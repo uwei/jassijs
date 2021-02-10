@@ -736,9 +736,6 @@ define("jassi/registry",["require"], function(require) {
 	"jassi/util/DatabaseSchema.ts": {
 		"date": 1611489275438
 	},
-	"jassi/util/monaco.d.ts": {
-		"date": 499162500000
-	},
 	"jassi/util/Reloader.ts": {
 		"date": 1612005124479,
 		"jassi.util.Reloader": {}

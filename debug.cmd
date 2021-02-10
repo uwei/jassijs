@@ -1,1 +1,1 @@
-heroku logs --tail --app myjassi
+heroku logs --tail --app jassijs
