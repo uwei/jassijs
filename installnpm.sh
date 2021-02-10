@@ -1,3 +1,3 @@
 #!/bin/sh
 cd server
-exec apm install
+exec npm install
