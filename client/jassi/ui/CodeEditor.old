@@ -1,0 +1,1117 @@
+define(["jassi/jassi",
+"jassi/ui/Panel",
+"jassi/ui/CodePanel",
+"jassi/ui/VariablePanel",
+"jassi/ui/DockingContainer",
+"jassi/ui/PropertyEditor",
+"jassi/ui/ComponentExplorer",
+"jassi/ui/ComponentPalette",
+"jassi/ui/helper/Resizer",
+"jassi/ui/helper/DragAndDropper",
+"jassi/ui/ErrorPanel",
+"jassi/base/Parser",
+"jassi/ui/CodeEditorInvisibleComponents",
+"jassi/ui/Button"], function(al){
+
+                        
+    jassi.register("classes","jassi.ui.CodeEditor",class extends jassi.ui.Panel{
+        constructor(){
+            super();
+            this.maximize();
+            this._main=new jassi.ui.DockingContainer();
+            this._codeView=new jassi.ui.Panel();
+            this._codeToolbar=new jassi.ui.Panel();
+            this._codePanel=new jassi.ui.CodePanel();
+            this._errors=new jassi.ui.ErrorPanel();
+            this._file="";
+            this._variables=new jassi.ui.VariablePanel();
+            this._componentPalette=new jassi.ui.ComponentPalette();
+            this._propertyEditor=new jassi.ui.PropertyEditor(this);
+            this._componentExplorer=new jassi.ui.ComponentExplorer(this);
+            this._invisibleComponents=new jassi.ui.CodeEditorInvisibleComponents(this);
+            this._initDesign();
+            this._init();
+            
+            this.editMode=true;
+        }
+        _initDesign(){
+        	var _this=this;
+        	this._designView=new jassi.ui.Panel();
+            this._designToolbar=new jassi.ui.Panel();
+            this._designPlaceholder=new jassi.ui.Panel();
+            this._design=new jassi.ui.Panel();
+            
+            
+            var save=new jassi.ui.Button();
+            save.tooltip="Save(Ctrl+S)";
+            save.icon="res/save.ico";
+            save.onclick(function(){
+                 _this.save(); 
+            });
+            this._designToolbar.add(save);
+    		
+    		var run=new jassi.ui.Button();
+            run.icon="res/car.ico";
+            run.tooltip="Run(F4)";
+            run.onclick(function(){
+               _this.evalCode(); 
+            });
+            this._designToolbar.add(run);
+           
+            var undo=new jassi.ui.Button();
+            undo.icon="res/undo.ico";
+            undo.tooltip="Undo (Strg+Z)";
+            undo.onclick(function(){
+               _this.undo(); 
+            });
+            this._designToolbar.add(undo);
+            
+             var test=new jassi.ui.Button();
+            test.icon="res/bug.ico";
+            test.tooltip="Test";
+            test.onclick(function(){
+            			var kk=_this._codeView.layout;
+            });
+            this._designToolbar.add(test);
+            
+           
+            var edit=new jassi.ui.Button();
+            edit.icon="res/dialog-test.ico";
+            edit.tooltip="Test Dialog";
+            edit.onclick(function(){
+            	_this.editDialog(!_this.editMode); 
+            	edit.toggle(!_this.editMode);
+               
+            });
+            this._designToolbar.add(edit);
+           
+            var lasso=new jassi.ui.Button();
+            lasso.icon="res/lasso.ico";
+            lasso.tooltip="Select rubberband";
+            lasso.onclick(function(){
+                var val=lasso.toggle();
+                _this._resizer.setLassoMode(val);
+				_this._draganddropper.canDrop(!val);
+            });
+            this._designToolbar.add(lasso);
+           
+            var remove=new jassi.ui.Button();
+            remove.icon="res/delete.ico";
+            remove.tooltip="Delete selected Control (ENTF)";
+            remove.onclick(function(){
+               _this.removeComponent(); 
+            });
+            this._designToolbar.add(remove);
+            this._design.add(this._designToolbar);
+			$(this._designPlaceholder.domWrapper).css("position","relative");
+            this._design.add(this._designPlaceholder);
+            this._design.add(this._invisibleComponents);
+        }
+        _init(){
+            var _this=this;
+            this._codePanel.width="100%";
+            this._codePanel.mode="javascript";
+            this._codePanel.getCompletions=function(editor,session, pos, prefix, callback){
+                return _this.getCompletions(editor,session,pos,prefix,callback);
+            }
+            this._codePanel.getDocTooltip=function(item){
+                return _this.getDocTooltip(item);
+            }
+            this._codeToolbar.horizontal=false;
+            this._codeToolbar.height="30";
+            this._codeView.horizontal=true;
+            this._codeView.add(this._codeToolbar);
+            this._codeView.add(this._codePanel);
+            this._codePanel.height="calc(100% - 31px)";
+            this._codePanel.width="100%";
+            this._main.width="calc(100% - 1px)";
+            this._main.height="95%";
+            var lasttop=this._main.dom.offsetTop;
+            var lasttop2=0;
+            
+            this._main.onresize=function(){
+                _this._codePanel._editor.resize();
+            /*     if(_this._main.dom.offsetTop!==lasttop){//resize to height
+                    lasttop=_this._main.dom.offsetTop;
+                    var i="calc(100% - "+(lasttop+1)+"px)";
+                    _this._main.height=i;
+                }*/
+               _this._updateInvisibleComponents();
+            }
+            var save=new jassi.ui.Button();
+            save.tooltip="Save(Ctrl+S)";
+            save.icon="res/save.ico";
+            save.onclick(function(){
+                 _this.save(); 
+            });
+            this._codeToolbar.add(save);
+    		
+    		var run=new jassi.ui.Button();
+            run.icon="res/car.ico";
+            run.tooltip="Run(F4)";
+            run.onclick(function(){
+               _this.evalCode(); 
+            });
+            this._codeToolbar.add(run);
+           
+            var undo=new jassi.ui.Button();
+            undo.icon="res/undo.ico";
+            undo.tooltip="Undo (Strg+Z)";
+            undo.onclick(function(){
+               _this.undo(); 
+            });
+            this._codeToolbar.add(undo);
+           
+            var goto=new jassi.ui.Button();
+            goto.icon="res/goto.ico";
+            goto.tooltip="Goto";
+            goto.onclick(function(){
+               _this.goto(); 
+            });
+            $(goto.dom).attr("ondrop","event.preventDefault();jassi.ui.CodeEditor.search(event.dataTransfer.getData('text'));");
+            $(goto.dom).attr("ondragover","event.preventDefault();");
+            this._codeToolbar.add(goto);
+            
+            
+           
+           
+            super.add(this._main);
+           
+            this._installView();
+            this.registerKeys();
+            this._initComponentExplorer();
+            this._codePanel.onblur(function(evt){
+                _this._propertyEditor.updateParser();
+            });
+
+         //   this._codePanel.setCompleter(this);
+ 
+        }
+        _installView(){
+        	   this._main.add(this._codeView,"Code..","code"); 
+            this._main.add(this._variables,"Variables","variables"); 
+            this._main.add(this._design,"Design","design"); 
+            this._main.add(this._propertyEditor,"Properties","properties"); 
+            this._main.add(this._componentExplorer,"Components","components"); 
+            this._main.add(this._errors,"Errors","errors"); 
+            this._main.add(this._componentPalette,"Palette","componentPalette"); 
+            this._main.layout='{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]}]}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":18.957059337410122,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":18.957059337410122,"width":77.70034843205575,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true},{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.299651567944256,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+
+        	
+        }
+        _installViewnew(){
+        	var _this=this;
+        	this._codeView.add(this._codePanel,"Code..","code",false,false); 
+            this._codeView.add(this._variables,"Variables","variables"); 
+            this._codeView.add(this._errors,"Errors","errors"); 
+            this._design=new jassi.ui.Panel();
+            
+            this._designView.add(this._design,"Design","design",false,false); 
+            this._designView.add(this._propertyEditor,"Properties","properties"); 
+            this._designView.add(this._componentExplorer,"Components","components"); 
+            this._designView.add(this._componentPalette,"Palette","componentPalette"); 
+        	this._main.add(this._designView,"Design","design",false);
+        	this._main.add(this._codeView,"Code","code",false);
+        	this._main.layout='{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"stack","width":100,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code","isClosable":true,"hasHeaders":false,"type":"component","componentName":"code","componentState":{"title":"Code","name":"code"},"reorderEnabled":true},{"title":"Design","isClosable":true,"hasHeaders":false,"type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"reorderEnabled":true}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+        	this._codeView.layout='{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":100,"content":[{"type":"stack","width":50,"height":85.18518518518519,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","isClosable":true,"hasHeaders":false,"type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"reorderEnabled":true}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":14.814814814814813,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":77.22627737226277,"content":[{"title":"Errors","isClosable":true,"hasHeaders":false,"type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.773722627737225,"content":[{"title":"Variables","isClosable":true,"hasHeaders":false,"type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+        	window.setTimeout(function(){
+        	_this._designView.layout='{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":100,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":77.37226277372264,"content":[{"title":"Design","isClosable":false,"hasHeaders":false,"type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":22.627737226277368,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":50,"height":16.628959276018097,"content":[{"title":"Palette","isClosable":true,"hasHeaders":false,"type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":17.998636082977765,"content":[{"title":"Components","isClosable":true,"hasHeaders":false,"type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":65.37240464100414,"content":[{"title":"Properties","isClosable":true,"hasHeaders":false,"type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+        		
+        	},7000);
+    	//	this._main.layout='{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]}]}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":18.957059337410122,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":18.957059337410122,"width":77.70034843205575,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true},{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.299651567944256,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+
+        }
+        /**
+         * add here all properties for the PropertyEditor
+         * @param {[jassi.ui.ComponentDescriptor]} desc - describe fields for propertyeditor
+         * e.g.  desc.fields.push(new jassi.ui.Property("id","number"));
+         */
+        static describeComponent(desc){
+           desc.fields.push({name:"file",type:"string",isUrlTag:true,id:true});
+           desc.fields.push({name:"line",type:"int",isUrlTag:true});
+        }
+        
+       
+       
+         _initComponentExplorer(){
+             var _this=this;
+             this._componentExplorer.onclick(function(data){
+               var ob=data.selection[0]; 
+               _this._propertyEditor.value=ob;
+            });
+            this._componentExplorer.getComponentName=function(item){
+                var varname=_this.getVariableFromObject(item);
+                if(varname===undefined)
+                    return;
+                if(varname.startsWith("this."))
+                    return varname.substring(5);
+                return varname;
+            };
+        }
+        /**
+         * removes the selected component
+         */
+        removeComponent(){
+            var todel=this._propertyEditor.value;
+            var varname=this.getVariableFromObject(todel);
+            if(varname!=="this"){
+                if(todel.domWrapper._parent!==undefined){
+                    todel.domWrapper._parent.remove(todel);
+                }
+                this._propertyEditor.removeVariableInCode(varname);
+                this._propertyEditor.removeVariableInDesign(varname);
+                this._updateInvisibleComponents();
+            } 
+            
+        }
+         /**
+         * save the code to server
+         */
+        save(){
+            var code=this._codePanel.value;
+            var _this=this;
+            jassi.server.saveFile(this._file,code).then(function(){
+                jassi.server.reloadJS(_this._file);
+                if(code.indexOf("jassi.register(")>-1){
+                    jassi.registry.reload();
+                }
+            });
+
+        }
+        /**
+         * undo action
+         */
+        undo(){
+            this._codePanel._editor.undo();
+            this.evalCode(); 
+        }
+        /**
+         * dialog edit mode
+         * @param {boolean} enable - if true allow resizing and drag and drop 
+         */
+        editDialog(enable){
+        	var _this=this;
+            this.editMode=enable;
+            var component=this._designPlaceholder._components[0];
+              //switch designmode
+            var comps=$(component.dom).find(".jcomponent");
+            for(var c=0;c<comps.length;c++){
+                if(comps[c]._this.setDesignMode!==undefined){
+                    comps[c]._this.setDesignMode(enable,this);
+                }
+            }
+            if(this._resizer!==undefined){
+                this._resizer.uninstall();
+            }
+            if(this._draganddropper!==undefined){
+                this._draganddropper.uninstall();
+            }
+            
+            if(enable===true){
+            	var allcomponents=this._variables.getEditableComponents(component);
+                //this._installTinyEditor();
+                this._resizer=new jassi.ui.helper.Resizer();
+                this._draganddropper=new jassi.ui.helper.DragAndDropper();
+                this._resizer.draganddropper= this._draganddropper;
+                this._resizer.install(component,allcomponents);
+                var _this=this;
+               
+                this._resizer.onelementselected=function(elementIDs,e){
+                        var ret=[];
+                        for(var x=0;x<elementIDs.length;x++){
+                            ret.push($("#"+elementIDs[x])[0]._this);
+                        }
+                        _this._propertyEditor.value=ret.length==1?ret[0]:ret;
+                   
+                };
+                this._resizer.onpropertychanged=function(comp,prop,value){
+                    _this._propertyEditor.setPropertyInCode(prop,value,true);
+                    _this._propertyEditor.value=_this._propertyEditor.value;
+                };
+
+                allcomponents=this._variables.getEditableComponents(component,true);
+                this._draganddropper.install(component,allcomponents);
+                this._draganddropper.onpropertychanged=function(component,top,left,oldParent,newParent,beforeComponent){
+                    var oldName=_this.getVariableFromObject(oldParent);
+                    var newName=_this.getVariableFromObject(newParent);
+                    var compName=_this.getVariableFromObject(component);
+                    if(top!==undefined){
+                        _this._propertyEditor.setPropertyInCode("x",top,true);
+                    }else{
+                         _this._propertyEditor.removePropertyInCode("x");
+                    }
+                    if(left!==undefined){
+                        _this._propertyEditor.setPropertyInCode("y",left,true);
+                    }else{
+                         _this._propertyEditor.removePropertyInCode("y");
+                    }
+                    if(oldParent!==newParent||beforeComponent!==undefined||top===undefined){//top=undefined ->on relative position at the end call the block
+                        //get Position
+                        _this._propertyEditor.removePropertyInCode("add",compName,oldName);
+                        var before;
+                        if(beforeComponent!==undefined){
+                            var on=_this.getVariableFromObject(beforeComponent);
+                            var par=_this.getVariableFromObject(beforeComponent._parent);
+                            before={variablename:par,property:"add",value:on};
+                        }
+                        _this._propertyEditor.setPropertyInCode("add",compName,false,newName,before);
+
+                    }
+                    _this.variables.updateCache();
+                    _this._propertyEditor.value=_this._propertyEditor.value;
+                    _this._componentExplorer.value=_this._componentExplorer.value;
+                }
+                this._draganddropper.onpropertyadded=function(type,component,top,left,newParent,beforeComponent){
+                    if(beforeComponent!==undefined&&beforeComponent.designDummyFor!==undefined){
+                    	beforeComponent=undefined;
+                    }
+                    	
+                    _this._propertyEditor.addInclude(type.replaceAll(".","/"));
+                    var varname=_this._propertyEditor.addVariableInCode(type);
+                    var varvalue=new (jassi.classes.getClass(type));
+                    if(varname.startsWith("me.")){
+                        var me=_this.getObjectFromVariable("me");
+                        me[varname.substring(3)]=varvalue;
+                    }else if(varname.startsWith("this.")){
+                        var th= _this.getObjectFromVariable("this");
+                        th[varname.substring(5)]=varvalue;
+                    }else
+                        _this._variables.add(varname,varvalue);
+                    var newName=_this.getVariableFromObject(newParent);
+                    var before;
+                    if(beforeComponent!==undefined){
+                            var on=_this.getVariableFromObject(beforeComponent);
+                            var par=_this.getVariableFromObject(beforeComponent._parent);
+                            before={variablename:par,property:"add",value:on};
+                    }
+                    _this._propertyEditor.setPropertyInCode("add",varname,false,newName,before);
+                   
+                    if(beforeComponent!==undefined){
+                        newParent.addBefore(varvalue,beforeComponent);
+                    }else{
+                        newParent.add(varvalue);
+                    }
+                    if(newParent._components.length>1){
+	                    var dummy=	newParent._components[newParent._components.length-2];
+	                    if(dummy.designDummyFor!==undefined){
+	                    	//var tmp=newParent._components[newParent._components.length-1];
+	                    	newParent.remove(dummy);//._components[newParent._components.length-1]=newParent._components[newParent._components.length-2];
+	                    	newParent.add(dummy);//._components[newParent._components.length-1]=tmp;
+	                    }
+                    }
+                    _this.variables.updateCache();
+                    
+                     if(top!==undefined){
+                        _this._propertyEditor.setPropertyInCode("x",top,true,varname);
+                        varvalue.x=top;
+                    }
+                    if(left!==undefined){
+                        _this._propertyEditor.setPropertyInCode("y",left,true,varname);
+                        varvalue.y=left;
+                    }
+                    
+                    //include the new element
+                    _this.editDialog(true);
+                    _this._propertyEditor.value=varvalue;
+                  	
+                    _this._componentExplorer.update();
+                    //var test=_this._invisibleComponents;
+                    _this._updateInvisibleComponents();
+
+                }
+                this._draganddropper.isDragEnabled=function(event,ui){
+                    return _this._resizer.componentUnderCursor!==undefined;
+                }
+            }else{
+            	
+            }
+          /*  $(".hoho2").selectable({});
+			$(".hoho2").selectable("disable");*/
+          /*  $(".HTMLPanel").selectable({});
+			$(".HTMLPanel").selectable("disable");
+			$(".HTMLPanel").draggable({});
+			$(".HTMLPanel").draggable("disable");*/
+        }
+         /**
+         * goto to the declariation on cursor
+         * @param {boolean} [lazy] - true if search only the string in the code 
+         * @returns {boolean} - true if successfull
+         */
+        async goto(lazy){
+            var pos=this._codePanel.cursorPosition;
+            var line=this._codePanel.getLine(pos.row);
+            //find start of the expression
+            var p=pos.column-1;
+            var name="";
+            var ibracket=0;
+            while(p>=0&&line[p]!=="\r"&&line[p]!=="\n"&&line[p]!=="\t"&&line[p]!==" "&&
+                    line[p]!==","&&line[p]!==";"&& line[p]!=="?"&&line[p]!==":"&&line[p]!=="="){
+                if(line[p]===")"||line[p]==="]")
+                    ibracket--;
+                if(line[p]==="("||line[p]==="("){
+                    ibracket++;
+                    if(ibracket===1)
+                        break;
+                }
+                name=line[p]+name;
+                p=p-1;
+            }
+            //find end of the expression
+            p=pos.column;
+            while(p<line.length&&line[p]!=="\r"&&line[p]!=="\n"&&line[p]!=="\t"&&line[p]!==" "&&
+                    line[p]!==","&&line[p]!==";"&&line[p]!=="?"&&line[p]!==":"&&
+                    line[p]!=="("&&line[p]!==")"&&line[p]!=="["&&line[p]!=="]"&&line[p]!=="{"&&line[p]!=="}"&&line[p]!=="="&&
+                    line[p]!=="."){//we jump only in this object
+                        name=name+line[p];
+                        p=p+1;
+                    }
+            var words=name.split(".");
+            if(words.length===1){//local var
+                var code=this.value;
+                var variable=name.replace(".","\\.");
+                var reg=new RegExp("\\W"+variable+"\\W");
+                var ret=reg.exec(code);
+                if(ret!==null){
+                    var s=code.substring(0,ret.index).split("\n").length;
+                    this._codePanel.cursorPosition={row:s,column:0};
+                }
+                return true;
+            }
+            
+            var sob="";
+            for(var x=0;x<words.length-1;x++){
+                sob=sob+(sob.length===0?"":".")+words[x];
+               
+            }
+            var test=jassi.classes.getClass(name);
+            if(test!==undefined){
+            	var sdef=test.toString();
+            	//var file=sob.replaceAll(".","/")+"/"+words[words.length-1]+".js";
+            	var file=await jassi.registry.getFilesForService("classes",name);
+                jassi.router.navigate("#do=jassi.ui.CodeEditor&file="+file+"&line=100");
+                return true;
+            }
+            var ob=this.variables.evalExpression(sob);
+            var basetype=ob.__proto__;
+            while(basetype!==null){
+                var classname=jassi.classes.getClassName(basetype);
+                if(classname===undefined)
+                    break;
+                var file=await jassi.registry.getFilesForService("classes",classname);
+                if(file!==undefined||file.length!==0){
+                        var code=await jassi.server.loadFile(file[0]);
+                        var member=ob[words[words.length-1]];
+                        var pos=-1;
+                        if (typeof member === "function"){
+                            pos=code.indexOf(member.toString());
+                            //var reg=new RegExp("\\s"+words[words.length-1]+"\\(");
+                            //var ret=reg.exec(code);
+                            //if(ret!==null)
+                              //  pos=ret.index;
+                        }else{
+                            if(lazy===true){
+                                var reg=new RegExp("\\W"+words[words.length-1]+"\\W");
+                                var ret=reg.exec(code);
+                                if(ret!==null)
+                                    pos=ret.index;
+                            }else{
+                                var reg=new RegExp("\\s get "+words[words.length-1]+"\\(");
+                                var ret=reg.exec(code);
+                                if(ret===null){
+                                    reg=new RegExp("\\s set "+words[words.length-1]+"\\(");
+                                    ret=reg.exec(code);
+                                }
+                                if(ret!==null)
+                                    pos=ret.index;
+                            }
+                        }
+                        if(pos!==-1){
+                            var s=code.substring(0,pos).split("\n").length.toString();
+                            jassi.router.navigate("#do=jassi.ui.CodeEditor&file="+file+"&line="+s);
+                            return true;
+                        }
+                }
+                basetype=basetype.__proto__;
+            }
+            //var variable=name.replace(".","\\.");
+            //var reg=new RegExp("\\W"+variable+"\\W");
+            if(lazy===true)
+                return false;
+            else
+                return this.goto(true);
+            
+        }
+        /**
+         * search text in classes at the given text
+         * @param {string} text - the text to search
+         * @returns {jassi.ui.CodeEditor} - the editor instance
+         */
+        static async search(text){
+            var found=undefined;
+            text=text.replaceAll("\r\n","\n");
+            var content=undefined;
+            //Fast search
+            for(var file in jassi.classes._cache){
+                var fname=file.replaceAll(".","/");
+                var cl=jassi.classes._cache[file];
+                var code=cl.toString().replaceAll("\r\n","\n");
+                if(code.indexOf(text)>-1){
+                    found=fname+".js";
+                    content=code;
+                    break;
+                }
+            }
+            if(found===undefined){
+                //Deep search (slow)
+                var files=await jassi.registry.getFilesForService("classes");
+                if(files!==undefined){
+                    for(var x=0;x<files.length;x++){
+                        var code=await jassi.server.loadFile(files[x]);
+                        code=code.replaceAll("\r\n","\n");
+                        if(code.indexOf(text)>-1){
+                            found=files[x];
+                            content=code;
+                        }
+                    }
+                }
+            }
+            if(found!==undefined){
+                var line=code.substring(0,content.indexOf(text)).split("\n").length+1;
+                jassi.router.navigate("#do=jassi.ui.CodeEditor&file="+found+"&line="+line.toString());
+//                return await jassi.ui.CodeEditor.open(found+":"+line.toString()+":0");
+            }
+            return undefined;
+        }
+       
+       
+        /**
+         * manage shortcuts
+         */
+        registerKeys(){
+            var _this=this;
+             $( this._codePanel.dom).keydown(function(evt) {
+                if(evt.keyCode===115&&evt.shiftKey){//F4
+                   // var thiss=this._this._id;
+                   // var editor = ace.edit(this._this._id);
+                   _this.evalCode(true);
+                   evt.preventDefault();
+                   return false;
+                }else if(evt.keyCode===115) {//F4
+                     _this.evalCode(false);
+                   evt.preventDefault();
+                   return false;
+                }
+                 if(evt.keyCode===116){//F5
+                    evt.preventDefault();
+                    return false;
+                }
+               
+                if (( String.fromCharCode(evt.which).toLowerCase() === 's' && evt.ctrlKey)/* && (evt.which == 19)*/) {//Str+s
+                    _this.save();
+                     event.preventDefault();
+                    return false;
+                }
+                
+            });
+            $( this._design.dom).attr("tabindex","1");
+           
+            $( this._design.dom).keydown(function(evt) {
+                if(evt.keyCode===115&&evt.shiftKey){//F4
+                   // var thiss=this._this._id;
+                   // var editor = ace.edit(this._this._id);
+                   _this.evalCode(true);
+                   evt.preventDefault();
+                   return false;
+                }else if(evt.keyCode===115) {//F4
+                     _this.evalCode(false);
+                   evt.preventDefault();
+                   return false;
+                }
+                if(evt.keyCode===90||evt.ctrlKey){//Ctrl+Z
+                    _this.undo();
+                }
+                if(evt.keyCode===116){//F5
+                    evt.preventDefault();
+                    return false;
+                }
+                 if(evt.keyCode===46){//Del
+                     _this.removeComponent();
+                    evt.preventDefault();
+                    return false;
+                }
+                
+                if (( String.fromCharCode(evt.which).toLowerCase() === 's' && evt.ctrlKey)/* && (evt.which == 19)*/) {//Str+s
+                    _this.save();
+                     event.preventDefault();
+                    return false;
+                }
+                
+            });
+        }
+        /**
+         * extract lines from code
+         * @param {string} code - the code
+         * @returns {[string]} - all lines
+         */
+        _codeToLines(code){
+            var lines=code.split("\n");
+                    for(var x=0;x<lines.length;x++){
+                        while(lines[x].startsWith("/")||lines[x].startsWith(" ")
+                        ||lines[x].startsWith("*")||lines[x].startsWith("\t")){
+                            lines[x]=lines[x].substring(1);
+                        }
+                    }
+            return lines;
+        }
+        /**
+         * get description for class members
+         * @param {object} ob - the object to inspect
+         * @param {string} member - the name of the member brackets for functions e.g.foo()
+         * @param {type} [type] - the __proto__-type to inspect 
+         * @returns {string} - the description
+         */
+        _getDescForMember(ob,member,type){
+                if(type===undefined)
+                    type=ob.__proto__;
+                var code=type.constructor.toString();
+                if(member.indexOf("(")>-1){
+                    var sname=member.substring(0,member.length-1);
+                    var reg=new RegExp("\\/(\\*)(\\*)[^*]*\\*+(?:[^*\\/][^*]*\\*+)*\\/\\s*(async )*"+sname+"\\([^\\)]*\\)");
+                    var ret=reg.exec(code);
+                    if(ret===null){
+                        var basetype=type.__proto__;
+                        if(basetype===null)
+                            return;
+                        else
+                            return this._getDescForMember(ob,member,basetype);
+                    }
+                    var lines=this._codeToLines(ret[0]);
+                    code="<b>"+lines[lines.length-1]+"</b>\n";
+                    for(var x=1;x<lines.length-1;x++){
+                        if(lines[x].startsWith("@param")){
+                            lines[x]=lines[x].substring(7);
+                            var pos=lines[x].indexOf(" ");
+                            if(pos!==-1)
+                                pos=lines[x].indexOf(" ",pos+1);
+                            if(pos!==-1)
+                                lines[x]="<b><i>"+lines[x].substring(0,pos)+"</b></i>"+lines[x].substring(pos+1);
+                          
+                        }
+                        lines[x]=lines[x].replaceAll("@returns","<b>@returns</b>");
+                        if(lines[x].length>0)
+                            code=code+lines[x]+"\n";
+                    }
+                    code="<small>"+code.substring(0,code.length-1)+"</small>";
+                }else {//this.name
+                    var reg=new RegExp("\\/(\\*)(\\*)[^*]*\\*+(?:[^*\\/][^*]*\\*+)*\\/\\s*this\\."+member+"\\=");
+                    var ret=reg.exec(code);
+                    if(ret===null){
+                        reg=new RegExp("\\/(\\*)(\\*)[^*]*\\*+(?:[^*\\/][^*]*\\*+)*\\/\\s*set "+member+"\\(");
+                        ret=reg.exec(code);
+                    }
+                    if(ret===null){
+                        reg=new RegExp("\\/(\\*)(\\*)[^*]*\\*+(?:[^*\\/][^*]*\\*+)*\\/\\s*get "+member+"\\(");
+                        ret=reg.exec(code);
+                    }
+                    if(ret===null){
+                        //test class
+                        if(ob[member]!==null&&ob[member]!==undefined&&ob[member].toString().startsWith("class")){
+                            return ob[member].toString();
+                        }
+                        //search in base class
+                        var basetype=type.__proto__;
+                        if(basetype===null)
+                            return;
+                        else
+                            return this._getDescForMember(ob,member,basetype);
+                        return;
+                    }
+                    var lines=this._codeToLines(ret[0]);
+                    code="";
+                    for(var x=0;x<lines.length-1;x++){
+                        if(lines[x].startsWith("@member "))
+                            lines[x]=lines[x].substring(8);
+                        if(lines[x].length>0)
+                            code=code+lines[x]+"\n";
+                    }
+                    code=code.substring(0,code.length-1).replace("*/","");
+                    code="<small>"+code+"</small>";
+                }
+
+                
+                return code;
+                
+        }
+        /**
+         * get the documentation for a member for the Ace-Code-Editor
+         * @param {object} item - the member to describe
+         */
+        getDocTooltip(item){
+            //this._codePanel.value=this._main.layout;
+            if(item.parent!==undefined){
+               item.docHTML=this._getDescForMember(item.parent,item.name);
+                
+            }
+            //item.docHTML="Hallo<br>Du</br>";
+        }
+        
+       
+        /**
+        * get the completion entrys for the Ace-Code-Editor
+        * @param {object} editor - the editor instance
+        * @param {object} session - the editor session
+        * @param {object} pos - the current code position
+        * @param {string} prefix - the word before the code position
+        * @param {function} - callback - the function to transfer the completions
+        */
+        getCompletions(editor,session, pos, prefix, callback) {
+                        var ret=[];
+                        var line=this._codePanel.getLine(pos.row);
+                        var p=pos.column-1;
+                        if(line[p-prefix.length]==="."){
+                            var name="";
+                            var p=p-1-prefix.length;
+                            var ibracket=0;
+                            while(p>=0&&line[p]!=="\r"&&line[p]!=="\n"&&line[p]!=="\t"&&line[p]!==" "&&
+                                    line[p]!==","&&line[p]!==";"&&
+                                    line[p]!=="?"&&line[p]!==":"){
+                                if(line[p]===")"||line[p]==="]")
+                                    ibracket--;
+                                if(line[p]==="("||line[p]==="("){
+                                    ibracket++;
+                                    if(ibracket===1)
+                                        break;
+                                }
+                                
+                                name=line[p]+name;
+                                p=p-1;
+                            }
+                            if(name==="this"||name.startsWith("this."))
+                                name=name.replace("this","this_this");
+                                
+                            //this is the real object for .
+                            var ob=this.variables.evalExpression(name);
+                            if(ob!==undefined&&ob!==null){
+                                var members=jassi.ui.VariablePanel.getMembers(ob,true);
+                                members.sort();
+                                for(var x=0;x<members.length;x++){
+                                    var caption=members[x];
+                                    var sname=members[x];
+                                    if(sname==="caller"||sname==="callee"||sname==="arguments")
+                                    	continue;
+                                    if(typeof ob[sname] === 'function'&&sname!=="constructor"){
+                                          var func=ob[sname].toString();
+                                          if(!func.startsWith("class")){
+                                              sname=sname+"(";
+                                              caption=func.substring(0,func.indexOf("{"));
+                                          }
+                                          if(caption.startsWith("function("))
+                                                caption=sname+caption.substring(9);                                       //   alert(sname);
+                                      }
+                                     var entry={ caption:caption,name:sname, value:sname, score: 10,meta:"object",parent:ob};
+                                        ret.push(entry);
+                                }
+                            }
+                     }else{//no member
+                        //Globalvar
+                        for(var v in window){
+                            var entry={ name:"g"+v, value:v, score: 10, meta:"global"};
+                            ret.push(entry);
+                        }
+                         //local
+                        for(var x in this._variables.value){
+                            var sname=this._variables.value[x].name;
+                            var entry={ name:sname, value:sname, score: 9, meta:"local" };
+                            ret.push(entry);
+                        }
+                    }
+                    for(var x=0;x<ret.length;x++){
+                        ret[x].jassi=this._codePanel;
+                    }
+                    callback(null,ret);
+        }
+        /**
+         * execute the current code
+         * @param {boolean} toCursor -  if true the variables were inspected on cursor position, 
+         *                              if false at the end of the layout() function or at the end of the code
+         */
+        evalCode(toCursor){
+            var lastVariablename=this.getVariableFromObject(this._propertyEditor.value);
+            this._variables.clear();
+            //this._variables.add("this",this);
+            
+            var code=this._codePanel.value;
+            var lines=code.split("\n");
+            
+            var _this=this;
+            var debugline=undefined;
+            if(toCursor===true){
+                debugline=this._codePanel.cursorPosition.row;
+            }else{
+                var parser=new jassi.base.Parser();
+                parser.parse(_this.value,"layout()");
+                var test=parser.data["layout()"];
+                if(test!==undefined){
+                    debugline=test[""][0].lineend-2
+                }else
+                    debugline=lines.length-1;
+            }
+            
+            
+            var svars=this.variables.getCodeForBreakpoint(code,toCursor);
+            svars=svars+"_variables_.update();";
+          
+            window.test=undefined;
+            jassi.test=undefined;
+            if(debugline+1>=lines.length)
+                lines[debugline]=lines[debugline]+svars;
+            else
+                lines[debugline+1]=svars+lines[debugline+1];
+                
+            this.variables.addDebugpoints(lines,this._codePanel.getBreakpoints());        
+            code="";
+            for(var x=0;x<lines.length;x++){
+                code=code+lines[x]+"\n";
+            }
+            code=code;
+            /* force reload all js files */            
+            requirejs.config({
+			    urlArgs : "bust="+new Date().getTime()
+			});
+
+            var _this=this;
+            var tmp=new Date().getTime();
+            jassi.server.saveFile("tmp/"+_this._file,code).then(function(){
+                try{requirejs.undef("tmp/"+_this._file);}catch(ex){};
+                var onload=function(data){
+                    if(jassi.test!==undefined){
+                        var ret=jassi.test();
+                     	Promise.resolve(ret).then(function(ret) {
+	                        if(ret instanceof jassi.ui.Component){
+	                        		_this.variables.updateCache();
+	                                _this.designedComponent=ret;
+	                                if(lastVariablename!==undefined){
+	                                      var ob=_this.getObjectFromVariable(lastVariablename);
+	                                      if(ob!==undefined){
+	                                    	_this._propertyEditor.value=ob;
+	                                      }
+	                                }
+	                        }
+                	});
+                    }
+                }
+                
+               
+                    //if this is the first save for the tmpfile then it fails - I dont know why, give it a second try
+                    require([ "tmp/"+_this._file],onload,/*error*/function(err){
+                        console.log("reload");
+                        window.setTimeout(function(){
+                            require([ "tmp/"+_this._file],onload);
+                        },20);
+                    });
+               
+            });
+            
+        }
+        /**
+         * switch view
+         * @member {string} view - "design" or "code"
+         */
+        set viewmode(view){
+           this._main.show(view); 
+        }
+        _updateInvisibleComponents(){
+            var _this=this;
+            this._invisibleComponents.update().then(function(){
+                var h=_this._invisibleComponents.dom.offsetHeight;
+                h=h+6+31;
+                _this._designPlaceholder.height="calc(100% - "+h+"px)";
+            });
+         }
+        /**
+         * @member {jassi.ui.Component} - the designed component
+         */
+        set designedComponent(component){
+        	var com=component;
+    		if(com.isAbsolute!==true && com.width==="0" && com.height==="0"){
+        		component.width="calc(100% - 1px)";
+        		component.height="calc(100% - 1px)";
+    		}
+        	if(this.variables.addParametersCalled!==true){
+                    this._main.show("design");
+                }
+            if(this._designPlaceholder._components.length>0)
+                this._designPlaceholder.remove(this._designPlaceholder._components[0]);
+            this._designPlaceholder.add(component);
+          // 
+            this._componentExplorer.value=component;
+            this._propertyEditor.updateParser();
+            this.editDialog(true); 
+           
+               $( this._design.dom).focus();
+            
+          
+            this._updateInvisibleComponents();
+            
+           
+            //var parser=new jassi.ui.PropertyEditor.Parser();
+            //parser.parse(_this.value);
+        }
+        get designedComponent(){
+            return this._designPlaceholder._components[0];
+        }
+        /**
+        * get all known instances for type
+        * @param {type} type - the type we are interested
+        * @returns {[string]}
+        */
+        getVariablesForType(type){
+            return this._variables.getVariablesForType(type);
+        }
+        /**
+         * gets the name of the variabel that holds the object
+         * @param {object} ob - the
+         */
+        getVariableFromObject(ob){
+            return this._variables.getVariableFromObject(ob);
+        }
+     
+        /**
+         * gets the name object of the given variabel
+         * @param {string} ob - the name of the variable
+         */
+        getObjectFromVariable(varname){
+        	return this._variables.getObjectFromVariable(varname);
+        }
+        
+       /**
+         * renames a variable in design
+         * @param {string} oldName
+         * @param {string} newName
+         */
+        renameVariable(oldName,newName){
+            this._variables.renameVariable(oldName,newName);
+            this._componentExplorer.update();
+        }
+       
+        
+        /**
+         * @member { jassi.ui.VariablePanel} - the variable
+         */
+        set variables(value){
+           this._variables=value;
+        }
+        get variables(){
+            return this._variables;
+        }
+        /**
+         * @member {string} - the code
+         */
+        set value(value){
+            this._codePanel.value=value;
+        }
+        get value(){
+            return this._codePanel.value;
+        }
+         /**
+         * @param {object} position - the current cursor position {row= ,column=}
+         */
+        set cursorPosition(cursor){
+            this._codePanel.cursorPosition=cursor;
+        }
+        get cursorPosition(){
+            return this._codePanel.cursorPosition;
+        }
+         /**
+         * goes to the line number 
+         * @param {object} value - the line number 
+         */
+        set line(value){
+            this.cursorPosition={row:value,column:0};
+            var _this=this;
+            setTimeout(function(){
+                    _this.cursorPosition={row:value,column:0};
+                },300);
+            setTimeout(function(){
+                    _this.cursorPosition={row:value,column:0};
+                },1000);//start takes one second....
+        }
+        get line(){
+            return this.cursorPosition.row;
+        }
+        /**
+         * @member {string} - title of the component
+         */
+        get title(){
+            var s=this.file.split("/");
+            return s[s.length-1];
+        }
+         /**
+         * @member {string} - the url to edit
+         */
+        set file(value){ //the Code
+           this._file=value;
+           this.openFile(value);
+        }
+        get file(){
+            return this._file;
+        }
+        async openFile(_file){
+            this._file=_file;
+            var content=await jassi.server.loadFile(this._file);
+            this._codePanel.value=content;
+            this._codePanel.width="100%";
+          //  this._codePanel.height="100%";
+            this._main.update();
+        }
+         /**
+         * opens a new CodeEditor for the code in url
+         * @param {string} url - the link to the code - relative e.g.   jassi/ui/Button.js 
+         *                                                      or      jassi/ui/Button.js:13:1 to jump in line 13
+         * @returns {jassi.ui.CodeEditor} - the editor instance
+         */
+        /*
+        static async open(url){
+            var editor;
+            var sp=url.split(":");
+            //jassi/ui/Button.js:13:1 extract line 
+            var line=0;
+            var column=0;
+            if(sp.length>=3){
+                url=sp[0];
+                line=parseInt(sp[1]);
+                column=parseInt(sp[2]);
+            }
+            var s=url.split("/");
+            var name=s[s.length-1];
+            if(jassi.windows.contains(name)){
+                var window=jassi.windows.show(name);
+                editor=jassi.windows.findComponent(name);
+            }else{
+                editor=new jassi.ui.CodeEditor();
+                jassi.windows.add(editor,name);
+                await editor.openFile(url);
+                jassi.windows.onclose(editor,function(param){
+                    editor.callEvent("close",param);
+                });
+            }
+            editor._main.show("code");
+            if(line!==0){
+                setTimeout(function(){
+                    editor.cursorPosition={row:line,column:column};
+                },100);
+            }
+            return editor;
+        }*/
+      
+    });
+    jassi.test=async function(){
+    	 var editor=new jassi.ui.CodeEditor();
+         var url="demo/DialogKunde.js";
+         await editor.openFile(url);
+         return editor;
+         
+    };
+   
+
+});

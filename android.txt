@@ -1,0 +1,12 @@
+install termux
+pkg install nodejs
+termux-setup-storage
+
+rm -r dirname
+mv jassi ~
+https://stackoverflow.com/questions/33474468/can-i-use-postgresql-in-android-phone
+$ pkg install postgresql
+$ mkdir -p $PREFIX/var/lib/postgresql
+$ initdb $PREFIX/var/lib/postgresql
+$ pg_ctl -D $PREFIX/var/lib/postgresql start
+$ pg_ctl -D $PREFIX/var/lib/postgresql stop

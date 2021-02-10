@@ -1,0 +1,30 @@
+{
+  "compilerOptions": { 
+    "baseUrl": "./",
+    "allowJs": true,
+    //"checkJs":false,
+    "target": "es2017",
+    "module": "amd",
+    "moduleResolution": "node",
+    "lib": [
+      "es2016", 
+      "dom",
+      "es5"
+    ],
+    //"outFile": "./js/build.js",
+    "rootDir": "./",
+
+     "sourceMap": true,
+    "outDir": "./js", 
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+  },
+ // "include":["./"],
+  "exclude": [
+    "js",
+    "jassichrome",
+    "../server",
+    "service-worker.js",
+    "jassi.js"
+  ]
+}

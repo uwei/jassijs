@@ -1,0 +1,33 @@
+{
+  "name": "uwei",
+  "version": "0.1.0",
+  "description": "jassijs",
+  "engines": {
+    "node": "10.x"
+  },
+  "main": "server/main2.js",
+  "scripts": {
+    "start": "node server/main2.js",
+    "test": "node out/test.js"
+  },
+  "dependencies": {
+    "@types/node": "^12.11.7",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "typescript": "^3.6.4"
+  },
+  "devDependencies": {
+    "request": "^2.81.0",
+    "tape": "^4.7.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/heroku/node-js-getting-started"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
+}

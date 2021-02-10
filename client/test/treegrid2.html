@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>W2UI Demo: grid-7</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="http://rawgit.com/vitmalina/w2ui/master/dist/w2ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://rawgit.com/vitmalina/w2ui/master/dist/w2ui.min.css" />
+</head>
+<body>
+
+<div id="grid" style="width: 100%; height: 400px;"></div>
+<button id="a">jjj</button>
+
+<script type="text/javascript">
+$(function () {
+    $("#a").on("click",function(){
+        w2ui["grid"].refresh();
+    });
+    var p=100000;
+    var u={ recid: 222, fname: 'Udo', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012',
+                                        w2ui: {
+                                           /* children: [
+                                                { recid: 2221, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                                                { recid: 2222, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                                                { recid: 2223, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                                                { recid: 2224, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012' }
+                                            ]*/
+                                            get children(){
+                                              //  alert("ok");
+                                                return [
+                                                { recid: 2221, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                                                { recid: 2222, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                                                { recid: 2223, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                                                { recid: 2224, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012' }
+                                            ];
+                                            }
+                                        } 
+                                    };
+    function find(parent,search){
+        for(var x=0;x<parent.length;x++){
+            var test=parent[x];
+            if(test.recid!=undefined&&test.recid.toString()==search)
+                return test;
+            if(test.w2ui!=undefined&&test.w2ui!=undefined){
+                var ch=find(test.w2ui.children,search);
+                if(ch!=undefined)
+                    return ch;
+            }
+        }
+        return undefined;
+    } 
+    $('#grid').w2grid({ 
+        name: 'grid', 
+        onExpand: function (event) {
+            p=p+2;
+            var l=find(w2ui["grid"].records,event.recid);
+            var n={ recid: p, fname: 'udo', lname: 'weigelt', email: 'jdoe@gmail.com', sdate: '4/3/2012', w2ui: { children: [
+                    { recid: 20000, fname: 'phillip', lname: 'weigelt', email: 'jdoe@gmail.com', sdate: '4/3/2012', w2ui: { children: [] }},  
+                     { recid: 20000, fname: 'sophie', lname: 'weigelt', email: 'jdoe@gmail.com', sdate: '4/3/2012', w2ui: { children: [{}] }},  
+            ] }};
+            l.w2ui.children.push(n);
+        //  $('#' + event.box_id).html('some html').animate({ height : 100 }, 100);
+        },
+        columns: [                
+            { field: 'lname', caption: 'Last Name', size: '30%' },
+            { field: 'fname', caption: 'First Name', size: '30%' },
+            { field: 'email', caption: 'Email', size: '40%' },
+            { field: 'sdate', caption: 'Start Date', size: '90px' }
+        ],
+        records: [
+            { recid: 1, fname: 'John', lname: 'doe', email: 'jdoe@gmail.com', sdate: '4/3/2012', w2ui: { children: [] }},
+            { recid: 2, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012', 
+                w2ui: {
+                    children: [
+                        { recid: 21, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                        { recid: 22, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012',
+                            w2ui: {
+                                children: [
+                                    { recid: 221, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                                    u,
+                                    { recid: 223, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                                    { recid: 224, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012' }
+                                ]
+                            } 
+                        },
+                        { recid: 23, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                        { recid: 24, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012' }
+                    ]
+                } 
+            },
+            { recid: 3, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012', 
+                w2ui: {
+                    children: [
+                        { recid: 11, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                        { recid: 12, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                        { recid: 13, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                        { recid: 14, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012' }
+                    ]
+                } 
+            },
+            { recid: 4, fname: 'Susan', lname: 'Ottie', email: 'jdoe@gmail.com', sdate: '4/3/2012', w2ui: { children: [] } },
+            { recid: 5, fname: 'Kelly', lname: 'Silver', email: 'jdoe@gmail.com', sdate: '4/3/2012', w2ui: { children: [] } },
+            { recid: 6, fname: 'Francis', lname: 'Gatos', email: 'jdoe@gmail.com', sdate: '4/3/2012', 
+                w2ui: {
+                    children: [
+                        { recid: 61, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                        { recid: 62, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                        { recid: 63, fname: 'Stuart', lname: 'Motzart', email: 'jdoe@gmail.com', sdate: '4/3/2012' },
+                        { recid: 64, fname: 'Jin', lname: 'Franson', email: 'jdoe@gmail.com', sdate: '4/3/2012' }
+                    ]
+                } 
+            },
+            { recid: 7, fname: 'Mark', lname: 'Welldo', email: 'jdoe@gmail.com', sdate: '4/3/2012', w2ui: { children: [] } },
+            { recid: 8, fname: 'Thomas', lname: 'Bahh', email: 'jdoe@gmail.com', sdate: '4/3/2012', w2ui: { children: [] } }
+        ]
+    });    
+});
+</script>
+
+</body>
+</html>

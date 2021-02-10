@@ -1,0 +1,153 @@
+.RText{
+	 background: rgba(173,216,230,0.5);
+}
+.jlabel{ 
+            display:block;font-size: smaller;
+}
+body .lm_content{
+                overflow: auto;
+                
+}
+.jbreackpoint {
+  /* border: 5px solid black; */
+  border-radius: 50%;
+  background: red;
+}
+.mce-content-body.HTMLPanel{
+	min-width:12px;
+	min-height:12px;
+	border:1px solid #ccc;
+} 
+.mce-content-body>p{
+  margin-top:0px;
+  margin-bottom:0px;
+}
+.mce-content-body.RText{
+	min-width:12px;
+	min-height:12px;
+	border:1px solid #ccc;
+} 
+
+.invisibleAfterColspan{
+	display:none;
+}
+
+br[data-mce-bogus="1"] {
+  display:none;
+}
+.jselected{
+  border-color: #C1E0FF; 
+  border-style:solid;
+}
+.ReportDesigner {
+    background-color:white
+
+}
+
+.ui-draggable-dragging{
+	opacity:0.4;
+}
+.Table{
+  height: 100px;
+  width: 100px;
+}
+.Tree{
+  height: 50px;
+  width: 50px;
+}
+.Button{
+  min-height: 8px;
+}
+.Button.down {
+  background: #bbb;
+  border-top: solid 2px #777;
+  border-left: solid 2px #777;
+  border-bottom: solid 2px #eaeaea;
+  border-right: solid 2px #eaeaea;
+}
+  #selectable .ui-selecting { background: #FECA40; }
+  #selectable .ui-selected { background: #F39814; color: white; }
+
+/* Ace Editor */
+.ace_gutter-cell.ace_breakpoint{ 
+    border-radius: 20px 0px 0px 20px; 
+    box-shadow: 0px 0px 1px 1px red inset; 
+}
+/*
+.ace_functionicon~.ace_completion-meta:before
+{
+  content:url('/res/function.ico'); 
+ 
+}
+
+.ace_variableicon~.ace_completion-meta:before
+{
+  content:url('/res/variable.ico'); 
+ 
+}
+.ace_membericon~.ace_completion-meta:before
+{
+  content:url('/res/member.ico'); 
+ 
+}*/
+/* Ace Editor Completion Color */
+.ace_functionicon~.ace_completion-meta
+{
+ background-color: aqua; 
+ color: black;
+}
+
+.ace_variableicon~.ace_completion-meta
+{
+  background-color:#FECA40; 
+  color: black;
+ 
+}
+.ace_membericon~.ace_completion-meta
+{
+  color: red;
+  background-color: chartreuse;
+}
+.ace_classicon~.ace_completion-meta
+{
+  color: black;
+  background-color:lightpink;
+}
+.input{
+  color:red;
+}
+.ace_annotationicon~.ace_completion-meta
+{
+  color: black;
+  background-color:rgb(117, 106, 146);
+}
+.autohide {
+  opacity: 0;
+}
+
+.autohide:hover {
+  opacity: 1;
+}
+
+/* Tooltip for mobile Browser 
+https://stackoverflow.com/questions/12539006/tooltips-for-mobile-browsers 
+  
+@media (pointer: coarse), (hover: none) {
+  [title] {
+    position: relative;
+    display: inline-flex;
+    justify-content: center;
+  }
+  [title]:focus::after {
+    content: attr(title);
+    position: absolute;
+    top: 90%;
+    color: #000;
+    background-color: #fff;
+    border: 1px solid;
+    width: fit-content;
+    padding: 3px;
+    font-size: 10px;
+  }
+
+}*/

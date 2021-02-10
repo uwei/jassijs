@@ -1,0 +1,14 @@
+<html>
+    <body>
+        <form id="form" action="user/login" method="post" >
+            <input type="text" name="username"><br>
+            <input type="password" name="password"><br>
+             <button id="loginButton" onclick="doSubmit()" type="button">Login</button>
+        </form>
+        <script>
+            function doSubmit() {
+                document.getElementById("form").submit();
+            }
+        </script>
+    </body>
+</html>

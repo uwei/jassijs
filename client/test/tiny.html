@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src='lib/tinymce/tinymce.min.js'></script>
+  <script>
+  tinymce.init({
+    selector: '#mytextarea',
+    inline: true,
+    setup:function(ed) {
+       ed.on('change', function(e) {
+           console.log('the content ', ed.getContent());
+       });
+   }
+
+  }
+          );
+  </script>
+</head>
+
+<body>
+<h1>TinyMCE Quick Start Guide</h1>
+    <span id="mytextarea">Hello, World!</span>
+</body>
+</html>

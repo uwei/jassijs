@@ -1,0 +1,13 @@
+//this is a dummy config needs by VS Code working with 2 project pathes
+{
+  "extends": "../../server/tsconfig.json",
+    "compilerOptions": {
+      "rootDirs": ["../server/remote","./"],
+     /* "paths": {
+        "typescript":["../server/node_modules/typescript"]
+      },*/
+    },
+    
+    "include":["../server/remote","./", "../jassi/base/Parser.ts"]
+    
+  }

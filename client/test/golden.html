@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+         <script src="lib/jquery.js"></script>
+  <script src="lib/jquery-ui.js"></script>
+    <script type="text/javascript" src="lib/goldenlayout.js"></script>
+<link type="text/css" rel="stylesheet" href="lib/goldenlayout-base.css" />
+<link type="text/css" rel="stylesheet" href="lib/goldenlayout-light-theme.css" />
+
+        <title>TODO supply a title</title>
+
+    </head>
+    <body>
+         <style>
+        .jlabel{ 
+            display:block;font-size: smaller;
+        }
+        body .lm_content{
+                overflow: scroll;
+        }
+    </style>
+        <script> 
+            var myLayout;
+            var counter=0;
+            function find(parent,name){
+                for(var x=0;x<parent.contentItems.length;x++){
+                    if(parent.contentItems[x].config.name===name)
+                        return parent.contentItems[x];
+                    var test=find(parent.contentItems[x],name);
+                    if(test!==undefined)
+                        return test;
+                }
+                return undefined;
+            } 
+            function addExplorer(title,component){
+                var configExplorer={
+                    name: 'explorer',
+                    type: 'stack',
+                    content:[]};
+                var config = {
+                    title: title,
+                    type: 'component',
+                    componentName: "name"+counter,
+                    componentState: { title:title,name:name,component:component }
+                };
+                  myLayout.registerComponent( "name"+counter++, function( container, state ){
+                    var v=container.getElement();
+                            v[0].appendChild(state.component);//html( '<h2>' + state.text + '</h2>');
+                });
+                var explorer=find(myLayout.root,"explorer");
+                if(explorer===undefined){
+                      myLayout.root.contentItems[0].addChild(configExplorer,0);
+                      explorer=myLayout.root.contentItems[0].contentItems[0];
+                      myLayout.root.contentItems[0].contentItems[0].config.width=15;
+                }
+
+                explorer.addChild(config);
+              
+            }
+           function add(title,component){
+               
+                var config = {
+                    title: title,
+                    type: 'component',
+                    componentName: "name"+counter,
+                    componentState: { title:title,name:name,component:component }
+                };
+                myLayout.registerComponent( "name"+counter++, function( container, state ){
+                    var v=container.getElement();
+                    v[0].appendChild(state.component);//html( '<h2>' + state.text + '</h2>');
+                });
+                var center=find(myLayout.root,"center");
+                center.addChild(config);
+              
+            }
+            $(function(){
+            
+          
+        var config = {settings:{
+             showPopoutIcon: false,
+         },
+        content: [{
+        type: 'row',
+        content:[
+            {
+            type: 'stack',
+            name: 'center',
+            content:[{
+                type: 'component',
+                 isClosable: false,
+
+                componentName: 'main',
+                componentState: { label: 'B' }
+            }]
+        }]
+    }]
+};
+myLayout = new GoldenLayout( config );
+myLayout.registerComponent( 'main', function( container, componentState ){
+    container.getElement().html( '<h2>' + componentState.label + '</h2>' );
+});
+myLayout.init();
+var x=0;
+$("#bt").on("click",function(){
+var bt=$("<button>kjj</button>")[0];
+
+addExplorer("Files",bt);
+    x++;
+});
+$("#bt").css("postion","absolute");
+$("#bt").css("top","200px");
+add("Kunde",bt);
+$("#bt").draggable();
+})
+
+        </script>
+        <button id="bt">kkk</button>
+        <div>TODO write content</div>
+    </body>
+</html>

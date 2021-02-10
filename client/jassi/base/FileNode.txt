@@ -1,0 +1,37 @@
+import { $Class } from "remote/jassi/base/Jassi";
+import {Server} from "remote/jassi/base/Server";
+
+//drag and drop from desktop: https://www.html5rocks.com/de/tutorials/file/dndfiles/
+@$Class("jassi.base.FileNode")
+export class FileNode {
+    name: string;
+    path: string;
+    files?: FileNode[];
+    isDirectory?() {
+    	return this.files!==undefined;
+    }
+    parent?:FileNode;
+    fullpath?:string;
+ 
+  /*  static async getFiles(): Promise<FileNode[]> {
+        var files = await new Server().dir();
+        var _files:FileNode={files:[],name:"root",path:""};
+        for (var x = 0;x < files.length;x++) {
+            var file = files[x];
+            var paths = file.split("/");
+            var current = _files;
+            for (var y = 0;y < paths.length - 1;y++) {
+                if (current[paths[y]] === undefined) {
+                    current[paths[y]] = { name: paths[y], files: [] };
+                    current.files.push(current[paths[y]]);
+                }
+                current = current[paths[y]];
+            }
+            current.files.push({ name: paths[paths.length - 1], path: file });
+        }
+        return _files.files;
+    }*/
+}
+export async function test(){
+	
+}

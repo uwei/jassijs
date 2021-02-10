@@ -1,0 +1,895 @@
+{
+	"app.ts": {
+		"date": 1587571767449
+	},
+	"demo/DBTest.ts": {
+		"date": 1587754351853
+	},
+	"demo/DialogKunde.ts": {
+		"date": 1586799739130,
+		"demo.DialogKunde": {}
+	},
+	"demo/DialogKunde2.ts": {
+		"date": 1578480372476,
+		"demo.DialogKunde2": {}
+	},
+	"demo/DK.ts": {
+		"date": 1586778201700,
+		"demo.DK": {}
+	},
+	"demo/HalloPhillip.ts": {
+		"date": 1587495719904,
+		"demo.HalloPhillip": {}
+	},
+	"demo/MemoryTest.ts": {
+		"date": 1579285622011
+	},
+	"demo/ReportKunde.ts": {
+		"date": 1581011791273,
+		"demo.ReportKunde": {}
+	},
+	"demo/TestComponent.ts": {
+		"date": 1586715283191,
+		"demo.TestComponent": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/TestComponent",
+					"editableChildComponents": [
+						"this",
+						"me.button4"
+					]
+				}
+			]
+		}
+	},
+	"demo/Testcontextmenu.ts": {
+		"date": 1579030823528,
+		"demo.Testcontextmenu": {}
+	},
+	"demo/TestExtension.ts": {
+		"date": 1579288931448
+	},
+	"demo/Testmenu.ts": {
+		"date": 1579030831633,
+		"demo.Testmenu": {}
+	},
+	"demo/TestTab.ts": {
+		"date": 1587301210956,
+		"de.KK3": {
+			"$ActionProvider": [
+				"3"
+			]
+		},
+		"de.KK4": {
+			"$ActionProvider": [
+				"4"
+			]
+		}
+	},
+	"demo/TestTree.ts": {
+		"date": 1587752685831,
+		"demo.TestTree": {}
+	},
+	"demo/TreeTable.ts": {
+		"date": 1587664392937,
+		"demo.TreeTable": {}
+	},
+	"jassi/base/Actions.ts": {
+		"date": 1587574136536,
+		"jassi.base.Actions": {}
+	},
+	"jassi/base/ChromeDebugger.ts": {
+		"date": 1587580514423,
+		"jassi.base.ChromeDebugger": {}
+	},
+	"jassi/base/Database.ts": {
+		"date": 1578503929726,
+		"jassi.base.Database": {},
+		"jassi.base.Database.TypeResolver": {},
+		"jassi.base.Database.Type": {},
+		"jassi.base.Database.Field": {}
+	},
+	"jassi/base/Debugger.ts": {
+		"date": 1586970806101,
+		"jassi.base.Debugger": {}
+	},
+	"jassi/base/Errors.ts": {
+		"date": 1579449103191
+	},
+	"jassi/base/Extensions.ts": {
+		"date": 1578488658560
+	},
+	"jassi/base/FileNode.ts": {
+		"date": 1587293006025,
+		"jassi.base.FileNode": {}
+	},
+	"jassi/base/Parser.ts": {
+		"date": 1578593817888,
+		"jassi.base.Parser": {}
+	},
+	"jassi/base/PropertyEditorService.ts": {
+		"date": 1579210738388,
+		"jassi.base.PropertyEditorService": {}
+	},
+	"jassi/base/Router.ts": {
+		"date": 1578943360891,
+		"jassi.base.Router": {}
+	},
+	"jassi/base/Windows.ts": {
+		"date": 1586966857144,
+		"jassi.base.Windows": {}
+	},
+	"jassi/jassi.ts": {
+		"date": 1580324099474
+	},
+	"jassi_report/Columns.ts": {
+		"date": 1579203329295,
+		"jassi_report.Columns": {}
+	},
+	"jassi_report/ReportDesign.ts": {
+		"date": 1587203854286,
+		"jassi_report.ReportDesign": {}
+	},
+	"jassi_report/RStack.ts": {
+		"date": 1587203849102,
+		"jassi_report.RStack": {}
+	},
+	"jassi_report/RText.ts": {
+		"date": 1586591636339,
+		"jassi_report.RText": {
+			"$ReportComponent": [
+				{
+					"fullPath": "report/Text",
+					"icon": "res/textbox.ico",
+					"initialize": {
+						"value": "text"
+					}
+				}
+			]
+		}
+	},
+	"jassi/ui/BoxPanel.ts": {
+		"date": 1579035421456,
+		"jassi.ui.BoxPanel": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/BoxPanel",
+					"icon": "res/boxpanel.ico",
+					"editableChildComponents": [
+						"this"
+					]
+				}
+			],
+			"$Property": [
+				{
+					"name": "isAbsolute",
+					"hide": true,
+					"type": "boolean"
+				}
+			]
+		}
+	},
+	"jassi/ui/Button.ts": {
+		"date": 1586591444609,
+		"jassi.ui.Button": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Button",
+					"icon": "res/button.ico",
+					"initialize": {
+						"text": "button"
+					}
+				}
+			]
+		}
+	},
+	"jassi/ui/Checkbox.ts": {
+		"date": 1579208303878,
+		"jassi.ui.Checkbox": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Ceckbox",
+					"icon": "res/checkbox.ico"
+				}
+			]
+		}
+	},
+	"jassi/ui/CodeEditor.ts": {
+		"date": 1587573220084,
+		"jassi.ui.CodeEditor": {}
+	},
+	"jassi/ui/CodeEditorInvisibleComponents.ts": {
+		"date": 1579118925540,
+		"jassi.ui.CodeEditorInvisibleComponents": {}
+	},
+	"jassi/ui/CodePanel.ts": {
+		"date": 1587751540297,
+		"jassi.ui.CodePanel": {}
+	},
+	"jassi/ui/Component.ts": {
+		"date": 1587741090134,
+		"jassi.ui.Component": {}
+	},
+	"jassi/ui/ComponentDescriptor.ts": {
+		"date": 1587578616297,
+		"jassi.ui.ComponentDescriptor": {}
+	},
+	"jassi/ui/ComponentExplorer.ts": {
+		"date": 1587664449124,
+		"jassi.ui.ComponentExplorer": {}
+	},
+	"jassi/ui/ComponentPalette.ts": {
+		"date": 1578695092181,
+		"jassi.ui.ComponentPalette": {}
+	},
+	"jassi/ui/ComponentSpy.ts": {
+		"date": 1586794941003,
+		"jassi.ui.ComponentSpy": {}
+	},
+	"jassi/ui/Container.ts": {
+		"date": 1587324000290,
+		"jassi.ui.Container": {}
+	},
+	"jassi/ui/ContextMenu.ts": {
+		"date": 1587739220470,
+		"jassi.ui.ContextMenu": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/ContextMenu",
+					"icon": "res/contextmenu.ico",
+					"editableChildComponents": [
+						"menu"
+					]
+				}
+			]
+		}
+	},
+	"jassi/ui/converters/DefaultConverter.ts": {
+		"date": 1579036779064,
+		"jassi.ui.converters.DefaultConverter": {
+			"$Converter": [
+				"custom"
+			],
+			"$Property": [
+				{
+					"name": "new",
+					"type": "json"
+				},
+				{
+					"name": "new/stringToObject",
+					"type": "function",
+					"default": "function(ob){}"
+				}
+			]
+		}
+	},
+	"jassi/ui/converters/NumberConverter.ts": {
+		"date": 1580153130000,
+		"jassi.ui.converters.NumberConverter": {
+			"$Converter": [
+				"number"
+			],
+			"$Property": [
+				{
+					"name": "new",
+					"type": "json"
+				},
+				{
+					"name": "new/min",
+					"type": "number",
+					"default": "undefined"
+				},
+				{
+					"name": "new/max",
+					"type": "number",
+					"default": "undefined"
+				}
+			]
+		}
+	},
+	"jassi/ui/converters/StringConverter.ts": {
+		"date": 1579036889519,
+		"jassi.ui.converters.StringConverter": {
+			"$Converter": [
+				"string"
+			],
+			"$Property": [
+				{
+					"name": "new",
+					"type": "json"
+				},
+				{
+					"name": "new/minChars",
+					"type": "number",
+					"default": "undefined"
+				},
+				{
+					"name": "new/maxChars",
+					"type": "number",
+					"default": "undefined"
+				}
+			]
+		}
+	},
+	"jassi/ui/Databinder.ts": {
+		"date": 1578504019338,
+		"jassi.ui.Databinder": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Databinder",
+					"icon": "res/databinder.ico"
+				}
+			]
+		}
+	},
+	"jassi/ui/DataComponent.ts": {
+		"date": 1580070153812,
+		"jassi.ui.DataComponent": {}
+	},
+	"jassi/ui/designer/ComponentDesigner.ts": {
+		"date": 1587578179708,
+		"jassi.ui.designer.ComponentDesigner": {}
+	},
+	"jassi/ui/designer/Report.ts": {
+		"date": 1579203401615,
+		"jassi_report.Report": {}
+	},
+	"jassi/ui/designer/ReportDesigner.ts": {
+		"date": 1581015240880,
+		"jassi.ui.designer.ReportDesigner": {}
+	},
+	"jassi/ui/Dialog.ts": {
+		"date": 1587580597961,
+		"jassi.ui.Dialog": {}
+	},
+	"jassi/ui/DockingContainer.ts": {
+		"date": 1580486985302,
+		"jassi.ui.DockingContainer": {}
+	},
+	"jassi/ui/ErrorPanel.ts": {
+		"date": 1586978382939,
+		"jassi.ui.ErrorPanel": {}
+	},
+	"jassi/ui/FileExplorer.ts": {
+		"date": 1587742339887,
+		"jassi.ui.FileActions": {
+			"$ActionProvider": [
+				"jassi.base.FileNode"
+			]
+		},
+		"jassi.ui.FileExplorer": {}
+	},
+	"jassi/ui/helper/DragAndDropper.ts": {
+		"date": 1587397949758,
+		"jassi.ui.helper.DragAndDropper": {}
+	},
+	"jassi/ui/helper/Resizer.ts": {
+		"date": 1587577979507,
+		"jassi.ui.helper.Resizer": {}
+	},
+	"jassi/ui/HTMLEditorPanel.ts": {
+		"date": 1579036982434,
+		"jassi.ui.HTMLEditorPanel": {}
+	},
+	"jassi/ui/HTMLPanel.ts": {
+		"date": 1586276196642,
+		"jassi.ui.HTMLPanel": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/HTMLPanel",
+					"icon": "res/htmlpanel.ico",
+					"initialize": {
+						"value": "text"
+					}
+				}
+			]
+		}
+	},
+	"jassi/ui/Image.ts": {
+		"date": 1579037070216,
+		"jassi.ui.Image": {
+			"$UIComponent": [
+				{
+					"fullPath": "default/Image"
+				}
+			]
+		}
+	},
+	"jassi/ui/InvisibleComponent.ts": {
+		"date": 1579037330343,
+		"jassi.ui.InvisibleComponent": {
+			"$Property": [
+				{
+					"name": "label",
+					"hide": true
+				},
+				{
+					"name": "icon",
+					"hide": true
+				},
+				{
+					"name": "tooltip",
+					"hide": true
+				},
+				{
+					"name": "x",
+					"hide": true
+				},
+				{
+					"name": "y",
+					"hide": true
+				},
+				{
+					"name": "width",
+					"hide": true
+				},
+				{
+					"name": "height",
+					"hide": true
+				},
+				{
+					"name": "contextMenu",
+					"hide": true
+				}
+			]
+		}
+	},
+	"jassi/ui/Menu.ts": {
+		"date": 1587324149949,
+		"jassi.ui.Menu": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Menu",
+					"icon": "res/menu.ico",
+					"initialize": {
+						"text": "menu"
+					}
+				}
+			]
+		}
+	},
+	"jassi/ui/MenuItem.ts": {
+		"date": 1586276243190,
+		"jassi.ui.MenuItem": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/MenuItem",
+					"icon": "res/menuitem.ico",
+					"initialize": {
+						"text": "menu"
+					},
+					"editableChildComponents": [
+						"items"
+					]
+				}
+			]
+		}
+	},
+	"jassi/ui/ObjectChooser.ts": {
+		"date": 1586798603620,
+		"jassi.ui.ObjectChooser": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/ObjectChooser",
+					"icon": "res/search.ico"
+				}
+			]
+		}
+	},
+	"jassi/ui/Panel.ts": {
+		"date": 1586276266900,
+		"jassi.ui.Panel": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Panel",
+					"icon": "res/panel.ico",
+					"editableChildComponents": [
+						"this"
+					]
+				}
+			],
+			"$Property": [
+				{
+					"name": "new",
+					"type": "json"
+				},
+				{
+					"name": "new/useSpan",
+					"type": "boolean",
+					"default": false
+				}
+			]
+		}
+	},
+	"jassi/ui/PDFViewer.ts": {
+		"date": 1579206466656,
+		"jassi.ui.PDFViewer": {}
+	},
+	"jassi/ui/Property.ts": {
+		"date": 1586629943550,
+		"jassi.ui.Property": {}
+	},
+	"jassi/ui/PropertyEditor.ts": {
+		"date": 1587577863285,
+		"jassi.ui.PropertyEditor": {}
+	},
+	"jassi/ui/PropertyEditors/BooleanEditor.ts": {
+		"date": 1579645089635,
+		"jassi.ui.PropertyEditors.BooleanEditor": {
+			"$PropertyEditor": [
+				[
+					"boolean"
+				]
+			]
+		}
+	},
+	"jassi/ui/PropertyEditors/ClassSelectorEditor.ts": {
+		"date": 1579551465753,
+		"jassi.ui.PropertyEditors.ClassSelectorEditor": {
+			"$PropertyEditor": [
+				[
+					"classselector"
+				]
+			]
+		}
+	},
+	"jassi/ui/PropertyEditors/ComponentSelectorEditor.ts": {
+		"date": 1579545469542,
+		"jassi.ui.PropertyEditors.ComponentSelectorEditor": {
+			"$PropertyEditor": [
+				[
+					"componentselector"
+				]
+			]
+		}
+	},
+	"jassi/ui/PropertyEditors/DatabinderEditor.ts": {
+		"date": 1578481420500,
+		"jassi.ui.PropertyEditors.DatabinderEditor": {
+			"$PropertyEditor": [
+				[
+					"databinder"
+				]
+			]
+		}
+	},
+	"jassi/ui/PropertyEditors/DBObjectEditor.ts": {
+		"date": 1578481427984,
+		"jassi.ui.PropertyEditors.DBObjectEditor": {
+			"$PropertyEditor": [
+				[
+					"dbobject"
+				]
+			]
+		}
+	},
+	"jassi/ui/PropertyEditors/DefaultEditor.ts": {
+		"date": 1586721308131,
+		"jassi.ui.PropertyEditors.DefaultEditor": {
+			"$PropertyEditor": [
+				[
+					"string",
+					"number"
+				]
+			]
+		}
+	},
+	"jassi/ui/PropertyEditors/Editor.ts": {
+		"date": 1578695603146,
+		"jassi.ui.PropertyEditors.Editor": {}
+	},
+	"jassi/ui/PropertyEditors/FunctionEditor.ts": {
+		"date": 1578481437384,
+		"jassi.ui.PropertyEditors.FunctionEditor": {
+			"$PropertyEditor": [
+				[
+					"function"
+				]
+			]
+		}
+	},
+	"jassi/ui/PropertyEditors/HTMLEditor.ts": {
+		"date": 1578695574526,
+		"jassi.ui.PropertyEditors.HTMLEditor": {
+			"$PropertyEditor": [
+				[
+					"html"
+				]
+			]
+		}
+	},
+	"jassi/ui/PropertyEditors/JsonEditor.ts": {
+		"date": 1587571063077,
+		"jassi.ui.PropertyEditors.JsonEditor": {
+			"$PropertyEditor": [
+				[
+					"json"
+				]
+			]
+		}
+	},
+	"jassi/ui/PropertyEditors/NameEditor.ts": {
+		"date": 1578481443660,
+		"jassi.ui.PropertyEditors.NameEditor": {
+			"$PropertyEditor": [
+				[
+					"*name*"
+				]
+			]
+		}
+	},
+	"jassi/ui/Repeater.ts": {
+		"date": 1579448277451,
+		"jassi.ui.Repeater": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Repeater",
+					"icon": "res/repeater.ico",
+					"editableChildComponents": [
+						"this",
+						"design"
+					]
+				}
+			]
+		}
+	},
+	"jassi/ui/SearchExplorer.ts": {
+		"date": 1587664647517,
+		"jassi.ui.SearchExplorer": {}
+	},
+	"jassi/ui/Select.ts": {
+		"date": 1580485230245,
+		"jassi.ui.Select": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Select",
+					"icon": "res/select.ico"
+				}
+			],
+			"$Property": [
+				{
+					"name": "new",
+					"type": "json"
+				},
+				{
+					"name": "new/multiple",
+					"type": "boolean",
+					"default": false
+				},
+				{
+					"name": "new/allowDeselect",
+					"type": "boolean",
+					"default": false
+				},
+				{
+					"name": "new/placeholder",
+					"type": "string",
+					"default": ""
+				}
+			]
+		}
+	},
+	"jassi/ui/SplitPanel.ts": {
+		"date": 1578695092182,
+		"jassi.ui.SplitPanel": {}
+	},
+	"jassi/ui/Table.ts": {
+		"date": 1587573654455,
+		"jassi.ui.Table": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Table",
+					"icon": "res/table.ico"
+				}
+			],
+			"$Property": [
+				{
+					"name": "new",
+					"type": "json"
+				},
+				{
+					"name": "new/paginationSize",
+					"type": "number",
+					"default": "undefined"
+				},
+				{
+					"name": "new/headerSort",
+					"type": "boolean",
+					"default": true
+				},
+				{
+					"name": "new/layout",
+					"type": "string",
+					"default": "fitDataStretch",
+					"chooseFrom": [
+						"fitData",
+						"fitColumns",
+						"fitDataFill",
+						"fitDataStretch"
+					]
+				},
+				{
+					"name": "new/dataTreeChildField",
+					"type": "string",
+					"default": "undefined"
+				},
+				{
+					"name": "new/movableColumns",
+					"type": "boolean",
+					"default": false
+				},
+				{
+					"name": "new/cellDblClick",
+					"type": "function",
+					"default": "function(event:any,group:any){\n\t\n}"
+				}
+			]
+		}
+	},
+	"jassi/ui/Tree.ts": {
+		"date": 1587754753241,
+		"jassi.ui.Tree": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Tree",
+					"icon": "res/tree.ico"
+				}
+			]
+		}
+	},
+	"jassi/ui/VariablePanel.ts": {
+		"date": 1587495384769,
+		"jassi.ui.VariablePanel": {}
+	},
+	"jassi/util/PDFReport.ts": {
+		"date": 1581715445621,
+		"jassi.ui.PDFReport": {}
+	},
+	"jassi/util/Reloader.ts": {
+		"date": 1587754316984,
+		"jassi.util.Reloader": {}
+	},
+	"jassi/util/Tools.ts": {
+		"date": 1587571068912,
+		"jassi.util.Tools": {}
+	},
+	"jassi/util/TSSourceMap.ts": {
+		"date": 1578481535178,
+		"jassi.util.TSSourceMap": {}
+	},
+	"jassi/util/typeorm.ts": {
+		"date": 1576348127280
+	},
+	"remote/de/AR.ts": {
+		"date": 1579282570677,
+		"de.AR": {
+			"$DBObject": []
+		}
+	},
+	"remote/de/ARZeile.ts": {
+		"date": 1581179596058,
+		"de.ARZeile": {
+			"$DBObject": []
+		}
+	},
+	"remote/de/Kunde.ext.ts": {
+		"date": 1579282699412
+	},
+	"remote/de/Kunde.ts": {
+		"date": 1579465530556,
+		"de.Kunde": {
+			"$DBObject": []
+		}
+	},
+	"remote/de/KundeExt.ts": {
+		"date": 1579465759466,
+		"de.KundeExt": {
+			"$Extension": [
+				"de.Kunde"
+			]
+		}
+	},
+	"remote/de/KundeExt2.ts": {
+		"date": 1578489282076
+	},
+	"remote/de/Lieferant.ts": {
+		"date": 1578685077432,
+		"de.Lieferant": {
+			"$DBObject": []
+		}
+	},
+	"remote/de/MyUser.ts": {
+		"date": 1578951364338,
+		"de.MyUser": {
+			"$DBObject": [],
+			"Entity": []
+		}
+	},
+	"remote/de/Recht.ts": {
+		"date": 1578479970274,
+		"de.Recht": {
+			"$DBObject": []
+		}
+	},
+	"remote/de/User.ts": {
+		"date": 1578479987989,
+		"de.User": {
+			"$DBObject": []
+		}
+	},
+	"remote/jassi/base/Classes.ts": {
+		"date": 1579284953211,
+		"jassi.base.Classes": {}
+	},
+	"remote/jassi/base/Database.ts": {
+		"date": 1578478628377,
+		"remote.jassi.base.Database": {}
+	},
+	"remote/jassi/base/DBArray.ts": {
+		"date": 1578477060403,
+		"jassi.base.DBArray": {}
+	},
+	"remote/jassi/base/DBObject.ts": {
+		"date": 1579447540903,
+		"jassi.base.DBObject": {}
+	},
+	"remote/jassi/base/Extensions.ts": {
+		"date": 1586622168850
+	},
+	"remote/jassi/base/FileNode.ts": {
+		"date": 1587231615500,
+		"jassi.base.FileNode": {}
+	},
+	"remote/jassi/base/hallo.ts": {
+		"date": 1578943024284
+	},
+	"remote/jassi/base/Jassi.ts": {
+		"date": 1586677135690,
+		"jassi.base.Jassi": {}
+	},
+	"remote/jassi/base/Registry.ts": {
+		"date": 1587310848615
+	},
+	"remote/jassi/base/RemoteObject.ts": {
+		"date": 1578339903020,
+		"jassi.base.RemoteObject": {}
+	},
+	"remote/jassi/base/RemoteProtocol.ts": {
+		"date": 1578671490123,
+		"jassi.base.RemoteProtocol": {}
+	},
+	"remote/jassi/base/Server.ts": {
+		"date": 1587754338963,
+		"remote.jassi.base.Server": {}
+	},
+	"remote/jassi/ext/registry.ts": {
+		"date": 1578951573443
+	},
+	"demo/TreeContextmenu.ts": {
+		"date": 1587741215255
+	},
+	"demo/TableContextmenu.ts": {
+		"date": 1587574256951
+	},
+	"jassi/util/Typescript.ts": {
+		"date": 1587572919051,
+		"jassi/util/Typescript": {}
+	},
+	"jassi/ui/Textbox.ts": {
+		"date": 1587743405866,
+		"jassi.ui.Textbox": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Textbox",
+					"icon": "res/textbox.ico"
+				}
+			],
+			"$Property": [
+				{
+					"name": "new",
+					"type": "string"
+				}
+			]
+		}
+	}
+}

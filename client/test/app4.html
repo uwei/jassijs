@@ -1,0 +1,27 @@
+<html>
+<head>
+<script type="text/javascript"> 
+function a1(){
+  let bt= document.createElement("select");
+        let op=new Option("jj","jj");
+        op.setAttribute("id","op");
+        
+        bt.setAttribute("id","sss");
+        bt.appendChild(op);
+        document.body.appendChild(bt);	
+}
+function a2(){
+  let sel=document.getElementById("sss");
+    let op=document.getElementById("op");
+    sel.removeChild(op);
+    document.body.removeChild(sel);
+}
+</script>
+</head>
+<body>
+
+    <button onclick="a1()">on</button>
+    <button onclick="a2()">off</button>
+
+</body>
+</html>
