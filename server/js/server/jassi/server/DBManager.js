@@ -61,6 +61,7 @@ function getConOpts() {
         "password": spass,
         "database": sdb,
         "synchronize": true,
+	"ssl": true,
         //  logger:"advanced-console",
         //    maxQueryExecutionTime:
         "logging": false,
