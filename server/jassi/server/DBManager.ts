@@ -85,6 +85,8 @@ function getConOpts(): ConnectionOptions {
     //    "src/subscriber/**/*.ts"
     // ]
   };
+
+
   return opt;
 }
 var _instance: DBManager = undefined;
@@ -102,14 +104,24 @@ export class DBManager {
 
       var test = getMetadataArgsStorage();
       try {
-        _initrunning = createConnection(getConOpts());
+        var opts = getConOpts();
+        
+          _initrunning = createConnection(opts);
         await _initrunning;
         await _instance.mySync();
       } catch (err) {
-        console.log("DB corrupt - revert the last change");
-        _instance = undefined;
-        _initrunning = undefined;
-        throw err;
+        try {
+          _initrunning=undefined;
+          opts["ssl"] = true;//heroku need this
+          _initrunning = createConnection(opts);
+          await _initrunning;
+          await _instance.mySync();
+        } catch (err) {
+          console.log("DB corrupt - revert the last change");
+          _instance = undefined;
+          _initrunning = undefined;
+          throw err;
+        }
       }
 
 

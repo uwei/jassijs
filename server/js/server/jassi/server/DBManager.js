@@ -61,7 +61,6 @@ function getConOpts() {
         "password": spass,
         "database": sdb,
         "synchronize": true,
-	"ssl": true,
         //  logger:"advanced-console",
         //    maxQueryExecutionTime:
         "logging": false,
@@ -80,15 +79,25 @@ class DBManager {
             _instance = new DBManager();
             var test = typeorm_1.getMetadataArgsStorage();
             try {
-                _initrunning = typeorm_1.createConnection(getConOpts());
+                var opts = getConOpts();
+                _initrunning = typeorm_1.createConnection(opts);
                 await _initrunning;
                 await _instance.mySync();
             }
             catch (err) {
-                console.log("DB corrupt - revert the last change");
-                _instance = undefined;
-                _initrunning = undefined;
-                throw err;
+                try {
+                    _initrunning = undefined;
+                    opts["ssl"] = true; //heroku need this
+                    _initrunning = typeorm_1.createConnection(opts);
+                    await _initrunning;
+                    await _instance.mySync();
+                }
+                catch (err) {
+                    console.log("DB corrupt - revert the last change");
+                    _instance = undefined;
+                    _initrunning = undefined;
+                    throw err;
+                }
             }
         }
         //wait for connection ready

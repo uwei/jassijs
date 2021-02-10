@@ -12,7 +12,7 @@ async function checkSimulateUser(request) {
     var rights = (await Promise.resolve().then(() => require("remote/jassi/security/Rights"))).default;
     var test = request.cookies["simulateUser"];
     if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && await rights.isAdmin() === true) {
-        var db = await (await Promise.resolve().then(() => require("remote/jassi/server/DBManager"))).DBManager.get();
+        var db = await (await Promise.resolve().then(() => require("jassi/server/DBManager"))).DBManager.get();
         var user = await db.getUser(request.cookies["simulateUser"], request.cookies["simulateUserPassword"]);
         if (!user) {
             console.log("simulateUser not found");
