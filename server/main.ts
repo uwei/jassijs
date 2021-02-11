@@ -31,7 +31,13 @@ import { User } from "remote/jassi/security/User";
 import { DBManager } from "jassi/server/DBManager";
 
 const PORT = process.env.PORT || 5000
-
+function test(){
+  var h=arguments.callee;
+}
+function test3(){
+  test();
+}
+test3();
 let app = express();
 new Indexer().updateRegistry();
 app.use(staticfiles);

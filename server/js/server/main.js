@@ -21,6 +21,13 @@ const getRequest_1 = require("jassi/server/getRequest");
 const User_1 = require("remote/jassi/security/User");
 const DBManager_1 = require("jassi/server/DBManager");
 const PORT = process.env.PORT || 5000;
+function test() {
+    var h = arguments.callee;
+}
+function test3() {
+    test();
+}
+test3();
 let app = express();
 new Indexer_1.Indexer().updateRegistry();
 app.use(Filessystem_1.staticfiles);

@@ -1,2 +1,0 @@
-https://dzone.com/articles/the-classic-northwind-database-converted-to-the-no
-https://github.com/tmcnab/northwind-mongo
