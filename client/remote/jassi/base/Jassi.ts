@@ -35,7 +35,7 @@ export function $register(servicename: string, ...params): Function {
     }
 }
 
-/*declare global {
+declare global {
     interface String {
         replaceAll: any;
     }
@@ -44,7 +44,7 @@ export function $register(servicename: string, ...params): Function {
 String.prototype.replaceAll = function (search:string, replacement:string):string {
     var target = this;
     return target.split(search).join(replacement);
-}*/
+}
 
 
 

@@ -4,7 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "E:\\wamp64\\www\\jassi\\client\\remote"
+			"path": "..\\client\\remote"
 		}
 	],
 	"settings": {}

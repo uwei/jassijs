@@ -33,16 +33,10 @@ function $register(servicename, ...params) {
     };
 }
 exports.$register = $register;
-/*declare global {
-    interface String {
-        replaceAll: any;
-    }
-}
-
-String.prototype.replaceAll = function (search:string, replacement:string):string {
+String.prototype.replaceAll = function (search, replacement) {
     var target = this;
     return target.split(search).join(replacement);
-}*/
+};
 /**
 * main class for jassi
 * @class Jassi
