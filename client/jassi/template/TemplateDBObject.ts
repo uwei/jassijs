@@ -7,7 +7,6 @@ import { OptionDialog } from "jassi/ui/OptionDialog";
 import { classes } from "remote/jassi/base/Classes";
 import registry from "remote/jassi/base/Registry";
 import { FileActions } from "jassi/ui/FileExplorer";
-import { name } from "node_modules/@types/sizzle";
 import { TemplateDBDialog } from "jassi/template/TemplateDBDialog";
 
 var code=`import {DBObject, $DBObject } from "remote/jassi/base/DBObject";

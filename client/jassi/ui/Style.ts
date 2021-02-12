@@ -2,7 +2,7 @@ import { InvisibleComponent } from "jassi/ui/InvisibleComponent";
 import { $UIComponent } from "jassi/ui/Component";
 import jassi, { $Class } from "remote/jassi/base/Jassi";
 import { Property, $Property } from "jassi/ui/Property";
-import { name } from "node_modules/@types/sizzle";
+
 import { CSSProperties } from "jassi/ui/CSSProperties";
 
 

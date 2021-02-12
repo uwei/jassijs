@@ -1,4 +1,4 @@
-require.config(
+/*require.config(
     {
       paths :
       {
@@ -17,7 +17,7 @@ require.config(
               exports: 'pdfMake'
           }
       }
-    });
+    });*/
 define("jassi_report/ext/pdfmake",['pdfmake'],function(ttt){
             return {
                 default:pdfMake

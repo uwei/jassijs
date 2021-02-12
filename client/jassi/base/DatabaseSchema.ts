@@ -3,9 +3,9 @@ import registry from "remote/jassi/base/Registry";
 import { classes } from "remote/jassi/base/Classes";
 import { db } from "remote/jassi/base/Database";
 import "jassi/ext/jquery.choosen";
-import typescript, { Typescript } from "jassi/util/Typescript";
+import typescript, { Typescript } from "jassi_editor/util/Typescript";
 
-import { Parser, ParsedClass } from "jassi/base/Parser";
+import { Parser, ParsedClass } from "jassi_editor/util/Parser";
 import { Property, $Property } from "jassi/ui/Property";
 
 import { TemplateDBObject } from "jassi/template/TemplateDBObject";
@@ -284,7 +284,7 @@ export class DatabaseSchema {
         this.parsedClasses[dbcl.name].parent.addOrModifyMember({ name: field.name, type: realtype, decorator: decs }, this.parsedClasses[dbcl.name]);
     }
     private async reloadCodeInEditor(file: string, text: string) {
-        var editor = windows.findComponent("jassi.ui.CodeEditor-" + file);
+        var editor = windows.findComponent("jassi_editor.CodeEditor-" + file);
         if (editor !== undefined) {
 
             if (editor._codeToReload === undefined) {

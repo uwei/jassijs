@@ -6,7 +6,6 @@ import { FileExplorer, FileActions } from "jassi/ui/FileExplorer";
 import { Server } from "remote/jassi/base/Server";
 import { router } from "jassi/base/Router";
 import { Property, $Property } from "jassi/ui/Property";
-import { name } from "node_modules/@types/sizzle";
 import { DBObject } from "remote/jassi/base/DBObject";
 import { classes } from "remote/jassi/base/Classes";
 import registry from "remote/jassi/base/Registry";

@@ -1,4 +1,4 @@
-require.config(
+/*require.config(
     {
        // 'pdfjs-dist/build/pdf': 'myfolder/pdf.min',
        // 'pdfjs-dist/build/pdf.worker': 'myfolder/pdf.worker.min'
@@ -10,7 +10,7 @@ require.config(
       shim: {
         'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
         }
-  });
+  });*/
 
 define("jassi_report/ext/pdfjs",["pdfjs-dist/build/pdf","pdfjs-dist/build/pdf.worker"],function(pdfjs,worker,pdfjsWorker){
     pdfjs.GlobalWorkerOptions.workerSrc = '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';

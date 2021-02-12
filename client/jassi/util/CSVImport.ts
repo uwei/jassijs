@@ -13,7 +13,6 @@ import { Papa } from "jassi/ext/papaparse";
 import { db } from "remote/jassi/base/Database";
 import registry from "remote/jassi/base/Registry";
 import { classes } from "remote/jassi/base/Classes";
-import { data } from "node_modules/@types/jquery";
 import { DBObject } from "remote/jassi/base/DBObject";
 var csv = `id,testid,companyname,contactname,contacttitle,address,city,region,postalcode,country,phone,fax
 ALFKI,1,Alfreds Futterkiste,Maria Anders,Sales Representative,Obere Str. 57,Berlin,#NV,12209,Germany,030-0074321,030-0076545

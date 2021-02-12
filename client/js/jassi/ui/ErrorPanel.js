@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "remote/jassi/base/Jassi", "jassi/ui/Button", "jassi/util/TSSourceMap", "jassi/base/Router"], function (require, exports, Panel_1, Errors_1, Jassi_1, Button_1, TSSourceMap_1, Router_1) {
+define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "remote/jassi/base/Jassi", "jassi/ui/Button", "jassi_editor/util/TSSourceMap", "jassi/base/Router"], function (require, exports, Panel_1, Errors_1, Jassi_1, Button_1, TSSourceMap_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ErrorPanel = void 0;
@@ -57,18 +57,23 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "remote/jas
          * search Errors in code
          **/
         async search() {
-            var typescript = (await new Promise((resolve_1, reject_1) => { require(["jassi/util/Typescript"], resolve_1, reject_1); })).default;
+            var typescript = (await new Promise((resolve_1, reject_1) => { require(["jassi_editor/util/Typescript"], resolve_1, reject_1); })).default;
             await typescript.initService();
-            var all = typescript.getDiagnosticsForAll();
+            var all = await typescript.getDiagnosticsForAll();
+            if (all.length === 0)
+                $.notify("no Errors found", "info", { position: "right" });
             for (var x = 0; x < all.length; x++) {
                 var diag = all[x];
                 var s = diag.file.fileName;
                 var pos = typescript.getLineAndCharacterOfPosition(diag.file.fileName, diag.start);
                 var href = window.location.origin;
                 var err = {
-                    errorMsg: diag.messageText,
-                    errorObj: {
-                        stack: href + "/" + diag.file.fileName + ":" + pos.line + ":" + pos.character
+                    filename: diag.file.fileName,
+                    lineno: pos.line,
+                    colno: pos.character,
+                    error: {
+                        message: diag.messageText,
+                        stack: "" //href + "/" + diag.file.fileName + ":" + pos.line + ":" + pos.character
                     }
                 };
                 Errors_1.Errors.errors.addError(err);
@@ -79,14 +84,20 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "remote/jas
          * @param {object} error - the error
          */
         async addError(error) {
+            var _a;
             var msg = "";
             if (error.infoMsg !== undefined) {
                 msg = error.infoMsg + "<br>";
             }
             else {
                 var sstack = "";
+                var m = (_a = error.error) === null || _a === void 0 ? void 0 : _a.message;
+                if (!m)
+                    m = "";
+                if (m.messageText)
+                    m = m.messageText;
                 if (error.error) {
-                    sstack = error.error.message.replaceAll(":", "") + "(" + error.filename + ":" + error.lineno + ":" + error.colno + ")\n";
+                    sstack = m.replaceAll(":", "") + "(" + error.filename + ":" + error.lineno + ":" + error.colno + ")\n";
                     if (error.error.stack !== undefined)
                         sstack = sstack + error.error.stack;
                 }
@@ -99,15 +110,22 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "remote/jas
                 msg = "";
                 for (var i = 0; i < stack.length; i++) {
                     var line = stack[i];
-                    if (line.split(":").length < 4)
-                        continue; //edge and chrome insert message in stack->ignore
-                    var poshttp = line.indexOf("http");
-                    var url = await this._convertURL(line.substring(poshttp, line.length));
-                    line = line.replace("\n", "");
-                    var ident = (i === 0 ? "0" : "20");
-                    msg = msg + '<div style="text-indent:' + ident + 'px;">' + line.substring(0, poshttp) +
-                        '<a href="#" onclick="jassi.ErrorPanel.prototype.onsrclink(this);">' +
-                        url + '</a>' + (line.endsWith(")") ? ")" : "") + '</div>';
+                    if (line.indexOf(".ts:") > 0) {
+                        msg = msg + '<div>' + line.substring(0, line.lastIndexOf("(")) +
+                            '<a href="#" onclick="jassi.ErrorPanel.prototype.onsrclink(this);">' +
+                            line.substr(line.lastIndexOf("(") + 1, line.length - 1) + '</a>)' + "" + '</div>';
+                    }
+                    else {
+                        if (line.split(":").length < 4)
+                            continue; //edge and chrome insert message in stack->ignore
+                        var poshttp = line.indexOf("http");
+                        var url = await this._convertURL(line.substring(poshttp, line.length));
+                        line = line.replace("\n", "");
+                        var ident = (i === 0 ? "0" : "20");
+                        msg = msg + '<div style="text-indent:' + ident + 'px;">' + line.substring(0, poshttp) +
+                            '<a href="#" onclick="jassi.ErrorPanel.prototype.onsrclink(this);">' +
+                            url + '</a>' + (line.endsWith(")") ? ")" : "") + '</div>';
+                    }
                 }
             }
             var value = $('<span>' + msg + '</span>');
@@ -176,8 +194,8 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "remote/jas
         var data = param.text.split(":");
         if (data[1] === "")
             return;
-        Router_1.router.navigate("#do=jassi.ui.CodeEditor&file=" + data[0] + "&line=" + data[1]);
-        // jassi.ui.CodeEditor.open(param.text);
+        Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + data[0] + "&line=" + data[1]);
+        // jassi_editor.CodeEditor.open(param.text);
     };
     Jassi_1.default.ErrorPanel = ErrorPanel;
 });

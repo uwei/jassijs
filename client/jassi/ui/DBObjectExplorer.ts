@@ -7,7 +7,6 @@ import registry from "remote/jassi/base/Registry";
 import { router } from "jassi/base/Router";
 import { DBObjectDialog } from "jassi/ui/DBObjectDialog";
 import windows from "jassi/base/Windows";
-import { name } from "node_modules/@types/sizzle";
 import { FileNode } from "remote/jassi/base/FileNode";
 
 @$Class("jassi.ui.DBObjectNode")
@@ -61,7 +60,7 @@ export class DBObjectActions {
     }
     @$Action({        name: "Open Code"    })
     static async OpenCode(all: DBObjectNode[]) {
-    	router.navigate("#do=jassi.ui.CodeEditor&file=" + all[0].filename);
+    	router.navigate("#do=jassi_editor.CodeEditor&file=" + all[0].filename);
     }
 
 }

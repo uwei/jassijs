@@ -72,9 +72,7 @@ export class Router
                                     ob[key]=params[key];
                                 }
                             }
-                            //editor=new jassi.ui.CodeEditor();
                             windows.add(ob,ob.title,name);
-                            //await editor.openFile(url);
                             if(ob.callEvent!==undefined){
                                 windows.onclose(ob,function(param){
                                     ob.callEvent("close",param);

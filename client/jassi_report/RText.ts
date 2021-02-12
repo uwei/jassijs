@@ -2,11 +2,7 @@ import jassi, { $Class } from "remote/jassi/base/Jassi";
 import { $ReportComponent, ReportComponent } from "jassi_report/ReportComponent";
 import { HTMLPanel } from "jassi/ui/HTMLPanel";
 import { $Property } from "jassi/ui/Property";
-import { type, name, prototype } from "node_modules/@types/jquery";
 import { ReportDesign } from "jassi_report/ReportDesign";
-import { Container } from "jassi/ui/Container";
-import { Panel } from "jassi/ui/Panel";
-import { Component } from "jassi/ui/Component";
 
 
 class InlineStyling {

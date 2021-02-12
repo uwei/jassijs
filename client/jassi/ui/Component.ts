@@ -4,8 +4,7 @@ import { ComponentDescriptor } from "jassi/ui/ComponentDescriptor";
 import registry from "remote/jassi/base/Registry";
 import { classes } from "remote/jassi/base/Classes";
 import { CSSProperties } from "jassi/ui/CSSProperties";
-import { Image } from "jassi/ui/Image";
-import { type } from "node_modules/@types/jquery";
+
 //import { CSSProperties } from "jassi/ui/Style";
 
 

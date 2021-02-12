@@ -1,5 +1,5 @@
 import jassi, { $Class } from "remote/jassi/base/Jassi";
-import "jassi/ext/typescript";
+
 //@ts-ignore
 import lodash from "jassi/ext/lodash";
 @$Class("jassi.util.Tools")

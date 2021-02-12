@@ -71,9 +71,7 @@ define(["require", "exports", "remote/jassi/base/Jassi", "remote/jassi/base/Clas
                                 ob[key] = params[key];
                             }
                         }
-                        //editor=new jassi.ui.CodeEditor();
                         Windows_1.default.add(ob, ob.title, name);
-                        //await editor.openFile(url);
                         if (ob.callEvent !== undefined) {
                             Windows_1.default.onclose(ob, function (param) {
                                 ob.callEvent("close", param);

@@ -1,2 +1,0 @@
-npm i @types/requirejs
-npm i @types/jquery

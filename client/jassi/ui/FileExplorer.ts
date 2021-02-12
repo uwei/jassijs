@@ -9,7 +9,7 @@ import { $ActionProvider, $Action, Actions } from "jassi/base/Actions";
 import { OptionDialog } from "jassi/ui/OptionDialog";
 import { Menu } from "jassi/ui/Menu";
 import { MenuItem } from "jassi/ui/MenuItem";
-import typescript, { Typescript } from "jassi/util/Typescript";
+import typescript, { Typescript } from "jassi_editor/util/Typescript";
 import { ContextMenu } from "jassi/ui/ContextMenu";
 //drag from Desktop https://www.html5rocks.com/de/tutorials/file/dndfiles/
 @$ActionProvider("jassi.base.FileNode")
@@ -46,7 +46,7 @@ export class FileActions {
         await FileExplorer.instance.refresh();
         FileExplorer.instance.tree.activateKey(newkey);
         if(open)
-        	router.navigate("#do=jassi.ui.CodeEditor&file=" + newkey.replaceAll("|","/"));
+        	router.navigate("#do=jassi_editor.CodeEditor&file=" + newkey.replaceAll("|","/"));
 
     }
     @$Action({
@@ -155,7 +155,7 @@ export class FileActions {
         var node: FileNode = all[0];
         if (node.isDirectory())
             return;
-        router.navigate("#do=jassi.ui.CodeEditor&file=" + node.fullpath);
+        router.navigate("#do=jassi_editor.CodeEditor&file=" + node.fullpath);
     }
 
 }

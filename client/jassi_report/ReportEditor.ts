@@ -1,6 +1,6 @@
 import jassi, { $Class } from "remote/jassi/base/Jassi";
 import { Panel } from "jassi/ui/Panel";
-import { CodePanel } from "jassi/ui/CodePanel";
+import { CodePanel } from "jassi_editor/CodePanel";
 import { VariablePanel } from "jassi/ui/VariablePanel";
 import { DockingContainer } from "jassi/ui/DockingContainer";
 import { ErrorPanel } from "jassi/ui/ErrorPanel";
@@ -10,16 +10,16 @@ import { Server } from "remote/jassi/base/Server";
 import { Reloader } from "jassi/util/Reloader";
 import { classes } from "remote/jassi/base/Classes";
 import { Component } from "jassi/ui/Component";
-import { trim } from "node_modules/@types/jquery";
+
 import { ReportDesign } from "jassi_report/ReportDesign";
 import { $Property } from "jassi/ui/Property";
 import { Test } from "jassi/base/Tests";
 import { Tools } from "jassi/util/Tools";
 import { ReportDesigner } from "jassi_report/designer/ReportDesigner";
-import { AcePanel } from "jassi/ui/AcePanel";
+import { AcePanel } from "jassi_editor/AcePanel";
 /**
  * Panel for editing sources
- * @class jassi.ui.CodeEditor
+ * @class jassi_report.ReportEditor
  */
 @$Class("jassi_report.ReportEditor")
 export class ReportEditor extends Panel {

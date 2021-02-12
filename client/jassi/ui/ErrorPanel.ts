@@ -3,7 +3,7 @@ import { Panel } from "jassi/ui/Panel";
 import { Errors } from "jassi/base/Errors";
 import jassi, { $Class } from "remote/jassi/base/Jassi";
 import { Button } from "jassi/ui/Button";
-import { TSSourceMap } from "jassi/util/TSSourceMap";
+import { TSSourceMap } from "jassi_editor/util/TSSourceMap";
 import { classes } from "remote/jassi/base/Classes";
 import { router } from "jassi/base/Router";
 
@@ -26,7 +26,7 @@ export class ErrorPanel extends Panel {
         this.IDClear = new Button();
         this.IDClear.tooltip = "Clear log";
         this.IDClear.icon = "mdi mdi-delete";
-        this.IDClear.onclick(function() {
+        this.IDClear.onclick(function () {
             _this.clear();
             jassi.errors.items = [];
         });
@@ -34,7 +34,7 @@ export class ErrorPanel extends Panel {
         this.IDSearch = new Button();
         this.IDSearch.tooltip = "search errors";
         this.IDSearch.icon = "mdi mdi-file-search-outline";
-        this.IDSearch.onclick(function() {
+        this.IDSearch.onclick(function () {
             _this.search();
 
         });
@@ -50,7 +50,7 @@ export class ErrorPanel extends Panel {
         this._container = $(this.dom).find(".errorpanel")[0];
         this.registerError();
         //old Errors
-        for (var x = 0;x < jassi.errors.items.length;x++) {
+        for (var x = 0; x < jassi.errors.items.length; x++) {
             this.addError(jassi.errors.items[x]);
         }
         if (window["jassi_debug"] === undefined)
@@ -61,19 +61,27 @@ export class ErrorPanel extends Panel {
      * search Errors in code
      **/
     async search() {
-        var typescript = (await import("jassi/util/Typescript")).default;
+        var typescript = (await import("jassi_editor/util/Typescript")).default;
         await typescript.initService();
-        var all = typescript.getDiagnosticsForAll();
-        for (var x = 0;x < all.length;x++) {
+        var all = await typescript.getDiagnosticsForAll();
+        if(all.length===0)
+            $.notify("no Errors found", "info", { position: "right" });
+        for (var x = 0; x < all.length; x++) {
             var diag = all[x];
             var s = diag.file.fileName;
             var pos = typescript.getLineAndCharacterOfPosition(diag.file.fileName, diag.start);
             var href = window.location.origin;
             var err = {
-                errorMsg: diag.messageText,
-                errorObj: {
-                    stack: href + "/" + diag.file.fileName + ":" + pos.line + ":" + pos.character
+                filename: diag.file.fileName,
+                lineno: pos.line,
+                colno: pos.character,
+                error: {
+
+                    message: diag.messageText,
+                    stack: ""//href + "/" + diag.file.fileName + ":" + pos.line + ":" + pos.character
+
                 }
+
 
             }
             Errors.errors.addError(err);
@@ -89,31 +97,44 @@ export class ErrorPanel extends Panel {
         if (error.infoMsg !== undefined) {
             msg = error.infoMsg + "<br>";
         } else {
-            var sstack="";
-            if(error.error){
-                sstack = error.error.message.replaceAll(":", "") + "(" + error.filename + ":" + error.lineno+  ":" + error.colno + ")\n";
+            var sstack = "";
+            var m=error.error?.message;
+            if(!m)
+                m="";
+            if(m.messageText)
+                m=m.messageText;
+            if (error.error) {
+                sstack = m.replaceAll(":", "") + "(" + error.filename + ":" + error.lineno + ":" + error.colno + ")\n";
                 if (error.error.stack !== undefined)
-                    sstack = sstack+error.error.stack;
+                    sstack = sstack + error.error.stack;
             }
-            if(error.reason!==undefined){
-                sstack = error.reason.message+":::\n";
+            if (error.reason !== undefined) {
+                sstack = error.reason.message + ":::\n";
                 if (error.reason.stack !== undefined)
-                    sstack = sstack+error.reason.stack;
+                    sstack = sstack + error.reason.stack;
             }
             var stack = sstack.split('\n');
             msg = "";
-            for (var i = 0;i < stack.length;i++) {
+            for (var i = 0; i < stack.length; i++) {
                 var line = stack[i];
-                if (line.split(":").length < 4)
-                    continue;//edge and chrome insert message in stack->ignore
-                var poshttp = line.indexOf("http");
-                var url: string = await this._convertURL(line.substring(poshttp, line.length));
-                line = line.replace("\n", "");
-                var ident=(i===0?"0":"20");
-                msg = msg + '<div style="text-indent:'+ident+'px;">' + line.substring(0, poshttp) +
+                if (line.indexOf(".ts:") > 0) {
+                    msg = msg + '<div>' + line.substring(0, line.lastIndexOf("(")) +
+                    '<a href="#" onclick="jassi.ErrorPanel.prototype.onsrclink(this);">' +
+                   line.substr(line.lastIndexOf("(")+1,line.length-1) + '</a>)' + "" + '</div>';
+
+                } else {
+                    if (line.split(":").length < 4)
+                        continue;//edge and chrome insert message in stack->ignore
+                    var poshttp = line.indexOf("http");
+                    var url: string = await this._convertURL(line.substring(poshttp, line.length));
+                    line = line.replace("\n", "");
+                    var ident = (i === 0 ? "0" : "20");
+                    msg = msg + '<div style="text-indent:' + ident + 'px;">' + line.substring(0, poshttp) +
                     '<a href="#" onclick="jassi.ErrorPanel.prototype.onsrclink(this);">' +
                     url + '</a>' + (line.endsWith(")") ? ")" : "") + '</div>';
-            }
+
+                }
+                          }
 
         }
         var value = $('<span>' + msg + '</span>');
@@ -140,8 +161,8 @@ export class ErrorPanel extends Panel {
             var aurl = url.substring(1).split(":");
             var newline = await new TSSourceMap().getLineFromJS(aurl[0], Number(aurl[1]), Number(aurl[2]));
             url = aurl[0].substring(3).replace(".js", ".ts") + ":" + newline + ":" + aurl[2];
-            if(url.startsWith("tmp/"))
-                url=url.substring(4);
+            if (url.startsWith("tmp/"))
+                url = url.substring(4);
         }
         return url;
     }
@@ -155,7 +176,7 @@ export class ErrorPanel extends Panel {
     }
     registerError() {
         var _this = this;
-        jassi.errors.onerror(function(err) {
+        jassi.errors.onerror(function (err) {
             _this.addError(err);
 
         }, this._id);
@@ -183,11 +204,11 @@ export function test() {
 
 
 
-ErrorPanel.prototype["onsrclink"] = function(param) {
+ErrorPanel.prototype["onsrclink"] = function (param) {
     var data = param.text.split(":");
-    if(data[1]==="")
+    if (data[1] === "")
         return;
-    router.navigate("#do=jassi.ui.CodeEditor&file=" + data[0] + "&line=" + data[1]);
-    // jassi.ui.CodeEditor.open(param.text);
+    router.navigate("#do=jassi_editor.CodeEditor&file=" + data[0] + "&line=" + data[1]);
+    // jassi_editor.CodeEditor.open(param.text);
 }
 jassi.ErrorPanel = ErrorPanel;

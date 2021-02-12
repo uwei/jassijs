@@ -1,7 +1,7 @@
 import { $Class } from "remote/jassi/base/Jassi";
 import { $ActionProvider, $Action } from "jassi/base/Actions";
 import { FileNode } from "remote/jassi/base/FileNode";
-import typescript, { Typescript } from "jassi/util/Typescript";
+import typescript, { Typescript } from "jassi_editor/util/Typescript";
 import { Component } from "jassi/ui/Component";
 import { Container } from "jassi/ui/Container";
 import { BoxPanel } from "jassi/ui/BoxPanel";

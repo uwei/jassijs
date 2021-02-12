@@ -156,7 +156,7 @@ let Server = class Server extends RemoteObject_1.RemoteObject {
                 var content = contents[f];
                 if (fileName.endsWith(".ts")) {
                     //@ts-ignore
-                    var tss = await Promise.resolve().then(() => require("jassi/util/Typescript"));
+                    var tss = await Promise.resolve().then(() => require("jassi_editor/util/Typescript"));
                     var rets = await tss.default.transpile(fileName, content);
                     allfileNames = allfileNames.concat(rets.fileNames);
                     allcontents = allcontents.concat(rets.contents);

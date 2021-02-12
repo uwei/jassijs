@@ -2,7 +2,7 @@
 import jassi from "jassi/jassi";
 import {Container} from "jassi/ui/Container";
 import {Panel} from "jassi/ui/Panel";
-import {ComponentDesigner} from "jassi/ui/designer/ComponentDesigner";
+import {ComponentDesigner} from "jassi_editor/ComponentDesigner";
 import {Databinder} from "jassi/ui/Databinder";
 import {Component,  $UIComponent } from "jassi/ui/Component";
 import {Property,  $Property } from "jassi/ui/Property";

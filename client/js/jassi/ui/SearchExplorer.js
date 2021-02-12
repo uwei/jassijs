@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/util/Typescript", "jassi/base/Router"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Typescript_1, Router_1) {
+define(["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_editor/util/Typescript", "jassi/base/Router"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Typescript_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SearchExplorer = void 0;
@@ -24,7 +24,7 @@ define(["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Tree", "jassi
             this.layout();
         }
         async doSearch() {
-            var Typescript = (await new Promise((resolve_1, reject_1) => { require(["jassi/util/Typescript"], resolve_1, reject_1); })).Typescript;
+            var Typescript = (await new Promise((resolve_1, reject_1) => { require(["jassi_editor/util/Typescript"], resolve_1, reject_1); })).Typescript;
             var all = [];
             var files = []; // [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
             var toFind = this.search.value.toLocaleLowerCase();
@@ -70,10 +70,10 @@ define(["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Tree", "jassi
                 if (evt.data !== undefined && evt.data.file !== undefined) {
                     var pos = evt.data.pos;
                     var file = evt.data.file;
-                    new Promise((resolve_2, reject_2) => { require(["jassi/util/Typescript"], resolve_2, reject_2); }).then(Typescript => {
+                    new Promise((resolve_2, reject_2) => { require(["jassi_editor/util/Typescript"], resolve_2, reject_2); }).then(Typescript => {
                         var text = Typescript_1.default.getCode(file);
                         var line = text.substring(0, pos).split("\n").length;
-                        Router_1.router.navigate("#do=jassi.ui.CodeEditor&file=" + file + "&line=" + line);
+                        Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + file + "&line=" + line);
                     });
                 }
             });

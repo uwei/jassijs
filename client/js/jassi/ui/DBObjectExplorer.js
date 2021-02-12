@@ -62,7 +62,7 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "remote/j
             Windows_1.default.add(ret, all[0].name);
         }
         static async OpenCode(all) {
-            Router_1.router.navigate("#do=jassi.ui.CodeEditor&file=" + all[0].filename);
+            Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + all[0].filename);
         }
     };
     __decorate([

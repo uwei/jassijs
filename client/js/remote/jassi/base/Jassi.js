@@ -33,10 +33,16 @@ define(["require", "exports", "remote/jassi/base/Registry"], function (require, 
         };
     }
     exports.$register = $register;
-    String.prototype.replaceAll = function (search, replacement) {
+    /*declare global {
+        interface String {
+            replaceAll: any;
+        }
+    }
+    
+    String.prototype.replaceAll = function (search:string, replacement:string):string {
         var target = this;
         return target.split(search).join(replacement);
-    };
+    }*/
     /**
     * main class for jassi
     * @class Jassi

@@ -1,19 +1,18 @@
 import jassi, { $Class } from "remote/jassi/base/Jassi";
 
 import { PropertyEditor } from "jassi/ui/PropertyEditor";
-import { ComponentExplorer } from "jassi/ui/ComponentExplorer";
-import { ComponentPalette } from "jassi/ui/ComponentPalette";
-import { CodeEditorInvisibleComponents } from "jassi/ui/CodeEditorInvisibleComponents";
-import { ComponentDesigner } from "jassi/ui/designer/ComponentDesigner";
+import { ComponentExplorer } from "jassi_editor/ComponentExplorer";
+import { ComponentPalette } from "jassi_editor/ComponentPalette";
+import { CodeEditorInvisibleComponents } from "jassi_editor/CodeEditorInvisibleComponents";
+import { ComponentDesigner } from "jassi_editor/ComponentDesigner";
 import { classes } from "remote/jassi/base/Classes";
 import { Component } from "jassi/ui/Component";
 import { Container } from "jassi/ui/Container";
 import { Property } from "jassi/ui/Property";
-import { PDFReport } from "jassi_report/util/PDFReport";
-import { PDFViewer } from "jassi/ui/PDFViewer";
+import { PDFReport } from "jassi_report/PDFReport";
+import { PDFViewer } from "jassi_report/PDFViewer";
 import { ReportDesign } from "jassi_report/ReportDesign";
 import { Tools } from "jassi/util/Tools";
-import { css } from "node_modules/@types/jquery";
 
 @$Class("jassi_report.designer.ReportDesigner")
 export class ReportDesigner extends ComponentDesigner {

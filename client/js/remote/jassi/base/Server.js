@@ -154,7 +154,7 @@ define(["require", "exports", "remote/jassi/base/Jassi", "remote/jassi/base/Remo
                     var content = contents[f];
                     if (fileName.endsWith(".ts")) {
                         //@ts-ignore
-                        var tss = await new Promise((resolve_4, reject_4) => { require(["jassi/util/Typescript"], resolve_4, reject_4); });
+                        var tss = await new Promise((resolve_4, reject_4) => { require(["jassi_editor/util/Typescript"], resolve_4, reject_4); });
                         var rets = await tss.default.transpile(fileName, content);
                         allfileNames = allfileNames.concat(rets.fileNames);
                         allcontents = allcontents.concat(rets.contents);

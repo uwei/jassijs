@@ -1,8 +1,7 @@
 import jassi, { $Class } from "remote/jassi/base/Jassi";
 import {Property,  $Property } from "jassi/ui/Property";
-import { type } from "node_modules/@types/jquery";
 import { Component } from "jassi/ui/Component";
-import { transform } from "node_modules/@types/typescript";
+
 
 var systemFonts= ["Arial","Helvetica Neue","Courier New","Times New Roman","Comic Sans MS","Impact"];
 var api='https://fonts.googleapis.com/css?family=';

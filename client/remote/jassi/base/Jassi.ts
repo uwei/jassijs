@@ -1,6 +1,5 @@
 
-import { Classes, classes } from "./Classes";
-import registry from "remote/jassi/base/Registry";
+import registry from "remote/jassi/base/Registry"; 
 
 
 
@@ -36,7 +35,7 @@ export function $register(servicename: string, ...params): Function {
     }
 }
 
-declare global {
+/*declare global {
     interface String {
         replaceAll: any;
     }
@@ -45,7 +44,7 @@ declare global {
 String.prototype.replaceAll = function (search:string, replacement:string):string {
     var target = this;
     return target.split(search).join(replacement);
-}
+}*/
 
 
 

@@ -3,7 +3,7 @@ import { $Class } from "remote/jassi/base/Jassi";
 import {Component,  $UIComponent } from "jassi/ui/Component";
 import {ComponentDescriptor} from "jassi/ui/ComponentDescriptor";
 import registry from "remote/jassi/base/Registry";
-import { data, type } from "node_modules/@types/jquery";
+
 
 import extensions from "jassi/base/Extensions";
 import { $Property } from "jassi/ui/Property";

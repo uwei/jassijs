@@ -10,7 +10,7 @@ import { DatabaseSchema, DatabaseClass, DatabaseField } from "jassi/base/Databas
 import { OptionDialog } from "jassi/ui/OptionDialog";
 import { PropertyEditor } from "jassi/ui/PropertyEditor";
 import { Property } from "jassi/ui/Property";
-import { data } from "node_modules/@types/jquery";
+
 type Me = {
     table?: Table;
     select?: Select;

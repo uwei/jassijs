@@ -14,6 +14,8 @@ type Me = {
     zahl2?: Textbox;
     ergebnis?: Textbox;
 };
+
+
 @$Class("demo.HalloPhillip")
 export class HalloPhillip extends Panel {
     me;

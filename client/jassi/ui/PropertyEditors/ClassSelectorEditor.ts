@@ -10,7 +10,6 @@ import {PropertyEditor} from "jassi/ui/PropertyEditor";
 import registry from "remote/jassi/base/Registry";
 import {ComponentDescriptor} from "jassi/ui/ComponentDescriptor";
 import { classes } from "remote/jassi/base/Classes";
-import { name } from "node_modules/@types/sizzle";
 
 @$PropertyEditor(["classselector"])
 @$Class("jassi.ui.PropertyEditors.ClassSelectorEditor")

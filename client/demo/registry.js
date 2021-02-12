@@ -18,7 +18,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.DialogKunde2": {}
 	},
 	"demo/DK.ts": {
-		"date": 1588526029375,
+		"date": 1613165431510,
 		"demo.DK": {}
 	},
 	"demo/EmptyDialog.ts": {
@@ -26,7 +26,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.EmptyDialog": {}
 	},
 	"demo/HalloPhillip.ts": {
-		"date": 1612391434115,
+		"date": 1613162938345,
 		"demo.HalloPhillip": {}
 	},
 	"demo/KundeView.ts": {

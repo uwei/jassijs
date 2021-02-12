@@ -3,7 +3,7 @@ import {Tree} from "jassi/ui/Tree";
 import {Panel} from "jassi/ui/Panel";
 import {Textbox} from "jassi/ui/Textbox";
 import {Server} from "remote/jassi/base/Server";
-import typescript from "jassi/util/Typescript";
+import typescript from "jassi_editor/util/Typescript";
 import { router } from "jassi/base/Router";
 
 
@@ -23,7 +23,7 @@ export class SearchExplorer extends Panel {
         this.layout();
     }
     async doSearch() { 
-        var Typescript:any=(await import ("jassi/util/Typescript")).Typescript;
+        var Typescript:any=(await import ("jassi_editor/util/Typescript")).Typescript;
         var all = [];
         var files = [];// [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
         var toFind: string =( <string>this.search.value).toLocaleLowerCase();
@@ -72,10 +72,10 @@ export class SearchExplorer extends Panel {
             if (evt.data !== undefined && evt.data.file !== undefined) {
             	var pos=evt.data.pos;
                 var file=evt.data.file;
-                import ("jassi/util/Typescript").then(Typescript=>{
+                import ("jassi_editor/util/Typescript").then(Typescript=>{
                     var text:string=typescript.getCode(file);
                     var line=text.substring(0,pos).split("\n").length;
-                    router.navigate("#do=jassi.ui.CodeEditor&file=" + file+"&line="+line);
+                    router.navigate("#do=jassi_editor.CodeEditor&file=" + file+"&line="+line);
                 });
 
             }

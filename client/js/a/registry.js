@@ -10,7 +10,7 @@ define("a/registry",["require"], function(require) {
 		"date": 1612818323489
 	},
 	"a/monaco.ts": {
-		"date": 1611772398569
+		"date": 1613148104582
 	},
 	"a/rep.ts": {
 		"date": 1611936363489

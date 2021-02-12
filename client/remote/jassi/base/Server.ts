@@ -152,7 +152,7 @@ export class Server extends RemoteObject {
                 var content = contents[f];
                 if (fileName.endsWith(".ts")) {
                     //@ts-ignore
-                    var tss = await import("jassi/util/Typescript");
+                    var tss = await import("jassi_editor/util/Typescript");
                     var rets = await tss.default.transpile(fileName, content);
                     allfileNames = allfileNames.concat(rets.fileNames);
                     allcontents = allcontents.concat(rets.contents);

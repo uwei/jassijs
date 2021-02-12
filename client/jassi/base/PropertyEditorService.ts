@@ -4,7 +4,6 @@ import { classes } from "remote/jassi/base/Classes";
 import registry from "remote/jassi/base/Registry";
 import {Editor} from "jassi/ui/PropertyEditors/Editor";
 import {Property} from "jassi/ui/Property";
-import { type } from "node_modules/@types/jquery";
 import { LoadingEditor } from "jassi/ui/PropertyEditors/LoadingEditor";
 
 @$Class("jassi.base.PropertyEditorService")

@@ -3,7 +3,7 @@ import "jassi/base/PropertyEditorService";
 import { Panel } from "jassi/ui/Panel";
 import { Button } from "jassi/ui/Button";
 import { Image } from "jassi/ui/Image";
-import { Parser } from "jassi/base/Parser";
+import { Parser } from "jassi_editor/util/Parser";
 import { Tools } from "jassi/util/Tools";
 import registry from "remote/jassi/base/Registry";
 import { ComponentDescriptor } from "jassi/ui/ComponentDescriptor";
@@ -13,7 +13,6 @@ import { Property, $Property } from "jassi/ui/Property";
 import { Editor } from "jassi/ui/PropertyEditors/Editor";
 import { Component } from "jassi/ui/Component";
 import { Container } from "jassi/ui/Container";
-import { isFunction, name } from "node_modules/@types/jquery";
 
 @$Class("jassi.ui.PropertyEditor") 
 export class PropertyEditor extends Panel {
@@ -44,7 +43,7 @@ export class PropertyEditor extends Panel {
         this.clear();
         this.layout();
         /** 
-         * @member {jassi.ui.CodeEditor} - the parent CodeEditor
+         * @member {jassi_editor.CodeEditor} - the parent CodeEditor
          * if undefined - no code changes would be done 
          * */
         this.codeEditor = codeEditor;

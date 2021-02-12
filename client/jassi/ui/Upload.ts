@@ -1,9 +1,6 @@
 import jassi, { $Class } from "remote/jassi/base/Jassi";
 import {Component,  $UIComponent} from "jassi/ui/Component";
 import {Property,  $Property } from "jassi/ui/Property";
-import jQuery=require("node_modules/@types/jquery");
-
-
 
 @$UIComponent({ fullPath:"common/Upload",icon:"mdi mdi-cloud-upload-outline"})
 @$Class("jassi.ui.Upload")

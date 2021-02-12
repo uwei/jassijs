@@ -21,7 +21,7 @@ import { classes } from "remote/jassi/base/Classes";
 import {Select} from "jassi/ui/Select";
 import {SearchExplorer} from "jassi/ui/SearchExplorer";
 import { DBObjectExplorer } from "jassi/ui/DBObjectExplorer";
-import { MonacoPanel } from "jassi/ui/MonacoPanel";
+import { MonacoPanel } from "jassi_editor/MonacoPanel";
 
 
 
