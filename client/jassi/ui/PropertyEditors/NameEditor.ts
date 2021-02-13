@@ -1,7 +1,7 @@
 import {PropertyEditor} from "jassi/ui/PropertyEditor";
 import {Editor,  $PropertyEditor } from "jassi/ui/PropertyEditors/Editor";
 import {Textbox} from "jassi/ui/Textbox";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 
 @$PropertyEditor(["*name*"])
 @$Class("jassi.ui.PropertyEditors.NameEditor")

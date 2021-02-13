@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Select", "jassi/ui/PropertyEditors/Editor", "jassi/ui/PropertyEditors/JsonEditor", "jassi/util/Tools", "jassi/ui/converters/StringConverter", "remote/jassi/base/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "remote/jassi/base/Registry", "jassi/ui/ComponentDescriptor", "remote/jassi/base/Classes"], function (require, exports, Select_1, Editor_1, JsonEditor_1, Tools_1, StringConverter_1, Jassi_1, Panel_1, Textbox_1, Registry_1, ComponentDescriptor_1, Classes_1) {
+define(["require", "exports", "jassi/ui/Select", "jassi/ui/PropertyEditors/Editor", "jassi/ui/PropertyEditors/JsonEditor", "jassi/util/Tools", "jassi/ui/converters/StringConverter", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Registry", "jassi/ui/ComponentDescriptor", "jassi/remote/Classes"], function (require, exports, Select_1, Editor_1, JsonEditor_1, Tools_1, StringConverter_1, Jassi_1, Panel_1, Textbox_1, Registry_1, ComponentDescriptor_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClassSelectorEditor = void 0;

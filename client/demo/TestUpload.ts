@@ -1,6 +1,6 @@
 import {HTMLPanel} from "jassi/ui/HTMLPanel";
 import {Upload} from "jassi/ui/Upload";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 //@ts-ignore
 import {Papa} from "jassi/ext/papaparse";

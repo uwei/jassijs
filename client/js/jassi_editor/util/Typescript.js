@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "remote/jassi/base/Server", "jassi_editor/ext/monaco", "jassi/ext/requestidlecallback"], function (require, exports, Jassi_1, Server_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Server", "jassi_editor/ext/monaco", "jassi/ext/requestidlecallback"], function (require, exports, Jassi_1, Server_1) {
     "use strict";
     var Typescript_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -183,6 +183,7 @@ define(["require", "exports", "remote/jassi/base/Jassi", "remote/jassi/base/Serv
             if (Typescript_1._isInited !== true) {
                 throw Error("check isInited before call ");
             }
+            //@ts-ignore
             return await this.tsWorker.getSignatureHelpItems("file:///" + file, position, undefined);
         }
         async includefileIfNeeded(file) {

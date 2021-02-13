@@ -1,7 +1,7 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {PropertyEditor} from "jassi/ui/PropertyEditor";
-import { classes } from "remote/jassi/base/Classes";
-import registry from "remote/jassi/base/Registry";
+import { classes } from "jassi/remote/Classes";
+import registry from "jassi/remote/Registry";
 import {Editor} from "jassi/ui/PropertyEditors/Editor";
 import {Property} from "jassi/ui/Property";
 import { LoadingEditor } from "jassi/ui/PropertyEditors/LoadingEditor";

@@ -1,11 +1,11 @@
 import jassi from "jassi/jassi";
 import { Component } from "jassi/ui/Component";
 import "jassi_editor/Debugger";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { router } from "jassi/base/Router";
 import "jassi_editor/ext/monaco";
 import typescript from "jassi_editor/util/Typescript";
-import { Server } from "remote/jassi/base/Server";
+import { Server } from "jassi/remote/Server";
 import { CodePanel } from "jassi_editor/CodePanel";
 
 

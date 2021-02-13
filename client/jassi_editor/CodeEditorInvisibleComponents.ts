@@ -1,11 +1,11 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import {HTMLPanel} from "jassi/ui/HTMLPanel";
 import "jassi/ui/Image";
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 import {InvisibleComponent} from "../jassi/ui/InvisibleComponent";
 import {Button} from "jassi/ui/Button";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 import {Component,  $UIComponent, UIComponentProperties } from "jassi/ui/Component";
 import {CodeEditor} from "jassi_editor/CodeEditor";//could be removed
 

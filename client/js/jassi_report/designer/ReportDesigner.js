@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/PropertyEditor", "jassi_editor/ComponentExplorer", "jassi_editor/ComponentPalette", "jassi_editor/CodeEditorInvisibleComponents", "jassi_editor/ComponentDesigner", "jassi_report/PDFReport", "jassi_report/PDFViewer", "jassi_report/ReportDesign", "jassi/util/Tools"], function (require, exports, Jassi_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditor", "jassi_editor/ComponentExplorer", "jassi_editor/ComponentPalette", "jassi_editor/CodeEditorInvisibleComponents", "jassi_editor/ComponentDesigner", "jassi_report/PDFReport", "jassi_report/PDFViewer", "jassi_report/ReportDesign", "jassi/util/Tools"], function (require, exports, Jassi_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportDesigner = void 0;

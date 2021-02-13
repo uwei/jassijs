@@ -1,6 +1,6 @@
 import { ReportDesign } from "jassi_report/ReportDesign";
 import jassi from "jassi/jassi";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { $Property } from "jassi/ui/Property";
 import { $UIComponent } from "jassi/ui/Component";
 import { Kunde } from "remote/de/Kunde";

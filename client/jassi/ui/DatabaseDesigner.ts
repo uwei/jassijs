@@ -4,7 +4,7 @@ import { Button } from "jassi/ui/Button";
 import { Databinder } from "jassi/ui/Databinder";
 import { Select } from "jassi/ui/Select";
 import { Table } from "jassi/ui/Table";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
 import { DatabaseSchema, DatabaseClass, DatabaseField } from "jassi/base/DatabaseSchema";
 import { OptionDialog } from "jassi/ui/OptionDialog";

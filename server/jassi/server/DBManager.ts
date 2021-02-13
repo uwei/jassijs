@@ -1,10 +1,10 @@
 import { ConnectionOptions, createConnection, getConnection, SaveOptions, FindConditions, FindOneOptions, ObjectType, ObjectID, FindManyOptions, Connection, SelectQueryBuilder, Brackets, EntitySchema, getMetadataArgsStorage, Entity } from "typeorm";
-import { classes } from "remote/jassi/base/Classes";
-import { MyUser } from "remote/de/MyUser";
-import registry from "remote/jassi/base/Registry";
-import { DBObject } from "remote/jassi/base/DBObject";
-import { ParentRightProperties } from "remote/jassi/security/Rights";
-import { User } from "remote/jassi/security/User";
+import { classes } from "jassi/remote/Classes";
+
+import registry from "jassi/remote/Registry";
+import { DBObject } from "jassi/remote/DBObject";
+import { ParentRightProperties } from "jassi/remote/security/Rights";
+import { User } from "jassi/remote/security/User";
 import { getRequest } from "./getRequest";
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
@@ -17,7 +17,7 @@ export interface MyFindManyOptions<Entity = any> extends FindManyOptions {
 }
 
 
-function getConOpts(): ConnectionOptions {
+async function getConOpts(): Promise<ConnectionOptions> {
   var stype: string = "postgres";
   var shost = "localhost";
   var suser = "postgres";
@@ -43,7 +43,7 @@ function getConOpts(): ConnectionOptions {
 
   var dbfiles = [];
   //files should be in the remote package
-  try {
+  /*try {
 
     var list: string[] = new Filesystem().dirFiles("../client/remote", [".ts"]);
     for (var x = 0; x < list.length; x++) {
@@ -54,13 +54,14 @@ function getConOpts(): ConnectionOptions {
     }
   } catch {
     throw Error("could not read DBObject classes");
-  }
-  /*var dbobjects = registry.getJSONData("$DBObject");
+  }*/
+
+  var dbobjects = await registry.getJSONData("$DBObject");
   for (var o = 0; o < dbobjects.length; o++) {
     var fname = dbobjects[o].filename;
 
-    dbfiles.push("js/client/" + fname.replace(".ts", ".js"));
-  }*/
+    dbfiles.push("js/" + fname.replace(".ts", ".js"));
+  }
   var opt: ConnectionOptions = {
 
     //@ts-ignore
@@ -104,7 +105,7 @@ export class DBManager {
 
       var test = getMetadataArgsStorage();
       try {
-        var opts = getConOpts();
+        var opts = await getConOpts();
         
           _initrunning = createConnection(opts);
         await _initrunning;
@@ -220,7 +221,7 @@ export class DBManager {
   async save<Entity>(entity: Entity, options?: SaveOptions): Promise<Entity>;
   async save<Entity>(entity, options) {
     await this._checkParentRightsForSave(entity);
-    if (classes.getClassName(entity) === "remote.jassi.security.User" && entity.password !== undefined) {
+    if (classes.getClassName(entity) === "jassi.remote.security.User" && entity.password !== undefined) {
       entity.password = await new Promise((resolve) => {
         const crypto = require('crypto');
         const salt = crypto.randomBytes(8).toString('base64');
@@ -554,7 +555,7 @@ class RelationInfo {
     var kk = getRequest().user;
     var userid = getRequest().user.user;
     var query = this.dbmanager.connection().createQueryBuilder().
-      select("me").from(classes.getClass("remote.jassi.security.ParentRight"), "me").
+      select("me").from(classes.getClass("jassi.remote.security.ParentRight"), "me").
       leftJoin("me.groups", "me_groups").
       leftJoin("me_groups.users", "me_groups_users");
 

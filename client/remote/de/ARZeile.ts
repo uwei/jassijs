@@ -1,11 +1,11 @@
 
 
-import {DBObject, $DBObject } from "remote/jassi/base/DBObject";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import {DBObject, $DBObject } from "jassi/remote/DBObject";
+import jassi, { $Class } from "jassi/remote/Jassi";
 //import Kunde from "de/Kunde";
 import { PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "jassi/util/DatabaseSchema";
 
-import { $CheckParentRight } from "remote/jassi/security/Rights";
+import { $CheckParentRight } from "jassi/remote/security/Rights";
 import { AR } from "remote/de/AR";
 
 @$DBObject()

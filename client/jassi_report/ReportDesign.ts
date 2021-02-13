@@ -1,9 +1,9 @@
 import { BoxPanel } from "jassi/ui/BoxPanel";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { RStack } from "jassi_report/RStack";
 import { RText } from "jassi_report/RText";
 
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 import { ReportDesigner } from "jassi_report/designer/ReportDesigner";
 import { RColumns } from "jassi_report/RColumns";
 import { RUnknown } from "jassi_report/RUnknown";

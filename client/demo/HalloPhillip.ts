@@ -6,7 +6,7 @@ import { Panel } from "jassi/ui/Panel";
 import { Button } from "jassi/ui/Button";
 import { Textbox } from "jassi/ui/Textbox";
 import { NumberConverter } from "jassi/ui/converters/NumberConverter";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 type Me = {
     aboutbutton?: Button;
     text?: Textbox;

@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 //@ts-ignore
 import pdfMake from "jassi_report/ext/pdfmake";
 import { PDFViewer } from "jassi_report/PDFViewer";

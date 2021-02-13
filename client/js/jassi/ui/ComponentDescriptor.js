@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Property", "remote/jassi/base/Classes", "remote/jassi/base/Registry"], function (require, exports, Jassi_1, Property_1, Classes_1, Registry_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/remote/Classes", "jassi/remote/Registry"], function (require, exports, Jassi_1, Property_1, Classes_1, Registry_1) {
     "use strict";
     var ComponentDescriptor_1;
     Object.defineProperty(exports, "__esModule", { value: true });

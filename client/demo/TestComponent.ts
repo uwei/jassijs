@@ -2,7 +2,7 @@ import {Panel} from "jassi/ui/Panel";
 import jassi from "jassi/jassi";
 import {Button} from "jassi/ui/Button";
 import {HTMLPanel} from "jassi/ui/HTMLPanel";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { $UIComponent } from "jassi/ui/Component";
 
 

@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 //https://developer.chrome.com/extensions/messaging
 @$Class("jassi_editor.Debugger")
 export class Debugger

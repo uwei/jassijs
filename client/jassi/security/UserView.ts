@@ -1,9 +1,9 @@
 import {NumberConverter} from "jassi/ui/converters/NumberConverter";
 import {Textbox} from "jassi/ui/Textbox";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import { $Property } from "jassi/ui/Property";
-import { User } from "remote/jassi/security/User";
+import { User } from "jassi/remote/security/User";
 import { Databinder } from "jassi/ui/Databinder";
 import { DBObjectView, DBObjectViewMe, $DBObjectView } from "jassi/ui/DBObjectView";
 import { DBObjectDialog } from "jassi/ui/DBObjectDialog";

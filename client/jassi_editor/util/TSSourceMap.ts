@@ -10,7 +10,7 @@ import sourceMap from "jassi/ext/sourcemap";
 
 
 import jassi from "jassi/jassi";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 //var sourceMap=window["sourceMap"];
 @$Class("jassi_editor.util.TSSourceMap")
 export class TSSourceMap {

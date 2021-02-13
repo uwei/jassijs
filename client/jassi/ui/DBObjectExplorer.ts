@@ -1,13 +1,13 @@
 import {ContextMenu} from "jassi/ui/ContextMenu";
 import {Tree} from "jassi/ui/Tree";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { $ActionProvider, $Action } from "jassi/base/Actions";
 import {Panel} from "jassi/ui/Panel";
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 import { router } from "jassi/base/Router";
 import { DBObjectDialog } from "jassi/ui/DBObjectDialog";
 import windows from "jassi/base/Windows";
-import { FileNode } from "remote/jassi/base/FileNode";
+import { FileNode } from "jassi/remote/FileNode";
 
 @$Class("jassi.ui.DBObjectNode")
 export class DBObjectNode {

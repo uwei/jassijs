@@ -3,7 +3,7 @@ import jassi from "jassi/jassi";
 import {Component} from "jassi/ui/Component";
 import {Databinder} from "jassi/ui/Databinder";
 import {Property,  $Property } from "jassi/ui/Property";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 
 var tmpDatabinder = undefined;
 @$Class("jassi.ui.DataComponent")

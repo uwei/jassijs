@@ -1,6 +1,6 @@
 import {DefaultConverter, $Converter } from "jassi/ui/converters/DefaultConverter";
 
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { $Property } from "../Property";
 
 @$Converter({name:"number"})

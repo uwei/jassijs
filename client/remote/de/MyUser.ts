@@ -1,6 +1,6 @@
 import {Entity, PrimaryColumn, Column} from "jassi/util/DatabaseSchema"; 
-import { $DBObject } from "remote/jassi/base/DBObject";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $DBObject } from "jassi/remote/DBObject";
+import { $Class } from "jassi/remote/Jassi";
 
 
 @$DBObject()

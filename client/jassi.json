@@ -1,6 +1,6 @@
 {
 	"modules": {
-		"jassi":"jassi_report",
+		"jassi":"jassi",
 		"jassi_report": "jassi_report",
 		"jassi_editor": "jassi_editor",
 		"demo": "demo",

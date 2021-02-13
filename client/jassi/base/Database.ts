@@ -1,7 +1,7 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 
-import { classes } from "remote/jassi/base/Classes";
-import {DBArray} from "remote/jassi/base/DBArray";
+import { classes } from "jassi/remote/Classes";
+import {DBArray} from "jassi/remote/DBArray";
 var cl = classes;//force import
 @$Class("jassi.base.Database")
 export class Database {

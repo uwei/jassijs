@@ -1,8 +1,8 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Property, $Property } from "jassi/ui/Property";
 import { ComponentDescriptor } from "jassi/ui/ComponentDescriptor";
-import registry from "remote/jassi/base/Registry";
-import { classes } from "remote/jassi/base/Classes";
+import registry from "jassi/remote/Registry";
+import { classes } from "jassi/remote/Classes";
 import { CSSProperties } from "jassi/ui/CSSProperties";
 
 //import { CSSProperties } from "jassi/ui/Style";

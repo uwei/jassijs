@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/ErrorPanel", "jassi/ui/Button", "remote/jassi/base/Registry", "remote/jassi/base/Server", "jassi/util/Reloader", "remote/jassi/base/Classes", "jassi/ui/Component", "jassi/ui/Property", "jassi/base/Tests", "jassi_editor/AcePanel", "jassi_editor/util/Typescript", "jassi_editor/MonacoPanel"], function (require, exports, Jassi_1, Panel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_1, Server_1, Reloader_1, Classes_1, Component_1, Property_1, Tests_1, AcePanel_1, Typescript_1, MonacoPanel_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/ErrorPanel", "jassi/ui/Button", "jassi/remote/Registry", "jassi/remote/Server", "jassi/util/Reloader", "jassi/remote/Classes", "jassi/ui/Component", "jassi/ui/Property", "jassi/base/Tests", "jassi_editor/AcePanel", "jassi_editor/util/Typescript", "jassi_editor/MonacoPanel"], function (require, exports, Jassi_1, Panel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_1, Server_1, Reloader_1, Classes_1, Component_1, Property_1, Tests_1, AcePanel_1, Typescript_1, MonacoPanel_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });

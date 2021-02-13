@@ -1,0 +1,6 @@
+{
+	"modules": {
+		"jassi": "jassi",
+		"northwind": "northwind"
+	}
+}

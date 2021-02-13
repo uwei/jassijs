@@ -1,10 +1,10 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Debugger } from "jassi_editor/Debugger";
 import { CodeEditor } from "jassi_editor/CodeEditor";
 import { OptionDialog } from "jassi/ui/OptionDialog";
 import { TSSourceMap } from "jassi_editor/util/TSSourceMap";
 import { Reloader } from "jassi/util/Reloader";
-import { Server } from "remote/jassi/base/Server";
+import { Server } from "jassi/remote/Server";
 import windows from "../jassi/base/Windows";
 
 

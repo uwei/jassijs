@@ -1,11 +1,11 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Component,  $UIComponent, ComponentCreateProperties } from "jassi/ui/Component";
 import {DataComponent} from "jassi/ui/DataComponent";
 //import Button from "jassi/ui/Button";
 import "jassi/ext/jquery.choosen";
 //import {Panel} from "jassi/ui/Panel";
 import { $Property } from "jassi/ui/Property";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 
 /*
 declare global {

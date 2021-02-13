@@ -1,8 +1,8 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Tree} from "jassi/ui/Tree";
 import {Panel} from "jassi/ui/Panel";
 import {Textbox} from "jassi/ui/Textbox";
-import {Server} from "remote/jassi/base/Server";
+import {Server} from "jassi/remote/Server";
 import typescript from "jassi_editor/util/Typescript";
 import { router } from "jassi/base/Router";
 

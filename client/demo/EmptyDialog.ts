@@ -1,6 +1,6 @@
 import { Button } from "jassi/ui/Button";
 import { Repeater } from "jassi/ui/Repeater";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
 type Me = {
     repeater1?: Repeater;

@@ -4,7 +4,7 @@ import {HTMLPanel} from "jassi/ui/HTMLPanel";
 import {Textbox} from "jassi/ui/Textbox";
 import {Button} from "jassi/ui/Button";
 import {BoxPanel} from "jassi/ui/BoxPanel";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 
 @$Class("demo.DialogKunde2")
 export class DialogKunde2 extends Panel {

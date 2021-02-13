@@ -1,10 +1,10 @@
 
-import jassi from    "remote/jassi/base/Jassi";
-import  "remote/jassi/base/Classes";
-import  "remote/jassi/base/Jassi";
+import jassi from    "jassi/remote/Jassi";
+import  "jassi/remote/Classes";
+import  "jassi/remote/Jassi";
 //import  "jassi/base/Router";
 import  "jassi/base/Extensions";
-import "remote/jassi/base/Registry";
+import "jassi/remote/Registry";
 import "jassi/ext/jquerylib";
 import "jassi/ext/intersection-observer";
 import { Errors } from "jassi/base/Errors";

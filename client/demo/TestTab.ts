@@ -1,6 +1,6 @@
 
-import { $Class } from "remote/jassi/base/Jassi";
-import { classes } from "remote/jassi/base/Classes";
+import { $Class } from "jassi/remote/Jassi";
+import { classes } from "jassi/remote/Classes";
 import { $ActionProvider } from "jassi/base/Actions";
 import {Panel} from "jassi/ui/Panel";
 import {HTMLPanel} from "jassi/ui/HTMLPanel";

@@ -1,7 +1,7 @@
 import {Property} from "jassi/ui/Property";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {PropertyEditor} from "jassi/ui/PropertyEditor";
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 
 export function $PropertyEditor(supportedtypes:string[]):Function{
     return function(pclass){

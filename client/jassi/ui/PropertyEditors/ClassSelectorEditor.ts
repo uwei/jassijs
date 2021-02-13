@@ -3,13 +3,13 @@ import {Editor,  $PropertyEditor } from "jassi/ui/PropertyEditors/Editor";
 import  {JsonEditor} from "jassi/ui/PropertyEditors/JsonEditor";
 import {Tools} from "jassi/util/Tools";
 import {StringConverter} from "jassi/ui/converters/StringConverter";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import {Textbox} from "jassi/ui/Textbox";
 import {PropertyEditor} from "jassi/ui/PropertyEditor";
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 import {ComponentDescriptor} from "jassi/ui/ComponentDescriptor";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 
 @$PropertyEditor(["classselector"])
 @$Class("jassi.ui.PropertyEditors.ClassSelectorEditor")

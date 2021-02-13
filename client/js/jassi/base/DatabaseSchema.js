@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "remote/jassi/base/Registry", "jassi_editor/util/Typescript", "jassi_editor/util/Parser", "jassi/template/TemplateDBObject", "jassi/util/Tools", "remote/jassi/base/Server", "jassi/base/Windows", "jassi/ui/OptionDialog", "jassi/ext/jquery.choosen"], function (require, exports, Jassi_1, Registry_1, Typescript_1, Parser_1, TemplateDBObject_1, Tools_1, Server_1, Windows_1, OptionDialog_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi_editor/util/Typescript", "jassi_editor/util/Parser", "jassi/template/TemplateDBObject", "jassi/util/Tools", "jassi/remote/Server", "jassi/base/Windows", "jassi/ui/OptionDialog", "jassi/ext/jquery.choosen"], function (require, exports, Jassi_1, Registry_1, Typescript_1, Parser_1, TemplateDBObject_1, Tools_1, Server_1, Windows_1, OptionDialog_1) {
     "use strict";
     var DatabaseSchema_1;
     Object.defineProperty(exports, "__esModule", { value: true });

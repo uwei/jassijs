@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Table} from "jassi/ui/Table";
 import {Panel} from "jassi/ui/Panel";
 import {Button} from "jassi/ui/Button";
@@ -8,8 +8,8 @@ import {VariablePanel} from "jassi/ui/VariablePanel";
 import {Databinder} from "jassi/ui/Databinder";
 import {Property,  $Property } from "jassi/ui/Property";
 import { $UIComponent } from "jassi/ui/Component";
-import {DBObject} from "remote/jassi/base/DBObject";
-import { classes } from "remote/jassi/base/Classes";
+import {DBObject} from "jassi/remote/DBObject";
+import { classes } from "jassi/remote/Classes";
 
 /*
 https://blog.openshift.com/using-filezilla-and-sftp-on-windows-with-openshift/

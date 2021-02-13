@@ -1,10 +1,10 @@
 
 import { ARZeile } from "remote/de/ARZeile";
 import { Kunde } from "remote/de/Kunde";
-import { DBObject, $DBObject } from "remote/jassi/base/DBObject";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import { DBObject, $DBObject } from "jassi/remote/DBObject";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { JoinColumn, JoinTable, Entity, PrimaryColumn, Column, ManyToMany, ManyToOne, OneToMany, OneToOne } from "jassi/util/DatabaseSchema";
-import { $CheckParentRight, $Rights } from "remote/jassi/security/Rights";
+import { $CheckParentRight, $Rights } from "jassi/remote/security/Rights";
 /**
 * Ausgangsrechnung
 * @class de.AR

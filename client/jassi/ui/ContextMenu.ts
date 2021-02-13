@@ -1,10 +1,10 @@
 import "jassi/ext/jquery.contextmenu";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Menu} from "jassi/ui/Menu";
 import {InvisibleComponent} from "jassi/ui/InvisibleComponent";
 import {Component,  $UIComponent } from "jassi/ui/Component";
-import registry from "remote/jassi/base/Registry";
-import { classes } from "remote/jassi/base/Classes";
+import registry from "jassi/remote/Registry";
+import { classes } from "jassi/remote/Classes";
 import { $Property } from "jassi/ui/Property";
 import { Actions, Action } from "jassi/base/Actions";
 import {MenuItem} from "jassi/ui/MenuItem";

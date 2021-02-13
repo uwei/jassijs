@@ -1,6 +1,6 @@
 import {Textbox} from "jassi/ui/Textbox";
 import {Editor, $PropertyEditor } from "jassi/ui/PropertyEditors/Editor";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 
 @$PropertyEditor(["string", "number","number[]"])
 @$Class("jassi.ui.PropertyEditors.DefaultEditor")

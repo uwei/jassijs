@@ -8,6 +8,6 @@
       },*/
     },
     
-    "include":["../server/remote","./", "../jassi/base/Parser.ts"]
+    "include":["../server/remote","./", "../jassi/base/Parser.ts", "../northwind/remote/Customer.ts"]
     
   }

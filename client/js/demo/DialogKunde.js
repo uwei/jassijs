@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "remote/de/Kunde", "jassi/ui/ObjectChooser", "jassi/ui/Databinder", "jassi/ui/converters/NumberConverter", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/ui/Textbox", "jassi/ui/Select", "jassi/ui/BoxPanel", "jassi/ui/Repeater", "jassi/ui/Table", "jassi/ui/Checkbox", "remote/jassi/base/Jassi", "demo/TestComponent", "jassi/ui/Property"], function (require, exports, Panel_1, Kunde_1, ObjectChooser_1, Databinder_1, NumberConverter_1, Button_1, HTMLPanel_1, Textbox_1, Select_1, BoxPanel_1, Repeater_1, Table_1, Checkbox_1, Jassi_1, TestComponent_1, Property_1) {
+define(["require", "exports", "jassi/ui/Panel", "remote/de/Kunde", "jassi/ui/ObjectChooser", "jassi/ui/Databinder", "jassi/ui/converters/NumberConverter", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/ui/Textbox", "jassi/ui/Select", "jassi/ui/BoxPanel", "jassi/ui/Repeater", "jassi/ui/Table", "jassi/ui/Checkbox", "jassi/remote/Jassi", "demo/TestComponent", "jassi/ui/Property"], function (require, exports, Panel_1, Kunde_1, ObjectChooser_1, Databinder_1, NumberConverter_1, Button_1, HTMLPanel_1, Textbox_1, Select_1, BoxPanel_1, Repeater_1, Table_1, Checkbox_1, Jassi_1, TestComponent_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DialogKunde = void 0;

@@ -1,6 +1,6 @@
 import {Component, $UIComponent } from "jassi/ui/Component";
 import {Property,  $Property } from "jassi/ui/Property";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 
 @$UIComponent({fullPath:"default/Image",icon:"mdi mdi-file-image"})//
 @$Class("jassi.ui.Image")

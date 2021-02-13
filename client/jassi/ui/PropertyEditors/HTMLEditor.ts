@@ -1,7 +1,7 @@
 import {Checkbox} from "jassi/ui/Checkbox";
 import {Editor,  $PropertyEditor } from "jassi/ui/PropertyEditors/Editor";
 import {Databinder} from "jassi/ui/Databinder";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Textbox} from "jassi/ui/Textbox";
 import {ObjectChooser} from "jassi/ui/ObjectChooser";
 import {Panel} from "jassi/ui/Panel";

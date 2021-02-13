@@ -1,5 +1,5 @@
-import { db } from "remote/jassi/base/Database";
-import { classes } from "remote/jassi/base/Classes";
+import { db } from "jassi/remote/Database";
+import { classes } from "jassi/remote/Classes";
 
 
 //define Decoraters for typeorm

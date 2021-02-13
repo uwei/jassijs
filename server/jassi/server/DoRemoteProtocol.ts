@@ -1,8 +1,8 @@
-import registry from "remote/jassi/base/Registry";
-import { classes } from "remote/jassi/base/Classes";
+import registry from "jassi/remote/Registry";
+import { classes } from "jassi/remote/Classes";
 import { getRequest } from "./getRequest";
 
-import { Database } from "remote/jassi/base/Database";
+import { Database } from "jassi/remote/Database";
 import { ECANCELED } from "constants";
 
 export function remoteProtocol(request, response) {
@@ -11,7 +11,7 @@ export function remoteProtocol(request, response) {
 }
 async function checkSimulateUser(request) {
 
-    var rights = (await import("remote/jassi/security/Rights")).default;
+    var rights = (await import("jassi/remote/security/Rights")).default;
     var test = request.cookies["simulateUser"];
     if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && await rights.isAdmin() === true) {
         var db = await (await import("jassi/server/DBManager")).DBManager.get();
@@ -37,7 +37,7 @@ async function checkSimulateUser(request) {
 async function execute(request, response) {
     // await new Promise((resolve)=>{docls(request,response,resolve)});
 
-    var RemoteProtocol = (await import("remote/jassi/base/RemoteProtocol")).RemoteProtocol;
+    var RemoteProtocol = (await import("jassi/remote/RemoteProtocol")).RemoteProtocol;
 
 
     var prot = new RemoteProtocol();
@@ -51,8 +51,9 @@ async function execute(request, response) {
         return;
     }
     var file: string = files[0];
-    if (!file.startsWith("remote/"))
-        throw "only packages which starswith remote/ can be loaded";
+    var path=file.split("/");
+    if (path.length<2||path[1]!=="remote")
+        throw "only remote packages can be loadeded";
     file = file.replace(".ts", "");
     import(file).then(async function (ret) {
 

@@ -1,7 +1,7 @@
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import { $Property } from "jassi/ui/Property";
-import { Group } from "remote/jassi/security/Group";
+import { Group } from "jassi/remote/security/Group";
 import { Databinder } from "jassi/ui/Databinder";
 import { DBObjectView,  $DBObjectView, DBObjectViewMe } from "jassi/ui/DBObjectView";
 import { DBObjectDialog } from "jassi/ui/DBObjectDialog";

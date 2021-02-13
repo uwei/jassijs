@@ -1,5 +1,5 @@
 
-import jassi from "remote/jassi/base/Jassi";
+import jassi from "jassi/remote/Jassi";
 //Do not import the class we want to extend!
 declare module "remote/de/Kunde"{
     export interface Kunde{

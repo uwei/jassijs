@@ -1,11 +1,11 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 
 import { PropertyEditor } from "jassi/ui/PropertyEditor";
 import { ComponentExplorer } from "jassi_editor/ComponentExplorer";
 import { ComponentPalette } from "jassi_editor/ComponentPalette";
 import { CodeEditorInvisibleComponents } from "jassi_editor/CodeEditorInvisibleComponents";
 import { ComponentDesigner } from "jassi_editor/ComponentDesigner";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 import { Component } from "jassi/ui/Component";
 import { Container } from "jassi/ui/Container";
 import { Property } from "jassi/ui/Property";

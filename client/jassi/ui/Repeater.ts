@@ -6,7 +6,7 @@ import {ComponentDesigner} from "jassi_editor/ComponentDesigner";
 import {Databinder} from "jassi/ui/Databinder";
 import {Component,  $UIComponent } from "jassi/ui/Component";
 import {Property,  $Property } from "jassi/ui/Property";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 class DesignPanel extends Panel {
     databinder: Databinder;
     me;

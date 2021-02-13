@@ -1,7 +1,7 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassi/util/DatabaseSchema";
 import { Kunde } from "remote/de/Kunde";
-import { extensions, $Extension } from "remote/jassi/base/Extensions";
+import { extensions, $Extension } from "jassi/remote/Extensions";
 
 //Do not import the class we want to extend!
 declare module "remote/de/Kunde"{

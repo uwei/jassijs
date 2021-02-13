@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { $ReportComponent, ReportComponent } from "jassi_report/ReportComponent";
 import { HTMLPanel } from "jassi/ui/HTMLPanel";
 import { InvisibleComponent } from "jassi/ui/InvisibleComponent";

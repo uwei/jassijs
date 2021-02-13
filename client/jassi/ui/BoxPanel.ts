@@ -1,8 +1,8 @@
 import { Panel } from "jassi/ui/Panel";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { $UIComponent } from "jassi/ui/Component";
 import { $Property } from "jassi/ui/Property";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 //@ts-ignore
 import Split from "jassi/ext/split";
 import { HTMLPanel } from "jassi/ui/HTMLPanel";

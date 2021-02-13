@@ -1,7 +1,7 @@
 import {Textbox} from "jassi/ui/Textbox";
 import {Editor,  $PropertyEditor } from "jassi/ui/PropertyEditors/Editor";
 import {Button} from "jassi/ui/Button";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 
 @$PropertyEditor(["function"])
 @$Class("jassi.ui.PropertyEditors.FunctionEditor")

@@ -1,5 +1,5 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
-import registry from "remote/jassi/base/Registry";
+import jassi, { $Class } from "jassi/remote/Jassi";
+import registry from "jassi/remote/Registry";
 
 @$Class("jassi.util.Reloader")
 export class Reloader{

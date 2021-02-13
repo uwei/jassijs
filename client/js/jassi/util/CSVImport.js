@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/ui/Table", "remote/jassi/base/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse", "remote/jassi/base/Database", "remote/jassi/base/Registry", "remote/jassi/base/Classes", "remote/jassi/base/DBObject"], function (require, exports, Upload_1, Button_1, NumberConverter_1, Textbox_1, BoxPanel_1, Select_1, Table_1, Jassi_1, Panel_1, papaparse_1, Database_1, Registry_1, Classes_1, DBObject_1) {
+define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse", "jassi/remote/Database", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/remote/DBObject"], function (require, exports, Upload_1, Button_1, NumberConverter_1, Textbox_1, BoxPanel_1, Select_1, Table_1, Jassi_1, Panel_1, papaparse_1, Database_1, Registry_1, Classes_1, DBObject_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CSVImport = void 0;

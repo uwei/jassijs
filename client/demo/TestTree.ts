@@ -1,7 +1,7 @@
 import {Panel} from "jassi/ui/Panel";
 import jassi from "jassi/jassi";
 import {Tree} from "jassi/ui/Tree";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 
 @$Class("demo.TestTree")
 export class TestTree extends Panel {

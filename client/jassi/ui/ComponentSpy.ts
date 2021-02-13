@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import {Table} from "jassi/ui/Table";
 import {HTMLPanel} from "jassi/ui/HTMLPanel";
@@ -6,7 +6,7 @@ import {Repeater} from "jassi/ui/Repeater";
 import {Button} from "jassi/ui/Button";
 import {BoxPanel} from "jassi/ui/BoxPanel";
 import {Select} from "./Select";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 
 class Me {
     IDText? : HTMLPanel;

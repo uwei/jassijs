@@ -1,10 +1,10 @@
 import {Panel} from "jassi/ui/Panel";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 //@ts-ignore
 import GoldenLayout from "jassi/ext/goldenlayout";
 
 import {ComponentDescriptor} from "jassi/ui/ComponentDescriptor";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 import {DockingContainer} from "jassi/ui/DockingContainer";
 import { Cookies } from "jassi/util/Cookies";
 

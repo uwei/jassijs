@@ -1,8 +1,8 @@
 import  {Button} from "jassi/ui/Button";
-import {Server} from "remote/jassi/base/Server";
+import {Server} from "jassi/remote/Server";
 import {Reloader} from "jassi/util/Reloader";
 
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 import { Kunde } from "remote/de/Kunde";
 
 

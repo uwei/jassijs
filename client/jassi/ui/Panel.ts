@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Container } from "jassi/ui/Container";
 import { Component, $UIComponent, ComponentCreateProperties } from "jassi/ui/Component";
 import { Property, $Property } from "jassi/ui/Property";

@@ -1,5 +1,5 @@
-import { $Class } from "remote/jassi/base/Jassi";
-import {DBObject, $DBObject } from "remote/jassi/base/DBObject";
+import { $Class } from "jassi/remote/Jassi";
+import {DBObject, $DBObject } from "jassi/remote/DBObject";
 import { PrimaryColumn, Column, OneToOne } from "jassi/util/DatabaseSchema";
 //import { Entity, PrimaryColumn, Column,OneToOne,ManyToMany,ManyToOne,OneToMany } from "typeorm";
 

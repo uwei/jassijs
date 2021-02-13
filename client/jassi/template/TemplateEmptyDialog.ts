@@ -1,9 +1,9 @@
 import { $ActionProvider, $Action } from "jassi/base/Actions";
-import { $Class } from "remote/jassi/base/Jassi";
-import { FileNode } from "remote/jassi/base/FileNode";
+import { $Class } from "jassi/remote/Jassi";
+import { FileNode } from "jassi/remote/FileNode";
 import { OptionDialog } from "jassi/ui/OptionDialog";
 import { FileExplorer, FileActions } from "jassi/ui/FileExplorer";
-import { Server } from "remote/jassi/base/Server";
+import { Server } from "jassi/remote/Server";
 import { router } from "jassi/base/Router";
 const code=`import { $Class } from "remote/jassi/base/Jassi";
 import {Panel} from "jassi/ui/Panel";

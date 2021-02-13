@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "jassi_editor/Debugger", "jassi/ui/OptionDialog", "jassi_editor/util/TSSourceMap", "jassi/util/Reloader", "remote/jassi/base/Server", "../jassi/base/Windows"], function (require, exports, Jassi_1, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "jassi/ui/OptionDialog", "jassi_editor/util/TSSourceMap", "jassi/util/Reloader", "jassi/remote/Server", "../jassi/base/Windows"], function (require, exports, Jassi_1, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ChromeDebugger = void 0;

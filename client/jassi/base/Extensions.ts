@@ -1,5 +1,5 @@
-import jassi from "remote/jassi/base/Jassi";
-import registry from "remote/jassi/base/Registry";
+import jassi from "jassi/remote/Jassi";
+import registry from "jassi/remote/Registry";
 
 export class Extensions
  /**

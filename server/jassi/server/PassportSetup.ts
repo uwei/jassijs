@@ -1,7 +1,7 @@
 
-import { User } from "remote/jassi/security/User";
+import { User } from "jassi/remote/security/User";
 import { DBManager } from "./DBManager";
-import { UserModel } from "remote/UserModel";
+import { UserModel } from "jassi/UserModel";
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;

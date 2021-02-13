@@ -1,6 +1,6 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
-import registry from "remote/jassi/base/Registry";
-import { classes } from "remote/jassi/base/Classes";
+import jassi, { $Class } from "jassi/remote/Jassi";
+import registry from "jassi/remote/Registry";
+import { classes } from "jassi/remote/Classes";
 
 export function $Property(property:Property=undefined):Function{
    

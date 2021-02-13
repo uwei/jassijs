@@ -1,10 +1,10 @@
 import { Button } from "jassi/ui/Button";
 import { NumberConverter } from "jassi/ui/converters/NumberConverter";
 import { Textbox } from "jassi/ui/Textbox";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
 import { $Property } from "jassi/ui/Property";
-import { Customer } from "remote/northwind/Customer";
+import { Customer } from "northwind/remote/Customer";
 import { Databinder } from "jassi/ui/Databinder";
 import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassi/ui/DBObjectView";
 import { DBObjectDialog } from "jassi/ui/DBObjectDialog";

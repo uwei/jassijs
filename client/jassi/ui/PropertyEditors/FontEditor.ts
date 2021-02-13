@@ -1,8 +1,8 @@
 import {PropertyEditor} from "jassi/ui/PropertyEditor";
 import {Editor,  $PropertyEditor } from "jassi/ui/PropertyEditors/Editor";
 import {Textbox} from "jassi/ui/Textbox";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
-import { classes } from "remote/jassi/base/Classes";
+import jassi, { $Class } from "jassi/remote/Jassi";
+import { classes } from "jassi/remote/Classes";
 import { Panel } from "jassi/ui/Panel";
 import { Select } from "jassi/ui/Select";
 import { loadFontIfNedded } from "jassi/ui/CSSProperties";

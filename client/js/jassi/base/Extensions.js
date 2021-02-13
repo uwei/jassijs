@@ -1,4 +1,4 @@
-define(["require", "exports", "remote/jassi/base/Jassi", "remote/jassi/base/Registry"], function (require, exports, Jassi_1, Registry_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], function (require, exports, Jassi_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Extensions = void 0;

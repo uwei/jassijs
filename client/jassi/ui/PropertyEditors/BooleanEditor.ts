@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Checkbox} from "jassi/ui/Checkbox";
 import {Editor, $PropertyEditor } from "jassi/ui/PropertyEditors/Editor";
 

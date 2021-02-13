@@ -1,14 +1,14 @@
-import { Group } from "remote/jassi/security/Group";
-import { User } from "remote/jassi/security/User";
+import { Group } from "jassi/remote/security/Group";
+import { User } from "jassi/remote/security/User";
 import { ARZeile } from "remote/de/ARZeile";
 import { Kunde } from "remote/de/Kunde";
 import { AR } from "remote/de/AR";
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 import { Test } from "jassi/base/Tests";
-import rights from "remote/jassi/security/Rights";
-import { RemoteProtocol } from "remote/jassi/base/RemoteProtocol";
-import { DBObject } from "remote/jassi/base/DBObject";
-import { ParentRight } from "remote/jassi/security/ParentRight";
+import rights from "jassi/remote/security/Rights";
+import { RemoteProtocol } from "jassi/remote/RemoteProtocol";
+import { DBObject } from "jassi/remote/DBObject";
+import { ParentRight } from "jassi/remote/security/ParentRight";
 
 
 async function freeNumber(cl: any) {

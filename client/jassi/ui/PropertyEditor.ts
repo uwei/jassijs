@@ -1,11 +1,11 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import "jassi/base/PropertyEditorService";
 import { Panel } from "jassi/ui/Panel";
 import { Button } from "jassi/ui/Button";
 import { Image } from "jassi/ui/Image";
 import { Parser } from "jassi_editor/util/Parser";
 import { Tools } from "jassi/util/Tools";
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 import { ComponentDescriptor } from "jassi/ui/ComponentDescriptor";
 import { NameEditor } from "jassi/ui/PropertyEditors/NameEditor";
 import { propertyeditor } from "jassi/base/PropertyEditorService";

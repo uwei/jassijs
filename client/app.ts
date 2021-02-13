@@ -16,7 +16,7 @@ import {ErrorPanel} from "jassi/ui/ErrorPanel";
 import {Testcontextmenu} from "demo/Testcontextmenu";
 import { router } from "jassi/base/Router";
 import {HalloPhillip} from "demo/HalloPhillip";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 
 import {Select} from "jassi/ui/Select";
 import {SearchExplorer} from "jassi/ui/SearchExplorer";

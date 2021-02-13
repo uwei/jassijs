@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "remote/jassi/base/Jassi", "jassi/base/Actions", "jassi/ui/Panel", "remote/jassi/base/Registry", "jassi/base/Router", "jassi/ui/DBObjectDialog", "jassi/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Jassi_1, Actions_1, Panel_1, Registry_1, Router_1, DBObjectDialog_1, Windows_1) {
+define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/remote/Jassi", "jassi/base/Actions", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/base/Router", "jassi/ui/DBObjectDialog", "jassi/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Jassi_1, Actions_1, Panel_1, Registry_1, Router_1, DBObjectDialog_1, Windows_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObjectExplorer = exports.DBObjectActions = exports.DBFileActions = exports.DBObjectNode = void 0;

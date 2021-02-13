@@ -1,7 +1,7 @@
 
-import jassi, { $Class } from "remote/jassi/base/Jassi";
-import { Server } from "remote/jassi/base/Server"; 
-import { FileNode } from "remote/jassi/base/FileNode";
+import jassi, { $Class } from "jassi/remote/Jassi";
+import { Server } from "jassi/remote/Server"; 
+import { FileNode } from "jassi/remote/FileNode";
 //@ts-ignore
 import "jassi_editor/ext/monaco";
 import "jassi/ext/requestidlecallback";
@@ -215,6 +215,7 @@ export class Typescript {
         if (Typescript._isInited !== true) {
             throw Error("check isInited before call ")
         }
+        //@ts-ignore
         return await this.tsWorker.getSignatureHelpItems("file:///" + file, position,undefined);
 
     }

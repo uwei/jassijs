@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Checkbox", "jassi/ui/PropertyEditors/Editor"], function (require, exports, Jassi_1, Checkbox_1, Editor_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Checkbox", "jassi/ui/PropertyEditors/Editor"], function (require, exports, Jassi_1, Checkbox_1, Editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BooleanEditor = void 0;

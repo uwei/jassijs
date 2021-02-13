@@ -1,6 +1,6 @@
 import { InvisibleComponent } from "jassi/ui/InvisibleComponent";
 import { $UIComponent } from "jassi/ui/Component";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Property, $Property } from "jassi/ui/Property";
 
 import { CSSProperties } from "jassi/ui/CSSProperties";

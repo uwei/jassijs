@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/Button", "jassi/util/Tools", "jassi_report/designer/ReportDesigner", "jassi_editor/AcePanel"], function (require, exports, Jassi_1, Panel_1, VariablePanel_1, DockingContainer_1, Button_1, Tools_1, ReportDesigner_1, AcePanel_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/Button", "jassi/util/Tools", "jassi_report/designer/ReportDesigner", "jassi_editor/AcePanel"], function (require, exports, Jassi_1, Panel_1, VariablePanel_1, DockingContainer_1, Button_1, Tools_1, ReportDesigner_1, AcePanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportEditor = void 0;

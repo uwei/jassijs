@@ -1,4 +1,4 @@
-define(["require", "exports", "remote/jassi/base/Database", "remote/jassi/base/Classes"], function (require, exports, Database_1, Classes_1) {
+define(["require", "exports", "jassi/remote/Database", "jassi/remote/Classes"], function (require, exports, Database_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;

@@ -1,6 +1,6 @@
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { $ActionProvider, $Action } from "jassi/base/Actions";
-import { FileNode } from "remote/jassi/base/FileNode";
+import { FileNode } from "jassi/remote/FileNode";
 import typescript, { Typescript } from "jassi_editor/util/Typescript";
 import { Component } from "jassi/ui/Component";
 import { Container } from "jassi/ui/Container";

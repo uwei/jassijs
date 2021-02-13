@@ -2,6 +2,8 @@
 //import ts = require('typescript');
 import * as ts from "typescript";
 import fs = require('fs');
+import { file } from "jszip";
+var rpath = require('path')
 
 //var chokidar = require('chokidar');
 var path = "./../public_html";
@@ -165,23 +167,25 @@ export class Compile {
     }
     console.info(s);
   }
-  transpileRemote(fileName: string) {
-    if (!fileName.startsWith("remote")) {
+  transpile(fileName: string) {
+    let spath = fileName.split("/");
+    if (spath.length < 2 && spath[1] !== "remote") {
       throw "fileName must startswith remote"
     }
-    var path="../client";
+    var path = "../client";
     var data = fs.readFileSync(path + "/" + fileName, { encoding: 'utf-8' });
+
     var module = fileName.replace(".ts", "");
     const host: ts.ParseConfigFileHost = ts.sys as any;
-    
+
     const parsedCmd = ts.getParsedCommandLineOfConfigFile("./tsconfig.json", undefined, host);
     const { options } = parsedCmd;
-    var outPath="js/client";
-    var fdir=outPath + "/" + fileName;
-    fdir=fdir.substring(0,fdir.lastIndexOf("/"));
-    fs.mkdirSync(fdir,{recursive:true});
-    
-     var prefix = "";
+    var outPath = "js/client";
+    var fdir = outPath + "/" + fileName;
+    fdir = fdir.substring(0, fdir.lastIndexOf("/"));
+    fs.mkdirSync(fdir, { recursive: true });
+
+    var prefix = "";
     for (let x = 0; x < fileName.split("/").length; x++) {
       prefix = "../" + prefix;
     }
@@ -189,8 +193,13 @@ export class Compile {
       compilerOptions: options,
       fileName: prefix + fileName
     });
-   
+
     fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js"), content.outputText);
     fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js.map"), content.sourceMapText);
+    var pathname = rpath.dirname(fileName);
+    if (!fs.existsSync(pathname)) {
+      fs.mkdirSync(pathname, { recursive: true });
+    }
+    fs.copyFileSync("../client/" + fileName, fileName);
   }
 }

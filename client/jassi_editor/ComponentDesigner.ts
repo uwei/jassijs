@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import {VariablePanel} from "jassi/ui/VariablePanel";
 import {PropertyEditor} from "jassi/ui/PropertyEditor";
@@ -14,7 +14,7 @@ import {Button} from "jassi/ui/Button";
 import {Component} from "jassi/ui/Component";
 import {DragAndDropper} from "jassi_editor/util/DragAndDropper";
 import {ComponentDescriptor} from "jassi/ui/ComponentDescriptor";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 import {Container} from "jassi/ui/Container";
 
 declare global {

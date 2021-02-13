@@ -2,7 +2,7 @@ import { Button } from "jassi/ui/Button";
 //@ts-ignore
 import PDFJS from "jassi_report/ext/pdfjs";
 import { Component } from "jassi/ui/Component";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
 import { BoxPanel } from "jassi/ui/BoxPanel";
 import { PDFReport } from "jassi_report/PDFReport";

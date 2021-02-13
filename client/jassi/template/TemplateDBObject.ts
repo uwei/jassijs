@@ -1,11 +1,11 @@
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { $Property } from "jassi/ui/Property";
 import { $ActionProvider, $Action } from "jassi/base/Actions";
-import { DBObject } from "remote/jassi/base/DBObject";
-import { FileNode } from "remote/jassi/base/FileNode";
+import { DBObject } from "jassi/remote/DBObject";
+import { FileNode } from "jassi/remote/FileNode";
 import { OptionDialog } from "jassi/ui/OptionDialog";
-import { classes } from "remote/jassi/base/Classes";
-import registry from "remote/jassi/base/Registry";
+import { classes } from "jassi/remote/Classes";
+import registry from "jassi/remote/Registry";
 import { FileActions } from "jassi/ui/FileExplorer";
 import { TemplateDBDialog } from "jassi/template/TemplateDBDialog";
 

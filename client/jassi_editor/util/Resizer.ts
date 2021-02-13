@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Component} from "jassi/ui/Component";
 import {DragAndDropper} from "jassi_editor/util/DragAndDropper";
 

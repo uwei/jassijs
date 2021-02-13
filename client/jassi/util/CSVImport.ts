@@ -6,14 +6,14 @@ import {BoxPanel} from "jassi/ui/BoxPanel";
 import {Checkbox} from "jassi/ui/Checkbox";
 import { Select } from "jassi/ui/Select";
 import { Table } from "jassi/ui/Table";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
 //@ts-ignore
 import { Papa } from "jassi/ext/papaparse";
-import { db } from "remote/jassi/base/Database";
-import registry from "remote/jassi/base/Registry";
-import { classes } from "remote/jassi/base/Classes";
-import { DBObject } from "remote/jassi/base/DBObject";
+import { db } from "jassi/remote/Database";
+import registry from "jassi/remote/Registry";
+import { classes } from "jassi/remote/Classes";
+import { DBObject } from "jassi/remote/DBObject";
 var csv = `id,testid,companyname,contactname,contacttitle,address,city,region,postalcode,country,phone,fax
 ALFKI,1,Alfreds Futterkiste,Maria Anders,Sales Representative,Obere Str. 57,Berlin,#NV,12209,Germany,030-0074321,030-0076545
 ANATR,2,Ana Trujillo Emparedados y helados,Ana Trujillo,Owner,Avda. de la Constitución 2222,México D.F.,#NV,05021,Mexico,(5) 555-4729,(5) 555-3745

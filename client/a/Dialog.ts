@@ -4,7 +4,7 @@ import { Checkbox } from "jassi/ui/Checkbox";
 import { Textbox } from "jassi/ui/Textbox";
 import { Button } from "jassi/ui/Button";
 import { BoxPanel } from "jassi/ui/BoxPanel";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
 import { HTMLPanel } from "jassi/ui/HTMLPanel";
 import { Style } from "jassi/ui/Style";

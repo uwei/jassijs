@@ -1,8 +1,8 @@
 import "jassi/ext/fancytree";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import {Component,  $UIComponent } from "jassi/ui/Component";
 import {ComponentDescriptor} from "jassi/ui/ComponentDescriptor";
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 
 
 import extensions from "jassi/base/Extensions";

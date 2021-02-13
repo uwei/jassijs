@@ -1,8 +1,8 @@
 import {Editor,  $PropertyEditor } from "jassi/ui/PropertyEditors/Editor";
 import {Select} from "jassi/ui/Select";
 
-import { classes } from "remote/jassi/base/Classes";
-import { $Class } from "remote/jassi/base/Jassi";
+import { classes } from "jassi/remote/Classes";
+import { $Class } from "jassi/remote/Jassi";
 /**
  * select one or more instances of an class
  * used by PropertyEditor

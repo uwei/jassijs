@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/MenuItem", "jassi/ui/Checkbox", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/ui/BoxPanel", "remote/jassi/base/Jassi", "jassi/ui/Panel", "jassi/ui/HTMLPanel"], function (require, exports, MenuItem_1, Checkbox_1, Textbox_1, Button_1, BoxPanel_1, Jassi_1, Panel_1, HTMLPanel_1) {
+define(["require", "exports", "jassi/ui/MenuItem", "jassi/ui/Checkbox", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/HTMLPanel"], function (require, exports, MenuItem_1, Checkbox_1, Textbox_1, Button_1, BoxPanel_1, Jassi_1, Panel_1, HTMLPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog = void 0;

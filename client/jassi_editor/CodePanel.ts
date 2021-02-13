@@ -1,4 +1,4 @@
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
 import typescript from "jassi_editor/util/Typescript";
 import { router } from "jassi/base/Router";

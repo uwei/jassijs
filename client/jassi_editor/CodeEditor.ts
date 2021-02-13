@@ -1,14 +1,14 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
 import { CodePanel } from "jassi_editor/CodePanel";
 import { VariablePanel } from "jassi/ui/VariablePanel";
 import { DockingContainer } from "jassi/ui/DockingContainer";
 import { ErrorPanel } from "jassi/ui/ErrorPanel";
 import { Button } from "jassi/ui/Button";
-import registry from "remote/jassi/base/Registry";
-import { Server } from "remote/jassi/base/Server";
+import registry from "jassi/remote/Registry";
+import { Server } from "jassi/remote/Server";
 import { Reloader } from "jassi/util/Reloader";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 import { Component } from "jassi/ui/Component";
 import { ReportDesign } from "jassi_report/ReportDesign";
 import { $Property } from "jassi/ui/Property";

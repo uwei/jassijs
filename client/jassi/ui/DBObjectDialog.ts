@@ -1,10 +1,10 @@
 import { Button } from "jassi/ui/Button";
 import { Table } from "jassi/ui/Table";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
-import registry from "remote/jassi/base/Registry";
-import { DBObject, $DBObject } from "remote/jassi/base/DBObject";
-import { classes } from "remote/jassi/base/Classes";
+import registry from "jassi/remote/Registry";
+import { DBObject, $DBObject } from "jassi/remote/DBObject";
+import { classes } from "jassi/remote/Classes";
 import { Component } from "jassi/ui/Component";
 import { DBObjectView, DBObjectViewProperties } from "jassi/ui/DBObjectView";
 import { BoxPanel } from "jassi/ui/BoxPanel";

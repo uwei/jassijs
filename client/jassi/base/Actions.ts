@@ -1,7 +1,7 @@
-import registry from "remote/jassi/base/Registry";
-import { $Class } from "remote/jassi/base/Jassi";
-import { FileNode } from "remote/jassi/base/FileNode";
-import { classes } from "remote/jassi/base/Classes";
+import registry from "jassi/remote/Registry";
+import { $Class } from "jassi/remote/Jassi";
+import { FileNode } from "jassi/remote/FileNode";
+import { classes } from "jassi/remote/Classes";
 
 
 export class ActionProperties {

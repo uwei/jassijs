@@ -1,6 +1,6 @@
 import {Panel} from "jassi/ui/Panel";
 
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import {Table} from "jassi/ui/Table";
 
 class Person {

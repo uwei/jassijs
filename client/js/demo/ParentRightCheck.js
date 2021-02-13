@@ -1,4 +1,4 @@
-define(["require", "exports", "remote/jassi/security/Group", "remote/jassi/security/User", "remote/de/ARZeile", "remote/de/Kunde", "remote/de/AR", "remote/jassi/base/Registry", "remote/jassi/base/RemoteProtocol", "remote/jassi/base/DBObject", "remote/jassi/security/ParentRight"], function (require, exports, Group_1, User_1, ARZeile_1, Kunde_1, AR_1, Registry_1, RemoteProtocol_1, DBObject_1, ParentRight_1) {
+define(["require", "exports", "jassi/remote/security/Group", "jassi/remote/security/User", "remote/de/ARZeile", "remote/de/Kunde", "remote/de/AR", "jassi/remote/Registry", "jassi/remote/RemoteProtocol", "jassi/remote/DBObject", "jassi/remote/security/ParentRight"], function (require, exports, Group_1, User_1, ARZeile_1, Kunde_1, AR_1, Registry_1, RemoteProtocol_1, DBObject_1, ParentRight_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;

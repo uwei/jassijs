@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import {Tree} from "jassi/ui/Tree";
 import {ComponentDescriptor} from "jassi/ui/ComponentDescriptor";

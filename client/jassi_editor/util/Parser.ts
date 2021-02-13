@@ -1,5 +1,5 @@
 
-import { $Class } from "remote/jassi/base/Jassi"; 
+import { $Class } from "jassi/remote/Jassi"; 
 
 
 import typescript,{ Typescript } from "jassi_editor/util/Typescript";

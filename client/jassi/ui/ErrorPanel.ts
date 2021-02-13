@@ -1,10 +1,10 @@
 
 import { Panel } from "jassi/ui/Panel";
 import { Errors } from "jassi/base/Errors";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Button } from "jassi/ui/Button";
 import { TSSourceMap } from "jassi_editor/util/TSSourceMap";
-import { classes } from "remote/jassi/base/Classes";
+import { classes } from "jassi/remote/Classes";
 import { router } from "jassi/base/Router";
 
 @$Class("jassi.ui.ErrorPanel")

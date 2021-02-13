@@ -1,9 +1,9 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import {HTMLPanel} from "jassi/ui/HTMLPanel";
 import {Image} from "jassi/ui/Image";
-import registry from "remote/jassi/base/Registry";
-import { classes } from "remote/jassi/base/Classes";
+import registry from "jassi/remote/Registry";
+import { classes } from "jassi/remote/Classes";
 import { $UIComponent, UIComponentProperties } from "jassi/ui/Component";
 
 @$Class("jassi_editor.ComponentPalette")

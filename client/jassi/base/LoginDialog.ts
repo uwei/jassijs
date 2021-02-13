@@ -1,4 +1,4 @@
-import { RemoteProtocol } from "remote/jassi/base/RemoteProtocol";
+import { RemoteProtocol } from "jassi/remote/RemoteProtocol";
 
 var queue = [];
 export function doAfterLogin(resolve, prot: RemoteProtocol) {

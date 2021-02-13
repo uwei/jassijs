@@ -4,9 +4,9 @@ import { Component } from "jassi/ui/Component";
 import ace from "jassi_editor/ext/acelib";
 import "jassi_editor/Debugger";
 import typescript, { Typescript } from "jassi_editor/util/Typescript";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { router } from "jassi/base/Router";
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 import { CodePanel } from "jassi_editor/CodePanel";
 
 

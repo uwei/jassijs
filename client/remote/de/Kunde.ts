@@ -1,11 +1,11 @@
-import { DBObject, $DBObject } from "remote/jassi/base/DBObject";
+import { DBObject, $DBObject } from "jassi/remote/DBObject";
 import { AR } from "remote/de/AR";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassi/util/DatabaseSchema";
 import "remote/de/Kunde.ext";
-import { ExtensionProvider } from "remote/jassi/base/Extensions";
-import { $DBObjectQuery } from "remote/jassi/base/DBObjectQuery";
-import { $ParentRights } from "remote/jassi/security/Rights";
+import { ExtensionProvider } from "jassi/remote/Extensions";
+import { $DBObjectQuery } from "jassi/remote/DBObjectQuery";
+import { $ParentRights } from "jassi/remote/security/Rights";
 //import "jassi/ext/enableExtension.js?de.Kunde";
 @$ParentRights([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
         description: {

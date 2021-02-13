@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "jassi/base/Router", "jassi_editor/util/Typescript", "remote/jassi/base/Server", "jassi_editor/CodePanel", "jassi_editor/Debugger", "jassi_editor/ext/monaco"], function (require, exports, Jassi_1, Router_1, Typescript_1, Server_1, CodePanel_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_editor/util/Typescript", "jassi/remote/Server", "jassi_editor/CodePanel", "jassi_editor/Debugger", "jassi_editor/ext/monaco"], function (require, exports, Jassi_1, Router_1, Typescript_1, Server_1, CodePanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;

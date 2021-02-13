@@ -1,10 +1,10 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Tree } from "jassi/ui/Tree";
 import { Panel } from "jassi/ui/Panel";
 import { Textbox } from "jassi/ui/Textbox";
-import { Server } from "remote/jassi/base/Server";
+import { Server } from "jassi/remote/Server";
 import { router } from "jassi/base/Router";
-import { FileNode } from "remote/jassi/base/FileNode";
+import { FileNode } from "jassi/remote/FileNode";
 import { $ActionProvider, $Action, Actions } from "jassi/base/Actions";
 import { OptionDialog } from "jassi/ui/OptionDialog";
 import { Menu } from "jassi/ui/Menu";

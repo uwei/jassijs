@@ -4,13 +4,13 @@ var fpath = require('path');
 import { Compile } from 'jassi/server/Compile';
 import { DBManager } from 'jassi/server/DBManager';
 import { Indexer } from 'jassi/server/Indexer';
-import { FileNode } from 'remote/jassi/base/FileNode';
+import { FileNode } from 'jassi/remote/FileNode';
 import JSZip = require("jszip");
 let resolve = require('path').resolve;
 
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"]
 export default class Filesystem {
-    static allModules:{[name:string]:any[]}={};
+    static allModules: { [name: string]: any[] } = {};
     public static path = "./../client";
     _pathForFile(fileName: string) {
         var path = Filesystem.path + "/" + fileName;
@@ -117,59 +117,7 @@ export default class Filesystem {
         });
         return results;
     }
-    /*public updateRegistry() {
-        var jsFiles: string[] = this.dirFiles(Filesystem.path, [".ts"], ["node_modules"])
-        //create empty if needed
-        if (!fs.existsSync(Filesystem.path + "/registry.json")) {
-            fs.writeFileSync(Filesystem.path + "//registry.json", "{}");
-        }
-        var index = JSON.parse(fs.readFileSync(Filesystem.path + "//registry.json"));
-        //remove deleted files
-        for (var key in index) {
-            if (!fs.existsSync(Filesystem.path + "/" + key)) {
-                delete index[key];
-            }
-        }
-       
-        for (let x = 0; x < jsFiles.length; x++) {
-            var jsFile = jsFiles[x];
-            var fileName = jsFile.substring(Filesystem.path.length + 1);
-            if(fileName===undefined||fileName.startsWith("tmp/"))
-                continue;
-               // findex(Filesystem.path + "/" + jsFile);
 
-            var entry = index[fileName];
-            if (entry === undefined) {
-                entry = {};
-                entry.date = undefined;
-                index[fileName] = entry;
-            }
-            var stats = fs.statSync(Filesystem.path + "/" + jsFile);
-            if (stats.mtime.getTime() !== entry.date) {
-                entry.lines = [];
-                var text = fs.readFileSync(Filesystem.path + "/" + jsFile).toString();
-                var lines = text.split("jassi.register(");
-                for (var y = 1; y < lines.length; y++) {
-                    var line: string = lines[y];
-                    var pos1 = line.indexOf(")");
-                    var pos2 = line.indexOf("\n") - 1;
-                    if (pos2 >= 0 && pos2 < pos1)
-                        pos1 = pos2;
-                    line = line.substring(0, pos1);
-                    var fields: string[] = line.split(",");
-                    for (var z = 0; z < fields.length; z++) {
-                        fields[z] = fields[z].trim();
-                        if (fields[z].startsWith('"') && fields[z].endsWith('"')) {
-                            fields[z] = fields[z].substring(1, fields[z].length - 1);
-                        }
-                    }
-                    entry.lines.push(fields);
-                }
-                entry.date = stats.mtime.getTime();
-            }
-        }
-        fs.writeFileSync(Filesystem.path + "/registry.json", JSON.stringify(index, undefined, "\t"));
-    }*/
     private async writeZip(zip: JSZip, outfile: string) {
         return new Promise((ready) => {
 
@@ -210,10 +158,10 @@ export default class Filesystem {
         }
         return parent;
     }
-    
-    
+
+
     //Reset ORM config
-    
+
     /**
      * create a folder
      * @param filename - the name of the new file 
@@ -250,7 +198,7 @@ export default class Filesystem {
      * @param newfile - new filename
      */
     public rename(oldfile: string, newfile: string): string {
-        var resolve = require('path').resolve 
+        var resolve = require('path').resolve
         var oldpath = this._pathForFile(oldfile);
         var newpath = this._pathForFile(newfile);
         if (!fs.existsSync(oldpath))
@@ -265,27 +213,40 @@ export default class Filesystem {
         } catch (ex) {
             return ex.message;
         }
-        return ""; 
+        return "";
     }
 
-     /**
-     * deletes a file or directory 
-     * @param file - old filename
-     */
+    /**
+    * deletes a file or directory 
+    * @param file - old filename
+    */
     public async remove(file: string): Promise<string> {
         var resolve = require('path').resolve
         var path = this._pathForFile(file);
         if (!fs.existsSync(path))
             return file + " not exists";
         try {
-              if(fs.lstatSync(path).isDirectory())
-                  fs.rmdirSync(path,  { recursive: true });
-              else
+            if (fs.lstatSync(path).isDirectory())
+                fs.rmdirSync(path, { recursive: true });
+            else
                 fs.unlinkSync(path);
         } catch (ex) {
             return ex.message;
         }
         return "";
+    }
+    /**
+     * create modul in ./jassi.json
+     * @param modul 
+     */
+    createRemoteModulIfNeeded(modul: string) {
+
+        var modules = JSON.parse(fs.readFileSync("./jassi.json", 'utf-8'));
+        if (!modules.modules[modul]) {
+            modules.modules[modul] = modul;
+            fs.writeFileSync("./jassi.json", JSON.stringify(modules, undefined, "\t"));
+            // new Indexer().updateRegistry();//create regstry.js
+        }
     }
     /**
      * save files + 
@@ -297,9 +258,9 @@ export default class Filesystem {
      * @param contents 
      * @returns "" or the error
      */
-    public async saveFiles(fileNames: string[], contents: string[],rollbackonerror:boolean=true) :Promise<string>{
-        var ret:string="";
-        var rollbackcontents:string[]=[];
+    public async saveFiles(fileNames: string[], contents: string[], rollbackonerror: boolean = true): Promise<string> {
+        var ret: string = "";
+        var rollbackcontents: string[] = [];
         for (var x = 0; x < fileNames.length; x++) {
             let fileName = fileNames[x];
             var path = require('path').dirname(this._pathForFile(fileName));
@@ -310,51 +271,58 @@ export default class Filesystem {
             } catch (err) {
 
             }
-            if(fs.existsSync(this._pathForFile(fileName))){
-                rollbackcontents.push(fs.readFileSync(this._pathForFile(fileName),{ encoding: 'utf-8' }));
-            }else{
+            if (fs.existsSync(this._pathForFile(fileName))) {
+                rollbackcontents.push(fs.readFileSync(this._pathForFile(fileName), { encoding: 'utf-8' }));
+            } else {
                 rollbackcontents.push(undefined);//this file would be killed at revert
             }
-            if(contents[x]===undefined)
+            if (contents[x] === undefined)
                 fs.unlinkSync(this._pathForFile(fileName));//remove file on revert
-            else{
+            else {
                 fs.writeFileSync(this._pathForFile(fileName), contents[x]);
                 //transpile remoteCode for Server
-                if (fileName.toLowerCase().startsWith("remote/") && fileName.toLowerCase().endsWith(".ts")) {
-                    new Compile().transpileRemote(fileName);
+                let spath = fileName.split("/");
+                if (spath.length > 1 && spath[1].toLowerCase() === "remote" && fileName.toLowerCase().endsWith(".ts")) {
+                    this.createRemoteModulIfNeeded(spath[0]);
+                    new Compile().transpile(fileName);
                 }
             }
         }
         new Indexer().updateRegistry();
-        var remotecodeincluded=false;
+        var remotecodeincluded = false;
         for (var f = 0; f < fileNames.length; f++) {
             var fileName = fileNames[f];
-            if(contents[f]===undefined)
+            if (contents[f] === undefined)
                 continue;
-            if (fileName.toLowerCase().startsWith("remote/") && fileName.toLowerCase().endsWith(".ts")) {
+            var spath = fileName.split("/");
+            if (spath.length > 1 && spath[1].toLowerCase() === "remote" && fileName.toLowerCase().endsWith(".ts")) {
                 //reload Modules
-                var remotecodeincluded=true;
-                var test = require.resolve("remote/jassi/base/Classes");
-                test = test.substring(0, test.length - "jassi/base/Classes.js".length);
-                var jfiles=[];
-                for (var jfile in require.cache) {
+                var remotecodeincluded = true;
+                var root = require.resolve("jassi/remote/Classes");
+                root = root.substring(0, root.length - "jassi/remote/Classes.js".length);
+                var modules = JSON.parse(fs.readFileSync("./jassi.json", 'utf-8')).modules;
+                var jfiles = [];
+                for (var modul in modules) {
+                    for (var jfile in require.cache) {
+                        if (jfile.replaceAll("\\", "/").startsWith(root.replaceAll("\\", "/") + modul + "/remote")) {
+                            //save Modules
+                            var p = jfile.substring(root.length).replaceAll("\\", "/");
+                            p = p.substring(0, p.length - 3);
+                            if (Filesystem.allModules[p] === undefined) {
+                                Filesystem.allModules[p] = [];
+                            }
+                            var mod = await import(p);
+                            if (Filesystem.allModules[p].indexOf(mod) === -1)
+                                Filesystem.allModules[p].push(mod);
 
-                    if (jfile.startsWith(test)) {
-                        //save Modules
-                        var p = "remote/"+jfile.substring(test.length).replaceAll("\\","/");
-                        p = p.substring(0,p.length - 3);
-                        if(Filesystem.allModules[p]===undefined){
-                            Filesystem.allModules[p]=[];
+                            jfiles.push(jfile);
                         }
-                        var mod = await import(p);
-                        if(Filesystem.allModules[p].indexOf(mod)===-1)
-                            Filesystem.allModules[p].push(mod);
-                        
-                        jfiles.push(jfile);
                     }
                 }
-                for(let k=0;k<jfiles.length;k++){
-                    let jfile=jfiles[k];
+
+
+                for (let k = 0; k < jfiles.length; k++) {
+                    let jfile = jfiles[k];
                     delete require.cache[jfile];
                 }
 
@@ -362,38 +330,38 @@ export default class Filesystem {
                 //              if(require.cache[ffile]!==undefined)
                 //                delete require.cache[ffile];
                 //reload DB+Extensions
-/*                var vdat = registry.getJSONData("$DBObject");
-                var vext = registry.getJSONData("$Extension");
-                vdat = vdat.concat(vext);
-                var found = false;
-                for (var v = 0; v < vdat.length; v++) {
-                    var val = vdat[v];
-                    if (val.filename === fileName) {
-                        found = true;
-                    }
-                };
-                if (found) {*/
-                    var man = await DBManager.destroyConnection();
-               // }
+                /*                var vdat = registry.getJSONData("$DBObject");
+                                var vext = registry.getJSONData("$Extension");
+                                vdat = vdat.concat(vext);
+                                var found = false;
+                                for (var v = 0; v < vdat.length; v++) {
+                                    var val = vdat[v];
+                                    if (val.filename === fileName) {
+                                        found = true;
+                                    }
+                                };
+                                if (found) {*/
+                var man = await DBManager.destroyConnection();
+                // }
             }
-            
+
         };
         for (var key in Filesystem.allModules) {//load and migrate modules
-            var all=Filesystem.allModules[key];
+            var all = Filesystem.allModules[key];
             var mod = await import(key);
-            for(var a=0;a<all.length;a++){
-                for(key in mod){
-                    all[a][key]=mod[key];
+            for (var a = 0; a < all.length; a++) {
+                for (key in mod) {
+                    all[a][key] = mod[key];
                 }
             }
         }
-        if(remotecodeincluded&&rollbackonerror){//verify DB-Schema
-            try{
+        if (remotecodeincluded && rollbackonerror) {//verify DB-Schema
+            try {
                 await DBManager.get();
-            }catch(err){
-                var restore=await this.saveFiles(fileNames,rollbackcontents,false);
+            } catch (err) {
+                var restore = await this.saveFiles(fileNames, rollbackcontents, false);
                 console.error(err.stack);
-                return err+"DB corrupt changes are reverted "+restore;
+                return err + "DB corrupt changes are reverted " + restore;
             }
         }
         return ret;
@@ -424,24 +392,63 @@ export default class Filesystem {
         //TODO $this->updateRegistry();
     }
 }
-
+export function syncRemoteFiles() {
+    //server remote
+    fs.watch(Filesystem.path, { recursive: true }, (eventType, filename) => {
+        if (!filename)
+            return;
+        var file = filename.replaceAll("\\", "/");
+        var paths = file.split("/");
+        if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
+            var file = filename.replaceAll("\\", "/");
+            var paths = file.split("/");
+            if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
+                setTimeout(() => {
+                    var f2 = "./" + file;
+                    var f1 = Filesystem.path + "/" + file;
+                    if (fs.statSync(f1).mtimeMs > fs.statSync(f2).mtimeMs) {
+                        console.log("sync " + f1 + "->" + f2);
+                    }
+                    fs.copyFileSync(f1, f2);
+                }, 200);
+            }
+        }
+    })
+    //client remote
+    fs.watch("./", { recursive: true }, (eventType, filename) => {
+        if (!filename)
+            return;
+        var file = filename.replaceAll("\\", "/");
+        var paths = file.split("/");
+        if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
+            setTimeout(() => {
+                var f1 = "./" + file;
+                var f2 = Filesystem.path + "/" + file;
+                if (fs.statSync(f1).mtimeMs > fs.statSync(f2).mtimeMs) {
+                    console.log("sync " + f1 + "->" + f2);
+                }
+                fs.copyFileSync(f1, f2);
+            }, 200);
+        }
+    })
+}
 export function staticfiles(req, res, next) {
 
     // console.log(req.path);
     let sfile = Filesystem.path + "/" + req.path;
     if (fs.existsSync(sfile)) {
-      // let code=fs.readFileSync(Filesystem.path+"/"+req.path);
-      let dat = fs.statSync(sfile).mtime.getTime();
-      if (req.query.lastcachedate === dat.toString()) {
-        res.set('X-Custom-UpToDate', 'true');
-        res.send("");
-      } else {
-        res.sendFile(resolve(sfile), {
-          headers: { 'X-Custom-Date': dat.toString() }
-        });
-      }
+        // let code=fs.readFileSync(Filesystem.path+"/"+req.path);
+        let dat = fs.statSync(sfile).mtime.getTime();
+        if (req.query.lastcachedate === dat.toString()) {
+            res.set('X-Custom-UpToDate', 'true');
+            res.send("");
+        } else {
+            res.sendFile(resolve(sfile), {
+                headers: { 'X-Custom-Date': dat.toString() }
+            });
+        }
     } else {
-      next();
+        next();
     }
     var s = 1;
-  }
+}

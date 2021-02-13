@@ -8,14 +8,17 @@ declare global {
 (global as any).window = {};
 (global as any).$ = {};
 
-require("app-module-path").addPath("./js/client");
-require("app-module-path").addPath("./js/server");
+import fs = require('fs');
+var hj=fs.existsSync("./js");
+
+//require("app-module-path").addPath("./js/client");
+require("app-module-path").addPath("./js");
 
 import "reflect-metadata";
 //important: registry must be loaded after "reflect-metadata" and before the typeorm (because delegation of Reflect.metadata)
 import express = require('express');
-import fs = require('fs');
-import { staticfiles } from "jassi/server/Filessystem";
+
+import { staticfiles, syncRemoteFiles } from "jassi/server/Filessystem";
 import { Indexer } from 'jassi/server/Indexer';
 import { loginRegister, manageToken } from "jassi/server/PassportLoginRegister";
 const passport = require("passport");
@@ -26,14 +29,15 @@ import { remoteProtocol } from "jassi/server/DoRemoteProtocol";
 import { zip } from "jassi/server/Zip";
 import { rawbody } from "jassi/server/RawBody";
 import { manageRequest, getRequest } from "jassi/server/getRequest";
-import rights from "remote/jassi/security/Rights";
-import { User } from "remote/jassi/security/User";
+import rights from "jassi/remote/security/Rights";
+import { User } from "jassi/remote/security/User";
 import { DBManager } from "jassi/server/DBManager";
 
 const PORT = process.env.PORT || 5000
 
 let app = express();
 new Indexer().updateRegistry();
+syncRemoteFiles();
 app.use(staticfiles);
 app.use(rawbody);
 app.use(manageRequest);

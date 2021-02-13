@@ -1,5 +1,5 @@
 
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 
 import "jassi/ext/tabulator";
 import {DataComponent} from "jassi/ui/DataComponent";

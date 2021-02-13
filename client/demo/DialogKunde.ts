@@ -13,7 +13,7 @@ import {Repeater} from "jassi/ui/Repeater";
 import {Table} from "jassi/ui/Table";
 import {Checkbox} from "jassi/ui/Checkbox";
 import db from "jassi/base/Database";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {TestComponent}from "demo/TestComponent";
 import {Property,  $Property } from "jassi/ui/Property";
 type Me ={

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Menu", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "remote/jassi/base/Registry", "remote/jassi/base/Classes", "jassi/ui/Property", "jassi/base/Actions", "jassi/ui/MenuItem", "jassi/ext/jquery.contextmenu"], function (require, exports, Jassi_1, Menu_1, InvisibleComponent_1, Component_1, Registry_1, Classes_1, Property_1, Actions_1, MenuItem_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/Property", "jassi/base/Actions", "jassi/ui/MenuItem", "jassi/ext/jquery.contextmenu"], function (require, exports, Jassi_1, Menu_1, InvisibleComponent_1, Component_1, Registry_1, Classes_1, Property_1, Actions_1, MenuItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ContextMenu = void 0;

@@ -2,10 +2,10 @@
 import {Panel} from "jassi/ui/Panel";
 import {HTMLPanel} from "jassi/ui/HTMLPanel";
 import {Button} from "jassi/ui/Button";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 //@ts-ignore
 import tinymce from "jassi/ext/tinymce"
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 
 class Me{
 	IDHtml?:HTMLPanel;

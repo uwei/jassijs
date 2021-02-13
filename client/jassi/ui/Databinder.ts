@@ -2,7 +2,7 @@
 import jassi from "jassi/jassi";
 import {InvisibleComponent} from "jassi/ui/InvisibleComponent";
 import {Component,  $UIComponent } from "jassi/ui/Component";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 
 
 @$UIComponent({fullPath:"common/Databinder",icon:"mdi mdi-connection"})

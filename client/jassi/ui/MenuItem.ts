@@ -3,7 +3,7 @@ import jassi from "jassi/jassi";
 import {Component,  $UIComponent } from "jassi/ui/Component";
 import {Menu} from "jassi/ui/Menu";
 import {Property,  $Property } from "jassi/ui/Property";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import {Container} from "jassi/ui/Container";
 
 //jassi.myRequire("lib/contextMenu.css");

@@ -1,7 +1,7 @@
-import { $Class } from "remote/jassi/base/Jassi";
-import registry from "remote/jassi/base/Registry";
-import { classes } from "remote/jassi/base/Classes";
-import { db } from "remote/jassi/base/Database";
+import { $Class } from "jassi/remote/Jassi";
+import registry from "jassi/remote/Registry";
+import { classes } from "jassi/remote/Classes";
+import { db } from "jassi/remote/Database";
 import "jassi/ext/jquery.choosen";
 import typescript, { Typescript } from "jassi_editor/util/Typescript";
 
@@ -12,7 +12,7 @@ import { TemplateDBObject } from "jassi/template/TemplateDBObject";
 
 import { Tools } from "jassi/util/Tools";
 
-import { Server } from "remote/jassi/base/Server";
+import { Server } from "jassi/remote/Server";
 import windows from "jassi/base/Windows";
 import { OptionDialog } from "jassi/ui/OptionDialog";
  

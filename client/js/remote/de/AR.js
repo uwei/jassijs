@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "remote/de/ARZeile", "remote/de/Kunde", "remote/jassi/base/DBObject", "remote/jassi/base/Jassi", "jassi/util/DatabaseSchema", "remote/jassi/security/Rights"], function (require, exports, ARZeile_1, Kunde_1, DBObject_1, Jassi_1, DatabaseSchema_1, Rights_1) {
+define(["require", "exports", "remote/de/ARZeile", "remote/de/Kunde", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/security/Rights"], function (require, exports, ARZeile_1, Kunde_1, DBObject_1, Jassi_1, DatabaseSchema_1, Rights_1) {
     "use strict";
     var AR_1;
     Object.defineProperty(exports, "__esModule", { value: true });

@@ -1,12 +1,12 @@
 import {Button} from "jassi/ui/Button";
 import {BoxPanel} from "jassi/ui/BoxPanel";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import { Databinder } from "jassi/ui/Databinder";
 import { $UIComponent } from "jassi/ui/Component";
-import registry from "remote/jassi/base/Registry";
-import { classes } from "remote/jassi/base/Classes";
-import { DBObject } from "remote/jassi/base/DBObject";
+import registry from "jassi/remote/Registry";
+import { classes } from "jassi/remote/Classes";
+import { DBObject } from "jassi/remote/DBObject";
 import { $Property } from "jassi/ui/Property";
 
 export type DBObjectViewMe = {

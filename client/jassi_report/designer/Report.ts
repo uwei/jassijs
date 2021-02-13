@@ -1,4 +1,4 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {BoxPanel} from "jassi/ui/BoxPanel";
 
 @$Class("jassi_report.Report")

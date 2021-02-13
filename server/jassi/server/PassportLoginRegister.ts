@@ -1,9 +1,9 @@
 
 import { type } from "os";
-import { User } from "remote/jassi/security/User";
+import { User } from "jassi/remote/security/User";
 import { DBManager } from "./DBManager";
 import { JWT_EXPIRATION_MS } from "./PassportSetup";
-import { UserModel } from "remote/UserModel";
+import { UserModel } from "jassi/UserModel";
 
 const express = require('express');
 const passport = require('passport');

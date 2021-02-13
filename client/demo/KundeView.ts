@@ -5,7 +5,7 @@ import { Databinder } from "jassi/ui/Databinder";
 import { Textbox } from "jassi/ui/Textbox";
 import { Panel } from "jassi/ui/Panel";
 import { $Property } from "jassi/ui/Property";
-import { $Class } from "remote/jassi/base/Jassi";
+import { $Class } from "jassi/remote/Jassi";
 import { Kunde } from "remote/de/Kunde";
 import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassi/ui/DBObjectView";
 type Me = {

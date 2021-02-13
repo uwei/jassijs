@@ -1,8 +1,8 @@
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import {Component,  $UIComponent } from "jassi/ui/Component";
 import {DataComponent} from "jassi/ui/DataComponent";
 import {DefaultConverter} from "jassi/ui/converters/DefaultConverter";
-import registry from "remote/jassi/base/Registry";
+import registry from "jassi/remote/Registry";
 import {Property,  $Property } from "jassi/ui/Property";
 @$UIComponent({fullPath:"common/Textbox",icon:"mdi mdi-form-textbox"})
 @$Class("jassi.ui.Textbox")

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "remote/jassi/base/Jassi", "jassi/ui/Button", "jassi_editor/util/TSSourceMap", "jassi/base/Router"], function (require, exports, Panel_1, Errors_1, Jassi_1, Button_1, TSSourceMap_1, Router_1) {
+define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remote/Jassi", "jassi/ui/Button", "jassi_editor/util/TSSourceMap", "jassi/base/Router"], function (require, exports, Panel_1, Errors_1, Jassi_1, Button_1, TSSourceMap_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ErrorPanel = void 0;
