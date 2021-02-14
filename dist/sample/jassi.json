@@ -1,9 +1,9 @@
 {
 	"modules": {
-		"jassi":"http://localhost/jassijs/dist/jassi.js",
-		"jassi_report": "http://localhost/jassijs/dist/jassi_report.js",
-		"jassi_editor": "http://localhost/jassijs/dist/jassi_editor.js",
-		"demo": "http://localhost/jassijs/dist/demo.js"
+		"jassi":"https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi.js",
+		"jassi_report": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_report.js",
+		"jassi_editor": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_editor.js",
+		"demo": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/demo.js"
 	},
 	"require": {
 		"paths": {
