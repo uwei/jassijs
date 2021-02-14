@@ -1,4 +1,4 @@
-import { Kunde } from "remote/de/Kunde";
+import { Kunde } from "de/remote/Kunde";
 
 export function test() {
     var kd = new Kunde();

@@ -7,7 +7,527 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("jassi_report/RColumns", ["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Property", "jassi_report/ReportDesign", "jassi_report/ReportComponent"], function (require, exports, Jassi_1, Property_1, ReportDesign_1, ReportComponent_1) {
+define("jassi_report/PDFReport", ["require", "exports", "jassi/remote/Jassi", "jassi_report/ext/pdfmake", "jassi_report/PDFViewer"], function (require, exports, Jassi_1, pdfmake_1, PDFViewer_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.PDFReport = void 0;
+    let PDFReport = class PDFReport {
+        constructor() {
+            // @member {object} - the generated report
+            this.report = null;
+        }
+        layout() {
+            //var me = this.me = {};
+        }
+        /**
+         * @member {object} - report definition
+         */
+        set value(value) {
+            this._definition = value;
+            var data = {};
+            Object.assign(data, value);
+            data.content = replaceTemplates(this._definition.content, this._definition.data);
+            if (data.background)
+                data.background = replaceTemplates(this._definition.background, this._definition.data);
+            if (data.header)
+                data.header = replaceTemplates(this._definition.header, this._definition.data);
+            if (data.footer)
+                data.footer = replaceTemplates(this._definition.footer, this._definition.data);
+            data.content = replaceTemplates(this._definition.content, this._definition.data);
+            replacePageInformation(data);
+            delete data.data;
+            this.report = pdfmake_1.default.createPdf(data);
+        }
+        get value() {
+            return this._definition;
+        }
+        open() {
+            this.report.open();
+        }
+        download() {
+            this.report.download();
+        }
+        print() {
+            this.report.print();
+        }
+        async getBase64() {
+            var _this = this;
+            return new Promise(function (resolve, reject) {
+                _this.report.getBase64(function (data) {
+                    resolve(data);
+                });
+            });
+        }
+        ;
+    };
+    PDFReport = __decorate([
+        Jassi_1.$Class("jassi_report.PDFReport"),
+        __metadata("design:paramtypes", [])
+    ], PDFReport);
+    exports.PDFReport = PDFReport;
+    function replace(str, data, member) {
+        var ob = getVar(data, member);
+        return str.split("{{" + member + "}}").join(ob);
+    }
+    function getVar(data, member) {
+        var names = member.split(".");
+        var ob = data[names[0]];
+        for (let x = 1; x < names.length; x++) {
+            if (ob === undefined)
+                return undefined;
+            ob = ob[names[x]];
+        }
+        return ob;
+    }
+    //replace {{currentPage}} {{pageWidth}} {{pageHeight}} {{pageCount}} in header,footer, background
+    function replacePageInformation(def) {
+        if (def.background && typeof def.background !== "function") {
+            let d = JSON.stringify(def.background);
+            def.background = function (currentPage, pageSize) {
+                let sret = d.replaceAll("{{currentPage}}", currentPage);
+                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
+                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
+                return JSON.parse(sret);
+            };
+        }
+        if (def.header && typeof def.header !== "function") {
+            let d = JSON.stringify(def.header);
+            def.header = function (currentPage, pageCount) {
+                let sret = d.replaceAll("{{currentPage}}", currentPage);
+                sret = sret.replaceAll("{{pageCount}}", pageCount);
+                return JSON.parse(sret);
+            };
+        }
+        if (def.footer && typeof def.footer !== "function") {
+            let d = JSON.stringify(def.footer);
+            def.footer = function (currentPage, pageCount, pageSize) {
+                let sret = d.replaceAll("{{currentPage}}", currentPage);
+                sret = sret.replaceAll("{{pageCount}}", pageCount);
+                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
+                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
+                return JSON.parse(sret);
+            };
+        }
+    }
+    function replaceDatatable(def, data) {
+        var header = def.datatable.header;
+        var footer = def.datatable.footer;
+        var dataexpr = def.datatable.foreach;
+        var groups = def.datatable.groups;
+        var body = def.datatable.body;
+        def.table = {
+            body: []
+        };
+        if (header)
+            def.table.body.push(header);
+        def.table.body.push({
+            foreach: def.datatable.dataforeach,
+            do: body
+        });
+        delete def.datatable.dataforeach;
+        /*var variable = dataexpr.split(" in ")[0];
+        var sarr = dataexpr.split(" in ")[1];
+        var arr = getVar(data, sarr);
+    
+        for (let x = 0;x < arr.length;x++) {
+            data[variable] = arr[x];
+            var copy = JSON.parse(JSON.stringify(body));//deep copy
+            copy = replaceTemplates(copy, data);
+            def.table.body.push(copy);
+        }*/
+        if (footer)
+            def.table.body.push(footer);
+        //delete data[variable];
+        delete def.datatable.header;
+        delete def.datatable.footer;
+        delete def.datatable.foreach;
+        delete def.datatable.groups;
+        delete def.datatable.body;
+        for (var key in def.datatable) {
+            def.table[key] = def.datatable[key];
+        }
+        delete def.datatable;
+        /*header:[{ text:"Item"},{ text:"Price"}],
+                        data:"line in invoice.lines",
+                        //footer:[{ text:"Total"},{ text:""}],
+                        body:[{ text:"Text"},{ text:"price"}],
+                        groups:*/
+    }
+    function replaceTemplates(def, data, parentArray = undefined) {
+        if (def.datatable !== undefined) {
+            replaceDatatable(def, data);
+        }
+        if (def.foreach !== undefined) {
+            //resolve foreach
+            //	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
+            if (parentArray === undefined) {
+                throw "foreach is not surounded by an Array";
+            }
+            var variable = def.foreach.split(" in ")[0];
+            var sarr = def.foreach.split(" in ")[1];
+            var arr = getVar(data, sarr);
+            var pos = parentArray.indexOf(def);
+            parentArray.splice(pos, 1);
+            for (let x = 0; x < arr.length; x++) {
+                data[variable] = arr[x];
+                delete def.foreach;
+                var copy;
+                if (def.do)
+                    copy = JSON.parse(JSON.stringify(def.do));
+                else
+                    copy = JSON.parse(JSON.stringify(def));
+                copy = replaceTemplates(copy, data);
+                parentArray.splice(pos++, 0, copy);
+            }
+            delete data[variable];
+            return undefined;
+        }
+        else if (Array.isArray(def)) {
+            for (var a = 0; a < def.length; a++) {
+                if (def[a].foreach !== undefined) {
+                    replaceTemplates(def[a], data, def);
+                    a--;
+                }
+                else
+                    def[a] = replaceTemplates(def[a], data, def);
+            }
+            return def;
+        }
+        else if (typeof def === "string") {
+            var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
+            if (ergebnis !== null) {
+                for (var e = 0; e < ergebnis.length; e++) {
+                    def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
+                }
+            }
+            return def;
+        }
+        else { //object	
+            for (var key in def) {
+                def[key] = replaceTemplates(def[key], data);
+            }
+            delete def.editTogether; //RText
+        }
+        return def;
+    }
+    function replaceTemplatesOld(def, data, parentArray = undefined) {
+        if (def.datatable !== undefined) {
+            replaceDatatable(def, data);
+        }
+        else if (def.foreach !== undefined) {
+            //resolve foreach
+            //	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
+            if (parentArray === undefined) {
+                throw "foreach is not surounded by an Array";
+            }
+            var variable = def.foreach.split(" in ")[0];
+            var sarr = def.foreach.split(" in ")[1];
+            var arr = getVar(data, sarr);
+            var pos = parentArray.indexOf(def);
+            parentArray.splice(pos, 1);
+            for (let x = 0; x < arr.length; x++) {
+                data[variable] = arr[x];
+                var copy = JSON.parse(JSON.stringify(def.do)); //deep copy
+                copy = replaceTemplates(copy, data);
+                parentArray.splice(pos++, 0, copy);
+            }
+            delete data[variable];
+            return undefined;
+        }
+        else if (Array.isArray(def)) {
+            for (var a = 0; a < def.length; a++) {
+                if (def[a].foreach !== undefined) {
+                    replaceTemplates(def[a], data, def);
+                    a--;
+                }
+                else
+                    def[a] = replaceTemplates(def[a], data, def);
+            }
+            return def;
+        }
+        else if (typeof def === "string") {
+            var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
+            if (ergebnis !== null) {
+                for (var e = 0; e < ergebnis.length; e++) {
+                    def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
+                }
+            }
+            return def;
+        }
+        else { //object	
+            for (var key in def) {
+                def[key] = replaceTemplates(def[key], data);
+            }
+            delete def.editTogether; //RText
+        }
+        return def;
+    }
+    async function test() {
+        var rep = new PDFReport();
+        var def = {
+            data: {
+                invoice: {
+                    number: 1000,
+                    date: "20.07.2018",
+                    customer: {
+                        firstname: "Henry",
+                        lastname: "Klaus",
+                        street: "Hauptstr. 157",
+                        place: "chemnitz",
+                    },
+                    lines: [
+                        { pos: 1, text: "this is the first position, lksjdflgsd er we wer wre er er er re wekfgjslkdfjjdk sgfsdg", price: 10.00, amount: 50, variante: [{ m: 1 }, { m: 2 }] },
+                        { pos: 2, text: "this is the next position", price: 20.50, },
+                        { pos: 3, text: "this is an other position", price: 19.50 },
+                        { pos: 4, text: "this is the last position", price: 50.00 },
+                    ],
+                    summary: [
+                        { text: "Subtotal", value: 100.00 },
+                        { text: "Tax", value: 19.00 },
+                        { text: "Subtotal", value: 119.00 },
+                    ]
+                }
+            },
+            content: {
+                stack: [{
+                        columns: [
+                            {
+                                stack: [
+                                    { text: '{{invoice.customer.firstname}} {{invoice.customer.lastname}}' },
+                                    { text: '{{invoice.customer.street}}' },
+                                    { text: '{{invoice.customer.place}}' }
+                                ]
+                            },
+                            {
+                                stack: [
+                                    { text: 'Invoice', fontSize: 18 },
+                                    { text: " " },
+                                    { text: "Date: {{invoice.date}}" },
+                                    { text: "Number: {{invoice.number}}", bold: true },
+                                    { text: " " },
+                                    { text: " " },
+                                ]
+                            }
+                        ]
+                    }, {
+                        table: {
+                            body: [
+                                ['Item', 'Price'],
+                                {
+                                    foreach: "line in invoice.lines",
+                                    do: [
+                                        '{{line.text}}', '{{line.price}}'
+                                    ]
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        datatable: {
+                            header: [{ text: "Item" }, { text: "Price" }],
+                            dataforeach: "line in invoice.lines",
+                            //footer:[{ text:"Total"},{ text:""}],
+                            body: [{ text: '{{line.text}}' }, { text: '{{line.price}}' }],
+                            groups: [
+                                {
+                                    field: "line",
+                                    header: [],
+                                    footer: []
+                                }
+                            ]
+                        }
+                    },
+                    { text: " " },
+                    {
+                        foreach: "sum in invoice.summary",
+                        columns: [
+                            { text: "{{sum.text}}" },
+                            { text: "{{sum.value}}" },
+                        ]
+                    },
+                ]
+            }
+        };
+        def.content = replaceTemplates(def.content, def.data);
+        rep.value = def;
+        var viewer = new PDFViewer_1.PDFViewer();
+        viewer.value = await rep.getBase64();
+        return viewer;
+    }
+    exports.test = test;
+});
+define("jassi_report/PDFViewer", ["require", "exports", "jassi/ui/Button", "jassi_report/ext/pdfjs", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/BoxPanel"], function (require, exports, Button_1, pdfjs_1, Component_1, Jassi_2, Panel_1, BoxPanel_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.PDFViewer = void 0;
+    class Canavas extends Component_1.Component {
+        constructor() {
+            super();
+            super.init($('<canvas type="pdfviewer"></canvas>')[0]);
+        }
+    }
+    let PDFViewer = class PDFViewer extends Panel_1.Panel {
+        constructor() {
+            super();
+            this._page = 1;
+            //super.init(undefined);//$('<canvas type="pdfviewer"></canvas>')[0]);
+            this.pdfjsLib = pdfjs_1.default;
+            this.pdfDoc = null;
+            this.pageNum = 1;
+            this.pageRendering = false;
+            this.pageNumPending = null;
+            this.scale = 0.8;
+            this.me = {};
+            this.layout(this.me);
+        }
+        layout(me) {
+            me.toolbar = new BoxPanel_1.BoxPanel();
+            me.canavasPanel = new Canavas();
+            me.plus = new Button_1.Button();
+            me.minus = new Button_1.Button();
+            var _this = this;
+            me.download = new Button_1.Button();
+            //me.canavasPanel.height="90%";
+            //	me.canavasPanel.width="90%";
+            //	var cn=$('<canvas type="pdfviewer"></canvas>')[0]
+            this.canvas = me.canavasPanel.dom;
+            //this.dom.appendChild(cn);
+            //this.canvas = cn;
+            this.ctx = this.canvas.getContext('2d');
+            this.add(me.toolbar);
+            this.add(me.canavasPanel);
+            me.toolbar.add(me.plus);
+            me.toolbar.horizontal = true;
+            me.toolbar.add(me.download);
+            me.toolbar.add(me.minus);
+            me.plus.text = "+";
+            me.plus.onclick(function (event) {
+                _this.scale = _this.scale * 1.4;
+                _this.renderPage(_this._page);
+            });
+            me.minus.text = "-";
+            me.minus.onclick(function (event) {
+                _this.scale = _this.scale / 1.4;
+                _this.renderPage(_this._page);
+            });
+            me.download.text = "download";
+            me.download.onclick(function (event) {
+                _this.report.open();
+            });
+        }
+        renderPage(num) {
+            // The workerSrc property shall be specified.
+            this.pageRendering = true;
+            // Using promise to fetch the page
+            var _this = this;
+            this.pdfDoc.getPage(num).then(function (page) {
+                var viewport = page.getViewport({ scale: _this.scale });
+                _this.canvas.height = viewport.height;
+                _this.canvas.width = viewport.width;
+                _this.width = viewport.width;
+                _this.height = viewport.height;
+                // Render PDF page into canvas context
+                var renderContext = {
+                    canvasContext: _this.ctx,
+                    viewport: viewport
+                };
+                var renderTask = page.render(renderContext);
+                // Wait for rendering to finish
+                renderTask.promise.then(function () {
+                    _this.pageRendering = false;
+                    if (_this.pageNumPending !== null) {
+                        // New page rendering is pending
+                        _this.renderPage(_this.pageNumPending);
+                        _this.pageNumPending = null;
+                    }
+                });
+            });
+        }
+        queueRenderPage(num) {
+            if (this.pageRendering) {
+                this.pageNumPending = num;
+            }
+            else {
+                this.renderPage(num);
+            }
+        }
+        /**
+         * Displays previous page.
+         */
+        onPrevPage() {
+            if (this.pageNum <= 1) {
+                return;
+            }
+            this.pageNum--;
+            this.queueRenderPage(this.pageNum);
+        }
+        /**
+         * Displays next page.
+         */
+        onNextPage() {
+            if (this.pageNum >= this.pdfDoc.numPages) {
+                return;
+            }
+            this.pageNum++;
+            this.queueRenderPage(this.pageNum);
+        }
+        /**
+         * @member {data} - the caption of the button
+         */
+        set value(value) {
+            this._data = value;
+            var pdfData = atob(this._data);
+            var loadingTask = this.pdfjsLib.getDocument({ data: pdfData });
+            var _this = this;
+            loadingTask.promise.then(function (pdf) {
+                _this.pdfDoc = pdf;
+                _this.queueRenderPage(_this._page);
+            }, function (e) {
+                var g = e;
+            });
+        }
+        get value() {
+            return this._data;
+            //return  $(this.checkbox).prop("checked");
+        }
+        /**
+         * @member {number} - the current page number
+         */
+        set page(value) {
+            this._page = value;
+        }
+        get page() {
+            return this._page;
+            //return  $(this.checkbox).prop("checked");
+        }
+    };
+    PDFViewer = __decorate([
+        Jassi_2.$Class("jassi_report.PDFViewer"),
+        __metadata("design:paramtypes", [])
+    ], PDFViewer);
+    exports.PDFViewer = PDFViewer;
+    async function test() {
+        var ret = new PDFViewer();
+        //testdocument
+        var data = 'JVBERi0xLjcKCjEgMCBvYmogICUgZW50cnkgcG9pbnQKPDwKICAvVHlwZSAvQ2F0YWxvZwog' +
+            'IC9QYWdlcyAyIDAgUgo+PgplbmRvYmoKCjIgMCBvYmoKPDwKICAvVHlwZSAvUGFnZXMKICAv' +
+            'TWVkaWFCb3ggWyAwIDAgMjAwIDIwMCBdCiAgL0NvdW50IDEKICAvS2lkcyBbIDMgMCBSIF0K' +
+            'Pj4KZW5kb2JqCgozIDAgb2JqCjw8CiAgL1R5cGUgL1BhZ2UKICAvUGFyZW50IDIgMCBSCiAg' +
+            'L1Jlc291cmNlcyA8PAogICAgL0ZvbnQgPDwKICAgICAgL0YxIDQgMCBSIAogICAgPj4KICA+' +
+            'PgogIC9Db250ZW50cyA1IDAgUgo+PgplbmRvYmoKCjQgMCBvYmoKPDwKICAvVHlwZSAvRm9u' +
+            'dAogIC9TdWJ0eXBlIC9UeXBlMQogIC9CYXNlRm9udCAvVGltZXMtUm9tYW4KPj4KZW5kb2Jq' +
+            'Cgo1IDAgb2JqICAlIHBhZ2UgY29udGVudAo8PAogIC9MZW5ndGggNDQKPj4Kc3RyZWFtCkJU' +
+            'CjcwIDUwIFRECi9GMSAxMiBUZgooSGVsbG8sIHdvcmxkISkgVGoKRVQKZW5kc3RyZWFtCmVu' +
+            'ZG9iagoKeHJlZgowIDYKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMDEwIDAwMDAwIG4g' +
+            'CjAwMDAwMDAwNzkgMDAwMDAgbiAKMDAwMDAwMDE3MyAwMDAwMCBuIAowMDAwMDAwMzAxIDAw' +
+            'MDAwIG4gCjAwMDAwMDAzODAgMDAwMDAgbiAKdHJhaWxlcgo8PAogIC9TaXplIDYKICAvUm9v' +
+            'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G';
+        ret.value = data;
+        return ret;
+    }
+    exports.test = test;
+});
+define("jassi_report/RColumns", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi_report/ReportDesign", "jassi_report/ReportComponent"], function (require, exports, Jassi_3, Property_1, ReportDesign_1, ReportComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RColumns = void 0;
@@ -71,14 +591,14 @@ define("jassi_report/RColumns", ["require", "exports", "remote/jassi/base/Jassi"
     };
     RColumns = __decorate([
         ReportComponent_1.$ReportComponent({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassi_report.RColumns"),
+        Jassi_3.$Class("jassi_report.RColumns"),
         Property_1.$Property({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], RColumns);
     exports.RColumns = RColumns;
 });
 //    jassi.register("reportcomponent","jassi_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassi_report/RDatatable", ["require", "exports", "remote/jassi/base/Jassi", "jassi_report/RText", "jassi_report/ReportComponent", "jassi_report/RTablerow", "jassi/ui/Property"], function (require, exports, Jassi_2, RText_1, ReportComponent_2, RTablerow_1, Property_2) {
+define("jassi_report/RDatatable", ["require", "exports", "jassi/remote/Jassi", "jassi_report/RText", "jassi_report/ReportComponent", "jassi_report/RTablerow", "jassi/ui/Property"], function (require, exports, Jassi_4, RText_1, ReportComponent_2, RTablerow_1, Property_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RDatatable = void 0;
@@ -268,7 +788,7 @@ define("jassi_report/RDatatable", ["require", "exports", "remote/jassi/base/Jass
     ], RDatatable.prototype, "dataforeach", void 0);
     RDatatable = __decorate([
         ReportComponent_2.$ReportComponent({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
-        Jassi_2.$Class("jassi_report.RDatatable"),
+        Jassi_4.$Class("jassi_report.RDatatable"),
         __metadata("design:paramtypes", [Object])
     ], RDatatable);
     exports.RDatatable = RDatatable;
@@ -276,7 +796,7 @@ define("jassi_report/RDatatable", ["require", "exports", "remote/jassi/base/Jass
     }
     exports.test = test;
 });
-define("jassi_report/RStack", ["require", "exports", "remote/jassi/base/Jassi", "jassi_report/ReportDesign", "jassi_report/ReportComponent"], function (require, exports, Jassi_3, ReportDesign_2, ReportComponent_3) {
+define("jassi_report/RStack", ["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportDesign", "jassi_report/ReportComponent"], function (require, exports, Jassi_5, ReportDesign_2, ReportComponent_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RStack = void 0;
@@ -319,7 +839,7 @@ define("jassi_report/RStack", ["require", "exports", "remote/jassi/base/Jassi", 
     };
     RStack = __decorate([
         ReportComponent_3.$ReportComponent({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
-        Jassi_3.$Class("jassi_report.RStack")
+        Jassi_5.$Class("jassi_report.RStack")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
@@ -327,7 +847,7 @@ define("jassi_report/RStack", ["require", "exports", "remote/jassi/base/Jassi", 
     exports.RStack = RStack;
 });
 //    jassi.register("reportcomponent","jassi_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassi_report/RTablerow", ["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Component", "jassi_report/ReportDesign", "jassi_report/ReportComponent"], function (require, exports, Jassi_4, Component_1, ReportDesign_3, ReportComponent_4) {
+define("jassi_report/RTablerow", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi_report/ReportDesign", "jassi_report/ReportComponent"], function (require, exports, Jassi_6, Component_2, ReportDesign_3, ReportComponent_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTablerow = void 0;
@@ -376,7 +896,7 @@ define("jassi_report/RTablerow", ["require", "exports", "remote/jassi/base/Jassi
         }
         wrapComponent(component) {
             var colspan = $(component.domWrapper).attr("colspan"); //save colspan
-            Component_1.Component.replaceWrapper(component, document.createElement("td"));
+            Component_2.Component.replaceWrapper(component, document.createElement("td"));
             $(component.domWrapper).attr("colspan", colspan);
             $(component.domWrapper).css("word-break", "break-all");
             $(component.domWrapper).css("display", "");
@@ -437,7 +957,7 @@ define("jassi_report/RTablerow", ["require", "exports", "remote/jassi/base/Jassi
     };
     RTablerow = __decorate([
         ReportComponent_4.$ReportComponent({ editableChildComponents: ["this"] }),
-        Jassi_4.$Class("jassi_report.RTablerow")
+        Jassi_6.$Class("jassi_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
@@ -445,7 +965,7 @@ define("jassi_report/RTablerow", ["require", "exports", "remote/jassi/base/Jassi
     exports.RTablerow = RTablerow;
 });
 //    jassi.register("reportcomponent","jassi_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassi_report/RText", ["require", "exports", "remote/jassi/base/Jassi", "jassi_report/ReportComponent", "jassi/ui/HTMLPanel", "jassi/ui/Property", "jassi_report/ReportDesign"], function (require, exports, Jassi_5, ReportComponent_5, HTMLPanel_1, Property_3, ReportDesign_4) {
+define("jassi_report/RText", ["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponent", "jassi/ui/HTMLPanel", "jassi/ui/Property", "jassi_report/ReportDesign"], function (require, exports, Jassi_7, ReportComponent_5, HTMLPanel_1, Property_3, ReportDesign_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RText = void 0;
@@ -867,7 +1387,7 @@ define("jassi_report/RText", ["require", "exports", "remote/jassi/base/Jassi", "
     ], RText.prototype, "lineHeight", null);
     RText = __decorate([
         ReportComponent_5.$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
-        Jassi_5.$Class("jassi_report.RText")
+        Jassi_7.$Class("jassi_report.RText")
         //@$Property({hideBaseClassProperties:true})
         ,
         Property_3.$Property({ name: "value", type: "string", description: "text" }),
@@ -882,7 +1402,7 @@ define("jassi_report/RText", ["require", "exports", "remote/jassi/base/Jassi", "
     }
     exports.test = test;
 });
-define("jassi_report/RUnknown", ["require", "exports", "remote/jassi/base/Jassi", "jassi_report/ReportComponent"], function (require, exports, Jassi_6, ReportComponent_6) {
+define("jassi_report/RUnknown", ["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponent"], function (require, exports, Jassi_8, ReportComponent_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RUnknown = void 0;
@@ -914,16 +1434,16 @@ define("jassi_report/RUnknown", ["require", "exports", "remote/jassi/base/Jassi"
         }
     };
     RUnknown = __decorate([
-        Jassi_6.$Class("jassi_report.RUnknown"),
+        Jassi_8.$Class("jassi_report.RUnknown"),
         __metadata("design:paramtypes", [Object])
     ], RUnknown);
     exports.RUnknown = RUnknown;
 });
-define("jassi_report/ReportComponent", ["require", "exports", "jassi/ui/Component", "remote/jassi/base/Registry", "remote/jassi/base/Jassi", "jassi/ui/Panel", "jassi/ui/Property"], function (require, exports, Component_2, Registry_1, Jassi_7, Panel_1, Property_4) {
+define("jassi_report/ReportComponent", ["require", "exports", "jassi/ui/Component", "jassi/remote/Registry", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Property"], function (require, exports, Component_3, Registry_1, Jassi_9, Panel_2, Property_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ReportComponent = exports.$ReportComponent = exports.ReportComponentProperties = void 0;
-    class ReportComponentProperties extends Component_2.UIComponentProperties {
+    class ReportComponentProperties extends Component_3.UIComponentProperties {
     }
     exports.ReportComponentProperties = ReportComponentProperties;
     function $ReportComponent(properties) {
@@ -932,7 +1452,7 @@ define("jassi_report/ReportComponent", ["require", "exports", "jassi/ui/Componen
         };
     }
     exports.$ReportComponent = $ReportComponent;
-    let ReportComponent = class ReportComponent extends Panel_1.Panel {
+    let ReportComponent = class ReportComponent extends Panel_2.Panel {
         constructor() {
             super(...arguments);
             this.reporttype = "nothing";
@@ -1023,12 +1543,12 @@ define("jassi_report/ReportComponent", ["require", "exports", "jassi/ui/Componen
         __metadata("design:paramtypes", [Object])
     ], ReportComponent.prototype, "width", null);
     ReportComponent = __decorate([
-        Jassi_7.$Class("jassi_report.ReportComponent"),
+        Jassi_9.$Class("jassi_report.ReportComponent"),
         Property_4.$Property({ hideBaseClassProperties: true })
     ], ReportComponent);
     exports.ReportComponent = ReportComponent;
 });
-define("jassi_report/ReportDesign", ["require", "exports", "jassi/ui/BoxPanel", "remote/jassi/base/Jassi", "jassi_report/RStack", "jassi_report/RText", "jassi_report/RColumns", "jassi_report/RUnknown", "jassi_report/ReportComponent", "jassi_report/RDatatable", "jassi/ui/Property"], function (require, exports, BoxPanel_1, Jassi_8, RStack_1, RText_2, RColumns_1, RUnknown_1, ReportComponent_7, RDatatable_1, Property_5) {
+define("jassi_report/ReportDesign", ["require", "exports", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi_report/RStack", "jassi_report/RText", "jassi_report/RColumns", "jassi_report/RUnknown", "jassi_report/ReportComponent", "jassi_report/RDatatable", "jassi/ui/Property"], function (require, exports, BoxPanel_2, Jassi_10, RStack_1, RText_2, RColumns_1, RUnknown_1, ReportComponent_7, RDatatable_1, Property_5) {
     "use strict";
     var ReportDesign_5;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1060,7 +1580,7 @@ define("jassi_report/ReportDesign", ["require", "exports", "jassi/ui/BoxPanel", 
         __metadata("design:type", String)
     ], InfoProperties.prototype, "producer", void 0);
     InfoProperties = __decorate([
-        Jassi_8.$Class("jassi_report.InfoProperties")
+        Jassi_10.$Class("jassi_report.InfoProperties")
     ], InfoProperties);
     let PermissionProperties = class PermissionProperties {
         constructor() {
@@ -1101,11 +1621,11 @@ define("jassi_report/ReportDesign", ["require", "exports", "jassi/ui/BoxPanel", 
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "documentAssembly", void 0);
     PermissionProperties = __decorate([
-        Jassi_8.$Class("jassi_report.PermissionProperties")
+        Jassi_10.$Class("jassi_report.PermissionProperties")
     ], PermissionProperties);
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
-    let ReportDesign = ReportDesign_5 = class ReportDesign extends BoxPanel_1.BoxPanel {
+    let ReportDesign = ReportDesign_5 = class ReportDesign extends BoxPanel_2.BoxPanel {
         /**
         *
         * @param {object} properties - properties to init
@@ -1453,7 +1973,7 @@ define("jassi_report/ReportDesign", ["require", "exports", "jassi/ui/BoxPanel", 
     ], ReportDesign.prototype, "pageOrientation", null);
     ReportDesign = ReportDesign_5 = __decorate([
         ReportComponent_7.$ReportComponent({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
-        Jassi_8.$Class("jassi_report.ReportDesign"),
+        Jassi_10.$Class("jassi_report.ReportDesign"),
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);
     exports.ReportDesign = ReportDesign;
@@ -1461,24 +1981,24 @@ define("jassi_report/ReportDesign", ["require", "exports", "jassi/ui/BoxPanel", 
     }
     exports.test = test;
 });
-define("jassi_report/ReportEditor", ["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/Button", "jassi/util/Tools", "jassi_report/designer/ReportDesigner", "jassi/ui/AcePanel"], function (require, exports, Jassi_9, Panel_2, VariablePanel_1, DockingContainer_1, Button_1, Tools_1, ReportDesigner_1, AcePanel_1) {
+define("jassi_report/ReportEditor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/Button", "jassi/util/Tools", "jassi_report/designer/ReportDesigner", "jassi_editor/AcePanel"], function (require, exports, Jassi_11, Panel_3, VariablePanel_1, DockingContainer_1, Button_2, Tools_1, ReportDesigner_1, AcePanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportEditor = void 0;
     /**
      * Panel for editing sources
-     * @class jassi.ui.CodeEditor
+     * @class jassi_report.ReportEditor
      */
-    let ReportEditor = class ReportEditor extends Panel_2.Panel {
+    let ReportEditor = class ReportEditor extends Panel_3.Panel {
         constructor() {
             super();
             this.maximize();
             this._main = new DockingContainer_1.DockingContainer();
-            this._codeView = new Panel_2.Panel();
+            this._codeView = new Panel_3.Panel();
             this._codePanel = new AcePanel_1.AcePanel();
             this._design = new ReportDesigner_1.ReportDesigner();
             this._variables = new VariablePanel_1.VariablePanel();
-            this._codeToolbar = new Panel_2.Panel();
+            this._codeToolbar = new Panel_3.Panel();
             this._init();
         }
         _init() {
@@ -1497,7 +2017,7 @@ define("jassi_report/ReportEditor", ["require", "exports", "remote/jassi/base/Ja
             this._codePanel.width = "100%";
             this._main.width = "calc(100% - 1px)";
             this._main.height = "99%";
-            var undo = new Button_1.Button();
+            var undo = new Button_2.Button();
             undo.icon = "mdi mdi-undo";
             undo.tooltip = "Undo (Strg+Z)";
             undo.onclick(function () {
@@ -1611,7 +2131,7 @@ define("jassi_report/ReportEditor", ["require", "exports", "remote/jassi/base/Ja
         }
     };
     ReportEditor = __decorate([
-        Jassi_9.$Class("jassi_report.ReportEditor"),
+        Jassi_11.$Class("jassi_report.ReportEditor"),
         __metadata("design:paramtypes", [])
     ], ReportEditor);
     exports.ReportEditor = ReportEditor;
@@ -1629,26 +2149,52 @@ define("jassi_report/modul", ["require", "exports"], function (require, exports)
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
-        "require": {}
+        "css": ["jassi_report.css"],
+        "require": {
+            paths: {
+                'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
+                'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
+                'pdfmake': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts',
+                'pdfMakeLib': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake' //'../../lib/pdfmake'
+            },
+            shim: {
+                'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
+                pdfMakeLib: {
+                    exports: 'pdfMake'
+                },
+                pdfmake: {
+                    deps: ['pdfMakeLib'],
+                    exports: 'pdfMake'
+                }
+            },
+        }
     };
 });
-//this file is autogenerated dont modify
+//this file is autogenerated don't modify
 define("jassi_report/registry", ["require"], function (require) {
     return {
         default: {
             "jassi_report/designer/Report.ts": {
-                "date": 1611936363493,
+                "date": 1613218544157,
                 "jassi_report.Report": {}
             },
             "jassi_report/designer/ReportDesigner.ts": {
-                "date": 1612890839603,
+                "date": 1613218544160,
                 "jassi_report.designer.ReportDesigner": {}
             },
             "jassi_report/modul.ts": {
-                "date": 1612722519098
+                "date": 1613312029291
+            },
+            "jassi_report/PDFReport.ts": {
+                "date": 1613218544158,
+                "jassi_report.PDFReport": {}
+            },
+            "jassi_report/PDFViewer.ts": {
+                "date": 1613218544158,
+                "jassi_report.PDFViewer": {}
             },
             "jassi_report/RColumns.ts": {
-                "date": 1612389719738,
+                "date": 1613218544158,
                 "jassi_report.RColumns": {
                     "$ReportComponent": [
                         {
@@ -1670,7 +2216,7 @@ define("jassi_report/registry", ["require"], function (require) {
                 "date": 1611935803813
             },
             "jassi_report/RDatatable.ts": {
-                "date": 1612389792364,
+                "date": 1613218566582,
                 "jassi_report.RDatatable": {
                     "$ReportComponent": [
                         {
@@ -1687,7 +2233,7 @@ define("jassi_report/registry", ["require"], function (require) {
                 }
             },
             "jassi_report/ReportComponent.ts": {
-                "date": 1612890169107,
+                "date": 1613218566582,
                 "jassi_report.ReportComponent": {
                     "$Property": [
                         {
@@ -1700,7 +2246,7 @@ define("jassi_report/registry", ["require"], function (require) {
                 "date": 1611935804327
             },
             "jassi_report/ReportDesign.ts": {
-                "date": 1611936472939,
+                "date": 1613218566582,
                 "jassi_report.InfoProperties": {},
                 "jassi_report.PermissionProperties": {},
                 "jassi_report.ReportDesign": {
@@ -1720,11 +2266,11 @@ define("jassi_report/registry", ["require"], function (require) {
                 }
             },
             "jassi_report/ReportEditor.ts": {
-                "date": 1612890194409,
+                "date": 1613218609627,
                 "jassi_report.ReportEditor": {}
             },
             "jassi_report/RStack.ts": {
-                "date": 1612389843337,
+                "date": 1613218544158,
                 "jassi_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -1738,7 +2284,7 @@ define("jassi_report/registry", ["require"], function (require) {
                 }
             },
             "jassi_report/RTablerow.ts": {
-                "date": 1611936363493,
+                "date": 1613218544158,
                 "jassi_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -1750,7 +2296,7 @@ define("jassi_report/registry", ["require"], function (require) {
                 }
             },
             "jassi_report/RText.ts": {
-                "date": 1612389901759,
+                "date": 1613218544158,
                 "jassi_report.RText": {
                     "$ReportComponent": [
                         {
@@ -1768,24 +2314,20 @@ define("jassi_report/registry", ["require"], function (require) {
                 }
             },
             "jassi_report/RUnknown.ts": {
-                "date": 1612890208427,
+                "date": 1613218544158,
                 "jassi_report.RUnknown": {}
-            },
-            "jassi_report/util/PDFReport.ts": {
-                "date": 1612890133146,
-                "jassi_report.ui.PDFReport": {}
             }
         }
     };
 });
-define("jassi_report/designer/Report", ["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/BoxPanel"], function (require, exports, Jassi_10, BoxPanel_2) {
+define("jassi_report/designer/Report", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/BoxPanel"], function (require, exports, Jassi_12, BoxPanel_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Report = void 0;
     let Report = 
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
-    class Report extends BoxPanel_2.BoxPanel {
+    class Report extends BoxPanel_3.BoxPanel {
         /**
         *
         * @param {object} properties - properties to init
@@ -1798,7 +2340,7 @@ define("jassi_report/designer/Report", ["require", "exports", "remote/jassi/base
         }
     };
     Report = __decorate([
-        Jassi_10.$Class("jassi_report.Report")
+        Jassi_12.$Class("jassi_report.Report")
         //@$UIComponent({editableChildComponents:["this"]})
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -1808,14 +2350,14 @@ define("jassi_report/designer/Report", ["require", "exports", "remote/jassi/base
 });
 //jassi.register("reportcomponent", "jassi_report.Report", "report/Report", "res/report.ico");
 // return CodeEditor.constructor;
-define("jassi_report/designer/ReportDesigner", ["require", "exports", "remote/jassi/base/Jassi", "jassi/ui/PropertyEditor", "jassi/ui/ComponentExplorer", "jassi/ui/ComponentPalette", "jassi/ui/CodeEditorInvisibleComponents", "jassi/ui/designer/ComponentDesigner", "jassi_report/util/PDFReport", "jassi/ui/PDFViewer", "jassi_report/ReportDesign", "jassi/util/Tools"], function (require, exports, Jassi_11, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, ReportDesign_6, Tools_2) {
+define("jassi_report/designer/ReportDesigner", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditor", "jassi_editor/ComponentExplorer", "jassi_editor/ComponentPalette", "jassi_editor/CodeEditorInvisibleComponents", "jassi_editor/ComponentDesigner", "jassi_report/PDFReport", "jassi_report/PDFViewer", "jassi_report/ReportDesign", "jassi/util/Tools"], function (require, exports, Jassi_13, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_2, ReportDesign_6, Tools_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportDesigner = void 0;
     let ReportDesigner = class ReportDesigner extends ComponentDesigner_1.ComponentDesigner {
         constructor() {
             super();
-            this.pdfviewer = new PDFViewer_1.PDFViewer();
+            this.pdfviewer = new PDFViewer_2.PDFViewer();
             this.lastView = undefined;
             this._codeChanger = undefined;
             this.mainLayout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]}]}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":18.957059337410122,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":18.957059337410122,"width":77.70034843205575,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true},{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.299651567944256,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
@@ -1961,7 +2503,7 @@ define("jassi_report/designer/ReportDesigner", ["require", "exports", "remote/ja
         }
     };
     ReportDesigner = __decorate([
-        Jassi_11.$Class("jassi_report.designer.ReportDesigner"),
+        Jassi_13.$Class("jassi_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;
@@ -1993,24 +2535,26 @@ define("jassi_report/designer/ReportDesigner", ["require", "exports", "remote/ja
         };
         //	def.content=replaceTemplates(def.content,def.data);
         rep.value = def;
-        var viewer = new PDFViewer_1.PDFViewer();
+        var viewer = new PDFViewer_2.PDFViewer();
         viewer.value = await rep.getBase64();
         return viewer;
     }
     exports.test = test;
     ;
 });
-require.config({
-    // 'pdfjs-dist/build/pdf': 'myfolder/pdf.min',
-    // 'pdfjs-dist/build/pdf.worker': 'myfolder/pdf.worker.min'
-    paths: {
-        'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
-        'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-    },
-    shim: {
+/*require.config(
+    {
+       // 'pdfjs-dist/build/pdf': 'myfolder/pdf.min',
+       // 'pdfjs-dist/build/pdf.worker': 'myfolder/pdf.worker.min'
+      paths: {
+          'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
+          'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
+        //  'pdf.worker.entry': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.entry.min'
+         },
+      shim: {
         'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
-    }
-});
+        }
+  });*/
 define("jassi_report/ext/pdfjs", ["pdfjs-dist/build/pdf", "pdfjs-dist/build/pdf.worker"], function (pdfjs, worker, pdfjsWorker) {
     pdfjs.GlobalWorkerOptions.workerSrc = '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
     //pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
@@ -2018,373 +2562,29 @@ define("jassi_report/ext/pdfjs", ["pdfjs-dist/build/pdf", "pdfjs-dist/build/pdf.
         default: pdfjs
     };
 });
-require.config({
-    paths: {
-        'pdfmake': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts',
-        'pdfMakeLib': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake' //'../../lib/pdfmake'
-    },
-    shim: {
-        pdfMakeLib: {
-            exports: 'pdfMake'
-        },
-        pdfmake: {
-            deps: ['pdfMakeLib'],
-            exports: 'pdfMake'
-        }
-    }
-});
+/*require.config(
+    {
+      paths :
+      {
+          'pdfmake' : '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts',// '../../lib/vfs_fonts',
+          'pdfMakeLib' :'//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake'  //'../../lib/pdfmake'
+      },
+      shim :
+      {
+          pdfMakeLib :
+          {
+              exports: 'pdfMake'
+          },
+          pdfmake :
+          {
+              deps: ['pdfMakeLib'],
+              exports: 'pdfMake'
+          }
+      }
+    });*/
 define("jassi_report/ext/pdfmake", ['pdfmake'], function (ttt) {
     return {
         default: pdfMake
     };
-});
-define("jassi_report/util/PDFReport", ["require", "exports", "remote/jassi/base/Jassi", "jassi_report/ext/pdfmake", "jassi/ui/PDFViewer"], function (require, exports, Jassi_12, pdfmake_1, PDFViewer_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.PDFReport = void 0;
-    let PDFReport = class PDFReport {
-        constructor() {
-            // @member {object} - the generated report
-            this.report = null;
-        }
-        layout() {
-            //var me = this.me = {};
-        }
-        /**
-         * @member {object} - report definition
-         */
-        set value(value) {
-            this._definition = value;
-            var data = {};
-            Object.assign(data, value);
-            data.content = replaceTemplates(this._definition.content, this._definition.data);
-            if (data.background)
-                data.background = replaceTemplates(this._definition.background, this._definition.data);
-            if (data.header)
-                data.header = replaceTemplates(this._definition.header, this._definition.data);
-            if (data.footer)
-                data.footer = replaceTemplates(this._definition.footer, this._definition.data);
-            data.content = replaceTemplates(this._definition.content, this._definition.data);
-            replacePageInformation(data);
-            delete data.data;
-            this.report = pdfmake_1.default.createPdf(data);
-        }
-        get value() {
-            return this._definition;
-        }
-        open() {
-            this.report.open();
-        }
-        download() {
-            this.report.download();
-        }
-        print() {
-            this.report.print();
-        }
-        async getBase64() {
-            var _this = this;
-            return new Promise(function (resolve, reject) {
-                _this.report.getBase64(function (data) {
-                    resolve(data);
-                });
-            });
-        }
-        ;
-    };
-    PDFReport = __decorate([
-        Jassi_12.$Class("jassi_report.ui.PDFReport"),
-        __metadata("design:paramtypes", [])
-    ], PDFReport);
-    exports.PDFReport = PDFReport;
-    function replace(str, data, member) {
-        var ob = getVar(data, member);
-        return str.split("{{" + member + "}}").join(ob);
-    }
-    function getVar(data, member) {
-        var names = member.split(".");
-        var ob = data[names[0]];
-        for (let x = 1; x < names.length; x++) {
-            if (ob === undefined)
-                return undefined;
-            ob = ob[names[x]];
-        }
-        return ob;
-    }
-    //replace {{currentPage}} {{pageWidth}} {{pageHeight}} {{pageCount}} in header,footer, background
-    function replacePageInformation(def) {
-        if (def.background && typeof def.background !== "function") {
-            let d = JSON.stringify(def.background);
-            def.background = function (currentPage, pageSize) {
-                let sret = d.replaceAll("{{currentPage}}", currentPage);
-                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
-                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
-                return JSON.parse(sret);
-            };
-        }
-        if (def.header && typeof def.header !== "function") {
-            let d = JSON.stringify(def.header);
-            def.header = function (currentPage, pageCount) {
-                let sret = d.replaceAll("{{currentPage}}", currentPage);
-                sret = sret.replaceAll("{{pageCount}}", pageCount);
-                return JSON.parse(sret);
-            };
-        }
-        if (def.footer && typeof def.footer !== "function") {
-            let d = JSON.stringify(def.footer);
-            def.footer = function (currentPage, pageCount, pageSize) {
-                let sret = d.replaceAll("{{currentPage}}", currentPage);
-                sret = sret.replaceAll("{{pageCount}}", pageCount);
-                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
-                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
-                return JSON.parse(sret);
-            };
-        }
-    }
-    function replaceDatatable(def, data) {
-        var header = def.datatable.header;
-        var footer = def.datatable.footer;
-        var dataexpr = def.datatable.foreach;
-        var groups = def.datatable.groups;
-        var body = def.datatable.body;
-        def.table = {
-            body: []
-        };
-        if (header)
-            def.table.body.push(header);
-        def.table.body.push({
-            foreach: def.datatable.dataforeach,
-            do: body
-        });
-        delete def.datatable.dataforeach;
-        /*var variable = dataexpr.split(" in ")[0];
-        var sarr = dataexpr.split(" in ")[1];
-        var arr = getVar(data, sarr);
-    
-        for (let x = 0;x < arr.length;x++) {
-            data[variable] = arr[x];
-            var copy = JSON.parse(JSON.stringify(body));//deep copy
-            copy = replaceTemplates(copy, data);
-            def.table.body.push(copy);
-        }*/
-        if (footer)
-            def.table.body.push(footer);
-        //delete data[variable];
-        delete def.datatable.header;
-        delete def.datatable.footer;
-        delete def.datatable.foreach;
-        delete def.datatable.groups;
-        delete def.datatable.body;
-        for (var key in def.datatable) {
-            def.table[key] = def.datatable[key];
-        }
-        delete def.datatable;
-        /*header:[{ text:"Item"},{ text:"Price"}],
-                        data:"line in invoice.lines",
-                        //footer:[{ text:"Total"},{ text:""}],
-                        body:[{ text:"Text"},{ text:"price"}],
-                        groups:*/
-    }
-    function replaceTemplates(def, data, parentArray = undefined) {
-        if (def.datatable !== undefined) {
-            replaceDatatable(def, data);
-        }
-        if (def.foreach !== undefined) {
-            //resolve foreach
-            //	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
-            if (parentArray === undefined) {
-                throw "foreach is not surounded by an Array";
-            }
-            var variable = def.foreach.split(" in ")[0];
-            var sarr = def.foreach.split(" in ")[1];
-            var arr = getVar(data, sarr);
-            var pos = parentArray.indexOf(def);
-            parentArray.splice(pos, 1);
-            for (let x = 0; x < arr.length; x++) {
-                data[variable] = arr[x];
-                delete def.foreach;
-                var copy;
-                if (def.do)
-                    copy = JSON.parse(JSON.stringify(def.do));
-                else
-                    copy = JSON.parse(JSON.stringify(def));
-                copy = replaceTemplates(copy, data);
-                parentArray.splice(pos++, 0, copy);
-            }
-            delete data[variable];
-            return undefined;
-        }
-        else if (Array.isArray(def)) {
-            for (var a = 0; a < def.length; a++) {
-                if (def[a].foreach !== undefined) {
-                    replaceTemplates(def[a], data, def);
-                    a--;
-                }
-                else
-                    def[a] = replaceTemplates(def[a], data, def);
-            }
-            return def;
-        }
-        else if (typeof def === "string") {
-            var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
-            if (ergebnis !== null) {
-                for (var e = 0; e < ergebnis.length; e++) {
-                    def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
-                }
-            }
-            return def;
-        }
-        else { //object	
-            for (var key in def) {
-                def[key] = replaceTemplates(def[key], data);
-            }
-            delete def.editTogether; //RText
-        }
-        return def;
-    }
-    function replaceTemplatesOld(def, data, parentArray = undefined) {
-        if (def.datatable !== undefined) {
-            replaceDatatable(def, data);
-        }
-        else if (def.foreach !== undefined) {
-            //resolve foreach
-            //	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
-            if (parentArray === undefined) {
-                throw "foreach is not surounded by an Array";
-            }
-            var variable = def.foreach.split(" in ")[0];
-            var sarr = def.foreach.split(" in ")[1];
-            var arr = getVar(data, sarr);
-            var pos = parentArray.indexOf(def);
-            parentArray.splice(pos, 1);
-            for (let x = 0; x < arr.length; x++) {
-                data[variable] = arr[x];
-                var copy = JSON.parse(JSON.stringify(def.do)); //deep copy
-                copy = replaceTemplates(copy, data);
-                parentArray.splice(pos++, 0, copy);
-            }
-            delete data[variable];
-            return undefined;
-        }
-        else if (Array.isArray(def)) {
-            for (var a = 0; a < def.length; a++) {
-                if (def[a].foreach !== undefined) {
-                    replaceTemplates(def[a], data, def);
-                    a--;
-                }
-                else
-                    def[a] = replaceTemplates(def[a], data, def);
-            }
-            return def;
-        }
-        else if (typeof def === "string") {
-            var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
-            if (ergebnis !== null) {
-                for (var e = 0; e < ergebnis.length; e++) {
-                    def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
-                }
-            }
-            return def;
-        }
-        else { //object	
-            for (var key in def) {
-                def[key] = replaceTemplates(def[key], data);
-            }
-            delete def.editTogether; //RText
-        }
-        return def;
-    }
-    async function test() {
-        var rep = new PDFReport();
-        var def = {
-            data: {
-                invoice: {
-                    number: 1000,
-                    date: "20.07.2018",
-                    customer: {
-                        firstname: "Henry",
-                        lastname: "Klaus",
-                        street: "Hauptstr. 157",
-                        place: "chemnitz",
-                    },
-                    lines: [
-                        { pos: 1, text: "this is the first position, lksjdflgsd er we wer wre er er er re wekfgjslkdfjjdk sgfsdg", price: 10.00, amount: 50, variante: [{ m: 1 }, { m: 2 }] },
-                        { pos: 2, text: "this is the next position", price: 20.50, },
-                        { pos: 3, text: "this is an other position", price: 19.50 },
-                        { pos: 4, text: "this is the last position", price: 50.00 },
-                    ],
-                    summary: [
-                        { text: "Subtotal", value: 100.00 },
-                        { text: "Tax", value: 19.00 },
-                        { text: "Subtotal", value: 119.00 },
-                    ]
-                }
-            },
-            content: {
-                stack: [{
-                        columns: [
-                            {
-                                stack: [
-                                    { text: '{{invoice.customer.firstname}} {{invoice.customer.lastname}}' },
-                                    { text: '{{invoice.customer.street}}' },
-                                    { text: '{{invoice.customer.place}}' }
-                                ]
-                            },
-                            {
-                                stack: [
-                                    { text: 'Invoice', fontSize: 18 },
-                                    { text: " " },
-                                    { text: "Date: {{invoice.date}}" },
-                                    { text: "Number: {{invoice.number}}", bold: true },
-                                    { text: " " },
-                                    { text: " " },
-                                ]
-                            }
-                        ]
-                    }, {
-                        table: {
-                            body: [
-                                ['Item', 'Price'],
-                                {
-                                    foreach: "line in invoice.lines",
-                                    do: [
-                                        '{{line.text}}', '{{line.price}}'
-                                    ]
-                                }
-                            ]
-                        }
-                    },
-                    {
-                        datatable: {
-                            header: [{ text: "Item" }, { text: "Price" }],
-                            dataforeach: "line in invoice.lines",
-                            //footer:[{ text:"Total"},{ text:""}],
-                            body: [{ text: '{{line.text}}' }, { text: '{{line.price}}' }],
-                            groups: [
-                                {
-                                    field: "line",
-                                    header: [],
-                                    footer: []
-                                }
-                            ]
-                        }
-                    },
-                    { text: " " },
-                    {
-                        foreach: "sum in invoice.summary",
-                        columns: [
-                            { text: "{{sum.text}}" },
-                            { text: "{{sum.value}}" },
-                        ]
-                    },
-                ]
-            }
-        };
-        def.content = replaceTemplates(def.content, def.data);
-        rep.value = def;
-        var viewer = new PDFViewer_2.PDFViewer();
-        viewer.value = await rep.getBase64();
-        return viewer;
-    }
-    exports.test = test;
 });
 //# sourceMappingURL=jassi_report.js.map

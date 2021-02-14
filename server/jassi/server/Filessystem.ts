@@ -392,6 +392,24 @@ export default class Filesystem {
         //TODO $this->updateRegistry();
     }
 }
+function copyFile(f1:string,f2:string){
+    try {
+        if (fs.existsSync(f1) && f1.endsWith(".ts") && !fs.statSync(f1).isDirectory()) {
+            if (!fs.existsSync(f2) || (fs.statSync(f1).mtimeMs > fs.statSync(f2).mtimeMs)) {
+                console.log("sync " + f1 + "->" + f2);
+                var dirname = require('path').dirname(f2);
+                if (!fs.existsSync(dirname)) {
+                    fs.mkdirSync(dirname, { recursive: true });
+                }
+                fs.copyFileSync(f1, f2);
+            }
+        }
+
+    } catch (ex) {
+        console.error(ex);
+        debugger;
+    }
+}
 export function syncRemoteFiles() {
     //server remote
     fs.watch(Filesystem.path, { recursive: true }, (eventType, filename) => {
@@ -400,18 +418,11 @@ export function syncRemoteFiles() {
         var file = filename.replaceAll("\\", "/");
         var paths = file.split("/");
         if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
-            var file = filename.replaceAll("\\", "/");
-            var paths = file.split("/");
-            if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
-                setTimeout(() => {
-                    var f2 = "./" + file;
-                    var f1 = Filesystem.path + "/" + file;
-                    if (fs.statSync(f1).mtimeMs > fs.statSync(f2).mtimeMs) {
-                        console.log("sync " + f1 + "->" + f2);
-                    }
-                    fs.copyFileSync(f1, f2);
-                }, 200);
-            }
+            setTimeout(() => {
+                var f2 = "./" + file;
+                var f1 = Filesystem.path + "/" + file;
+                copyFile(f1,f2);
+            }, 200);
         }
     })
     //client remote
@@ -422,12 +433,10 @@ export function syncRemoteFiles() {
         var paths = file.split("/");
         if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
             setTimeout(() => {
-                var f1 = "./" + file;
-                var f2 = Filesystem.path + "/" + file;
-                if (fs.statSync(f1).mtimeMs > fs.statSync(f2).mtimeMs) {
-                    console.log("sync " + f1 + "->" + f2);
-                }
-                fs.copyFileSync(f1, f2);
+                
+                    var f1 = "./" + file;
+                    var f2 = Filesystem.path + "/" + file;
+                    copyFile(f1,f2);
             }, 200);
         }
     })

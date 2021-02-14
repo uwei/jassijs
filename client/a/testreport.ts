@@ -3,7 +3,7 @@ import jassi from "jassi/jassi";
 import { $Class } from "jassi/remote/Jassi";
 import { $Property } from "jassi/ui/Property";
 import { $UIComponent } from "jassi/ui/Component";
-import { Kunde } from "remote/de/Kunde";
+import { Kunde } from "de/remote/Kunde";
 import { RText } from "jassi_report/RText";
 export class Testreport extends ReportDesign {
     me = {};

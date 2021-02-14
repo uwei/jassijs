@@ -193,13 +193,13 @@ export class Compile {
       compilerOptions: options,
       fileName: prefix + fileName
     });
-
-    fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js"), content.outputText);
-    fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js.map"), content.sourceMapText);
     var pathname = rpath.dirname(fileName);
     if (!fs.existsSync(pathname)) {
       fs.mkdirSync(pathname, { recursive: true });
     }
     fs.copyFileSync("../client/" + fileName, fileName);
+    fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js"), content.outputText);
+    fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js.map"), content.sourceMapText);
+    
   }
 }

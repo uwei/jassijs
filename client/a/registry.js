@@ -13,10 +13,10 @@ define("a/registry",["require"], function(require) {
 		"date": 1613148104582
 	},
 	"a/rep.ts": {
-		"date": 1613218544157
+		"date": 1613330812614
 	},
 	"a/testreport.ts": {
-		"date": 1613218544157
+		"date": 1613330812614
 	}
 }
  }

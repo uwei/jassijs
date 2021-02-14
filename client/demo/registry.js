@@ -3,15 +3,11 @@ define("demo/registry",["require"], function(require) {
  return {
   default: {
 	"demo/DBTest.ts": {
-		"date": 1597411843712
+		"date": 1613330812615
 	},
 	"demo/Dialog.ts": {
 		"date": 1613218544157,
 		"demo/Dialog": {}
-	},
-	"demo/DialogKunde.ts": {
-		"date": 1613218544158,
-		"demo.DialogKunde": {}
 	},
 	"demo/DialogKunde2.ts": {
 		"date": 1613218544157,
@@ -30,7 +26,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.HalloPhillip": {}
 	},
 	"demo/KundeView.ts": {
-		"date": 1613218544157,
+		"date": 1613330812615,
 		"demo.KundeView": {
 			"$DBObjectView": [
 				{
@@ -40,20 +36,20 @@ define("demo/registry",["require"], function(require) {
 		}
 	},
 	"demo/MemoryTest.ts": {
-		"date": 1613218609627
+		"date": 1613330812614
 	},
 	"demo/modul.ts": {
 		"date": 1612818333557
 	},
 	"demo/ParentRightCheck.ts": {
-		"date": 1613218819988
+		"date": 1613330812615
 	},
 	"demo/ReportKunde.ts": {
-		"date": 1613218544157,
+		"date": 1613330812614,
 		"demo.ReportKunde": {}
 	},
 	"demo/ReportRechnung.ts": {
-		"date": 1613218544157,
+		"date": 1613330812614,
 		"demo.ReportRechnung": {}
 	},
 	"demo/StyleDialog.ts": {
@@ -82,7 +78,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.Testcontextmenu": {}
 	},
 	"demo/TestExtension.ts": {
-		"date": 1588013367734
+		"date": 1613330812614
 	},
 	"demo/Testmenu.ts": {
 		"date": 1613218544157,

@@ -4,6 +4,7 @@
   "description": "",
   "main": "main2.js",
   "dependencies": {
+    "@types/express": "^4.17.11",
     "@types/node": "^12.12.14",
     "app-module-path": "^2.2.0",
     "balanced-match": {

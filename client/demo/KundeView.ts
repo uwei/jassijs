@@ -6,7 +6,7 @@ import { Textbox } from "jassi/ui/Textbox";
 import { Panel } from "jassi/ui/Panel";
 import { $Property } from "jassi/ui/Property";
 import { $Class } from "jassi/remote/Jassi";
-import { Kunde } from "remote/de/Kunde";
+import { Kunde } from "de/remote/Kunde";
 import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassi/ui/DBObjectView";
 type Me = {
     textbox1?: Textbox;

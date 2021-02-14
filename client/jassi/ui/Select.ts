@@ -51,7 +51,7 @@ export class Select extends DataComponent {
 
         $('#' + this._id).chosen({
         	
-            width: "100px",
+           // width: "100px",
             placeholder_text_single: placeholder, 
             allow_single_deselect: single
         });

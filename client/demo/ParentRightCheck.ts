@@ -1,8 +1,8 @@
 import { Group } from "jassi/remote/security/Group";
 import { User } from "jassi/remote/security/User";
-import { ARZeile } from "remote/de/ARZeile";
-import { Kunde } from "remote/de/Kunde";
-import { AR } from "remote/de/AR";
+import { ARZeile } from "de/remote/ARZeile";
+import { Kunde } from "de/remote/Kunde";
+import { AR } from "de/remote/AR";
 import registry from "jassi/remote/Registry";
 import { Test } from "jassi/base/Tests";
 import rights from "jassi/remote/security/Rights";

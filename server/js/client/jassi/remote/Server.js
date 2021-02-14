@@ -5,15 +5,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var Server_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.Server = void 0;
 const Jassi_1 = require("jassi/remote/Jassi");
 const RemoteObject_1 = require("jassi/remote/RemoteObject");
 const FileNode_1 = require("jassi/remote/FileNode");
-let Server = class Server extends RemoteObject_1.RemoteObject {
+let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     constructor() {
-        super(...arguments);
+        super();
         this.filesInMap = undefined;
+        if (Server_1.isonline === undefined) {
+            Server_1.isonline = this.isOnline();
+        }
     }
     _convertFileNode(node) {
         var ret = new FileNode_1.FileNode();
@@ -87,7 +94,11 @@ let Server = class Server extends RemoteObject_1.RemoteObject {
     */
     async dir(withDate = false) {
         if (!Jassi_1.default.isServer) {
-            var ret = await this.call(this, "dir", withDate);
+            var ret;
+            if ((await Server_1.isonline) === true)
+                ret = await this.call(this, "dir", withDate);
+            else
+                ret = { name: "", files: [] };
             await this.addFilesFromMap(ret);
             ret.fullpath = ""; //root
             return this._convertFileNode(ret);
@@ -247,6 +258,25 @@ let Server = class Server extends RemoteObject_1.RemoteObject {
         }
     }
     /**
+    * is the nodes server running
+    **/
+    async isOnline() {
+        if (!Jassi_1.default.isServer) {
+            try {
+                var ret = await this.call(this, "isOnline");
+                return ret;
+            }
+            catch (_a) {
+                return false;
+            }
+            //@ts-ignore
+            //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+        }
+        else {
+            return true;
+        }
+    }
+    /**
      * creates a file
      **/
     async createFile(filename, content) {
@@ -286,12 +316,14 @@ let Server = class Server extends RemoteObject_1.RemoteObject {
             return 14; //this is called on server
     }
 };
-Server = __decorate([
-    Jassi_1.$Class("jassi.remote.Server")
+Server.isonline = undefined;
+Server = Server_1 = __decorate([
+    Jassi_1.$Class("jassi.remote.Server"),
+    __metadata("design:paramtypes", [])
 ], Server);
 exports.Server = Server;
 async function test() {
-    alert(await Server.mytest());
+    console.log(await Server.mytest());
 }
 exports.test = test;
 //# sourceMappingURL=Server.js.map

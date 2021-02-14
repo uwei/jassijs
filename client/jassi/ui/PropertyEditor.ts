@@ -33,7 +33,19 @@ export class PropertyEditor extends Panel {
     constructor(codeEditor) {
         super();
         this.table = new Panel();
-        this.table.init($('<table style="font-size:11px"><tr><th class="propertyeditorheader">Name</th><th class="propertyeditorheader">Value</th></tr><tr class="propertyeditorrow"><td >a1</td><td>b1</td></tr></table>')[0]);
+        this.table.init($(`<table style="table-layout: fixed;font-size:11px">
+                            <thead>
+                                <tr>
+                                    <th class="propertyeditorheader">Name</th>
+                                    <th class="propertyeditorheader">Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="propertyeditorrow">
+                                    <td >a1</td><td>b1</td>
+                                </tr>
+                            </tbody>
+                            </table>`)[0]);
         this.add(this.table);
         this.table.width = "98%";
         $(".propertyeditorheader").resizable({ handles: "e" });
@@ -65,7 +77,7 @@ export class PropertyEditor extends Panel {
      */
     addProperty(name: string, editor: Editor, description: string) {
         var component = editor.getComponent();
-        var row = $('<tr nowrap class="propertyeditorrow"><td  style="fontsize:11px" nowrap title="'+description+'">' + name + '</td></tr>')[0];
+        var row = $('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="'+description+'">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>')[0];
         var but = new Image();
         but.src = "mdi mdi-delete-forever-outline";
         var _this = this;
@@ -75,17 +87,22 @@ export class PropertyEditor extends Panel {
             _this.updateParser();
             _this.value = _this.value;
         });
-       // $(row.children[0]).attr("title", description);
+
         $(row.children[0]).tooltip();
        // $(row.children[0]).css("font-size", "11px");
 
         $(row.children[0]).prepend(but.dom);
         //$(component.dom).css("font-size", "11px");
-        this.table.dom.appendChild(row);
+        this.table.dom.children[1].appendChild(row);
         row["_components"] = [editor, but];
-        component.width = "100%";
+       /* $(component.dom).css({
+            "width":"100%",
+            "padding":"initial",
+            "font-size":"11px"
+        });*/
         try {
-            row.appendChild(component.dom);
+            
+            row.children[1].appendChild(component.dom);
         } catch{
             //Why
             //debugger;

@@ -9,11 +9,15 @@ define("de/registry",["require"], function(require) {
 		"date": 1602968596108
 	},
 	"de/del.ts": {
-		"date": 1597762265615
+		"date": 1613339863040
 	},
 	"de/Dialog.ts": {
 		"date": 1613218544158,
 		"de/Dialog": {}
+	},
+	"de/DialogKunde.ts": {
+		"date": 1613338776386,
+		"demo.DialogKunde": {}
 	},
 	"de/modul.ts": {
 		"date": 1612818328924
@@ -26,6 +30,74 @@ define("de/registry",["require"], function(require) {
 	},
 	"de/q.ts": {
 		"date": 1588091498058
+	},
+	"de/remote/AR.ts": {
+		"date": 1613331991860,
+		"de.AR": {
+			"$Rights": [
+				[
+					{
+						"name": "Auftragswesen/Ausgangsrechnung/festschreiben"
+					},
+					{
+						"name": "Auftragswesen/Ausgangsrechnung/löschen"
+					}
+				]
+			],
+			"$DBObject": []
+		}
+	},
+	"de/remote/ARZeile.ts": {
+		"date": 1613332002844,
+		"de.ARZeile": {
+			"$DBObject": []
+		}
+	},
+	"de/remote/Kunde.ext.ts": {
+		"date": 1613332025514
+	},
+	"de/remote/Kunde.ts": {
+		"date": 1613331972412,
+		"de.Kunde": {
+			"$ParentRights": [
+				[
+					{
+						"name": "Kundennummern",
+						"sqlToCheck": "me.id>=:i1 and me.id<=:i2",
+						"description": {
+							"text": "Kundennummern",
+							"i1": "von",
+							"i2": "bis"
+						}
+					}
+				]
+			],
+			"$DBObject": []
+		}
+	},
+	"de/remote/KundeExt.ts": {
+		"date": 1613332031772,
+		"de.KundeExt": {
+			"$Extension": [
+				"de.Kunde"
+			]
+		}
+	},
+	"de/remote/KundeExt2.ts": {
+		"date": 1613332035281
+	},
+	"de/remote/Lieferant.ts": {
+		"date": 1613332015004,
+		"de.Lieferant": {
+			"$DBObject": []
+		}
+	},
+	"de/remote/MyUser.ts": {
+		"date": 1613330861054,
+		"de.MyUser": {
+			"$DBObject": [],
+			"Entity": []
+		}
 	}
 }
  }

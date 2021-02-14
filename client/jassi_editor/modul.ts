@@ -1,4 +1,5 @@
 export default {
+    "css":["jassi_editor.css"],
     "types":{
         "node_modules/monaco.d.ts":"https://cdn.jsdelivr.net/npm/monaco-editor@0.22.3/monaco.d.ts",
     },

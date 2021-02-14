@@ -26,6 +26,7 @@ export class ColorEditor extends Editor{
 		this.component.horizontal=true;
 		this.icon=new Textbox();
 		this.select=new Select();
+		this.select.width="100%";
 		this.component.add(this.select);
 		this.component.add(this.icon);
 		this.select.items=colors;

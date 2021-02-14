@@ -7,7 +7,14 @@ import { FileNode } from "jassi/remote/FileNode";
 
 @$Class("jassi.remote.Server")
 export class Server extends RemoteObject {
+    public static isonline=undefined;
     private filesInMap: { [name: string]: { modul: string, id: number } } = undefined;
+    constructor(){
+        super();
+        if(Server.isonline===undefined){
+             Server.isonline=this.isOnline();
+        }
+    }
     private _convertFileNode(node: FileNode): FileNode {
         var ret: FileNode = new FileNode();
         Object.assign(ret, node);
@@ -82,7 +89,11 @@ export class Server extends RemoteObject {
     */
     async dir(withDate: boolean = false): Promise<FileNode> {
         if (!jassi.isServer) {
-            var ret: FileNode = <FileNode>await this.call(this, "dir", withDate);
+            var ret: FileNode;
+            if((await Server.isonline)===true)
+                ret= <FileNode>await this.call(this, "dir", withDate);
+            else
+                ret={name:"",files:[]};
             await this.addFilesFromMap(ret);
             ret.fullpath = "";//root
             return this._convertFileNode(ret);
@@ -237,6 +248,23 @@ export class Server extends RemoteObject {
             var fs: any = await import("jassi/server/Filessystem");
 
             return await new fs.default().rename(oldname, newname);;
+        }
+    }
+     /**
+     * is the nodes server running 
+     **/
+    async isOnline(): Promise<boolean> {
+        if (!jassi.isServer) {
+            try{
+                var ret = await this.call(this, "isOnline");
+                return ret;
+            }catch{
+                return false;
+            }
+            //@ts-ignore
+            //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+        } else {
+            return true;
         }
     }
     /**

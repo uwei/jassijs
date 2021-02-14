@@ -210,7 +210,7 @@ export class ObjectChooser extends Button {
 
 export async function test () {
 	// kk.o=0;
-	var Kunde=(await import("remote/de/Kunde")).Kunde
+	var Kunde=(await import("de/remote/Kunde")).Kunde
 	var dlg = new ObjectChooser();
 	dlg.items = "de.Kunde";
 	dlg.value = (await Kunde.find({id:1}))[0];

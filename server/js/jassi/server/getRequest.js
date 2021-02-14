@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRequest = exports.manageRequest = void 0;
+exports.getRequest = exports.installGetRequest = void 0;
 var cls = require('cls-hooked');
 var namespace = cls.createNamespace('my.jassi');
-function manageRequest(req, res, next) {
+//install the hook to use getRequest - warning it has performance impact
+function installGetRequest(req, res, next) {
     namespace.bindEmitter(req);
     namespace.run(function () {
         namespace.set('req', req);
@@ -11,10 +12,9 @@ function manageRequest(req, res, next) {
         next();
     });
 }
-exports.manageRequest = manageRequest;
+exports.installGetRequest = installGetRequest;
+//gets the current request
 function getRequest() {
-    var test = namespace.get('req');
-    var test2 = namespace.get('re');
     return namespace.get('req');
 }
 exports.getRequest = getRequest;

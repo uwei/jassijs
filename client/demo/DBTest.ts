@@ -1,6 +1,6 @@
-import { AR } from "remote/de/AR";
-import { Kunde } from "remote/de/Kunde";
-import {ARZeile} from "remote/de/ARZeile";
+import { AR } from "de/remote/AR";
+import { Kunde } from "de/remote/Kunde";
+import {ARZeile} from "de/remote/ARZeile";
 
 
 export async function test4() {

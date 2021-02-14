@@ -64,9 +64,9 @@ export class Jassi {
         //@ts-ignore
         this.isServer = window.document === undefined;
         if (!this.isServer) {
-            this.myRequire("jassi/jassi.css");
-            this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
-            this.myRequire("//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
+          //  this.myRequire("jassi/jassi.css");
+          //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
+          //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
         }
     }
 	/**

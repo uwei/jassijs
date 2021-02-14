@@ -1,0 +1,62 @@
+.jbreackpoint {
+    /* border: 5px solid black; */
+    border-radius: 50%;
+    background: red;
+  }
+
+
+.ui-draggable-dragging{
+	opacity:0.4;
+}
+#selectable .ui-selecting { background: #FECA40; }
+#selectable .ui-selected { background: #F39814; color: white; }
+
+/* Ace Editor */
+.ace_annotationicon~.ace_completion-meta
+{
+  color: black;
+  background-color:rgb(117, 106, 146);
+}
+.ace_gutter-cell.ace_breakpoint{ 
+  border-radius: 20px 0px 0px 20px; 
+  box-shadow: 0px 0px 1px 1px red inset; 
+}
+/*
+.ace_functionicon~.ace_completion-meta:before
+{
+content:url('/res/function.ico'); 
+
+}
+
+.ace_variableicon~.ace_completion-meta:before
+{
+content:url('/res/variable.ico'); 
+
+}
+.ace_membericon~.ace_completion-meta:before
+{
+content:url('/res/member.ico'); 
+
+}*/
+/* Ace Editor Completion Color */
+.ace_functionicon~.ace_completion-meta
+{
+    background-color: aqua; 
+    color: black;
+}
+
+.ace_variableicon~.ace_completion-meta
+{
+    background-color:#FECA40; 
+    color: black;
+}
+.ace_membericon~.ace_completion-meta
+{
+    color: red;
+    background-color: chartreuse;
+}
+.ace_classicon~.ace_completion-meta
+{
+    color: black;
+    background-color:lightpink;
+}

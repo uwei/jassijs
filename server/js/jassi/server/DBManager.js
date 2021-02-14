@@ -81,7 +81,7 @@ class DBManager {
                 await _initrunning;
                 await _instance.mySync();
             }
-            catch (err) {
+            catch (err1) {
                 try {
                     _initrunning = undefined;
                     opts["ssl"] = true; //heroku need this
@@ -93,7 +93,10 @@ class DBManager {
                     console.log("DB corrupt - revert the last change");
                     _instance = undefined;
                     _initrunning = undefined;
-                    throw err;
+                    if (err.message === "The server does not support SSL connections")
+                        throw err1;
+                    else
+                        throw err;
                 }
             }
         }
@@ -276,7 +279,8 @@ class DBManager {
             ret = relations.addWhere(options.where, options.whereParams, ret);
         ret = relations.addWhereBySample(options, ret);
         ret = relations.join(ret);
-        ret = await relations.addParentRightDestriction(ret);
+        if (!getRequest_1.getRequest().user.isAdmin)
+            ret = await relations.addParentRightDestriction(ret);
         var test = ret.getSql();
         return await ret.getMany();
         // return await this.connection().manager.find(entityClass, p1);

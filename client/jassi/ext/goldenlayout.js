@@ -14,7 +14,7 @@ requirejs.config({
     }
 
 });
-define("jassi/ext/goldenlayout",['goldenlayout',"remote/jassi/base/Jassi"],function(GoldenLayout){
+define("jassi/ext/goldenlayout",['goldenlayout',"jassi/remote/Jassi"],function(GoldenLayout){
     //jassi.myRequire("lib/goldenlayout-base.css");
     //jassi.myRequire("lib/goldenlayout-light-theme.css");        
     jassi.myRequire("//cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-base.css");

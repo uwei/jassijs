@@ -1,0 +1,15 @@
+{
+	"modules": {
+		"jassi":"http://localhost/jassijs/dist/jassi.js",
+		"jassi_report": "http://localhost/jassijs/dist/jassi_report.js",
+		"jassi_editor": "http://localhost/jassijs/dist/jassi_editor.js",
+		"demo": "http://localhost/jassijs/dist/demo.js"
+	},
+	"require": {
+		"paths": {
+			"require.js": "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js",
+			"1jassi_report": "http://localhost/jassi/dist/jassi_report.js",
+			"1jassi":"http://localhost/jassi/dist/jassi.js"
+		}
+	}
+}

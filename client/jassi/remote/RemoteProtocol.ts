@@ -68,7 +68,7 @@ export class RemoteProtocol {
         if (jassi.isServer)
             throw new Error("should be called on client");
         var sdataObject = undefined;
-        var url = "remoteprotocol?" + Date.now();
+        var url = "remoteprotocol1?" + Date.now();
         var _this = this;
         var redirect = undefined;
         var config = {

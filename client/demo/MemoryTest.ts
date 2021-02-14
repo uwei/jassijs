@@ -3,7 +3,7 @@ import {Server} from "jassi/remote/Server";
 import {Reloader} from "jassi/util/Reloader";
 
 import registry from "jassi/remote/Registry";
-import { Kunde } from "remote/de/Kunde";
+import { Kunde } from "de/remote/Kunde";
 
 
 function test(){

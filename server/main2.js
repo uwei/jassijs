@@ -4,4 +4,3 @@ process.chdir('./server');
 
 console.log("=>"+__dirname);
 var main = require('./js/main.js');
-//# sourceMappingURL=main2.js.map

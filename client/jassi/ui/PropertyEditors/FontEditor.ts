@@ -25,6 +25,7 @@ export class FontEditor extends Editor{
 	        "placeholder": "select a font",
 	        "allowDeselect": false
 		 });
+        this.component.width="100%";
 	    this.component.display=function(item){
 	    	return '<span style=font-family:"'+item+'>'+item+'</span>';
 	    }

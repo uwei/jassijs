@@ -51,14 +51,14 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1613218566584
 	},
 	"jassi/modul.ts": {
-		"date": 1613158998220
+		"date": 1613308757716
 	},
 	"jassi/remote/Classes.ts": {
-		"date": 1613248818825,
+		"date": 1613249050111,
 		"jassi.remote.Classes": {}
 	},
 	"jassi/remote/Database.ts": {
-		"date": 1613248958209,
+		"date": 1613249031685,
 		"jassi.remote.Database": {}
 	},
 	"jassi/remote/DBArray.ts": {
@@ -83,7 +83,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1613218515810
 	},
 	"jassi/remote/Jassi.ts": {
-		"date": 1613219112108,
+		"date": 1613312290455,
 		"jassi.remote.Jassi": {}
 	},
 	"jassi/remote/Registry.ts": {
@@ -94,7 +94,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.RemoteObject": {}
 	},
 	"jassi/remote/RemoteProtocol.ts": {
-		"date": 1613219136623,
+		"date": 1613340184584,
 		"jassi.remote.RemoteProtocol": {}
 	},
 	"jassi/remote/security/Group.ts": {
@@ -142,7 +142,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1613232706751,
+		"date": 1613340166168,
 		"jassi.remote.Server": {}
 	},
 	"jassi/security/GroupView.ts": {
@@ -465,7 +465,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/ObjectChooser.ts": {
-		"date": 1613218544160,
+		"date": 1613330812615,
 		"jassi.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
@@ -507,7 +507,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.Property": {}
 	},
 	"jassi/ui/PropertyEditor.ts": {
-		"date": 1613218566582,
+		"date": 1613337696501,
 		"jassi.ui.PropertyEditor": {},
 		"jassi.ui.PropertyEditorTestProperties": {}
 	},
@@ -522,7 +522,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/PropertyEditors/ClassSelectorEditor.ts": {
-		"date": 1613218566583,
+		"date": 1613338467848,
 		"jassi.ui.PropertyEditors.ClassSelectorEditor": {
 			"$PropertyEditor": [
 				[
@@ -532,7 +532,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/PropertyEditors/ColorEditor.ts": {
-		"date": 1613218544160,
+		"date": 1613338505131,
 		"jassi.ui.PropertyEditors.ColorEditor": {
 			"$PropertyEditor": [
 				[
@@ -542,7 +542,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/PropertyEditors/ComponentSelectorEditor.ts": {
-		"date": 1613218544160,
+		"date": 1613338542938,
 		"jassi.ui.PropertyEditors.ComponentSelectorEditor": {
 			"$PropertyEditor": [
 				[
@@ -588,7 +588,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.PropertyEditors.Editor": {}
 	},
 	"jassi/ui/PropertyEditors/FontEditor.ts": {
-		"date": 1613218544159,
+		"date": 1613338564468,
 		"jassi.ui.PropertyEditors.FontEditor": {
 			"$PropertyEditor": [
 				[
@@ -618,7 +618,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/PropertyEditors/JsonEditor.ts": {
-		"date": 1613218544160,
+		"date": 1613332987727,
 		"jassi.ui.PropertyEditors.JsonEditor": {
 			"$PropertyEditor": [
 				[
@@ -662,7 +662,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.SearchExplorer": {}
 	},
 	"jassi/ui/Select.ts": {
-		"date": 1613218544160,
+		"date": 1613338080789,
 		"jassi.ui.SelectCreateProperties": {},
 		"jassi.ui.Select": {
 			"$UIComponent": [

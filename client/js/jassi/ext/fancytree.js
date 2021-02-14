@@ -19,7 +19,7 @@ requirejs.config({
         'jquery.fancytree.dnd': ["jquery", "jquery.ui"],
     }
 });
-define("jassi/ext/fancytree", ["remote/jassi/base/Jassi", "jquery.fancytree", 'jquery.fancytree.filter', 'jquery.fancytree.multi', 'jquery.fancytree.dnd'], function () {
+define("jassi/ext/fancytree", ["jassi/remote/Jassi", "jquery.fancytree", 'jquery.fancytree.filter', 'jquery.fancytree.multi', 'jquery.fancytree.dnd'], function () {
     //jassi.myRequire("lib/skin-win8/ui.fancytree.min.css");
     jassi.myRequire("//cdn.jsdelivr.net/npm/jquery.fancytree@2.35.0/dist/skin-win8/ui.fancytree.css");
     return { default: "" };

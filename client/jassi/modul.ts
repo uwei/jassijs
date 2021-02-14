@@ -1,4 +1,9 @@
 export default {
+    "css":[
+        "jassi.css",
+        "https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css",
+        "https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"
+    ],
     "types":{
         "node_modules/jquery/JQuery.d.ts":"https://cdn.jsdelivr.net/npm/@types/jquery@3.5.5/JQuery.d.ts",
         "node_modules/jquery/JQueryStatic.d.ts":"https://cdn.jsdelivr.net/npm/@types/jquery@3.5.5/JQueryStatic.d.ts",

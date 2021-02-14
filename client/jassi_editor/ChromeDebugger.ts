@@ -10,7 +10,7 @@ import windows from "../jassi/base/Windows";
 
 //		var extensionId="nheagplodboonenlmdkdeicbgpdgnclk";//homepc
 //var extensionId="acdfaoillomjkcepfbfdbccmipjhgmco";//laptop
-var extensionId = "nfbbhnmkfdonfbobklbjinalhgileegp";//laptop neu
+var extensionId = "fneicfmgliieackjmcpomdomljidfamb";//laptop neu
 /**
  * debugging in Chrome
  */

@@ -16,6 +16,7 @@ export class ComponentSelectorEditor extends Editor {
             this.component=new Select({
             	multiple:(property.componentType.indexOf("[")===0) 
             });
+            this.component.width="100%";
             var _this=this;
             this.component.onchange(function(param){
                 _this._onchange(param);

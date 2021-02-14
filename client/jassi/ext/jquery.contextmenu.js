@@ -8,7 +8,7 @@ requirejs.config({
 
 }); 
 
-define("jassi/ext/jquery.contextmenu",["remote/jassi/base/Jassi","jquery.contextMenu"], function(require) {
+define("jassi/ext/jquery.contextmenu",["jassi/remote/Jassi","jquery.contextMenu"], function(require) {
     jassi.myRequire("//rawgit.com/s-yadav/contextMenu.js/master/contextMenu.css");
     return {
         
