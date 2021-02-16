@@ -239,16 +239,16 @@ export class Registry {
         var modultext = "";
         //@ts-ignore
         if (window?.document === undefined) { //on server
-            try {
-                //@ts-ignore
-                var fs = await import('fs');
-               
-                modultext = fs.readFileSync("./jassi.json", 'utf-8');
-                var modules = JSON.parse(modultext).modules;
-                for (let modul in modules) {
-                    try {
-                        var data=(await require(modul+"/registry")).default;
-                        this.initJSONData(data);
+
+            //@ts-ignore
+            var fs = await import('fs');
+
+            modultext = fs.readFileSync("./jassi.json", 'utf-8');
+            var modules = JSON.parse(modultext).modules;
+            for (let modul in modules) {
+                try {
+                    var data = (await require(modul + "/registry")).default;
+                    this.initJSONData(data);
                     /*    //requirejs.undef("js/"+modul+"/registry.js");
                         var text = fs.readFileSync("./../client/" + modul + "/registry.js", 'utf-8');
                         text = text.substring(text.indexOf("default:") + 8);
@@ -256,16 +256,13 @@ export class Registry {
                         text = text.substring(0, text.lastIndexOf("}") - 1);
                         var d = JSON.parse(text)
                         _*/
-                    } catch {
-                        console.error("failed load registry " + modul + "/registry.js");
-                    }
-
-
+                } catch {
+                    console.error("failed load registry " + modul + "/registry.js");
                 }
-            } catch (ex) {
-                console.error("Could not read registry from modul " + module);
-                throw ex;
+
+
             }
+
         } else { //on client
             var all = {};
             var mod = JSON.parse(await (this.loadText("jassi.json")));

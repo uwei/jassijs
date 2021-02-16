@@ -7,10 +7,10 @@ import { Reloader } from "jassi/util/Reloader";
 import { Server } from "jassi/remote/Server";
 import windows from "../jassi/base/Windows";
 
+let checkExtensionInstalled=setTimeout(()=>{
+     $.notify("no  jassi chrome extension installed", "warning", { position: "right" });
+},1000);
 
-//		var extensionId="nheagplodboonenlmdkdeicbgpdgnclk";//homepc
-//var extensionId="acdfaoillomjkcepfbfdbccmipjhgmco";//laptop
-var extensionId = "fneicfmgliieackjmcpomdomljidfamb";//laptop neu
 /**
  * debugging in Chrome
  */
@@ -19,8 +19,30 @@ export class ChromeDebugger extends Debugger {
     allBreakPoints: { [file: string]: string[] } = {};
     constructor() {
         super();
-
-        this.listentoCodeChanges();
+        //listen to code changes
+        this.sendChromeMessage({ name: "getCodeChange" });
+        window.addEventListener("message", (event) => {
+            this.onChromeMessage(event);
+        });
+    }
+    //on receiving messages from chrome extension
+    private onChromeMessage(event) { 
+        var _this = this;
+        //console.log("Website received message: " + JSON.stringify(event.data));
+        if (event?.data?.event === "onResourceContentCommitted") {
+            _this.saveCode(event.data.url.url, event.data.data);
+        }
+        if (event.data.fromJassiExtension && event.data.connected) {
+            clearTimeout(checkExtensionInstalled);
+            if (jassi.debugger !== undefined)
+                jassi.debugger.destroy();
+            jassi.debugger=this;
+        }
+    }
+    //send message to chrome extension
+    private sendChromeMessage(msg) {
+        msg.toJassiExtension = true;
+        window.postMessage(msg, "*");
     }
     urlToFile(url) {
         var file = url;
@@ -31,8 +53,8 @@ export class ChromeDebugger extends Debugger {
     }
     async saveCode(url, code) {
         //alert(code);
-        var file:string = this.urlToFile(url);
-        var filename:string=file.replace("$temp","");
+        var file: string = this.urlToFile(url);
+        var filename: string = file.replace("$temp", "");
         var _this = this;
         //give the user the option to reload the changes in codeeditor
         var editor = windows.findComponent("jassi_editor.CodeEditor-" + filename);
@@ -47,7 +69,7 @@ export class ChromeDebugger extends Debugger {
                 });
             }
             //remove temporary debugpoints
-            if (file.indexOf("$temp")>-1) {
+            if (file.indexOf("$temp") > -1) {
                 var reg = new RegExp("{var debug_editor.*debug_editor\\.addVariables\\(_variables_\\)\\;}");
                 var ret = reg.exec(code);
                 while (ret !== null) {
@@ -58,7 +80,7 @@ export class ChromeDebugger extends Debugger {
             editor._codeToReload = code;
 
         }
-         if (file.indexOf("$temp")>-1) {
+        if (file.indexOf("$temp") > -1) {
             return;
         }
         new Server().saveFile(file, code).then(function () {
@@ -68,28 +90,7 @@ export class ChromeDebugger extends Debugger {
             }
         });
     }
-    static isExtensionInstalled() {
-        if (window["chrome"] === undefined)
-            return false;
-        try {
-            window["chrome"].runtime.sendMessage(extensionId, { name: "connect" }, undefined);
-
-        } catch (ex) {
-            return false;
-        }
-        return true;
-    }
-    listentoCodeChanges() {
-
-        var _this = this;
-        window["chrome"].runtime.sendMessage(extensionId, { name: "getCodeChange" }, undefined, function (ret) {
-            if (_this.destroyed)
-                return;
-            _this.saveCode(ret.url.url, ret.data);
-            _this.listentoCodeChanges();
-
-        });
-    }
+   
     /**
      * remove all breakpoints for the file
      * @param file 
@@ -119,20 +120,23 @@ export class ChromeDebugger extends Debugger {
             var pos = this.allBreakPoints[file].indexOf(line + ":" + column);
             this.allBreakPoints[file].splice(pos, 1);
         }
+        var _this = this;
         var newline = await new TSSourceMap().getLineFromTS(file, line, column);
         var ret = new Promise(function (resolve) {
             //http://localhost/jassi/public_html/demo/TreeTable.js?bust=1551539152470
-            var sfile = file.replace(".ts", ".js");
-            var url = window.location.href.split("/app.html")[0] + "/" + "js/" + sfile;//+"?bust="+window.jassiversion;
-            window["chrome"].runtime.sendMessage(extensionId, {
+            var sfile = newline.jsfilename;//file.replace(".ts", ".js");
+            var root = window.location.origin + window.location.pathname;
+            root = root.substring(0, root.lastIndexOf("/"));
+            var url = root + "/" + newline.jsfilename;//+"?bust="+window.jassiversion;
+            if (newline.jsfilename.indexOf(":") > -1)
+                url = newline.jsfilename;//load module from js-file
+            _this.sendChromeMessage({
                 name: "breakpointChanged",
                 url: url,
-                line: newline,
+                line: newline.line,
                 enable: enable,
                 condition: "1===1",
                 type: type
-            }, undefined, function (ret) {
-                resolve(ret);
             });
         })
         return ret;
@@ -167,30 +171,10 @@ export class ChromeDebugger extends Debugger {
         //	chrome.runtime.sendMessage(extensionId,{name: "disconnect"},undefined);
         this.destroyed = true;
     }
-    /*	var port = chrome.runtime.connect("acdfaoillomjkcepfbfdbccmipjhgmco",{name: "knockknock"});
-        port.postMessage({joke: "Knock knock"});
-	
-        port.onMessage.addListener(function(msg) {
-        debugger;
-            if (msg.question == "Who's there?")
-            port.postMessage({answer: "Madame"});
-          else if (msg.question == "Madame who?")
-            port.postMessage({answer: "Madame... Bovary"});
-        });*/
-    //	chrome.runtime.sendMessage("acdfaoillomjkcepfbfdbccmipjhgmco",{greeting: "hello"}, function(response) {
-    // debugger;
-    //  console.log(response.farewell);
-    //	});
 
 }
 
-jassi.test = function () {
-    alert(jassi.base.ChromeDebugger.isExtensionInstalled());
-    var kk = new jassi.base.ChromeDebugger();
 
-}
-if (ChromeDebugger.isExtensionInstalled()) {
-    if (jassi.debugger !== undefined)
-        jassi.debugger.destroy();
-    jassi.debugger = new ChromeDebugger();
-}
+//if connected then this instance is registred to jassi.debugger;
+new ChromeDebugger();
+window.postMessage({toJassiExtension:true,name:"connect"}, "*");

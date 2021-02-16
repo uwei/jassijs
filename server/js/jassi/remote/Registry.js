@@ -210,31 +210,25 @@ class Registry {
         var modultext = "";
         //@ts-ignore
         if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
-            try {
-                //@ts-ignore
-                var fs = await Promise.resolve().then(() => require('fs'));
-                modultext = fs.readFileSync("./jassi.json", 'utf-8');
-                var modules = JSON.parse(modultext).modules;
-                for (let modul in modules) {
-                    try {
-                        var data = (await require(modul + "/registry")).default;
-                        this.initJSONData(data);
-                        /*    //requirejs.undef("js/"+modul+"/registry.js");
-                            var text = fs.readFileSync("./../client/" + modul + "/registry.js", 'utf-8');
-                            text = text.substring(text.indexOf("default:") + 8);
-                            text = text.substring(0, text.lastIndexOf("}") - 1);
-                            text = text.substring(0, text.lastIndexOf("}") - 1);
-                            var d = JSON.parse(text)
-                            _*/
-                    }
-                    catch (_a) {
-                        console.error("failed load registry " + modul + "/registry.js");
-                    }
+            //@ts-ignore
+            var fs = await Promise.resolve().then(() => require('fs'));
+            modultext = fs.readFileSync("./jassi.json", 'utf-8');
+            var modules = JSON.parse(modultext).modules;
+            for (let modul in modules) {
+                try {
+                    var data = (await require(modul + "/registry")).default;
+                    this.initJSONData(data);
+                    /*    //requirejs.undef("js/"+modul+"/registry.js");
+                        var text = fs.readFileSync("./../client/" + modul + "/registry.js", 'utf-8');
+                        text = text.substring(text.indexOf("default:") + 8);
+                        text = text.substring(0, text.lastIndexOf("}") - 1);
+                        text = text.substring(0, text.lastIndexOf("}") - 1);
+                        var d = JSON.parse(text)
+                        _*/
                 }
-            }
-            catch (ex) {
-                console.error("Could not read registry from modul " + module);
-                throw ex;
+                catch (_a) {
+                    console.error("failed load registry " + modul + "/registry.js");
+                }
             }
         }
         else { //on client

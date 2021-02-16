@@ -51,7 +51,7 @@ export  class Testcontextmenu extends Panel{
         }
        
 	}
-    jassi.test=async function(){
+    export async function test(){
        // kk.o=0;
     	var dlg=new Testcontextmenu();
 		return dlg;

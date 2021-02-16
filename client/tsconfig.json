@@ -24,7 +24,7 @@
     "js",
     "jassichrome",
     "../server",
-    "service-worker.js",
+    "jassi/service-worker.js",
     "jassi.js"
-  ]
+  ] 
 }

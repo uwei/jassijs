@@ -65,7 +65,7 @@ let RemoteProtocol = class RemoteProtocol {
         if (Jassi_1.default.isServer)
             throw new Error("should be called on client");
         var sdataObject = undefined;
-        var url = "remoteprotocol1?" + Date.now();
+        var url = "remoteprotocol?" + Date.now();
         var _this = this;
         var redirect = undefined;
         var config = {

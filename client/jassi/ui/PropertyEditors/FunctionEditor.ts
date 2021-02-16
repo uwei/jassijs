@@ -15,6 +15,7 @@ export class FunctionEditor extends Editor
         super(property, propertyEditor);
         /** @member - the renedering component **/
         this.component = new Button();
+        this.component.width="100%";
         var _this = this;
         this.component.onclick(function (param) {
             _this._onclick(param);

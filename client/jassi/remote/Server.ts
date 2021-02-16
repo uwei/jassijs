@@ -8,7 +8,8 @@ import { FileNode } from "jassi/remote/FileNode";
 @$Class("jassi.remote.Server")
 export class Server extends RemoteObject {
     public static isonline=undefined;
-    private filesInMap: { [name: string]: { modul: string, id: number } } = undefined;
+    //files found in js.map of modules in the jassi.json
+    public static filesInMap: { [name: string]: { modul: string, id: number } } = undefined;
     constructor(){
         super();
         if(Server.isonline===undefined){
@@ -29,9 +30,9 @@ export class Server extends RemoteObject {
         return ret;
     }
     async fillFilesInMapIfNeeded() {
-        if (this.filesInMap)
+        if (Server.filesInMap)
             return;
-        this.filesInMap = {};
+        Server.filesInMap = {};
         for (var mod in jassi.modules) {
             if (jassi.modules[mod].endsWith(".js")) {
                 var code = await this.loadFile(jassi.modules[mod] + ".map");
@@ -39,7 +40,7 @@ export class Server extends RemoteObject {
                 var files = data.sources;
                 for (let x = 0; x < files.length; x++) {
                     let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                    this.filesInMap[fname] = {
+                    Server.filesInMap[fname] = {
                         id: x,
                         modul: mod
                     };
@@ -51,7 +52,7 @@ export class Server extends RemoteObject {
         if (jassi.isServer)
             throw Error("only on client");
         await this.fillFilesInMapIfNeeded();
-        for (var fname in this.filesInMap) {
+        for (var fname in Server.filesInMap) {
             let path = fname.split("/");
             var parent = root;
             for (let p = 0; p < path.length; p++) {
@@ -128,8 +129,8 @@ export class Server extends RemoteObject {
     async loadFile(fileName: string): Promise<string> {
         if (!jassi.isServer) {
             await this.fillFilesInMapIfNeeded();
-            if (this.filesInMap[fileName]) {
-                var found = this.filesInMap[fileName];
+            if (Server.filesInMap[fileName]) {
+                var found = Server.filesInMap[fileName];
                 var code = await this.loadFile(jassi.modules[found.modul] + ".map");
                 var data = JSON.parse(code).sourcesContent[found.id];
                 return data;
@@ -201,7 +202,7 @@ export class Server extends RemoteObject {
     */
     async saveFile(fileName: string, content: string): Promise<string> {
         await this.fillFilesInMapIfNeeded();
-        if (this.filesInMap[fileName]) {
+        if (Server.filesInMap[fileName]) {
             //@ts-ignore
              $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
             return;
@@ -309,5 +310,7 @@ export class Server extends RemoteObject {
 
 
 export async function test() {
+    var serv=await new Server().dir();
+
     console.log(await Server.mytest());
 }

@@ -14,7 +14,7 @@ export class DBObjectNode {
 	name?:string;
 	filename?:string;
 }
-@$ActionProvider("jassi.base.FileNode")
+@$ActionProvider("jassi.remote.FileNode")
 @$Class("jassi.ui.DBFileActions")
 export class DBFileActions {
 	

@@ -1,6 +1,6 @@
 requirejs.config({
     paths: {
-          'papaparse':'//cdnjs.cloudflare.com/ajax/libs/PapaParse/4.6.3/papaparse.min',
+          
     },
 
 

@@ -10,20 +10,33 @@ import sourceMap from "jassi/ext/sourcemap";
 
 
 import jassi from "jassi/jassi";
+import { Server } from "jassi/remote/Server";
 import { $Class } from "jassi/remote/Jassi";
 //var sourceMap=window["sourceMap"];
 @$Class("jassi_editor.util.TSSourceMap")
 export class TSSourceMap {
-    async getLineFromTS(tsfile: string, line, column) {
-        var jscode = await $.ajax({ url: "js/" + tsfile.replace(".ts", ".js"), dataType: "text" });
+    async getLineFromTS(tsfile: string, line, column):Promise<{line:number,column:number,jsfilename:string}> {
+        var jscode;
         var mapcode = "";
-        var pos = jscode.indexOf("//" + "# sourceMappingURL=");
-        if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
-            var b64 = jscode.substring(pos + 50);
-            mapcode=ts["base64decode"](undefined,b64);
-            //mapcode = decodeURIComponent(escape((b64)));
+        var filenumber=0;
+        var jsfilename;
+        if (Server.filesInMap && Server.filesInMap[tsfile]) {
+            var mod = Server.filesInMap[tsfile].modul;
+            jsfilename = jassi.modules[mod];
+            mapcode = await $.ajax({ url: jsfilename+".map", dataType: "text" });
+            filenumber=Server.filesInMap[tsfile].id;
         } else {
-            mapcode = await $.ajax({ url: "js/" + tsfile.replace(".ts", ".js.map"), dataType: "text" });
+            jsfilename="js/" + tsfile.replace(".ts", ".js");
+            jscode = await $.ajax({ url: jsfilename, dataType: "text" });
+
+            var pos = jscode.indexOf("//" + "# sourceMappingURL=");
+            if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
+                var b64 = jscode.substring(pos + 50);
+                mapcode = ts["base64decode"](undefined, b64);
+                //mapcode = decodeURIComponent(escape((b64)));
+            } else {
+                mapcode = await $.ajax({ url: "js/" + tsfile.replace(".ts", ".js.map"), dataType: "text" });
+            }
         }
         var ret = new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
             var isinline = false;
@@ -34,13 +47,14 @@ export class TSSourceMap {
             sourceMap.SourceMapConsumer.with(rawSourceMap, null, consumer => {
                 var test = consumer.sources;
                 var l = consumer.generatedPositionFor({
-                    source: rawSourceMap.sources[0],
+                    source: rawSourceMap.sources[filenumber],
                     line: line,
                     column: column
                 })
+                l.jsfilename=jsfilename;
                 return l;
             }).then(function (whatever) {
-                resolve(whatever.line);
+                resolve(whatever);
             });
         });
         return ret;

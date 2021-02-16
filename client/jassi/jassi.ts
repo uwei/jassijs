@@ -26,7 +26,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-//jassi.extensions.init();
 export default jassi;
 
 

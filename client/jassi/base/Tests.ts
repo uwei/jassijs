@@ -10,7 +10,7 @@ import { HTMLPanel } from "jassi/ui/HTMLPanel";
 
 
 
-@$ActionProvider("jassi.base.FileNode")
+@$ActionProvider("jassi.remote.FileNode")
 @$Class("jassi.ui.TestAction")
 export class TestAction {
     @$Action({

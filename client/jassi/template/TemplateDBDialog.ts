@@ -51,7 +51,7 @@ export class TemplateDBDialogProperties {
 	@$Property({type:"classselector", service:"$DBObject"})
     dbobject:DBObject;
 }
-@$ActionProvider("jassi.base.FileNode")
+@$ActionProvider("jassi.remote.FileNode")
 @$Class("jassi.ui.TemplateDBDialog")
 export class TemplateDBDialog {
 	static code:string=code;

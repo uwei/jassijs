@@ -99,7 +99,7 @@ export class DialogKunde2 extends Panel {
 	}
 }
 
-jassi.test = function () {
+export function test() {
 	// kk.o=0;
 	return new DialogKunde2();
 }

@@ -134,10 +134,10 @@ define("demo/Dialog", ["require", "exports", "jassi/ui/Button", "jassi/ui/BoxPan
     }
     exports.test = test;
 });
-define("demo/DialogKunde2", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", "jassi/ui/HTMLPanel", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi"], function (require, exports, Panel_3, jassi_1, HTMLPanel_1, Textbox_2, Button_2, BoxPanel_2, Jassi_3) {
+define("demo/DialogKunde2", ["require", "exports", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi"], function (require, exports, Panel_3, HTMLPanel_1, Textbox_2, Button_2, BoxPanel_2, Jassi_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DialogKunde2 = void 0;
+    exports.test = exports.DialogKunde2 = void 0;
     let DialogKunde2 = class DialogKunde2 extends Panel_3.Panel {
         constructor() {
             super();
@@ -227,10 +227,11 @@ define("demo/DialogKunde2", ["require", "exports", "jassi/ui/Panel", "jassi/jass
         __metadata("design:paramtypes", [])
     ], DialogKunde2);
     exports.DialogKunde2 = DialogKunde2;
-    jassi_1.default.test = function () {
+    function test() {
         // kk.o=0;
         return new DialogKunde2();
-    };
+    }
+    exports.test = test;
 });
 define("demo/EmptyDialog", ["require", "exports", "jassi/ui/Button", "jassi/ui/Repeater", "jassi/remote/Jassi", "jassi/ui/Panel"], function (require, exports, Button_3, Repeater_1, Jassi_4, Panel_4) {
     "use strict";
@@ -1040,10 +1041,10 @@ define("demo/TestUpload", ["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui
     }
     exports.test = test;
 });
-define("demo/Testcontextmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Button", "jassi/remote/Jassi"], function (require, exports, Panel_11, jassi_2, ContextMenu_2, MenuItem_2, Button_8, Jassi_14) {
+define("demo/Testcontextmenu", ["require", "exports", "jassi/ui/Panel", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Button", "jassi/remote/Jassi"], function (require, exports, Panel_11, ContextMenu_2, MenuItem_2, Button_8, Jassi_14) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Testcontextmenu = void 0;
+    exports.test = exports.Testcontextmenu = void 0;
     let Testcontextmenu = class Testcontextmenu extends Panel_11.Panel {
         constructor() {
             super();
@@ -1090,13 +1091,14 @@ define("demo/Testcontextmenu", ["require", "exports", "jassi/ui/Panel", "jassi/j
         __metadata("design:paramtypes", [])
     ], Testcontextmenu);
     exports.Testcontextmenu = Testcontextmenu;
-    jassi_2.default.test = async function () {
+    async function test() {
         // kk.o=0;
         var dlg = new Testcontextmenu();
         return dlg;
-    };
+    }
+    exports.test = test;
 });
-define("demo/Testmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", "jassi/ui/Menu", "jassi/ui/MenuItem", "jassi/ui/Button", "jassi/remote/Jassi"], function (require, exports, Panel_12, jassi_3, Menu_1, MenuItem_3, Button_9, Jassi_15) {
+define("demo/Testmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", "jassi/ui/Menu", "jassi/ui/MenuItem", "jassi/ui/Button", "jassi/remote/Jassi"], function (require, exports, Panel_12, jassi_1, Menu_1, MenuItem_3, Button_9, Jassi_15) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testmenu = void 0;
@@ -1172,7 +1174,7 @@ define("demo/Testmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", 
         __metadata("design:paramtypes", [])
     ], Testmenu);
     exports.Testmenu = Testmenu;
-    jassi_3.default.test = async function () {
+    jassi_1.default.test = async function () {
         // kk.o=0;
         var dlg = new Testmenu();
         return dlg;
@@ -1307,7 +1309,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo/Dialog": {}
             },
             "demo/DialogKunde2.ts": {
-                "date": 1613218544157,
+                "date": 1613391153926,
                 "demo.DialogKunde2": {}
             },
             "demo/DK.ts": {
@@ -1371,7 +1373,7 @@ define("demo/registry", ["require"], function (require) {
                 }
             },
             "demo/Testcontextmenu.ts": {
-                "date": 1613218544157,
+                "date": 1613394627144,
                 "demo.Testcontextmenu": {}
             },
             "demo/TestExtension.ts": {

@@ -28,7 +28,7 @@ export async function test(){
 	return ret;
 }`;
 
-@$ActionProvider("jassi.base.FileNode")
+@$ActionProvider("jassi.remote.FileNode")
 @$Class("jassi.ui.TemplateEmptyDialog")
 export class TemplateEmptyDialog {
 	static code:string=code;

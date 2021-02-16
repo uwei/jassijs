@@ -5,7 +5,7 @@ import jassi from "jassi/jassi";
 import {ARZeile} from "de/remote/ARZeile";
 import {FileExplorer} from "jassi/ui/FileExplorer";
 import "demo/HalloPhillip";
-import "demo/DialogKunde";
+import "de/DialogKunde";
 import "demo/TreeTable";
 import windows from "jassi/base/Windows";
 import {Panel} from "jassi/ui/Panel";

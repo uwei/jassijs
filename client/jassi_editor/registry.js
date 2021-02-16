@@ -7,11 +7,11 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi.ui.AcePanel": {}
 	},
 	"jassi_editor/ChromeDebugger.ts": {
-		"date": 1613333140668,
+		"date": 1613488621460,
 		"jassi_editor.ChromeDebugger": {}
 	},
 	"jassi_editor/CodeEditor.ts": {
-		"date": 1613218609628,
+		"date": 1613483623015,
 		"jassi_editor.CodeEditor": {}
 	},
 	"jassi_editor/CodeEditorInvisibleComponents.ts": {
@@ -45,6 +45,9 @@ define("jassi_editor/registry",["require"], function(require) {
 		"date": 1613218609627,
 		"jassi_editor.MonacoPanel": {}
 	},
+	"jassi_editor/StartEditor.ts": {
+		"date": 1613341619526
+	},
 	"jassi_editor/util/DragAndDropper.ts": {
 		"date": 1613218544158,
 		"jassi_editor.util.DragAndDropper": {}
@@ -61,7 +64,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi_editor.util.Resizer": {}
 	},
 	"jassi_editor/util/TSSourceMap.ts": {
-		"date": 1613218544158,
+		"date": 1613425674482,
 		"jassi_editor.util.TSSourceMap": {}
 	},
 	"jassi_editor/util/Typescript.ts": {

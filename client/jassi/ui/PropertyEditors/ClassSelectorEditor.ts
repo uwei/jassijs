@@ -27,6 +27,7 @@ export  class ClassSelectorEditor extends Editor {
         super(property, propertyEditor);
         /** @member - the renedering component **/
         this.component = new Panel();
+        this.component.width="100%";
         this.select = new Select();
         this.select.width = "calc(100% - 26px)";
         this.property = Tools.copyObject(property);

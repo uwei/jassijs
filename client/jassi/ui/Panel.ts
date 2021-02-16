@@ -90,13 +90,13 @@ export class Panel extends Container {
     */
     add(component: Component) {//add a component to the container
         //     $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
-        return super.add(component);
+        return super.add(component); 
     }
     /**
      * adds a component to the container before an other component
      * @param {jassi.ui.Component} component - the component to add
      * @param {jassi.ui.Component} before - the component before then component to add
-     */
+     */ 
     addBefore(component: Component, before: Component) {//add a component to the container
         //   $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
         return super.addBefore(component, before);
@@ -106,7 +106,7 @@ export class Panel extends Container {
      * @param {boolean} enable - true if activate designMode
      */
     protected _setDesignMode(enable) {
-        this._designMode = enable;
+        this._designMode = enable; 
         if (enable) {//dummy in containers at the end
             if (this.isAbsolute === false) {
                 DesignDummy.createIfNeeded(this, "atEnd", (this["_editorselectthis"] ? this["_editorselectthis"] : this));

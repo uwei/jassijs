@@ -1,15 +1,9 @@
-requirejs.config({
-    paths: {
-          'spectrum':'//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
-    },
-   shim: {
-        "spectrum": ["jquery"],
-    }
 
-});
-
-define("jassi/ext/spectrum",["remote/jassi/base/Jassi","spectrum"],function(require){
-    jassi.myRequire("//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css");
+define("jassi/ext/spectrum",["jassi/remote/Jassi","spectrum"],function(){
+    //'spectrum':'//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min'
+    var path=require('jassi/modul').default.require.paths["spectrum"]; 
+    //path=path.substring(0,path.lastIndexOf("/"));
+    jassi.myRequire(path+".css");
             return {
                 
                 default:""

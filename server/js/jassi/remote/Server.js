@@ -17,7 +17,6 @@ const FileNode_1 = require("jassi/remote/FileNode");
 let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     constructor() {
         super();
-        this.filesInMap = undefined;
         if (Server_1.isonline === undefined) {
             Server_1.isonline = this.isOnline();
         }
@@ -36,9 +35,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         return ret;
     }
     async fillFilesInMapIfNeeded() {
-        if (this.filesInMap)
+        if (Server_1.filesInMap)
             return;
-        this.filesInMap = {};
+        Server_1.filesInMap = {};
         for (var mod in Jassi_1.default.modules) {
             if (Jassi_1.default.modules[mod].endsWith(".js")) {
                 var code = await this.loadFile(Jassi_1.default.modules[mod] + ".map");
@@ -46,7 +45,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                 var files = data.sources;
                 for (let x = 0; x < files.length; x++) {
                     let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                    this.filesInMap[fname] = {
+                    Server_1.filesInMap[fname] = {
                         id: x,
                         modul: mod
                     };
@@ -58,7 +57,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         if (Jassi_1.default.isServer)
             throw Error("only on client");
         await this.fillFilesInMapIfNeeded();
-        for (var fname in this.filesInMap) {
+        for (var fname in Server_1.filesInMap) {
             let path = fname.split("/");
             var parent = root;
             for (let p = 0; p < path.length; p++) {
@@ -135,8 +134,8 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     async loadFile(fileName) {
         if (!Jassi_1.default.isServer) {
             await this.fillFilesInMapIfNeeded();
-            if (this.filesInMap[fileName]) {
-                var found = this.filesInMap[fileName];
+            if (Server_1.filesInMap[fileName]) {
+                var found = Server_1.filesInMap[fileName];
                 var code = await this.loadFile(Jassi_1.default.modules[found.modul] + ".map");
                 var data = JSON.parse(code).sourcesContent[found.id];
                 return data;
@@ -207,7 +206,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     */
     async saveFile(fileName, content) {
         await this.fillFilesInMapIfNeeded();
-        if (this.filesInMap[fileName]) {
+        if (Server_1.filesInMap[fileName]) {
             //@ts-ignore
             $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
             return;
@@ -317,12 +316,15 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     }
 };
 Server.isonline = undefined;
+//files found in js.map of modules in the jassi.json
+Server.filesInMap = undefined;
 Server = Server_1 = __decorate([
     Jassi_1.$Class("jassi.remote.Server"),
     __metadata("design:paramtypes", [])
 ], Server);
 exports.Server = Server;
 async function test() {
+    var serv = await new Server().dir();
     console.log(await Server.mytest());
 }
 exports.test = test;

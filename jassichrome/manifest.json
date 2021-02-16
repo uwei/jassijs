@@ -1,7 +1,7 @@
 {
-  "name": "Jassi Ext",
-  "description": "provides",
-  "version": "0.7",
+  "name": "jassijs Debugger",
+  "description": "provides debugging with jassijs",
+  "version": "1.0",
   "permissions": [
     "debugger",
     "storage",
@@ -11,18 +11,27 @@
     "http://localhost/",
     "http://*/",
     "https://*/",
-    "contextMenus"
+    "contextMenus",
+	"declarativeContent"
 
   ],
+  
+  "icons": {
+    "128": "icon_128.png"
+  },
+  "content_scripts": [
+		{
+			"matches": ["<all_urls>"],
+			"js": ["contentScript.js"]
+		}
+	],
   "background": {
     "scripts": ["background.js"]
   },
-  "externally_connectable": {
-    "matches":  ["*://localhost/*","*://myjassi.herokuapp.com/*"]
-  },
+
   "devtools_page": "devtools.html",
   "browser_action": {
-    "default_title": "Jassi Debugger"
+    "default_title": "Debugging with jassijs"
   },
 
  

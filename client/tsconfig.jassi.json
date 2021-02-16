@@ -20,6 +20,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
+  "exclude": [
+    "jassi/service-worker.js"
+  ],
   "include":["./jassi"],
   
 }

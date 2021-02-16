@@ -62,5 +62,12 @@ exports.default={
 		"de.Lieferant": {
 			"$DBObject": []
 		}
+	},
+	"de/remote/MyUser.ts": {
+		"date": 1613330861054,
+		"de.MyUser": {
+			"$DBObject": [],
+			"Entity": []
+		}
 	}
 }

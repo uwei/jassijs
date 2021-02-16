@@ -393,10 +393,11 @@ export class CodeEditor extends Panel {
                 res(evt);
             };
         });
-
+        let abspath=location.origin+location.pathname;
+        abspath=abspath.substring(0,abspath.lastIndexOf("/")+1);
         navigator.serviceWorker.controller.postMessage({
             type: 'SAVE_FILE',
-            filename: files.fileNames[codejs],
+            filename: abspath+files.fileNames[codejs],
             code: files.contents[codejs]
         }, [channel.port2]);
         var test=await ret;

@@ -1,16 +1,8 @@
-requirejs.config({
-    paths: {
-  //      'jquery.choosen':'lib/chosen/chosen.jquery',
-          'jquery.choosen':'//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery',
-    },
-   shim: {
-        "jquery.choosen": ["jquery"],
-    }
 
-});
-
-define("jassi/ext/jquery.choosen",["remote/jassi/base/Jassi","jquery.choosen"],function(require){
-    jassi.myRequire("//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css");
+define("jassi/ext/jquery.choosen",["jassi/remote/Jassi","jquery.choosen"],function(){
+    var path=require('jassi/modul').default.require.paths["jquery.choosen"]; 
+    path=path.substring(0,path.lastIndexOf("/"));      
+    jassi.myRequire(path+"/chosen.css");
             return {
                 
                 default:""

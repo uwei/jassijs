@@ -14,6 +14,7 @@ class DefaultEditor extends Editor
         super(property, propertyEditor);
         /** @member - the renedering component **/
         this.component = new Textbox();
+        this.component.width="100%";
         var _this = this;
         this.component.onchange(function (param) {
             _this._onchange(param);

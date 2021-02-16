@@ -1,15 +1,9 @@
-requirejs.config({
-    paths: {
-        'jquery.contextMenu': '//rawgit.com/s-yadav/contextMenu.js/master/contextMenu',
-    },
-    shim: {
-    "jquery.contextMenu": ["jquery.ui"]
-    }
 
-}); 
 
-define("jassi/ext/jquery.contextmenu",["jassi/remote/Jassi","jquery.contextMenu"], function(require) {
-    jassi.myRequire("//rawgit.com/s-yadav/contextMenu.js/master/contextMenu.css");
+define("jassi/ext/jquery.contextmenu",["jassi/remote/Jassi","jquery.contextMenu"], function() {
+    var path=require('jassi/modul').default.require.paths["jquery.contextMenu"]; 
+    path=path.substring(0,path.lastIndexOf("/"));
+    jassi.myRequire(path+"/contextMenu.css");
     return {
         
         default:""

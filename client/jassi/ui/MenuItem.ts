@@ -22,7 +22,7 @@ export  class MenuItem extends Container {
     constructor() {
         super();
 
-        super.init($('<li style="white-space: nowrap"><div><img class="menuitemicon" src="res/dummy.ico"/><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
+        super.init($('<li style="white-space: nowrap"><div><span class="menuitemspan"><img class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
         $(this.dom).addClass("designerNoResizable");
         this._text = "";
         this._icon = "";
@@ -48,16 +48,30 @@ export  class MenuItem extends Container {
     */
     set icon(icon: string) { //the Code
         this._icon = icon;
-        if (icon === "")
-            icon = "res/dummy.ico";
-        $(this.dom).find(".menuitemicon").attr("src", icon);
+          var img;
+        var el1 = $(this.dom).find(".menuitemspan");
+        el1.removeClass();
+        el1.addClass("menuitemspan");
+         $(this.dom).find(".menuitemicon").attr("src", "");
+        if (icon?.startsWith("mdi")) {
+            el1.addClass(icon);
+
+        } else {
+            $(this.dom).find(".menuitemicon").attr("src", icon);
+        }
+
+        //if (icon === "")
+        //    icon = "res/dummy.ico";
+        //$(this.dom).find(".menuitemicon").attr("src", icon);
     }
     @$Property()
     get icon(): string { //the Code
-        var ret = $(this.dom).find(".menuitemicon").attr("src");
-        if (ret === "res/dummy.ico")
-            ret = "";
+         var ret=$(this.dom).find(".menuitemicon").attr("src");
+        if(ret===""){
+            ret= $(this.dom).find(".menuitemspan").attr("class").replace("menuitemspan ","");
+        }
         return ret;
+        
     }
     /**
      * @member {string} - the caption of the button
@@ -120,7 +134,7 @@ export  class MenuItem extends Container {
 
 
 }
-jassi.test = async function() {
+export async function test() {
     // kk.o=0;
     var menu = new Menu();
     var save = new MenuItem();
@@ -134,7 +148,7 @@ jassi.test = async function() {
     save.text = "dd";
     menu.add(save2);
     save2.text = "pppq";
-    save2.icon = "res/button";
+    save2.icon = "mdi mdi-car";//"res/red.jpg";
     save2.onclick(function(event) {
 
     });

@@ -22,7 +22,6 @@ define("jassi/jassi", ["require", "exports", "jassi/remote/Jassi", "jassi/base/E
             }
         });
     }
-    //jassi.extensions.init();
     exports.default = Jassi_1.default;
 });
 define("jassi/modul", ["require", "exports"], function (require, exports) {
@@ -49,13 +48,42 @@ define("jassi/modul", ["require", "exports"], function (require, exports) {
         },
         "require": {
             "paths": {
-                "ace": "//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/",
-                "ace/ext/language_tools": "//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools"
+                'intersection-observer': '//cdn.jsdelivr.net/npm/intersection-observer@0.7.0/intersection-observer.js',
+                'goldenlayout': '//cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/goldenlayout',
+                'jquery.choosen': '//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery',
+                'jquery.contextMenu': '//rawgit.com/s-yadav/contextMenu.js/master/contextMenu',
+                'jquery.fancytree': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/jquery.fancytree.min',
+                "jquery.fancytree.ui-deps": '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/modules/jquery.fancytree.ui-deps',
+                'jquery.fancytree.filter': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/modules/jquery.fancytree.filter',
+                'jquery.fancytree.multi': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/modules/jquery.fancytree.multi',
+                'jquery.fancytree.dnd': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/modules/jquery.fancytree.dnd',
+                'jquery': '//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery',
+                'jquery.ui': '//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui',
+                'jquery.ui.touch': '//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min',
+                'jquery.doubletap': '//cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/2.0.3/jquery.mobile-events.min',
+                'jquery.notify': '//cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min',
+                'js-cookie': '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
+                'lodash': '//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min',
+                'papaparse': '//cdnjs.cloudflare.com/ajax/libs/PapaParse/4.6.3/papaparse.min',
+                'ric': '//cdn.jsdelivr.net/npm/requestidlecallback@0.3.0/index.min',
+                'source.map': "https://unpkg.com/source-map@0.7.3/dist/source-map",
+                'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
+                'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
+                'tabulatorlib': '//unpkg.com/tabulator-tables@4.6.1/dist/js/tabulator',
+                'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min'
             },
             "shim": {
-                "ace/ext/language_tools": [
-                    "ace/ace"
-                ]
+                'goldenlayout': ["jquery"],
+                "jquery.choosen": ["jquery"],
+                "jquery.contextMenu": ["jquery.ui"],
+                'jquery.fancytree': ["jquery", "jquery.ui"],
+                'jquery.fancytree.dnd': ["jquery", "jquery.ui"],
+                'jquery.ui': ["jquery"],
+                'jquery.notify': ["jquery"],
+                'jquery.ui.touch': ["jquery", "jquery.ui"],
+                'jquery.doubletap': ["jquery"],
+                'jassi/jassi': ['jquery', 'jquery.ui', 'jquery.ui.touch'],
+                "spectrum": ["jquery"]
             }
         }
     };
@@ -97,10 +125,10 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.base.Router": {}
             },
             "jassi/base/Tests.ts": {
-                "date": 1613218544159,
+                "date": 1613416627532,
                 "jassi.ui.TestAction": {
                     "$ActionProvider": [
-                        "jassi.base.FileNode"
+                        "jassi.remote.FileNode"
                     ]
                 },
                 "jassi.base.Test": {}
@@ -110,10 +138,10 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.base.Windows": {}
             },
             "jassi/jassi.ts": {
-                "date": 1613218566584
+                "date": 1613394045174
             },
             "jassi/modul.ts": {
-                "date": 1613308757716
+                "date": 1613419302505
             },
             "jassi/remote/Classes.ts": {
                 "date": 1613249050111,
@@ -149,14 +177,14 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.Jassi": {}
             },
             "jassi/remote/Registry.ts": {
-                "date": 1613228011197
+                "date": 1613415494435
             },
             "jassi/remote/RemoteObject.ts": {
                 "date": 1613219128046,
                 "jassi.remote.RemoteObject": {}
             },
             "jassi/remote/RemoteProtocol.ts": {
-                "date": 1613340184584,
+                "date": 1613390719458,
                 "jassi.remote.RemoteProtocol": {}
             },
             "jassi/remote/security/Group.ts": {
@@ -204,7 +232,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/remote/Server.ts": {
-                "date": 1613340166168,
+                "date": 1613423379620,
                 "jassi.remote.Server": {}
             },
             "jassi/security/GroupView.ts": {
@@ -228,28 +256,28 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/template/TemplateDBDialog.ts": {
-                "date": 1613218609627,
+                "date": 1613416620658,
                 "jassi.ui.TemplateDBDialogProperties": {},
                 "jassi.ui.TemplateDBDialog": {
                     "$ActionProvider": [
-                        "jassi.base.FileNode"
+                        "jassi.remote.FileNode"
                     ]
                 }
             },
             "jassi/template/TemplateDBObject.ts": {
-                "date": 1613218566583,
+                "date": 1613416614503,
                 "jassi.ui.TemplateDBDialogProperties": {},
                 "jassi.ui.TemplateDBObject": {
                     "$ActionProvider": [
-                        "jassi.base.FileNode"
+                        "jassi.remote.FileNode"
                     ]
                 }
             },
             "jassi/template/TemplateEmptyDialog.ts": {
-                "date": 1613218609627,
+                "date": 1613416608418,
                 "jassi.ui.TemplateEmptyDialog": {
                     "$ActionProvider": [
-                        "jassi.base.FileNode"
+                        "jassi.remote.FileNode"
                     ]
                 }
             },
@@ -275,7 +303,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Button.ts": {
-                "date": 1613218544159,
+                "date": 1613398165793,
                 "jassi.ui.Button": {
                     "$UIComponent": [
                         {
@@ -316,7 +344,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.Container": {}
             },
             "jassi/ui/ContextMenu.ts": {
-                "date": 1613218566584,
+                "date": 1613416602064,
                 "jassi.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -407,11 +435,11 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.DBObjectDialog": {}
             },
             "jassi/ui/DBObjectExplorer.ts": {
-                "date": 1613218566583,
+                "date": 1613416590967,
                 "jassi.ui.DBObjectNode": {},
                 "jassi.ui.DBFileActions": {
                     "$ActionProvider": [
-                        "jassi.base.FileNode"
+                        "jassi.remote.FileNode"
                     ]
                 },
                 "jassi.ui.DBObjectActions": {
@@ -451,10 +479,10 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.ErrorPanel": {}
             },
             "jassi/ui/FileExplorer.ts": {
-                "date": 1613218609627,
+                "date": 1613416578139,
                 "jassi.ui.FileActions": {
                     "$ActionProvider": [
-                        "jassi.base.FileNode"
+                        "jassi.remote.FileNode"
                     ]
                 },
                 "jassi.ui.FileExplorer": {}
@@ -510,7 +538,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/MenuItem.ts": {
-                "date": 1613218544159,
+                "date": 1613398544055,
                 "jassi.ui.MenuItem": {
                     "$UIComponent": [
                         {
@@ -543,7 +571,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.OptionDialogTestProp": {}
             },
             "jassi/ui/Panel.ts": {
-                "date": 1613218544159,
+                "date": 1613478144814,
                 "jassi.ui.PanelCreateProperties": {},
                 "jassi.ui.Panel": {
                     "$UIComponent": [
@@ -584,7 +612,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/PropertyEditors/ClassSelectorEditor.ts": {
-                "date": 1613338467848,
+                "date": 1613421412342,
                 "jassi.ui.PropertyEditors.ClassSelectorEditor": {
                     "$PropertyEditor": [
                         [
@@ -594,7 +622,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/PropertyEditors/ColorEditor.ts": {
-                "date": 1613338505131,
+                "date": 1613421827599,
                 "jassi.ui.PropertyEditors.ColorEditor": {
                     "$PropertyEditor": [
                         [
@@ -614,7 +642,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/PropertyEditors/DatabinderEditor.ts": {
-                "date": 1613218544157,
+                "date": 1613421449783,
                 "jassi.ui.PropertyEditors.DatabinderEditor": {
                     "$PropertyEditor": [
                         [
@@ -634,7 +662,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/PropertyEditors/DefaultEditor.ts": {
-                "date": 1613218544157,
+                "date": 1613421239003,
                 "jassi.ui.PropertyEditors.DefaultEditor": {
                     "$PropertyEditor": [
                         [
@@ -660,7 +688,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/PropertyEditors/FunctionEditor.ts": {
-                "date": 1613218544157,
+                "date": 1613421461639,
                 "jassi.ui.PropertyEditors.FunctionEditor": {
                     "$PropertyEditor": [
                         [
@@ -695,7 +723,7 @@ define("jassi/registry", ["require"], function (require) {
                 "date": 1613218544158
             },
             "jassi/ui/PropertyEditors/NameEditor.ts": {
-                "date": 1613218544158,
+                "date": 1613421352058,
                 "jassi.ui.PropertyEditors.NameEditor": {
                     "$PropertyEditor": [
                         [
@@ -2774,7 +2802,7 @@ define("jassi/base/Tests", ["require", "exports", "jassi/remote/Jassi", "jassi/b
         __metadata("design:returntype", Promise)
     ], TestAction, "testNode", null);
     TestAction = TestAction_1 = __decorate([
-        Actions_1.$ActionProvider("jassi.base.FileNode"),
+        Actions_1.$ActionProvider("jassi.remote.FileNode"),
         Jassi_9.$Class("jassi.ui.TestAction")
     ], TestAction);
     exports.TestAction = TestAction;
@@ -2828,684 +2856,6 @@ define("jassi/base/Tests", ["require", "exports", "jassi/remote/Jassi", "jassi/b
     }
     exports.Tests = Tests;
 });
-define("jassi/ext/contextMenu", ["require"], function () {
-    /*
-     *contextMenu.js v 1.4.1
-     *Author: Sudhanshu Yadav
-     *s-yadav.github.com
-     *Copyright (c) 2013-2015 Sudhanshu Yadav.
-     *Dual licensed under the MIT and GPL licenses
-     */
-    ;
-    (function ($, window, document, undefined) {
-        "use strict";
-        $.single = (function () {
-            var single = $({});
-            return function (elm) {
-                single[0] = elm;
-                return single;
-            };
-        }());
-        $.fn.contextMenu = function (method, selector, option) {
-            //parameter fix
-            if (!methods[method]) {
-                option = selector;
-                selector = method;
-                method = 'popup';
-            }
-            //need to check for array object
-            else if (selector) {
-                if (!((selector instanceof Array) || (typeof selector === 'string') || (selector.nodeType) || (selector.jquery))) {
-                    option = selector;
-                    selector = null;
-                }
-            }
-            if ((selector instanceof Array) && (method != 'update')) {
-                method = 'menu';
-            }
-            var myoptions = option;
-            if ($.inArray(method, ['menu', 'popup', 'close', 'destroy']) > -1) {
-                option = iMethods.optionOtimizer(method, option);
-                this.each(function () {
-                    var $this = $(this);
-                    myoptions = $.extend({}, $.fn.contextMenu.defaults, option);
-                    if (!myoptions.baseTrigger) {
-                        myoptions.baseTrigger = $this;
-                    }
-                    methods[method].call($this, selector, myoptions);
-                });
-            }
-            else {
-                methods[method].call(this, selector, myoptions);
-            }
-            return this;
-        };
-        $.fn.contextMenu.defaults = {
-            triggerOn: 'click',
-            subMenuTriggerOn: 'hover click',
-            displayAround: 'cursor',
-            mouseClick: 'left',
-            verAdjust: 0,
-            horAdjust: 0,
-            top: 'auto',
-            left: 'auto',
-            closeOther: true,
-            containment: window,
-            winEventClose: true,
-            position: 'auto',
-            closeOnClick: true,
-            //callback
-            onOpen: function (data, event) { },
-            afterOpen: function (data, event) { },
-            onClose: function (data, event) { }
-        };
-        var methods = {
-            menu: function (selector, option) {
-                selector = iMethods.createMenuList(this, selector, option);
-                iMethods.contextMenuBind.call(this, selector, option, 'menu');
-            },
-            popup: function (selector, option) {
-                $(selector).addClass('iw-contextMenu');
-                iMethods.contextMenuBind.call(this, selector, option, 'popup');
-            },
-            update: function (selector, option) {
-                var self = this;
-                option = option || {};
-                this.each(function () {
-                    var trgr = $(this), menuData = trgr.data('iw-menuData');
-                    //refresh if any new element is added
-                    if (!menuData) {
-                        self.contextMenu('refresh');
-                        menuData = trgr.data('iw-menuData');
-                    }
-                    var menu = menuData.menu;
-                    if (typeof selector === 'object') {
-                        for (var i = 0; i < selector.length; i++) {
-                            var name = selector[i].name, disable = selector[i].disable, fun = selector[i].fun, icon = selector[i].icon, img = selector[i].img, title = selector[i].title, className = selector[i].className, elm = menu.children('li').filter(function () {
-                                return $(this).contents().filter(function () {
-                                    return this.nodeType == 3;
-                                }).text() == name;
-                            }), subMenu = selector[i].subMenu;
-                            //toggle disable if provided on update method
-                            disable != undefined && (disable ? elm.addClass('iw-mDisable') : elm.removeClass('iw-mDisable'));
-                            //bind new function if provided
-                            fun && elm.unbind('click.contextMenu').bind('click.contextMenu', fun);
-                            //update title
-                            title != undefined && elm.attr('title', title);
-                            //update class name
-                            className != undefined && elm.attr('class', className);
-                            var imgIcon = elm.find('.iw-mIcon');
-                            if (imgIcon.length)
-                                imgIcon.remove();
-                            //update image or icon
-                            if (img) {
-                                elm.prepend('<img src="' + img + '" align="absmiddle" class="iw-mIcon" />');
-                            }
-                            else if (icon) {
-                                elm.prepend('<span align="absmiddle" class="iw-mIcon ' + icon + '" />');
-                            }
-                            //to change submenus
-                            if (subMenu) {
-                                elm.contextMenu('update', subMenu);
-                            }
-                        }
-                    }
-                    iMethods.onOff(menu);
-                    //bind event again if trigger option has changed.
-                    var triggerOn = option.triggerOn;
-                    if (triggerOn) {
-                        trgr.unbind('.contextMenu');
-                        //add contextMenu identifier on all events
-                        triggerOn = triggerOn.split(" ");
-                        var events = [];
-                        for (var i = 0, ln = triggerOn.length; i < ln; i++) {
-                            events.push(triggerOn[i] + '.contextMenu');
-                        }
-                        //to bind event
-                        trgr.bind(events.join(' '), iMethods.eventHandler);
-                    }
-                    //set menu data back to trigger element
-                    menuData.option = $.extend({}, menuData.option, option);
-                    trgr.data('iw-menuData', menuData);
-                });
-            },
-            refresh: function () {
-                var menuData = this.filter(function () {
-                    return !!$(this).data('iw-menuData');
-                }).data('iw-menuData'), newElm = this.filter(function () {
-                    return !$(this).data('iw-menuData');
-                });
-                //to change basetrigger on refresh  
-                menuData.option.baseTrigger = this;
-                iMethods.contextMenuBind.call(newElm, menuData.menuSelector, menuData.option);
-            },
-            open: function (sel, data) {
-                data = data || {};
-                var e = data.event || $.Event('click');
-                if (data.top)
-                    e.clientY = data.top;
-                if (data.left)
-                    e.clientX = data.left;
-                this.each(function () {
-                    iMethods.eventHandler.call(this, e);
-                });
-            },
-            //to force context menu to close
-            close: function () {
-                var menuData = this.data('iw-menuData');
-                if (menuData) {
-                    iMethods.closeContextMenu(menuData.option, this, menuData.menu, null);
-                }
-            },
-            //to get value of a key
-            value: function (key) {
-                var menuData = this.data('iw-menuData');
-                if (menuData[key]) {
-                    return menuData[key];
-                }
-                else if (menuData.option) {
-                    return menuData.option[key];
-                }
-                return null;
-            },
-            destroy: function () {
-                var trgr = this, menuId = trgr.data('iw-menuData').menuId, menu = $('.iw-contextMenu[menuId=' + menuId + ']'), menuData = menu.data('iw-menuData');
-                //Handle the situation of dynamically added element.
-                if (!menuData)
-                    return;
-                if (menuData.noTrigger == 1) {
-                    if (menu.hasClass('iw-created')) {
-                        menu.remove();
-                    }
-                    else {
-                        menu.removeClass('iw-contextMenu ' + menuId)
-                            .removeAttr('menuId').removeData('iw-menuData');
-                        //to destroy submenus
-                        menu.find('li.iw-mTrigger').contextMenu('destroy');
-                    }
-                }
-                else {
-                    menuData.noTrigger--;
-                    menu.data('iw-menuData', menuData);
-                }
-                trgr.unbind('.contextMenu').removeClass('iw-mTrigger').removeData('iw-menuData');
-            }
-        };
-        var iMethods = {
-            contextMenuBind: function (selector, option, method) {
-                var trigger = this, menu = $(selector), menuData = menu.data('iw-menuData');
-                //fallback
-                if (menu.length == 0) {
-                    menu = trigger.find(selector);
-                    if (menu.length == 0) {
-                        return;
-                    }
-                }
-                if (method == 'menu') {
-                    iMethods.menuHover(menu);
-                }
-                //get base trigger
-                var baseTrigger = option.baseTrigger;
-                if (!menuData) {
-                    var menuId;
-                    if (!baseTrigger.data('iw-menuData')) {
-                        menuId = Math.ceil(Math.random() * 100000);
-                        baseTrigger.data('iw-menuData', {
-                            'menuId': menuId
-                        });
-                    }
-                    else {
-                        menuId = baseTrigger.data('iw-menuData').menuId;
-                    }
-                    //create clone menu to calculate exact height and width.
-                    var cloneMenu = menu.clone();
-                    cloneMenu.appendTo('body');
-                    menuData = {
-                        'menuId': menuId,
-                        'menuWidth': cloneMenu.outerWidth(true),
-                        'menuHeight': cloneMenu.outerHeight(true),
-                        'noTrigger': 1,
-                        'trigger': trigger
-                    };
-                    //to set data on selector
-                    menu.data('iw-menuData', menuData).attr('menuId', menuId);
-                    //remove clone menu
-                    cloneMenu.remove();
-                }
-                else {
-                    menuData.noTrigger++;
-                    menu.data('iw-menuData', menuData);
-                }
-                //to set data on trigger
-                trigger.addClass('iw-mTrigger').data('iw-menuData', {
-                    'menuId': menuData.menuId,
-                    'option': option,
-                    'menu': menu,
-                    'menuSelector': selector,
-                    'method': method
-                });
-                //hover fix
-                var triggerOn = option.triggerOn;
-                if (triggerOn.indexOf('hover') != -1) {
-                    triggerOn = triggerOn.replace('hover', 'mouseenter');
-                    //hover out if display is of context menu is on hover
-                    if (baseTrigger.index(trigger) != -1) {
-                        baseTrigger.add(menu).bind('mouseleave.contextMenu', function (e) {
-                            if ($(e.relatedTarget).closest('.iw-contextMenu').length == 0) {
-                                $('.iw-contextMenu[menuId="' + menuData.menuId + '"]').fadeOut(100);
-                            }
-                        });
-                    }
-                }
-                trigger.delegate('input,a,.needs-click', 'click', function (e) {
-                    e.stopImmediatePropagation();
-                });
-                //add contextMenu identifier on all events
-                triggerOn = triggerOn.split(' ');
-                var events = [];
-                for (var i = 0, ln = triggerOn.length; i < ln; i++) {
-                    events.push(triggerOn[i] + '.contextMenu');
-                }
-                //to bind event
-                trigger.bind(events.join(' '), iMethods.eventHandler);
-                //to stop bubbling in menu
-                menu.bind('click mouseenter', function (e) {
-                    e.stopPropagation();
-                });
-                menu.delegate('li', 'click', function (e) {
-                    if (option.closeOnClick && !$.single(this).hasClass('iw-has-submenu'))
-                        iMethods.closeContextMenu(option, trigger, menu, e);
-                });
-            },
-            eventHandler: function (e) {
-                e.preventDefault();
-                var trigger = $(this), trgrData = trigger.data('iw-menuData'), menu = trgrData.menu, menuData = menu.data('iw-menuData'), option = trgrData.option, cntnmnt = option.containment, clbckData = {
-                    trigger: trigger,
-                    menu: menu
-                }, 
-                //check conditions
-                cntWin = cntnmnt == window, btChck = option.baseTrigger.index(trigger) == -1;
-                //to close previous open menu.
-                if (!btChck && option.closeOther) {
-                    $('.iw-contextMenu').css('display', 'none');
-                }
-                //to reset already selected menu item
-                menu.find('.iw-mSelected').removeClass('iw-mSelected');
-                //call open callback
-                option.onOpen.call(this, clbckData, e);
-                var cObj = $(cntnmnt), cHeight = cObj.innerHeight(), cWidth = cObj.innerWidth(), cTop = 0, cLeft = 0, menuHeight = menuData.menuHeight, menuWidth = menuData.menuWidth, va, ha, left = 0, top = 0, bottomMenu, rightMenu, verAdjust = va = parseInt(option.verAdjust), horAdjust = ha = parseInt(option.horAdjust);
-                if (!cntWin) {
-                    cTop = cObj.offset().top;
-                    cLeft = cObj.offset().left;
-                    //to add relative position if no position is defined on containment
-                    if (cObj.css('position') == 'static') {
-                        cObj.css('position', 'relative');
-                    }
-                }
-                if (option.displayAround == 'cursor') {
-                    left = cntWin ? e.clientX : e.clientX + $(window).scrollLeft() - cLeft;
-                    top = cntWin ? e.clientY : e.clientY + $(window).scrollTop() - cTop;
-                    bottomMenu = top + menuHeight;
-                    rightMenu = left + menuWidth;
-                    //max height and width of context menu
-                    if (bottomMenu > cHeight) {
-                        if ((top - menuHeight) < 0) {
-                            if ((bottomMenu - cHeight) < (menuHeight - top)) {
-                                top = cHeight - menuHeight;
-                                va = -1 * va;
-                            }
-                            else {
-                                top = 0;
-                                va = 0;
-                            }
-                        }
-                        else {
-                            top = top - menuHeight;
-                            va = -1 * va;
-                        }
-                    }
-                    if (rightMenu > cWidth) {
-                        if ((left - menuWidth) < 0) {
-                            if ((rightMenu - cWidth) < (menuWidth - left)) {
-                                left = cWidth - menuWidth;
-                                ha = -1 * ha;
-                            }
-                            else {
-                                left = 0;
-                                ha = 0;
-                            }
-                        }
-                        else {
-                            left = left - menuWidth;
-                            ha = -1 * ha;
-                        }
-                    }
-                }
-                else if (option.displayAround == 'trigger') {
-                    var triggerHeight = trigger.outerHeight(true), triggerWidth = trigger.outerWidth(true), triggerLeft = cntWin ? trigger.offset().left - cObj.scrollLeft() : trigger.offset().left - cLeft, triggerTop = cntWin ? trigger.offset().top - cObj.scrollTop() : trigger.offset().top - cTop, leftShift = triggerWidth;
-                    left = triggerLeft + triggerWidth;
-                    top = triggerTop;
-                    bottomMenu = top + menuHeight;
-                    rightMenu = left + menuWidth;
-                    //max height and width of context menu
-                    if (bottomMenu > cHeight) {
-                        if ((top - menuHeight) < 0) {
-                            if ((bottomMenu - cHeight) < (menuHeight - top)) {
-                                top = cHeight - menuHeight;
-                                va = -1 * va;
-                            }
-                            else {
-                                top = 0;
-                                va = 0;
-                            }
-                        }
-                        else {
-                            top = top - menuHeight + triggerHeight;
-                            va = -1 * va;
-                        }
-                    }
-                    if (rightMenu > cWidth) {
-                        if ((left - menuWidth) < 0) {
-                            if ((rightMenu - cWidth) < (menuWidth - left)) {
-                                left = cWidth - menuWidth;
-                                ha = -1 * ha;
-                                leftShift = -triggerWidth;
-                            }
-                            else {
-                                left = 0;
-                                ha = 0;
-                                leftShift = 0;
-                            }
-                        }
-                        else {
-                            left = left - menuWidth - triggerWidth;
-                            ha = -1 * ha;
-                            leftShift = -triggerWidth;
-                        }
-                    }
-                    //test end
-                    if (option.position == 'top') {
-                        top = triggerTop - menuHeight;
-                        va = verAdjust;
-                        left = left - leftShift;
-                    }
-                    else if (option.position == 'left') {
-                        left = triggerLeft - menuWidth;
-                        ha = horAdjust;
-                    }
-                    else if (option.position == 'bottom') {
-                        top = triggerTop + triggerHeight;
-                        va = verAdjust;
-                        left = left - leftShift;
-                    }
-                    else if (option.position == 'right') {
-                        left = triggerLeft + triggerWidth;
-                        ha = horAdjust;
-                    }
-                }
-                //applying css property
-                var cssObj = {
-                    'position': (cntWin || btChck) ? 'fixed' : 'absolute',
-                    'display': 'inline-block',
-                    'height': '',
-                    'width': ''
-                };
-                //to get position from offset parent
-                if (option.left != 'auto') {
-                    left = iMethods.getPxSize(option.left, cWidth);
-                }
-                if (option.top != 'auto') {
-                    top = iMethods.getPxSize(option.top, cHeight);
-                }
-                if (!cntWin) {
-                    var oParPos = trigger.offsetParent().offset();
-                    if (btChck) {
-                        left = left + cLeft - $(window).scrollLeft();
-                        top = top + cTop - $(window).scrollTop();
-                    }
-                    else {
-                        left = left - (cLeft - oParPos.left);
-                        top = top - (cTop - oParPos.top);
-                    }
-                }
-                cssObj.left = left + ha + 'px';
-                cssObj.top = top + va + 'px';
-                menu.css(cssObj);
-                //to call after open call back
-                option.afterOpen.call(this, clbckData, e);
-                //to add current menu class
-                if (trigger.closest('.iw-contextMenu').length == 0) {
-                    $('.iw-curMenu').removeClass('iw-curMenu');
-                    menu.addClass('iw-curMenu');
-                }
-                var dataParm = {
-                    trigger: trigger,
-                    menu: menu,
-                    option: option,
-                    method: trgrData.method
-                };
-                $('html').unbind('click', iMethods.clickEvent).click(dataParm, iMethods.clickEvent);
-                $(document).unbind('keydown', iMethods.keyEvent).keydown(dataParm, iMethods.keyEvent);
-                if (option.winEventClose) {
-                    $(window).bind('scroll resize', dataParm, iMethods.scrollEvent);
-                }
-            },
-            scrollEvent: function (e) {
-                iMethods.closeContextMenu(e.data.option, e.data.trigger, e.data.menu, e);
-            },
-            clickEvent: function (e) {
-                var button = e.data.trigger.get(0);
-                if ((button !== e.target) && ($(e.target).closest('.iw-contextMenu').length == 0)) {
-                    iMethods.closeContextMenu(e.data.option, e.data.trigger, e.data.menu, e);
-                }
-            },
-            keyEvent: function (e) {
-                e.preventDefault();
-                var menu = e.data.menu, option = e.data.option, keyCode = e.keyCode;
-                // handle cursor keys
-                if (keyCode == 27) {
-                    iMethods.closeContextMenu(option, e.data.trigger, menu, e);
-                }
-                if (e.data.method == 'menu') {
-                    var curMenu = $('.iw-curMenu'), optList = curMenu.children('li:not(.iw-mDisable)'), selected = optList.filter('.iw-mSelected'), index = optList.index(selected), focusOn = function (elm) {
-                        iMethods.selectMenu(curMenu, elm);
-                        var menuData = elm.data('iw-menuData');
-                        if (menuData) {
-                            iMethods.eventHandler.call(elm[0], e);
-                        }
-                    }, first = function () {
-                        focusOn(optList.filter(':first'));
-                    }, last = function () {
-                        focusOn(optList.filter(':last'));
-                    }, next = function () {
-                        focusOn(optList.filter(':eq(' + (index + 1) + ')'));
-                    }, prev = function () {
-                        focusOn(optList.filter(':eq(' + (index - 1) + ')'));
-                    }, subMenu = function () {
-                        var menuData = selected.data('iw-menuData');
-                        if (menuData) {
-                            iMethods.eventHandler.call(selected[0], e);
-                            var selector = menuData.menu;
-                            selector.addClass('iw-curMenu');
-                            curMenu.removeClass('iw-curMenu');
-                            curMenu = selector;
-                            optList = curMenu.children('li:not(.iw-mDisable)');
-                            selected = optList.filter('.iw-mSelected');
-                            first();
-                        }
-                    }, parMenu = function () {
-                        var selector = curMenu.data('iw-menuData').trigger;
-                        var parMenu = selector.closest('.iw-contextMenu');
-                        if (parMenu.length != 0) {
-                            curMenu.removeClass('iw-curMenu').css('display', 'none');
-                            parMenu.addClass('iw-curMenu');
-                        }
-                    };
-                    switch (keyCode) {
-                        case 13:
-                            selected.click();
-                            break;
-                        case 40:
-                            (index == optList.length - 1 || selected.length == 0) ? first() : next();
-                            break;
-                        case 38:
-                            (index == 0 || selected.length == 0) ? last() : prev();
-                            break;
-                        case 33:
-                            first();
-                            break;
-                        case 34:
-                            last();
-                            break;
-                        case 37:
-                            parMenu();
-                            break;
-                        case 39:
-                            subMenu();
-                            break;
-                    }
-                }
-            },
-            closeContextMenu: function (option, trigger, menu, e) {
-                //unbind all events from top DOM
-                $(document).unbind('keydown', iMethods.keyEvent);
-                $('html').unbind('click', iMethods.clickEvent);
-                $(window).unbind('scroll resize', iMethods.scrollEvent);
-                $('.iw-contextMenu').css('display', 'none');
-                $(document).focus();
-                //call close function
-                option.onClose.call(this, {
-                    trigger: trigger,
-                    menu: menu
-                }, e);
-            },
-            getPxSize: function (size, of) {
-                if (!isNaN(size)) {
-                    return size;
-                }
-                if (size.indexOf('%') != -1) {
-                    return parseInt(size) * of / 100;
-                }
-                else {
-                    return parseInt(size);
-                }
-            },
-            selectMenu: function (menu, elm) {
-                //to select the list
-                var selected = menu.find('li.iw-mSelected'), submenu = selected.find('.iw-contextMenu');
-                if ((submenu.length != 0) && (selected[0] != elm[0])) {
-                    submenu.fadeOut(100);
-                }
-                selected.removeClass('iw-mSelected');
-                elm.addClass('iw-mSelected');
-            },
-            menuHover: function (menu) {
-                var lastEventTime = Date.now();
-                menu.children('li').bind('mouseenter.contextMenu click.contextMenu', function (e) {
-                    //to make curmenu
-                    $('.iw-curMenu').removeClass('iw-curMenu');
-                    menu.addClass('iw-curMenu');
-                    iMethods.selectMenu(menu, $(this));
-                });
-            },
-            createMenuList: function (trgr, selector, option) {
-                var baseTrigger = option.baseTrigger, randomNum = Math.floor(Math.random() * 10000);
-                if ((typeof selector == 'object') && (!selector.nodeType) && (!selector.jquery)) {
-                    var menuList = $('<ul class="iw-contextMenu iw-created iw-cm-menu" id="iw-contextMenu' + randomNum + '"></ul>');
-                    $.each(selector, function (index, selObj) {
-                        var name = selObj.name, fun = selObj.fun || function () { }, subMenu = selObj.subMenu, img = selObj.img || '', icon = selObj.icon || '', title = selObj.title || "", className = selObj.className || "", disable = selObj.disable, list = $('<li title="' + title + '" class="' + className + '">' + name + '</li>');
-                        if (img) {
-                            list.prepend('<img src="' + img + '" align="absmiddle" class="iw-mIcon" />');
-                        }
-                        else if (icon) {
-                            list.prepend('<span align="absmiddle" class="' + "iw-mIcon " + icon + '" />');
-                        }
-                        //to add disable
-                        if (disable) {
-                            list.addClass('iw-mDisable');
-                        }
-                        if (!subMenu) {
-                            list.bind('click.contextMenu', function (e) {
-                                fun.call(this, {
-                                    trigger: baseTrigger,
-                                    menu: menuList
-                                }, e);
-                            });
-                        }
-                        //to create sub menu
-                        menuList.append(list);
-                        if (subMenu) {
-                            list.addClass('iw-has-submenu').append('<div class="iw-cm-arrow-right" />');
-                            iMethods.subMenu(list, subMenu, baseTrigger, option);
-                        }
-                    });
-                    if (baseTrigger.index(trgr[0]) == -1) {
-                        trgr.append(menuList);
-                    }
-                    else {
-                        var par = option.containment == window ? 'body' : option.containment;
-                        $(par).append(menuList);
-                    }
-                    iMethods.onOff($('#iw-contextMenu' + randomNum));
-                    return '#iw-contextMenu' + randomNum;
-                }
-                else if ($(selector).length != 0) {
-                    var element = $(selector);
-                    element.removeClass('iw-contextMenuCurrent')
-                        .addClass('iw-contextMenu iw-cm-menu iw-contextMenu' + randomNum)
-                        .attr('menuId', 'iw-contextMenu' + randomNum)
-                        .css('display', 'none');
-                    //to create subMenu
-                    element.find('ul').each(function (index, element) {
-                        var subMenu = $(this), parent = subMenu.parent('li');
-                        parent.append('<div class="iw-cm-arrow-right" />');
-                        subMenu.addClass('iw-contextMenuCurrent');
-                        iMethods.subMenu(parent, '.iw-contextMenuCurrent', baseTrigger, option);
-                    });
-                    iMethods.onOff($('.iw-contextMenu' + randomNum));
-                    return '.iw-contextMenu' + randomNum;
-                }
-            },
-            subMenu: function (trigger, selector, baseTrigger, option) {
-                trigger.contextMenu('menu', selector, {
-                    triggerOn: option.subMenuTriggerOn,
-                    displayAround: 'trigger',
-                    position: 'auto',
-                    mouseClick: 'left',
-                    baseTrigger: baseTrigger,
-                    containment: option.containment
-                });
-            },
-            onOff: function (menu) {
-                menu.find('.iw-mOverlay').remove();
-                menu.find('.iw-mDisable').each(function () {
-                    var list = $(this);
-                    list.append('<div class="iw-mOverlay"/>');
-                    list.find('.iw-mOverlay').bind('click mouseenter', function (event) {
-                        event.stopPropagation();
-                    });
-                });
-            },
-            optionOtimizer: function (method, option) {
-                if (!option) {
-                    return;
-                }
-                if (method == 'menu') {
-                    if (!option.mouseClick) {
-                        option.mouseClick = 'right';
-                    }
-                }
-                if ((option.mouseClick == 'right') && (option.triggerOn == 'click')) {
-                    option.triggerOn = 'contextmenu';
-                }
-                if ($.inArray(option.triggerOn, ['hover', 'mouseenter', 'mouseover', 'mouseleave', 'mouseout', 'focusin', 'focusout']) != -1) {
-                    option.displayAround = 'trigger';
-                }
-                return option;
-            }
-        };
-    })(jQuery, window, document);
-});
 undefined;
 //Hack for jquery.fancytree.dnd
 define("jquery-ui/ui/widgets/draggable", function () {
@@ -3515,39 +2865,19 @@ define("jquery-ui/ui/widgets/droppable", function () {
     return jQuery.ui;
 });
 //END Hack
-requirejs.config({
-    paths: {
-        'jquery.fancytree': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/jquery.fancytree.min',
-        "jquery.fancytree.ui-deps": '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/modules/jquery.fancytree.ui-deps',
-        'jquery.fancytree.filter': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/modules/jquery.fancytree.filter',
-        'jquery.fancytree.multi': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/modules/jquery.fancytree.multi',
-        'jquery.fancytree.dnd': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/modules/jquery.fancytree.dnd',
-    },
-    shim: {
-        'jquery.fancytree': ["jquery", "jquery.ui"],
-        'jquery.fancytree.dnd': ["jquery", "jquery.ui"],
-    }
-});
 define("jassi/ext/fancytree", ["jassi/remote/Jassi", "jquery.fancytree", 'jquery.fancytree.filter', 'jquery.fancytree.multi', 'jquery.fancytree.dnd'], function () {
     //jassi.myRequire("lib/skin-win8/ui.fancytree.min.css");
-    jassi.myRequire("//cdn.jsdelivr.net/npm/jquery.fancytree@2.35.0/dist/skin-win8/ui.fancytree.css");
+    //'jquery.fancytree': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/jquery.fancytree.min',
+    var path = require('jassi/modul').default.require.paths["jquery.fancytree"];
+    path = path.substring(0, path.lastIndexOf("/"));
+    jassi.myRequire(path + "/skin-win8/ui.fancytree.css");
     return { default: "" };
 });
-requirejs.config({
-    paths: {
-        'goldenlayout': '//cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/goldenlayout',
-    },
-    shim: {
-        'goldenlayout': ["jquery"]
-        //"jquery.ui.contextmenu": ["jquery.ui"]
-        // "jquery.contextMenu": ["jquery.ui",'jquery.ui.position'],jquery.ui-contextmenu
-    }
-});
 define("jassi/ext/goldenlayout", ['goldenlayout', "jassi/remote/Jassi"], function (GoldenLayout) {
-    //jassi.myRequire("lib/goldenlayout-base.css");
-    //jassi.myRequire("lib/goldenlayout-light-theme.css");        
-    jassi.myRequire("//cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-base.css");
-    jassi.myRequire("//cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-light-theme.css");
+    var path = require('jassi/modul').default.require.paths["goldenlayout"];
+    path = path.substring(0, path.lastIndexOf("/"));
+    jassi.myRequire(path + "/css/goldenlayout-base.css");
+    jassi.myRequire(path + "/css/goldenlayout-light-theme.css");
     return {
         default: GoldenLayout
     };
@@ -3555,72 +2885,27 @@ define("jassi/ext/goldenlayout", ['goldenlayout', "jassi/remote/Jassi"], functio
 //polyfill for old ios
 var def = [];
 if (window.IntersectionObserver === undefined) {
-    def = ['//cdn.jsdelivr.net/npm/intersection-observer@0.7.0/intersection-observer.js'];
+    var path = require('jassi/modul').default.require.paths["intersection-observer"];
+    def = [path];
 }
 define("jassi/ext/intersection-observer", def, function () {
     return {};
 });
-requirejs.config({
-    paths: {
-        //      'jquery.choosen':'lib/chosen/chosen.jquery',
-        'jquery.choosen': '//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery',
-    },
-    shim: {
-        "jquery.choosen": ["jquery"],
-    }
-});
-define("jassi/ext/jquery.choosen", ["remote/jassi/base/Jassi", "jquery.choosen"], function (require) {
-    jassi.myRequire("//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css");
+define("jassi/ext/jquery.choosen", ["jassi/remote/Jassi", "jquery.choosen"], function () {
+    var path = require('jassi/modul').default.require.paths["jquery.choosen"];
+    path = path.substring(0, path.lastIndexOf("/"));
+    jassi.myRequire(path + "/chosen.css");
     return {
         default: ""
     };
 });
-requirejs.config({
-    paths: {
-        'jquery.contextMenu': '//rawgit.com/s-yadav/contextMenu.js/master/contextMenu',
-    },
-    shim: {
-        "jquery.contextMenu": ["jquery.ui"]
-    }
-});
-define("jassi/ext/jquery.contextmenu", ["jassi/remote/Jassi", "jquery.contextMenu"], function (require) {
-    jassi.myRequire("//rawgit.com/s-yadav/contextMenu.js/master/contextMenu.css");
+define("jassi/ext/jquery.contextmenu", ["jassi/remote/Jassi", "jquery.contextMenu"], function () {
+    var path = require('jassi/modul').default.require.paths["jquery.contextMenu"];
+    path = path.substring(0, path.lastIndexOf("/"));
+    jassi.myRequire(path + "/contextMenu.css");
     return {
         default: ""
     };
-});
-requirejs.config({
-    paths: {
-        'jquery.w2ui': '../../lib/w2ui-1.5.rc1',
-    },
-    shim: {
-        "jquery.w2ui": ["jquery"],
-    }
-});
-define("jassi/ext/jquery.w2ui", ["remote/jassi/base/Jassi", 'jquery.w2ui'], function (require) {
-    jassi.myRequire("lib/w2ui-1.5.rc1.css");
-    return {
-        default: w2ui
-    };
-});
-requirejs.config({
-    waitSeconds: 200,
-    paths: {
-        'jquery': '//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery',
-        //'jquery': 'lib/jquery',
-        'jquery.ui': '//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui',
-        //'jquery.ui': 'lib/jquery-ui', 
-        'jquery.ui.touch': '//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min',
-        'jquery.doubletap': '//cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/2.0.3/jquery.mobile-events.min',
-        'jquery.notify': '//cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min',
-    },
-    shim: {
-        'jquery.ui': ["jquery"],
-        'jquery.notify': ["jquery"],
-        'jquery.ui.touch': ["jquery", "jquery.ui"],
-        'jquery.doubletap': ["jquery"],
-        'jassi/jassi': ['jquery', 'jquery.ui', 'jquery.ui.touch'],
-    },
 });
 define("jassi/ext/jquerylib", [
     "jquery",
@@ -3634,21 +2919,10 @@ define("jassi/ext/jquerylib", [
         default: ""
     };
 });
-requirejs.config({
-    paths: {
-        //      'jquery.choosen':'lib/chosen/chosen.jquery',
-        'js-cookie': '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
-    }
-});
 define("jassi/ext/js-cookie", ['js-cookie'], function (cookie) {
     return {
         default: cookie
     };
-});
-requirejs.config({
-    paths: {
-        'lodash': '//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min',
-    },
 });
 define("jassi/ext/lodash", ["lodash"], function (lodash) {
     //jassi.myRequire("//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css");
@@ -3657,9 +2931,7 @@ define("jassi/ext/lodash", ["lodash"], function (lodash) {
     };
 });
 requirejs.config({
-    paths: {
-        'papaparse': '//cdnjs.cloudflare.com/ajax/libs/PapaParse/4.6.3/papaparse.min',
-    },
+    paths: {},
 });
 define("jassi/ext/papaparse", ["papaparse"], function (papa) {
     // jassi.myRequire("//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css");
@@ -3667,23 +2939,8 @@ define("jassi/ext/papaparse", ["papaparse"], function (papa) {
         Papa: papa
     };
 });
-//END Hack
-requirejs.config({
-    paths: {
-        //'jquery.fancytree': '//cdnjs.cloudflare.com/ajax/libs/jquery.fancytree/2.35.0/jquery.fancytree-all.min',
-        'ric': '//cdn.jsdelivr.net/npm/requestidlecallback@0.3.0/index.min',
-    },
-    shim: {}
-});
 define("jassi/ext/requestidlecallback", ["ric"], function () {
-    //jassi.myRequire("lib/skin-win8/ui.fancytree.min.css");
-    //jassi.myRequire("//cdn.jsdelivr.net/npm/jquery.fancytree@2.35.0/dist/skin-win8/ui.fancytree.css");
     return { default: "" };
-});
-requirejs.config({
-    paths: {
-        'source.map': "https://unpkg.com/source-map@0.7.3/dist/source-map"
-    }
 });
 //dummy for sourcemap 
 define("fs", [], function () {
@@ -3700,40 +2957,23 @@ define("jassi/ext/sourcemap", ["source.map", "exports"], function (sm, exp) {
         default: sm
     };
 });
-requirejs.config({
-    paths: {
-        'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
-    },
-    shim: {
-        "spectrum": ["jquery"],
-    }
-});
-define("jassi/ext/spectrum", ["remote/jassi/base/Jassi", "spectrum"], function (require) {
-    jassi.myRequire("//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min.css");
+define("jassi/ext/spectrum", ["jassi/remote/Jassi", "spectrum"], function () {
+    //'spectrum':'//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min'
+    var path = require('jassi/modul').default.require.paths["spectrum"];
+    //path=path.substring(0,path.lastIndexOf("/"));
+    jassi.myRequire(path + ".css");
     return {
         default: ""
     };
 });
-requirejs.config({
-    paths: {
-        'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
-    },
-});
 define("jassi/ext/split", ["splitlib"], function (split) {
-    jassi.myRequire("jassi/ext/split.css");
     return {
         default: split
     };
 });
-//<link href="https://unpkg.com/tabulator-tables@4.6.1/dist/css/tabulator.min.css" rel="stylesheet">
-//<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.6.1/dist/js/tabulator.min.js"></script>
-requirejs.config({
-    paths: {
-        'tabulatorlib': '//unpkg.com/tabulator-tables@4.6.1/dist/js/tabulator'
-    },
-});
 define("jassi/ext/tabulator", ['tabulatorlib'], function (Tabulator) {
-    jassi.myRequire("//unpkg.com/tabulator-tables@4.6.1/dist/css/tabulator.min.css");
+    var path = require('jassi/modul').default.require.paths["tabulatorlib"];
+    jassi.myRequire(path.replace("js", "css") + ".min.css");
     window.Tabulator = Tabulator;
     //hack 
     var initializeRow = function (row) {
@@ -3856,18 +3096,13 @@ define("jassi/ext/tabulator", ['tabulatorlib'], function (Tabulator) {
 });
 ////GEHT NICHT 
 ////use requirejs(["https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min.js"],function(tinymcelib){
+var path = require('jassi/modul').default.require.paths["tinymcelib"];
+path = path.substring(0, path.lastIndexOf("/"));
 var tinyMCEPreInit = {
     suffix: '.min',
-    base: '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2',
+    base: path,
     query: ''
 };
-requirejs.config({
-    paths: {
-        //        'tinymce':'lib/tinymce/tinymce.min',
-        //        'tinymce':'//cdnjs.cloudflare.com/ajax/libs/tinymce/5.0.14/tinymce.min'
-        'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min'
-    }
-});
 define("jassi/ext/tinymce", ["tinymcelib"], function (require) {
     return {
         default: tinymce
@@ -4689,31 +3924,25 @@ define("jassi/remote/Registry", ["require", "exports"], function (require, expor
             var modultext = "";
             //@ts-ignore
             if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
-                try {
-                    //@ts-ignore
-                    var fs = await new Promise((resolve_12, reject_12) => { require(['fs'], resolve_12, reject_12); });
-                    modultext = fs.readFileSync("./jassi.json", 'utf-8');
-                    var modules = JSON.parse(modultext).modules;
-                    for (let modul in modules) {
-                        try {
-                            var data = (await require(modul + "/registry")).default;
-                            this.initJSONData(data);
-                            /*    //requirejs.undef("js/"+modul+"/registry.js");
-                                var text = fs.readFileSync("./../client/" + modul + "/registry.js", 'utf-8');
-                                text = text.substring(text.indexOf("default:") + 8);
-                                text = text.substring(0, text.lastIndexOf("}") - 1);
-                                text = text.substring(0, text.lastIndexOf("}") - 1);
-                                var d = JSON.parse(text)
-                                _*/
-                        }
-                        catch (_a) {
-                            console.error("failed load registry " + modul + "/registry.js");
-                        }
+                //@ts-ignore
+                var fs = await new Promise((resolve_12, reject_12) => { require(['fs'], resolve_12, reject_12); });
+                modultext = fs.readFileSync("./jassi.json", 'utf-8');
+                var modules = JSON.parse(modultext).modules;
+                for (let modul in modules) {
+                    try {
+                        var data = (await require(modul + "/registry")).default;
+                        this.initJSONData(data);
+                        /*    //requirejs.undef("js/"+modul+"/registry.js");
+                            var text = fs.readFileSync("./../client/" + modul + "/registry.js", 'utf-8');
+                            text = text.substring(text.indexOf("default:") + 8);
+                            text = text.substring(0, text.lastIndexOf("}") - 1);
+                            text = text.substring(0, text.lastIndexOf("}") - 1);
+                            var d = JSON.parse(text)
+                            _*/
                     }
-                }
-                catch (ex) {
-                    console.error("Could not read registry from modul " + module);
-                    throw ex;
+                    catch (_a) {
+                        console.error("failed load registry " + modul + "/registry.js");
+                    }
                 }
             }
             else { //on client
@@ -5057,7 +4286,7 @@ define("jassi/remote/RemoteProtocol", ["require", "exports", "jassi/remote/Jassi
             if (Jassi_15.default.isServer)
                 throw new Error("should be called on client");
             var sdataObject = undefined;
-            var url = "remoteprotocol1?" + Date.now();
+            var url = "remoteprotocol?" + Date.now();
             var _this = this;
             var redirect = undefined;
             var config = {
@@ -5192,7 +4421,6 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
     let Server = Server_2 = class Server extends RemoteObject_2.RemoteObject {
         constructor() {
             super();
-            this.filesInMap = undefined;
             if (Server_2.isonline === undefined) {
                 Server_2.isonline = this.isOnline();
             }
@@ -5211,9 +4439,9 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
             return ret;
         }
         async fillFilesInMapIfNeeded() {
-            if (this.filesInMap)
+            if (Server_2.filesInMap)
                 return;
-            this.filesInMap = {};
+            Server_2.filesInMap = {};
             for (var mod in Jassi_16.default.modules) {
                 if (Jassi_16.default.modules[mod].endsWith(".js")) {
                     var code = await this.loadFile(Jassi_16.default.modules[mod] + ".map");
@@ -5221,7 +4449,7 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
                     var files = data.sources;
                     for (let x = 0; x < files.length; x++) {
                         let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                        this.filesInMap[fname] = {
+                        Server_2.filesInMap[fname] = {
                             id: x,
                             modul: mod
                         };
@@ -5233,7 +4461,7 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
             if (Jassi_16.default.isServer)
                 throw Error("only on client");
             await this.fillFilesInMapIfNeeded();
-            for (var fname in this.filesInMap) {
+            for (var fname in Server_2.filesInMap) {
                 let path = fname.split("/");
                 var parent = root;
                 for (let p = 0; p < path.length; p++) {
@@ -5310,8 +4538,8 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
         async loadFile(fileName) {
             if (!Jassi_16.default.isServer) {
                 await this.fillFilesInMapIfNeeded();
-                if (this.filesInMap[fileName]) {
-                    var found = this.filesInMap[fileName];
+                if (Server_2.filesInMap[fileName]) {
+                    var found = Server_2.filesInMap[fileName];
                     var code = await this.loadFile(Jassi_16.default.modules[found.modul] + ".map");
                     var data = JSON.parse(code).sourcesContent[found.id];
                     return data;
@@ -5382,7 +4610,7 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
         */
         async saveFile(fileName, content) {
             await this.fillFilesInMapIfNeeded();
-            if (this.filesInMap[fileName]) {
+            if (Server_2.filesInMap[fileName]) {
                 //@ts-ignore
                 $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
                 return;
@@ -5492,12 +4720,15 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
         }
     };
     Server.isonline = undefined;
+    //files found in js.map of modules in the jassi.json
+    Server.filesInMap = undefined;
     Server = Server_2 = __decorate([
         Jassi_16.$Class("jassi.remote.Server"),
         __metadata("design:paramtypes", [])
     ], Server);
     exports.Server = Server;
     async function test() {
+        var serv = await new Server().dir();
         console.log(await Server.mytest());
     }
     exports.test = test;
@@ -5926,7 +5157,7 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateDBDialog, "newFile", null);
     TemplateDBDialog = __decorate([
-        Actions_2.$ActionProvider("jassi.base.FileNode"),
+        Actions_2.$ActionProvider("jassi.remote.FileNode"),
         Jassi_24.$Class("jassi.ui.TemplateDBDialog")
     ], TemplateDBDialog);
     exports.TemplateDBDialog = TemplateDBDialog;
@@ -6000,7 +5231,7 @@ export async function test() {
         __metadata("design:returntype", Promise)
     ], TemplateDBObject, "newFile", null);
     TemplateDBObject = TemplateDBObject_2 = __decorate([
-        Actions_3.$ActionProvider("jassi.base.FileNode"),
+        Actions_3.$ActionProvider("jassi.remote.FileNode"),
         Jassi_25.$Class("jassi.ui.TemplateDBObject")
     ], TemplateDBObject);
     exports.TemplateDBObject = TemplateDBObject;
@@ -6054,7 +5285,7 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateEmptyDialog, "newFile", null);
     TemplateEmptyDialog = __decorate([
-        Actions_4.$ActionProvider("jassi.base.FileNode"),
+        Actions_4.$ActionProvider("jassi.remote.FileNode"),
         Jassi_26.$Class("jassi.ui.TemplateEmptyDialog")
     ], TemplateEmptyDialog);
     exports.TemplateEmptyDialog = TemplateEmptyDialog;
@@ -6201,14 +5432,14 @@ define("jassi/ui/BoxPanel", ["require", "exports", "jassi/ui/Panel", "jassi/remo
 define("jassi/ui/Button", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property"], function (require, exports, Jassi_28, Component_3, Property_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Button = void 0;
+    exports.test = exports.Button = void 0;
     let Button = class Button extends Component_3.Component {
         /* get dom(){
              return this.dom;
          }*/
         constructor() {
             super();
-            super.init($('<button class="Button" id="dummy" contenteditable=false><span class="element1"></span><span class="element2" > </span></button>')[0]);
+            super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
         }
         /**
         * register an event if the button is clicked
@@ -6226,34 +5457,32 @@ define("jassi/ui/Button", ["require", "exports", "jassi/remote/Jassi", "jassi/ui
         */
         set icon(icon) {
             var img;
+            var el1 = $(this.dom).find(".buttonspan");
+            el1.removeClass();
+            el1.addClass("buttonspan");
+            $(this.dom).find(".buttonimg").attr("src", "");
             if (icon === null || icon === void 0 ? void 0 : icon.startsWith("mdi")) {
-                img = $('<span >')[0];
-                $(img).removeClass();
-                $(img).addClass(icon);
+                el1.addClass(icon);
             }
             else {
-                img = $('<img vspace="0" hspace="0"  border="0"  src="" alt="">')[0];
-                $(img).attr("src", icon);
+                $(this.dom).find(".buttonimg").attr("src", icon);
             }
-            var dompic = $(this.dom).find(".element1")[0];
-            if (dompic.children.length === 1)
-                dompic.removeChild(dompic.children[0]);
-            dompic.appendChild(img);
         }
         get icon() {
-            var dompic = $(this.dom).find(".element1")[0];
-            if (dompic.children.length === 1)
-                return "";
-            return ($(this.dom).find(".element1")).attr("class");
+            var ret = $(this.dom).find(".buttonimg").attr("src");
+            if (ret === "") {
+                ret = $(this.dom).find(".buttonspan").attr("class").replace("buttonspan ", "");
+            }
+            return ret;
         }
         /**
          * @member {string} - the caption of the button
          */
         set text(value) {
-            $(this.dom).find(".element2").html(value);
+            $(this.dom).find(".buttontext").html(value);
         }
         get text() {
-            return $(this.dom).find(".element2").text();
+            return $(this.dom).find(".buttontext").text();
         }
         toggle(setDown = undefined) {
             if (setDown === undefined) {
@@ -6291,6 +5520,19 @@ define("jassi/ui/Button", ["require", "exports", "jassi/remote/Jassi", "jassi/ui
         __metadata("design:paramtypes", [])
     ], Button);
     exports.Button = Button;
+    async function test() {
+        var Panel = (await (new Promise((resolve_26, reject_26) => { require(["jassi/ui/Panel"], resolve_26, reject_26); }))).Panel;
+        var pan = new Panel();
+        var but = new Button();
+        but.text = "Hallo";
+        but.icon = "res/red.jpg"; //"mdi mdi-car";//"res/red.jpg";
+        //alert(but.icon);
+        pan.add(but);
+        pan.width = 100;
+        pan.height = 100;
+        return pan;
+    }
+    exports.test = test;
 });
 define("jassi/ui/CSSProperties", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, Jassi_29, Property_7) {
     "use strict";
@@ -7889,7 +7131,7 @@ define("jassi/ui/ContextMenu", ["require", "exports", "jassi/remote/Jassi", "jas
         var Panel = Classes_17.classes.getClass("jassi.ui.Panel");
         var Button = Classes_17.classes.getClass("jassi.ui.Button");
         var MenuItem = Classes_17.classes.getClass("jassi.ui.MenuItem");
-        var FileNode = Classes_17.classes.getClass("jassi.base.FileNode");
+        var FileNode = Classes_17.classes.getClass("jassi.remote.FileNode");
         var bt = new Button();
         var cmen = new ContextMenu();
         var men = new MenuItem();
@@ -8119,7 +7361,7 @@ define("jassi/ui/DBObjectExplorer", ["require", "exports", "jassi/ui/ContextMenu
         __metadata("design:returntype", Promise)
     ], DBFileActions, "ViewData", null);
     DBFileActions = __decorate([
-        Actions_6.$ActionProvider("jassi.base.FileNode"),
+        Actions_6.$ActionProvider("jassi.remote.FileNode"),
         Jassi_38.$Class("jassi.ui.DBFileActions")
     ], DBFileActions);
     exports.DBFileActions = DBFileActions;
@@ -9268,7 +8510,7 @@ define("jassi/ui/ErrorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/ba
          * search Errors in code
          **/
         async search() {
-            var typescript = (await new Promise((resolve_26, reject_26) => { require(["jassi_editor/util/Typescript"], resolve_26, reject_26); })).default;
+            var typescript = (await new Promise((resolve_27, reject_27) => { require(["jassi_editor/util/Typescript"], resolve_27, reject_27); })).default;
             await typescript.initService();
             var all = await typescript.getDiagnosticsForAll();
             if (all.length === 0)
@@ -9592,7 +8834,7 @@ define("jassi/ui/FileExplorer", ["require", "exports", "jassi/remote/Jassi", "ja
         __metadata("design:returntype", Promise)
     ], FileActions, "open", null);
     FileActions = __decorate([
-        Actions_7.$ActionProvider("jassi.base.FileNode"),
+        Actions_7.$ActionProvider("jassi.remote.FileNode"),
         Jassi_46.$Class("jassi.ui.FileActions")
     ], FileActions);
     exports.FileActions = FileActions;
@@ -10178,15 +9420,15 @@ define("jassi/ui/Menu", ["require", "exports", "jassi/jassi", "jassi/ui/Containe
         return menu;
     };
 });
-define("jassi/ui/MenuItem", ["require", "exports", "jassi/jassi", "jassi/ui/Component", "jassi/ui/Menu", "jassi/ui/Property", "jassi/remote/Jassi", "jassi/ui/Container"], function (require, exports, jassi_2, Component_15, Menu_2, Property_19, Jassi_53, Container_4) {
+define("jassi/ui/MenuItem", ["require", "exports", "jassi/ui/Component", "jassi/ui/Menu", "jassi/ui/Property", "jassi/remote/Jassi", "jassi/ui/Container"], function (require, exports, Component_15, Menu_2, Property_19, Jassi_53, Container_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.MenuItem = void 0;
+    exports.test = exports.MenuItem = void 0;
     //jassi.myRequire("lib/contextMenu.css");
     let MenuItem = class MenuItem extends Container_4.Container {
         constructor() {
             super();
-            super.init($('<li style="white-space: nowrap"><div><img class="menuitemicon" src="res/dummy.ico"/><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
+            super.init($('<li style="white-space: nowrap"><div><span class="menuitemspan"><img class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
             $(this.dom).addClass("designerNoResizable");
             this._text = "";
             this._icon = "";
@@ -10208,14 +9450,26 @@ define("jassi/ui/MenuItem", ["require", "exports", "jassi/jassi", "jassi/ui/Comp
         */
         set icon(icon) {
             this._icon = icon;
-            if (icon === "")
-                icon = "res/dummy.ico";
-            $(this.dom).find(".menuitemicon").attr("src", icon);
+            var img;
+            var el1 = $(this.dom).find(".menuitemspan");
+            el1.removeClass();
+            el1.addClass("menuitemspan");
+            $(this.dom).find(".menuitemicon").attr("src", "");
+            if (icon === null || icon === void 0 ? void 0 : icon.startsWith("mdi")) {
+                el1.addClass(icon);
+            }
+            else {
+                $(this.dom).find(".menuitemicon").attr("src", icon);
+            }
+            //if (icon === "")
+            //    icon = "res/dummy.ico";
+            //$(this.dom).find(".menuitemicon").attr("src", icon);
         }
         get icon() {
             var ret = $(this.dom).find(".menuitemicon").attr("src");
-            if (ret === "res/dummy.ico")
-                ret = "";
+            if (ret === "") {
+                ret = $(this.dom).find(".menuitemspan").attr("class").replace("menuitemspan ", "");
+            }
             return ret;
         }
         /**
@@ -10295,7 +9549,7 @@ define("jassi/ui/MenuItem", ["require", "exports", "jassi/jassi", "jassi/ui/Comp
         __metadata("design:paramtypes", [])
     ], MenuItem);
     exports.MenuItem = MenuItem;
-    jassi_2.default.test = async function () {
+    async function test() {
         // kk.o=0;
         var menu = new Menu_2.Menu();
         var save = new MenuItem();
@@ -10308,11 +9562,12 @@ define("jassi/ui/MenuItem", ["require", "exports", "jassi/jassi", "jassi/ui/Comp
         save.text = "dd";
         menu.add(save2);
         save2.text = "pppq";
-        save2.icon = "res/button";
+        save2.icon = "mdi mdi-car"; //"res/red.jpg";
         save2.onclick(function (event) {
         });
         return menu;
-    };
+    }
+    exports.test = test;
 });
 define("jassi/ui/ObjectChooser", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/ui/Property", "jassi/ui/Component", "jassi/remote/Classes"], function (require, exports, Jassi_54, Table_4, Panel_11, Button_7, Textbox_4, Property_20, Component_16, Classes_21) {
     "use strict";
@@ -10511,7 +9766,7 @@ define("jassi/ui/ObjectChooser", ["require", "exports", "jassi/remote/Jassi", "j
     exports.ObjectChooser = ObjectChooser;
     async function test() {
         // kk.o=0;
-        var Kunde = (await new Promise((resolve_27, reject_27) => { require(["de/remote/Kunde"], resolve_27, reject_27); })).Kunde;
+        var Kunde = (await new Promise((resolve_28, reject_28) => { require(["de/remote/Kunde"], resolve_28, reject_28); })).Kunde;
         var dlg = new ObjectChooser();
         dlg.items = "de.Kunde";
         dlg.value = (await Kunde.find({ id: 1 }))[0];
@@ -11721,7 +10976,7 @@ define("jassi/ui/SearchExplorer", ["require", "exports", "jassi/remote/Jassi", "
             this.layout();
         }
         async doSearch() {
-            var Typescript = (await new Promise((resolve_28, reject_28) => { require(["jassi_editor/util/Typescript"], resolve_28, reject_28); })).Typescript;
+            var Typescript = (await new Promise((resolve_29, reject_29) => { require(["jassi_editor/util/Typescript"], resolve_29, reject_29); })).Typescript;
             var all = [];
             var files = []; // [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
             var toFind = this.search.value.toLocaleLowerCase();
@@ -11767,7 +11022,7 @@ define("jassi/ui/SearchExplorer", ["require", "exports", "jassi/remote/Jassi", "
                 if (evt.data !== undefined && evt.data.file !== undefined) {
                     var pos = evt.data.pos;
                     var file = evt.data.file;
-                    new Promise((resolve_29, reject_29) => { require(["jassi_editor/util/Typescript"], resolve_29, reject_29); }).then(Typescript => {
+                    new Promise((resolve_30, reject_30) => { require(["jassi_editor/util/Typescript"], resolve_30, reject_30); }).then(Typescript => {
                         var text = Typescript_4.default.getCode(file);
                         var line = text.substring(0, pos).split("\n").length;
                         Router_4.router.navigate("#do=jassi_editor.CodeEditor&file=" + file + "&line=" + line);
@@ -13162,7 +12417,7 @@ define("jassi/ui/VariablePanel", ["require", "exports", "jassi/remote/Jassi", "j
             this.debugpoints = {};
         }
         async createTable() {
-            var Table = (await new Promise((resolve_30, reject_30) => { require(["jassi/ui/Table"], resolve_30, reject_30); })).Table;
+            var Table = (await new Promise((resolve_31, reject_31) => { require(["jassi/ui/Table"], resolve_31, reject_31); })).Table;
             this.table = new Table({
                 dataTreeChildFunction: function (obj) {
                     var ret = [];
@@ -13528,6 +12783,7 @@ define("jassi/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "j
             super(property, propertyEditor);
             /** @member - the renedering component **/
             this.component = new Panel_17.Panel();
+            this.component.width = "100%";
             this.select = new Select_3.Select();
             this.select.width = "calc(100% - 26px)";
             this.property = Tools_2.Tools.copyObject(property);
@@ -13695,8 +12951,9 @@ define("jassi/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassi/ui/
             this.component = new BoxPanel_7.BoxPanel();
             this.component.horizontal = true;
             this.icon = new Textbox_9.Textbox();
+            this.icon.width = "10px";
             this.select = new Select_4.Select();
-            this.select.width = "100%";
+            this.select.width = "85px";
             this.component.add(this.select);
             this.component.add(this.icon);
             this.select.items = colors;
@@ -13722,6 +12979,7 @@ define("jassi/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassi/ui/
             bt.css("height", "8px");
             var bx = $(this.icon.domWrapper).find(".sp-replacer");
             bx.css("height", "10px");
+            bx.css("width", "10px");
             var bp = $(this.icon.domWrapper).find(".sp-dd");
             bp.css("height", "6px");
             //spec.width="10px";
@@ -14005,6 +13263,7 @@ define("jassi/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "jass
             super(property, propertyEditor);
             /** @member - the renedering component **/
             this.component = new Textbox_11.Textbox();
+            this.component.width = "100%";
             var _this = this;
             this.component.onchange(function (param) {
                 _this._onchange(param);
@@ -14084,6 +13343,7 @@ define("jassi/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassi/u
             super(property, propertyEditor);
             /** @member - the renedering component **/
             this.component = new Textbox_12.Textbox();
+            this.component.width = "100%";
             var _this = this;
             this.component.onchange(function (param) {
                 _this._onchange(param);
@@ -14358,6 +13618,7 @@ define("jassi/ui/PropertyEditors/FunctionEditor", ["require", "exports", "jassi/
             super(property, propertyEditor);
             /** @member - the renedering component **/
             this.component = new Button_9.Button();
+            this.component.width = "100%";
             var _this = this;
             this.component.onclick(function (param) {
                 _this._onclick(param);
@@ -14775,6 +14036,7 @@ define("jassi/ui/PropertyEditors/NameEditor", ["require", "exports", "jassi/ui/P
             super(property, propertyEditor);
             /** @member - the renedering component **/
             this.component = new Textbox_16.Textbox();
+            this.component.width = "100%";
             var _this = this;
             this.component.onchange(function (param) {
                 _this._onchange(param);

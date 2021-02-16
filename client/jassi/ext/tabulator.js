@@ -1,13 +1,7 @@
-//<link href="https://unpkg.com/tabulator-tables@4.6.1/dist/css/tabulator.min.css" rel="stylesheet">
-//<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.6.1/dist/js/tabulator.min.js"></script>
-requirejs.config({
-    paths: {
-        'tabulatorlib': '//unpkg.com/tabulator-tables@4.6.1/dist/js/tabulator'
-    },
-    
-});
+
 define("jassi/ext/tabulator",['tabulatorlib'], function (Tabulator) {
-    jassi.myRequire("//unpkg.com/tabulator-tables@4.6.1/dist/css/tabulator.min.css");  
+    var path=require('jassi/modul').default.require.paths["tabulatorlib"]; 
+    jassi.myRequire(path.replace("js","css")+".min.css");  
     window.Tabulator=Tabulator;
     //hack 
     var initializeRow = function (row) {

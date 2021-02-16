@@ -245,7 +245,7 @@ export async function test() {
     var Panel = classes.getClass("jassi.ui.Panel");
     var Button = classes.getClass("jassi.ui.Button");
     var MenuItem = classes.getClass("jassi.ui.MenuItem");
-    var FileNode = classes.getClass("jassi.base.FileNode");
+    var FileNode = classes.getClass("jassi.remote.FileNode");
 
     var bt = new Button();
     var cmen = new ContextMenu();

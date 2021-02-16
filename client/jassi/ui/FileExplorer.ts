@@ -12,7 +12,7 @@ import { MenuItem } from "jassi/ui/MenuItem";
 import typescript, { Typescript } from "jassi_editor/util/Typescript";
 import { ContextMenu } from "jassi/ui/ContextMenu";
 //drag from Desktop https://www.html5rocks.com/de/tutorials/file/dndfiles/
-@$ActionProvider("jassi.base.FileNode")
+@$ActionProvider("jassi.remote.FileNode")
 @$Class("jassi.ui.FileActions")
 export class FileActions {
 	

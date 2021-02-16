@@ -1,9 +1,3 @@
-requirejs.config({
-    paths: {
-        'source.map':"https://unpkg.com/source-map@0.7.3/dist/source-map"
-    }
-
-});
 
 //dummy for sourcemap 
 define("fs", [],

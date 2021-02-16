@@ -1,17 +1,17 @@
 {
 	"modules": {
 		"jassi":"jassi",
-		"jassi_report": "http://localhost/jassijs/dist/jassi_report.js",
+		"jassi_report": "jassi_report",
 		"jassi_editor": "jassi_editor",
-		"demo": "demo",
+		"demo": "http://localhost/jassijs/dist/demo.js",
 		"a": "a",
 		"de": "de"
 	},
 	"require": {
 		"paths": {
 			"require.js": "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js",
-			"1jassi_report": "http://localhost/jassi/dist/jassi_report.js",
-			"1jassi":"http://localhost/jassi/dist/jassi.js"
+			"1jassi_report": "http://localhost/jassijs/dist/jassi_report.js",
+			"1jassi":"http://localhost/jassijs/dist/jassi.js"
 		}
 	}
 }

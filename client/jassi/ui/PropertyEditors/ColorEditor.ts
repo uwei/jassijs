@@ -25,8 +25,9 @@ export class ColorEditor extends Editor{
         this.component = new BoxPanel();
 		this.component.horizontal=true;
 		this.icon=new Textbox();
+		this.icon.width="10px";
 		this.select=new Select();
-		this.select.width="100%";
+		this.select.width="85px";
 		this.component.add(this.select);
 		this.component.add(this.icon);
 		this.select.items=colors;
@@ -52,6 +53,7 @@ export class ColorEditor extends Editor{
 	 	bt.css("height","8px");
 	 	var bx=$(this.icon.domWrapper).find(".sp-replacer");
 	 	bx.css("height","10px");
+		bx.css("width","10px");
 	 	var bp=$(this.icon.domWrapper).find(".sp-dd");
 	 	bp.css("height","6px");
 	 	//spec.width="10px";
