@@ -3,7 +3,7 @@
 		"jassi":"jassi",
 		"jassi_report": "jassi_report",
 		"jassi_editor": "jassi_editor",
-		"demo": "http://localhost/jassijs/dist/demo.js",
+		"demo": "demo",
 		"a": "a",
 		"de": "de"
 	},

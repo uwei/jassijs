@@ -76,6 +76,12 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Tex
     ;
     function test() {
         var t = new HalloPhillip();
+        $.notify.addStyle('download extension', {
+            html: '<a href="https://www.w3schools.com" target="_blank"><span data-notify-text/></a>'
+        });
+        $.notify('For debugging in edge an chrome the jassi debugging extension must be installed. Click here to download.', {
+            style: 'download extension'
+        });
         // kk.o=0;
         return t;
     }

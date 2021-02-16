@@ -22,7 +22,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.EmptyDialog": {}
 	},
 	"demo/HalloPhillip.ts": {
-		"date": 1613218544160,
+		"date": 1613492193247,
 		"demo.HalloPhillip": {}
 	},
 	"demo/KundeView.ts": {

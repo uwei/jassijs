@@ -1,7 +1,7 @@
 {
   "name": "jassijs Debugger",
   "description": "provides debugging with jassijs",
-  "version": "1.0",
+  "version": "0.0.1",
   "permissions": [
     "debugger",
     "storage",
@@ -15,7 +15,7 @@
 	"declarativeContent"
 
   ],
-  
+  "homepage_url": "https://github.com/uwei/jassijs",
   "icons": {
     "128": "icon_128.png"
   },
