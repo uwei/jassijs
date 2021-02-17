@@ -9,7 +9,7 @@ import { Property, $Property } from "jassi/ui/Property";
 import { DBObject } from "jassi/remote/DBObject";
 import { classes } from "jassi/remote/Classes";
 import registry from "jassi/remote/Registry";
-const code=`import { $Class } from "remote/jassi/base/Jassi";
+const code=`import { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import { $Property } from "jassi/ui/Property";
 import { {{dbclassname}} } from "{{dbfilename}}";

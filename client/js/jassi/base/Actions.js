@@ -7,10 +7,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define(["require", "exports", "jassi/remote/Registry", "jassi/remote/Jassi", "jassi/remote/Classes"], function (require, exports, Registry_1, Jassi_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Actions = exports.$ActionProvider = exports.$Action = exports.ActionProperties = void 0;
+    exports.test = exports.Actions = exports.$ActionProvider = exports.$Action = exports.$Actions = exports.ActionProperties = void 0;
     class ActionProperties {
     }
     exports.ActionProperties = ActionProperties;
+    /**
+     * usage
+     * @$Actions()
+     * static test():ActionProperties[]{
+     * }
+     */
+    function $Actions() {
+        return function (target, propertyKey, descriptor) {
+            Registry_1.default.registerMember("$Actions", target, propertyKey);
+        };
+    }
+    exports.$Actions = $Actions;
     function $Action(property) {
         return function (target, propertyKey, descriptor) {
             Registry_1.default.registerMember("$Action", target, propertyKey, property);
@@ -40,13 +52,28 @@ define(["require", "exports", "jassi/remote/Registry", "jassi/remote/Jassi", "ja
                 var entr = allclasses[x];
                 var mem = Registry_1.default.getMemberData("$Action")[entr.classname];
                 for (let name in mem) {
-                    var ac = mem[name][0][0];
+                    let ac = mem[name][0][0];
                     if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
                         continue;
                     ret.push({
                         name: ac.name,
-                        call: Classes_1.classes.getClass(entr.classname)[name]
+                        icon: ac.icon,
+                        call: ac.run ? ac.run : Classes_1.classes.getClass(entr.classname)[name]
                     });
+                }
+                mem = Registry_1.default.getMemberData("$Actions")[entr.classname];
+                for (let name in mem) {
+                    let acs = await Classes_1.classes.getClass(entr.classname)[name]();
+                    for (let x = 0; x < acs.length; x++) {
+                        let ac = acs[x];
+                        if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
+                            continue;
+                        ret.push({
+                            name: ac.name,
+                            icon: ac.icon,
+                            call: ac.run
+                        });
+                    }
                 }
             }
             return ret;

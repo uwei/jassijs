@@ -43,7 +43,7 @@ define(["require", "exports"], function (require, exports) {
                 'source.map': "https://unpkg.com/source-map@0.7.3/dist/source-map",
                 'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
                 'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
-                'tabulatorlib': '//unpkg.com/tabulator-tables@4.6.1/dist/js/tabulator',
+                'tabulatorlib': '//unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator',
                 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min'
             },
             "shim": {

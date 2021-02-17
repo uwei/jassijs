@@ -1,4 +1,3 @@
-
 import { BoxPanel } from "jassi/ui/BoxPanel";
 import { Button } from "jassi/ui/Button";
 import { Databinder } from "jassi/ui/Databinder";
@@ -8,9 +7,8 @@ import { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
 import { DatabaseSchema, DatabaseClass, DatabaseField } from "jassi/base/DatabaseSchema";
 import { OptionDialog } from "jassi/ui/OptionDialog";
-import { PropertyEditor } from "jassi/ui/PropertyEditor";
-import { Property } from "jassi/ui/Property";
-
+import { router } from "jassi/base/Router";
+import { $Action, $ActionProvider } from "jassi/base/Actions";
 type Me = {
     table?: Table;
     select?: Select;
@@ -22,6 +20,7 @@ type Me = {
     newfield?: Button;
 };
 var ttt = 1;
+@$ActionProvider("jassi.base.ActionNode")
 @$Class("jassi/ui/DatabaseDesigner")
 export class DatabaseDesigner extends Panel {
     me: Me;
@@ -33,6 +32,13 @@ export class DatabaseDesigner extends Panel {
         super();
         this.me = {};
         this.layout(this.me);
+    }
+    @$Action({
+        name: "Administration/Database Designer",
+        icon: "mdi mdi-database-edit",
+    })
+    static async showDialog() {
+        router.navigate("#do=jassi/ui/DatabaseDesigner");
     }
     layout(me: Me) {
         me.newclass = new Button();
@@ -54,11 +60,13 @@ export class DatabaseDesigner extends Panel {
                 //@ts-ignore
                 { title: "nullable", field: "nullable", editor: "tick", editorParams: { tristate: false } },
                 //@ts-ignore
-                { title: "relationinfo", field: "relationinfo", editor: "select",
+                {
+                    title: "relationinfo", field: "relationinfo", editor: "select",
                     editorParams: this.posibleRelations,
                     cellEditing: function (cell) {
                         _this.updatePossibleRelations(cell);
-                    } }
+                    }
+                }
             ]
         });
         me.select = new Select();
@@ -103,7 +111,9 @@ export class DatabaseDesigner extends Panel {
         me.newfield.text = "Create Field";
         me.newfield.icon = "mdi mdi-playlist-plus";
         me.newfield.onclick(function (event) {
-            _this.currentClass.fields.push(new DatabaseField());
+            var field = new DatabaseField();
+            field.parent = _this.currentClass;
+            _this.currentClass.fields.push(field);
             me.table.items = _this.currentClass.fields;
         });
         me.newfield.width = "140";

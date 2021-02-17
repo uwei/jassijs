@@ -5,7 +5,7 @@ import { OptionDialog } from "jassi/ui/OptionDialog";
 import { FileExplorer, FileActions } from "jassi/ui/FileExplorer";
 import { Server } from "jassi/remote/Server";
 import { router } from "jassi/base/Router";
-const code=`import { $Class } from "remote/jassi/base/Jassi";
+const code=`import { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 
 type Me = {

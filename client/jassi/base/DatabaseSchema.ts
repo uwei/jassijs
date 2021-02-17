@@ -197,7 +197,7 @@ export class DatabaseClass {
 var classnode = undefined;
 @$Class("jassi.base.DatabaseSchema")
 export class DatabaseSchema {
-    static basicdatatypes = ["string", "int", "decimal", "boolean"];
+    static basicdatatypes = ["string", "int", "decimal", "boolean","Date"];
     databaseClasses: DatabaseClass[] = [];
     private parsedClasses: { [classname: string]: ParsedClass };
     //AR|de/AR
@@ -217,6 +217,8 @@ export class DatabaseSchema {
         if (pos > -1)
             type = type.substring(pos + 1).trim();
         var file = parsedClass.parent.imports[type];
+        if(type===parsedClass.name)
+            return parsedClass.fullClassname;
         var ret = this.definedImports[type + "|" + file];
         if (!ret) {
             throw Error("Import not found " + parsedClass.fullClassname + " : " + type);
@@ -225,7 +227,8 @@ export class DatabaseSchema {
     }
     private createDBClass(cl: DatabaseClass) {
         var scode = TemplateDBObject.code.replaceAll("{{fullclassname}}", cl.name);
-        var file = "remote/" + cl.name.replaceAll(".", "/") + ".ts";
+        var file = cl.name.replaceAll(".", "/") + ".ts";
+        file=file.substring(0,file.indexOf("/"))+"/remote"+"/"+file.substring(file.indexOf("/")+1);
         cl.filename = file;
         cl.simpleclassname = cl.name.split(".")[cl.name.split(".").length - 1];
         scode = scode.replaceAll("{{classname}}", cl.simpleclassname);
@@ -272,9 +275,15 @@ export class DatabaseSchema {
         } else {
             var params = [];
             var tcl = field.type.replace("[]", "");
+            
             realtype = this.getClass(tcl).simpleclassname;
-            this.parsedClasses[dbcl.name].parent.addImportIfNeeded(realtype, this.getClass(tcl).filename);
-            params.push("type => " + tcl);
+            if(dbcl.name!==tcl)
+                this.parsedClasses[dbcl.name].parent.addImportIfNeeded(realtype, this.getClass(tcl).filename.substring(0,this.getClass(tcl).filename.length-3));
+            let scl=tcl;
+            if(scl.indexOf(".")>-1){
+                scl=scl.substring(scl.lastIndexOf(".")+1);
+            }
+            params.push("type => " + scl);
             if (field.inverseSide && field.inverseSide !== "")
                 params.push(field.inverseSide);
             if (s)
@@ -379,7 +388,12 @@ export class DatabaseSchema {
             var parser = new Parser();
             var file = entr.filename;
             var code = typescript.getCode(file);
+            try{
             parser.parse(code);
+            }catch(err){
+                console.error("error in parsing "+file);
+                throw err;
+            }
             for (var key in parser.classes) {
                 var pclass = parser.classes[key];
                 pclass["filename"] = file;
@@ -507,6 +521,8 @@ export class DatabaseSchema {
                         field.type = "int";
                     else if (tp === "boolean")
                         field.type = "boolean";
+                    else if (tp === "Date")
+                        field.type = "Date";
                     else
                         throw new Error("type unknown " + dbclass.name + ":" + field.name);
                     if (field.properties !== undefined && field.properties["type"]) {

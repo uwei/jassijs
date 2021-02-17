@@ -9,10 +9,10 @@ import registry from "jassi/remote/Registry";
 import { FileActions } from "jassi/ui/FileExplorer";
 import { TemplateDBDialog } from "jassi/template/TemplateDBDialog";
 
-var code=`import {DBObject, $DBObject } from "remote/jassi/base/DBObject";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+var code=`import {DBObject, $DBObject } from "jassi/remote/DBObject";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassi/util/DatabaseSchema";
-import { $DBObjectQuery } from "remote/jassi/base/DBObjectQuery";
+import { $DBObjectQuery } from "jassi/remote/DBObjectQuery";
 
 
 @$DBObject()

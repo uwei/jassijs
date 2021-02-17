@@ -16,6 +16,9 @@ import db from "jassi/base/Database";
 import jassi, { $Class } from "jassi/remote/Jassi";
 import { TestComponent } from "demo/TestComponent";
 import { Property, $Property } from "jassi/ui/Property";
+import { router } from "jassi/base/Router";
+import { $Action, $ActionProvider } from "jassi/base/Actions";
+
 type Me = {
     repeater1?: Repeater;
     textbox1?: Textbox;
@@ -28,7 +31,9 @@ type Me = {
     idnachname?: Textbox;
     [name: string]: any;
 };
-@$Class("demo.DialogKunde")
+
+@$ActionProvider("jassi.base.ActionNode")
+@$Class("de.DialogKunde")
 export class DialogKunde extends Panel {
     me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" })
@@ -38,6 +43,14 @@ export class DialogKunde extends Panel {
         this.me = {};
         this.layout(this.me);
     }
+    @$Action({
+        name: "Demo/Kunden",
+        icon:"mdi mdi-account"
+    })
+    static async showDialog() {
+        router.navigate("#do=de.DialogKunde");  
+    }
+   
     async setdata() {
         var kunden = await Kunde.find();
         //this.me.binder.toForm(kunde);
@@ -206,5 +219,6 @@ export async function test() {
     var kd = (await Kunde.find({ id: 2 }))[0];
     var dlg = new DialogKunde();
     dlg.value = kd;
+
     return dlg;
 }

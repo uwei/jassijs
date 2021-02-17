@@ -9,19 +9,22 @@ import windows from "../jassi/base/Windows";
 
 let checkExtensionInstalled=setTimeout(()=>{
      $.notify("no  jassi chrome extension installed", "warning", { position: "right" });
-},1000);
+},3000);
 
 /**
  * debugging in Chrome
  */
 @$Class("jassi_editor.ChromeDebugger")
 export class ChromeDebugger extends Debugger {
+    private static mid=0;
+    private responseList={};
     allBreakPoints: { [file: string]: string[] } = {};
     constructor() {
         super();
         //listen to code changes
         this.sendChromeMessage({ name: "getCodeChange" });
         window.addEventListener("message", (event) => {
+           // console.log("mess"+JSON.stringify(event));
             this.onChromeMessage(event);
         });
     }
@@ -38,10 +41,20 @@ export class ChromeDebugger extends Debugger {
                 jassi.debugger.destroy();
             jassi.debugger=this;
         }
+        if (event.data.fromJassiExtension && event.data.mid) {
+            var test=this.responseList[event.data.mid];
+            if(test){
+                test(event);
+                delete this.responseList[event.data.mid];
+            }
+        }
     }
     //send message to chrome extension
-    private sendChromeMessage(msg) {
+    private sendChromeMessage(msg,response=undefined) {
         msg.toJassiExtension = true;
+        msg.mid=ChromeDebugger.mid++;
+        if(response)
+            this.responseList[msg.mid]=response;
         window.postMessage(msg, "*");
     }
     urlToFile(url) {
@@ -137,6 +150,8 @@ export class ChromeDebugger extends Debugger {
                 enable: enable,
                 condition: "1===1",
                 type: type
+            },(data)=>{
+                resolve(data);
             });
         })
         return ret;

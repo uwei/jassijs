@@ -8,11 +8,14 @@ import { classes } from "jassi/remote/Classes";
 import { Component } from "jassi/ui/Component";
 import { DBObjectView, DBObjectViewProperties } from "jassi/ui/DBObjectView";
 import { BoxPanel } from "jassi/ui/BoxPanel";
+import { $ActionProvider, $Actions,  ActionProperties } from "jassi/base/Actions";
+import windows from "jassi/base/Windows";
 type Me = {
     splitpanel1?: BoxPanel;
     IDDBView?: Panel;
     table1?: Table;
 };
+@$ActionProvider("jassi.base.ActionNode")
 @$Class("jassi.ui.DBObjectDialog")
 export class DBObjectDialog extends Panel {
     me: Me;
@@ -27,14 +30,14 @@ export class DBObjectDialog extends Panel {
     layout(me: Me) {
         me.splitpanel1 = new BoxPanel();
         me.IDDBView = new Panel();
-       
+
         me.table1 = new Table();
         me.table1.height = "calc(100% - 300px)";
         me.table1.width = "calc(100% - 50px)";
         me.splitpanel1.add(me.IDDBView);
-        me.splitpanel1.spliter = [70,30];
+        me.splitpanel1.spliter = [70, 30];
         me.splitpanel1.height = "100%";
-        me.splitpanel1.horizontal=false;
+        me.splitpanel1.horizontal = false;
         //	me.splitpanel1.width=910;
         me.splitpanel1.add(me.table1);
         this.add(me.splitpanel1);
@@ -102,6 +105,30 @@ export class DBObjectDialog extends Panel {
                 this.me.table1.selectComponent = this.view;
             }
         }
+    }
+    /**
+     * create Action for all DBObjectView with actionname is defined
+     */
+    @$Actions()
+    private static async createAcions(): Promise<ActionProperties[]> {
+        var ret: ActionProperties[] = [];
+        var data = await registry.getJSONData("$DBObjectView");
+        for (var x = 0; x < data.length; x++) {
+            var param: DBObjectViewProperties = data[x].params[0];
+            if (param.actionname) {
+                ret.push({
+                    name: param.actionname,
+                    icon: param.icon,
+                    run: function () {
+                        var ret = new DBObjectDialog();
+                        ret.dbclassname = param.classname;
+                        ret.height = "100%";
+                        windows.add(ret, param.classname);
+                    }
+                })
+            }
+        }
+        return ret;
     }
     static async createFor(classname: string) {
         var ret = new DBObjectDialog();

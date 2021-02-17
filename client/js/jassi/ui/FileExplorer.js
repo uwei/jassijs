@@ -129,6 +129,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
     __decorate([
         Actions_1.$Action({
             name: "New/File",
+            icon: "mdi mdi-file",
             isEnabled: function (all) {
                 return all[0].isDirectory();
             }

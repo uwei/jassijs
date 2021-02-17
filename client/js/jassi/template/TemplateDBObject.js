@@ -12,10 +12,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
     var TemplateDBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateDBObject = exports.TemplateDBObjectProperties = void 0;
-    var code = `import {DBObject, $DBObject } from "remote/jassi/base/DBObject";
-import jassi, { $Class } from "remote/jassi/base/Jassi";
+    var code = `import {DBObject, $DBObject } from "jassi/remote/DBObject";
+import jassi, { $Class } from "jassi/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassi/util/DatabaseSchema";
-import { $DBObjectQuery } from "remote/jassi/base/DBObjectQuery";
+import { $DBObjectQuery } from "jassi/remote/DBObjectQuery";
 
 
 @$DBObject()

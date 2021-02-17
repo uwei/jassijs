@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/ui/converters/NumberConverter", "jassi/remote/Jassi"], function (require, exports, Panel_1, Button_1, Textbox_1, NumberConverter_1, Jassi_1) {
+define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/ui/converters/NumberConverter", "jassi/remote/Jassi", "jassi/base/Router", "jassi/base/Actions"], function (require, exports, Panel_1, Button_1, Textbox_1, NumberConverter_1, Jassi_1, Router_1, Actions_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.HalloPhillip = void 0;
@@ -16,6 +16,14 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Tex
             super();
             this.me = {};
             this.layout(this.me);
+        }
+        static testActions() {
+            return [{ name: "Demo/say hello", run: function () {
+                        alert("hello");
+                    } }];
+        }
+        static async showDialog() {
+            Router_1.router.navigate("#do=demo.HalloPhillip");
         }
         async setdata() {
         }
@@ -68,7 +76,23 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Tex
             super.destroy();
         }
     };
+    __decorate([
+        Actions_1.$Actions(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Array)
+    ], HalloPhillip, "testActions", null);
+    __decorate([
+        Actions_1.$Action({
+            name: "Demo/Hallo Phillip",
+            icon: "mdi mdi-face",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], HalloPhillip, "showDialog", null);
     HalloPhillip = __decorate([
+        Actions_1.$ActionProvider("jassi.base.ActionNode"),
         Jassi_1.$Class("demo.HalloPhillip"),
         __metadata("design:paramtypes", [])
     ], HalloPhillip);
@@ -77,7 +101,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Tex
     function test() {
         var t = new HalloPhillip();
         $.notify.addStyle('download extension', {
-            html: '<a href="https://www.w3schools.com" target="_blank"><span data-notify-text/></a>'
+            html: '<a href="https://raw.githubusercontent.com/uwei/jassijs/main/jassichrome/jassijsext.zip" target="_blank"><span data-notify-text/></a>'
         });
         $.notify('For debugging in edge an chrome the jassi debugging extension must be installed. Click here to download.', {
             style: 'download extension'

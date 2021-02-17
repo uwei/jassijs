@@ -53,7 +53,7 @@ window.bid = "";
 window.debuggeeId = "";
 //this funtion removes the last paused breakpoint
 window.removeLastBreakpoint = function () {
-  console.log("remove BP:" + window.bid);
+  //console.log("remove BP:" + window.bid);
   var test = chrome.debugger.sendCommand(window.debuggeeId, "Debugger.removeBreakpoint", { breakpointId: window.bid });
 }
 function onEvent(debuggeeId, method, param) {
@@ -68,7 +68,7 @@ function onEvent(debuggeeId, method, param) {
 
 
 chrome.runtime.onConnect.addListener(port => {
-  console.log('connected ', port);
+  //console.log('connected ', port);
 
   if (port.name === 'hi') {
     port.onMessage.addListener(this.processMessage);
@@ -94,21 +94,24 @@ chrome.runtime.onConnect.addListener(function (devToolsConnection) {
 var breakPointTypes = {};
 
 //enable or disable a breakpoint
-function changeBreakpoint(request, sender, sendResponse) {
+function changeBreakpoint(request, sender, sendRes) {
   var debuggeeId = { tabId: sender.tab.id };
   enableDebuggerIfNeeded(true, sender.tab, () => {
     if (request.enable) {
       try {
+        var sicres=sendRes;
         var test = chrome.debugger.sendCommand(debuggeeId, "Debugger.setBreakpointByUrl",
           { condition: "", lineNumber: request.line, url: request.url },
-          function (data1, data2) {
+          (data1, data2) =>{
             var h = data1;
-            sendResponse(h);
+            if(!h)
+              h={};
+              sendRes(h);
             if (request.type !== "debugpoint")
               breakPointTypes[data1.breakpointId] = request.type;
           });
       } catch (err) {
-        sendResponse(err);
+        sendRes(err);
       }
     } else {
       try {
@@ -120,25 +123,34 @@ function changeBreakpoint(request, sender, sendResponse) {
           { breakpointId: bid },
           function (data1, data2) {
             var h = data1;
-            sendResponse(h);
+            if(!h)
+              h={};
+            sendRes(h);
           });
       } catch (err) {
-        sendResponse(err);
+        sendRes(err);
       }
     }
   });
 }
 function handleDebuggerRequest(request, sender, sendResponse) {
-
+  //send Response not work sendCommand(debuggeeId, "Debugger.setBreakpointByUrl" why?
+  var sendResponse=function(data){
+    data.fromJassiExtension=true;
+    data.mid=request.mid;
+    chrome.tabs.sendMessage(sender.tab.id, data);
+  }
   var debuggeeId = { tabId: sender.tab.id };
   if (request.name === "getCodeChange") {
     tabsForCodeChange.push(sender.tab.id);
+    sendResponse("ok");
   }
   if (request.name === "connect") {
     chrome.tabs.sendMessage(sender.tab.id, {
       fromJassiExtension: true,
       connected: true
     });
+    sendResponse("ok");
   }
   if (request.name === "disconnect") {
     if (changeRequestClient[site] !== undefined)
@@ -158,7 +170,7 @@ function handleDebuggerRequest(request, sender, sendResponse) {
 
 //listen to contentscript
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log("received from contentscript " + sender.tab.id + ":" + JSON.stringify(request));
+  //console.log("received from contentscript " + sender.tab.id + ":" + JSON.stringify(request));
   handleDebuggerRequest(request, sender, sendResponse);
   // Callback for that request
   //sendResponse({ message: "Background has received that message 🔥" });

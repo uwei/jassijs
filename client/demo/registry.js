@@ -22,8 +22,12 @@ define("demo/registry",["require"], function(require) {
 		"demo.EmptyDialog": {}
 	},
 	"demo/HalloPhillip.ts": {
-		"date": 1613492193247,
-		"demo.HalloPhillip": {}
+		"date": 1613572432870,
+		"demo.HalloPhillip": {
+			"$ActionProvider": [
+				"jassi.base.ActionNode"
+			]
+		}
 	},
 	"demo/KundeView.ts": {
 		"date": 1613330812615,

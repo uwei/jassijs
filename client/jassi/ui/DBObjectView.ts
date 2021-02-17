@@ -8,6 +8,7 @@ import registry from "jassi/remote/Registry";
 import { classes } from "jassi/remote/Classes";
 import { DBObject } from "jassi/remote/DBObject";
 import { $Property } from "jassi/ui/Property";
+import { $ActionProvider, ActionProperties } from "jassi/base/Actions";
 
 export type DBObjectViewMe = {
 	databinder?:Databinder,
@@ -23,6 +24,8 @@ export class DBObjectViewProperties {
      * full path to classifiy the UIComponent e.g common/TopComponent 
      */
     classname: string;
+    actionname?:string;
+    icon?:string;
 }
 export function $DBObjectView(properties: DBObjectViewProperties): Function {
     return function (pclass) {
@@ -30,6 +33,7 @@ export function $DBObjectView(properties: DBObjectViewProperties): Function {
     }
 }
 type Me=DBObjectViewMe;
+
 @$UIComponent({ editableChildComponents: ["this","me.main","me.toolbar","me.save","me.remove","me.refresh"] })
 @$Class("jassi/ui/DBObjectView")
 export class DBObjectView extends Panel {
@@ -118,6 +122,7 @@ export class DBObjectView extends Panel {
     ondeleted(handler: (obj:DBObject ) => void) {
         this.addEvent("deleted", handler);
     }
+  
     layout(me:Me) {
     	var _this=this;
 	    me.toolbar=new BoxPanel();

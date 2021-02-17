@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Table", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/ui/BoxPanel", "./Select", "jassi/remote/Classes"], function (require, exports, Jassi_1, Panel_1, Table_1, HTMLPanel_1, Button_1, BoxPanel_1, Select_1, Classes_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Table", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/ui/BoxPanel", "./Select", "jassi/remote/Classes", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Jassi_1, Panel_1, Table_1, HTMLPanel_1, Button_1, BoxPanel_1, Select_1, Classes_1, Actions_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentSpy = void 0;
@@ -19,6 +19,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this.ids = {};
             this.labelids = {};
             this.layout();
+        }
+        static async showDialog() {
+            Router_1.router.navigate("#do=jassi.ui.ComponentSpy");
         }
         layout() {
             var me = this.me = {};
@@ -101,7 +104,17 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             super.destroy();
         }
     };
+    __decorate([
+        Actions_1.$Action({
+            name: "Administration/Spy Components",
+            icon: "mdi mdi-police-badge",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], ComponentSpy, "showDialog", null);
     ComponentSpy = __decorate([
+        Actions_1.$ActionProvider("jassi.base.ActionNode"),
         Jassi_1.$Class("jassi.ui.ComponentSpy"),
         __metadata("design:paramtypes", [])
     ], ComponentSpy);

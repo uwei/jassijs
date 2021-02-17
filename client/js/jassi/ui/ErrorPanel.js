@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remote/Jassi", "jassi/ui/Button", "jassi_editor/util/TSSourceMap", "jassi/base/Router"], function (require, exports, Panel_1, Errors_1, Jassi_1, Button_1, TSSourceMap_1, Router_1) {
+define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remote/Jassi", "jassi/ui/Button", "jassi_editor/util/TSSourceMap", "jassi/base/Router", "jassi/base/Actions"], function (require, exports, Panel_1, Errors_1, Jassi_1, Button_1, TSSourceMap_1, Router_1, Actions_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ErrorPanel = void 0;
@@ -19,6 +19,9 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remo
         constructor() {
             super();
             this.layout();
+        }
+        static async showDialog() {
+            Router_1.router.navigate("#do=jassi.ui.ErrorPanel");
         }
         layout() {
             var _this = this;
@@ -179,7 +182,17 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remo
             //this._container
         }
     };
+    __decorate([
+        Actions_1.$Action({
+            name: "Administration/Errors",
+            icon: "mdi mdi-emoticon-confused-outline",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], ErrorPanel, "showDialog", null);
     ErrorPanel = __decorate([
+        Actions_1.$ActionProvider("jassi.base.ActionNode"),
         Jassi_1.$Class("jassi.ui.ErrorPanel"),
         __metadata("design:paramtypes", [])
     ], ErrorPanel);

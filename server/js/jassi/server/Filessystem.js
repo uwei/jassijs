@@ -330,14 +330,21 @@ class Filesystem {
             }
         }
         ;
-        for (var key in Filesystem.allModules) { //load and migrate modules
-            var all = Filesystem.allModules[key];
-            var mod = await Promise.resolve().then(() => require(key));
-            for (var a = 0; a < all.length; a++) {
-                for (key in mod) {
-                    all[a][key] = mod[key];
+        try {
+            for (var key in Filesystem.allModules) { //load and migrate modules
+                var all = Filesystem.allModules[key];
+                var mod = await Promise.resolve().then(() => require(key));
+                for (var a = 0; a < all.length; a++) {
+                    for (key in mod) {
+                        all[a][key] = mod[key];
+                    }
                 }
             }
+        }
+        catch (err) {
+            var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+            console.error(err.stack);
+            return err + "DB corrupt changes are reverted " + restore;
         }
         if (remotecodeincluded && rollbackonerror) { //verify DB-Schema
             try {

@@ -11,7 +11,7 @@ define(["require", "exports", "jassi/base/Actions", "jassi/remote/Jassi", "jassi
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateEmptyDialog = void 0;
-    const code = `import { $Class } from "remote/jassi/base/Jassi";
+    const code = `import { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 
 type Me = {

@@ -50,7 +50,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                             id = props[p].name;
                         }
                     }
-                    var name = params.do + "-" + params[id];
+                    var name = params.do;
+                    if (params[id])
+                        name = name + "-" + params[id];
                     if (Windows_1.default.contains(name)) {
                         var window = Windows_1.default.show(name);
                         var ob = Windows_1.default.findComponent(name);

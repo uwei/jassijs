@@ -167,7 +167,7 @@ export class CodeEditor extends Panel {
         new Server().saveFile(this._file, code).then(function () {
             var f = _this._file.replace(".ts", "");
             new Reloader().reloadJS(f);
-            if (code.indexOf("jassi.register(") > -1) {
+            if (code.indexOf("@$") > -1) {
                 registry.reload();
             }
         });

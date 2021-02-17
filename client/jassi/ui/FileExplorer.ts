@@ -18,6 +18,7 @@ export class FileActions {
 	
     @$Action({
         name: "New/File",
+        icon: "mdi mdi-file",
         isEnabled: function(all: FileNode[]): boolean {
             return all[0].isDirectory();
         }

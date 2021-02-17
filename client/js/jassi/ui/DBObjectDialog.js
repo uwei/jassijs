@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/BoxPanel"], function (require, exports, Table_1, Jassi_1, Panel_1, Registry_1, Classes_1, BoxPanel_1) {
+define(["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/BoxPanel", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, Table_1, Jassi_1, Panel_1, Registry_1, Classes_1, BoxPanel_1, Actions_1, Windows_1) {
     "use strict";
     var DBObjectDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -95,6 +95,29 @@ define(["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/
                 }
             }
         }
+        /**
+         * create Action for all DBObjectView with actionname is defined
+         */
+        static async createAcions() {
+            var ret = [];
+            var data = await Registry_1.default.getJSONData("$DBObjectView");
+            for (var x = 0; x < data.length; x++) {
+                var param = data[x].params[0];
+                if (param.actionname) {
+                    ret.push({
+                        name: param.actionname,
+                        icon: param.icon,
+                        run: function () {
+                            var ret = new DBObjectDialog_1();
+                            ret.dbclassname = param.classname;
+                            ret.height = "100%";
+                            Windows_1.default.add(ret, param.classname);
+                        }
+                    });
+                }
+            }
+            return ret;
+        }
         static async createFor(classname) {
             var ret = new DBObjectDialog_1();
             ret.height = 400;
@@ -106,7 +129,14 @@ define(["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/
             return ret;
         }
     };
+    __decorate([
+        Actions_1.$Actions(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], DBObjectDialog, "createAcions", null);
     DBObjectDialog = DBObjectDialog_1 = __decorate([
+        Actions_1.$ActionProvider("jassi.base.ActionNode"),
         Jassi_1.$Class("jassi.ui.DBObjectDialog"),
         __metadata("design:paramtypes", [])
     ], DBObjectDialog);

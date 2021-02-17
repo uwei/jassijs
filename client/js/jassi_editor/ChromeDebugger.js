@@ -9,21 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "jassi/ui/OptionDialog", "jassi_editor/util/TSSourceMap", "jassi/util/Reloader", "jassi/remote/Server", "../jassi/base/Windows"], function (require, exports, Jassi_1, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1) {
     "use strict";
+    var ChromeDebugger_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ChromeDebugger = void 0;
     let checkExtensionInstalled = setTimeout(() => {
         $.notify("no  jassi chrome extension installed", "warning", { position: "right" });
-    }, 1000);
+    }, 3000);
     /**
      * debugging in Chrome
      */
-    let ChromeDebugger = class ChromeDebugger extends Debugger_1.Debugger {
+    let ChromeDebugger = ChromeDebugger_1 = class ChromeDebugger extends Debugger_1.Debugger {
         constructor() {
             super();
+            this.responseList = {};
             this.allBreakPoints = {};
             //listen to code changes
             this.sendChromeMessage({ name: "getCodeChange" });
             window.addEventListener("message", (event) => {
+                // console.log("mess"+JSON.stringify(event));
                 this.onChromeMessage(event);
             });
         }
@@ -41,10 +44,20 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
                     Jassi_1.default.debugger.destroy();
                 Jassi_1.default.debugger = this;
             }
+            if (event.data.fromJassiExtension && event.data.mid) {
+                var test = this.responseList[event.data.mid];
+                if (test) {
+                    test(event);
+                    delete this.responseList[event.data.mid];
+                }
+            }
         }
         //send message to chrome extension
-        sendChromeMessage(msg) {
+        sendChromeMessage(msg, response = undefined) {
             msg.toJassiExtension = true;
+            msg.mid = ChromeDebugger_1.mid++;
+            if (response)
+                this.responseList[msg.mid] = response;
             window.postMessage(msg, "*");
         }
         urlToFile(url) {
@@ -137,6 +150,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
                     enable: enable,
                     condition: "1===1",
                     type: type
+                }, (data) => {
+                    resolve(data);
                 });
             });
             return ret;
@@ -169,7 +184,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
             this.destroyed = true;
         }
     };
-    ChromeDebugger = __decorate([
+    ChromeDebugger.mid = 0;
+    ChromeDebugger = ChromeDebugger_1 = __decorate([
         Jassi_1.$Class("jassi_editor.ChromeDebugger"),
         __metadata("design:paramtypes", [])
     ], ChromeDebugger);

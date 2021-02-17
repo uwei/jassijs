@@ -1,9 +1,9 @@
-import {Upload} from "jassi/ui/Upload";
-import {Button} from "jassi/ui/Button";
-import {NumberConverter} from "jassi/ui/converters/NumberConverter";
-import {Textbox} from "jassi/ui/Textbox";
-import {BoxPanel} from "jassi/ui/BoxPanel";
-import {Checkbox} from "jassi/ui/Checkbox";
+import { Upload } from "jassi/ui/Upload";
+import { Button } from "jassi/ui/Button";
+import { NumberConverter } from "jassi/ui/converters/NumberConverter";
+import { Textbox } from "jassi/ui/Textbox";
+import { BoxPanel } from "jassi/ui/BoxPanel";
+import { Checkbox } from "jassi/ui/Checkbox";
 import { Select } from "jassi/ui/Select";
 import { Table } from "jassi/ui/Table";
 import { $Class } from "jassi/remote/Jassi";
@@ -14,7 +14,273 @@ import { db } from "jassi/remote/Database";
 import registry from "jassi/remote/Registry";
 import { classes } from "jassi/remote/Classes";
 import { DBObject } from "jassi/remote/DBObject";
-var csv = `id,testid,companyname,contactname,contacttitle,address,city,region,postalcode,country,phone,fax
+import { $Action, $ActionProvider } from "jassi/base/Actions";
+import { router } from "jassi/base/Router";
+import { Server } from "jassi/remote/Server";
+
+
+type Me = {
+	table?: Table,
+	select?: Select,
+	boxpanel1?: BoxPanel,
+	fromLine?: Textbox,
+	next?: Button,
+	upload?: Upload
+}
+@$ActionProvider("jassi.base.ActionNode")
+@$Class("jassi.util.CSVImport")
+export class CSVImport extends Panel {
+	me: Me;
+	data: any[];
+	fieldCount: number;
+	constructor() {
+		super();
+		this.me = {};
+		this.layout(this.me);
+	}
+	@$Action({ name: "Administration/Database CSV-Import", icon: "mdi mdi-database-import" })
+	static async showDialog() {
+
+		router.navigate("#do=jassi.util.CSVImport");
+	}
+
+
+	async initTableHeaders() {
+		var _this = this;
+		var html = "<option></option>";
+		var meta = db.getMetadata(await classes.loadClass(this.me.select.value));
+		var lkeys = [];
+		for (var key in meta) {
+			if (key === "this")
+				continue;
+			html = html + '<option value="' + key.toLowerCase() + '">' + key.toLowerCase() + '</option>';
+			lkeys.push(key.toLowerCase());
+		}
+		for (var x = 0; x < this.fieldCount; x++) {
+			var el: HTMLElement = $("#" + this._id + "--" + x)[0];
+			el.innerHTML = html;
+			var pos = lkeys.indexOf(this.data[0]["Column " + x].toLowerCase());
+			//assign dettected fields in first row
+			if (pos !== -1) {
+				$("#" + this._id + "--" + x).val(lkeys[pos]);
+			}
+
+		}
+		//this.me.table.
+	}
+	async initClasses() {
+		var cls = [];
+		var _this = this;
+		await registry.loadAllFilesForService("$DBObject")
+		var data = registry.getData("$DBObject");
+		data.forEach((entr) => {
+			cls.push(classes.getClassName(entr.oclass));
+		});
+		this.me.select.items = cls;
+		//debug
+
+	}
+	readData(csvdata: string) {
+		var csvdata = Papa.parse(csvdata, { skipEmptyLines: true }).data;
+		var len = csvdata[0].length;
+		this.data = [];
+		//convert [{1:hallo",2:"Du"}]
+		for (var z = 0; z < csvdata.length; z++) {
+			var ob = {};
+			for (var x = 0; x < len; x++) {
+				ob["Column " + x] = csvdata[z][x];
+			}
+			this.data.push(ob);
+		}
+
+	}
+	updateTable() {
+		let _this = this;
+		this.fieldCount = 0;
+		for (var key in this.data[0]) {
+			this.fieldCount++
+		}
+		this.initClasses();
+		var cols: Tabulator.ColumnDefinition[] = [];
+		var formatter = function (cell, formatterParams, onRendered) {
+			return '<select name="pets" id="' + _this._id + "--" + formatterParams.max + '"><option>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option></select';
+		}
+		for (var x = 0; x < this.fieldCount; x++) {
+			cols.push({
+				headerSort: false,
+				title: "Column " + x,
+				field: "Column " + x,
+				titleFormatter: formatter,
+				titleFormatterParams: { max: x }
+			});
+		}
+		this.me.table.columns = cols;
+		this.me.table.items = this.data;
+	}
+	layout(me: Me) {
+		me.boxpanel1 = new BoxPanel();
+		me.fromLine = new Textbox();
+		me.next = new Button();
+		me.upload = new Upload();
+		var _this = this;
+		this.me.table = new Table({
+			autoColumns: false
+		});
+
+
+		me.select = new Select();
+		me.table.width = 500;
+		me.table.height = "200";
+		me.fromLine.value = 2;
+		this.add(me.upload);
+		this.add(me.boxpanel1);
+		this.add(me.table);
+		this.add(me.next);
+		me.select.label = "DB-Class";
+		me.select.width = 235;
+		me.select.onchange(function (event) {
+			_this.initTableHeaders();
+		});
+		me.select.height = 30;
+		me.boxpanel1.width = 195;
+		me.boxpanel1.horizontal = false;
+		me.boxpanel1.add(me.fromLine);
+		me.boxpanel1.add(me.select);
+		me.fromLine.label = "start from line";
+		me.fromLine.width = "80";
+		me.fromLine.converter = new NumberConverter();
+		me.next.text = "Import";
+		me.next.onclick(function (event) {
+			_this.doimport().then((prot: string) => {
+				alert(prot);
+				console.log(prot);
+			});
+		});
+		me.upload.onuploaded(function (fdata: { [file: string]: string }) {
+			for (var key in fdata) {
+				_this.readData(fdata[key]);
+				_this.updateTable();
+			}
+		});
+	}
+	/**
+	 * imports a csv-file into database
+	 * @param urlcsv - the link to the csv which we import
+	 * @param dbclass 
+	 * @param fieldmapping - e.g. {"id":"CUSTOMERID"} if the field id is in csv-column CUSTOMERID or {"id":1} if the field id is in column 1 
+	 * @param replace - replace text e.g. {"für":"fuer"}
+	 * returns the message if succeeded
+	 */
+	static async startImport(urlcsv: string, dbclass: string, fieldmapping: { [field: string]: (string | number) } = undefined,replace:{[toReplace:string]:string}=undefined): Promise<string> {
+		var imp = new CSVImport();
+		var mapping = {};
+		let ret = await new Server().loadFile(urlcsv);
+		if(replace){
+			for(let key in replace){
+				ret=ret.replaceAll(key,replace[key]);
+			}
+		}
+		imp.readData(ret);
+		var _meta = db.getMetadata(await classes.loadClass(dbclass));
+		var meta = {};
+		for (let k in _meta) {
+			meta[k.toLowerCase()] = k;
+		}
+		var lkeys = [];
+		var fieldids = {};
+
+		for (var field in imp.data[0]) {//fieldnames
+			//let field=imp.data[0][x];
+			var x = Number(field.replace("Column ", ""));
+			var fieldname = imp.data[0][field];
+			fieldids[fieldname.toLowerCase()] = x;
+			if (meta[fieldname.toLowerCase()]) {
+				mapping[fieldname.toLowerCase()] = x;
+			}
+		}
+		if (fieldmapping) {
+			for (var key in fieldmapping) {
+				let val = fieldmapping[key];
+				if (Number.isInteger(val)) {
+					mapping[key] = Number(val) - 1;
+				} else {
+					if (fieldids[val.toLowerCase()]!==undefined)
+						mapping[key] = fieldids[val.toLowerCase()];
+
+				}
+			}
+		}
+		/*		for (var key in meta) {
+					if (key === "this")
+						continue;
+					html = html + '<option value="' + key.toLowerCase() + '">' + key.toLowerCase() + '</option>';
+					lkeys.push(key.toLowerCase());
+				}*/
+		return await imp._doimport(imp.data, dbclass, 2, mapping);
+	}
+	async doimport() {
+		//read userchoices
+		var assignedfields = {};
+		for (var x = 0; x < this.fieldCount; x++) {
+			var value: any = $("#" + this._id + "--" + x).val();
+			if (value !== "")
+				assignedfields[<string>value] = x;
+		}
+		return await this._doimport(this.data, this.me.select.value, <number>this.me.fromLine.value, assignedfields);
+
+	}
+
+	private async _doimport(data: any[], dbclass: string, fromLine: number, assignedfields: { [field: string]: number }) {
+
+
+		var Type = classes.getClass(dbclass);
+		//read objects so we can read from cache
+		let nil = await Type["find"]();
+		var meta = db.getMetadata(await classes.loadClass(dbclass));
+		var members = registry.getMemberData("design:type")[dbclass];
+
+		var allObjects: DBObject[] = [];
+		var from = fromLine;
+		for (var x = from; x < data.length; x++) {
+			var satz = data[x];
+
+			var ob = new Type();
+
+			for (var fname in meta) {
+				let pos = assignedfields[fname.toLowerCase()];
+				if (pos !== undefined) {
+					let val = satz["Column " + pos];
+					var mtype = members[fname];
+					if (mtype !== undefined) {
+						var mt = mtype[0][0];
+						if (mt === Number)
+							val = Number(val);
+						if (val === "#NV")
+							val = undefined;
+					}
+					ob[fname] = val;
+				}
+			}
+			var exists = DBObject.getFromCache(dbclass, ob.id);
+			if (exists) {
+				Object.assign(exists, ob);
+				allObjects.push(exists);
+			} else
+				allObjects.push(ob);
+		}
+		var ret: Promise<DBObject>[] = [];
+		for (var x = 0; x < allObjects.length; x++) {
+			await allObjects[x].save();
+			//ret.push(allObjects[x].save());
+		}
+		await Promise.all(ret);
+		return "imported " + allObjects.length + " objects";
+	}
+}
+
+
+export async function test() {
+	var csv = `id,testid,companyname,contactname,contacttitle,address,city,region,postalcode,country,phone,fax
 ALFKI,1,Alfreds Futterkiste,Maria Anders,Sales Representative,Obere Str. 57,Berlin,#NV,12209,Germany,030-0074321,030-0076545
 ANATR,2,Ana Trujillo Emparedados y helados,Ana Trujillo,Owner,Avda. de la Constitución 2222,México D.F.,#NV,05021,Mexico,(5) 555-4729,(5) 555-3745
 ANTON,3,Antonio Moreno Taquería,Antonio Moreno,Owner,Mataderos  2312,México D.F.,#NV,05023,Mexico,(5) 555-3932,#NV
@@ -108,206 +374,14 @@ WILMK,90,Wilman Kala,Matti Karttunen,Owner/Marketing Assistant,Keskuskatu 45,Hel
 WOLZA,91,Wolski  Zajazd,Zbyszek Piestrzeniewicz,Owner,ul. Filtrowa 68,Warszawa,#NV,01-012,Poland,(26) 642-7012,(26) 642-7012
 `;
 
-type Me = {
-    table?: Table,
-    select?: Select,
-	boxpanel1?:BoxPanel,
-	fromLine?:Textbox,
-	next?:Button,
-	upload?:Upload
+	var s = await CSVImport.startImport("https://raw.githubusercontent.com/tmcnab/northwind-mongo/master/employees.csv", "northwind.Employees",
+		{ "id": "EmployeeID" },{".\nA":".A","e\nM":"eM","w\nW":"wW"});
+	alert(s);
+	/*	var t = await classes.loadClass("northwind.Customer");
+		var ret = new CSVImport();
+		ret.readData(csv);
+		ret.updateTable();
+	
+		return ret;*/
 }
 
-@$Class("jassi/util/CSVImport")
-export class CSVImport extends Panel {
-    me: Me;
-	data:any[];
-	fieldCount:number;
-    constructor() {
-        super();
-        this.me = {};
-        this.layout(this.me);
-    }
-    initTableHeaders() {
-    	var _this=this;
-    	var html="<option></option>";
-         var meta = db.getMetadata(classes.getClass(this.me.select.value));
-         var lkeys=[];
-    	 for(var key in meta){
-    	 	if(key==="this")
-    	 		continue;
-		   html=html+'<option value="'+key.toLowerCase()+'">'+key.toLowerCase()+'</option>';
-		   lkeys.push(key.toLowerCase());
-	     }
-    	 for(var x=0;x<this.fieldCount;x++){
-	    	 var el:HTMLElement=$("#"+this._id+"--"+x)[0];
-	    	 el.innerHTML=html;
-	    	 var pos=lkeys.indexOf(this.data[0]["Column "+x].toLowerCase());
-	    	 //assign dettected fields in first row
-	    	 if(pos!==-1){
-	    	 	$("#"+this._id+"--"+x).val(lkeys[pos]);
-	    	 }
-	    	 
-    	 }
-        //this.me.table.
-    }
-    async initClasses() {
-        var cls = [];
-        var _this=this;
-        await registry.loadAllFilesForService("$DBObject")
-        var data = registry.getData("$DBObject");
-        data.forEach((entr) => {
-            cls.push(classes.getClassName(entr.oclass));
-        });
-        this.me.select.items = cls;
-        //debug
-        
-    }
-    readData(csvdata:string) {
-        var csvdata = Papa.parse(csvdata,{skipEmptyLines: true}).data;
-        var len = csvdata[0].length;
-        this.data = [];
-        //convert [{1:hallo",2:"Du"}]
-        for (var z = 0;z < csvdata.length;z++) {
-            var ob = {};
-            for (var x = 0;x < len;x++) {
-                ob["Column " + x] = csvdata[z][x];
-            }
-            this.data.push(ob);
-        }
-      
-    }
-    updateTable(){
-    	let _this=this;
-    	this.fieldCount = 0;
-        for (var key in this.data[0]) {
-            this.fieldCount++
-        }
-        this.initClasses();
-	    var cols: Tabulator.ColumnDefinition[] = [];
-        var formatter = function(cell, formatterParams, onRendered) {
-            return '<select name="pets" id="'+_this._id+"--"+formatterParams.max+'"><option>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option></select'; 
-        }
-        for (var x = 0;x < this.fieldCount;x++) {
-            cols.push({
-                    headerSort: false,
-                    title: "Column " + x,
-                    field: "Column " + x,
-                    titleFormatter: formatter,
-                    titleFormatterParams:{max:x}
-                });
-        }
-		this.me.table.columns=cols;
-		this.me.table.items = this.data;
-    }
-    layout(me: Me) {
-	    me.boxpanel1=new BoxPanel();
-	    me.fromLine=new Textbox();
-	    me.next=new Button();
-	    me.upload=new Upload();
-    	var _this=this;
-    	this.me.table = new Table({
-            autoColumns: false
-        });
-       
-        
-        me.select = new Select();
-        me.table.width=500;
-        me.table.height="200";
-		me.fromLine.value=2;
-		this.add(me.upload);
-		this.add(me.boxpanel1);
-		this.add(me.table);
-		this.add(me.next);
-        me.select.label = "DB-Class";
-        me.select.width = 235;
-        me.select.onchange(function(event){
-        	_this.initTableHeaders();
-        });
-        me.select.height=30;
-        me.boxpanel1.width=195;
-        me.boxpanel1.horizontal=false;
-        me.boxpanel1.add(me.fromLine);
-        me.boxpanel1.add(me.select);
-        me.fromLine.label="start from line";
-        me.fromLine.width="80";
-        me.fromLine.converter=new NumberConverter();
-        me.next.text="next";
-        me.next.onclick(function(event){
-        	_this.doimport();
-        });
-        me.upload.onuploaded(function(fdata:{[file:string]:string}){
-        	for(var key in fdata){
-        		_this.readData(fdata[key]);
-        		 _this.updateTable();
-        	}
-        });
-        
-        this.readData(csv);
-    	this.updateTable();
-       
-    }
-    async doimport(){
-    	//read userchoices
-    	var assignedfields={};
-    	var Type=classes.getClass(this.me.select.value);
-    	//read objects so we can read from cache
-    	let nil=await Type["find"]();
-    	var meta = db.getMetadata(classes.getClass(this.me.select.value));
-        var members=registry.getMemberData("design:type")[this.me.select.value];
-    	for(var x=0;x<this.fieldCount;x++){
-    		var value:any=$("#"+this._id+"--"+x).val();
-    		if(value!=="")
-    			assignedfields[<string>value]=x;
-	    }
-	    var allObjects:DBObject[]=[];
-	    var from=<number>this.me.fromLine.value;
-	    for(var x=from;x<this.data.length;x++){
-	    	var satz=this.data[x];
-	    	
-	    	var ob=new Type();
-	    	
-	    	for(var fname in meta){
-	    		let pos=assignedfields[fname.toLowerCase()];
-	    		if(pos!==undefined){
-	    			let val=satz["Column "+pos];
-	    			var mtype=members[fname];
-	    			if(mtype!==undefined){
-	    				var mt=mtype[0][0];
-	    				if(mt===Number)
-	    					val=Number(val);
-	    				if(val==="#NV")
-	    					val=undefined;
-	    			}
-	    			ob[fname]=val;
-	    		}
-	    	}
-	    	var exists=DBObject.getFromCache(this.me.select.value,ob.id);
-	    	if(exists){
-				Object.assign(exists,ob);
-				allObjects.push(exists);
-	    	}else
-		    	allObjects.push(ob);
-	    }
-	    var ret:Promise<DBObject>[]=[];
-	    for(var x=0;x<allObjects.length;x++){
-	    	await allObjects[x].save();
-	    	//ret.push(allObjects[x].save());
-	    }
-	    await Promise.all(ret);
-	    alert("imported "+allObjects.length+" objects");
-	    console.log("imported "+allObjects.length+" objects");
-    }
-}
-
-
-export async function test() {
- 
-	var t=await classes.loadClass("northwind.Customer");
-    var ret = new CSVImport();
-	window.setTimeout(()=>{
-/*        	ret.me.select.value="northwind.Customer";
-        	ret.initTableHeaders();
-        	ret.doimport();*/
-        },300);
-    return ret;
-}

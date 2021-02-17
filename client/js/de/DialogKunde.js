@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "de/remote/Kunde", "jassi/ui/ObjectChooser", "jassi/ui/Databinder", "jassi/ui/converters/NumberConverter", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/ui/Textbox", "jassi/ui/Select", "jassi/ui/BoxPanel", "jassi/ui/Repeater", "jassi/ui/Table", "jassi/ui/Checkbox", "jassi/remote/Jassi", "demo/TestComponent", "jassi/ui/Property"], function (require, exports, Panel_1, Kunde_1, ObjectChooser_1, Databinder_1, NumberConverter_1, Button_1, HTMLPanel_1, Textbox_1, Select_1, BoxPanel_1, Repeater_1, Table_1, Checkbox_1, Jassi_1, TestComponent_1, Property_1) {
+define(["require", "exports", "jassi/ui/Panel", "de/remote/Kunde", "jassi/ui/ObjectChooser", "jassi/ui/Databinder", "jassi/ui/converters/NumberConverter", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/ui/Textbox", "jassi/ui/Select", "jassi/ui/BoxPanel", "jassi/ui/Repeater", "jassi/ui/Table", "jassi/ui/Checkbox", "jassi/remote/Jassi", "demo/TestComponent", "jassi/ui/Property", "jassi/base/Router", "jassi/base/Actions"], function (require, exports, Panel_1, Kunde_1, ObjectChooser_1, Databinder_1, NumberConverter_1, Button_1, HTMLPanel_1, Textbox_1, Select_1, BoxPanel_1, Repeater_1, Table_1, Checkbox_1, Jassi_1, TestComponent_1, Property_1, Router_1, Actions_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DialogKunde = void 0;
@@ -16,6 +16,9 @@ define(["require", "exports", "jassi/ui/Panel", "de/remote/Kunde", "jassi/ui/Obj
             super();
             this.me = {};
             this.layout(this.me);
+        }
+        static async showDialog() {
+            Router_1.router.navigate("#do=de.DialogKunde");
         }
         async setdata() {
             var kunden = await Kunde_1.Kunde.find();
@@ -185,8 +188,18 @@ define(["require", "exports", "jassi/ui/Panel", "de/remote/Kunde", "jassi/ui/Obj
         Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Kunde_1.Kunde)
     ], DialogKunde.prototype, "value", void 0);
+    __decorate([
+        Actions_1.$Action({
+            name: "Demo/Kunden",
+            icon: "mdi mdi-account"
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], DialogKunde, "showDialog", null);
     DialogKunde = __decorate([
-        Jassi_1.$Class("demo.DialogKunde"),
+        Actions_1.$ActionProvider("jassi.base.ActionNode"),
+        Jassi_1.$Class("de.DialogKunde"),
         __metadata("design:paramtypes", [])
     ], DialogKunde);
     exports.DialogKunde = DialogKunde;

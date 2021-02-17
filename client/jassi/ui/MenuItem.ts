@@ -146,7 +146,7 @@ export async function test() {
         alert("ok");
     });
     save.text = "dd";
-    menu.add(save2);
+    save.items.add(save2);
     save2.text = "pppq";
     save2.icon = "mdi mdi-car";//"res/red.jpg";
     save2.onclick(function(event) {

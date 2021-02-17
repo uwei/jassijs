@@ -93,10 +93,14 @@ class DBManager {
                     console.log("DB corrupt - revert the last change");
                     _instance = undefined;
                     _initrunning = undefined;
-                    if (err.message === "The server does not support SSL connections")
+                    if (err.message === "The server does not support SSL connections") {
                         throw err1;
-                    else
+                        console.error(err1);
+                    }
+                    else {
                         throw err;
+                        console.error(err);
+                    }
                 }
             }
         }

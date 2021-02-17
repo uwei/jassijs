@@ -79,10 +79,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
     ], Customer);
     exports.Customer = Customer;
     async function test() {
-        var cus = new Customer();
-        cus.id = "999000";
-        cus.CompanyName = "Hallo";
-        await cus.save();
+        var all = await Customer.find();
         //var cus2=<Customer>await Customer.findOne();
         //debugger;
         //await Kunde.sample();

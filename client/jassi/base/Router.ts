@@ -52,7 +52,9 @@ export class Router
                                 }
                             }
 
-                        var name=params.do+"-"+params[id];
+                        var name=params.do;
+                        if(params[id])
+                            name=name+"-"+params[id];
                         if(windows.contains(name)){
                             var window=windows.show(name);
                             var ob=windows.findComponent(name);

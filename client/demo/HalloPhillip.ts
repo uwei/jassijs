@@ -7,6 +7,9 @@ import { Button } from "jassi/ui/Button";
 import { Textbox } from "jassi/ui/Textbox";
 import { NumberConverter } from "jassi/ui/converters/NumberConverter";
 import { $Class } from "jassi/remote/Jassi";
+import { router } from "jassi/base/Router";
+import { $Action, $ActionProvider, $Actions, ActionProperties } from "jassi/base/Actions";
+
 type Me = {
     aboutbutton?: Button;
     text?: Textbox;
@@ -15,7 +18,7 @@ type Me = {
     ergebnis?: Textbox;
 };
 
-
+@$ActionProvider("jassi.base.ActionNode")
 @$Class("demo.HalloPhillip")
 export class HalloPhillip extends Panel {
     me;
@@ -23,6 +26,19 @@ export class HalloPhillip extends Panel {
         super();
         this.me = {};
         this.layout(this.me);
+    }
+    @$Actions()
+    static testActions():ActionProperties[]{
+        return [{name:"Demo/say hello",run:function(){
+            alert("hello");
+        }}]
+    }
+     @$Action({
+        name: "Demo/Hallo Phillip",
+       icon: "mdi mdi-face",
+    })
+    static async showDialog() {
+        router.navigate("#do=demo.HalloPhillip");  
     }
     async setdata() {
     }
@@ -79,7 +95,7 @@ export class HalloPhillip extends Panel {
 export function test() {
     var t = new HalloPhillip();
     $.notify.addStyle('download extension', {
-        html: '<a href="https://www.w3schools.com" target="_blank"><span data-notify-text/></a>'
+        html: '<a href="https://raw.githubusercontent.com/uwei/jassijs/main/jassichrome/jassijsext.zip" target="_blank"><span data-notify-text/></a>'
     });
     $.notify('For debugging in edge an chrome the jassi debugging extension must be installed. Click here to download.', {
         style: 'download extension'

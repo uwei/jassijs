@@ -3,8 +3,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"northwind/remote/Customer.ts": {
-		"date": 1613246031091,
+		"date": 1613595972489,
 		"northwind.Customer": {
+			"$DBObject": []
+		}
+	},
+	"northwind/remote/Employees.ts": {
+		"date": 1613596509587,
+		"northwind.Employees": {
 			"$DBObject": []
 		}
 	}

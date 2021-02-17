@@ -346,15 +346,22 @@ export default class Filesystem {
             }
 
         };
-        for (var key in Filesystem.allModules) {//load and migrate modules
-            var all = Filesystem.allModules[key];
-            var mod = await import(key);
-            for (var a = 0; a < all.length; a++) {
-                for (key in mod) {
-                    all[a][key] = mod[key];
+        try {
+            for (var key in Filesystem.allModules) {//load and migrate modules
+                var all = Filesystem.allModules[key];
+                var mod = await import(key);
+                for (var a = 0; a < all.length; a++) {
+                    for (key in mod) {
+                        all[a][key] = mod[key];
+                    }
                 }
             }
+        } catch (err){
+            var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+            console.error(err.stack);
+            return err + "DB corrupt changes are reverted " + restore;
         }
+
         if (remotecodeincluded && rollbackonerror) {//verify DB-Schema
             try {
                 await DBManager.get();
@@ -392,7 +399,7 @@ export default class Filesystem {
         //TODO $this->updateRegistry();
     }
 }
-function copyFile(f1:string,f2:string){
+function copyFile(f1: string, f2: string) {
     try {
         if (fs.existsSync(f1) && f1.endsWith(".ts") && !fs.statSync(f1).isDirectory()) {
             if (!fs.existsSync(f2) || (fs.statSync(f1).mtimeMs > fs.statSync(f2).mtimeMs)) {
@@ -421,7 +428,7 @@ export function syncRemoteFiles() {
             setTimeout(() => {
                 var f2 = "./" + file;
                 var f1 = Filesystem.path + "/" + file;
-                copyFile(f1,f2);
+                copyFile(f1, f2);
             }, 200);
         }
     })
@@ -433,10 +440,10 @@ export function syncRemoteFiles() {
         var paths = file.split("/");
         if (eventType === "change" && paths.length > 1 && paths[1] === "remote") {
             setTimeout(() => {
-                
-                    var f1 = "./" + file;
-                    var f2 = Filesystem.path + "/" + file;
-                    copyFile(f1,f2);
+
+                var f1 = "./" + file;
+                var f2 = Filesystem.path + "/" + file;
+                copyFile(f1, f2);
             }, 200);
         }
     })

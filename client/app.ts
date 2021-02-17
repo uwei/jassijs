@@ -22,6 +22,7 @@ import {Select} from "jassi/ui/Select";
 import {SearchExplorer} from "jassi/ui/SearchExplorer";
 import { DBObjectExplorer } from "jassi/ui/DBObjectExplorer";
 import { MonacoPanel } from "jassi_editor/MonacoPanel";
+import { ActionNodeMenu } from "jassi/ui/ActionNodeMenu";
 
 
 
@@ -35,7 +36,8 @@ async function test() {
     windows.addLeft(new DBObjectExplorer(), "DBObjects");
     windows.addLeft(new SearchExplorer(), "Search");
     windows.addLeft(new FileExplorer(), "Files");
-    var bts = new Button();
+    windows._desktop.add(new ActionNodeMenu());
+ /*   var bts = new Button();
     bts.text = "Spy";
     bts.y = 100;
     bts.onclick(function() {
@@ -116,7 +118,7 @@ async function test() {
         mpan.width="100%";
         mpan.height="100%";
     });
-    windows._desktop.add(bt5);
+    windows._desktop.add(bt5);*/
     
     
     router.navigate(window.location.hash);

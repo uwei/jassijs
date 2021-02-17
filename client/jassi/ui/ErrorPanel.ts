@@ -6,7 +6,8 @@ import { Button } from "jassi/ui/Button";
 import { TSSourceMap } from "jassi_editor/util/TSSourceMap";
 import { classes } from "jassi/remote/Classes";
 import { router } from "jassi/base/Router";
-
+import { $Action, $ActionProvider } from "jassi/base/Actions";
+@$ActionProvider("jassi.base.ActionNode")
 @$Class("jassi.ui.ErrorPanel")
 export class ErrorPanel extends Panel {
     IDClear: Button;
@@ -20,6 +21,13 @@ export class ErrorPanel extends Panel {
     constructor() {
         super();
         this.layout();
+    }
+    @$Action ({
+        name: "Administration/Errors",
+        icon: "mdi mdi-emoticon-confused-outline",
+    })
+    static async showDialog() {
+        router.navigate("#do=jassi.ui.ErrorPanel");
     }
     layout() {
         var _this = this;

@@ -18,14 +18,15 @@ function __init(editor: monaco.editor.IStandaloneCodeEditor) {
     var CommandsRegistry = require("vs/platform/commands/common/commands").CommandsRegistry;
     CommandsRegistry.registerCommand("autoimport", (o1, model: monaco.editor.ITextModel, pos) => {
         var file = model.uri.path.substring(1);
+        var code=model.getValue();
         var p = typescript.getPositionOfLineAndCharacter(file, {
             line: pos.lineNumber, character: pos.column
         });
         setTimeout(() => {
-            CodePanel.getAutoimport(p, file, undefined).then((data) => {
+            CodePanel.getAutoimport(p, file, code).then((data) => {
                 if (data !== undefined) {
                     model.pushEditOperations([], [{
-                        range: monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row }),
+                        range: monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row+1 }),
                         text: data.text
                     }], () => null);
                 }
@@ -63,7 +64,7 @@ function __init(editor: monaco.editor.IStandaloneCodeEditor) {
             var sug = [];
             for (var x = 0; x < all.entries.length; x++) {
                 var it = all.entries[x];
-                if (it.kindModifiers === "export" && it.hasAction === true) {
+                if ((it.kindModifiers === "export"||it.kindModifiers === "") && it.hasAction === true) {
                     var item: monaco.languages.CompletionItem = {
                         label: it.name,
                         kind: <monaco.languages.CompletionItemKind>it.kind,

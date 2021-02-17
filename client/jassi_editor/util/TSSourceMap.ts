@@ -38,7 +38,7 @@ export class TSSourceMap {
                 mapcode = await $.ajax({ url: "js/" + tsfile.replace(".ts", ".js.map"), dataType: "text" });
             }
         }
-        var ret = new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
+        var ret:Promise<{line:number,column:number,jsfilename:string}> = new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
             var isinline = false;
             sourceMap.SourceMapConsumer.initialize({
                 "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"

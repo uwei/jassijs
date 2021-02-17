@@ -7,6 +7,8 @@ import {Button} from "jassi/ui/Button";
 import {BoxPanel} from "jassi/ui/BoxPanel";
 import {Select} from "./Select";
 import { classes } from "jassi/remote/Classes";
+import { $Action, $ActionProvider } from "jassi/base/Actions";
+import { router } from "jassi/base/Router";
 
 class Me {
     IDText? : HTMLPanel;
@@ -16,6 +18,7 @@ class Me {
     IDTable?:Table;
     IDTest?:Button;
 }
+@$ActionProvider("jassi.base.ActionNode")
 @$Class("jassi.ui.ComponentSpy")
 export class ComponentSpy extends Panel {
     ids;
@@ -26,6 +29,13 @@ export class ComponentSpy extends Panel {
         this.ids = {};
         this.labelids = {};
         this.layout();
+    }
+    @$Action ({
+        name: "Administration/Spy Components",
+        icon: "mdi mdi-police-badge",
+    })
+    static async showDialog() {
+        router.navigate("#do=jassi.ui.ComponentSpy");
     }
     layout() {
         var me:Me = this.me = {};

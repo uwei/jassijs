@@ -129,7 +129,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             new Server_1.Server().saveFile(this._file, code).then(function () {
                 var f = _this._file.replace(".ts", "");
                 new Reloader_1.Reloader().reloadJS(f);
-                if (code.indexOf("jassi.register(") > -1) {
+                if (code.indexOf("@$") > -1) {
                     Registry_1.default.reload();
                 }
             });
