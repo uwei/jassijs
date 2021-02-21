@@ -28,8 +28,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
     ], TableEditorProperties.prototype, "layout", void 0);
     __decorate([
         Property_1.$Property({ default: undefined }),
-        __metadata("design:type", String)
-    ], TableEditorProperties.prototype, "dataTreeChildField", void 0);
+        __metadata("design:type", Function)
+    ], TableEditorProperties.prototype, "dataTreeChildFunction", void 0);
     __decorate([
         Property_1.$Property({ default: false }),
         __metadata("design:type", Boolean)
@@ -61,9 +61,23 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
                 properties = {};
             if (properties.autoColumns === undefined)
                 properties.autoColumns = true;
+            if (properties.autoColumnsDefinitions === undefined) {
+                properties.autoColumnsDefinitions = function (definitions) {
+                    var ret = [];
+                    for (let x = 0; x < definitions.length; x++) {
+                        if (definitions[x].sorter === "array")
+                            continue;
+                        if (_this.items && _this.items.length > 0 && typeof _this.items[0][definitions[x].field] === "function")
+                            continue;
+                        ret.push(definitions[x]);
+                    }
+                    return ret;
+                };
+            }
             if (properties.dataTreeChildFunction !== undefined) {
                 //@ts-ignore
-                properties.dataTreeChildField = properties.dataTreeChildFunction;
+                properties.dataTreeChildField = "__treechilds";
+                this.dataTreeChildFunction = properties.dataTreeChildFunction;
                 delete properties.dataTreeChildFunction;
             }
             if (properties.dataTreeChildField !== undefined)
@@ -78,6 +92,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
             //    properties.autoResize = false;
             if (properties.layout === undefined)
                 properties.layout = "fitDataStretch"; //"fitDataFill";////"fitColumns";
+            var dataTreeRowExpanded = properties.dataTreeRowExpanded;
+            properties.dataTreeRowExpanded = function (row, level) {
+                _this.onTreeExpanded(row, level);
+                if (dataTreeRowExpanded !== undefined) {
+                    dataTreeRowExpanded(row, level);
+                }
+            };
             var rowClick = properties.rowClick;
             properties.rowClick = function (e, row) {
                 _this._onselect(e, row);
@@ -94,12 +115,53 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
                 return undefined;
             };
             this.table = new Tabulator("[id='" + this._id + "']", properties);
-            if (Tabulator["hackuw"] !== undefined) {
-                Tabulator["hackuw"](this.table);
-            }
             this.layout();
         }
         ;
+        getChildsFromTreeFunction(data) {
+            var childs;
+            if (typeof this.dataTreeChildFunction === "function") {
+                childs = this.dataTreeChildFunction(data);
+            }
+            else {
+                childs = data[this.dataTreeChildFunction];
+                if (typeof childs === "function")
+                    childs = childs.bind(data)();
+            }
+            return childs;
+        }
+        populateTreeData(data) {
+            var childs = this.getChildsFromTreeFunction(data);
+            if (childs && childs.length > 0) {
+                Object.defineProperty(data, "__treechilds", {
+                    configurable: true,
+                    get: function () {
+                        return childs;
+                    }
+                });
+                for (var x = 0; x < childs.length; x++) {
+                    var nchilds = this.getChildsFromTreeFunction(childs[x]);
+                    if (nchilds && nchilds.length > 0) {
+                        Object.defineProperty(childs[x], "__treechilds", {
+                            configurable: true,
+                            get: function () {
+                                return ["dummy"];
+                            }
+                        });
+                    }
+                }
+            }
+        }
+        onTreeExpanded(row, level) {
+            if (this.dataTreeChildFunction) {
+                var data = row.getData();
+                let childs = data.__treechilds; //this.getChildsFromTreeFunction(data)   //row.getData()["childs"];
+                for (let f = 0; f < childs.length; f++) {
+                    this.populateTreeData(childs[f]);
+                }
+                row.update(data);
+            }
+        }
         layout() {
             this._selectHandler = [];
         }
@@ -173,6 +235,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
          * set the items of the table
          */
         set items(value) {
+            if (value && this.dataTreeChildFunction) { //populate __treechilds
+                for (let x = 0; x < value.length; x++) {
+                    this.populateTreeData(value[x]);
+                }
+            }
             this._items = value;
             if (value !== undefined)
                 this.table.setData(value);

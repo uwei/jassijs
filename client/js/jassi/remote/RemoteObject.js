@@ -16,8 +16,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             prot.classname = Classes_1.classes.getClassName(this);
             prot._this = "static";
             prot.parameter = parameter;
-            prot.method = method;
-            var ret = await prot.call();
+            prot.method = method.name;
+            var ret;
+            //let Transaction= (await import("jassi/remote/Transaction")).Transaction;
+            //var trans=Transaction.cache.get(_this);
+            //if(trans&&trans[method.name]){
+            //	throw "not implemented"
+            //	ret=await trans[method.name][0]._push(undefined,prot.method,prot,trans[method.name][1]);
+            //}
+            ret = await prot.call();
             return ret;
         }
         async call(_this, method, ...parameter) {
@@ -27,8 +34,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             prot.classname = Classes_1.classes.getClassName(this);
             prot._this = _this;
             prot.parameter = parameter;
-            prot.method = method;
-            var ret = await prot.call();
+            prot.method = method.name;
+            var ret;
+            let Transaction = (await new Promise((resolve_1, reject_1) => { require(["jassi/remote/Transaction"], resolve_1, reject_1); })).Transaction;
+            var trans = Transaction.cache.get(_this);
+            if (trans && trans[method.name]) {
+                ret = await trans[method.name][0]._push(_this, method, prot, trans[method.name][1]);
+                return ret;
+            }
+            ret = await prot.call();
             return ret;
         }
     };

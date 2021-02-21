@@ -23,7 +23,7 @@ let ARZeile = ARZeile_1 = class ARZeile extends DBObject_1.DBObject {
     }
     static async find(options = undefined) {
         if (!Jassi_1.default.isServer) {
-            return await this.call("find", options);
+            return await this.call(this.find, options);
         }
         else {
             //@ts-ignore

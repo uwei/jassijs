@@ -325,6 +325,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/util/Typescrip
                 if (pos >= 0)
                     node.parent.parent["type"]["members"].splice(pos, 1);
             }
+            else if (node.parent["members"] !== undefined) {
+                var pos = node.parent["members"].indexOf(node);
+                if (pos >= 0)
+                    node.parent["members"].splice(pos, 1);
+            }
             else
                 throw Error(node.getFullText() + "could not be removed");
         }

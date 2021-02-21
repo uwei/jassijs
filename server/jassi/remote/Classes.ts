@@ -76,15 +76,11 @@ export class Classes {
     getClassName(_class): string {
         if (_class === undefined)
             return undefined;
-        if (_class._classname === undefined) {
-            if (_class.prototype !== undefined && _class.prototype._classname !== undefined) {
-                return _class.prototype._classname;
-            }
-            if (_class.__proto__ === null)
-                return undefined;
-            return _class.__proto__._classname;
-        }
-        return _class._classname;
+        if(_class.constructor?._classname)
+            return _class.constructor?._classname;
+        if(_class.prototype?.constructor?._classname)
+            return _class.prototype?.constructor?._classname;
+        return undefined;
     }
 
     register(data: new (...args: any[]) => any, name: string) {

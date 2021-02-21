@@ -17,6 +17,7 @@ import { DBObject } from "jassi/remote/DBObject";
 import { $Action, $ActionProvider } from "jassi/base/Actions";
 import { router } from "jassi/base/Router";
 import { Server } from "jassi/remote/Server";
+import { Transaction } from "jassi/remote/Transaction";
 
 
 type Me = {
@@ -204,8 +205,8 @@ export class CSVImport extends Panel {
 				if (Number.isInteger(val)) {
 					mapping[key] = Number(val) - 1;
 				} else {
-					if (fieldids[val.toLowerCase()]!==undefined)
-						mapping[key] = fieldids[val.toLowerCase()];
+					if (fieldids[(<string>val).toLowerCase()]!==undefined)
+						mapping[key] = fieldids[(<string>val).toLowerCase()];
 
 				}
 			}
@@ -241,7 +242,7 @@ export class CSVImport extends Panel {
 
 		var allObjects: DBObject[] = [];
 		var from = fromLine;
-		for (var x = from; x < data.length; x++) {
+		for (var x = from-1; x < data.length; x++) {
 			var satz = data[x];
 
 			var ob = new Type();
@@ -258,6 +259,9 @@ export class CSVImport extends Panel {
 						if (val === "#NV")
 							val = undefined;
 					}
+					if((meta[fname].OneToOne||meta[fname].ManyToOne)&& val!==undefined){
+						val={id:val};
+					}
 					ob[fname] = val;
 				}
 			}
@@ -269,11 +273,14 @@ export class CSVImport extends Panel {
 				allObjects.push(ob);
 		}
 		var ret: Promise<DBObject>[] = [];
+		var trans=new Transaction();
 		for (var x = 0; x < allObjects.length; x++) {
-			await allObjects[x].save();
+			//await allObjects[x].save();
+			trans.add(allObjects[x],allObjects[x].save);
 			//ret.push(allObjects[x].save());
 		}
-		await Promise.all(ret);
+		await trans.execute();
+		
 		return "imported " + allObjects.length + " objects";
 	}
 }
@@ -374,8 +381,8 @@ WILMK,90,Wilman Kala,Matti Karttunen,Owner/Marketing Assistant,Keskuskatu 45,Hel
 WOLZA,91,Wolski  Zajazd,Zbyszek Piestrzeniewicz,Owner,ul. Filtrowa 68,Warszawa,#NV,01-012,Poland,(26) 642-7012,(26) 642-7012
 `;
 
-	var s = await CSVImport.startImport("https://raw.githubusercontent.com/tmcnab/northwind-mongo/master/employees.csv", "northwind.Employees",
-		{ "id": "EmployeeID" },{".\nA":".A","e\nM":"eM","w\nW":"wW"});
+	var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees",
+		{ "id": "EmployeeID" });
 	alert(s);
 	/*	var t = await classes.loadClass("northwind.Customer");
 		var ret = new CSVImport();
@@ -384,4 +391,5 @@ WOLZA,91,Wolski  Zajazd,Zbyszek Piestrzeniewicz,Owner,ul. Filtrowa 68,Warszawa,#
 	
 		return ret;*/
 }
+
 

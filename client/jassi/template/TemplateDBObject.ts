@@ -11,7 +11,7 @@ import { TemplateDBDialog } from "jassi/template/TemplateDBDialog";
 
 var code=`import {DBObject, $DBObject } from "jassi/remote/DBObject";
 import jassi, { $Class } from "jassi/remote/Jassi";
-import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassi/util/DatabaseSchema";
+import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany,JoinColumn,JoinTable } from "jassi/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassi/remote/DBObjectQuery";
 
 

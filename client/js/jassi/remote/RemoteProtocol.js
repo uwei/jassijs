@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "./Jassi", "./Classes"], function (require, exports, Jassi_1, Classes_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], function (require, exports, Jassi_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteProtocol = void 0;
@@ -163,6 +163,13 @@ define(["require", "exports", "./Jassi", "./Classes"], function (require, export
                         delete val.__refid__;
                         delete val.__clname__;
                     }
+                }
+                //Date conversation
+                var datepattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
+                if (typeof value === 'string') {
+                    var a = datepattern.exec(value);
+                    if (a)
+                        return new Date(value);
                 }
                 return val;
             });

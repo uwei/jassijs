@@ -56,7 +56,7 @@ let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
     }
     static async find(options = undefined) {
         if (!Jassi_1.default.isServer) {
-            return await this.call("find", options);
+            return await this.call(this.find, options);
         }
         else {
             //@ts-ignore
@@ -142,6 +142,10 @@ Kunde = Kunde_1 = __decorate([
 ], Kunde);
 exports.Kunde = Kunde;
 async function test() {
+    let test = new Kunde();
+    for (var key in test) {
+        console.log(key);
+    }
     //await Kunde.sample();
     var k = await Kunde.findOne({ id: 1 });
     k.vorname = "Ella";

@@ -7,8 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RemoteProtocol = void 0;
-const Jassi_1 = require("./Jassi");
-const Classes_1 = require("./Classes");
+const Jassi_1 = require("jassi/remote/Jassi");
+const Classes_1 = require("jassi/remote/Classes");
 let RemoteProtocol = class RemoteProtocol {
     /**
      * converts object to jsonstring
@@ -65,7 +65,7 @@ let RemoteProtocol = class RemoteProtocol {
         if (Jassi_1.default.isServer)
             throw new Error("should be called on client");
         var sdataObject = undefined;
-        var url = "remoteprotocol1?" + Date.now();
+        var url = "remoteprotocol?" + Date.now();
         var _this = this;
         var redirect = undefined;
         var config = {
@@ -116,6 +116,12 @@ let RemoteProtocol = class RemoteProtocol {
                 return value;
             if (value.__clname__ !== null && value.__clname__ !== undefined && allclassnames.indexOf(value.__clname__) === -1) {
                 allclassnames.push(value.__clname__);
+            }
+            var datepattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
+            if (typeof value === 'string') { //Date conversation
+                var a = datepattern.exec(val);
+                if (a)
+                    return new Date(value);
             }
             return value;
         });

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"jassi/remote/Classes.ts": {
-		"date": 1613249050111,
+		"date": 1613925159863,
 		"jassi.remote.Classes": {}
 	},
 	"jassi/remote/Database.ts": {
@@ -15,14 +15,14 @@ exports.default={
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
-		"date": 1613219076133,
+		"date": 1613743705378,
 		"jassi.remote.DBObject": {}
 	},
 	"jassi/remote/DBObjectQuery.ts": {
 		"date": 1613218566583
 	},
 	"jassi/remote/Extensions.ts": {
-		"date": 1613218569575
+		"date": 1613925202662
 	},
 	"jassi/remote/FileNode.ts": {
 		"date": 1613219099164,
@@ -36,14 +36,14 @@ exports.default={
 		"jassi.remote.Jassi": {}
 	},
 	"jassi/remote/Registry.ts": {
-		"date": 1613415494435
+		"date": 1613925163015
 	},
 	"jassi/remote/RemoteObject.ts": {
-		"date": 1613219128046,
+		"date": 1613741323055,
 		"jassi.remote.RemoteObject": {}
 	},
 	"jassi/remote/RemoteProtocol.ts": {
-		"date": 1613390719458,
+		"date": 1613815783270,
 		"jassi.remote.RemoteProtocol": {}
 	},
 	"jassi/remote/security/Group.ts": {
@@ -77,11 +77,11 @@ exports.default={
 		}
 	},
 	"jassi/remote/security/Rights.ts": {
-		"date": 1613219021491,
+		"date": 1613673891346,
 		"jassi.remote.security.Rights": {}
 	},
 	"jassi/remote/security/User.ts": {
-		"date": 1613219027355,
+		"date": 1613673898489,
 		"jassi.remote.security.User": {
 			"$DBObject": [
 				{
@@ -91,17 +91,21 @@ exports.default={
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1613423379620,
+		"date": 1613673883034,
 		"jassi.remote.Server": {}
+	},
+	"jassi/remote/Transaction.ts": {
+		"date": 1613744930893,
+		"jassi.remote.Transaction": {}
 	},
 	"jassi/server/Compile.ts": {
 		"date": 1613330043874
 	},
 	"jassi/server/DBManager.ts": {
-		"date": 1613590984016
+		"date": 1613742748314
 	},
 	"jassi/server/DoRemoteProtocol.ts": {
-		"date": 1613223789102
+		"date": 1613687536019
 	},
 	"jassi/server/Filessystem.ts": {
 		"date": 1613592867325
@@ -114,6 +118,9 @@ exports.default={
 	},
 	"jassi/server/JassiServer.ts": {
 		"date": 1613329152158
+	},
+	"jassi/server/ObjectTransaction.ts": {
+		"date": 1613735239671
 	},
 	"jassi/server/PassportLoginRegister.ts": {
 		"date": 1613220855230

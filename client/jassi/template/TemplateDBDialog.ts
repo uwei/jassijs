@@ -68,7 +68,8 @@ export class TemplateDBDialog {
 	    	var scode=code.replaceAll("{{dialogname}}",props.dialogname);
 	    	var fulldbclassname= classes.getClassName(props.dbobject);
 	    	var shortdbclassname=fulldbclassname.split(".")[fulldbclassname.split(".").length-1];
-	    	var dbfilename=await registry.getJSONData("$Class",fulldbclassname)[0].filename;
+            var cl=await registry.getJSONData("$Class",fulldbclassname);
+	    	var dbfilename=cl[0].filename;
 	    	dbfilename=dbfilename.substring(0,dbfilename.length-3);
 	    	scode=scode.replaceAll("{{fullclassname}}",(all[0].fullpath+"/"+props.dialogname).replaceAll("/","."));
 	    	scode=scode.replaceAll("{{dbclassname}}",shortdbclassname);

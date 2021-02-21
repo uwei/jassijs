@@ -14,8 +14,20 @@ define("northwind/registry",["require"], function(require) {
 			]
 		}
 	},
+	"northwind/EmployeesView.ts": {
+		"date": 1613814368405,
+		"northwind.EmployeesView": {
+			"$DBObjectView": [
+				{
+					"classname": "northwind.Employees",
+					"actionname": "Northwind/Employees",
+					"icon": "mdi mdi-account-tie"
+				}
+			]
+		}
+	},
 	"northwind/ImportData.ts": {
-		"date": 1613582645215,
+		"date": 1613935445224,
 		"northwind.ImportData": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"
@@ -32,7 +44,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Employees.ts": {
-		"date": 1613596509587,
+		"date": 1613816797060,
 		"northwind.Employees": {
 			"$DBObject": []
 		}

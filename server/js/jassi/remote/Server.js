@@ -95,7 +95,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         if (!Jassi_1.default.isServer) {
             var ret;
             if ((await Server_1.isonline) === true)
-                ret = await this.call(this, "dir", withDate);
+                ret = await this.call(this, this.dir, withDate);
             else
                 ret = { name: "", files: [] };
             await this.addFilesFromMap(ret);
@@ -117,7 +117,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
      */
     async loadFiles(fileNames) {
         if (!Jassi_1.default.isServer) {
-            return await this.call(this, "loadFiles", fileNames);
+            return await this.call(this, this.loadFiles, fileNames);
         }
         else {
             //@ts-ignore
@@ -177,7 +177,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                     allcontents.push(content);
                 }
             }
-            var res = await this.call(this, "saveFiles", allfileNames, allcontents);
+            var res = await this.call(this, this.saveFiles, allfileNames, allcontents);
             if (res === "") {
                 //@ts-ignore
                 $.notify(fileName + " saved", "info", { position: "bottom right" });
@@ -228,7 +228,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     **/
     async delete(name) {
         if (!Jassi_1.default.isServer) {
-            var ret = await this.call(this, "delete", name);
+            var ret = await this.call(this, this.delete, name);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -244,7 +244,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
      **/
     async rename(oldname, newname) {
         if (!Jassi_1.default.isServer) {
-            var ret = await this.call(this, "rename", oldname, newname);
+            var ret = await this.call(this, this.rename, oldname, newname);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -262,7 +262,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     async isOnline() {
         if (!Jassi_1.default.isServer) {
             try {
-                var ret = await this.call(this, "isOnline");
+                var ret = await this.call(this, this.isOnline);
                 return ret;
             }
             catch (_a) {
@@ -280,7 +280,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
      **/
     async createFile(filename, content) {
         if (!Jassi_1.default.isServer) {
-            var ret = await this.call(this, "createFile", filename, content);
+            var ret = await this.call(this, this.createFile, filename, content);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -296,7 +296,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     **/
     async createFolder(foldername) {
         if (!Jassi_1.default.isServer) {
-            var ret = await this.call(this, "createFolder", foldername);
+            var ret = await this.call(this, this.createFolder, foldername);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -309,7 +309,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     }
     static async mytest() {
         if (!Jassi_1.default.isServer) {
-            return await this.call("mytest");
+            return await this.call(this.mytest);
         }
         else
             return 14; //this is called on server

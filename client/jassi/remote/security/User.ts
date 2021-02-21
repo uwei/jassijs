@@ -28,7 +28,7 @@ export class User extends DBObject  {
     */
     async hallo() {
         if (!jassi.isServer) {
-            return await this.call(this,"hallo");
+            return await this.call(this,this.hallo);
         } else {
 			return 11;
         }

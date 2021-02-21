@@ -1,20 +1,20 @@
-import jassi, { $Class } from "./Jassi";
-import { classes } from "./Classes";
+import jassi, { $Class } from "jassi/remote/Jassi";
+import { classes } from "jassi/remote/Classes";
 
 
-@$Class("jassi.remote.RemoteProtocol") 
+@$Class("jassi.remote.RemoteProtocol")
 export class RemoteProtocol {
     static counter = 0;
     classname: string;
     _this: any;
     parameter: any[];
     method: string;
-	/**
-	 * converts object to jsonstring
-	 * if class is registerd in classes then the class is used
-	 * if id is used then recursive childs are possible
-	 * @param obj 
-	 */
+    /**
+     * converts object to jsonstring
+     * if class is registerd in classes then the class is used
+     * if id is used then recursive childs are possible
+     * @param obj 
+     */
     stringify(obj) {
         var ref = [];
 
@@ -41,27 +41,29 @@ export class RemoteProtocol {
             } else {
                 val = value;
             }
+
+
             return val;
         });
     }
-    
-    public static async simulateUser(user:string=undefined,password:string=undefined){
-        var rights =(await import( "jassi/remote/security/Rights")).default;
-    //	if(await rights.isAdmin()){
-    //		throw new Error("not an admin")
-    //	}
-    if(user===undefined){
-        //@ts-ignore
-        var Cookies=(await import( "jassi/util/Cookies")).Cookies;
-        Cookies.remove("simulateUser",{});
-        Cookies.remove("simulateUserPassword",{});
-    }else{
-    	Cookies.set("simulateUser",user,{});
-        Cookies.set("simulateUserPassword",password,{});
+
+    public static async simulateUser(user: string = undefined, password: string = undefined) {
+        var rights = (await import("jassi/remote/security/Rights")).default;
+        //	if(await rights.isAdmin()){
+        //		throw new Error("not an admin")
+        //	}
+        if (user === undefined) {
+            //@ts-ignore
+            var Cookies = (await import("jassi/util/Cookies")).Cookies;
+            Cookies.remove("simulateUser", {});
+            Cookies.remove("simulateUserPassword", {});
+        } else {
+            Cookies.set("simulateUser", user, {});
+            Cookies.set("simulateUserPassword", password, {});
+        }
+
     }
-    	
-    }
-	/**
+    /**
    * call the server
    */
     async call() {
@@ -80,14 +82,14 @@ export class RemoteProtocol {
         try {
             var ret = await $.ajax(config);
         } catch (ex) {
-            if (ex.status === 401||(ex.responseText&&ex.responseText.indexOf("jwt expired")!==-1)) {
+            if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                 redirect = new Promise((resolve) => {
                     //@ts-ignore
                     import("jassi/base/LoginDialog").then((lib) => {
                         lib.doAfterLogin(resolve, _this);
                     });
                 });
-            }else{
+            } else {
                 throw ex;
             }
         }
@@ -103,9 +105,9 @@ export class RemoteProtocol {
         return retval;
     }
 
-	/**
-	 * converts jsonstring to an object
-	 */
+    /**
+     * converts jsonstring to an object
+     */
     async parse(text: string) {
         var ref = {};
         if (text === undefined)
@@ -120,6 +122,7 @@ export class RemoteProtocol {
             if (value.__clname__ !== null && value.__clname__ !== undefined && allclassnames.indexOf(value.__clname__) === -1) {
                 allclassnames.push(value.__clname__);
             }
+            
             return value;
         });
         //all classes must be loaded
@@ -166,7 +169,13 @@ export class RemoteProtocol {
                     delete val.__clname__;
                 }
             }
-
+            //Date conversation
+            var datepattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
+            if (typeof value === 'string') {
+                var a = datepattern.exec(value);
+                if (a)
+                    return new Date(value);
+            }
             return val;
         });
     }

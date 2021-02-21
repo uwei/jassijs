@@ -1,28 +1,15 @@
 
 
 
-import jassi from "jassi/jassi";
-import {ARZeile} from "de/remote/ARZeile";
 import {FileExplorer} from "jassi/ui/FileExplorer";
-import "demo/HalloPhillip";
-import "de/DialogKunde";
-import "demo/TreeTable";
 import windows from "jassi/base/Windows";
 import {Panel} from "jassi/ui/Panel";
 import {Button} from "jassi/ui/Button";
-import {ComponentSpy} from "jassi/ui/ComponentSpy";
-import {ErrorPanel} from "jassi/ui/ErrorPanel";
-
-import {Testcontextmenu} from "demo/Testcontextmenu";
 import { router } from "jassi/base/Router";
-import {HalloPhillip} from "demo/HalloPhillip";
-import { classes } from "jassi/remote/Classes";
-
-import {Select} from "jassi/ui/Select";
 import {SearchExplorer} from "jassi/ui/SearchExplorer";
 import { DBObjectExplorer } from "jassi/ui/DBObjectExplorer";
-import { MonacoPanel } from "jassi_editor/MonacoPanel";
 import { ActionNodeMenu } from "jassi/ui/ActionNodeMenu";
+
 
 
 
@@ -36,7 +23,18 @@ async function test() {
     windows.addLeft(new DBObjectExplorer(), "DBObjects");
     windows.addLeft(new SearchExplorer(), "Search");
     windows.addLeft(new FileExplorer(), "Files");
-    windows._desktop.add(new ActionNodeMenu());
+    var bt=new Button();
+    windows._desktop.add(bt);
+    bt.icon="mdi mdi-refresh";
+    var am=new ActionNodeMenu();
+    bt.onclick(()=>{
+        windows._desktop.remove(am);
+        am=new ActionNodeMenu()
+        windows._desktop.add(am);
+    });
+    windows._desktop.add(am);
+
+    
  /*   var bts = new Button();
     bts.text = "Spy";
     bts.y = 100;

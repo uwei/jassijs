@@ -28,7 +28,7 @@ export class ARZeile extends DBObject {
     }
       static async find(options = undefined): Promise<ARZeile[]> {
         if (!jassi.isServer) {
-            return await this.call("find", options);
+            return await this.call(this.find, options);
         } else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();

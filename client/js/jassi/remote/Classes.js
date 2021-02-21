@@ -78,17 +78,14 @@ define(["require", "exports", "jassi/remote/Registry"], function (require, expor
         * @returns {string} name of the class
         */
         getClassName(_class) {
+            var _a, _b, _c, _d, _e, _f;
             if (_class === undefined)
                 return undefined;
-            if (_class._classname === undefined) {
-                if (_class.prototype !== undefined && _class.prototype._classname !== undefined) {
-                    return _class.prototype._classname;
-                }
-                if (_class.__proto__ === null)
-                    return undefined;
-                return _class.__proto__._classname;
-            }
-            return _class._classname;
+            if ((_a = _class.constructor) === null || _a === void 0 ? void 0 : _a._classname)
+                return (_b = _class.constructor) === null || _b === void 0 ? void 0 : _b._classname;
+            if ((_d = (_c = _class.prototype) === null || _c === void 0 ? void 0 : _c.constructor) === null || _d === void 0 ? void 0 : _d._classname)
+                return (_f = (_e = _class.prototype) === null || _e === void 0 ? void 0 : _e.constructor) === null || _f === void 0 ? void 0 : _f._classname;
+            return undefined;
         }
         register(data, name) {
             //data.prototype._classname=name;

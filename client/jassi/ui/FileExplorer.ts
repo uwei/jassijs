@@ -45,7 +45,7 @@ export class FileActions {
             return;
         }
         await FileExplorer.instance.refresh();
-        FileExplorer.instance.tree.activateKey(newkey);
+        await FileExplorer.instance.tree.activateKey(newkey);
         if(open)
         	router.navigate("#do=jassi_editor.CodeEditor&file=" + newkey.replaceAll("|","/"));
 

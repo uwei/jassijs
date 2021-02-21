@@ -36,7 +36,7 @@ export class AR extends DBObject {
     }
     static async myfind(options = undefined): Promise<AR[]> {
         if (!jassi.isServer) {
-            return await this.call("myfind", options);
+            return await this.call(this.myfind, options);
         }
         else {
             //@ts-ignore

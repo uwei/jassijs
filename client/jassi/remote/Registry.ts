@@ -97,14 +97,14 @@ export class Registry {
      *            index.json and could be read without loading the class
      **/
     register(service: string, oclass: new (...args: any[]) => any, ...params) {
-        var sclass = oclass.prototype._classname;
+        var sclass = oclass.prototype.constructor._classname;
         if (sclass === undefined && service !== "$Class") {
             throw "@$Class member is missing or must be set at last";
             return;
         }
         if (service === "$Class") {
             sclass = params[0];
-            oclass.prototype._classname = params[0];
+            oclass.prototype.constructor._classname = params[0];
         }
         if (this.data[service] === undefined) {
             this.data[service] = {};
@@ -242,11 +242,12 @@ export class Registry {
 
             //@ts-ignore
             var fs = await import('fs');
-
+            
             modultext = fs.readFileSync("./jassi.json", 'utf-8');
             var modules = JSON.parse(modultext).modules;
             for (let modul in modules) {
                 try {
+                    delete require.cache[require.resolve(modul + "/registry")];
                     var data = (await require(modul + "/registry")).default;
                     this.initJSONData(data);
                     /*    //requirejs.undef("js/"+modul+"/registry.js");

@@ -1,19 +1,18 @@
 import { DBObject, $DBObject } from "jassi/remote/DBObject";
 import jassi, { $Class } from "jassi/remote/Jassi";
-import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassi/util/DatabaseSchema";
+import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, JoinColumn, JoinTable } from "jassi/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassi/remote/DBObjectQuery";
+import { Transaction } from "jassi/remote/Transaction";
 @$DBObject()
 @$Class("northwind.Employees")
 export class Employees extends DBObject {
     @PrimaryColumn()
     id: number;
-    @Column({ nullable: true })
-    BirthDate: Date;
+
     constructor() {
         super();
     }
-    @Column({ nullable: true })
-    HireDate: Date;
+
     @Column({ nullable: true })
     LastName: string;
     @Column({ nullable: true })
@@ -42,17 +41,55 @@ export class Employees extends DBObject {
     Notes: string;
     @Column({ nullable: true })
     PhotoPath: string;
-    @OneToOne(type => Employees)
+    @JoinColumn()
+    @ManyToOne(type => Employees)
     ReportsTo: Employees;
+    @Column({ nullable: true })
+    BirthDate: Date;
+    @Column({ nullable: true })
+    HireDate: Date;
+    static async find(options = undefined): Promise<any[]> {
+        if (!jassi.isServer) {
+            return await this.call(this.find, options);
+        }
+        else {
+            //@ts-ignore
+            var man = await (await import("jassi/server/DBManager")).DBManager.get();
+            return man.find(this, options);
+        }
+    }
+    async hallo(num) {
+        if (!jassi.isServer) {
+            var ret = await this.call(this, this.hallo, num);
+            return ret * 10;
+        } else {
+
+            return num + 1;
+            // return ["jassi/base/ChromeDebugger.ts"];
+        }
+    }
+}
+function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
 }
 export async function test() {
-    var emp = new Employees();
-    emp.id = 100003;
-    emp.BirthDate = new Date(Date.now());
-    await emp.save();
-    var emp2 = new Employees();
-    emp2.id = 200000;
-    emp2.ReportsTo=emp;
-    await emp2.save();
+    var em = new Employees();
+    em.id = getRandomInt(100000);
+    var em2 = new Employees();
+    em2.id = getRandomInt(100000);
+    var trans = new Transaction();
+    console.log(em.id + " " + em2.id);
+    trans.add(em, em.save);
+    trans.add(em2, em2.save);
+    var h = await trans.execute();
+    h = h;
+    /*  var emp = new Employees();
+      emp.id = 100003;
+      emp.BirthDate = new Date(Date.now());
+      //await emp.save();
+      var emp2 = new Employees();
+      emp2.id = 200000;
+      emp2.ReportsTo = emp;
+      //await emp2.save();*/
 }
 ;

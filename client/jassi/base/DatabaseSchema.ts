@@ -212,13 +212,13 @@ export class DatabaseSchema {
     }
 
     //type => ARZeile
-    private getFulltype(type: string, parsedClass: ParsedClass) {
+    private getFulltype(type: string, parsedClass: ParsedClass) :ParsedClass{
         var pos = type.lastIndexOf(">");
         if (pos > -1)
             type = type.substring(pos + 1).trim();
         var file = parsedClass.parent.imports[type];
         if(type===parsedClass.name)
-            return parsedClass.fullClassname;
+            return parsedClass;
         var ret = this.definedImports[type + "|" + file];
         if (!ret) {
             throw Error("Import not found " + parsedClass.fullClassname + " : " + type);
@@ -247,10 +247,12 @@ export class DatabaseSchema {
     }
     private createDBField(field: DatabaseField, dbcl: DatabaseClass) {
         var decs = {};
-        if (field.join && field.relation === "OneToOne")
+        if ((field.join||field.inverseSide===undefined||field.inverseSide==="") && field.relation === "OneToOne")
             decs["JoinColumn"] = { name: "JoinColumn", parameter: [] };
-        if (field.join && field.relation === "ManyToMany")
+        if ((field.join||field.inverseSide===undefined||field.inverseSide==="")&&field.join && field.relation === "ManyToMany")
             decs["JoinTable"] = { name: "JoinTable", parameter: [] };
+        
+        
         var realtype = field.type;
         var realprops = field.properties;
         if (field.type === "decimal") {

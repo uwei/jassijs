@@ -21,7 +21,7 @@ let User = class User extends DBObject_1.DBObject {
    */
     async hallo() {
         if (!Jassi_1.default.isServer) {
-            return await this.call(this, "hallo");
+            return await this.call(this, this.hallo);
         }
         else {
             return 11;

@@ -1,21 +1,23 @@
-define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Server"], function (require, exports, Panel_1, Textbox_1, Server_1) {
+define(["require", "exports", "de/remote/Kunde"], function (require, exports, Kunde_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     var systemFonts = ["Arial", "Helvetica Neue", "Courier New", "Times New Roman", "Comic Sans MS", "Impact"];
-    function test() {
-        var h = Server_1.Server["isonline"];
-        var font = "Bebas Neue";
-        //loadFontIfNedded(font);	
-        var pan = new Panel_1.Panel();
-        var tb = new Textbox_1.Textbox();
-        tb.value = "AHallo";
-        console.log(tb._id);
-        tb.css({
-            font_family: font
+    async function test() {
+        let test = new Kunde_1.Kunde();
+        Kunde_1.Kunde.prototype = Object.create(Kunde_1.Kunde.prototype, {
+            setPosition: {
+                value: function () {
+                    //... etc
+                },
+                writable: true,
+                enumerable: true,
+                configurable: true
+            }
         });
-        pan.add(tb);
-        return pan;
+        for (var key in test) {
+            console.log(key);
+        }
     }
     exports.test = test;
 });

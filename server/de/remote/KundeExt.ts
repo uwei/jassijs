@@ -42,10 +42,11 @@ class KundeExt {
      * @param {class} type - the type to extend
      */
     static extend(type) {
-        type.prototype.extFunc = function () { return 8; }
+        //type.prototype.extFunc = function () { return 8; }
     }
 
 }
-
+//Hack for tabulator.js
+KundeExt.prototype.extFunc["match"]=function(){return false;}
 //jassi.register("extensions", "de.Kunde", KundeExt, "KundeExt");
 

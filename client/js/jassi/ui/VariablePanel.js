@@ -35,7 +35,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                         return ret;
                     for (var v in obj.value) {
                         var oval = obj.value[v];
-                        ret.push({ name: v, value: oval });
+                        ret.push({
+                            name: v,
+                            value: oval
+                        });
                     }
                     return ret;
                 }

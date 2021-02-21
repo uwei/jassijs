@@ -106,13 +106,13 @@ export class DBManager {
       var test = getMetadataArgsStorage();
       try {
         var opts = await getConOpts();
-        
-          _initrunning = createConnection(opts);
+
+        _initrunning = createConnection(opts);
         await _initrunning;
         await _instance.mySync();
       } catch (err1) {
         try {
-          _initrunning=undefined;
+          _initrunning = undefined;
           opts["ssl"] = true;//heroku need this
           _initrunning = createConnection(opts);
           await _initrunning;
@@ -121,13 +121,13 @@ export class DBManager {
           console.log("DB corrupt - revert the last change");
           _instance = undefined;
           _initrunning = undefined;
-          if(err.message==="The server does not support SSL connections"){
-                        throw err1;
-                        console.error(err1);
+          if (err.message === "The server does not support SSL connections") {
+            throw err1;
+            console.error(err1);
           }
-          else{          
-           throw err;
-           console.error(err);
+          else {
+            throw err;
+            console.error(err);
           }
         }
       }
@@ -216,6 +216,49 @@ export class DBManager {
       throw new Error("you are not allowed to delete " + classes.getClassName(entity) + " with id " + entity["id"]);
     await this.connection().manager.remove(entity);
   }
+
+  private async addSaveTransaction(entity) {
+    if (entity.objecttransaction) {
+      let ot = entity.objecttransaction;
+      if (!ot.savelist) {
+        ot.savelist = [entity];
+        ot.saveresolve=[];
+        ot.addFunctionFinally(async () => {
+          ot.savelist.forEach((ent)=>{
+            delete ent.objecttransaction;
+          });
+          ot.savereturn = await this.connection().manager.save(ot.savelist);
+          for (let x = 0; x < ot.savereturn.length; x++) {
+            delete ot.savereturn[x].password;
+            ot.saveresolve[x](ot.savereturn[x]);
+          }
+        })
+      } else
+        ot.savelist.push(entity);
+      //entity.objecttransaction.addFunctionFinally(
+      return new Promise((resolve) => {
+        ot.saveresolve.push(resolve);
+        ot.transactionResolved();
+        ot.checkFinally();
+      });
+    }
+  }
+    /**
+   * insert a new object
+   * @param obj - the object to insert
+   */
+  async insert(obj: DBObject) {
+
+    await this._checkParentRightsForSave(obj);
+    if (obj["objecttransaction"]) {
+      return this.addSaveTransaction(obj);
+    }
+    //@ts-ignore
+    var ret = await this.connection().manager.insert(obj.constructor, obj);
+    //save also relations
+    ret = await this.save(obj);
+    return ret;
+  }
   /**
   * Saves all given entities in the database.
   * If entities do not exist in the database then inserts, otherwise updates.
@@ -239,12 +282,17 @@ export class DBManager {
       })
 
     }
+    if (entity.objecttransaction&&options===undefined) {
+      return this.addSaveTransaction(entity);
+    }
     var ret = await this.connection().manager.save(entity, options);
     delete entity.password;
     delete ret["password"];
     return ret;
   }
   private async _checkParentRightsForSave<Entity>(entity: Entity) {
+    if(getRequest().user.isAdmin)
+      return;
     //Check if the object self has restrictions
     var cl = classes.getClass(classes.getClassName(entity));
     if (entity["id"] !== undefined) {
@@ -447,19 +495,7 @@ export class DBManager {
     var test = await ret.getCount();
     return test === ids.length;
   }
-  /**
-   * insert a new object
-   * @param obj - the object to insert
-   */
-  async insert(obj: DBObject) {
 
-    await this._checkParentRightsForSave(obj);
-    //@ts-ignore
-    var ret = await this.connection().manager.insert(obj.constructor, obj);
-    //save also relations
-    ret = await this.save(obj);
-    return ret;
-  }
 
 
 }

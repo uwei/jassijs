@@ -17,7 +17,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
        */
         async hallo() {
             if (!Jassi_1.default.isServer) {
-                return await this.call(this, "hallo");
+                return await this.call(this, this.hallo);
             }
             else {
                 return 11;

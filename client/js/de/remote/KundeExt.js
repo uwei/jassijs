@@ -28,13 +28,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/DatabaseSchema",
          * @param {class} type - the type to extend
          */
         static extend(type) {
-            type.prototype.extFunc = function () { return 8; };
+            //type.prototype.extFunc = function () { return 8; }
         }
     };
     KundeExt = __decorate([
         Extensions_1.$Extension("de.Kunde"),
         Jassi_1.$Class("de.KundeExt")
     ], KundeExt);
+    //Hack for tabulator.js
+    KundeExt.prototype.extFunc["match"] = function () { return false; };
 });
 //jassi.register("extensions", "de.Kunde", KundeExt, "KundeExt");
 //# sourceMappingURL=KundeExt.js.map

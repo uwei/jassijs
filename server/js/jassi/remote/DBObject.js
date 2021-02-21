@@ -18,6 +18,7 @@ const Registry_1 = require("jassi/remote/Registry");
 let cl = Classes_1.classes; //force Classes
 const DatabaseSchema_1 = require("jassi/util/DatabaseSchema");
 const Database_1 = require("jassi/remote/Database");
+const Transaction_1 = require("jassi/remote/Transaction");
 function $DBObject(options) {
     return function (pclass, ...params) {
         var classname = Classes_1.classes.getClassName(pclass);
@@ -110,8 +111,10 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
                     cl[this.id] = this; //must be cached before inserting, so the new properties are introduced to the existing
                     if (this.isAutoId())
                         throw new Error("autoid - load the object  before saving or remove id");
-                    else
-                        return await this.call(this, "_createObjectInDB"); //fails if the Object is saved before loading 
+                    else {
+                        //this._createObjectInDB
+                        return await this.call(this, Transaction_1.Transaction.redirectTransaction(this, this, this.save, this._createObjectInDB));
+                    } //fails if the Object is saved before loading 
                 }
                 else {
                     if (cl[this.id] !== this) {
@@ -119,7 +122,8 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
                     }
                 }
                 cl[this.id] = this; //Update cache on save
-                var h = await this.call(this._replaceObjectWithId(this), "save");
+                var newob = this._replaceObjectWithId(this);
+                var h = await this.call(newob, Transaction_1.Transaction.redirectTransaction(this, newob, this.save, this.save));
                 this.id = h.id;
                 return this;
             }
@@ -128,7 +132,8 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
                     throw new Error("error while saving the Id is not set");
                 }
                 else {
-                    var h = await this.call(this._replaceObjectWithId(this), "_createObjectInDB");
+                    var newob = this._replaceObjectWithId(this);
+                    var h = await this.call(newob, Transaction_1.Transaction.redirectTransaction(this, newob, this.save, this._createObjectInDB));
                     this.id = h.id;
                     DBObject_1.cache[Classes_1.classes.getClassName(this)][this.id] = this;
                     return this;
@@ -154,7 +159,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
     }
     static async findOne(options = undefined) {
         if (!Jassi_1.default.isServer) {
-            return await this.call("findOne", options);
+            return await this.call(this.findOne, options);
         }
         else {
             //@ts-ignore
@@ -164,7 +169,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
     }
     static async find(options = undefined) {
         if (!Jassi_1.default.isServer) {
-            return await this.call("find", options);
+            return await this.call(this.find, options);
         }
         else {
             //@ts-ignore
@@ -182,7 +187,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
             if (cl !== undefined) {
                 delete cl[this.id];
             }
-            return await this.call({ id: this.id }, "remove");
+            return await this.call({ id: this.id }, this.remove);
         }
         else {
             //@ts-ignore

@@ -18,14 +18,14 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.base.Database.Field": {}
 	},
 	"jassi/base/DatabaseSchema.ts": {
-		"date": 1613596782645,
+		"date": 1613649088662,
 		"jassi.base.DatabaseSchema": {}
 	},
 	"jassi/base/Errors.ts": {
 		"date": 1590693468836
 	},
 	"jassi/base/Extensions.ts": {
-		"date": 1613218566583
+		"date": 1613921826082
 	},
 	"jassi/base/LoginDialog.ts": {
 		"date": 1613218597119
@@ -55,10 +55,10 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1613394045174
 	},
 	"jassi/modul.ts": {
-		"date": 1613590425651
+		"date": 1613812466946
 	},
 	"jassi/remote/Classes.ts": {
-		"date": 1613249050111,
+		"date": 1613925159863,
 		"jassi.remote.Classes": {}
 	},
 	"jassi/remote/Database.ts": {
@@ -70,14 +70,14 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
-		"date": 1613219076133,
+		"date": 1613743705378,
 		"jassi.remote.DBObject": {}
 	},
 	"jassi/remote/DBObjectQuery.ts": {
 		"date": 1613218566583
 	},
 	"jassi/remote/Extensions.ts": {
-		"date": 1613218569575
+		"date": 1613925202662
 	},
 	"jassi/remote/FileNode.ts": {
 		"date": 1613219099164,
@@ -91,14 +91,14 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.Jassi": {}
 	},
 	"jassi/remote/Registry.ts": {
-		"date": 1613415494435
+		"date": 1613925163015
 	},
 	"jassi/remote/RemoteObject.ts": {
-		"date": 1613219128046,
+		"date": 1613741323055,
 		"jassi.remote.RemoteObject": {}
 	},
 	"jassi/remote/RemoteProtocol.ts": {
-		"date": 1613390719458,
+		"date": 1613815783270,
 		"jassi.remote.RemoteProtocol": {}
 	},
 	"jassi/remote/security/Group.ts": {
@@ -132,11 +132,11 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/security/Rights.ts": {
-		"date": 1613219021491,
+		"date": 1613673891346,
 		"jassi.remote.security.Rights": {}
 	},
 	"jassi/remote/security/User.ts": {
-		"date": 1613219027355,
+		"date": 1613673898489,
 		"jassi.remote.security.User": {
 			"$DBObject": [
 				{
@@ -146,8 +146,12 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1613423379620,
+		"date": 1613673883034,
 		"jassi.remote.Server": {}
+	},
+	"jassi/remote/Transaction.ts": {
+		"date": 1613744930893,
+		"jassi.remote.Transaction": {}
 	},
 	"jassi/security/GroupView.ts": {
 		"date": 1613218741242,
@@ -170,7 +174,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/template/TemplateDBDialog.ts": {
-		"date": 1613504650904,
+		"date": 1613777555443,
 		"jassi.ui.TemplateDBDialogProperties": {},
 		"jassi.ui.TemplateDBDialog": {
 			"$ActionProvider": [
@@ -179,7 +183,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/template/TemplateDBObject.ts": {
-		"date": 1613587997622,
+		"date": 1613649434998,
 		"jassi.ui.TemplateDBDialogProperties": {},
 		"jassi.ui.TemplateDBObject": {
 			"$ActionProvider": [
@@ -230,6 +234,23 @@ define("jassi/registry",["require"], function(require) {
 					"initialize": {
 						"text": "button"
 					}
+				}
+			]
+		}
+	},
+	"jassi/ui/Calendar.ts": {
+		"date": 1613816685718,
+		"jassi.ui.Calendar": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Calendar",
+					"icon": "mdi mdi-calendar-month"
+				}
+			],
+			"$Property": [
+				{
+					"name": "new",
+					"type": "string"
 				}
 			]
 		}
@@ -334,7 +355,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.CSSProperties": {}
 	},
 	"jassi/ui/DatabaseDesigner.ts": {
-		"date": 1613596829556,
+		"date": 1613673965699,
 		"jassi/ui/DatabaseDesigner": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"
@@ -413,7 +434,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/FileExplorer.ts": {
-		"date": 1613505542339,
+		"date": 1613777827314,
 		"jassi.ui.FileActions": {
 			"$ActionProvider": [
 				"jassi.remote.FileNode"
@@ -716,7 +737,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Table.ts": {
-		"date": 1613218544158,
+		"date": 1613935208033,
 		"jassi.ui.TableEditorProperties": {},
 		"jassi.ui.Table": {
 			"$UIComponent": [
@@ -783,14 +804,14 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/VariablePanel.ts": {
-		"date": 1613218544158,
+		"date": 1613914326592,
 		"jassi.ui.VariablePanel": {}
 	},
 	"jassi/util/Cookies.ts": {
 		"date": 1611783871704
 	},
 	"jassi/util/CSVImport.ts": {
-		"date": 1613597798630,
+		"date": 1613741746617,
 		"jassi.util.CSVImport": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"

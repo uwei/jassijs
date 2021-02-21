@@ -112,6 +112,7 @@ export class DatabaseDesigner extends Panel {
         me.newfield.icon = "mdi mdi-playlist-plus";
         me.newfield.onclick(function (event) {
             var field = new DatabaseField();
+            //@ts-ignore
             field.parent = _this.currentClass;
             _this.currentClass.fields.push(field);
             me.table.items = _this.currentClass.fields;

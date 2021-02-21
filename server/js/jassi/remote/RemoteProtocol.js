@@ -7,8 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RemoteProtocol = void 0;
-const Jassi_1 = require("./Jassi");
-const Classes_1 = require("./Classes");
+const Jassi_1 = require("jassi/remote/Jassi");
+const Classes_1 = require("jassi/remote/Classes");
 let RemoteProtocol = class RemoteProtocol {
     /**
      * converts object to jsonstring
@@ -164,6 +164,13 @@ let RemoteProtocol = class RemoteProtocol {
                     delete val.__refid__;
                     delete val.__clname__;
                 }
+            }
+            //Date conversation
+            var datepattern = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/;
+            if (typeof value === 'string') {
+                var a = datepattern.exec(value);
+                if (a)
+                    return new Date(value);
             }
             return val;
         });

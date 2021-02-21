@@ -39,7 +39,7 @@ export class Rights extends RemoteObject{
         if (!jassi.isServer) {
             if(this._isAdmin!==undefined)
                 return this._isAdmin;
-            return await this.call(this,"isAdmin");
+            return await this.call(this,this.isAdmin);
         } else {
             //@ts-ignore
             var req = (await import("jassi/server/getRequest")).getRequest();

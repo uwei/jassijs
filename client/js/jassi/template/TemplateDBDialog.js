@@ -68,7 +68,8 @@ export async function test(){
                 var scode = code.replaceAll("{{dialogname}}", props.dialogname);
                 var fulldbclassname = Classes_1.classes.getClassName(props.dbobject);
                 var shortdbclassname = fulldbclassname.split(".")[fulldbclassname.split(".").length - 1];
-                var dbfilename = await Registry_1.default.getJSONData("$Class", fulldbclassname)[0].filename;
+                var cl = await Registry_1.default.getJSONData("$Class", fulldbclassname);
+                var dbfilename = cl[0].filename;
                 dbfilename = dbfilename.substring(0, dbfilename.length - 3);
                 scode = scode.replaceAll("{{fullclassname}}", (all[0].fullpath + "/" + props.dialogname).replaceAll("/", "."));
                 scode = scode.replaceAll("{{dbclassname}}", shortdbclassname);

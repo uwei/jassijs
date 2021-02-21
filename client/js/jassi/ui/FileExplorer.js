@@ -36,7 +36,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
                 return;
             }
             await FileExplorer.instance.refresh();
-            FileExplorer.instance.tree.activateKey(newkey);
+            await FileExplorer.instance.tree.activateKey(newkey);
             if (open)
                 Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + newkey.replaceAll("|", "/"));
         }

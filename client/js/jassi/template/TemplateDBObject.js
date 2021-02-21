@@ -14,7 +14,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
     exports.TemplateDBObject = exports.TemplateDBObjectProperties = void 0;
     var code = `import {DBObject, $DBObject } from "jassi/remote/DBObject";
 import jassi, { $Class } from "jassi/remote/Jassi";
-import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassi/util/DatabaseSchema";
+import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany,JoinColumn,JoinTable } from "jassi/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassi/remote/DBObjectQuery";
 
 

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.remoteProtocol = void 0;
+exports._execute = exports.remoteProtocol = void 0;
 const Registry_1 = require("jassi/remote/Registry");
 const Classes_1 = require("jassi/remote/Classes");
 const getRequest_1 = require("./getRequest");
@@ -25,74 +25,81 @@ async function checkSimulateUser(request) {
         var kk = getRequest_1.getRequest().user;
     }
 }
-async function execute(request, response) {
+async function execute(request, res) {
+    _execute(request.rawBody, request, undefined).then((val) => {
+        res.send(val);
+    });
+}
+async function _execute(protext, request, runAfterCreation) {
     // await new Promise((resolve)=>{docls(request,response,resolve)});
     var RemoteProtocol = (await Promise.resolve().then(() => require("jassi/remote/RemoteProtocol"))).RemoteProtocol;
     var prot = new RemoteProtocol();
-    var vdata = await prot.parse(request.rawBody);
+    var vdata = await prot.parse(protext);
     Object.assign(prot, vdata);
     var files = Registry_1.default.getAllFilesForService("$Class", prot.classname);
     if (files === undefined || files.length === 0) {
-        response.send("file for " + prot.classname + " not found");
-        return;
+        return "file for " + prot.classname + " not found";
     }
     var file = files[0];
     var path = file.split("/");
     if (path.length < 2 || path[1] !== "remote")
         throw "only remote packages can be loadeded";
     file = file.replace(".ts", "");
-    Promise.resolve().then(() => require(file)).then(async function (ret) {
-        var C = Classes_1.classes.getClass(prot.classname);
-        if (prot._this === "static") {
-            try {
-                await checkSimulateUser(request);
-                if (prot.parameter === undefined)
-                    ret = await (C[prot.method]());
-                else
-                    ret = await (C[prot.method](...prot.parameter));
-            }
-            catch (ex) {
-                console.error(ex.stack);
-                var msg = ex.message;
-                if (!msg)
-                    msg = ex;
-                if (!ex)
-                    ex = "";
-                ret = {
-                    "**throw error**": msg
-                };
-            }
-            var s = new RemoteProtocol().stringify(ret);
-            if (s === undefined)
-                s = "$$undefined$$";
-            response.send(s);
+    var ret = await Promise.resolve().then(() => require(file));
+    var C = Classes_1.classes.getClass(prot.classname);
+    if (prot._this === "static") {
+        try {
+            await checkSimulateUser(request);
+            if (prot.parameter === undefined)
+                ret = await (C[prot.method]());
+            else
+                ret = await (C[prot.method](...prot.parameter));
         }
-        else {
-            var obj = new C();
-            if (prot._this !== undefined)
-                Object.assign(obj, prot._this);
-            var ret = undefined;
-            try {
-                await checkSimulateUser(request);
-                if (prot.parameter === undefined)
-                    ret = await (obj[prot.method]());
-                else
-                    ret = await (obj[prot.method](...prot.parameter));
-            }
-            catch (ex) {
-                console.error(ex.stack);
-                var msg = ex.message;
-                if (!msg)
-                    msg = ex;
-                if (!ex)
-                    ex = "";
-                ret = {
-                    "**throw error**": msg
-                };
-            }
-            var s = new RemoteProtocol().stringify(ret);
-            response.send(s);
+        catch (ex) {
+            console.error(ex.stack);
+            var msg = ex.message;
+            if (!msg)
+                msg = ex;
+            if (!ex)
+                ex = "";
+            ret = {
+                "**throw error**": msg
+            };
         }
-    });
+        var s = new RemoteProtocol().stringify(ret);
+        if (s === undefined)
+            s = "$$undefined$$";
+        return s;
+    }
+    else {
+        var obj = new C();
+        if (runAfterCreation) {
+            obj = runAfterCreation(obj);
+        }
+        if (prot._this !== undefined)
+            Object.assign(obj, prot._this);
+        var ret = undefined;
+        try {
+            await checkSimulateUser(request);
+            if (prot.parameter === undefined)
+                ret = await (obj[prot.method]());
+            else
+                ret = await (obj[prot.method](...prot.parameter));
+        }
+        catch (ex) {
+            console.error(ex.stack);
+            var msg = ex.message;
+            if (!msg)
+                msg = ex;
+            if (!ex)
+                ex = "";
+            ret = {
+                "**throw error**": msg
+            };
+        }
+        var s = new RemoteProtocol().stringify(ret);
+        return s;
+    }
 }
+exports._execute = _execute;
 //# sourceMappingURL=DoRemoteProtocol.js.map

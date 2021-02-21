@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse", "jassi/remote/Database", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/remote/DBObject", "jassi/base/Actions", "jassi/base/Router", "jassi/remote/Server"], function (require, exports, Upload_1, Button_1, NumberConverter_1, Textbox_1, BoxPanel_1, Select_1, Table_1, Jassi_1, Panel_1, papaparse_1, Database_1, Registry_1, Classes_1, DBObject_1, Actions_1, Router_1, Server_1) {
+define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse", "jassi/remote/Database", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/remote/DBObject", "jassi/base/Actions", "jassi/base/Router", "jassi/remote/Server", "jassi/remote/Transaction"], function (require, exports, Upload_1, Button_1, NumberConverter_1, Textbox_1, BoxPanel_1, Select_1, Table_1, Jassi_1, Panel_1, papaparse_1, Database_1, Registry_1, Classes_1, DBObject_1, Actions_1, Router_1, Server_1, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -206,7 +206,7 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
             var members = Registry_1.default.getMemberData("design:type")[dbclass];
             var allObjects = [];
             var from = fromLine;
-            for (var x = from; x < data.length; x++) {
+            for (var x = from - 1; x < data.length; x++) {
                 var satz = data[x];
                 var ob = new Type();
                 for (var fname in meta) {
@@ -221,6 +221,9 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
                             if (val === "#NV")
                                 val = undefined;
                         }
+                        if ((meta[fname].OneToOne || meta[fname].ManyToOne) && val !== undefined) {
+                            val = { id: val };
+                        }
                         ob[fname] = val;
                     }
                 }
@@ -233,11 +236,13 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
                     allObjects.push(ob);
             }
             var ret = [];
+            var trans = new Transaction_1.Transaction();
             for (var x = 0; x < allObjects.length; x++) {
-                await allObjects[x].save();
+                //await allObjects[x].save();
+                trans.add(allObjects[x], allObjects[x].save);
                 //ret.push(allObjects[x].save());
             }
-            await Promise.all(ret);
+            await trans.execute();
             return "imported " + allObjects.length + " objects";
         }
     };
@@ -347,7 +352,7 @@ WHITC,89,White Clover Markets,Karl Jablonski,Owner,305 - 14th Ave. S. Suite 3B,S
 WILMK,90,Wilman Kala,Matti Karttunen,Owner/Marketing Assistant,Keskuskatu 45,Helsinki,#NV,21240,Finland,90-224 8858,90-224 8858
 WOLZA,91,Wolski  Zajazd,Zbyszek Piestrzeniewicz,Owner,ul. Filtrowa 68,Warszawa,#NV,01-012,Poland,(26) 642-7012,(26) 642-7012
 `;
-        var s = await CSVImport.startImport("https://raw.githubusercontent.com/tmcnab/northwind-mongo/master/employees.csv", "northwind.Employees", { "id": "EmployeeID" }, { ".\nA": ".A", "e\nM": "eM", "w\nW": "wW" });
+        var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees", { "id": "EmployeeID" });
         alert(s);
         /*	var t = await classes.loadClass("northwind.Customer");
             var ret = new CSVImport();

@@ -113,7 +113,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1612387959952
 	},
 	"demo/TreeTable.ts": {
-		"date": 1613218544157,
+		"date": 1613914171753,
 		"demo.TreeTable": {}
 	}
 }

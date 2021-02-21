@@ -21,10 +21,12 @@ define(["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/re
             Router_1.router.navigate("#do=northwind.ImportData");
         }
         async startImport() {
-            var path = "https://raw.githubusercontent.com/tmcnab/northwind-mongo/master";
+            var path = "https://uwei.github.io/jassijs/client/northwind/import";
             this.me.IDProtokoll.value = "";
             var s = await CSVImport_1.CSVImport.startImport(path + "/customers.csv", "northwind.Customer", { "id": "CustomerID" });
             this.me.IDProtokoll.value += "<br>Customer " + s;
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees", { "id": "EmployeeID" });
+            this.me.IDProtokoll.value += "<br>Employees " + s;
             this.me.IDProtokoll.value += "<br>Fertig";
         }
         layout(me) {

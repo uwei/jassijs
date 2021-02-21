@@ -5,6 +5,7 @@ import registry from "jassi/remote/Registry";
 let cl = classes;//force Classes
 import { Entity, EntityOptions } from "jassi/util/DatabaseSchema";
 import { db } from "jassi/remote/Database";
+import { Transaction } from "jassi/remote/Transaction";
    
 export function $DBObject(options?: EntityOptions): Function {
     return function(pclass, ...params) {
@@ -105,22 +106,26 @@ export class DBObject extends RemoteObject {
                     cl[this.id] = this;//must be cached before inserting, so the new properties are introduced to the existing
                     if (this.isAutoId())
                         throw new Error("autoid - load the object  before saving or remove id");
-                    else
-                        return await this.call(this, "_createObjectInDB");//fails if the Object is saved before loading 
+                    else{
+                        //this._createObjectInDB
+                        return await this.call(this,Transaction.redirectTransaction(this,this,this.save,this._createObjectInDB));
+                    }//fails if the Object is saved before loading 
                 } else {
                     if (cl[this.id] !== this) {
                         throw new Error("the object must be loaded before save");
                     }
                 }
                 cl[this.id] = this;//Update cache on save
-                var h= await this.call(this._replaceObjectWithId(this), "save");
+                var newob=this._replaceObjectWithId(this);
+                var h= await this.call(newob, Transaction.redirectTransaction(this,newob,this.save,this.save));
                 this.id=h.id;
                 return this;
             } else {
                 if (!this.isAutoId()) {
                     throw new Error("error while saving the Id is not set");
                 } else{
-                	 var h= await this.call(this._replaceObjectWithId(this), "_createObjectInDB");
+                     var newob=this._replaceObjectWithId(this);
+                	 var h= await this.call(newob, Transaction.redirectTransaction(this,newob,this.save,this._createObjectInDB));
                 	 this.id=h.id;
                 	 DBObject.cache[classes.getClassName(this)][this.id]=this;
                     return this;
@@ -145,7 +150,7 @@ export class DBObject extends RemoteObject {
     }
     static async findOne(options = undefined): Promise<DBObject> {
         if (!jassi.isServer) {
-            return await this.call("findOne", options);
+            return await this.call(this.findOne, options);
         } else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
@@ -154,7 +159,7 @@ export class DBObject extends RemoteObject {
     }
     static async find(options = undefined): Promise<DBObject[]> {
         if (!jassi.isServer) {
-            return await this.call("find", options);
+            return await this.call(this.find, options);
         } else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
@@ -172,7 +177,7 @@ export class DBObject extends RemoteObject {
                 delete cl[this.id];
             }
 
-            return await this.call({ id: this.id }, "remove");
+            return await this.call({ id: this.id }, this.remove);
         } else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();

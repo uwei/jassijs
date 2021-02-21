@@ -34,28 +34,33 @@ async function checkSimulateUser(request) {
 
 
 }
-async function execute(request, response) {
+async function execute(request, res) {
+    _execute(request.rawBody,request,undefined).then((val)=>{
+        res.send(val);
+    });
+    
+}
+export async function _execute(protext:string,request,runAfterCreation):Promise<string> {
     // await new Promise((resolve)=>{docls(request,response,resolve)});
 
     var RemoteProtocol = (await import("jassi/remote/RemoteProtocol")).RemoteProtocol;
 
 
     var prot = new RemoteProtocol();
-    var vdata = await prot.parse(request.rawBody);
+    var vdata = await prot.parse(protext);
     Object.assign(prot, vdata);
 
     var files = registry.getAllFilesForService("$Class", prot.classname);
 
     if (files === undefined || files.length === 0) {
-        response.send("file for " + prot.classname + " not found");
-        return;
+        return "file for " + prot.classname + " not found";
     }
     var file: string = files[0];
     var path=file.split("/");
     if (path.length<2||path[1]!=="remote")
         throw "only remote packages can be loadeded";
     file = file.replace(".ts", "");
-    import(file).then(async function (ret) {
+    var ret=await import(file);
 
         var C = classes.getClass(prot.classname);
         if (prot._this === "static") {
@@ -79,9 +84,12 @@ async function execute(request, response) {
             var s = new RemoteProtocol().stringify(ret);
             if (s === undefined)
                 s = "$$undefined$$";
-            response.send(s);
+            return s;
         } else {
             var obj = new C();
+            if(runAfterCreation){
+                obj=runAfterCreation(obj);
+            }
             if (prot._this !== undefined)
                 Object.assign(obj, prot._this);
             var ret = undefined;
@@ -103,7 +111,7 @@ async function execute(request, response) {
                 }
             }
             var s = new RemoteProtocol().stringify(ret);
-            response.send(s);
+           return s;
         }
-    });
+
 }

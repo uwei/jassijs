@@ -179,6 +179,48 @@ class DBManager {
             throw new Error("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
         await this.connection().manager.remove(entity);
     }
+    async addSaveTransaction(entity) {
+        if (entity.objecttransaction) {
+            let ot = entity.objecttransaction;
+            if (!ot.savelist) {
+                ot.savelist = [entity];
+                ot.saveresolve = [];
+                ot.addFunctionFinally(async () => {
+                    ot.savelist.forEach((ent) => {
+                        delete ent.objecttransaction;
+                    });
+                    ot.savereturn = await this.connection().manager.save(ot.savelist);
+                    for (let x = 0; x < ot.savereturn.length; x++) {
+                        delete ot.savereturn[x].password;
+                        ot.saveresolve[x](ot.savereturn[x]);
+                    }
+                });
+            }
+            else
+                ot.savelist.push(entity);
+            //entity.objecttransaction.addFunctionFinally(
+            return new Promise((resolve) => {
+                ot.saveresolve.push(resolve);
+                ot.transactionResolved();
+                ot.checkFinally();
+            });
+        }
+    }
+    /**
+   * insert a new object
+   * @param obj - the object to insert
+   */
+    async insert(obj) {
+        await this._checkParentRightsForSave(obj);
+        if (obj["objecttransaction"]) {
+            return this.addSaveTransaction(obj);
+        }
+        //@ts-ignore
+        var ret = await this.connection().manager.insert(obj.constructor, obj);
+        //save also relations
+        ret = await this.save(obj);
+        return ret;
+    }
     async save(entity, options) {
         await this._checkParentRightsForSave(entity);
         if (Classes_1.classes.getClassName(entity) === "jassi.remote.security.User" && entity.password !== undefined) {
@@ -192,12 +234,17 @@ class DBManager {
                 });
             });
         }
+        if (entity.objecttransaction && options === undefined) {
+            return this.addSaveTransaction(entity);
+        }
         var ret = await this.connection().manager.save(entity, options);
         delete entity.password;
         delete ret["password"];
         return ret;
     }
     async _checkParentRightsForSave(entity) {
+        if (getRequest_1.getRequest().user.isAdmin)
+            return;
         //Check if the object self has restrictions
         var cl = Classes_1.classes.getClass(Classes_1.classes.getClassName(entity));
         if (entity["id"] !== undefined) {
@@ -366,18 +413,6 @@ class DBManager {
         var tt = ret.getSql();
         var test = await ret.getCount();
         return test === ids.length;
-    }
-    /**
-     * insert a new object
-     * @param obj - the object to insert
-     */
-    async insert(obj) {
-        await this._checkParentRightsForSave(obj);
-        //@ts-ignore
-        var ret = await this.connection().manager.insert(obj.constructor, obj);
-        //save also relations
-        ret = await this.save(obj);
-        return ret;
     }
 }
 exports.DBManager = DBManager;

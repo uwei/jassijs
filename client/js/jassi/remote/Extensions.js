@@ -21,7 +21,7 @@ define(["require", "exports", "./Registry"], function (require, exports, Registr
             //TODO reloading???
             //we must wait with to extent because forclass ist not loaded
             var func = Registry_1.default.onregister("$Class", function (oclass, params) {
-                if (oclass.prototype._classname === forclass) {
+                if (oclass.prototype.constructor._classname === forclass) {
                     Registry_1.default.offregister("$Class", func);
                     let props = Object.getOwnPropertyNames(extensionclass.prototype);
                     for (var m = 0; m < props.length; m++) {
@@ -47,7 +47,7 @@ define(["require", "exports", "./Registry"], function (require, exports, Registr
         }
         annotateMember(classname, member, type, ...annotations) {
             var func = Registry_1.default.onregister("$Class", function (oclass, params) {
-                if (oclass.prototype._classname === classname) {
+                if (oclass.prototype.constructor._classname === classname) {
                     Registry_1.default.offregister("$Class", func);
                     //designtype
                     Reflect["metadata"]("design:type", type)(oclass.prototype, member);

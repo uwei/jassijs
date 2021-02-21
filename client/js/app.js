@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/ui/FileExplorer", "jassi/base/Windows", "jassi/ui/Panel", "jassi/base/Router", "jassi/ui/SearchExplorer", "jassi/ui/DBObjectExplorer", "jassi/ui/ActionNodeMenu", "demo/HalloPhillip", "de/DialogKunde", "demo/TreeTable"], function (require, exports, FileExplorer_1, Windows_1, Panel_1, Router_1, SearchExplorer_1, DBObjectExplorer_1, ActionNodeMenu_1) {
+define(["require", "exports", "jassi/ui/FileExplorer", "jassi/base/Windows", "jassi/ui/Panel", "jassi/ui/Button", "jassi/base/Router", "jassi/ui/SearchExplorer", "jassi/ui/DBObjectExplorer", "jassi/ui/ActionNodeMenu"], function (require, exports, FileExplorer_1, Windows_1, Panel_1, Button_1, Router_1, SearchExplorer_1, DBObjectExplorer_1, ActionNodeMenu_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     //var h=new RemoteObject().test();
@@ -9,7 +9,16 @@ define(["require", "exports", "jassi/ui/FileExplorer", "jassi/base/Windows", "ja
         Windows_1.default.addLeft(new DBObjectExplorer_1.DBObjectExplorer(), "DBObjects");
         Windows_1.default.addLeft(new SearchExplorer_1.SearchExplorer(), "Search");
         Windows_1.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
-        Windows_1.default._desktop.add(new ActionNodeMenu_1.ActionNodeMenu());
+        var bt = new Button_1.Button();
+        Windows_1.default._desktop.add(bt);
+        bt.icon = "mdi mdi-refresh";
+        var am = new ActionNodeMenu_1.ActionNodeMenu();
+        bt.onclick(() => {
+            Windows_1.default._desktop.remove(am);
+            am = new ActionNodeMenu_1.ActionNodeMenu();
+            Windows_1.default._desktop.add(am);
+        });
+        Windows_1.default._desktop.add(am);
         /*   var bts = new Button();
            bts.text = "Spy";
            bts.y = 100;

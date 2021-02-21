@@ -18,7 +18,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
         }
         static async find(options = undefined) {
             if (!Jassi_1.default.isServer) {
-                return await this.call("find", options);
+                return await this.call(this.find, options);
             }
             else {
                 //@ts-ignore

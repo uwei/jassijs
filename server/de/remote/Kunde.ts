@@ -70,7 +70,7 @@ export class Kunde extends DBObject implements ExtensionProvider {
     }
     static async find(options = undefined): Promise<any[]> {
         if (!jassi.isServer) {
-            return await this.call("find", options);
+            return await this.call(this.find, options);
         }
         else {
             //@ts-ignore
@@ -98,6 +98,10 @@ export class Kunde extends DBObject implements ExtensionProvider {
     land: string;
 }
 export async function test() {
+    let test=new Kunde();
+    for(var key in test) {
+        console.log(key);
+    }
     //await Kunde.sample();
     var k = <Kunde>await Kunde.findOne({ id: 1 });
     k.vorname = "Ella";

@@ -26,7 +26,7 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassi/rem
         }
         static async myfind(options = undefined) {
             if (!Jassi_1.default.isServer) {
-                return await this.call("myfind", options);
+                return await this.call(this.myfind, options);
             }
             else {
                 //@ts-ignore

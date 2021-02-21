@@ -39,7 +39,7 @@ let Rights = class Rights extends RemoteObject_1.RemoteObject {
         if (!Jassi_1.default.isServer) {
             if (this._isAdmin !== undefined)
                 return this._isAdmin;
-            return await this.call(this, "isAdmin");
+            return await this.call(this, this.isAdmin);
         }
         else {
             //@ts-ignore

@@ -25,7 +25,7 @@ export class Extensions {
         //TODO reloading???
         //we must wait with to extent because forclass ist not loaded
         var func = registry.onregister("$Class", function (oclass, params) {
-            if (oclass.prototype._classname === forclass) {
+            if (oclass.prototype.constructor._classname === forclass) {
                 registry.offregister("$Class", func);
                 let props = Object.getOwnPropertyNames(extensionclass.prototype);
                 for (var m = 0; m < props.length; m++) {
@@ -53,7 +53,7 @@ export class Extensions {
     annotateMember(classname, member, type, ...annotations) {
        
         var func = registry.onregister("$Class", function (oclass, params) {
-            if (oclass.prototype._classname === classname) {
+            if (oclass.prototype.constructor._classname === classname) {
                 registry.offregister("$Class", func);
                 //designtype
               

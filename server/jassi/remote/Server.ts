@@ -92,7 +92,7 @@ export class Server extends RemoteObject {
         if (!jassi.isServer) {
             var ret: FileNode;
             if((await Server.isonline)===true)
-                ret= <FileNode>await this.call(this, "dir", withDate);
+                ret= <FileNode>await this.call(this, this.dir, withDate);
             else
                 ret={name:"",files:[]};
             await this.addFilesFromMap(ret);
@@ -113,7 +113,7 @@ export class Server extends RemoteObject {
      */
     async loadFiles(fileNames: string[]): Promise<{ [id: string]: string }> {
         if (!jassi.isServer) {
-            return <{ [id: string]: string }>await this.call(this, "loadFiles", fileNames);
+            return <{ [id: string]: string }>await this.call(this, this.loadFiles, fileNames);
         } else {
             //@ts-ignore
             var fs = await import("jassi/server/Filessystem");
@@ -174,7 +174,7 @@ export class Server extends RemoteObject {
                     allcontents.push(content);
                 }
             }
-            var res = await this.call(this, "saveFiles", allfileNames, allcontents);
+            var res = await this.call(this, this.saveFiles, allfileNames, allcontents);
 
             if (res === "") {
                 //@ts-ignore
@@ -224,7 +224,7 @@ export class Server extends RemoteObject {
     **/
     async delete(name: string): Promise<string> {
         if (!jassi.isServer) {
-            var ret = await this.call(this, "delete", name);
+            var ret = await this.call(this, this.delete, name);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -240,7 +240,7 @@ export class Server extends RemoteObject {
      **/
     async rename(oldname: string, newname: string): Promise<string> {
         if (!jassi.isServer) {
-            var ret = await this.call(this, "rename", oldname, newname);
+            var ret = await this.call(this, this.rename, oldname, newname);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -257,7 +257,7 @@ export class Server extends RemoteObject {
     async isOnline(): Promise<boolean> {
         if (!jassi.isServer) {
             try{
-                var ret = await this.call(this, "isOnline");
+                var ret = await this.call(this, this.isOnline);
                 return ret;
             }catch{
                 return false;
@@ -273,7 +273,7 @@ export class Server extends RemoteObject {
      **/
     async createFile(filename: string, content: string): Promise<string> {
         if (!jassi.isServer) {
-            var ret = await this.call(this, "createFile", filename, content);
+            var ret = await this.call(this, this.createFile, filename, content);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -289,7 +289,7 @@ export class Server extends RemoteObject {
     **/
     async createFolder(foldername: string): Promise<string> {
         if (!jassi.isServer) {
-            var ret = await this.call(this, "createFolder", foldername);
+            var ret = await this.call(this, this.createFolder, foldername);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -302,7 +302,7 @@ export class Server extends RemoteObject {
     }
     static async mytest() {
         if (!jassi.isServer) {
-            return await this.call("mytest");
+            return await this.call(this.mytest);
         } else
             return 14;//this is called on server
     }

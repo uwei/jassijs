@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteObject", "jassi/remote/Registry", "jassi/util/DatabaseSchema", "jassi/remote/Database"], function (require, exports, Jassi_1, Classes_1, RemoteObject_1, Registry_1, DatabaseSchema_1, Database_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteObject", "jassi/remote/Registry", "jassi/util/DatabaseSchema", "jassi/remote/Database", "jassi/remote/Transaction"], function (require, exports, Jassi_1, Classes_1, RemoteObject_1, Registry_1, DatabaseSchema_1, Database_1, Transaction_1) {
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -105,8 +105,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                         cl[this.id] = this; //must be cached before inserting, so the new properties are introduced to the existing
                         if (this.isAutoId())
                             throw new Error("autoid - load the object  before saving or remove id");
-                        else
-                            return await this.call(this, "_createObjectInDB"); //fails if the Object is saved before loading 
+                        else {
+                            //this._createObjectInDB
+                            return await this.call(this, Transaction_1.Transaction.redirectTransaction(this, this, this.save, this._createObjectInDB));
+                        } //fails if the Object is saved before loading 
                     }
                     else {
                         if (cl[this.id] !== this) {
@@ -114,7 +116,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                         }
                     }
                     cl[this.id] = this; //Update cache on save
-                    var h = await this.call(this._replaceObjectWithId(this), "save");
+                    var newob = this._replaceObjectWithId(this);
+                    var h = await this.call(newob, Transaction_1.Transaction.redirectTransaction(this, newob, this.save, this.save));
                     this.id = h.id;
                     return this;
                 }
@@ -123,7 +126,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                         throw new Error("error while saving the Id is not set");
                     }
                     else {
-                        var h = await this.call(this._replaceObjectWithId(this), "_createObjectInDB");
+                        var newob = this._replaceObjectWithId(this);
+                        var h = await this.call(newob, Transaction_1.Transaction.redirectTransaction(this, newob, this.save, this._createObjectInDB));
                         this.id = h.id;
                         DBObject_1.cache[Classes_1.classes.getClassName(this)][this.id] = this;
                         return this;
@@ -149,7 +153,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         }
         static async findOne(options = undefined) {
             if (!Jassi_1.default.isServer) {
-                return await this.call("findOne", options);
+                return await this.call(this.findOne, options);
             }
             else {
                 //@ts-ignore
@@ -159,7 +163,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         }
         static async find(options = undefined) {
             if (!Jassi_1.default.isServer) {
-                return await this.call("find", options);
+                return await this.call(this.find, options);
             }
             else {
                 //@ts-ignore
@@ -177,7 +181,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                 if (cl !== undefined) {
                     delete cl[this.id];
                 }
-                return await this.call({ id: this.id }, "remove");
+                return await this.call({ id: this.id }, this.remove);
             }
             else {
                 //@ts-ignore

@@ -31,7 +31,7 @@ let AR = AR_1 = class AR extends DBObject_1.DBObject {
     }
     static async myfind(options = undefined) {
         if (!Jassi_1.default.isServer) {
-            return await this.call("myfind", options);
+            return await this.call(this.myfind, options);
         }
         else {
             //@ts-ignore
