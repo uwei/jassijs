@@ -239,7 +239,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Calendar.ts": {
-		"date": 1613816685718,
+		"date": 1614021824682,
 		"jassi.ui.Calendar": {
 			"$UIComponent": [
 				{
@@ -458,7 +458,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Image.ts": {
-		"date": 1613218544159,
+		"date": 1614029162105,
 		"jassi.ui.Image": {
 			"$UIComponent": [
 				{
@@ -737,7 +737,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Table.ts": {
-		"date": 1613935208033,
+		"date": 1614022517264,
 		"jassi.ui.TableEditorProperties": {},
 		"jassi.ui.Table": {
 			"$UIComponent": [
@@ -755,8 +755,25 @@ define("jassi/registry",["require"], function(require) {
 			]
 		}
 	},
+	"jassi/ui/Textarea.ts": {
+		"date": 1614023973946,
+		"jassi.ui.Textarea": {
+			"$UIComponent": [
+				{
+					"fullPath": "common/Textarea",
+					"icon": "mdi mdi-text-box-outline"
+				}
+			],
+			"$Property": [
+				{
+					"name": "new",
+					"type": "string"
+				}
+			]
+		}
+	},
 	"jassi/ui/Textbox.ts": {
-		"date": 1613218566582,
+		"date": 1614029152611,
 		"jassi.ui.Textbox": {
 			"$UIComponent": [
 				{

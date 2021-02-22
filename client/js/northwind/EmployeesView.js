@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Employees", "jassi/ui/DBObjectView"], function (require, exports, Calendar_1, Textbox_1, Button_1, Jassi_1, Property_1, Employees_1, DBObjectView_1) {
+define(["require", "exports", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Employees", "jassi/ui/DBObjectView"], function (require, exports, Image_1, Textarea_1, Calendar_1, Textbox_1, Button_1, Jassi_1, Property_1, Employees_1, DBObjectView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmployeesView = void 0;
@@ -30,8 +30,15 @@ define(["require", "exports", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui
             me.postalCode = new Textbox_1.Textbox();
             me.city = new Textbox_1.Textbox();
             me.birthDate = new Calendar_1.Calendar();
+            me.region = new Textbox_1.Textbox();
+            me.state = new Textbox_1.Textbox();
+            me.hiredate = new Calendar_1.Calendar();
+            me.homephone = new Textbox_1.Textbox();
+            me.notes = new Textarea_1.Textarea();
+            me.image1 = new Image_1.Image();
+            me.textbox2 = new Textbox_1.Textbox();
             me.button1.text = "button";
-            me.main.width = "800";
+            me.main.width = "900";
             me.main.height = "800";
             me.main.isAbsolute = true;
             me.main.add(me.titleOfCouttesy);
@@ -42,6 +49,13 @@ define(["require", "exports", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui
             me.main.add(me.postalCode);
             me.main.add(me.city);
             me.main.add(me.birthDate);
+            me.main.add(me.region);
+            me.main.add(me.state);
+            me.main.add(me.hiredate);
+            me.main.add(me.homephone);
+            me.main.add(me.notes);
+            me.main.add(me.image1);
+            me.main.add(me.textbox2);
             me.titleOfCouttesy.x = 5;
             me.titleOfCouttesy.y = 5;
             me.titleOfCouttesy.label = "Title of C.";
@@ -64,7 +78,7 @@ define(["require", "exports", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui
             me.address.y = 50;
             me.address.label = "Address";
             me.address.bind(me.databinder, "Address");
-            me.address.width = 275;
+            me.address.width = 345;
             me.postalCode.x = 5;
             me.postalCode.y = 95;
             me.postalCode.label = "Postal Code";
@@ -74,12 +88,53 @@ define(["require", "exports", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui
             me.city.y = 95;
             me.city.bind(me.databinder, "City");
             me.city.label = "City";
-            me.city.width = 170;
-            me.birthDate.x = 10;
-            me.birthDate.y = 145;
-            me.birthDate.width = 190;
+            me.city.width = 240;
+            me.birthDate.x = 5;
+            me.birthDate.y = 190;
+            me.birthDate.width = 90;
             me.birthDate.bind(me.databinder, "BirthDate");
             me.birthDate.label = "Birth Date";
+            me.region.x = 5;
+            me.region.y = 140;
+            me.region.bind(me.databinder, "Region");
+            me.region.label = "Region";
+            me.region.width = 90;
+            me.state.x = 110;
+            me.state.y = 140;
+            me.state.bind(me.databinder, "Country");
+            me.state.label = "country";
+            me.state.width = 240;
+            me.hiredate.x = 110;
+            me.hiredate.y = 190;
+            me.hiredate.bind(me.databinder, "HireDate");
+            me.hiredate.label = "Hire Date";
+            me.hiredate.width = 85;
+            me.homephone.x = 210;
+            me.homephone.y = 190;
+            me.homephone.bind(me.databinder, "HomePhone");
+            me.homephone.label = "Home Phone";
+            me.homephone.width = 140;
+            me.notes.x = 375;
+            me.notes.y = 50;
+            me.notes.width = 240;
+            me.notes.height = 155;
+            me.notes.bind(me.databinder, "Notes");
+            me.notes.label = "Notes";
+            this.width = 778;
+            this.height = 828;
+            me.image1.x = 630;
+            me.image1.y = 20;
+            me.image1.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80";
+            me.image1.css({
+                background_color: "black",
+                border_style: "solid"
+            });
+            me.image1.width = 125;
+            me.textbox2.x = 5;
+            me.textbox2.y = 240;
+            me.textbox2.bind(me.databinder, "PhotoPath");
+            me.textbox2.label = "Photo Path";
+            me.textbox2.width = 610;
         }
     };
     __decorate([

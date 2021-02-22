@@ -36,8 +36,8 @@ export class ComponentPalette extends Panel {
                 img.tooltip = sname;
 
                 img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon+(data.icon.startsWith("mdi")?" mdi-18px":"");
-                img.height = 24;
-                img.width = 24;
+                //img.height = 24;
+                //img.width = 24;
                 img["createFromType"] = mdata.classname;
                 img["createFromParam"] = data.initialize;
                 _this._makeDraggable(img);

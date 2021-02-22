@@ -31,7 +31,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi_editor.ComponentExplorer": {}
 	},
 	"jassi_editor/ComponentPalette.ts": {
-		"date": 1613218566583,
+		"date": 1614028739796,
 		"jassi_editor.ComponentPalette": {}
 	},
 	"jassi_editor/Debugger.ts": {

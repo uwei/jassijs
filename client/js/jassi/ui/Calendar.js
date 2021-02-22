@@ -23,6 +23,20 @@ define(["require", "exports", "jassi/ui/Textbox", "jassi/ui/Component", "jassi/r
         set value(val) {
             $(this.dom).datepicker('setDate', val);
         }
+        static parseDate(date, format = undefined, settings = undefined) {
+            if (settings === undefined)
+                settings = $.datepicker.regional[navigator.language.split("-")[0]];
+            if (format === undefined)
+                format = settings.dateFormat;
+            return $.datepicker.parseDate(format, date, settings);
+        }
+        static formatDate(date, format = undefined, settings = undefined) {
+            if (settings === undefined)
+                settings = $.datepicker.regional[navigator.language.split("-")[0]];
+            if (format === undefined)
+                format = settings.dateFormat;
+            return $.datepicker.formatDate(format, date, settings);
+        }
     };
     Calendar = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Calendar", icon: "mdi mdi-calendar-month" }),
@@ -34,7 +48,9 @@ define(["require", "exports", "jassi/ui/Textbox", "jassi/ui/Component", "jassi/r
     function test() {
         var cal = new Calendar();
         cal.value = new Date(1978, 5, 1);
-        var dateFormat = $(cal.dom).datepicker("option", "dateFormat");
+        var h = Calendar.parseDate("18.03.2020");
+        var hh = Calendar.formatDate(h);
+        var i = cal.value;
         // cal.value=Date.now()
         return cal;
     }

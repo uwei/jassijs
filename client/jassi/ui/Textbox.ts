@@ -33,12 +33,14 @@ export  class Textbox extends DataComponent{
         get disabled(){
             return $(this.dom).prop('disabled');
         }
+        
         /**
          * @member {string} value - value of the component 
          */
         set value(value){ //the Code
                     $(this.dom).val(value);
         }
+        @$Property({type:"string"})
         get value(){
         	var ret= $(this.dom).val();
         	if(this.converter!==undefined){

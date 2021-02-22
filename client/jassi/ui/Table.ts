@@ -6,6 +6,7 @@ import { DataComponent } from "jassi/ui/DataComponent";
 import { $Property } from "jassi/ui/Property";
 import { Component, $UIComponent } from "jassi/ui/Component";
 import { Textbox } from "jassi/ui/Textbox";
+import { Calendar } from "jassi/ui/Calendar";
 
 interface TableOptions extends Tabulator.Options {
     dataTreeChildFunction?: ((data: any) => any);
@@ -20,7 +21,7 @@ class TableEditorProperties {
     @$Property({ default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] })
     layout: string;
     @$Property({ default: undefined })
-    dataTreeChildFunction: (any) => any|any;
+    dataTreeChildFunction: (any) => any | any;
     @$Property({ default: false })
     movableColumns: boolean;
     @$Property({ default: "function(event:any,group:any){\n\t\n}" })
@@ -57,18 +58,9 @@ export class Table extends DataComponent {
 
         if (properties.autoColumns === undefined)
             properties.autoColumns = true;
-        if(properties.autoColumnsDefinitions===undefined){
-            properties.autoColumnsDefinitions=function(definitions):Tabulator.ColumnDefinition[]{
-                var ret=[];
-                for(let x=0;x<definitions.length;x++){
-                    if(definitions[x].sorter==="array")
-                        continue;
-                    if(_this.items&&_this.items.length>0&&typeof _this.items[0][definitions[x].field]==="function")
-                        continue;
-                    ret.push(definitions[x]);
-                }
-                return ret;
-            }
+        if (properties.autoColumnsDefinitions === undefined) {
+
+            properties.autoColumnsDefinitions = this.defaultAutoColumnDefinitions.bind(this);
         }
         if (properties.dataTreeChildFunction !== undefined) {
             //@ts-ignore
@@ -92,7 +84,7 @@ export class Table extends DataComponent {
             properties.layout = "fitDataStretch"; //"fitDataFill";////"fitColumns";
         var dataTreeRowExpanded = properties.dataTreeRowExpanded;
         properties.dataTreeRowExpanded = function (row: Tabulator.RowComponent, level) {
-            _this.onTreeExpanded(row,level);
+            _this.onTreeExpanded(row, level);
             if (dataTreeRowExpanded !== undefined) {
                 dataTreeRowExpanded(row, level);
             }
@@ -116,21 +108,44 @@ export class Table extends DataComponent {
         this.table = new Tabulator("[id='" + this._id + "']", properties);
         this.layout();
     }
-    private getChildsFromTreeFunction(data){
+    private defaultAutoColumnDefinitions(definitions: Tabulator.ColumnDefinition[]): Tabulator.ColumnDefinition[] {
+        var _this = this;
+        var ret = [];
+        for (let x = 0; x < definitions.length; x++) {
+            var data;
+            if (definitions[x].sorter === "array")
+                continue;
+            if (_this.items && _this.items.length > 0) {
+                data = _this.items[0][definitions[x].field];
+                if (typeof data === "function")
+                    continue;
+                if (data instanceof Date) {
+                    definitions[x].formatter = function (cell, formatterParams, onRendered) {
+                        return Calendar.formatDate(data); //return the contents of the cell;
+                    }
+                }
+                
+            }
+                ret.push(definitions[x]);
+            }
+            return ret;
+
+        }
+    private getChildsFromTreeFunction(data) {
         var childs;
         if (typeof this.dataTreeChildFunction === "function") {
             childs = this.dataTreeChildFunction(data);
         } else {
             childs = data[this.dataTreeChildFunction];
-            if(typeof childs==="function")
-                childs=childs.bind(data)();
+            if (typeof childs === "function")
+                childs = childs.bind(data)();
         }
         return childs;
     }
     private populateTreeData(data) {
 
-        var childs=this.getChildsFromTreeFunction(data);
-       
+        var childs = this.getChildsFromTreeFunction(data);
+
         if (childs && childs.length > 0) {
             Object.defineProperty(data, "__treechilds", {
                 configurable: true,
@@ -139,8 +154,8 @@ export class Table extends DataComponent {
                 }
             });
             for (var x = 0; x < childs.length; x++) {
-                var nchilds=this.getChildsFromTreeFunction(childs[x]);
-               
+                var nchilds = this.getChildsFromTreeFunction(childs[x]);
+
                 if (nchilds && nchilds.length > 0) {
                     Object.defineProperty(childs[x], "__treechilds", {
                         configurable: true,
@@ -154,13 +169,13 @@ export class Table extends DataComponent {
         }
     }
     private onTreeExpanded(row: Tabulator.RowComponent, level) {
-        if(this.dataTreeChildFunction){
-            var data=row.getData();
-             let childs=data.__treechilds;//this.getChildsFromTreeFunction(data)   //row.getData()["childs"];
-                for(let f=0;f<childs.length;f++){
-                    this.populateTreeData(childs[f]);
-                }
-                row.update(data);
+        if (this.dataTreeChildFunction) {
+            var data = row.getData();
+            let childs = data.__treechilds;//this.getChildsFromTreeFunction(data)   //row.getData()["childs"];
+            for (let f = 0; f < childs.length; f++) {
+                this.populateTreeData(childs[f]);
+            }
+            row.update(data);
         }
     }
     layout() {

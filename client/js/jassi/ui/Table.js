@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "jassi/ui/Property", "jassi/ui/Component", "jassi/ui/Textbox", "jassi/ext/tabulator"], function (require, exports, Jassi_1, DataComponent_1, Property_1, Component_1, Textbox_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "jassi/ui/Property", "jassi/ui/Component", "jassi/ui/Textbox", "jassi/ui/Calendar", "jassi/ext/tabulator"], function (require, exports, Jassi_1, DataComponent_1, Property_1, Component_1, Textbox_1, Calendar_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -62,17 +62,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
             if (properties.autoColumns === undefined)
                 properties.autoColumns = true;
             if (properties.autoColumnsDefinitions === undefined) {
-                properties.autoColumnsDefinitions = function (definitions) {
-                    var ret = [];
-                    for (let x = 0; x < definitions.length; x++) {
-                        if (definitions[x].sorter === "array")
-                            continue;
-                        if (_this.items && _this.items.length > 0 && typeof _this.items[0][definitions[x].field] === "function")
-                            continue;
-                        ret.push(definitions[x]);
-                    }
-                    return ret;
-                };
+                properties.autoColumnsDefinitions = this.defaultAutoColumnDefinitions.bind(this);
             }
             if (properties.dataTreeChildFunction !== undefined) {
                 //@ts-ignore
@@ -118,6 +108,27 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
             this.layout();
         }
         ;
+        defaultAutoColumnDefinitions(definitions) {
+            var _this = this;
+            var ret = [];
+            for (let x = 0; x < definitions.length; x++) {
+                var data;
+                if (definitions[x].sorter === "array")
+                    continue;
+                if (_this.items && _this.items.length > 0) {
+                    data = _this.items[0][definitions[x].field];
+                    if (typeof data === "function")
+                        continue;
+                    if (data instanceof Date) {
+                        definitions[x].formatter = function (cell, formatterParams, onRendered) {
+                            return Calendar_1.Calendar.formatDate(data); //return the contents of the cell;
+                        };
+                    }
+                }
+                ret.push(definitions[x]);
+            }
+            return ret;
+        }
         getChildsFromTreeFunction(data) {
             var childs;
             if (typeof this.dataTreeChildFunction === "function") {

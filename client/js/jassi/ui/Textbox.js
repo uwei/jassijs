@@ -176,6 +176,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         __metadata("design:type", DefaultConverter_1.DefaultConverter)
     ], Textbox.prototype, "converter", void 0);
     __decorate([
+        Property_1.$Property({ type: "string" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Textbox.prototype, "value", null);
+    __decorate([
         Property_1.$Property({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),

@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi"], function (require, exports, Component_1, Property_1, Jassi_1) {
+define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi", "jassi/ui/DataComponent"], function (require, exports, Component_1, Property_1, Jassi_1, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Image = void 0;
-    let Image = class Image extends Component_1.Component {
+    exports.test = exports.Image = void 0;
+    let Image = class Image extends DataComponent_1.DataComponent {
         /* get dom(){
              return this.dom;
          }*/
@@ -19,12 +19,41 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
             super();
             //  var img=$('<div >')[0];
             //super.init($('<img vspace="0" hspace="0"  border="0"  src="" alt="">')[0]);
-            super.init($('<span><img vspace="0" hspace="0"  border="0"  src="" alt=""></span>')[0]);
+            super.init($('<div style="display: inline-block;white-space: nowrap;"><img  vspace="0" hspace="0"  border="0"  src="" alt=""></div>')[0]);
         }
         onclick(handler) {
             $("#" + this._id).click(function () {
                 handler();
             });
+        }
+        /**
+        * @member {string} value - value of the component
+        */
+        set value(value) {
+            this.src = value;
+        }
+        get value() {
+            return this.src;
+        }
+        get width() {
+            return super.width;
+        }
+        set width(value) {
+            if (value === undefined)
+                $(this.dom.children[0]).attr("width", "");
+            else
+                $(this.dom.children[0]).attr("width", "100%");
+            super.width = value;
+        }
+        get height() {
+            return super.height;
+        }
+        set height(value) {
+            if (value === undefined)
+                $(this.dom.children[0]).attr("height", "");
+            else
+                $(this.dom.children[0]).attr("height", "100%");
+            super.height = value;
         }
         /**
         * @member {string} - link to image
@@ -34,9 +63,11 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
             $(this.dom.children[0]).attr("src", "");
             if (icon === null || icon === void 0 ? void 0 : icon.startsWith("mdi ")) {
                 $(this.dom).addClass(icon);
+                $(this.dom.children[0]).css("visibility", "hidden");
             }
             else {
                 $(this.dom.children[0]).attr("src", icon);
+                $(this.dom.children[0]).css("visibility", "");
             }
         }
         get src() {
@@ -49,6 +80,11 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
         }
     };
     __decorate([
+        Property_1.$Property({ type: "string" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Image.prototype, "value", null);
+    __decorate([
         Property_1.$Property(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
@@ -60,5 +96,11 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
         __metadata("design:paramtypes", [])
     ], Image);
     exports.Image = Image;
+    function test() {
+        var ret = new Image();
+        ret.src = "mdi mdi-file-image";
+        return ret;
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=Image.js.map
