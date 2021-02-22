@@ -121,7 +121,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
                         continue;
                     if (data instanceof Date) {
                         definitions[x].formatter = function (cell, formatterParams, onRendered) {
-                            return Calendar_1.Calendar.formatDate(data); //return the contents of the cell;
+                            return Calendar_1.Calendar.formatDate(cell.getValue()); //return the contents of the cell;
                         };
                     }
                 }

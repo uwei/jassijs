@@ -124,12 +124,13 @@ define(["require", "exports", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/C
             this.height = 828;
             me.image1.x = 630;
             me.image1.y = 20;
-            me.image1.src = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80";
+            me.image1.src = "";
             me.image1.css({
                 background_color: "black",
                 border_style: "solid"
             });
             me.image1.width = 125;
+            me.image1.bind(me.databinder, "PhotoPath");
             me.textbox2.x = 5;
             me.textbox2.y = 240;
             me.textbox2.bind(me.databinder, "PhotoPath");

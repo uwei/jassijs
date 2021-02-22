@@ -121,7 +121,7 @@ export class Table extends DataComponent {
                     continue;
                 if (data instanceof Date) {
                     definitions[x].formatter = function (cell, formatterParams, onRendered) {
-                        return Calendar.formatDate(data); //return the contents of the cell;
+                        return Calendar.formatDate(cell.getValue()); //return the contents of the cell;
                     }
                 }
                 

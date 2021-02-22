@@ -737,7 +737,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Table.ts": {
-		"date": 1614022517264,
+		"date": 1614030305265,
 		"jassi.ui.TableEditorProperties": {},
 		"jassi.ui.Table": {
 			"$UIComponent": [
