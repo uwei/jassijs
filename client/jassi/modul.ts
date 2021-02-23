@@ -1,11 +1,11 @@
 
 var jquery_language='https://cdn.jsdelivr.net/gh/jquery/jquery-ui@main/ui/i18n/datepicker-'+navigator.language.split("-")[0];
 export default {
-    "css": [
-        "jassi.css",
-        "https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css",
-        "https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"
-    ],
+    "css": {
+        "jassi.css":"jassi.css",
+        "materialdesignicons.min.css":"https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css",
+        "jquery-ui.css":"https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"
+    },
     "types": {
         
         "node_modules/jquery/JQuery.d.ts": "https://cdn.jsdelivr.net/npm/@types/jquery@3.5.5/JQuery.d.ts",

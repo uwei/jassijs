@@ -151,7 +151,7 @@ export class Jassi {
             link.rel = "stylesheet";
             link.id = "-->" + url;
             var _this = this;
-            link.onload = function () {
+            link.onload = function (data1,data2) {
                 _this.myRequire(href, event);
             };
             head.appendChild(link);

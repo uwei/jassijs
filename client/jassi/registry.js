@@ -55,7 +55,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1613394045174
 	},
 	"jassi/modul.ts": {
-		"date": 1613812466946
+		"date": 1614113369415
 	},
 	"jassi/remote/Classes.ts": {
 		"date": 1613925159863,
@@ -87,7 +87,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1613218515810
 	},
 	"jassi/remote/Jassi.ts": {
-		"date": 1613312290455,
+		"date": 1614111274724,
 		"jassi.remote.Jassi": {}
 	},
 	"jassi/remote/Registry.ts": {
@@ -225,7 +225,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Button.ts": {
-		"date": 1613398165793,
+		"date": 1614117889882,
 		"jassi.ui.Button": {
 			"$UIComponent": [
 				{
@@ -458,7 +458,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Image.ts": {
-		"date": 1614029162105,
+		"date": 1614118156072,
 		"jassi.ui.Image": {
 			"$UIComponent": [
 				{
@@ -658,6 +658,19 @@ define("jassi/registry",["require"], function(require) {
 			"$PropertyEditor": [
 				[
 					"html"
+				]
+			]
+		}
+	},
+	"jassi/ui/PropertyEditors/ImageEditor.ts": {
+		"date": 1614118659538,
+		"jassi.ui.PropertyEditors.ImageEditor": {
+			"$ActionProvider": [
+				"jassi.base.ActionNode"
+			],
+			"$PropertyEditor": [
+				[
+					"image"
 				]
 			]
 		}

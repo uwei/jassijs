@@ -72,7 +72,7 @@ export class Image extends DataComponent {
                 $(this.dom.children[0]).css("visibility","");
             }
         }
-        @$Property()
+        @$Property({type:"image"})
         get src():string{ 
             var ret=$(this.dom).attr("src");
             if(ret==="")

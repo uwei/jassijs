@@ -39,7 +39,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi_editor.Debugger": {}
 	},
 	"jassi_editor/modul.ts": {
-		"date": 1613311839341
+		"date": 1614109063764
 	},
 	"jassi_editor/MonacoPanel.ts": {
 		"date": 1613573828092,

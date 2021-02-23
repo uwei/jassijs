@@ -83,7 +83,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         __metadata("design:returntype", void 0)
     ], Button.prototype, "onclick", null);
     __decorate([
-        Property_1.$Property(),
+        Property_1.$Property({ type: "image" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Button.prototype, "icon", null);

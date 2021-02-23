@@ -79,7 +79,8 @@ async function run() {
                 var mod = mods[x];
                 mod = mod.substring(0, mod.length - "/modul".length);
                 var modpath = modules[mod];
-                res[x].default.css.forEach((f) => {
+                for (let key in res[x].default.css) {
+                    let f = res[x].default.css[key];
                     if (f.indexOf(":") > -1) //https://cdn
                         cssFiles.push(f);
                     else if (modpath.endsWith(".js")) {
@@ -89,7 +90,7 @@ async function run() {
                     else {
                         cssFiles.push(modpath + "/" + f);
                     }
-                });
+                }
             }
             let toadd = res[x].default.require;
             if (toadd) {

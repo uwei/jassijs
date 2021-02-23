@@ -44,7 +44,7 @@ export class Button extends Component {
             $(this.dom).find(".buttonimg").attr("src", icon);
         }
     }
-    @$Property()
+    @$Property({type:"image"})
     get icon(): string { //the Code
         var ret=$(this.dom).find(".buttonimg").attr("src");
         if(ret===""){

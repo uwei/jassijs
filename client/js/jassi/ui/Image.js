@@ -85,7 +85,7 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
         __metadata("design:paramtypes", [Object])
     ], Image.prototype, "value", null);
     __decorate([
-        Property_1.$Property(),
+        Property_1.$Property({ type: "image" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Image.prototype, "src", null);

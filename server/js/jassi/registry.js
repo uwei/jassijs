@@ -32,7 +32,7 @@ exports.default={
 		"date": 1613218515810
 	},
 	"jassi/remote/Jassi.ts": {
-		"date": 1613312290455,
+		"date": 1614111274724,
 		"jassi.remote.Jassi": {}
 	},
 	"jassi/remote/Registry.ts": {
