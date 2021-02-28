@@ -17,9 +17,6 @@ const FileNode_1 = require("jassi/remote/FileNode");
 let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     constructor() {
         super();
-        if (Server_1.isonline === undefined) {
-            Server_1.isonline = this.isOnline();
-        }
     }
     _convertFileNode(node) {
         var ret = new FileNode_1.FileNode();
@@ -54,8 +51,6 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         }
     }
     async addFilesFromMap(root) {
-        if (Jassi_1.default.isServer)
-            throw Error("only on client");
         await this.fillFilesInMapIfNeeded();
         for (var fname in Server_1.filesInMap) {
             let path = fname.split("/");
@@ -91,11 +86,11 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     * @param {Promise<string>} [async] - returns a Promise for asynchros handling
     * @returns {string[]} - list of files
     */
-    async dir(withDate = false) {
-        if (!Jassi_1.default.isServer) {
+    async dir(withDate = false, context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             var ret;
-            if ((await Server_1.isonline) === true)
-                ret = await this.call(this, this.dir, withDate);
+            if ((await Server_1.isOnline(context)) === true)
+                ret = await this.call(this, this.dir, withDate, context);
             else
                 ret = { name: "", files: [] };
             await this.addFilesFromMap(ret);
@@ -115,9 +110,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
      * @param {string} fileNamew
      * @returns {string} content of the file
      */
-    async loadFiles(fileNames) {
-        if (!Jassi_1.default.isServer) {
-            return await this.call(this, this.loadFiles, fileNames);
+    async loadFiles(fileNames, context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+            return await this.call(this, this.loadFiles, fileNames, context);
         }
         else {
             //@ts-ignore
@@ -131,12 +126,12 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
      * @param {string} fileName
      * @returns {string} content of the file
      */
-    async loadFile(fileName) {
-        if (!Jassi_1.default.isServer) {
+    async loadFile(fileName, context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             await this.fillFilesInMapIfNeeded();
             if (Server_1.filesInMap[fileName]) {
                 var found = Server_1.filesInMap[fileName];
-                var code = await this.loadFile(Jassi_1.default.modules[found.modul] + ".map");
+                var code = await this.loadFile(Jassi_1.default.modules[found.modul] + ".map", context);
                 var data = JSON.parse(code).sourcesContent[found.id];
                 return data;
             }
@@ -155,8 +150,8 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     * @param [{string}] fileNames - the name of the file
     * @param [{string}] contents
     */
-    async saveFiles(fileNames, contents) {
-        if (!Jassi_1.default.isServer) {
+    async saveFiles(fileNames, contents, context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             var allfileNames = [];
             var allcontents = [];
             var alltsfiles = [];
@@ -177,7 +172,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                     allcontents.push(content);
                 }
             }
-            var res = await this.call(this, this.saveFiles, allfileNames, allcontents);
+            var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
             if (res === "") {
                 //@ts-ignore
                 $.notify(fileName + " saved", "info", { position: "bottom right" });
@@ -204,14 +199,14 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     * @param {string} fileName - the name of the file
     * @param {string} content
     */
-    async saveFile(fileName, content) {
+    async saveFile(fileName, content, context = undefined) {
         await this.fillFilesInMapIfNeeded();
         if (Server_1.filesInMap[fileName]) {
             //@ts-ignore
             $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
             return;
         }
-        return await this.saveFiles([fileName], [content]);
+        return await this.saveFiles([fileName], [content], context);
         /* if (!jassi.isServer) {
              var ret = await this.call(this, "saveFiles", fileNames, contents);
              //@ts-ignore
@@ -226,9 +221,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     /**
     * renames a file or directory
     **/
-    async delete(name) {
-        if (!Jassi_1.default.isServer) {
-            var ret = await this.call(this, this.delete, name);
+    async delete(name, context = undefined) {
+        if (!context.isServer) {
+            var ret = await this.call(this, this.delete, name, context);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -242,9 +237,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     /**
      * renames a file or directory
      **/
-    async rename(oldname, newname) {
-        if (!Jassi_1.default.isServer) {
-            var ret = await this.call(this, this.rename, oldname, newname);
+    async rename(oldname, newname, context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+            var ret = await this.call(this, this.rename, oldname, newname, context);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -259,11 +254,12 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     /**
     * is the nodes server running
     **/
-    async isOnline() {
-        if (!Jassi_1.default.isServer) {
+    static async isOnline(context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             try {
-                var ret = await this.call(this, this.isOnline);
-                return ret;
+                if (this.isonline === undefined)
+                    Server_1.isonline = await this.call(this.isOnline, context);
+                return await Server_1.isonline;
             }
             catch (_a) {
                 return false;
@@ -278,9 +274,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     /**
      * creates a file
      **/
-    async createFile(filename, content) {
-        if (!Jassi_1.default.isServer) {
-            var ret = await this.call(this, this.createFile, filename, content);
+    async createFile(filename, content, context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+            var ret = await this.call(this, this.createFile, filename, content, context);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -294,9 +290,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     /**
     * creates a file
     **/
-    async createFolder(foldername) {
-        if (!Jassi_1.default.isServer) {
-            var ret = await this.call(this, this.createFolder, foldername);
+    async createFolder(foldername, context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+            var ret = await this.call(this, this.createFolder, foldername, context);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
@@ -307,9 +303,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
             return await new fs.default().createFolder(foldername);
         }
     }
-    static async mytest() {
-        if (!Jassi_1.default.isServer) {
-            return await this.call(this.mytest);
+    static async mytest(context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+            return await this.call(this.mytest, context);
         }
         else
             return 14; //this is called on server

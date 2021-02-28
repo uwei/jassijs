@@ -12,7 +12,11 @@ router.post('/register', async (req, res) => {
     var username = decodeURIComponent(req.rawBody.split("&")[0].split("=")[1]);
     var password = decodeURIComponent(req.rawBody.split("&")[1].split("=")[1]);
     try {
-        await (await DBManager_1.DBManager.get()).createUser(username, password);
+        var context = {
+            isServer: true,
+            request: req
+        };
+        await (await DBManager_1.DBManager.get()).createUser(context, username, password);
         console.log("user created");
         /*const user= new User();
         user.email=username;

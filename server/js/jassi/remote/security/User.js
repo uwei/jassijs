@@ -19,9 +19,9 @@ let User = class User extends DBObject_1.DBObject {
     /**
    * reload the object from jassi.db
    */
-    async hallo() {
-        if (!Jassi_1.default.isServer) {
-            return await this.call(this, this.hallo);
+    async hallo(context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+            return await this.call(this, this.hallo, context);
         }
         else {
             return 11;

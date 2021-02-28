@@ -33,15 +33,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
     }
     exports.$CheckParentRight = $CheckParentRight;
     let Rights = class Rights extends RemoteObject_1.RemoteObject {
-        async isAdmin() {
-            if (!Jassi_1.default.isServer) {
+        async isAdmin(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 if (this._isAdmin !== undefined)
                     return this._isAdmin;
-                return await this.call(this, this.isAdmin);
+                return await this.call(this, this.isAdmin, context);
             }
             else {
                 //@ts-ignore
-                var req = (await new Promise((resolve_1, reject_1) => { require(["jassi/server/getRequest"], resolve_1, reject_1); })).getRequest();
+                var req = context.request;
                 return req.user.isAdmin;
             }
         }

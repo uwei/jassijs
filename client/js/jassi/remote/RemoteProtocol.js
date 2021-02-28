@@ -57,6 +57,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], fun
                 Cookies.set("simulateUserPassword", password, {});
             }
         }
+        async exec(config, object) {
+            return await $.ajax(config, object);
+        }
         /**
        * call the server
        */
@@ -74,7 +77,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], fun
                 data: this.stringify(this),
             };
             try {
-                var ret = await $.ajax(config);
+                var ret = await this.exec(config, this._this);
             }
             catch (ex) {
                 if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {

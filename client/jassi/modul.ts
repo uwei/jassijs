@@ -24,6 +24,7 @@ export default {
         "paths": {
             'intersection-observer': '//cdn.jsdelivr.net/npm/intersection-observer@0.7.0/intersection-observer.js',
             'goldenlayout': '//cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/goldenlayout',
+            "reflect-metadata":"https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect",
             'jquery.choosen': '//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.jquery',
             'jquery.contextMenu': '//rawgit.com/s-yadav/contextMenu.js/master/contextMenu',
             'jquery.fancytree': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/jquery.fancytree.min',

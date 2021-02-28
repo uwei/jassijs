@@ -6,6 +6,7 @@ import "de/remote/Kunde.ext";
 import { ExtensionProvider } from "jassi/remote/Extensions";
 import { $DBObjectQuery } from "jassi/remote/DBObjectQuery";
 import { $ParentRights } from "jassi/remote/security/Rights";
+import { Context } from "jassi/remote/RemoteObject";
 //import "jassi/ext/enableExtension.js?de.Kunde";
 @$ParentRights([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
         description: {
@@ -21,7 +22,7 @@ export class Kunde extends DBObject implements ExtensionProvider {
     @Column()
     vorname: string;
     @Column()
-    nachname: string;
+    nachname: string; 
     @Column()
     strasse: string;
     @Column()
@@ -68,14 +69,14 @@ export class Kunde extends DBObject implements ExtensionProvider {
     static async alleKundenNachNummer(): Promise<any[]> {
         return await Kunde.find({ order: "id" });
     }
-    static async find(options = undefined): Promise<any[]> {
-        if (!jassi.isServer) {
-            return await this.call(this.find, options);
+    static async find(options = undefined,context:Context=undefined): Promise<any[]> {
+        if (!context?.isServer) {
+            return await this.call(this.find, options,context);
         }
         else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
-            return man.find(this, options);
+            return man.find(context,this, options);
         }
     }
     static async sample() {

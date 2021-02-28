@@ -2,6 +2,7 @@ import jassi, { $Class } from "jassi/remote/Jassi";
 import { classes } from "jassi/remote/Classes";
 
 
+
 @$Class("jassi.remote.RemoteProtocol")
 export class RemoteProtocol {
     static counter = 0;
@@ -63,6 +64,9 @@ export class RemoteProtocol {
         }
 
     }
+    async exec(config,object){
+        return await $.ajax(config,object);
+    }
     /**
    * call the server
    */
@@ -80,7 +84,7 @@ export class RemoteProtocol {
             data: this.stringify(this),
         }
         try {
-            var ret = await $.ajax(config);
+            var ret = await this.exec(config,this._this);
         } catch (ex) {
             if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                 redirect = new Promise((resolve) => {
@@ -116,6 +120,7 @@ export class RemoteProtocol {
             return "";
         //first get all classnames	
         var allclassnames = [];
+      
         JSON.parse(text, function (key, value) {
             if (value === null || value === undefined)
                 return value;
@@ -125,6 +130,7 @@ export class RemoteProtocol {
             
             return value;
         });
+
         //all classes must be loaded
         for (var x = 0; x < allclassnames.length; x++) {
             await classes.loadClass(allclassnames[x]);

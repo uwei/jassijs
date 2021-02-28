@@ -52,10 +52,10 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.base.Windows": {}
 	},
 	"jassi/jassi.ts": {
-		"date": 1613394045174
+		"date": 1614358430834
 	},
 	"jassi/modul.ts": {
-		"date": 1614113369415
+		"date": 1614359854752
 	},
 	"jassi/remote/Classes.ts": {
 		"date": 1613925159863,
@@ -70,7 +70,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
-		"date": 1613743705378,
+		"date": 1614463357728,
 		"jassi.remote.DBObject": {}
 	},
 	"jassi/remote/DBObjectQuery.ts": {
@@ -87,18 +87,21 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1613218515810
 	},
 	"jassi/remote/Jassi.ts": {
-		"date": 1614111274724,
+		"date": 1614285410993,
 		"jassi.remote.Jassi": {}
 	},
+	"jassi/remote/ObjectTransaction.ts": {
+		"date": 1614468824546
+	},
 	"jassi/remote/Registry.ts": {
-		"date": 1613925163015
+		"date": 1614285404119
 	},
 	"jassi/remote/RemoteObject.ts": {
-		"date": 1613741323055,
+		"date": 1614463452099,
 		"jassi.remote.RemoteObject": {}
 	},
 	"jassi/remote/RemoteProtocol.ts": {
-		"date": 1613815783270,
+		"date": 1614463817133,
 		"jassi.remote.RemoteProtocol": {}
 	},
 	"jassi/remote/security/Group.ts": {
@@ -132,11 +135,11 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/security/Rights.ts": {
-		"date": 1613673891346,
+		"date": 1614469207075,
 		"jassi.remote.security.Rights": {}
 	},
 	"jassi/remote/security/User.ts": {
-		"date": 1613673898489,
+		"date": 1614459180220,
 		"jassi.remote.security.User": {
 			"$DBObject": [
 				{
@@ -146,11 +149,11 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1613673883034,
+		"date": 1614461610772,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
-		"date": 1613744930893,
+		"date": 1614544309854,
 		"jassi.remote.Transaction": {}
 	},
 	"jassi/security/GroupView.ts": {
@@ -378,7 +381,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.DataComponent": {}
 	},
 	"jassi/ui/DBObjectDialog.ts": {
-		"date": 1613571993991,
+		"date": 1614464799579,
 		"jassi.ui.DBObjectDialog": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"
@@ -750,7 +753,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Table.ts": {
-		"date": 1614030305265,
+		"date": 1614285087403,
 		"jassi.ui.TableEditorProperties": {},
 		"jassi.ui.Table": {
 			"$UIComponent": [
@@ -841,7 +844,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1611783871704
 	},
 	"jassi/util/CSVImport.ts": {
-		"date": 1613741746617,
+		"date": 1614543932781,
 		"jassi.util.CSVImport": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"
@@ -849,7 +852,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/util/DatabaseSchema.ts": {
-		"date": 1613218438772
+		"date": 1614287996043
 	},
 	"jassi/util/Reloader.ts": {
 		"date": 1613218566582,

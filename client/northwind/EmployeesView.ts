@@ -1,3 +1,4 @@
+import { NumberConverter } from "jassi/ui/converters/NumberConverter";
 import { Image } from "jassi/ui/Image";
 import { Textarea } from "jassi/ui/Textarea";
 import { Calendar } from "jassi/ui/Calendar";
@@ -27,6 +28,7 @@ type Me = {
     notes?: Textarea;
     image1?: Image;
     textbox2?: Textbox;
+    id?: Textbox;
 } & DBObjectViewMe;
 @$DBObjectView({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" })
 @$Class("northwind.EmployeesView")
@@ -59,6 +61,7 @@ export class EmployeesView extends DBObjectView {
         me.notes = new Textarea();
         me.image1 = new Image();
         me.textbox2 = new Textbox();
+        me.id = new Textbox();
         me.button1.text = "button";
         me.main.width = "900";
         me.main.height = "800";
@@ -78,10 +81,11 @@ export class EmployeesView extends DBObjectView {
         me.main.add(me.notes);
         me.main.add(me.image1);
         me.main.add(me.textbox2);
-        me.titleOfCouttesy.x = 5;
+        me.main.add(me.id);
+        me.titleOfCouttesy.x = 525;
         me.titleOfCouttesy.y = 5;
         me.titleOfCouttesy.label = "Title of C.";
-        me.titleOfCouttesy.width = 60;
+        me.titleOfCouttesy.width = 85;
         me.titleOfCouttesy.bind(me.databinder, "TitleOfCourtesy");
         me.firstName.x = 80;
         me.firstName.y = 5;
@@ -95,7 +99,7 @@ export class EmployeesView extends DBObjectView {
         me.title.y = 5;
         me.title.bind(me.databinder, "Title");
         me.title.label = "Title";
-        me.title.width = 190;
+        me.title.width = 90;
         me.address.x = 5;
         me.address.y = 50;
         me.address.label = "Address";
@@ -158,6 +162,12 @@ export class EmployeesView extends DBObjectView {
         me.textbox2.bind(me.databinder, "PhotoPath");
         me.textbox2.label = "Photo Path";
         me.textbox2.width = 610;
+        me.id.x = 5;
+        me.id.y = 5;
+        me.id.width = 60;
+        me.id.label = "Id";
+        me.id.bind(me.databinder, "id");
+        me.id.converter = new NumberConverter();
     }
 }
 export async function test() {

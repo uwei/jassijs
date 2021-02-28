@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Employees", "jassi/ui/DBObjectView"], function (require, exports, Image_1, Textarea_1, Calendar_1, Textbox_1, Button_1, Jassi_1, Property_1, Employees_1, DBObjectView_1) {
+define(["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Employees", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_1, Image_1, Textarea_1, Calendar_1, Textbox_1, Button_1, Jassi_1, Property_1, Employees_1, DBObjectView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmployeesView = void 0;
@@ -37,6 +37,7 @@ define(["require", "exports", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/C
             me.notes = new Textarea_1.Textarea();
             me.image1 = new Image_1.Image();
             me.textbox2 = new Textbox_1.Textbox();
+            me.id = new Textbox_1.Textbox();
             me.button1.text = "button";
             me.main.width = "900";
             me.main.height = "800";
@@ -56,10 +57,11 @@ define(["require", "exports", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/C
             me.main.add(me.notes);
             me.main.add(me.image1);
             me.main.add(me.textbox2);
-            me.titleOfCouttesy.x = 5;
+            me.main.add(me.id);
+            me.titleOfCouttesy.x = 525;
             me.titleOfCouttesy.y = 5;
             me.titleOfCouttesy.label = "Title of C.";
-            me.titleOfCouttesy.width = 60;
+            me.titleOfCouttesy.width = 85;
             me.titleOfCouttesy.bind(me.databinder, "TitleOfCourtesy");
             me.firstName.x = 80;
             me.firstName.y = 5;
@@ -73,7 +75,7 @@ define(["require", "exports", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/C
             me.title.y = 5;
             me.title.bind(me.databinder, "Title");
             me.title.label = "Title";
-            me.title.width = 190;
+            me.title.width = 90;
             me.address.x = 5;
             me.address.y = 50;
             me.address.label = "Address";
@@ -136,6 +138,12 @@ define(["require", "exports", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/C
             me.textbox2.bind(me.databinder, "PhotoPath");
             me.textbox2.label = "Photo Path";
             me.textbox2.width = 610;
+            me.id.x = 5;
+            me.id.y = 5;
+            me.id.width = 60;
+            me.id.label = "Id";
+            me.id.bind(me.databinder, "id");
+            me.id.converter = new NumberConverter_1.NumberConverter();
         }
     };
     __decorate([

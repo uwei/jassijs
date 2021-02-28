@@ -238,9 +238,8 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
             var ret = [];
             var trans = new Transaction_1.Transaction();
             for (var x = 0; x < allObjects.length; x++) {
-                //await allObjects[x].save();
-                trans.add(allObjects[x], allObjects[x].save);
-                //ret.push(allObjects[x].save());
+                var obs = allObjects[x];
+                trans.add(obs, obs.save);
             }
             await trans.execute();
             return "imported " + allObjects.length + " objects";
@@ -353,7 +352,7 @@ WILMK,90,Wilman Kala,Matti Karttunen,Owner/Marketing Assistant,Keskuskatu 45,Hel
 WOLZA,91,Wolski  Zajazd,Zbyszek Piestrzeniewicz,Owner,ul. Filtrowa 68,Warszawa,#NV,01-012,Poland,(26) 642-7012,(26) 642-7012
 `;
         var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees", { "id": "EmployeeID" });
-        alert(s);
+        console.log(s);
         /*	var t = await classes.loadClass("northwind.Customer");
             var ret = new CSVImport();
             ret.readData(csv);

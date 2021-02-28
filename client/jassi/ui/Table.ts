@@ -9,7 +9,7 @@ import { Textbox } from "jassi/ui/Textbox";
 import { Calendar } from "jassi/ui/Calendar";
 
 interface TableOptions extends Tabulator.Options {
-    dataTreeChildFunction?: ((data: any) => any);
+    dataTreeChildFunction?: ((data: any) => any)|any;
 
 }
 @$Class("jassi.ui.TableEditorProperties")

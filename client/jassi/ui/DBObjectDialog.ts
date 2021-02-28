@@ -8,7 +8,7 @@ import { classes } from "jassi/remote/Classes";
 import { Component } from "jassi/ui/Component";
 import { DBObjectView, DBObjectViewProperties } from "jassi/ui/DBObjectView";
 import { BoxPanel } from "jassi/ui/BoxPanel";
-import { $ActionProvider, $Actions,  ActionProperties } from "jassi/base/Actions";
+import { $ActionProvider, $Actions, ActionProperties } from "jassi/base/Actions";
 import windows from "jassi/base/Windows";
 type Me = {
     splitpanel1?: BoxPanel;
@@ -106,6 +106,14 @@ export class DBObjectDialog extends Panel {
             }
         }
     }
+    private static createFunction(classname: string):any {
+        return function () {
+            var ret = new DBObjectDialog();
+            ret.dbclassname = classname;
+            ret.height = "100%";
+            windows.add(ret, classname);
+        }
+    }
     /**
      * create Action for all DBObjectView with actionname is defined
      */
@@ -119,12 +127,7 @@ export class DBObjectDialog extends Panel {
                 ret.push({
                     name: param.actionname,
                     icon: param.icon,
-                    run: function () {
-                        var ret = new DBObjectDialog();
-                        ret.dbclassname = param.classname;
-                        ret.height = "100%";
-                        windows.add(ret, param.classname);
-                    }
+                    run: this.createFunction(param.classname)
                 })
             }
         }

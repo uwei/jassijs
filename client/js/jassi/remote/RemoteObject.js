@@ -7,17 +7,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteProtocol"], function (require, exports, Jassi_1, Classes_1, RemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.RemoteObject = void 0;
+    exports.RemoteObject = exports.Context = void 0;
+    class Context {
+    }
+    exports.Context = Context;
     let RemoteObject = class RemoteObject {
         static async call(method, ...parameter) {
             if (Jassi_1.default.isServer)
                 throw "should be called on client";
             var prot = new RemoteProtocol_1.RemoteProtocol();
+            var context = parameter[parameter.length - 1];
             prot.classname = Classes_1.classes.getClassName(this);
             prot._this = "static";
             prot.parameter = parameter;
             prot.method = method.name;
+            prot.parameter.splice(parameter.length - 1, 1);
             var ret;
+            if (context === null || context === void 0 ? void 0 : context.transactionitem) {
+                ret = await context.transactionitem.transaction.wait(context.transactionitem, prot);
+                return ret;
+            }
             //let Transaction= (await import("jassi/remote/Transaction")).Transaction;
             //var trans=Transaction.cache.get(_this);
             //if(trans&&trans[method.name]){
@@ -31,15 +40,19 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             if (Jassi_1.default.isServer)
                 throw "should be called on client";
             var prot = new RemoteProtocol_1.RemoteProtocol();
+            var context = parameter[parameter.length - 1];
             prot.classname = Classes_1.classes.getClassName(this);
             prot._this = _this;
             prot.parameter = parameter;
             prot.method = method.name;
+            prot.parameter.splice(parameter.length - 1, 1);
             var ret;
-            let Transaction = (await new Promise((resolve_1, reject_1) => { require(["jassi/remote/Transaction"], resolve_1, reject_1); })).Transaction;
-            var trans = Transaction.cache.get(_this);
-            if (trans && trans[method.name]) {
-                ret = await trans[method.name][0]._push(_this, method, prot, trans[method.name][1]);
+            //let context=(await import("jassi/remote/Context")).Context;
+            //let Transaction= (await import("jassi/remote/Transaction")).Transaction;
+            //var trans=Transaction.cache.get(_this);
+            //var trans=context.get("transaction");
+            if (context === null || context === void 0 ? void 0 : context.transactionitem) {
+                ret = await context.transactionitem.transaction.wait(context.transactionitem, prot);
                 return ret;
             }
             ret = await prot.call();

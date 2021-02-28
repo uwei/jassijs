@@ -15,6 +15,41 @@ self.addEventListener('install', event => {
         .then(cache => cache.addAll(PRECACHE_URLS))
         .then(self.skipWaiting()));
 });
+var db;
+async function getDB() {
+    var req = indexedDB.open("jassi", 1);
+    req.onupgradeneeded = function (ev) {
+        var db = ev.target["result"];
+        var objectStore = db.createObjectStore("files", { keyPath: "id" });
+    };
+    db = await new Promise((res) => {
+        req.onsuccess = (ev) => {
+            res(ev.target["result"]);
+        };
+        req.onerror = function (ev) {
+            console.log(ev);
+        };
+    });
+    return db;
+}
+async function loadFileFromDB(fileName, callback) {
+    let transaction = (await getDB()).transaction('files', 'readonly');
+    const store = transaction.objectStore('files');
+    var ret = await store.get(fileName);
+    var r = await new Promise((resolve) => {
+        ret.onsuccess = ev => { resolve(ret.result); };
+        ret.onerror = ev => { resolve(undefined); };
+    });
+    return (r !== undefined ? r.value : undefined);
+}
+function getMimeType(filename) {
+    var type = "application/javascript";
+    if (filename.endsWith(".ts"))
+        type = "video/mp2t";
+    if (filename.endsWith(".map"))
+        type = "text/html; charset=utf-8";
+    return type;
+}
 // The activate handler takes care of cleaning up old caches.
 self.addEventListener('activate', event => {
     const currentCaches = [PRECACHE, RUNTIME];
@@ -27,7 +62,7 @@ self.addEventListener('activate', event => {
     }).then(() => self.clients.claim()));
 });
 self.addEventListener('message', function (evt) {
-    if (evt.data && evt.data.type === "SAVE_FILE") {
+    if (evt.data && evt.data.type === "SAVE_FILE") { //this tempFiles could be delivered
         console.log(evt.data.filename);
         tempFiles[evt.data.filename] = evt.data.code;
         evt.ports[0].postMessage({ result: "ok" });
@@ -43,7 +78,7 @@ self.addEventListener('fetch', event => {
     if (event.request.method === "POST" || event.request.url.indexOf("/remoteprotocol?") !== -1) {
         var pr = new Promise((resolve, reject) => {
             fetch(event.request).then((data) => {
-                if (data.status === 401 || data.status === 500) {
+                if (data.status === 401 || data.status === 500) { //now we display an Logindialog and pause the request
                     self.clients.get(event.clientId).then((client) => {
                         client.postMessage(`wait for login`);
                         console.log("wait for login");
@@ -61,61 +96,68 @@ self.addEventListener('fetch', event => {
     }
     event.respondWith(caches.open(RUNTIME).then(function (cache) {
         var filename = event.request.url;
-        // var plainfilename=filename.replace("?tmp","");
-        if (tempFiles[filename]) {
-            var type = "application/javascript";
-            if (filename.endsWith(".ts"))
-                type = "video/mp2t";
-            if (filename.endsWith(".map"))
-                type = "text/html; charset=utf-8";
+        if (tempFiles[filename]) { //we deliver tempFiles
             console.log("deliver " + filename + tempFiles[filename].substring(0, 50));
             return new Response(tempFiles[filename], {
-                headers: { "Content-Type": type }
+                headers: { "Content-Type": getMimeType(filename) }
             });
         }
-        return cache.match(event.request).then(function (response) {
-            var fromCache = event.request.headers.get("X-Custom-FromCache");
-            //we needn't ask the server if a newer version exists 
-            if (response && fromCache !== undefined && fromCache !== null &&
-                fromCache === response.headers.get("X-Custom-Date")) {
-                return response;
+        var sfilename = filename.replace(self.serviceWorker.scriptURL.replace("service-worker.js", ""), "");
+        var wait = loadFileFromDB(filename);
+        event.waitUntil(wait);
+        return wait.then((content) => {
+            if (content !== undefined) {
+                return new Response(content, {
+                    headers: { "Content-Type": getMimeType(filename) }
+                });
             }
-            if (event.request.url.startsWith(self.location.origin) && response) {
-                var dat = response.headers.get("X-Custom-Date");
-                var s = event.request.url + "?lastcachedate=" + dat;
-                if (event.request.url.indexOf("?") > 0) {
-                    s = event.request.url + "&lastcachedate=" + dat;
-                }
-                if (dat !== undefined) {
-                    return fetch(s, { cache: "no-store" }).then(function (networkResponse) {
-                        if (networkResponse.headers.get("X-Custom-UpToDate") === "true") {
-                            return response; //server says the cache is upToDate
+            else {
+                return cache.match(event.request).then(function (response) {
+                    var fromCache = event.request.headers.get("X-Custom-FromCache");
+                    //we needn't ask the server if a newer version exists 
+                    if (response && fromCache !== undefined && fromCache !== null &&
+                        fromCache === response.headers.get("X-Custom-Date")) {
+                        return response;
+                    }
+                    if (event.request.url.startsWith(self.location.origin) && response) {
+                        //we check if the cache is still current
+                        var dat = response.headers.get("X-Custom-Date");
+                        var s = event.request.url + "?lastcachedate=" + dat;
+                        if (event.request.url.indexOf("?") > 0) {
+                            s = event.request.url + "&lastcachedate=" + dat;
                         }
-                        else {
-                            //server has new data
-                            // console.log("cache "+ event.request.url);
-                            cache.put(event.request, networkResponse.clone());
-                            return networkResponse;
-                        }
+                        if (dat !== undefined) {
+                            return fetch(s, { cache: "no-store" }).then(function (networkResponse) {
+                                if (networkResponse.headers.get("X-Custom-UpToDate") === "true") {
+                                    return response; //server says the cache is upToDate
+                                }
+                                else {
+                                    //server has new data
+                                    cache.put(event.request, networkResponse.clone());
+                                    return networkResponse;
+                                }
+                            });
+                        } /*end self origin*/
+                        else
+                            return response;
+                    }
+                    //external sites
+                    if (response)
+                        return response;
+                    //not in cache so cache now
+                    return fetch(event.request, { cache: "no-store" }).then(function (networkResponse) {
+                        cache.put(event.request, networkResponse.clone());
+                        //console.log("cache+ " + event.request.url);
+                        return networkResponse;
                     });
-                }
-                else
-                    return response;
+                }).catch(function (error) {
+                    // Handles exceptions that arise from match() or fetch().
+                    console.error('Error in fetch handler:', error);
+                    throw error;
+                });
             }
-            //external sites
-            if (response)
-                return response;
-            //not in cache so cache now
-            return fetch(event.request, { cache: "no-store" }).then(function (networkResponse) {
-                cache.put(event.request, networkResponse.clone());
-                console.log("cache+ " + event.request.url);
-                return networkResponse;
-            });
-        }).catch(function (error) {
-            // Handles exceptions that arise from match() or fetch().
-            console.error('Error in fetch handler:', error);
-            throw error;
-        });
-    }));
-});
+        }); //loadFileFromDB
+    }) //cache.open
+    ); //event.respondWith
+}); //self.addEventListener('fetch'
 //# sourceMappingURL=service-worker.js.map

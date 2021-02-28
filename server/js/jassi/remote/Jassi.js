@@ -136,6 +136,7 @@ let Jassi = class Jassi {
             link.rel = "stylesheet";
             link.id = "-->" + url;
             var _this = this;
+            //@ts-ignore 
             link.onload = function (data1, data2) {
                 _this.myRequire(href, event);
             };

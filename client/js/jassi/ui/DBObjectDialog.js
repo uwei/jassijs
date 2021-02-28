@@ -95,6 +95,14 @@ define(["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/
                 }
             }
         }
+        static createFunction(classname) {
+            return function () {
+                var ret = new DBObjectDialog_1();
+                ret.dbclassname = classname;
+                ret.height = "100%";
+                Windows_1.default.add(ret, classname);
+            };
+        }
         /**
          * create Action for all DBObjectView with actionname is defined
          */
@@ -107,12 +115,7 @@ define(["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/
                     ret.push({
                         name: param.actionname,
                         icon: param.icon,
-                        run: function () {
-                            var ret = new DBObjectDialog_1();
-                            ret.dbclassname = param.classname;
-                            ret.height = "100%";
-                            Windows_1.default.add(ret, param.classname);
-                        }
+                        run: this.createFunction(param.classname)
                     });
                 }
             }

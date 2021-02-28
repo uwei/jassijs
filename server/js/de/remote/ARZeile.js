@@ -21,14 +21,14 @@ let ARZeile = ARZeile_1 = class ARZeile extends DBObject_1.DBObject {
     constructor() {
         super();
     }
-    static async find(options = undefined) {
+    static async find(options = undefined, context = undefined) {
         if (!Jassi_1.default.isServer) {
-            return await this.call(this.find, options);
+            return await this.call(this.find, options, context);
         }
         else {
             //@ts-ignore
             var man = await (await Promise.resolve().then(() => require("jassi/server/DBManager"))).DBManager.get();
-            return man.find(this, options);
+            return man.find(context, this, options);
         }
     }
     get oo2() {

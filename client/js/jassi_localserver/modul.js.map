@@ -1,1 +1,1 @@
-{"version":3,"file":"modul.js","sourceRoot":"","sources":["../../jassi_localserver/modul.ts"],"names":[],"mappings":";;;IAAA,kBAAe;QACX,SAAS,EAAC;YACN,KAAK,EAAE,EACN;YACD,IAAI,EAAE,EACL;SAEJ;KACJ,CAAA"}
+{"version":3,"file":"modul.js","sourceRoot":"","sources":["../../jassi_localserver/modul.ts"],"names":[],"mappings":";;;IAAA,kBAAe;QACX,aAAa,EAAC;YACV,gBAAgB;YAChB,iCAAiC;YACjC,eAAe;YACf,iCAAiC;SACpC;QACD,SAAS,EAAC;YACN,KAAK,EAAE;gBAEH,eAAe,EAAC,4EAA4E;gBAC5F,SAAS,EAAC,+BAA+B;gBACzC,gBAAgB,EAAC,sDAAsD;gBACvE,YAAY,EAAC,kCAAkC;aAClD;YACD,IAAI,EAAE,EACL;SAEJ;KACJ,CAAA"}

@@ -20,7 +20,7 @@ export class Customer extends DBObject {
     City: string;
     @Column({ nullable: true })
     // @Column({default:""})
-    Region: string;
+    Region: string; 
     @Column({ nullable: true })
     PostalCode: string;
     @Column({ nullable: true })

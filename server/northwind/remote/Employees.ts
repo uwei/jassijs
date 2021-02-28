@@ -3,6 +3,7 @@ import jassi, { $Class } from "jassi/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, JoinColumn, JoinTable } from "jassi/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassi/remote/DBObjectQuery";
 import { Transaction } from "jassi/remote/Transaction";
+import { Context } from "jassi/remote/RemoteObject";
 @$DBObject()
 @$Class("northwind.Employees")
 export class Employees extends DBObject {
@@ -48,14 +49,14 @@ export class Employees extends DBObject {
     BirthDate: Date;
     @Column({ nullable: true })
     HireDate: Date;
-    static async find(options = undefined): Promise<any[]> {
-        if (!jassi.isServer) {
-            return await this.call(this.find, options);
+    static async find(options = undefined,context:Context=undefined): Promise<any[]> {
+        if (!context?.isServer) {
+            return await this.call(this.find, options,context);
         }
         else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
-            return man.find(this, options);
+            return man.find(context,this, options);
         }
     }
     async hallo(num) {

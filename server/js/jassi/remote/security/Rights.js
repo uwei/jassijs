@@ -35,15 +35,15 @@ function $CheckParentRight() {
 }
 exports.$CheckParentRight = $CheckParentRight;
 let Rights = class Rights extends RemoteObject_1.RemoteObject {
-    async isAdmin() {
-        if (!Jassi_1.default.isServer) {
+    async isAdmin(context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             if (this._isAdmin !== undefined)
                 return this._isAdmin;
-            return await this.call(this, this.isAdmin);
+            return await this.call(this, this.isAdmin, context);
         }
         else {
             //@ts-ignore
-            var req = (await Promise.resolve().then(() => require("jassi/server/getRequest"))).getRequest();
+            var req = context.request;
             return req.user.isAdmin;
         }
     }

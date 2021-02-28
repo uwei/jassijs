@@ -6,7 +6,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1587933243841
 	},
 	"de/dd.ts": {
-		"date": 1602968596108
+		"date": 1614431352531
 	},
 	"de/del.ts": {
 		"date": 1613922613218
@@ -36,7 +36,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1588091498058
 	},
 	"de/remote/AR.ts": {
-		"date": 1613673717899,
+		"date": 1614458857516,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -52,7 +52,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1613673728950,
+		"date": 1614464269053,
 		"de.ARZeile": {
 			"$DBObject": []
 		}
@@ -61,7 +61,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1613332025514
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1613921980493,
+		"date": 1614464285841,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -91,7 +91,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1613332035281
 	},
 	"de/remote/Lieferant.ts": {
-		"date": 1613332015004,
+		"date": 1614464290662,
 		"de.Lieferant": {
 			"$DBObject": []
 		}

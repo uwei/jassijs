@@ -5,6 +5,7 @@ import { DBObject, $DBObject } from "jassi/remote/DBObject";
 import jassi, { $Class } from "jassi/remote/Jassi";
 import { JoinColumn, JoinTable, Entity, PrimaryColumn, Column, ManyToMany, ManyToOne, OneToMany, OneToOne } from "jassi/util/DatabaseSchema";
 import { $CheckParentRight, $Rights } from "jassi/remote/security/Rights";
+import { Context } from "jassi/remote/RemoteObject";
 /** 
 * Ausgangsrechnung 
 * @class de.AR  
@@ -34,9 +35,9 @@ export class AR extends DBObject {
         this.strasse = "";
         this.nummer = 0;
     }
-    static async myfind(options = undefined): Promise<AR[]> {
+    static async myfind(options = undefined,context:Context=undefined): Promise<AR[]> {
         if (!jassi.isServer) {
-            return await this.call(this.myfind, options);
+            return await this.call(this.myfind, options,context);
         }
         else {
             //@ts-ignore

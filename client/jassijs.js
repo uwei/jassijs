@@ -1,5 +1,15 @@
-
-
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+    navigator.serviceWorker.addEventListener("message", (evt) => {
+      if(evt.data==="wait for login") {
+        new Promise((resolve_1, reject_1) => { require(["jassi/base/LoginDialog"], resolve_1, reject_1); }).then((data) => {
+            data.login();
+            //          navigator.serviceWorker.controller.postMessage("logindialog closed");
+        });
+      }
+    });
+  }
+  
 async function loadText(url) {
     return new Promise((resolve) => {
         let oReq = new XMLHttpRequest();
@@ -68,6 +78,7 @@ async function run() {
         }
         for (let x = 0; x < dowait.length; x++) {
             var mod=await dowait[x];
+            
         }
 
     }
@@ -84,10 +95,12 @@ async function run() {
     for (let key in modules) {
         mods.push(key+"/modul");
     }
+    var startlib=["jassi/jassi"];
     require(mods, function (...res) {
         for (let x = 0; x < res.length; x++) {
             if(res[x].default.css){
                 var mod=mods[x];
+                
                 mod=mod.substring(0,mod.length-"/modul".length);
                 var modpath=modules[mod];
                 for(let key in res[x].default.css){
@@ -101,6 +114,10 @@ async function run() {
                         cssFiles.push(modpath+"/"+f);
                     }
                 }
+               
+            }
+            if(res[x].default.loadonstart){
+                res[x].default.loadonstart.forEach((entr)=>startlib.push(entr));
             }
             let toadd = res[x].default.require;
             if (toadd) {
@@ -118,7 +135,7 @@ async function run() {
         }
         requirejs.config(requireconfig);
 
-        require(["jassi/jassi"], function (jassi) {
+        require(startlib, function (jassi,...others) {
             cssFiles.forEach((css)=>{
                 jassi.default.myRequire(css);
             })

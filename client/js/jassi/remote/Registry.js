@@ -1,4 +1,4 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "reflect-metadata"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.migrateModul = exports.Registry = void 0;
@@ -217,6 +217,7 @@ define(["require", "exports"], function (require, exports) {
                 var modules = JSON.parse(modultext).modules;
                 for (let modul in modules) {
                     try {
+                        //@ts-ignore
                         delete require.cache[require.resolve(modul + "/registry")];
                         var data = (await require(modul + "/registry")).default;
                         this.initJSONData(data);

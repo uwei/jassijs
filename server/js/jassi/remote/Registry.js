@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.migrateModul = exports.Registry = void 0;
+require("reflect-metadata");
 if (Reflect["_metadataorg"] === undefined) {
     Reflect["_metadataorg"] = Reflect["metadata"];
     if (Reflect["_metadataorg"] === undefined)
@@ -216,6 +217,7 @@ class Registry {
             var modules = JSON.parse(modultext).modules;
             for (let modul in modules) {
                 try {
+                    //@ts-ignore
                     delete require.cache[require.resolve(modul + "/registry")];
                     var data = (await require(modul + "/registry")).default;
                     this.initJSONData(data);

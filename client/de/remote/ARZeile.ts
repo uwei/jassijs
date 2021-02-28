@@ -7,6 +7,7 @@ import { PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, Prim
 
 import { $CheckParentRight } from "jassi/remote/security/Rights";
 import { AR } from "de/remote/AR";
+import { Context } from "jassi/remote/RemoteObject";
    
 @$DBObject()
 @$Class("de.ARZeile")
@@ -24,15 +25,15 @@ export class ARZeile extends DBObject {
     public ar: AR;
     public tt;
     constructor() {
-        super();
+        super(); 
     }
-      static async find(options = undefined): Promise<ARZeile[]> {
+      static async find(options = undefined,context:Context=undefined): Promise<ARZeile[]> {
         if (!jassi.isServer) {
-            return await this.call(this.find, options);
+            return await this.call(this.find, options,context);
         } else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
-            return man.find(this, options);
+            return man.find(context,this, options);
         }
     }
     get oo2() {

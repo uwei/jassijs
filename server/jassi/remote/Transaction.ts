@@ -1,13 +1,15 @@
 import jassi, { $Class } from "jassi/remote/Jassi";
-import { RemoteObject } from "jassi/remote/RemoteObject";
+import { Context, RemoteObject } from "jassi/remote/RemoteObject";
 import { RemoteProtocol } from "jassi/remote/RemoteProtocol";
-import { ObjectTransaction } from "jassi/server/ObjectTransaction";
-import { openStdin } from "process";
-var serversession;
+
+
+
+//var serversession;
 
 
 
 export class TransactionItem {
+    transaction:Transaction;
     obj: any;
     method: (...args) => any;
     params: any[];
@@ -18,61 +20,39 @@ export class TransactionItem {
 }
 @$Class("jassi.remote.Transaction")
 export class Transaction extends RemoteObject {
-    public static cache:Map<RemoteObject,any>=new Map() 
     private statements: TransactionItem[] = [];
     private ready;
-    private  addToCache(obj,method:string,id){
-        let el=Transaction.cache.get(obj);
-        if(!el){
-            el={};
-            Transaction.cache.set(obj,el);
-        }
-        el[method] = [this, id];
-    }
-    private removeFromCache(obj,method:string){
-        var c=Transaction.cache.get(obj);
-        delete c[method];
-        if(Object.keys(c).length === 0)
-            Transaction.cache.delete(obj);
-
-    }
-    static redirectTransaction(objold,objnew,methodold: (...args) => any, methodnew: (...args) => any): (...args) => any {
-        var obj=Transaction.cache.get(objold);
-        if(obj!==undefined){
-            var test=obj[methodold.name];
-            if(test){
-                test[0].removeFromCache(objold,methodold.name);
-                test[0].addToCache(objnew,methodnew.name,test[1]);
+    private context = new Context();
+  
+    async execute(): Promise<any[]> {
+        //  return this.context.register("transaction", this, async () => {
+        for (var x = 0; x < this.statements.length; x++) {
+            var it = this.statements[x];
+            var context:Context={
+                isServer:false,
+                transaction:this,
+                transactionitem:it
             }
-        }
-        //methodnew["transaction"] = methodold["transaction"];
-        //delete methodold["transaction"];
-        return methodnew;
-    }
-    async execute():Promise<any[]> {
-        
-        this.statements.forEach((it => {
-            it.promise = it.obj[it.method.name](...it.params);
+            it.promise = it.obj[it.method.name](...it.params,context);
             it.promise.then((val) => {
                 it.result = val;//promise returned or resolved out of Transaction
             })
-        }));
-        let _this=this;
-        await new Promise((res)=>{
-            _this.ready=res;
+        }
+        let _this = this;
+        await new Promise((res) => {
+            _this.ready = res;
         })
-        var ret=[];
-        for(let x=0;x<this.statements.length;x++){
-            var res=await this.statements[x].promise;
+        var ret = [];
+        for (let x = 0; x < this.statements.length; x++) {
+            var res = await this.statements[x].promise;
             ret.push(res);
         }
         return ret;
-        //this.statements=[];
+        //  });
+
     }
-    async _push(obj:any,method: (...args) => any, prot: RemoteProtocol, id): Promise<any> {
-        var stat=this.statements[id];
-        stat.remoteProtocol = prot;
-        this.removeFromCache(obj,method.name);
+    async wait(transactionItem:TransactionItem,prot: RemoteProtocol): Promise<any> {
+        transactionItem.remoteProtocol = prot;
         //if all transactions are placed then do the request
         var foundUnplaced = false;
         for (let x = 0; x < this.statements.length; x++) {
@@ -83,14 +63,15 @@ export class Transaction extends RemoteObject {
         if (foundUnplaced === false) {
             this.sendRequest();
         }
-        let _this=this;
-        return new Promise((res)=>{
+        let _this = this;
+        return new Promise((res) => {
 
-            stat.resolve=res;
+            transactionItem.resolve = res;
         });//await this.statements[id].result;//wait for result - comes with Request
     }
-    private async sendRequest() {
-        if (!jassi.isServer) {
+  
+    private async sendRequest(context: Context = undefined) {
+        if (!context?.isServer) {
             var prots = [];
             for (let x = 0; x < this.statements.length; x++) {
                 let st = this.statements[x];
@@ -99,85 +80,71 @@ export class Transaction extends RemoteObject {
                 else
                     prots.push(st.remoteProtocol.stringify(st.remoteProtocol));
             }
-            var sic=this.statements;
-            this.statements=prots;
-            var ret=await this.call(this, this.sendRequest);
-            this.statements=sic;
-            for(let x=0;x<this.statements.length;x++){
+            var sic = this.statements;
+            this.statements = prots;
+            var ret = await this.call(this, this.sendRequest, context);
+            this.statements = sic;
+            for (let x = 0; x < this.statements.length; x++) {
                 this.statements[x].resolve(ret[x]);
             }
             this.ready();
             //ret is not what we want - perhaps there is a modification
-           /* let ret2=[];
-            for(let x=0;x<this.statements.length;x++){
-                ret2.push(await this.statements[x].promise);
-            }
-            this.resolve(ret);*/
+            /* let ret2=[];
+             for(let x=0;x<this.statements.length;x++){
+                 ret2.push(await this.statements[x].promise);
+             }
+             this.resolve(ret);*/
             return true;
         } else {
             //@ts-ignore
-            
-            
+
+
             //@ts-ignore
-            var ObjectTransaction=(await import("jassi/server/ObjectTransaction")).ObjectTransaction;
-            var ot=new ObjectTransaction();
-            ot.statements=[];
-            let ret=[]; 
-            for(let x=0;x<this.statements.length;x++){ 
-                var stat:any={
-                    result:"**unresolved**"
-                    
+            var ObjectTransaction = (await import("jassi/remote/ObjectTransaction")).ObjectTransaction;
+            var ot = new ObjectTransaction();
+            ot.statements = [];
+            let ret = [];
+            for (let x = 0; x < this.statements.length; x++) {
+                var stat: any = {
+                    result: "**unresolved**"
+
                 }
                 ot.statements.push(stat);
             }
-            for(let x=0;x<this.statements.length;x++){ 
-               ret.push(this.doServerStatement(this.statements,ot,x)); 
+            for (let x = 0; x < this.statements.length; x++) {
+                ret.push( this.doServerStatement(this.statements, ot, x, context));
             }
-            await Promise.all(ret);
+            for(let x=0;x<ret.length;x++){
+                ret[x]=await ret[x];
+            }
 
             return ret;
         }
 
 
     }
-    private async  doServerStatement(statements,ot:ObjectTransaction,num:number){
+    private async doServerStatement(statements, ot/*:ObjectTransaction*/, num: number, context) {
         //@ts-ignore
-        var req=(await import( "jassi/server/getRequest")).getRequest();
+        var _execute = (await import("jassi/server/DoRemoteProtocol"))._execute;
+        var _this = this;
+        var newcontext: any = {};
+        Object.assign(newcontext, context);
+        newcontext.objecttransaction = ot;
+        newcontext.objecttransactionitem = ot.statements[num];
         //@ts-ignore
-        var createNamespace = require('cls-hooked').createNamespace;
-         //@ts-ignore
-         var _execute=(await import("jassi/server/DoRemoteProtocol"))._execute;
-         if(!serversession){
-            serversession= createNamespace("objecttransaction");
-            
-         }
-         var _this=this;
-         serversession.run(function(){
-            serversession.set('objecttransaction', ot.statements[num]);
-            //@ts-ignore
-            ot.statements[num].result= _execute(<string>_this.statements[num],req,(obj)=>{
-                obj.objecttransaction=ot;
-                return obj;
-            })
-         });
-            //serversession.bindEmitter(ot.statements[num]);
-            //serversession.run(function () {
-                
-        //});
-         
-        //@ts-ignore
-       
+        ot.statements[num].result = _execute(<string>_this.statements[num], context.request, newcontext);
+
         return ot.statements[num].result;
-        
+
     }
-    add(obj: any, method: (...args) => any, ...params) {
+    public add(obj: any, method: (...args) => any, ...params) {
 
         var ti = new TransactionItem();
         ti.method = method;
         ti.obj = obj;
         ti.params = params;
-        this.addToCache(obj,method.name,this.statements.length);
-        
+        ti.transaction=this;
+       
         this.statements.push(ti);
     }
 

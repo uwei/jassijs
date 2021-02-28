@@ -29,9 +29,9 @@ let AR = AR_1 = class AR extends DBObject_1.DBObject {
         this.strasse = "";
         this.nummer = 0;
     }
-    static async myfind(options = undefined) {
+    static async myfind(options = undefined, context = undefined) {
         if (!Jassi_1.default.isServer) {
-            return await this.call(this.myfind, options);
+            return await this.call(this.myfind, options, context);
         }
         else {
             //@ts-ignore

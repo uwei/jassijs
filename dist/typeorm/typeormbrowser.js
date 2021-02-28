@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
@@ -9,38 +9,6 @@ var __createBinding = (this && this.__createBinding) || (Object.create ? (functi
 var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
-define("typeorm/cli", ["require", "exports", "yargs", "./commands/SchemaSyncCommand", "./commands/SchemaDropCommand", "./commands/QueryCommand", "./commands/EntityCreateCommand", "./commands/MigrationCreateCommand", "./commands/MigrationRunCommand", "./commands/MigrationRevertCommand", "./commands/MigrationShowCommand", "./commands/SubscriberCreateCommand", "./commands/SchemaLogCommand", "./commands/MigrationGenerateCommand", "./commands/VersionCommand", "./commands/InitCommand", "./commands/CacheClearCommand", "reflect-metadata"], function (require, exports, yargs_1, SchemaSyncCommand_1, SchemaDropCommand_1, QueryCommand_1, EntityCreateCommand_1, MigrationCreateCommand_1, MigrationRunCommand_1, MigrationRevertCommand_1, MigrationShowCommand_1, SubscriberCreateCommand_1, SchemaLogCommand_1, MigrationGenerateCommand_1, VersionCommand_1, InitCommand_1, CacheClearCommand_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    yargs_1.default
-        .usage("Usage: $0 <command> [options]")
-        .command(new SchemaSyncCommand_1.SchemaSyncCommand())
-        .command(new SchemaLogCommand_1.SchemaLogCommand())
-        .command(new SchemaDropCommand_1.SchemaDropCommand())
-        .command(new QueryCommand_1.QueryCommand())
-        .command(new EntityCreateCommand_1.EntityCreateCommand())
-        .command(new SubscriberCreateCommand_1.SubscriberCreateCommand())
-        .command(new MigrationCreateCommand_1.MigrationCreateCommand())
-        .command(new MigrationGenerateCommand_1.MigrationGenerateCommand())
-        .command(new MigrationRunCommand_1.MigrationRunCommand())
-        .command(new MigrationShowCommand_1.MigrationShowCommand())
-        .command(new MigrationRevertCommand_1.MigrationRevertCommand())
-        .command(new VersionCommand_1.VersionCommand())
-        .command(new CacheClearCommand_1.CacheClearCommand())
-        .command(new InitCommand_1.InitCommand())
-        .recommendCommands()
-        .demandCommand(1)
-        .strict()
-        .alias("v", "version")
-        .help("h")
-        .alias("h", "help")
-        .argv;
-    require("yargonaut")
-        .style("blue")
-        .style("yellow", "required")
-        .helpStyle("green")
-        .errorsStyle("red");
-});
 define("typeorm/container", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -45399,4 +45367,4 @@ define("typeorm/repository/EntityId", ["require", "exports"], function (require,
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
 });
-//# sourceMappingURL=build.js.map
+//# sourceMappingURL=typeormbrowser.js.map

@@ -1,5 +1,5 @@
 
-
+import "reflect-metadata";
 
 
 
@@ -8,7 +8,7 @@ if (Reflect["_metadataorg"] === undefined) {
     Reflect["_metadataorg"] = Reflect["metadata"];
     if (Reflect["_metadataorg"] === undefined)
         Reflect["_metadataorg"] = null;
-}
+} 
 
 //@ts-ignore
 Reflect["metadata"] = function (o, property, ...args): Function {
@@ -246,7 +246,8 @@ export class Registry {
             modultext = fs.readFileSync("./jassi.json", 'utf-8');
             var modules = JSON.parse(modultext).modules;
             for (let modul in modules) {
-                try {
+                try { 
+                    //@ts-ignore
                     delete require.cache[require.resolve(modul + "/registry")];
                     var data = (await require(modul + "/registry")).default;
                     this.initJSONData(data);

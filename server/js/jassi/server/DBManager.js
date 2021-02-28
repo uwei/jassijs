@@ -5,78 +5,65 @@ const typeorm_1 = require("typeorm");
 const Classes_1 = require("jassi/remote/Classes");
 const Registry_1 = require("jassi/remote/Registry");
 const User_1 = require("jassi/remote/security/User");
-const getRequest_1 = require("./getRequest");
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
-async function getConOpts() {
-    var stype = "postgres";
-    var shost = "localhost";
-    var suser = "postgres";
-    var spass = "ja$$1";
-    var iport = 5432;
-    var sdb = "jassi";
-    //the default is the sqlite3
-    //this is the default way: define an environment var DATABASSE_URL
-    //type://user:password@hostname:port/database
-    //eg: postgres://abcknhlveqwqow:polc78b98e8cd7168d35a66e392d2de6a8d5710e854c084ff47f90643lce2876@ec2-174-102-251-1.compute-1.amazonaws.com:5432/dcpqmp4rcmu182
-    var test = process.env.DATABASE_URL;
-    if (test !== undefined) {
-        var all = test.split(":");
-        stype = all[0];
-        var h = all[2].split("@");
-        shost = h[1];
-        iport = Number(all[3].split("/")[0]);
-        suser = all[1].replace("//", "");
-        spass = h[0];
-        sdb = all[3].split("/")[1];
-    }
-    var dbfiles = [];
-    //files should be in the remote package
-    /*try {
-  
-      var list: string[] = new Filesystem().dirFiles("../client/remote", [".ts"]);
-      for (var x = 0; x < list.length; x++) {
-        var test = fs.readFileSync(list[x], { encoding: 'utf-8' });
-        if (test.indexOf("@$DBObject(") !== -1) {
-          dbfiles.push(list[x].replace("..", "js").replace(".ts", ".js"));
-        }
-      }
-    } catch {
-      throw Error("could not read DBObject classes");
-    }*/
-    var dbobjects = await Registry_1.default.getJSONData("$DBObject");
-    for (var o = 0; o < dbobjects.length; o++) {
-        var fname = dbobjects[o].filename;
-        dbfiles.push("js/" + fname.replace(".ts", ".js"));
-    }
-    var opt = {
-        //@ts-ignore
-        "type": stype,
-        "host": shost,
-        "port": iport,
-        "username": suser,
-        "password": spass,
-        "database": sdb,
-        "synchronize": true,
-        //  logger:"advanced-console",
-        //    maxQueryExecutionTime:
-        "logging": false,
-        "entities": dbfiles,
-    };
-    return opt;
-}
 var _instance = undefined;
 var _initrunning = undefined;
 /**
  * Database access with typeorm
  */
 class DBManager {
+    static async getConOpts() {
+        var stype = "postgres";
+        var shost = "localhost";
+        var suser = "postgres";
+        var spass = "ja$$1";
+        var iport = 5432;
+        var sdb = "jassi";
+        //the default is the sqlite3
+        //this is the default way: define an environment var DATABASSE_URL
+        //type://user:password@hostname:port/database
+        //eg: postgres://abcknhlveqwqow:polc78b98e8cd7168d35a66e392d2de6a8d5710e854c084ff47f90643lce2876@ec2-174-102-251-1.compute-1.amazonaws.com:5432/dcpqmp4rcmu182
+        var test = process.env.DATABASE_URL;
+        if (test !== undefined) {
+            var all = test.split(":");
+            stype = all[0];
+            var h = all[2].split("@");
+            shost = h[1];
+            iport = Number(all[3].split("/")[0]);
+            suser = all[1].replace("//", "");
+            spass = h[0];
+            sdb = all[3].split("/")[1];
+        }
+        var dbclasses = [];
+        var dbobjects = await Registry_1.default.getJSONData("$DBObject");
+        for (var o = 0; o < dbobjects.length; o++) {
+            var clname = dbobjects[o].classname;
+            dbclasses.push(await Classes_1.classes.loadClass(clname));
+            //var fname = dbobjects[o].filename;
+            //dbfiles.push("js/" + fname.replace(".ts", ".js"));
+        }
+        var opt = {
+            //@ts-ignore
+            "type": stype,
+            "host": shost,
+            "port": iport,
+            "username": suser,
+            "password": spass,
+            "database": sdb,
+            "synchronize": true,
+            "logging": false,
+            "entities": dbclasses,
+        };
+        return opt;
+    }
     static async get() {
         if (_instance === undefined) {
             _instance = new DBManager();
             var test = typeorm_1.getMetadataArgsStorage();
             try {
-                var opts = await getConOpts();
+                var opts = await DBManager.getConOpts();
+                Object.freeze(DBManager);
                 _initrunning = typeorm_1.createConnection(opts);
                 await _initrunning;
                 await _instance.mySync();
@@ -173,22 +160,19 @@ class DBManager {
     connection() {
         return typeorm_1.getConnection();
     }
-    async remove(entity) {
-        var test = await (await DBManager.get()).checkParentRight(entity, [entity["id"]]);
+    async remove(context, entity) {
+        var test = await (await DBManager.get()).checkParentRight(context, entity, [entity["id"]]);
         if (test === false)
             throw new Error("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
         await this.connection().manager.remove(entity);
     }
-    async addSaveTransaction(entity) {
-        if (entity.objecttransaction) {
-            let ot = entity.objecttransaction;
+    async addSaveTransaction(context, entity) {
+        if (context.objecttransaction) {
+            let ot = context.objecttransaction;
             if (!ot.savelist) {
                 ot.savelist = [entity];
                 ot.saveresolve = [];
                 ot.addFunctionFinally(async () => {
-                    ot.savelist.forEach((ent) => {
-                        delete ent.objecttransaction;
-                    });
                     ot.savereturn = await this.connection().manager.save(ot.savelist);
                     for (let x = 0; x < ot.savereturn.length; x++) {
                         delete ot.savereturn[x].password;
@@ -198,10 +182,9 @@ class DBManager {
             }
             else
                 ot.savelist.push(entity);
-            //entity.objecttransaction.addFunctionFinally(
             return new Promise((resolve) => {
                 ot.saveresolve.push(resolve);
-                ot.transactionResolved();
+                ot.transactionResolved(context);
                 ot.checkFinally();
             });
         }
@@ -210,19 +193,19 @@ class DBManager {
    * insert a new object
    * @param obj - the object to insert
    */
-    async insert(obj) {
-        await this._checkParentRightsForSave(obj);
-        if (obj["objecttransaction"]) {
-            return this.addSaveTransaction(obj);
+    async insert(context, obj) {
+        await this._checkParentRightsForSave(context, obj);
+        if (context.objecttransaction) {
+            return this.addSaveTransaction(context, obj);
         }
         //@ts-ignore
         var ret = await this.connection().manager.insert(obj.constructor, obj);
         //save also relations
-        ret = await this.save(obj);
+        ret = await this.save(context, obj);
         return ret;
     }
-    async save(entity, options) {
-        await this._checkParentRightsForSave(entity);
+    async save(context, entity, options) {
+        await this._checkParentRightsForSave(context, entity);
         if (Classes_1.classes.getClassName(entity) === "jassi.remote.security.User" && entity.password !== undefined) {
             entity.password = await new Promise((resolve) => {
                 const crypto = require('crypto');
@@ -234,23 +217,23 @@ class DBManager {
                 });
             });
         }
-        if (entity.objecttransaction && options === undefined) {
-            return this.addSaveTransaction(entity);
+        if (context.objecttransaction && options === undefined) {
+            return this.addSaveTransaction(context, entity);
         }
         var ret = await this.connection().manager.save(entity, options);
         delete entity.password;
         delete ret["password"];
         return ret;
     }
-    async _checkParentRightsForSave(entity) {
-        if (getRequest_1.getRequest().user.isAdmin)
+    async _checkParentRightsForSave(context, entity) {
+        if (context.request.user.isAdmin)
             return;
         //Check if the object self has restrictions
         var cl = Classes_1.classes.getClass(Classes_1.classes.getClassName(entity));
         if (entity["id"] !== undefined) {
             var exist = await this.connection().manager.findOne(cl, entity["id"]);
             if (exist !== undefined) {
-                var t = await this.checkParentRight(cl, [entity["id"]]);
+                var t = await this.checkParentRight(context, cl, [entity["id"]]);
                 if (!t) {
                     throw new Error("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"]);
                 }
@@ -272,7 +255,7 @@ class DBManager {
             var data = entity[rel.propertyName];
             if (data !== undefined && !Array.isArray(data)) {
                 let cl = rel.type;
-                var t = await this.checkParentRight(cl, [data["id"]]);
+                var t = await this.checkParentRight(context, cl, [data["id"]]);
                 if (!t) {
                     throw new Error("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
                 }
@@ -283,7 +266,7 @@ class DBManager {
                 for (let x = 0; x < data.length; x++) {
                     arr.push(data[x].id);
                 }
-                let t = await this.checkParentRight(cl, arr);
+                let t = await this.checkParentRight(context, cl, arr);
                 if (!t) {
                     throw new Error("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
                 }
@@ -299,11 +282,11 @@ class DBManager {
     /**
      * Finds first entity that matches given conditions.
      */
-    async findOne(entityClass, p1, p2) {
+    async findOne(context, entityClass, p1, p2) {
         if (typeof p1 === "string" || typeof p1 === "number") { //search by id
             p1 = { id: p1 };
         }
-        var ret = await this.find(entityClass, p1);
+        var ret = await this.find(context, entityClass, p1);
         if (ret === undefined || ret.length === 0)
             return undefined;
         else
@@ -315,7 +298,7 @@ class DBManager {
     /**
       * Finds first entity that matches given conditions.
       */
-    async find(entityClass, p1) {
+    async find(context, entityClass, p1) {
         //return this.connection().manager.findOne(entityClass,id,options);
         // else
         var options = p1;
@@ -330,13 +313,13 @@ class DBManager {
             ret = relations.addWhere(options.where, options.whereParams, ret);
         ret = relations.addWhereBySample(options, ret);
         ret = relations.join(ret);
-        if (!getRequest_1.getRequest().user.isAdmin)
-            ret = await relations.addParentRightDestriction(ret);
+        if (context.request.user.isAdmin)
+            ret = await relations.addParentRightDestriction(context, ret);
         var test = ret.getSql();
         return await ret.getMany();
         // return await this.connection().manager.find(entityClass, p1);
     }
-    async createUser(username, password) {
+    async createUser(context, username, password) {
         //var hh=getConnection().manager.findOne(User,{ email: username });
         if (await typeorm_1.getConnection().manager.findOne(User_1.User, { email: username }) !== undefined) {
             throw new Error("User already exists");
@@ -358,11 +341,11 @@ class DBManager {
             resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
           });
         })*/
-        await (await DBManager.get()).save(user);
+        await (await DBManager.get()).save(context, user);
         delete user.password;
         return user;
     }
-    async getUser(user, password) {
+    async getUser(context, user, password) {
         /* const users = await this.connection().getRepository(User)
          .createQueryBuilder()
          .select("user.id", "id")
@@ -400,7 +383,7 @@ class DBManager {
         }
         return undefined;
     }
-    async checkParentRight(entityClass, ids) {
+    async checkParentRight(context, entityClass, ids) {
         var clname = Classes_1.classes.getClassName(entityClass);
         var cl = Classes_1.classes.getClass(clname);
         var relations = new RelationInfo(clname, this);
@@ -408,8 +391,8 @@ class DBManager {
             select("me").from(cl, "me");
         ret = relations.join(ret);
         ret.andWhere("me.id IN (:...ids)", { ids: ids });
-        if (!getRequest_1.getRequest().user.isAdmin)
-            ret = await relations.addParentRightDestriction(ret);
+        if (!context.request.user.isAdmin)
+            ret = await relations.addParentRightDestriction(context, ret);
         var tt = ret.getSql();
         var test = await ret.getCount();
         return test === ids.length;
@@ -490,12 +473,12 @@ class RelationInfo {
      * add an andWhere to the sql-Query to check the parent rights
      * @param builder
      */
-    async addParentRightDestriction(builder) {
+    async addParentRightDestriction(context, builder) {
         var username = "a@b.com";
         var ret = builder;
         //first we get the sql from User-Rights we had to check 
-        var kk = getRequest_1.getRequest().user;
-        var userid = getRequest_1.getRequest().user.user;
+        var kk = context.request.user;
+        var userid = context.request.user.user;
         var query = this.dbmanager.connection().createQueryBuilder().
             select("me").from(Classes_1.classes.getClass("jassi.remote.security.ParentRight"), "me").
             leftJoin("me.groups", "me_groups").
@@ -684,5 +667,4 @@ class RelationInfo {
         }
     }
 }
-Object.freeze(DBManager);
 //# sourceMappingURL=DBManager.js.map

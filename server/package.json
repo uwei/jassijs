@@ -22,7 +22,6 @@
       "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz",
       "version": "1.1.11"
     },
-    "cls-hooked": "^4.2.2",
     "concat-map": {
       "integrity": "sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=",
       "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz",

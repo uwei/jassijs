@@ -2,6 +2,7 @@
 import { User } from "jassi/remote/security/User";
 import { DBManager } from "./DBManager";
 import { UserModel } from "jassi/UserModel";
+import { Context } from "jassi/remote/RemoteObject";
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -18,7 +19,10 @@ passport.use(new LocalStrategy({
   passwordField: "password",
 }, async (username, password, done) => {
   try {
-    const userDocument = await (await DBManager.get()).getUser(username,password); //UserModel.findOne({username: username});
+    var context:Context={
+      isServer:true
+  }
+    const userDocument = await (await DBManager.get()).getUser(context,username,password); //UserModel.findOne({username: username});
     if (userDocument) {
       return done(null, userDocument);
     } else {

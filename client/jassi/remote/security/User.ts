@@ -3,6 +3,7 @@ import jassi, { $Class } from "jassi/remote/Jassi";
 import {  PrimaryGeneratedColumn,JoinTable,Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassi/util/DatabaseSchema";
 import { Group } from "jassi/remote/security/Group";
 import { ParentRight } from "jassi/remote/security/ParentRight";
+import { Context } from "../RemoteObject";
 
 
 
@@ -26,9 +27,9 @@ export class User extends DBObject  {
      /**
     * reload the object from jassi.db
     */
-    async hallo() {
-        if (!jassi.isServer) {
-            return await this.call(this,this.hallo);
+    async hallo(context:Context=undefined) {
+        if (!context?.isServer) {
+            return await this.call(this,this.hallo,context);
         } else {
 			return 11;
         }

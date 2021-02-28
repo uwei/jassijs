@@ -24,9 +24,9 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassi/rem
             this.strasse = "";
             this.nummer = 0;
         }
-        static async myfind(options = undefined) {
+        static async myfind(options = undefined, context = undefined) {
             if (!Jassi_1.default.isServer) {
-                return await this.call(this.myfind, options);
+                return await this.call(this.myfind, options, context);
             }
             else {
                 //@ts-ignore

@@ -19,14 +19,14 @@ let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
     constructor() {
         super();
     }
-    static async find(options = undefined) {
-        if (!Jassi_1.default.isServer) {
-            return await this.call(this.find, options);
+    static async find(options = undefined, context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+            return await this.call(this.find, options, context);
         }
         else {
             //@ts-ignore
             var man = await (await Promise.resolve().then(() => require("jassi/server/DBManager"))).DBManager.get();
-            return man.find(this, options);
+            return man.find(context, this, options);
         }
     }
     async hallo(num) {

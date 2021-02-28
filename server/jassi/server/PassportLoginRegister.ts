@@ -4,6 +4,7 @@ import { User } from "jassi/remote/security/User";
 import { DBManager } from "./DBManager";
 import { JWT_EXPIRATION_MS } from "./PassportSetup";
 import { UserModel } from "jassi/UserModel";
+import { Context } from "jassi/remote/RemoteObject";
 
 const express = require('express');
 const passport = require('passport');
@@ -20,8 +21,11 @@ router.post('/register', async (req, res) => {
 
     try {
 
-      
-        await (await DBManager.get()).createUser(username, password);
+        var context:Context={
+            isServer:true,
+            request:req
+        }
+        await (await DBManager.get()).createUser(context,username, password);
         console.log("user created");
         /*const user= new User();
         user.email=username;

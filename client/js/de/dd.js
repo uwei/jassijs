@@ -1,29 +1,40 @@
-define(["require", "exports", "jassi/ui/Table", "jassi/ui/Button", "jassi/ui/Panel"], function (require, exports, Table_1, Button_1, Panel_1) {
+define(["require", "exports", "jassi/remote/Context"], function (require, exports, Context_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
-    function test() {
-        var pan = new Panel_1.Panel();
-        var me = {};
-        me.button1 = new Button_1.Button();
-        me.button2 = new Button_1.Button();
-        me.button3 = new Button_1.Button();
-        me.table1 = new Table_1.Table();
-        me.table1.width = 150;
-        pan["me"] = me;
-        pan.add(me.table1);
-        pan.isAbsolute = false;
-        pan.add(me.button1);
-        pan.add(me.button2);
-        pan.add(me.button3);
-        me.button1.text = "button";
-        me.button1.onclick(function (event) {
+    class Test {
+        test(id) {
+            var test = id;
+            for (var x = 1; x < 1000; y++) {
+                var ob = Context_1.Context.get("meintest");
+            }
+            return ob.hallo;
+        }
+    }
+    async function c() {
+        var err = new Error();
+        return 1;
+    }
+    async function b() {
+        var p = await new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(5);
+            }, 100);
         });
-        me.button2.text = "button";
-        me.button3.text = "buttonss";
-        me.button3.onclick(function (event) {
+        return c();
+    }
+    async function a() {
+        return await b();
+    }
+    async function test() {
+        await a();
+        /*var t=new Test();
+        var context=new Context();
+        var r=context.register("meintest",{hallo:9},async ()=>{
+            return t.test(8);
         });
-        return pan;
+        alert(await r);
+        context.destroy();*/
     }
     exports.test = test;
 });

@@ -8,8 +8,8 @@ declare global {
 (global as any).$ = {};
 
 require("app-module-path").addPath("./js");
-
-import "reflect-metadata";
+import "jassi/remote/Registry";
+//import "reflect-metadata";
 //important: registry must be loaded after "reflect-metadata" and before the typeorm (because delegation of Reflect.metadata)
 import express = require('express');
 
@@ -23,7 +23,6 @@ import "jassi/server/PassportSetup";
 import { remoteProtocol } from "jassi/server/DoRemoteProtocol";
 import { zip } from "jassi/server/Zip";
 import { rawbody } from "jassi/server/RawBody";
-import { installGetRequest, getRequest } from "jassi/server/getRequest";
 
 
 class JassiConnectionProperties {
@@ -54,7 +53,7 @@ export default function JassiServer(properties: JassiConnectionProperties={}, ex
         syncRemoteFiles();
     app.use(staticfiles);
     app.use(rawbody);
-    app.use(installGetRequest);
+   // app.use(installGetRequest);
     app.use(passport.initialize());
     app.use(cookieParser());
     app.use("/user", loginRegister);

@@ -1,6 +1,6 @@
 import jassi, { $Class } from "jassi/remote/Jassi";
 import registry from "jassi/remote/Registry";
-import { RemoteObject } from "jassi/remote/RemoteObject";
+import { Context, RemoteObject } from "jassi/remote/RemoteObject";
 
 export class RightProperties{
     name:string;
@@ -34,15 +34,15 @@ export function $CheckParentRight():Function{
 @$Class("jassi.remote.security.Rights")
 export class Rights extends RemoteObject{
     private _isAdmin:boolean;
-    async isAdmin():Promise<boolean>{
+    async isAdmin(context:Context=undefined):Promise<boolean>{
         
-        if (!jassi.isServer) {
+        if (!context?.isServer) {
             if(this._isAdmin!==undefined)
                 return this._isAdmin;
-            return await this.call(this,this.isAdmin);
+            return await this.call(this,this.isAdmin,context);
         } else {
             //@ts-ignore
-            var req = (await import("jassi/server/getRequest")).getRequest();
+            var req = context.request;
             return req.user.isAdmin;
         }
     }

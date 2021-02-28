@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 global.window = {};
 global.$ = {};
 require("app-module-path").addPath("./js");
-require("reflect-metadata");
+require("jassi/remote/Registry");
+//import "reflect-metadata";
 //important: registry must be loaded after "reflect-metadata" and before the typeorm (because delegation of Reflect.metadata)
 const express = require("express");
 const Filessystem_1 = require("jassi/server/Filessystem");
@@ -16,7 +17,6 @@ require("jassi/server/PassportSetup");
 const DoRemoteProtocol_1 = require("jassi/server/DoRemoteProtocol");
 const Zip_1 = require("jassi/server/Zip");
 const RawBody_1 = require("jassi/server/RawBody");
-const getRequest_1 = require("jassi/server/getRequest");
 class JassiConnectionProperties {
 }
 /**
@@ -35,7 +35,7 @@ function JassiServer(properties = {}, expressApp = undefined) {
         Filessystem_1.syncRemoteFiles();
     app.use(Filessystem_1.staticfiles);
     app.use(RawBody_1.rawbody);
-    app.use(getRequest_1.installGetRequest);
+    // app.use(installGetRequest);
     app.use(passport.initialize());
     app.use(cookieParser());
     app.use("/user", PassportLoginRegister_1.loginRegister);

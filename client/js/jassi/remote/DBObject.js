@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteObject", "jassi/remote/Registry", "jassi/util/DatabaseSchema", "jassi/remote/Database", "jassi/remote/Transaction"], function (require, exports, Jassi_1, Classes_1, RemoteObject_1, Registry_1, DatabaseSchema_1, Database_1, Transaction_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteObject", "jassi/remote/Registry", "jassi/util/DatabaseSchema", "jassi/remote/Database"], function (require, exports, Jassi_1, Classes_1, RemoteObject_1, Registry_1, DatabaseSchema_1, Database_1) {
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -92,8 +92,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         /**
         * save the object to jassi.db
         */
-        async save() {
-            if (!Jassi_1.default.isServer) {
+        async save(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 if (this.id !== undefined) {
                     var cname = Classes_1.classes.getClassName(this);
                     var cl = DBObject_1.cache[cname];
@@ -107,7 +107,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                             throw new Error("autoid - load the object  before saving or remove id");
                         else {
                             //this._createObjectInDB
-                            return await this.call(this, Transaction_1.Transaction.redirectTransaction(this, this, this.save, this._createObjectInDB));
+                            return await this.call(this, this._createObjectInDB, context);
                         } //fails if the Object is saved before loading 
                     }
                     else {
@@ -117,7 +117,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                     }
                     cl[this.id] = this; //Update cache on save
                     var newob = this._replaceObjectWithId(this);
-                    var h = await this.call(newob, Transaction_1.Transaction.redirectTransaction(this, newob, this.save, this.save));
+                    var h = await this.call(newob, this.save, context);
                     this.id = h.id;
                     return this;
                 }
@@ -127,7 +127,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                     }
                     else {
                         var newob = this._replaceObjectWithId(this);
-                        var h = await this.call(newob, Transaction_1.Transaction.redirectTransaction(this, newob, this.save, this._createObjectInDB));
+                        var h = await this.call(newob, this._createObjectInDB, context);
                         this.id = h.id;
                         DBObject_1.cache[Classes_1.classes.getClassName(this)][this.id] = this;
                         return this;
@@ -137,56 +137,56 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             else {
                 //@ts-ignore
                 var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
-                return man.save(this);
+                return man.save(context, this);
                 // return ["jassi/base/ChromeDebugger.ts"];
             }
         }
-        async _createObjectInDB() {
-            if (!Jassi_1.default.isServer) {
+        async _createObjectInDB(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 throw new Error("createObject could oly be called on server");
             }
             else {
                 //@ts-ignore
                 var man = await (await new Promise((resolve_2, reject_2) => { require(["jassi/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
-                return man.insert(this);
+                return man.insert(context, this);
             }
         }
-        static async findOne(options = undefined) {
-            if (!Jassi_1.default.isServer) {
-                return await this.call(this.findOne, options);
+        static async findOne(options = undefined, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await this.call(this.findOne, options, context);
             }
             else {
                 //@ts-ignore
                 var man = await (await new Promise((resolve_3, reject_3) => { require(["jassi/server/DBManager"], resolve_3, reject_3); })).DBManager.get();
-                return man.findOne(this, options);
+                return man.findOne(context, this, options);
             }
         }
-        static async find(options = undefined) {
-            if (!Jassi_1.default.isServer) {
-                return await this.call(this.find, options);
+        static async find(options = undefined, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await this.call(this.find, options, context);
             }
             else {
                 //@ts-ignore
                 var man = await (await new Promise((resolve_4, reject_4) => { require(["jassi/server/DBManager"], resolve_4, reject_4); })).DBManager.get();
-                return man.find(this, options);
+                return man.find(context, this, options);
             }
         }
         /**
         * reload the object from jassi.db
         */
-        async remove() {
-            if (!Jassi_1.default.isServer) {
+        async remove(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 //@ts-ignore
                 var cl = DBObject_1.cache[Classes_1.classes.getClassName(this)];
                 if (cl !== undefined) {
                     delete cl[this.id];
                 }
-                return await this.call({ id: this.id }, this.remove);
+                return await this.call({ id: this.id }, this.remove, context);
             }
             else {
                 //@ts-ignore
                 var man = await (await new Promise((resolve_5, reject_5) => { require(["jassi/server/DBManager"], resolve_5, reject_5); })).DBManager.get();
-                await man.remove(this);
+                await man.remove(context, this);
             }
         }
         _getObjectProperty(dummy) {

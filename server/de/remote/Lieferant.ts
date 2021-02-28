@@ -12,7 +12,7 @@ export class Lieferant extends DBObject {
     @Column({nullable:false})
     name:string;
     
-}
+} 
 
 /*export async function test(){
 	var l=new Lieferant();

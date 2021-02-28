@@ -1,6 +1,6 @@
 import jassi, { $Class } from "jassi/remote/Jassi";
 import { classes } from "jassi/remote/Classes";
-import { RemoteObject } from "jassi/remote/RemoteObject";
+import { Context, RemoteObject } from "jassi/remote/RemoteObject";
 import registry from "jassi/remote/Registry";
 let cl = classes;//force Classes
 import { Entity, EntityOptions } from "jassi/util/DatabaseSchema";
@@ -92,8 +92,8 @@ export class DBObject extends RemoteObject {
     /**
     * save the object to jassi.db
     */
-    async save() {
-        if (!jassi.isServer) {
+    async save(context:Context=undefined) {
+        if (!context?.isServer) {
             if (this.id !== undefined) {
                 var cname = classes.getClassName(this);
                 var cl = DBObject.cache[cname];
@@ -108,7 +108,7 @@ export class DBObject extends RemoteObject {
                         throw new Error("autoid - load the object  before saving or remove id");
                     else{
                         //this._createObjectInDB
-                        return await this.call(this,Transaction.redirectTransaction(this,this,this.save,this._createObjectInDB));
+                        return await this.call(this,this._createObjectInDB,context);
                     }//fails if the Object is saved before loading 
                 } else {
                     if (cl[this.id] !== this) {
@@ -117,7 +117,7 @@ export class DBObject extends RemoteObject {
                 }
                 cl[this.id] = this;//Update cache on save
                 var newob=this._replaceObjectWithId(this);
-                var h= await this.call(newob, Transaction.redirectTransaction(this,newob,this.save,this.save));
+                var h= await this.call(newob, this.save,context);
                 this.id=h.id;
                 return this;
             } else {
@@ -125,7 +125,7 @@ export class DBObject extends RemoteObject {
                     throw new Error("error while saving the Id is not set");
                 } else{
                      var newob=this._replaceObjectWithId(this);
-                	 var h= await this.call(newob, Transaction.redirectTransaction(this,newob,this.save,this._createObjectInDB));
+                	 var h= await this.call(newob, this._createObjectInDB,context);
                 	 this.id=h.id;
                 	 DBObject.cache[classes.getClassName(this)][this.id]=this;
                     return this;
@@ -134,54 +134,54 @@ export class DBObject extends RemoteObject {
         } else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
-            return man.save(this);
+            return man.save(context,this);
             // return ["jassi/base/ChromeDebugger.ts"];
         }
     }
-    async _createObjectInDB() {
-        if (!jassi.isServer) {
+    async _createObjectInDB(context:Context=undefined) {
+        if (!context?.isServer) {
             throw new Error("createObject could oly be called on server");
 
         } else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
-            return man.insert(this);
+            return man.insert(context,this);
         }
     }
-    static async findOne(options = undefined): Promise<DBObject> {
-        if (!jassi.isServer) {
-            return await this.call(this.findOne, options);
+    static async findOne(options = undefined,context:Context=undefined): Promise<DBObject> {
+        if (!context?.isServer) {
+            return await this.call(this.findOne, options,context);
         } else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
-            return man.findOne(this, options);
+            return man.findOne(context,this, options);
         }
     }
-    static async find(options = undefined): Promise<DBObject[]> {
-        if (!jassi.isServer) {
-            return await this.call(this.find, options);
+    static async find(options = undefined,context:Context=undefined): Promise<DBObject[]> {
+        if (!context?.isServer) {
+            return await this.call(this.find, options,context);
         } else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
-            return man.find(this, options);
+            return man.find(context,this, options);
         }
     }
     /**
     * reload the object from jassi.db
     */
-    async remove() {
-        if (!jassi.isServer) {
+    async remove(context:Context=undefined) {
+        if (!context?.isServer) {
             //@ts-ignore
             var cl = DBObject.cache[classes.getClassName(this)];
             if (cl !== undefined) {
                 delete cl[this.id];
             }
 
-            return await this.call({ id: this.id }, this.remove);
+            return await this.call({ id: this.id }, this.remove,context);
         } else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
-            await man.remove(this);
+            await man.remove(context,this);
         }
     }
 
