@@ -8,11 +8,11 @@ define("jassi_localserver/registry",["require"], function(require) {
 	"jassi_localserver/DBManager.ts": {
 		"date": 1614469272935
 	},
-	"jassi_localserver/Filesystem.ts": {
-		"date": 1614352774551
+	"jassi_localserver/Filessystem.ts": {
+		"date": 1614633628339
 	},
 	"jassi_localserver/LocalProtocol.ts": {
-		"date": 1614539864986
+		"date": 1614633454875
 	},
 	"jassi_localserver/modul.ts": {
 		"date": 1614543659084

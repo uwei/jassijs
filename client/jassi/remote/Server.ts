@@ -97,7 +97,7 @@ export class Server extends RemoteObject {
         } else {
             //@ts-ignore
             var fs = await import("jassi/server/Filessystem");
-            var rett: FileNode = new fs.default().dir("", withDate);
+            var rett: FileNode = await new fs.default().dir("", withDate);
             return rett;
             // return ["jassi/base/ChromeDebugger.ts"];
         }

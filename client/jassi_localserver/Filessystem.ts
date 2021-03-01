@@ -1,0 +1,201 @@
+
+class FileEntry {
+    id: string;
+    date: number;
+    isDirectory?: boolean;
+    data: any;
+}
+export default class Filessystem {
+    private static db: IDBDatabase;
+    private static async getDB() {
+        if (Filessystem.db)
+            return Filessystem.db;
+        var req = window.indexedDB.open("jassi", 1);
+        req.onupgradeneeded = function (event) {
+            var db = event.target["result"];
+            var objectStore = db.createObjectStore("files", { keyPath: "id" });
+        }
+        Filessystem.db = await new Promise((resolve) => {
+            req.onsuccess = (ev) => { resolve(ev.target["result"]) };
+        })
+
+        return Filessystem.db;
+    }
+    /**
+     * @returns  [{name:"hallo",date:1566554},{name:"demo",files:[]}]
+     */
+    async dir(curdir = "", appendDate = false) {
+        var root = { files: [] };
+        var db = await Filessystem.getDB();
+        let transaction = db.transaction('files', 'readonly');
+        const store = transaction.objectStore('files');
+        var ret = await store.openCursor();
+        var all: FileEntry[] = [];
+        await new Promise((resolve) => {
+            ret.onsuccess = ev => {
+                var el = ev.target["result"];
+                if (el) {
+                    if(el.value.id.startsWith(curdir))
+                        all.push(el.value);
+                    el.continue();
+                } else
+                    resolve(undefined);
+            }
+            ret.onerror = ev => { resolve(undefined) }
+        });
+        var keys={
+            "":root
+        }
+        for (let x = 0; x < all.length; x++) {
+            var entr = all[x];
+            var paths = entr.id.split("/");
+            var parent = root;
+            var currentpath=[];
+            for (let p = 0; p < paths.length; p++) {
+                let name = paths[p];
+                currentpath.push(name);
+                let scurrentpath=currentpath.join("/");
+                if (p < paths.length - 1) {//the parentfolders
+                    
+                    if (!keys[scurrentpath]) {
+                        let nf={
+                            name: name,
+                            files: []
+                        }
+                        parent.files.push(nf);
+                        keys[scurrentpath]=nf;
+                    }
+                    parent = keys[scurrentpath];
+                } else {
+                    if (entr.isDirectory) {
+                        let nf={
+                            name:name,
+                            files:[]
+                        }
+                        keys[scurrentpath]=nf;
+                        parent.files.push(nf);
+                    } else {
+                        var newitem:any={
+                            name:name
+                        }
+                        if(appendDate)
+                            newitem.date=entr.date;
+                        parent.files.push(newitem)
+                    }
+                }
+            }
+        }
+        return root;
+    }
+    public async createFile(filename: string, content: string) {
+        return await this.saveFile(filename,content);
+    }
+    async saveFile(filename, content) {
+        return await this.saveFiles([filename], [content]);
+    }
+    async saveFiles(fileNames: string[], contents: string[]) {
+        var db = await Filessystem.getDB();
+
+        for (let x = 0; x < fileNames.length; x++) {
+            let fname = fileNames[x];
+            let exists = await this.loadFileEntry(fname);
+            let data = contents[x];
+            let transaction = db.transaction('files', 'readwrite');
+            const store = transaction.objectStore('files');
+            var el = new FileEntry();
+            el.id = fname;
+            el.data = data;
+            el.date = Date.now();
+            if (exists)
+                store.put(el);
+            else
+                store.add(el);
+            await new Promise((resolve) => { transaction.oncomplete = resolve })
+        }
+        return "";
+    }
+    async loadFileEntry(fileName: string): Promise<FileEntry> {
+        var db = await Filessystem.getDB();
+        let transaction = db.transaction('files', 'readonly');
+        const store = transaction.objectStore('files');
+        var ret = await store.get(fileName);
+        var r: any = await new Promise((resolve) => {
+            ret.onsuccess = ev => { resolve(ret.result) }
+            ret.onerror = ev => { resolve(undefined) }
+        });
+
+        return r;
+    }
+    /**
+    * create a folder
+    * @param filename - the name of the new file 
+    * @param content - then content
+    */
+    public async createFolder(filename: string): Promise<string> {
+        var test = await this.loadFileEntry(filename);
+        if (test)
+            return filename + " allready exists";
+        var db = await Filessystem.getDB();
+        let transaction = db.transaction('files', 'readwrite');
+        const store = transaction.objectStore('files');
+        var el: FileEntry = {
+            data: undefined,
+            id: filename,
+            isDirectory: true,
+            date: Date.now()
+        }
+        store.add(el);
+
+        await new Promise((resolve) => { transaction.oncomplete = resolve })
+        return "";
+    }
+    async loadFile(fileName: string) {
+        var r = await this.loadFileEntry(fileName);
+        return (r ? r.data : undefined);
+    }
+    /**
+    * deletes a file or directory 
+    * @param file - old filename
+    */
+    public async remove(file: string): Promise<string> {
+        var entr = await this.loadFileEntry(file);
+        if (entr === undefined) {
+            return file + " not exists";
+        }
+
+        var db = await Filessystem.getDB();
+        let transaction = db.transaction('files', 'readwrite');
+        const store = transaction.objectStore('files');
+        store.delete(file);
+
+        await new Promise((resolve) => { transaction.oncomplete = resolve })
+        return "";
+    }
+
+}
+
+export async function test() {
+    await new Filessystem().saveFiles(["hallo.js"], ["alert(2)"]);
+    var s1 = await new Filessystem().remove("hallo.js");
+    var test = await new Filessystem().loadFile("hallo.js")
+    var s2 = await new Filessystem().remove("hallo.js");
+    var s = await new Filessystem().createFolder("demo");
+    var s3 = await new Filessystem().remove("demo");
+    await new Filessystem().saveFiles(["local/modul.ts"], [`export default {
+    "require":{ 
+        
+    }
+}`]);
+    await new Filessystem().saveFiles(["local/registry.js"], [`//this file is autogenerated don't modify
+define("local/registry",["require"], function(require) {
+ return {
+  default: {
+	"local/modul.ts": {
+		"date": 1614616375403
+	}
+}
+ }
+});`]);
+
+
+}

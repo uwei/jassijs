@@ -163,6 +163,7 @@ class Filesystem {
         catch (ex) {
             return ex.message;
         }
+        return "";
     }
     /**
      * create a file
@@ -179,6 +180,7 @@ class Filesystem {
         catch (ex) {
             return ex.message;
         }
+        return "";
     }
     /**
      * renames a file or directory

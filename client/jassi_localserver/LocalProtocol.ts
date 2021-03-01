@@ -4,16 +4,41 @@ import { RemoteProtocol } from "jassi/remote/RemoteProtocol";
 
 RemoteProtocol.prototype.exec = async function (config, ob) {
     var clname = JSON.parse(config.data).classname;
-    var local =["jassi.remote.Transaction", "northwind.Employees", "northwind.Customer"];
+    var local = ["jassi.remote.Transaction", "northwind.Employees", "northwind.Customer"];
     var classes = (await import("jassi/remote/Classes")).classes;
     var DBObject = await classes.loadClass("jassi.remote.DBObject");
     var ret;
-    if (local.indexOf(clname) > -1){
+    //
+    if (clname === "jassi.remote.Server") {
+        var tst = JSON.parse(config.data);
+        if (tst.method === "dir") {
+            var sret = await localExec(JSON.parse(config.data));
+            var retserver = JSON.parse(await $.ajax(config));
+            retserver.files.push(sret.files[1]);
+            return JSON.stringify(retserver);
+        }else if(tst.method==="saveFiles"){
+            if(tst.parameter[0][0].startsWith("local/")||tst.parameter[0][0].startsWith("js/local/")){
+                var sret = await localExec(JSON.parse(config.data));
+                ret = new RemoteProtocol().stringify(sret);
+                if (ret === undefined)
+                    ret = "$$undefined$$";
+                return ret;
+            }
+        } else if(tst.parameter.length>0&&tst.parameter[0].startsWith("local/")) {
+            var sret = await localExec(JSON.parse(config.data));
+            ret = new RemoteProtocol().stringify(sret);
+            if (ret === undefined)
+                ret = "$$undefined$$";
+            return ret;
+        }
+
+    }
+    if (local.indexOf(clname) > -1) {
         var sret = await localExec(JSON.parse(config.data));
         ret = new RemoteProtocol().stringify(sret);
         if (ret === undefined)
             ret = "$$undefined$$";
-     }else
+    } else
         ret = await $.ajax(config);
     return ret;
 }
@@ -22,13 +47,13 @@ export async function localExec(prot: RemoteProtocol, context: Context = undefin
     var p = new RemoteProtocol();
 
     var C = await classes.loadClass(prot.classname);
-    if (context === undefined){
-        context= {
+    if (context === undefined) {
+        context = {
             isServer: true,
-                request: {
+            request: {
                 user: {
                     isAdmin: true,
-                        user: 1
+                    user: 1
                 }
             }
         };
@@ -53,7 +78,7 @@ export async function localExec(prot: RemoteProtocol, context: Context = undefin
             }
         }
         //var s = new RemoteProtocol().stringify(ret);
-        
+
         return ret;
     } else {
         var obj = new C();

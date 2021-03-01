@@ -98,7 +98,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             else {
                 //@ts-ignore
                 var fs = await new Promise((resolve_1, reject_1) => { require(["jassi/server/Filessystem"], resolve_1, reject_1); });
-                var rett = new fs.default().dir("", withDate);
+                var rett = await new fs.default().dir("", withDate);
                 return rett;
                 // return ["jassi/base/ChromeDebugger.ts"];
             }

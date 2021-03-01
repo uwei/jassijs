@@ -8,6 +8,32 @@ define(["require", "exports", "jassi/remote/RemoteProtocol"], function (require,
         var classes = (await new Promise((resolve_1, reject_1) => { require(["jassi/remote/Classes"], resolve_1, reject_1); })).classes;
         var DBObject = await classes.loadClass("jassi.remote.DBObject");
         var ret;
+        //
+        if (clname === "jassi.remote.Server") {
+            var tst = JSON.parse(config.data);
+            if (tst.method === "dir") {
+                var sret = await localExec(JSON.parse(config.data));
+                var retserver = JSON.parse(await $.ajax(config));
+                retserver.files.push(sret.files[1]);
+                return JSON.stringify(retserver);
+            }
+            else if (tst.method === "saveFiles") {
+                if (tst.parameter[0][0].startsWith("local/") || tst.parameter[0][0].startsWith("js/local/")) {
+                    var sret = await localExec(JSON.parse(config.data));
+                    ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
+                    if (ret === undefined)
+                        ret = "$$undefined$$";
+                    return ret;
+                }
+            }
+            else if (tst.parameter.length > 0 && tst.parameter[0].startsWith("local/")) {
+                var sret = await localExec(JSON.parse(config.data));
+                ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
+                if (ret === undefined)
+                    ret = "$$undefined$$";
+                return ret;
+            }
+        }
         if (local.indexOf(clname) > -1) {
             var sret = await localExec(JSON.parse(config.data));
             ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);

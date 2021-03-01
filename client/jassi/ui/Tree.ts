@@ -1,12 +1,14 @@
 import "jassi/ext/fancytree";
 import { $Class } from "jassi/remote/Jassi";
-import {Component,  $UIComponent } from "jassi/ui/Component";
-import {ComponentDescriptor} from "jassi/ui/ComponentDescriptor";
+import { Component, $UIComponent } from "jassi/ui/Component";
+import { ComponentDescriptor } from "jassi/ui/ComponentDescriptor";
 import registry from "jassi/remote/Registry";
 
 
 import extensions from "jassi/base/Extensions";
 import { $Property } from "jassi/ui/Property";
+import { Style } from "jassi/ui/Style";
+import { CSSProperties } from "jassi/ui/CSSProperties";
 /*declare global {
     interface JQuery {
         fancytree: any;
@@ -14,23 +16,23 @@ import { $Property } from "jassi/ui/Property";
 }*/
 
 @$Class("jassi.ui.TreeEditorPropertiesMulti")
-class TreeEditorPropertiesMulti{
-	@$Property({ default: "", chooseFrom: ["", "sameParent", "sameLevel"], description: "multi selection mode" })
-	mode?:string;
+class TreeEditorPropertiesMulti {
+    @$Property({ default: "", chooseFrom: ["", "sameParent", "sameLevel"], description: "multi selection mode" })
+    mode?: string;
 }
 @$Class("jassi.ui.TreeEditorProperties")
-class TreeEditorProperties{
-	@$Property({default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
-	selectMode?:number;
-	@$Property({default: false, description: "display a checkbox before the node" })
-	checkbox?:boolean;
-	@$Property({ type: "json" ,componentType:"jassi.ui.TreeEditorPropertiesMulti"})
-	multi?:TreeEditorPropertiesMulti;
+class TreeEditorProperties {
+    @$Property({ default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
+    selectMode?: number;
+    @$Property({ default: false, description: "display a checkbox before the node" })
+    checkbox?: boolean;
+    @$Property({ type: "json", componentType: "jassi.ui.TreeEditorPropertiesMulti" })
+    multi?: TreeEditorPropertiesMulti;
 }
 
-@$UIComponent({ fullPath: "common/Tree", icon: "mdi mdi-file-tree"})
+@$UIComponent({ fullPath: "common/Tree", icon: "mdi mdi-file-tree" })
 @$Class("jassi.ui.Tree")
-@$Property({ name: "new", type: "json" ,componentType:"jassi.ui.TreeEditorProperties"})
+@$Property({ name: "new", type: "json", componentType: "jassi.ui.TreeEditorProperties" })
 /*@$Property({ name: "new/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
 @$Property({ name: "new/checkbox", type: "boolean", default: false, description: "desplay a checkbos before the node" })
 @$Property({ name: "new/multi", type: "json" })
@@ -40,6 +42,7 @@ export class Tree extends Component {
     _propDisplay: string | { (item: any): string };
     _propIcon: string | { (item: any): string };
     _propChilds: string | { (item: any): any[] };
+    _propStyle: string | { (item: any): CSSProperties };
     _select: { value: number };
     tree: Fancytree.Fancytree;
     _isInited: boolean;
@@ -89,7 +92,7 @@ export class Tree extends Component {
          });*/
         options.source = [{ title: 'Folder in home folder', key: 'fA100', folder: true, lazy: true }];
         options.icon = false;//we have an own
-        options.lazyLoad = function(event, data) {
+        options.lazyLoad = function (event, data) {
             TreeNode.loadChilds(event, data);
 
         };
@@ -102,12 +105,12 @@ export class Tree extends Component {
                   return beforeExpand(event, data);
               return true;
           };*/
-        options.activate = function(event: JQueryEventObject, data: Fancytree.EventData) {
+        options.activate = function (event: JQueryEventObject, data: Fancytree.EventData) {
             _this._onselect(event, data);
             if (activate !== undefined)
                 activate(event, data);
         };
-        options.click = function(event: JQueryEventObject, data: Fancytree.EventData) {
+        options.click = function (event: JQueryEventObject, data: Fancytree.EventData) {
             _this._onclick(event, data);
             if (click !== undefined)
                 return click(event, data);
@@ -121,9 +124,19 @@ export class Tree extends Component {
         $("#" + this._id).find("ul").css("overflow", "auto");
     }
     /**
+    * @member - get the property for the display of the item or an function to get the display from an item
+    */
+    @$Property({ type: "string", description: "the property called to get the style of the item" })
+    set propStyle(value: string | { (item: any): CSSProperties }) {
+        this._propStyle = value;
+    }
+    get propStyle() {
+        return this._propStyle;
+    }
+    /**
      * @member - get the property for the display of the item or an function to get the display from an item
      */
-    @$Property({type:"string", description:"the property called to get the name of the item"})
+    @$Property({ type: "string", description: "the property called to get the name of the item" })
     set propDisplay(value: string | { (item: any): string }) {
         this._propDisplay = value;
     }
@@ -167,9 +180,9 @@ export class Tree extends Component {
             if (text === "") {
                 this.tree.clearFilter();
                 // this.expandAll();
-            } else{
+            } else {
                 //@ts-ignore
-                this.tree.filterNodes(text, {leavesOnly:true});
+                this.tree.filterNodes(text, { leavesOnly: true });
             }
         });
     }
@@ -182,6 +195,17 @@ export class Tree extends Component {
             ret = this.propDisplay(item);
         } else
             ret = item[this.propDisplay];
+        return ret;
+    }
+    /**
+   * get title from node
+   */
+    getStyleFromItem(item): CSSProperties {
+        var ret;
+        if (typeof (this.propStyle) === "function") {
+            ret = this.propStyle(item);
+        } else
+            ret = item[this.propStyle];
         return ret;
     }
     /**
@@ -210,13 +234,13 @@ export class Tree extends Component {
 
 
     /*private getTreeNodeFromId(id:string):TreeNode{
-    	//@ts-ignore
-    	for(var entr of this.objectToNode){
-			if(entr[1]._id===id)
-				return entr[1];
-    		//entries.return;
-    	}
-    	return undefined;
+        //@ts-ignore
+        for(var entr of this.objectToNode){
+            if(entr[1]._id===id)
+                return entr[1];
+            //entries.return;
+        }
+        return undefined;
     }*/
     private _onselect(event, data) {
         var item = this._itemToKey.get(data.node.data);
@@ -248,7 +272,7 @@ export class Tree extends Component {
             return;
         this["_selectionIsWaiting"] = values;
         var _this = this;
-        for (var v = 0;v < values.length;v++) {
+        for (var v = 0; v < values.length; v++) {
             var item = values[v];
             this._readNodeFromItem(item).then((node) => {
                 node.setSelected(true);
@@ -291,7 +315,7 @@ export class Tree extends Component {
         }
 
         if (parent.hasChildren()) {
-            for (var x = 0;x < parent.children.length;x++) {
+            for (var x = 0; x < parent.children.length; x++) {
                 var node = parent.children[x];
                 if (allreadySeen.indexOf(node.data.item) === -1)
                     allreadySeen.push(node.data.item);
@@ -307,7 +331,7 @@ export class Tree extends Component {
     }
     async expandKeys(keys: string[]) {
         var all = [];
-        for (var x = 0;x < keys.length;x++) {
+        for (var x = 0; x < keys.length; x++) {
             all.push((await this._readNodeFromKey(keys[x])).setExpanded(true));
         }
         await Promise.all(all);
@@ -335,7 +359,7 @@ export class Tree extends Component {
         node.setActive(true);
         var list = node.getParentList(false, false);
 
-        for (var x = 0;x < list.length;x++) {
+        for (var x = 0; x < list.length; x++) {
             if (!list[x].isExpanded())
                 await list[x].setExpanded(true);
         }
@@ -416,7 +440,7 @@ export class Tree extends Component {
             allPathes.push(path);
         });
         var allPromise: [] = [];
-        for (var i = 0;i < allPathes.length;i++) {
+        for (var i = 0; i < allPathes.length; i++) {
             //@ts-ignore
             allPromise.push(this.tree.loadKeyPath(allPathes[i], undefined));
 
@@ -465,14 +489,14 @@ export class Tree extends Component {
      * @param value - set the data to show in Tree
      **/
     set items(value: any) { //the Code
-	    this._items=value;
+        this._items = value;
         this._allKeysReaded = undefined;
         this._allNodesReaded = undefined;
         this._itemToKey = new Map();
         if (!Array.isArray(value))
             value = [value];
         var avalue: TreeNode[] = [];
-        for (var x = 0;x < value.length;x++) {
+        for (var x = 0; x < value.length; x++) {
             avalue.push(new TreeNode(this, value[x]));
         }
         this.tree.reload(avalue);
@@ -542,18 +566,18 @@ export class Tree extends Component {
     set contextMenu(value) {
         super.contextMenu = value;
         var _this = this;
-        value.onbeforeshow(function(evt) {
+        value.onbeforeshow(function (evt) {
             _this._prepareContextmenu(evt);
         });
     }
     get contextMenu() {
         return super.contextMenu;
     }
-    destroy(){
-    	this._items=undefined;
-    	
-    	super.destroy();
-    	
+    destroy() {
+        this._items = undefined;
+
+        super.destroy();
+
     }
 
 }
@@ -586,15 +610,29 @@ class TreeNode {
         }
 
     }
+    private getStyle(): string {
+        var ret = "";
+        var style = this.tree.getStyleFromItem(this.item);
+        if (style) {
+            for (let key in style) {
+                if (key === "_classname")
+                    continue;
+                var newKey = key.replaceAll("_", "-");
+                
+                ret = ret + "\t\t" + newKey + ":" + (<string>style[key]) + ";\n";
+            }
+        }
+        return ret;
+    }
     get title() {
         var ret = this.tree.getTitleFromItem(this.item);
 
         var bt = "";
         if (this.tree.contextMenu !== undefined)
             bt = "<span class='MenuButton menu mdi mdi-menu-down' id=900  treeid=" + this.tree._id + "  height='10' width='10' onclick='/*jassi.ui.Tree._callContextmenu(event);*/'>";
-		//prevent XSS
-		ret = (ret===undefined?"":ret).replaceAll("<", "&lt").replaceAll(">", "&gt");
-        ret = "<span id=" + this._id + ">" + ret + "</span>";
+        //prevent XSS
+        ret = (ret === undefined ? "" : ret).replaceAll("<", "&lt").replaceAll(">", "&gt");
+        ret = "<span id=" + this._id + " style='"+this.getStyle()+"'  >" + ret + "</span>";
         return ret + bt;
     }
     static loadChilds(event, data) {
@@ -605,7 +643,7 @@ class TreeNode {
         var cs = tree.getChildsFromItem(data.node.data.item);
         var childs: TreeNode[] = [];
         if (cs !== undefined && cs.length > 0) {
-            for (var x = 0;x < cs.length;x++) {
+            for (var x = 0; x < cs.length; x++) {
                 var nd = new TreeNode(tree, cs[x], _this);
                 childs.push(nd);
             }
@@ -644,7 +682,8 @@ export async function test() {
     var tree = new Tree({
         checkbox: true
     });
-    var s: any = { name: "Sansa", id: 1 };
+
+    var s: any = { name: "Sansa", id: 1, style: { color: "blue" } };
     var p = { name: "Peter", id: 2 };
     var u = { name: "Uwe", id: 3, childs: [p, s] };
     var t = { name: "Tom", id: 5 };
@@ -652,6 +691,7 @@ export async function test() {
     s.childs = [c];
     tree.propDisplay = "name";
     tree.propChilds = "childs";
+    tree.propStyle = "style";
     /*tree.propIcon = function(data) {
         if (data.name === "Uwe")
             return "res/car.ico";
@@ -663,7 +703,7 @@ export async function test() {
     tree.height = "100px";
     //  tree._readAllKeysIfNeeded();
 
-    tree.onclick(function(data) {
+    tree.onclick(function (data) {
         console.log("select " + data.data.name);
     });
     tree.selection = [p, s];

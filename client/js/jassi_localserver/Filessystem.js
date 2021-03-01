@@ -4,26 +4,26 @@ define(["require", "exports"], function (require, exports) {
     exports.test = void 0;
     class FileEntry {
     }
-    class Filesystem {
+    class Filessystem {
         static async getDB() {
-            if (Filesystem.db)
-                return Filesystem.db;
+            if (Filessystem.db)
+                return Filessystem.db;
             var req = window.indexedDB.open("jassi", 1);
             req.onupgradeneeded = function (event) {
                 var db = event.target["result"];
                 var objectStore = db.createObjectStore("files", { keyPath: "id" });
             };
-            Filesystem.db = await new Promise((resolve) => {
+            Filessystem.db = await new Promise((resolve) => {
                 req.onsuccess = (ev) => { resolve(ev.target["result"]); };
             });
-            return Filesystem.db;
+            return Filessystem.db;
         }
         /**
          * @returns  [{name:"hallo",date:1566554},{name:"demo",files:[]}]
          */
-        async dir() {
+        async dir(curdir = "", appendDate = false) {
             var root = { files: [] };
-            var db = await Filesystem.getDB();
+            var db = await Filessystem.getDB();
             let transaction = db.transaction('files', 'readonly');
             const store = transaction.objectStore('files');
             var ret = await store.openCursor();
@@ -32,43 +32,68 @@ define(["require", "exports"], function (require, exports) {
                 ret.onsuccess = ev => {
                     var el = ev.target["result"];
                     if (el) {
-                        all.push(el);
+                        if (el.value.id.startsWith(curdir))
+                            all.push(el.value);
+                        el.continue();
                     }
                     else
                         resolve(undefined);
                 };
                 ret.onerror = ev => { resolve(undefined); };
             });
+            var keys = {
+                "": root
+            };
             for (let x = 0; x < all.length; x++) {
                 var entr = all[x];
                 var paths = entr.id.split("/");
                 var parent = root;
+                var currentpath = [];
                 for (let p = 0; p < paths.length; p++) {
                     let name = paths[p];
+                    currentpath.push(name);
+                    let scurrentpath = currentpath.join("/");
                     if (p < paths.length - 1) { //the parentfolders
-                        if (!parent[name]) {
-                            parent[name] = {
+                        if (!keys[scurrentpath]) {
+                            let nf = {
                                 name: name,
                                 files: []
                             };
-                            parent = parent[name];
+                            parent.files.push(nf);
+                            keys[scurrentpath] = nf;
                         }
+                        parent = keys[scurrentpath];
                     }
                     else {
-                        parent.files.push({
-                            name: name,
-                            date: entr.date
-                        });
+                        if (entr.isDirectory) {
+                            let nf = {
+                                name: name,
+                                files: []
+                            };
+                            keys[scurrentpath] = nf;
+                            parent.files.push(nf);
+                        }
+                        else {
+                            var newitem = {
+                                name: name
+                            };
+                            if (appendDate)
+                                newitem.date = entr.date;
+                            parent.files.push(newitem);
+                        }
                     }
                 }
             }
             return root;
         }
+        async createFile(filename, content) {
+            return await this.saveFile(filename, content);
+        }
         async saveFile(filename, content) {
             return await this.saveFiles([filename], [content]);
         }
         async saveFiles(fileNames, contents) {
-            var db = await Filesystem.getDB();
+            var db = await Filessystem.getDB();
             for (let x = 0; x < fileNames.length; x++) {
                 let fname = fileNames[x];
                 let exists = await this.loadFileEntry(fname);
@@ -85,9 +110,10 @@ define(["require", "exports"], function (require, exports) {
                     store.add(el);
                 await new Promise((resolve) => { transaction.oncomplete = resolve; });
             }
+            return "";
         }
         async loadFileEntry(fileName) {
-            var db = await Filesystem.getDB();
+            var db = await Filessystem.getDB();
             let transaction = db.transaction('files', 'readonly');
             const store = transaction.objectStore('files');
             var ret = await store.get(fileName);
@@ -106,7 +132,7 @@ define(["require", "exports"], function (require, exports) {
             var test = await this.loadFileEntry(filename);
             if (test)
                 return filename + " allready exists";
-            var db = await Filesystem.getDB();
+            var db = await Filessystem.getDB();
             let transaction = db.transaction('files', 'readwrite');
             const store = transaction.objectStore('files');
             var el = {
@@ -132,7 +158,7 @@ define(["require", "exports"], function (require, exports) {
             if (entr === undefined) {
                 return file + " not exists";
             }
-            var db = await Filesystem.getDB();
+            var db = await Filessystem.getDB();
             let transaction = db.transaction('files', 'readwrite');
             const store = transaction.objectStore('files');
             store.delete(file);
@@ -140,20 +166,20 @@ define(["require", "exports"], function (require, exports) {
             return "";
         }
     }
-    exports.default = Filesystem;
+    exports.default = Filessystem;
     async function test() {
-        await new Filesystem().saveFiles(["hallo.js"], ["alert(2)"]);
-        var s1 = await new Filesystem().remove("hallo.js");
-        var test = await new Filesystem().loadFile("hallo.js");
-        var s2 = await new Filesystem().remove("hallo.js");
-        var s = await new Filesystem().createFolder("demo");
-        var s3 = await new Filesystem().remove("demo");
-        await new Filesystem().saveFiles(["local/modul.ts"], [`export default {
+        await new Filessystem().saveFiles(["hallo.js"], ["alert(2)"]);
+        var s1 = await new Filessystem().remove("hallo.js");
+        var test = await new Filessystem().loadFile("hallo.js");
+        var s2 = await new Filessystem().remove("hallo.js");
+        var s = await new Filessystem().createFolder("demo");
+        var s3 = await new Filessystem().remove("demo");
+        await new Filessystem().saveFiles(["local/modul.ts"], [`export default {
     "require":{ 
         
     }
 }`]);
-        await new Filesystem().saveFiles(["local/registry.js"], [`//this file is autogenerated don't modify
+        await new Filessystem().saveFiles(["local/registry.js"], [`//this file is autogenerated don't modify
 define("local/registry",["require"], function(require) {
  return {
   default: {
@@ -166,4 +192,4 @@ define("local/registry",["require"], function(require) {
     }
     exports.test = test;
 });
-//# sourceMappingURL=Filesystem.js.map
+//# sourceMappingURL=Filessystem.js.map

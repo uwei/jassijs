@@ -9,6 +9,9 @@ define("jassi/server/DoRemoteProtocol", ["jassi_localserver/LocalProtocol"], fun
         }
     };
 });
+define("jassi/server/Filessystem", ["jassi_localserver/Filessystem"], function (fs) {
+    return fs;
+});
 define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry"], function (db, Classes_1, Registry_1) {
     db.DBManager["getConOpts"] = async function () {
         var dbclasses = [];

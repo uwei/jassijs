@@ -118,6 +118,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
             $("#" + this._id).find("ul").css("overflow", "auto");
         }
         /**
+        * @member - get the property for the display of the item or an function to get the display from an item
+        */
+        set propStyle(value) {
+            this._propStyle = value;
+        }
+        get propStyle() {
+            return this._propStyle;
+        }
+        /**
          * @member - get the property for the display of the item or an function to get the display from an item
          */
         set propDisplay(value) {
@@ -177,6 +186,18 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
             }
             else
                 ret = item[this.propDisplay];
+            return ret;
+        }
+        /**
+       * get title from node
+       */
+        getStyleFromItem(item) {
+            var ret;
+            if (typeof (this.propStyle) === "function") {
+                ret = this.propStyle(item);
+            }
+            else
+                ret = item[this.propStyle];
             return ret;
         }
         /**
@@ -532,6 +553,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         }
     };
     __decorate([
+        Property_1.$Property({ type: "string", description: "the property called to get the style of the item" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Tree.prototype, "propStyle", null);
+    __decorate([
         Property_1.$Property({ type: "string", description: "the property called to get the name of the item" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
@@ -571,6 +597,19 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
                 this.lazy = true;
             }
         }
+        getStyle() {
+            var ret = "";
+            var style = this.tree.getStyleFromItem(this.item);
+            if (style) {
+                for (let key in style) {
+                    if (key === "_classname")
+                        continue;
+                    var newKey = key.replaceAll("_", "-");
+                    ret = ret + "\t\t" + newKey + ":" + style[key] + ";\n";
+                }
+            }
+            return ret;
+        }
         get title() {
             var ret = this.tree.getTitleFromItem(this.item);
             var bt = "";
@@ -578,7 +617,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
                 bt = "<span class='MenuButton menu mdi mdi-menu-down' id=900  treeid=" + this.tree._id + "  height='10' width='10' onclick='/*jassi.ui.Tree._callContextmenu(event);*/'>";
             //prevent XSS
             ret = (ret === undefined ? "" : ret).replaceAll("<", "&lt").replaceAll(">", "&gt");
-            ret = "<span id=" + this._id + ">" + ret + "</span>";
+            ret = "<span id=" + this._id + " style='" + this.getStyle() + "'  >" + ret + "</span>";
             return ret + bt;
         }
         static loadChilds(event, data) {
@@ -610,7 +649,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         var tree = new Tree({
             checkbox: true
         });
-        var s = { name: "Sansa", id: 1 };
+        var s = { name: "Sansa", id: 1, style: { color: "blue" } };
         var p = { name: "Peter", id: 2 };
         var u = { name: "Uwe", id: 3, childs: [p, s] };
         var t = { name: "Tom", id: 5 };
@@ -618,6 +657,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         s.childs = [c];
         tree.propDisplay = "name";
         tree.propChilds = "childs";
+        tree.propStyle = "style";
         /*tree.propIcon = function(data) {
             if (data.name === "Uwe")
                 return "res/car.ico";

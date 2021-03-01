@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/remote/Context"], function (require, exports, Context_1) {
+define(["require", "exports", "jassi/remote/Context", "jassi/remote/Server"], function (require, exports, Context_1, Server_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -27,7 +27,8 @@ define(["require", "exports", "jassi/remote/Context"], function (require, export
         return await b();
     }
     async function test() {
-        await a();
+        var h = await new Server_1.Server().dir();
+        alert(h);
         /*var t=new Test();
         var context=new Context();
         var r=context.register("meintest",{hallo:9},async ()=>{

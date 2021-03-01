@@ -70,7 +70,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
-		"date": 1614463357728,
+		"date": 1614545325200,
 		"jassi.remote.DBObject": {}
 	},
 	"jassi/remote/DBObjectQuery.ts": {
@@ -97,7 +97,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1614285404119
 	},
 	"jassi/remote/RemoteObject.ts": {
-		"date": 1614463452099,
+		"date": 1614545171594,
 		"jassi.remote.RemoteObject": {}
 	},
 	"jassi/remote/RemoteProtocol.ts": {
@@ -149,11 +149,11 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1614461610772,
+		"date": 1614631578506,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
-		"date": 1614544309854,
+		"date": 1614545262225,
 		"jassi.remote.Transaction": {}
 	},
 	"jassi/security/GroupView.ts": {
@@ -806,7 +806,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Tree.ts": {
-		"date": 1613218566582,
+		"date": 1614616169375,
 		"jassi.ui.TreeEditorPropertiesMulti": {},
 		"jassi.ui.TreeEditorProperties": {},
 		"jassi.ui.Tree": {

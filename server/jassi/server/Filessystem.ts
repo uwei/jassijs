@@ -176,6 +176,7 @@ export default class Filesystem {
         } catch (ex) {
             return ex.message;
         }
+        return "";
     }
     /**
      * create a file
@@ -191,6 +192,7 @@ export default class Filesystem {
         } catch (ex) {
             return ex.message;
         }
+        return "";
     }
     /**
      * renames a file or directory

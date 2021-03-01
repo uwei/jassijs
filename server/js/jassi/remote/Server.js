@@ -100,7 +100,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         else {
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassi/server/Filessystem"));
-            var rett = new fs.default().dir("", withDate);
+            var rett = await new fs.default().dir("", withDate);
             return rett;
             // return ["jassi/base/ChromeDebugger.ts"];
         }

@@ -45,7 +45,7 @@ async function  loadFileFromDB(fileName,callback) {
     ret.onsuccess = ev => { resolve(ret.result) }
     ret.onerror = ev => { resolve(undefined) }
   });
-  return (r!==undefined ? r.value : undefined);
+  return (r!==undefined ? r.data : undefined);
 }
 function getMimeType(filename) {
   var type = "application/javascript";
@@ -116,7 +116,7 @@ self.addEventListener('fetch', event => {
       }
       var sfilename=filename.replace(self.serviceWorker.scriptURL.replace("service-worker.js",""),"");
       
-      var wait=loadFileFromDB(filename);
+      var wait=loadFileFromDB(sfilename);
       event.waitUntil(wait);
       return wait.then((content)=>{
         if(content!==undefined){
