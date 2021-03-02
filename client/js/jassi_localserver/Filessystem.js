@@ -18,11 +18,7 @@ define(["require", "exports"], function (require, exports) {
             });
             return Filessystem.db;
         }
-        /**
-         * @returns  [{name:"hallo",date:1566554},{name:"demo",files:[]}]
-         */
-        async dir(curdir = "", appendDate = false) {
-            var root = { files: [] };
+        async dirEntry(curdir = "") {
             var db = await Filessystem.getDB();
             let transaction = db.transaction('files', 'readonly');
             const store = transaction.objectStore('files');
@@ -32,7 +28,7 @@ define(["require", "exports"], function (require, exports) {
                 ret.onsuccess = ev => {
                     var el = ev.target["result"];
                     if (el) {
-                        if (el.value.id.startsWith(curdir))
+                        if (curdir === "" || el.value.id === curdir || el.value.id.startsWith(curdir + "/"))
                             all.push(el.value);
                         el.continue();
                     }
@@ -41,6 +37,14 @@ define(["require", "exports"], function (require, exports) {
                 };
                 ret.onerror = ev => { resolve(undefined); };
             });
+            return all;
+        }
+        /**
+         * @returns  [{name:"hallo",date:1566554},{name:"demo",files:[]}]
+         */
+        async dir(curdir = "", appendDate = false) {
+            var root = { name: "", files: [] };
+            var all = await this.dirEntry(curdir);
             var keys = {
                 "": root
             };
@@ -66,12 +70,14 @@ define(["require", "exports"], function (require, exports) {
                     }
                     else {
                         if (entr.isDirectory) {
-                            let nf = {
-                                name: name,
-                                files: []
-                            };
-                            keys[scurrentpath] = nf;
-                            parent.files.push(nf);
+                            if (keys[scurrentpath] === undefined) {
+                                let nf = {
+                                    name: name,
+                                    files: []
+                                };
+                                keys[scurrentpath] = nf;
+                                parent.files.push(nf);
+                            }
                         }
                         else {
                             var newitem = {
@@ -154,20 +160,54 @@ define(["require", "exports"], function (require, exports) {
         * @param file - old filename
         */
         async remove(file) {
-            var entr = await this.loadFileEntry(file);
-            if (entr === undefined) {
+            var entr = await this.dirEntry(file);
+            if (entr.length === 0) {
                 return file + " not exists";
             }
             var db = await Filessystem.getDB();
-            let transaction = db.transaction('files', 'readwrite');
-            const store = transaction.objectStore('files');
-            store.delete(file);
-            await new Promise((resolve) => { transaction.oncomplete = resolve; });
+            for (let i = 0; i < entr.length; i++) {
+                let transaction = db.transaction('files', 'readwrite');
+                const store = transaction.objectStore('files');
+                store.delete(entr[i].id);
+                await new Promise((resolve) => { transaction.oncomplete = resolve; });
+            }
+            //entr = await this.dirEntry(file);
+            return "";
+        }
+        /**
+         * renames a file or directory
+         * @param oldfile - old filename
+         * @param newfile - new filename
+         */
+        async rename(oldfile, newfile) {
+            var oldf = await this.dirEntry(oldfile);
+            var newf = await this.dirEntry(newfile);
+            if (oldf.length < 1)
+                return oldfile + " not exists";
+            if (newf.length > 0)
+                return newfile + " already exists";
+            for (let i = 0; i < oldf.length; i++) {
+                await this.remove(oldf[i].id);
+                oldf[i].id = newfile + oldf[i].id.substring(oldfile.length);
+                if (oldf[i].isDirectory)
+                    await this.createFolder(oldf[i].id);
+                else
+                    await this.createFile(oldf[i].id, oldf[i].data);
+            }
             return "";
         }
     }
     exports.default = Filessystem;
     async function test() {
+        var fs = new Filessystem();
+        var hh = await fs.dir("local");
+        /*await fs.createFolder("demo");
+        await fs.createFile("demo/hallo", "");
+        await fs.createFile("demo/hallo2", "");
+        await fs.rename("demo","demo1");
+        var hh=await fs.dirEntry();
+        await fs.remove("demo1");*/
+        return;
         await new Filessystem().saveFiles(["hallo.js"], ["alert(2)"]);
         var s1 = await new Filessystem().remove("hallo.js");
         var test = await new Filessystem().loadFile("hallo.js");

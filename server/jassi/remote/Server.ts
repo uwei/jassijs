@@ -93,7 +93,8 @@ export class Server extends RemoteObject {
                 ret={name:"",files:[]};
             await this.addFilesFromMap(ret);
             ret.fullpath = "";//root
-            return this._convertFileNode(ret);
+            let r=this._convertFileNode(ret);
+            return r;
         } else {
             //@ts-ignore
             var fs = await import("jassi/server/Filessystem");
@@ -158,7 +159,7 @@ export class Server extends RemoteObject {
 
                 var fileName = fileNames[f];
                 var content = contents[f];
-                if (fileName.endsWith(".ts")) {
+                if (fileName.endsWith(".ts")||fileName.endsWith(".js")) {
                     //@ts-ignore
                     var tss = await import("jassi_editor/util/Typescript");
                     var rets = await tss.default.transpile(fileName, content);
@@ -216,10 +217,10 @@ export class Server extends RemoteObject {
          }*/
     }
     /**
-    * renames a file or directory
+    * deletes a file or directory
     **/
     async delete(name: string,context:Context=undefined): Promise<string> {
-        if (!context.isServer) {
+        if (!context?.isServer) {
             var ret = await this.call(this, this.delete, name,context);
             //@ts-ignore
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });

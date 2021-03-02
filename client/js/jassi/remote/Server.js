@@ -93,7 +93,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                     ret = { name: "", files: [] };
                 await this.addFilesFromMap(ret);
                 ret.fullpath = ""; //root
-                return this._convertFileNode(ret);
+                let r = this._convertFileNode(ret);
+                return r;
             }
             else {
                 //@ts-ignore
@@ -157,7 +158,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                     var _this = this;
                     var fileName = fileNames[f];
                     var content = contents[f];
-                    if (fileName.endsWith(".ts")) {
+                    if (fileName.endsWith(".ts") || fileName.endsWith(".js")) {
                         //@ts-ignore
                         var tss = await new Promise((resolve_4, reject_4) => { require(["jassi_editor/util/Typescript"], resolve_4, reject_4); });
                         var rets = await tss.default.transpile(fileName, content);
@@ -217,10 +218,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
              }*/
         }
         /**
-        * renames a file or directory
+        * deletes a file or directory
         **/
         async delete(name, context = undefined) {
-            if (!context.isServer) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 var ret = await this.call(this, this.delete, name, context);
                 //@ts-ignore
                 //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });

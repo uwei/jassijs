@@ -149,7 +149,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1614631578506,
+		"date": 1614708311040,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -290,7 +290,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.Container": {}
 	},
 	"jassi/ui/ContextMenu.ts": {
-		"date": 1613416602064,
+		"date": 1614703451260,
 		"jassi.ui.ContextMenu": {
 			"$UIComponent": [
 				{
@@ -437,7 +437,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/FileExplorer.ts": {
-		"date": 1613777827314,
+		"date": 1614707848453,
 		"jassi.ui.FileActions": {
 			"$ActionProvider": [
 				"jassi.remote.FileNode"
@@ -806,7 +806,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Tree.ts": {
-		"date": 1614616169375,
+		"date": 1614710530324,
 		"jassi.ui.TreeEditorPropertiesMulti": {},
 		"jassi.ui.TreeEditorProperties": {},
 		"jassi.ui.Tree": {

@@ -61,9 +61,9 @@ export class Typescript {
         //@ts-ignore
         var comp: any = ts.transpileModule(content, opt);
 
-        ret.fileNames.push("js/" + fileName.replace(".ts", ".js"));
+        ret.fileNames.push("js/" + fileName.substring(0,fileName.length-3)+".js");
         ret.contents.push(comp.outputText);
-        ret.fileNames.push("js/" + fileName.replace(".ts", ".js.map"));
+        ret.fileNames.push("js/" + fileName.substring(0,fileName.length-3)+".js.map");
         ret.contents.push(comp.sourceMapText);
         return ret;
     }

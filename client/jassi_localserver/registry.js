@@ -9,13 +9,13 @@ define("jassi_localserver/registry",["require"], function(require) {
 		"date": 1614469272935
 	},
 	"jassi_localserver/Filessystem.ts": {
-		"date": 1614633628339
+		"date": 1614710621004
 	},
 	"jassi_localserver/LocalProtocol.ts": {
-		"date": 1614633454875
+		"date": 1614707860432
 	},
 	"jassi_localserver/modul.ts": {
-		"date": 1614543659084
+		"date": 1614634283885
 	},
 	"jassi_localserver/Testserver.ts": {
 		"date": 1614365026599,

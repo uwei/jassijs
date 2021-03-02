@@ -167,7 +167,7 @@ export default class Filesystem {
      * @param filename - the name of the new file 
      * @param content - then content
      */
-    public createFolder(filename: string): string {
+    public async createFolder(filename: string): Promise<string> {
         var newpath = this._pathForFile(filename);
         if (fs.existsSync(newpath))
             return filename + " allready exists";
@@ -183,7 +183,7 @@ export default class Filesystem {
      * @param filename - the name of the new file 
      * @param content - then content
      */
-    public createFile(filename: string, content: string): string {
+    public async createFile(filename: string, content: string): Promise<string> {
         var newpath = this._pathForFile(filename);
         if (fs.existsSync(newpath))
             return filename + " allready exists";
@@ -199,7 +199,7 @@ export default class Filesystem {
      * @param oldfile - old filename
      * @param newfile - new filename
      */
-    public rename(oldfile: string, newfile: string): string {
+    public async rename(oldfile: string, newfile: string): string {
         var resolve = require('path').resolve
         var oldpath = this._pathForFile(oldfile);
         var newpath = this._pathForFile(newfile);

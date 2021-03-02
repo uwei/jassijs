@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/Property", "jassi/base/Actions", "jassi/ui/MenuItem", "jassi/ext/jquery.contextmenu"], function (require, exports, Jassi_1, Menu_1, InvisibleComponent_1, Component_1, Registry_1, Classes_1, Property_1, Actions_1, MenuItem_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Classes", "jassi/ui/Property", "jassi/base/Actions", "jassi/ui/MenuItem", "jassi/ext/jquery.contextmenu"], function (require, exports, Jassi_1, Menu_1, InvisibleComponent_1, Component_1, Classes_1, Property_1, Actions_1, MenuItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ContextMenu = void 0;
@@ -140,9 +140,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/I
                         return;
                 }
             }
+            let y = evt.originalEvent.clientY;
             //$(_this.menu.dom).contextMenu("menu","#"+_this.menu._id);//,{triggerOn:'contextmenu'});
             //$(_this.menu.dom).contextMenu('open',evt);
-            this.show({ left: evt.originalEvent.clientX, top: evt.originalEvent.clientY });
+            this.show({ left: evt.originalEvent.clientX, top: y });
         }
         /**
          * register the contextMenu (right click) on the component
@@ -181,6 +182,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/I
                 $(_this.menu.dom).menu();
                 $(_this.menu.dom).menu("destroy");
                 $(_this.menu.dom).contextMenu("menu", "#" + _this.menu._id, { triggerOn: 'dummyevent' });
+                //correct pos menu not visible
+                if (event.top + $(_this.menu.dom).height() > window.innerHeight) {
+                    event.top = window.innerHeight - $(_this.menu.dom).height();
+                }
+                if (event.left + $(_this.menu.dom).width() > window.innerWidth) {
+                    event.left = window.innerWidth - $(_this.menu.dom).width();
+                }
                 $(_this.menu.dom).contextMenu('open', event);
             }, 10);
         }
@@ -258,51 +266,5 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/I
         return bt;
     }
     exports.test = test;
-    Jassi_1.default.test = async function () {
-        var Tree = Classes_1.classes.getClass("jassi.ui.Tree");
-        var tree = new Tree();
-        tree.width = "100%";
-        tree.height = "300px";
-        //https://github.com/s-yadav/contextMenu.js
-        var menuid = Registry_1.default.nextID();
-        var _menu = $('<ul id=' + menuid + '' + ` class="contextMenu" style="display: none;">
-	         <li><img src="images/create.png" class="iw-mIcon" /><select style="width:100%" class="Select"><option value="dd">ddd</option><option value="dd">ddd</option></select></li>
-	    	<li title="create button" onclick="doCreate()">
-	        <img src="images/create.png" class="iw-mIcon" />Create</li>
-		    <li class="iw-has-submenu iw-mTrigger" title="update button2">
-		        <img src="images/update.png" class="iw-mIcon" />Update2
-		        <ul>
-		            <li onclick="doMerge()">Merge</li>
-		            <li><span> Hoho</span></li>
-		            <li>Replace
-		                <ul>
-		                    <li>Replace Top 100</li>
-		                    <li>Replace All</li>
-		                </ul>
-		            </li>
-		        </ul>
-		    </li>
-			<li onclick="doDelete()">
-		        <img src="images/delete.png" class="iw-mIcon" />Delete
-		        <ul>
-		            <li>Sooft Delete</li>
-		            <li>Hard Delete</li>
-		        </ul>
-		    </li>
-		    <li class="iw-mDisable">Disabled</li>
-		</ul>`)[0];
-        $(tree.dom)[0].appendChild(_menu);
-        $(tree.dom).contextmenu(function (evt) {
-            window.setTimeout(function () {
-                $(_menu).menu();
-                $(_menu).menu("destroy");
-                $(_menu).contextMenu("menu", "#" + menuid, { triggerOn: 'contextmenu2' });
-                $(_menu).contextMenu('open', { left: evt.originalEvent.clientX, top: evt.originalEvent.clientY });
-            }, 10);
-            evt.preventDefault();
-            //_this.show({left:evt.originalEvent.clientX,top:evt.originalEvent.clientY});
-        });
-        return tree;
-    };
 });
 //# sourceMappingURL=ContextMenu.js.map

@@ -153,7 +153,7 @@ class Filesystem {
      * @param filename - the name of the new file
      * @param content - then content
      */
-    createFolder(filename) {
+    async createFolder(filename) {
         var newpath = this._pathForFile(filename);
         if (fs.existsSync(newpath))
             return filename + " allready exists";
@@ -170,7 +170,7 @@ class Filesystem {
      * @param filename - the name of the new file
      * @param content - then content
      */
-    createFile(filename, content) {
+    async createFile(filename, content) {
         var newpath = this._pathForFile(filename);
         if (fs.existsSync(newpath))
             return filename + " allready exists";
@@ -187,7 +187,7 @@ class Filesystem {
      * @param oldfile - old filename
      * @param newfile - new filename
      */
-    rename(oldfile, newfile) {
+    async rename(oldfile, newfile) {
         var resolve = require('path').resolve;
         var oldpath = this._pathForFile(oldfile);
         var newpath = this._pathForFile(newfile);

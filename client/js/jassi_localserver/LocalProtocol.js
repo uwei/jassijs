@@ -12,9 +12,17 @@ define(["require", "exports", "jassi/remote/RemoteProtocol"], function (require,
         if (clname === "jassi.remote.Server") {
             var tst = JSON.parse(config.data);
             if (tst.method === "dir") {
-                var sret = await localExec(JSON.parse(config.data));
                 var retserver = JSON.parse(await $.ajax(config));
-                retserver.files.push(sret.files[1]);
+                var sret = await localExec(JSON.parse(config.data));
+                for (let i = 0; i < retserver.files.length; i++) {
+                    if (retserver.files[i].name === "local") {
+                        retserver.files.splice(i, 1);
+                    }
+                }
+                for (let i = 0; i < sret.files.length; i++) {
+                    if (sret.files[i].name === "local")
+                        retserver.files.push(sret.files[i]);
+                }
                 return JSON.stringify(retserver);
             }
             else if (tst.method === "saveFiles") {

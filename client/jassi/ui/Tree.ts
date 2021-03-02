@@ -332,7 +332,11 @@ export class Tree extends Component {
     async expandKeys(keys: string[]) {
         var all = [];
         for (var x = 0; x < keys.length; x++) {
-            all.push((await this._readNodeFromKey(keys[x])).setExpanded(true));
+            var n = await this._readNodeFromKey(keys[x]);
+            if (n) {
+                n.setExpanded(true);
+                all.push(n);
+            }
         }
         await Promise.all(all);
     }
@@ -618,7 +622,7 @@ class TreeNode {
                 if (key === "_classname")
                     continue;
                 var newKey = key.replaceAll("_", "-");
-                
+
                 ret = ret + "\t\t" + newKey + ":" + (<string>style[key]) + ";\n";
             }
         }
@@ -632,7 +636,7 @@ class TreeNode {
             bt = "<span class='MenuButton menu mdi mdi-menu-down' id=900  treeid=" + this.tree._id + "  height='10' width='10' onclick='/*jassi.ui.Tree._callContextmenu(event);*/'>";
         //prevent XSS
         ret = (ret === undefined ? "" : ret).replaceAll("<", "&lt").replaceAll(">", "&gt");
-        ret = "<span id=" + this._id + " style='"+this.getStyle()+"'  >" + ret + "</span>";
+        ret = "<span id=" + this._id + " style='" + this.getStyle() + "'  >" + ret + "</span>";
         return ret + bt;
     }
     static loadChilds(event, data) {

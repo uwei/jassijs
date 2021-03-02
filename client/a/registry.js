@@ -6,6 +6,9 @@ define("a/registry",["require"], function(require) {
 		"date": 1613218544157,
 		"$/Dialog": {}
 	},
+	"a/loch.ts": {
+		"date": 1614703902293
+	},
 	"a/modul.ts": {
 		"date": 1612818323489
 	},

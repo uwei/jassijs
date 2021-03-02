@@ -162,10 +162,11 @@ export  class ContextMenu extends InvisibleComponent {
                     return;
             }
         }
-       
+        let y=evt.originalEvent.clientY;
+        
         //$(_this.menu.dom).contextMenu("menu","#"+_this.menu._id);//,{triggerOn:'contextmenu'});
         //$(_this.menu.dom).contextMenu('open',evt);
-        this.show({ left: evt.originalEvent.clientX, top: evt.originalEvent.clientY });
+        this.show({ left: evt.originalEvent.clientX, top: y });
         
     }
 
@@ -208,6 +209,17 @@ export  class ContextMenu extends InvisibleComponent {
             $(_this.menu.dom).menu();
             $(_this.menu.dom).menu("destroy");
             $(_this.menu.dom).contextMenu("menu", "#" + _this.menu._id, { triggerOn: 'dummyevent' });
+            //correct pos menu not visible
+            
+        
+            if(event.top+$(_this.menu.dom).height()>window.innerHeight){
+                event.top=window.innerHeight-$(_this.menu.dom).height();
+            }
+            if(event.left+$(_this.menu.dom).width()>window.innerWidth){
+                event.left=window.innerWidth-$(_this.menu.dom).width();
+            }
+            
+
             $(_this.menu.dom).contextMenu('open', event);
         }, 10);
     }
@@ -275,53 +287,3 @@ export async function test() {
     //pan.add(cmen);
     return bt;
 }
-jassi.test = async function() {
-    var Tree = classes.getClass("jassi.ui.Tree");
-    var tree = new Tree();
-    tree.width = "100%";
-    tree.height = "300px";
-    //https://github.com/s-yadav/contextMenu.js
-    var menuid = registry.nextID();
-    var _menu = $('<ul id=' + menuid + '' + ` class="contextMenu" style="display: none;">
-	         <li><img src="images/create.png" class="iw-mIcon" /><select style="width:100%" class="Select"><option value="dd">ddd</option><option value="dd">ddd</option></select></li>
-	    	<li title="create button" onclick="doCreate()">
-	        <img src="images/create.png" class="iw-mIcon" />Create</li>
-		    <li class="iw-has-submenu iw-mTrigger" title="update button2">
-		        <img src="images/update.png" class="iw-mIcon" />Update2
-		        <ul>
-		            <li onclick="doMerge()">Merge</li>
-		            <li><span> Hoho</span></li>
-		            <li>Replace
-		                <ul>
-		                    <li>Replace Top 100</li>
-		                    <li>Replace All</li>
-		                </ul>
-		            </li>
-		        </ul>
-		    </li>
-			<li onclick="doDelete()">
-		        <img src="images/delete.png" class="iw-mIcon" />Delete
-		        <ul>
-		            <li>Sooft Delete</li>
-		            <li>Hard Delete</li>
-		        </ul>
-		    </li>
-		    <li class="iw-mDisable">Disabled</li>
-		</ul>`)[0];
-    $(tree.dom)[0].appendChild(_menu);
-    $(tree.dom).contextmenu(function(evt) {
-        window.setTimeout(function() {
-            $(_menu).menu();
-            $(_menu).menu("destroy");
-            $(_menu).contextMenu("menu", "#" + menuid, { triggerOn: 'contextmenu2' });
-            $(_menu).contextMenu('open', { left: evt.originalEvent.clientX, top: evt.originalEvent.clientY });
-        }, 10);
-        evt.preventDefault();
-        //_this.show({left:evt.originalEvent.clientX,top:evt.originalEvent.clientY});
-
-    });
-    return tree;
-}
-
-
-

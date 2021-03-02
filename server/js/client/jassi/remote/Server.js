@@ -220,7 +220,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
          }*/
     }
     /**
-    * deletes a file or directory
+    * renames a file or directory
     **/
     async delete(name, context = undefined) {
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {

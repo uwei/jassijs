@@ -35,10 +35,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
                 alert(ret);
                 return;
             }
-            await FileExplorer.instance.refresh();
-            await FileExplorer.instance.tree.activateKey(newkey);
-            if (open)
-                Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + newkey.replaceAll("|", "/"));
+            try {
+                await FileExplorer.instance.refresh();
+                await FileExplorer.instance.tree.activateKey(newkey);
+                if (open)
+                    Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + newkey.replaceAll("|", "/"));
+            }
+            catch (err) {
+                debugger;
+            }
         }
         static async download(all) {
             if (all.length === 0 || !all[0].isDirectory())
@@ -211,7 +216,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             root.name = "client";
             var keys = this.tree.getExpandedKeys();
             this.tree.items = [root];
-            keys.push("client");
+            if (keys.indexOf("client") === -1)
+                keys.push("client");
             await this.tree.expandKeys(keys);
         }
         async layout() {

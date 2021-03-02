@@ -44,11 +44,14 @@ export class FileActions {
             alert(ret);
             return;
         }
+        try{
         await FileExplorer.instance.refresh();
         await FileExplorer.instance.tree.activateKey(newkey);
         if(open)
         	router.navigate("#do=jassi_editor.CodeEditor&file=" + newkey.replaceAll("|","/"));
-
+        }catch(err){
+debugger;
+        }
     }
     @$Action({
         name: "Download",
@@ -181,11 +184,13 @@ export class FileExplorer extends Panel {
         let root = (await new Server().dir());
         root.fullpath = "";
         root.name = "client";
+        
         var keys = this.tree.getExpandedKeys();
         this.tree.items = [root];
-        keys.push("client");
+        if(keys.indexOf("client")===-1)
+            keys.push("client");
         await this.tree.expandKeys(keys);
-
+        
     }
     async layout() {
         var _this = this;

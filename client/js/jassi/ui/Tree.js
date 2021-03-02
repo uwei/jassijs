@@ -320,7 +320,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         async expandKeys(keys) {
             var all = [];
             for (var x = 0; x < keys.length; x++) {
-                all.push((await this._readNodeFromKey(keys[x])).setExpanded(true));
+                var n = await this._readNodeFromKey(keys[x]);
+                if (n) {
+                    n.setExpanded(true);
+                    all.push(n);
+                }
             }
             await Promise.all(all);
         }
