@@ -95,8 +95,8 @@ define(["require", "exports", "jassi/ui/Panel", "de/remote/Kunde", "jassi/ui/Obj
             me.IDCheckBox.text = "Checkme";
             me.IDCheckBox.width = 95;
             me.checkPanel.add(me.IDCheckBox);
-            me.checkPanel.add(me.IDBT5);
             me.checkPanel.add(me.IDRose);
+            me.checkPanel.add(me.IDBT5);
             me.checkPanel.label = "relativer Panel";
             me.checkPanel.y = 1;
             me.checkPanel.x = 280;

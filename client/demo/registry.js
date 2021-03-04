@@ -6,7 +6,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1613330812615
 	},
 	"demo/Dialog.ts": {
-		"date": 1613218544157,
+		"date": 1614895450330,
 		"demo/Dialog": {}
 	},
 	"demo/DialogKunde2.ts": {
@@ -14,20 +14,12 @@ define("demo/registry",["require"], function(require) {
 		"demo.DialogKunde2": {}
 	},
 	"demo/DK.ts": {
-		"date": 1613218544161,
+		"date": 1614892605286,
 		"demo.DK": {}
 	},
 	"demo/EmptyDialog.ts": {
 		"date": 1613218544157,
 		"demo.EmptyDialog": {}
-	},
-	"demo/HalloPhillip.ts": {
-		"date": 1613572432870,
-		"demo.HalloPhillip": {
-			"$ActionProvider": [
-				"jassi.base.ActionNode"
-			]
-		}
 	},
 	"demo/KundeView.ts": {
 		"date": 1613330812615,

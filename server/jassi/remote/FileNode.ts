@@ -7,6 +7,7 @@ export class FileNode {
     parent?: FileNode;
     files?: FileNode[];
     date?: any;
+    flag?:string;
     isDirectory?() {
         return this.files !== undefined;
     }

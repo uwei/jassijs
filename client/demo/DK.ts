@@ -4,8 +4,10 @@ import jassi, { $Class } from "jassi/remote/Jassi";
 import {Panel} from "jassi/ui/Panel";
 import {Button} from "jassi/ui/Button";
 import {Textbox} from "jassi/ui/Textbox";
+import Filessystem from "jassi_localserver/Filesystem";
 
-
+var g=Filessystem;
+debugger;
 type Me={
 	textbox1?:Textbox,
 	table1?:Table

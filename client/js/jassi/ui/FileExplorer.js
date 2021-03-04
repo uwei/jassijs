@@ -46,14 +46,16 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             }
         }
         static async download(all) {
-            if (all.length === 0 || !all[0].isDirectory())
-                return;
             var path = all[0].fullpath;
-            var url = "/zip?path=client/" + path;
-            if (all[0].name === "client" && all[0].fullpath === "")
-                url = "/zip?path=client";
-            if (all[0].name === "server" && all[0].fullpath === "")
-                url = "/zip?path=server";
+            var byteCharacters = atob(await new Server_1.Server().zip(path));
+            const byteNumbers = new Array(byteCharacters.length);
+            for (let i = 0; i < byteCharacters.length; i++) {
+                byteNumbers[i] = byteCharacters.charCodeAt(i);
+            }
+            const byteArray = new Uint8Array(byteNumbers);
+            // If you want to use the image in your DOM:
+            var blob = new Blob([byteArray], { type: "application/zip" });
+            var url = URL.createObjectURL(blob);
             var link = document.createElement('a');
             document.body.appendChild(link);
             link.href = url;
@@ -209,6 +211,17 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             this.tree = new Tree_1.Tree();
             this.search = new Textbox_1.Textbox();
             this.layout();
+            this.tree.propStyle = node => { return this.getStyle(node); };
+        }
+        getStyle(node) {
+            var _a;
+            var ret = undefined;
+            if (((_a = node.flag) === null || _a === void 0 ? void 0 : _a.indexOf("fromMap")) > -1) {
+                ret = {
+                    color: "green"
+                };
+            }
+            return ret;
         }
         async refresh() {
             let root = (await new Server_1.Server().dir());

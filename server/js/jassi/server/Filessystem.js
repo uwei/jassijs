@@ -5,8 +5,8 @@ const fs = require("fs");
 var fpath = require('path');
 const Compile_1 = require("jassi/server/Compile");
 const DBManager_1 = require("jassi/server/DBManager");
-const Indexer_1 = require("jassi/server/Indexer");
 const JSZip = require("jszip");
+const RegistryIndexer_1 = require("./RegistryIndexer");
 let resolve = require('path').resolve;
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
 class Filesystem {
@@ -84,11 +84,12 @@ class Filesystem {
         return ret;
         //  return ret;
     }
-    dirFiles(dir, extensions, ignore = []) {
+    async dirFiles(dir, extensions, ignore = []) {
         var results = [];
         var list = fs.readdirSync(dir);
         var _this = this;
-        list.forEach(function (file) {
+        for (let l = 0; l < list.length; l++) {
+            let file = list[l];
             for (var x = 0; x < ignore.length; x++) {
                 if (file === ignore[x])
                     return;
@@ -97,7 +98,8 @@ class Filesystem {
             var stat = fs.statSync(file);
             if (stat && stat.isDirectory()) {
                 /* Recurse into a subdirectory */
-                results = results.concat(_this.dirFiles(file, extensions));
+                var arr = await _this.dirFiles(file, extensions);
+                results = results.concat(arr);
             }
             else {
                 /* Is a file */
@@ -107,7 +109,8 @@ class Filesystem {
                     }
                 }
             }
-        });
+        }
+        ;
         return results;
     }
     async writeZip(zip, outfile) {
@@ -120,6 +123,18 @@ class Filesystem {
                 ready(err);
             });
         });
+    }
+    async zip(directoryname, serverdir = undefined) {
+        var root = Filesystem.path;
+        if (serverdir) {
+            root = ".";
+        }
+        await this.zipFolder(root + "/" + directoryname, "/tmp/" + directoryname + ".zip");
+        var data = fs.readFileSync("/tmp/" + directoryname + ".zip"); //,'binary');
+        fs.unlinkSync("/tmp/" + directoryname + ".zip");
+        //let buff = new Buffer(data);
+        let ret = data.toString('base64');
+        return ret;
     }
     async zipFolder(folder, outfile, parent = undefined) {
         var isRoot = parent === undefined;
@@ -172,9 +187,13 @@ class Filesystem {
      */
     async createFile(filename, content) {
         var newpath = this._pathForFile(filename);
+        var parent = require('path').dirname(Filesystem.path + "/" + newpath);
+        //var fdir = fpath.dirname(path + "/" + fileName).split(fpath.sep).pop();
         if (fs.existsSync(newpath))
             return filename + " allready exists";
         try {
+            if (!fs.existsSync(parent))
+                fs.mkdirSync(parent, { recursive: true });
             fs.writeFileSync(Filesystem.path + "/" + newpath, content);
         }
         catch (ex) {
@@ -235,7 +254,6 @@ class Filesystem {
         if (!modules.modules[modul]) {
             modules.modules[modul] = modul;
             fs.writeFileSync("./jassi.json", JSON.stringify(modules, undefined, "\t"));
-            // new Indexer().updateRegistry();//create regstry.js
         }
     }
     /**
@@ -278,7 +296,7 @@ class Filesystem {
                 }
             }
         }
-        new Indexer_1.Indexer().updateRegistry();
+        await new RegistryIndexer_1.ServerIndexer().updateRegistry();
         var remotecodeincluded = false;
         for (var f = 0; f < fileNames.length; f++) {
             var fileName = fileNames[f];
@@ -312,21 +330,6 @@ class Filesystem {
                     let jfile = jfiles[k];
                     delete require.cache[jfile];
                 }
-                //                var ffile=require.resolve(fileName.replace(".ts",""));
-                //              if(require.cache[ffile]!==undefined)
-                //                delete require.cache[ffile];
-                //reload DB+Extensions
-                /*                var vdat = registry.getJSONData("$DBObject");
-                                var vext = registry.getJSONData("$Extension");
-                                vdat = vdat.concat(vext);
-                                var found = false;
-                                for (var v = 0; v < vdat.length; v++) {
-                                    var val = vdat[v];
-                                    if (val.filename === fileName) {
-                                        found = true;
-                                    }
-                                };
-                                if (found) {*/
                 var man = await DBManager_1.DBManager.destroyConnection();
                 // }
             }
@@ -382,7 +385,7 @@ class Filesystem {
             });
             return;
              }*/
-        new Indexer_1.Indexer().updateRegistry();
+        await new RegistryIndexer_1.ServerIndexer().updateRegistry();
         //TODO $this->updateRegistry();
     }
 }
@@ -407,7 +410,34 @@ function copyFile(f1, f2) {
         debugger;
     }
 }
+/**
+ *  each remote file on server and client should be the same
+*/
+async function checkRemoteFiles() {
+    var modules = JSON.parse(fs.readFileSync("./jassi.json", 'utf-8')).modules;
+    for (var m in modules) {
+        var files = await new Filesystem().dirFiles("./" + m + "/remote", [".ts"]);
+        for (let x = 0; x < files.length; x++) {
+            var file = files[x];
+            var clientfile = file.replace("./", Filesystem.path + "/");
+            if (!fs.existsSync(clientfile)) {
+                console.error(clientfile + " not exists");
+            }
+            else {
+                if (fs.statSync(file).mtimeMs !== fs.statSync(clientfile).mtimeMs) {
+                    if (fs.statSync(file).mtimeMs > fs.statSync(clientfile).mtimeMs) {
+                        console.error(clientfile + " is not up to date " + file + " is newer");
+                    }
+                    else {
+                        console.error(file + " is not up to date " + clientfile + " is newer");
+                    }
+                }
+            }
+        }
+    }
+}
 function syncRemoteFiles() {
+    /*await*/ checkRemoteFiles();
     //server remote
     fs.watch(Filesystem.path, { recursive: true }, (eventType, filename) => {
         if (!filename)

@@ -12,9 +12,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
     var ChromeDebugger_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ChromeDebugger = void 0;
-    let checkExtensionInstalled = setTimeout(() => {
-        $.notify("no  jassi chrome extension installed", "warning", { position: "right" });
-    }, 3000);
+    var installed = undefined;
     /**
      * debugging in Chrome
      */
@@ -30,6 +28,18 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
                 this.onChromeMessage(event);
             });
         }
+        showHintExtensionNotInstalled() {
+            $.notify.addStyle('downloadlink', {
+                html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
+                classes: {
+                    base: {
+                        "color": "white",
+                        "background-color": "lightblue"
+                    }
+                }
+            });
+            $.notify("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000, });
+        }
         //on receiving messages from chrome extension
         onChromeMessage(event) {
             var _a;
@@ -39,7 +49,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
                 _this.saveCode(event.data.url.url, event.data.data);
             }
             if (event.data.fromJassiExtension && event.data.connected) {
-                clearTimeout(checkExtensionInstalled);
+                installed = true;
+                //clearTimeout(checkExtensionInstalled);
                 if (Jassi_1.default.debugger !== undefined)
                     Jassi_1.default.debugger.destroy();
                 Jassi_1.default.debugger = this;
@@ -123,6 +134,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
          * @param {string} type - the type default undefined->stop debugging
          **/
         async breakpointChanged(file, line, column, enable, type = undefined) {
+            if (!installed)
+                this.showHintExtensionNotInstalled();
             if (this.allBreakPoints[file] === undefined) {
                 this.allBreakPoints[file] = [];
             }

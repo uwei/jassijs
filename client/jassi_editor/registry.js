@@ -7,7 +7,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi.ui.AcePanel": {}
 	},
 	"jassi_editor/ChromeDebugger.ts": {
-		"date": 1613592968297,
+		"date": 1614805327715,
 		"jassi_editor.ChromeDebugger": {}
 	},
 	"jassi_editor/CodeEditor.ts": {
@@ -56,7 +56,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"date": 1613148168781
 	},
 	"jassi_editor/util/Parser.ts": {
-		"date": 1613779964792,
+		"date": 1614889218718,
 		"jassi_editor.base.Parser": {}
 	},
 	"jassi_editor/util/Resizer.ts": {
@@ -68,7 +68,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi_editor.util.TSSourceMap": {}
 	},
 	"jassi_editor/util/Typescript.ts": {
-		"date": 1614702107260,
+		"date": 1614803273364,
 		"jassi_editor.util.Typescript": {}
 	}
 }

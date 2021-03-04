@@ -1,12 +1,25 @@
 import { $Class } from "jassi/remote/Jassi";
 //@ts-ignore
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent, RemoveEvent, UpdateEvent } from "typeorm";
+import Filessystem from "./Filesystem";
 
 
 @EventSubscriber()
 @$Class("jassi_localserver/TypeORMListener")
 export class TypeORMListener implements EntitySubscriberInterface {
-
+    savetimer;
+    saveDB(event){
+        if(this.savetimer){
+            clearTimeout(this.savetimer);
+            this.savetimer=undefined;
+        }
+        this.savetimer=setTimeout(()=>{
+            var data=event.connection.driver.export();
+            new Filessystem().saveFile("__default.db",data);
+            console.log("save DB");
+        },300);
+        
+    }
     /**
      * Called after entity is loaded.
      */
@@ -25,6 +38,7 @@ export class TypeORMListener implements EntitySubscriberInterface {
      * Called after entity insertion.
      */
     afterInsert(event: InsertEvent<any>) {
+        this.saveDB(event);
         //console.log(`AFTER ENTITY INSERTED: `, event.entity);
     }
 
@@ -39,7 +53,8 @@ export class TypeORMListener implements EntitySubscriberInterface {
      * Called after entity update.
      */
     afterUpdate(event: UpdateEvent<any>) {
-       // console.log(`AFTER ENTITY UPDATED: `, event.entity);
+        this.saveDB(event);
+        //console.log(`AFTER ENTITY UPDATED: `, event.entity);
     }
 
     /**
@@ -53,7 +68,8 @@ export class TypeORMListener implements EntitySubscriberInterface {
      * Called after entity removal.
      */
     afterRemove(event: RemoveEvent<any>) {
-        console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+      //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+      this.saveDB(event);
     }
 
     /**

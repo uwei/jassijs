@@ -52,14 +52,7 @@ define(["require", "exports", "jassi/ui/FileExplorer", "jassi/base/Windows", "ja
            });
            windows._desktop.add(bt);
        
-           var bt5 = new Button();
-           bt5.text = "Hallo Phillip";
-           bt5.y = 250;
-           bt5.onclick(function() {
-               windows.add(new HalloPhillip(), "Test");
-       
-           });
-           windows._desktop.add(bt5);
+          
        
        
            var bt2 = new Button();

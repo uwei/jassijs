@@ -17,10 +17,9 @@ class DBManager {
         var stype = "postgres";
         var shost = "localhost";
         var suser = "postgres";
-        var spass = "ja$$1";
+        var spass = "";
         var iport = 5432;
         var sdb = "jassi";
-        //the default is the sqlite3
         //this is the default way: define an environment var DATABASSE_URL
         //type://user:password@hostname:port/database
         //eg: postgres://abcknhlveqwqow:polc78b98e8cd7168d35a66e392d2de6a8d5710e854c084ff47f90643lce2876@ec2-174-102-251-1.compute-1.amazonaws.com:5432/dcpqmp4rcmu182
@@ -53,7 +52,7 @@ class DBManager {
             "database": sdb,
             "synchronize": true,
             "logging": false,
-            "entities": dbclasses,
+            "entities": dbclasses
         };
         return opt;
     }

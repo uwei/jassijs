@@ -11,19 +11,20 @@ import { Menu } from "jassi/ui/Menu";
 import { MenuItem } from "jassi/ui/MenuItem";
 import typescript, { Typescript } from "jassi_editor/util/Typescript";
 import { ContextMenu } from "jassi/ui/ContextMenu";
+import { CSSProperties } from "jassi/ui/CSSProperties";
 //drag from Desktop https://www.html5rocks.com/de/tutorials/file/dndfiles/
 @$ActionProvider("jassi.remote.FileNode")
 @$Class("jassi.ui.FileActions")
 export class FileActions {
-	
+
     @$Action({
         name: "New/File",
         icon: "mdi mdi-file",
-        isEnabled: function(all: FileNode[]): boolean {
+        isEnabled: function (all: FileNode[]): boolean {
             return all[0].isDirectory();
         }
     })
-    static async newFile(all: FileNode[], fileName:string = undefined,code:string="",open:boolean=false) {
+    static async newFile(all: FileNode[], fileName: string = undefined, code: string = "", open: boolean = false) {
         if (all.length === 0 || !all[0].isDirectory())
             return;
         var path = all[0].fullpath;
@@ -37,37 +38,40 @@ export class FileActions {
         console.log("create " + fileName);
         var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
         var newfile = path + "/" + fileName;
-        
+
         var ret = await new Server().createFile(newfile, code);
         var newkey = path + "|" + fileName;
         if (ret !== "") {
             alert(ret);
             return;
         }
-        try{
-        await FileExplorer.instance.refresh();
-        await FileExplorer.instance.tree.activateKey(newkey);
-        if(open)
-        	router.navigate("#do=jassi_editor.CodeEditor&file=" + newkey.replaceAll("|","/"));
-        }catch(err){
-debugger;
+        try {
+            await FileExplorer.instance.refresh();
+            await FileExplorer.instance.tree.activateKey(newkey);
+            if (open)
+                router.navigate("#do=jassi_editor.CodeEditor&file=" + newkey.replaceAll("|", "/"));
+        } catch (err) {
+            debugger;
         }
     }
     @$Action({
         name: "Download",
-        isEnabled: function(all: FileNode[]): boolean {
+        isEnabled: function (all: FileNode[]): boolean {
             return all[0].isDirectory();
         }
     })
     static async download(all: FileNode[]) {
-        if (all.length === 0 || !all[0].isDirectory())
-            return;
+
         var path = all[0].fullpath;
-        var url = "/zip?path=client/" + path;
-        if (all[0].name === "client" && all[0].fullpath === "")
-            url = "/zip?path=client";
-        if (all[0].name === "server" && all[0].fullpath === "")
-            url = "/zip?path=server";
+        var byteCharacters = atob(await new Server().zip(path));
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        // If you want to use the image in your DOM:
+        var blob = new Blob([byteArray], { type: "application/zip" });
+        var url = URL.createObjectURL(blob);
         var link = document.createElement('a');
         document.body.appendChild(link);
         link.href = url;
@@ -77,7 +81,7 @@ debugger;
 
     @$Action({
         name: "New/Folder",
-        isEnabled: function(all: FileNode[]): boolean {
+        isEnabled: function (all: FileNode[]): boolean {
             return all[0].isDirectory();
         }
     })
@@ -151,10 +155,10 @@ debugger;
         FileExplorer.instance.tree.activateKey(key);
     }
     @$Action({
-        name: "Open", isEnabled: function(all: FileNode[]): boolean {
+        name: "Open", isEnabled: function (all: FileNode[]): boolean {
             return !all[0].isDirectory();
-        }    
-})
+        }
+    })
     static async open(all: FileNode[]) {
         var node: FileNode = all[0];
         if (node.isDirectory())
@@ -179,18 +183,29 @@ export class FileExplorer extends Panel {
         this.tree = new Tree();
         this.search = new Textbox();
         this.layout();
+        this.tree.propStyle=node=>{return  this.getStyle(node)};
+    }
+    getStyle(node:FileNode):CSSProperties{
+        var ret:CSSProperties=undefined;
+        if(node.flag?.indexOf("fromMap")>-1){
+            ret={
+                color:"green"
+            }
+        }
+
+        return ret;
     }
     async refresh() {
         let root = (await new Server().dir());
         root.fullpath = "";
         root.name = "client";
-        
+
         var keys = this.tree.getExpandedKeys();
         this.tree.items = [root];
-        if(keys.indexOf("client")===-1)
+        if (keys.indexOf("client") === -1)
             keys.push("client");
         await this.tree.expandKeys(keys);
-        
+
     }
     async layout() {
         var _this = this;
@@ -206,7 +221,7 @@ export class FileExplorer extends Panel {
         this.refresh();
         this.add(this.tree);
         // this._files.files;
-        this.tree.onclick(function(evt) {
+        this.tree.onclick(function (evt) {
 
             if (evt.data !== undefined) {
                 FileActions.open([evt.data]);
@@ -214,7 +229,7 @@ export class FileExplorer extends Panel {
             }
         });
         $("#" + this._id).css("flow", "visible");
-        this.search.onkeydown(function(evt) {
+        this.search.onkeydown(function (evt) {
             window.setTimeout(() => {
                 _this.tree.filter(<string>_this.search.value);
                 if (evt.code === "Enter") {

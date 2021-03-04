@@ -572,7 +572,9 @@ define("jassi/base/Router", ["require", "exports", "jassi/remote/Jassi", "jassi/
                             id = props[p].name;
                         }
                     }
-                    var name = params.do + "-" + params[id];
+                    var name = params.do;
+                    if (params[id])
+                        name = name + "-" + params[id];
                     if (Windows_1.default.contains(name)) {
                         var window = Windows_1.default.show(name);
                         var ob = Windows_1.default.findComponent(name);
@@ -974,21 +976,24 @@ define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/rem
 //return Component.constructor;
 define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "jassi/ui/OptionDialog", "jassi_editor/util/TSSourceMap", "jassi/util/Reloader", "jassi/remote/Server", "jassi/base/Windows"], function (require, exports, Jassi_4, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_2) {
     "use strict";
+    var ChromeDebugger_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ChromeDebugger = void 0;
     let checkExtensionInstalled = setTimeout(() => {
         $.notify("no  jassi chrome extension installed", "warning", { position: "right" });
-    }, 1000);
+    }, 3000);
     /**
      * debugging in Chrome
      */
-    let ChromeDebugger = class ChromeDebugger extends Debugger_1.Debugger {
+    let ChromeDebugger = ChromeDebugger_1 = class ChromeDebugger extends Debugger_1.Debugger {
         constructor() {
             super();
+            this.responseList = {};
             this.allBreakPoints = {};
             //listen to code changes
             this.sendChromeMessage({ name: "getCodeChange" });
             window.addEventListener("message", (event) => {
+                // console.log("mess"+JSON.stringify(event));
                 this.onChromeMessage(event);
             });
         }
@@ -1006,10 +1011,20 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
                     Jassi_4.default.debugger.destroy();
                 Jassi_4.default.debugger = this;
             }
+            if (event.data.fromJassiExtension && event.data.mid) {
+                var test = this.responseList[event.data.mid];
+                if (test) {
+                    test(event);
+                    delete this.responseList[event.data.mid];
+                }
+            }
         }
         //send message to chrome extension
-        sendChromeMessage(msg) {
+        sendChromeMessage(msg, response = undefined) {
             msg.toJassiExtension = true;
+            msg.mid = ChromeDebugger_1.mid++;
+            if (response)
+                this.responseList[msg.mid] = response;
             window.postMessage(msg, "*");
         }
         urlToFile(url) {
@@ -1102,6 +1117,8 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
                     enable: enable,
                     condition: "1===1",
                     type: type
+                }, (data) => {
+                    resolve(data);
                 });
             });
             return ret;
@@ -1134,7 +1151,8 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
             this.destroyed = true;
         }
     };
-    ChromeDebugger = __decorate([
+    ChromeDebugger.mid = 0;
+    ChromeDebugger = ChromeDebugger_1 = __decorate([
         Jassi_4.$Class("jassi_editor.ChromeDebugger"),
         __metadata("design:paramtypes", [])
     ], ChromeDebugger);
@@ -1265,7 +1283,7 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             new Server_2.Server().saveFile(this._file, code).then(function () {
                 var f = _this._file.replace(".ts", "");
                 new Reloader_2.Reloader().reloadJS(f);
-                if (code.indexOf("jassi.register(") > -1) {
+                if (code.indexOf("@$") > -1) {
                     Registry_2.default.reload();
                 }
             });
@@ -2673,8 +2691,8 @@ define("jassi_editor/ComponentPalette", ["require", "exports", "jassi/remote/Jas
                     var sname = name[name.length - 1];
                     img.tooltip = sname;
                     img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon + (data.icon.startsWith("mdi") ? " mdi-18px" : "");
-                    img.height = 24;
-                    img.width = 24;
+                    //img.height = 24;
+                    //img.width = 24;
                     img["createFromType"] = mdata.classname;
                     img["createFromParam"] = data.initialize;
                     _this._makeDraggable(img);
@@ -2905,14 +2923,15 @@ define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", 
         var CommandsRegistry = require("vs/platform/commands/common/commands").CommandsRegistry;
         CommandsRegistry.registerCommand("autoimport", (o1, model, pos) => {
             var file = model.uri.path.substring(1);
+            var code = model.getValue();
             var p = Typescript_4.default.getPositionOfLineAndCharacter(file, {
                 line: pos.lineNumber, character: pos.column
             });
             setTimeout(() => {
-                CodePanel_3.CodePanel.getAutoimport(p, file, undefined).then((data) => {
+                CodePanel_3.CodePanel.getAutoimport(p, file, code).then((data) => {
                     if (data !== undefined) {
                         model.pushEditOperations([], [{
-                                range: monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row }),
+                                range: monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row + 1 }),
                                 text: data.text
                             }], () => null);
                     }
@@ -2948,7 +2967,7 @@ define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", 
                 var sug = [];
                 for (var x = 0; x < all.entries.length; x++) {
                     var it = all.entries[x];
-                    if (it.kindModifiers === "export" && it.hasAction === true) {
+                    if ((it.kindModifiers === "export" || it.kindModifiers === "") && it.hasAction === true) {
                         var item = {
                             label: it.name,
                             kind: it.kind,
@@ -3201,7 +3220,7 @@ define("jassi_editor/modul", ["require", "exports"], function (require, exports)
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
-        "css": ["jassi_editor.css"],
+        "css": { "jassi_editor.css": "jassi_editor.css" },
         "types": {
             "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.22.3/monaco.d.ts",
         },
@@ -3227,11 +3246,11 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi.ui.AcePanel": {}
             },
             "jassi_editor/ChromeDebugger.ts": {
-                "date": 1613488621460,
+                "date": 1613592968297,
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
-                "date": 1613483623015,
+                "date": 1613572265906,
                 "jassi_editor.CodeEditor": {}
             },
             "jassi_editor/CodeEditorInvisibleComponents.ts": {
@@ -3251,7 +3270,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.ComponentExplorer": {}
             },
             "jassi_editor/ComponentPalette.ts": {
-                "date": 1613218566583,
+                "date": 1614028739796,
                 "jassi_editor.ComponentPalette": {}
             },
             "jassi_editor/Debugger.ts": {
@@ -3259,10 +3278,10 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.Debugger": {}
             },
             "jassi_editor/modul.ts": {
-                "date": 1613311839341
+                "date": 1614109063764
             },
             "jassi_editor/MonacoPanel.ts": {
-                "date": 1613218609627,
+                "date": 1613573828092,
                 "jassi_editor.MonacoPanel": {}
             },
             "jassi_editor/StartEditor.ts": {
@@ -3276,7 +3295,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "date": 1613148168781
             },
             "jassi_editor/util/Parser.ts": {
-                "date": 1613332427627,
+                "date": 1613779964792,
                 "jassi_editor.base.Parser": {}
             },
             "jassi_editor/util/Resizer.ts": {
@@ -3284,11 +3303,11 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.util.Resizer": {}
             },
             "jassi_editor/util/TSSourceMap.ts": {
-                "date": 1613425674482,
+                "date": 1613550062397,
                 "jassi_editor.util.TSSourceMap": {}
             },
             "jassi_editor/util/Typescript.ts": {
-                "date": 1613218610071,
+                "date": 1614702107260,
                 "jassi_editor.util.Typescript": {}
             }
         }
@@ -4124,6 +4143,11 @@ define("jassi_editor/util/Parser", ["require", "exports", "jassi/remote/Jassi", 
                 if (pos >= 0)
                     node.parent.parent["type"]["members"].splice(pos, 1);
             }
+            else if (node.parent["members"] !== undefined) {
+                var pos = node.parent["members"].indexOf(node);
+                if (pos >= 0)
+                    node.parent["members"].splice(pos, 1);
+            }
             else
                 throw Error(node.getFullText() + "could not be removed");
         }
@@ -4893,9 +4917,9 @@ define("jassi_editor/util/Typescript", ["require", "exports", "jassi/remote/Jass
             };
             //@ts-ignore
             var comp = ts.transpileModule(content, opt);
-            ret.fileNames.push("js/" + fileName.replace(".ts", ".js"));
+            ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js");
             ret.contents.push(comp.outputText);
-            ret.fileNames.push("js/" + fileName.replace(".ts", ".js.map"));
+            ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js.map");
             ret.contents.push(comp.sourceMapText);
             return ret;
         }

@@ -4,11 +4,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "typeorm"], function (require, exports, Jassi_1, typeorm_1) {
+define(["require", "exports", "jassi/remote/Jassi", "typeorm", "./Filesystem"], function (require, exports, Jassi_1, typeorm_1, Filesystem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeORMListener = void 0;
     let TypeORMListener = class TypeORMListener {
+        saveDB(event) {
+            if (this.savetimer) {
+                clearTimeout(this.savetimer);
+                this.savetimer = undefined;
+            }
+            this.savetimer = setTimeout(() => {
+                var data = event.connection.driver.export();
+                new Filesystem_1.default().saveFile("__default.db", data);
+                console.log("save DB");
+            }, 300);
+        }
         /**
          * Called after entity is loaded.
          */
@@ -25,6 +36,7 @@ define(["require", "exports", "jassi/remote/Jassi", "typeorm"], function (requir
          * Called after entity insertion.
          */
         afterInsert(event) {
+            this.saveDB(event);
             //console.log(`AFTER ENTITY INSERTED: `, event.entity);
         }
         /**
@@ -37,7 +49,8 @@ define(["require", "exports", "jassi/remote/Jassi", "typeorm"], function (requir
          * Called after entity update.
          */
         afterUpdate(event) {
-            // console.log(`AFTER ENTITY UPDATED: `, event.entity);
+            this.saveDB(event);
+            //console.log(`AFTER ENTITY UPDATED: `, event.entity);
         }
         /**
          * Called before entity removal.
@@ -49,7 +62,8 @@ define(["require", "exports", "jassi/remote/Jassi", "typeorm"], function (requir
          * Called after entity removal.
          */
         afterRemove(event) {
-            console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+            //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+            this.saveDB(event);
         }
         /**
          * Called before transaction start.

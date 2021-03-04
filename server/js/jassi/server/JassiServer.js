@@ -7,16 +7,15 @@ require("jassi/remote/Registry");
 //import "reflect-metadata";
 //important: registry must be loaded after "reflect-metadata" and before the typeorm (because delegation of Reflect.metadata)
 const express = require("express");
-const Filessystem_1 = require("jassi/server/Filessystem");
-const Indexer_1 = require("jassi/server/Indexer");
+const Filesystem_1 = require("jassi/server/Filesystem");
 const PassportLoginRegister_1 = require("jassi/server/PassportLoginRegister");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const https = require("https");
 require("jassi/server/PassportSetup");
 const DoRemoteProtocol_1 = require("jassi/server/DoRemoteProtocol");
-const Zip_1 = require("jassi/server/Zip");
 const RawBody_1 = require("jassi/server/RawBody");
+const RegistryIndexer_1 = require("./RegistryIndexer");
 class JassiConnectionProperties {
 }
 /**
@@ -30,10 +29,11 @@ function JassiServer(properties = {}, expressApp = undefined) {
     if (app === undefined)
         app = express();
     if (properties.updeateRegistryOnStart !== false)
-        new Indexer_1.Indexer().updateRegistry();
-    if (properties.syncRemoteFiles !== false)
-        Filessystem_1.syncRemoteFiles();
-    app.use(Filessystem_1.staticfiles);
+        new RegistryIndexer_1.ServerIndexer().updateRegistry();
+    if (properties.syncRemoteFiles !== false) {
+        Filesystem_1.syncRemoteFiles();
+    }
+    app.use(Filesystem_1.staticfiles);
     app.use(RawBody_1.rawbody);
     // app.use(installGetRequest);
     app.use(passport.initialize());
@@ -41,8 +41,8 @@ function JassiServer(properties = {}, expressApp = undefined) {
     app.use("/user", PassportLoginRegister_1.loginRegister);
     app.use(PassportLoginRegister_1.manageToken);
     app.post('/remoteprotocol', passport.authenticate("jwt", { session: false }), DoRemoteProtocol_1.remoteProtocol);
-    if (properties.allowDownloadAsZip !== false)
-        app.get('/zip', passport.authenticate("jwt", { session: false }), Zip_1.zip);
+    /* if (properties.allowDownloadAsZip!==false)
+         app.get('/zip', passport.authenticate("jwt", { session: false }), zip);*/
     const PORT = (process.env.PORT || 5000);
     app.listen(PORT, () => console.log(`Listening on ${PORT}`));
     return app;

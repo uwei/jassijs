@@ -8,14 +8,22 @@ define("jassi_localserver/registry",["require"], function(require) {
 	"jassi_localserver/DBManager.ts": {
 		"date": 1614469272935
 	},
-	"jassi_localserver/Filessystem.ts": {
-		"date": 1614710621004
+	"jassi_localserver/Filesystem.ts": {
+		"date": 1614894754592,
+		"jassi_localserver.Filessystem": {}
+	},
+	"jassi_localserver/Indexer.ts": {
+		"date": 1614893991197
 	},
 	"jassi_localserver/LocalProtocol.ts": {
-		"date": 1614707860432
+		"date": 1614892282701
 	},
 	"jassi_localserver/modul.ts": {
-		"date": 1614634283885
+		"date": 1614785819884
+	},
+	"jassi_localserver/RegistyIndexer.ts": {
+		"date": 1614891745582,
+		"jassi_localserver.RegistryIndexer": {}
 	},
 	"jassi_localserver/Testserver.ts": {
 		"date": 1614365026599,
@@ -28,7 +36,7 @@ define("jassi_localserver/registry",["require"], function(require) {
 		}
 	},
 	"jassi_localserver/TypeORMListener.ts": {
-		"date": 1614543915598,
+		"date": 1614891650187,
 		"jassi_localserver/TypeORMListener": {
 			"EventSubscriber": []
 		}

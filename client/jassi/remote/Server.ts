@@ -61,6 +61,7 @@ export class Server extends RemoteObject {
                     }
                     if (!found) {
                         found = {
+                            flag:"fromMap",
                             name: dirname,
                             files: []
                         }
@@ -70,6 +71,7 @@ export class Server extends RemoteObject {
 
                 } else {
                     parent.files.push({
+                        flag:"fromMap",
                         name: path[p],
                         date: undefined
                     });
@@ -97,9 +99,19 @@ export class Server extends RemoteObject {
             return r;
         } else {
             //@ts-ignore
-            var fs = await import("jassi/server/Filessystem");
+            var fs = await import("jassi/server/Filesystem");
             var rett: FileNode = await new fs.default().dir("", withDate);
             return rett;
+            // return ["jassi/base/ChromeDebugger.ts"];
+        }
+    }
+    public async zip(directoryname:string,serverdir:boolean=undefined,context:Context=undefined){
+        if (!context?.isServer) {
+            return <{ [id: string]: string }>await this.call(this, this.zip, directoryname,serverdir,context);
+        } else {
+            //@ts-ignore
+            var fs = await import("jassi/server/Filesystem");
+            return await new fs.default().zip(directoryname,serverdir);
             // return ["jassi/base/ChromeDebugger.ts"];
         }
     }
@@ -113,7 +125,7 @@ export class Server extends RemoteObject {
             return <{ [id: string]: string }>await this.call(this, this.loadFiles, fileNames,context);
         } else {
             //@ts-ignore
-            var fs = await import("jassi/server/Filessystem");
+            var fs = await import("jassi/server/Filesystem");
             return new fs.default().loadFiles(fileNames);
             // return ["jassi/base/ChromeDebugger.ts"];
         }
@@ -137,7 +149,7 @@ export class Server extends RemoteObject {
             //return await this.call(this,"loadFile", fileName);
         } else {
             //@ts-ignore
-            var fs = await import("jassi/server/Filessystem");
+            var fs = await import("jassi/server/Filesystem");
             var rett: string = new fs.default().loadFile(fileName);
             return rett;
         }
@@ -187,7 +199,7 @@ export class Server extends RemoteObject {
             return res;
         } else {
             //@ts-ignore
-            var fs: any = await import("jassi/server/Filessystem");
+            var fs: any = await import("jassi/server/Filesystem");
             var ret = await new fs.default().saveFiles(fileNames, contents, true);
             return ret;
         }
@@ -212,9 +224,9 @@ export class Server extends RemoteObject {
              return ret;
          } else {
              //@ts-ignore
-             var fs: any = await import("jassi/server/Filessystem");
+             var fs: any = await import("jassi/server/Filesystem");
              return new fs.default().saveFiles(fileNames, contents);
-         }*/
+         }*/ 
     }
     /**
     * deletes a file or directory
@@ -227,7 +239,7 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             //@ts-ignore
-            var fs: any = await import("jassi/server/Filessystem");
+            var fs: any = await import("jassi/server/Filesystem");
 
             return await new fs.default().remove(name);
         }
@@ -243,7 +255,7 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             //@ts-ignore
-            var fs: any = await import("jassi/server/Filessystem");
+            var fs: any = await import("jassi/server/Filesystem");
 
             return await new fs.default().rename(oldname, newname);;
         }
@@ -277,7 +289,7 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             //@ts-ignore
-            var fs: any = await import("jassi/server/Filessystem");
+            var fs: any = await import("jassi/server/Filesystem");
 
             return await new fs.default().createFile(filename, content);
         }
@@ -293,7 +305,7 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             //@ts-ignore
-            var fs: any = await import("jassi/server/Filessystem");
+            var fs: any = await import("jassi/server/Filesystem");
 
             return await new fs.default().createFolder(foldername);
         }
@@ -308,7 +320,18 @@ export class Server extends RemoteObject {
 
 
 export async function test() {
-    var serv=await new Server().dir();
-
-    console.log(await Server.mytest());
+     var byteCharacters = atob(await new Server().zip("local"));
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        // If you want to use the image in your DOM:
+        var blob = new Blob([byteArray], { type: "application/zip" });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        document.body.appendChild(link);
+        link.href = url;
+        link.click();
+        link.remove();
 }

@@ -16,7 +16,7 @@ define(["require", "exports", "jassi/remote/RemoteProtocol"], function (require,
                 var sret = await localExec(JSON.parse(config.data));
                 for (let i = 0; i < retserver.files.length; i++) {
                     if (retserver.files[i].name === "local") {
-                        retserver.files.splice(i, 1);
+                        //retserver.files.splice(i,1);
                     }
                 }
                 for (let i = 0; i < sret.files.length; i++) {
@@ -34,7 +34,7 @@ define(["require", "exports", "jassi/remote/RemoteProtocol"], function (require,
                     return ret;
                 }
             }
-            else if (tst.parameter.length > 0 && tst.parameter[0].startsWith("local/")) {
+            else if (tst.parameter.length > 0 && (tst.parameter[0] === "local" || tst.parameter[0].startsWith("local/"))) {
                 var sret = await localExec(JSON.parse(config.data));
                 ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
                 if (ret === undefined)

@@ -63,6 +63,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                         }
                         if (!found) {
                             found = {
+                                flag: "fromMap",
                                 name: dirname,
                                 files: []
                             };
@@ -72,6 +73,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                     }
                     else {
                         parent.files.push({
+                            flag: "fromMap",
                             name: path[p],
                             date: undefined
                         });
@@ -98,9 +100,20 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_1, reject_1) => { require(["jassi/server/Filessystem"], resolve_1, reject_1); });
+                var fs = await new Promise((resolve_1, reject_1) => { require(["jassi/server/Filesystem"], resolve_1, reject_1); });
                 var rett = await new fs.default().dir("", withDate);
                 return rett;
+                // return ["jassi/base/ChromeDebugger.ts"];
+            }
+        }
+        async zip(directoryname, serverdir = undefined, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await this.call(this, this.zip, directoryname, serverdir, context);
+            }
+            else {
+                //@ts-ignore
+                var fs = await new Promise((resolve_2, reject_2) => { require(["jassi/server/Filesystem"], resolve_2, reject_2); });
+                return await new fs.default().zip(directoryname, serverdir);
                 // return ["jassi/base/ChromeDebugger.ts"];
             }
         }
@@ -115,7 +128,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_2, reject_2) => { require(["jassi/server/Filessystem"], resolve_2, reject_2); });
+                var fs = await new Promise((resolve_3, reject_3) => { require(["jassi/server/Filesystem"], resolve_3, reject_3); });
                 return new fs.default().loadFiles(fileNames);
                 // return ["jassi/base/ChromeDebugger.ts"];
             }
@@ -139,7 +152,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_3, reject_3) => { require(["jassi/server/Filessystem"], resolve_3, reject_3); });
+                var fs = await new Promise((resolve_4, reject_4) => { require(["jassi/server/Filesystem"], resolve_4, reject_4); });
                 var rett = new fs.default().loadFile(fileName);
                 return rett;
             }
@@ -160,7 +173,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                     var content = contents[f];
                     if (fileName.endsWith(".ts") || fileName.endsWith(".js")) {
                         //@ts-ignore
-                        var tss = await new Promise((resolve_4, reject_4) => { require(["jassi_editor/util/Typescript"], resolve_4, reject_4); });
+                        var tss = await new Promise((resolve_5, reject_5) => { require(["jassi_editor/util/Typescript"], resolve_5, reject_5); });
                         var rets = await tss.default.transpile(fileName, content);
                         allfileNames = allfileNames.concat(rets.fileNames);
                         allcontents = allcontents.concat(rets.contents);
@@ -188,7 +201,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_5, reject_5) => { require(["jassi/server/Filessystem"], resolve_5, reject_5); });
+                var fs = await new Promise((resolve_6, reject_6) => { require(["jassi/server/Filesystem"], resolve_6, reject_6); });
                 var ret = await new fs.default().saveFiles(fileNames, contents, true);
                 return ret;
             }
@@ -213,7 +226,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                  return ret;
              } else {
                  //@ts-ignore
-                 var fs: any = await import("jassi/server/Filessystem");
+                 var fs: any = await import("jassi/server/Filesystem");
                  return new fs.default().saveFiles(fileNames, contents);
              }*/
         }
@@ -229,7 +242,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_6, reject_6) => { require(["jassi/server/Filessystem"], resolve_6, reject_6); });
+                var fs = await new Promise((resolve_7, reject_7) => { require(["jassi/server/Filesystem"], resolve_7, reject_7); });
                 return await new fs.default().remove(name);
             }
         }
@@ -245,7 +258,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_7, reject_7) => { require(["jassi/server/Filessystem"], resolve_7, reject_7); });
+                var fs = await new Promise((resolve_8, reject_8) => { require(["jassi/server/Filesystem"], resolve_8, reject_8); });
                 return await new fs.default().rename(oldname, newname);
                 ;
             }
@@ -282,7 +295,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_8, reject_8) => { require(["jassi/server/Filessystem"], resolve_8, reject_8); });
+                var fs = await new Promise((resolve_9, reject_9) => { require(["jassi/server/Filesystem"], resolve_9, reject_9); });
                 return await new fs.default().createFile(filename, content);
             }
         }
@@ -298,7 +311,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_9, reject_9) => { require(["jassi/server/Filessystem"], resolve_9, reject_9); });
+                var fs = await new Promise((resolve_10, reject_10) => { require(["jassi/server/Filesystem"], resolve_10, reject_10); });
                 return await new fs.default().createFolder(foldername);
             }
         }
@@ -319,8 +332,20 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
     ], Server);
     exports.Server = Server;
     async function test() {
-        var serv = await new Server().dir();
-        console.log(await Server.mytest());
+        var byteCharacters = atob(await new Server().zip("local"));
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+            byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        // If you want to use the image in your DOM:
+        var blob = new Blob([byteArray], { type: "application/zip" });
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        document.body.appendChild(link);
+        link.href = url;
+        link.click();
+        link.remove();
     }
     exports.test = test;
 });

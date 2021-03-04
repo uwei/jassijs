@@ -25,7 +25,7 @@ exports.default={
 		"date": 1613925202662
 	},
 	"jassi/remote/FileNode.ts": {
-		"date": 1613219099164,
+		"date": 1614803263239,
 		"jassi.remote.FileNode": {}
 	},
 	"jassi/remote/hallo.ts": {
@@ -94,7 +94,7 @@ exports.default={
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1614708311040,
+		"date": 1614891730205,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -105,19 +105,19 @@ exports.default={
 		"date": 1613330043874
 	},
 	"jassi/server/DBManager.ts": {
-		"date": 1614468733890
+		"date": 1614801636948
 	},
 	"jassi/server/DoRemoteProtocol.ts": {
 		"date": 1614540000853
 	},
-	"jassi/server/Filessystem.ts": {
-		"date": 1614708279627
+	"jassi/server/Filesystem.ts": {
+		"date": 1614891589205
 	},
 	"jassi/server/Indexer.ts": {
-		"date": 1613245531530
+		"date": 1614891596646
 	},
 	"jassi/server/JassiServer.ts": {
-		"date": 1614469215207
+		"date": 1614891596646
 	},
 	"jassi/server/PassportLoginRegister.ts": {
 		"date": 1614463987601
@@ -128,8 +128,11 @@ exports.default={
 	"jassi/server/RawBody.ts": {
 		"date": 1589573020012
 	},
+	"jassi/server/RegistryIndexer.ts": {
+		"date": 1614891596646
+	},
 	"jassi/server/Zip.ts": {
-		"date": 1589573353489
+		"date": 1614891596646
 	},
 	"jassi/UserModel.ts": {
 		"date": 1613218878493

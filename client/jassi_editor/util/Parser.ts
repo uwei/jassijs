@@ -2,7 +2,7 @@
 import { $Class } from "jassi/remote/Jassi";
 
 
-import typescript, { Typescript } from "jassi_editor/util/Typescript";
+import typescript from "jassi_editor/util/Typescript";
 
 
 interface Properties {

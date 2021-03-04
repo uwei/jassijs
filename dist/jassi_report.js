@@ -2149,7 +2149,7 @@ define("jassi_report/modul", ["require", "exports"], function (require, exports)
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
-        "css": ["jassi_report.css"],
+        "css": { "jassi_report.css": "jassi_report.css" },
         "require": {
             paths: {
                 'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
@@ -2183,7 +2183,7 @@ define("jassi_report/registry", ["require"], function (require) {
                 "jassi_report.designer.ReportDesigner": {}
             },
             "jassi_report/modul.ts": {
-                "date": 1613312029291
+                "date": 1614109043365
             },
             "jassi_report/PDFReport.ts": {
                 "date": 1613218544158,

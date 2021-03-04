@@ -1,37 +1,24 @@
 import ts = require("typescript");
-import fs = require('fs');
-import { Any } from "typeorm";
-import Filesystem from "jassi/server/Filessystem";
+//import "jassi_editor/util/Typescript";
+//@ts-ignore
+import Filesystem from "jassi/server/Filesystem";
 
 
 
-export class Indexer {
-
-    public updateRegistry(modul: string = undefined, isserver: boolean = undefined) {
-        if (modul === undefined) {
-            //client modules
-            var data = fs.readFileSync(Filesystem.path + "/jassi.json", 'utf-8');
-            var modules = JSON.parse(data).modules;
-            for (var m in modules) {
-                if (!modules[m].endsWith(".js"))//.js are internet modules
-                    this.updateRegistry(m, false);
-            }
-            //server modules
-            data = fs.readFileSync("./jassi.json", 'utf-8');
-            var modules = JSON.parse(data).modules;
-            for (var m in modules) {
-                if (!modules[m].endsWith(".js"))//.js are internet modules
-                    this.updateRegistry(m, true);
-            }
-            this.checkRemoteFiles();
-            return;
-        }
-        var path = isserver ? "./" + modul : Filesystem.path + "/" + modul;
+export abstract class Indexer {
+    
+    abstract fileExists(name);
+    abstract readFile(name);
+    abstract getFileTime(name);
+    abstract createDirectory(name);
+    abstract writeFile(name:string,content:string);
+    public async updateModul(root,modul: string, isserver: boolean ) {
+        var path = root +(root===""?"":"/") + modul;
 
         //create empty if needed
         var text = "{}";
-        if (fs.existsSync(path + "/registry.js")) {
-            text = fs.readFileSync(path + "/registry.js", 'utf-8');
+        if (await this.fileExists(path + "/registry.js")) {
+            text = await this.readFile(path + "/registry.js");
             
             if (!isserver) {
                 text = text.substring(text.indexOf("default:") + 8);
@@ -44,19 +31,15 @@ export class Indexer {
         var index = JSON.parse(text);
         //remove deleted files
         for (var key in index) {
-            if (!fs.existsSync(path + "/" + key)) {
+            if (!(await this.fileExists(path + "/" + key))) {
                 delete index[key];
             }
         }
-        var jsFiles: string[] = new Filesystem().dirFiles(path, [".ts"], ["node_modules"])
-        /* if (fs.existsSync(Filesystem.path + "/remote/" + modul)) {
-             var jsFiles2: string[] = new Filesystem().dirFiles(Filesystem.path + "/remote/" + modul, [".ts"], ["node_modules"])
-             jsFiles2.forEach((entr) => { jsFiles.push(entr) });
-         }*/
-        var root=(isserver ? "./": Filesystem.path);
+ 
+        var jsFiles: string[] =await  new Filesystem().dirFiles(path, [".ts"], ["node_modules"])
         for (let x = 0; x < jsFiles.length; x++) {
             var jsFile = jsFiles[x];
-            var fileName = jsFile.substring((root.length + (isserver?0:1)));
+            var fileName = jsFile.substring((root.length + (root===""?0:1)));
             if (fileName === undefined)
                 continue;
             var entry = index[fileName];
@@ -65,10 +48,11 @@ export class Indexer {
                 entry.date = undefined;
                 index[fileName] = entry;
             }
-            if (fs.existsSync(root + "/" + fileName)) {
-                var stats = fs.statSync(root + "/" + fileName);
-                if (stats.mtime.getTime() !== entry.date) {
-                    var text = fs.readFileSync(root + "/" + fileName).toString();
+            if (await this.fileExists(root + (root===""?"":"/") + fileName)) {
+               
+                var dat=await this.getFileTime(root + (root===""?"":"/") + fileName)
+                if (dat !== entry.date) {
+                    var text =<string> await this.readFile(root + (root===""?"":"/") + fileName);
                     var sourceFile = ts.createSourceFile('hallo.ts', text, ts.ScriptTarget.ES5, true);
                     var outDecorations = [];
                     entry = {};
@@ -76,8 +60,7 @@ export class Indexer {
                     index[fileName] = entry;
                     this.collectAnnotations(sourceFile, entry);
                     // findex(Filesystem.path + "/" + jsFile);
-
-                    entry.date = stats.mtime.getTime();
+                    entry.date = dat;
                 }
             }
         }
@@ -90,13 +73,15 @@ export class Indexer {
                 '  default: ' + text + "\n" +
                 ' }\n' +
                 '});';
-            var jsdir = path.replace(Filesystem.path, Filesystem.path + "/js");
-            if (!fs.existsSync(jsdir))
-                fs.mkdirSync(jsdir);
-            fs.writeFileSync(jsdir + "/registry.js", text);
-            fs.writeFileSync(path + "/registry.js", text);
+            var jsdir = "js/"+path;
+            if(Filesystem.path!==undefined)
+                jsdir=path.replace(Filesystem.path, Filesystem.path + "/js");
+            if (!(await this.fileExists(jsdir)))
+                await this.createDirectory(jsdir);
+            await this.writeFile(jsdir + "/registry.js", text);
+            await this.writeFile(path + "/registry.js", text);
         } else { //write server
-            var modules = JSON.parse(fs.readFileSync("./jassi.json", 'utf-8')).modules;
+            var modules = JSON.parse(await this.readFile("./jassi.json")).modules;
             for (let smodul in modules) {
                 if (modul === smodul) {
                     var text = JSON.stringify(index, undefined, "\t");
@@ -105,42 +90,16 @@ export class Indexer {
                         'Object.defineProperty(exports, "__esModule", { value: true });\n' +
                         'exports.default=' + text ;
                     var jsdir = "js/" + modul;
-                    if (!fs.existsSync(jsdir))
-                        fs.mkdirSync(jsdir);
-                    fs.writeFileSync(jsdir + "/registry.js", text);
-                    fs.writeFileSync(modul + "/registry.js", text);
+                    if (!(await this.fileExists(jsdir)))
+                        await this.createDirectory(jsdir);
+                    await this.writeFile(jsdir + "/registry.js", text);
+                    await this.writeFile(modul + "/registry.js", text);
                 }
             }
         }
 
-        //registry.initJSONData(text);
-    }
-    /**
-     * each remote file on server and client should be the same
-     */
-    checkRemoteFiles() {
-        var modules = JSON.parse(fs.readFileSync("./jassi.json", 'utf-8')).modules;
-        for (var m in modules) {
-            var files = new Filesystem().dirFiles("./" + m + "/remote", [".ts"]);
-            for (let x = 0; x < files.length; x++) {
-                var file = files[x];
-                var clientfile = file.replace("./", Filesystem.path + "/");
-                if (!fs.existsSync(clientfile)) {
-                    console.error(clientfile + " not exists");
-                } else {
-                    if (fs.statSync(file).mtimeMs !== fs.statSync(clientfile).mtimeMs) {
-                        if (fs.statSync(file).mtimeMs > fs.statSync(clientfile).mtimeMs) {
-                            console.error(clientfile + " is not up to date " + file + " is newer");
-                        } else {
-                            console.error(file + " is not up to date " + clientfile + " is newer");
-                        }
-                    }
-                }
-
-
-            }
-        }
-    }
+     }
+    
     convertArgument(arg: any) {
         if (arg === undefined)
             return undefined;

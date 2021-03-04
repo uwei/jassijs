@@ -9,10 +9,10 @@ define("jassi/server/DoRemoteProtocol", ["jassi_localserver/LocalProtocol"], fun
         }
     };
 });
-define("jassi/server/Filessystem", ["jassi_localserver/Filessystem"], function (fs) {
+define("jassi/server/Filesystem", ["jassi_localserver/Filesystem"], function (fs) {
     return fs;
 });
-define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry"], function (db, Classes_1, Registry_1) {
+define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry", "jassi_localserver/DBManager", "jassi_localserver/TypeORMListener"], function (db, Classes_1, Registry_1, dbman, TypeORMListener) {
     db.DBManager["getConOpts"] = async function () {
         var dbclasses = [];
         const initSqlJs = window["SQL"];
@@ -32,8 +32,12 @@ define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/C
                 throw err;
             }
         }
+        var Filessystem = await Classes_1.classes.loadClass("jassi_localserver.Filessystem");
+        var data = await new Filessystem().loadFile("__default.db");
         var opt = {
+            database: data,
             type: "sqljs",
+            subscribers: [TypeORMListener.TypeORMListener],
             "entities": dbclasses
         };
         return opt;
