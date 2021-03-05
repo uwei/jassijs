@@ -31,7 +31,7 @@ class Indexer {
         var jsFiles = await new Filesystem_1.default().dirFiles(path, [".ts"], ["node_modules"]);
         for (let x = 0; x < jsFiles.length; x++) {
             var jsFile = jsFiles[x];
-            var fileName = jsFile.substring((root.length + 1));
+            var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));
             if (fileName === undefined)
                 continue;
             var entry = index[fileName];
@@ -40,10 +40,10 @@ class Indexer {
                 entry.date = undefined;
                 index[fileName] = entry;
             }
-            if (await this.fileExists(root + "/" + fileName)) {
-                var dat = await this.getFileTime(root + "/" + fileName);
+            if (await this.fileExists(root + (root === "" ? "" : "/") + fileName)) {
+                var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName);
                 if (dat !== entry.date) {
-                    var text = await this.readFile(root + "/" + fileName);
+                    var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
                     var sourceFile = ts.createSourceFile('hallo.ts', text, ts.ScriptTarget.ES5, true);
                     var outDecorations = [];
                     entry = {};
@@ -63,7 +63,9 @@ class Indexer {
                 '  default: ' + text + "\n" +
                 ' }\n' +
                 '});';
-            var jsdir = path.replace(Filesystem_1.default.path, Filesystem_1.default.path + "/js");
+            var jsdir = "js/" + path;
+            if (Filesystem_1.default.path !== undefined)
+                jsdir = path.replace(Filesystem_1.default.path, Filesystem_1.default.path + "/js");
             if (!(await this.fileExists(jsdir)))
                 await this.createDirectory(jsdir);
             await this.writeFile(jsdir + "/registry.js", text);

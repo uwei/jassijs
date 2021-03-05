@@ -322,7 +322,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
             for (var x = 0; x < keys.length; x++) {
                 var n = await this._readNodeFromKey(keys[x]);
                 if (n) {
-                    n.setExpanded(true);
+                    await n.setExpanded(true);
                     all.push(n);
                 }
             }

@@ -4,6 +4,7 @@ import { Reloader } from "jassi/util/Reloader";
 //@ts-ignore force load this class
 import { DBManager } from "jassi/server/DBManager";
 
+
 class FileEntry {
     id: string;
     date: number;
@@ -133,7 +134,7 @@ export default class Filessystem {
         return root;
     }
     public async createFile(filename: string, content: any) {
-        return await this.saveFile(filename, content);
+        return await this.saveFiles([filename], [content],false);
     }
     async saveFile(filename, content) {
         return await this.saveFiles([filename], [content]);
@@ -144,7 +145,7 @@ export default class Filessystem {
         var tsfiles = [];
         for (let x = 0; x < fileNames.length; x++) {
             let fname = fileNames[x];
-            if (fname.endsWith(".js"))
+            if (fname.endsWith(".ts"))
                 tsfiles.push(fname);
             let exists = await this.loadFileEntry(fname);
             if (exists) {
@@ -250,6 +251,8 @@ export default class Filessystem {
             store.delete(entr[i].id);
             await new Promise((resolve) => { transaction.oncomplete = resolve })
         }
+        var RegistryIndexer =(await import("jassi_localserver/RegistyIndexer")).RegistryIndexer;
+        await new RegistryIndexer().updateRegistry();
         //entr = await this.dirEntry(file);
         return "";
     }
@@ -295,6 +298,8 @@ export default class Filessystem {
             else
                 await this.createFile(oldf[i].id, oldf[i].data);
         }
+        var RegistryIndexer =(await import("jassi_localserver/RegistyIndexer")).RegistryIndexer;
+        await new RegistryIndexer().updateRegistry();
         return "";
     }
 }

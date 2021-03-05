@@ -1,7 +1,7 @@
 {
 	"modules": {
 		"jassi":"jassi",
-		"jassi_report": "https://uwei.github.io/jassijs/dist/jassi_report.js",
+		"jassi_report": "jassi_report",
 		"jassi_editor": "jassi_editor",
 		"jassi_localserver": "jassi_localserver",
 		"local": "local",

@@ -41,7 +41,7 @@ RemoteProtocol.prototype.exec = async function (config, ob) {
         }
 
     }
-    if (local.indexOf(clname) > -1) {
+    if (local.indexOf(clname) > -1||clname.startsWith("local")) {
         var sret = await localExec(JSON.parse(config.data));
         ret = new RemoteProtocol().stringify(sret);
         if (ret === undefined)

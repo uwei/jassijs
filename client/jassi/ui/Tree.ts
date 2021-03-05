@@ -334,7 +334,7 @@ export class Tree extends Component {
         for (var x = 0; x < keys.length; x++) {
             var n = await this._readNodeFromKey(keys[x]);
             if (n) {
-                n.setExpanded(true);
+                await n.setExpanded(true);
                 all.push(n);
             }
         }

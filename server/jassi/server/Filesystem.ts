@@ -238,6 +238,7 @@ export default class Filesystem {
         } catch (ex) {
             return ex.message;
         }
+        await new ServerIndexer().updateRegistry();
         return "";
     }
 
@@ -258,6 +259,7 @@ export default class Filesystem {
         } catch (ex) {
             return ex.message;
         }
+        await new ServerIndexer().updateRegistry();
         return "";
     }
     /**

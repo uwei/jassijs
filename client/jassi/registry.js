@@ -806,7 +806,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Tree.ts": {
-		"date": 1614710530324,
+		"date": 1614961346455,
 		"jassi.ui.TreeEditorPropertiesMulti": {},
 		"jassi.ui.TreeEditorProperties": {},
 		"jassi.ui.Tree": {

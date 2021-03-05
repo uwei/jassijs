@@ -132,7 +132,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
             return root;
         }
         async createFile(filename, content) {
-            return await this.saveFile(filename, content);
+            return await this.saveFiles([filename], [content], false);
         }
         async saveFile(filename, content) {
             return await this.saveFiles([filename], [content]);
@@ -143,7 +143,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
             var tsfiles = [];
             for (let x = 0; x < fileNames.length; x++) {
                 let fname = fileNames[x];
-                if (fname.endsWith(".js"))
+                if (fname.endsWith(".ts"))
                     tsfiles.push(fname);
                 let exists = await this.loadFileEntry(fname);
                 if (exists) {
@@ -247,6 +247,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                 store.delete(entr[i].id);
                 await new Promise((resolve) => { transaction.oncomplete = resolve; });
             }
+            var RegistryIndexer = (await new Promise((resolve_2, reject_2) => { require(["jassi_localserver/RegistyIndexer"], resolve_2, reject_2); })).RegistryIndexer;
+            await new RegistryIndexer().updateRegistry();
             //entr = await this.dirEntry(file);
             return "";
         }
@@ -255,7 +257,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
          */
         async zip(directoryname, serverdir = undefined, context = undefined) {
             //@ts-ignore
-            var JSZip = (await new Promise((resolve_2, reject_2) => { require(["jassi_localserver/ext/jszip"], resolve_2, reject_2); })).default;
+            var JSZip = (await new Promise((resolve_3, reject_3) => { require(["jassi_localserver/ext/jszip"], resolve_3, reject_3); })).default;
             if (serverdir)
                 throw new Error("serverdir is unsupported on localserver");
             var zip = new JSZip();
@@ -290,6 +292,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                 else
                     await this.createFile(oldf[i].id, oldf[i].data);
             }
+            var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassi_localserver/RegistyIndexer"], resolve_4, reject_4); })).RegistryIndexer;
+            await new RegistryIndexer().updateRegistry();
             return "";
         }
     };

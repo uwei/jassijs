@@ -223,6 +223,7 @@ class Filesystem {
         catch (ex) {
             return ex.message;
         }
+        await new RegistryIndexer_1.ServerIndexer().updateRegistry();
         return "";
     }
     /**
@@ -243,6 +244,7 @@ class Filesystem {
         catch (ex) {
             return ex.message;
         }
+        await new RegistryIndexer_1.ServerIndexer().updateRegistry();
         return "";
     }
     /**
