@@ -9,7 +9,7 @@ RemoteProtocol.prototype.exec = async function (config, ob) {
     var DBObject = await classes.loadClass("jassi.remote.DBObject");
     var ret;
     //
-    if (clname === "jassi.remote.Server") {
+   /* if (clname === "jassi.remote.Server") {
         var tst = JSON.parse(config.data);
         if (tst.method === "dir") {
             var retserver = JSON.parse(await $.ajax(config));
@@ -41,13 +41,13 @@ RemoteProtocol.prototype.exec = async function (config, ob) {
         }
 
     }
-    if (local.indexOf(clname) > -1||clname.startsWith("local")) {
+    if (local.indexOf(clname) > -1||clname.startsWith("local")) {*/
         var sret = await localExec(JSON.parse(config.data));
         ret = new RemoteProtocol().stringify(sret);
         if (ret === undefined)
             ret = "$$undefined$$";
-    } else
-        ret = await $.ajax(config);
+   /* } else
+        ret = await $.ajax(config);*/
     return ret;
 }
 export async function localExec(prot: RemoteProtocol, context: Context = undefined) {
