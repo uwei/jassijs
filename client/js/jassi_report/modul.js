@@ -13,6 +13,7 @@ define(["require", "exports"], function (require, exports) {
             shim: {
                 'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
                 "vfs_fonts": ["pdfMake"]
+                //"pdfMake":["vfs_fonts"]
             },
         }
     };

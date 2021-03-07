@@ -18,7 +18,9 @@
           }
       }
     });*/
-define("jassi_report/ext/pdfmake",['pdfmake'],function(ttt){
+define("jassi_report/ext/pdfmake",['pdfMake',"vfs_fonts"],function(ttt,vfs){
+        var fonts=require("vfs_fonts");
+
             return {
                 default:pdfMake
             }

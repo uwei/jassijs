@@ -85,6 +85,7 @@ async function run() {
         mods.push(key + "/modul");
     }
     var startlib = ["jassi/jassi"];
+
     require(mods, function (...res) {
         for (let x = 0; x < res.length; x++) {
             if (res[x].default.css) {

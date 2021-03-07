@@ -1,9 +1,11 @@
 {
+	"modalt":{
+		"jassi_localserver": "jassi_localserver"
+	},
 	"modules": {
 		"jassi":"jassi",
 		"jassi_report": "jassi_report",
 		"jassi_editor": "jassi_editor",
-		"jassi_localserver": "jassi_localserver",
 		"local": "local",
 		"demo": "demo",
 		"northwind":"northwind",
