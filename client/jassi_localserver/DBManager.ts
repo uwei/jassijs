@@ -1,3 +1,4 @@
+//@ts-ignore
 import { ConnectionOptions, createConnection, getConnection, SaveOptions, FindConditions, FindOneOptions, ObjectType, ObjectID, FindManyOptions, Connection, SelectQueryBuilder, Brackets, EntitySchema, getMetadataArgsStorage, Entity } from "typeorm";
 import { classes } from "jassi/remote/Classes";
 
@@ -6,6 +7,7 @@ import { DBObject } from "jassi/remote/DBObject";
 import { ParentRightProperties } from "jassi/remote/security/Rights";
 import { User } from "jassi/remote/security/User";
 import { Context } from "jassi/remote/RemoteObject";
+import { $Class } from "jassi/remote/Jassi";
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
 
@@ -21,6 +23,7 @@ var _initrunning = undefined;
 /**
  * Database access with typeorm
  */
+@$Class("jassi_localserver.DBManager")
 export class DBManager {
   static async getConOpts(): Promise<ConnectionOptions> {
     var stype: string = "postgres";
@@ -33,6 +36,7 @@ export class DBManager {
     //this is the default way: define an environment var DATABASSE_URL
     //type://user:password@hostname:port/database
     //eg: postgres://abcknhlveqwqow:polc78b98e8cd7168d35a66e392d2de6a8d5710e854c084ff47f90643lce2876@ec2-174-102-251-1.compute-1.amazonaws.com:5432/dcpqmp4rcmu182
+    //@ts-ignore
     var test = process.env.DATABASE_URL;
     if (test !== undefined) {
   
@@ -65,7 +69,7 @@ export class DBManager {
       "username": suser,
       "password": spass,
       "database": sdb,
-      "synchronize": true,
+      //"synchronize": true,
       "logging": false,
       "entities": dbclasses,
       //"js/client/remote/de/**/*.js"
@@ -93,14 +97,14 @@ export class DBManager {
         Object.freeze(DBManager);
         _initrunning = createConnection(opts);
         await _initrunning;
-        await _instance.mySync();
+       
       } catch (err1) {
         try {
           _initrunning = undefined;
           opts["ssl"] = true;//heroku need this
           _initrunning = createConnection(opts);
           await _initrunning;
-          await _instance.mySync();
+          
         } catch (err) {
           console.log("DB corrupt - revert the last change");
           _instance = undefined;
@@ -115,8 +119,12 @@ export class DBManager {
           }
         }
       }
-
-
+      try{
+        await _instance.mySync();
+      }catch(err){
+        console.log("DB Schema could not be saved");
+        throw err;
+      }
     }
     //wait for connection ready
     await _initrunning;
@@ -127,6 +135,7 @@ export class DBManager {
 
   private async mySync() {
     var con = getConnection();
+    //@ts-ignore
     var schem = await import("typeorm/schema-builder/RdbmsSchemaBuilder");
     var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
     schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"] = async function () {
@@ -154,10 +163,7 @@ export class DBManager {
 
     //con.driver.
   }
-  public static async destroyConnection() {
-    if (_instance !== undefined)
-      await getConnection().close();
-    _instance = undefined;
+  public static async clearMetadata() {
     DBManager.clearArray(getMetadataArgsStorage().checks);
     DBManager.clearArray(getMetadataArgsStorage().columns);
     DBManager.clearArray(getMetadataArgsStorage().discriminatorValues);
@@ -181,6 +187,13 @@ export class DBManager {
     DBManager.clearArray(getMetadataArgsStorage().transactionRepositories);
     DBManager.clearArray(getMetadataArgsStorage().trees);
     DBManager.clearArray(getMetadataArgsStorage().uniques);
+  }
+  
+  public static async destroyConnection() {
+    if (_instance !== undefined)
+      await getConnection().close();
+    _instance = undefined;
+   DBManager.clearMetadata();
 
   }
   private static clearArray(arr: any[]) {
@@ -346,7 +359,7 @@ export class DBManager {
     if (ret === undefined || ret.length === 0)
       return undefined;
     else
-      return ret[0];
+      return <Entity> ret[0];
     //return this.connection().manager.findOne(entityClass,id,options);
     // else
     //return this.connection().manager.findOne(entityClass, p1, p2);

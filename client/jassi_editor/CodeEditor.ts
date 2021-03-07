@@ -157,20 +157,32 @@ export class CodeEditor extends Panel {
 
 
 
-
+    private async _save(code) {
+        await new Server().saveFile(this._file, code);
+        var test = classes.getClass("jassi_localserver.DBManager");
+        var reload = true;
+        if (test) {
+            var dbobjects = await registry.getJSONData("$DBObject");
+            dbobjects.forEach((data) => {
+                if (data.filename === this._file)
+                    reload = false;
+            });
+        }
+        if (reload) {
+            var f = this._file.replace(".ts", "");
+            new Reloader().reloadJS(f);
+        }
+        if (code.indexOf("@$") > -1) {
+            registry.reload();
+        }
+    }
     /**
     * save the code to server
     */
     save() {
         var code = this._codePanel.value;
         var _this = this;
-        new Server().saveFile(this._file, code).then(function () {
-            var f = _this._file.replace(".ts", "");
-            new Reloader().reloadJS(f);
-            if (code.indexOf("@$") > -1) {
-                registry.reload();
-            }
-        });
+        this._save(code);
 
     }
 
@@ -293,7 +305,7 @@ export class CodeEditor extends Panel {
         var lines = code.split("\n");
         var _this = this;
         var breakpoints = _this._codePanel.getBreakpoints();
-        var filename=_this._file.replace(".ts","$temp.ts");
+        var filename = _this._file.replace(".ts", "$temp.ts");
         await jassi.debugger.removeBreakpointsForFile(filename);
         for (var line in breakpoints) {
             if (breakpoints[line]) {
@@ -358,11 +370,11 @@ export class CodeEditor extends Panel {
 
         //@ts-ignore 
         var tss = await import("jassi_editor/util/Typescript");
-        var settings=Typescript.compilerSettings;
-        settings["inlineSourceMap"]=true;
-        settings["inlineSources"]=true;
+        var settings = Typescript.compilerSettings;
+        settings["inlineSourceMap"] = true;
+        settings["inlineSources"] = true;
         var files = await tss.default.transpile(file + ".ts", code);
-        
+
         var codets = -1;
         var codemap = -1;
         var codejs = -1;
@@ -377,30 +389,30 @@ export class CodeEditor extends Panel {
                 codejs = x;
             }
         }
-      /*  var all = JSON.parse(files.contents[codemap]);
-        all["sourcesContent"] = [files.contents[codets]];
-        files.contents[codemap] = JSON.stringify(all);
-        var b64 = btoa(unescape(encodeURIComponent(files.contents[codemap])));
-        var pos = files.contents[codejs].indexOf("//" + "# sourceMappingURL=");
-        files.contents[codejs] = files.contents[codejs].substring(0, pos);
-        files.contents[codejs] = files.contents[codejs] + "//" + "# sourceMappingURL=data:application/json;charset=utf8;base64," + b64;
-        */
-        const channel = new MessageChannel(); 
+        /*  var all = JSON.parse(files.contents[codemap]);
+          all["sourcesContent"] = [files.contents[codets]];
+          files.contents[codemap] = JSON.stringify(all);
+          var b64 = btoa(unescape(encodeURIComponent(files.contents[codemap])));
+          var pos = files.contents[codejs].indexOf("//" + "# sourceMappingURL=");
+          files.contents[codejs] = files.contents[codejs].substring(0, pos);
+          files.contents[codejs] = files.contents[codejs] + "//" + "# sourceMappingURL=data:application/json;charset=utf8;base64," + b64;
+          */
+        const channel = new MessageChannel();
 
-        var ret=new Promise((res, rej) => {
+        var ret = new Promise((res, rej) => {
             channel.port1.onmessage = (evt) => {
                 channel.port1.close();
                 res(evt);
             };
         });
-        let abspath=location.origin+location.pathname;
-        abspath=abspath.substring(0,abspath.lastIndexOf("/")+1);
+        let abspath = location.origin + location.pathname;
+        abspath = abspath.substring(0, abspath.lastIndexOf("/") + 1);
         navigator.serviceWorker.controller.postMessage({
             type: 'SAVE_FILE',
-            filename: abspath+files.fileNames[codejs],
+            filename: abspath + files.fileNames[codejs],
             code: files.contents[codejs]
         }, [channel.port2]);
-        var test=await ret;
+        var test = await ret;
     }
     /**
      * execute the current code
@@ -425,10 +437,10 @@ export class CodeEditor extends Panel {
         code = code;
         var _this = this;
         var tmp = new Date().getTime();
-        var jsfile = _this._file.replace(".ts", "")+"$temp";
+        var jsfile = _this._file.replace(".ts", "") + "$temp";
         //await new Server().saveFile("tmp/" + _this._file, code);
         //only local - no TS File in Debugger
-        await this.saveTempFile( jsfile, code);
+        await this.saveTempFile(jsfile, code);
 
         try { requirejs.undef("js/" + jsfile + ".js"); } catch (ex) { };
         var onload = function (data) {
@@ -596,7 +608,7 @@ export class CodeEditor extends Panel {
     undo() {
         this._codePanel.undo();
     }
- 
+
 }
 
 export async function test() {

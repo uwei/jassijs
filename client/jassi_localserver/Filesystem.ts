@@ -3,6 +3,7 @@ import { Context } from "jassi/remote/RemoteObject";
 import { Reloader } from "jassi/util/Reloader";
 //@ts-ignore force load this class
 import { DBManager } from "jassi/server/DBManager";
+import registry from "jassi/remote/Registry";
 
 
 class FileEntry {
@@ -54,10 +55,10 @@ export default class Filessystem {
                     if (fname === ent)
                         include = false;
                 });
-                
+
             }
-            if (include&&!all[x].isDirectory)
-                    ret.push(fname);
+            if (include && !all[x].isDirectory)
+                ret.push(fname);
         }
         return ret;
     }
@@ -134,7 +135,7 @@ export default class Filessystem {
         return root;
     }
     public async createFile(filename: string, content: any) {
-        return await this.saveFiles([filename], [content],false);
+        return await this.saveFiles([filename], [content], false);
     }
     async saveFile(filename, content) {
         return await this.saveFiles([filename], [content]);
@@ -143,10 +144,17 @@ export default class Filessystem {
         var db = await Filessystem.getDB();
         var rollbackcontents: string[] = [];
         var tsfiles = [];
+        var dbschemaHasChanged = false;
+        var dbobjects = await registry.getJSONData("$DBObject");
+
         for (let x = 0; x < fileNames.length; x++) {
             let fname = fileNames[x];
             if (fname.endsWith(".ts"))
-                tsfiles.push(fname);
+                tsfiles.push(fname.replace(".ts", ""));
+            dbobjects.forEach((test) => {
+                if (test.filename === fname)
+                    dbschemaHasChanged = true;
+            });
             let exists = await this.loadFileEntry(fname);
             if (exists) {
                 rollbackcontents.push(exists.data);
@@ -169,27 +177,25 @@ export default class Filessystem {
                     store.add(el);
                 await new Promise((resolve) => { transaction.oncomplete = resolve })
             }
-            var spath = fname.split("/");
-            if (spath.length > 1 && spath[1].toLowerCase() === "remote" && fname.toLowerCase().endsWith(".ts")) {
-                var man = await DBManager.destroyConnection();
-            }
-
         }
-        if(fileNames.length===1&&fileNames[0].endsWith("/registry.js"))//no indexer save recurse
+        if (fileNames.length === 1 && fileNames[0].endsWith("/registry.js"))//no indexer save recurse
             return;
-        var RegistryIndexer =(await import("jassi_localserver/RegistyIndexer")).RegistryIndexer;
+        var RegistryIndexer = (await import("jassi_localserver/RegistryIndexer")).RegistryIndexer;
         await new RegistryIndexer().updateRegistry();
 
         if (rollbackonerror) {
             try {
-                //reloadjs
-                for (let x = 0; x < tsfiles.length; x++) {
-                    var f = tsfiles[x].replace(".ts", "");
-                    new Reloader().reloadJS(f);
+                new Reloader().reloadJSAll(tsfiles);
+                if (dbschemaHasChanged) {
+                    var man = await DBManager.destroyConnection();
+                    await DBManager.get();
                 }
-                await DBManager.get();
             } catch (err) {
                 console.error(err);
+                if (dbschemaHasChanged) {
+                    DBManager.destroyConnection();
+                    await DBManager.get();
+                }
                 var restore = await this.saveFiles(fileNames, rollbackcontents, false);
                 return err + "DB corrupt changes are reverted " + restore;
             }
@@ -251,7 +257,7 @@ export default class Filessystem {
             store.delete(entr[i].id);
             await new Promise((resolve) => { transaction.oncomplete = resolve })
         }
-        var RegistryIndexer =(await import("jassi_localserver/RegistyIndexer")).RegistryIndexer;
+        var RegistryIndexer = (await import("jassi_localserver/RegistryIndexer")).RegistryIndexer;
         await new RegistryIndexer().updateRegistry();
         //entr = await this.dirEntry(file);
         return "";
@@ -298,7 +304,7 @@ export default class Filessystem {
             else
                 await this.createFile(oldf[i].id, oldf[i].data);
         }
-        var RegistryIndexer =(await import("jassi_localserver/RegistyIndexer")).RegistryIndexer;
+        var RegistryIndexer = (await import("jassi_localserver/RegistryIndexer")).RegistryIndexer;
         await new RegistryIndexer().updateRegistry();
         return "";
     }

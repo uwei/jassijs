@@ -16,16 +16,16 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
         constructor() {
             super();
         }
-        static async find(options = undefined, context = undefined) {
-            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this.find, options, context);
-            }
-            else {
-                //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
-                return man.find(context, this, options);
-            }
-        }
+        /* static async find(options = undefined,context:Context=undefined): Promise<any[]> {
+             if (!context?.isServer) {
+                 return await this.call(this.find, options,context);
+             }
+             else {
+                 //@ts-ignore
+                 var man = await (await import("jassi/server/DBManager")).DBManager.get();
+                 return man.find(context,this, options);
+             }
+         }*/
         async hallo(num) {
             if (!Jassi_1.default.isServer) {
                 var ret = await this.call(this, this.hallo, num);

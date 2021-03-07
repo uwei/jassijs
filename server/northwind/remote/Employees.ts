@@ -49,7 +49,7 @@ export class Employees extends DBObject {
     BirthDate: Date;
     @Column({ nullable: true })
     HireDate: Date;
-    static async find(options = undefined,context:Context=undefined): Promise<any[]> {
+   /* static async find(options = undefined,context:Context=undefined): Promise<any[]> {
         if (!context?.isServer) {
             return await this.call(this.find, options,context);
         }
@@ -58,7 +58,7 @@ export class Employees extends DBObject {
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
             return man.find(context,this, options);
         }
-    }
+    }*/
     async hallo(num) {
         if (!jassi.isServer) {
             var ret = await this.call(this, this.hallo, num);

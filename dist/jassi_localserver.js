@@ -7,8 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/remote/Classes", "jassi/remote/Registry", "jassi/remote/security/User"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1) {
+define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/remote/Classes", "jassi/remote/Registry", "jassi/remote/security/User", "jassi/remote/Jassi"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, Jassi_1) {
     "use strict";
+    var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBManager = void 0;
     const parser = require('js-sql-parser');
@@ -18,7 +19,7 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
     /**
      * Database access with typeorm
      */
-    class DBManager {
+    let DBManager = DBManager_1 = class DBManager {
         static async getConOpts() {
             var stype = "postgres";
             var shost = "localhost";
@@ -30,6 +31,7 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
             //this is the default way: define an environment var DATABASSE_URL
             //type://user:password@hostname:port/database
             //eg: postgres://abcknhlveqwqow:polc78b98e8cd7168d35a66e392d2de6a8d5710e854c084ff47f90643lce2876@ec2-174-102-251-1.compute-1.amazonaws.com:5432/dcpqmp4rcmu182
+            //@ts-ignore
             var test = process.env.DATABASE_URL;
             if (test !== undefined) {
                 var all = test.split(":");
@@ -57,7 +59,7 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
                 "username": suser,
                 "password": spass,
                 "database": sdb,
-                "synchronize": true,
+                //"synchronize": true,
                 "logging": false,
                 "entities": dbclasses,
             };
@@ -65,14 +67,13 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
         }
         static async get() {
             if (_instance === undefined) {
-                _instance = new DBManager();
+                _instance = new DBManager_1();
                 var test = typeorm_1.getMetadataArgsStorage();
                 try {
-                    var opts = await DBManager.getConOpts();
-                    Object.freeze(DBManager);
+                    var opts = await DBManager_1.getConOpts();
+                    Object.freeze(DBManager_1);
                     _initrunning = typeorm_1.createConnection(opts);
                     await _initrunning;
-                    await _instance.mySync();
                 }
                 catch (err1) {
                     try {
@@ -80,7 +81,6 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
                         opts["ssl"] = true; //heroku need this
                         _initrunning = typeorm_1.createConnection(opts);
                         await _initrunning;
-                        await _instance.mySync();
                     }
                     catch (err) {
                         console.log("DB corrupt - revert the last change");
@@ -96,6 +96,13 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
                         }
                     }
                 }
+                try {
+                    await _instance.mySync();
+                }
+                catch (err) {
+                    console.log("DB Schema could not be saved");
+                    throw err;
+                }
             }
             //wait for connection ready
             await _initrunning;
@@ -103,6 +110,7 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
         }
         async mySync() {
             var con = typeorm_1.getConnection();
+            //@ts-ignore
             var schem = await new Promise((resolve_1, reject_1) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_1, reject_1); });
             var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
             schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"] = async function () {
@@ -127,33 +135,36 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
             //throw schem.RdbmsSchemaBuilder.prototype["_error_"]; 
             //con.driver.
         }
+        static async clearMetadata() {
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().checks);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().columns);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().discriminatorValues);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().embeddeds);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entityListeners);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entityRepositories);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entitySubscribers);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().exclusions);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().tables);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().generations);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().indices);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().inheritances);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().joinColumns);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().joinTables);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().namingStrategies);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relationCounts);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relationIds);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relations);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().tables);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().transactionEntityManagers);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().transactionRepositories);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().trees);
+            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().uniques);
+        }
         static async destroyConnection() {
             if (_instance !== undefined)
                 await typeorm_1.getConnection().close();
             _instance = undefined;
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().checks);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().columns);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().discriminatorValues);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().embeddeds);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().entityListeners);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().entityRepositories);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().entitySubscribers);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().exclusions);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().tables);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().generations);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().indices);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().inheritances);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().joinColumns);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().joinTables);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().namingStrategies);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().relationCounts);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().relationIds);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().relations);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().tables);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().transactionEntityManagers);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().transactionRepositories);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().trees);
-            DBManager.clearArray(typeorm_1.getMetadataArgsStorage().uniques);
+            DBManager_1.clearMetadata();
         }
         static clearArray(arr) {
             while (arr.length > 0) {
@@ -167,7 +178,7 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
             return typeorm_1.getConnection();
         }
         async remove(context, entity) {
-            var test = await (await DBManager.get()).checkParentRight(context, entity, [entity["id"]]);
+            var test = await (await DBManager_1.get()).checkParentRight(context, entity, [entity["id"]]);
             if (test === false)
                 throw new Error("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
             await this.connection().manager.remove(entity);
@@ -334,7 +345,7 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
             user.email = username;
             user.password = password;
             //first user would be admin
-            if (await (await DBManager.get()).connection().manager.findOne(User_1.User) === undefined) {
+            if (await (await DBManager_1.get()).connection().manager.findOne(User_1.User) === undefined) {
                 user.isAdmin = true;
             }
             //password is encrypted when saving
@@ -347,7 +358,7 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
                 resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
               });
             })*/
-            await (await DBManager.get()).save(context, user);
+            await (await DBManager_1.get()).save(context, user);
             delete user.password;
             return user;
         }
@@ -403,7 +414,11 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
             var test = await ret.getCount();
             return test === ids.length;
         }
-    }
+    };
+    DBManager = DBManager_1 = __decorate([
+        Jassi_1.$Class("jassi_localserver.DBManager"),
+        __metadata("design:paramtypes", [])
+    ], DBManager);
     exports.DBManager = DBManager;
     class RelationInfo {
         constructor(className, dbmanager) {
@@ -691,6 +706,7 @@ define("jassi_localserver/DatabaseSchema", ["require", "exports", "jassi/remote/
     }
     function Entity(...param) {
         //DEntity(param)(pclass, ...params);
+        console.log("Ent:" + JSON.stringify(param));
         return addDecorater("Entity", typeorm_2.Entity(...param), param);
     }
     exports.Entity = Entity;
@@ -733,7 +749,7 @@ define("jassi_localserver/DatabaseSchema", ["require", "exports", "jassi/remote/
 });
 //export function Entity(options?: EntityOptions): Function;
 //export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
-define("jassi_localserver/Filessystem", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_1) {
+define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jassi/server/DBManager", "jassi/remote/Registry"], function (require, exports, Jassi_2, Reloader_1, DBManager_2, Registry_2) {
     "use strict";
     var Filessystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -753,6 +769,38 @@ define("jassi_localserver/Filessystem", ["require", "exports", "jassi/remote/Jas
                 req.onsuccess = (ev) => { resolve(ev.target["result"]); };
             });
             return Filessystem_1.db;
+        }
+        /**
+         * exists a directory?
+         * @param path
+         */
+        async existsDirectory(path) {
+            var test = await this.dirEntry(path);
+            return test.length > 0;
+        }
+        async dirFiles(dir, extensions, ignore = []) {
+            var ret = [];
+            var all = await this.dirEntry(dir);
+            for (let x = 0; x < all.length; x++) {
+                let fname = all[x].id;
+                var include = true;
+                if (extensions) {
+                    include = false;
+                    extensions.forEach((ent) => {
+                        if (fname.endsWith(ent))
+                            include = true;
+                    });
+                }
+                if (ignore) {
+                    ignore.forEach((ent) => {
+                        if (fname === ent)
+                            include = false;
+                    });
+                }
+                if (include && !all[x].isDirectory)
+                    ret.push(fname);
+            }
+            return ret;
         }
         async dirEntry(curdir = "") {
             var db = await Filessystem_1.getDB();
@@ -829,28 +877,70 @@ define("jassi_localserver/Filessystem", ["require", "exports", "jassi/remote/Jas
             return root;
         }
         async createFile(filename, content) {
-            return await this.saveFile(filename, content);
+            return await this.saveFiles([filename], [content], false);
         }
         async saveFile(filename, content) {
             return await this.saveFiles([filename], [content]);
         }
-        async saveFiles(fileNames, contents) {
+        async saveFiles(fileNames, contents, rollbackonerror = true) {
             var db = await Filessystem_1.getDB();
+            var rollbackcontents = [];
+            var tsfiles = [];
+            var dbschemaHasChanged = false;
+            var dbobjects = await Registry_2.default.getJSONData("$DBObject");
             for (let x = 0; x < fileNames.length; x++) {
                 let fname = fileNames[x];
+                if (fname.endsWith(".ts"))
+                    tsfiles.push(fname.replace(".ts", ""));
+                dbobjects.forEach((test) => {
+                    if (test.filename === fname)
+                        dbschemaHasChanged = true;
+                });
                 let exists = await this.loadFileEntry(fname);
-                let data = contents[x];
-                let transaction = db.transaction('files', 'readwrite');
-                const store = transaction.objectStore('files');
-                var el = new FileEntry();
-                el.id = fname;
-                el.data = data;
-                el.date = Date.now();
-                if (exists)
-                    store.put(el);
-                else
-                    store.add(el);
-                await new Promise((resolve) => { transaction.oncomplete = resolve; });
+                if (exists) {
+                    rollbackcontents.push(exists.data);
+                }
+                else {
+                    rollbackcontents.push(undefined); //this file would be killed at revert
+                }
+                if (contents[x] === undefined)
+                    await this.remove(fname); //remove file on revert
+                else {
+                    let data = contents[x];
+                    let transaction = db.transaction('files', 'readwrite');
+                    const store = transaction.objectStore('files');
+                    var el = new FileEntry();
+                    el.id = fname;
+                    el.data = data;
+                    el.date = Date.now();
+                    if (exists)
+                        store.put(el);
+                    else
+                        store.add(el);
+                    await new Promise((resolve) => { transaction.oncomplete = resolve; });
+                }
+            }
+            if (fileNames.length === 1 && fileNames[0].endsWith("/registry.js")) //no indexer save recurse
+                return;
+            var RegistryIndexer = (await new Promise((resolve_2, reject_2) => { require(["jassi_localserver/RegistryIndexer"], resolve_2, reject_2); })).RegistryIndexer;
+            await new RegistryIndexer().updateRegistry();
+            if (rollbackonerror) {
+                try {
+                    new Reloader_1.Reloader().reloadJSAll(tsfiles);
+                    if (dbschemaHasChanged) {
+                        var man = await DBManager_2.DBManager.destroyConnection();
+                        await DBManager_2.DBManager.get();
+                    }
+                }
+                catch (err) {
+                    console.error(err);
+                    if (dbschemaHasChanged) {
+                        DBManager_2.DBManager.destroyConnection();
+                        await DBManager_2.DBManager.get();
+                    }
+                    var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                    return err + "DB corrupt changes are reverted " + restore;
+                }
             }
             return "";
         }
@@ -907,6 +997,8 @@ define("jassi_localserver/Filessystem", ["require", "exports", "jassi/remote/Jas
                 store.delete(entr[i].id);
                 await new Promise((resolve) => { transaction.oncomplete = resolve; });
             }
+            var RegistryIndexer = (await new Promise((resolve_3, reject_3) => { require(["jassi_localserver/RegistryIndexer"], resolve_3, reject_3); })).RegistryIndexer;
+            await new RegistryIndexer().updateRegistry();
             //entr = await this.dirEntry(file);
             return "";
         }
@@ -914,7 +1006,8 @@ define("jassi_localserver/Filessystem", ["require", "exports", "jassi/remote/Jas
          * zip a directory
          */
         async zip(directoryname, serverdir = undefined, context = undefined) {
-            var JSZip = (await new Promise((resolve_2, reject_2) => { require(["jassi_localserver/ext/jszip"], resolve_2, reject_2); })).default;
+            //@ts-ignore
+            var JSZip = (await new Promise((resolve_4, reject_4) => { require(["jassi_localserver/ext/jszip"], resolve_4, reject_4); })).default;
             if (serverdir)
                 throw new Error("serverdir is unsupported on localserver");
             var zip = new JSZip();
@@ -949,11 +1042,13 @@ define("jassi_localserver/Filessystem", ["require", "exports", "jassi/remote/Jas
                 else
                     await this.createFile(oldf[i].id, oldf[i].data);
             }
+            var RegistryIndexer = (await new Promise((resolve_5, reject_5) => { require(["jassi_localserver/RegistryIndexer"], resolve_5, reject_5); })).RegistryIndexer;
+            await new RegistryIndexer().updateRegistry();
             return "";
         }
     };
     Filessystem = Filessystem_1 = __decorate([
-        Jassi_1.$Class("jassi_localserver.Filessystem")
+        Jassi_2.$Class("jassi_localserver.Filessystem")
     ], Filessystem);
     exports.default = Filessystem;
     async function test() {
@@ -990,51 +1085,225 @@ define("local/registry",["require"], function(require) {
     }
     exports.test = test;
 });
-define("jassi/util/DatabaseSchema", ["jassi_localserver/DatabaseSchema"], function (to) {
-    return to;
-});
-define("jassi/server/DoRemoteProtocol", ["jassi_localserver/LocalProtocol"], function (locprot) {
-    return {
-        _execute: async function (protext, request, context) {
-            var prot = JSON.parse(protext);
-            return await locprot.localExec(prot, context);
+define("jassi_localserver/Indexer", ["require", "exports", "jassi/server/Filesystem", "jassi_editor/util/Typescript"], function (require, exports, Filesystem_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Indexer = void 0;
+    class Indexer {
+        async updateModul(root, modul, isserver) {
+            var path = root + (root === "" ? "" : "/") + modul;
+            //create empty if needed
+            var text = "{}";
+            if (await this.fileExists(path + "/registry.js")) {
+                text = await this.readFile(path + "/registry.js");
+                if (!isserver) {
+                    text = text.substring(text.indexOf("default:") + 8);
+                    text = text.substring(0, text.lastIndexOf("}") - 1);
+                    text = text.substring(0, text.lastIndexOf("}") - 1);
+                }
+                else {
+                    text = text.substring(text.indexOf("default=") + 8);
+                }
+            }
+            var index = JSON.parse(text);
+            //remove deleted files
+            for (var key in index) {
+                if (!(await this.fileExists(path + "/" + key))) {
+                    delete index[key];
+                }
+            }
+            var jsFiles = await new Filesystem_1.default().dirFiles(path, [".ts"], ["node_modules"]);
+            for (let x = 0; x < jsFiles.length; x++) {
+                var jsFile = jsFiles[x];
+                var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));
+                if (fileName === undefined)
+                    continue;
+                var entry = index[fileName];
+                if (entry === undefined) {
+                    entry = {};
+                    entry.date = undefined;
+                    index[fileName] = entry;
+                }
+                if (await this.fileExists(root + (root === "" ? "" : "/") + fileName)) {
+                    var dat = await this.getFileTime(root + (root === "" ? "" : "/") + fileName);
+                    if (dat !== entry.date) {
+                        var text = await this.readFile(root + (root === "" ? "" : "/") + fileName);
+                        var sourceFile = ts.createSourceFile('hallo.ts', text, ts.ScriptTarget.ES5, true);
+                        var outDecorations = [];
+                        entry = {};
+                        entry.date = undefined;
+                        index[fileName] = entry;
+                        this.collectAnnotations(sourceFile, entry);
+                        // findex(Filesystem.path + "/" + jsFile);
+                        entry.date = dat;
+                    }
+                }
+            }
+            if (!isserver) { //write client
+                var text = JSON.stringify(index, undefined, "\t");
+                text = "//this file is autogenerated don't modify\n" +
+                    'define("' + modul + '/registry",["require"], function(require) {\n' +
+                    ' return {\n' +
+                    '  default: ' + text + "\n" +
+                    ' }\n' +
+                    '});';
+                var jsdir = "js/" + path;
+                if (Filesystem_1.default.path !== undefined)
+                    jsdir = path.replace(Filesystem_1.default.path, Filesystem_1.default.path + "/js");
+                if (!(await this.fileExists(jsdir)))
+                    await this.createDirectory(jsdir);
+                await this.writeFile(jsdir + "/registry.js", text);
+                await this.writeFile(path + "/registry.js", text);
+            }
+            else { //write server
+                var modules = JSON.parse(await this.readFile("./jassi.json")).modules;
+                for (let smodul in modules) {
+                    if (modul === smodul) {
+                        var text = JSON.stringify(index, undefined, "\t");
+                        text = '"use strict:"\n' +
+                            "//this file is autogenerated don't modify\n" +
+                            'Object.defineProperty(exports, "__esModule", { value: true });\n' +
+                            'exports.default=' + text;
+                        var jsdir = "js/" + modul;
+                        if (!(await this.fileExists(jsdir)))
+                            await this.createDirectory(jsdir);
+                        await this.writeFile(jsdir + "/registry.js", text);
+                        await this.writeFile(modul + "/registry.js", text);
+                    }
+                }
+            }
         }
-    };
+        convertArgument(arg) {
+            if (arg === undefined)
+                return undefined;
+            if (arg.kind === ts.SyntaxKind.ObjectLiteralExpression) {
+                var ret = {};
+                var props = arg.properties;
+                if (props !== undefined) {
+                    for (var p = 0; p < props.length; p++) {
+                        ret[props[p].name.text] = this.convertArgument(props[p].initializer);
+                    }
+                }
+                return ret;
+            }
+            else if (arg.kind === ts.SyntaxKind.StringLiteral) {
+                return arg.text;
+            }
+            else if (arg.kind === ts.SyntaxKind.ArrayLiteralExpression) {
+                let ret = [];
+                for (var p = 0; p < arg.elements.length; p++) {
+                    ret.push(this.convertArgument(arg.elements[p]));
+                }
+                return ret;
+            }
+            else if (arg.kind === ts.SyntaxKind.Identifier) {
+                return arg.text;
+            }
+            else if (arg.kind === ts.SyntaxKind.TrueKeyword) {
+                return true;
+            }
+            else if (arg.kind === ts.SyntaxKind.FalseKeyword) {
+                return false;
+            }
+            else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
+                return Number(arg.text);
+            }
+            throw "Error typ not found";
+        }
+        collectAnnotations(node, outDecorations, depth = 0) {
+            //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);
+            if (node.kind === ts.SyntaxKind.ClassDeclaration) {
+                if (node.decorators !== undefined) {
+                    var dec = {};
+                    var sclass = undefined;
+                    for (let x = 0; x < node.decorators.length; x++) {
+                        var decnode = node.decorators[x];
+                        var ex = decnode.expression;
+                        if (ex.expression === undefined) {
+                            dec[ex.text] = []; //Annotaion without parameter
+                        }
+                        else {
+                            if (ex.expression.text === "$Class")
+                                sclass = this.convertArgument(ex.arguments[0]);
+                            else {
+                                if (dec[ex.expression.text] === undefined) {
+                                    dec[ex.expression.text] = [];
+                                }
+                                for (var a = 0; a < ex.arguments.length; a++) {
+                                    dec[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                }
+                            }
+                        }
+                    }
+                    if (sclass !== undefined)
+                        outDecorations[sclass] = dec;
+                }
+            }
+            depth++;
+            node.getChildren().forEach(c => this.collectAnnotations(c, outDecorations, depth));
+        }
+    }
+    exports.Indexer = Indexer;
 });
-define("jassi/server/Filessystem", ["jassi_localserver/Filessystem"], function (fs) {
-    return fs;
-});
-define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry", "jassi_localserver/DBManager", "jassi_localserver/TypeORMListener"], function (db, Classes_1, Registry_1, dbman, TypeORMListener) {
-    db.DBManager["getConOpts"] = async function () {
-        var dbclasses = [];
-        const initSqlJs = window["SQL"];
-        const SQL = await window["SQL"]({
-            // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
-            // You can omit locateFile completely when running in node
-            locateFile: file => `https://sql.js.org/dist/${file}`
-        });
-        var dbobjects = await Registry_1.default.getJSONData("$DBObject");
-        for (var o = 0; o < dbobjects.length; o++) {
-            var clname = dbobjects[o].classname;
-            try {
+define("jassi_localserver/Installserver", ["require", "exports"], function (require, exports) {
+    "use strict";
+    define("jassi/util/DatabaseSchema", ["jassi_localserver/DatabaseSchema"], function (to) {
+        return to;
+    });
+    define("jassi/server/DoRemoteProtocol", ["jassi_localserver/LocalProtocol"], function (locprot) {
+        return {
+            _execute: async function (protext, request, context) {
+                var prot = JSON.parse(protext);
+                return await locprot.localExec(prot, context);
+            }
+        };
+    });
+    define("jassi/server/Filesystem", ["jassi_localserver/Filesystem"], function (fs) {
+        return fs;
+    });
+    define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry", "jassi_localserver/DBManager", "jassi_localserver/TypeORMListener"], function (db, Classes_1, Registry_1, dbman, TypeORMListener) {
+        db.DBManager["getConOpts"] = async function () {
+            var dbclasses = [];
+            const initSqlJs = window["SQL"];
+            const SQL = await window["SQL"]({
+                // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
+                // You can omit locateFile completely when running in node
+                locateFile: file => `https://sql.js.org/dist/${file}`
+            });
+            var Reloader = (await new Promise((resolve_6, reject_6) => { require(["jassi/util/Reloader"], resolve_6, reject_6); })).Reloader;
+            var dbobjects = await Registry_1.default.getJSONData("$DBObject");
+            var dbfiles = [];
+            for (var o = 0; o < dbobjects.length; o++) {
+                var clname = dbobjects[o].classname;
+                try {
+                    dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
+                    dbclasses.push(await Classes_1.classes.loadClass(clname));
+                }
+                catch (err) {
+                    console.log(err);
+                    throw err;
+                }
+            }
+            db.DBManager.clearMetadata();
+            dbclasses = [];
+            await new Reloader().reloadJS("jassi_localserver/TypeORMListener");
+            await new Reloader().reloadJSAll(dbfiles);
+            for (var o = 0; o < dbobjects.length; o++) {
+                var clname = dbobjects[o].classname;
                 dbclasses.push(await Classes_1.classes.loadClass(clname));
             }
-            catch (err) {
-                console.log(err);
-                throw err;
-            }
-        }
-        var Filessystem = await Classes_1.classes.loadClass("jassi_localserver.Filessystem");
-        var data = await new Filessystem().loadFile("__default.db");
-        var opt = {
-            database: data,
-            type: "sqljs",
-            subscribers: [TypeORMListener.TypeORMListener],
-            "entities": dbclasses
+            var Filessystem = await Classes_1.classes.loadClass("jassi_localserver.Filessystem");
+            var data = await new Filessystem().loadFile("__default.db");
+            var opt = {
+                database: data,
+                type: "sqljs",
+                subscribers: [TypeORMListener.TypeORMListener],
+                "entities": dbclasses
+            };
+            return opt;
         };
-        return opt;
-    };
-    return db;
+        return db;
+    });
 });
 //DatabaseSchema
 define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/RemoteProtocol"], function (require, exports, RemoteProtocol_1) {
@@ -1044,7 +1313,7 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
     RemoteProtocol_1.RemoteProtocol.prototype.exec = async function (config, ob) {
         var clname = JSON.parse(config.data).classname;
         var local = ["jassi.remote.Transaction", "northwind.Employees", "northwind.Customer"];
-        var classes = (await new Promise((resolve_3, reject_3) => { require(["jassi/remote/Classes"], resolve_3, reject_3); })).classes;
+        var classes = (await new Promise((resolve_7, reject_7) => { require(["jassi/remote/Classes"], resolve_7, reject_7); })).classes;
         var DBObject = await classes.loadClass("jassi.remote.DBObject");
         var ret;
         //
@@ -1055,7 +1324,7 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
                 var sret = await localExec(JSON.parse(config.data));
                 for (let i = 0; i < retserver.files.length; i++) {
                     if (retserver.files[i].name === "local") {
-                        retserver.files.splice(i, 1);
+                        //retserver.files.splice(i,1);
                     }
                 }
                 for (let i = 0; i < sret.files.length; i++) {
@@ -1081,7 +1350,7 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
                 return ret;
             }
         }
-        if (local.indexOf(clname) > -1) {
+        if (local.indexOf(clname) > -1 || clname.startsWith("local")) {
             var sret = await localExec(JSON.parse(config.data));
             ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
             if (ret === undefined)
@@ -1092,7 +1361,7 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
         return ret;
     };
     async function localExec(prot, context = undefined) {
-        var classes = (await new Promise((resolve_4, reject_4) => { require(["jassi/remote/Classes"], resolve_4, reject_4); })).classes;
+        var classes = (await new Promise((resolve_8, reject_8) => { require(["jassi/remote/Classes"], resolve_8, reject_8); })).classes;
         var p = new RemoteProtocol_1.RemoteProtocol();
         var C = await classes.loadClass(prot.classname);
         if (context === undefined) {
@@ -1160,14 +1429,55 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
     }
     exports.localExec = localExec;
 });
-define("jassi_localserver/Testserver", ["require", "exports", "de/remote/Kunde", "jassi/remote/Jassi", "typeorm", "de/remote/AR", "de/remote/ARZeile", "jassi/server/DBManager"], function (require, exports, Kunde_1, Jassi_2, typeorm_3, AR_1, ARZeile_1, DBManager_1) {
+define("jassi_localserver/RegistryIndexer", ["require", "exports", "jassi_localserver/Indexer", "jassi/remote/Server", "jassi_localserver/Filesystem", "jassi/remote/Jassi"], function (require, exports, Indexer_1, Server_1, Filesystem_2, Jassi_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.RegistryIndexer = void 0;
+    let RegistryIndexer = class RegistryIndexer extends Indexer_1.Indexer {
+        async updateRegistry() {
+            //client modules
+            var data = await new Server_1.Server().loadFile("jassi.json");
+            var modules = JSON.parse(data).modules;
+            for (var m in modules) {
+                if (!modules[m].endsWith(".js")) { //.js are internet modules
+                    if (await new Filesystem_2.default().existsDirectory(modules[m]))
+                        await this.updateModul("", m, false);
+                }
+            }
+            return;
+        }
+        async writeFile(name, content) {
+            await new Filesystem_2.default().saveFile(name, content);
+        }
+        async createDirectory(name) {
+            await new Filesystem_2.default().createFolder(name);
+            return;
+        }
+        async getFileTime(filename) {
+            var entry = await new Filesystem_2.default().loadFileEntry(filename);
+            return entry.date;
+        }
+        async fileExists(filename) {
+            var test = await new Filesystem_2.default().loadFileEntry(filename);
+            return test !== undefined;
+        }
+        async readFile(filename) {
+            return await new Filesystem_2.default().loadFile(filename);
+        }
+    };
+    RegistryIndexer = __decorate([
+        Jassi_3.$Class("jassi_localserver.RegistryIndexer")
+    ], RegistryIndexer);
+    exports.RegistryIndexer = RegistryIndexer;
+});
+define("jassi_localserver/Testserver", ["require", "exports", "de/remote/Kunde", "jassi/remote/Jassi", "typeorm", "de/remote/AR", "de/remote/ARZeile", "jassi/server/DBManager"], function (require, exports, Kunde_1, Jassi_4, typeorm_3, AR_1, ARZeile_1, DBManager_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     //@$ActionProvider("jassi.base.ActionNode")
     let Testserver = class Testserver {
         static async run() {
-            var man = await DBManager_1.DBManager.get();
+            var man = await DBManager_3.DBManager.get();
             var kd = new Kunde_1.Kunde();
             kd.id = 9;
             await man.save(kd);
@@ -1209,14 +1519,14 @@ define("jassi_localserver/Testserver", ["require", "exports", "de/remote/Kunde",
         }
     };
     Testserver = __decorate([
-        Jassi_2.$Class("jassi_localserver.Testserver")
+        Jassi_4.$Class("jassi_localserver.Testserver")
     ], Testserver);
     async function test() {
         Testserver.run();
     }
     exports.test = test;
 });
-define("jassi_localserver/Testuser", ["require", "exports", "jassi/util/DatabaseSchema", "jassi/remote/DBObject", "jassi/remote/Jassi"], function (require, exports, DatabaseSchema_1, DBObject_1, Jassi_3) {
+define("jassi_localserver/Testuser", ["require", "exports", "jassi/util/DatabaseSchema", "jassi/remote/DBObject", "jassi/remote/Jassi"], function (require, exports, DatabaseSchema_1, DBObject_1, Jassi_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testuser = void 0;
@@ -1236,18 +1546,25 @@ define("jassi_localserver/Testuser", ["require", "exports", "jassi/util/Database
     ], Testuser.prototype, "lastname", void 0);
     Testuser = __decorate([
         DBObject_1.$DBObject(),
-        Jassi_3.$Class("Testuser")
+        Jassi_5.$Class("Testuser")
     ], Testuser);
     exports.Testuser = Testuser;
 });
-define("jassi_localserver/TypeORMListener", ["require", "exports", "jassi/remote/Jassi", "typeorm", "jassi_localserver/Filessystem"], function (require, exports, Jassi_4, typeorm_4, Filessystem_2) {
+define("jassi_localserver/TypeORMListener", ["require", "exports", "jassi/remote/Jassi", "typeorm", "jassi_localserver/Filesystem"], function (require, exports, Jassi_6, typeorm_4, Filesystem_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeORMListener = void 0;
     let TypeORMListener = class TypeORMListener {
         saveDB(event) {
-            var data = event.connection.driver.export();
-            new Filessystem_2.default().saveFile("__default.db", data);
+            if (this.savetimer) {
+                clearTimeout(this.savetimer);
+                this.savetimer = undefined;
+            }
+            this.savetimer = setTimeout(() => {
+                var data = event.connection.driver.export();
+                new Filesystem_3.default().saveFile("__default.db", data);
+                console.log("save DB");
+            }, 300);
         }
         /**
          * Called after entity is loaded.
@@ -1333,7 +1650,7 @@ define("jassi_localserver/TypeORMListener", ["require", "exports", "jassi/remote
     };
     TypeORMListener = __decorate([
         typeorm_4.EventSubscriber(),
-        Jassi_4.$Class("jassi_localserver/TypeORMListener")
+        Jassi_6.$Class("jassi_localserver/TypeORMListener")
     ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
 });
@@ -1364,20 +1681,27 @@ define("jassi_localserver/registry", ["require"], function (require) {
     return {
         default: {
             "jassi_localserver/DatabaseSchema.ts": {
-                "date": 1614290342083
+                "date": 1614967872228
             },
             "jassi_localserver/DBManager.ts": {
-                "date": 1614469272935
+                "date": 1615053519554
             },
-            "jassi_localserver/Filessystem.ts": {
-                "date": 1614792494775,
+            "jassi_localserver/Filesystem.ts": {
+                "date": 1615055552589,
                 "jassi_localserver.Filessystem": {}
             },
+            "jassi_localserver/Indexer.ts": {
+                "date": 1614893991197
+            },
             "jassi_localserver/LocalProtocol.ts": {
-                "date": 1614792300706
+                "date": 1614963126042
             },
             "jassi_localserver/modul.ts": {
                 "date": 1614785819884
+            },
+            "jassi_localserver/RegistryIndexer.ts": {
+                "date": 1614891745582,
+                "jassi_localserver.RegistryIndexer": {}
             },
             "jassi_localserver/Testserver.ts": {
                 "date": 1614365026599,
@@ -1390,7 +1714,7 @@ define("jassi_localserver/registry", ["require"], function (require) {
                 }
             },
             "jassi_localserver/TypeORMListener.ts": {
-                "date": 1614791556938,
+                "date": 1614891650187,
                 "jassi_localserver/TypeORMListener": {
                     "EventSubscriber": []
                 }

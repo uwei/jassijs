@@ -26,15 +26,26 @@ define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/C
             // You can omit locateFile completely when running in node
             locateFile: file => `https://sql.js.org/dist/${file}`
         });
+       var Reloader=(await import("jassi/util/Reloader")).Reloader;
         var dbobjects = await Registry_1.default.getJSONData("$DBObject");
+        var dbfiles=[];
         for (var o = 0; o < dbobjects.length; o++) {
             var clname = dbobjects[o].classname;
             try {
+                dbfiles.push(dbobjects[o].filename.replace(".ts",""));
                 dbclasses.push(await Classes_1.classes.loadClass(clname));
             } catch (err) {
                 console.log(err);
                 throw err;
             }
+        }
+        db.DBManager.clearMetadata();
+        dbclasses=[];
+        await new Reloader().reloadJS("jassi_localserver/TypeORMListener");
+        await new Reloader().reloadJSAll(dbfiles);
+        for (var o = 0; o < dbobjects.length; o++) {
+            var clname = dbobjects[o].classname;
+             dbclasses.push(await Classes_1.classes.loadClass(clname));
         }
         var Filessystem=await Classes_1.classes.loadClass("jassi_localserver.Filessystem");
        

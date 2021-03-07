@@ -38,13 +38,13 @@ define("northwind/registry",["require"], function(require) {
 		"date": 1613551043267
 	},
 	"northwind/remote/Customer.ts": {
-		"date": 1614464320487,
+		"date": 1615052487959,
 		"northwind.Customer": {
 			"$DBObject": []
 		}
 	},
 	"northwind/remote/Employees.ts": {
-		"date": 1614464317771,
+		"date": 1614966827636,
 		"northwind.Employees": {
 			"$DBObject": []
 		}

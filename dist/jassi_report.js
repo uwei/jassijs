@@ -2154,18 +2154,12 @@ define("jassi_report/modul", ["require", "exports"], function (require, exports)
             paths: {
                 'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
                 'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-                'pdfmake': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts',
-                'pdfMakeLib': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake' //'../../lib/pdfmake'
+                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts',
+                'pdfMake': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake' //'../../lib/pdfmake'
             },
             shim: {
                 'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
-                pdfMakeLib: {
-                    exports: 'pdfMake'
-                },
-                pdfmake: {
-                    deps: ['pdfMakeLib'],
-                    exports: 'pdfMake'
-                }
+                "vfs_fonts": ["pdfMake"]
             },
         }
     };
@@ -2183,7 +2177,7 @@ define("jassi_report/registry", ["require"], function (require) {
                 "jassi_report.designer.ReportDesigner": {}
             },
             "jassi_report/modul.ts": {
-                "date": 1614109043365
+                "date": 1614960545105
             },
             "jassi_report/PDFReport.ts": {
                 "date": 1613218544158,

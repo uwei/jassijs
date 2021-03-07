@@ -55,73 +55,79 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
             return undefined;
         }
         async reloadJS(fileName) {
+            await this.reloadJSAll([fileName]);
+        }
+        async reloadJSAll(fileNames) {
             //classname->file
             var files = {};
-            var fileNameBlank = fileName;
-            if (fileNameBlank.endsWith(".js"))
-                fileNameBlank = fileNameBlank.substring(0, fileNameBlank.length - 3);
-            var test = this._findScript(fileNameBlank);
-            //de.Kunde statt de/kunde
-            if (test !== undefined) {
-                var attr = test.getAttributeNode("data-requiremodule");
-                if (attr !== null) {
-                    fileNameBlank = attr.value;
-                }
-            }
-            //load all classes which depends on the classes in filename
-            var allclasses = await Registry_1.default.getJSONData("classes");
-            var classesInFile = [];
-            for (var x = 0; x < allclasses.length; x++) {
-                var pclass = allclasses[x];
-                if (pclass.filename === fileName) {
-                    classesInFile.push(pclass.filename);
-                }
-            }
-            //collect all classes which depends on the class
-            var family = {};
-            for (var x = 0; x < classesInFile.length; x++) {
-                var classname = classesInFile[x];
-                var check = classes.getClass(classname);
-                if (check === undefined)
-                    continue;
-                var classes = classes.getCache();
-                family[classname] = {};
-                for (var key in classes) {
-                    if (key === classname)
-                        files[key] = allclasses[key][0].file;
-                    if (classes[key].prototype instanceof check) {
-                        files[key] = allclasses[key][0].file;
-                        var tree = [];
-                        let test = classes[key].prototype;
-                        while (test !== check.prototype) {
-                            tree.push(classes.getClassName(test));
-                            test = test["__proto__"];
-                            //all.push(allclasses[key][0].file);
-                        }
-                        var cur = family[classname];
-                        for (var c = tree.length - 1; c >= 0; c--) {
-                            var cl = tree[c];
-                            if (cur[cl] === undefined)
-                                cur[cl] = {};
-                            cur = cur[cl];
-                        }
-                        //delete class - its better to get an exception if sonething goes wrong
-                        //  classes[key]=undefined;
-                        //jassi.classes.removeClass(key);
+            let allModules = {};
+            var allfiles = [];
+            for (let ff = 0; ff < fileNames.length; ff++) {
+                var fileName = fileNames[ff];
+                var fileNameBlank = fileName;
+                if (fileNameBlank.endsWith(".js"))
+                    fileNameBlank = fileNameBlank.substring(0, fileNameBlank.length - 3);
+                var test = this._findScript(fileNameBlank);
+                //de.Kunde statt de/kunde
+                if (test !== undefined) {
+                    var attr = test.getAttributeNode("data-requiremodule");
+                    if (attr !== null) {
+                        fileNameBlank = attr.value;
                     }
                 }
+                //load all classes which are in the same filename
+                var allclasses = await Registry_1.default.getJSONData("$Class");
+                var classesInFile = [];
+                for (var x = 0; x < allclasses.length; x++) {
+                    var pclass = allclasses[x];
+                    if (pclass.filename === fileName) {
+                        classesInFile.push(pclass.filename);
+                    }
+                }
+                //collect all classes which depends on the class
+                var family = {};
+                for (var x = 0; x < classesInFile.length; x++) {
+                    var classname = classesInFile[x];
+                    var check = classes.getClass(classname);
+                    if (check === undefined)
+                        continue;
+                    var classes = classes.getCache();
+                    family[classname] = {};
+                    for (var key in classes) {
+                        if (key === classname)
+                            files[key] = allclasses[key][0].file;
+                        if (classes[key].prototype instanceof check) {
+                            files[key] = allclasses[key][0].file;
+                            var tree = [];
+                            let test = classes[key].prototype;
+                            while (test !== check.prototype) {
+                                tree.push(classes.getClassName(test));
+                                test = test["__proto__"];
+                                //all.push(allclasses[key][0].file);
+                            }
+                            var cur = family[classname];
+                            for (var c = tree.length - 1; c >= 0; c--) {
+                                var cl = tree[c];
+                                if (cur[cl] === undefined)
+                                    cur[cl] = {};
+                                cur = cur[cl];
+                            }
+                            //delete class - its better to get an exception if sonething goes wrong
+                            //  classes[key]=undefined;
+                            //jassi.classes.removeClass(key);
+                        }
+                    }
+                }
+                for (var key in files) {
+                    if (files[key].endsWith(".js"))
+                        files[key] = files[key].substring(0, files[key].length - 3); //files._self_=fileName;
+                    allfiles.push(files[key]);
+                }
+                if (allfiles.indexOf(fileNameBlank) < 0) {
+                    allfiles.push(fileNameBlank);
+                }
+                //save all modules
             }
-            var allfiles = [];
-            for (var key in files) {
-                if (files[key].endsWith(".js"))
-                    files[key] = files[key].substring(0, files[key].length - 3); //files._self_=fileName;
-                allfiles.push(files[key]);
-            }
-            if (allfiles.indexOf(fileNameBlank) < 0) {
-                allfiles.push(fileNameBlank);
-            }
-            //save all modules
-            let allModules = {};
             await new Promise((resolve, reject) => {
                 require(allfiles, function (...ret) {
                     for (var rx = 0; rx < ret.length; rx++) {
@@ -130,33 +136,39 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
                     resolve(undefined);
                 });
             });
-            //undefined all files
-            for (var key in files) {
-                requirejs.undef(files[key]);
+            for (let x = 0; x < allfiles.length; x++) {
+                requirejs.undef(allfiles[x]);
             }
-            requirejs.undef(fileNameBlank);
-            var hasloaded = {};
-            var doclass = async function (fam) {
-                for (var key in fam) {
-                    var name = fam[key].name;
-                    var file = files[key];
-                    //console.log("reload "+key+"->"+file);
-                    var next = fam[key];
-                    var key = key;
-                    await new Promise((resolve, reject) => {
-                        require([file], function (ret) {
-                            _this.migrateModul(allModules, file, ret);
-                            resolve(undefined);
-                        });
-                    });
-                    await doclass(next);
-                }
-            };
-            doclass(family);
+            //undefined all files
+            /*  for (var key in files) {
+                  requirejs.undef(files[key]);
+              }*/
+            // requirejs.undef(fileNameBlank);
+            /*  var hasloaded = {};
+              var doclass = async function (fam) {
+                  for (var key in fam) {
+                      var name = fam[key].name;
+                      var file = files[key];
+                      //console.log("reload "+key+"->"+file);
+                      var next = fam[key];
+                      var key = key;
+                      await new Promise((resolve, reject) => {
+                          require([file], function (ret) {
+                              _this.migrateModul(allModules, file, ret);
+                              resolve(undefined);
+                          });
+                      });
+                      await doclass(next);
+                  }
+              }
+              doclass(family);*/
             var _this = this;
+            console.log("reload " + JSON.stringify(fileNameBlank));
             await new Promise((resolve, reNameject) => {
-                require([fileNameBlank], function (ret) {
-                    _this.migrateModul(allModules, fileNameBlank, ret);
+                require(allfiles, function (...ret) {
+                    for (let f = 0; f < allfiles.length; f++) {
+                        _this.migrateModul(allModules, allfiles[f], ret[f]);
+                    }
                     resolve(undefined);
                 });
             });

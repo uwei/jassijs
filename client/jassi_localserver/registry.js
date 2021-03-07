@@ -3,13 +3,13 @@ define("jassi_localserver/registry",["require"], function(require) {
  return {
   default: {
 	"jassi_localserver/DatabaseSchema.ts": {
-		"date": 1614290342083
+		"date": 1614967872228
 	},
 	"jassi_localserver/DBManager.ts": {
-		"date": 1614469272935
+		"date": 1615053519554
 	},
 	"jassi_localserver/Filesystem.ts": {
-		"date": 1614962437159,
+		"date": 1615055552589,
 		"jassi_localserver.Filessystem": {}
 	},
 	"jassi_localserver/Indexer.ts": {
@@ -21,7 +21,7 @@ define("jassi_localserver/registry",["require"], function(require) {
 	"jassi_localserver/modul.ts": {
 		"date": 1614785819884
 	},
-	"jassi_localserver/RegistyIndexer.ts": {
+	"jassi_localserver/RegistryIndexer.ts": {
 		"date": 1614891745582,
 		"jassi_localserver.RegistryIndexer": {}
 	},

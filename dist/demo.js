@@ -57,10 +57,12 @@ define("demo/DBTest", ["require", "exports", "de/remote/AR", "de/remote/Kunde", 
     }
     exports.test3 = test3;
 });
-define("demo/DK", ["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox"], function (require, exports, Table_1, Jassi_1, Panel_1, Textbox_1) {
+define("demo/DK", ["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_localserver/Filesystem"], function (require, exports, Table_1, Jassi_1, Panel_1, Textbox_1, Filesystem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DK = void 0;
+    var g = Filesystem_1.default;
+    debugger;
     let DK = class DK extends Panel_1.Panel {
         constructor() {
             super();
@@ -263,81 +265,7 @@ define("demo/EmptyDialog", ["require", "exports", "jassi/ui/Button", "jassi/ui/R
     }
     exports.test = test;
 });
-define("demo/HalloPhillip", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/ui/converters/NumberConverter", "jassi/remote/Jassi"], function (require, exports, Panel_5, Button_4, Textbox_3, NumberConverter_1, Jassi_5) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.HalloPhillip = void 0;
-    let HalloPhillip = class HalloPhillip extends Panel_5.Panel {
-        constructor() {
-            super();
-            this.me = {};
-            this.layout(this.me);
-        }
-        async setdata() {
-        }
-        layout(me) {
-            me.aboutbutton = new Button_4.Button();
-            me.text = new Textbox_3.Textbox();
-            me.zahl1 = new Textbox_3.Textbox();
-            me.zahl2 = new Textbox_3.Textbox();
-            me.ergebnis = new Textbox_3.Textbox();
-            this.isAbsolute = true;
-            this.width = 574;
-            this.height = 529;
-            this.add(me.text);
-            this.add(me.zahl1);
-            this.add(me.zahl2);
-            this.add(me.ergebnis);
-            this.add(me.aboutbutton);
-            me.aboutbutton.text = "about us";
-            me.aboutbutton.x = 3;
-            me.aboutbutton.y = 3;
-            me.aboutbutton.onclick(function (event) {
-                me.text.value = "mein papa und ich haben diese textbox programiert";
-            });
-            me.aboutbutton.height = 20;
-            me.text.x = 5;
-            me.text.y = 30;
-            me.text.width = 165;
-            me.zahl1.x = 5;
-            me.zahl1.y = 60;
-            me.zahl1.label = "zahl 1";
-            me.zahl1.converter = new NumberConverter_1.NumberConverter();
-            me.zahl1.oninput(function (event) {
-                me.ergebnis.value = me.zahl1.value + me.zahl2.value;
-            });
-            me.zahl1.height = 15;
-            me.zahl2.x = 5;
-            me.zahl2.y = 109;
-            me.zahl2.label = "zahl 2";
-            me.zahl2.converter = new NumberConverter_1.NumberConverter();
-            me.zahl2.oninput(function (event) {
-                me.ergebnis.value = me.zahl1.value + me.zahl2.value;
-            });
-            me.ergebnis.x = 5;
-            me.ergebnis.y = 165;
-            me.ergebnis.label = "ergebnis";
-            me.ergebnis.converter = new NumberConverter_1.NumberConverter();
-        }
-        destroy() {
-            //$(this.me.text.dom).draggable("destroy");
-            super.destroy();
-        }
-    };
-    HalloPhillip = __decorate([
-        Jassi_5.$Class("demo.HalloPhillip"),
-        __metadata("design:paramtypes", [])
-    ], HalloPhillip);
-    exports.HalloPhillip = HalloPhillip;
-    ;
-    function test() {
-        var t = new HalloPhillip();
-        // kk.o=0;
-        return t;
-    }
-    exports.test = test;
-});
-define("demo/KundeView", ["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/Property", "jassi/remote/Jassi", "de/remote/Kunde", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_2, Textbox_4, Property_1, Jassi_6, Kunde_2, DBObjectView_1) {
+define("demo/KundeView", ["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/Property", "jassi/remote/Jassi", "de/remote/Kunde", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_3, Property_1, Jassi_5, Kunde_2, DBObjectView_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -358,13 +286,13 @@ define("demo/KundeView", ["require", "exports", "jassi/ui/converters/NumberConve
         }
         layout(me) {
             //this.setdata();
-            me.textbox1 = new Textbox_4.Textbox();
-            me.textbox2 = new Textbox_4.Textbox();
-            me.textbox3 = new Textbox_4.Textbox();
-            me.textbox4 = new Textbox_4.Textbox();
-            me.textbox5 = new Textbox_4.Textbox();
-            me.textbox6 = new Textbox_4.Textbox();
-            me.textbox7 = new Textbox_4.Textbox();
+            me.textbox1 = new Textbox_3.Textbox();
+            me.textbox2 = new Textbox_3.Textbox();
+            me.textbox3 = new Textbox_3.Textbox();
+            me.textbox4 = new Textbox_3.Textbox();
+            me.textbox5 = new Textbox_3.Textbox();
+            me.textbox6 = new Textbox_3.Textbox();
+            me.textbox7 = new Textbox_3.Textbox();
             me.main.isAbsolute = true;
             me.main.width = "300";
             me.main.height = "300";
@@ -389,7 +317,7 @@ define("demo/KundeView", ["require", "exports", "jassi/ui/converters/NumberConve
             me.textbox2.label = "Id";
             me.textbox2.width = 50;
             me.textbox2.bind(me.databinder, "id");
-            me.textbox2.converter = new NumberConverter_2.NumberConverter();
+            me.textbox2.converter = new NumberConverter_1.NumberConverter();
             me.textbox3.x = 125;
             me.textbox3.y = 70;
             me.textbox3.label = "Nachname";
@@ -426,7 +354,7 @@ define("demo/KundeView", ["require", "exports", "jassi/ui/converters/NumberConve
     ], KundeView.prototype, "value", void 0);
     KundeView = __decorate([
         DBObjectView_1.$DBObjectView({ classname: "de.Kunde" }),
-        Jassi_6.$Class("demo.KundeView"),
+        Jassi_5.$Class("demo.KundeView"),
         __metadata("design:paramtypes", [])
     ], KundeView);
     exports.KundeView = KundeView;
@@ -561,7 +489,7 @@ define("demo/ParentRightCheck", ["require", "exports", "jassi/remote/security/Gr
     }
     exports.test = test;
 });
-define("demo/ReportKunde", ["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi", "jassi/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_1, Jassi_7, Property_2, Kunde_4) {
+define("demo/ReportKunde", ["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi", "jassi/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_1, Jassi_6, Property_2, Kunde_4) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -586,7 +514,7 @@ define("demo/ReportKunde", ["require", "exports", "jassi_report/ReportDesign", "
         __metadata("design:type", typeof (_a = typeof Kunde_4.Kunde !== "undefined" && Kunde_4.Kunde) === "function" ? _a : Object)
     ], ReportKunde.prototype, "value", void 0);
     ReportKunde = __decorate([
-        Jassi_7.$Class("demo.ReportKunde"),
+        Jassi_6.$Class("demo.ReportKunde"),
         __metadata("design:paramtypes", [])
     ], ReportKunde);
     exports.ReportKunde = ReportKunde;
@@ -600,7 +528,7 @@ define("demo/ReportKunde", ["require", "exports", "jassi_report/ReportDesign", "
     }
     exports.test = test;
 });
-define("demo/ReportRechnung", ["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi", "jassi/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_2, Jassi_8, Property_3, Kunde_5) {
+define("demo/ReportRechnung", ["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi", "jassi/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_2, Jassi_7, Property_3, Kunde_5) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -755,7 +683,7 @@ define("demo/ReportRechnung", ["require", "exports", "jassi_report/ReportDesign"
         __metadata("design:type", typeof (_a = typeof Kunde_5.Kunde !== "undefined" && Kunde_5.Kunde) === "function" ? _a : Object)
     ], ReportRechnung.prototype, "value", void 0);
     ReportRechnung = __decorate([
-        Jassi_8.$Class("demo.ReportRechnung"),
+        Jassi_7.$Class("demo.ReportRechnung"),
         __metadata("design:paramtypes", [])
     ], ReportRechnung);
     exports.ReportRechnung = ReportRechnung;
@@ -769,19 +697,19 @@ define("demo/ReportRechnung", ["require", "exports", "jassi_report/ReportDesign"
     }
     exports.test = test;
 });
-define("demo/StyleDialog", ["require", "exports", "jassi/ui/Style", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Panel"], function (require, exports, Style_1, Button_5, Jassi_9, Panel_6) {
+define("demo/StyleDialog", ["require", "exports", "jassi/ui/Style", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Panel"], function (require, exports, Style_1, Button_4, Jassi_8, Panel_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.StyleDialog = void 0;
-    let StyleDialog = class StyleDialog extends Panel_6.Panel {
+    let StyleDialog = class StyleDialog extends Panel_5.Panel {
         constructor() {
             super();
             this.me = {};
             this.layout(this.me);
         }
         layout(me) {
-            me.button1 = new Button_5.Button();
-            me.button2 = new Button_5.Button();
+            me.button1 = new Button_4.Button();
+            me.button2 = new Button_4.Button();
             me.style1 = new Style_1.Style();
             me.style2 = new Style_1.Style();
             me.style3 = new Style_1.Style();
@@ -795,7 +723,7 @@ define("demo/StyleDialog", ["require", "exports", "jassi/ui/Style", "jassi/ui/Bu
         }
     };
     StyleDialog = __decorate([
-        Jassi_9.$Class("demo/StyleDialog"),
+        Jassi_8.$Class("demo/StyleDialog"),
         __metadata("design:paramtypes", [])
     ], StyleDialog);
     exports.StyleDialog = StyleDialog;
@@ -850,11 +778,11 @@ define("demo/TableContextmenu", ["require", "exports", "jassi/ui/ContextMenu", "
     }
     exports.test = test;
 });
-define("demo/TestComponent", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Component"], function (require, exports, Panel_7, Button_6, HTMLPanel_2, Jassi_10, Component_1) {
+define("demo/TestComponent", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Component"], function (require, exports, Panel_6, Button_5, HTMLPanel_2, Jassi_9, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestComponent = void 0;
-    let TestComponent = class TestComponent extends Panel_7.Panel {
+    let TestComponent = class TestComponent extends Panel_6.Panel {
         constructor() {
             super();
             this.me = {};
@@ -866,13 +794,13 @@ define("demo/TestComponent", ["require", "exports", "jassi/ui/Panel", "jassi/ui/
             return "TestComponent ";
         }
         layout(me) {
-            me.button1 = new Button_6.Button();
+            me.button1 = new Button_5.Button();
             me.htmlpanel1 = new HTMLPanel_2.HTMLPanel();
-            me.button2 = new Button_6.Button();
+            me.button2 = new Button_5.Button();
             me.htmlpanel2 = new HTMLPanel_2.HTMLPanel();
-            me.panel2 = new Panel_7.Panel();
-            me.button3 = new Button_6.Button();
-            me.button4 = new Button_6.Button();
+            me.panel2 = new Panel_6.Panel();
+            me.button3 = new Button_5.Button();
+            me.button4 = new Button_5.Button();
             this.add(me.button2);
             this.add(me.button1);
             this.add(me.htmlpanel2);
@@ -901,7 +829,7 @@ define("demo/TestComponent", ["require", "exports", "jassi/ui/Panel", "jassi/ui/
     };
     TestComponent = __decorate([
         Component_1.$UIComponent({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
-        Jassi_10.$Class("demo.TestComponent"),
+        Jassi_9.$Class("demo.TestComponent"),
         __metadata("design:paramtypes", [])
     ], TestComponent);
     exports.TestComponent = TestComponent;
@@ -921,7 +849,7 @@ define("demo/TestExtension", ["require", "exports", "de/remote/Kunde"], function
     }
     exports.test = test;
 });
-define("demo/TestTab", ["require", "exports", "jassi/remote/Jassi", "jassi/base/Actions", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/Button"], function (require, exports, Jassi_11, Actions_1, Panel_8, HTMLPanel_3, Button_7) {
+define("demo/TestTab", ["require", "exports", "jassi/remote/Jassi", "jassi/base/Actions", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/Button"], function (require, exports, Jassi_10, Actions_1, Panel_7, HTMLPanel_3, Button_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.KK4 = exports.KK3 = void 0;
@@ -929,18 +857,18 @@ define("demo/TestTab", ["require", "exports", "jassi/remote/Jassi", "jassi/base/
     };
     KK3 = __decorate([
         Actions_1.$ActionProvider("3"),
-        Jassi_11.$Class("de.KK3")
+        Jassi_10.$Class("de.KK3")
     ], KK3);
     exports.KK3 = KK3;
     let KK4 = class KK4 {
     };
     KK4 = __decorate([
         Actions_1.$ActionProvider("4"),
-        Jassi_11.$Class("de.KK4")
+        Jassi_10.$Class("de.KK4")
     ], KK4);
     exports.KK4 = KK4;
     function test() {
-        var pan = new Panel_8.Panel();
+        var pan = new Panel_7.Panel();
         //pan.tooltip="Pan";
         pan.width = "100%";
         pan.height = "100%";
@@ -949,7 +877,7 @@ define("demo/TestTab", ["require", "exports", "jassi/remote/Jassi", "jassi/base/
         div.height = 50;
         div.tooltip = "div";
         pan.add(div);
-        var button = new Button_7.Button();
+        var button = new Button_6.Button();
         button.tooltip = "But";
         button.text = "Button";
         pan.add(button);
@@ -957,11 +885,11 @@ define("demo/TestTab", ["require", "exports", "jassi/remote/Jassi", "jassi/base/
     }
     exports.test = test;
 });
-define("demo/TestTree", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Tree", "jassi/remote/Jassi"], function (require, exports, Panel_9, Tree_1, Jassi_12) {
+define("demo/TestTree", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Tree", "jassi/remote/Jassi"], function (require, exports, Panel_8, Tree_1, Jassi_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestTree = void 0;
-    let TestTree = class TestTree extends Panel_9.Panel {
+    let TestTree = class TestTree extends Panel_8.Panel {
         constructor() {
             super();
             this.layout();
@@ -970,12 +898,12 @@ define("demo/TestTree", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Tree"
         }
     };
     TestTree = __decorate([
-        Jassi_12.$Class("demo.TestTree"),
+        Jassi_11.$Class("demo.TestTree"),
         __metadata("design:paramtypes", [])
     ], TestTree);
     exports.TestTree = TestTree;
     async function test() {
-        var ret = new Panel_9.Panel();
+        var ret = new Panel_8.Panel();
         var tree = new Tree_1.Tree();
         var s = { name: "Sansa", id: 1 };
         var p = { name: "Peter", id: 2 };
@@ -1000,11 +928,11 @@ define("demo/TestTree", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Tree"
     }
     exports.test = test;
 });
-define("demo/TestUpload", ["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Upload", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse"], function (require, exports, HTMLPanel_4, Upload_1, Jassi_13, Panel_10, papaparse_1) {
+define("demo/TestUpload", ["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Upload", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse"], function (require, exports, HTMLPanel_4, Upload_1, Jassi_12, Panel_9, papaparse_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestUpload = void 0;
-    let TestUpload = class TestUpload extends Panel_10.Panel {
+    let TestUpload = class TestUpload extends Panel_9.Panel {
         constructor() {
             super();
             this.me = {};
@@ -1029,7 +957,7 @@ define("demo/TestUpload", ["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui
         }
     };
     TestUpload = __decorate([
-        Jassi_13.$Class("demo/TestUpload"),
+        Jassi_12.$Class("demo/TestUpload"),
         __metadata("design:paramtypes", [])
     ], TestUpload);
     exports.TestUpload = TestUpload;
@@ -1041,11 +969,11 @@ define("demo/TestUpload", ["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui
     }
     exports.test = test;
 });
-define("demo/Testcontextmenu", ["require", "exports", "jassi/ui/Panel", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Button", "jassi/remote/Jassi"], function (require, exports, Panel_11, ContextMenu_2, MenuItem_2, Button_8, Jassi_14) {
+define("demo/Testcontextmenu", ["require", "exports", "jassi/ui/Panel", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Button", "jassi/remote/Jassi"], function (require, exports, Panel_10, ContextMenu_2, MenuItem_2, Button_7, Jassi_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Testcontextmenu = void 0;
-    let Testcontextmenu = class Testcontextmenu extends Panel_11.Panel {
+    let Testcontextmenu = class Testcontextmenu extends Panel_10.Panel {
         constructor() {
             super();
             this.me = {};
@@ -1054,7 +982,7 @@ define("demo/Testcontextmenu", ["require", "exports", "jassi/ui/Panel", "jassi/u
         layout(me) {
             me.contextmenu1 = new ContextMenu_2.ContextMenu();
             me.car = new MenuItem_2.MenuItem();
-            me.button1 = new Button_8.Button();
+            me.button1 = new Button_7.Button();
             me.menuitem1 = new MenuItem_2.MenuItem();
             me.menuitem2 = new MenuItem_2.MenuItem();
             me.menuitem3 = new MenuItem_2.MenuItem();
@@ -1087,7 +1015,7 @@ define("demo/Testcontextmenu", ["require", "exports", "jassi/ui/Panel", "jassi/u
         }
     };
     Testcontextmenu = __decorate([
-        Jassi_14.$Class("demo.Testcontextmenu"),
+        Jassi_13.$Class("demo.Testcontextmenu"),
         __metadata("design:paramtypes", [])
     ], Testcontextmenu);
     exports.Testcontextmenu = Testcontextmenu;
@@ -1098,11 +1026,11 @@ define("demo/Testcontextmenu", ["require", "exports", "jassi/ui/Panel", "jassi/u
     }
     exports.test = test;
 });
-define("demo/Testmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", "jassi/ui/Menu", "jassi/ui/MenuItem", "jassi/ui/Button", "jassi/remote/Jassi"], function (require, exports, Panel_12, jassi_1, Menu_1, MenuItem_3, Button_9, Jassi_15) {
+define("demo/Testmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", "jassi/ui/Menu", "jassi/ui/MenuItem", "jassi/ui/Button", "jassi/remote/Jassi"], function (require, exports, Panel_11, jassi_1, Menu_1, MenuItem_3, Button_8, Jassi_14) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testmenu = void 0;
-    let Testmenu = class Testmenu extends Panel_12.Panel {
+    let Testmenu = class Testmenu extends Panel_11.Panel {
         constructor() {
             super();
             this.me = {};
@@ -1115,7 +1043,7 @@ define("demo/Testmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", 
             me.menuitem3 = new MenuItem_3.MenuItem();
             me.menuitem4 = new MenuItem_3.MenuItem();
             me.menuitem5 = new MenuItem_3.MenuItem();
-            me.button1 = new Button_9.Button();
+            me.button1 = new Button_8.Button();
             me.menuitem6 = new MenuItem_3.MenuItem();
             me.menuitem7 = new MenuItem_3.MenuItem();
             me.menu1.width = 205;
@@ -1170,7 +1098,7 @@ define("demo/Testmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", 
         }
     };
     Testmenu = __decorate([
-        Jassi_15.$Class("demo.Testmenu"),
+        Jassi_14.$Class("demo.Testmenu"),
         __metadata("design:paramtypes", [])
     ], Testmenu);
     exports.Testmenu = Testmenu;
@@ -1180,7 +1108,7 @@ define("demo/Testmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", 
         return dlg;
     };
 });
-define("demo/TreeContextmenu", ["require", "exports", "jassi/ui/Tree", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Panel", "jassi/ui/Button"], function (require, exports, Tree_2, ContextMenu_3, MenuItem_4, Panel_13, Button_10) {
+define("demo/TreeContextmenu", ["require", "exports", "jassi/ui/Tree", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Panel", "jassi/ui/Button"], function (require, exports, Tree_2, ContextMenu_3, MenuItem_4, Panel_12, Button_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -1197,8 +1125,8 @@ define("demo/TreeContextmenu", ["require", "exports", "jassi/ui/Tree", "jassi/ui
             checkbox: true,
             selectMode: 2,
         });
-        me.panel = new Panel_13.Panel();
-        me.button = new Button_10.Button();
+        me.panel = new Panel_12.Panel();
+        me.button = new Button_9.Button();
         me.panel["me"] = me;
         me.panel.add(me.tree);
         me.panel.add(me.button);
@@ -1240,7 +1168,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassi/ui/Tree", "jassi/ui
     }
     exports.test = test;
 });
-define("demo/TreeTable", ["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/Table"], function (require, exports, Panel_14, Jassi_16, Table_3) {
+define("demo/TreeTable", ["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/Table"], function (require, exports, Panel_13, Jassi_15, Table_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
@@ -1250,13 +1178,17 @@ define("demo/TreeTable", ["require", "exports", "jassi/ui/Panel", "jassi/remote/
             this.id = id;
             this.childs = childs;
         }
+        t() {
+            return this.childs;
+        }
     }
-    let TreeTable = class TreeTable extends Panel_14.Panel {
+    class Me {
+    }
+    ;
+    let TreeTable = class TreeTable extends Panel_13.Panel {
         constructor() {
             super();
-            this.me = {
-            //tab:Table
-            };
+            this.me = new Me();
             this.layout(this.me);
         }
         layout(me) {
@@ -1267,19 +1199,79 @@ define("demo/TreeTable", ["require", "exports", "jassi/ui/Panel", "jassi/remote/
             var c = new Person("Christoph", 4, [u, t]);
             s.childs = [c];
             me.tab = new Table_3.Table({
-                dataTreeChildFunction: function (ob) {
-                    return ob.childs;
-                }
+                dataTreeChildFunction: "t"
             });
             me.tab.items = [c];
             me.tab.height = "150";
             me.tab.width = "100%";
-            me.tab.items = [c, u];
+            //me.tab.items = [c, u];
+            this.add(me.tab);
+        }
+        layoutalt(me) {
+            var s = new Person("Sophie", 1);
+            var p = new Person("Phillip", 2);
+            var u = new Person("Udo", 3, [p, s]);
+            var t = new Person("Thomas", 5);
+            var c = new Person("Christoph", 4, [u, t]);
+            s.childs = [c];
+            function populateData(data) {
+                var childs = data["childs"];
+                if (childs && childs.length > 0) {
+                    Object.defineProperty(data, "__treechilds", {
+                        configurable: true,
+                        get: function () {
+                            return childs;
+                        }
+                    });
+                    for (var x = 0; x < childs.length; x++) {
+                        var nchilds = childs[x]["childs"];
+                        if (nchilds && nchilds.length > 0) {
+                            Object.defineProperty(childs[x], "__treechilds", {
+                                configurable: true,
+                                get: function () {
+                                    return ["dummy"];
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+            me.tab = new Table_3.Table({
+                dataTree: true,
+                dataTreeChildField: "__treechilds",
+                dataTreeRowExpanded: function (row) {
+                    let childs = row.getData()["childs"];
+                    for (let f = 0; f < childs.length; f++) {
+                        populateData(childs[f]);
+                    }
+                    row.update(row.getData());
+                    /* var chs = row.getTreeChildren();
+                    for (let x = 0; x < chs.length; x++) {
+                        let r = chs[x];
+                        var dat = r.getData();
+                        let test=dat.__treechilds;
+                        r.update(dat);
+    
+                    }
+                    row.update(row.getData());*/
+                }
+                /*dataTreeChildFunction1: function (ob) {
+                    return ob.childs;
+                }*/
+            });
+            var data = [c];
+            for (var x = 0; x < data.length; x++) {
+                populateData(data[x]);
+            }
+            me.tab.items = data;
+            me.tab.height = "150";
+            me.tab.width = "100%";
+            //me.tab.items = [c, u];
             this.add(me.tab);
         }
     };
     TreeTable = __decorate([
-        Jassi_16.$Class("demo.TreeTable"),
+        Jassi_15.$Class("demo.TreeTable"),
         __metadata("design:paramtypes", [])
     ], TreeTable);
     exports.TreeTable = TreeTable;
@@ -1305,7 +1297,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1613330812615
             },
             "demo/Dialog.ts": {
-                "date": 1613218544157,
+                "date": 1614895450330,
                 "demo/Dialog": {}
             },
             "demo/DialogKunde2.ts": {
@@ -1313,16 +1305,12 @@ define("demo/registry", ["require"], function (require) {
                 "demo.DialogKunde2": {}
             },
             "demo/DK.ts": {
-                "date": 1613218544161,
+                "date": 1614892605286,
                 "demo.DK": {}
             },
             "demo/EmptyDialog.ts": {
                 "date": 1613218544157,
                 "demo.EmptyDialog": {}
-            },
-            "demo/HalloPhillip.ts": {
-                "date": 1613218544160,
-                "demo.HalloPhillip": {}
             },
             "demo/KundeView.ts": {
                 "date": 1613330812615,
@@ -1408,7 +1396,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1612387959952
             },
             "demo/TreeTable.ts": {
-                "date": 1613218544157,
+                "date": 1613914171753,
                 "demo.TreeTable": {}
             }
         }

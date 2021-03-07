@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jassi/server/DBManager"], function (require, exports, Jassi_1, Reloader_1, DBManager_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jassi/server/DBManager", "jassi/remote/Registry"], function (require, exports, Jassi_1, Reloader_1, DBManager_1, Registry_1) {
     "use strict";
     var Filessystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -141,10 +141,16 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
             var db = await Filessystem_1.getDB();
             var rollbackcontents = [];
             var tsfiles = [];
+            var dbschemaHasChanged = false;
+            var dbobjects = await Registry_1.default.getJSONData("$DBObject");
             for (let x = 0; x < fileNames.length; x++) {
                 let fname = fileNames[x];
                 if (fname.endsWith(".ts"))
-                    tsfiles.push(fname);
+                    tsfiles.push(fname.replace(".ts", ""));
+                dbobjects.forEach((test) => {
+                    if (test.filename === fname)
+                        dbschemaHasChanged = true;
+                });
                 let exists = await this.loadFileEntry(fname);
                 if (exists) {
                     rollbackcontents.push(exists.data);
@@ -168,26 +174,25 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                         store.add(el);
                     await new Promise((resolve) => { transaction.oncomplete = resolve; });
                 }
-                var spath = fname.split("/");
-                if (spath.length > 1 && spath[1].toLowerCase() === "remote" && fname.toLowerCase().endsWith(".ts")) {
-                    var man = await DBManager_1.DBManager.destroyConnection();
-                }
             }
             if (fileNames.length === 1 && fileNames[0].endsWith("/registry.js")) //no indexer save recurse
                 return;
-            var RegistryIndexer = (await new Promise((resolve_1, reject_1) => { require(["jassi_localserver/RegistyIndexer"], resolve_1, reject_1); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_1, reject_1) => { require(["jassi_localserver/RegistryIndexer"], resolve_1, reject_1); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             if (rollbackonerror) {
                 try {
-                    //reloadjs
-                    for (let x = 0; x < tsfiles.length; x++) {
-                        var f = tsfiles[x].replace(".ts", "");
-                        new Reloader_1.Reloader().reloadJS(f);
+                    new Reloader_1.Reloader().reloadJSAll(tsfiles);
+                    if (dbschemaHasChanged) {
+                        var man = await DBManager_1.DBManager.destroyConnection();
+                        await DBManager_1.DBManager.get();
                     }
-                    await DBManager_1.DBManager.get();
                 }
                 catch (err) {
                     console.error(err);
+                    if (dbschemaHasChanged) {
+                        DBManager_1.DBManager.destroyConnection();
+                        await DBManager_1.DBManager.get();
+                    }
                     var restore = await this.saveFiles(fileNames, rollbackcontents, false);
                     return err + "DB corrupt changes are reverted " + restore;
                 }
@@ -247,7 +252,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                 store.delete(entr[i].id);
                 await new Promise((resolve) => { transaction.oncomplete = resolve; });
             }
-            var RegistryIndexer = (await new Promise((resolve_2, reject_2) => { require(["jassi_localserver/RegistyIndexer"], resolve_2, reject_2); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_2, reject_2) => { require(["jassi_localserver/RegistryIndexer"], resolve_2, reject_2); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             //entr = await this.dirEntry(file);
             return "";
@@ -292,7 +297,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                 else
                     await this.createFile(oldf[i].id, oldf[i].data);
             }
-            var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassi_localserver/RegistyIndexer"], resolve_4, reject_4); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassi_localserver/RegistryIndexer"], resolve_4, reject_4); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             return "";
         }

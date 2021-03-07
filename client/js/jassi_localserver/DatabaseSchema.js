@@ -15,6 +15,7 @@ define(["require", "exports", "jassi/remote/Classes", "jassi/remote/Database", "
     }
     function Entity(...param) {
         //DEntity(param)(pclass, ...params);
+        console.log("Ent:" + JSON.stringify(param));
         return addDecorater("Entity", typeorm_1.Entity(...param), param);
     }
     exports.Entity = Entity;

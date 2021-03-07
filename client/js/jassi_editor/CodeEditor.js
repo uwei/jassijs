@@ -120,19 +120,32 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this._main.add(this._errors, "Errors", "errors");
             this._main.layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":100,"content":[{"type":"stack","width":33.333333333333336,"height":80.34682080924856,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":19.653179190751445,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":50,"content":[{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":50,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
         }
+        async _save(code) {
+            await new Server_1.Server().saveFile(this._file, code);
+            var test = Classes_1.classes.getClass("jassi_localserver.DBManager");
+            var reload = true;
+            if (test) {
+                var dbobjects = await Registry_1.default.getJSONData("$DBObject");
+                dbobjects.forEach((data) => {
+                    if (data.filename === this._file)
+                        reload = false;
+                });
+            }
+            if (reload) {
+                var f = this._file.replace(".ts", "");
+                new Reloader_1.Reloader().reloadJS(f);
+            }
+            if (code.indexOf("@$") > -1) {
+                Registry_1.default.reload();
+            }
+        }
         /**
         * save the code to server
         */
         save() {
             var code = this._codePanel.value;
             var _this = this;
-            new Server_1.Server().saveFile(this._file, code).then(function () {
-                var f = _this._file.replace(".ts", "");
-                new Reloader_1.Reloader().reloadJS(f);
-                if (code.indexOf("@$") > -1) {
-                    Registry_1.default.reload();
-                }
-            });
+            this._save(code);
         }
         /**
          * goto to the declariation on cursor

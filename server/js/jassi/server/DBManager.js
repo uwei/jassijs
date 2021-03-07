@@ -1,10 +1,22 @@
 "use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var DBManager_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DBManager = void 0;
+//@ts-ignore
 const typeorm_1 = require("typeorm");
 const Classes_1 = require("jassi/remote/Classes");
 const Registry_1 = require("jassi/remote/Registry");
 const User_1 = require("jassi/remote/security/User");
+const Jassi_1 = require("jassi/remote/Jassi");
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
 var _instance = undefined;
@@ -12,17 +24,19 @@ var _initrunning = undefined;
 /**
  * Database access with typeorm
  */
-class DBManager {
+let DBManager = DBManager_1 = class DBManager {
     static async getConOpts() {
         var stype = "postgres";
         var shost = "localhost";
         var suser = "postgres";
-        var spass = "";
+        var spass = "ja$$1";
         var iport = 5432;
         var sdb = "jassi";
+        //the default is the sqlite3
         //this is the default way: define an environment var DATABASSE_URL
         //type://user:password@hostname:port/database
         //eg: postgres://abcknhlveqwqow:polc78b98e8cd7168d35a66e392d2de6a8d5710e854c084ff47f90643lce2876@ec2-174-102-251-1.compute-1.amazonaws.com:5432/dcpqmp4rcmu182
+        //@ts-ignore
         var test = process.env.DATABASE_URL;
         if (test !== undefined) {
             var all = test.split(":");
@@ -50,22 +64,21 @@ class DBManager {
             "username": suser,
             "password": spass,
             "database": sdb,
-            "synchronize": true,
+            //"synchronize": true,
             "logging": false,
-            "entities": dbclasses
+            "entities": dbclasses,
         };
         return opt;
     }
     static async get() {
         if (_instance === undefined) {
-            _instance = new DBManager();
+            _instance = new DBManager_1();
             var test = typeorm_1.getMetadataArgsStorage();
             try {
-                var opts = await DBManager.getConOpts();
-                Object.freeze(DBManager);
+                var opts = await DBManager_1.getConOpts();
+                Object.freeze(DBManager_1);
                 _initrunning = typeorm_1.createConnection(opts);
                 await _initrunning;
-                await _instance.mySync();
             }
             catch (err1) {
                 try {
@@ -73,7 +86,6 @@ class DBManager {
                     opts["ssl"] = true; //heroku need this
                     _initrunning = typeorm_1.createConnection(opts);
                     await _initrunning;
-                    await _instance.mySync();
                 }
                 catch (err) {
                     console.log("DB corrupt - revert the last change");
@@ -89,6 +101,13 @@ class DBManager {
                     }
                 }
             }
+            try {
+                await _instance.mySync();
+            }
+            catch (err) {
+                console.log("DB Schema could not be saved");
+                throw err;
+            }
         }
         //wait for connection ready
         await _initrunning;
@@ -96,6 +115,7 @@ class DBManager {
     }
     async mySync() {
         var con = typeorm_1.getConnection();
+        //@ts-ignore
         var schem = await Promise.resolve().then(() => require("typeorm/schema-builder/RdbmsSchemaBuilder"));
         var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
         schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"] = async function () {
@@ -120,33 +140,36 @@ class DBManager {
         //throw schem.RdbmsSchemaBuilder.prototype["_error_"]; 
         //con.driver.
     }
+    static async clearMetadata() {
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().checks);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().columns);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().discriminatorValues);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().embeddeds);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entityListeners);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entityRepositories);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entitySubscribers);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().exclusions);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().tables);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().generations);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().indices);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().inheritances);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().joinColumns);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().joinTables);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().namingStrategies);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relationCounts);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relationIds);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relations);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().tables);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().transactionEntityManagers);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().transactionRepositories);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().trees);
+        DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().uniques);
+    }
     static async destroyConnection() {
         if (_instance !== undefined)
             await typeorm_1.getConnection().close();
         _instance = undefined;
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().checks);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().columns);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().discriminatorValues);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().embeddeds);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().entityListeners);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().entityRepositories);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().entitySubscribers);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().exclusions);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().tables);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().generations);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().indices);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().inheritances);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().joinColumns);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().joinTables);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().namingStrategies);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().relationCounts);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().relationIds);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().relations);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().tables);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().transactionEntityManagers);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().transactionRepositories);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().trees);
-        DBManager.clearArray(typeorm_1.getMetadataArgsStorage().uniques);
+        DBManager_1.clearMetadata();
     }
     static clearArray(arr) {
         while (arr.length > 0) {
@@ -160,7 +183,7 @@ class DBManager {
         return typeorm_1.getConnection();
     }
     async remove(context, entity) {
-        var test = await (await DBManager.get()).checkParentRight(context, entity, [entity["id"]]);
+        var test = await (await DBManager_1.get()).checkParentRight(context, entity, [entity["id"]]);
         if (test === false)
             throw new Error("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
         await this.connection().manager.remove(entity);
@@ -327,7 +350,7 @@ class DBManager {
         user.email = username;
         user.password = password;
         //first user would be admin
-        if (await (await DBManager.get()).connection().manager.findOne(User_1.User) === undefined) {
+        if (await (await DBManager_1.get()).connection().manager.findOne(User_1.User) === undefined) {
             user.isAdmin = true;
         }
         //password is encrypted when saving
@@ -340,7 +363,7 @@ class DBManager {
             resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
           });
         })*/
-        await (await DBManager.get()).save(context, user);
+        await (await DBManager_1.get()).save(context, user);
         delete user.password;
         return user;
     }
@@ -396,7 +419,11 @@ class DBManager {
         var test = await ret.getCount();
         return test === ids.length;
     }
-}
+};
+DBManager = DBManager_1 = __decorate([
+    Jassi_1.$Class("jassi_localserver.DBManager"),
+    __metadata("design:paramtypes", [])
+], DBManager);
 exports.DBManager = DBManager;
 class RelationInfo {
     constructor(className, dbmanager) {

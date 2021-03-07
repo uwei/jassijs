@@ -2,7 +2,9 @@
 	"modules": {
 		"jassi":"https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi.js",
 		"jassi_report": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_report.js",
+		"jassi_localserver": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_localserver.js",
 		"jassi_editor": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_editor.js",
+		"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js",
 		"demo": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/demo.js"
 	},
 	"require": {

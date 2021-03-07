@@ -979,9 +979,7 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
     var ChromeDebugger_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ChromeDebugger = void 0;
-    let checkExtensionInstalled = setTimeout(() => {
-        $.notify("no  jassi chrome extension installed", "warning", { position: "right" });
-    }, 3000);
+    var installed = undefined;
     /**
      * debugging in Chrome
      */
@@ -997,6 +995,18 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
                 this.onChromeMessage(event);
             });
         }
+        showHintExtensionNotInstalled() {
+            $.notify.addStyle('downloadlink', {
+                html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
+                classes: {
+                    base: {
+                        "color": "white",
+                        "background-color": "lightblue"
+                    }
+                }
+            });
+            $.notify("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000, });
+        }
         //on receiving messages from chrome extension
         onChromeMessage(event) {
             var _a;
@@ -1006,7 +1016,8 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
                 _this.saveCode(event.data.url.url, event.data.data);
             }
             if (event.data.fromJassiExtension && event.data.connected) {
-                clearTimeout(checkExtensionInstalled);
+                installed = true;
+                //clearTimeout(checkExtensionInstalled);
                 if (Jassi_4.default.debugger !== undefined)
                     Jassi_4.default.debugger.destroy();
                 Jassi_4.default.debugger = this;
@@ -1090,6 +1101,8 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
          * @param {string} type - the type default undefined->stop debugging
          **/
         async breakpointChanged(file, line, column, enable, type = undefined) {
+            if (!installed)
+                this.showHintExtensionNotInstalled();
             if (this.allBreakPoints[file] === undefined) {
                 this.allBreakPoints[file] = [];
             }
@@ -1274,19 +1287,32 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             this._main.add(this._errors, "Errors", "errors");
             this._main.layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":100,"content":[{"type":"stack","width":33.333333333333336,"height":80.34682080924856,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":19.653179190751445,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":50,"content":[{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":50,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
         }
+        async _save(code) {
+            await new Server_2.Server().saveFile(this._file, code);
+            var test = Classes_3.classes.getClass("jassi_localserver.DBManager");
+            var reload = true;
+            if (test) {
+                var dbobjects = await Registry_2.default.getJSONData("$DBObject");
+                dbobjects.forEach((data) => {
+                    if (data.filename === this._file)
+                        reload = false;
+                });
+            }
+            if (reload) {
+                var f = this._file.replace(".ts", "");
+                new Reloader_2.Reloader().reloadJS(f);
+            }
+            if (code.indexOf("@$") > -1) {
+                Registry_2.default.reload();
+            }
+        }
         /**
         * save the code to server
         */
         save() {
             var code = this._codePanel.value;
             var _this = this;
-            new Server_2.Server().saveFile(this._file, code).then(function () {
-                var f = _this._file.replace(".ts", "");
-                new Reloader_2.Reloader().reloadJS(f);
-                if (code.indexOf("@$") > -1) {
-                    Registry_2.default.reload();
-                }
-            });
+            this._save(code);
         }
         /**
          * goto to the declariation on cursor
@@ -3246,7 +3272,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi.ui.AcePanel": {}
             },
             "jassi_editor/ChromeDebugger.ts": {
-                "date": 1613592968297,
+                "date": 1614805327715,
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
@@ -3295,7 +3321,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "date": 1613148168781
             },
             "jassi_editor/util/Parser.ts": {
-                "date": 1613779964792,
+                "date": 1614889218718,
                 "jassi_editor.base.Parser": {}
             },
             "jassi_editor/util/Resizer.ts": {
@@ -3307,7 +3333,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.util.TSSourceMap": {}
             },
             "jassi_editor/util/Typescript.ts": {
-                "date": 1614702107260,
+                "date": 1614803273364,
                 "jassi_editor.util.Typescript": {}
             }
         }
