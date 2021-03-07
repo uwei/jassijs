@@ -62,7 +62,7 @@ define("jassi/modul", ["require", "exports"], function (require, exports) {
                 'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
                 'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
                 'tabulatorlib': '//unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator',
-                'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min'
+                'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min' //also define in tinymce.js
             },
             "shim": {
                 'goldenlayout': ["jquery"],
@@ -3113,11 +3113,12 @@ define("jassi/ext/tabulator", ['tabulatorlib'], function (Tabulator) {
 });
 ////GEHT NICHT 
 ////use requirejs(["https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min.js"],function(tinymcelib){
-var path = require('jassi/modul').default.require.paths["tinymcelib"];
-path = path.substring(0, path.lastIndexOf("/"));
+//var path = require('jassi/modul').default.require.paths["tinymcelib"];
+//path=path.substring(0,path.lastIndexOf("/"));
+//var path="//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min";
 var tinyMCEPreInit = {
     suffix: '.min',
-    base: path,
+    base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2",
     query: ''
 };
 define("jassi/ext/tinymce", ["tinymcelib"], function (require) {

@@ -2160,6 +2160,7 @@ define("jassi_report/modul", ["require", "exports"], function (require, exports)
             shim: {
                 'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
                 "vfs_fonts": ["pdfMake"]
+                //"pdfMake":["vfs_fonts"]
             },
         }
     };
@@ -2576,7 +2577,8 @@ define("jassi_report/ext/pdfjs", ["pdfjs-dist/build/pdf", "pdfjs-dist/build/pdf.
           }
       }
     });*/
-define("jassi_report/ext/pdfmake", ['pdfmake'], function (ttt) {
+define("jassi_report/ext/pdfmake", ['pdfMake', "vfs_fonts"], function (ttt, vfs) {
+    var fonts = require("vfs_fonts");
     return {
         default: pdfMake
     };
