@@ -1,5 +1,15 @@
-
-
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js');
+    navigator.serviceWorker.addEventListener("message", (evt) => {
+      if(evt.data==="wait for login") {
+        new Promise((resolve_1, reject_1) => { require(["jassi/base/LoginDialog"], resolve_1, reject_1); }).then((data) => {
+            data.login();
+            //          navigator.serviceWorker.controller.postMessage("logindialog closed");
+        });
+      }
+    });
+  }
+  
 async function loadText(url) {
     return new Promise((resolve) => {
         let oReq = new XMLHttpRequest();
@@ -68,28 +78,13 @@ async function run() {
         }
         for (let x = 0; x < dowait.length; x++) {
             var mod=await dowait[x];
+            
         }
-        /*for (let modul in modules) {
-            var reqs = await allmodules[modul]
-            if (reqs) {
-                let toadd = JSON.parse(reqs).require;
-                if (toadd){
-                    if(!requireconfig.paths){
-                        requireconfig.paths={}
-                    }
-                    if(toadd.paths)
-                        Object.assign(requireconfig.paths, toadd.paths);
-                    if(!requireconfig.shim){
-                        requireconfig.shim={}
-                    }
-                    if(toadd.shim)
-                    Object.assign(requireconfig.shim, toadd.shim);
-                }
-            }
-        }*/
+
     }
-   
+
     requirejs.config({
+        waitSeconds: 200,
         baseUrl: 'js',
         paths: {
             //"jassi/ext": '../../jassi/ext',
@@ -100,13 +95,16 @@ async function run() {
     for (let key in modules) {
         mods.push(key+"/modul");
     }
+    var startlib=["jassi/jassi"];
     require(mods, function (...res) {
         for (let x = 0; x < res.length; x++) {
             if(res[x].default.css){
                 var mod=mods[x];
+                
                 mod=mod.substring(0,mod.length-"/modul".length);
                 var modpath=modules[mod];
-                 res[x].default.css.forEach((f)=>{
+                for(let key in res[x].default.css){
+                    let f=res[x].default.css[key];
                     if(f.indexOf(":")>-1)//https://cdn
                         cssFiles.push(f);
                     else if(modpath.endsWith(".js")){
@@ -115,7 +113,11 @@ async function run() {
                     }else{
                         cssFiles.push(modpath+"/"+f);
                     }
-                })
+                }
+               
+            }
+            if(res[x].default.loadonstart){
+                res[x].default.loadonstart.forEach((entr)=>startlib.push(entr));
             }
             let toadd = res[x].default.require;
             if (toadd) {
@@ -133,7 +135,7 @@ async function run() {
         }
         requirejs.config(requireconfig);
 
-        require(["jassi/jassi"], function (jassi) {
+        require(startlib, function (jassi,...others) {
             cssFiles.forEach((css)=>{
                 jassi.default.myRequire(css);
             })

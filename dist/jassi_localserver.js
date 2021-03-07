@@ -1317,47 +1317,45 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
         var DBObject = await classes.loadClass("jassi.remote.DBObject");
         var ret;
         //
-        if (clname === "jassi.remote.Server") {
-            var tst = JSON.parse(config.data);
-            if (tst.method === "dir") {
-                var retserver = JSON.parse(await $.ajax(config));
-                var sret = await localExec(JSON.parse(config.data));
-                for (let i = 0; i < retserver.files.length; i++) {
-                    if (retserver.files[i].name === "local") {
-                        //retserver.files.splice(i,1);
-                    }
-                }
-                for (let i = 0; i < sret.files.length; i++) {
-                    if (sret.files[i].name === "local")
-                        retserver.files.push(sret.files[i]);
-                }
-                return JSON.stringify(retserver);
-            }
-            else if (tst.method === "saveFiles") {
-                if (tst.parameter[0][0].startsWith("local/") || tst.parameter[0][0].startsWith("js/local/")) {
-                    var sret = await localExec(JSON.parse(config.data));
-                    ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
-                    if (ret === undefined)
-                        ret = "$$undefined$$";
-                    return ret;
-                }
-            }
-            else if (tst.parameter.length > 0 && (tst.parameter[0] === "local" || tst.parameter[0].startsWith("local/"))) {
-                var sret = await localExec(JSON.parse(config.data));
-                ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
-                if (ret === undefined)
-                    ret = "$$undefined$$";
-                return ret;
-            }
-        }
-        if (local.indexOf(clname) > -1 || clname.startsWith("local")) {
-            var sret = await localExec(JSON.parse(config.data));
-            ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
-            if (ret === undefined)
-                ret = "$$undefined$$";
-        }
-        else
-            ret = await $.ajax(config);
+        /* if (clname === "jassi.remote.Server") {
+             var tst = JSON.parse(config.data);
+             if (tst.method === "dir") {
+                 var retserver = JSON.parse(await $.ajax(config));
+                 var sret = await localExec(JSON.parse(config.data));
+                 for(let i=0;i<retserver.files.length;i++){
+                     if(retserver.files[i].name==="local"){
+                         //retserver.files.splice(i,1);
+                     }
+                 }
+                 for(let i=0;i<sret.files.length;i++){
+                     if(sret.files[i].name==="local")
+                         retserver.files.push(sret.files[i]);
+                 }
+                 return JSON.stringify(retserver);
+             }else if(tst.method==="saveFiles"){
+                 if(tst.parameter[0][0].startsWith("local/")||tst.parameter[0][0].startsWith("js/local/")){
+                     var sret = await localExec(JSON.parse(config.data));
+                     ret = new RemoteProtocol().stringify(sret);
+                     if (ret === undefined)
+                         ret = "$$undefined$$";
+                     return ret;
+                 }
+             } else if(tst.parameter.length>0&&(tst.parameter[0]==="local"||tst.parameter[0].startsWith("local/"))) {
+                 var sret = await localExec(JSON.parse(config.data));
+                 ret = new RemoteProtocol().stringify(sret);
+                 if (ret === undefined)
+                     ret = "$$undefined$$";
+                 return ret;
+             }
+     
+         }
+         if (local.indexOf(clname) > -1||clname.startsWith("local")) {*/
+        var sret = await localExec(JSON.parse(config.data));
+        ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
+        if (ret === undefined)
+            ret = "$$undefined$$";
+        /* } else
+             ret = await $.ajax(config);*/
         return ret;
     };
     async function localExec(prot, context = undefined) {

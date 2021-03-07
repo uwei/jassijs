@@ -3015,8 +3015,7 @@ define("jassi/ext/goldenlayout", ['goldenlayout', "jassi/remote/Jassi"], functio
 //polyfill for old ios
 var def = [];
 if (window.IntersectionObserver === undefined) {
-    var path = require('jassi/modul').default.require.paths["intersection-observer"];
-    def = [path];
+    def = ["intersection-observer"];
 }
 define("jassi/ext/intersection-observer", def, function () {
     return {};
