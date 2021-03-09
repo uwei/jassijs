@@ -5,7 +5,7 @@ import {HTMLPanel} from "jassi/ui/HTMLPanel";
 import {Repeater} from "jassi/ui/Repeater";
 import {Button} from "jassi/ui/Button";
 import {BoxPanel} from "jassi/ui/BoxPanel";
-import {Select} from "./Select";
+import {Select} from "jassi/ui/Select";
 import { classes } from "jassi/remote/Classes";
 import { $Action, $ActionProvider } from "jassi/base/Actions";
 import { router } from "jassi/base/Router";

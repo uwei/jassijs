@@ -9,7 +9,7 @@ define(["require", "exports", "jassi/remote/Database", "jassi/remote/Classes"], 
             var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
             var clname = Classes_1.classes.getClassName(con);
             var field = fargs.length == 1 ? "this" : fargs[1];
-            Database_1.db._setMetadata(con, field, decoratername, args, fargs);
+            Database_1.db._setMetadata(con, field, decoratername, args, fargs, undefined);
         };
     }
     function Entity(...param) {

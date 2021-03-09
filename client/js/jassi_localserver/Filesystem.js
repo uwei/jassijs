@@ -181,19 +181,21 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
             await new RegistryIndexer().updateRegistry();
             if (rollbackonerror) {
                 try {
-                    new Reloader_1.Reloader().reloadJSAll(tsfiles);
-                    if (dbschemaHasChanged) {
-                        var man = await DBManager_1.DBManager.destroyConnection();
-                        await DBManager_1.DBManager.get();
-                    }
+                    await Reloader_1.Reloader.instance.reloadJSAll(tsfiles);
+                    /*  if (dbschemaHasChanged) {
+                          var man = await DBManager.destroyConnection();
+                          await DBManager.get();
+                      }*/
                 }
                 catch (err) {
                     console.error(err);
                     if (dbschemaHasChanged) {
-                        DBManager_1.DBManager.destroyConnection();
-                        await DBManager_1.DBManager.get();
+                        await DBManager_1.DBManager.destroyConnection();
                     }
                     var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                    if (dbschemaHasChanged) {
+                        await DBManager_1.DBManager.get();
+                    }
                     return err + "DB corrupt changes are reverted " + restore;
                 }
             }

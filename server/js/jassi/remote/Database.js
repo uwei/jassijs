@@ -8,24 +8,51 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = exports.Database = void 0;
 const Jassi_1 = require("jassi/remote/Jassi");
+const Classes_1 = require("./Classes");
 class TypeDef {
 }
 let Database = class Database {
     constructor() {
         this.typeDef = new Map();
+        this.decoratorCalls = new Map();
     }
-    _setMetadata(constructor, field, decoratername, fieldprops, decoraterprops) {
+    removeOld(oclass) {
+        var name = Classes_1.classes.getClassName(oclass);
+        this.typeDef.forEach((value, key) => {
+            var testname = Classes_1.classes.getClassName(key);
+            if (testname === name && key !== oclass)
+                this.typeDef.delete(key);
+        });
+        this.decoratorCalls.forEach((value, key) => {
+            var testname = Classes_1.classes.getClassName(key);
+            if (testname === name && key !== oclass)
+                this.decoratorCalls.delete(key);
+        });
+    }
+    _setMetadata(constructor, field, decoratername, fieldprops, decoraterprops, delegate) {
         var def = this.typeDef.get(constructor);
         if (def === undefined) {
             def = new TypeDef();
-            this.typeDef.set(constructor, def);
+            this.decoratorCalls.set(constructor, []);
+            this.typeDef.set(constructor, def); //new class
         }
+        if (field === "this") {
+            this.removeOld(constructor);
+        }
+        this.decoratorCalls.get(constructor).push([delegate, fieldprops, decoraterprops]);
         var afield = def[field];
         if (def[field] === undefined) {
             afield = {};
             def[field] = afield;
         }
         afield[decoratername] = fieldprops;
+    }
+    fillDecorators() {
+        this.decoratorCalls.forEach((allvalues, key) => {
+            allvalues.forEach((value) => {
+                value[0](...value[1])(...value[2]);
+            });
+        });
     }
     getMetadata(sclass) {
         return this.typeDef.get(sclass);

@@ -22,7 +22,7 @@ export  class MemoryTest{
         let test=await server.loadFile("demo/DK.ts");
         await server.saveFile("demo/DK.ts",test);
 
-        await new Reloader().reloadJS("demo/DK.js");
+        await Reloader.instance.reloadJS("demo/DK.js");
         delete registry.data["$Class"]["demo.DK"];
         requirejs.undef("demo/DK.js");
         requirejs.undef("demo/DK");

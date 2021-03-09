@@ -30,21 +30,23 @@ export class Server extends RemoteObject {
     async fillFilesInMapIfNeeded() {
         if (Server.filesInMap)
             return;
-        Server.filesInMap = {};
+        var ret = {};
         for (var mod in jassi.modules) {
             if (jassi.modules[mod].endsWith(".js")) {
-                var code = await this.loadFile(jassi.modules[mod] + ".map");
+                var code = await $.ajax({ url: jassi.modules[mod] + ".map", dataType: "text" }) 
                 var data = JSON.parse(code);
                 var files = data.sources;
                 for (let x = 0; x < files.length; x++) {
                     let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                    Server.filesInMap[fname] = {
+                    ret[fname] = {
                         id: x,
                         modul: mod
                     };
                 }
             }
         }
+        Server.filesInMap=ret;
+
     }
     async addFilesFromMap(root: FileNode) {
         await this.fillFilesInMapIfNeeded();
@@ -210,12 +212,12 @@ export class Server extends RemoteObject {
     * @param {string} content
     */
     async saveFile(fileName: string, content: string,context:Context=undefined): Promise<string> {
-        await this.fillFilesInMapIfNeeded();
+        /*await this.fillFilesInMapIfNeeded();
         if (Server.filesInMap[fileName]) {
             //@ts-ignore
              $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
             return;
-        }
+        }*/
         return await this.saveFiles([fileName], [content],context);
         /* if (!jassi.isServer) {
              var ret = await this.call(this, "saveFiles", fileNames, contents);

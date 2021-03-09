@@ -185,18 +185,20 @@ export default class Filessystem {
 
         if (rollbackonerror) {
             try {
-                new Reloader().reloadJSAll(tsfiles);
-                if (dbschemaHasChanged) {
+                await Reloader.instance.reloadJSAll(tsfiles);
+              /*  if (dbschemaHasChanged) {
                     var man = await DBManager.destroyConnection();
                     await DBManager.get();
-                }
+                }*/
             } catch (err) {
                 console.error(err);
                 if (dbschemaHasChanged) {
-                    DBManager.destroyConnection();
-                    await DBManager.get();
+                    await DBManager.destroyConnection();
                 }
                 var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                if (dbschemaHasChanged) {
+                    await DBManager.get();
+                }
                 return err + "DB corrupt changes are reverted " + restore;
             }
         }

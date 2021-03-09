@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/ui/ComponentDescriptor", "./Windows"], function (require, exports, Jassi_1, Classes_1, ComponentDescriptor_1, Windows_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/ui/ComponentDescriptor", "jassi/base/Windows"], function (require, exports, Jassi_1, Classes_1, ComponentDescriptor_1, Windows_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.router = exports.Router = void 0;

@@ -2,7 +2,7 @@ import { Table } from "jassi/ui/Table";
 import { Button } from "jassi/ui/Button";
 import { Panel } from "jassi/ui/Panel";
 import { Textbox } from "jassi/ui/Textbox";
-import { Context } from "jassi/remote/Context";
+
 import { Server } from "jassi/remote/Server";
 type Me = {
     button1?: Button;
@@ -36,8 +36,7 @@ async function a(){
     return await b();
 }
 export async function test() {
-   var h=await new Server().dir();
-   alert(h);
+  debugger;
    /*var t=new Test();
    var context=new Context();
    var r=context.register("meintest",{hallo:9},async ()=>{

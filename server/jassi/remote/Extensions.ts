@@ -1,4 +1,4 @@
-import registry from "./Registry";
+import registry from "jassi/remote/Registry";
 
 
 export function $Extension(forclass): Function {

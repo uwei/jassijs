@@ -8,51 +8,51 @@ define(["require", "exports", "jassi/remote/Classes", "jassi/remote/Database", "
             var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
             var clname = Classes_1.classes.getClassName(con);
             var field = fargs.length == 1 ? "this" : fargs[1];
-            Database_1.db._setMetadata(con, field, decoratername, args, fargs);
+            Database_1.db._setMetadata(con, field, decoratername, args, fargs, delegate);
             if (delegate)
-                delegate(...fargs);
+                delegate(...args)(...fargs);
         };
     }
     function Entity(...param) {
         //DEntity(param)(pclass, ...params);
         console.log("Ent:" + JSON.stringify(param));
-        return addDecorater("Entity", typeorm_1.Entity(...param), param);
+        return addDecorater("Entity", typeorm_1.Entity, param);
     }
     exports.Entity = Entity;
     function PrimaryGeneratedColumn(...param) {
-        return addDecorater("PrimaryGeneratedColumn", typeorm_1.PrimaryGeneratedColumn(...param), param);
+        return addDecorater("PrimaryGeneratedColumn", typeorm_1.PrimaryGeneratedColumn, ...param);
     }
     exports.PrimaryGeneratedColumn = PrimaryGeneratedColumn;
     function JoinColumn(...param) {
-        return addDecorater("JoinColumn", typeorm_1.JoinColumn(...param), param);
+        return addDecorater("JoinColumn", typeorm_1.JoinColumn, ...param);
     }
     exports.JoinColumn = JoinColumn;
     function JoinTable(...param) {
-        return addDecorater("JoinTable", typeorm_1.JoinTable(...param), param);
+        return addDecorater("JoinTable", typeorm_1.JoinTable, ...param);
     }
     exports.JoinTable = JoinTable;
     function Column(...param) {
-        return addDecorater("Column", typeorm_1.Column(...param), param);
+        return addDecorater("Column", typeorm_1.Column, ...param);
     }
     exports.Column = Column;
     function PrimaryColumn(...param) {
-        return addDecorater("PrimaryColumn", typeorm_1.PrimaryColumn(...param), param);
+        return addDecorater("PrimaryColumn", typeorm_1.PrimaryColumn, ...param);
     }
     exports.PrimaryColumn = PrimaryColumn;
     function OneToOne(...param) {
-        return addDecorater("OneToOne", typeorm_1.OneToOne(...param), param);
+        return addDecorater("OneToOne", typeorm_1.OneToOne, ...param);
     }
     exports.OneToOne = OneToOne;
     function OneToMany(...param) {
-        return addDecorater("OneToMany", typeorm_1.OneToMany(...param), param);
+        return addDecorater("OneToMany", typeorm_1.OneToMany, ...param);
     }
     exports.OneToMany = OneToMany;
     function ManyToOne(...param) {
-        return addDecorater("ManyToOne", typeorm_1.ManyToOne(...param), param);
+        return addDecorater("ManyToOne", typeorm_1.ManyToOne, ...param);
     }
     exports.ManyToOne = ManyToOne;
     function ManyToMany(...param) {
-        return addDecorater("ManyToMany", typeorm_1.ManyToMany(...param), param);
+        return addDecorater("ManyToMany", typeorm_1.ManyToMany, ...param);
     }
     exports.ManyToMany = ManyToMany;
 });

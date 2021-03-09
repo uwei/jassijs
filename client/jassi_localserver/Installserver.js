@@ -1,4 +1,6 @@
-
+define("jassi_localserver/Installserver",[],function(){
+    //do nothing
+});
 
 define("jassi/util/DatabaseSchema", ["jassi_localserver/DatabaseSchema"], function (to) {
     return to;
@@ -16,7 +18,7 @@ define("jassi/server/Filesystem",["jassi_localserver/Filesystem"],function(fs){
     return        fs
     
 })
-define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry","jassi_localserver/DBManager","jassi_localserver/TypeORMListener"], function (db, Classes_1, Registry_1,dbman,TypeORMListener) {
+define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry","jassi_localserver/DBManager","jassi_localserver/TypeORMListener","typeorm","jassi/remote/Database"], function (db, Classes_1, Registry_1,dbman,TypeORMListener,to,Database) {
     
     db.DBManager["getConOpts"] = async function () {
         var dbclasses = [];
@@ -26,7 +28,7 @@ define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/C
             // You can omit locateFile completely when running in node
             locateFile: file => `https://sql.js.org/dist/${file}`
         });
-       var Reloader=(await import("jassi/util/Reloader")).Reloader;
+
         var dbobjects = await Registry_1.default.getJSONData("$DBObject");
         var dbfiles=[];
         for (var o = 0; o < dbobjects.length; o++) {
@@ -40,17 +42,11 @@ define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/C
             }
         }
         db.DBManager.clearMetadata();
-        dbclasses=[];
-        await new Reloader().reloadJS("jassi_localserver/TypeORMListener");
-        await new Reloader().reloadJSAll(dbfiles);
-        for (var o = 0; o < dbobjects.length; o++) {
-            var clname = dbobjects[o].classname;
-             dbclasses.push(await Classes_1.classes.loadClass(clname));
-        }
+        Database.db.fillDecorators();
+        var tcl=await Classes_1.classes.loadClass("jassi_localserver.TypeORMListener");
+        to.EventSubscriber()(tcl);
         var Filessystem=await Classes_1.classes.loadClass("jassi_localserver.Filessystem");
-       
         var data=await new Filessystem().loadFile("__default.db");
-       
         var opt = {
             database:data,
             type: "sqljs",

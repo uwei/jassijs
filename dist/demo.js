@@ -381,7 +381,7 @@ define("demo/MemoryTest", ["require", "exports", "jassi/remote/Server", "jassi/u
             let server = new Server_1.Server();
             let test = await server.loadFile("demo/DK.ts");
             await server.saveFile("demo/DK.ts", test);
-            await new Reloader_1.Reloader().reloadJS("demo/DK.js");
+            await Reloader_1.Reloader.instance.reloadJS("demo/DK.js");
             delete Registry_1.default.data["$Class"]["demo.DK"];
             requirejs.undef("demo/DK.js");
             requirejs.undef("demo/DK");

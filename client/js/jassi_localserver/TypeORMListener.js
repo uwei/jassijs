@@ -4,10 +4,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "typeorm", "./Filesystem"], function (require, exports, Jassi_1, typeorm_1, Filesystem_1) {
+define(["require", "exports", "jassi/remote/Jassi", "typeorm", "jassi_localserver/Filesystem", "jassi/util/Reloader", "jassi/remote/Registry", "./DBManager"], function (require, exports, Jassi_1, typeorm_1, Filesystem_1, Reloader_1, Registry_1, DBManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeORMListener = void 0;
+    //listener for code changes
+    Reloader_1.Reloader.instance.addEventCodeReloaded(async function (files) {
+        var dbobjects = await Registry_1.default.getJSONData("$DBObject");
+        var reload = false;
+        for (var x = 0; x < files.length; x++) {
+            var file = files[x];
+            dbobjects.forEach((data) => {
+                if (data.filename === file + ".ts")
+                    reload = true;
+            });
+        }
+        if (reload) {
+            await DBManager_1.DBManager.destroyConnection();
+            await DBManager_1.DBManager.get();
+        }
+    });
     let TypeORMListener = class TypeORMListener {
         saveDB(event) {
             if (this.savetimer) {
@@ -104,7 +120,7 @@ define(["require", "exports", "jassi/remote/Jassi", "typeorm", "./Filesystem"], 
     };
     TypeORMListener = __decorate([
         typeorm_1.EventSubscriber(),
-        Jassi_1.$Class("jassi_localserver/TypeORMListener")
+        Jassi_1.$Class("jassi_localserver.TypeORMListener")
     ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
 });

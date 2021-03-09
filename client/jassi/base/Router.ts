@@ -4,7 +4,7 @@ import("jassi/remote/Classes");
 import registry from "jassi/remote/Registry";
 import { classes } from "jassi/remote/Classes";
 import {ComponentDescriptor} from "jassi/ui/ComponentDescriptor";
-import windows from "./Windows";
+import windows from "jassi/base/Windows";
 
 @$Class("jassi.base.Router")
 export class Router

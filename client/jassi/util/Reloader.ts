@@ -5,10 +5,12 @@ import registry from "jassi/remote/Registry";
 export class Reloader {
     static cache = [];
     static reloadCodeFromServerIsRunning: boolean = false;
+    static instance = new Reloader();
+    listener = [];
     /**
      * reloads Code
      */
-    constructor() {
+    private constructor() {
 
     }
     /**
@@ -37,7 +39,21 @@ export class Reloader {
         };
         window.setTimeout(f, 100000);
     }
-    _findScript(name: string) {
+    /**
+     * listener for code reloaded 
+     * @param {function} func - callfunction for the event
+     */
+    addEventCodeReloaded(func) {
+        this.listener.push(func);
+    }
+    removeEventCodeReloaded(func) {
+        var pos = this.listener.indexOf(func);
+        if (pos !== -1) {
+            this.listener.splice(pos, 1);
+        }
+    }
+
+    private _findScript(name: string) {
         var scripts = $('script');
         for (var x = 0; x < scripts.length; x++) {
             var attr = scripts[x].getAttributeNode("src");
@@ -113,7 +129,7 @@ export class Reloader {
                     }
                 }
             }
-           
+
             for (var key in files) {
                 if (files[key].endsWith(".js"))
                     files[key] = files[key].substring(0, files[key].length - 3);   //files._self_=fileName;
@@ -135,43 +151,57 @@ export class Reloader {
                 resolve(undefined);
             });
         });
-        for(let x=0;x<allfiles.length;x++){
+        for (let x = 0; x < allfiles.length; x++) {
             requirejs.undef(allfiles[x]);
         }
         //undefined all files
-      /*  for (var key in files) {
-            requirejs.undef(files[key]);
-        }*/
-       // requirejs.undef(fileNameBlank);
+        /*  for (var key in files) {
+              requirejs.undef(files[key]);
+          }*/
+        // requirejs.undef(fileNameBlank);
 
-      /*  var hasloaded = {};
-        var doclass = async function (fam) {
-            for (var key in fam) {
-                var name = fam[key].name;
-                var file = files[key];
-                //console.log("reload "+key+"->"+file);
-                var next = fam[key];
-                var key = key;
-                await new Promise((resolve, reject) => {
-                    require([file], function (ret) {
-                        _this.migrateModul(allModules, file, ret);
-                        resolve(undefined);
-                    });
-                });
-                await doclass(next);
-            }
-        }
-        doclass(family);*/
+        /*  var hasloaded = {};
+          var doclass = async function (fam) {
+              for (var key in fam) {
+                  var name = fam[key].name;
+                  var file = files[key];
+                  //console.log("reload "+key+"->"+file);
+                  var next = fam[key];
+                  var key = key;
+                  await new Promise((resolve, reject) => {
+                      require([file], function (ret) {
+                          _this.migrateModul(allModules, file, ret);
+                          resolve(undefined);
+                      });
+                  });
+                  await doclass(next);
+              }
+          }
+          doclass(family);*/
         var _this = this;
-        console.log("reload " + JSON.stringify(fileNameBlank));
-        await new Promise((resolve, reNameject) => {
-            require(allfiles, function (...ret) {
-                for(let f=0;f<allfiles.length;f++){
-                    _this.migrateModul(allModules, allfiles[f], ret[f]);
-                }
 
-                resolve(undefined);
+        // console.log("reload " + JSON.stringify(fileNameBlank));
+        await new Promise((resolve, reject) => {
+            require(allfiles, function (...ret) {
+                async function run() {
+                    for (let f = 0; f < allfiles.length; f++) {
+                        _this.migrateModul(allModules, allfiles[f], ret[f]);
+                    }
+                    for (let i = 0; i < _this.listener.length; i++) {
+                       
+                        await _this.listener[i](allfiles);
+                        
+                    };
+                }
+                run().then(() => {
+                    resolve(undefined);
+                }).catch(err => {
+                    reject(err);
+                });
+
             });
+        }).catch(err => {
+            throw err
         });
 
     }

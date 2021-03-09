@@ -159,22 +159,15 @@ export class CodeEditor extends Panel {
 
     private async _save(code) {
         await new Server().saveFile(this._file, code);
-        var test = classes.getClass("jassi_localserver.DBManager");
-        var reload = true;
-        if (test) {
-            var dbobjects = await registry.getJSONData("$DBObject");
-            dbobjects.forEach((data) => {
-                if (data.filename === this._file)
-                    reload = false;
-            });
-        }
-        if (reload) {
+        
+       
             var f = this._file.replace(".ts", "");
-            new Reloader().reloadJS(f);
-        }
-        if (code.indexOf("@$") > -1) {
-            registry.reload();
-        }
+            if (code.indexOf("@$") > -1) {
+                await registry.reload();
+            }
+            Reloader.instance.reloadJS(f);
+     
+        
     }
     /**
     * save the code to server

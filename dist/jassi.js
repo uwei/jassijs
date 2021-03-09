@@ -117,7 +117,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.base.PropertyEditorService": {}
             },
             "jassi/base/Router.ts": {
-                "date": 1613505686419,
+                "date": 1615231156312,
                 "jassi.base.Router": {}
             },
             "jassi/base/Tests.ts": {
@@ -137,7 +137,7 @@ define("jassi/registry", ["require"], function (require) {
                 "date": 1614358430834
             },
             "jassi/modul.ts": {
-                "date": 1614359854752
+                "date": 1615134737730
             },
             "jassi/remote/Classes.ts": {
                 "date": 1613925159863,
@@ -148,7 +148,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.Database": {}
             },
             "jassi/remote/DBArray.ts": {
-                "date": 1613233278151,
+                "date": 1615231253407,
                 "jassi.remote.DBArray": {}
             },
             "jassi/remote/DBObject.ts": {
@@ -159,7 +159,7 @@ define("jassi/registry", ["require"], function (require) {
                 "date": 1613218566583
             },
             "jassi/remote/Extensions.ts": {
-                "date": 1613925202662
+                "date": 1615231258775
             },
             "jassi/remote/FileNode.ts": {
                 "date": 1614803263239,
@@ -221,7 +221,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.security.Rights": {}
             },
             "jassi/remote/security/User.ts": {
-                "date": 1614459180220,
+                "date": 1615231236534,
                 "jassi.remote.security.User": {
                     "$DBObject": [
                         {
@@ -231,7 +231,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/remote/Server.ts": {
-                "date": 1614891730205,
+                "date": 1615230258439,
                 "jassi.remote.Server": {}
             },
             "jassi/remote/Transaction.ts": {
@@ -360,7 +360,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.ComponentDescriptor": {}
             },
             "jassi/ui/ComponentSpy.ts": {
-                "date": 1613512879714,
+                "date": 1615231223589,
                 "jassi.ui.ComponentSpy": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -386,7 +386,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/converters/DefaultConverter.ts": {
-                "date": 1613218566582,
+                "date": 1615231302585,
                 "jassi.ui.converters.DefaultConverterProperties": {},
                 "jassi.ui.converters.DefaultConverter": {
                     "$Converter": [
@@ -404,7 +404,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/converters/NumberConverter.ts": {
-                "date": 1613218544158,
+                "date": 1615231311640,
                 "jassi.ui.converters.NumberConverter": {
                     "$Converter": [
                         {
@@ -420,7 +420,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/converters/StringConverter.ts": {
-                "date": 1613218544157,
+                "date": 1615231315342,
                 "jassi.ui.converters.StringConverter": {
                     "$Converter": [
                         {
@@ -503,7 +503,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/DesignDummy.ts": {
-                "date": 1613218544159,
+                "date": 1615231275007,
                 "jassi.ui.DesignDummy": {}
             },
             "jassi/ui/DockingContainer.ts": {
@@ -554,7 +554,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/InvisibleComponent.ts": {
-                "date": 1613218544159,
+                "date": 1615231279789,
                 "jassi.ui.InvisibleComponent": {
                     "$Property": [
                         {
@@ -611,7 +611,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.OptionDialogTestProp": {}
             },
             "jassi/ui/Panel.ts": {
-                "date": 1613478144814,
+                "date": 1615231285196,
                 "jassi.ui.PanelCreateProperties": {},
                 "jassi.ui.Panel": {
                     "$UIComponent": [
@@ -2433,7 +2433,224 @@ define("jassi/base/PropertyEditorService", ["require", "exports", "jassi/remote/
     var propertyeditor = new PropertyEditorService();
     exports.propertyeditor = propertyeditor;
 });
-define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext/goldenlayout", "jassi/ui/ComponentDescriptor", "jassi/remote/Classes", "jassi/util/Cookies"], function (require, exports, Panel_1, Jassi_8, goldenlayout_1, ComponentDescriptor_1, Classes_4, Cookies_1) {
+define("jassi/base/Router", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/ui/ComponentDescriptor", "jassi/base/Windows"], function (require, exports, Jassi_8, Classes_4, ComponentDescriptor_1, Windows_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.router = exports.Router = void 0;
+    new Promise((resolve_1, reject_1) => { require(["jassi/remote/Classes"], resolve_1, reject_1); });
+    let Router = class Router {
+        constructor() {
+        }
+        /**
+         * registers a database class
+         * @param {string} - the name of the class
+         * @param {class} - the class
+         */
+        register(name, data) {
+            throw "Error not implemented";
+        }
+        /**
+         * resolve the url
+         * @param {string} hash - the hash to resolve
+         */
+        resolve(hash) {
+            if (hash === "")
+                return;
+            var tags = hash.substring(1).split("&");
+            var params = {};
+            for (var x = 0; x < tags.length; x++) {
+                var kv = tags[x].split("=");
+                params[kv[0]] = kv[1];
+            }
+            if (params.do !== undefined) {
+                var clname = params.do;
+                //load js file
+                Classes_4.classes.loadClass(clname).then(function (cl) {
+                    if (cl === undefined)
+                        return;
+                    var props = ComponentDescriptor_1.ComponentDescriptor.describe(cl).fields;
+                    ;
+                    var id = undefined;
+                    for (var p = 0; p < props.length; p++) {
+                        if (props[p].id) {
+                            id = props[p].name;
+                        }
+                    }
+                    var name = params.do;
+                    if (params[id])
+                        name = name + "-" + params[id];
+                    if (Windows_2.default.contains(name)) {
+                        var window = Windows_2.default.show(name);
+                        var ob = Windows_2.default.findComponent(name);
+                        if (ob !== undefined) {
+                            for (var key in params) {
+                                if (key !== "do" && //no classname
+                                    key !== id) { //no id!
+                                    ob[key] = params[key];
+                                }
+                            }
+                        }
+                        return window;
+                    }
+                    else {
+                        var ob = new cl();
+                        for (var key in params) {
+                            if (key !== "do") {
+                                ob[key] = params[key];
+                            }
+                        }
+                        Windows_2.default.add(ob, ob.title, name);
+                        if (ob.callEvent !== undefined) {
+                            Windows_2.default.onclose(ob, function (param) {
+                                ob.callEvent("close", param);
+                            });
+                        }
+                    }
+                });
+                /*var urltags=[];
+                for(var p=0;p<props.length;p){
+                    if(props[p].isUrlTag){
+                        urltags.push(props[p]);
+                    }
+                }*/
+            }
+        }
+        /**
+         * generate a URL from the component
+         * @param {jassi.ui.Component} component - the component to inspect
+         */
+        getURLFromComponent(component) {
+        }
+        /**
+         *
+         * @param {string} hash - the hash to navigate
+         */
+        navigate(hash) {
+            window.location.hash = hash;
+            this.resolve(hash);
+        }
+    };
+    Router = __decorate([
+        Jassi_8.$Class("jassi.base.Router"),
+        __metadata("design:paramtypes", [])
+    ], Router);
+    exports.Router = Router;
+    ;
+    window.addEventListener("popstate", function (evt) {
+        router.resolve(window.location.hash);
+    });
+    let router = new Router();
+    exports.router = router;
+});
+define("jassi/base/Tests", ["require", "exports", "jassi/remote/Jassi", "jassi/base/Actions", "jassi_editor/util/Typescript", "jassi/ui/Component", "jassi/ui/Container", "jassi/ui/BoxPanel", "jassi/base/Windows", "jassi/ui/HTMLPanel"], function (require, exports, Jassi_9, Actions_1, Typescript_2, Component_1, Container_1, BoxPanel_1, Windows_3, HTMLPanel_1) {
+    "use strict";
+    var TestAction_1, _a;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Tests = exports.Test = exports.TestAction = void 0;
+    let TestAction = TestAction_1 = class TestAction {
+        static async testNode(all, container = undefined) {
+            //var isRoot=false;
+            if (container === undefined) {
+                container = new BoxPanel_1.BoxPanel();
+                Windows_3.default.add(container, "Tests");
+                //	isRoot=true;
+            }
+            for (var x = 0; x < all.length; x++) {
+                var file = all[x];
+                if (file.isDirectory()) {
+                    await TestAction_1.testNode(file.files, container);
+                }
+                else {
+                    await Typescript_2.default.initService();
+                    var text = Typescript_2.default.getCode(file.fullpath);
+                    if (text !== undefined) {
+                        text = text.toLowerCase();
+                        console.log("test " + file.fullpath);
+                        if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
+                            var func = (await new Promise((resolve_2, reject_2) => { require([file.fullpath.substring(0, file.fullpath.length - 3)], resolve_2, reject_2); })).test;
+                            if (typeof func === "function") {
+                                var ret = await func(new Test());
+                                if (ret instanceof Component_1.Component) {
+                                    $(ret.dom).css({ position: "relative" });
+                                    ret.width = 400;
+                                    var head = new HTMLPanel_1.HTMLPanel();
+                                    head.value = "<b>" + file.fullpath + "</b>";
+                                    container.add(head);
+                                    container.add(ret);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // if(isRoot&&container._components.length>0){
+            //  }
+        }
+    };
+    __decorate([
+        Actions_1.$Action({
+            name: "Test"
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Array, typeof (_a = typeof Container_1.Container !== "undefined" && Container_1.Container) === "function" ? _a : Object]),
+        __metadata("design:returntype", Promise)
+    ], TestAction, "testNode", null);
+    TestAction = TestAction_1 = __decorate([
+        Actions_1.$ActionProvider("jassi.remote.FileNode"),
+        Jassi_9.$Class("jassi.ui.TestAction")
+    ], TestAction);
+    exports.TestAction = TestAction;
+    let Test = class Test {
+        /**
+         * fails if the condition is false
+         * @parameter condition
+         **/
+        expectEqual(condition) {
+            if (!condition)
+                throw new Error("Test fails");
+        }
+        /**
+         * fails if the func does not throw an error
+         * @parameter func - the function that should failed
+         **/
+        expectError(func) {
+            try {
+                if (func.toString().startsWith("async ")) {
+                    var errobj;
+                    try {
+                        throw new Error("test fails");
+                    }
+                    catch (err) {
+                        errobj = err;
+                    }
+                    func().then(() => {
+                        throw errobj;
+                    }).catch((err) => {
+                        if (err.message === "test fails")
+                            throw errobj;
+                        var k = 1; //io
+                    });
+                    return;
+                }
+                else {
+                    func();
+                }
+            }
+            catch (_a) {
+                return; //io
+            }
+            throw new Error("test fails");
+        }
+    };
+    Test = __decorate([
+        Jassi_9.$Class("jassi.base.Test")
+    ], Test);
+    exports.Test = Test;
+    class Tests {
+    }
+    exports.Tests = Tests;
+});
+define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext/goldenlayout", "jassi/ui/ComponentDescriptor", "jassi/remote/Classes", "jassi/util/Cookies"], function (require, exports, Panel_1, Jassi_10, goldenlayout_1, ComponentDescriptor_2, Classes_5, Cookies_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Windows = void 0;
@@ -2697,14 +2914,14 @@ define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/rem
          * @param {jassi.ui.component} comp - the component to read
          */
         getUrlFromComponent(comp) {
-            var props = ComponentDescriptor_1.ComponentDescriptor.describe(comp.constructor).fields;
+            var props = ComponentDescriptor_2.ComponentDescriptor.describe(comp.constructor).fields;
             var urltags = [];
             for (var p = 0; p < props.length; p++) {
                 if (props[p].isUrlTag) {
                     urltags.push(props[p]);
                 }
             }
-            var url = "#do=" + Classes_4.classes.getClassName(comp);
+            var url = "#do=" + Classes_5.classes.getClassName(comp);
             for (var x = 0; x < urltags.length; x++) {
                 url = url + "&" + urltags[x].name + "=" + comp[urltags[x].name];
             }
@@ -2716,7 +2933,7 @@ define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/rem
             if (save === undefined || save === "")
                 return;
             var all = save.split(",");
-            new Promise((resolve_1, reject_1) => { require(["./Router"], resolve_1, reject_1); }).then(function (router) {
+            new Promise((resolve_3, reject_3) => { require(["./Router"], resolve_3, reject_3); }).then(function (router) {
                 for (var x = 0; x < all.length; x++) {
                     router.router.navigate(all[x]);
                 }
@@ -2757,7 +2974,7 @@ define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/rem
         }
     };
     Windows = __decorate([
-        Jassi_8.$Class("jassi.base.Windows"),
+        Jassi_10.$Class("jassi.base.Windows"),
         __metadata("design:paramtypes", [])
     ], Windows);
     exports.Windows = Windows;
@@ -2769,223 +2986,6 @@ define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/rem
 //  jassi.windows._init();
 //  });
 //return Component.constructor;
-define("jassi/base/Router", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/ui/ComponentDescriptor", "jassi/base/Windows"], function (require, exports, Jassi_9, Classes_5, ComponentDescriptor_2, Windows_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.router = exports.Router = void 0;
-    new Promise((resolve_2, reject_2) => { require(["jassi/remote/Classes"], resolve_2, reject_2); });
-    let Router = class Router {
-        constructor() {
-        }
-        /**
-         * registers a database class
-         * @param {string} - the name of the class
-         * @param {class} - the class
-         */
-        register(name, data) {
-            throw "Error not implemented";
-        }
-        /**
-         * resolve the url
-         * @param {string} hash - the hash to resolve
-         */
-        resolve(hash) {
-            if (hash === "")
-                return;
-            var tags = hash.substring(1).split("&");
-            var params = {};
-            for (var x = 0; x < tags.length; x++) {
-                var kv = tags[x].split("=");
-                params[kv[0]] = kv[1];
-            }
-            if (params.do !== undefined) {
-                var clname = params.do;
-                //load js file
-                Classes_5.classes.loadClass(clname).then(function (cl) {
-                    if (cl === undefined)
-                        return;
-                    var props = ComponentDescriptor_2.ComponentDescriptor.describe(cl).fields;
-                    ;
-                    var id = undefined;
-                    for (var p = 0; p < props.length; p++) {
-                        if (props[p].id) {
-                            id = props[p].name;
-                        }
-                    }
-                    var name = params.do;
-                    if (params[id])
-                        name = name + "-" + params[id];
-                    if (Windows_2.default.contains(name)) {
-                        var window = Windows_2.default.show(name);
-                        var ob = Windows_2.default.findComponent(name);
-                        if (ob !== undefined) {
-                            for (var key in params) {
-                                if (key !== "do" && //no classname
-                                    key !== id) { //no id!
-                                    ob[key] = params[key];
-                                }
-                            }
-                        }
-                        return window;
-                    }
-                    else {
-                        var ob = new cl();
-                        for (var key in params) {
-                            if (key !== "do") {
-                                ob[key] = params[key];
-                            }
-                        }
-                        Windows_2.default.add(ob, ob.title, name);
-                        if (ob.callEvent !== undefined) {
-                            Windows_2.default.onclose(ob, function (param) {
-                                ob.callEvent("close", param);
-                            });
-                        }
-                    }
-                });
-                /*var urltags=[];
-                for(var p=0;p<props.length;p){
-                    if(props[p].isUrlTag){
-                        urltags.push(props[p]);
-                    }
-                }*/
-            }
-        }
-        /**
-         * generate a URL from the component
-         * @param {jassi.ui.Component} component - the component to inspect
-         */
-        getURLFromComponent(component) {
-        }
-        /**
-         *
-         * @param {string} hash - the hash to navigate
-         */
-        navigate(hash) {
-            window.location.hash = hash;
-            this.resolve(hash);
-        }
-    };
-    Router = __decorate([
-        Jassi_9.$Class("jassi.base.Router"),
-        __metadata("design:paramtypes", [])
-    ], Router);
-    exports.Router = Router;
-    ;
-    window.addEventListener("popstate", function (evt) {
-        router.resolve(window.location.hash);
-    });
-    let router = new Router();
-    exports.router = router;
-});
-define("jassi/base/Tests", ["require", "exports", "jassi/remote/Jassi", "jassi/base/Actions", "jassi_editor/util/Typescript", "jassi/ui/Component", "jassi/ui/Container", "jassi/ui/BoxPanel", "jassi/base/Windows", "jassi/ui/HTMLPanel"], function (require, exports, Jassi_10, Actions_1, Typescript_2, Component_1, Container_1, BoxPanel_1, Windows_3, HTMLPanel_1) {
-    "use strict";
-    var TestAction_1, _a;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Tests = exports.Test = exports.TestAction = void 0;
-    let TestAction = TestAction_1 = class TestAction {
-        static async testNode(all, container = undefined) {
-            //var isRoot=false;
-            if (container === undefined) {
-                container = new BoxPanel_1.BoxPanel();
-                Windows_3.default.add(container, "Tests");
-                //	isRoot=true;
-            }
-            for (var x = 0; x < all.length; x++) {
-                var file = all[x];
-                if (file.isDirectory()) {
-                    await TestAction_1.testNode(file.files, container);
-                }
-                else {
-                    await Typescript_2.default.initService();
-                    var text = Typescript_2.default.getCode(file.fullpath);
-                    if (text !== undefined) {
-                        text = text.toLowerCase();
-                        console.log("test " + file.fullpath);
-                        if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
-                            var func = (await new Promise((resolve_3, reject_3) => { require([file.fullpath.substring(0, file.fullpath.length - 3)], resolve_3, reject_3); })).test;
-                            if (typeof func === "function") {
-                                var ret = await func(new Test());
-                                if (ret instanceof Component_1.Component) {
-                                    $(ret.dom).css({ position: "relative" });
-                                    ret.width = 400;
-                                    var head = new HTMLPanel_1.HTMLPanel();
-                                    head.value = "<b>" + file.fullpath + "</b>";
-                                    container.add(head);
-                                    container.add(ret);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            // if(isRoot&&container._components.length>0){
-            //  }
-        }
-    };
-    __decorate([
-        Actions_1.$Action({
-            name: "Test"
-        }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Array, typeof (_a = typeof Container_1.Container !== "undefined" && Container_1.Container) === "function" ? _a : Object]),
-        __metadata("design:returntype", Promise)
-    ], TestAction, "testNode", null);
-    TestAction = TestAction_1 = __decorate([
-        Actions_1.$ActionProvider("jassi.remote.FileNode"),
-        Jassi_10.$Class("jassi.ui.TestAction")
-    ], TestAction);
-    exports.TestAction = TestAction;
-    let Test = class Test {
-        /**
-         * fails if the condition is false
-         * @parameter condition
-         **/
-        expectEqual(condition) {
-            if (!condition)
-                throw new Error("Test fails");
-        }
-        /**
-         * fails if the func does not throw an error
-         * @parameter func - the function that should failed
-         **/
-        expectError(func) {
-            try {
-                if (func.toString().startsWith("async ")) {
-                    var errobj;
-                    try {
-                        throw new Error("test fails");
-                    }
-                    catch (err) {
-                        errobj = err;
-                    }
-                    func().then(() => {
-                        throw errobj;
-                    }).catch((err) => {
-                        if (err.message === "test fails")
-                            throw errobj;
-                        var k = 1; //io
-                    });
-                    return;
-                }
-                else {
-                    func();
-                }
-            }
-            catch (_a) {
-                return; //io
-            }
-            throw new Error("test fails");
-        }
-    };
-    Test = __decorate([
-        Jassi_10.$Class("jassi.base.Test")
-    ], Test);
-    exports.Test = Test;
-    class Tests {
-    }
-    exports.Tests = Tests;
-});
 undefined;
 //Hack for jquery.fancytree.dnd
 define("jquery-ui/ui/widgets/draggable", function () {
@@ -3220,157 +3220,6 @@ define("jassi/remote/Classes", ["require", "exports", "jassi/remote/Registry"], 
     let classes = new Classes();
     exports.classes = classes;
 });
-define("jassi/remote/Jassi", ["require", "exports", "jassi/remote/Registry"], function (require, exports, Registry_6) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Jassi = exports.$register = exports.$Class = void 0;
-    /*
-    window.extentsionCalled = function (param:  ExtensionAction) {
-        if (param.sample) {
-            alert("default:" + param.defaultAction.name);
-        }
-       
-    }
-    window.extentsionCalled({
-        sample: { name: "Passt" }
-    })*/
-    function $Class(longclassname) {
-        return function (pclass) {
-            Registry_6.default.register("$Class", pclass, longclassname);
-        };
-    }
-    exports.$Class = $Class;
-    function $register(servicename, ...params) {
-        return function (pclass) {
-            Registry_6.default.register(servicename, pclass, params);
-        };
-    }
-    exports.$register = $register;
-    //@ts-ignore
-    String.prototype.replaceAll = function (search, replacement) {
-        var target = this;
-        return target.split(search).join(replacement);
-    };
-    /**
-    * main class for jassi
-    * @class Jassi
-    */
-    let Jassi = class Jassi {
-        constructor() {
-            this.isServer = false;
-            //@ts-ignore
-            this.isServer = window.document === undefined;
-            if (!this.isServer) {
-                //  this.myRequire("jassi/jassi.css");
-                //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
-                //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
-            }
-        }
-        /**
-         * include a global stylesheet
-         * @id - the given id - important for update
-         * @data - the css data to insert
-         **/
-        includeCSS(id, data) {
-            //@ts-ignore
-            var style = document.getElementById(id);
-            //@ts-ignore
-            if (!document.getElementById(id)) {
-                style = $('<style id=' + id + '></style>')[0];
-                //@ts-ignore
-                document.head.appendChild(style);
-            }
-            var sstyle = "";
-            for (var selector in data) {
-                var sstyle = sstyle + "\n\t" + selector + "{\n";
-                var properties = data[selector];
-                var prop = {};
-                for (let key in properties) {
-                    if (key === "_classname")
-                        continue;
-                    var newKey = key.replaceAll("_", "-");
-                    prop[newKey] = properties[key];
-                    sstyle = sstyle + "\t\t" + newKey + ":" + properties[key] + ";\n";
-                }
-                sstyle = sstyle + "\t}\n";
-            }
-            style.innerHTML = sstyle;
-        }
-        /**
-        * include a js or a css file
-        * @param {string|string[]} href - url(s) of the js or css file(s)
-        * @param {function} [param] - would be added with? to the url
-        */
-        myRequire(href, event = undefined, param = undefined) {
-            if (this.isServer)
-                throw "jass.Require is only available on client";
-            if ((typeof href) === "string") {
-                href = [href];
-            }
-            var url = "";
-            if (href instanceof Array) {
-                if (href.length === 0) {
-                    if (event !== undefined)
-                        event();
-                    return;
-                }
-                else {
-                    url = href[0];
-                    href.splice(0, 1);
-                }
-            }
-            if (url.endsWith(".js")) {
-                //@ts-ignore
-                if (window.document.getElementById("-->" + url) !== null) {
-                    this.myRequire(href, event);
-                }
-                else {
-                    //@ts-ignore
-                    var js = window.document.createElement("script");
-                    //   js.type = "text/javascript";
-                    js.src = url + (param !== undefined ? "?" + param : "");
-                    var _this = this;
-                    js.onload = function () {
-                        _this.myRequire(href, event);
-                    };
-                    js.id = "-->" + url;
-                    //@ts-ignore
-                    window.document.head.appendChild(js);
-                }
-            }
-            else {
-                //    <link href="lib/jquery.splitter.css" rel="stylesheet"/>
-                //@ts-ignore
-                var head = window.document.getElementsByTagName('head')[0];
-                //@ts-ignore
-                var link = window.document.createElement('link');
-                //  link.rel  = 'import';
-                link.href = url;
-                link.rel = "stylesheet";
-                link.id = "-->" + url;
-                var _this = this;
-                //@ts-ignore 
-                link.onload = function (data1, data2) {
-                    _this.myRequire(href, event);
-                };
-                head.appendChild(link);
-            }
-        }
-    };
-    Jassi = __decorate([
-        $Class("jassi.remote.Jassi"),
-        __metadata("design:paramtypes", [])
-    ], Jassi);
-    exports.Jassi = Jassi;
-    ;
-    var jassi = new Jassi();
-    //@ts-ignore
-    if (window["jassi"] === undefined) { //reloading this file -> no destroy namespace
-        //@ts-ignore
-        window["jassi"] = jassi;
-    }
-    exports.default = jassi;
-});
 define("jassi/remote/DBArray", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], function (require, exports, Jassi_11, Classes_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3454,7 +3303,7 @@ define("jassi/remote/DBArray", ["require", "exports", "jassi/remote/Jassi", "jas
     ], DBArray);
     exports.DBArray = DBArray;
 });
-define("jassi/remote/DBObject", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteObject", "jassi/remote/Registry", "jassi/util/DatabaseSchema", "jassi/remote/Database"], function (require, exports, Jassi_12, Classes_7, RemoteObject_1, Registry_7, DatabaseSchema_2, Database_1) {
+define("jassi/remote/DBObject", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteObject", "jassi/remote/Registry", "jassi/util/DatabaseSchema", "jassi/remote/Database"], function (require, exports, Jassi_12, Classes_7, RemoteObject_1, Registry_6, DatabaseSchema_2, Database_1) {
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3467,7 +3316,7 @@ define("jassi/remote/DBObject", ["require", "exports", "jassi/remote/Jassi", "ja
                 options = {};
             if (!options.name)
                 options.name = classname.toLowerCase().replaceAll(".", "_");
-            Registry_7.default.register("$DBObject", pclass, options);
+            Registry_6.default.register("$DBObject", pclass, options);
             DatabaseSchema_2.Entity(options)(pclass, ...params); //pass to orginal Entitiy
         };
     }
@@ -3653,7 +3502,7 @@ define("jassi/remote/DBObject", ["require", "exports", "jassi/remote/Jassi", "ja
     }
     exports.test = test;
 });
-define("jassi/remote/DBObjectQuery", ["require", "exports", "jassi/remote/Classes", "jassi/remote/Registry"], function (require, exports, Classes_8, Registry_8) {
+define("jassi/remote/DBObjectQuery", ["require", "exports", "jassi/remote/Classes", "jassi/remote/Registry"], function (require, exports, Classes_8, Registry_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObjectQuery = exports.$DBObjectQuery = exports.DBObjectQueryProperties = void 0;
@@ -3663,7 +3512,7 @@ define("jassi/remote/DBObjectQuery", ["require", "exports", "jassi/remote/Classe
     function $DBObjectQuery(property) {
         return function (target, propertyKey, descriptor) {
             var test = Classes_8.classes.getClassName(target);
-            Registry_8.default.registerMember("$DBObjectQuery", target, propertyKey, property);
+            Registry_7.default.registerMember("$DBObjectQuery", target, propertyKey, property);
         };
     }
     exports.$DBObjectQuery = $DBObjectQuery;
@@ -3674,7 +3523,7 @@ define("jassi/remote/DBObjectQuery", ["require", "exports", "jassi/remote/Classe
         static async getQueries(classname) {
             var cl = await Classes_8.classes.loadClass(classname);
             var ret = [];
-            var all = Registry_8.default.getMemberData("$DBObjectQuery");
+            var all = Registry_7.default.getMemberData("$DBObjectQuery");
             var queries = all[classname];
             for (var name in queries) {
                 var qu = queries[name][0][0];
@@ -3697,7 +3546,7 @@ define("jassi/remote/DBObjectQuery", ["require", "exports", "jassi/remote/Classe
     }
     exports.test = test;
 });
-define("jassi/remote/Database", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_13) {
+define("jassi/remote/Database", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], function (require, exports, Jassi_13, Classes_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.db = exports.Database = void 0;
@@ -3706,19 +3555,45 @@ define("jassi/remote/Database", ["require", "exports", "jassi/remote/Jassi"], fu
     let Database = class Database {
         constructor() {
             this.typeDef = new Map();
+            this.decoratorCalls = new Map();
         }
-        _setMetadata(constructor, field, decoratername, fieldprops, decoraterprops) {
+        removeOld(oclass) {
+            var name = Classes_9.classes.getClassName(oclass);
+            this.typeDef.forEach((value, key) => {
+                var testname = Classes_9.classes.getClassName(key);
+                if (testname === name && key !== oclass)
+                    this.typeDef.delete(key);
+            });
+            this.decoratorCalls.forEach((value, key) => {
+                var testname = Classes_9.classes.getClassName(key);
+                if (testname === name && key !== oclass)
+                    this.decoratorCalls.delete(key);
+            });
+        }
+        _setMetadata(constructor, field, decoratername, fieldprops, decoraterprops, delegate) {
             var def = this.typeDef.get(constructor);
             if (def === undefined) {
                 def = new TypeDef();
-                this.typeDef.set(constructor, def);
+                this.decoratorCalls.set(constructor, []);
+                this.typeDef.set(constructor, def); //new class
             }
+            if (field === "this") {
+                this.removeOld(constructor);
+            }
+            this.decoratorCalls.get(constructor).push([delegate, fieldprops, decoraterprops]);
             var afield = def[field];
             if (def[field] === undefined) {
                 afield = {};
                 def[field] = afield;
             }
             afield[decoratername] = fieldprops;
+        }
+        fillDecorators() {
+            this.decoratorCalls.forEach((allvalues, key) => {
+                allvalues.forEach((value) => {
+                    value[0](...value[1])(...value[2]);
+                });
+            });
         }
         getMetadata(sclass) {
             return this.typeDef.get(sclass);
@@ -3730,6 +3605,288 @@ define("jassi/remote/Database", ["require", "exports", "jassi/remote/Jassi"], fu
     exports.Database = Database;
     var db = new Database();
     exports.db = db;
+});
+define("jassi/remote/Extensions", ["require", "exports", "jassi/remote/Registry"], function (require, exports, Registry_8) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.extensions = exports.Extensions = exports.$Extension = void 0;
+    function $Extension(forclass) {
+        return function (pclass) {
+            Registry_8.default.register("$Extension", pclass, forclass);
+        };
+    }
+    exports.$Extension = $Extension;
+    class Extensions {
+        constructor() {
+            this.funcRegister = Registry_8.default.onregister("$Extension", this.register.bind(this));
+        }
+        destroy() {
+            Registry_8.default.offregister("$Extension", this.funcRegister);
+        }
+        annotate(oclass, ...annotations) {
+        }
+        register(extensionclass, forclass) {
+            //TODO reloading???
+            //we must wait with to extent because forclass ist not loaded
+            var func = Registry_8.default.onregister("$Class", function (oclass, params) {
+                if (oclass.prototype.constructor._classname === forclass) {
+                    Registry_8.default.offregister("$Class", func);
+                    let props = Object.getOwnPropertyNames(extensionclass.prototype);
+                    for (var m = 0; m < props.length; m++) {
+                        var member = props[m];
+                        if (member !== "_classname" && member !== "constructor") {
+                            if (typeof extensionclass.prototype[member] === "function") {
+                                if (oclass.prototype[member] !== undefined) {
+                                    var sic = oclass.prototype[member];
+                                    var ext = extensionclass.prototype[member];
+                                    oclass.prototype[member] = function (...p) {
+                                        sic.bind(this)(...p);
+                                        ext.bind(this)(...p);
+                                    };
+                                }
+                                else
+                                    oclass.prototype[member] = extensionclass.prototype[member];
+                            }
+                        }
+                    }
+                }
+            });
+            //  alert(forclass);
+        }
+        annotateMember(classname, member, type, ...annotations) {
+            var func = Registry_8.default.onregister("$Class", function (oclass, params) {
+                if (oclass.prototype.constructor._classname === classname) {
+                    Registry_8.default.offregister("$Class", func);
+                    //designtype
+                    Reflect["metadata"]("design:type", type)(oclass.prototype, member);
+                    for (var x = 0; x < annotations.length; x++) {
+                        let ann = annotations[x];
+                        ann(oclass.prototype, member);
+                    }
+                }
+            });
+        }
+    }
+    exports.Extensions = Extensions;
+    var extensions = new Extensions();
+    exports.extensions = extensions;
+});
+define("jassi/remote/FileNode", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_14) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.FileNode = void 0;
+    ;
+    let FileNode = class FileNode {
+        isDirectory() {
+            return this.files !== undefined;
+        }
+        resolveChilds(all) {
+            if (all === undefined)
+                all = {};
+            //var ret:FileNode[]=[];
+            if (this.files !== undefined) {
+                for (let x = 0; x < this.files.length; x++) {
+                    all[this.files[x].fullpath] = this.files[x];
+                    this.files[x].resolveChilds(all);
+                }
+            }
+            return all;
+        }
+    };
+    FileNode = __decorate([
+        Jassi_14.$Class("jassi.remote.FileNode")
+    ], FileNode);
+    exports.FileNode = FileNode;
+});
+define("jassi/remote/Jassi", ["require", "exports", "jassi/remote/Registry"], function (require, exports, Registry_9) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Jassi = exports.$register = exports.$Class = void 0;
+    /*
+    window.extentsionCalled = function (param:  ExtensionAction) {
+        if (param.sample) {
+            alert("default:" + param.defaultAction.name);
+        }
+       
+    }
+    window.extentsionCalled({
+        sample: { name: "Passt" }
+    })*/
+    function $Class(longclassname) {
+        return function (pclass) {
+            Registry_9.default.register("$Class", pclass, longclassname);
+        };
+    }
+    exports.$Class = $Class;
+    function $register(servicename, ...params) {
+        return function (pclass) {
+            Registry_9.default.register(servicename, pclass, params);
+        };
+    }
+    exports.$register = $register;
+    //@ts-ignore
+    String.prototype.replaceAll = function (search, replacement) {
+        var target = this;
+        return target.split(search).join(replacement);
+    };
+    /**
+    * main class for jassi
+    * @class Jassi
+    */
+    let Jassi = class Jassi {
+        constructor() {
+            this.isServer = false;
+            //@ts-ignore
+            this.isServer = window.document === undefined;
+            if (!this.isServer) {
+                //  this.myRequire("jassi/jassi.css");
+                //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
+                //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
+            }
+        }
+        /**
+         * include a global stylesheet
+         * @id - the given id - important for update
+         * @data - the css data to insert
+         **/
+        includeCSS(id, data) {
+            //@ts-ignore
+            var style = document.getElementById(id);
+            //@ts-ignore
+            if (!document.getElementById(id)) {
+                style = $('<style id=' + id + '></style>')[0];
+                //@ts-ignore
+                document.head.appendChild(style);
+            }
+            var sstyle = "";
+            for (var selector in data) {
+                var sstyle = sstyle + "\n\t" + selector + "{\n";
+                var properties = data[selector];
+                var prop = {};
+                for (let key in properties) {
+                    if (key === "_classname")
+                        continue;
+                    var newKey = key.replaceAll("_", "-");
+                    prop[newKey] = properties[key];
+                    sstyle = sstyle + "\t\t" + newKey + ":" + properties[key] + ";\n";
+                }
+                sstyle = sstyle + "\t}\n";
+            }
+            style.innerHTML = sstyle;
+        }
+        /**
+        * include a js or a css file
+        * @param {string|string[]} href - url(s) of the js or css file(s)
+        * @param {function} [param] - would be added with? to the url
+        */
+        myRequire(href, event = undefined, param = undefined) {
+            if (this.isServer)
+                throw "jass.Require is only available on client";
+            if ((typeof href) === "string") {
+                href = [href];
+            }
+            var url = "";
+            if (href instanceof Array) {
+                if (href.length === 0) {
+                    if (event !== undefined)
+                        event();
+                    return;
+                }
+                else {
+                    url = href[0];
+                    href.splice(0, 1);
+                }
+            }
+            if (url.endsWith(".js")) {
+                //@ts-ignore
+                if (window.document.getElementById("-->" + url) !== null) {
+                    this.myRequire(href, event);
+                }
+                else {
+                    //@ts-ignore
+                    var js = window.document.createElement("script");
+                    //   js.type = "text/javascript";
+                    js.src = url + (param !== undefined ? "?" + param : "");
+                    var _this = this;
+                    js.onload = function () {
+                        _this.myRequire(href, event);
+                    };
+                    js.id = "-->" + url;
+                    //@ts-ignore
+                    window.document.head.appendChild(js);
+                }
+            }
+            else {
+                //    <link href="lib/jquery.splitter.css" rel="stylesheet"/>
+                //@ts-ignore
+                var head = window.document.getElementsByTagName('head')[0];
+                //@ts-ignore
+                var link = window.document.createElement('link');
+                //  link.rel  = 'import';
+                link.href = url;
+                link.rel = "stylesheet";
+                link.id = "-->" + url;
+                var _this = this;
+                //@ts-ignore 
+                link.onload = function (data1, data2) {
+                    _this.myRequire(href, event);
+                };
+                head.appendChild(link);
+            }
+        }
+    };
+    Jassi = __decorate([
+        $Class("jassi.remote.Jassi"),
+        __metadata("design:paramtypes", [])
+    ], Jassi);
+    exports.Jassi = Jassi;
+    ;
+    var jassi = new Jassi();
+    //@ts-ignore
+    if (window["jassi"] === undefined) { //reloading this file -> no destroy namespace
+        //@ts-ignore
+        window["jassi"] = jassi;
+    }
+    exports.default = jassi;
+});
+define("jassi/remote/ObjectTransaction", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ObjectTransaction = void 0;
+    class ObjectTransaction {
+        constructor() {
+            this.statements = [];
+            this.functionsFinally = [];
+        }
+        transactionResolved(context) {
+            //var session = getNamespace('objecttransaction');
+            var test = context.objecttransactionitem; // session.get("objecttransaction");
+            if (test)
+                test.resolve = true;
+        }
+        addFunctionFinally(functionToAdd) {
+            this.functionsFinally.push(functionToAdd);
+        }
+        checkFinally() {
+            let canFinally = true;
+            this.statements.forEach((ent) => {
+                if (ent.result === "**unresolved**")
+                    canFinally = false;
+                if (ent.result["then"] && !ent["resolve"]) { //Promise, which is not resolved by addFunctionFinally
+                    canFinally = false;
+                }
+            });
+            if (canFinally) {
+                this.finally();
+            }
+        }
+        async finally() {
+            for (let x = 0; x < this.functionsFinally.length; x++) {
+                await this.functionsFinally[x]();
+            }
+        }
+    }
+    exports.ObjectTransaction = ObjectTransaction;
 });
 define("jassi/remote/Registry", ["require", "exports", "reflect-metadata"], function (require, exports) {
     "use strict";
@@ -4123,138 +4280,7 @@ define("jassi/remote/Registry", ["require", "exports", "reflect-metadata"], func
     exports.migrateModul = migrateModul;
 });
 //jassi.registry=registry;
-define("jassi/remote/Extensions", ["require", "exports", "jassi/remote/Registry"], function (require, exports, Registry_9) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.extensions = exports.Extensions = exports.$Extension = void 0;
-    function $Extension(forclass) {
-        return function (pclass) {
-            Registry_9.default.register("$Extension", pclass, forclass);
-        };
-    }
-    exports.$Extension = $Extension;
-    class Extensions {
-        constructor() {
-            this.funcRegister = Registry_9.default.onregister("$Extension", this.register.bind(this));
-        }
-        destroy() {
-            Registry_9.default.offregister("$Extension", this.funcRegister);
-        }
-        annotate(oclass, ...annotations) {
-        }
-        register(extensionclass, forclass) {
-            //TODO reloading???
-            //we must wait with to extent because forclass ist not loaded
-            var func = Registry_9.default.onregister("$Class", function (oclass, params) {
-                if (oclass.prototype.constructor._classname === forclass) {
-                    Registry_9.default.offregister("$Class", func);
-                    let props = Object.getOwnPropertyNames(extensionclass.prototype);
-                    for (var m = 0; m < props.length; m++) {
-                        var member = props[m];
-                        if (member !== "_classname" && member !== "constructor") {
-                            if (typeof extensionclass.prototype[member] === "function") {
-                                if (oclass.prototype[member] !== undefined) {
-                                    var sic = oclass.prototype[member];
-                                    var ext = extensionclass.prototype[member];
-                                    oclass.prototype[member] = function (...p) {
-                                        sic.bind(this)(...p);
-                                        ext.bind(this)(...p);
-                                    };
-                                }
-                                else
-                                    oclass.prototype[member] = extensionclass.prototype[member];
-                            }
-                        }
-                    }
-                }
-            });
-            //  alert(forclass);
-        }
-        annotateMember(classname, member, type, ...annotations) {
-            var func = Registry_9.default.onregister("$Class", function (oclass, params) {
-                if (oclass.prototype.constructor._classname === classname) {
-                    Registry_9.default.offregister("$Class", func);
-                    //designtype
-                    Reflect["metadata"]("design:type", type)(oclass.prototype, member);
-                    for (var x = 0; x < annotations.length; x++) {
-                        let ann = annotations[x];
-                        ann(oclass.prototype, member);
-                    }
-                }
-            });
-        }
-    }
-    exports.Extensions = Extensions;
-    var extensions = new Extensions();
-    exports.extensions = extensions;
-});
-define("jassi/remote/FileNode", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_14) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.FileNode = void 0;
-    ;
-    let FileNode = class FileNode {
-        isDirectory() {
-            return this.files !== undefined;
-        }
-        resolveChilds(all) {
-            if (all === undefined)
-                all = {};
-            //var ret:FileNode[]=[];
-            if (this.files !== undefined) {
-                for (let x = 0; x < this.files.length; x++) {
-                    all[this.files[x].fullpath] = this.files[x];
-                    this.files[x].resolveChilds(all);
-                }
-            }
-            return all;
-        }
-    };
-    FileNode = __decorate([
-        Jassi_14.$Class("jassi.remote.FileNode")
-    ], FileNode);
-    exports.FileNode = FileNode;
-});
-define("jassi/remote/ObjectTransaction", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ObjectTransaction = void 0;
-    class ObjectTransaction {
-        constructor() {
-            this.statements = [];
-            this.functionsFinally = [];
-        }
-        transactionResolved(context) {
-            //var session = getNamespace('objecttransaction');
-            var test = context.objecttransactionitem; // session.get("objecttransaction");
-            if (test)
-                test.resolve = true;
-        }
-        addFunctionFinally(functionToAdd) {
-            this.functionsFinally.push(functionToAdd);
-        }
-        checkFinally() {
-            let canFinally = true;
-            this.statements.forEach((ent) => {
-                if (ent.result === "**unresolved**")
-                    canFinally = false;
-                if (ent.result["then"] && !ent["resolve"]) { //Promise, which is not resolved by addFunctionFinally
-                    canFinally = false;
-                }
-            });
-            if (canFinally) {
-                this.finally();
-            }
-        }
-        async finally() {
-            for (let x = 0; x < this.functionsFinally.length; x++) {
-                await this.functionsFinally[x]();
-            }
-        }
-    }
-    exports.ObjectTransaction = ObjectTransaction;
-});
-define("jassi/remote/RemoteObject", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteProtocol"], function (require, exports, Jassi_15, Classes_9, RemoteProtocol_1) {
+define("jassi/remote/RemoteObject", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteProtocol"], function (require, exports, Jassi_15, Classes_10, RemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteObject = exports.Context = void 0;
@@ -4267,7 +4293,7 @@ define("jassi/remote/RemoteObject", ["require", "exports", "jassi/remote/Jassi",
                 throw "should be called on client";
             var prot = new RemoteProtocol_1.RemoteProtocol();
             var context = parameter[parameter.length - 1];
-            prot.classname = Classes_9.classes.getClassName(this);
+            prot.classname = Classes_10.classes.getClassName(this);
             prot._this = "static";
             prot.parameter = parameter;
             prot.method = method.name;
@@ -4291,7 +4317,7 @@ define("jassi/remote/RemoteObject", ["require", "exports", "jassi/remote/Jassi",
                 throw "should be called on client";
             var prot = new RemoteProtocol_1.RemoteProtocol();
             var context = parameter[parameter.length - 1];
-            prot.classname = Classes_9.classes.getClassName(this);
+            prot.classname = Classes_10.classes.getClassName(this);
             prot._this = _this;
             prot.parameter = parameter;
             prot.method = method.name;
@@ -4314,7 +4340,7 @@ define("jassi/remote/RemoteObject", ["require", "exports", "jassi/remote/Jassi",
     ], RemoteObject);
     exports.RemoteObject = RemoteObject;
 });
-define("jassi/remote/RemoteProtocol", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], function (require, exports, Jassi_16, Classes_10) {
+define("jassi/remote/RemoteProtocol", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], function (require, exports, Jassi_16, Classes_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteProtocol = void 0;
@@ -4329,7 +4355,7 @@ define("jassi/remote/RemoteProtocol", ["require", "exports", "jassi/remote/Jassi
             var ref = [];
             return JSON.stringify(obj, function (key, value) {
                 var val = {};
-                var clname = value === null ? undefined : Classes_10.classes.getClassName(value);
+                var clname = value === null ? undefined : Classes_11.classes.getClassName(value);
                 var k = clname;
                 if (k !== undefined) {
                     val.__clname__ = clname;
@@ -4433,7 +4459,7 @@ define("jassi/remote/RemoteProtocol", ["require", "exports", "jassi/remote/Jassi
             });
             //all classes must be loaded
             for (var x = 0; x < allclassnames.length; x++) {
-                await Classes_10.classes.loadClass(allclassnames[x]);
+                await Classes_11.classes.loadClass(allclassnames[x]);
             }
             return JSON.parse(text, function (key, value) {
                 var val = value;
@@ -4444,7 +4470,7 @@ define("jassi/remote/RemoteProtocol", ["require", "exports", "jassi/remote/Jassi
                     if (val === undefined) {
                         //TODO import types from js
                         //create dummy
-                        var type = Classes_10.classes.getClass(value.__clname__);
+                        var type = Classes_11.classes.getClass(value.__clname__);
                         //@ts-ignore
                         var test = type._createObject === undefined ? undefined : type._createObject(val);
                         if (test !== undefined)
@@ -4461,7 +4487,7 @@ define("jassi/remote/RemoteProtocol", ["require", "exports", "jassi/remote/Jassi
                         }
                         else {
                             //TODO import types from js
-                            var type = Classes_10.classes.getClass(value.__clname__);
+                            var type = Classes_11.classes.getClass(value.__clname__);
                             //@ts-ignore
                             var test = type._createObject === undefined ? undefined : type._createObject(value);
                             if (test !== undefined)
@@ -4536,21 +4562,22 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
         async fillFilesInMapIfNeeded() {
             if (Server_2.filesInMap)
                 return;
-            Server_2.filesInMap = {};
+            var ret = {};
             for (var mod in Jassi_17.default.modules) {
                 if (Jassi_17.default.modules[mod].endsWith(".js")) {
-                    var code = await this.loadFile(Jassi_17.default.modules[mod] + ".map");
+                    var code = await $.ajax({ url: Jassi_17.default.modules[mod] + ".map", dataType: "text" });
                     var data = JSON.parse(code);
                     var files = data.sources;
                     for (let x = 0; x < files.length; x++) {
                         let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                        Server_2.filesInMap[fname] = {
+                        ret[fname] = {
                             id: x,
                             modul: mod
                         };
                     }
                 }
             }
+            Server_2.filesInMap = ret;
         }
         async addFilesFromMap(root) {
             await this.fillFilesInMapIfNeeded();
@@ -4716,12 +4743,12 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
         * @param {string} content
         */
         async saveFile(fileName, content, context = undefined) {
-            await this.fillFilesInMapIfNeeded();
-            if (Server_2.filesInMap[fileName]) {
+            /*await this.fillFilesInMapIfNeeded();
+            if (Server.filesInMap[fileName]) {
                 //@ts-ignore
-                $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
+                 $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
                 return;
-            }
+            }*/
             return await this.saveFiles([fileName], [content], context);
             /* if (!jassi.isServer) {
                  var ret = await this.call(this, "saveFiles", fileNames, contents);
@@ -5326,7 +5353,7 @@ define("jassi/security/UserView", ["require", "exports", "jassi/ui/converters/Nu
     }
     exports.test = test;
 });
-define("jassi/template/TemplateDBDialog", ["require", "exports", "jassi/base/Actions", "jassi/remote/Jassi", "jassi/ui/OptionDialog", "jassi/ui/FileExplorer", "jassi/ui/Property", "jassi/remote/DBObject", "jassi/remote/Classes", "jassi/remote/Registry"], function (require, exports, Actions_2, Jassi_26, OptionDialog_2, FileExplorer_1, Property_3, DBObject_6, Classes_11, Registry_11) {
+define("jassi/template/TemplateDBDialog", ["require", "exports", "jassi/base/Actions", "jassi/remote/Jassi", "jassi/ui/OptionDialog", "jassi/ui/FileExplorer", "jassi/ui/Property", "jassi/remote/DBObject", "jassi/remote/Classes", "jassi/remote/Registry"], function (require, exports, Actions_2, Jassi_26, OptionDialog_2, FileExplorer_1, Property_3, DBObject_6, Classes_12, Registry_11) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -5386,7 +5413,7 @@ export async function test(){
             var res = await OptionDialog_2.OptionDialog.askProperties("Create new DBDialog:", props, ["ok", "cancel"], undefined, false);
             if (res.button === "ok") {
                 var scode = code.replaceAll("{{dialogname}}", props.dialogname);
-                var fulldbclassname = Classes_11.classes.getClassName(props.dbobject);
+                var fulldbclassname = Classes_12.classes.getClassName(props.dbobject);
                 var shortdbclassname = fulldbclassname.split(".")[fulldbclassname.split(".").length - 1];
                 var cl = await Registry_11.default.getJSONData("$Class", fulldbclassname);
                 var dbfilename = cl[0].filename;
@@ -5608,7 +5635,7 @@ define("jassi/ui/ActionNodeMenu", ["require", "exports", "jassi/ui/Menu", "jassi
     }
     exports.test = test;
 });
-define("jassi/ui/BoxPanel", ["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Classes", "jassi/ext/split"], function (require, exports, Panel_3, Jassi_30, Component_2, Property_5, Classes_12, split_1) {
+define("jassi/ui/BoxPanel", ["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Classes", "jassi/ext/split"], function (require, exports, Panel_3, Jassi_30, Component_2, Property_5, Classes_13, split_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.BoxPanel = void 0;
@@ -5727,7 +5754,7 @@ define("jassi/ui/BoxPanel", ["require", "exports", "jassi/ui/Panel", "jassi/remo
     ], BoxPanel);
     exports.BoxPanel = BoxPanel;
     async function test() {
-        var HTMLPanel = await Classes_12.classes.loadClass("jassi.ui.HTMLPanel");
+        var HTMLPanel = await Classes_13.classes.loadClass("jassi.ui.HTMLPanel");
         var ret = new BoxPanel();
         var me = {};
         ret["me"] = me;
@@ -6130,7 +6157,7 @@ define("jassi/ui/Checkbox", ["require", "exports", "jassi/remote/Jassi", "jassi/
     exports.Checkbox = Checkbox;
 });
 //@class({longname:"jassi.ui.Checkbox"})
-define("jassi/ui/Component", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/CSSProperties"], function (require, exports, Jassi_35, Property_10, Registry_12, Classes_13, CSSProperties_1) {
+define("jassi/ui/Component", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/CSSProperties"], function (require, exports, Jassi_35, Property_10, Registry_12, Classes_14, CSSProperties_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6271,7 +6298,7 @@ define("jassi/ui/Component", ["require", "exports", "jassi/remote/Jassi", "jassi
             //add _this to the dom element
             var lid = Registry_12.default.nextID();
             var st = 'style="display: inline"';
-            if (this instanceof Classes_13.classes.getClass("jassi.ui.Container")) {
+            if (this instanceof Classes_14.classes.getClass("jassi.ui.Container")) {
                 st = "";
             }
             if (properties !== undefined && properties.noWrapper === true) {
@@ -6506,7 +6533,7 @@ define("jassi/ui/Component", ["require", "exports", "jassi/remote/Jassi", "jassi
             if (this._contextMenu !== undefined)
                 this._contextMenu.unregisterComponent(this);
             if (value !== undefined) {
-                var ContextMenu = Classes_13.classes.getClass("jassi.ui.ContextMenu");
+                var ContextMenu = Classes_14.classes.getClass("jassi.ui.ContextMenu");
                 if (value instanceof ContextMenu === false) {
                     throw "value is not of type jassi.ui.ContextMenu";
                 }
@@ -6604,7 +6631,7 @@ define("jassi/ui/Component", ["require", "exports", "jassi/remote/Jassi", "jassi
     ], Component);
     exports.Component = Component;
 });
-define("jassi/ui/ComponentDescriptor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/remote/Classes", "jassi/remote/Registry"], function (require, exports, Jassi_36, Property_11, Classes_14, Registry_13) {
+define("jassi/ui/ComponentDescriptor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/remote/Classes", "jassi/remote/Registry"], function (require, exports, Jassi_36, Property_11, Classes_15, Registry_13) {
     "use strict";
     var ComponentDescriptor_3;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6641,7 +6668,7 @@ define("jassi/ui/ComponentDescriptor", ["require", "exports", "jassi/remote/Jass
                 var hideBaseClassProperties = false;
                 do {
                     family.push(type);
-                    var sclass = Classes_14.classes.getClassName(type);
+                    var sclass = Classes_15.classes.getClassName(type);
                     if (Registry_13.default.getMemberData("$Property") === undefined)
                         return cache;
                     var props = Registry_13.default.getMemberData("$Property")[sclass];
@@ -6668,7 +6695,7 @@ define("jassi/ui/ComponentDescriptor", ["require", "exports", "jassi/remote/Jass
                                         else if (tp.name === "Function")
                                             prop.type = "function";
                                         else
-                                            prop.type = Classes_14.classes.getClassName(tp);
+                                            prop.type = Classes_15.classes.getClassName(tp);
                                     }
                                 }
                                 if (prop.type === undefined && prop.hide !== true)
@@ -6701,7 +6728,7 @@ define("jassi/ui/ComponentDescriptor", ["require", "exports", "jassi/remote/Jass
          **/
         static getEditableComponents(component, idFromLabel, includeFrozenContainer, flag) {
             var ret = "";
-            var sclass = Classes_14.classes.getClassName(component);
+            var sclass = Classes_15.classes.getClassName(component);
             var props = Registry_13.default.getData("$UIComponent")[sclass];
             if (!props) {
                 props = props = Registry_13.default.getData("$ReportComponent")[sclass];
@@ -6732,7 +6759,7 @@ define("jassi/ui/ComponentDescriptor", ["require", "exports", "jassi/remote/Jass
          **/
         resolveEditableComponents(ob) {
             var ret = {};
-            var sclass = Classes_14.classes.getClassName(ob);
+            var sclass = Classes_15.classes.getClassName(ob);
             if (Registry_13.default.getData("$UIComponent", sclass) !== undefined && Registry_13.default.getData("$UIComponent", sclass)[0] !== undefined) {
                 var props = Registry_13.default.getData("$UIComponent", sclass)[0].params[0];
                 this.editableComponents = props.editableChildComponents;
@@ -6776,292 +6803,7 @@ define("jassi/ui/ComponentDescriptor", ["require", "exports", "jassi/remote/Jass
     ], ComponentDescriptor);
     exports.ComponentDescriptor = ComponentDescriptor;
 });
-define("jassi/ui/Select", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/Property", "jassi/remote/Classes", "jassi/ext/jquery.choosen"], function (require, exports, Jassi_37, Component_6, DataComponent_1, Property_12, Classes_15) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Select = void 0;
-    /*
-    declare global {
-        interface JQuery {
-            chosen: any;
-        }
-    }
-    */
-    let SelectCreateProperties = class SelectCreateProperties extends Component_6.ComponentCreateProperties {
-    };
-    __decorate([
-        Property_12.$Property({ default: false }),
-        __metadata("design:type", Boolean)
-    ], SelectCreateProperties.prototype, "multiple", void 0);
-    __decorate([
-        Property_12.$Property({ default: false }),
-        __metadata("design:type", Boolean)
-    ], SelectCreateProperties.prototype, "allowDeselect", void 0);
-    __decorate([
-        Property_12.$Property({ default: "" }),
-        __metadata("design:type", String)
-    ], SelectCreateProperties.prototype, "placeholder", void 0);
-    SelectCreateProperties = __decorate([
-        Jassi_37.$Class("jassi.ui.SelectCreateProperties")
-    ], SelectCreateProperties);
-    let Select = class Select extends DataComponent_1.DataComponent {
-        constructor(properties = undefined) {
-            super();
-            super.init($('<select class="Select"><option value=""></option></select>')[0]);
-            var _this = this;
-            if (properties !== undefined && properties.multiple === true)
-                $('#' + this._id).prop("multiple", true);
-            var single = false;
-            if (properties !== undefined && properties.allowDeselect !== undefined)
-                single = properties.allowDeselect;
-            var placeholder = "Select...";
-            if (properties !== undefined && properties.placeholder !== undefined)
-                placeholder = properties.placeholder;
-            $('#' + this._id).chosen({
-                // width: "100px",
-                placeholder_text_single: placeholder,
-                allow_single_deselect: single
-            });
-            this.domSelect = this.dom;
-            if (this.domWrapper.children.length == 1) { //mobile device
-                this.dom = this.domSelect;
-            }
-            else
-                this.dom = this.domWrapper.children[1];
-            $(this.domSelect).attr("id", "");
-            $(this.dom).attr("id", this._id);
-            $(this.domSelect).chosen().change(function (e) {
-                if (_this._select !== undefined)
-                    _this._select.value = _this.value;
-                //e.data = _this.value;
-                //handler(e);
-            });
-            // this.layout();
-        }
-        refresh() {
-            $(this.domSelect).trigger("chosen:updated");
-            //	 $('#'+this._id).data("placeholder","Select...").chosen({
-            //	 	width: "100px"
-            //	 });
-        }
-        /**
-         * called if value has changed
-         * @param {function} handler - the function which is executed
-         */
-        onchange(handler) {
-            var _this = this;
-            $(this.domSelect).chosen().change(function (e) {
-                e.data = _this.value;
-                handler(e);
-            });
-        }
-        /**
-         * if the value is changed then the value of _component is also changed (_component.value)
-         */
-        set selectComponent(_component) {
-            this._select = _component;
-        }
-        get selectComponent() {
-            return this._select; //$(this.dom).text();
-        }
-        /**
-         * @member {string|function}  - property or function to get the displaystring for the object
-         **/
-        set display(value) {
-            this._display = value;
-            if (this.items !== undefined)
-                this.items = this.items;
-        }
-        get display() {
-            return this._display;
-        }
-        set items(value) {
-            this._items = value;
-            this.options = { undefined: undefined };
-            if (this.domSelect === undefined)
-                return;
-            console.log("dekt.memoryleak");
-            /* slow
-            while (this.domSelect.firstChild) {
-                $(this.domSelect.firstChild).remove();
-    
-            }
-            this.domSelect.appendChild($('<option value=""></option>')[0]);
-            for (var x = 0;x < value.length;x++) {
-                var ob = value[x];
-                var val = undefined;
-                if (typeof (this.display) === "function")
-                    val = this.display(ob);
-                else if (this.display !== undefined)
-                    val = ob[this.display];
-                else
-                    val = ob;
-                this.options[x.toString()] = ob;
-                var it = $('<option value="' + x + '">' + val + '</option>')[0];
-                this.domSelect.appendChild(it);
-            }
-            this.refresh();
-    */
-            var html = '<option value=""></option>';
-            for (var x = 0; x < value.length; x++) {
-                var ob = value[x];
-                var val = undefined;
-                if (typeof (this.display) === "function")
-                    val = this.display(ob);
-                else if (this.display !== undefined)
-                    val = ob[this.display];
-                else
-                    val = ob;
-                this.options[x.toString()] = ob;
-                html += '<option value="' + x + '">' + val + '</option>';
-                //this.domSelect.appendChild(it);
-            }
-            this.domSelect.innerHTML = html;
-            this.refresh();
-            /*   for(var x=0;x<value.length;x++){
-                   delete value[x].recid;
-               }*/
-        }
-        get items() {
-            //  if(w2ui[this._id]===undefined)
-            return this._items;
-            //   return w2ui[this._id].records;//$(this.dom).text();
-        }
-        /**
-         * @member {object} sel - the selected object
-         */
-        set value(sel) {
-            var found = false;
-            if ($(this.domSelect).chosen().prop("multiple")) {
-                var keys = [];
-                if (sel) {
-                    sel.forEach((se) => {
-                        for (var key in this.options) {
-                            if (this.options[key] === se) {
-                                keys.push(key);
-                                found = true;
-                                break;
-                            }
-                        }
-                        $(this.domSelect).val(keys).trigger("chosen:updated");
-                    });
-                }
-            }
-            else {
-                for (var key in this.options) {
-                    if (this.options[key] === sel) {
-                        $(this.domSelect).val(key).trigger("chosen:updated");
-                        found = true;
-                        break;
-                    }
-                }
-            }
-            if (!found)
-                $(this.domSelect).val("").trigger("chosen:updated");
-            // refresh()
-        }
-        get value() {
-            if (this.options === undefined)
-                return undefined;
-            var val = $(this.domSelect).chosen().val();
-            if ($(this.domSelect).chosen().prop("multiple")) {
-                var opts = [];
-                val.forEach((e) => {
-                    if (e !== "") //placeholder for empty
-                        opts.push(this.options[e]);
-                });
-                return opts;
-            }
-            return this.options[val];
-        }
-        /**
-         * @member {string|number} - the width of the component
-         * e.g. 50 or "100%"
-         */
-        /* set width(value){ //the Code
-             super.width=value;
-         
-              
-              if(this.domWrapper.children.length>1){
-                 var val=$(this.domWrapper).css("width");
-                 $(this.domWrapper.children[1]).css("width",val);
-              }
-         }*/
-        /**
-         * binds a component to a databinder
-         * @param {Databinder} databinder - the databinder to bind
-         * @param {string} property - the property to bind
-        
-        bind(databinder,property){
-            this._databinder=databinder;
-            databinder.add(property,this,"onselect");
-            databinder.checkAutocommit(this);
-        } */
-        destroy() {
-            //	$(this.domSelect).chosen('destroy');
-            $(this.domSelect).chosen("destroy"); //.search_choices;
-            $('#' + this._id).remove(); //.search_choices;
-            $(this.domSelect).remove();
-            $(this.dom).remove();
-            this.domSelect = undefined;
-            super.destroy();
-        }
-    };
-    __decorate([
-        Property_12.$Property({ default: "function(event){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object]),
-        __metadata("design:returntype", void 0)
-    ], Select.prototype, "onchange", null);
-    __decorate([
-        Property_12.$Property({ type: "string" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], Select.prototype, "display", null);
-    Select = __decorate([
-        Component_6.$UIComponent({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
-        Jassi_37.$Class("jassi.ui.Select"),
-        Property_12.$Property({ name: "new", type: "json", componentType: "jassi.ui.SelectCreateProperties" }),
-        __metadata("design:paramtypes", [SelectCreateProperties])
-    ], Select);
-    exports.Select = Select;
-    async function test() {
-        var Panel = Classes_15.classes.getClass("jassi.ui.Panel");
-        var Button = Classes_15.classes.getClass("jassi.ui.Button");
-        var me = {};
-        var pan = new Panel();
-        var bt = new Button();
-        var bt2 = new Button();
-        me.sel = new Select({
-            "multiple": false,
-            "placeholder": "Hallo",
-            "allowDeselect": false
-        });
-        bt.text = "wer";
-        bt.onclick(function (event) {
-            //	bt.text=me.sel.value.vorname;	
-            me.sel.value = me.sel.items[1];
-        });
-        bt.height = 15;
-        pan.width = 500;
-        me.sel.display = "nachname";
-        me.sel.items = [{ name: "Achim", nachname: "<b>Wenzel</b>" },
-            { name: "Anne", nachname: "Meier" }];
-        var h = me.sel.items;
-        me.sel.width = 195;
-        me.sel.height = 25;
-        me.sel.onchange(function (event) {
-            alert(event.data.nachname);
-        });
-        //	$('#'+sel._id).data("placeholder","Select2...").chosen({width: "200px"});
-        pan.add(me.sel);
-        pan.add(bt);
-        pan.add(bt2);
-        return pan;
-    }
-    exports.test = test;
-});
-define("jassi/ui/ComponentSpy", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Table", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/remote/Classes", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Jassi_38, Panel_4, Table_1, HTMLPanel_2, Button_1, BoxPanel_2, Select_1, Classes_16, Actions_6, Router_1) {
+define("jassi/ui/ComponentSpy", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Table", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/remote/Classes", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Jassi_37, Panel_4, Table_1, HTMLPanel_2, Button_1, BoxPanel_2, Select_1, Classes_16, Actions_6, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentSpy = void 0;
@@ -7114,14 +6856,14 @@ define("jassi/ui/ComponentSpy", ["require", "exports", "jassi/remote/Jassi", "ja
         }
         update() {
             var data = [];
-            for (var k in Jassi_38.default.componentSpy.ids) {
-                data.push(Jassi_38.default.componentSpy.ids[k]);
+            for (var k in Jassi_37.default.componentSpy.ids) {
+                data.push(Jassi_37.default.componentSpy.ids[k]);
             }
             this.me.IDTable.items = data;
         }
         clear() {
-            Jassi_38.default.componentSpy.ids = {};
-            Jassi_38.default.componentSpy.labelids = {};
+            Jassi_37.default.componentSpy.ids = {};
+            Jassi_37.default.componentSpy.labelids = {};
             this.update();
         }
         watch(component) {
@@ -7169,20 +6911,20 @@ define("jassi/ui/ComponentSpy", ["require", "exports", "jassi/remote/Jassi", "ja
     ], ComponentSpy, "showDialog", null);
     ComponentSpy = __decorate([
         Actions_6.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_38.$Class("jassi.ui.ComponentSpy"),
+        Jassi_37.$Class("jassi.ui.ComponentSpy"),
         __metadata("design:paramtypes", [])
     ], ComponentSpy);
     exports.ComponentSpy = ComponentSpy;
-    Jassi_38.default.test = function () {
+    Jassi_37.default.test = function () {
         return new ComponentSpy();
     };
-    Jassi_38.default.componentSpy = new ComponentSpy();
+    Jassi_37.default.componentSpy = new ComponentSpy();
 });
-define("jassi/ui/Container", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component"], function (require, exports, Jassi_39, Component_7) {
+define("jassi/ui/Container", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component"], function (require, exports, Jassi_38, Component_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Container = void 0;
-    let Container = class Container extends Component_7.Component {
+    let Container = class Container extends Component_6.Component {
         /**
          *
          * @param {object} properties - properties to init
@@ -7284,12 +7026,12 @@ define("jassi/ui/Container", ["require", "exports", "jassi/remote/Jassi", "jassi
         }
     };
     Container = __decorate([
-        Jassi_39.$Class("jassi.ui.Container"),
+        Jassi_38.$Class("jassi.ui.Container"),
         __metadata("design:paramtypes", [Object])
     ], Container);
     exports.Container = Container;
 });
-define("jassi/ui/ContextMenu", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Classes", "jassi/ui/Property", "jassi/base/Actions", "jassi/ui/MenuItem", "jassi/ext/jquery.contextmenu"], function (require, exports, Jassi_40, Menu_2, InvisibleComponent_1, Component_8, Classes_17, Property_13, Actions_7, MenuItem_2) {
+define("jassi/ui/ContextMenu", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Classes", "jassi/ui/Property", "jassi/base/Actions", "jassi/ui/MenuItem", "jassi/ext/jquery.contextmenu"], function (require, exports, Jassi_39, Menu_2, InvisibleComponent_1, Component_7, Classes_17, Property_12, Actions_7, MenuItem_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ContextMenu = void 0;
@@ -7500,18 +7242,18 @@ define("jassi/ui/ContextMenu", ["require", "exports", "jassi/remote/Jassi", "jas
         }
     };
     __decorate([
-        Property_13.$Property(),
+        Property_12.$Property(),
         __metadata("design:type", Boolean)
     ], ContextMenu.prototype, "includeClassActions", void 0);
     __decorate([
-        Property_13.$Property({ default: "function(event){\n\t\n}" }),
+        Property_12.$Property({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], ContextMenu.prototype, "onbeforeshow", null);
     ContextMenu = __decorate([
-        Component_8.$UIComponent({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
-        Jassi_40.$Class("jassi.ui.ContextMenu"),
+        Component_7.$UIComponent({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
+        Jassi_39.$Class("jassi.ui.ContextMenu"),
         __metadata("design:paramtypes", [])
     ], ContextMenu);
     exports.ContextMenu = ContextMenu;
@@ -7549,7 +7291,7 @@ define("jassi/ui/ContextMenu", ["require", "exports", "jassi/remote/Jassi", "jas
     }
     exports.test = test;
 });
-define("jassi/ui/DBObjectDialog", ["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/BoxPanel", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, Table_2, Jassi_41, Panel_5, Registry_14, Classes_18, BoxPanel_3, Actions_8, Windows_4) {
+define("jassi/ui/DBObjectDialog", ["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/BoxPanel", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, Table_2, Jassi_40, Panel_5, Registry_14, Classes_18, BoxPanel_3, Actions_8, Windows_4) {
     "use strict";
     var DBObjectDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -7682,7 +7424,7 @@ define("jassi/ui/DBObjectDialog", ["require", "exports", "jassi/ui/Table", "jass
     ], DBObjectDialog, "createAcions", null);
     DBObjectDialog = DBObjectDialog_1 = __decorate([
         Actions_8.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_41.$Class("jassi.ui.DBObjectDialog"),
+        Jassi_40.$Class("jassi.ui.DBObjectDialog"),
         __metadata("design:paramtypes", [])
     ], DBObjectDialog);
     exports.DBObjectDialog = DBObjectDialog;
@@ -7693,14 +7435,14 @@ define("jassi/ui/DBObjectDialog", ["require", "exports", "jassi/ui/Table", "jass
     }
     exports.test = test;
 });
-define("jassi/ui/DBObjectExplorer", ["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/remote/Jassi", "jassi/base/Actions", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/base/Router", "jassi/ui/DBObjectDialog", "jassi/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Jassi_42, Actions_9, Panel_6, Registry_15, Router_2, DBObjectDialog_2, Windows_5) {
+define("jassi/ui/DBObjectExplorer", ["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/remote/Jassi", "jassi/base/Actions", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/base/Router", "jassi/ui/DBObjectDialog", "jassi/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Jassi_41, Actions_9, Panel_6, Registry_15, Router_2, DBObjectDialog_2, Windows_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObjectExplorer = exports.DBObjectActions = exports.DBFileActions = exports.DBObjectNode = void 0;
     let DBObjectNode = class DBObjectNode {
     };
     DBObjectNode = __decorate([
-        Jassi_42.$Class("jassi.ui.DBObjectNode")
+        Jassi_41.$Class("jassi.ui.DBObjectNode")
     ], DBObjectNode);
     exports.DBObjectNode = DBObjectNode;
     let DBFileActions = class DBFileActions {
@@ -7737,7 +7479,7 @@ define("jassi/ui/DBObjectExplorer", ["require", "exports", "jassi/ui/ContextMenu
     ], DBFileActions, "ViewData", null);
     DBFileActions = __decorate([
         Actions_9.$ActionProvider("jassi.remote.FileNode"),
-        Jassi_42.$Class("jassi.ui.DBFileActions")
+        Jassi_41.$Class("jassi.ui.DBFileActions")
     ], DBFileActions);
     exports.DBFileActions = DBFileActions;
     let DBObjectActions = class DBObjectActions {
@@ -7765,7 +7507,7 @@ define("jassi/ui/DBObjectExplorer", ["require", "exports", "jassi/ui/ContextMenu
     ], DBObjectActions, "OpenCode", null);
     DBObjectActions = __decorate([
         Actions_9.$ActionProvider("jassi.ui.DBObjectNode"),
-        Jassi_42.$Class("jassi.ui.DBObjectActions")
+        Jassi_41.$Class("jassi.ui.DBObjectActions")
     ], DBObjectActions);
     exports.DBObjectActions = DBObjectActions;
     let DBObjectExplorer = class DBObjectExplorer extends Panel_6.Panel {
@@ -7804,7 +7546,7 @@ define("jassi/ui/DBObjectExplorer", ["require", "exports", "jassi/ui/ContextMenu
         }
     };
     DBObjectExplorer = __decorate([
-        Jassi_42.$Class("jassi.ui.DBObjectExplorer"),
+        Jassi_41.$Class("jassi.ui.DBObjectExplorer"),
         __metadata("design:paramtypes", [])
     ], DBObjectExplorer);
     exports.DBObjectExplorer = DBObjectExplorer;
@@ -7814,7 +7556,7 @@ define("jassi/ui/DBObjectExplorer", ["require", "exports", "jassi/ui/ContextMenu
     }
     exports.test = test;
 });
-define("jassi/ui/DBObjectView", ["require", "exports", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui/Component", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/Property"], function (require, exports, Button_2, BoxPanel_4, Jassi_43, Panel_7, Databinder_1, Component_9, Registry_16, Classes_19, Property_14) {
+define("jassi/ui/DBObjectView", ["require", "exports", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui/Component", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/Property"], function (require, exports, Button_2, BoxPanel_4, Jassi_42, Panel_7, Databinder_1, Component_8, Registry_16, Classes_19, Property_13) {
     "use strict";
     var DBObjectView_3;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -7955,32 +7697,32 @@ define("jassi/ui/DBObjectView", ["require", "exports", "jassi/ui/Button", "jassi
         }
     };
     __decorate([
-        Property_14.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+        Property_13.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "oncreated", null);
     __decorate([
-        Property_14.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+        Property_13.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "onsaved", null);
     __decorate([
-        Property_14.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+        Property_13.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "onrefreshed", null);
     __decorate([
-        Property_14.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+        Property_13.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "ondeleted", null);
     DBObjectView = DBObjectView_3 = __decorate([
-        Component_9.$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh"] }),
-        Jassi_43.$Class("jassi/ui/DBObjectView"),
+        Component_8.$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh"] }),
+        Jassi_42.$Class("jassi/ui/DBObjectView"),
         __metadata("design:paramtypes", [])
     ], DBObjectView);
     exports.DBObjectView = DBObjectView;
@@ -7990,12 +7732,12 @@ define("jassi/ui/DBObjectView", ["require", "exports", "jassi/ui/Button", "jassi
     }
     exports.test = test;
 });
-define("jassi/ui/DataComponent", ["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi"], function (require, exports, Component_10, Property_15, Jassi_44) {
+define("jassi/ui/DataComponent", ["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi"], function (require, exports, Component_9, Property_14, Jassi_43) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DataComponent = void 0;
     var tmpDatabinder = undefined;
-    let DataComponent = class DataComponent extends Component_10.Component {
+    let DataComponent = class DataComponent extends Component_9.Component {
         /**
         * base class for each Component
         * @class jassi.ui.Component
@@ -8038,23 +7780,23 @@ define("jassi/ui/DataComponent", ["require", "exports", "jassi/ui/Component", "j
         }
     };
     __decorate([
-        Property_15.$Property(),
+        Property_14.$Property(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], DataComponent.prototype, "autocommit", null);
     __decorate([
-        Property_15.$Property({ type: "databinder" }),
+        Property_14.$Property({ type: "databinder" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], DataComponent.prototype, "bind", null);
     DataComponent = __decorate([
-        Jassi_44.$Class("jassi.ui.DataComponent"),
+        Jassi_43.$Class("jassi.ui.DataComponent"),
         __metadata("design:paramtypes", [Object])
     ], DataComponent);
     exports.DataComponent = DataComponent;
 });
-define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/Databinder", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/base/DatabaseSchema", "jassi/ui/OptionDialog", "jassi/base/Router", "jassi/base/Actions"], function (require, exports, BoxPanel_5, Button_3, Databinder_2, Select_2, Table_3, Jassi_45, Panel_8, DatabaseSchema_7, OptionDialog_5, Router_3, Actions_10) {
+define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/Databinder", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/base/DatabaseSchema", "jassi/ui/OptionDialog", "jassi/base/Router", "jassi/base/Actions"], function (require, exports, BoxPanel_5, Button_3, Databinder_2, Select_2, Table_3, Jassi_44, Panel_8, DatabaseSchema_7, OptionDialog_5, Router_3, Actions_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DatabaseDesigner = void 0;
@@ -8224,7 +7966,7 @@ define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", 
     ], DatabaseDesigner, "showDialog", null);
     DatabaseDesigner = __decorate([
         Actions_10.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_45.$Class("jassi/ui/DatabaseDesigner"),
+        Jassi_44.$Class("jassi/ui/DatabaseDesigner"),
         __metadata("design:paramtypes", [])
     ], DatabaseDesigner);
     exports.DatabaseDesigner = DatabaseDesigner;
@@ -8234,7 +7976,7 @@ define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", 
     }
     exports.test = test;
 });
-define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Jassi"], function (require, exports, InvisibleComponent_2, Component_11, Jassi_46) {
+define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Jassi"], function (require, exports, InvisibleComponent_2, Component_10, Jassi_45) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Databinder = void 0;
@@ -8444,14 +8186,14 @@ define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponen
         }
     };
     Databinder = __decorate([
-        Component_11.$UIComponent({ fullPath: "common/Databinder", icon: "mdi mdi-connection" }),
-        Jassi_46.$Class("jassi.ui.Databinder"),
+        Component_10.$UIComponent({ fullPath: "common/Databinder", icon: "mdi mdi-connection" }),
+        Jassi_45.$Class("jassi.ui.Databinder"),
         __metadata("design:paramtypes", [])
     ], Databinder);
     exports.Databinder = Databinder;
 });
 // return CodeEditor.constructor;
-define("jassi/ui/DesignDummy", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Image", "jassi/ui/MenuItem"], function (require, exports, Jassi_47, Image_1, MenuItem_3) {
+define("jassi/ui/DesignDummy", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Image", "jassi/ui/MenuItem"], function (require, exports, Jassi_46, Image_1, MenuItem_3) {
     "use strict";
     var DesignDummy_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -8518,12 +8260,12 @@ define("jassi/ui/DesignDummy", ["require", "exports", "jassi/remote/Jassi", "jas
         }
     };
     DesignDummy = DesignDummy_1 = __decorate([
-        Jassi_47.$Class("jassi.ui.DesignDummy"),
+        Jassi_46.$Class("jassi.ui.DesignDummy"),
         __metadata("design:paramtypes", [])
     ], DesignDummy);
     exports.DesignDummy = DesignDummy;
 });
-define("jassi/ui/DockingContainer", ["require", "exports", "jassi/ext/goldenlayout", "jassi/remote/Jassi", "jassi/ui/Container", "jassi/ui/Button", "jassi/ui/Textbox"], function (require, exports, goldenlayout_2, Jassi_48, Container_2, Button_4, Textbox_3) {
+define("jassi/ui/DockingContainer", ["require", "exports", "jassi/ext/goldenlayout", "jassi/remote/Jassi", "jassi/ui/Container", "jassi/ui/Button", "jassi/ui/Textbox"], function (require, exports, goldenlayout_2, Jassi_47, Container_2, Button_4, Textbox_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DockingContainer = void 0;
@@ -8831,11 +8573,11 @@ define("jassi/ui/DockingContainer", ["require", "exports", "jassi/ext/goldenlayo
         }
     };
     DockingContainer = __decorate([
-        Jassi_48.$Class("jassi.ui.DockingContainer"),
+        Jassi_47.$Class("jassi.ui.DockingContainer"),
         __metadata("design:paramtypes", [Object])
     ], DockingContainer);
     exports.DockingContainer = DockingContainer;
-    Jassi_48.default.test = function () {
+    Jassi_47.default.test = function () {
         var dock = new DockingContainer();
         var bt = new Button_4.Button();
         dock.add(bt, "Hallo", "Hallo");
@@ -8853,7 +8595,7 @@ define("jassi/ui/DockingContainer", ["require", "exports", "jassi/ext/goldenlayo
         return dock;
     };
 });
-define("jassi/ui/ErrorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remote/Jassi", "jassi/ui/Button", "jassi_editor/util/TSSourceMap", "jassi/base/Router", "jassi/base/Actions"], function (require, exports, Panel_9, Errors_2, Jassi_49, Button_5, TSSourceMap_1, Router_4, Actions_11) {
+define("jassi/ui/ErrorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remote/Jassi", "jassi/ui/Button", "jassi_editor/util/TSSourceMap", "jassi/base/Router", "jassi/base/Actions"], function (require, exports, Panel_9, Errors_2, Jassi_48, Button_5, TSSourceMap_1, Router_4, Actions_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ErrorPanel = void 0;
@@ -8876,7 +8618,7 @@ define("jassi/ui/ErrorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/ba
             this.IDClear.icon = "mdi mdi-delete";
             this.IDClear.onclick(function () {
                 _this.clear();
-                Jassi_49.default.errors.items = [];
+                Jassi_48.default.errors.items = [];
             });
             this.IDClear.width = 35;
             this.IDSearch = new Button_5.Button();
@@ -8896,8 +8638,8 @@ define("jassi/ui/ErrorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/ba
             this._container = $(this.dom).find(".errorpanel")[0];
             this.registerError();
             //old Errors
-            for (var x = 0; x < Jassi_49.default.errors.items.length; x++) {
-                this.addError(Jassi_49.default.errors.items[x]);
+            for (var x = 0; x < Jassi_48.default.errors.items.length; x++) {
+                this.addError(Jassi_48.default.errors.items[x]);
             }
             if (window["jassi_debug"] === undefined)
                 window["jassi_debug"] = { variables: [] };
@@ -9015,12 +8757,12 @@ define("jassi/ui/ErrorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/ba
         }
         registerError() {
             var _this = this;
-            Jassi_49.default.errors.onerror(function (err) {
+            Jassi_48.default.errors.onerror(function (err) {
                 _this.addError(err);
             }, this._id);
         }
         unregisterError() {
-            Jassi_49.default.errors.offerror(this._id);
+            Jassi_48.default.errors.offerror(this._id);
         }
         destroy() {
             this.unregisterError();
@@ -9039,7 +8781,7 @@ define("jassi/ui/ErrorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/ba
     ], ErrorPanel, "showDialog", null);
     ErrorPanel = __decorate([
         Actions_11.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_49.$Class("jassi.ui.ErrorPanel"),
+        Jassi_48.$Class("jassi.ui.ErrorPanel"),
         __metadata("design:paramtypes", [])
     ], ErrorPanel);
     exports.ErrorPanel = ErrorPanel;
@@ -9056,9 +8798,9 @@ define("jassi/ui/ErrorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/ba
         Router_4.router.navigate("#do=jassi_editor.CodeEditor&file=" + data[0] + "&line=" + data[1]);
         // jassi_editor.CodeEditor.open(param.text);
     };
-    Jassi_49.default.ErrorPanel = ErrorPanel;
+    Jassi_48.default.ErrorPanel = ErrorPanel;
 });
-define("jassi/ui/FileExplorer", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Server", "jassi/base/Router", "jassi/base/Actions", "jassi/ui/OptionDialog", "jassi_editor/util/Typescript", "jassi/ui/ContextMenu"], function (require, exports, Jassi_50, Tree_2, Panel_10, Textbox_4, Server_3, Router_5, Actions_12, OptionDialog_6, Typescript_3, ContextMenu_2) {
+define("jassi/ui/FileExplorer", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Server", "jassi/base/Router", "jassi/base/Actions", "jassi/ui/OptionDialog", "jassi_editor/util/Typescript", "jassi/ui/ContextMenu"], function (require, exports, Jassi_49, Tree_2, Panel_10, Textbox_4, Server_3, Router_5, Actions_12, OptionDialog_6, Typescript_3, ContextMenu_2) {
     "use strict";
     var FileExplorer_4;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -9249,7 +8991,7 @@ define("jassi/ui/FileExplorer", ["require", "exports", "jassi/remote/Jassi", "ja
     ], FileActions, "open", null);
     FileActions = __decorate([
         Actions_12.$ActionProvider("jassi.remote.FileNode"),
-        Jassi_50.$Class("jassi.ui.FileActions")
+        Jassi_49.$Class("jassi.ui.FileActions")
     ], FileActions);
     exports.FileActions = FileActions;
     let FileExplorer = FileExplorer_4 = class FileExplorer extends Panel_10.Panel {
@@ -9316,7 +9058,7 @@ define("jassi/ui/FileExplorer", ["require", "exports", "jassi/remote/Jassi", "ja
     };
     FileExplorer.instance = undefined;
     FileExplorer = FileExplorer_4 = __decorate([
-        Jassi_50.$Class("jassi.ui.FileExplorer"),
+        Jassi_49.$Class("jassi.ui.FileExplorer"),
         __metadata("design:paramtypes", [])
     ], FileExplorer);
     exports.FileExplorer = FileExplorer;
@@ -9325,7 +9067,7 @@ define("jassi/ui/FileExplorer", ["require", "exports", "jassi/remote/Jassi", "ja
     }
     exports.test = test;
 });
-define("jassi/ui/HTMLEditorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ext/tinymce", "jassi/remote/Registry"], function (require, exports, Panel_11, HTMLPanel_3, Button_6, Jassi_51, tinymce_1, Registry_17) {
+define("jassi/ui/HTMLEditorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ext/tinymce", "jassi/remote/Registry"], function (require, exports, Panel_11, HTMLPanel_3, Button_6, Jassi_50, tinymce_1, Registry_17) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLEditorPanel = void 0;
@@ -9383,23 +9125,23 @@ define("jassi/ui/HTMLEditorPanel", ["require", "exports", "jassi/ui/Panel", "jas
         }
     };
     HTMLEditorPanel = __decorate([
-        Jassi_51.$Class("jassi.ui.HTMLEditorPanel"),
+        Jassi_50.$Class("jassi.ui.HTMLEditorPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLEditorPanel);
     exports.HTMLEditorPanel = HTMLEditorPanel;
-    Jassi_51.default.test = async function () {
+    Jassi_50.default.test = async function () {
         var dlg = new HTMLEditorPanel();
         //	dlg.value=jassi.db.load("de.Kunde",9);	
         return dlg;
     };
 });
 // return CodeEditor.constructor;
-define("jassi/ui/HTMLPanel", ["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, Component_12, Jassi_52, Property_16) {
+define("jassi/ui/HTMLPanel", ["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, Component_11, Jassi_51, Property_15) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLPanel = void 0;
     var bugtinymce = undefined;
-    let HTMLPanel = class HTMLPanel extends Component_12.Component {
+    let HTMLPanel = class HTMLPanel extends Component_11.Component {
         /*[
             'undo redo | bold italic underline | fontsizeselect', //fontselect
             'forecolor backcolor | numlist bullist outdent indent'
@@ -9562,27 +9304,27 @@ define("jassi/ui/HTMLPanel", ["require", "exports", "jassi/ui/Component", "jassi
         }
     };
     __decorate([
-        Property_16.$Property({ description: "line break after element", default: false }),
+        Property_15.$Property({ description: "line break after element", default: false }),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel.prototype, "newlineafter", null);
     __decorate([
-        Property_16.$Property(),
+        Property_15.$Property(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], HTMLPanel.prototype, "value", null);
     HTMLPanel = __decorate([
-        Component_12.$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
-        Jassi_52.$Class("jassi.ui.HTMLPanel"),
+        Component_11.$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
+        Jassi_51.$Class("jassi.ui.HTMLPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel);
     exports.HTMLPanel = HTMLPanel;
 });
-define("jassi/ui/Image", ["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi", "jassi/ui/DataComponent"], function (require, exports, Component_13, Property_17, Jassi_53, DataComponent_2) {
+define("jassi/ui/Image", ["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi", "jassi/ui/DataComponent"], function (require, exports, Component_12, Property_16, Jassi_52, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Image = void 0;
-    let Image = class Image extends DataComponent_2.DataComponent {
+    let Image = class Image extends DataComponent_1.DataComponent {
         /* get dom(){
              return this.dom;
          }*/
@@ -9651,19 +9393,19 @@ define("jassi/ui/Image", ["require", "exports", "jassi/ui/Component", "jassi/ui/
         }
     };
     __decorate([
-        Property_17.$Property({ type: "string" }),
+        Property_16.$Property({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Image.prototype, "value", null);
     __decorate([
-        Property_17.$Property({ type: "image" }),
+        Property_16.$Property({ type: "image" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Image.prototype, "src", null);
     Image = __decorate([
-        Component_13.$UIComponent({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
+        Component_12.$UIComponent({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
         ,
-        Jassi_53.$Class("jassi.ui.Image"),
+        Jassi_52.$Class("jassi.ui.Image"),
         __metadata("design:paramtypes", [])
     ], Image);
     exports.Image = Image;
@@ -9674,51 +9416,20 @@ define("jassi/ui/Image", ["require", "exports", "jassi/ui/Component", "jassi/ui/
     }
     exports.test = test;
 });
-define("jassi/ui/Property", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi/remote/Classes"], function (require, exports, Jassi_54, Registry_18, Classes_20) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Property = exports.$Property = void 0;
-    function $Property(property = undefined) {
-        return function (target, propertyKey, descriptor) {
-            //debugger;
-            var test = Classes_20.classes.getClassName(target);
-            if (propertyKey === undefined)
-                Registry_18.default.registerMember("$Property", target.prototype, "new", property); //allow registerMember in class definition
-            else
-                Registry_18.default.registerMember("$Property", target, propertyKey, property);
-        };
-    }
-    exports.$Property = $Property;
-    let Property = class Property {
-        /**
-         * Property for PropertyEditor
-         * @class jassi.ui.EditorProperty
-         */
-        constructor(name = undefined, type = undefined) {
-            this.name = name;
-            this.type = type;
-        }
-    };
-    Property = __decorate([
-        Jassi_54.$Class("jassi.ui.Property"),
-        __metadata("design:paramtypes", [Object, Object])
-    ], Property);
-    exports.Property = Property;
-});
-define("jassi/ui/InvisibleComponent", ["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, Component_14, Jassi_55, Property_18) {
+define("jassi/ui/InvisibleComponent", ["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, Component_13, Jassi_53, Property_17) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InvisibleComponent = void 0;
     /**
      * invivisible Component
      **/
-    let InvisibleComponent = class InvisibleComponent extends Component_14.Component {
+    let InvisibleComponent = class InvisibleComponent extends Component_13.Component {
         constructor(properties = undefined) {
             super(properties);
         }
     };
     InvisibleComponent = __decorate([
-        Jassi_55.$Class("jassi.ui.InvisibleComponent")
+        Jassi_53.$Class("jassi.ui.InvisibleComponent")
         /*@$Property({name:"label",hide:true})
         @$Property({name:"icon",hide:true})
         @$Property({name:"tooltip",hide:true})
@@ -9731,12 +9442,12 @@ define("jassi/ui/InvisibleComponent", ["require", "exports", "jassi/ui/Component
         @$Property({name:"hidden",hide:true})
         @$Property({name:"styles",hide:true})*/
         ,
-        Property_18.$Property({ hideBaseClassProperties: true }),
+        Property_17.$Property({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], InvisibleComponent);
     exports.InvisibleComponent = InvisibleComponent;
 });
-define("jassi/ui/Menu", ["require", "exports", "jassi/jassi", "jassi/ui/Container", "jassi/ui/Property", "jassi/ui/MenuItem", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DesignDummy"], function (require, exports, jassi_1, Container_3, Property_19, MenuItem_4, Jassi_56, Component_15, DesignDummy_2) {
+define("jassi/ui/Menu", ["require", "exports", "jassi/jassi", "jassi/ui/Container", "jassi/ui/Property", "jassi/ui/MenuItem", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DesignDummy"], function (require, exports, jassi_1, Container_3, Property_18, MenuItem_4, Jassi_54, Component_14, DesignDummy_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Menu = void 0;
@@ -9856,14 +9567,14 @@ define("jassi/ui/Menu", ["require", "exports", "jassi/jassi", "jassi/ui/Containe
         }
     };
     __decorate([
-        Property_19.$Property({ name: "onclick", type: "function", default: "function(event){\n\t\n}" }),
+        Property_18.$Property({ name: "onclick", type: "function", default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Menu.prototype, "onclick", null);
     Menu = __decorate([
-        Component_15.$UIComponent({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
-        Jassi_56.$Class("jassi.ui.Menu"),
+        Component_14.$UIComponent({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
+        Jassi_54.$Class("jassi.ui.Menu"),
         __metadata("design:paramtypes", [Object])
     ], Menu);
     exports.Menu = Menu;
@@ -9888,7 +9599,7 @@ define("jassi/ui/Menu", ["require", "exports", "jassi/jassi", "jassi/ui/Containe
         return menu;
     };
 });
-define("jassi/ui/MenuItem", ["require", "exports", "jassi/ui/Component", "jassi/ui/Menu", "jassi/ui/Property", "jassi/remote/Jassi", "jassi/ui/Container"], function (require, exports, Component_16, Menu_3, Property_20, Jassi_57, Container_4) {
+define("jassi/ui/MenuItem", ["require", "exports", "jassi/ui/Component", "jassi/ui/Menu", "jassi/ui/Property", "jassi/remote/Jassi", "jassi/ui/Container"], function (require, exports, Component_15, Menu_3, Property_19, Jassi_55, Container_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MenuItem = void 0;
@@ -9996,24 +9707,24 @@ define("jassi/ui/MenuItem", ["require", "exports", "jassi/ui/Component", "jassi/
         }
     };
     __decorate([
-        Property_20.$Property({ default: "function(event){\n\t\n}" }),
+        Property_19.$Property({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], MenuItem.prototype, "onclick", null);
     __decorate([
-        Property_20.$Property(),
+        Property_19.$Property(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], MenuItem.prototype, "icon", null);
     __decorate([
-        Property_20.$Property(),
+        Property_19.$Property(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], MenuItem.prototype, "text", null);
     MenuItem = __decorate([
-        Component_16.$UIComponent({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] }),
-        Jassi_57.$Class("jassi.ui.MenuItem"),
+        Component_15.$UIComponent({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] }),
+        Jassi_55.$Class("jassi.ui.MenuItem"),
         __metadata("design:paramtypes", [])
     ], MenuItem);
     exports.MenuItem = MenuItem;
@@ -10037,7 +9748,7 @@ define("jassi/ui/MenuItem", ["require", "exports", "jassi/ui/Component", "jassi/
     }
     exports.test = test;
 });
-define("jassi/ui/ObjectChooser", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/ui/Property", "jassi/ui/Component", "jassi/remote/Classes"], function (require, exports, Jassi_58, Table_4, Panel_12, Button_7, Textbox_5, Property_21, Component_17, Classes_21) {
+define("jassi/ui/ObjectChooser", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/ui/Property", "jassi/ui/Component", "jassi/remote/Classes"], function (require, exports, Jassi_56, Table_4, Panel_12, Button_7, Textbox_5, Property_20, Component_16, Classes_20) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ObjectChooser = void 0;
@@ -10146,7 +9857,7 @@ define("jassi/ui/ObjectChooser", ["require", "exports", "jassi/remote/Jassi", "j
             return this._value;
         }
         async loadObjects(classname) {
-            var cl = await Classes_21.classes.loadClass(classname);
+            var cl = await Classes_20.classes.loadClass(classname);
             return await cl.find();
         }
         //@$Property()
@@ -10202,33 +9913,33 @@ define("jassi/ui/ObjectChooser", ["require", "exports", "jassi/remote/Jassi", "j
         }
     };
     __decorate([
-        Property_21.$Property({ default: 450 }),
+        Property_20.$Property({ default: 450 }),
         __metadata("design:type", Number)
     ], ObjectChooser.prototype, "dialogHeight", void 0);
     __decorate([
-        Property_21.$Property({ default: 300 }),
+        Property_20.$Property({ default: 300 }),
         __metadata("design:type", Number)
     ], ObjectChooser.prototype, "dialogWidth", void 0);
     __decorate([
-        Property_21.$Property({ default: "function(event){\n\t\n}" }),
+        Property_20.$Property({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], ObjectChooser.prototype, "onchange", null);
     __decorate([
-        Property_21.$Property({ default: true }),
+        Property_20.$Property({ default: true }),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], ObjectChooser.prototype, "autocommit", null);
     __decorate([
-        Property_21.$Property({ type: "databinder" }),
+        Property_20.$Property({ type: "databinder" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], ObjectChooser.prototype, "bind", null);
     ObjectChooser = __decorate([
-        Component_17.$UIComponent({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
-        Jassi_58.$Class("jassi.ui.ObjectChooser"),
+        Component_16.$UIComponent({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
+        Jassi_56.$Class("jassi.ui.ObjectChooser"),
         __metadata("design:paramtypes", [])
     ], ObjectChooser);
     exports.ObjectChooser = ObjectChooser;
@@ -10245,7 +9956,7 @@ define("jassi/ui/ObjectChooser", ["require", "exports", "jassi/remote/Jassi", "j
     }
     exports.test = test;
 });
-define("jassi/ui/OptionDialog", ["require", "exports", "jassi/ui/Panel", "jassi/ui/BoxPanel", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/ui/Textbox", "jassi/ui/PropertyEditor"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_4, Button_8, Jassi_59, Property_22, Textbox_6, PropertyEditor_1) {
+define("jassi/ui/OptionDialog", ["require", "exports", "jassi/ui/Panel", "jassi/ui/BoxPanel", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/ui/Textbox", "jassi/ui/PropertyEditor"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_4, Button_8, Jassi_57, Property_21, Textbox_6, PropertyEditor_1) {
     "use strict";
     var OptionDialog_7;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -10356,26 +10067,26 @@ define("jassi/ui/OptionDialog", ["require", "exports", "jassi/ui/Panel", "jassi/
         }
     };
     __decorate([
-        Property_22.$Property(),
+        Property_21.$Property(),
         __metadata("design:type", String)
     ], OptionDialog.prototype, "text", void 0);
     OptionDialog = OptionDialog_7 = __decorate([
-        Jassi_59.$Class("jassi.ui.OptionDialog"),
+        Jassi_57.$Class("jassi.ui.OptionDialog"),
         __metadata("design:paramtypes", [Object])
     ], OptionDialog);
     exports.OptionDialog = OptionDialog;
     let Testprop = class Testprop {
     };
     __decorate([
-        Property_22.$Property(),
+        Property_21.$Property(),
         __metadata("design:type", Boolean)
     ], Testprop.prototype, "visible", void 0);
     __decorate([
-        Property_22.$Property(),
+        Property_21.$Property(),
         __metadata("design:type", String)
     ], Testprop.prototype, "text", void 0);
     Testprop = __decorate([
-        Jassi_59.$Class("jassi.ui.OptionDialogTestProp")
+        Jassi_57.$Class("jassi.ui.OptionDialogTestProp")
     ], Testprop);
     async function test() {
         var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);
@@ -10392,18 +10103,18 @@ define("jassi/ui/OptionDialog", ["require", "exports", "jassi/ui/Panel", "jassi/
     exports.test = test;
     ;
 });
-define("jassi/ui/Panel", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Container", "jassi/ui/Component", "jassi/ui/Property", "jassi/ui/DesignDummy"], function (require, exports, Jassi_60, Container_5, Component_18, Property_23, DesignDummy_3) {
+define("jassi/ui/Panel", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Container", "jassi/ui/Component", "jassi/ui/Property", "jassi/ui/DesignDummy"], function (require, exports, Jassi_58, Container_5, Component_17, Property_22, DesignDummy_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Panel = void 0;
-    let PanelCreateProperties = class PanelCreateProperties extends Component_18.ComponentCreateProperties {
+    let PanelCreateProperties = class PanelCreateProperties extends Component_17.ComponentCreateProperties {
     };
     __decorate([
-        Property_23.$Property({ default: false }),
+        Property_22.$Property({ default: false }),
         __metadata("design:type", Boolean)
     ], PanelCreateProperties.prototype, "useSpan", void 0);
     PanelCreateProperties = __decorate([
-        Jassi_60.$Class("jassi.ui.PanelCreateProperties")
+        Jassi_58.$Class("jassi.ui.PanelCreateProperties")
     ], PanelCreateProperties);
     let Panel = 
     //@$Property({ name: "new/useSpan", type: "boolean", default: false })
@@ -10553,21 +10264,52 @@ define("jassi/ui/Panel", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/
         }
     };
     __decorate([
-        Property_23.$Property(),
+        Property_22.$Property(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Panel.prototype, "isAbsolute", null);
     Panel = __decorate([
-        Component_18.$UIComponent({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
-        Jassi_60.$Class("jassi.ui.Panel"),
-        Property_23.$Property({ name: "new", type: "json", componentType: "jassi.ui.PanelCreateProperties" })
+        Component_17.$UIComponent({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
+        Jassi_58.$Class("jassi.ui.Panel"),
+        Property_22.$Property({ name: "new", type: "json", componentType: "jassi.ui.PanelCreateProperties" })
         //@$Property({ name: "new/useSpan", type: "boolean", default: false })
         ,
         __metadata("design:paramtypes", [PanelCreateProperties])
     ], Panel);
     exports.Panel = Panel;
 });
-define("jassi/ui/PropertyEditor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Image", "jassi_editor/util/Parser", "jassi/ui/ComponentDescriptor", "jassi/ui/PropertyEditors/NameEditor", "jassi/base/PropertyEditorService", "jassi/ui/Property", "jassi/base/PropertyEditorService"], function (require, exports, Jassi_61, Panel_14, Image_2, Parser_2, ComponentDescriptor_4, NameEditor_1, PropertyEditorService_1, Property_24) {
+define("jassi/ui/Property", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi/remote/Classes"], function (require, exports, Jassi_59, Registry_18, Classes_21) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Property = exports.$Property = void 0;
+    function $Property(property = undefined) {
+        return function (target, propertyKey, descriptor) {
+            //debugger;
+            var test = Classes_21.classes.getClassName(target);
+            if (propertyKey === undefined)
+                Registry_18.default.registerMember("$Property", target.prototype, "new", property); //allow registerMember in class definition
+            else
+                Registry_18.default.registerMember("$Property", target, propertyKey, property);
+        };
+    }
+    exports.$Property = $Property;
+    let Property = class Property {
+        /**
+         * Property for PropertyEditor
+         * @class jassi.ui.EditorProperty
+         */
+        constructor(name = undefined, type = undefined) {
+            this.name = name;
+            this.type = type;
+        }
+    };
+    Property = __decorate([
+        Jassi_59.$Class("jassi.ui.Property"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], Property);
+    exports.Property = Property;
+});
+define("jassi/ui/PropertyEditor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Image", "jassi_editor/util/Parser", "jassi/ui/ComponentDescriptor", "jassi/ui/PropertyEditors/NameEditor", "jassi/base/PropertyEditorService", "jassi/ui/Property", "jassi/base/PropertyEditorService"], function (require, exports, Jassi_60, Panel_14, Image_2, Parser_2, ComponentDescriptor_4, NameEditor_1, PropertyEditorService_1, Property_23) {
     "use strict";
     var PropertyEditor_2;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -11242,18 +10984,18 @@ define("jassi/ui/PropertyEditor", ["require", "exports", "jassi/remote/Jassi", "
         }
     };
     PropertyEditor = PropertyEditor_2 = __decorate([
-        Jassi_61.$Class("jassi.ui.PropertyEditor"),
+        Jassi_60.$Class("jassi.ui.PropertyEditor"),
         __metadata("design:paramtypes", [Object])
     ], PropertyEditor);
     exports.PropertyEditor = PropertyEditor;
     let TestProperties = class TestProperties {
     };
     __decorate([
-        Property_24.$Property({ decription: "name of the dialog", }),
+        Property_23.$Property({ decription: "name of the dialog", }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     TestProperties = __decorate([
-        Jassi_61.$Class("jassi.ui.PropertyEditorTestProperties")
+        Jassi_60.$Class("jassi.ui.PropertyEditorTestProperties")
     ], TestProperties);
     exports.TestProperties = TestProperties;
     function test() {
@@ -11263,7 +11005,7 @@ define("jassi/ui/PropertyEditor", ["require", "exports", "jassi/remote/Jassi", "
     }
     exports.test = test;
 });
-define("jassi/ui/Repeater", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi"], function (require, exports, Panel_15, Databinder_3, Component_19, Property_25, Jassi_62) {
+define("jassi/ui/Repeater", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi"], function (require, exports, Panel_15, Databinder_3, Component_18, Property_24, Jassi_61) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Repeater = void 0;
@@ -11415,19 +11157,19 @@ define("jassi/ui/Repeater", ["require", "exports", "jassi/ui/Panel", "jassi/ui/D
         }
     };
     __decorate([
-        Property_25.$Property({ type: "databinder" }),
+        Property_24.$Property({ type: "databinder" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], Repeater.prototype, "bind", null);
     Repeater = __decorate([
-        Component_19.$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
-        Jassi_62.$Class("jassi.ui.Repeater"),
+        Component_18.$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
+        Jassi_61.$Class("jassi.ui.Repeater"),
         __metadata("design:paramtypes", [Object])
     ], Repeater);
     exports.Repeater = Repeater;
 });
-define("jassi/ui/SearchExplorer", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_editor/util/Typescript", "jassi/base/Router"], function (require, exports, Jassi_63, Tree_3, Panel_16, Textbox_7, Typescript_4, Router_6) {
+define("jassi/ui/SearchExplorer", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_editor/util/Typescript", "jassi/base/Router"], function (require, exports, Jassi_62, Tree_3, Panel_16, Textbox_7, Typescript_4, Router_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SearchExplorer = void 0;
@@ -11509,12 +11251,297 @@ define("jassi/ui/SearchExplorer", ["require", "exports", "jassi/remote/Jassi", "
         }
     };
     SearchExplorer = __decorate([
-        Jassi_63.$Class("jassi.ui.SearchExplorer"),
+        Jassi_62.$Class("jassi.ui.SearchExplorer"),
         __metadata("design:paramtypes", [])
     ], SearchExplorer);
     exports.SearchExplorer = SearchExplorer;
     function test() {
         return new SearchExplorer();
+    }
+    exports.test = test;
+});
+define("jassi/ui/Select", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/Property", "jassi/remote/Classes", "jassi/ext/jquery.choosen"], function (require, exports, Jassi_63, Component_19, DataComponent_2, Property_25, Classes_22) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Select = void 0;
+    /*
+    declare global {
+        interface JQuery {
+            chosen: any;
+        }
+    }
+    */
+    let SelectCreateProperties = class SelectCreateProperties extends Component_19.ComponentCreateProperties {
+    };
+    __decorate([
+        Property_25.$Property({ default: false }),
+        __metadata("design:type", Boolean)
+    ], SelectCreateProperties.prototype, "multiple", void 0);
+    __decorate([
+        Property_25.$Property({ default: false }),
+        __metadata("design:type", Boolean)
+    ], SelectCreateProperties.prototype, "allowDeselect", void 0);
+    __decorate([
+        Property_25.$Property({ default: "" }),
+        __metadata("design:type", String)
+    ], SelectCreateProperties.prototype, "placeholder", void 0);
+    SelectCreateProperties = __decorate([
+        Jassi_63.$Class("jassi.ui.SelectCreateProperties")
+    ], SelectCreateProperties);
+    let Select = class Select extends DataComponent_2.DataComponent {
+        constructor(properties = undefined) {
+            super();
+            super.init($('<select class="Select"><option value=""></option></select>')[0]);
+            var _this = this;
+            if (properties !== undefined && properties.multiple === true)
+                $('#' + this._id).prop("multiple", true);
+            var single = false;
+            if (properties !== undefined && properties.allowDeselect !== undefined)
+                single = properties.allowDeselect;
+            var placeholder = "Select...";
+            if (properties !== undefined && properties.placeholder !== undefined)
+                placeholder = properties.placeholder;
+            $('#' + this._id).chosen({
+                // width: "100px",
+                placeholder_text_single: placeholder,
+                allow_single_deselect: single
+            });
+            this.domSelect = this.dom;
+            if (this.domWrapper.children.length == 1) { //mobile device
+                this.dom = this.domSelect;
+            }
+            else
+                this.dom = this.domWrapper.children[1];
+            $(this.domSelect).attr("id", "");
+            $(this.dom).attr("id", this._id);
+            $(this.domSelect).chosen().change(function (e) {
+                if (_this._select !== undefined)
+                    _this._select.value = _this.value;
+                //e.data = _this.value;
+                //handler(e);
+            });
+            // this.layout();
+        }
+        refresh() {
+            $(this.domSelect).trigger("chosen:updated");
+            //	 $('#'+this._id).data("placeholder","Select...").chosen({
+            //	 	width: "100px"
+            //	 });
+        }
+        /**
+         * called if value has changed
+         * @param {function} handler - the function which is executed
+         */
+        onchange(handler) {
+            var _this = this;
+            $(this.domSelect).chosen().change(function (e) {
+                e.data = _this.value;
+                handler(e);
+            });
+        }
+        /**
+         * if the value is changed then the value of _component is also changed (_component.value)
+         */
+        set selectComponent(_component) {
+            this._select = _component;
+        }
+        get selectComponent() {
+            return this._select; //$(this.dom).text();
+        }
+        /**
+         * @member {string|function}  - property or function to get the displaystring for the object
+         **/
+        set display(value) {
+            this._display = value;
+            if (this.items !== undefined)
+                this.items = this.items;
+        }
+        get display() {
+            return this._display;
+        }
+        set items(value) {
+            this._items = value;
+            this.options = { undefined: undefined };
+            if (this.domSelect === undefined)
+                return;
+            console.log("dekt.memoryleak");
+            /* slow
+            while (this.domSelect.firstChild) {
+                $(this.domSelect.firstChild).remove();
+    
+            }
+            this.domSelect.appendChild($('<option value=""></option>')[0]);
+            for (var x = 0;x < value.length;x++) {
+                var ob = value[x];
+                var val = undefined;
+                if (typeof (this.display) === "function")
+                    val = this.display(ob);
+                else if (this.display !== undefined)
+                    val = ob[this.display];
+                else
+                    val = ob;
+                this.options[x.toString()] = ob;
+                var it = $('<option value="' + x + '">' + val + '</option>')[0];
+                this.domSelect.appendChild(it);
+            }
+            this.refresh();
+    */
+            var html = '<option value=""></option>';
+            for (var x = 0; x < value.length; x++) {
+                var ob = value[x];
+                var val = undefined;
+                if (typeof (this.display) === "function")
+                    val = this.display(ob);
+                else if (this.display !== undefined)
+                    val = ob[this.display];
+                else
+                    val = ob;
+                this.options[x.toString()] = ob;
+                html += '<option value="' + x + '">' + val + '</option>';
+                //this.domSelect.appendChild(it);
+            }
+            this.domSelect.innerHTML = html;
+            this.refresh();
+            /*   for(var x=0;x<value.length;x++){
+                   delete value[x].recid;
+               }*/
+        }
+        get items() {
+            //  if(w2ui[this._id]===undefined)
+            return this._items;
+            //   return w2ui[this._id].records;//$(this.dom).text();
+        }
+        /**
+         * @member {object} sel - the selected object
+         */
+        set value(sel) {
+            var found = false;
+            if ($(this.domSelect).chosen().prop("multiple")) {
+                var keys = [];
+                if (sel) {
+                    sel.forEach((se) => {
+                        for (var key in this.options) {
+                            if (this.options[key] === se) {
+                                keys.push(key);
+                                found = true;
+                                break;
+                            }
+                        }
+                        $(this.domSelect).val(keys).trigger("chosen:updated");
+                    });
+                }
+            }
+            else {
+                for (var key in this.options) {
+                    if (this.options[key] === sel) {
+                        $(this.domSelect).val(key).trigger("chosen:updated");
+                        found = true;
+                        break;
+                    }
+                }
+            }
+            if (!found)
+                $(this.domSelect).val("").trigger("chosen:updated");
+            // refresh()
+        }
+        get value() {
+            if (this.options === undefined)
+                return undefined;
+            var val = $(this.domSelect).chosen().val();
+            if ($(this.domSelect).chosen().prop("multiple")) {
+                var opts = [];
+                val.forEach((e) => {
+                    if (e !== "") //placeholder for empty
+                        opts.push(this.options[e]);
+                });
+                return opts;
+            }
+            return this.options[val];
+        }
+        /**
+         * @member {string|number} - the width of the component
+         * e.g. 50 or "100%"
+         */
+        /* set width(value){ //the Code
+             super.width=value;
+         
+              
+              if(this.domWrapper.children.length>1){
+                 var val=$(this.domWrapper).css("width");
+                 $(this.domWrapper.children[1]).css("width",val);
+              }
+         }*/
+        /**
+         * binds a component to a databinder
+         * @param {Databinder} databinder - the databinder to bind
+         * @param {string} property - the property to bind
+        
+        bind(databinder,property){
+            this._databinder=databinder;
+            databinder.add(property,this,"onselect");
+            databinder.checkAutocommit(this);
+        } */
+        destroy() {
+            //	$(this.domSelect).chosen('destroy');
+            $(this.domSelect).chosen("destroy"); //.search_choices;
+            $('#' + this._id).remove(); //.search_choices;
+            $(this.domSelect).remove();
+            $(this.dom).remove();
+            this.domSelect = undefined;
+            super.destroy();
+        }
+    };
+    __decorate([
+        Property_25.$Property({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], Select.prototype, "onchange", null);
+    __decorate([
+        Property_25.$Property({ type: "string" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Select.prototype, "display", null);
+    Select = __decorate([
+        Component_19.$UIComponent({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
+        Jassi_63.$Class("jassi.ui.Select"),
+        Property_25.$Property({ name: "new", type: "json", componentType: "jassi.ui.SelectCreateProperties" }),
+        __metadata("design:paramtypes", [SelectCreateProperties])
+    ], Select);
+    exports.Select = Select;
+    async function test() {
+        var Panel = Classes_22.classes.getClass("jassi.ui.Panel");
+        var Button = Classes_22.classes.getClass("jassi.ui.Button");
+        var me = {};
+        var pan = new Panel();
+        var bt = new Button();
+        var bt2 = new Button();
+        me.sel = new Select({
+            "multiple": false,
+            "placeholder": "Hallo",
+            "allowDeselect": false
+        });
+        bt.text = "wer";
+        bt.onclick(function (event) {
+            //	bt.text=me.sel.value.vorname;	
+            me.sel.value = me.sel.items[1];
+        });
+        bt.height = 15;
+        pan.width = 500;
+        me.sel.display = "nachname";
+        me.sel.items = [{ name: "Achim", nachname: "<b>Wenzel</b>" },
+            { name: "Anne", nachname: "Meier" }];
+        var h = me.sel.items;
+        me.sel.width = 195;
+        me.sel.height = 25;
+        me.sel.onchange(function (event) {
+            alert(event.data.nachname);
+        });
+        //	$('#'+sel._id).data("placeholder","Select2...").chosen({width: "200px"});
+        pan.add(me.sel);
+        pan.add(bt);
+        pan.add(bt2);
+        return pan;
     }
     exports.test = test;
 });
@@ -13385,7 +13412,7 @@ define("jassi/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassi/r
     ], BooleanEditor);
     exports.BooleanEditor = BooleanEditor;
 });
-define("jassi/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassi/ui/Select", "jassi/ui/PropertyEditors/Editor", "jassi/ui/PropertyEditors/JsonEditor", "jassi/util/Tools", "jassi/ui/converters/StringConverter", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Registry", "jassi/ui/ComponentDescriptor", "jassi/remote/Classes"], function (require, exports, Select_3, Editor_2, JsonEditor_1, Tools_2, StringConverter_1, Jassi_72, Panel_18, Textbox_10, Registry_21, ComponentDescriptor_6, Classes_22) {
+define("jassi/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassi/ui/Select", "jassi/ui/PropertyEditors/Editor", "jassi/ui/PropertyEditors/JsonEditor", "jassi/util/Tools", "jassi/ui/converters/StringConverter", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Registry", "jassi/ui/ComponentDescriptor", "jassi/remote/Classes"], function (require, exports, Select_3, Editor_2, JsonEditor_1, Tools_2, StringConverter_1, Jassi_72, Panel_18, Textbox_10, Registry_21, ComponentDescriptor_6, Classes_23) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClassSelectorEditor = void 0;
@@ -13432,12 +13459,12 @@ define("jassi/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "j
                 var file = converter.classname.replaceAll(".", "/");
                 var stype = file.split("/")[file.split("/").length - 1];
                 _this.propertyEditor.addImportIfNeeded(stype, file);
-                Classes_22.classes.loadClass(converter.classname).then((pclass) => {
+                Classes_23.classes.loadClass(converter.classname).then((pclass) => {
                     _this.propertyEditor.setPropertyInDesign(_this.property.name, new pclass());
                 });
             }
             _this.property.constructorClass = converter.classname;
-            _this.jsonEditor.showThisProperties = ComponentDescriptor_6.ComponentDescriptor.describe(Classes_22.classes.getClass(converter.classname)).fields;
+            _this.jsonEditor.showThisProperties = ComponentDescriptor_6.ComponentDescriptor.describe(Classes_23.classes.getClass(converter.classname)).fields;
             for (var x = 0; x < _this.jsonEditor.showThisProperties.length; x++) {
                 var test = _this.jsonEditor.showThisProperties[x].name;
                 if (test.startsWith("new")) {
@@ -13458,7 +13485,7 @@ define("jassi/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "j
                    });*/
                 for (var x = 0; x < converters.length; x++) {
                     var con = converters[x];
-                    var cname = Classes_22.classes.getClassName(con.oclass);
+                    var cname = Classes_23.classes.getClassName(con.oclass);
                     var name = cname;
                     if (con.params[0] && con.params[0].name !== undefined)
                         name = con.params[0].name;
@@ -13685,7 +13712,7 @@ define("jassi/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassi/ui/
     }
     exports.test2 = test2;
 });
-define("jassi/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Select", "jassi/remote/Classes", "jassi/remote/Jassi"], function (require, exports, Editor_4, Select_5, Classes_23, Jassi_74) {
+define("jassi/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Select", "jassi/remote/Classes", "jassi/remote/Jassi"], function (require, exports, Editor_4, Select_5, Classes_24, Jassi_74) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSelectorEditor = void 0;
@@ -13712,7 +13739,7 @@ define("jassi/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports"
         set ob(ob) {
             super.ob = ob;
             var scomponentType = this.property.componentType.replace("[", "").replace("]", "");
-            var data = this.propertyEditor.getVariablesForType(Classes_23.classes.getClass(scomponentType));
+            var data = this.propertyEditor.getVariablesForType(Classes_24.classes.getClass(scomponentType));
             this.component.items = data === undefined ? [] : data;
             var value = this.propertyEditor.getPropertyValue(this.property);
             if (this.property.componentType.indexOf("[") === 0 && value) {
@@ -13765,7 +13792,7 @@ define("jassi/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports"
     }
     exports.test = test;
 });
-define("jassi/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/ui/ObjectChooser", "jassi/remote/Classes"], function (require, exports, Editor_5, Jassi_75, Panel_19, Textbox_12, ObjectChooser_1, Classes_24) {
+define("jassi/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/ui/ObjectChooser", "jassi/remote/Classes"], function (require, exports, Editor_5, Jassi_75, Panel_19, Textbox_12, ObjectChooser_1, Classes_25) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectEditor = void 0;
@@ -13830,7 +13857,7 @@ define("jassi/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassi/
             return this.component;
         }
         async loadObject(id) {
-            var tp = await Classes_24.classes.loadClass(this.property.componentType);
+            var tp = await Classes_25.classes.loadClass(this.property.componentType);
             return await tp["findOne"](parseInt(id));
         }
         /**
@@ -14501,7 +14528,7 @@ define("jassi/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassi/ui/
     }
     exports.test = test;
 });
-define("jassi/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Button", "jassi/ui/PropertyEditor", "jassi/util/Tools", "jassi/remote/Classes", "jassi/ui/Property"], function (require, exports, Jassi_83, Editor_12, Button_11, PropertyEditor_5, Tools_3, Classes_25, Property_32) {
+define("jassi/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Button", "jassi/ui/PropertyEditor", "jassi/util/Tools", "jassi/remote/Classes", "jassi/ui/Property"], function (require, exports, Jassi_83, Editor_12, Button_11, PropertyEditor_5, Tools_3, Classes_26, Property_32) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.JsonEditor = void 0;
@@ -14627,7 +14654,7 @@ define("jassi/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassi/remo
             this.makePropertyChangedEvent(propEditor);
             propEditor.parentPropertyEditor = this.propertyEditor;
             propEditor.variablename = this.property.name;
-            var newclass = Classes_25.classes.getClass(this.property.componentType);
+            var newclass = Classes_26.classes.getClass(this.property.componentType);
             var newvalue = new newclass();
             //only the top-PropertyEditor changed something
             if (this.propertyEditor.parentPropertyEditor === undefined) {
@@ -14636,7 +14663,7 @@ define("jassi/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassi/remo
                     var param = code === undefined ? undefined : code.substring(code.indexOf("(") + 1, code.indexOf(")"));
                     if (param === "")
                         param = undefined;
-                    Classes_25.classes.loadClass(this.property.constructorClass).then((oclass) => {
+                    Classes_26.classes.loadClass(this.property.constructorClass).then((oclass) => {
                         let oparam = Tools_3.Tools.jsonToObject(param);
                         var vv = new oclass(param === undefined ? undefined : oparam);
                         propEditor.value = vv;
@@ -14975,7 +15002,7 @@ define("jassi/ui/converters/StringConverter", ["require", "exports", "jassi/ui/c
     ], StringConverter);
     exports.StringConverter = StringConverter;
 });
-define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse", "jassi/remote/Database", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/remote/DBObject", "jassi/base/Actions", "jassi/base/Router", "jassi/remote/Server", "jassi/remote/Transaction"], function (require, exports, Upload_1, Button_12, NumberConverter_2, Textbox_20, BoxPanel_8, Select_7, Table_5, Jassi_88, Panel_22, papaparse_1, Database_2, Registry_24, Classes_26, DBObject_7, Actions_14, Router_7, Server_4, Transaction_1) {
+define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse", "jassi/remote/Database", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/remote/DBObject", "jassi/base/Actions", "jassi/base/Router", "jassi/remote/Server", "jassi/remote/Transaction"], function (require, exports, Upload_1, Button_12, NumberConverter_2, Textbox_20, BoxPanel_8, Select_7, Table_5, Jassi_88, Panel_22, papaparse_1, Database_2, Registry_24, Classes_27, DBObject_7, Actions_14, Router_7, Server_4, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -14992,7 +15019,7 @@ define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/
         async initTableHeaders() {
             var _this = this;
             var html = "<option></option>";
-            var meta = Database_2.db.getMetadata(await Classes_26.classes.loadClass(this.me.select.value));
+            var meta = Database_2.db.getMetadata(await Classes_27.classes.loadClass(this.me.select.value));
             var lkeys = [];
             for (var key in meta) {
                 if (key === "this")
@@ -15017,7 +15044,7 @@ define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/
             await Registry_24.default.loadAllFilesForService("$DBObject");
             var data = Registry_24.default.getData("$DBObject");
             data.forEach((entr) => {
-                cls.push(Classes_26.classes.getClassName(entr.oclass));
+                cls.push(Classes_27.classes.getClassName(entr.oclass));
             });
             this.me.select.items = cls;
             //debug
@@ -15120,7 +15147,7 @@ define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/
                 }
             }
             imp.readData(ret);
-            var _meta = Database_2.db.getMetadata(await Classes_26.classes.loadClass(dbclass));
+            var _meta = Database_2.db.getMetadata(await Classes_27.classes.loadClass(dbclass));
             var meta = {};
             for (let k in _meta) {
                 meta[k.toLowerCase()] = k;
@@ -15167,10 +15194,10 @@ define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/
             return await this._doimport(this.data, this.me.select.value, this.me.fromLine.value, assignedfields);
         }
         async _doimport(data, dbclass, fromLine, assignedfields) {
-            var Type = Classes_26.classes.getClass(dbclass);
+            var Type = Classes_27.classes.getClass(dbclass);
             //read objects so we can read from cache
             let nil = await Type["find"]();
-            var meta = Database_2.db.getMetadata(await Classes_26.classes.loadClass(dbclass));
+            var meta = Database_2.db.getMetadata(await Classes_27.classes.loadClass(dbclass));
             var members = Registry_24.default.getMemberData("design:type")[dbclass];
             var allObjects = [];
             var from = fromLine;
@@ -15345,7 +15372,7 @@ define("jassi/util/Cookies", ["require", "exports", "jassi/ext/js-cookie"], func
     var Cookies = js_cookie_1.default;
     exports.Cookies = Cookies;
 });
-define("jassi/util/DatabaseSchema", ["require", "exports", "jassi/remote/Database", "jassi/remote/Classes"], function (require, exports, Database_3, Classes_27) {
+define("jassi/util/DatabaseSchema", ["require", "exports", "jassi/remote/Database", "jassi/remote/Classes"], function (require, exports, Database_3, Classes_28) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
@@ -15354,9 +15381,9 @@ define("jassi/util/DatabaseSchema", ["require", "exports", "jassi/remote/Databas
     function addDecorater(decoratername, ...args) {
         return function (...fargs) {
             var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
-            var clname = Classes_27.classes.getClassName(con);
+            var clname = Classes_28.classes.getClassName(con);
             var field = fargs.length == 1 ? "this" : fargs[1];
-            Database_3.db._setMetadata(con, field, decoratername, args, fargs);
+            Database_3.db._setMetadata(con, field, decoratername, args, fargs, undefined);
         };
     }
     function Entity(...param) {
@@ -15410,6 +15437,7 @@ define("jassi/util/Reloader", ["require", "exports", "jassi/remote/Jassi", "jass
          * reloads Code
          */
         constructor() {
+            this.listener = [];
         }
         /**
          * check code changes out of the browser if localhost and load the changes in to the browser
@@ -15436,6 +15464,19 @@ define("jassi/util/Reloader", ["require", "exports", "jassi/remote/Jassi", "jass
                 });
             };
             window.setTimeout(f, 100000);
+        }
+        /**
+         * listener for code reloaded
+         * @param {function} func - callfunction for the event
+         */
+        addEventCodeReloaded(func) {
+            this.listener.push(func);
+        }
+        removeEventCodeReloaded(func) {
+            var pos = this.listener.indexOf(func);
+            if (pos !== -1) {
+                this.listener.splice(pos, 1);
+            }
         }
         _findScript(name) {
             var scripts = $('script');
@@ -15556,14 +15597,26 @@ define("jassi/util/Reloader", ["require", "exports", "jassi/remote/Jassi", "jass
               }
               doclass(family);*/
             var _this = this;
-            console.log("reload " + JSON.stringify(fileNameBlank));
-            await new Promise((resolve, reNameject) => {
+            // console.log("reload " + JSON.stringify(fileNameBlank));
+            await new Promise((resolve, reject) => {
                 require(allfiles, function (...ret) {
-                    for (let f = 0; f < allfiles.length; f++) {
-                        _this.migrateModul(allModules, allfiles[f], ret[f]);
+                    async function run() {
+                        for (let f = 0; f < allfiles.length; f++) {
+                            _this.migrateModul(allModules, allfiles[f], ret[f]);
+                        }
+                        for (let i = 0; i < _this.listener.length; i++) {
+                            await _this.listener[i](allfiles);
+                        }
+                        ;
                     }
-                    resolve(undefined);
+                    run().then(() => {
+                        resolve(undefined);
+                    }).catch(err => {
+                        reject(err);
+                    });
                 });
+            }).catch(err => {
+                throw err;
             });
         }
         migrateModul(allModules, file, modul) {
@@ -15619,6 +15672,7 @@ define("jassi/util/Reloader", ["require", "exports", "jassi/remote/Jassi", "jass
     };
     Reloader.cache = [];
     Reloader.reloadCodeFromServerIsRunning = false;
+    Reloader.instance = new Reloader_1();
     Reloader = Reloader_1 = __decorate([
         Jassi_89.$Class("jassi.util.Reloader"),
         __metadata("design:paramtypes", [])

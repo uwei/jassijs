@@ -3,7 +3,7 @@ import { Container } from "jassi/ui/Container";
 import { Component, $UIComponent, ComponentCreateProperties } from "jassi/ui/Component";
 import { Property, $Property } from "jassi/ui/Property";
 import { Image } from "jassi/ui/Image";
-import { DesignDummy } from "./DesignDummy";
+import { DesignDummy } from "jassi/ui/DesignDummy";
 
 @$Class("jassi.ui.PanelCreateProperties")
 class PanelCreateProperties extends ComponentCreateProperties {

@@ -1,4 +1,4 @@
-import { Component } from "./Component";
+import { Component } from "jassi/ui/Component";
 import { $Class } from "jassi/remote/Jassi";
 import { Image } from "jassi/ui/Image";
 import { MenuItem } from "jassi/ui/MenuItem";

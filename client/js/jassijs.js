@@ -57,6 +57,9 @@ async function run() {
                 path = "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js";
             await loadScript(path);
         }
+        requirejs.onResourceLoad = function (context, map, depArray, o) {
+            ;
+        };
         let allmodules = {};
         let dowait = [];
         for (let modul in modules) {
@@ -85,7 +88,6 @@ async function run() {
         mods.push(key + "/modul");
     }
     var startlib = ["jassi/jassi"];
-
     require(mods, function (...res) {
         for (let x = 0; x < res.length; x++) {
             if (res[x].default.css) {

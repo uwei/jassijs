@@ -17,6 +17,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
          * reloads Code
          */
         constructor() {
+            this.listener = [];
         }
         /**
          * check code changes out of the browser if localhost and load the changes in to the browser
@@ -43,6 +44,19 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
                 });
             };
             window.setTimeout(f, 100000);
+        }
+        /**
+         * listener for code reloaded
+         * @param {function} func - callfunction for the event
+         */
+        addEventCodeReloaded(func) {
+            this.listener.push(func);
+        }
+        removeEventCodeReloaded(func) {
+            var pos = this.listener.indexOf(func);
+            if (pos !== -1) {
+                this.listener.splice(pos, 1);
+            }
         }
         _findScript(name) {
             var scripts = $('script');
@@ -163,14 +177,26 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
               }
               doclass(family);*/
             var _this = this;
-            console.log("reload " + JSON.stringify(fileNameBlank));
-            await new Promise((resolve, reNameject) => {
+            // console.log("reload " + JSON.stringify(fileNameBlank));
+            await new Promise((resolve, reject) => {
                 require(allfiles, function (...ret) {
-                    for (let f = 0; f < allfiles.length; f++) {
-                        _this.migrateModul(allModules, allfiles[f], ret[f]);
+                    async function run() {
+                        for (let f = 0; f < allfiles.length; f++) {
+                            _this.migrateModul(allModules, allfiles[f], ret[f]);
+                        }
+                        for (let i = 0; i < _this.listener.length; i++) {
+                            await _this.listener[i](allfiles);
+                        }
+                        ;
                     }
-                    resolve(undefined);
+                    run().then(() => {
+                        resolve(undefined);
+                    }).catch(err => {
+                        reject(err);
+                    });
                 });
+            }).catch(err => {
+                throw err;
             });
         }
         migrateModul(allModules, file, modul) {
@@ -226,6 +252,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
     };
     Reloader.cache = [];
     Reloader.reloadCodeFromServerIsRunning = false;
+    Reloader.instance = new Reloader_1();
     Reloader = Reloader_1 = __decorate([
         Jassi_1.$Class("jassi.util.Reloader"),
         __metadata("design:paramtypes", [])

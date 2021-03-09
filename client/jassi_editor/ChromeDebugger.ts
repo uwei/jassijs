@@ -5,7 +5,7 @@ import { OptionDialog } from "jassi/ui/OptionDialog";
 import { TSSourceMap } from "jassi_editor/util/TSSourceMap";
 import { Reloader } from "jassi/util/Reloader";
 import { Server } from "jassi/remote/Server";
-import windows from "../jassi/base/Windows";
+import windows from "jassi/base/Windows";
 var installed=undefined;
 
 
@@ -110,7 +110,7 @@ export class ChromeDebugger extends Debugger {
             return;
         }
         new Server().saveFile(file, code).then(function () {
-            new Reloader().reloadJS(file.replace(".ts", ""));
+            Reloader.instance.reloadJS(file.replace(".ts", ""));
             if (code.indexOf("jassi.register(") > -1) {
                 jassi.registry.reload();
             }

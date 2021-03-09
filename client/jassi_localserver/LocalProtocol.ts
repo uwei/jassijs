@@ -3,11 +3,11 @@ import { Context } from "jassi/remote/RemoteObject";
 import { RemoteProtocol } from "jassi/remote/RemoteProtocol";
 
 RemoteProtocol.prototype.exec = async function (config, ob) {
-    var clname = JSON.parse(config.data).classname;
+   var clname = JSON.parse(config.data).classname;
     var local = ["jassi.remote.Transaction", "northwind.Employees", "northwind.Customer"];
     var classes = (await import("jassi/remote/Classes")).classes;
     var DBObject = await classes.loadClass("jassi.remote.DBObject");
-    var ret;
+     var ret;
     //
    /* if (clname === "jassi.remote.Server") {
         var tst = JSON.parse(config.data);

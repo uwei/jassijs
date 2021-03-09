@@ -122,22 +122,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
         async _save(code) {
             await new Server_1.Server().saveFile(this._file, code);
-            var test = Classes_1.classes.getClass("jassi_localserver.DBManager");
-            var reload = true;
-            if (test) {
-                var dbobjects = await Registry_1.default.getJSONData("$DBObject");
-                dbobjects.forEach((data) => {
-                    if (data.filename === this._file)
-                        reload = false;
-                });
-            }
-            if (reload) {
-                var f = this._file.replace(".ts", "");
-                new Reloader_1.Reloader().reloadJS(f);
-            }
+            var f = this._file.replace(".ts", "");
             if (code.indexOf("@$") > -1) {
-                Registry_1.default.reload();
+                await Registry_1.default.reload();
             }
+            Reloader_1.Reloader.instance.reloadJS(f);
         }
         /**
         * save the code to server

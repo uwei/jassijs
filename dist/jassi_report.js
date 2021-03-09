@@ -2178,7 +2178,7 @@ define("jassi_report/registry", ["require"], function (require) {
                 "jassi_report.designer.ReportDesigner": {}
             },
             "jassi_report/modul.ts": {
-                "date": 1614960545105
+                "date": 1615135683395
             },
             "jassi_report/PDFReport.ts": {
                 "date": 1613218544158,

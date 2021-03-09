@@ -10,8 +10,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DBArray = void 0;
-const Jassi_1 = require("./Jassi");
-const Classes_1 = require("./Classes");
+const Jassi_1 = require("jassi/remote/Jassi");
+const Classes_1 = require("jassi/remote/Classes");
 let cl = Classes_1.classes; //force Classes.
 let DBArray = class DBArray
 /**

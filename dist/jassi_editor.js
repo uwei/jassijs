@@ -529,452 +529,7 @@ define("jassi_editor/AcePanel", ["require", "exports", "jassi/jassi", "jassi_edi
         return dlg;
     };
 });
-define("jassi/base/Router", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/ui/ComponentDescriptor", "jassi/base/Windows"], function (require, exports, Jassi_2, Classes_1, ComponentDescriptor_1, Windows_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.router = exports.Router = void 0;
-    new Promise((resolve_1, reject_1) => { require(["jassi/remote/Classes"], resolve_1, reject_1); });
-    let Router = class Router {
-        constructor() {
-        }
-        /**
-         * registers a database class
-         * @param {string} - the name of the class
-         * @param {class} - the class
-         */
-        register(name, data) {
-            throw "Error not implemented";
-        }
-        /**
-         * resolve the url
-         * @param {string} hash - the hash to resolve
-         */
-        resolve(hash) {
-            if (hash === "")
-                return;
-            var tags = hash.substring(1).split("&");
-            var params = {};
-            for (var x = 0; x < tags.length; x++) {
-                var kv = tags[x].split("=");
-                params[kv[0]] = kv[1];
-            }
-            if (params.do !== undefined) {
-                var clname = params.do;
-                //load js file
-                Classes_1.classes.loadClass(clname).then(function (cl) {
-                    if (cl === undefined)
-                        return;
-                    var props = ComponentDescriptor_1.ComponentDescriptor.describe(cl).fields;
-                    ;
-                    var id = undefined;
-                    for (var p = 0; p < props.length; p++) {
-                        if (props[p].id) {
-                            id = props[p].name;
-                        }
-                    }
-                    var name = params.do;
-                    if (params[id])
-                        name = name + "-" + params[id];
-                    if (Windows_1.default.contains(name)) {
-                        var window = Windows_1.default.show(name);
-                        var ob = Windows_1.default.findComponent(name);
-                        if (ob !== undefined) {
-                            for (var key in params) {
-                                if (key !== "do" && //no classname
-                                    key !== id) { //no id!
-                                    ob[key] = params[key];
-                                }
-                            }
-                        }
-                        return window;
-                    }
-                    else {
-                        var ob = new cl();
-                        for (var key in params) {
-                            if (key !== "do") {
-                                ob[key] = params[key];
-                            }
-                        }
-                        Windows_1.default.add(ob, ob.title, name);
-                        if (ob.callEvent !== undefined) {
-                            Windows_1.default.onclose(ob, function (param) {
-                                ob.callEvent("close", param);
-                            });
-                        }
-                    }
-                });
-                /*var urltags=[];
-                for(var p=0;p<props.length;p){
-                    if(props[p].isUrlTag){
-                        urltags.push(props[p]);
-                    }
-                }*/
-            }
-        }
-        /**
-         * generate a URL from the component
-         * @param {jassi.ui.Component} component - the component to inspect
-         */
-        getURLFromComponent(component) {
-        }
-        /**
-         *
-         * @param {string} hash - the hash to navigate
-         */
-        navigate(hash) {
-            window.location.hash = hash;
-            this.resolve(hash);
-        }
-    };
-    Router = __decorate([
-        Jassi_2.$Class("jassi.base.Router"),
-        __metadata("design:paramtypes", [])
-    ], Router);
-    exports.Router = Router;
-    ;
-    window.addEventListener("popstate", function (evt) {
-        router.resolve(window.location.hash);
-    });
-    let router = new Router();
-    exports.router = router;
-});
-define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext/goldenlayout", "jassi/ui/ComponentDescriptor", "jassi/remote/Classes", "jassi/util/Cookies"], function (require, exports, Panel_1, Jassi_3, goldenlayout_1, ComponentDescriptor_2, Classes_2, Cookies_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Windows = void 0;
-    let Windows = class Windows {
-        /**
-         * the window system -> jassi.windows
-         * @class jassi.base.Windows
-         */
-        constructor() {
-            this._noRestore = [];
-            this._myLayout = undefined;
-            this._counter = 0;
-            this._id = "jassi.windows";
-            this.dom = $('<div class="Windows" id="' + this._id + 'jassi.windows"/>')[0];
-            this._desktop = new Panel_1.Panel();
-            this._desktop.maximize();
-            //@member {Object.<string,lm.items.Component>} holds all known windows 
-            this.components = [];
-            //  this._desktop.add(new jassi.ui.Button());
-            $(document.body).append(this.dom);
-            //formemoryleak
-            this._init();
-        }
-        /**
-         * inits the component
-         */
-        _init() {
-            var config = {
-                settings: {
-                    showPopoutIcon: false
-                },
-                content: [{
-                        type: 'row',
-                        name: 'mid',
-                        isClosable: false,
-                        content: [
-                            {
-                                type: 'stack',
-                                name: 'center',
-                                isClosable: false,
-                                content: [{
-                                        type: 'component',
-                                        isClosable: false,
-                                        componentName: 'main',
-                                        componentState: {}
-                                    }]
-                            }
-                        ]
-                    }]
-            };
-            this._myLayout = new goldenlayout_1.default(config);
-            var thisDesktop = this._desktop;
-            var _this = this;
-            this._myLayout.registerComponent('main', function (container, state) {
-                var v = container.getElement();
-                v[0].appendChild(thisDesktop.dom); //html( '<h2>' + state.text + '</h2>');
-                _this.inited = true;
-            });
-            this._myLayout.init();
-            this.restoreWindows();
-            var j = this._myLayout;
-        }
-        /**
-         * search a window
-         * @param {object|undefined} parent - the parent window
-         * @param {type} name - name of the window
-         * @returns {object} - the founded window
-         */
-        _findDeep(parent, name) {
-            if (parent === undefined)
-                parent = this._myLayout.root;
-            for (var x = 0; x < parent.contentItems.length; x++) {
-                if (parent.contentItems[x].config.name === name || parent.contentItems[x].config.componentName === name)
-                    return parent.contentItems[x];
-                var test = this._findDeep(parent.contentItems[x], name);
-                if (test !== undefined)
-                    return test;
-            }
-            return undefined;
-        }
-        /**
-         * true if there a window with that name
-         * @param {string} name
-         * @returns {boolean}
-         */
-        contains(name) {
-            return this._myLayout._components[name] !== undefined;
-        }
-        /**
-         * activate the window
-         * @param {string} name - the neme of the window
-         * @returns {objet} - the window
-         */
-        show(name) {
-            //           var m=this._find(this._myLayout.root,name);
-            var m = this.components[name];
-            if (m.parent.header !== undefined)
-                m.parent.header.parent.setActiveContentItem(m);
-            return m;
-        }
-        /**
-         * finds the component for the name
-         * @param {string} name - the name of the window
-         * @returns {jassi.ui.Component} - the found dom element
-         */
-        findComponent(name) {
-            var m = this.components[name]; //this._find(this._myLayout.root,name);
-            if (m === undefined)
-                return undefined;
-            if (m.container === undefined || m.container._config === undefined || m.container._config.componentState === undefined)
-                return undefined;
-            var ret = m.container._config.componentState.component;
-            if (ret._this !== undefined)
-                return ret._this;
-        }
-        /**
-         * adds a window to the side (left - area)
-         * @param {dom|jassi.ui.Component} component - the component to add
-         * @param {string} title - the title
-         */
-        addLeft(component, title) {
-            var parentname = 'xxxleft';
-            this._noRestore.push(title);
-            var config = {
-                name: parentname,
-                type: 'stack',
-                content: []
-            };
-            var _this = this;
-            var parent = this.components[parentname];
-            if (parent === undefined) {
-                this._myLayout.root.contentItems[0].addChild(config, 0);
-                parent = this._myLayout.root.contentItems[0].contentItems[0];
-                this._myLayout.root.contentItems[0].contentItems[0].config.width = 15;
-                this.components[parentname] = parent;
-                parent.on("itemDestroyed", () => {
-                    delete _this.components[parentname];
-                    _this._myLayout.updateSize();
-                });
-            }
-            this._add(parent, component, title);
-        }
-        /**
-        * adds a window to the side (left - area)
-        * @param {dom|jassi.ui.Component} component - the component to add
-        * @param {string} title - the title
-        */
-        addRight(component, title) {
-            var parentname = 'xxxright';
-            this._noRestore.push(title);
-            var _this = this;
-            var config = {
-                name: parentname,
-                type: 'column',
-                content: []
-            };
-            var parent = this.components[parentname];
-            if (parent === undefined) {
-                var pos = this._myLayout.root.contentItems[0].contentItems.length;
-                this._myLayout.root.contentItems[0].addChild(config, pos);
-                parent = this._myLayout.root.contentItems[0].contentItems[pos];
-                parent.config.width = 15;
-                this.components[parentname] = parent;
-                parent.on("itemDestroyed", () => {
-                    delete _this.components[parentname];
-                    _this._myLayout.updateSize();
-                });
-            }
-            this._add(parent, component, title);
-        }
-        add(component, title, name = undefined) {
-            var parent = this.components["center"];
-            if (parent === undefined)
-                parent = this.components["center"] = this._findDeep(this._myLayout.root, "center");
-            return this._add(parent, component, title, name);
-        }
-        /**
-         * add a window to the main area
-         * @param {dom|jassi.ui.Component} component - the component to add
-         * @param {string} title - the title
-         * @param {string} [id] - the name (id) - =title if undefined
-         */
-        _add(parent, component, title, name = undefined) {
-            var _this = this;
-            if (component.dom !== undefined)
-                component = component.dom;
-            if (name === undefined)
-                name = title;
-            if (this.components[name] !== undefined)
-                name = name + this._counter++;
-            var config = {
-                title: title,
-                type: 'component',
-                componentName: name,
-                componentState: { title: title, name: name, component: component }
-            };
-            this._myLayout.registerComponent(name, function (container, state) {
-                var v = container.getElement();
-                state.component._container = container;
-                var z = v[0].appendChild(state.component); //html( '<h2>' + state.text + '</h2>');
-                _this.onclose(state.component, function (data) {
-                    if (data.config.componentState.component._this !== undefined)
-                        data.config.componentState.component._this.destroy();
-                    delete data.config.componentState.component._container;
-                    delete data.config.componentState.component;
-                    //memory leak golden layout
-                    // container.tab._dragListener._oDocument.unbind('mouseup touchend', container.tab._dragListener._fUp);
-                    /*  container.tab.element.remove();
-                      var myNode =container.tab.element[0];
-                      while (myNode.firstChild) {
-                          myNode.removeChild(myNode.firstChild);
-                      }*/
-                    // container.tab.header.activeContentItem = undefined;
-                    delete _this._myLayout._components[name];
-                    delete _this.components[name];
-                    _this.saveWindows();
-                });
-                var test = _this.components[name];
-            });
-            parent.addChild(config);
-            for (var x = 0; x < parent.contentItems.length; x++) {
-                if (parent.contentItems[x].config.name === name || parent.contentItems[x].config.componentName === name) {
-                    this.components[name] = parent.contentItems[x];
-                    //activate
-                    var _this = this;
-                    setTimeout(function () {
-                        _this.show(name);
-                        _this.saveWindows();
-                    }, 10);
-                    //this.components[name].parent.header.parent.setActiveContentItem(this.components[name]);
-                }
-            }
-            var j = 9;
-        }
-        test() {
-            var name = "oo";
-            var title = "oo";
-            var config = {
-                title: title,
-                type: 'component',
-                componentName: name,
-                componentState: { title: title, name: name }
-            };
-            var tt = $("<Button>");
-            var _this = this;
-            this._myLayout.registerComponent(name, function (container, componentState) {
-                // var v=container.getElement();
-                container.on("destroy", function (data) {
-                    var hh = container.tab;
-                    hh._dragListener._oDocument.unbind('mouseup touchend', hh._dragListener._fUp);
-                    delete _this._myLayout._components[name];
-                });
-            });
-            var center = this.components["center"];
-            if (center === undefined)
-                center = this.components["center"] = this._findDeep(this._myLayout.root, "center");
-            center.addChild(config);
-        }
-        /**
-         * gets the url for the given component
-         * @param {jassi.ui.component} comp - the component to read
-         */
-        getUrlFromComponent(comp) {
-            var props = ComponentDescriptor_2.ComponentDescriptor.describe(comp.constructor).fields;
-            var urltags = [];
-            for (var p = 0; p < props.length; p++) {
-                if (props[p].isUrlTag) {
-                    urltags.push(props[p]);
-                }
-            }
-            var url = "#do=" + Classes_2.classes.getClassName(comp);
-            for (var x = 0; x < urltags.length; x++) {
-                url = url + "&" + urltags[x].name + "=" + comp[urltags[x].name];
-            }
-            return url;
-            return "";
-        }
-        restoreWindows() {
-            var save = Cookies_1.Cookies.get('openedwindows');
-            if (save === undefined || save === "")
-                return;
-            var all = save.split(",");
-            new Promise((resolve_2, reject_2) => { require(["./Router"], resolve_2, reject_2); }).then(function (router) {
-                for (var x = 0; x < all.length; x++) {
-                    router.router.navigate(all[x]);
-                }
-            });
-        }
-        /*
-         * writes all opened components to cookie
-         */
-        saveWindows() {
-            var all = [];
-            for (var key in this.components) {
-                var comp = this.findComponent(key); //this.components[key].container._config.componentState.component;
-                if (comp !== undefined && this._noRestore.indexOf(key) === -1) {
-                    // comp=comp._this;
-                    if (comp !== undefined) {
-                        var url = this.getUrlFromComponent(comp);
-                        all.push(url);
-                    }
-                }
-            }
-            var s = "";
-            for (var x = 0; x < all.length; x++) {
-                s = s + (s === "" ? "" : ",") + all[x];
-            }
-            Cookies_1.Cookies.set('openedwindows', s, { expires: 30 });
-        }
-        /**
-         * fired if component is closing
-         * @param {dom|jassi.UI.Component} component - the component to register this event
-         * @param {function} func
-         */
-        onclose(component, func) {
-            if (component.dom !== undefined)
-                component = component.dom;
-            component._container.on("destroy", function (data) {
-                func(data);
-            });
-        }
-    };
-    Windows = __decorate([
-        Jassi_3.$Class("jassi.base.Windows"),
-        __metadata("design:paramtypes", [])
-    ], Windows);
-    exports.Windows = Windows;
-    var windows = new Windows();
-    windows = windows;
-    exports.default = windows;
-});
-//   myRequire("lib/goldenlayout.js",function(){
-//  jassi.windows._init();
-//  });
-//return Component.constructor;
-define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "jassi/ui/OptionDialog", "jassi_editor/util/TSSourceMap", "jassi/util/Reloader", "jassi/remote/Server", "jassi/base/Windows"], function (require, exports, Jassi_4, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_2) {
+define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "jassi/ui/OptionDialog", "jassi_editor/util/TSSourceMap", "jassi/util/Reloader", "jassi/remote/Server", "jassi/base/Windows"], function (require, exports, Jassi_2, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1) {
     "use strict";
     var ChromeDebugger_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1018,9 +573,9 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
             if (event.data.fromJassiExtension && event.data.connected) {
                 installed = true;
                 //clearTimeout(checkExtensionInstalled);
-                if (Jassi_4.default.debugger !== undefined)
-                    Jassi_4.default.debugger.destroy();
-                Jassi_4.default.debugger = this;
+                if (Jassi_2.default.debugger !== undefined)
+                    Jassi_2.default.debugger.destroy();
+                Jassi_2.default.debugger = this;
             }
             if (event.data.fromJassiExtension && event.data.mid) {
                 var test = this.responseList[event.data.mid];
@@ -1051,7 +606,7 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
             var filename = file.replace("$temp", "");
             var _this = this;
             //give the user the option to reload the changes in codeeditor
-            var editor = Windows_2.default.findComponent("jassi_editor.CodeEditor-" + filename);
+            var editor = Windows_1.default.findComponent("jassi_editor.CodeEditor-" + filename);
             if (editor !== undefined) {
                 if (editor._codeToReload === undefined) {
                     OptionDialog_1.OptionDialog.show("The source was updated in Chrome. Do you want to load this modification?", ["Yes", "No"], editor, false).then(function (data) {
@@ -1075,9 +630,9 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
                 return;
             }
             new Server_1.Server().saveFile(file, code).then(function () {
-                new Reloader_1.Reloader().reloadJS(file.replace(".ts", ""));
+                Reloader_1.Reloader.instance.reloadJS(file.replace(".ts", ""));
                 if (code.indexOf("jassi.register(") > -1) {
-                    Jassi_4.default.registry.reload();
+                    Jassi_2.default.registry.reload();
                 }
             });
         }
@@ -1154,7 +709,7 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
             return;
             var file = this.urlToFile(url);
             var _this = this;
-            var editor = Jassi_4.default.windows.findComponent("jassi_editor.CodeEditor-" + file);
+            var editor = Jassi_2.default.windows.findComponent("jassi_editor.CodeEditor-" + file);
             if (editor !== undefined) {
                 editor.addVariables(variables);
             }
@@ -1166,7 +721,7 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
     };
     ChromeDebugger.mid = 0;
     ChromeDebugger = ChromeDebugger_1 = __decorate([
-        Jassi_4.$Class("jassi_editor.ChromeDebugger"),
+        Jassi_2.$Class("jassi_editor.ChromeDebugger"),
         __metadata("design:paramtypes", [])
     ], ChromeDebugger);
     exports.ChromeDebugger = ChromeDebugger;
@@ -1174,7 +729,7 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
     new ChromeDebugger();
     window.postMessage({ toJassiExtension: true, name: "connect" }, "*");
 });
-define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/ErrorPanel", "jassi/ui/Button", "jassi/remote/Registry", "jassi/remote/Server", "jassi/util/Reloader", "jassi/remote/Classes", "jassi/ui/Component", "jassi/ui/Property", "jassi/base/Tests", "jassi_editor/AcePanel", "jassi_editor/util/Typescript", "jassi_editor/MonacoPanel"], function (require, exports, Jassi_5, Panel_2, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_2, Server_2, Reloader_2, Classes_3, Component_1, Property_1, Tests_1, AcePanel_2, Typescript_2, MonacoPanel_1) {
+define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/ErrorPanel", "jassi/ui/Button", "jassi/remote/Registry", "jassi/remote/Server", "jassi/util/Reloader", "jassi/remote/Classes", "jassi/ui/Component", "jassi/ui/Property", "jassi/base/Tests", "jassi_editor/AcePanel", "jassi_editor/util/Typescript", "jassi_editor/MonacoPanel"], function (require, exports, Jassi_3, Panel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_2, Server_2, Reloader_2, Classes_1, Component_1, Property_1, Tests_1, AcePanel_2, Typescript_2, MonacoPanel_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1183,13 +738,13 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
      * Panel for editing sources
      * @class jassi_editor.CodeEditor
      */
-    let CodeEditor = CodeEditor_1 = class CodeEditor extends Panel_2.Panel {
+    let CodeEditor = CodeEditor_1 = class CodeEditor extends Panel_1.Panel {
         constructor() {
             super();
             this.maximize();
             this._main = new DockingContainer_1.DockingContainer();
-            this._codeView = new Panel_2.Panel();
-            this._codeToolbar = new Panel_2.Panel();
+            this._codeView = new Panel_1.Panel();
+            this._codeToolbar = new Panel_1.Panel();
             if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
                 this._codePanel = new AcePanel_2.AcePanel();
             }
@@ -1200,7 +755,7 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             this._errors = new ErrorPanel_1.ErrorPanel();
             this._file = "";
             this._variables = new VariablePanel_1.VariablePanel();
-            this._design = new Panel_2.Panel();
+            this._design = new Panel_1.Panel();
             this._init();
             this.editMode = true;
         }
@@ -1260,7 +815,7 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             goto.onclick(function () {
                 _this.gotoDeclaration();
             });
-            Jassi_5.default["$CodeEditor"] = CodeEditor_1;
+            Jassi_3.default["$CodeEditor"] = CodeEditor_1;
             $(goto.dom).attr("ondrop", "event.preventDefault();jassi.$CodeEditor.search(event.dataTransfer.getData('text'));");
             $(goto.dom).attr("ondragover", "event.preventDefault();");
             this._codeToolbar.add(goto);
@@ -1275,7 +830,7 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             this._installView();
             this.registerKeys();
             this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
-                Jassi_5.default.debugger.breakpointChanged(_this._file, line, column, enable, type);
+                Jassi_3.default.debugger.breakpointChanged(_this._file, line, column, enable, type);
             });
             this._variables.createTable();
             //   this._codePanel.setCompleter(this);
@@ -1289,22 +844,11 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
         }
         async _save(code) {
             await new Server_2.Server().saveFile(this._file, code);
-            var test = Classes_3.classes.getClass("jassi_localserver.DBManager");
-            var reload = true;
-            if (test) {
-                var dbobjects = await Registry_2.default.getJSONData("$DBObject");
-                dbobjects.forEach((data) => {
-                    if (data.filename === this._file)
-                        reload = false;
-                });
-            }
-            if (reload) {
-                var f = this._file.replace(".ts", "");
-                new Reloader_2.Reloader().reloadJS(f);
-            }
+            var f = this._file.replace(".ts", "");
             if (code.indexOf("@$") > -1) {
-                Registry_2.default.reload();
+                await Registry_2.default.reload();
             }
+            Reloader_2.Reloader.instance.reloadJS(f);
         }
         /**
         * save the code to server
@@ -1424,11 +968,11 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             var _this = this;
             var breakpoints = _this._codePanel.getBreakpoints();
             var filename = _this._file.replace(".ts", "$temp.ts");
-            await Jassi_5.default.debugger.removeBreakpointsForFile(filename);
+            await Jassi_3.default.debugger.removeBreakpointsForFile(filename);
             for (var line in breakpoints) {
                 if (breakpoints[line]) {
                     var row = lines[line].length;
-                    await Jassi_5.default.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
+                    await Jassi_3.default.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
                 }
             }
             if (data.test !== undefined) {
@@ -1449,7 +993,7 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
                     _this.variables.updateCache();
                     if (ret instanceof Component_1.Component && ret["reporttype"] === undefined) {
                         require(["jassi_editor/ComponentDesigner"], function () {
-                            var ComponentDesigner = Classes_3.classes.getClass("jassi_editor.ComponentDesigner");
+                            var ComponentDesigner = Classes_1.classes.getClass("jassi_editor.ComponentDesigner");
                             if (!((_this._design) instanceof ComponentDesigner)) {
                                 _this._design = new ComponentDesigner();
                                 _this._main.add(_this._design, "Design", "design");
@@ -1460,7 +1004,7 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
                     }
                     else if (ret["reporttype"] !== undefined) {
                         require(["jassi_report/designer/ReportDesigner"], function () {
-                            var ReportDesigner = Classes_3.classes.getClass("jassi_report.designer.ReportDesigner");
+                            var ReportDesigner = Classes_1.classes.getClass("jassi_report.designer.ReportDesigner");
                             if (!((_this._design) instanceof ReportDesigner)) {
                                 _this._design = new ReportDesigner();
                                 _this._main.add(_this._design, "Design", "design");
@@ -1481,7 +1025,7 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
         }
         async saveTempFile(file, code) {
             //@ts-ignore 
-            var tss = await new Promise((resolve_3, reject_3) => { require(["jassi_editor/util/Typescript"], resolve_3, reject_3); });
+            var tss = await new Promise((resolve_1, reject_1) => { require(["jassi_editor/util/Typescript"], resolve_1, reject_1); });
             var settings = Typescript_2.Typescript.compilerSettings;
             settings["inlineSourceMap"] = true;
             settings["inlineSources"] = true;
@@ -1716,7 +1260,7 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
         __metadata("design:paramtypes", [Number])
     ], CodeEditor.prototype, "line", null);
     CodeEditor = CodeEditor_1 = __decorate([
-        Jassi_5.$Class("jassi_editor.CodeEditor"),
+        Jassi_3.$Class("jassi_editor.CodeEditor"),
         __metadata("design:paramtypes", [])
     ], CodeEditor);
     exports.CodeEditor = CodeEditor;
@@ -1730,73 +1274,11 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
     exports.test = test;
     ;
 });
-define("jassi/ui/Property", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi/remote/Classes"], function (require, exports, Jassi_6, Registry_3, Classes_4) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Property = exports.$Property = void 0;
-    function $Property(property = undefined) {
-        return function (target, propertyKey, descriptor) {
-            //debugger;
-            var test = Classes_4.classes.getClassName(target);
-            if (propertyKey === undefined)
-                Registry_3.default.registerMember("$Property", target.prototype, "new", property); //allow registerMember in class definition
-            else
-                Registry_3.default.registerMember("$Property", target, propertyKey, property);
-        };
-    }
-    exports.$Property = $Property;
-    let Property = class Property {
-        /**
-         * Property for PropertyEditor
-         * @class jassi.ui.EditorProperty
-         */
-        constructor(name = undefined, type = undefined) {
-            this.name = name;
-            this.type = type;
-        }
-    };
-    Property = __decorate([
-        Jassi_6.$Class("jassi.ui.Property"),
-        __metadata("design:paramtypes", [Object, Object])
-    ], Property);
-    exports.Property = Property;
-});
-define("jassi/ui/InvisibleComponent", ["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, Component_2, Jassi_7, Property_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.InvisibleComponent = void 0;
-    /**
-     * invivisible Component
-     **/
-    let InvisibleComponent = class InvisibleComponent extends Component_2.Component {
-        constructor(properties = undefined) {
-            super(properties);
-        }
-    };
-    InvisibleComponent = __decorate([
-        Jassi_7.$Class("jassi.ui.InvisibleComponent")
-        /*@$Property({name:"label",hide:true})
-        @$Property({name:"icon",hide:true})
-        @$Property({name:"tooltip",hide:true})
-        @$Property({name:"x",hide:true})
-        @$Property({name:"y",hide:true})
-        @$Property({name:"width",hide:true})
-        @$Property({name:"height",hide:true})
-        @$Property({name:"contextMenu",hide:true})
-        @$Property({name:"invisible",hide:true})
-        @$Property({name:"hidden",hide:true})
-        @$Property({name:"styles",hide:true})*/
-        ,
-        Property_2.$Property({ hideBaseClassProperties: true }),
-        __metadata("design:paramtypes", [Object])
-    ], InvisibleComponent);
-    exports.InvisibleComponent = InvisibleComponent;
-});
-define("jassi_editor/CodeEditorInvisibleComponents", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/ui/InvisibleComponent", "jassi/ui/Button", "jassi/remote/Classes", "jassi/ui/Image"], function (require, exports, Jassi_8, Panel_3, Registry_4, InvisibleComponent_1, Button_2, Classes_5) {
+define("jassi_editor/CodeEditorInvisibleComponents", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/ui/InvisibleComponent", "jassi/ui/Button", "jassi/remote/Classes", "jassi/ui/Image"], function (require, exports, Jassi_4, Panel_2, Registry_3, InvisibleComponent_1, Button_2, Classes_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodeEditorInvisibleComponents = void 0;
-    let CodeEditorInvisibleComponents = class CodeEditorInvisibleComponents extends Panel_3.Panel {
+    let CodeEditorInvisibleComponents = class CodeEditorInvisibleComponents extends Panel_2.Panel {
         constructor(codeeditor) {
             super();
             super.init($('<span class="Panel" style="border:1px solid #ccc;"/>')[0]);
@@ -1831,9 +1313,9 @@ define("jassi_editor/CodeEditorInvisibleComponents", ["require", "exports", "jas
                         evt.currentTarget.ob.extensionCalled({ componentDesignerInvisibleComponentClicked: { codeEditor: _this.codeeditor, designButton: img } });
                     }
                 });
-                var cn = Classes_5.classes.getClassName(ob);
+                var cn = Classes_2.classes.getClassName(ob);
                 //search icon
-                var regdata = await Registry_4.default.getJSONData("$UIComponent");
+                var regdata = await Registry_3.default.getJSONData("$UIComponent");
                 regdata.forEach(function (val) {
                     if (val.classname === cn) {
                         img.icon = val.params[0].icon;
@@ -1862,7 +1344,7 @@ define("jassi_editor/CodeEditorInvisibleComponents", ["require", "exports", "jas
          * @param {jassi.ui.Component} component
          */
         _makeDraggable(component) {
-            var helper = new (Classes_5.classes.getClass(component.createFromType))();
+            var helper = new (Classes_2.classes.getClass(component.createFromType))();
             $("#jassitemp")[0].removeChild(helper.domWrapper);
             $(component.dom).draggable({
                 cancel: "false", revert: "invalid",
@@ -1884,17 +1366,17 @@ define("jassi_editor/CodeEditorInvisibleComponents", ["require", "exports", "jas
         }
     };
     CodeEditorInvisibleComponents = __decorate([
-        Jassi_8.$Class("jassi_editor.CodeEditorInvisibleComponents"),
+        Jassi_4.$Class("jassi_editor.CodeEditorInvisibleComponents"),
         __metadata("design:paramtypes", [Object])
     ], CodeEditorInvisibleComponents);
     exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;
 });
-define("jassi_editor/CodePanel", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi_editor/util/Typescript", "jassi/base/Router"], function (require, exports, Jassi_9, Panel_4, Typescript_3, Router_1) {
+define("jassi_editor/CodePanel", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi_editor/util/Typescript", "jassi/base/Router"], function (require, exports, Jassi_5, Panel_3, Typescript_3, Router_1) {
     "use strict";
     var CodePanel_2;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodePanel = void 0;
-    let CodePanel = CodePanel_2 = class CodePanel extends Panel_4.Panel {
+    let CodePanel = CodePanel_2 = class CodePanel extends Panel_3.Panel {
         resize() {
         }
         undo() {
@@ -2020,15 +1502,15 @@ define("jassi_editor/CodePanel", ["require", "exports", "jassi/remote/Jassi", "j
         }
     };
     CodePanel = CodePanel_2 = __decorate([
-        Jassi_9.$Class("jassi_editor.CodePanel")
+        Jassi_5.$Class("jassi_editor.CodePanel")
     ], CodePanel);
     exports.CodePanel = CodePanel;
 });
-define("jassi_editor/ComponentDesigner", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/PropertyEditor", "jassi_editor/ComponentExplorer", "jassi_editor/ComponentPalette", "jassi_editor/util/Resizer", "jassi_editor/CodeEditorInvisibleComponents", "jassi/ui/Repeater", "jassi/ui/Button", "jassi_editor/util/DragAndDropper", "jassi/remote/Classes", "jassi/ui/Databinder"], function (require, exports, Jassi_10, Panel_5, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, Classes_6) {
+define("jassi_editor/ComponentDesigner", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/PropertyEditor", "jassi_editor/ComponentExplorer", "jassi_editor/ComponentPalette", "jassi_editor/util/Resizer", "jassi_editor/CodeEditorInvisibleComponents", "jassi/ui/Repeater", "jassi/ui/Button", "jassi_editor/util/DragAndDropper", "jassi/remote/Classes", "jassi/ui/Databinder"], function (require, exports, Jassi_6, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, Classes_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentDesigner = void 0;
-    let ComponentDesigner = class ComponentDesigner extends Panel_5.Panel {
+    let ComponentDesigner = class ComponentDesigner extends Panel_4.Panel {
         constructor() {
             super();
             this._codeEditor = undefined;
@@ -2060,8 +1542,8 @@ define("jassi_editor/ComponentDesigner", ["require", "exports", "jassi/remote/Ja
         }
         _initDesign() {
             var _this = this;
-            this._designToolbar = new Panel_5.Panel();
-            this._designPlaceholder = new Panel_5.Panel();
+            this._designToolbar = new Panel_4.Panel();
+            this._designPlaceholder = new Panel_4.Panel();
             var save = new Button_3.Button();
             save.tooltip = "Save(Ctrl+S)";
             save.icon = "mdi mdi-content-save mdi-18px";
@@ -2414,7 +1896,7 @@ define("jassi_editor/ComponentDesigner", ["require", "exports", "jassi/remote/Ja
                     _this._variables.updateCache();*/
                 }
             }
-            var varvalue = new (Classes_6.classes.getClass(type));
+            var varvalue = new (Classes_3.classes.getClass(type));
             if (this._propertyEditor.codeEditor !== undefined) {
                 var varname = _this._propertyEditor.addVariableInCode(type, scope);
                 if (varname.startsWith("me.")) {
@@ -2541,7 +2023,7 @@ define("jassi_editor/ComponentDesigner", ["require", "exports", "jassi/remote/Ja
         }
     };
     ComponentDesigner = __decorate([
-        Jassi_10.$Class("jassi_editor.ComponentDesigner"),
+        Jassi_6.$Class("jassi_editor.ComponentDesigner"),
         __metadata("design:paramtypes", [])
     ], ComponentDesigner);
     exports.ComponentDesigner = ComponentDesigner;
@@ -2550,12 +2032,12 @@ define("jassi_editor/ComponentDesigner", ["require", "exports", "jassi/remote/Ja
     exports.test = test;
     ;
 });
-define("jassi_editor/ComponentExplorer", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Tree", "jassi/ui/ComponentDescriptor", "jassi/ui/ContextMenu", "jassi_editor/CodeEditor", "jassi/ui/PropertyEditor"], function (require, exports, Jassi_11, Panel_6, Tree_1, ComponentDescriptor_3, ContextMenu_1, CodeEditor_2, PropertyEditor_2) {
+define("jassi_editor/ComponentExplorer", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Tree", "jassi/ui/ComponentDescriptor", "jassi/ui/ContextMenu", "jassi_editor/CodeEditor", "jassi/ui/PropertyEditor"], function (require, exports, Jassi_7, Panel_5, Tree_1, ComponentDescriptor_1, ContextMenu_1, CodeEditor_2, PropertyEditor_2) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentExplorer = void 0;
-    let ComponentExplorer = class ComponentExplorer extends Panel_6.Panel {
+    let ComponentExplorer = class ComponentExplorer extends Panel_5.Panel {
         /**
         * edit object properties
         */
@@ -2597,7 +2079,7 @@ define("jassi_editor/ComponentExplorer", ["require", "exports", "jassi/remote/Ja
         getComponentChilds(item) {
             if (item === this.value)
                 return item._components;
-            var comps = ComponentDescriptor_3.ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);
+            var comps = ComponentDescriptor_1.ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);
             var ret = [];
             for (var name in comps) {
                 var comp = comps[name];
@@ -2673,12 +2155,12 @@ define("jassi_editor/ComponentExplorer", ["require", "exports", "jassi/remote/Ja
         }
     };
     ComponentExplorer = __decorate([
-        Jassi_11.$Class("jassi_editor.ComponentExplorer"),
+        Jassi_7.$Class("jassi_editor.ComponentExplorer"),
         __metadata("design:paramtypes", [typeof (_a = typeof CodeEditor_2.CodeEditor !== "undefined" && CodeEditor_2.CodeEditor) === "function" ? _a : Object, typeof (_b = typeof PropertyEditor_2.PropertyEditor !== "undefined" && PropertyEditor_2.PropertyEditor) === "function" ? _b : Object])
     ], ComponentExplorer);
     exports.ComponentExplorer = ComponentExplorer;
-    Jassi_11.default.test = async function () {
-        var dlg = new Jassi_11.default.ui.ComponentExplorer();
+    Jassi_7.default.test = async function () {
+        var dlg = new Jassi_7.default.ui.ComponentExplorer();
         dlg.getComponentName = function (item) {
             return "hallo";
         };
@@ -2686,11 +2168,11 @@ define("jassi_editor/ComponentExplorer", ["require", "exports", "jassi/remote/Ja
         return dlg;
     };
 });
-define("jassi_editor/ComponentPalette", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Image", "jassi/remote/Registry", "jassi/remote/Classes"], function (require, exports, Jassi_12, Panel_7, Image_1, Registry_5, Classes_7) {
+define("jassi_editor/ComponentPalette", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Image", "jassi/remote/Registry", "jassi/remote/Classes"], function (require, exports, Jassi_8, Panel_6, Image_1, Registry_4, Classes_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentPalette = void 0;
-    let ComponentPalette = class ComponentPalette extends Panel_7.Panel {
+    let ComponentPalette = class ComponentPalette extends Panel_6.Panel {
         constructor() {
             super();
             this.layout();
@@ -2706,7 +2188,7 @@ define("jassi_editor/ComponentPalette", ["require", "exports", "jassi/remote/Jas
             while (this._components.length > 0) {
                 this.remove(this._components[0]);
             }
-            Registry_5.default.getJSONData(this._service).then((jdata) => {
+            Registry_4.default.getJSONData(this._service).then((jdata) => {
                 for (var x = 0; x < jdata.length; x++) {
                     var mdata = jdata[x];
                     var data = mdata.params[0];
@@ -2756,10 +2238,10 @@ define("jassi_editor/ComponentPalette", ["require", "exports", "jassi/remote/Jas
                 appendTo: "body",
                 helper: function (event) {
                     if (helper === undefined) {
-                        var cl = Classes_7.classes.getClass(component.createFromType);
+                        var cl = Classes_4.classes.getClass(component.createFromType);
                         if (cl === undefined) {
-                            Classes_7.classes.loadClass(component.createFromType); //for later
-                            cl = Panel_7.Panel;
+                            Classes_4.classes.loadClass(component.createFromType); //for later
+                            cl = Panel_6.Panel;
                         }
                         helper = new cl();
                         var img = new Image_1.Image();
@@ -2791,12 +2273,12 @@ define("jassi_editor/ComponentPalette", ["require", "exports", "jassi/remote/Jas
         }
     };
     ComponentPalette = __decorate([
-        Jassi_12.$Class("jassi_editor.ComponentPalette"),
+        Jassi_8.$Class("jassi_editor.ComponentPalette"),
         __metadata("design:paramtypes", [])
     ], ComponentPalette);
     exports.ComponentPalette = ComponentPalette;
 });
-define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_13) {
+define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Debugger = void 0;
@@ -2872,7 +2354,7 @@ define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi"], fu
         * @param {jassi_editor.CodeEditor} codeEditor
         */
         addDebugpoints(lines, debugpoints, codeEditor) {
-            Jassi_13.default.d[codeEditor._id] = undefined;
+            Jassi_9.default.d[codeEditor._id] = undefined;
             //        	jassi.ui.VariablePanel.get(this._id).__db=undefined;
             var hassome = undefined;
             this.debugpoints = debugpoints;
@@ -2928,15 +2410,15 @@ define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi"], fu
         }
     };
     Debugger = __decorate([
-        Jassi_13.$Class("jassi_editor.Debugger"),
+        Jassi_9.$Class("jassi_editor.Debugger"),
         __metadata("design:paramtypes", [])
     ], Debugger);
     exports.Debugger = Debugger;
-    if (Jassi_13.default.debugger === undefined)
-        Jassi_13.default.debugger = new Debugger();
+    if (Jassi_9.default.debugger === undefined)
+        Jassi_9.default.debugger = new Debugger();
     require(["jassi_editor/ChromeDebugger"]);
 });
-define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_editor/util/Typescript", "jassi/remote/Server", "jassi_editor/CodePanel", "jassi_editor/Debugger", "jassi_editor/ext/monaco"], function (require, exports, Jassi_14, Router_2, Typescript_4, Server_3, CodePanel_3) {
+define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_editor/util/Typescript", "jassi/remote/Server", "jassi_editor/CodePanel", "jassi_editor/Debugger", "jassi_editor/ext/monaco"], function (require, exports, Jassi_10, Router_2, Typescript_4, Server_3, CodePanel_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -3212,7 +2694,7 @@ define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", 
         }
     };
     MonacoPanel = __decorate([
-        Jassi_14.$Class("jassi_editor.MonacoPanel"),
+        Jassi_10.$Class("jassi_editor.MonacoPanel"),
         __metadata("design:paramtypes", [])
     ], MonacoPanel);
     exports.MonacoPanel = MonacoPanel;
@@ -3235,12 +2717,30 @@ define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", 
     }
     exports.test = test;
 });
-define("jassi_editor/StartEditor", ["require", "exports", "jassi/base/Windows", "jassi/ui/DBObjectExplorer", "jassi/ui/FileExplorer", "jassi/ui/SearchExplorer"], function (require, exports, Windows_3, DBObjectExplorer_1, FileExplorer_1, SearchExplorer_1) {
+define("jassi_editor/StartEditor", ["require", "exports", "jassi/ui/FileExplorer", "jassi/base/Windows", "jassi/ui/Panel", "jassi/ui/Button", "jassi/base/Router", "jassi/ui/SearchExplorer", "jassi/ui/DBObjectExplorer", "jassi/ui/ActionNodeMenu"], function (require, exports, FileExplorer_1, Windows_2, Panel_7, Button_4, Router_3, SearchExplorer_1, DBObjectExplorer_1, ActionNodeMenu_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    Windows_3.default.addLeft(new DBObjectExplorer_1.DBObjectExplorer(), "DBObjects");
-    Windows_3.default.addLeft(new SearchExplorer_1.SearchExplorer(), "Search");
-    Windows_3.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
+    //var h=new RemoteObject().test();
+    async function test() {
+        //  jassi.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
+        var body = new Panel_7.Panel({ id: "body" });
+        body.max();
+        Windows_2.default.addLeft(new DBObjectExplorer_1.DBObjectExplorer(), "DBObjects");
+        Windows_2.default.addLeft(new SearchExplorer_1.SearchExplorer(), "Search");
+        Windows_2.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
+        var bt = new Button_4.Button();
+        Windows_2.default._desktop.add(bt);
+        bt.icon = "mdi mdi-refresh";
+        var am = new ActionNodeMenu_1.ActionNodeMenu();
+        bt.onclick(() => {
+            Windows_2.default._desktop.remove(am);
+            am = new ActionNodeMenu_1.ActionNodeMenu();
+            Windows_2.default._desktop.add(am);
+        });
+        Windows_2.default._desktop.add(am);
+        Router_3.router.navigate(window.location.hash);
+    }
+    test().then();
 });
 define("jassi_editor/modul", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -3272,15 +2772,15 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi.ui.AcePanel": {}
             },
             "jassi_editor/ChromeDebugger.ts": {
-                "date": 1614805327715,
+                "date": 1615231321794,
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
-                "date": 1613572265906,
+                "date": 1615115467438,
                 "jassi_editor.CodeEditor": {}
             },
             "jassi_editor/CodeEditorInvisibleComponents.ts": {
-                "date": 1613218566583,
+                "date": 1615231329957,
                 "jassi_editor.CodeEditorInvisibleComponents": {}
             },
             "jassi_editor/CodePanel.ts": {
@@ -3311,7 +2811,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.MonacoPanel": {}
             },
             "jassi_editor/StartEditor.ts": {
-                "date": 1613341619526
+                "date": 1615231921384
             },
             "jassi_editor/util/DragAndDropper.ts": {
                 "date": 1613218544158,
@@ -3333,7 +2833,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.util.TSSourceMap": {}
             },
             "jassi_editor/util/Typescript.ts": {
-                "date": 1614803273364,
+                "date": 1615138014146,
                 "jassi_editor.util.Typescript": {}
             }
         }
@@ -3449,7 +2949,7 @@ define("jassi_editor/ext/monaco", ["jassi_editor/ext/monacoLib", "require", 'vs/
         return this._worker;
 
     }*/ 
-define("jassi_editor/util/DragAndDropper", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_15) {
+define("jassi_editor/util/DragAndDropper", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DragAndDropper = void 0;
@@ -3846,12 +3346,12 @@ define("jassi_editor/util/DragAndDropper", ["require", "exports", "jassi/remote/
         }
     };
     DragAndDropper = __decorate([
-        Jassi_15.$Class("jassi_editor.util.DragAndDropper"),
+        Jassi_11.$Class("jassi_editor.util.DragAndDropper"),
         __metadata("design:paramtypes", [])
     ], DragAndDropper);
     exports.DragAndDropper = DragAndDropper;
 });
-define("jassi_editor/util/Parser", ["require", "exports", "jassi/remote/Jassi", "jassi_editor/util/Typescript"], function (require, exports, Jassi_16, Typescript_5) {
+define("jassi_editor/util/Parser", ["require", "exports", "jassi/remote/Jassi", "jassi_editor/util/Typescript"], function (require, exports, Jassi_12, Typescript_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Parser = exports.ParsedClass = void 0;
@@ -4458,7 +3958,7 @@ define("jassi_editor/util/Parser", ["require", "exports", "jassi/remote/Jassi", 
         }
     };
     Parser = __decorate([
-        Jassi_16.$Class("jassi_editor.base.Parser"),
+        Jassi_12.$Class("jassi_editor.base.Parser"),
         __metadata("design:paramtypes", [])
     ], Parser);
     exports.Parser = Parser;
@@ -4473,7 +3973,7 @@ define("jassi_editor/util/Parser", ["require", "exports", "jassi/remote/Jassi", 
     }
     exports.test = test;
 });
-define("jassi_editor/util/Resizer", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_17) {
+define("jassi_editor/util/Resizer", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Resizer = void 0;
@@ -4809,12 +4309,12 @@ define("jassi_editor/util/Resizer", ["require", "exports", "jassi/remote/Jassi"]
         }
     };
     Resizer = __decorate([
-        Jassi_17.$Class("jassi_editor.util.Resizer"),
+        Jassi_13.$Class("jassi_editor.util.Resizer"),
         __metadata("design:paramtypes", [])
     ], Resizer);
     exports.Resizer = Resizer;
 });
-define("jassi_editor/util/TSSourceMap", ["require", "exports", "jassi/ext/sourcemap", "jassi/jassi", "jassi/remote/Server", "jassi/remote/Jassi"], function (require, exports, sourcemap_1, jassi_2, Server_4, Jassi_18) {
+define("jassi_editor/util/TSSourceMap", ["require", "exports", "jassi/ext/sourcemap", "jassi/jassi", "jassi/remote/Server", "jassi/remote/Jassi"], function (require, exports, sourcemap_1, jassi_2, Server_4, Jassi_14) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TSSourceMap = void 0;
@@ -4898,11 +4398,11 @@ define("jassi_editor/util/TSSourceMap", ["require", "exports", "jassi/ext/source
         }
     };
     TSSourceMap = __decorate([
-        Jassi_18.$Class("jassi_editor.util.TSSourceMap")
+        Jassi_14.$Class("jassi_editor.util.TSSourceMap")
     ], TSSourceMap);
     exports.TSSourceMap = TSSourceMap;
 });
-define("jassi_editor/util/Typescript", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Server", "jassi_editor/ext/monaco", "jassi/ext/requestidlecallback"], function (require, exports, Jassi_19, Server_5) {
+define("jassi_editor/util/Typescript", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Server", "jassi_editor/ext/monaco", "jassi/ext/requestidlecallback"], function (require, exports, Jassi_15, Server_5) {
     "use strict";
     var Typescript_6;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4972,8 +4472,8 @@ define("jassi_editor/util/Typescript", ["require", "exports", "jassi/remote/Jass
         //load  d.ts from modulpackage
         async includeModulTypes() {
             var nodeFiles = {};
-            for (var mod in Jassi_19.default.modules) {
-                var config = (await new Promise((resolve_4, reject_4) => { require([mod + "/modul"], resolve_4, reject_4); })).default;
+            for (var mod in Jassi_15.default.modules) {
+                var config = (await new Promise((resolve_2, reject_2) => { require([mod + "/modul"], resolve_2, reject_2); })).default;
                 if (config.types) {
                     for (var key in config.types) {
                         var file = config.types[key];
@@ -5303,7 +4803,7 @@ define("jassi_editor/util/Typescript", ["require", "exports", "jassi/remote/Jass
         experimentalDecorators: true,
     };
     Typescript = Typescript_6 = __decorate([
-        Jassi_19.$Class("jassi_editor.util.Typescript"),
+        Jassi_15.$Class("jassi_editor.util.Typescript"),
         __metadata("design:paramtypes", [])
     ], Typescript);
     exports.Typescript = Typescript;
@@ -5311,11 +4811,11 @@ define("jassi_editor/util/Typescript", ["require", "exports", "jassi/remote/Jass
     var typescript = new Typescript();
     exports.default = typescript;
 });
-define("jassi_editor/util/monaco", ["require", "exports", "jassi/ui/Component"], function (require, exports, Component_3) {
+define("jassi_editor/util/monaco", ["require", "exports", "jassi/ui/Component"], function (require, exports, Component_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoEditor = void 0;
-    class MonacoEditor extends Component_3.Component {
+    class MonacoEditor extends Component_2.Component {
         /* get dom(){
              return this.dom;
          }*/

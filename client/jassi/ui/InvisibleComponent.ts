@@ -1,7 +1,7 @@
 import jassi from "jassi/jassi";
 import {Component} from "jassi/ui/Component";
 import { $Class } from "jassi/remote/Jassi";
-import { $Property, Property } from "./Property";
+import { $Property, Property } from "jassi/ui/Property";
 
 /**
  * invivisible Component

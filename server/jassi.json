@@ -2,6 +2,7 @@
 	"modules": {
 		"jassi": "jassi",
 		"northwind": "northwind",
-		"de": "de"
+		"de": "de",
+		"local": "local"
 	}
 }

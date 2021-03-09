@@ -35,7 +35,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.base.PropertyEditorService": {}
 	},
 	"jassi/base/Router.ts": {
-		"date": 1613505686419,
+		"date": 1615231156312,
 		"jassi.base.Router": {}
 	},
 	"jassi/base/Tests.ts": {
@@ -55,7 +55,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1614358430834
 	},
 	"jassi/modul.ts": {
-		"date": 1614359854752
+		"date": 1615134737730
 	},
 	"jassi/remote/Classes.ts": {
 		"date": 1613925159863,
@@ -66,7 +66,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.Database": {}
 	},
 	"jassi/remote/DBArray.ts": {
-		"date": 1613233278151,
+		"date": 1615231253407,
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
@@ -77,7 +77,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1613218566583
 	},
 	"jassi/remote/Extensions.ts": {
-		"date": 1613925202662
+		"date": 1615231258775
 	},
 	"jassi/remote/FileNode.ts": {
 		"date": 1614803263239,
@@ -139,7 +139,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.security.Rights": {}
 	},
 	"jassi/remote/security/User.ts": {
-		"date": 1614459180220,
+		"date": 1615231236534,
 		"jassi.remote.security.User": {
 			"$DBObject": [
 				{
@@ -149,7 +149,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1614891730205,
+		"date": 1615230258439,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -278,7 +278,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.ComponentDescriptor": {}
 	},
 	"jassi/ui/ComponentSpy.ts": {
-		"date": 1613512879714,
+		"date": 1615231223589,
 		"jassi.ui.ComponentSpy": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"
@@ -304,7 +304,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/converters/DefaultConverter.ts": {
-		"date": 1613218566582,
+		"date": 1615231302585,
 		"jassi.ui.converters.DefaultConverterProperties": {},
 		"jassi.ui.converters.DefaultConverter": {
 			"$Converter": [
@@ -322,7 +322,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/converters/NumberConverter.ts": {
-		"date": 1613218544158,
+		"date": 1615231311640,
 		"jassi.ui.converters.NumberConverter": {
 			"$Converter": [
 				{
@@ -338,7 +338,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/converters/StringConverter.ts": {
-		"date": 1613218544157,
+		"date": 1615231315342,
 		"jassi.ui.converters.StringConverter": {
 			"$Converter": [
 				{
@@ -421,7 +421,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/DesignDummy.ts": {
-		"date": 1613218544159,
+		"date": 1615231275007,
 		"jassi.ui.DesignDummy": {}
 	},
 	"jassi/ui/DockingContainer.ts": {
@@ -472,7 +472,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/InvisibleComponent.ts": {
-		"date": 1613218544159,
+		"date": 1615231279789,
 		"jassi.ui.InvisibleComponent": {
 			"$Property": [
 				{
@@ -529,7 +529,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.OptionDialogTestProp": {}
 	},
 	"jassi/ui/Panel.ts": {
-		"date": 1613478144814,
+		"date": 1615231285196,
 		"jassi.ui.PanelCreateProperties": {},
 		"jassi.ui.Panel": {
 			"$UIComponent": [

@@ -9,44 +9,44 @@ function addDecorater(decoratername,delegate,...args){
         var con=fargs.length===1?fargs[0]:fargs[0].constructor;
         var clname=classes.getClassName(con);
         var field=fargs.length==1?"this":fargs[1];
-        db._setMetadata(con,field,decoratername,args,fargs);
+        db._setMetadata(con,field,decoratername,args,fargs,delegate);
         if(delegate)
-            delegate( ...fargs);
+            delegate(...args)( ...fargs);
     }
 }
 export function Entity(...param): Function{
     //DEntity(param)(pclass, ...params);
     console.log("Ent:"+JSON.stringify(param));
-    return addDecorater("Entity",DEntity(...param),param);
+    return addDecorater("Entity",DEntity,param);
 }
 export function PrimaryGeneratedColumn(...param): Function{
-    return addDecorater("PrimaryGeneratedColumn",DPrimaryGeneratedColumn(...param),param);
+    return addDecorater("PrimaryGeneratedColumn",DPrimaryGeneratedColumn,...param);
 }
 export function JoinColumn(...param): Function{
-    return addDecorater("JoinColumn",DJoinColumn(...param),param);
+    return addDecorater("JoinColumn",DJoinColumn,...param);
 }
 export function JoinTable(...param): Function{
-    return addDecorater("JoinTable",DJoinTable(...param),param);
+    return addDecorater("JoinTable",DJoinTable,...param);
 }
 export function Column(...param): Function{
-    return addDecorater("Column",DColumn(...param),param);
+    return addDecorater("Column",DColumn,...param);
 }
 export function PrimaryColumn(...param): Function{
-    return addDecorater("PrimaryColumn",DPrimaryColumn(...param),param);
+    return addDecorater("PrimaryColumn",DPrimaryColumn,...param);
 }
 export function OneToOne(...param): Function{
-    return addDecorater("OneToOne",DOneToOne(...param),param);
+    return addDecorater("OneToOne",DOneToOne,...param);
 }
 export function OneToMany(...param): Function{
-    return addDecorater("OneToMany",DOneToMany(...param),param);
+    return addDecorater("OneToMany",DOneToMany,...param);
 }
 
 export function ManyToOne(...param): Function{
-    return addDecorater("ManyToOne",DManyToOne(...param),param);
+    return addDecorater("ManyToOne",DManyToOne,...param);
 }
 
 export function ManyToMany(...param): Function{
-    return addDecorater("ManyToMany",DManyToMany(...param),param);
+    return addDecorater("ManyToMany",DManyToMany,...param);
 }
 /*
 export function $DBObject(options?: EntityOptions): Function {

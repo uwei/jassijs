@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/remote/Context", "jassi/remote/Server"], function (require, exports, Context_1, Server_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -6,7 +6,7 @@ define(["require", "exports", "jassi/remote/Context", "jassi/remote/Server"], fu
         test(id) {
             var test = id;
             for (var x = 1; x < 1000; y++) {
-                var ob = Context_1.Context.get("meintest");
+                var ob = Context.get("meintest");
             }
             return ob.hallo;
         }
@@ -27,8 +27,7 @@ define(["require", "exports", "jassi/remote/Context", "jassi/remote/Server"], fu
         return await b();
     }
     async function test() {
-        var h = await new Server_1.Server().dir();
-        alert(h);
+        debugger;
         /*var t=new Test();
         var context=new Context();
         var r=context.register("meintest",{hallo:9},async ()=>{

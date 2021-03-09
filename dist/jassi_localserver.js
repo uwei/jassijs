@@ -699,51 +699,51 @@ define("jassi_localserver/DatabaseSchema", ["require", "exports", "jassi/remote/
             var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
             var clname = Classes_2.classes.getClassName(con);
             var field = fargs.length == 1 ? "this" : fargs[1];
-            Database_1.db._setMetadata(con, field, decoratername, args, fargs);
+            Database_1.db._setMetadata(con, field, decoratername, args, fargs, delegate);
             if (delegate)
-                delegate(...fargs);
+                delegate(...args)(...fargs);
         };
     }
     function Entity(...param) {
         //DEntity(param)(pclass, ...params);
         console.log("Ent:" + JSON.stringify(param));
-        return addDecorater("Entity", typeorm_2.Entity(...param), param);
+        return addDecorater("Entity", typeorm_2.Entity, param);
     }
     exports.Entity = Entity;
     function PrimaryGeneratedColumn(...param) {
-        return addDecorater("PrimaryGeneratedColumn", typeorm_2.PrimaryGeneratedColumn(...param), param);
+        return addDecorater("PrimaryGeneratedColumn", typeorm_2.PrimaryGeneratedColumn, ...param);
     }
     exports.PrimaryGeneratedColumn = PrimaryGeneratedColumn;
     function JoinColumn(...param) {
-        return addDecorater("JoinColumn", typeorm_2.JoinColumn(...param), param);
+        return addDecorater("JoinColumn", typeorm_2.JoinColumn, ...param);
     }
     exports.JoinColumn = JoinColumn;
     function JoinTable(...param) {
-        return addDecorater("JoinTable", typeorm_2.JoinTable(...param), param);
+        return addDecorater("JoinTable", typeorm_2.JoinTable, ...param);
     }
     exports.JoinTable = JoinTable;
     function Column(...param) {
-        return addDecorater("Column", typeorm_2.Column(...param), param);
+        return addDecorater("Column", typeorm_2.Column, ...param);
     }
     exports.Column = Column;
     function PrimaryColumn(...param) {
-        return addDecorater("PrimaryColumn", typeorm_2.PrimaryColumn(...param), param);
+        return addDecorater("PrimaryColumn", typeorm_2.PrimaryColumn, ...param);
     }
     exports.PrimaryColumn = PrimaryColumn;
     function OneToOne(...param) {
-        return addDecorater("OneToOne", typeorm_2.OneToOne(...param), param);
+        return addDecorater("OneToOne", typeorm_2.OneToOne, ...param);
     }
     exports.OneToOne = OneToOne;
     function OneToMany(...param) {
-        return addDecorater("OneToMany", typeorm_2.OneToMany(...param), param);
+        return addDecorater("OneToMany", typeorm_2.OneToMany, ...param);
     }
     exports.OneToMany = OneToMany;
     function ManyToOne(...param) {
-        return addDecorater("ManyToOne", typeorm_2.ManyToOne(...param), param);
+        return addDecorater("ManyToOne", typeorm_2.ManyToOne, ...param);
     }
     exports.ManyToOne = ManyToOne;
     function ManyToMany(...param) {
-        return addDecorater("ManyToMany", typeorm_2.ManyToMany(...param), param);
+        return addDecorater("ManyToMany", typeorm_2.ManyToMany, ...param);
     }
     exports.ManyToMany = ManyToMany;
 });
@@ -926,19 +926,21 @@ define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jass
             await new RegistryIndexer().updateRegistry();
             if (rollbackonerror) {
                 try {
-                    new Reloader_1.Reloader().reloadJSAll(tsfiles);
-                    if (dbschemaHasChanged) {
-                        var man = await DBManager_2.DBManager.destroyConnection();
-                        await DBManager_2.DBManager.get();
-                    }
+                    await Reloader_1.Reloader.instance.reloadJSAll(tsfiles);
+                    /*  if (dbschemaHasChanged) {
+                          var man = await DBManager.destroyConnection();
+                          await DBManager.get();
+                      }*/
                 }
                 catch (err) {
                     console.error(err);
                     if (dbschemaHasChanged) {
-                        DBManager_2.DBManager.destroyConnection();
-                        await DBManager_2.DBManager.get();
+                        await DBManager_2.DBManager.destroyConnection();
                     }
                     var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                    if (dbschemaHasChanged) {
+                        await DBManager_2.DBManager.get();
+                    }
                     return err + "DB corrupt changes are reverted " + restore;
                 }
             }
@@ -1245,65 +1247,60 @@ define("jassi_localserver/Indexer", ["require", "exports", "jassi/server/Filesys
     }
     exports.Indexer = Indexer;
 });
-define("jassi_localserver/Installserver", ["require", "exports"], function (require, exports) {
-    "use strict";
-    define("jassi/util/DatabaseSchema", ["jassi_localserver/DatabaseSchema"], function (to) {
-        return to;
-    });
-    define("jassi/server/DoRemoteProtocol", ["jassi_localserver/LocalProtocol"], function (locprot) {
-        return {
-            _execute: async function (protext, request, context) {
-                var prot = JSON.parse(protext);
-                return await locprot.localExec(prot, context);
-            }
-        };
-    });
-    define("jassi/server/Filesystem", ["jassi_localserver/Filesystem"], function (fs) {
-        return fs;
-    });
-    define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry", "jassi_localserver/DBManager", "jassi_localserver/TypeORMListener"], function (db, Classes_1, Registry_1, dbman, TypeORMListener) {
-        db.DBManager["getConOpts"] = async function () {
-            var dbclasses = [];
-            const initSqlJs = window["SQL"];
-            const SQL = await window["SQL"]({
-                // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
-                // You can omit locateFile completely when running in node
-                locateFile: file => `https://sql.js.org/dist/${file}`
-            });
-            var Reloader = (await new Promise((resolve_6, reject_6) => { require(["jassi/util/Reloader"], resolve_6, reject_6); })).Reloader;
-            var dbobjects = await Registry_1.default.getJSONData("$DBObject");
-            var dbfiles = [];
-            for (var o = 0; o < dbobjects.length; o++) {
-                var clname = dbobjects[o].classname;
-                try {
-                    dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
-                    dbclasses.push(await Classes_1.classes.loadClass(clname));
-                }
-                catch (err) {
-                    console.log(err);
-                    throw err;
-                }
-            }
-            db.DBManager.clearMetadata();
-            dbclasses = [];
-            await new Reloader().reloadJS("jassi_localserver/TypeORMListener");
-            await new Reloader().reloadJSAll(dbfiles);
-            for (var o = 0; o < dbobjects.length; o++) {
-                var clname = dbobjects[o].classname;
+define("jassi_localserver/Installserver", [], function () {
+    //do nothing
+});
+define("jassi/util/DatabaseSchema", ["jassi_localserver/DatabaseSchema"], function (to) {
+    return to;
+});
+define("jassi/server/DoRemoteProtocol", ["jassi_localserver/LocalProtocol"], function (locprot) {
+    return {
+        _execute: async function (protext, request, context) {
+            var prot = JSON.parse(protext);
+            return await locprot.localExec(prot, context);
+        }
+    };
+});
+define("jassi/server/Filesystem", ["jassi_localserver/Filesystem"], function (fs) {
+    return fs;
+});
+define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry", "jassi_localserver/DBManager", "jassi_localserver/TypeORMListener", "typeorm", "jassi/remote/Database"], function (db, Classes_1, Registry_1, dbman, TypeORMListener, to, Database) {
+    db.DBManager["getConOpts"] = async function () {
+        var dbclasses = [];
+        const initSqlJs = window["SQL"];
+        const SQL = await window["SQL"]({
+            // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
+            // You can omit locateFile completely when running in node
+            locateFile: file => `https://sql.js.org/dist/${file}`
+        });
+        var dbobjects = await Registry_1.default.getJSONData("$DBObject");
+        var dbfiles = [];
+        for (var o = 0; o < dbobjects.length; o++) {
+            var clname = dbobjects[o].classname;
+            try {
+                dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
                 dbclasses.push(await Classes_1.classes.loadClass(clname));
             }
-            var Filessystem = await Classes_1.classes.loadClass("jassi_localserver.Filessystem");
-            var data = await new Filessystem().loadFile("__default.db");
-            var opt = {
-                database: data,
-                type: "sqljs",
-                subscribers: [TypeORMListener.TypeORMListener],
-                "entities": dbclasses
-            };
-            return opt;
+            catch (err) {
+                console.log(err);
+                throw err;
+            }
+        }
+        db.DBManager.clearMetadata();
+        Database.db.fillDecorators();
+        var tcl = await Classes_1.classes.loadClass("jassi_localserver.TypeORMListener");
+        to.EventSubscriber()(tcl);
+        var Filessystem = await Classes_1.classes.loadClass("jassi_localserver.Filessystem");
+        var data = await new Filessystem().loadFile("__default.db");
+        var opt = {
+            database: data,
+            type: "sqljs",
+            subscribers: [TypeORMListener.TypeORMListener],
+            "entities": dbclasses
         };
-        return db;
-    });
+        return opt;
+    };
+    return db;
 });
 //DatabaseSchema
 define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/RemoteProtocol"], function (require, exports, RemoteProtocol_1) {
@@ -1313,7 +1310,7 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
     RemoteProtocol_1.RemoteProtocol.prototype.exec = async function (config, ob) {
         var clname = JSON.parse(config.data).classname;
         var local = ["jassi.remote.Transaction", "northwind.Employees", "northwind.Customer"];
-        var classes = (await new Promise((resolve_7, reject_7) => { require(["jassi/remote/Classes"], resolve_7, reject_7); })).classes;
+        var classes = (await new Promise((resolve_6, reject_6) => { require(["jassi/remote/Classes"], resolve_6, reject_6); })).classes;
         var DBObject = await classes.loadClass("jassi.remote.DBObject");
         var ret;
         //
@@ -1359,7 +1356,7 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
         return ret;
     };
     async function localExec(prot, context = undefined) {
-        var classes = (await new Promise((resolve_8, reject_8) => { require(["jassi/remote/Classes"], resolve_8, reject_8); })).classes;
+        var classes = (await new Promise((resolve_7, reject_7) => { require(["jassi/remote/Classes"], resolve_7, reject_7); })).classes;
         var p = new RemoteProtocol_1.RemoteProtocol();
         var C = await classes.loadClass(prot.classname);
         if (context === undefined) {
@@ -1548,10 +1545,26 @@ define("jassi_localserver/Testuser", ["require", "exports", "jassi/util/Database
     ], Testuser);
     exports.Testuser = Testuser;
 });
-define("jassi_localserver/TypeORMListener", ["require", "exports", "jassi/remote/Jassi", "typeorm", "jassi_localserver/Filesystem"], function (require, exports, Jassi_6, typeorm_4, Filesystem_3) {
+define("jassi_localserver/TypeORMListener", ["require", "exports", "jassi/remote/Jassi", "typeorm", "jassi_localserver/Filesystem", "jassi/util/Reloader", "jassi/remote/Registry", "jassi_localserver/DBManager"], function (require, exports, Jassi_6, typeorm_4, Filesystem_3, Reloader_2, Registry_3, DBManager_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeORMListener = void 0;
+    //listener for code changes
+    Reloader_2.Reloader.instance.addEventCodeReloaded(async function (files) {
+        var dbobjects = await Registry_3.default.getJSONData("$DBObject");
+        var reload = false;
+        for (var x = 0; x < files.length; x++) {
+            var file = files[x];
+            dbobjects.forEach((data) => {
+                if (data.filename === file + ".ts")
+                    reload = true;
+            });
+        }
+        if (reload) {
+            await DBManager_4.DBManager.destroyConnection();
+            await DBManager_4.DBManager.get();
+        }
+    });
     let TypeORMListener = class TypeORMListener {
         saveDB(event) {
             if (this.savetimer) {
@@ -1648,7 +1661,7 @@ define("jassi_localserver/TypeORMListener", ["require", "exports", "jassi/remote
     };
     TypeORMListener = __decorate([
         typeorm_4.EventSubscriber(),
-        Jassi_6.$Class("jassi_localserver/TypeORMListener")
+        Jassi_6.$Class("jassi_localserver.TypeORMListener")
     ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
 });
@@ -1682,23 +1695,24 @@ define("jassi_localserver/registry", ["require"], function (require) {
                 "date": 1614967872228
             },
             "jassi_localserver/DBManager.ts": {
-                "date": 1615053519554
+                "date": 1615116146398,
+                "jassi_localserver.DBManager": {}
             },
             "jassi_localserver/Filesystem.ts": {
-                "date": 1615055552589,
+                "date": 1615114920227,
                 "jassi_localserver.Filessystem": {}
             },
             "jassi_localserver/Indexer.ts": {
                 "date": 1614893991197
             },
             "jassi_localserver/LocalProtocol.ts": {
-                "date": 1614963126042
+                "date": 1615236383156
             },
             "jassi_localserver/modul.ts": {
                 "date": 1614785819884
             },
             "jassi_localserver/RegistryIndexer.ts": {
-                "date": 1614891745582,
+                "date": 1615231351206,
                 "jassi_localserver.RegistryIndexer": {}
             },
             "jassi_localserver/Testserver.ts": {
@@ -1712,7 +1726,7 @@ define("jassi_localserver/registry", ["require"], function (require) {
                 }
             },
             "jassi_localserver/TypeORMListener.ts": {
-                "date": 1614891650187,
+                "date": 1615231358606,
                 "jassi_localserver/TypeORMListener": {
                     "EventSubscriber": []
                 }

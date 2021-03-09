@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Table", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/ui/BoxPanel", "./Select", "jassi/remote/Classes", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Jassi_1, Panel_1, Table_1, HTMLPanel_1, Button_1, BoxPanel_1, Select_1, Classes_1, Actions_1, Router_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Table", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/remote/Classes", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Jassi_1, Panel_1, Table_1, HTMLPanel_1, Button_1, BoxPanel_1, Select_1, Classes_1, Actions_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentSpy = void 0;

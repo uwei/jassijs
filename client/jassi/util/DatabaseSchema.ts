@@ -10,7 +10,7 @@ function addDecorater(decoratername,...args){
         var con=fargs.length===1?fargs[0]:fargs[0].constructor;
         var clname=classes.getClassName(con);
         var field=fargs.length==1?"this":fargs[1];
-        db._setMetadata(con,field,decoratername,args,fargs);
+        db._setMetadata(con,field,decoratername,args,fargs,undefined);
     }
 }
 

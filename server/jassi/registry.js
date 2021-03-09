@@ -11,7 +11,7 @@ exports.default={
 		"jassi.remote.Database": {}
 	},
 	"jassi/remote/DBArray.ts": {
-		"date": 1613233278151,
+		"date": 1615231253407,
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
@@ -22,7 +22,7 @@ exports.default={
 		"date": 1613218566583
 	},
 	"jassi/remote/Extensions.ts": {
-		"date": 1613925202662
+		"date": 1615231258775
 	},
 	"jassi/remote/FileNode.ts": {
 		"date": 1614803263239,
@@ -84,7 +84,7 @@ exports.default={
 		"jassi.remote.security.Rights": {}
 	},
 	"jassi/remote/security/User.ts": {
-		"date": 1614459180220,
+		"date": 1615231236534,
 		"jassi.remote.security.User": {
 			"$DBObject": [
 				{
@@ -94,7 +94,7 @@ exports.default={
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1614891730205,
+		"date": 1615230258439,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -105,7 +105,8 @@ exports.default={
 		"date": 1613330043874
 	},
 	"jassi/server/DBManager.ts": {
-		"date": 1614801636948
+		"date": 1615116151499,
+		"jassi_localserver.DBManager": {}
 	},
 	"jassi/server/DoRemoteProtocol.ts": {
 		"date": 1614540000853
@@ -114,7 +115,7 @@ exports.default={
 		"date": 1614961549727
 	},
 	"jassi/server/Indexer.ts": {
-		"date": 1614895672650
+		"date": 1615116180620
 	},
 	"jassi/server/JassiServer.ts": {
 		"date": 1614891596646

@@ -34,21 +34,22 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     async fillFilesInMapIfNeeded() {
         if (Server_1.filesInMap)
             return;
-        Server_1.filesInMap = {};
+        var ret = {};
         for (var mod in Jassi_1.default.modules) {
             if (Jassi_1.default.modules[mod].endsWith(".js")) {
-                var code = await this.loadFile(Jassi_1.default.modules[mod] + ".map");
+                var code = await $.ajax({ url: Jassi_1.default.modules[mod] + ".map", dataType: "text" });
                 var data = JSON.parse(code);
                 var files = data.sources;
                 for (let x = 0; x < files.length; x++) {
                     let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                    Server_1.filesInMap[fname] = {
+                    ret[fname] = {
                         id: x,
                         modul: mod
                     };
                 }
             }
         }
+        Server_1.filesInMap = ret;
     }
     async addFilesFromMap(root) {
         await this.fillFilesInMapIfNeeded();
@@ -214,12 +215,12 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     * @param {string} content
     */
     async saveFile(fileName, content, context = undefined) {
-        await this.fillFilesInMapIfNeeded();
-        if (Server_1.filesInMap[fileName]) {
+        /*await this.fillFilesInMapIfNeeded();
+        if (Server.filesInMap[fileName]) {
             //@ts-ignore
-            $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
+             $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
             return;
-        }
+        }*/
         return await this.saveFiles([fileName], [content], context);
         /* if (!jassi.isServer) {
              var ret = await this.call(this, "saveFiles", fileNames, contents);

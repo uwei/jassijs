@@ -1,5 +1,5 @@
-import jassi, { $Class } from "./Jassi";
-import  {classes} from "./Classes";
+import jassi, { $Class } from "jassi/remote/Jassi";
+import  {classes} from "jassi/remote/Classes";
 let cl=classes;//force Classes.
 
 @$Class("jassi.remote.DBArray")

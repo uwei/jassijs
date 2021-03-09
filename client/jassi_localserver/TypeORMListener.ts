@@ -1,30 +1,50 @@
 import { $Class } from "jassi/remote/Jassi";
 //@ts-ignore
 import { EntitySubscriberInterface, EventSubscriber, InsertEvent, RemoveEvent, UpdateEvent } from "typeorm";
-import Filessystem from "./Filesystem";
+import Filessystem from "jassi_localserver/Filesystem";
+import { Reloader } from "jassi/util/Reloader";
+import registry from "jassi/remote/Registry";
+import { DBManager } from "./DBManager";
 
+
+//listener for code changes
+Reloader.instance.addEventCodeReloaded(async function (files: string[]) {
+    var dbobjects = await registry.getJSONData("$DBObject");
+    var reload = false;
+    for (var x = 0; x < files.length; x++) {
+        var file = files[x];
+        dbobjects.forEach((data) => {
+            if (data.filename === file+".ts")
+                reload = true;
+        });
+    }
+    if(reload){
+        await DBManager.destroyConnection();
+        await DBManager.get();
+    }
+});
 
 @EventSubscriber()
-@$Class("jassi_localserver/TypeORMListener")
+@$Class("jassi_localserver.TypeORMListener")
 export class TypeORMListener implements EntitySubscriberInterface {
     savetimer;
-    saveDB(event){
-        if(this.savetimer){
+    saveDB(event) {
+        if (this.savetimer) {
             clearTimeout(this.savetimer);
-            this.savetimer=undefined;
+            this.savetimer = undefined;
         }
-        this.savetimer=setTimeout(()=>{
-            var data=event.connection.driver.export();
-            new Filessystem().saveFile("__default.db",data);
+        this.savetimer = setTimeout(() => {
+            var data = event.connection.driver.export();
+            new Filessystem().saveFile("__default.db", data);
             console.log("save DB");
-        },300);
-        
+        }, 300);
+
     }
     /**
      * Called after entity is loaded.
      */
     afterLoad(entity: any) {
-       // console.log(`AFTER ENTITY LOADED: `, entity);
+        // console.log(`AFTER ENTITY LOADED: `, entity);
     }
 
     /**
@@ -61,22 +81,22 @@ export class TypeORMListener implements EntitySubscriberInterface {
      * Called before entity removal.
      */
     beforeRemove(event: RemoveEvent<any>) {
-       // console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+        // console.log(`BEFORE ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
     }
 
     /**
      * Called after entity removal.
      */
     afterRemove(event: RemoveEvent<any>) {
-      //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
-      this.saveDB(event);
+        //  console.log(`AFTER ENTITY WITH ID ${event.entityId} REMOVED: `, event.entity);
+        this.saveDB(event);
     }
 
     /**
      * Called before transaction start.
      */
     beforeTransactionStart(event) {
-       // console.log(`BEFORE TRANSACTION STARTED: `, event);
+        // console.log(`BEFORE TRANSACTION STARTED: `, event);
     }
 
     /**
@@ -90,7 +110,7 @@ export class TypeORMListener implements EntitySubscriberInterface {
      * Called before transaction commit.
      */
     beforeTransactionCommit(event/*: TransactionCommitEvent*/) {
-       // console.log(`BEFORE TRANSACTION COMMITTED: `, event);
+        // console.log(`BEFORE TRANSACTION COMMITTED: `, event);
     }
 
     /**
@@ -104,14 +124,14 @@ export class TypeORMListener implements EntitySubscriberInterface {
      * Called before transaction rollback.
      */
     beforeTransactionRollback(event/*: TransactionRollbackEvent*/) {
-     //   console.log(`BEFORE TRANSACTION ROLLBACK: `, event);
+        //   console.log(`BEFORE TRANSACTION ROLLBACK: `, event);
     }
 
     /**
      * Called after transaction rollback.
      */
     afterTransactionRollback(event/*: TransactionRollbackEvent*/) {
-       // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
+        // console.log(`AFTER TRANSACTION ROLLBACK: `, event);
     }
 
 }

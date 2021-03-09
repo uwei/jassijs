@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.extensions = exports.Extensions = exports.$Extension = void 0;
-const Registry_1 = require("./Registry");
+const Registry_1 = require("jassi/remote/Registry");
 function $Extension(forclass) {
     return function (pclass) {
         Registry_1.default.register("$Extension", pclass, forclass);

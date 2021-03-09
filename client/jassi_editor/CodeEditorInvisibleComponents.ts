@@ -3,7 +3,7 @@ import {Panel} from "jassi/ui/Panel";
 import {HTMLPanel} from "jassi/ui/HTMLPanel";
 import "jassi/ui/Image";
 import registry from "jassi/remote/Registry";
-import {InvisibleComponent} from "../jassi/ui/InvisibleComponent";
+import {InvisibleComponent} from "jassi/ui/InvisibleComponent";
 import {Button} from "jassi/ui/Button";
 import { classes } from "jassi/remote/Classes";
 import {Component,  $UIComponent, UIComponentProperties } from "jassi/ui/Component";

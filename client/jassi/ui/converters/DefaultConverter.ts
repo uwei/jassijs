@@ -1,6 +1,6 @@
 import jassi, { $Class } from "jassi/remote/Jassi";
 import registry from "jassi/remote/Registry";
-import { $Property } from "../Property";
+import { $Property } from "jassi/ui/Property";
 
 export class $ConverterProperties{
 	name?:string;

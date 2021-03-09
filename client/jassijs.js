@@ -63,6 +63,9 @@ async function run() {
                 path="//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js";
             await loadScript(path);
         }
+        requirejs.onResourceLoad = function (context, map, depArray,o) {
+            ;
+        }
 
 
         let allmodules = {};
