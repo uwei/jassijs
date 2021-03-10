@@ -1,8 +1,6 @@
 export default {
+    "loadbeforestart":["js-sql-parser","typeormbrowser","jassi_localserver/Installserver"],
     "loadonstart":[
-        "typeormbrowser",
-        "jassi_localserver/Installserver",
-        "js-sql-parser",
         "jassi_localserver/LocalProtocol"
     ],
     "require":{ 

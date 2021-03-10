@@ -15,7 +15,7 @@ import { Tools } from "jassi/util/Tools";
 import { Server } from "jassi/remote/Server";
 import windows from "jassi/base/Windows";
 import { OptionDialog } from "jassi/ui/OptionDialog";
- 
+
 
 export class DatabaseField {
     name: string;
@@ -61,9 +61,9 @@ export class DatabaseField {
         return undefined;
     }
 
-	/**
-	 * looks possible relations in the type class
-	 **/
+    /**
+     * looks possible relations in the type class
+     **/
     getPossibleRelations(): string[] {
         if (this.name === "id")
             return ["PrimaryColumn", "PrimaryGeneratedColumn"];
@@ -78,7 +78,7 @@ export class DatabaseField {
         var cl = this.type.replace("[]", "");
         var parentcl = this.parent.name;
         var relclass = this.parent.parent.getClass(cl);
-        for (var x = 0;x < relclass.fields.length;x++) {
+        for (var x = 0; x < relclass.fields.length; x++) {
             var relfield = relclass.fields[x];
             if (this.type.endsWith("[]")) {
 
@@ -185,7 +185,7 @@ export class DatabaseClass {
     parent: DatabaseSchema;
     simpleclassname: string;
     getField(name: string): DatabaseField {
-        for (var x = 0;x < this.fields.length;x++) {
+        for (var x = 0; x < this.fields.length; x++) {
             var cl = this.fields[x];
             if (cl.name === name)
                 return cl;
@@ -197,13 +197,13 @@ export class DatabaseClass {
 var classnode = undefined;
 @$Class("jassi.base.DatabaseSchema")
 export class DatabaseSchema {
-    static basicdatatypes = ["string", "int", "decimal", "boolean","Date"];
+    static basicdatatypes = ["string", "int", "decimal", "boolean", "Date"];
     databaseClasses: DatabaseClass[] = [];
     private parsedClasses: { [classname: string]: ParsedClass };
     //AR|de/AR
     private definedImports: { [importname: string]: ParsedClass };
     getClass(name: string): DatabaseClass {
-        for (var x = 0;x < this.databaseClasses.length;x++) {
+        for (var x = 0; x < this.databaseClasses.length; x++) {
             var cl = this.databaseClasses[x];
             if (cl.name === name)
                 return cl;
@@ -212,12 +212,12 @@ export class DatabaseSchema {
     }
 
     //type => ARZeile
-    private getFulltype(type: string, parsedClass: ParsedClass) :ParsedClass{
+    private getFulltype(type: string, parsedClass: ParsedClass): ParsedClass {
         var pos = type.lastIndexOf(">");
         if (pos > -1)
             type = type.substring(pos + 1).trim();
         var file = parsedClass.parent.imports[type];
-        if(type===parsedClass.name)
+        if (type === parsedClass.name)
             return parsedClass;
         var ret = this.definedImports[type + "|" + file];
         if (!ret) {
@@ -228,7 +228,7 @@ export class DatabaseSchema {
     private createDBClass(cl: DatabaseClass) {
         var scode = TemplateDBObject.code.replaceAll("{{fullclassname}}", cl.name);
         var file = cl.name.replaceAll(".", "/") + ".ts";
-        file=file.substring(0,file.indexOf("/"))+"/remote"+"/"+file.substring(file.indexOf("/")+1);
+        file = file.substring(0, file.indexOf("/")) + "/remote" + "/" + file.substring(file.indexOf("/") + 1);
         cl.filename = file;
         cl.simpleclassname = cl.name.split(".")[cl.name.split(".").length - 1];
         scode = scode.replaceAll("{{classname}}", cl.simpleclassname);
@@ -247,12 +247,12 @@ export class DatabaseSchema {
     }
     private createDBField(field: DatabaseField, dbcl: DatabaseClass) {
         var decs = {};
-        if ((field.join||field.inverseSide===undefined||field.inverseSide==="") && field.relation === "OneToOne")
+        if ((field.join || field.inverseSide === undefined || field.inverseSide === "") && field.relation === "OneToOne")
             decs["JoinColumn"] = { name: "JoinColumn", parameter: [] };
-        if ((field.join||field.inverseSide===undefined||field.inverseSide==="")&&field.join && field.relation === "ManyToMany")
+        if ((field.join || field.inverseSide === undefined || field.inverseSide === "") && field.join && field.relation === "ManyToMany")
             decs["JoinTable"] = { name: "JoinTable", parameter: [] };
-        
-        
+
+
         var realtype = field.type;
         var realprops = field.properties;
         if (field.type === "decimal") {
@@ -277,13 +277,13 @@ export class DatabaseSchema {
         } else {
             var params = [];
             var tcl = field.type.replace("[]", "");
-            
+
             realtype = this.getClass(tcl).simpleclassname;
-            if(dbcl.name!==tcl)
-                this.parsedClasses[dbcl.name].parent.addImportIfNeeded(realtype, this.getClass(tcl).filename.substring(0,this.getClass(tcl).filename.length-3));
-            let scl=tcl;
-            if(scl.indexOf(".")>-1){
-                scl=scl.substring(scl.lastIndexOf(".")+1);
+            if (dbcl.name !== tcl)
+                this.parsedClasses[dbcl.name].parent.addImportIfNeeded(realtype, this.getClass(tcl).filename.substring(0, this.getClass(tcl).filename.length - 3));
+            let scl = tcl;
+            if (scl.indexOf(".") > -1) {
+                scl = scl.substring(scl.lastIndexOf(".") + 1);
             }
             params.push("type => " + scl);
             if (field.inverseSide && field.inverseSide !== "")
@@ -315,15 +315,15 @@ export class DatabaseSchema {
         await org.loadSchemaFromCode();
         var modifiedclasses: DatabaseClass[] = [];
         //check relations
-        for (var x = 0;x < this.databaseClasses.length;x++) {
+        for (var x = 0; x < this.databaseClasses.length; x++) {
             var dbcl = this.databaseClasses[x];
-            for (var y = 0;y < dbcl.fields.length;y++) {
+            for (var y = 0; y < dbcl.fields.length; y++) {
                 let f = dbcl.fields[y];
                 if (DatabaseSchema.basicdatatypes.indexOf(f.type) === -1 && (f.relation === undefined || f.relation === ""))
                     throw Error("Relation must be filled " + dbcl.name + " field " + f.name);
             }
         }
-        for (var x = 0;x < this.databaseClasses.length;x++) {
+        for (var x = 0; x < this.databaseClasses.length; x++) {
             var dbcl = this.databaseClasses[x];
             if (org.getClass(dbcl.name) === undefined) {
                 changes += "create class " + dbcl.name + "\n";
@@ -332,7 +332,7 @@ export class DatabaseSchema {
                     this.createDBClass(dbcl);
                 }
             }
-            for (var y = 0;y < dbcl.fields.length;y++) {
+            for (var y = 0; y < dbcl.fields.length; y++) {
                 var field = dbcl.fields[y];
                 var forg = org.getClass(dbcl.name)?.getField(field.name);
                 if (org.getClass(dbcl.name) === undefined || forg === undefined) {
@@ -363,7 +363,7 @@ export class DatabaseSchema {
         var files: string[] = [];
         var contents: string[] = [];
         if (!onlyPreview) {
-            for (var x = 0;x < modifiedclasses.length;x++) {
+            for (var x = 0; x < modifiedclasses.length; x++) {
                 var mcl = modifiedclasses[x];
                 var text = this.parsedClasses[mcl.name].parent.getModifiedCode();
                 files.push(mcl.filename);
@@ -374,7 +374,7 @@ export class DatabaseSchema {
             }
             try {
                 await new Server().saveFiles(files, contents);
-                for (var y = 0;y < files.length;y++)
+                for (var y = 0; y < files.length; y++)
                     await this.reloadCodeInEditor(files[y], contents[y]);
             } catch (perr) {
                 alert(perr.message);
@@ -390,19 +390,21 @@ export class DatabaseSchema {
             var parser = new Parser();
             var file = entr.filename;
             var code = typescript.getCode(file);
-            try{
-            parser.parse(code);
-            }catch(err){
-                console.error("error in parsing "+file);
-                throw err;
-            }
-            for (var key in parser.classes) {
-                var pclass = parser.classes[key];
-                pclass["filename"] = file;
-                if (pclass.decorator["$DBObject"]) {
-                    //var dbclass=pclass.decorator["$Class"].param[0];
-                    this.parsedClasses[pclass.fullClassname] = pclass;
-                    this.definedImports[pclass.name + "|" + file.substring(0, file.length - 3)] = pclass;
+            if (code !== undefined) {
+                try {
+                    parser.parse(code);
+                } catch (err) {
+                    console.error("error in parsing " + file);
+                    throw err;
+                }
+                for (var key in parser.classes) {
+                    var pclass = parser.classes[key];
+                    pclass["filename"] = file;
+                    if (pclass.decorator["$DBObject"]) {
+                        //var dbclass=pclass.decorator["$Class"].param[0];
+                        this.parsedClasses[pclass.fullClassname] = pclass;
+                        this.definedImports[pclass.name + "|" + file.substring(0, file.length - 3)] = pclass;
+                    }
                 }
             }
         });
@@ -447,7 +449,7 @@ export class DatabaseSchema {
                 } else if (meta["ManyToOne"]) {
                     field.relation = "ManyToOne";
                     if (meta["ManyToOne"].parameter.length > 0) {
-                        for (var x = 0;x < meta["ManyToOne"].parameter.length;x++) {
+                        for (var x = 0; x < meta["ManyToOne"].parameter.length; x++) {
                             let vd = meta["ManyToOne"].parameter[x];
                             if (x === 0) {
                                 field.type = this.getFulltype(meta["ManyToOne"].parameter[0], pclass).fullClassname;
@@ -463,7 +465,7 @@ export class DatabaseSchema {
                 } else if (meta["OneToMany"]) {
                     field.relation = "OneToMany";
                     if (meta["OneToMany"].parameter.length > 0) {
-                        for (var x = 0;x < meta["OneToMany"].parameter.length;x++) {
+                        for (var x = 0; x < meta["OneToMany"].parameter.length; x++) {
                             let vd = meta["OneToMany"].parameter[x];
                             if (x === 0) {
                                 field.type = this.getFulltype(meta["OneToMany"].parameter[0], pclass).fullClassname + "[]";
@@ -479,7 +481,7 @@ export class DatabaseSchema {
                 } else if (meta["ManyToMany"]) {
                     field.relation = "ManyToMany";
                     if (meta["ManyToMany"].parameter.length > 0) {
-                        for (var x = 0;x < meta["ManyToMany"].parameter.length;x++) {
+                        for (var x = 0; x < meta["ManyToMany"].parameter.length; x++) {
                             let vd = meta["ManyToMany"].parameter[x];
                             if (x === 0) {
                                 field.type = this.getFulltype(meta["ManyToMany"].parameter[0], pclass).fullClassname + "[]";
@@ -498,7 +500,7 @@ export class DatabaseSchema {
                 } else if (meta["OneToOne"]) {
                     field.relation = "OneToOne";
                     if (meta["OneToOne"].parameter.length > 0) {
-                        for (var x = 0;x < meta["OneToOne"].parameter.length;x++) {
+                        for (var x = 0; x < meta["OneToOne"].parameter.length; x++) {
                             let vd = meta["OneToOne"].parameter[x];
                             if (x === 0) {
                                 field.type = this.getFulltype(meta["OneToOne"].parameter[0], pclass).fullClassname;
@@ -544,11 +546,11 @@ class ColumnOptions{
 //	@$Property({type:"string",chooseFrom:DatabaseSchema.basicdatatypes,description:"Column type. Must be one of the value from the ColumnTypes class."})
   //  type?: ColumnType;
     @$Property({description:"Indicates if column's value can be set to NULL.", default:false}) 
-	nullable?: boolean;
+    nullable?: boolean;
     @$Property({type:"string",description:"Default database value."}) 
-	default?: any;
+    default?: any;
     @$Property({description:"Indicates if column is always selected by QueryBuilder and find operations.",default:true})
-	@$Property({description:'Column types length. Used only on some column types. For example type = "string" and length = "100" means that ORM will create a column with type varchar(100).'})
+    @$Property({description:'Column types length. Used only on some column types. For example type = "string" and length = "100" means that ORM will create a column with type varchar(100).'})
     length?: number;
     [name:string]:any;
 }*/

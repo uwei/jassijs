@@ -1247,8 +1247,18 @@ define("jassi_localserver/Indexer", ["require", "exports", "jassi/server/Filesys
     }
     exports.Indexer = Indexer;
 });
-define("jassi_localserver/Installserver", [], function () {
-    //do nothing
+define("jassi_localserver/Installserver", ["jassi_localserver/Filesystem"], function (Filesystem) {
+    return {
+        autostart: async function () {
+            var files = await new Filesystem.default().dirFiles("", ["js", "ts"]);
+            files.forEach((fname) => {
+                if (!fname.startsWith("js/")) {
+                    var name = fname.substring(0, fname.length - 3);
+                    requirejs.undef(name);
+                }
+            });
+        }
+    };
 });
 define("jassi/util/DatabaseSchema", ["jassi_localserver/DatabaseSchema"], function (to) {
     return to;
@@ -1669,10 +1679,8 @@ define("jassi_localserver/modul", ["require", "exports"], function (require, exp
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
+        "loadbeforestart": ["js-sql-parser", "typeormbrowser", "jassi_localserver/Installserver"],
         "loadonstart": [
-            "typeormbrowser",
-            "jassi_localserver/Installserver",
-            "js-sql-parser",
             "jassi_localserver/LocalProtocol"
         ],
         "require": {

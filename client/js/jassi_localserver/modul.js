@@ -2,10 +2,8 @@ define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.default = {
+        "loadbeforestart": ["js-sql-parser", "typeormbrowser", "jassi_localserver/Installserver"],
         "loadonstart": [
-            "typeormbrowser",
-            "jassi_localserver/Installserver",
-            "js-sql-parser",
             "jassi_localserver/LocalProtocol"
         ],
         "require": {

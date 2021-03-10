@@ -10,7 +10,8 @@
 		"demo": "demo",
 		"northwind":"northwind",
 		"a": "a",
-		"de": "de"
+		"de": "de",
+		"jassi_localserver": "jassi_localserver"
 		
 	},
 	"require": {

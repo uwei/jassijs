@@ -1,5 +1,15 @@
-define("jassi_localserver/Installserver", [], function () {
-    //do nothing
+define("jassi_localserver/Installserver", ["jassi_localserver/Filesystem"], function (Filesystem) {
+    return {
+        autostart: async function () {
+            var files = await new Filesystem.default().dirFiles("", ["js", "ts"]);
+            files.forEach((fname) => {
+                if (!fname.startsWith("js/")) {
+                    var name = fname.substring(0, fname.length - 3);
+                    requirejs.undef(name);
+                }
+            });
+        }
+    };
 });
 define("jassi/util/DatabaseSchema", ["jassi_localserver/DatabaseSchema"], function (to) {
     return to;

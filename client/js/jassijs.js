@@ -88,6 +88,7 @@ async function run() {
         mods.push(key + "/modul");
     }
     var startlib = ["jassi/jassi"];
+    var beforestartlib = [];
     require(mods, function (...res) {
         for (let x = 0; x < res.length; x++) {
             if (res[x].default.css) {
@@ -110,6 +111,9 @@ async function run() {
             if (res[x].default.loadonstart) {
                 res[x].default.loadonstart.forEach((entr) => startlib.push(entr));
             }
+            if (res[x].default.loadbeforestart) {
+                res[x].default.loadbeforestart.forEach((entr) => beforestartlib.push(entr));
+            }
             let toadd = res[x].default.require;
             if (toadd) {
                 if (!requireconfig.paths) {
@@ -125,16 +129,35 @@ async function run() {
             }
         }
         requirejs.config(requireconfig);
-        require(startlib, function (jassi, ...others) {
-            cssFiles.forEach((css) => {
-                jassi.default.myRequire(css);
-            });
-            //this.myRequire("jassi/jassi.css");
-            jassi.default.modules = modules;
-            if (runScript) {
-                require([runScript], function () {
+        //load beforestartlib synchron
+        async function loadBeforestart() {
+            for (var x = 0; x < beforestartlib.length; x++) {
+                await new Promise((resolve) => {
+                    require([beforestartlib[x]], function (beforestart) {
+                        if (beforestart === null || beforestart === void 0 ? void 0 : beforestart.autostart) {
+                            beforestart.autostart().then(() => {
+                                resolve(undefined);
+                            });
+                        }
+                        else {
+                            resolve(undefined);
+                        }
+                    });
                 });
             }
+        }
+        loadBeforestart().then(() => {
+            require(startlib, function (jassi, ...others) {
+                cssFiles.forEach((css) => {
+                    jassi.default.myRequire(css);
+                });
+                //this.myRequire("jassi/jassi.css");
+                jassi.default.modules = modules;
+                if (runScript) {
+                    require([runScript], function () {
+                    });
+                }
+            });
         });
     });
 }
@@ -153,4 +176,5 @@ run();
     err.appendChild(node);
     return true;
 }*/
+//# sourceMappingURL=jassijs.js.map
 //# sourceMappingURL=jassijs.js.map

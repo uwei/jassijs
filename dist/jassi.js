@@ -1912,20 +1912,22 @@ define("jassi/base/DatabaseSchema", ["require", "exports", "jassi/remote/Jassi",
                 var parser = new Parser_1.Parser();
                 var file = entr.filename;
                 var code = Typescript_1.default.getCode(file);
-                try {
-                    parser.parse(code);
-                }
-                catch (err) {
-                    console.error("error in parsing " + file);
-                    throw err;
-                }
-                for (var key in parser.classes) {
-                    var pclass = parser.classes[key];
-                    pclass["filename"] = file;
-                    if (pclass.decorator["$DBObject"]) {
-                        //var dbclass=pclass.decorator["$Class"].param[0];
-                        this.parsedClasses[pclass.fullClassname] = pclass;
-                        this.definedImports[pclass.name + "|" + file.substring(0, file.length - 3)] = pclass;
+                if (code !== undefined) {
+                    try {
+                        parser.parse(code);
+                    }
+                    catch (err) {
+                        console.error("error in parsing " + file);
+                        throw err;
+                    }
+                    for (var key in parser.classes) {
+                        var pclass = parser.classes[key];
+                        pclass["filename"] = file;
+                        if (pclass.decorator["$DBObject"]) {
+                            //var dbclass=pclass.decorator["$Class"].param[0];
+                            this.parsedClasses[pclass.fullClassname] = pclass;
+                            this.definedImports[pclass.name + "|" + file.substring(0, file.length - 3)] = pclass;
+                        }
                     }
                 }
             });
