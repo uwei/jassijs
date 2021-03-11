@@ -4,6 +4,12 @@ define("local/registry",["require"], function(require) {
   default: {
 	"local/modul.ts": {
 		"date": 1614616375403
+	},
+	"local/remote/Book.ts": {
+		"date": 1615236283429,
+		"local.Book": {
+			"$DBObject": []
+		}
 	}
 }
  }

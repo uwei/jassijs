@@ -11,7 +11,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.DBObject = exports.$DBObject = void 0;
+    exports.test = exports.DBObject = exports.MyFindManyOptions = exports.$DBObject = void 0;
     let cl = Classes_1.classes; //force Classes
     function $DBObject(options) {
         return function (pclass, ...params) {
@@ -25,6 +25,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         };
     }
     exports.$DBObject = $DBObject;
+    class MyFindManyOptions {
+    }
+    exports.MyFindManyOptions = MyFindManyOptions;
     /**
     * base class for all database entfities
     * all objects which use the jassi.db must implement this

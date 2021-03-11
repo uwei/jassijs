@@ -7,11 +7,11 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi.ui.AcePanel": {}
 	},
 	"jassi_editor/ChromeDebugger.ts": {
-		"date": 1615231321794,
+		"date": 1615316996160,
 		"jassi_editor.ChromeDebugger": {}
 	},
 	"jassi_editor/CodeEditor.ts": {
-		"date": 1615115467438,
+		"date": 1615323569923,
 		"jassi_editor.CodeEditor": {}
 	},
 	"jassi_editor/CodeEditorInvisibleComponents.ts": {

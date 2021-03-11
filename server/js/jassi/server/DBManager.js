@@ -333,6 +333,8 @@ let DBManager = DBManager_1 = class DBManager {
             select("me").from(cl, "me");
         if (options)
             ret = relations.addWhere(options.where, options.whereParams, ret);
+        options === null || options === void 0 ? true : delete options.where;
+        options === null || options === void 0 ? true : delete options.whereParams;
         ret = relations.addWhereBySample(options, ret);
         ret = relations.join(ret);
         if (context.request.user.isAdmin)

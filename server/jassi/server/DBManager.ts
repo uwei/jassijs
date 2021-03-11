@@ -393,7 +393,8 @@ export class DBManager {
       select("me").from(cl, "me");
     if (options)
       ret = relations.addWhere(<string>options.where, options.whereParams, ret);
-
+    delete options?.where;
+    delete options?.whereParams;
     ret = relations.addWhereBySample(options, ret);
     ret = relations.join(ret);
     if (context.request.user.isAdmin)

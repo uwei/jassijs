@@ -119,10 +119,6 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/
             var cl = await Classes_1.classes.loadClass(classname);
             return await cl.find();
         }
-        //@$Property()
-        /**
-         * @member {string} items - the items to select
-         */
         set items(value) {
             var _this = this;
             if (value !== undefined && typeof (value) === "string") {
@@ -179,6 +175,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/
         Property_1.$Property({ default: 300 }),
         __metadata("design:type", Number)
     ], ObjectChooser.prototype, "dialogWidth", void 0);
+    __decorate([
+        Property_1.$Property({ type: "string", description: "the classname for to choose" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], ObjectChooser.prototype, "items", null);
     __decorate([
         Property_1.$Property({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),

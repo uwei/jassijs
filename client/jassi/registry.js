@@ -18,7 +18,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.base.Database.Field": {}
 	},
 	"jassi/base/DatabaseSchema.ts": {
-		"date": 1613649088662,
+		"date": 1615410630397,
 		"jassi.base.DatabaseSchema": {}
 	},
 	"jassi/base/Errors.ts": {
@@ -62,7 +62,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.Classes": {}
 	},
 	"jassi/remote/Database.ts": {
-		"date": 1613249031685,
+		"date": 1615321945165,
 		"jassi.remote.Database": {}
 	},
 	"jassi/remote/DBArray.ts": {
@@ -70,7 +70,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
-		"date": 1614545325200,
+		"date": 1615492360475,
 		"jassi.remote.DBObject": {}
 	},
 	"jassi/remote/DBObjectQuery.ts": {
@@ -149,7 +149,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1615230258439,
+		"date": 1615325758616,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -450,7 +450,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.HTMLEditorPanel": {}
 	},
 	"jassi/ui/HTMLPanel.ts": {
-		"date": 1613218544158,
+		"date": 1615496666013,
 		"jassi.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
@@ -513,7 +513,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/ObjectChooser.ts": {
-		"date": 1613330812615,
+		"date": 1615497996853,
 		"jassi.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
@@ -852,10 +852,10 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/util/DatabaseSchema.ts": {
-		"date": 1614287996043
+		"date": 1615318935612
 	},
 	"jassi/util/Reloader.ts": {
-		"date": 1614970552689,
+		"date": 1615324259508,
 		"jassi.util.Reloader": {}
 	},
 	"jassi/util/Tools.ts": {

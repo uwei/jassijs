@@ -11,21 +11,23 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
     "use strict";
     var Employees_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Employees = void 0;
+    exports.test2 = exports.test = exports.Employees = void 0;
     let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
         constructor() {
             super();
         }
-        /* static async find(options = undefined,context:Context=undefined): Promise<any[]> {
-             if (!context?.isServer) {
-                 return await this.call(this.find, options,context);
-             }
-             else {
-                 //@ts-ignore
-                 var man = await (await import("jassi/server/DBManager")).DBManager.get();
-                 return man.find(context,this, options);
-             }
-         }*/
+        static async find(options = undefined, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                if (options === undefined)
+                    options = { relations: ["ReportsTo"] };
+                return await this.call(this.find, options, context);
+            }
+            else {
+                //@ts-ignore
+                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                return man.find(context, this, options);
+            }
+        }
         async hallo(num) {
             if (!Jassi_1.default.isServer) {
                 var ret = await this.call(this, this.hallo, num);
@@ -120,6 +122,11 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
         return Math.floor(Math.random() * Math.floor(max));
     }
     async function test() {
+        var all = await Employees.find({ where: "id>:p", whereParams: { p: 5 } });
+        debugger;
+    }
+    exports.test = test;
+    async function test2() {
         var em = new Employees();
         em.id = getRandomInt(100000);
         var em2 = new Employees();
@@ -139,7 +146,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
           emp2.ReportsTo = emp;
           //await emp2.save();*/
     }
-    exports.test = test;
+    exports.test2 = test2;
     ;
 });
 //# sourceMappingURL=Employees.js.map

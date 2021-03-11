@@ -18,7 +18,19 @@ export function $DBObject(options?: EntityOptions): Function {
         Entity(options)(pclass, ...params);//pass to orginal Entitiy
     }
 }
-
+export class MyFindManyOptions{
+    relations?:string[];
+    [sampleproperty:string]:any;
+    /**
+     * 
+     * where e.g. id>5
+     */
+    where?:string;
+    /**
+     * e.g. where:"id>:param" ,whereParams:{param:5}
+     */
+    whereParams?:any;
+}
 /**
 * base class for all database entfities
 * all objects which use the jassi.db must implement this
@@ -157,7 +169,7 @@ export class DBObject extends RemoteObject {
             return man.findOne(context,this, options);
         }
     }
-    static async find(options = undefined,context:Context=undefined): Promise<DBObject[]> {
+    static async find(options:MyFindManyOptions = undefined,context:Context=undefined): Promise<DBObject[]> {
         if (!context?.isServer) {
             return await this.call(this.find, options,context);
         } else {

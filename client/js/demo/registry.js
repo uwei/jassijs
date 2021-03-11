@@ -32,7 +32,7 @@ define("demo/registry",["require"], function(require) {
 		}
 	},
 	"demo/MemoryTest.ts": {
-		"date": 1613330812614
+		"date": 1615317035748
 	},
 	"demo/modul.ts": {
 		"date": 1612818333557

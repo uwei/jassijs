@@ -1,3 +1,5 @@
+import { ObjectChooser } from "jassi/ui/ObjectChooser";
+import { HTMLPanel } from "jassi/ui/HTMLPanel";
 import { NumberConverter } from "jassi/ui/converters/NumberConverter";
 import { Image } from "jassi/ui/Image";
 import { Textarea } from "jassi/ui/Textarea";
@@ -15,7 +17,7 @@ type Me = {
     button1?: Button;
     titleOfCouttesy?: Textbox;
     firstName?: Textbox;
-    textbox1?: Textbox;
+    lastName?: Textbox;
     title?: Textbox;
     address?: Textbox;
     postalCode?: Textbox;
@@ -27,8 +29,10 @@ type Me = {
     homephone?: Textbox;
     notes?: Textarea;
     image1?: Image;
-    textbox2?: Textbox;
+    photoPath?: Textbox;
     id?: Textbox;
+    reportsTo?: HTMLPanel;
+    objectchooser1?: ObjectChooser;
 } & DBObjectViewMe;
 @$DBObjectView({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" })
 @$Class("northwind.EmployeesView")
@@ -48,7 +52,7 @@ export class EmployeesView extends DBObjectView {
         me.button1 = new Button();
         me.titleOfCouttesy = new Textbox();
         me.firstName = new Textbox();
-        me.textbox1 = new Textbox();
+        me.lastName = new Textbox();
         me.title = new Textbox();
         me.address = new Textbox();
         me.postalCode = new Textbox();
@@ -60,28 +64,32 @@ export class EmployeesView extends DBObjectView {
         me.homephone = new Textbox();
         me.notes = new Textarea();
         me.image1 = new Image();
-        me.textbox2 = new Textbox();
+        me.photoPath = new Textbox();
         me.id = new Textbox();
+        me.reportsTo = new HTMLPanel();
+        me.objectchooser1 = new ObjectChooser();
         me.button1.text = "button";
-        me.main.width = "900";
-        me.main.height = "800";
+        me.main.width = 900;
+        me.main.height = "900";
         me.main.isAbsolute = true;
-        me.main.add(me.titleOfCouttesy);
         me.main.add(me.firstName);
-        me.main.add(me.textbox1);
+        me.main.add(me.lastName);
         me.main.add(me.title);
+        me.main.add(me.titleOfCouttesy);
         me.main.add(me.address);
         me.main.add(me.postalCode);
         me.main.add(me.city);
-        me.main.add(me.birthDate);
         me.main.add(me.region);
         me.main.add(me.state);
+        me.main.add(me.birthDate);
         me.main.add(me.hiredate);
         me.main.add(me.homephone);
         me.main.add(me.notes);
         me.main.add(me.image1);
-        me.main.add(me.textbox2);
+        me.main.add(me.photoPath);
         me.main.add(me.id);
+        me.main.add(me.reportsTo);
+        me.main.add(me.objectchooser1);
         me.titleOfCouttesy.x = 525;
         me.titleOfCouttesy.y = 5;
         me.titleOfCouttesy.label = "Title of C.";
@@ -91,10 +99,10 @@ export class EmployeesView extends DBObjectView {
         me.firstName.y = 5;
         me.firstName.label = "First name";
         me.firstName.bind(me.databinder, "FirstName");
-        me.textbox1.x = 250;
-        me.textbox1.y = 5;
-        me.textbox1.label = "Last Name";
-        me.textbox1.bind(me.databinder, "LastName");
+        me.lastName.x = 250;
+        me.lastName.y = 5;
+        me.lastName.label = "Last Name";
+        me.lastName.bind(me.databinder, "LastName");
         me.title.x = 420;
         me.title.y = 5;
         me.title.bind(me.databinder, "Title");
@@ -146,8 +154,6 @@ export class EmployeesView extends DBObjectView {
         me.notes.height = 155;
         me.notes.bind(me.databinder, "Notes");
         me.notes.label = "Notes";
-        this.width = 778;
-        this.height = 828;
         me.image1.x = 630;
         me.image1.y = 20;
         me.image1.src = "";
@@ -157,22 +163,34 @@ export class EmployeesView extends DBObjectView {
         });
         me.image1.width = 125;
         me.image1.bind(me.databinder, "PhotoPath");
-        me.textbox2.x = 5;
-        me.textbox2.y = 240;
-        me.textbox2.bind(me.databinder, "PhotoPath");
-        me.textbox2.label = "Photo Path";
-        me.textbox2.width = 610;
+        me.photoPath.x = 5;
+        me.photoPath.y = 240;
+        me.photoPath.bind(me.databinder, "PhotoPath");
+        me.photoPath.label = "Photo Path";
+        me.photoPath.width = 460;
         me.id.x = 5;
         me.id.y = 5;
         me.id.width = 60;
         me.id.label = "Id";
         me.id.bind(me.databinder, "id");
         me.id.converter = new NumberConverter();
+        me.reportsTo.x = 7;
+        me.reportsTo.y = 298;
+        me.reportsTo.label = "Reports To";
+        me.reportsTo.bind(me.databinder, "ReportsTo");
+        me.reportsTo.template = "{{FirstName}} {{LastName}}";
+        me.reportsTo.width = 160;
+        me.objectchooser1.x = 170;
+        me.objectchooser1.y = 310;
+        me.objectchooser1.width = 25;
+        me.objectchooser1.height = 25;
+        me.objectchooser1.bind(me.databinder, "ReportsTo");
+        me.objectchooser1.items = "northwind.Employees";
     }
 }
 export async function test() {
-    var em = (await Employees.find())[0];
+    var em = (await Employees.find({id:4}))[0];
     var ret = new EmployeesView;
-    ret["value"] = <Employees>await Employees.findOne();
+    ret["value"] = em;
     return ret;
 }

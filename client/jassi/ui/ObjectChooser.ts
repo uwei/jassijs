@@ -144,7 +144,7 @@ export class ObjectChooser extends Button {
 		var cl:any=await classes.loadClass(classname);
 		return await cl.find();
 	}
-	//@$Property()
+	@$Property({type:"string",description:"the classname for to choose"})
 	/**
 	 * @member {string} items - the items to select
 	 */

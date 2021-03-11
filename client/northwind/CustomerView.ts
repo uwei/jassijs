@@ -1,13 +1,8 @@
-import { Button } from "jassi/ui/Button";
-import { NumberConverter } from "jassi/ui/converters/NumberConverter";
 import { Textbox } from "jassi/ui/Textbox";
 import { $Class } from "jassi/remote/Jassi";
-import { Panel } from "jassi/ui/Panel";
 import { $Property } from "jassi/ui/Property";
 import { Customer } from "northwind/remote/Customer";
-import { Databinder } from "jassi/ui/Databinder";
 import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassi/ui/DBObjectView";
-import { DBObjectDialog } from "jassi/ui/DBObjectDialog";
 type Me = {
     id?: Textbox;
     companyname?: Textbox;
@@ -69,12 +64,12 @@ export class CustomerView extends DBObjectView {
         me.id.y = 5;
         me.id.bind(me.databinder, "id");
         me.id.width = 65;
-        me.id.converter = new NumberConverter();
         me.id.label = "id";
         me.companyname.x = 195;
         me.companyname.y = 45;
         me.companyname.bind(me.databinder, "CompanyName");
         me.companyname.label = "Company Name";
+        me.companyname.width = 155;
         me.contacttitle.x = 10;
         me.contacttitle.y = 45;
         me.contacttitle.label = "Contact Title";
@@ -83,18 +78,18 @@ export class CustomerView extends DBObjectView {
         me.contactname.y = 5;
         me.contactname.label = "Contact Name";
         me.contactname.bind(me.databinder, "ContactName");
-        me.contactname.width = 215;
+        me.contactname.width = 260;
         me.address.x = 10;
         me.address.y = 90;
         me.address.bind(me.databinder, "Address");
         me.address.label = "Address";
-        me.address.width = 355;
+        me.address.width = 340;
         me.postalcode.x = 10;
         me.postalcode.y = 140;
         me.postalcode.label = "Postal Code";
         me.postalcode.bind(me.databinder, "PostalCode");
         me.postalcode.width = 90;
-        me.textbox1.x = 115;
+        me.textbox1.x = 100;
         me.textbox1.y = 140;
         me.textbox1.label = "City";
         me.textbox1.width = 250;
@@ -117,6 +112,7 @@ export class CustomerView extends DBObjectView {
         me.fax.y = 230;
         me.fax.label = "Fax";
         me.fax.bind(me.databinder, "Fax");
+        me.toolbar.height = 20;
     }
 }
 export async function test() {

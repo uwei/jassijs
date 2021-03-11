@@ -49,8 +49,10 @@ export class Employees extends DBObject {
     BirthDate: Date;
     @Column({ nullable: true })
     HireDate: Date;
-   /* static async find(options = undefined,context:Context=undefined): Promise<any[]> {
+    static async find(options = undefined,context:Context=undefined): Promise<Employees[]> {
         if (!context?.isServer) {
+            if(options===undefined)
+                options={relations:["ReportsTo"]}
             return await this.call(this.find, options,context);
         }
         else {
@@ -58,7 +60,7 @@ export class Employees extends DBObject {
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
             return man.find(context,this, options);
         }
-    }*/
+    }
     async hallo(num) {
         if (!jassi.isServer) {
             var ret = await this.call(this, this.hallo, num);
@@ -74,6 +76,10 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
 }
 export async function test() {
+    var all=await Employees.find({where:"id>:p",whereParams:{p:5}});
+    debugger;
+}
+export async function test2() {
     var em = new Employees();
     em.id = getRandomInt(100000);
     var em2 = new Employees();
