@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject", "jassi/remote/FileNode"], function (require, exports, Jassi_1, RemoteObject_1, FileNode_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject", "jassi/remote/FileNode", "./Classes"], function (require, exports, Jassi_1, RemoteObject_1, FileNode_1, Classes_1) {
     "use strict";
     var Server_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -143,10 +143,17 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 await this.fillFilesInMapIfNeeded();
                 if (Server_1.filesInMap[fileName]) {
-                    var found = Server_1.filesInMap[fileName];
-                    var code = await this.loadFile(Jassi_1.default.modules[found.modul] + ".map", context);
-                    var data = JSON.parse(code).sourcesContent[found.id];
-                    return data;
+                    //perhabs the files ar in localserver?
+                    var Filessystem = Classes_1.classes.getClass("jassi_localserver.Filessystem");
+                    if (Filessystem && (await new Filessystem().loadFileEntry(fileName) !== undefined)) {
+                        //use ajax
+                    }
+                    else {
+                        var found = Server_1.filesInMap[fileName];
+                        var code = await this.loadFile(Jassi_1.default.modules[found.modul] + ".map", context);
+                        var data = JSON.parse(code).sourcesContent[found.id];
+                        return data;
+                    }
                 }
                 return $.ajax({ url: fileName, dataType: "text" });
                 //return await this.call(this,"loadFile", fileName);

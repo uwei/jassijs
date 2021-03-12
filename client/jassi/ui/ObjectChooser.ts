@@ -180,14 +180,14 @@ export class ObjectChooser extends Button {
 	 * @member {bool} autocommit -  if true the databinder will update the value on every change
 	 *                              if false the databinder will update the value on databinder.toForm 
 	 */
-	@$Property({default:true})
+	@$Property()
 	get autocommit():boolean {
 		return this._autocommit;
 	}
 	set autocommit(value:boolean) {
 		this._autocommit = value;
-		if (this._databinder !== undefined)
-			this._databinder.checkAutocommit(this);
+		//if (this._databinder !== undefined)
+		//	this._databinder.checkAutocommit(this);
 	}
 	/**
 	 * binds a component to a databinder
@@ -198,7 +198,7 @@ export class ObjectChooser extends Button {
 	bind(databinder, property) {
 		this._databinder = databinder;
 		databinder.add(property, this, "onchange");
-		databinder.checkAutocommit(this);
+		//databinder.checkAutocommit(this);
 	}
 	destroy() {
 	

@@ -14,6 +14,7 @@ exports.test = exports.Server = void 0;
 const Jassi_1 = require("jassi/remote/Jassi");
 const RemoteObject_1 = require("jassi/remote/RemoteObject");
 const FileNode_1 = require("jassi/remote/FileNode");
+const Classes_1 = require("./Classes");
 let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     constructor() {
         super();
@@ -145,10 +146,17 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             await this.fillFilesInMapIfNeeded();
             if (Server_1.filesInMap[fileName]) {
-                var found = Server_1.filesInMap[fileName];
-                var code = await this.loadFile(Jassi_1.default.modules[found.modul] + ".map", context);
-                var data = JSON.parse(code).sourcesContent[found.id];
-                return data;
+                //perhabs the files ar in localserver?
+                var Filessystem = Classes_1.classes.getClass("jassi_localserver.Filessystem");
+                if (Filessystem && (await new Filessystem().loadFileEntry(fileName) !== undefined)) {
+                    //use ajax
+                }
+                else {
+                    var found = Server_1.filesInMap[fileName];
+                    var code = await this.loadFile(Jassi_1.default.modules[found.modul] + ".map", context);
+                    var data = JSON.parse(code).sourcesContent[found.id];
+                    return data;
+                }
             }
             return $.ajax({ url: fileName, dataType: "text" });
             //return await this.call(this,"loadFile", fileName);

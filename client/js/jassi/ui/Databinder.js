@@ -66,7 +66,27 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
                 let setter = this._setter[pos];
                 setter(component, this.userObject[property]);
             }
-            this._autocommit.push(undefined);
+            let _this = this;
+            if (component[this._onChange[this._onChange.length - 1]]) {
+                component[this._onChange[this._onChange.length - 1]]((event) => {
+                    _this.componentChanged(component, property, event);
+                });
+            }
+            // this._autocommit.push(undefined);
+        }
+        componentChanged(component, property, event) {
+            let pos = this.components.indexOf(component);
+            if (component.autocommit) {
+                this._fromForm(pos);
+            }
+            var val = this._getter[pos](this.components[pos]); //this._getter[pos](this.components[pos]);
+            //synchronize the new object to all the other components
+            for (let x = 0; x < this.components.length; x++) {
+                var test = this._getter[x](this.components[x]);
+                if (this._properties[x] === property && test != val && this.components[x] !== component) {
+                    this._setter[x](this.components[x], val);
+                }
+            }
         }
         remove(component) {
             for (var x = 0; x < this.components.length; x++) {
@@ -189,22 +209,22 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
          * register the autocommit handler if needed
          * @param {jassi.ui.DataComponent} component
          */
-        checkAutocommit(component) {
-            if (component.autocommit !== true)
-                return;
-            var pos = this.components.indexOf(component);
-            if (this._autocommit[pos] !== undefined)
-                return;
-            var onchange = this._onChange[pos];
-            if (onchange === undefined)
-                return;
-            var _this = this;
-            this._autocommit[pos] = function () {
-                pos = _this.components.indexOf(component);
-                _this._fromForm(pos);
-            };
-            component[onchange](this._autocommit[pos]);
-        }
+        /* checkAutocommit(component){
+             if(component.autocommit!==true)
+                 return;
+             var pos=this.components.indexOf(component);
+             if(this._autocommit[pos]!==undefined)
+                 return;
+             var onchange=this._onChange[pos];
+             if(onchange===undefined)
+                 return;
+             var _this=this;
+             this._autocommit[pos]=function(){
+                 pos=_this.components.indexOf(component);
+                 _this._fromForm(pos);
+             };
+             component[onchange](this._autocommit[pos]);
+         }*/
         destroy() {
             this.components = [];
             this._properties = [];

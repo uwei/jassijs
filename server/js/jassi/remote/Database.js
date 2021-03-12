@@ -5,6 +5,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = exports.Database = void 0;
 const Jassi_1 = require("jassi/remote/Jassi");
@@ -15,6 +18,7 @@ let Database = class Database {
     constructor() {
         this.typeDef = new Map();
         this.decoratorCalls = new Map();
+        ;
     }
     removeOld(oclass) {
         var name = Classes_1.classes.getClassName(oclass);
@@ -59,9 +63,11 @@ let Database = class Database {
     }
 };
 Database = __decorate([
-    Jassi_1.$Class("jassi.remote.Database")
+    Jassi_1.$Class("jassi.remote.Database"),
+    __metadata("design:paramtypes", [])
 ], Database);
 exports.Database = Database;
+//@ts-ignore
 var db = new Database();
 exports.db = db;
 //# sourceMappingURL=Database.js.map

@@ -189,7 +189,7 @@ export class EmployeesView extends DBObjectView {
     }
 }
 export async function test() {
-    var em = (await Employees.find({id:4}))[0];
+    var em = (await Employees.find({ id: 4 }))[0];
     var ret = new EmployeesView;
     ret["value"] = em;
     return ret;

@@ -148,8 +148,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/
         }
         set autocommit(value) {
             this._autocommit = value;
-            if (this._databinder !== undefined)
-                this._databinder.checkAutocommit(this);
+            //if (this._databinder !== undefined)
+            //	this._databinder.checkAutocommit(this);
         }
         /**
          * binds a component to a databinder
@@ -159,7 +159,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/
         bind(databinder, property) {
             this._databinder = databinder;
             databinder.add(property, this, "onchange");
-            databinder.checkAutocommit(this);
+            //databinder.checkAutocommit(this);
         }
         destroy() {
             this._value = undefined;
@@ -187,7 +187,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/
         __metadata("design:returntype", void 0)
     ], ObjectChooser.prototype, "onchange", null);
     __decorate([
-        Property_1.$Property({ default: true }),
+        Property_1.$Property(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], ObjectChooser.prototype, "autocommit", null);

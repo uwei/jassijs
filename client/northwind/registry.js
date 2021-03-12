@@ -15,7 +15,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/EmployeesView.ts": {
-		"date": 1615498346335,
+		"date": 1615590101914,
 		"northwind.EmployeesView": {
 			"$DBObjectView": [
 				{

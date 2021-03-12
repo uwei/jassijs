@@ -62,7 +62,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.Classes": {}
 	},
 	"jassi/remote/Database.ts": {
-		"date": 1615321945165,
+		"date": 1615586709418,
 		"jassi.remote.Database": {}
 	},
 	"jassi/remote/DBArray.ts": {
@@ -149,7 +149,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1615325758616,
+		"date": 1615555231827,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -366,7 +366,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Databinder.ts": {
-		"date": 1613218544159,
+		"date": 1615589873138,
 		"jassi.ui.Databinder": {
 			"$UIComponent": [
 				{
@@ -377,7 +377,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/DataComponent.ts": {
-		"date": 1613218544158,
+		"date": 1615587905350,
 		"jassi.ui.DataComponent": {}
 	},
 	"jassi/ui/DBObjectDialog.ts": {
@@ -513,7 +513,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/ObjectChooser.ts": {
-		"date": 1615497996853,
+		"date": 1615590050176,
 		"jassi.ui.ObjectChooser": {
 			"$UIComponent": [
 				{

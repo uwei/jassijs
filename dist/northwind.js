@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("northwind/CustomerView", ["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Customer", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_1, Jassi_1, Property_1, Customer_1, DBObjectView_1) {
+define("northwind/CustomerView", ["require", "exports", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Customer", "jassi/ui/DBObjectView"], function (require, exports, Textbox_1, Jassi_1, Property_1, Customer_1, DBObjectView_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -51,12 +51,12 @@ define("northwind/CustomerView", ["require", "exports", "jassi/ui/converters/Num
             me.id.y = 5;
             me.id.bind(me.databinder, "id");
             me.id.width = 65;
-            me.id.converter = new NumberConverter_1.NumberConverter();
             me.id.label = "id";
             me.companyname.x = 195;
             me.companyname.y = 45;
             me.companyname.bind(me.databinder, "CompanyName");
             me.companyname.label = "Company Name";
+            me.companyname.width = 155;
             me.contacttitle.x = 10;
             me.contacttitle.y = 45;
             me.contacttitle.label = "Contact Title";
@@ -65,18 +65,18 @@ define("northwind/CustomerView", ["require", "exports", "jassi/ui/converters/Num
             me.contactname.y = 5;
             me.contactname.label = "Contact Name";
             me.contactname.bind(me.databinder, "ContactName");
-            me.contactname.width = 215;
+            me.contactname.width = 260;
             me.address.x = 10;
             me.address.y = 90;
             me.address.bind(me.databinder, "Address");
             me.address.label = "Address";
-            me.address.width = 355;
+            me.address.width = 340;
             me.postalcode.x = 10;
             me.postalcode.y = 140;
             me.postalcode.label = "Postal Code";
             me.postalcode.bind(me.databinder, "PostalCode");
             me.postalcode.width = 90;
-            me.textbox1.x = 115;
+            me.textbox1.x = 100;
             me.textbox1.y = 140;
             me.textbox1.label = "City";
             me.textbox1.width = 250;
@@ -99,6 +99,7 @@ define("northwind/CustomerView", ["require", "exports", "jassi/ui/converters/Num
             me.fax.y = 230;
             me.fax.label = "Fax";
             me.fax.bind(me.databinder, "Fax");
+            me.toolbar.height = 20;
         }
     };
     __decorate([
@@ -122,7 +123,7 @@ define("northwind/CustomerView", ["require", "exports", "jassi/ui/converters/Num
     }
     exports.test = test;
 });
-define("northwind/EmployeesView", ["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Employees", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_2, Image_1, Textarea_1, Calendar_1, Textbox_2, Button_1, Jassi_2, Property_2, Employees_1, DBObjectView_2) {
+define("northwind/EmployeesView", ["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Employees", "jassi/ui/DBObjectView"], function (require, exports, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Image_1, Textarea_1, Calendar_1, Textbox_2, Button_1, Jassi_2, Property_2, Employees_1, DBObjectView_2) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -140,7 +141,7 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/converters/Nu
             me.button1 = new Button_1.Button();
             me.titleOfCouttesy = new Textbox_2.Textbox();
             me.firstName = new Textbox_2.Textbox();
-            me.textbox1 = new Textbox_2.Textbox();
+            me.lastName = new Textbox_2.Textbox();
             me.title = new Textbox_2.Textbox();
             me.address = new Textbox_2.Textbox();
             me.postalCode = new Textbox_2.Textbox();
@@ -152,28 +153,32 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/converters/Nu
             me.homephone = new Textbox_2.Textbox();
             me.notes = new Textarea_1.Textarea();
             me.image1 = new Image_1.Image();
-            me.textbox2 = new Textbox_2.Textbox();
+            me.photoPath = new Textbox_2.Textbox();
             me.id = new Textbox_2.Textbox();
+            me.reportsTo = new HTMLPanel_1.HTMLPanel();
+            me.objectchooser1 = new ObjectChooser_1.ObjectChooser();
             me.button1.text = "button";
-            me.main.width = "900";
-            me.main.height = "800";
+            me.main.width = 900;
+            me.main.height = "900";
             me.main.isAbsolute = true;
-            me.main.add(me.titleOfCouttesy);
             me.main.add(me.firstName);
-            me.main.add(me.textbox1);
+            me.main.add(me.lastName);
             me.main.add(me.title);
+            me.main.add(me.titleOfCouttesy);
             me.main.add(me.address);
             me.main.add(me.postalCode);
             me.main.add(me.city);
-            me.main.add(me.birthDate);
             me.main.add(me.region);
             me.main.add(me.state);
+            me.main.add(me.birthDate);
             me.main.add(me.hiredate);
             me.main.add(me.homephone);
             me.main.add(me.notes);
             me.main.add(me.image1);
-            me.main.add(me.textbox2);
+            me.main.add(me.photoPath);
             me.main.add(me.id);
+            me.main.add(me.reportsTo);
+            me.main.add(me.objectchooser1);
             me.titleOfCouttesy.x = 525;
             me.titleOfCouttesy.y = 5;
             me.titleOfCouttesy.label = "Title of C.";
@@ -183,10 +188,10 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/converters/Nu
             me.firstName.y = 5;
             me.firstName.label = "First name";
             me.firstName.bind(me.databinder, "FirstName");
-            me.textbox1.x = 250;
-            me.textbox1.y = 5;
-            me.textbox1.label = "Last Name";
-            me.textbox1.bind(me.databinder, "LastName");
+            me.lastName.x = 250;
+            me.lastName.y = 5;
+            me.lastName.label = "Last Name";
+            me.lastName.bind(me.databinder, "LastName");
             me.title.x = 420;
             me.title.y = 5;
             me.title.bind(me.databinder, "Title");
@@ -238,8 +243,6 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/converters/Nu
             me.notes.height = 155;
             me.notes.bind(me.databinder, "Notes");
             me.notes.label = "Notes";
-            this.width = 778;
-            this.height = 828;
             me.image1.x = 630;
             me.image1.y = 20;
             me.image1.src = "";
@@ -249,17 +252,29 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/converters/Nu
             });
             me.image1.width = 125;
             me.image1.bind(me.databinder, "PhotoPath");
-            me.textbox2.x = 5;
-            me.textbox2.y = 240;
-            me.textbox2.bind(me.databinder, "PhotoPath");
-            me.textbox2.label = "Photo Path";
-            me.textbox2.width = 610;
+            me.photoPath.x = 5;
+            me.photoPath.y = 240;
+            me.photoPath.bind(me.databinder, "PhotoPath");
+            me.photoPath.label = "Photo Path";
+            me.photoPath.width = 460;
             me.id.x = 5;
             me.id.y = 5;
             me.id.width = 60;
             me.id.label = "Id";
             me.id.bind(me.databinder, "id");
-            me.id.converter = new NumberConverter_2.NumberConverter();
+            me.id.converter = new NumberConverter_1.NumberConverter();
+            me.reportsTo.x = 7;
+            me.reportsTo.y = 298;
+            me.reportsTo.label = "Reports To";
+            me.reportsTo.bind(me.databinder, "ReportsTo");
+            me.reportsTo.template = "{{FirstName}} {{LastName}}";
+            me.reportsTo.width = 160;
+            me.objectchooser1.x = 170;
+            me.objectchooser1.y = 310;
+            me.objectchooser1.width = 25;
+            me.objectchooser1.height = 25;
+            me.objectchooser1.bind(me.databinder, "ReportsTo");
+            me.objectchooser1.items = "northwind.Employees";
         }
     };
     __decorate([
@@ -273,14 +288,14 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/converters/Nu
     ], EmployeesView);
     exports.EmployeesView = EmployeesView;
     async function test() {
-        var em = (await Employees_1.Employees.find())[0];
+        var em = (await Employees_1.Employees.find({ id: 4 }))[0];
         var ret = new EmployeesView;
-        ret["value"] = await Employees_1.Employees.findOne();
+        ret["value"] = em;
         return ret;
     }
     exports.test = test;
 });
-define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/util/CSVImport", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Button_2, HTMLPanel_1, Jassi_3, Panel_1, CSVImport_1, Actions_1, Router_1) {
+define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/util/CSVImport", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Button_2, HTMLPanel_2, Jassi_3, Panel_1, CSVImport_1, Actions_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ImportData = void 0;
@@ -304,10 +319,10 @@ define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/
         }
         layout(me) {
             var _this = this;
-            me.htmlpanel1 = new HTMLPanel_1.HTMLPanel();
+            me.htmlpanel1 = new HTMLPanel_2.HTMLPanel();
             me.IDImport = new Button_2.Button();
-            me.htmlpanel2 = new HTMLPanel_1.HTMLPanel();
-            me.IDProtokoll = new HTMLPanel_1.HTMLPanel();
+            me.htmlpanel2 = new HTMLPanel_2.HTMLPanel();
+            me.IDProtokoll = new HTMLPanel_2.HTMLPanel();
             this.add(me.htmlpanel1);
             this.add(me.IDImport);
             this.add(me.htmlpanel2);
@@ -351,7 +366,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CustomerView.ts": {
-                "date": 1613583380375,
+                "date": 1615490345648,
                 "northwind/CustomerView": {
                     "$DBObjectView": [
                         {
@@ -363,7 +378,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1614439057694,
+                "date": 1615590101914,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -392,7 +407,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1614966827636,
+                "date": 1615492081804,
                 "northwind.Employees": {
                     "$DBObject": []
                 }
@@ -486,21 +501,23 @@ define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObje
     "use strict";
     var Employees_2;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Employees = void 0;
+    exports.test2 = exports.test = exports.Employees = void 0;
     let Employees = Employees_2 = class Employees extends DBObject_2.DBObject {
         constructor() {
             super();
         }
-        /* static async find(options = undefined,context:Context=undefined): Promise<any[]> {
-             if (!context?.isServer) {
-                 return await this.call(this.find, options,context);
-             }
-             else {
-                 //@ts-ignore
-                 var man = await (await import("jassi/server/DBManager")).DBManager.get();
-                 return man.find(context,this, options);
-             }
-         }*/
+        static async find(options = undefined, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                if (options === undefined)
+                    options = { relations: ["ReportsTo"] };
+                return await this.call(this.find, options, context);
+            }
+            else {
+                //@ts-ignore
+                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                return man.find(context, this, options);
+            }
+        }
         async hallo(num) {
             if (!Jassi_5.default.isServer) {
                 var ret = await this.call(this, this.hallo, num);
@@ -595,6 +612,11 @@ define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObje
         return Math.floor(Math.random() * Math.floor(max));
     }
     async function test() {
+        var all = await Employees.find({ where: "id>:p", whereParams: { p: 5 } });
+        debugger;
+    }
+    exports.test = test;
+    async function test2() {
         var em = new Employees();
         em.id = getRandomInt(100000);
         var em2 = new Employees();
@@ -614,7 +636,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObje
           emp2.ReportsTo = emp;
           //await emp2.save();*/
     }
-    exports.test = test;
+    exports.test2 = test2;
     ;
 });
 //# sourceMappingURL=northwind.js.map

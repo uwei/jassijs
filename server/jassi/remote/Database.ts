@@ -7,6 +7,9 @@ class TypeDef{
 }
 @$Class("jassi.remote.Database")
 export class Database{
+    private constructor(){
+        ;
+    }
     typeDef:Map<object,TypeDef>=new Map();
     decoratorCalls:Map<object,any[]>=new Map();
     private removeOld(oclass){
@@ -52,5 +55,6 @@ export class Database{
         return this.typeDef.get(sclass);
     }
 }
+//@ts-ignore
 var db=new Database();
 export {db};

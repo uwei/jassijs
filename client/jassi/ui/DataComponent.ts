@@ -33,8 +33,8 @@ export class DataComponent extends Component {
     }
     set autocommit(value: boolean) {
         this._autocommit = value;
-        if (this._databinder !== undefined)
-            this._databinder.checkAutocommit(this);
+        //if (this._databinder !== undefined)
+        //    this._databinder.checkAutocommit(this);
     }
     /**
      * binds a component to a databinder
@@ -45,7 +45,7 @@ export class DataComponent extends Component {
     bind(databinder, property) {
         this._databinder = databinder;
         databinder.add(property, this, "onchange");
-        databinder.checkAutocommit(this);
+        //databinder.checkAutocommit(this);
     }
     destroy() {
         if(this._databinder!==undefined){

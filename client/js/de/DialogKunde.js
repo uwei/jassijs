@@ -51,7 +51,7 @@ define(["require", "exports", "jassi/ui/Panel", "de/remote/Kunde", "jassi/ui/Obj
             me.idvorname.x = 5;
             me.idvorname.y = 35;
             me.idvorname.bind(me.binder, "vorname");
-            me.idvorname.width = 160;
+            me.idvorname.width = 95;
             me.idvorname.autocommit = false;
             me.idvorname.label = "Vorname";
             me.idvorname.value = "<strong>formatierter</strong><br />HTML Text";
@@ -59,7 +59,7 @@ define(["require", "exports", "jassi/ui/Panel", "de/remote/Kunde", "jassi/ui/Obj
             me.idid.x = 5;
             me.idid.y = 5;
             me.idid.bind(me.binder, "id");
-            me.idid.width = 160;
+            me.idid.width = 145;
             me.idid.converter = new NumberConverter_1.NumberConverter();
             this.add(me.idid);
             me.idnachname.label = "Nachname";
@@ -67,6 +67,7 @@ define(["require", "exports", "jassi/ui/Panel", "de/remote/Kunde", "jassi/ui/Obj
             me.idnachname.x = 5;
             me.idnachname.bind(me.binder, "nachname");
             me.idnachname.width = 160;
+            me.idnachname.autocommit = true;
             this.add(me.idnachname);
             me.idtable = new Table_1.Table({
                 cellDblClick: function (event, group) {
@@ -78,7 +79,7 @@ define(["require", "exports", "jassi/ui/Panel", "de/remote/Kunde", "jassi/ui/Obj
             /**/
             me.idtable.width = 275;
             me.idtable.height = 195;
-            me.idtable.selectComponent = me.binder;
+            // me.idtable.selectComponent = me.binder;
             me.idtable.onchange(function (event) {
                 //alert(event.item.vorname);
             });
@@ -130,8 +131,8 @@ define(["require", "exports", "jassi/ui/Panel", "de/remote/Kunde", "jassi/ui/Obj
             me.htmlpanel1.value = "<strong>formatierter</strong><br />HTML Text";
             me.htmlpanel1.height = 10;
             me.htmlpanel1.width = 85;
-            me.IDSave.x = 175;
-            me.IDSave.y = 50;
+            me.IDSave.x = 180;
+            me.IDSave.y = 10;
             me.IDSave.text = "Save";
             me.IDSave.onclick(function (event) {
                 var ob = me.binder.fromForm();

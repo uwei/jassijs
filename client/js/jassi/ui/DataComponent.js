@@ -33,8 +33,8 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
         }
         set autocommit(value) {
             this._autocommit = value;
-            if (this._databinder !== undefined)
-                this._databinder.checkAutocommit(this);
+            //if (this._databinder !== undefined)
+            //    this._databinder.checkAutocommit(this);
         }
         /**
          * binds a component to a databinder
@@ -44,7 +44,7 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
         bind(databinder, property) {
             this._databinder = databinder;
             databinder.add(property, this, "onchange");
-            databinder.checkAutocommit(this);
+            //databinder.checkAutocommit(this);
         }
         destroy() {
             if (this._databinder !== undefined) {
