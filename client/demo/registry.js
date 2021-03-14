@@ -45,7 +45,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.ReportKunde": {}
 	},
 	"demo/ReportRechnung.ts": {
-		"date": 1613330812614,
+		"date": 1615756706461,
 		"demo.ReportRechnung": {}
 	},
 	"demo/StyleDialog.ts": {

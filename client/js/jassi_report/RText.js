@@ -67,10 +67,27 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponen
             this._italics = value;
             $(this.dom).css("font-style", value ? "italic" : "normal");
         }
+        get font() {
+            return this._font;
+        }
+        set font(value) {
+            this._font = value;
+            //copy from CSSProperties
+            var api = 'https://fonts.googleapis.com/css?family=';
+            var sfont = value.replaceAll(" ", "+");
+            if (!document.getElementById("-->" + api + sfont)) { //"-->https://fonts.googleapis.com/css?family=Aclonica">
+                Jassi_1.default.myRequire(api + sfont);
+            }
+            if (value === undefined)
+                $(this.dom).css("font_family", "");
+            else
+                $(this.dom).css("font_family", value);
+        }
         get fontSize() {
             return this._fontSize;
         }
         set fontSize(value) {
+            this._fontSize = value;
             if (value === undefined)
                 $(this.dom).css("font-size", "");
             else
@@ -199,6 +216,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponen
                 ret.fontSize = ob.fontSize;
                 delete ob.fontSize;
             }
+            if (ob.font) {
+                ret.font = ob.font;
+                delete ob.font;
+            }
             if (ob.lineHeight) {
                 ret.lineHeight = ob.lineHeight;
                 delete ob.lineHeight;
@@ -228,6 +249,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponen
                         rt.color = style.color;
                     if (style.fontsize)
                         rt.fontSize = style.fontsize;
+                    if (style.font)
+                        rt.font = style.font;
                     if (style.underline)
                         rt.decoration = "underline";
                     if (style.italics)
@@ -359,6 +382,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponen
                 ret.decorationStyle = this.decorationStyle;
             if (this.decorationColor !== undefined)
                 ret.decorationColor = this.decorationColor;
+            if (this.font !== undefined)
+                ret.font = this.font;
             if (this.fontSize !== undefined)
                 ret.fontSize = this.fontSize;
             if (this.lineHeight !== undefined)
@@ -371,9 +396,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponen
         }
     };
     __decorate([
-        Property_1.$Property({ chooseFrom: function (component) {
+        Property_1.$Property({
+            chooseFrom: function (component) {
                 return ReportDesign_1.ReportDesign.getVariables(component);
-            } }),
+            }
+        }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "value", null);
@@ -387,6 +414,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponen
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], RText.prototype, "italics", null);
+    __decorate([
+        Property_1.$Property({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], RText.prototype, "font", null);
     __decorate([
         Property_1.$Property(),
         __metadata("design:type", Number),

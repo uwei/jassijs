@@ -14,7 +14,7 @@ define("jassi_report/registry",["require"], function(require) {
 		"date": 1615135683395
 	},
 	"jassi_report/PDFReport.ts": {
-		"date": 1613218544158,
+		"date": 1615756460856,
 		"jassi_report.PDFReport": {}
 	},
 	"jassi_report/PDFViewer.ts": {
@@ -124,7 +124,7 @@ define("jassi_report/registry",["require"], function(require) {
 		}
 	},
 	"jassi_report/RText.ts": {
-		"date": 1613218544158,
+		"date": 1615756201986,
 		"jassi_report.RText": {
 			"$ReportComponent": [
 				{

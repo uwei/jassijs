@@ -9,19 +9,20 @@ class InlineStyling {
     bold: boolean;
     italics: boolean;
     color: string;
-    background: string; 
+    background: string;
     underline: boolean;
     fontsize: number;
+    font: string;
 }
 
-@$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text"})
+@$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" })
 @$Class("jassi_report.RText")
 //@$Property({hideBaseClassProperties:true})
-@$Property({name:"value", type:"string",description: "text"})
+@$Property({ name: "value", type: "string", description: "text" })
 
 export class RText extends ReportComponent {
-	private _tcm;
-    private toolbar=  ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
+    private _tcm;
+    private toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
 
     reporttype: string = "text";
     private _bold: boolean;
@@ -34,8 +35,8 @@ export class RText extends ReportComponent {
     private _italics: boolean;
     private _alignment: string;
     private _background: string;
+    private _font: string;
 
-	
     /**
     * 
     * @param {object} properties - properties to init
@@ -48,26 +49,29 @@ export class RText extends ReportComponent {
         super.init($('<div class="RText jdisableaddcomponents" ><div  class="HTMLPanelContent"></div></div>')[0]);
         $(this.__dom).css("text-overflow", "ellipsis");
         $(this.__dom).css("overflow", "hidden");
-    	//  super.init($('<div class="RText"></div>')[0]);
+        //  super.init($('<div class="RText"></div>')[0]);
         var el = this.dom.children[0];
         this._designMode = false;
-       	$(this.dom).css("display", "block");
-       	this.css({font_family:"Roboto",font_size:"12px"})
-     //   $(this.dom.children[0]).css("display","inline-block");
-		this.extensionCalled=HTMLPanel.prototype.extensionCalled.bind(this);
-		this._setDesignMode=HTMLPanel.prototype._setDesignMode.bind(this);
+        $(this.dom).css("display", "block");
+        this.css({ font_family: "Roboto", font_size: "12px" })
+        //   $(this.dom.children[0]).css("display","inline-block");
+        this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
+        this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
     }
-   
-    @$Property({chooseFrom:function(component){
-    	return ReportDesign.getVariables(component);}})
-    get value():string {
-         var el = this.dom.children[0];
+
+    @$Property({
+        chooseFrom: function (component) {
+            return ReportDesign.getVariables(component);
+        }
+    })
+    get value(): string {
+        var el = this.dom.children[0];
         if (el === undefined)
             return "";
-    	var ret=$(el).html();
-    	return ret;
+        var ret = $(el).html();
+        return ret;
     }
-    set value(code:string) {
+    set value(code: string) {
         var el: any = this.dom.children[0];
         if (el === undefined) {
             el = document.createTextNode(code);
@@ -75,7 +79,7 @@ export class RText extends ReportComponent {
         } else
             $(el).html(code);
     }
- 
+
     @$Property()
     get bold(): boolean {
         return this._bold;
@@ -92,15 +96,34 @@ export class RText extends ReportComponent {
         this._italics = value;
         $(this.dom).css("font-style", value ? "italic" : "normal");
     }
+    @$Property({chooseFrom:["Alegreya",    "AlegreyaSans",    "AlegreyaSansSC",    "AlegreyaSC",    "AlmendraSC",    "Amaranth",    "Andada",    "AndadaSC",    "AnonymousPro",    "ArchivoNarrow",    "Arvo",    "Asap",    "AveriaLibre",    "AveriaSansLibre",    "AveriaSerifLibre",    "Cambay",    "Caudex",    "CrimsonText",    "Cuprum",    "Economica",    "Exo2",    "Exo",    "ExpletusSans",    "FiraSans",    "JosefinSans",    "JosefinSlab",    "Karla",    "Lato",    "LobsterTwo",    "Lora",    "Marvel",    "Merriweather",    "MerriweatherSans",    "Nobile",    "NoticiaText",    "Overlock",    "Philosopher",    "PlayfairDisplay",    "PlayfairDisplaySC",    "PT_Serif-Web",    "Puritan",    "Quantico",    "QuattrocentoSans",    "Quicksand",    "Rambla",    "Rosario",    "Sansation",    "Sarabun",    "Scada",    "Share",    "Sitara",    "SourceSansPro",    "TitilliumWeb",    "Volkhov",    "Vollkorn"]})
+    get font(): string {
+        return this._font;
+    }
+    set font(value: string) {
+        this._font=value;
+        //copy from CSSProperties
+        var api = 'https://fonts.googleapis.com/css?family=';
+        var sfont = value.replaceAll(" ", "+")
+        if (!document.getElementById("-->" + api + sfont)) {//"-->https://fonts.googleapis.com/css?family=Aclonica">
+            jassi.myRequire(api + sfont);
+        }
+
+        if (value === undefined)
+            $(this.dom).css("font_family", "");
+        else
+            $(this.dom).css("font_family", value);
+    }
     @$Property()
     get fontSize(): number {
         return this._fontSize;
     }
-    set fontSize(value: number){
-        if(value===undefined)
-        	$(this.dom).css("font-size", "");
-       else
-	        $(this.dom).css("font-size", value + "px");
+    set fontSize(value: number) {
+        this._fontSize=value;
+        if (value === undefined)
+            $(this.dom).css("font-size", "");
+        else
+            $(this.dom).css("font-size", value + "px");
     }
     @$Property({ type: "color" })
     get background(): string {
@@ -177,24 +200,24 @@ export class RText extends ReportComponent {
         $(this.dom).css("line-height", value);
         //  super.width = value;
     }
-   
+
     /*@$Property()
     get text():string{
-    	//check for htmlcode
+        //check for htmlcode
     	
-    	return super.value;
+        return super.value;
     }
     set text(val:string){
-    	if(val!==undefined&&val!==""){
-	    	var h="<span>hallo<b>du</b></span>";
-			var node=$("<span>"+val+"</span>");
-			if(node[0].innerText!==node[0].innerHTML){
-				
-			}
-    	}
-    	super.value=val;
+        if(val!==undefined&&val!==""){
+            var h="<span>hallo<b>du</b></span>";
+            var node=$("<span>"+val+"</span>");
+            if(node[0].innerText!==node[0].innerHTML){
+            	
+            }
+        }
+        super.value=val;
     }*/
-    fromJSON(ob: any):RText {
+    fromJSON(ob: any): RText {
         var ret = this;
         if (ob.editTogether) {
             delete ob.editTogether;
@@ -234,6 +257,10 @@ export class RText extends ReportComponent {
             ret.fontSize = ob.fontSize;
             delete ob.fontSize;
         }
+        if (ob.font) {
+            ret.font = ob.font;
+            delete ob.font;
+        }
         if (ob.lineHeight) {
             ret.lineHeight = ob.lineHeight;
             delete ob.lineHeight;
@@ -247,11 +274,11 @@ export class RText extends ReportComponent {
             delete ob.background;
         }
         super.fromJSON(ob);
-       // ret.otherProperties = ob;
+        // ret.otherProperties = ob;
         return this;
     }
     private convertFromHTMLNode(node: ChildNode, list: any[], style: InlineStyling): any {
-        for (var x = 0;x < node.childNodes.length;x++) {
+        for (var x = 0; x < node.childNodes.length; x++) {
             var child = node.childNodes[x];
             if (child.nodeName === "#text") {
                 var rt: any = {};
@@ -263,6 +290,8 @@ export class RText extends ReportComponent {
                     rt.color = style.color;
                 if (style.fontsize)
                     rt.fontSize = style.fontsize;
+                if (style.font)
+                    rt.font = style.font;
                 if (style.underline)
                     rt.decoration = "underline";
                 if (style.italics)
@@ -315,51 +344,51 @@ export class RText extends ReportComponent {
     };
     private convertToHTML(obs: any[]) {
         var html = "";
-       for (var x = 0;x < obs.length;x++) {
+        for (var x = 0; x < obs.length; x++) {
             var ob = obs[x];
-            var anz=0;
-            var tagcount =0 ;
-            if(ob.bold){
-            	html += "<strong>";
+            var anz = 0;
+            var tagcount = 0;
+            if (ob.bold) {
+                html += "<strong>";
             }
-            if(ob.italics){
-            	html += "<em>";
+            if (ob.italics) {
+                html += "<em>";
             }
             if (ob.background || ob.color || ob.decoration === "underline" || ob.fontSize) {
-               
+
                 if (ob.color) {
-                    html += "<span style='color:" + ob.color + "'>";tagcount++
+                    html += "<span style='color:" + ob.color + "'>"; tagcount++
                 }
                 if (ob.background) {
-                    html += "<span style='background-color:" + ob.background + "'>";tagcount++
+                    html += "<span style='background-color:" + ob.background + "'>"; tagcount++
                 }
                 if (ob.decoration) {
-                    html += "<span style='text-decoration:" + ob.decoration + "'>";tagcount++
+                    html += "<span style='text-decoration:" + ob.decoration + "'>"; tagcount++
                 }
                 if (ob.fontSize) {
-                    html += "<span style='font-size:" + ob.fontSize + "pt'>";tagcount++
+                    html += "<span style='font-size:" + ob.fontSize + "pt'>"; tagcount++
                 }
-                
-			
+
+
             }
-            html += ob.text.replaceAll("\n","<br/>");
-            for(var t=0;t<tagcount;t++) {
-            	html+="</span>";
+            html += ob.text.replaceAll("\n", "<br/>");
+            for (var t = 0; t < tagcount; t++) {
+                html += "</span>";
             }
-            if(ob.italics){
-            	html += "</em>";
+            if (ob.italics) {
+                html += "</em>";
             }
-            if(ob.bold){
-            	html += "</strong>";
+            if (ob.bold) {
+                html += "</strong>";
             }
-   
+
         }
         this.value = html;
     }
-    private convertFromHTML(ret:any): any {
+    private convertFromHTML(ret: any): any {
         var sval = decodeURI(this.value);
         sval = sval.replaceAll("<br>", "\n")
-        ret.text= sval//.replaceAll("<br>","\\n");
+        ret.text = sval//.replaceAll("<br>","\\n");
         var node = $("<span>" + ret.text + "</span>");
         if (node[0].innerText !== node[0].innerHTML) {//htmltext
             var style = new InlineStyling();
@@ -374,7 +403,7 @@ export class RText extends ReportComponent {
 
         var ret = super.toJSON();
         this.convertFromHTML(ret);
-        if (this.width !== undefined&&!this._parent?.setChildWidth)
+        if (this.width !== undefined && !this._parent?.setChildWidth)
             ret.width = this.width;
         if (this.bold !== undefined)
             ret.bold = this.bold;
@@ -388,6 +417,8 @@ export class RText extends ReportComponent {
             ret.decorationStyle = this.decorationStyle;
         if (this.decorationColor !== undefined)
             ret.decorationColor = this.decorationColor;
+        if (this.font !== undefined)
+            ret.font = this.font;
         if (this.fontSize !== undefined)
             ret.fontSize = this.fontSize;
         if (this.lineHeight !== undefined)
@@ -396,8 +427,8 @@ export class RText extends ReportComponent {
             ret.alignment = this.alignment;
         if (this.background !== undefined)
             ret.background = this.background;
-        
-        
+
+
         return ret;
     }
 }

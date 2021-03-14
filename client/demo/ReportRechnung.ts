@@ -45,7 +45,7 @@ export class ReportRechnung extends ReportDesign {
                                         fontSize: 18
                                     },
                                     {
-                                        text: "<br>"
+                                        text: "\n"
                                     },
                                     {
                                         text: "Date: {{invoice.date}}"
@@ -76,7 +76,7 @@ export class ReportRechnung extends ReportDesign {
                         }
                     },
                     {
-                        text: "<br>"
+                        text: "\n"
                     },
                     {
                         foreach: "sum in invoice.summary",

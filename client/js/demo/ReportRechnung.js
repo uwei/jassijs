@@ -48,7 +48,7 @@ define(["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi",
                                             fontSize: 18
                                         },
                                         {
-                                            text: "<br>"
+                                            text: "\n"
                                         },
                                         {
                                             text: "Date: {{invoice.date}}"
@@ -79,7 +79,7 @@ define(["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi",
                             }
                         },
                         {
-                            text: "<br>"
+                            text: "\n"
                         },
                         {
                             foreach: "sum in invoice.summary",

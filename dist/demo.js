@@ -570,7 +570,7 @@ define("demo/ReportRechnung", ["require", "exports", "jassi_report/ReportDesign"
                                             fontSize: 18
                                         },
                                         {
-                                            text: "<br>"
+                                            text: "\n"
                                         },
                                         {
                                             text: "Date: {{invoice.date}}"
@@ -601,7 +601,7 @@ define("demo/ReportRechnung", ["require", "exports", "jassi_report/ReportDesign"
                             }
                         },
                         {
-                            text: "<br>"
+                            text: "\n"
                         },
                         {
                             foreach: "sum in invoice.summary",
@@ -1336,7 +1336,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo.ReportKunde": {}
             },
             "demo/ReportRechnung.ts": {
-                "date": 1613330812614,
+                "date": 1615756706461,
                 "demo.ReportRechnung": {}
             },
             "demo/StyleDialog.ts": {

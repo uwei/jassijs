@@ -36,6 +36,7 @@ define("jassi_report/PDFReport", ["require", "exports", "jassi/remote/Jassi", "j
             data.content = replaceTemplates(this._definition.content, this._definition.data);
             replacePageInformation(data);
             delete data.data;
+            registerFonts(data);
             this.report = pdfmake_1.default.createPdf(data);
         }
         get value() {
@@ -65,6 +66,36 @@ define("jassi_report/PDFReport", ["require", "exports", "jassi/remote/Jassi", "j
         __metadata("design:paramtypes", [])
     ], PDFReport);
     exports.PDFReport = PDFReport;
+    //var available = ["Alegreya",    "AlegreyaSans",    "AlegreyaSansSC",    "AlegreyaSC",    "AlmendraSC",    "Amaranth",    "Andada",    "AndadaSC",    "AnonymousPro",    "ArchivoNarrow",    "Arvo",    "Asap",    "AveriaLibre",    "AveriaSansLibre",    "AveriaSerifLibre",    "Cambay",    "Caudex",    "CrimsonText",    "Cuprum",    "Economica",    "Exo2",    "Exo",    "ExpletusSans",    "FiraSans",    "JosefinSans",    "JosefinSlab",    "Karla",    "Lato",    "LobsterTwo",    "Lora",    "Marvel",    "Merriweather",    "MerriweatherSans",    "Nobile",    "NoticiaText",    "Overlock",    "Philosopher",    "PlayfairDisplay",    "PlayfairDisplaySC",    "PT_Serif-Web",    "Puritan",    "Quantico",    "QuattrocentoSans",    "Quicksand",    "Rambla",    "Rosario",    "Sansation",    "Sarabun",    "Scada",    "Share",    "Sitara",    "SourceSansPro",    "TitilliumWeb",    "Volkhov",    "Vollkorn"];
+    function registerFonts(data) {
+        var fonts = [];
+        var base = "https://cdn.jsdelivr.net/gh/xErik/pdfmake-fonts-google@master/lib/ofl"; //abeezee/ABeeZee-Italic.ttf
+        JSON.stringify(data, (key, value) => {
+            if (key === "font" && value !== "") {
+                fonts.push(value);
+            }
+            return value;
+        });
+        if (!pdfmake_1.default.fonts) {
+            pdfmake_1.default.fonts = {
+                Roboto: {
+                    normal: 'Roboto-Regular.ttf',
+                    bold: 'Roboto-Medium.ttf',
+                    italics: 'Roboto-Italic.ttf',
+                    bolditalics: 'Roboto-MediumItalic.ttf'
+                }
+            };
+        }
+        fonts.forEach((font) => {
+            if (font !== "Roboto") {
+                pdfmake_1.default.fonts[font] = {};
+                pdfmake_1.default.fonts[font].normal = base + "/" + font.toLowerCase() + "/" + font + "-Regular.ttf";
+                pdfmake_1.default.fonts[font].bold = base + "/" + font.toLowerCase() + "/" + font + "-Bold.ttf";
+                pdfmake_1.default.fonts[font].italics = base + "/" + font.toLowerCase() + "/" + font + "-Italic.ttf";
+                pdfmake_1.default.fonts[font].bolditalics = base + "/" + font.toLowerCase() + "/" + font + "-BoldItalic.ttf";
+            }
+        });
+    }
     function replace(str, data, member) {
         var ob = getVar(data, member);
         return str.split("{{" + member + "}}").join(ob);
@@ -290,6 +321,7 @@ define("jassi_report/PDFReport", ["require", "exports", "jassi/remote/Jassi", "j
             },
             content: {
                 stack: [{
+                        //font: "ExpletusSans",
                         columns: [
                             {
                                 stack: [
@@ -1025,10 +1057,27 @@ define("jassi_report/RText", ["require", "exports", "jassi/remote/Jassi", "jassi
             this._italics = value;
             $(this.dom).css("font-style", value ? "italic" : "normal");
         }
+        get font() {
+            return this._font;
+        }
+        set font(value) {
+            this._font = value;
+            //copy from CSSProperties
+            var api = 'https://fonts.googleapis.com/css?family=';
+            var sfont = value.replaceAll(" ", "+");
+            if (!document.getElementById("-->" + api + sfont)) { //"-->https://fonts.googleapis.com/css?family=Aclonica">
+                Jassi_7.default.myRequire(api + sfont);
+            }
+            if (value === undefined)
+                $(this.dom).css("font_family", "");
+            else
+                $(this.dom).css("font_family", value);
+        }
         get fontSize() {
             return this._fontSize;
         }
         set fontSize(value) {
+            this._fontSize = value;
             if (value === undefined)
                 $(this.dom).css("font-size", "");
             else
@@ -1157,6 +1206,10 @@ define("jassi_report/RText", ["require", "exports", "jassi/remote/Jassi", "jassi
                 ret.fontSize = ob.fontSize;
                 delete ob.fontSize;
             }
+            if (ob.font) {
+                ret.font = ob.font;
+                delete ob.font;
+            }
             if (ob.lineHeight) {
                 ret.lineHeight = ob.lineHeight;
                 delete ob.lineHeight;
@@ -1186,6 +1239,8 @@ define("jassi_report/RText", ["require", "exports", "jassi/remote/Jassi", "jassi
                         rt.color = style.color;
                     if (style.fontsize)
                         rt.fontSize = style.fontsize;
+                    if (style.font)
+                        rt.font = style.font;
                     if (style.underline)
                         rt.decoration = "underline";
                     if (style.italics)
@@ -1317,6 +1372,8 @@ define("jassi_report/RText", ["require", "exports", "jassi/remote/Jassi", "jassi
                 ret.decorationStyle = this.decorationStyle;
             if (this.decorationColor !== undefined)
                 ret.decorationColor = this.decorationColor;
+            if (this.font !== undefined)
+                ret.font = this.font;
             if (this.fontSize !== undefined)
                 ret.fontSize = this.fontSize;
             if (this.lineHeight !== undefined)
@@ -1329,9 +1386,11 @@ define("jassi_report/RText", ["require", "exports", "jassi/remote/Jassi", "jassi
         }
     };
     __decorate([
-        Property_3.$Property({ chooseFrom: function (component) {
+        Property_3.$Property({
+            chooseFrom: function (component) {
                 return ReportDesign_4.ReportDesign.getVariables(component);
-            } }),
+            }
+        }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "value", null);
@@ -1345,6 +1404,11 @@ define("jassi_report/RText", ["require", "exports", "jassi/remote/Jassi", "jassi
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], RText.prototype, "italics", null);
+    __decorate([
+        Property_3.$Property({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], RText.prototype, "font", null);
     __decorate([
         Property_3.$Property(),
         __metadata("design:type", Number),
@@ -2181,7 +2245,7 @@ define("jassi_report/registry", ["require"], function (require) {
                 "date": 1615135683395
             },
             "jassi_report/PDFReport.ts": {
-                "date": 1613218544158,
+                "date": 1615756460856,
                 "jassi_report.PDFReport": {}
             },
             "jassi_report/PDFViewer.ts": {
@@ -2291,7 +2355,7 @@ define("jassi_report/registry", ["require"], function (require) {
                 }
             },
             "jassi_report/RText.ts": {
-                "date": 1613218544158,
+                "date": 1615756201986,
                 "jassi_report.RText": {
                     "$ReportComponent": [
                         {

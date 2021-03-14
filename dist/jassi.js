@@ -231,7 +231,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/remote/Server.ts": {
-                "date": 1615555231827,
+                "date": 1615732643984,
                 "jassi.remote.Server": {}
             },
             "jassi/remote/Transaction.ts": {

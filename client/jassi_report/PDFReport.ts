@@ -19,26 +19,26 @@ export class PDFReport {
         //var me = this.me = {};
 
     }
-	/**
-	 * @member {object} - report definition
-	 */
+    /**
+     * @member {object} - report definition
+     */
     set value(value) { //the Code
-        this._definition =value;
+        this._definition = value;
         var data: any = {};
         Object.assign(data, value);
-        
+
         data.content = replaceTemplates(this._definition.content, this._definition.data);
-        if(data.background)
-        	data.background = replaceTemplates(this._definition.background, this._definition.data);
-        if(data.header)
-        	data.header = replaceTemplates(this._definition.header, this._definition.data);
-       if(data.footer)
-        	data.footer = replaceTemplates(this._definition.footer, this._definition.data);
-       
+        if (data.background)
+            data.background = replaceTemplates(this._definition.background, this._definition.data);
+        if (data.header)
+            data.header = replaceTemplates(this._definition.header, this._definition.data);
+        if (data.footer)
+            data.footer = replaceTemplates(this._definition.footer, this._definition.data);
+
         data.content = replaceTemplates(this._definition.content, this._definition.data);
         replacePageInformation(data);
         delete data.data;
-
+        registerFonts(data);
         this.report = pdfMake.createPdf(data);
     }
     get value() {
@@ -57,8 +57,8 @@ export class PDFReport {
     async getBase64() {
         var _this = this;
         return new Promise(
-            function(resolve, reject) {
-                _this.report.getBase64(function(data) {
+            function (resolve, reject) {
+                _this.report.getBase64(function (data) {
                     resolve(data);
 
                 });
@@ -66,6 +66,37 @@ export class PDFReport {
 
     };
 
+}
+//var available = ["Alegreya",    "AlegreyaSans",    "AlegreyaSansSC",    "AlegreyaSC",    "AlmendraSC",    "Amaranth",    "Andada",    "AndadaSC",    "AnonymousPro",    "ArchivoNarrow",    "Arvo",    "Asap",    "AveriaLibre",    "AveriaSansLibre",    "AveriaSerifLibre",    "Cambay",    "Caudex",    "CrimsonText",    "Cuprum",    "Economica",    "Exo2",    "Exo",    "ExpletusSans",    "FiraSans",    "JosefinSans",    "JosefinSlab",    "Karla",    "Lato",    "LobsterTwo",    "Lora",    "Marvel",    "Merriweather",    "MerriweatherSans",    "Nobile",    "NoticiaText",    "Overlock",    "Philosopher",    "PlayfairDisplay",    "PlayfairDisplaySC",    "PT_Serif-Web",    "Puritan",    "Quantico",    "QuattrocentoSans",    "Quicksand",    "Rambla",    "Rosario",    "Sansation",    "Sarabun",    "Scada",    "Share",    "Sitara",    "SourceSansPro",    "TitilliumWeb",    "Volkhov",    "Vollkorn"];
+function registerFonts(data) {
+    var fonts = [];
+    var base = "https://cdn.jsdelivr.net/gh/xErik/pdfmake-fonts-google@master/lib/ofl"//abeezee/ABeeZee-Italic.ttf
+
+    JSON.stringify(data, (key, value) => {
+        if (key === "font"&&value!=="") {
+            fonts.push(value);
+        }
+        return value;
+    });
+    if (!pdfMake.fonts) {
+        pdfMake.fonts = {
+            Roboto: {
+                normal: 'Roboto-Regular.ttf',
+                bold: 'Roboto-Medium.ttf',
+                italics: 'Roboto-Italic.ttf',
+                bolditalics: 'Roboto-MediumItalic.ttf'
+            }
+        };
+    }
+    fonts.forEach((font: string) => {
+        if (font !== "Roboto") {
+            pdfMake.fonts[font] = {};
+            pdfMake.fonts[font].normal = base + "/" + font.toLowerCase() + "/" + font + "-Regular.ttf";
+            pdfMake.fonts[font].bold = base + "/" + font.toLowerCase() + "/" + font + "-Bold.ttf";
+            pdfMake.fonts[font].italics = base + "/" + font.toLowerCase() + "/" + font + "-Italic.ttf";
+            pdfMake.fonts[font].bolditalics = base + "/" + font.toLowerCase() + "/" + font + "-BoldItalic.ttf";
+        }
+    });
 }
 
 function replace(str: string, data, member: string) {
@@ -75,7 +106,7 @@ function replace(str: string, data, member: string) {
 function getVar(data, member) {
     var names = member.split(".");
     var ob = data[names[0]];
-    for (let x = 1;x < names.length;x++) {
+    for (let x = 1; x < names.length; x++) {
 
         if (ob === undefined)
             return undefined;
@@ -85,28 +116,28 @@ function getVar(data, member) {
 }
 //replace {{currentPage}} {{pageWidth}} {{pageHeight}} {{pageCount}} in header,footer, background
 function replacePageInformation(def) {
-	
-    if (def.background&&typeof def.background !== "function") {
+
+    if (def.background && typeof def.background !== "function") {
         let d = JSON.stringify(def.background);
-        def.background = function(currentPage, pageSize) {
+        def.background = function (currentPage, pageSize) {
             let sret = d.replaceAll("{{currentPage}}", currentPage);
             sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
             sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
             return JSON.parse(sret);
         }
     }
-    if (def.header &&typeof def.header !== "function") {
+    if (def.header && typeof def.header !== "function") {
         let d = JSON.stringify(def.header);
-        def.header = function(currentPage, pageCount) {
+        def.header = function (currentPage, pageCount) {
             let sret = d.replaceAll("{{currentPage}}", currentPage);
             sret = sret.replaceAll("{{pageCount}}", pageCount);
             return JSON.parse(sret);
         }
-	}
-    if (def.footer&&typeof def.footer !== "function") {
-       let d = JSON.stringify(def.footer);
-            
-       def.footer = function(currentPage, pageCount, pageSize) {
+    }
+    if (def.footer && typeof def.footer !== "function") {
+        let d = JSON.stringify(def.footer);
+
+        def.footer = function (currentPage, pageCount, pageSize) {
             let sret = d.replaceAll("{{currentPage}}", currentPage);
             sret = sret.replaceAll("{{pageCount}}", pageCount);
             sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
@@ -129,8 +160,8 @@ function replaceDatatable(def, data) {
     if (header)
         def.table.body.push(header);
     def.table.body.push({
-    	foreach:def.datatable.dataforeach,
-    	do:body
+        foreach: def.datatable.dataforeach,
+        do: body
     });
     delete def.datatable.dataforeach;
     /*var variable = dataexpr.split(" in ")[0];
@@ -143,7 +174,7 @@ function replaceDatatable(def, data) {
         copy = replaceTemplates(copy, data);
         def.table.body.push(copy);
     }*/
-     if (footer)
+    if (footer)
         def.table.body.push(footer);
     //delete data[variable];
     delete def.datatable.header;
@@ -151,21 +182,21 @@ function replaceDatatable(def, data) {
     delete def.datatable.foreach;
     delete def.datatable.groups;
     delete def.datatable.body;
-    
-    for(var key in def.datatable){
-    	def.table[key]=def.datatable[key];
+
+    for (var key in def.datatable) {
+        def.table[key] = def.datatable[key];
     }
     delete def.datatable;
-	/*header:[{ text:"Item"},{ text:"Price"}],
-					data:"line in invoice.lines",
-					//footer:[{ text:"Total"},{ text:""}],
-					body:[{ text:"Text"},{ text:"price"}],
-					groups:*/
+    /*header:[{ text:"Item"},{ text:"Price"}],
+                    data:"line in invoice.lines",
+                    //footer:[{ text:"Total"},{ text:""}],
+                    body:[{ text:"Text"},{ text:"price"}],
+                    groups:*/
 
 
 }
 function replaceTemplates(def, data, parentArray: any[] = undefined) {
-	
+
     if (def.datatable !== undefined) {
         replaceDatatable(def, data);
 
@@ -182,22 +213,22 @@ function replaceTemplates(def, data, parentArray: any[] = undefined) {
         var pos = parentArray.indexOf(def);
         parentArray.splice(pos, 1);
 
-        for (let x = 0;x < arr.length;x++) {
+        for (let x = 0; x < arr.length; x++) {
             data[variable] = arr[x];
             delete def.foreach;
             var copy;
-            if(def.do)
-            	copy= JSON.parse(JSON.stringify(def.do));
+            if (def.do)
+                copy = JSON.parse(JSON.stringify(def.do));
             else
-            	copy= JSON.parse(JSON.stringify(def));
-            	
+                copy = JSON.parse(JSON.stringify(def));
+
             copy = replaceTemplates(copy, data);
             parentArray.splice(pos++, 0, copy);
         }
         delete data[variable];
         return undefined;
     } else if (Array.isArray(def)) {
-        for (var a = 0;a < def.length;a++) {
+        for (var a = 0; a < def.length; a++) {
             if (def[a].foreach !== undefined) {
                 replaceTemplates(def[a], data, def);
                 a--;
@@ -208,7 +239,7 @@ function replaceTemplates(def, data, parentArray: any[] = undefined) {
     } else if (typeof def === "string") {
         var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
         if (ergebnis !== null) {
-            for (var e = 0;e < ergebnis.length;e++) {
+            for (var e = 0; e < ergebnis.length; e++) {
                 def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
             }
         }
@@ -223,7 +254,7 @@ function replaceTemplates(def, data, parentArray: any[] = undefined) {
     return def;
 }
 function replaceTemplatesOld(def, data, parentArray: any[] = undefined) {
-	
+
     if (def.datatable !== undefined) {
         replaceDatatable(def, data);
 
@@ -239,7 +270,7 @@ function replaceTemplatesOld(def, data, parentArray: any[] = undefined) {
         var pos = parentArray.indexOf(def);
         parentArray.splice(pos, 1);
 
-        for (let x = 0;x < arr.length;x++) {
+        for (let x = 0; x < arr.length; x++) {
             data[variable] = arr[x];
             var copy = JSON.parse(JSON.stringify(def.do));//deep copy
             copy = replaceTemplates(copy, data);
@@ -248,7 +279,7 @@ function replaceTemplatesOld(def, data, parentArray: any[] = undefined) {
         delete data[variable];
         return undefined;
     } else if (Array.isArray(def)) {
-        for (var a = 0;a < def.length;a++) {
+        for (var a = 0; a < def.length; a++) {
             if (def[a].foreach !== undefined) {
                 replaceTemplates(def[a], data, def);
                 a--;
@@ -259,7 +290,7 @@ function replaceTemplatesOld(def, data, parentArray: any[] = undefined) {
     } else if (typeof def === "string") {
         var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
         if (ergebnis !== null) {
-            for (var e = 0;e < ergebnis.length;e++) {
+            for (var e = 0; e < ergebnis.length; e++) {
                 def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
             }
         }
@@ -302,8 +333,10 @@ export async function test() {
         },
         content: {
             stack: [{
+                 //font: "ExpletusSans",
                 columns: [
                     {
+                        
                         stack: [
                             { text: '{{invoice.customer.firstname}} {{invoice.customer.lastname}}' },
                             { text: '{{invoice.customer.street}}' },
@@ -353,11 +386,11 @@ export async function test() {
             { text: " " },
             {
                 foreach: "sum in invoice.summary",
-                    columns: [
-                        { text: "{{sum.text}}" },
-                        { text: "{{sum.value}}" },
-                    ]
-                
+                columns: [
+                    { text: "{{sum.text}}" },
+                    { text: "{{sum.value}}" },
+                ]
+
             },
             ]
         }
