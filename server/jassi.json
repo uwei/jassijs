@@ -3,6 +3,7 @@
 		"jassi": "jassi",
 		"northwind": "northwind",
 		"de": "de",
-		"local": "local"
+		"local": "local",
+		"nothwind": "nothwind"
 	}
 }

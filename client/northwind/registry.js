@@ -2,6 +2,18 @@
 define("northwind/registry",["require"], function(require) {
  return {
   default: {
+	"northwind/CategoriesView.ts": {
+		"date": 1615758610480,
+		"northwind.CategoriesView": {
+			"$DBObjectView": [
+				{
+					"classname": "northwind.Categories",
+					"actionname": "Northwind/Categories",
+					"icon": "mdi mdi-cube"
+				}
+			]
+		}
+	},
 	"northwind/CustomerView.ts": {
 		"date": 1615490345648,
 		"northwind/CustomerView": {
@@ -27,7 +39,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ImportData.ts": {
-		"date": 1613935445224,
+		"date": 1615842426557,
 		"northwind.ImportData": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"
@@ -36,6 +48,12 @@ define("northwind/registry",["require"], function(require) {
 	},
 	"northwind/modul.ts": {
 		"date": 1613551043267
+	},
+	"northwind/remote/Categories.ts": {
+		"date": 1615758109294,
+		"northwind.Categories": {
+			"$DBObject": []
+		}
 	},
 	"northwind/remote/Customer.ts": {
 		"date": 1615052487959,
@@ -47,6 +65,48 @@ define("northwind/registry",["require"], function(require) {
 		"date": 1615492081804,
 		"northwind.Employees": {
 			"$DBObject": []
+		}
+	},
+	"northwind/remote/Products.ts": {
+		"date": 1615842274553,
+		"northwind.Products": {
+			"$DBObject": []
+		}
+	},
+	"northwind/remote/Shippers.ts": {
+		"date": 1615757238969,
+		"northwind.Shippers": {
+			"$DBObject": []
+		}
+	},
+	"northwind/remote/Suppliers.ts": {
+		"date": 1615758951978,
+		"northwind.Suppliers": {
+			"$DBObject": []
+		}
+	},
+	"northwind/ShippersView.ts": {
+		"date": 1615757648366,
+		"northwind.ShippersView": {
+			"$DBObjectView": [
+				{
+					"classname": "northwind.Shippers",
+					"actionname": "Northwind/Shippers",
+					"icon": "mdi mdi-truck-delivery"
+				}
+			]
+		}
+	},
+	"northwind/SuppliersView.ts": {
+		"date": 1615759779463,
+		"northwind.SuppliersView": {
+			"$DBObjectView": [
+				{
+					"classname": "northwind.Suppliers",
+					"actionname": "Northwind/Suppliers",
+					"icon": "mdi mdi-office-building-outline"
+				}
+			]
 		}
 	}
 }

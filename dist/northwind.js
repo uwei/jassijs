@@ -7,12 +7,71 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("northwind/CustomerView", ["require", "exports", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Customer", "jassi/ui/DBObjectView"], function (require, exports, Textbox_1, Jassi_1, Property_1, Customer_1, DBObjectView_1) {
+define("northwind/CategoriesView", ["require", "exports", "jassi/ui/Textarea", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Categories", "jassi/ui/DBObjectView"], function (require, exports, Textarea_1, Textbox_1, Jassi_1, Property_1, Categories_1, DBObjectView_1) {
+    "use strict";
+    var _a;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.CategoriesView = void 0;
+    let CategoriesView = class CategoriesView extends DBObjectView_1.DBObjectView {
+        constructor() {
+            super();
+            //this.me = {}; this is called in objectdialog
+            this.layout(this.me);
+        }
+        get title() {
+            return this.value === undefined ? "CategoriesView" : "CategoriesView " + this.value.id;
+        }
+        layout(me) {
+            me.Id = new Textbox_1.Textbox();
+            me.name = new Textbox_1.Textbox();
+            me.description = new Textarea_1.Textarea();
+            me.main.add(me.Id);
+            me.main.isAbsolute = true;
+            me.main.add(me.description);
+            me.main.add(me.name);
+            this.width = 626;
+            this.height = 178;
+            me.Id.x = 5;
+            me.Id.y = 5;
+            me.Id.label = "Id";
+            me.Id.bind(me.databinder, "id");
+            me.Id.width = 65;
+            me.name.x = 85;
+            me.name.y = 5;
+            me.name.bind(me.databinder, "CategoryName");
+            me.name.label = "Name";
+            me.name.width = 180;
+            me.description.x = 5;
+            me.description.y = 60;
+            me.description.height = 35;
+            me.description.width = 260;
+            me.description.bind(me.databinder, "Description");
+            me.description.label = "Description";
+        }
+    };
+    __decorate([
+        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        __metadata("design:type", typeof (_a = typeof Categories_1.Categories !== "undefined" && Categories_1.Categories) === "function" ? _a : Object)
+    ], CategoriesView.prototype, "value", void 0);
+    CategoriesView = __decorate([
+        DBObjectView_1.$DBObjectView({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
+        Jassi_1.$Class("northwind.CategoriesView"),
+        __metadata("design:paramtypes", [])
+    ], CategoriesView);
+    exports.CategoriesView = CategoriesView;
+    async function test() {
+        var ret = new CategoriesView;
+        ret["value"] = await Categories_1.Categories.findOne();
+        return ret;
+    }
+    exports.test = test;
+});
+define("northwind/CustomerView", ["require", "exports", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Customer", "jassi/ui/DBObjectView"], function (require, exports, Textbox_2, Jassi_2, Property_2, Customer_1, DBObjectView_2) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CustomerView = void 0;
-    let CustomerView = class CustomerView extends DBObjectView_1.DBObjectView {
+    let CustomerView = class CustomerView extends DBObjectView_2.DBObjectView {
         constructor() {
             super();
             //this.me = {}; this is called in objectdialog
@@ -22,17 +81,17 @@ define("northwind/CustomerView", ["require", "exports", "jassi/ui/Textbox", "jas
             return this.value === undefined ? "CustomerView" : "CustomerView " + this.value.id;
         }
         layout(me) {
-            me.id = new Textbox_1.Textbox();
-            me.companyname = new Textbox_1.Textbox();
-            me.contacttitle = new Textbox_1.Textbox();
-            me.contactname = new Textbox_1.Textbox();
-            me.address = new Textbox_1.Textbox();
-            me.postalcode = new Textbox_1.Textbox();
-            me.textbox1 = new Textbox_1.Textbox();
-            me.region = new Textbox_1.Textbox();
-            me.textbox2 = new Textbox_1.Textbox();
-            me.phone = new Textbox_1.Textbox();
-            me.fax = new Textbox_1.Textbox();
+            me.id = new Textbox_2.Textbox();
+            me.companyname = new Textbox_2.Textbox();
+            me.contacttitle = new Textbox_2.Textbox();
+            me.contactname = new Textbox_2.Textbox();
+            me.address = new Textbox_2.Textbox();
+            me.postalcode = new Textbox_2.Textbox();
+            me.textbox1 = new Textbox_2.Textbox();
+            me.region = new Textbox_2.Textbox();
+            me.textbox2 = new Textbox_2.Textbox();
+            me.phone = new Textbox_2.Textbox();
+            me.fax = new Textbox_2.Textbox();
             me.main.isAbsolute = true;
             me.main.width = 560;
             me.main.height = "300";
@@ -103,16 +162,16 @@ define("northwind/CustomerView", ["require", "exports", "jassi/ui/Textbox", "jas
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_2.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Customer_1.Customer !== "undefined" && Customer_1.Customer) === "function" ? _a : Object)
     ], CustomerView.prototype, "value", void 0);
     CustomerView = __decorate([
-        DBObjectView_1.$DBObjectView({
+        DBObjectView_2.$DBObjectView({
             classname: "northwind.Customer",
             actionname: "Northwind/Customers",
             icon: "mdi mdi-nature-people"
         }),
-        Jassi_1.$Class("northwind/CustomerView"),
+        Jassi_2.$Class("northwind/CustomerView"),
         __metadata("design:paramtypes", [])
     ], CustomerView);
     exports.CustomerView = CustomerView;
@@ -123,12 +182,12 @@ define("northwind/CustomerView", ["require", "exports", "jassi/ui/Textbox", "jas
     }
     exports.test = test;
 });
-define("northwind/EmployeesView", ["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Employees", "jassi/ui/DBObjectView"], function (require, exports, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Image_1, Textarea_1, Calendar_1, Textbox_2, Button_1, Jassi_2, Property_2, Employees_1, DBObjectView_2) {
+define("northwind/EmployeesView", ["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Employees", "jassi/ui/DBObjectView"], function (require, exports, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Image_1, Textarea_2, Calendar_1, Textbox_3, Button_1, Jassi_3, Property_3, Employees_1, DBObjectView_3) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmployeesView = void 0;
-    let EmployeesView = class EmployeesView extends DBObjectView_2.DBObjectView {
+    let EmployeesView = class EmployeesView extends DBObjectView_3.DBObjectView {
         constructor() {
             super();
             //this.me = {}; this is called in objectdialog
@@ -139,22 +198,22 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/ObjectChooser
         }
         layout(me) {
             me.button1 = new Button_1.Button();
-            me.titleOfCouttesy = new Textbox_2.Textbox();
-            me.firstName = new Textbox_2.Textbox();
-            me.lastName = new Textbox_2.Textbox();
-            me.title = new Textbox_2.Textbox();
-            me.address = new Textbox_2.Textbox();
-            me.postalCode = new Textbox_2.Textbox();
-            me.city = new Textbox_2.Textbox();
+            me.titleOfCouttesy = new Textbox_3.Textbox();
+            me.firstName = new Textbox_3.Textbox();
+            me.lastName = new Textbox_3.Textbox();
+            me.title = new Textbox_3.Textbox();
+            me.address = new Textbox_3.Textbox();
+            me.postalCode = new Textbox_3.Textbox();
+            me.city = new Textbox_3.Textbox();
             me.birthDate = new Calendar_1.Calendar();
-            me.region = new Textbox_2.Textbox();
-            me.state = new Textbox_2.Textbox();
+            me.region = new Textbox_3.Textbox();
+            me.state = new Textbox_3.Textbox();
             me.hiredate = new Calendar_1.Calendar();
-            me.homephone = new Textbox_2.Textbox();
-            me.notes = new Textarea_1.Textarea();
+            me.homephone = new Textbox_3.Textbox();
+            me.notes = new Textarea_2.Textarea();
             me.image1 = new Image_1.Image();
-            me.photoPath = new Textbox_2.Textbox();
-            me.id = new Textbox_2.Textbox();
+            me.photoPath = new Textbox_3.Textbox();
+            me.id = new Textbox_3.Textbox();
             me.reportsTo = new HTMLPanel_1.HTMLPanel();
             me.objectchooser1 = new ObjectChooser_1.ObjectChooser();
             me.button1.text = "button";
@@ -278,12 +337,12 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/ObjectChooser
         }
     };
     __decorate([
-        Property_2.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_3.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Employees_1.Employees !== "undefined" && Employees_1.Employees) === "function" ? _a : Object)
     ], EmployeesView.prototype, "value", void 0);
     EmployeesView = __decorate([
-        DBObjectView_2.$DBObjectView({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" }),
-        Jassi_2.$Class("northwind.EmployeesView"),
+        DBObjectView_3.$DBObjectView({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" }),
+        Jassi_3.$Class("northwind.EmployeesView"),
         __metadata("design:paramtypes", [])
     ], EmployeesView);
     exports.EmployeesView = EmployeesView;
@@ -295,7 +354,7 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/ObjectChooser
     }
     exports.test = test;
 });
-define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/util/CSVImport", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Button_2, HTMLPanel_2, Jassi_3, Panel_1, CSVImport_1, Actions_1, Router_1) {
+define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/util/CSVImport", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Button_2, HTMLPanel_2, Jassi_4, Panel_1, CSVImport_1, Actions_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ImportData = void 0;
@@ -315,6 +374,14 @@ define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/
             this.me.IDProtokoll.value += "<br>Customer " + s;
             s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees", { "id": "EmployeeID" });
             this.me.IDProtokoll.value += "<br>Employees " + s;
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/shippers.csv", "northwind.Shippers", { "id": "shipperid" });
+            this.me.IDProtokoll.value += "<br>Shippers " + s;
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/categories.csv", "northwind.Categories", { "id": "categoryid" });
+            this.me.IDProtokoll.value += "<br>Categories " + s;
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/suppliers.csv", "northwind.Suppliers", { "id": "supplierid" });
+            this.me.IDProtokoll.value += "<br>Suppliers " + s;
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid", "SupplierID": "Supplier", "CategoryID": "Category" });
+            this.me.IDProtokoll.value += "<br>Products " + s;
             this.me.IDProtokoll.value += "<br>Fertig";
         }
         layout(me) {
@@ -344,12 +411,193 @@ define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/
     ], ImportData, "showDialog", null);
     ImportData = __decorate([
         Actions_1.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_3.$Class("northwind.ImportData"),
+        Jassi_4.$Class("northwind.ImportData"),
         __metadata("design:paramtypes", [])
     ], ImportData);
     exports.ImportData = ImportData;
     async function test() {
         var ret = new ImportData();
+        return ret;
+    }
+    exports.test = test;
+});
+define("northwind/ShippersView", ["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Shippers", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_2, Textbox_4, Jassi_5, Property_4, Shippers_1, DBObjectView_4) {
+    "use strict";
+    var _a;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.ShippersView = void 0;
+    let ShippersView = class ShippersView extends DBObjectView_4.DBObjectView {
+        constructor() {
+            super();
+            //this.me = {}; this is called in objectdialog
+            this.layout(this.me);
+        }
+        get title() {
+            return this.value === undefined ? "ShippersView" : "ShippersView " + this.value.id;
+        }
+        layout(me) {
+            me.id = new Textbox_4.Textbox();
+            me.companyName = new Textbox_4.Textbox();
+            me.phone = new Textbox_4.Textbox();
+            me.main.add(me.id);
+            me.main.isAbsolute = true;
+            me.main.height = 110;
+            me.main.add(me.phone);
+            me.main.add(me.companyName);
+            this.width = 626;
+            this.height = 146;
+            me.id.converter = new NumberConverter_2.NumberConverter();
+            me.id.bind(me.databinder, "id");
+            me.id.label = "Id";
+            me.id.width = 40;
+            me.id.x = 5;
+            me.id.y = 0;
+            me.companyName.x = 60;
+            me.companyName.y = 0;
+            me.companyName.bind(me.databinder, "CompanyName");
+            me.companyName.label = "Company name";
+            me.companyName.width = 160;
+            me.phone.x = 5;
+            me.phone.y = 50;
+            me.phone.width = 215;
+            me.phone.bind(me.databinder, "Phone");
+            me.phone.label = "Phone";
+        }
+    };
+    __decorate([
+        Property_4.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        __metadata("design:type", typeof (_a = typeof Shippers_1.Shippers !== "undefined" && Shippers_1.Shippers) === "function" ? _a : Object)
+    ], ShippersView.prototype, "value", void 0);
+    ShippersView = __decorate([
+        DBObjectView_4.$DBObjectView({ classname: "northwind.Shippers", actionname: "Northwind/Shippers", icon: "mdi mdi-truck-delivery" }),
+        Jassi_5.$Class("northwind.ShippersView"),
+        __metadata("design:paramtypes", [])
+    ], ShippersView);
+    exports.ShippersView = ShippersView;
+    async function test() {
+        var ret = new ShippersView;
+        ret["value"] = await Shippers_1.Shippers.findOne();
+        return ret;
+    }
+    exports.test = test;
+});
+define("northwind/SuppliersView", ["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Suppliers", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_3, Textbox_5, Jassi_6, Property_5, Suppliers_1, DBObjectView_5) {
+    "use strict";
+    var _a;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.SuppliersView = void 0;
+    let SuppliersView = class SuppliersView extends DBObjectView_5.DBObjectView {
+        constructor() {
+            super();
+            //this.me = {}; this is called in objectdialog
+            this.layout(this.me);
+        }
+        get title() {
+            return this.value === undefined ? "SuppliersView" : "SuppliersView " + this.value.id;
+        }
+        layout(me) {
+            me.id = new Textbox_5.Textbox();
+            me.companyName = new Textbox_5.Textbox();
+            me.contactName = new Textbox_5.Textbox();
+            me.contactTitle = new Textbox_5.Textbox();
+            me.address = new Textbox_5.Textbox();
+            me.postalCode = new Textbox_5.Textbox();
+            me.city = new Textbox_5.Textbox();
+            me.region = new Textbox_5.Textbox();
+            me.Country = new Textbox_5.Textbox();
+            me.phone = new Textbox_5.Textbox();
+            me.fax = new Textbox_5.Textbox();
+            me.homepage = new Textbox_5.Textbox();
+            me.main.add(me.id);
+            me.main.isAbsolute = true;
+            me.main.height = "800";
+            me.main.width = 800;
+            me.main.add(me.homepage);
+            me.main.add(me.fax);
+            me.main.add(me.phone);
+            me.main.add(me.Country);
+            me.main.add(me.region);
+            me.main.add(me.city);
+            me.main.add(me.postalCode);
+            me.main.add(me.address);
+            me.main.add(me.contactTitle);
+            me.main.add(me.contactName);
+            me.main.add(me.companyName);
+            me.id.x = 10;
+            me.id.y = 5;
+            me.id.converter = new NumberConverter_3.NumberConverter();
+            me.id.width = 50;
+            me.id.bind(me.databinder, "id");
+            me.id.label = "Id";
+            me.companyName.x = 75;
+            me.companyName.y = 5;
+            me.companyName.label = "Company Name";
+            me.companyName.bind(me.databinder, "CompanyName");
+            me.companyName.width = 290;
+            me.contactName.x = 10;
+            me.contactName.y = 50;
+            me.contactName.bind(me.databinder, "ContactName");
+            me.contactName.label = "Contact Name";
+            me.contactTitle.x = 180;
+            me.contactTitle.y = 50;
+            me.contactTitle.bind(me.databinder, "ContactTitle");
+            me.contactTitle.label = "Contact Title";
+            me.contactTitle.width = 185;
+            me.address.x = 10;
+            me.address.y = 95;
+            me.address.bind(me.databinder, "Address");
+            me.address.label = "Address";
+            me.address.width = 355;
+            me.postalCode.x = 10;
+            me.postalCode.y = 140;
+            me.postalCode.bind(me.databinder, "PostalCode");
+            me.postalCode.width = 95;
+            me.postalCode.label = "Postal Code";
+            me.city.x = 120;
+            me.city.y = 140;
+            me.city.bind(me.databinder, "City");
+            me.city.label = "City";
+            me.city.width = 245;
+            me.region.x = 10;
+            me.region.y = 185;
+            me.region.bind(me.databinder, "Region");
+            me.region.label = "Region";
+            me.region.width = 155;
+            me.Country.x = 180;
+            me.Country.y = 185;
+            me.Country.bind(me.databinder, "Country");
+            me.Country.label = "Country";
+            me.Country.width = 185;
+            me.phone.x = 10;
+            me.phone.y = 230;
+            me.phone.bind(me.databinder, "Phone");
+            me.phone.label = "Phone";
+            me.phone.width = 155;
+            me.fax.x = 180;
+            me.fax.y = 230;
+            me.fax.bind(me.databinder, "Fax");
+            me.fax.label = "Fax";
+            me.fax.width = 185;
+            me.homepage.x = 10;
+            me.homepage.y = 275;
+            me.homepage.bind(me.databinder, "HomePage");
+            me.homepage.label = "Home Page";
+            me.homepage.width = 355;
+        }
+    };
+    __decorate([
+        Property_5.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        __metadata("design:type", typeof (_a = typeof Suppliers_1.Suppliers !== "undefined" && Suppliers_1.Suppliers) === "function" ? _a : Object)
+    ], SuppliersView.prototype, "value", void 0);
+    SuppliersView = __decorate([
+        DBObjectView_5.$DBObjectView({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" }),
+        Jassi_6.$Class("northwind.SuppliersView"),
+        __metadata("design:paramtypes", [])
+    ], SuppliersView);
+    exports.SuppliersView = SuppliersView;
+    async function test() {
+        var ret = new SuppliersView;
+        ret["value"] = await Suppliers_1.Suppliers.findOne();
         return ret;
     }
     exports.test = test;
@@ -365,6 +613,18 @@ define("northwind/modul", ["require", "exports"], function (require, exports) {
 define("northwind/registry", ["require"], function (require) {
     return {
         default: {
+            "northwind/CategoriesView.ts": {
+                "date": 1615758610480,
+                "northwind.CategoriesView": {
+                    "$DBObjectView": [
+                        {
+                            "classname": "northwind.Categories",
+                            "actionname": "Northwind/Categories",
+                            "icon": "mdi mdi-cube"
+                        }
+                    ]
+                }
+            },
             "northwind/CustomerView.ts": {
                 "date": 1615490345648,
                 "northwind/CustomerView": {
@@ -390,7 +650,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ImportData.ts": {
-                "date": 1613935445224,
+                "date": 1615842426557,
                 "northwind.ImportData": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -399,6 +659,12 @@ define("northwind/registry", ["require"], function (require) {
             },
             "northwind/modul.ts": {
                 "date": 1613551043267
+            },
+            "northwind/remote/Categories.ts": {
+                "date": 1615758109294,
+                "northwind.Categories": {
+                    "$DBObject": []
+                }
             },
             "northwind/remote/Customer.ts": {
                 "date": 1615052487959,
@@ -411,15 +677,93 @@ define("northwind/registry", ["require"], function (require) {
                 "northwind.Employees": {
                     "$DBObject": []
                 }
+            },
+            "northwind/remote/Products.ts": {
+                "date": 1615842274553,
+                "northwind.Products": {
+                    "$DBObject": []
+                }
+            },
+            "northwind/remote/Shippers.ts": {
+                "date": 1615757238969,
+                "northwind.Shippers": {
+                    "$DBObject": []
+                }
+            },
+            "northwind/remote/Suppliers.ts": {
+                "date": 1615758951978,
+                "northwind.Suppliers": {
+                    "$DBObject": []
+                }
+            },
+            "northwind/ShippersView.ts": {
+                "date": 1615757648366,
+                "northwind.ShippersView": {
+                    "$DBObjectView": [
+                        {
+                            "classname": "northwind.Shippers",
+                            "actionname": "Northwind/Shippers",
+                            "icon": "mdi mdi-truck-delivery"
+                        }
+                    ]
+                }
+            },
+            "northwind/SuppliersView.ts": {
+                "date": 1615759779463,
+                "northwind.SuppliersView": {
+                    "$DBObjectView": [
+                        {
+                            "classname": "northwind.Suppliers",
+                            "actionname": "Northwind/Suppliers",
+                            "icon": "mdi mdi-office-building-outline"
+                        }
+                    ]
+                }
             }
         }
     };
 });
-define("northwind/remote/Customer", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, DBObject_1, Jassi_4, DatabaseSchema_1) {
+define("northwind/remote/Categories", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, DBObject_1, Jassi_7, DatabaseSchema_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Categories = void 0;
+    let Categories = class Categories extends DBObject_1.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        DatabaseSchema_1.PrimaryColumn(),
+        __metadata("design:type", Number)
+    ], Categories.prototype, "id", void 0);
+    __decorate([
+        DatabaseSchema_1.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Categories.prototype, "CategoryName", void 0);
+    __decorate([
+        DatabaseSchema_1.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Categories.prototype, "Description", void 0);
+    __decorate([
+        DatabaseSchema_1.Column(),
+        __metadata("design:type", String)
+    ], Categories.prototype, "Picture", void 0);
+    Categories = __decorate([
+        DBObject_1.$DBObject(),
+        Jassi_7.$Class("northwind.Categories"),
+        __metadata("design:paramtypes", [])
+    ], Categories);
+    exports.Categories = Categories;
+    async function test() {
+    }
+    exports.test = test;
+    ;
+});
+define("northwind/remote/Customer", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, DBObject_2, Jassi_8, DatabaseSchema_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Customer = void 0;
-    let Customer = class Customer extends DBObject_1.DBObject {
+    let Customer = class Customer extends DBObject_2.DBObject {
         constructor() {
             super();
             this.CompanyName = "";
@@ -437,52 +781,52 @@ define("northwind/remote/Customer", ["require", "exports", "jassi/remote/DBObjec
         }
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        DatabaseSchema_2.PrimaryColumn(),
         __metadata("design:type", String)
     ], Customer.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        DatabaseSchema_2.Column(),
         __metadata("design:type", String)
     ], Customer.prototype, "CompanyName", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        DatabaseSchema_2.Column(),
         __metadata("design:type", String)
     ], Customer.prototype, "ContactName", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        DatabaseSchema_2.Column(),
         __metadata("design:type", String)
     ], Customer.prototype, "ContactTitle", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        DatabaseSchema_2.Column(),
         __metadata("design:type", String)
     ], Customer.prototype, "Address", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        DatabaseSchema_2.Column(),
         __metadata("design:type", String)
     ], Customer.prototype, "City", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        DatabaseSchema_2.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Region", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        DatabaseSchema_2.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "PostalCode", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        DatabaseSchema_2.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Country", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        DatabaseSchema_2.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Phone", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        DatabaseSchema_2.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Fax", void 0);
     Customer = __decorate([
-        DBObject_1.$DBObject(),
-        Jassi_4.$Class("northwind.Customer"),
+        DBObject_2.$DBObject(),
+        Jassi_8.$Class("northwind.Customer"),
         __metadata("design:paramtypes", [])
     ], Customer);
     exports.Customer = Customer;
@@ -497,12 +841,12 @@ define("northwind/remote/Customer", ["require", "exports", "jassi/remote/DBObjec
     exports.test = test;
     ;
 });
-define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/Transaction"], function (require, exports, DBObject_2, Jassi_5, DatabaseSchema_2, Transaction_1) {
+define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/Transaction"], function (require, exports, DBObject_3, Jassi_9, DatabaseSchema_3, Transaction_1) {
     "use strict";
     var Employees_2;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.Employees = void 0;
-    let Employees = Employees_2 = class Employees extends DBObject_2.DBObject {
+    let Employees = Employees_2 = class Employees extends DBObject_3.DBObject {
         constructor() {
             super();
         }
@@ -519,7 +863,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObje
             }
         }
         async hallo(num) {
-            if (!Jassi_5.default.isServer) {
+            if (!Jassi_9.default.isServer) {
                 var ret = await this.call(this, this.hallo, num);
                 return ret * 10;
             }
@@ -530,81 +874,81 @@ define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObje
         }
     };
     __decorate([
-        DatabaseSchema_2.PrimaryColumn(),
+        DatabaseSchema_3.PrimaryColumn(),
         __metadata("design:type", Number)
     ], Employees.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "LastName", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "FirstName", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Title", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "TitleOfCourtesy", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Address", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "City", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Region", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "PostalCode", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Country", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "HomePhone", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Extension", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Photo", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Notes", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "PhotoPath", void 0);
     __decorate([
-        DatabaseSchema_2.JoinColumn(),
-        DatabaseSchema_2.ManyToOne(type => Employees_2),
+        DatabaseSchema_3.JoinColumn(),
+        DatabaseSchema_3.ManyToOne(type => Employees_2),
         __metadata("design:type", Employees)
     ], Employees.prototype, "ReportsTo", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", Date)
     ], Employees.prototype, "BirthDate", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        DatabaseSchema_3.Column({ nullable: true }),
         __metadata("design:type", Date)
     ], Employees.prototype, "HireDate", void 0);
     Employees = Employees_2 = __decorate([
-        DBObject_2.$DBObject(),
-        Jassi_5.$Class("northwind.Employees"),
+        DBObject_3.$DBObject(),
+        Jassi_9.$Class("northwind.Employees"),
         __metadata("design:paramtypes", [])
     ], Employees);
     exports.Employees = Employees;
@@ -637,6 +981,167 @@ define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObje
           //await emp2.save();*/
     }
     exports.test2 = test2;
+    ;
+});
+define("northwind/remote/Products", ["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, Categories_2, Suppliers_2, DBObject_4, Jassi_10, DatabaseSchema_4) {
+    "use strict";
+    var _a, _b;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Products = void 0;
+    let Products = class Products extends DBObject_4.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        DatabaseSchema_4.PrimaryColumn(),
+        __metadata("design:type", Number)
+    ], Products.prototype, "id", void 0);
+    __decorate([
+        DatabaseSchema_4.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Products.prototype, "ProductName", void 0);
+    __decorate([
+        DatabaseSchema_4.ManyToOne(type => Suppliers_2.Suppliers),
+        __metadata("design:type", typeof (_a = typeof Suppliers_2.Suppliers !== "undefined" && Suppliers_2.Suppliers) === "function" ? _a : Object)
+    ], Products.prototype, "Supplier", void 0);
+    __decorate([
+        DatabaseSchema_4.ManyToOne(type => Categories_2.Categories),
+        __metadata("design:type", typeof (_b = typeof Categories_2.Categories !== "undefined" && Categories_2.Categories) === "function" ? _b : Object)
+    ], Products.prototype, "Category", void 0);
+    __decorate([
+        DatabaseSchema_4.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Products.prototype, "QuantityPerUnit", void 0);
+    __decorate([
+        DatabaseSchema_4.Column({ nullable: true, type: "decimal" }),
+        __metadata("design:type", Number)
+    ], Products.prototype, "UnitPrice", void 0);
+    __decorate([
+        DatabaseSchema_4.Column({ nullable: true }),
+        __metadata("design:type", Number)
+    ], Products.prototype, "UnitsInStock", void 0);
+    __decorate([
+        DatabaseSchema_4.Column({ nullable: true }),
+        __metadata("design:type", Number)
+    ], Products.prototype, "UnitsOnOrder", void 0);
+    __decorate([
+        DatabaseSchema_4.Column({ nullable: true }),
+        __metadata("design:type", Number)
+    ], Products.prototype, "ReorderLevel", void 0);
+    __decorate([
+        DatabaseSchema_4.Column({ nullable: true }),
+        __metadata("design:type", Boolean)
+    ], Products.prototype, "Discontinued", void 0);
+    Products = __decorate([
+        DBObject_4.$DBObject(),
+        Jassi_10.$Class("northwind.Products"),
+        __metadata("design:paramtypes", [])
+    ], Products);
+    exports.Products = Products;
+    async function test() {
+    }
+    exports.test = test;
+    ;
+});
+define("northwind/remote/Shippers", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, DBObject_5, Jassi_11, DatabaseSchema_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Shippers = void 0;
+    let Shippers = class Shippers extends DBObject_5.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        DatabaseSchema_5.PrimaryColumn(),
+        __metadata("design:type", Number)
+    ], Shippers.prototype, "id", void 0);
+    __decorate([
+        DatabaseSchema_5.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Shippers.prototype, "CompanyName", void 0);
+    __decorate([
+        DatabaseSchema_5.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Shippers.prototype, "Phone", void 0);
+    Shippers = __decorate([
+        DBObject_5.$DBObject(),
+        Jassi_11.$Class("northwind.Shippers"),
+        __metadata("design:paramtypes", [])
+    ], Shippers);
+    exports.Shippers = Shippers;
+    async function test() {
+    }
+    exports.test = test;
+    ;
+});
+define("northwind/remote/Suppliers", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, DBObject_6, Jassi_12, DatabaseSchema_6) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Suppliers = void 0;
+    let Suppliers = class Suppliers extends DBObject_6.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        DatabaseSchema_6.PrimaryColumn(),
+        __metadata("design:type", Number)
+    ], Suppliers.prototype, "id", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "CompanyName", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "ContactName", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "ContactTitle", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "Address", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "City", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "Region", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "PostalCode", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "Country", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "Phone", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "Fax", void 0);
+    __decorate([
+        DatabaseSchema_6.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Suppliers.prototype, "HomePage", void 0);
+    Suppliers = __decorate([
+        DBObject_6.$DBObject(),
+        Jassi_12.$Class("northwind.Suppliers"),
+        __metadata("design:paramtypes", [])
+    ], Suppliers);
+    exports.Suppliers = Suppliers;
+    async function test() {
+    }
+    exports.test = test;
     ;
 });
 //# sourceMappingURL=northwind.js.map

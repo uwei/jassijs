@@ -1,0 +1,1 @@
+{"version":3,"file":"registry.js","sourceRoot":"","sources":["../../nothwind/registry.js"],"names":[],"mappings":"AAAA,aAAa,CAAA;AACb,yCAAyC;AACzC,MAAM,CAAC,cAAc,CAAC,OAAO,EAAE,YAAY,EAAE,EAAE,KAAK,EAAE,IAAI,EAAE,CAAC,CAAC;AAC9D,OAAO,CAAC,OAAO,GAAC;IACf,6BAA6B,EAAE;QAC9B,MAAM,EAAE,aAAa;QACrB,mBAAmB,EAAE;YACpB,WAAW,EAAE,EAAE;SACf;KACD;CACD,CAAA"}

@@ -21,21 +21,29 @@ export class ImportData extends Panel {
         this.layout(this.me);
     }
     @$Action({ name: "Northwind/Import sample data", icon: "mdi mdi-database-import" })
-	static async showDialog() {
+    static async showDialog() {
 
-		router.navigate("#do=northwind.ImportData");
-	}
+        router.navigate("#do=northwind.ImportData");
+    }
     async startImport() {
-        var path="https://uwei.github.io/jassijs/client/northwind/import";
-        this.me.IDProtokoll.value="";
-        var s = await CSVImport.startImport(path+"/customers.csv", "northwind.Customer",{ "id": "CustomerID" });
-        this.me.IDProtokoll.value+="<br>Customer "+s;
-        s=await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees",{ "id": "EmployeeID" });
-        this.me.IDProtokoll.value+="<br>Employees "+s;
-        this.me.IDProtokoll.value+="<br>Fertig";
+        var path = "https://uwei.github.io/jassijs/client/northwind/import";
+        this.me.IDProtokoll.value = "";
+        var s = await CSVImport.startImport(path + "/customers.csv", "northwind.Customer", { "id": "CustomerID" });
+        this.me.IDProtokoll.value += "<br>Customer " + s;
+        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees", { "id": "EmployeeID" });
+        this.me.IDProtokoll.value += "<br>Employees " + s;
+        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/shippers.csv", "northwind.Shippers", { "id": "shipperid" });
+        this.me.IDProtokoll.value += "<br>Shippers " + s;
+        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/categories.csv", "northwind.Categories", { "id": "categoryid" });
+        this.me.IDProtokoll.value += "<br>Categories " + s;
+        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/suppliers.csv", "northwind.Suppliers", { "id": "supplierid" });
+        this.me.IDProtokoll.value += "<br>Suppliers " + s;
+        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid","SupplierID":"Supplier","CategoryID":"Category" });
+        this.me.IDProtokoll.value += "<br>Products " + s;
+        this.me.IDProtokoll.value += "<br>Fertig";
     }
     layout(me: Me) {
-        var _this=this;
+        var _this = this;
         me.htmlpanel1 = new HTMLPanel();
         me.IDImport = new Button();
         me.htmlpanel2 = new HTMLPanel();
