@@ -177,7 +177,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/template/TemplateDBDialog.ts": {
-		"date": 1613777555443,
+		"date": 1615921857812,
 		"jassi.ui.TemplateDBDialogProperties": {},
 		"jassi.ui.TemplateDBDialog": {
 			"$ActionProvider": [
@@ -555,7 +555,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.Property": {}
 	},
 	"jassi/ui/PropertyEditor.ts": {
-		"date": 1613337696501,
+		"date": 1615844604424,
 		"jassi.ui.PropertyEditor": {},
 		"jassi.ui.PropertyEditorTestProperties": {}
 	},
@@ -844,7 +844,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1611783871704
 	},
 	"jassi/util/CSVImport.ts": {
-		"date": 1614543932781,
+		"date": 1615844053088,
 		"jassi.util.CSVImport": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"

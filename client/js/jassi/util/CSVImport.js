@@ -217,7 +217,10 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
                         if (mtype !== undefined) {
                             var mt = mtype[0][0];
                             if (mt === Number)
-                                val = Number(val);
+                                val = Number(val.replaceAll(",", "."));
+                            if (mt === Boolean) {
+                                val = (val === "true" || val === true || val === 1 || val === "1");
+                            }
                             if (val === "#NV")
                                 val = undefined;
                         }
@@ -351,7 +354,9 @@ WHITC,89,White Clover Markets,Karl Jablonski,Owner,305 - 14th Ave. S. Suite 3B,S
 WILMK,90,Wilman Kala,Matti Karttunen,Owner/Marketing Assistant,Keskuskatu 45,Helsinki,#NV,21240,Finland,90-224 8858,90-224 8858
 WOLZA,91,Wolski  Zajazd,Zbyszek Piestrzeniewicz,Owner,ul. Filtrowa 68,Warszawa,#NV,01-012,Poland,(26) 642-7012,(26) 642-7012
 `;
-        var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees", { "id": "EmployeeID" });
+        var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid", "supplier": "supplierid", "category": "categoryid" });
+        //	var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees",
+        //		{ "id": "EmployeeID" });
         console.log(s);
         /*	var t = await classes.loadClass("northwind.Customer");
             var ret = new CSVImport();

@@ -21,7 +21,7 @@ exports.default={
 		}
 	},
 	"northwind/remote/Products.ts": {
-		"date": 1615842274553,
+		"date": 1615918366138,
 		"northwind.Products": {
 			"$DBObject": []
 		}

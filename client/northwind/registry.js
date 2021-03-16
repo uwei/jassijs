@@ -49,6 +49,16 @@ define("northwind/registry",["require"], function(require) {
 	"northwind/modul.ts": {
 		"date": 1613551043267
 	},
+	"northwind/ProductView.ts": {
+		"date": 1615922270670,
+		"northwind.ProductView": {
+			"$DBObjectView": [
+				{
+					"classname": "northwind.Products"
+				}
+			]
+		}
+	},
 	"northwind/remote/Categories.ts": {
 		"date": 1615758109294,
 		"northwind.Categories": {
@@ -68,7 +78,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Products.ts": {
-		"date": 1615842274553,
+		"date": 1615918366138,
 		"northwind.Products": {
 			"$DBObject": []
 		}

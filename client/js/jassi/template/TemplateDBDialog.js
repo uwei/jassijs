@@ -43,7 +43,7 @@ export class {{dialogname}} extends DBObjectView {
 export async function test(){
 	var ret=new {{dialogname}};
 	
-	ret["value"]=<{{dbclassname}}>await {{dbclassname}}.findOne();
+	ret["value"]=<{{dbclassname}}>await {{dbclassname}}.findOne({ relations: ["*"] });
 	return ret;
 }`;
     let TemplateDBDialogProperties = class TemplateDBDialogProperties {

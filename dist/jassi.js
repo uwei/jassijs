@@ -259,7 +259,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/template/TemplateDBDialog.ts": {
-                "date": 1613777555443,
+                "date": 1615921857812,
                 "jassi.ui.TemplateDBDialogProperties": {},
                 "jassi.ui.TemplateDBDialog": {
                     "$ActionProvider": [
@@ -637,7 +637,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.Property": {}
             },
             "jassi/ui/PropertyEditor.ts": {
-                "date": 1613337696501,
+                "date": 1615844604424,
                 "jassi.ui.PropertyEditor": {},
                 "jassi.ui.PropertyEditorTestProperties": {}
             },
@@ -926,7 +926,7 @@ define("jassi/registry", ["require"], function (require) {
                 "date": 1611783871704
             },
             "jassi/util/CSVImport.ts": {
-                "date": 1614543932781,
+                "date": 1615844053088,
                 "jassi.util.CSVImport": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -5405,7 +5405,7 @@ export class {{dialogname}} extends DBObjectView {
 export async function test(){
 	var ret=new {{dialogname}};
 	
-	ret["value"]=<{{dbclassname}}>await {{dbclassname}}.findOne();
+	ret["value"]=<{{dbclassname}}>await {{dbclassname}}.findOne({ relations: ["*"] });
 	return ret;
 }`;
     let TemplateDBDialogProperties = class TemplateDBDialogProperties {
@@ -10759,6 +10759,8 @@ define("jassi/ui/PropertyEditor", ["require", "exports", "jassi/remote/Jassi", "
                 return r;
             }
             if (property.name === "new" && this.variablename.startsWith("me.")) {
+                if (this.parser.data["me"] === undefined)
+                    return undefined;
                 var prop = this.parser.data["me"][this.variablename.substring(3)];
                 if (prop === undefined)
                     return undefined;
@@ -15280,7 +15282,10 @@ define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/
                         if (mtype !== undefined) {
                             var mt = mtype[0][0];
                             if (mt === Number)
-                                val = Number(val);
+                                val = Number(val.replaceAll(",", "."));
+                            if (mt === Boolean) {
+                                val = (val === "true" || val === true || val === 1 || val === "1");
+                            }
                             if (val === "#NV")
                                 val = undefined;
                         }
@@ -15414,7 +15419,9 @@ WHITC,89,White Clover Markets,Karl Jablonski,Owner,305 - 14th Ave. S. Suite 3B,S
 WILMK,90,Wilman Kala,Matti Karttunen,Owner/Marketing Assistant,Keskuskatu 45,Helsinki,#NV,21240,Finland,90-224 8858,90-224 8858
 WOLZA,91,Wolski  Zajazd,Zbyszek Piestrzeniewicz,Owner,ul. Filtrowa 68,Warszawa,#NV,01-012,Poland,(26) 642-7012,(26) 642-7012
 `;
-        var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees", { "id": "EmployeeID" });
+        var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid", "supplier": "supplierid", "category": "categoryid" });
+        //	var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees",
+        //		{ "id": "EmployeeID" });
         console.log(s);
         /*	var t = await classes.loadClass("northwind.Customer");
             var ret = new CSVImport();

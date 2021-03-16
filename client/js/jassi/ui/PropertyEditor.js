@@ -389,6 +389,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                 return r;
             }
             if (property.name === "new" && this.variablename.startsWith("me.")) {
+                if (this.parser.data["me"] === undefined)
+                    return undefined;
                 var prop = this.parser.data["me"][this.variablename.substring(3)];
                 if (prop === undefined)
                     return undefined;
