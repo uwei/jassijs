@@ -443,20 +443,18 @@ define("northwind/ProductView", ["require", "exports", "jassi/ui/ObjectChooser",
             me.unitsInStock = new Textbox_4.Textbox();
             me.unitsOnOrder = new Textbox_4.Textbox();
             me.reorderLevel = new Textbox_4.Textbox();
-            me.checkbox1 = new Checkbox_1.Checkbox();
+            me.discontinued = new Checkbox_1.Checkbox();
             me.category = new HTMLPanel_3.HTMLPanel();
             me.categoryChooser = new ObjectChooser_2.ObjectChooser();
             me.supplier = new HTMLPanel_3.HTMLPanel();
             me.supplierchooser = new ObjectChooser_2.ObjectChooser();
             me.main.add(me.id);
             me.main.isAbsolute = true;
-            me.main.x = 15;
-            me.main.y = 105;
             me.main.add(me.supplierchooser);
             me.main.add(me.supplier);
             me.main.add(me.categoryChooser);
             me.main.add(me.category);
-            me.main.add(me.checkbox1);
+            me.main.add(me.discontinued);
             me.main.add(me.reorderLevel);
             me.main.add(me.unitsOnOrder);
             me.main.add(me.unitsInStock);
@@ -471,10 +469,11 @@ define("northwind/ProductView", ["require", "exports", "jassi/ui/ObjectChooser",
             me.id.label = "Id";
             me.id.width = 65;
             me.id.converter = new NumberConverter_2.NumberConverter();
-            me.productName.x = 92;
-            me.productName.y = 12;
+            me.productName.x = 90;
+            me.productName.y = 10;
             me.productName.bind(me.databinder, "ProductName");
             me.productName.label = "Product Name";
+            me.productName.width = 310;
             me.quantityPerUnit.x = 10;
             me.quantityPerUnit.y = 60;
             me.quantityPerUnit.bind(me.databinder, "QuantityPerUnit");
@@ -504,9 +503,11 @@ define("northwind/ProductView", ["require", "exports", "jassi/ui/ObjectChooser",
             me.reorderLevel.width = 70;
             me.reorderLevel.label = "Reorder Level";
             me.reorderLevel.converter = new NumberConverter_2.NumberConverter();
-            me.checkbox1.x = 268;
-            me.checkbox1.y = 18;
-            me.checkbox1.width = 15;
+            me.discontinued.x = 268;
+            me.discontinued.y = 18;
+            me.discontinued.width = 10;
+            me.discontinued.bind(me.databinder, "Discontinued");
+            me.discontinued.label = "Discontinued";
             me.category.x = 10;
             me.category.y = 110;
             me.category.template = "{{CategoryName}}";
@@ -537,7 +538,7 @@ define("northwind/ProductView", ["require", "exports", "jassi/ui/ObjectChooser",
         __metadata("design:type", typeof (_a = typeof Products_1.Products !== "undefined" && Products_1.Products) === "function" ? _a : Object)
     ], ProductView.prototype, "value", void 0);
     ProductView = __decorate([
-        DBObjectView_4.$DBObjectView({ classname: "northwind.Products" }),
+        DBObjectView_4.$DBObjectView({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" }),
         Jassi_5.$Class("northwind.ProductView"),
         __metadata("design:paramtypes", [])
     ], ProductView);
@@ -790,11 +791,13 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551043267
             },
             "northwind/ProductView.ts": {
-                "date": 1615922270670,
+                "date": 1615988978608,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
-                            "classname": "northwind.Products"
+                            "classname": "northwind.Products",
+                            "actionname": "Northwind/Products",
+                            "icon": "mdi mdi-reproduction"
                         }
                     ]
                 }

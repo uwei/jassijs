@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property"], function (require, exports, Jassi_1, Component_1, Property_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property", "jassi/ui/DataComponent"], function (require, exports, Jassi_1, Component_1, Property_1, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Checkbox = void 0;
-    let Checkbox = class Checkbox extends Component_1.Component {
+    let Checkbox = class Checkbox extends DataComponent_1.DataComponent {
         /* get dom(){
              return this.dom;
          }*/

@@ -61,7 +61,12 @@ define(["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi
                 if (this._value === undefined)
                     scode = "";
                 else {
-                    scode = this.compileTemplate(this.template)(code);
+                    try {
+                        scode = this.compileTemplate(this.template)(code);
+                    }
+                    catch (err) {
+                        scode = err.message;
+                    }
                 }
             }
             var el = this.dom.children[0];

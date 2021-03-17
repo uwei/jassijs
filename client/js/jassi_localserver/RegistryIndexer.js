@@ -14,7 +14,7 @@ define(["require", "exports", "jassi_localserver/Indexer", "jassi/remote/Server"
             var data = await new Server_1.Server().loadFile("jassi.json");
             var modules = JSON.parse(data).modules;
             for (var m in modules) {
-                if (!modules[m].endsWith(".js")) { //.js are internet modules
+                if (!modules[m].endsWith(".js") && modules[m].indexOf(".js") === -1) { //.js are internet modules
                     if (await new Filesystem_1.default().existsDirectory(modules[m]))
                         await this.updateModul("", m, false);
                 }

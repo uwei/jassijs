@@ -18,13 +18,13 @@ type Me = {
     unitsInStock?: Textbox;
     unitsOnOrder?: Textbox;
     reorderLevel?: Textbox;
-    checkbox1?: Checkbox;
+    discontinued?: Checkbox;
     category?: HTMLPanel;
     categoryChooser?: ObjectChooser;
     supplier?: HTMLPanel;
     supplierchooser?: ObjectChooser;
 } & DBObjectViewMe;
-@$DBObjectView({ classname: "northwind.Products" })
+@$DBObjectView({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" })
 @$Class("northwind.ProductView")
 export class ProductView extends DBObjectView {
     me: Me;
@@ -46,20 +46,18 @@ export class ProductView extends DBObjectView {
         me.unitsInStock = new Textbox();
         me.unitsOnOrder = new Textbox();
         me.reorderLevel = new Textbox();
-        me.checkbox1 = new Checkbox();
+        me.discontinued = new Checkbox();
         me.category = new HTMLPanel();
         me.categoryChooser = new ObjectChooser();
         me.supplier = new HTMLPanel();
         me.supplierchooser = new ObjectChooser();
         me.main.add(me.id);
         me.main.isAbsolute = true;
-        me.main.x = 15;
-        me.main.y = 105;
         me.main.add(me.supplierchooser);
         me.main.add(me.supplier);
         me.main.add(me.categoryChooser);
         me.main.add(me.category);
-        me.main.add(me.checkbox1);
+        me.main.add(me.discontinued);
         me.main.add(me.reorderLevel);
         me.main.add(me.unitsOnOrder);
         me.main.add(me.unitsInStock);
@@ -74,10 +72,11 @@ export class ProductView extends DBObjectView {
         me.id.label = "Id";
         me.id.width = 65;
         me.id.converter = new NumberConverter();
-        me.productName.x = 92;
-        me.productName.y = 12;
+        me.productName.x = 90;
+        me.productName.y = 10;
         me.productName.bind(me.databinder, "ProductName");
         me.productName.label = "Product Name";
+        me.productName.width = 310;
         me.quantityPerUnit.x = 10;
         me.quantityPerUnit.y = 60;
         me.quantityPerUnit.bind(me.databinder, "QuantityPerUnit");
@@ -107,9 +106,11 @@ export class ProductView extends DBObjectView {
         me.reorderLevel.width = 70;
         me.reorderLevel.label = "Reorder Level";
         me.reorderLevel.converter = new NumberConverter();
-        me.checkbox1.x = 268;
-        me.checkbox1.y = 18;
-        me.checkbox1.width = 15;
+        me.discontinued.x = 268;
+        me.discontinued.y = 18;
+        me.discontinued.width = 10;
+        me.discontinued.bind(me.databinder, "Discontinued");
+        me.discontinued.label = "Discontinued";
         me.category.x = 10;
         me.category.y = 110;
         me.category.template = "{{CategoryName}}";

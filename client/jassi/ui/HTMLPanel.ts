@@ -68,7 +68,11 @@ export class HTMLPanel extends DataComponent {
             if(this._value===undefined)
                scode="";
             else{ 
-                scode = this.compileTemplate(this.template)(code);
+                try{
+                    scode = this.compileTemplate(this.template)(code);
+                }catch(err){
+                    scode=err.message;
+                }
             }
         }
         var el: any = this.dom.children[0];

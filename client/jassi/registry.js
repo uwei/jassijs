@@ -94,7 +94,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1614468824546
 	},
 	"jassi/remote/Registry.ts": {
-		"date": 1614285404119
+		"date": 1615986605063
 	},
 	"jassi/remote/RemoteObject.ts": {
 		"date": 1614545171594,
@@ -149,7 +149,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1615732643984,
+		"date": 1615987582181,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -259,7 +259,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Checkbox.ts": {
-		"date": 1613218544158,
+		"date": 1615988827935,
 		"jassi.ui.Checkbox": {
 			"$UIComponent": [
 				{
@@ -450,7 +450,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.HTMLEditorPanel": {}
 	},
 	"jassi/ui/HTMLPanel.ts": {
-		"date": 1615496666013,
+		"date": 1615988641923,
 		"jassi.ui.HTMLPanel": {
 			"$UIComponent": [
 				{

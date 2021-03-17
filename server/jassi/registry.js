@@ -39,7 +39,7 @@ exports.default={
 		"date": 1614468824546
 	},
 	"jassi/remote/Registry.ts": {
-		"date": 1614285404119
+		"date": 1615986605063
 	},
 	"jassi/remote/RemoteObject.ts": {
 		"date": 1614545171594,
@@ -94,7 +94,7 @@ exports.default={
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1615732643984,
+		"date": 1615987582181,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {

@@ -15,7 +15,7 @@ export class RegistryIndexer extends Indexer {
         var modules = JSON.parse(data).modules;
         for (var m in modules) {
 
-            if (!modules[m].endsWith(".js")){//.js are internet modules
+            if (!modules[m].endsWith(".js")&&modules[m].indexOf(".js")===-1){//.js are internet modules
                 if(await new Filessystem().existsDirectory(modules[m]))
                     await this.updateModul("", m, false);
             }

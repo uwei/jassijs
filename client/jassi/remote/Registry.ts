@@ -269,7 +269,7 @@ export class Registry {
             var all = {};
             var mod = JSON.parse(await (this.loadText("jassi.json")));
             for (let modul in mod.modules) {
-                if (!mod.modules[modul].endsWith(".js"))
+                if (!mod.modules[modul].endsWith(".js")&&mod.modules[modul].indexOf(".js?")===-1)
                     //@ts-ignore
                     requirejs.undef(modul + "/registry");
                 {

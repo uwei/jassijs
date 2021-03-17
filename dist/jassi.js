@@ -176,7 +176,7 @@ define("jassi/registry", ["require"], function (require) {
                 "date": 1614468824546
             },
             "jassi/remote/Registry.ts": {
-                "date": 1614285404119
+                "date": 1615986605063
             },
             "jassi/remote/RemoteObject.ts": {
                 "date": 1614545171594,
@@ -231,7 +231,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/remote/Server.ts": {
-                "date": 1615732643984,
+                "date": 1615987582181,
                 "jassi.remote.Server": {}
             },
             "jassi/remote/Transaction.ts": {
@@ -341,7 +341,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Checkbox.ts": {
-                "date": 1613218544158,
+                "date": 1615988827935,
                 "jassi.ui.Checkbox": {
                     "$UIComponent": [
                         {
@@ -532,7 +532,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.HTMLEditorPanel": {}
             },
             "jassi/ui/HTMLPanel.ts": {
-                "date": 1615496666013,
+                "date": 1615988641923,
                 "jassi.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -4136,7 +4136,7 @@ define("jassi/remote/Registry", ["require", "exports", "reflect-metadata"], func
                 var all = {};
                 var mod = JSON.parse(await (this.loadText("jassi.json")));
                 for (let modul in mod.modules) {
-                    if (!mod.modules[modul].endsWith(".js"))
+                    if (!mod.modules[modul].endsWith(".js") && mod.modules[modul].indexOf(".js?") === -1)
                         //@ts-ignore
                         requirejs.undef(modul + "/registry");
                     {
@@ -4572,8 +4572,8 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
                 return;
             var ret = {};
             for (var mod in Jassi_17.default.modules) {
-                if (Jassi_17.default.modules[mod].endsWith(".js")) {
-                    var code = await $.ajax({ url: Jassi_17.default.modules[mod] + ".map", dataType: "text" });
+                if (Jassi_17.default.modules[mod].endsWith(".js") || Jassi_17.default.modules[mod].indexOf(".js?") > -1) {
+                    var code = await $.ajax({ url: Jassi_17.default.modules[mod].replace(".js", ".js.map"), dataType: "text" });
                     var data = JSON.parse(code);
                     var files = data.sources;
                     for (let x = 0; x < files.length; x++) {
@@ -4688,7 +4688,7 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
                     }
                     else {
                         var found = Server_2.filesInMap[fileName];
-                        var code = await this.loadFile(Jassi_17.default.modules[found.modul] + ".map", context);
+                        var code = await this.loadFile(Jassi_17.default.modules[found.modul].replace(".js", ".js.map"), context);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;
                     }
@@ -6112,11 +6112,11 @@ define("jassi/ui/Calendar", ["require", "exports", "jassi/ui/Textbox", "jassi/ui
     }
     exports.test = test;
 });
-define("jassi/ui/Checkbox", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property"], function (require, exports, Jassi_34, Component_5, Property_9) {
+define("jassi/ui/Checkbox", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property", "jassi/ui/DataComponent"], function (require, exports, Jassi_34, Component_5, Property_9, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Checkbox = void 0;
-    let Checkbox = class Checkbox extends Component_5.Component {
+    let Checkbox = class Checkbox extends DataComponent_1.DataComponent {
         /* get dom(){
              return this.dom;
          }*/
@@ -9171,12 +9171,12 @@ define("jassi/ui/HTMLEditorPanel", ["require", "exports", "jassi/ui/Panel", "jas
     };
 });
 // return CodeEditor.constructor;
-define("jassi/ui/HTMLPanel", ["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/ui/DataComponent"], function (require, exports, Component_11, Jassi_51, Property_15, DataComponent_1) {
+define("jassi/ui/HTMLPanel", ["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/ui/DataComponent"], function (require, exports, Component_11, Jassi_51, Property_15, DataComponent_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLPanel = void 0;
     var bugtinymce = undefined;
-    let HTMLPanel = class HTMLPanel extends DataComponent_1.DataComponent {
+    let HTMLPanel = class HTMLPanel extends DataComponent_2.DataComponent {
         /*[
             'undo redo | bold italic underline | fontsizeselect', //fontselect
             'forecolor backcolor | numlist bullist outdent indent'
@@ -9225,7 +9225,12 @@ define("jassi/ui/HTMLPanel", ["require", "exports", "jassi/ui/Component", "jassi
                 if (this._value === undefined)
                     scode = "";
                 else {
-                    scode = this.compileTemplate(this.template)(code);
+                    try {
+                        scode = this.compileTemplate(this.template)(code);
+                    }
+                    catch (err) {
+                        scode = err.message;
+                    }
                 }
             }
             var el = this.dom.children[0];
@@ -9387,11 +9392,11 @@ define("jassi/ui/HTMLPanel", ["require", "exports", "jassi/ui/Component", "jassi
     ], HTMLPanel);
     exports.HTMLPanel = HTMLPanel;
 });
-define("jassi/ui/Image", ["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi", "jassi/ui/DataComponent"], function (require, exports, Component_12, Property_16, Jassi_52, DataComponent_2) {
+define("jassi/ui/Image", ["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi", "jassi/ui/DataComponent"], function (require, exports, Component_12, Property_16, Jassi_52, DataComponent_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Image = void 0;
-    let Image = class Image extends DataComponent_2.DataComponent {
+    let Image = class Image extends DataComponent_3.DataComponent {
         /* get dom(){
              return this.dom;
          }*/
@@ -11330,7 +11335,7 @@ define("jassi/ui/SearchExplorer", ["require", "exports", "jassi/remote/Jassi", "
     }
     exports.test = test;
 });
-define("jassi/ui/Select", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/Property", "jassi/remote/Classes", "jassi/ext/jquery.choosen"], function (require, exports, Jassi_63, Component_19, DataComponent_3, Property_25, Classes_23) {
+define("jassi/ui/Select", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/Property", "jassi/remote/Classes", "jassi/ext/jquery.choosen"], function (require, exports, Jassi_63, Component_19, DataComponent_4, Property_25, Classes_23) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Select = void 0;
@@ -11358,7 +11363,7 @@ define("jassi/ui/Select", ["require", "exports", "jassi/remote/Jassi", "jassi/ui
     SelectCreateProperties = __decorate([
         Jassi_63.$Class("jassi.ui.SelectCreateProperties")
     ], SelectCreateProperties);
-    let Select = class Select extends DataComponent_3.DataComponent {
+    let Select = class Select extends DataComponent_4.DataComponent {
         constructor(properties = undefined) {
             super();
             super.init($('<select class="Select"><option value=""></option></select>')[0]);
@@ -11702,7 +11707,7 @@ define("jassi/ui/Style", ["require", "exports", "jassi/ui/InvisibleComponent", "
     }
     exports.test2 = test2;
 });
-define("jassi/ui/Table", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "jassi/ui/Property", "jassi/ui/Component", "jassi/ui/Textbox", "jassi/ui/Calendar", "jassi/ext/tabulator"], function (require, exports, Jassi_65, DataComponent_4, Property_27, Component_21, Textbox_8, Calendar_1) {
+define("jassi/ui/Table", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "jassi/ui/Property", "jassi/ui/Component", "jassi/ui/Textbox", "jassi/ui/Calendar", "jassi/ext/tabulator"], function (require, exports, Jassi_65, DataComponent_5, Property_27, Component_21, Textbox_8, Calendar_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -11747,7 +11752,7 @@ define("jassi/ui/Table", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/
     @$Property({ name: "new/movableColumns", type: "boolean", default: false })
     @$Property({ name: "new/cellDblClick", type: "function", default: "function(event:any,group:any){\n\t\n}" })
     */
-    class Table extends DataComponent_4.DataComponent {
+    class Table extends DataComponent_5.DataComponent {
         constructor(properties) {
             super();
             super.init($('<div class="Table"></div>')[0]);
@@ -12097,12 +12102,12 @@ define("jassi/ui/Textarea", ["require", "exports", "jassi/ui/Component", "jassi/
     ], Textarea);
     exports.Textarea = Textarea;
 });
-define("jassi/ui/Textbox", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/converters/DefaultConverter", "jassi/remote/Registry", "jassi/ui/Property"], function (require, exports, Jassi_67, Component_23, DataComponent_5, DefaultConverter_1, Registry_19, Property_29) {
+define("jassi/ui/Textbox", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/converters/DefaultConverter", "jassi/remote/Registry", "jassi/ui/Property"], function (require, exports, Jassi_67, Component_23, DataComponent_6, DefaultConverter_1, Registry_19, Property_29) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Textbox = void 0;
-    let Textbox = class Textbox extends DataComponent_5.DataComponent {
+    let Textbox = class Textbox extends DataComponent_6.DataComponent {
         constructor(color = undefined) {
             super();
             super.init($('<input type="text" />')[0]);

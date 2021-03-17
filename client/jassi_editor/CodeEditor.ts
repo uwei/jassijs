@@ -306,7 +306,12 @@ export class CodeEditor extends Panel {
                 await jassi.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
             }
         }
-
+  
+        var islocaldb=classes.getClass("jassi_localserver.DBManager");
+        if(islocaldb&&code.indexOf("@$DBObject(")>-1){
+            
+            (<any>islocaldb).destroyConnection();
+        }
         if (data.test !== undefined) {
             var ret = await data.test(new Test());
             // Promise.resolve(ret).then(async function(ret) {

@@ -253,6 +253,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                     await Jassi_1.default.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
                 }
             }
+            var islocaldb = Classes_1.classes.getClass("jassi_localserver.DBManager");
+            if (islocaldb && code.indexOf("@$DBObject(") > -1) {
+                islocaldb.destroyConnection();
+            }
             if (data.test !== undefined) {
                 var ret = await data.test(new Tests_1.Test());
                 // Promise.resolve(ret).then(async function(ret) {

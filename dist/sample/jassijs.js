@@ -63,7 +63,7 @@ async function run() {
         let allmodules = {};
         let dowait = [];
         for (let modul in modules) {
-            if (modules[modul].endsWith(".js")) {
+            if (modules[modul].endsWith(".js")||modules[modul].indexOf(".js?")>-1) {
                 dowait.push(loadScript(modules[modul]));
             }
             /*let modulpath = "./" + modul + "/jassi.json";
@@ -99,7 +99,7 @@ async function run() {
                     let f = res[x].default.css[key];
                     if (f.indexOf(":") > -1) //https://cdn
                         cssFiles.push(f);
-                    else if (modpath.endsWith(".js")) {
+                    else if (modpath.endsWith(".js")||modpath.indexOf(".js?")>-1) {
                         var m = modpath.substring(0, modpath.lastIndexOf("/"));
                         cssFiles.push(m + "/" + f);
                     }

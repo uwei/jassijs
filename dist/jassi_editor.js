@@ -975,6 +975,10 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
                     await Jassi_3.default.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
                 }
             }
+            var islocaldb = Classes_1.classes.getClass("jassi_localserver.DBManager");
+            if (islocaldb && code.indexOf("@$DBObject(") > -1) {
+                islocaldb.destroyConnection();
+            }
             if (data.test !== undefined) {
                 var ret = await data.test(new Tests_1.Test());
                 // Promise.resolve(ret).then(async function(ret) {
@@ -2776,7 +2780,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
-                "date": 1615323569923,
+                "date": 1615988313947,
                 "jassi_editor.CodeEditor": {}
             },
             "jassi_editor/CodeEditorInvisibleComponents.ts": {

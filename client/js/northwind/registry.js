@@ -50,11 +50,13 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551043267
             },
             "northwind/ProductView.ts": {
-                "date": 1615922270670,
+                "date": 1615988978608,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
-                            "classname": "northwind.Products"
+                            "classname": "northwind.Products",
+                            "actionname": "Northwind/Products",
+                            "icon": "mdi mdi-reproduction"
                         }
                     ]
                 }

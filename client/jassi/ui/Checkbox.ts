@@ -1,11 +1,12 @@
 import jassi, { $Class } from "jassi/remote/Jassi";
 import {Component,  $UIComponent } from "jassi/ui/Component";
 import {Property,  $Property } from "jassi/ui/Property";
+import { DataComponent } from "jassi/ui/DataComponent";
 
 
 @$UIComponent({ fullPath:"common/Ceckbox",icon:"mdi mdi-checkbox-marked-outline"})
 @$Class("jassi.ui.Checkbox")
-export class Checkbox extends Component{
+export class Checkbox extends DataComponent{
         checkbox:ChildNode;
        /* get dom(){
             return this.dom;

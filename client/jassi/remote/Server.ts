@@ -33,8 +33,8 @@ export class Server extends RemoteObject {
             return;
         var ret = {};
         for (var mod in jassi.modules) {
-            if (jassi.modules[mod].endsWith(".js")) {
-                var code = await $.ajax({ url: jassi.modules[mod] + ".map", dataType: "text" })
+            if (jassi.modules[mod].endsWith(".js")||jassi.modules[mod].indexOf(".js?")>-1) {
+                var code = await $.ajax({ url: jassi.modules[mod].replace(".js",".js.map"), dataType: "text" })
                 var data = JSON.parse(code);
                 var files = data.sources;
                 for (let x = 0; x < files.length; x++) {
@@ -148,7 +148,7 @@ export class Server extends RemoteObject {
                     //use ajax
                 } else {
                     var found = Server.filesInMap[fileName];
-                    var code = await this.loadFile(jassi.modules[found.modul] + ".map", context);
+                    var code = await this.loadFile(jassi.modules[found.modul].replace(".js",".js.map"), context);
                     var data = JSON.parse(code).sourcesContent[found.id];
                     return data;
                 }
