@@ -573,7 +573,7 @@ export class Parser {
                         lastprop.parent["statements"].splice(pos + 1, 0, newExpression);
                 } else {
                     var pos = statements.length;
-                    if (statements[statements.length - 1].getText().startsWith("return "))
+                    if (pos>0&&statements[statements.length - 1].getText().startsWith("return "))
                         pos--;
                     statements.splice(pos, 0, newExpression);
                 }

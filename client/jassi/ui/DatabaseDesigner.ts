@@ -143,6 +143,7 @@ export class DatabaseDesigner extends Panel {
         if (res.button === "OK") {
             this.currentClass = new DatabaseClass();
             this.currentClass.name = res.text;
+            this.currentClass.parent=this.currentSchema;
             var f = new DatabaseField();
             f.name = "id";
             f.type = "int";

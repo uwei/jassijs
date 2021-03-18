@@ -358,7 +358,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.CSSProperties": {}
 	},
 	"jassi/ui/DatabaseDesigner.ts": {
-		"date": 1613673965699,
+		"date": 1616102745056,
 		"jassi/ui/DatabaseDesigner": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"

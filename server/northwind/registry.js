@@ -20,6 +20,12 @@ exports.default={
 			"$DBObject": []
 		}
 	},
+	"northwind/remote/Orders.ts": {
+		"date": 1616106326699,
+		"northwind.Orders": {
+			"$DBObject": []
+		}
+	},
 	"northwind/remote/Products.ts": {
 		"date": 1616092571111,
 		"northwind.Products": {

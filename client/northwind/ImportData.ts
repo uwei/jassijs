@@ -28,7 +28,8 @@ export class ImportData extends Panel {
     async startImport() {
         var path = "https://uwei.github.io/jassijs/client/northwind/import";
         this.me.IDProtokoll.value = "";
-        var s = await CSVImport.startImport(path + "/customers.csv", "northwind.Customer", { "id": "CustomerID" });
+        var s;
+        /*s = await CSVImport.startImport(path + "/customers.csv", "northwind.Customer", { "id": "CustomerID" });
         this.me.IDProtokoll.value += "<br>Customer " + s;
         s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees", { "id": "EmployeeID" });
         this.me.IDProtokoll.value += "<br>Employees " + s;
@@ -38,8 +39,10 @@ export class ImportData extends Panel {
         this.me.IDProtokoll.value += "<br>Categories " + s;
         s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/suppliers.csv", "northwind.Suppliers", { "id": "supplierid" });
         this.me.IDProtokoll.value += "<br>Suppliers " + s;
-        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid","SupplierID":"Supplier","CategoryID":"Category" });
-        this.me.IDProtokoll.value += "<br>Products " + s;
+        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid","supplier":"supplierid","category":"categoryid" } );
+        this.me.IDProtokoll.value += "<br>Products " + s;*/
+        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid","customer":"customerid","employee":"employeeid" });
+        this.me.IDProtokoll.value += "<br>Orders " + s;
         this.me.IDProtokoll.value += "<br>Fertig";
     }
     layout(me: Me) {

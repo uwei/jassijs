@@ -126,6 +126,7 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/
             if (res.button === "OK") {
                 this.currentClass = new DatabaseSchema_1.DatabaseClass();
                 this.currentClass.name = res.text;
+                this.currentClass.parent = this.currentSchema;
                 var f = new DatabaseSchema_1.DatabaseField();
                 f.name = "id";
                 f.type = "int";

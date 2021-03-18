@@ -56,7 +56,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"date": 1613148168781
 	},
 	"jassi_editor/util/Parser.ts": {
-		"date": 1614889218718,
+		"date": 1616105244530,
 		"jassi_editor.base.Parser": {}
 	},
 	"jassi_editor/util/Resizer.ts": {
