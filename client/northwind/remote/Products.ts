@@ -35,5 +35,10 @@ export class Products extends DBObject {
     Discontinued: boolean;
 }
 export async function test() {
+    var p:Products=await Products.findOne();
+    debugger;
+    p.ProductName="udo";
+    var p2=await Products.findOne({onlyColumns:[],relations:["*"]});
+    var k=p===p2;
 }
 ;

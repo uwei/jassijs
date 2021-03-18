@@ -319,22 +319,55 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
             //return this.connection().manager.findOne(entityClass,id,options);
             // else
             var options = p1;
+            var onlyColumns = options === null || options === void 0 ? void 0 : options.onlyColumns;
             var clname = Classes_1.classes.getClassName(entityClass);
             var cl = Classes_1.classes.getClass(clname);
             var relations = new RelationInfo(clname, this);
-            if (options)
-                relations.addRelations(options.relations, true);
+            var allRelations = this.resolveWildcharInRelations(clname, options === null || options === void 0 ? void 0 : options.relations);
+            if (options && options.relations) {
+                relations.addRelations(allRelations, true);
+            }
             var ret = await this.connection().manager.createQueryBuilder().
                 select("me").from(cl, "me");
             if (options)
                 ret = relations.addWhere(options.where, options.whereParams, ret);
+            options === null || options === void 0 ? true : delete options.where;
+            options === null || options === void 0 ? true : delete options.whereParams;
+            options === null || options === void 0 ? true : delete options.onlyColumns;
             ret = relations.addWhereBySample(options, ret);
             ret = relations.join(ret);
             if (context.request.user.isAdmin)
                 ret = await relations.addParentRightDestriction(context, ret);
             var test = ret.getSql();
-            return await ret.getMany();
+            let objs = await ret.getMany();
+            if (objs && onlyColumns) {
+                objs.forEach((ob) => {
+                    for (var key in ob) {
+                        if (onlyColumns.indexOf(key) === -1 && allRelations.indexOf(key) === -1 && key !== "id")
+                            ob[key] = undefined;
+                    }
+                });
+            }
+            return objs;
             // return await this.connection().manager.find(entityClass, p1);
+        }
+        resolveWildcharInRelations(classname, relation) {
+            var ret = [];
+            if (!relation)
+                return ret;
+            for (let r = 0; r < relation.length; r++) {
+                if (relation[r] === "*") {
+                    var vdata = typeorm_1.getConnection().getMetadata(Classes_1.classes.getClass(classname));
+                    for (var re = 0; re < vdata.relations.length; re++) {
+                        var s = vdata.relations[re].propertyName;
+                        if (ret.indexOf(s) === -1)
+                            ret.push(s);
+                    }
+                }
+                else
+                    ret.push(relation[r]);
+            }
+            return ret;
         }
         async createUser(context, username, password) {
             //var hh=getConnection().manager.findOne(User,{ email: username });

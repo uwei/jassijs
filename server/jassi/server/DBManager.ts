@@ -13,6 +13,7 @@ const passwordIteration = 10000;
 
 export interface MyFindManyOptions<Entity = any> extends FindManyOptions {
   whereParams?: any,
+  onlyColumns?:string[];
   [field: string]: any
 }
 
@@ -382,13 +383,15 @@ export class DBManager {
     //return this.connection().manager.findOne(entityClass,id,options);
     // else
    
-
+    
     var options: MyFindManyOptions<Entity> = p1;
+    var onlyColumns=options?.onlyColumns;
     var clname = classes.getClassName(entityClass);
     var cl = classes.getClass(clname);
     var relations = new RelationInfo(clname, this);
+    var allRelations=this.resolveWildcharInRelations(clname,options?.relations);
     if (options&&options.relations){
-      relations.addRelations(this.resolveWildcharInRelations(clname,options.relations), true);
+      relations.addRelations(allRelations, true);
     }
     var ret = await this.connection().manager.createQueryBuilder().
       select("me").from(cl, "me");
@@ -396,6 +399,7 @@ export class DBManager {
       ret = relations.addWhere(<string>options.where, options.whereParams, ret);
     delete options?.where;
     delete options?.whereParams;
+    delete options?.onlyColumns;
     ret = relations.addWhereBySample(options, ret);
     ret = relations.join(ret);
     if (context.request.user.isAdmin)
@@ -403,11 +407,22 @@ export class DBManager {
 
 
     var test = ret.getSql();
-    return await ret.getMany();
+    let objs= await ret.getMany();
+    if(objs&&onlyColumns){
+      objs.forEach((ob)=>{
+        for(var key in ob){
+          if(onlyColumns.indexOf(key)===-1&&allRelations.indexOf(key)===-1&&key!=="id")
+            ob[key]=undefined;
+        }
+      });
+    }
+    return objs;
     // return await this.connection().manager.find(entityClass, p1);
   }
   private resolveWildcharInRelations(classname,relation:string[]):string[]{
     var ret=[];
+    if(!relation)
+            return ret;
     for(let r=0;r<relation.length;r++){
       if(relation[r]==="*"){
         var vdata = getConnection().getMetadata(classes.getClass(classname));
