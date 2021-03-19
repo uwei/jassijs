@@ -120,8 +120,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                     }
                     cl[this.id] = this; //Update cache on save
                     var newob = this._replaceObjectWithId(this);
-                    var h = await this.call(newob, this.save, context);
-                    this.id = h.id;
+                    var id = await this.call(newob, this.save, context);
+                    this.id = id;
                     return this;
                 }
                 else {

@@ -49,6 +49,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/
                        
                     } */
                 });
+                if (me.IDTable.table.getSelectedRows().length > 0)
+                    me.IDTable.table.scrollToRow(me.IDTable.table.getSelectedRows()[0]);
                 _this.callEvent("showDialog", event);
             });
             this.icon = "mdi mdi-glasses";
@@ -86,7 +88,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/
             });
             me.IDSearch.height = 15;
             me.IDTable.width = "100%";
-            me.IDTable.height = "calc(100% - 100px)";
+            me.IDTable.height = "calc(100% - 10px)";
             setTimeout(() => { me.IDSearch.focus(); }, 200);
             setTimeout(() => { me.IDSearch.focus(); }, 1000);
             me.IDCancel.onclick(function (event) {

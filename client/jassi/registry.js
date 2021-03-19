@@ -70,7 +70,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
-		"date": 1615492360475,
+		"date": 1616194195148,
 		"jassi.remote.DBObject": {}
 	},
 	"jassi/remote/DBObjectQuery.ts": {
@@ -149,7 +149,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1615987582181,
+		"date": 1616191186093,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -513,7 +513,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/ObjectChooser.ts": {
-		"date": 1615590050176,
+		"date": 1616195924588,
 		"jassi.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
@@ -753,7 +753,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Table.ts": {
-		"date": 1614285087403,
+		"date": 1616196145911,
 		"jassi.ui.TableEditorProperties": {},
 		"jassi.ui.Table": {
 			"$UIComponent": [

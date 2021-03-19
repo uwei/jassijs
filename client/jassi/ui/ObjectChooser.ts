@@ -1,14 +1,14 @@
 import jassi, { $Class } from "jassi/remote/Jassi";
-import {Table} from "jassi/ui/Table";
-import {Panel} from "jassi/ui/Panel";
-import {Button} from "jassi/ui/Button";
-import {Textbox} from "jassi/ui/Textbox";
-import {Checkbox} from "jassi/ui/Checkbox";
-import {VariablePanel} from "jassi/ui/VariablePanel";
-import {Databinder} from "jassi/ui/Databinder";
-import {Property,  $Property } from "jassi/ui/Property";
+import { Table } from "jassi/ui/Table";
+import { Panel } from "jassi/ui/Panel";
+import { Button } from "jassi/ui/Button";
+import { Textbox } from "jassi/ui/Textbox";
+import { Checkbox } from "jassi/ui/Checkbox";
+import { VariablePanel } from "jassi/ui/VariablePanel";
+import { Databinder } from "jassi/ui/Databinder";
+import { Property, $Property } from "jassi/ui/Property";
 import { $UIComponent } from "jassi/ui/Component";
-import {DBObject} from "jassi/remote/DBObject";
+import { DBObject } from "jassi/remote/DBObject";
 import { classes } from "jassi/remote/Classes";
 
 /*
@@ -22,13 +22,13 @@ class Me {
 	IDOK?: Button;
 
 }
-@$UIComponent({fullPath:"common/ObjectChooser",icon:"mdi mdi-glasses"})
+@$UIComponent({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" })
 @$Class("jassi.ui.ObjectChooser")
 export class ObjectChooser extends Button {
-	
-	@$Property({default: 450})
+
+	@$Property({ default: 450 })
 	dialogHeight: number;
-	@$Property({default: 300})
+	@$Property({ default: 300 })
 	dialogWidth: number;
 	_items;
 	me: Me;
@@ -52,7 +52,7 @@ export class ObjectChooser extends Button {
 	get title() {
 		return "Select";
 	}
-	
+
 	layout() {
 		var me: Me = this.me = {};
 		var _this = this;
@@ -70,6 +70,8 @@ export class ObjectChooser extends Button {
 				   
 				} */
 			});
+			if (me.IDTable.table.getSelectedRows().length > 0)
+				me.IDTable.table.scrollToRow(me.IDTable.table.getSelectedRows()[0]);
 			_this.callEvent("showDialog", event);
 		});
 		this.icon = "mdi mdi-glasses";
@@ -92,6 +94,7 @@ export class ObjectChooser extends Button {
 		});
 		me.IDSearch.width = 170;
 		me.IDSearch.oninput(function (event) {
+		
 			me.IDTable.search("all", me.IDSearch.value, true);
 		});
 		$(me.IDTable.dom).doubletap(function (data) {
@@ -110,7 +113,7 @@ export class ObjectChooser extends Button {
 		});
 		me.IDSearch.height = 15;
 		me.IDTable.width = "100%";
-		me.IDTable.height = "calc(100% - 100px)";
+		me.IDTable.height = "calc(100% - 10px)";
 		setTimeout(() => { me.IDSearch.focus(); }, 200);
 		setTimeout(() => { me.IDSearch.focus(); }, 1000);
 		me.IDCancel.onclick(function (event) {
@@ -136,31 +139,31 @@ export class ObjectChooser extends Button {
 	set value(value) { //the Code
 		this._value = value;
 	}
-	
+
 	get value() {
 		return this._value;
 	}
-	async loadObjects(classname:string){
-		var cl:any=await classes.loadClass(classname);
+	async loadObjects(classname: string) {
+		var cl: any = await classes.loadClass(classname);
 		return await cl.find();
 	}
-	@$Property({type:"string",description:"the classname for to choose"})
+	@$Property({ type: "string", description: "the classname for to choose" })
 	/**
 	 * @member {string} items - the items to select
 	 */
-	set items(value:any) {
+	set items(value: any) {
 		var _this = this;
 		if (value !== undefined && typeof (value) === "string") {
-			this.loadObjects(value).then((data)=>{
-				_this.me.IDTable.items=data;
+			this.loadObjects(value).then((data) => {
+				_this.me.IDTable.items = data;
 			});
-				
-		
+
+
 		} else
 			_this.me.IDTable.items = value;
 	}
 
-	get items():any {
+	get items(): any {
 		return this._items;
 	}
 
@@ -171,7 +174,7 @@ export class ObjectChooser extends Button {
 	* called if value has changed
 	* @param {function} handler - the function which is executed
 	*/
-	@$Property({default: "function(event){\n\t\n}"})
+	@$Property({ default: "function(event){\n\t\n}" })
 	onchange(handler) {
 		this.addEvent("change", handler);
 	}
@@ -181,10 +184,10 @@ export class ObjectChooser extends Button {
 	 *                              if false the databinder will update the value on databinder.toForm 
 	 */
 	@$Property()
-	get autocommit():boolean {
+	get autocommit(): boolean {
 		return this._autocommit;
 	}
-	set autocommit(value:boolean) {
+	set autocommit(value: boolean) {
 		this._autocommit = value;
 		//if (this._databinder !== undefined)
 		//	this._databinder.checkAutocommit(this);
@@ -194,26 +197,26 @@ export class ObjectChooser extends Button {
 	 * @param {jassi.ui.Databinder} databinder - the databinder to bind
 	 * @param {string} property - the property to bind
 	 */
-	@$Property({type:"databinder"})
+	@$Property({ type: "databinder" })
 	bind(databinder, property) {
 		this._databinder = databinder;
 		databinder.add(property, this, "onchange");
 		//databinder.checkAutocommit(this);
 	}
 	destroy() {
-	
-    	this._value=undefined;
-   		this.me.IDPanel.destroy();
+
+		this._value = undefined;
+		this.me.IDPanel.destroy();
 		super.destroy();
 	}
 }
 
-export async function test () {
+export async function test() {
 	// kk.o=0;
-	var Kunde=(await import("de/remote/Kunde")).Kunde
+	var Kunde = (await import("de/remote/Kunde")).Kunde
 	var dlg = new ObjectChooser();
 	dlg.items = "de.Kunde";
-	dlg.value = (await Kunde.find({id:1}))[0];
+	dlg.value = (await Kunde.find({ id: 1 }))[0];
 	//	var kunden=await jassi.db.load("de.Kunde");
 	//	dlg.value=kunden[4];
 	//	dlg.me.IDTable.items=kunden;

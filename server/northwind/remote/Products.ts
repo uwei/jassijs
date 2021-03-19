@@ -1,8 +1,7 @@
 import { Categories } from "northwind/remote/Categories";
 import { Suppliers } from "northwind/remote/Suppliers";
-import { Categories } from "northwind/remote/Categories";
-import { Suppliers } from "northwind/remote/Suppliers";
-import { Suppliers } from "northwind/remote/Suppliers";
+
+
 import { DBObject, $DBObject } from "jassi/remote/DBObject";
 import jassi, { $Class } from "jassi/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, JoinColumn, JoinTable } from "jassi/util/DatabaseSchema";

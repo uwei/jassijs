@@ -335,7 +335,30 @@ export class Table extends DataComponent {
      * @param {boolean} [doSelect] - if true the first entry is selected
      */
     search(field, value, doSelect) {
+	//custom filter function
+			function matchAny(data, filterParams) {
+				//data - the data for the row being filtered
+				//filterParams - params object passed to the filter
 
+				var match = false;
+
+				for (var key in data) {
+					if (filterParams.value===undefined||filterParams.value===""||data[key]?.toString().toLowerCase().indexOf(filterParams.value.toLowerCase())>-1) {
+						match = true;
+					}
+				}
+
+				return match;
+			}
+
+			//set filter to custom function
+			this.table.setFilter( matchAny, { value: value });
+            if(doSelect) {
+                //@ts-ignore
+                this.table.deselectRow(this.table.getSelectedRows());
+                 //@ts-ignore
+                this.table.selectRow( this.table.getRowFromPosition(0,true));
+            }
     }
     destroy() {
         // this.tree = undefined;

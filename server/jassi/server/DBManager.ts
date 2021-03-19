@@ -13,7 +13,7 @@ const passwordIteration = 10000;
 
 export interface MyFindManyOptions<Entity = any> extends FindManyOptions {
   whereParams?: any,
-  onlyColumns?:string[];
+  onlyColumns?: string[];
   [field: string]: any
 }
 
@@ -40,7 +40,7 @@ export class DBManager {
     //@ts-ignore
     var test = process.env.DATABASE_URL;
     if (test !== undefined) {
-  
+
       var all = test.split(":");
       stype = all[0];
       var h = all[2].split("@");
@@ -50,9 +50,9 @@ export class DBManager {
       spass = h[0];
       sdb = all[3].split("/")[1];
     }
-  
+
     var dbclasses = [];
-    
+
     var dbobjects = await registry.getJSONData("$DBObject");
     for (var o = 0; o < dbobjects.length; o++) {
       var clname = dbobjects[o].classname;
@@ -60,9 +60,9 @@ export class DBManager {
       //var fname = dbobjects[o].filename;
       //dbfiles.push("js/" + fname.replace(".ts", ".js"));
     }
-  
+
     var opt: ConnectionOptions = {
-  
+
       //@ts-ignore
       "type": stype,
       "host": shost,
@@ -74,7 +74,7 @@ export class DBManager {
       "logging": false,
       "entities": dbclasses,
       //"js/client/remote/de/**/*.js"
-  
+
       // "migrations": [
       //    "src/migration/**/*.ts"
       // ],
@@ -82,8 +82,8 @@ export class DBManager {
       //    "src/subscriber/**/*.ts"
       // ]
     };
-  
-  
+
+
     return opt;
   }
   public static async get(): Promise<DBManager> {
@@ -98,14 +98,14 @@ export class DBManager {
         Object.freeze(DBManager);
         _initrunning = createConnection(opts);
         await _initrunning;
-       
+
       } catch (err1) {
         try {
           _initrunning = undefined;
           opts["ssl"] = true;//heroku need this
           _initrunning = createConnection(opts);
           await _initrunning;
-          
+
         } catch (err) {
           console.log("DB corrupt - revert the last change");
           _instance = undefined;
@@ -120,9 +120,9 @@ export class DBManager {
           }
         }
       }
-      try{
+      try {
         await _instance.mySync();
-      }catch(err){
+      } catch (err) {
         console.log("DB Schema could not be saved");
         throw err;
       }
@@ -189,12 +189,12 @@ export class DBManager {
     DBManager.clearArray(getMetadataArgsStorage().trees);
     DBManager.clearArray(getMetadataArgsStorage().uniques);
   }
-  
+
   public static async destroyConnection() {
     if (_instance !== undefined)
       await getConnection().close();
     _instance = undefined;
-   DBManager.clearMetadata();
+    DBManager.clearMetadata();
 
   }
   private static clearArray(arr: any[]) {
@@ -208,19 +208,19 @@ export class DBManager {
   connection() {
     return getConnection();
   }
-  async remove<Entity>(context:Context, entity: Entity) {
-    var test = await (await DBManager.get()).checkParentRight(context,entity, [entity["id"]]);
+  async remove<Entity>(context: Context, entity: Entity) {
+    var test = await (await DBManager.get()).checkParentRight(context, entity, [entity["id"]]);
     if (test === false)
       throw new Error("you are not allowed to delete " + classes.getClassName(entity) + " with id " + entity["id"]);
     await this.connection().manager.remove(entity);
   }
 
-  private async addSaveTransaction(context:Context, entity) {
+  private async addSaveTransaction(context: Context, entity) {
     if (context.objecttransaction) {
       let ot = context.objecttransaction;
       if (!ot.savelist) {
         ot.savelist = [entity];
-        ot.saveresolve=[];
+        ot.saveresolve = [];
         ot.addFunctionFinally(async () => {
           ot.savereturn = await this.connection().manager.save(ot.savelist);
           for (let x = 0; x < ot.savereturn.length; x++) {
@@ -237,34 +237,34 @@ export class DBManager {
       });
     }
   }
-    /**
-   * insert a new object
-   * @param obj - the object to insert
-   */
-  async insert(context:Context, obj: DBObject) {
+  /**
+ * insert a new object
+ * @param obj - the object to insert
+ */
+  async insert(context: Context, obj: DBObject) {
 
-    await this._checkParentRightsForSave(context,obj);
+    await this._checkParentRightsForSave(context, obj);
     if (context.objecttransaction) {
-      return this.addSaveTransaction(context,obj);
+      return this.addSaveTransaction(context, obj);
     }
     //@ts-ignore
     var ret = await this.connection().manager.insert(obj.constructor, obj);
     //save also relations
-    ret = await this.save(context,obj);
-    return ret;
+    let retob = await this.save(context, obj);
+    return  retob?.id;
   }
   /**
   * Saves all given entities in the database.
   * If entities do not exist in the database then inserts, otherwise updates.
   */
-  async save<Entity>(context:Context, entities: Entity[], options?: SaveOptions): Promise<Entity[]>;
+  async save<Entity>(context: Context, entities: Entity[], options?: SaveOptions): Promise<Entity[]>;
   /**
    * Saves all given entities in the database.
    * If entities do not exist in the database then inserts, otherwise updates.
    */
-  async save<Entity>(context:Context, entity: Entity, options?: SaveOptions): Promise<Entity>;
-  async save<Entity>(context:Context, entity, options) {
-    await this._checkParentRightsForSave(context,entity);
+  async save<Entity>(context: Context, entity: Entity, options?: SaveOptions): Promise<Entity>;
+  async save<Entity>(context: Context, entity, options) {
+    await this._checkParentRightsForSave(context, entity);
     if (classes.getClassName(entity) === "jassi.remote.security.User" && entity.password !== undefined) {
       entity.password = await new Promise((resolve) => {
         const crypto = require('crypto');
@@ -276,24 +276,25 @@ export class DBManager {
       })
 
     }
-    
-    if (context.objecttransaction&&options===undefined) {
-      return this.addSaveTransaction(context,entity);
+
+    if (context.objecttransaction && options === undefined) {
+      return this.addSaveTransaction(context, entity);
     }
     var ret = await this.connection().manager.save(entity, options);
-    delete entity.password;
-    delete ret["password"];
-    return ret;
+    //delete entity.password;
+    //delete ret["password"];
+    //@ts-ignore
+    return (<DBObject>ret)?.id;
   }
-  private async _checkParentRightsForSave<Entity>(context:Context, entity: Entity) {
-    if(context.request.user.isAdmin)
+  private async _checkParentRightsForSave<Entity>(context: Context, entity: Entity) {
+    if (context.request.user.isAdmin)
       return;
     //Check if the object self has restrictions
     var cl = classes.getClass(classes.getClassName(entity));
     if (entity["id"] !== undefined) {
       var exist = await this.connection().manager.findOne(cl, entity["id"]);
       if (exist !== undefined) {
-        var t = await this.checkParentRight(context,cl, [entity["id"]]);
+        var t = await this.checkParentRight(context, cl, [entity["id"]]);
         if (!t) {
           throw new Error("you are not allowed to save " + classes.getClassName(cl) + " with id " + entity["id"]);
         }
@@ -316,7 +317,7 @@ export class DBManager {
       var data = entity[rel.propertyName];
       if (data !== undefined && !Array.isArray(data)) {
         let cl = rel.type;
-        var t = await this.checkParentRight(context,cl, [data["id"]]);
+        var t = await this.checkParentRight(context, cl, [data["id"]]);
         if (!t) {
           throw new Error("you are not allowed to save " + classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
         }
@@ -327,7 +328,7 @@ export class DBManager {
         for (let x = 0; x < data.length; x++) {
           arr.push(data[x].id);
         }
-        let t = await this.checkParentRight(context,cl, arr);
+        let t = await this.checkParentRight(context, cl, arr);
         if (!t) {
           throw new Error("you are not allowed to save " + classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
         }
@@ -340,27 +341,27 @@ export class DBManager {
        }*/
     }
   }
-  findOne<Entity>(context:Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, id?: string | number | Date | ObjectID, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
+  findOne<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, id?: string | number | Date | ObjectID, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
   /**
    * Finds first entity that matches given find options.
    */
-  findOne<Entity>(context:Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
+  findOne<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
   /**
   * Finds first entity that matches given conditions.
   */
-  findOne<Entity>(context:Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, conditions?: FindConditions<Entity>, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
+  findOne<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, conditions?: FindConditions<Entity>, options?: FindOneOptions<Entity>): Promise<Entity | undefined>;
   /**
    * Finds first entity that matches given conditions.
    */
-  async findOne<Entity>(context:Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, p1?: any, p2?: any): Promise<Entity | undefined> {
+  async findOne<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, p1?: any, p2?: any): Promise<Entity | undefined> {
     if (typeof p1 === "string" || typeof p1 === "number") {//search by id
       p1 = { id: p1 };
     }
-    var ret = await this.find(context,entityClass, p1);
+    var ret = await this.find(context, entityClass, p1);
     if (ret === undefined || ret.length === 0)
       return undefined;
     else
-      return <Entity> ret[0];
+      return <Entity>ret[0];
     //return this.connection().manager.findOne(entityClass,id,options);
     // else
     //return this.connection().manager.findOne(entityClass, p1, p2);
@@ -368,29 +369,29 @@ export class DBManager {
   /**
  * Finds entities that match given options.
  */
-  async find<Entity>(context:Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, options?: MyFindManyOptions<Entity>): Promise<Entity[]>;
+  async find<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, options?: MyFindManyOptions<Entity>): Promise<Entity[]>;
 
   /**
    * Finds entities that match given conditions.
    */
-  async find<Entity>(context:Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, conditions?: FindConditions<Entity>): Promise<Entity[]>;
+  async find<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, conditions?: FindConditions<Entity>): Promise<Entity[]>;
 
 
   /**
     * Finds first entity that matches given conditions.
     */
-  async find<Entity>(context:Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, p1?: any): Promise<Entity[]> {
+  async find<Entity>(context: Context, entityClass: ObjectType<Entity> | EntitySchema<Entity>, p1?: any): Promise<Entity[]> {
     //return this.connection().manager.findOne(entityClass,id,options);
     // else
-   
-    
+
+
     var options: MyFindManyOptions<Entity> = p1;
-    var onlyColumns=options?.onlyColumns;
+    var onlyColumns = options?.onlyColumns;
     var clname = classes.getClassName(entityClass);
     var cl = classes.getClass(clname);
     var relations = new RelationInfo(clname, this);
-    var allRelations=this.resolveWildcharInRelations(clname,options?.relations);
-    if (options&&options.relations){
+    var allRelations = this.resolveWildcharInRelations(clname, options?.relations);
+    if (options && options.relations) {
       relations.addRelations(allRelations, true);
     }
     var ret = await this.connection().manager.createQueryBuilder().
@@ -403,40 +404,40 @@ export class DBManager {
     ret = relations.addWhereBySample(options, ret);
     ret = relations.join(ret);
     if (context.request.user.isAdmin)
-      ret = await relations.addParentRightDestriction(context,ret);
+      ret = await relations.addParentRightDestriction(context, ret);
 
 
     var test = ret.getSql();
-    let objs= await ret.getMany();
-    if(objs&&onlyColumns){
-      objs.forEach((ob)=>{
-        for(var key in ob){
-          if(onlyColumns.indexOf(key)===-1&&allRelations.indexOf(key)===-1&&key!=="id")
-            ob[key]=undefined;
+    let objs = await ret.getMany();
+    if (objs && onlyColumns) {
+      objs.forEach((ob) => {
+        for (var key in ob) {
+          if (onlyColumns.indexOf(key) === -1 && allRelations.indexOf(key) === -1 && key !== "id")
+            ob[key] = undefined;
         }
       });
     }
     return objs;
     // return await this.connection().manager.find(entityClass, p1);
   }
-  private resolveWildcharInRelations(classname,relation:string[]):string[]{
-    var ret=[];
-    if(!relation)
-            return ret;
-    for(let r=0;r<relation.length;r++){
-      if(relation[r]==="*"){
+  private resolveWildcharInRelations(classname, relation: string[]): string[] {
+    var ret = [];
+    if (!relation)
+      return ret;
+    for (let r = 0; r < relation.length; r++) {
+      if (relation[r] === "*") {
         var vdata = getConnection().getMetadata(classes.getClass(classname));
         for (var re = 0; re < vdata.relations.length; re++) {
-          var s=vdata.relations[re].propertyName;
-          if(ret.indexOf(s)===-1)
+          var s = vdata.relations[re].propertyName;
+          if (ret.indexOf(s) === -1)
             ret.push(s);
         }
-      }else
-       ret.push(relation[r]);
+      } else
+        ret.push(relation[r]);
     }
     return ret;
   }
-  public async createUser(context:Context, username: string, password: string): Promise<User> {
+  public async createUser(context: Context, username: string, password: string): Promise<User> {
     //var hh=getConnection().manager.findOne(User,{ email: username });
     if (await getConnection().manager.findOne(User, { email: username }) !== undefined) {
       throw new Error("User already exists");
@@ -460,12 +461,12 @@ export class DBManager {
         resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
       });
     })*/
-    await (await DBManager.get()).save(context,user);
+    await (await DBManager.get()).save(context, user);
     delete user.password;
     return user;
   }
 
-  async getUser(context:Context, user: string, password) {
+  async getUser(context: Context, user: string, password) {
 
     /* const users = await this.connection().getRepository(User)
      .createQueryBuilder()
@@ -504,7 +505,7 @@ export class DBManager {
     }
     return undefined;
   }
-  async checkParentRight(context:Context, entityClass, ids: any[]): Promise<boolean> {
+  async checkParentRight(context: Context, entityClass, ids: any[]): Promise<boolean> {
 
     var clname = classes.getClassName(entityClass);
     var cl = classes.getClass(clname);
@@ -516,7 +517,7 @@ export class DBManager {
     ret = relations.join(ret);
     ret.andWhere("me.id IN (:...ids)", { ids: ids });
     if (!context.request.user.isAdmin)
-      ret = await relations.addParentRightDestriction(context,ret);
+      ret = await relations.addParentRightDestriction(context, ret);
     var tt = ret.getSql();
 
     var test = await ret.getCount();
@@ -619,7 +620,7 @@ class RelationInfo {
    * add an andWhere to the sql-Query to check the parent rights
    * @param builder 
    */
-  async addParentRightDestriction<Entity>(context:Context, builder: SelectQueryBuilder<Entity>): Promise<SelectQueryBuilder<Entity>> {
+  async addParentRightDestriction<Entity>(context: Context, builder: SelectQueryBuilder<Entity>): Promise<SelectQueryBuilder<Entity>> {
     var username = "a@b.com";
     var ret = builder;
     //first we get the sql from User-Rights we had to check 

@@ -33,8 +33,11 @@ export class Server extends RemoteObject {
             return;
         var ret = {};
         for (var mod in jassi.modules) {
-            if (jassi.modules[mod].endsWith(".js")||jassi.modules[mod].indexOf(".js?")>-1) {
-                var code = await $.ajax({ url: jassi.modules[mod].replace(".js",".js.map"), dataType: "text" })
+            if (jassi.modules[mod].endsWith(".js") || jassi.modules[mod].indexOf(".js?") > -1) {
+                let mapname = jassi.modules[mod].split("?")[0] + ".map";
+                if (jassi.modules[mod].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + jassi.modules[mod].split("?")[1];
+                var code = await $.ajax({ url: mapname, dataType: "text" })
                 var data = JSON.parse(code);
                 var files = data.sources;
                 for (let x = 0; x < files.length; x++) {
@@ -144,11 +147,14 @@ export class Server extends RemoteObject {
             if (Server.filesInMap[fileName]) {
                 //perhabs the files ar in localserver?
                 var Filessystem = classes.getClass("jassi_localserver.Filessystem");
-                if (Filessystem && (await new Filessystem().loadFileEntry(fileName)!==undefined)) {
+                if (Filessystem && (await new Filessystem().loadFileEntry(fileName) !== undefined)) {
                     //use ajax
                 } else {
                     var found = Server.filesInMap[fileName];
-                    var code = await this.loadFile(jassi.modules[found.modul].replace(".js",".js.map"), context);
+                    let mapname = jassi.modules[found.modul].split("?")[0] + ".map";
+                    if (jassi.modules[found.modul].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + jassi.modules[found.modul].split("?")[1];
+                    var code = await this.loadFile(mapname, context);
                     var data = JSON.parse(code).sourcesContent[found.id];
                     return data;
                 }

@@ -223,10 +223,11 @@ let DBManager = DBManager_1 = class DBManager {
         //@ts-ignore
         var ret = await this.connection().manager.insert(obj.constructor, obj);
         //save also relations
-        ret = await this.save(context, obj);
-        return ret;
+        let retob = await this.save(context, obj);
+        return retob === null || retob === void 0 ? void 0 : retob.id;
     }
     async save(context, entity, options) {
+        var _a;
         await this._checkParentRightsForSave(context, entity);
         if (Classes_1.classes.getClassName(entity) === "jassi.remote.security.User" && entity.password !== undefined) {
             entity.password = await new Promise((resolve) => {
@@ -243,9 +244,10 @@ let DBManager = DBManager_1 = class DBManager {
             return this.addSaveTransaction(context, entity);
         }
         var ret = await this.connection().manager.save(entity, options);
-        delete entity.password;
-        delete ret["password"];
-        return ret;
+        //delete entity.password;
+        //delete ret["password"];
+        //@ts-ignore
+        return (_a = ret) === null || _a === void 0 ? void 0 : _a.id;
     }
     async _checkParentRightsForSave(context, entity) {
         if (context.request.user.isAdmin)

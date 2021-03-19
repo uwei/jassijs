@@ -125,8 +125,8 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
                 }
                 cl[this.id] = this; //Update cache on save
                 var newob = this._replaceObjectWithId(this);
-                var h = await this.call(newob, this.save, context);
-                this.id = h.id;
+                var id = await this.call(newob, this.save, context);
+                this.id = id;
                 return this;
             }
             else {

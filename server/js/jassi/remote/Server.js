@@ -38,7 +38,10 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         var ret = {};
         for (var mod in Jassi_1.default.modules) {
             if (Jassi_1.default.modules[mod].endsWith(".js") || Jassi_1.default.modules[mod].indexOf(".js?") > -1) {
-                var code = await $.ajax({ url: Jassi_1.default.modules[mod].replace(".js", ".js.map"), dataType: "text" });
+                let mapname = Jassi_1.default.modules[mod].split("?")[0] + ".map";
+                if (Jassi_1.default.modules[mod].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + Jassi_1.default.modules[mod].split("?")[1];
+                var code = await $.ajax({ url: mapname, dataType: "text" });
                 var data = JSON.parse(code);
                 var files = data.sources;
                 for (let x = 0; x < files.length; x++) {
@@ -153,7 +156,10 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                 }
                 else {
                     var found = Server_1.filesInMap[fileName];
-                    var code = await this.loadFile(Jassi_1.default.modules[found.modul].replace(".js", ".js.map"), context);
+                    let mapname = Jassi_1.default.modules[found.modul].split("?")[0] + ".map";
+                    if (Jassi_1.default.modules[found.modul].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + Jassi_1.default.modules[found.modul].split("?")[1];
+                    var code = await this.loadFile(mapname, context);
                     var data = JSON.parse(code).sourcesContent[found.id];
                     return data;
                 }

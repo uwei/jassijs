@@ -15,7 +15,7 @@ exports.default={
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
-		"date": 1615492360475,
+		"date": 1616194195148,
 		"jassi.remote.DBObject": {}
 	},
 	"jassi/remote/DBObjectQuery.ts": {
@@ -94,7 +94,7 @@ exports.default={
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1615987582181,
+		"date": 1616191186093,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -105,7 +105,7 @@ exports.default={
 		"date": 1613330043874
 	},
 	"jassi/server/DBManager.ts": {
-		"date": 1616091637880,
+		"date": 1616194148911,
 		"jassi_localserver.DBManager": {}
 	},
 	"jassi/server/DoRemoteProtocol.ts": {
