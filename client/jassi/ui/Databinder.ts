@@ -4,6 +4,9 @@ import { InvisibleComponent } from "jassi/ui/InvisibleComponent";
 import { Component, $UIComponent } from "jassi/ui/Component";
 import { $Class } from "jassi/remote/Jassi";
 import { DataComponent } from "jassi/ui/DataComponent";
+import {db}  from "jassi/remote/Database";
+import { classes } from "jassi/remote/Classes";
+
 
 
 @$UIComponent({ fullPath: "common/Databinder", icon: "mdi mdi-connection" })
@@ -92,8 +95,8 @@ export class Databinder extends InvisibleComponent {
 
             var test = this._getter[x](this.components[x]);
 
-            if (this._properties[x] === property && test != val&&this.components[x]!==component) {
-                
+            if (this._properties[x] === property && test != val && this.components[x] !== component) {
+
                 this._setter[x](this.components[x], val);
             }
         }
@@ -148,13 +151,42 @@ export class Databinder extends InvisibleComponent {
         } else
             this.toForm(obj);
     }
-   
+
     /**
      * binds the object to all added components
      * @param {object} obj - the object to bind
      */
     toForm(obj) {
+        class PropertSetter {
+            relations:string[]=[];
+            userObject;
+            todo:any[]=[];
+            setProperty(setter,comp:Component,property:string){
+               
+                setter(comp, this.userObject[property]);
+
+                var def=db.getMetadata(obj.constructor);
+                var _this=this;
+                if(def&&def[property]&&(def[property].ManyToOne||def[property].ManyToMany||def[property].OneToOne||def[property].OneToMany)){
+                         if(this.relations.indexOf(property)===-1)
+                               this.relations.push(property); 
+                               this.todo.push(()=>setter(comp, _this.userObject[property]));
+                                  
+                 }
+
+            }
+            async finalize(){
+                if(this.relations.length>0){
+                    await this.userObject.constructor.findOne({onlyColumns:[],id: this.userObject.id, relations: this.relations})
+                }
+                this.todo.forEach((func)=>{
+                    func();
+                })
+            }
+        }
         this.userObject = obj;
+        var setter=new PropertSetter();
+        setter.userObject=obj;
         for (var x = 0; x < this.components.length; x++) {
             var comp = this.components[x];
             var prop = this._properties[x];
@@ -170,14 +202,15 @@ export class Databinder extends InvisibleComponent {
                     if (oldValue !== undefined)
                         sfunc(comp, undefined);
                 } else {
-                    if (oldValue !== this.userObject[prop]) {
-                        sfunc(comp, this.userObject[prop]);
+                    var propValue = this.userObject[prop];
+                    if (oldValue !== propValue||propValue===undefined) {
+                        setter.setProperty(sfunc,comp,prop,propValue);
+                        //sfunc(comp, propValue);
                     }
                 }
             }
-            //var sfunc=this.setter[x];
-            //this._toForm(prop,comp);
         }
+        setter.finalize();
     }
     /**
      * gets the objectproperties from all added components

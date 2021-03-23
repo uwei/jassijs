@@ -56,5 +56,5 @@ export class Database{
     }
 }
 //@ts-ignore
-var db=new Database();
+var db:Database=new Database();
 export {db};

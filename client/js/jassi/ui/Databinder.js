@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Jassi"], function (require, exports, InvisibleComponent_1, Component_1, Jassi_1) {
+define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/remote/Database"], function (require, exports, InvisibleComponent_1, Component_1, Jassi_1, Database_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Databinder = void 0;
@@ -144,7 +144,33 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
          * @param {object} obj - the object to bind
          */
         toForm(obj) {
+            class PropertSetter {
+                constructor() {
+                    this.relations = [];
+                    this.todo = [];
+                }
+                setProperty(setter, comp, property) {
+                    setter(comp, this.userObject[property]);
+                    var def = Database_1.db.getMetadata(obj.constructor);
+                    var _this = this;
+                    if (def && def[property] && (def[property].ManyToOne || def[property].ManyToMany || def[property].OneToOne || def[property].OneToMany)) {
+                        if (this.relations.indexOf(property) === -1)
+                            this.relations.push(property);
+                        this.todo.push(() => setter(comp, _this.userObject[property]));
+                    }
+                }
+                async finalize() {
+                    if (this.relations.length > 0) {
+                        await this.userObject.constructor.findOne({ onlyColumns: [], id: this.userObject.id, relations: this.relations });
+                    }
+                    this.todo.forEach((func) => {
+                        func();
+                    });
+                }
+            }
             this.userObject = obj;
+            var setter = new PropertSetter();
+            setter.userObject = obj;
             for (var x = 0; x < this.components.length; x++) {
                 var comp = this.components[x];
                 var prop = this._properties[x];
@@ -162,14 +188,15 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
                             sfunc(comp, undefined);
                     }
                     else {
-                        if (oldValue !== this.userObject[prop]) {
-                            sfunc(comp, this.userObject[prop]);
+                        var propValue = this.userObject[prop];
+                        if (oldValue !== propValue || propValue === undefined) {
+                            setter.setProperty(sfunc, comp, prop, propValue);
+                            //sfunc(comp, propValue);
                         }
                     }
                 }
-                //var sfunc=this.setter[x];
-                //this._toForm(prop,comp);
             }
+            setter.finalize();
         }
         /**
          * gets the objectproperties from all added components
