@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "jassi/ui/Calendar", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Orders", "jassi/ui/DBObjectView"], function (require, exports, Calendar_1, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Textbox_1, Jassi_1, Property_1, Orders_1, DBObjectView_1) {
     "use strict";
-    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.OrdersView = void 0;
     let OrdersView = class OrdersView extends DBObjectView_1.DBObjectView {
@@ -161,7 +160,7 @@ define(["require", "exports", "jassi/ui/Calendar", "jassi/ui/ObjectChooser", "ja
     };
     __decorate([
         Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Orders_1.Orders !== "undefined" && Orders_1.Orders) === "function" ? _a : Object)
+        __metadata("design:type", Orders_1.Orders)
     ], OrdersView.prototype, "value", void 0);
     OrdersView = __decorate([
         DBObjectView_1.$DBObjectView({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text" }),

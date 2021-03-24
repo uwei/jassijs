@@ -366,7 +366,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Databinder.ts": {
-		"date": 1616529821288,
+		"date": 1616613103911,
 		"jassi.ui.Databinder": {
 			"$UIComponent": [
 				{

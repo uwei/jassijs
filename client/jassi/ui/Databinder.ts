@@ -4,7 +4,7 @@ import { InvisibleComponent } from "jassi/ui/InvisibleComponent";
 import { Component, $UIComponent } from "jassi/ui/Component";
 import { $Class } from "jassi/remote/Jassi";
 import { DataComponent } from "jassi/ui/DataComponent";
-import {db}  from "jassi/remote/Database";
+import { db } from "jassi/remote/Database";
 import { classes } from "jassi/remote/Classes";
 
 
@@ -71,9 +71,11 @@ export class Databinder extends InvisibleComponent {
             this._onChange.push(onChange);
 
         if (this.userObject !== undefined) {
-            var pos = this._properties.indexOf(property);
-            let setter = this._setter[pos];
-            setter(component, this.userObject[property]);
+            var acc=new PropertyAccessor();
+            acc.userObject=this.userObject;
+            let setter = this._setter[this._setter.length-1];
+            acc.setProperty(setter,component,property,undefined);
+            acc.finalizeSetProperty();
         }
         let _this = this;
         if (component[this._onChange[this._onChange.length - 1]]) {
@@ -157,36 +159,10 @@ export class Databinder extends InvisibleComponent {
      * @param {object} obj - the object to bind
      */
     toForm(obj) {
-        class PropertSetter {
-            relations:string[]=[];
-            userObject;
-            todo:any[]=[];
-            setProperty(setter,comp:Component,property:string){
-               
-                setter(comp, this.userObject[property]);
-
-                var def=db.getMetadata(obj.constructor);
-                var _this=this;
-                if(def&&def[property]&&(def[property].ManyToOne||def[property].ManyToMany||def[property].OneToOne||def[property].OneToMany)){
-                         if(this.relations.indexOf(property)===-1)
-                               this.relations.push(property); 
-                               this.todo.push(()=>setter(comp, _this.userObject[property]));
-                                  
-                 }
-
-            }
-            async finalize(){
-                if(this.relations.length>0){
-                    await this.userObject.constructor.findOne({onlyColumns:[],id: this.userObject.id, relations: this.relations})
-                }
-                this.todo.forEach((func)=>{
-                    func();
-                })
-            }
-        }
+      
         this.userObject = obj;
-        var setter=new PropertSetter();
-        setter.userObject=obj;
+        var setter = new PropertyAccessor();
+        setter.userObject = obj;
         for (var x = 0; x < this.components.length; x++) {
             var comp = this.components[x];
             var prop = this._properties[x];
@@ -202,15 +178,13 @@ export class Databinder extends InvisibleComponent {
                     if (oldValue !== undefined)
                         sfunc(comp, undefined);
                 } else {
-                    var propValue = this.userObject[prop];
-                    if (oldValue !== propValue||propValue===undefined) {
-                        setter.setProperty(sfunc,comp,prop,propValue);
-                        //sfunc(comp, propValue);
-                    }
+
+                    setter.setProperty(sfunc, comp, prop, oldValue);
+
                 }
             }
         }
-        setter.finalize();
+        setter.finalizeSetProperty();
     }
     /**
      * gets the objectproperties from all added components
@@ -242,7 +216,7 @@ export class Databinder extends InvisibleComponent {
                 if (comp["converter"] !== undefined) {
                     test = comp["converter"].stringToObject(test);
                 }
-                this.userObject[prop] = test;
+                new PropertyAccessor().setNestedProperty(this.userObject,prop, test);
             }
         }
     }
@@ -278,6 +252,58 @@ export class Databinder extends InvisibleComponent {
         super.destroy();
     }
 }
+  class PropertyAccessor {
+            relations: string[] = [];
+            userObject;
+            todo: any[] = [];
+            getNestedProperty(obj, property: string) {
+                if (obj === undefined)
+                    return undefined;
+                var path = property.split(".");
+                var ret = obj[path[0]];
+                if (ret === undefined)
+                    return undefined;
+                if (path.length === 1)
+                    return ret;
+                else {
+                    path.splice(0, 1);
+                    return this.getNestedProperty(ret, path.join("."));
+                }
+            }
+            setNestedProperty(obj, property: string,value) {
+                var path = property.split(".");
+                path.splice(path.length-1, 1);
+                var ob=obj;
+                if(path.length>0)
+                    ob=this.getNestedProperty(ob,path.join("."));
+                ob[property.split(".")[0]]=value;
+            }
+            setProperty(setter, comp: Component, property: string, oldValue) {
+                var _this = this;
+                var propValue = this.getNestedProperty( this.userObject,property);
+                if (oldValue !== propValue) {
+                    setter(comp, propValue);
+                }
 
+
+                var def = db.getMetadata(this.userObject.constructor);
+
+                if (def && def[property] && (def[property].ManyToOne || def[property].ManyToMany || def[property].OneToOne || def[property].OneToMany)) {
+                    if (this.relations.indexOf(property) === -1)
+                        this.relations.push(property);
+                    this.todo.push(() => setter(comp, _this.getNestedProperty(_this.userObject,property)));
+
+                }
+
+            }
+            async finalizeSetProperty() {
+                if (this.relations.length > 0) {
+                    await this.userObject.constructor.findOne({ onlyColumns: [], id: this.userObject.id, relations: this.relations })
+                }
+                this.todo.forEach((func) => {
+                    func();
+                })
+            }
+        }
    // return CodeEditor.constructor;
 
