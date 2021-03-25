@@ -26,6 +26,16 @@ define("northwind/registry",["require"], function(require) {
 			]
 		}
 	},
+	"northwind/DetailTest.ts": {
+		"date": 1616706620470,
+		"northwind.DetailTest": {
+			"$DBObjectView": [
+				{
+					"classname": "northwind.OrderDetails"
+				}
+			]
+		}
+	},
 	"northwind/EmployeesView.ts": {
 		"date": 1615590101914,
 		"northwind.EmployeesView": {
@@ -39,7 +49,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ImportData.ts": {
-		"date": 1616104719272,
+		"date": 1616705888155,
 		"northwind.ImportData": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"
@@ -88,6 +98,12 @@ define("northwind/registry",["require"], function(require) {
 	"northwind/remote/Employees.ts": {
 		"date": 1615492081804,
 		"northwind.Employees": {
+			"$DBObject": []
+		}
+	},
+	"northwind/remote/OrderDetails.ts": {
+		"date": 1616705980340,
+		"northwind.OrderDetails": {
 			"$DBObject": []
 		}
 	},

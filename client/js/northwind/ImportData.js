@@ -35,9 +35,11 @@ define(["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/re
             s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/suppliers.csv", "northwind.Suppliers", { "id": "supplierid" });
             this.me.IDProtokoll.value += "<br>Suppliers " + s;
             s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid","supplier":"supplierid","category":"categoryid" } );
-            this.me.IDProtokoll.value += "<br>Products " + s;*/
-            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid", "customer": "customerid", "employee": "employeeid" });
-            this.me.IDProtokoll.value += "<br>Orders " + s;
+            this.me.IDProtokoll.value += "<br>Products " + s;
+            s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid","customer":"customerid","employee":"employeeid" });
+            this.me.IDProtokoll.value += "<br>Orders " + s;*/
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/order_details.csv", "northwind.OrderDetails", { "order": "orderid", "product": "productid" });
+            this.me.IDProtokoll.value += "<br>OrderDetails " + s;
             this.me.IDProtokoll.value += "<br>Fertig";
         }
         layout(me) {

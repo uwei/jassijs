@@ -251,7 +251,7 @@ export class DBManager {
     var ret = await this.connection().manager.insert(obj.constructor, obj);
     //save also relations
     let retob = await this.save(context, obj);
-    return  retob?.id;
+    return retob?.id;
   }
   /**
   * Saves all given entities in the database.
@@ -792,15 +792,9 @@ class RelationInfo {
       for (var x = 0; x < all.length; x++) {
         curPath = curPath + (curPath === "" ? "" : ".") + all[x];
         if (this.relations[curPath] === undefined) {
-          //read type
-          var membername = (x === 0 ? curPath : "");
-          if (registry.getMemberData("$CheckParentRight") !== undefined) {
-            var data = registry.getMemberData("$CheckParentRight")[curClassname];
-            for (var key in data) {
-              membername = key;
-            }
-          }
           var vdata = this.dbmanager.connection().getMetadata(classes.getClass(curClassname));
+          //read type
+          var membername = all[x];
           for (var r = 0; r < vdata.relations.length; r++) {
             var rel = vdata.relations[r];
             if (rel.propertyName === membername) {
@@ -812,6 +806,30 @@ class RelationInfo {
                 fullPath: curPath,
                 parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
                 doSelect: doselect
+              }
+            }
+          }
+          //Parentrights
+          membername = "";
+          if (registry.getMemberData("$CheckParentRight") !== undefined) {
+            var data = registry.getMemberData("$CheckParentRight")[curClassname];
+            for (var key in data) {
+              membername = key;
+            }
+          }
+          if (membername !== "") {
+            for (var r = 0; r < vdata.relations.length; r++) {
+              var rel = vdata.relations[r];
+              if (rel.propertyName === membername) {
+                var clname = classes.getClassName(rel.type);
+                var testPR = registry.getData("$ParentRights", clname);
+                this.relations[curPath] = {
+                  className: classes.getClassName(rel.type),
+                  name: membername,
+                  fullPath: curPath,
+                  parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
+                  doSelect: doselect
+                }
               }
             }
           }

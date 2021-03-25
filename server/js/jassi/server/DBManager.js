@@ -695,15 +695,9 @@ class RelationInfo {
             for (var x = 0; x < all.length; x++) {
                 curPath = curPath + (curPath === "" ? "" : ".") + all[x];
                 if (this.relations[curPath] === undefined) {
-                    //read type
-                    var membername = (x === 0 ? curPath : "");
-                    if (Registry_1.default.getMemberData("$CheckParentRight") !== undefined) {
-                        var data = Registry_1.default.getMemberData("$CheckParentRight")[curClassname];
-                        for (var key in data) {
-                            membername = key;
-                        }
-                    }
                     var vdata = this.dbmanager.connection().getMetadata(Classes_1.classes.getClass(curClassname));
+                    //read type
+                    var membername = all[x];
                     for (var r = 0; r < vdata.relations.length; r++) {
                         var rel = vdata.relations[r];
                         if (rel.propertyName === membername) {
@@ -716,6 +710,30 @@ class RelationInfo {
                                 parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
                                 doSelect: doselect
                             };
+                        }
+                    }
+                    //Parentrights
+                    membername = "";
+                    if (Registry_1.default.getMemberData("$CheckParentRight") !== undefined) {
+                        var data = Registry_1.default.getMemberData("$CheckParentRight")[curClassname];
+                        for (var key in data) {
+                            membername = key;
+                        }
+                    }
+                    if (membername !== "") {
+                        for (var r = 0; r < vdata.relations.length; r++) {
+                            var rel = vdata.relations[r];
+                            if (rel.propertyName === membername) {
+                                var clname = Classes_1.classes.getClassName(rel.type);
+                                var testPR = Registry_1.default.getData("$ParentRights", clname);
+                                this.relations[curPath] = {
+                                    className: Classes_1.classes.getClassName(rel.type),
+                                    name: membername,
+                                    fullPath: curPath,
+                                    parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
+                                    doSelect: doselect
+                                };
+                            }
                         }
                     }
                 }

@@ -116,12 +116,11 @@ export class DBObject extends RemoteObject {
 
                 if (cl[this.id] === undefined) {
                     cl[this.id] = this;//must be cached before inserting, so the new properties are introduced to the existing
-                    if (this.isAutoId())
+                    /*if (this.isAutoId())
                         throw new Error("autoid - load the object  before saving or remove id");
-                    else{
-                        //this._createObjectInDB
+                    else{*/
                         return await this.call(this,this._createObjectInDB,context);
-                    }//fails if the Object is saved before loading 
+                    //}//fails if the Object is saved before loading 
                 } else {
                     if (cl[this.id] !== this) {
                         throw new Error("the object must be loaded before save");

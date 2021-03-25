@@ -70,7 +70,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
-		"date": 1616194195148,
+		"date": 1616706104394,
 		"jassi.remote.DBObject": {}
 	},
 	"jassi/remote/DBObjectQuery.ts": {
