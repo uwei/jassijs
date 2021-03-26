@@ -62,7 +62,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.Classes": {}
 	},
 	"jassi/remote/Database.ts": {
-		"date": 1616254517411,
+		"date": 1616788601845,
 		"jassi.remote.Database": {}
 	},
 	"jassi/remote/DBArray.ts": {
@@ -70,7 +70,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.DBArray": {}
 	},
 	"jassi/remote/DBObject.ts": {
-		"date": 1616706104394,
+		"date": 1616787993933,
 		"jassi.remote.DBObject": {}
 	},
 	"jassi/remote/DBObjectQuery.ts": {
@@ -366,7 +366,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Databinder.ts": {
-		"date": 1616613103911,
+		"date": 1616789749132,
 		"jassi.ui.Databinder": {
 			"$UIComponent": [
 				{
@@ -844,7 +844,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1611783871704
 	},
 	"jassi/util/CSVImport.ts": {
-		"date": 1615844053088,
+		"date": 1616788006690,
 		"jassi.util.CSVImport": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"

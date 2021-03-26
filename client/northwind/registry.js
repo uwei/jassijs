@@ -27,7 +27,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/DetailTest.ts": {
-		"date": 1616706620470,
+		"date": 1616779216863,
 		"northwind.DetailTest": {
 			"$DBObjectView": [
 				{
@@ -49,7 +49,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ImportData.ts": {
-		"date": 1616705888155,
+		"date": 1616781051951,
 		"northwind.ImportData": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"

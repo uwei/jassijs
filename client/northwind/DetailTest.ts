@@ -32,6 +32,6 @@ export class DetailTest extends DBObjectView {
 export async function test() {
     var ret = new DetailTest();
    // ret.value.Order.Customer
-    ret["value"] = <OrderDetails>await OrderDetails.findOne({ relations: ["Order","Order.Customer"] });
+    ret["value"] = <OrderDetails>await OrderDetails.findOne();//{ relations: ["Order","Order.Customer"] });
     return ret;
 }

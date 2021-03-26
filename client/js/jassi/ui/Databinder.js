@@ -245,7 +245,7 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
     exports.Databinder = Databinder;
     class PropertyAccessor {
         constructor() {
-            this.relations = [];
+            this.relationsToResolve = [];
             this.todo = [];
         }
         getNestedProperty(obj, property) {
@@ -270,22 +270,50 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
                 ob = this.getNestedProperty(ob, path.join("."));
             ob[property.split(".")[0]] = value;
         }
+        /**
+         * check if relation must be resolved and queue it
+         */
+        testRelation(def, property, propertypath, setter, comp) {
+            var rel = def === null || def === void 0 ? void 0 : def.getRelation(property);
+            var ret = false;
+            if (this.getNestedProperty(this.userObject, propertypath) !== undefined)
+                return ret; //the relation is resolved
+            if (rel) {
+                //the relation should be resolved on finalize
+                if (this.relationsToResolve.indexOf(propertypath) === -1)
+                    this.relationsToResolve.push(propertypath);
+                ret = true;
+            }
+            if (setter && (propertypath.indexOf(".") > -1 || ret))
+                this.todo.push(() => setter(comp, this.getNestedProperty(this.userObject, propertypath)));
+            return ret;
+        }
+        /**
+         * set a nested property and load the db relation if needed
+         */
         setProperty(setter, comp, property, oldValue) {
+            var _a;
             var _this = this;
             var propValue = this.getNestedProperty(this.userObject, property);
             if (oldValue !== propValue) {
                 setter(comp, propValue);
             }
-            var def = Database_1.db.getMetadata(this.userObject.constructor);
-            if (def && def[property] && (def[property].ManyToOne || def[property].ManyToMany || def[property].OneToOne || def[property].OneToMany)) {
-                if (this.relations.indexOf(property) === -1)
-                    this.relations.push(property);
-                this.todo.push(() => setter(comp, _this.getNestedProperty(_this.userObject, property)));
+            let path = property.split(".");
+            let currenttype = this.userObject.constructor;
+            var def = Database_1.db.getMetadata(currenttype);
+            let propertypath = "";
+            for (let x = 0; x < path.length; x++) {
+                propertypath += (propertypath === "" ? "" : ".") + path[x];
+                this.testRelation(def, path[x], propertypath, path.length - 1 === x ? setter : undefined, comp);
+                currenttype = (_a = def.getRelation(path[x])) === null || _a === void 0 ? void 0 : _a.oclass;
+                if (currenttype === undefined)
+                    break;
+                def = Database_1.db.getMetadata(currenttype);
             }
         }
         async finalizeSetProperty() {
-            if (this.relations.length > 0) {
-                await this.userObject.constructor.findOne({ onlyColumns: [], id: this.userObject.id, relations: this.relations });
+            if (this.relationsToResolve.length > 0) {
+                await this.userObject.constructor.findOne({ onlyColumns: [], id: this.userObject.id, relations: this.relationsToResolve });
             }
             this.todo.forEach((func) => {
                 func();

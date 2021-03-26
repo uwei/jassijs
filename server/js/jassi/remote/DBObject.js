@@ -43,7 +43,8 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
         super();
     }
     isAutoId() {
-        var def = Database_1.db.getMetadata(this.constructor);
+        var _a;
+        var def = (_a = Database_1.db.getMetadata(this.constructor)) === null || _a === void 0 ? void 0 : _a.fields;
         return def.id.PrimaryGeneratedColumn !== undefined;
     }
     static getFromCache(classname, id) {

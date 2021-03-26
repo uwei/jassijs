@@ -49,7 +49,7 @@ export class CSVImport extends Panel {
 	async initTableHeaders() {
 		var _this = this;
 		var html = "<option></option>";
-		var meta = db.getMetadata(await classes.loadClass(this.me.select.value));
+		var meta = db.getMetadata(await classes.loadClass(this.me.select.value))?.fields;
 		var lkeys = [];
 		for (var key in meta) {
 			if (key === "this")
@@ -182,7 +182,7 @@ export class CSVImport extends Panel {
 			}
 		}
 		imp.readData(ret);
-		var _meta = db.getMetadata(await classes.loadClass(dbclass));
+		var _meta = db.getMetadata(await classes.loadClass(dbclass))?.fields;
 		var meta = {};
 		for (let k in _meta) {
 			meta[k.toLowerCase()] = k;
@@ -237,7 +237,7 @@ export class CSVImport extends Panel {
 		var Type = classes.getClass(dbclass);
 		//read objects so we can read from cache
 		let nil = await Type["find"]();
-		var meta = db.getMetadata(await classes.loadClass(dbclass));
+		var meta = db.getMetadata(await classes.loadClass(dbclass))?.fields;
 		var members = registry.getMemberData("design:type")[dbclass];
 
 		var allObjects: DBObject[] = [];

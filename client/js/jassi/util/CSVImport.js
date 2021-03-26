@@ -22,9 +22,10 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
             Router_1.router.navigate("#do=jassi.util.CSVImport");
         }
         async initTableHeaders() {
+            var _a;
             var _this = this;
             var html = "<option></option>";
-            var meta = Database_1.db.getMetadata(await Classes_1.classes.loadClass(this.me.select.value));
+            var meta = (_a = Database_1.db.getMetadata(await Classes_1.classes.loadClass(this.me.select.value))) === null || _a === void 0 ? void 0 : _a.fields;
             var lkeys = [];
             for (var key in meta) {
                 if (key === "this")
@@ -143,6 +144,7 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
          * returns the message if succeeded
          */
         static async startImport(urlcsv, dbclass, fieldmapping = undefined, replace = undefined) {
+            var _a;
             var imp = new CSVImport_1();
             var mapping = {};
             let ret = await new Server_1.Server().loadFile(urlcsv);
@@ -152,7 +154,7 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
                 }
             }
             imp.readData(ret);
-            var _meta = Database_1.db.getMetadata(await Classes_1.classes.loadClass(dbclass));
+            var _meta = (_a = Database_1.db.getMetadata(await Classes_1.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
             var meta = {};
             for (let k in _meta) {
                 meta[k.toLowerCase()] = k;
@@ -199,10 +201,11 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
             return await this._doimport(this.data, this.me.select.value, this.me.fromLine.value, assignedfields);
         }
         async _doimport(data, dbclass, fromLine, assignedfields) {
+            var _a;
             var Type = Classes_1.classes.getClass(dbclass);
             //read objects so we can read from cache
             let nil = await Type["find"]();
-            var meta = Database_1.db.getMetadata(await Classes_1.classes.loadClass(dbclass));
+            var meta = (_a = Database_1.db.getMetadata(await Classes_1.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
             var members = Registry_1.default.getMemberData("design:type")[dbclass];
             var allObjects = [];
             var from = fromLine;

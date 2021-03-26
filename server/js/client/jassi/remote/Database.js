@@ -9,11 +9,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.db = exports.Database = void 0;
+exports.db = exports.Database = exports.TypeDef = void 0;
 const Jassi_1 = require("jassi/remote/Jassi");
 const Classes_1 = require("./Classes");
 class TypeDef {
+    constructor() {
+        this.fields = {};
+    }
+    getRelation(fieldname) {
+        var ret = undefined;
+        var test = this.fields[fieldname];
+        for (let key in test) {
+            if (key === "OneToOne" || key === "OneToMany" || key === "ManyToOne" || key === "ManyToMany") {
+                return { type: key, oclass: test[key][0][0]() };
+            }
+        }
+        return ret;
+    }
 }
+exports.TypeDef = TypeDef;
 let Database = class Database {
     constructor() {
         this.typeDef = new Map();
@@ -44,10 +58,10 @@ let Database = class Database {
             this.removeOld(constructor);
         }
         this.decoratorCalls.get(constructor).push([delegate, fieldprops, decoraterprops]);
-        var afield = def[field];
-        if (def[field] === undefined) {
+        var afield = def.fields[field];
+        if (def.fields[field] === undefined) {
             afield = {};
-            def[field] = afield;
+            def.fields[field] = afield;
         }
         afield[decoratername] = fieldprops;
     }

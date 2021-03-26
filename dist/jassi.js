@@ -144,7 +144,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.Classes": {}
             },
             "jassi/remote/Database.ts": {
-                "date": 1615586709418,
+                "date": 1616788601845,
                 "jassi.remote.Database": {}
             },
             "jassi/remote/DBArray.ts": {
@@ -152,7 +152,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.DBArray": {}
             },
             "jassi/remote/DBObject.ts": {
-                "date": 1615492360475,
+                "date": 1616787993933,
                 "jassi.remote.DBObject": {}
             },
             "jassi/remote/DBObjectQuery.ts": {
@@ -231,7 +231,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/remote/Server.ts": {
-                "date": 1615987582181,
+                "date": 1616191186093,
                 "jassi.remote.Server": {}
             },
             "jassi/remote/Transaction.ts": {
@@ -440,7 +440,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.CSSProperties": {}
             },
             "jassi/ui/DatabaseDesigner.ts": {
-                "date": 1613673965699,
+                "date": 1616102745056,
                 "jassi/ui/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -448,7 +448,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Databinder.ts": {
-                "date": 1615589873138,
+                "date": 1616789749132,
                 "jassi.ui.Databinder": {
                     "$UIComponent": [
                         {
@@ -595,7 +595,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/ObjectChooser.ts": {
-                "date": 1615590050176,
+                "date": 1616195924588,
                 "jassi.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -835,7 +835,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Table.ts": {
-                "date": 1614285087403,
+                "date": 1616196145911,
                 "jassi.ui.TableEditorProperties": {},
                 "jassi.ui.Table": {
                     "$UIComponent": [
@@ -926,7 +926,7 @@ define("jassi/registry", ["require"], function (require) {
                 "date": 1611783871704
             },
             "jassi/util/CSVImport.ts": {
-                "date": 1615844053088,
+                "date": 1616788006690,
                 "jassi.util.CSVImport": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -3336,7 +3336,8 @@ define("jassi/remote/DBObject", ["require", "exports", "jassi/remote/Jassi", "ja
             super();
         }
         isAutoId() {
-            var def = Database_1.db.getMetadata(this.constructor);
+            var _a;
+            var def = (_a = Database_1.db.getMetadata(this.constructor)) === null || _a === void 0 ? void 0 : _a.fields;
             return def.id.PrimaryGeneratedColumn !== undefined;
         }
         static getFromCache(classname, id) {
@@ -3404,12 +3405,11 @@ define("jassi/remote/DBObject", ["require", "exports", "jassi/remote/Jassi", "ja
                     }
                     if (cl[this.id] === undefined) {
                         cl[this.id] = this; //must be cached before inserting, so the new properties are introduced to the existing
-                        if (this.isAutoId())
+                        /*if (this.isAutoId())
                             throw new Error("autoid - load the object  before saving or remove id");
-                        else {
-                            //this._createObjectInDB
-                            return await this.call(this, this._createObjectInDB, context);
-                        } //fails if the Object is saved before loading 
+                        else{*/
+                        return await this.call(this, this._createObjectInDB, context);
+                        //}//fails if the Object is saved before loading 
                     }
                     else {
                         if (cl[this.id] !== this) {
@@ -3418,8 +3418,8 @@ define("jassi/remote/DBObject", ["require", "exports", "jassi/remote/Jassi", "ja
                     }
                     cl[this.id] = this; //Update cache on save
                     var newob = this._replaceObjectWithId(this);
-                    var h = await this.call(newob, this.save, context);
-                    this.id = h.id;
+                    var id = await this.call(newob, this.save, context);
+                    this.id = id;
                     return this;
                 }
                 else {
@@ -3554,9 +3554,23 @@ define("jassi/remote/DBObjectQuery", ["require", "exports", "jassi/remote/Classe
 define("jassi/remote/Database", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], function (require, exports, Jassi_13, Classes_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.db = exports.Database = void 0;
+    exports.db = exports.Database = exports.TypeDef = void 0;
     class TypeDef {
+        constructor() {
+            this.fields = {};
+        }
+        getRelation(fieldname) {
+            var ret = undefined;
+            var test = this.fields[fieldname];
+            for (let key in test) {
+                if (key === "OneToOne" || key === "OneToMany" || key === "ManyToOne" || key === "ManyToMany") {
+                    return { type: key, oclass: test[key][0][0]() };
+                }
+            }
+            return ret;
+        }
     }
+    exports.TypeDef = TypeDef;
     let Database = class Database {
         constructor() {
             this.typeDef = new Map();
@@ -3587,10 +3601,10 @@ define("jassi/remote/Database", ["require", "exports", "jassi/remote/Jassi", "ja
                 this.removeOld(constructor);
             }
             this.decoratorCalls.get(constructor).push([delegate, fieldprops, decoraterprops]);
-            var afield = def[field];
-            if (def[field] === undefined) {
+            var afield = def.fields[field];
+            if (def.fields[field] === undefined) {
                 afield = {};
-                def[field] = afield;
+                def.fields[field] = afield;
             }
             afield[decoratername] = fieldprops;
         }
@@ -4573,7 +4587,10 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
             var ret = {};
             for (var mod in Jassi_17.default.modules) {
                 if (Jassi_17.default.modules[mod].endsWith(".js") || Jassi_17.default.modules[mod].indexOf(".js?") > -1) {
-                    var code = await $.ajax({ url: Jassi_17.default.modules[mod].replace(".js", ".js.map"), dataType: "text" });
+                    let mapname = Jassi_17.default.modules[mod].split("?")[0] + ".map";
+                    if (Jassi_17.default.modules[mod].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + Jassi_17.default.modules[mod].split("?")[1];
+                    var code = await $.ajax({ url: mapname, dataType: "text" });
                     var data = JSON.parse(code);
                     var files = data.sources;
                     for (let x = 0; x < files.length; x++) {
@@ -4688,7 +4705,10 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
                     }
                     else {
                         var found = Server_2.filesInMap[fileName];
-                        var code = await this.loadFile(Jassi_17.default.modules[found.modul].replace(".js", ".js.map"), context);
+                        let mapname = Jassi_17.default.modules[found.modul].split("?")[0] + ".map";
+                        if (Jassi_17.default.modules[found.modul].indexOf(".js?") > -1)
+                            mapname = mapname + "?" + Jassi_17.default.modules[found.modul].split("?")[1];
+                        var code = await this.loadFile(mapname, context);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;
                     }
@@ -7930,6 +7950,7 @@ define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", 
             if (res.button === "OK") {
                 this.currentClass = new DatabaseSchema_7.DatabaseClass();
                 this.currentClass.name = res.text;
+                this.currentClass.parent = this.currentSchema;
                 var f = new DatabaseSchema_7.DatabaseField();
                 f.name = "id";
                 f.type = "int";
@@ -7991,7 +8012,7 @@ define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", 
     }
     exports.test = test;
 });
-define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Jassi"], function (require, exports, InvisibleComponent_2, Component_10, Jassi_45) {
+define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/remote/Database"], function (require, exports, InvisibleComponent_2, Component_10, Jassi_45, Database_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Databinder = void 0;
@@ -8046,9 +8067,11 @@ define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponen
             else
                 this._onChange.push(onChange);
             if (this.userObject !== undefined) {
-                var pos = this._properties.indexOf(property);
-                let setter = this._setter[pos];
-                setter(component, this.userObject[property]);
+                var acc = new PropertyAccessor();
+                acc.userObject = this.userObject;
+                let setter = this._setter[this._setter.length - 1];
+                acc.setProperty(setter, component, property, undefined);
+                acc.finalizeSetProperty();
             }
             let _this = this;
             if (component[this._onChange[this._onChange.length - 1]]) {
@@ -8129,6 +8152,8 @@ define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponen
          */
         toForm(obj) {
             this.userObject = obj;
+            var setter = new PropertyAccessor();
+            setter.userObject = obj;
             for (var x = 0; x < this.components.length; x++) {
                 var comp = this.components[x];
                 var prop = this._properties[x];
@@ -8146,14 +8171,11 @@ define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponen
                             sfunc(comp, undefined);
                     }
                     else {
-                        if (oldValue !== this.userObject[prop]) {
-                            sfunc(comp, this.userObject[prop]);
-                        }
+                        setter.setProperty(sfunc, comp, prop, oldValue);
                     }
                 }
-                //var sfunc=this.setter[x];
-                //this._toForm(prop,comp);
             }
+            setter.finalizeSetProperty();
         }
         /**
          * gets the objectproperties from all added components
@@ -8185,7 +8207,7 @@ define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponen
                     if (comp["converter"] !== undefined) {
                         test = comp["converter"].stringToObject(test);
                     }
-                    this.userObject[prop] = test;
+                    new PropertyAccessor().setNestedProperty(this.userObject, prop, test);
                 }
             }
         }
@@ -8226,6 +8248,83 @@ define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponen
         __metadata("design:paramtypes", [])
     ], Databinder);
     exports.Databinder = Databinder;
+    class PropertyAccessor {
+        constructor() {
+            this.relationsToResolve = [];
+            this.todo = [];
+        }
+        getNestedProperty(obj, property) {
+            if (obj === undefined)
+                return undefined;
+            var path = property.split(".");
+            var ret = obj[path[0]];
+            if (ret === undefined)
+                return undefined;
+            if (path.length === 1)
+                return ret;
+            else {
+                path.splice(0, 1);
+                return this.getNestedProperty(ret, path.join("."));
+            }
+        }
+        setNestedProperty(obj, property, value) {
+            var path = property.split(".");
+            path.splice(path.length - 1, 1);
+            var ob = obj;
+            if (path.length > 0)
+                ob = this.getNestedProperty(ob, path.join("."));
+            ob[property.split(".")[0]] = value;
+        }
+        /**
+         * check if relation must be resolved and queue it
+         */
+        testRelation(def, property, propertypath, setter, comp) {
+            var rel = def === null || def === void 0 ? void 0 : def.getRelation(property);
+            var ret = false;
+            if (this.getNestedProperty(this.userObject, propertypath) !== undefined)
+                return ret; //the relation is resolved
+            if (rel) {
+                //the relation should be resolved on finalize
+                if (this.relationsToResolve.indexOf(propertypath) === -1)
+                    this.relationsToResolve.push(propertypath);
+                ret = true;
+            }
+            if (setter && (propertypath.indexOf(".") > -1 || ret))
+                this.todo.push(() => setter(comp, this.getNestedProperty(this.userObject, propertypath)));
+            return ret;
+        }
+        /**
+         * set a nested property and load the db relation if needed
+         */
+        setProperty(setter, comp, property, oldValue) {
+            var _a;
+            var _this = this;
+            var propValue = this.getNestedProperty(this.userObject, property);
+            if (oldValue !== propValue) {
+                setter(comp, propValue);
+            }
+            let path = property.split(".");
+            let currenttype = this.userObject.constructor;
+            var def = Database_2.db.getMetadata(currenttype);
+            let propertypath = "";
+            for (let x = 0; x < path.length; x++) {
+                propertypath += (propertypath === "" ? "" : ".") + path[x];
+                this.testRelation(def, path[x], propertypath, path.length - 1 === x ? setter : undefined, comp);
+                currenttype = (_a = def.getRelation(path[x])) === null || _a === void 0 ? void 0 : _a.oclass;
+                if (currenttype === undefined)
+                    break;
+                def = Database_2.db.getMetadata(currenttype);
+            }
+        }
+        async finalizeSetProperty() {
+            if (this.relationsToResolve.length > 0) {
+                await this.userObject.constructor.findOne({ onlyColumns: [], id: this.userObject.id, relations: this.relationsToResolve });
+            }
+            this.todo.forEach((func) => {
+                func();
+            });
+        }
+    }
 });
 // return CodeEditor.constructor;
 define("jassi/ui/DesignDummy", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Image", "jassi/ui/MenuItem"], function (require, exports, Jassi_46, Image_1, MenuItem_3) {
@@ -9862,6 +9961,8 @@ define("jassi/ui/ObjectChooser", ["require", "exports", "jassi/remote/Jassi", "j
                        
                     } */
                 });
+                if (me.IDTable.table.getSelectedRows().length > 0)
+                    me.IDTable.table.scrollToRow(me.IDTable.table.getSelectedRows()[0]);
                 _this.callEvent("showDialog", event);
             });
             this.icon = "mdi mdi-glasses";
@@ -9899,7 +10000,7 @@ define("jassi/ui/ObjectChooser", ["require", "exports", "jassi/remote/Jassi", "j
             });
             me.IDSearch.height = 15;
             me.IDTable.width = "100%";
-            me.IDTable.height = "calc(100% - 100px)";
+            me.IDTable.height = "calc(100% - 10px)";
             setTimeout(() => { me.IDSearch.focus(); }, 200);
             setTimeout(() => { me.IDSearch.focus(); }, 1000);
             me.IDCancel.onclick(function (event) {
@@ -12016,6 +12117,27 @@ define("jassi/ui/Table", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/
          * @param {boolean} [doSelect] - if true the first entry is selected
          */
         search(field, value, doSelect) {
+            //custom filter function
+            function matchAny(data, filterParams) {
+                //data - the data for the row being filtered
+                //filterParams - params object passed to the filter
+                var _a;
+                var match = false;
+                for (var key in data) {
+                    if (filterParams.value === undefined || filterParams.value === "" || ((_a = data[key]) === null || _a === void 0 ? void 0 : _a.toString().toLowerCase().indexOf(filterParams.value.toLowerCase())) > -1) {
+                        match = true;
+                    }
+                }
+                return match;
+            }
+            //set filter to custom function
+            this.table.setFilter(matchAny, { value: value });
+            if (doSelect) {
+                //@ts-ignore
+                this.table.deselectRow(this.table.getSelectedRows());
+                //@ts-ignore
+                this.table.selectRow(this.table.getRowFromPosition(0, true));
+            }
         }
         destroy() {
             // this.tree = undefined;
@@ -15077,7 +15199,7 @@ define("jassi/ui/converters/StringConverter", ["require", "exports", "jassi/ui/c
     ], StringConverter);
     exports.StringConverter = StringConverter;
 });
-define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse", "jassi/remote/Database", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/remote/DBObject", "jassi/base/Actions", "jassi/base/Router", "jassi/remote/Server", "jassi/remote/Transaction"], function (require, exports, Upload_1, Button_12, NumberConverter_2, Textbox_20, BoxPanel_8, Select_7, Table_5, Jassi_88, Panel_22, papaparse_1, Database_2, Registry_24, Classes_28, DBObject_7, Actions_14, Router_7, Server_4, Transaction_1) {
+define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse", "jassi/remote/Database", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/remote/DBObject", "jassi/base/Actions", "jassi/base/Router", "jassi/remote/Server", "jassi/remote/Transaction"], function (require, exports, Upload_1, Button_12, NumberConverter_2, Textbox_20, BoxPanel_8, Select_7, Table_5, Jassi_88, Panel_22, papaparse_1, Database_3, Registry_24, Classes_28, DBObject_7, Actions_14, Router_7, Server_4, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -15092,9 +15214,10 @@ define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/
             Router_7.router.navigate("#do=jassi.util.CSVImport");
         }
         async initTableHeaders() {
+            var _a;
             var _this = this;
             var html = "<option></option>";
-            var meta = Database_2.db.getMetadata(await Classes_28.classes.loadClass(this.me.select.value));
+            var meta = (_a = Database_3.db.getMetadata(await Classes_28.classes.loadClass(this.me.select.value))) === null || _a === void 0 ? void 0 : _a.fields;
             var lkeys = [];
             for (var key in meta) {
                 if (key === "this")
@@ -15213,6 +15336,7 @@ define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/
          * returns the message if succeeded
          */
         static async startImport(urlcsv, dbclass, fieldmapping = undefined, replace = undefined) {
+            var _a;
             var imp = new CSVImport_1();
             var mapping = {};
             let ret = await new Server_4.Server().loadFile(urlcsv);
@@ -15222,7 +15346,7 @@ define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/
                 }
             }
             imp.readData(ret);
-            var _meta = Database_2.db.getMetadata(await Classes_28.classes.loadClass(dbclass));
+            var _meta = (_a = Database_3.db.getMetadata(await Classes_28.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
             var meta = {};
             for (let k in _meta) {
                 meta[k.toLowerCase()] = k;
@@ -15269,10 +15393,11 @@ define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/
             return await this._doimport(this.data, this.me.select.value, this.me.fromLine.value, assignedfields);
         }
         async _doimport(data, dbclass, fromLine, assignedfields) {
+            var _a;
             var Type = Classes_28.classes.getClass(dbclass);
             //read objects so we can read from cache
             let nil = await Type["find"]();
-            var meta = Database_2.db.getMetadata(await Classes_28.classes.loadClass(dbclass));
+            var meta = (_a = Database_3.db.getMetadata(await Classes_28.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
             var members = Registry_24.default.getMemberData("design:type")[dbclass];
             var allObjects = [];
             var from = fromLine;
@@ -15452,7 +15577,7 @@ define("jassi/util/Cookies", ["require", "exports", "jassi/ext/js-cookie"], func
     var Cookies = js_cookie_1.default;
     exports.Cookies = Cookies;
 });
-define("jassi/util/DatabaseSchema", ["require", "exports", "jassi/remote/Database", "jassi/remote/Classes"], function (require, exports, Database_3, Classes_29) {
+define("jassi/util/DatabaseSchema", ["require", "exports", "jassi/remote/Database", "jassi/remote/Classes"], function (require, exports, Database_4, Classes_29) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
@@ -15463,7 +15588,7 @@ define("jassi/util/DatabaseSchema", ["require", "exports", "jassi/remote/Databas
             var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
             var clname = Classes_29.classes.getClassName(con);
             var field = fargs.length == 1 ? "this" : fargs[1];
-            Database_3.db._setMetadata(con, field, decoratername, args, fargs, undefined);
+            Database_4.db._setMetadata(con, field, decoratername, args, fargs, undefined);
         };
     }
     function Entity(...param) {

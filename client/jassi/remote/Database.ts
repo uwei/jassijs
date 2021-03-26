@@ -1,9 +1,19 @@
 
 import jassi, { $Class } from "jassi/remote/Jassi";
 import { classes } from "./Classes";
-class TypeDef{
-	[fieldname:string]:{[decorater:string]:any[]}
-    
+export class TypeDef{
+	fields:{[fieldname:string]:{[decorater:string]:any[]}}={};
+    getRelation(fieldname):{type:string,oclass}{
+        var ret=undefined;
+        var test=this.fields[fieldname];
+        for(let key in test){
+            if(key==="OneToOne"||key==="OneToMany"||key==="ManyToOne"||key==="ManyToMany"){
+                return {type:key,oclass:test[key][0][0]()};
+                
+            }
+        }
+        return ret;
+    }
 }
 @$Class("jassi.remote.Database")
 export class Database{
@@ -37,10 +47,10 @@ export class Database{
             this.removeOld(constructor);
         }
         this.decoratorCalls.get(constructor).push([delegate,fieldprops,decoraterprops]);
-        var afield=def[field];
-        if(def[field]===undefined){
+        var afield=def.fields[field];
+        if(def.fields[field]===undefined){
         	afield={};
-        	def[field]=afield;
+        	def.fields[field]=afield;
         }
         afield[decoratername]=fieldprops;
     }

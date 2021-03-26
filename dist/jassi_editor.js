@@ -2780,7 +2780,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
-                "date": 1615988313947,
+                "date": 1616191203135,
                 "jassi_editor.CodeEditor": {}
             },
             "jassi_editor/CodeEditorInvisibleComponents.ts": {
@@ -2825,7 +2825,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "date": 1613148168781
             },
             "jassi_editor/util/Parser.ts": {
-                "date": 1614889218718,
+                "date": 1616105244530,
                 "jassi_editor.base.Parser": {}
             },
             "jassi_editor/util/Resizer.ts": {
@@ -3906,7 +3906,7 @@ define("jassi_editor/util/Parser", ["require", "exports", "jassi/remote/Jassi", 
                     }
                     else {
                         var pos = statements.length;
-                        if (statements[statements.length - 1].getText().startsWith("return "))
+                        if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
                             pos--;
                         statements.splice(pos, 0, newExpression);
                     }

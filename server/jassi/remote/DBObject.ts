@@ -45,7 +45,7 @@ export class DBObject extends RemoteObject {
         super();
     }
     public isAutoId() {
-        var def = db.getMetadata(this.constructor);
+        var def = db.getMetadata(this.constructor)?.fields;
         return def.id.PrimaryGeneratedColumn !== undefined;
     }
     public static getFromCache(classname:string,id:number|string):DBObject {

@@ -39,7 +39,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "northw
     async function test() {
         var ret = new DetailTest();
         // ret.value.Order.Customer
-        ret["value"] = await OrderDetails_1.OrderDetails.findOne({ relations: ["Order", "Order.Customer"] });
+        ret["value"] = await OrderDetails_1.OrderDetails.findOne(); //{ relations: ["Order","Order.Customer"] });
         return ret;
     }
     exports.test = test;
