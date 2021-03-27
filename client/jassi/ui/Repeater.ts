@@ -7,7 +7,10 @@ import {Databinder} from "jassi/ui/Databinder";
 import {Component,  $UIComponent } from "jassi/ui/Component";
 import {Property,  $Property } from "jassi/ui/Property";
 import { $Class } from "jassi/remote/Jassi";
-class DesignPanel extends Panel {
+
+@$UIComponent({ editableChildComponents: ["databinder"]})
+@$Class("jassi.ui.RepeaterDesignPanel")
+class RepeaterDesignPanel extends Panel {
     databinder: Databinder;
     me;
 }
@@ -23,7 +26,7 @@ export class Repeater extends Panel {
     _isCreated: boolean;
     _designer: Component;
     _databinder: Databinder;
-    design: DesignPanel;
+    design: RepeaterDesignPanel;
     me;
     /**
      * can be used for controls in repeating group
@@ -41,7 +44,7 @@ export class Repeater extends Panel {
 
         super();
         this._autocommit = false;
-        this.design = new DesignPanel();
+        this.design = new RepeaterDesignPanel();
         this.add(this.design);
         this.design.width = "100%";
         this.design.height = "100%";
@@ -81,6 +84,9 @@ export class Repeater extends Panel {
             }
             if (this._isCreated !== true) {
                 this.design.databinder = new Databinder();
+               // var code:string=this._createRepeatingComponent.toString();
+               // var varname=code.substring(code.indexOf("(")+1,code.indexOf(")"));
+               // this._componentDesigner._codeEditor.variables.addVariable(varname,this.design.databinder);
                 this.me = {};
                 this._copyMeFromParent(this.me, this._parent);
                 this._createRepeatingComponent(this.me);
@@ -94,7 +100,7 @@ export class Repeater extends Panel {
                 this._isCreated = true;
             }
             if (this.value === undefined || this.value === null || this.value.length < 0)
-                this.design.databinder.value = undefined;
+                this.design.databinder.value = undefined; 
             else
                 this.design.databinder.value = this.value[0];
             this.design.extensionCalled({
@@ -113,7 +119,7 @@ export class Repeater extends Panel {
                 return;
             var sic = this.design;
             for (var x = 0; x < this.value.length; x++) {
-                this.design = new DesignPanel();
+                this.design = new RepeaterDesignPanel();
                 var ob = this.value[x];
                 this.design.databinder = new Databinder();
                 this.design.databinder.value = ob;

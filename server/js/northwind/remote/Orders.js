@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.Orders = void 0;
+const OrderDetails_1 = require("northwind/remote/OrderDetails");
 const Employees_1 = require("northwind/remote/Employees");
 const Customer_1 = require("northwind/remote/Customer");
 const DBObject_1 = require("jassi/remote/DBObject");
@@ -77,6 +78,10 @@ __decorate([
     DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Orders.prototype, "ShipCountry", void 0);
+__decorate([
+    DatabaseSchema_1.OneToMany(type => OrderDetails_1.OrderDetails, e => e.Order),
+    __metadata("design:type", OrderDetails_1.OrderDetails)
+], Orders.prototype, "Details", void 0);
 Orders = __decorate([
     DBObject_1.$DBObject(),
     Jassi_1.$Class("northwind.Orders"),

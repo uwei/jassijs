@@ -57,6 +57,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             var ret = [];
             for (var name in comps) {
                 var comp = comps[name];
+                if (comp === undefined)
+                    continue;
                 var complist = comp._components;
                 if (name !== "this" && this.getComponentName(comp) !== undefined) {
                     if (ret.indexOf(comp) === -1)

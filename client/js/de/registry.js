@@ -12,7 +12,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1613922613218
 	},
 	"de/Dialog.ts": {
-		"date": 1613218544158,
+		"date": 1616805942324,
 		"de/Dialog": {}
 	},
 	"de/DialogKunde.ts": {
@@ -52,7 +52,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1614464269053,
+		"date": 1616791096258,
 		"de.ARZeile": {
 			"$DBObject": []
 		}

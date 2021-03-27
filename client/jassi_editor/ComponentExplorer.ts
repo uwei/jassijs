@@ -64,6 +64,8 @@ export class ComponentExplorer extends Panel {
         var ret = [];
         for (var name in comps) {
             var comp = comps[name];
+            if(comp===undefined)
+                continue;
             var complist = comp._components;
             if (name !== "this" && this.getComponentName(comp) !== undefined) {
                 if (ret.indexOf(comp) === -1)

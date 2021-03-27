@@ -89,7 +89,8 @@ export class Panel extends Container {
     * @param {jassi.ui.Component} component - the component to add
     */
     add(component: Component) {//add a component to the container
-        //     $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
+         $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
+        
         return super.add(component); 
     }
     /**

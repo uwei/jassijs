@@ -561,8 +561,11 @@ export class Parser {
             } else {
                 var lastprop: ts.Node = undefined;
                 for (let prop in this.data[variableName]) {
-                    if (prop === "_new_")
+                    if (prop === "_new_"){
+                        //should be in the same scope of declaration (important for repeater)
+                        statements=this.data[variableName][prop][0].node.parent["statements"];
                         continue;
+                    }
                     var testnode: ts.Node = this.data[variableName][prop][this.data[variableName][prop].length - 1].node;
                     if (testnode.parent === scope["body"])
                         lastprop = testnode;

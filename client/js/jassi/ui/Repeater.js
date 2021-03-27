@@ -11,8 +11,12 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Repeater = void 0;
-    class DesignPanel extends Panel_1.Panel {
-    }
+    let RepeaterDesignPanel = class RepeaterDesignPanel extends Panel_1.Panel {
+    };
+    RepeaterDesignPanel = __decorate([
+        Component_1.$UIComponent({ editableChildComponents: ["databinder"] }),
+        Jassi_1.$Class("jassi.ui.RepeaterDesignPanel")
+    ], RepeaterDesignPanel);
     let Repeater = class Repeater extends Panel_1.Panel {
         /**
         *
@@ -24,7 +28,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui
         constructor(properties = undefined) {
             super();
             this._autocommit = false;
-            this.design = new DesignPanel();
+            this.design = new RepeaterDesignPanel();
             this.add(this.design);
             this.design.width = "100%";
             this.design.height = "100%";
@@ -61,6 +65,9 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui
                 }
                 if (this._isCreated !== true) {
                     this.design.databinder = new Databinder_1.Databinder();
+                    // var code:string=this._createRepeatingComponent.toString();
+                    // var varname=code.substring(code.indexOf("(")+1,code.indexOf(")"));
+                    // this._componentDesigner._codeEditor.variables.addVariable(varname,this.design.databinder);
                     this.me = {};
                     this._copyMeFromParent(this.me, this._parent);
                     this._createRepeatingComponent(this.me);
@@ -91,7 +98,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui
                     return;
                 var sic = this.design;
                 for (var x = 0; x < this.value.length; x++) {
-                    this.design = new DesignPanel();
+                    this.design = new RepeaterDesignPanel();
                     var ob = this.value[x];
                     this.design.databinder = new Databinder_1.Databinder();
                     this.design.databinder.value = ob;

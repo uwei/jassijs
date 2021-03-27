@@ -19,7 +19,7 @@ exports.default={
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1614464269053,
+		"date": 1616791096258,
 		"de.ARZeile": {
 			"$DBObject": []
 		}

@@ -96,6 +96,13 @@ export class DragAndDropper {
                     this.onpropertyadded(ui.draggable[0]._this.createFromType, newComponent, left, top,newParent);
                 return;
             }
+            var oldParent = ui.draggable[0]._this._parent;
+            var pleft =$(newParent.dom).offset().left;
+            var ptop = $(newParent.dom).offset().top;
+            var oleft =$(oldParent.dom).offset().left;
+            var otop = $(oldParent.dom).offset().top;
+            left=left+oleft-pleft;
+            top=top+otop-ptop;
             //snap to 5
             if (top !== 1) {
                 top = Math.round(top / 5) * 5;
@@ -103,7 +110,8 @@ export class DragAndDropper {
             if (left !== 1) {
                 left = Math.round(left / 5) * 5;
             }
-            var oldParent = ui.draggable[0]._this._parent;
+
+            
             oldParent.remove(ui.draggable[0]._this);
             $(ui.draggable).css({ 'top': top, 'left': left, position: 'absolute' });
             target._this.add(ui.draggable[0]._this);

@@ -21,13 +21,13 @@ exports.default={
 		}
 	},
 	"northwind/remote/OrderDetails.ts": {
-		"date": 1616705980340,
+		"date": 1616791057960,
 		"northwind.OrderDetails": {
 			"$DBObject": []
 		}
 	},
 	"northwind/remote/Orders.ts": {
-		"date": 1616106326699,
+		"date": 1616791058036,
 		"northwind.Orders": {
 			"$DBObject": []
 		}

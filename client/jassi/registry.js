@@ -18,7 +18,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.base.Database.Field": {}
 	},
 	"jassi/base/DatabaseSchema.ts": {
-		"date": 1615410630397,
+		"date": 1616791024045,
 		"jassi.base.DatabaseSchema": {}
 	},
 	"jassi/base/Errors.ts": {
@@ -207,7 +207,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi/ui/ActionNodeMenu": {}
 	},
 	"jassi/ui/BoxPanel.ts": {
-		"date": 1613218544160,
+		"date": 1616801823471,
 		"jassi.ui.BoxPanel": {
 			"$UIComponent": [
 				{
@@ -366,7 +366,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Databinder.ts": {
-		"date": 1616789749132,
+		"date": 1616794729521,
 		"jassi.ui.Databinder": {
 			"$UIComponent": [
 				{
@@ -529,7 +529,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.OptionDialogTestProp": {}
 	},
 	"jassi/ui/Panel.ts": {
-		"date": 1615231285196,
+		"date": 1616806851087,
 		"jassi.ui.PanelCreateProperties": {},
 		"jassi.ui.Panel": {
 			"$UIComponent": [
@@ -704,7 +704,16 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Repeater.ts": {
-		"date": 1613218544158,
+		"date": 1616795708998,
+		"jassi.ui.RepeaterDesignPanel": {
+			"$UIComponent": [
+				{
+					"editableChildComponents": [
+						"databinder"
+					]
+				}
+			]
+		},
 		"jassi.ui.Repeater": {
 			"$UIComponent": [
 				{
@@ -837,7 +846,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/VariablePanel.ts": {
-		"date": 1613914326592,
+		"date": 1616796607091,
 		"jassi.ui.VariablePanel": {}
 	},
 	"jassi/util/Cookies.ts": {

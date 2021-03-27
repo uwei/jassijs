@@ -26,7 +26,7 @@ __decorate([
     __metadata("design:type", Number)
 ], OrderDetails.prototype, "id", void 0);
 __decorate([
-    DatabaseSchema_1.ManyToOne(type => Orders_1.Orders),
+    DatabaseSchema_1.ManyToOne(type => Orders_1.Orders, e => e.Details),
     __metadata("design:type", typeof (_a = typeof Orders_1.Orders !== "undefined" && Orders_1.Orders) === "function" ? _a : Object)
 ], OrderDetails.prototype, "Order", void 0);
 __decorate([

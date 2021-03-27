@@ -287,7 +287,7 @@ export class DatabaseSchema {
             }
             params.push("type => " + scl);
             if (field.inverseSide && field.inverseSide !== "")
-                params.push(field.inverseSide);
+                params.push("e=>"+field.inverseSide);
             if (s)
                 params.push(s);
             decs[field.relation] = { name: field.relation, parameter: params };

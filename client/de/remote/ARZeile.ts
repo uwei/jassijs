@@ -1,14 +1,10 @@
-
-
-import {DBObject, $DBObject } from "jassi/remote/DBObject";
+import { DBObject, $DBObject } from "jassi/remote/DBObject";
 import jassi, { $Class } from "jassi/remote/Jassi";
 //import Kunde from "de/Kunde";
-import { PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn} from "jassi/util/DatabaseSchema";
-
+import { PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "jassi/util/DatabaseSchema";
 import { $CheckParentRight } from "jassi/remote/security/Rights";
 import { AR } from "de/remote/AR";
 import { Context } from "jassi/remote/RemoteObject";
-   
 @$DBObject()
 @$Class("de.ARZeile")
 export class ARZeile extends DBObject {
@@ -18,22 +14,23 @@ export class ARZeile extends DBObject {
     public text: string;
     @Column()
     public position: number;
-    @Column({nullable:true,type:"decimal"})
-    public preis:number;
+    @Column({ nullable: true, type: "decimal" })
+    public preis: number;
     @$CheckParentRight()
     @ManyToOne(type => AR, ar => ar.zeilen)
     public ar: AR;
     public tt;
     constructor() {
-        super(); 
+        super();
     }
-      static async find(options = undefined,context:Context=undefined): Promise<ARZeile[]> {
+    static async find(options = undefined, context: Context = undefined): Promise<ARZeile[]> {
         if (!jassi.isServer) {
-            return await this.call(this.find, options,context);
-        } else {
+            return await this.call(this.find, options, context);
+        }
+        else {
             //@ts-ignore
             var man = await (await import("jassi/server/DBManager")).DBManager.get();
-            return man.find(context,this, options);
+            return man.find(context, this, options);
         }
     }
     get oo2() {
@@ -42,13 +39,7 @@ export class ARZeile extends DBObject {
         var t = 1;
         return "gpp";
     }
-    test() {
-        var h = 9;
-        var kk = 3;
-        var b = 3;
 
-        return this.tt + "pko01" + this.oo2;
-    }
     async sample() {
         var ret;
         var az = await jassi.db.load("de.ARZeile", 120);
@@ -59,33 +50,28 @@ export class ARZeile extends DBObject {
         ar2.zeilen.add(az3);
         ar2.zeilen.remove(az3);
         // $(document.body).html(ret);
-        /*var z1=new de.ARZeile();  
+        /*var z1=new de.ARZeile();
         z1.id=110;
         z1.text="lkjlk";
-        jassi.db.save(z1); 
+        jassi.db.save(z1);
         var z2=new de.ARZeile();
         z2.id=120;
         z2.text="lddkjlk";
-        jassi.db.save(z2);  
-        var ar=jassi.db.load("de.AR",30);  
-        ar.zeilen=new jassi.base.DBArray(z1,z2); 
+        jassi.db.save(z2);
+        var ar=jassi.db.load("de.AR",30);
+        ar.zeilen=new jassi.base.DBArray(z1,z2);
         jassi.db.save(ar);
         var arz=jassi.db.load("de.ARZeile",1);
         var test=ar.zeilen;*/
-
-
     }
 }
-
-
 jassi.test = async function () {
     //	var k=new Kunde();
     //k=k;
-
     var test = await jassi.db.load("de.ARZeile");
     var z: ARZeile = new ARZeile();
     z.id = 150;
     z.text = "jjj";
     //   jassi.db.save(z);
     return undefined;
-}
+};

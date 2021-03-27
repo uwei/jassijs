@@ -1,3 +1,7 @@
+import { OrderDetails } from "northwind/remote/OrderDetails";
+import { OrderDetails } from "northwind/remote/OrderDetails";
+import { OrderDetails } from "northwind/remote/OrderDetails";
+import { OrderDetails } from "northwind/remote/OrderDetails";
 import { Employees } from "northwind/remote/Employees";
 import { Customer } from "northwind/remote/Customer";
 import { DBObject, $DBObject } from "jassi/remote/DBObject";
@@ -17,28 +21,30 @@ export class Orders extends DBObject {
     Customer: Customer;
     @ManyToOne(type => Employees)
     Employee: Employees;
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     OrderDate: Date;
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     RequiredDate: Date;
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     ShippedDate: Date;
     @ManyToOne(type => Shippers)
     ShipVia: Shippers;
-    @Column({	nullable: true,	type: "decimal"})
+    @Column({ nullable: true, type: "decimal" })
     Freight: number;
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     ShipName: string;
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     ShipAddress: string;
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     ShipCity: string;
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     ShipRegion: string;
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     ShipPostalCode: string;
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     ShipCountry: string;
+    @OneToMany(type => OrderDetails, e=>e.Order)
+    Details: OrderDetails;
 }
 export async function test() {
 }

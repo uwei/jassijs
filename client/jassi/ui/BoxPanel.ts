@@ -99,6 +99,8 @@ export class BoxPanel extends Panel {
         for (var x = 0; x < this._components.length; x++) {
             if (this._components[x]["designDummyFor"])
                 continue;
+            //test
+            $(this._components[x].__dom).css("overflow","scroll");
             $(this._components[x].__dom).css("width", this.horizontal ? "calc(100% - 5px)" : "100%");
             $(this._components[x].__dom).css("height", this.horizontal ? "100%" : "calc(100% - 5px)");
             comp.push(this._components[x].domWrapper);

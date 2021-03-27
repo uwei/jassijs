@@ -12,15 +12,15 @@ export class OrderDetails extends DBObject {
     constructor() {
         super();
     }
-    @ManyToOne(type => Orders)
+    @ManyToOne(type => Orders, e=>e.Details)
     Order: Orders;
     @ManyToOne(type => Products)
     Product: Products;
-    @Column({	nullable: false,	type: "decimal"})
+    @Column({ nullable: false, type: "decimal" })
     UnitPrice: number;
     @Column()
     Quantity: number;
-    @Column({	nullable: true,	type: "decimal"})
+    @Column({ nullable: true, type: "decimal" })
     Discount: number;
 }
 export async function test() {

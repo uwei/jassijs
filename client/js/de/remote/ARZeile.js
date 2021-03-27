@@ -32,12 +32,6 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
             var t = 1;
             return "gpp";
         }
-        test() {
-            var h = 9;
-            var kk = 3;
-            var b = 3;
-            return this.tt + "pko01" + this.oo2;
-        }
         async sample() {
             var ret;
             var az = await Jassi_1.default.db.load("de.ARZeile", 120);

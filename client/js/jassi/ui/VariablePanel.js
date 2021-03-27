@@ -133,7 +133,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                         }
                         if (comp === undefined)
                             comp = comp;
-                        var complist = comp._components;
+                        var complist = comp === null || comp === void 0 ? void 0 : comp._components;
                         if (complist !== undefined) {
                             for (var o = 0; o < complist.length; o++) {
                                 update(fname, complist[o]);
@@ -195,6 +195,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                     if (vars[z] instanceof type)
                         ret.push("me." + z);
                 }
+            }
+            //search in cache (published by updateCache)
+            for (let key in this._cache) {
+                if (!key.startsWith("this.") && this._cache[key] instanceof type && ret.indexOf(key) === -1)
+                    ret.push(key);
             }
             return ret;
         }

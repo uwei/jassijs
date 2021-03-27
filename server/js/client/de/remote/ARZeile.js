@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var ARZeile_1;
+var ARZeile_1, _a;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ARZeile = void 0;
 const DBObject_1 = require("jassi/remote/DBObject");
@@ -81,7 +81,7 @@ __decorate([
 __decorate([
     Rights_1.$CheckParentRight(),
     DatabaseSchema_1.ManyToOne(type => AR_1.AR, ar => ar.zeilen),
-    __metadata("design:type", AR_1.AR)
+    __metadata("design:type", typeof (_a = typeof AR_1.AR !== "undefined" && AR_1.AR) === "function" ? _a : Object)
 ], ARZeile.prototype, "ar", void 0);
 ARZeile = ARZeile_1 = __decorate([
     DBObject_1.$DBObject(),

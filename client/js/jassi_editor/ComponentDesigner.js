@@ -383,11 +383,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                 scope = { variablename: repeatername, methodname: "createRepeatingComponent" };
                 if (test === undefined) {
                     var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassi.ui.Databinder");
-                    _this._propertyEditor.setPropertyInCode("createRepeatingComponent", "function(" + vardatabinder + "){\n\t\n}", true, repeatername);
-                    repeater.createRepeatingComponent(function (databinder) {
+                    _this._propertyEditor.setPropertyInCode("createRepeatingComponent", "function(me:Me){\n\t\n}", true, repeatername);
+                    repeater.createRepeatingComponent(function (me) {
                         if (this._designMode !== true)
                             return;
-                        _this._variables.addVariable(vardatabinder, databinder);
+                        //_this._variables.addVariable(vardatabinder,databinder);
                         _this._variables.updateCache();
                     });
                     /*var db=new jassi.ui.Databinder();

@@ -23,11 +23,11 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi_editor.CodePanel": {}
 	},
 	"jassi_editor/ComponentDesigner.ts": {
-		"date": 1613218544160,
+		"date": 1616797569842,
 		"jassi_editor.ComponentDesigner": {}
 	},
 	"jassi_editor/ComponentExplorer.ts": {
-		"date": 1613218544158,
+		"date": 1616798562552,
 		"jassi_editor.ComponentExplorer": {}
 	},
 	"jassi_editor/ComponentPalette.ts": {
@@ -49,14 +49,14 @@ define("jassi_editor/registry",["require"], function(require) {
 		"date": 1615231921384
 	},
 	"jassi_editor/util/DragAndDropper.ts": {
-		"date": 1613218544158,
+		"date": 1616803921075,
 		"jassi_editor.util.DragAndDropper": {}
 	},
 	"jassi_editor/util/monaco.ts": {
 		"date": 1613148168781
 	},
 	"jassi_editor/util/Parser.ts": {
-		"date": 1616105244530,
+		"date": 1616798357054,
 		"jassi_editor.base.Parser": {}
 	},
 	"jassi_editor/util/Resizer.ts": {

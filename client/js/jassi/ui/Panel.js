@@ -93,7 +93,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Container", "jassi
         * @param {jassi.ui.Component} component - the component to add
         */
         add(component) {
-            //     $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
+            $(component.domWrapper).css({ position: (this.isAbsolute ? "absolute" : "relative") });
             return super.add(component);
         }
         /**

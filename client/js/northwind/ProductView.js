@@ -88,9 +88,9 @@ define(["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "j
             me.reorderLevel.width = 70;
             me.reorderLevel.label = "Reorder Level";
             me.reorderLevel.converter = new NumberConverter_1.NumberConverter();
-            me.discontinued.x = 268;
-            me.discontinued.y = 18;
-            me.discontinued.width = 10;
+            me.discontinued.x = 415;
+            me.discontinued.y = 10;
+            me.discontinued.width = 70;
             me.discontinued.bind(me.databinder, "Discontinued");
             me.discontinued.label = "Discontinued";
             me.category.x = 10;
