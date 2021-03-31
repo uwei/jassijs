@@ -450,7 +450,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.HTMLEditorPanel": {}
 	},
 	"jassi/ui/HTMLPanel.ts": {
-		"date": 1615988641923,
+		"date": 1617202756406,
 		"jassi.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
@@ -529,7 +529,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.OptionDialogTestProp": {}
 	},
 	"jassi/ui/Panel.ts": {
-		"date": 1616806851087,
+		"date": 1617031543751,
 		"jassi.ui.PanelCreateProperties": {},
 		"jassi.ui.Panel": {
 			"$UIComponent": [

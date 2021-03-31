@@ -28,9 +28,16 @@ body .lm_content{
 br[data-mce-bogus="1"] {
   display:none;
 }
+.jdesignmode > .Panel {
+  border:1px solid #ccc;
+}
 .jselected{
   border-color: #C1E0FF; 
+  border:1px;
   border-style:solid;
+}
+.jabsolutelayout{
+  position:relative;
 }
 
 .Table{

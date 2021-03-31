@@ -63,15 +63,15 @@ export class HTMLPanel extends DataComponent {
      **/
     set value(code: string) { //the Code
         var scode = code;
-        this._value=code;
+        this._value = code;
         if (this.template) {
-            if(this._value===undefined)
-               scode="";
-            else{ 
-                try{
+            if (this._value === undefined)
+                scode = "";
+            else {
+                try {
                     scode = this.compileTemplate(this.template)(code);
-                }catch(err){
-                    scode=err.message;
+                } catch (err) {
+                    scode = err.message;
                 }
             }
         }
@@ -134,7 +134,7 @@ export class HTMLPanel extends DataComponent {
         }
         super.extensionCalled(action);
     }
-
+   
     /**
      * activates or deactivates designmode
      * @param {boolean} enable - true if activate designMode

@@ -325,6 +325,9 @@ export class Resizer {
             this.elements = elements;
         $(this.parentPanel.dom).on("mousedown", this, this.mouseDown);
         this.mousedownElements = $(this.parentPanel.dom).find(this.elements);
+        for(let x=0;x<this.mousedownElements.length;x++){
+            this.mousedownElements[x]= this.mousedownElements[x].parentNode;
+        }
         this.mousedownElements.on("mousedown", this, this.mouseDown);
         $(this.parentPanel.dom).on("mousemove", this, this.mouseMove);
         $(this.parentPanel.dom).on("mouseup", this, this.mouseUp);

@@ -47,7 +47,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Container", "jassi
                 super(properties);
                 if (properties === undefined || properties.id === undefined) {
                     //super.init($('<div class="Panel"/>')[0]);
-                    super.init($('<' + tag + ' class="Panel" style="border:1px solid #ccc;"/>')[0]);
+                    super.init($('<' + tag + ' class="Panel" />')[0]);
                 }
             }
             this._designMode = false;
@@ -93,7 +93,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Container", "jassi
         * @param {jassi.ui.Component} component - the component to add
         */
         add(component) {
-            $(component.domWrapper).css({ position: (this.isAbsolute ? "absolute" : "relative") });
+            // $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
             return super.add(component);
         }
         /**

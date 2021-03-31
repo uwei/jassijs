@@ -281,6 +281,7 @@ export class ComponentDesigner extends Panel{
             var component=this._designPlaceholder._components[0];
               //switch designmode
             var comps=$(component.dom).find(".jcomponent");
+            comps.addClass("jdesignmode");
             for(var c=0;c<comps.length;c++){
                 
                 if(comps[c]._this["extensionCalled"]!==undefined){

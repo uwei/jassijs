@@ -22,7 +22,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.EmptyDialog": {}
 	},
 	"demo/KundeView.ts": {
-		"date": 1613330812615,
+		"date": 1617199730431,
 		"demo.KundeView": {
 			"$DBObjectView": [
 				{

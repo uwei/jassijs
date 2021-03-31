@@ -225,6 +225,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             var component = this._designPlaceholder._components[0];
             //switch designmode
             var comps = $(component.dom).find(".jcomponent");
+            comps.addClass("jdesignmode");
             for (var c = 0; c < comps.length; c++) {
                 if (comps[c]._this["extensionCalled"] !== undefined) {
                     comps[c]._this["extensionCalled"]({

@@ -340,6 +340,7 @@ export class DragAndDropper {
             cancel: "false", 
             revert: "invalid",
             drag: function(event, ui) {
+                
                 _this.lastDropCanceled = _this.isDragEnabled(event, ui);
                 setTimeout(function() {
                     _this.lastDropCanceled = false;
