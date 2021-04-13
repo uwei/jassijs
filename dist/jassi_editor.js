@@ -1728,6 +1728,7 @@ define("jassi_editor/ComponentDesigner", ["require", "exports", "jassi/remote/Ja
             var component = this._designPlaceholder._components[0];
             //switch designmode
             var comps = $(component.dom).find(".jcomponent");
+            comps.addClass("jdesignmode");
             for (var c = 0; c < comps.length; c++) {
                 if (comps[c]._this["extensionCalled"] !== undefined) {
                     comps[c]._this["extensionCalled"]({
@@ -1886,11 +1887,11 @@ define("jassi_editor/ComponentDesigner", ["require", "exports", "jassi/remote/Ja
                 scope = { variablename: repeatername, methodname: "createRepeatingComponent" };
                 if (test === undefined) {
                     var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassi.ui.Databinder");
-                    _this._propertyEditor.setPropertyInCode("createRepeatingComponent", "function(" + vardatabinder + "){\n\t\n}", true, repeatername);
-                    repeater.createRepeatingComponent(function (databinder) {
+                    _this._propertyEditor.setPropertyInCode("createRepeatingComponent", "function(me:Me){\n\t\n}", true, repeatername);
+                    repeater.createRepeatingComponent(function (me) {
                         if (this._designMode !== true)
                             return;
-                        _this._variables.addVariable(vardatabinder, databinder);
+                        //_this._variables.addVariable(vardatabinder,databinder);
                         _this._variables.updateCache();
                     });
                     /*var db=new jassi.ui.Databinder();
@@ -2087,6 +2088,8 @@ define("jassi_editor/ComponentExplorer", ["require", "exports", "jassi/remote/Ja
             var ret = [];
             for (var name in comps) {
                 var comp = comps[name];
+                if (comp === undefined)
+                    continue;
                 var complist = comp._components;
                 if (name !== "this" && this.getComponentName(comp) !== undefined) {
                     if (ret.indexOf(comp) === -1)
@@ -2792,11 +2795,11 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.CodePanel": {}
             },
             "jassi_editor/ComponentDesigner.ts": {
-                "date": 1613218544160,
+                "date": 1617031466374,
                 "jassi_editor.ComponentDesigner": {}
             },
             "jassi_editor/ComponentExplorer.ts": {
-                "date": 1613218544158,
+                "date": 1616798562552,
                 "jassi_editor.ComponentExplorer": {}
             },
             "jassi_editor/ComponentPalette.ts": {
@@ -2818,18 +2821,18 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "date": 1615231921384
             },
             "jassi_editor/util/DragAndDropper.ts": {
-                "date": 1613218544158,
+                "date": 1617202816523,
                 "jassi_editor.util.DragAndDropper": {}
             },
             "jassi_editor/util/monaco.ts": {
                 "date": 1613148168781
             },
             "jassi_editor/util/Parser.ts": {
-                "date": 1616105244530,
+                "date": 1616798357054,
                 "jassi_editor.base.Parser": {}
             },
             "jassi_editor/util/Resizer.ts": {
-                "date": 1613218544158,
+                "date": 1617199366407,
                 "jassi_editor.util.Resizer": {}
             },
             "jassi_editor/util/TSSourceMap.ts": {
@@ -3041,6 +3044,13 @@ define("jassi_editor/util/DragAndDropper", ["require", "exports", "jassi/remote/
                         this.onpropertyadded(ui.draggable[0]._this.createFromType, newComponent, left, top, newParent);
                     return;
                 }
+                var oldParent = ui.draggable[0]._this._parent;
+                var pleft = $(newParent.dom).offset().left;
+                var ptop = $(newParent.dom).offset().top;
+                var oleft = $(oldParent.dom).offset().left;
+                var otop = $(oldParent.dom).offset().top;
+                left = left + oleft - pleft;
+                top = top + otop - ptop;
                 //snap to 5
                 if (top !== 1) {
                     top = Math.round(top / 5) * 5;
@@ -3048,7 +3058,6 @@ define("jassi_editor/util/DragAndDropper", ["require", "exports", "jassi/remote/
                 if (left !== 1) {
                     left = Math.round(left / 5) * 5;
                 }
-                var oldParent = ui.draggable[0]._this._parent;
                 oldParent.remove(ui.draggable[0]._this);
                 $(ui.draggable).css({ 'top': top, 'left': left, position: 'absolute' });
                 target._this.add(ui.draggable[0]._this);
@@ -3893,8 +3902,11 @@ define("jassi_editor/util/Parser", ["require", "exports", "jassi/remote/Jassi", 
                 else {
                     var lastprop = undefined;
                     for (let prop in this.data[variableName]) {
-                        if (prop === "_new_")
+                        if (prop === "_new_") {
+                            //should be in the same scope of declaration (important for repeater)
+                            statements = this.data[variableName][prop][0].node.parent["statements"];
                             continue;
+                        }
                         var testnode = this.data[variableName][prop][this.data[variableName][prop].length - 1].node;
                         if (testnode.parent === scope["body"])
                             lastprop = testnode;
@@ -4270,6 +4282,9 @@ define("jassi_editor/util/Resizer", ["require", "exports", "jassi/remote/Jassi"]
                 this.elements = elements;
             $(this.parentPanel.dom).on("mousedown", this, this.mouseDown);
             this.mousedownElements = $(this.parentPanel.dom).find(this.elements);
+            for (let x = 0; x < this.mousedownElements.length; x++) {
+                this.mousedownElements[x] = this.mousedownElements[x].parentNode;
+            }
             this.mousedownElements.on("mousedown", this, this.mouseDown);
             $(this.parentPanel.dom).on("mousemove", this, this.mouseMove);
             $(this.parentPanel.dom).on("mouseup", this, this.mouseUp);

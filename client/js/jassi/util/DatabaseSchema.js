@@ -13,43 +13,43 @@ define(["require", "exports", "jassi/remote/Database", "jassi/remote/Classes"], 
         };
     }
     function Entity(...param) {
-        return addDecorater("Entity", param);
+        return addDecorater("Entity", ...param);
     }
     exports.Entity = Entity;
     function PrimaryGeneratedColumn(...param) {
-        return addDecorater("PrimaryGeneratedColumn", param);
+        return addDecorater("PrimaryGeneratedColumn", ...param);
     }
     exports.PrimaryGeneratedColumn = PrimaryGeneratedColumn;
     function JoinColumn(...param) {
-        return addDecorater("JoinColumn", param);
+        return addDecorater("JoinColumn", ...param);
     }
     exports.JoinColumn = JoinColumn;
     function JoinTable(...param) {
-        return addDecorater("JoinTable", param);
+        return addDecorater("JoinTable", ...param);
     }
     exports.JoinTable = JoinTable;
     function Column(...any) {
-        return addDecorater("Column", any);
+        return addDecorater("Column", ...any);
     }
     exports.Column = Column;
     function PrimaryColumn(...any) {
-        return addDecorater("PrimaryColumn", any);
+        return addDecorater("PrimaryColumn", ...any);
     }
     exports.PrimaryColumn = PrimaryColumn;
     function OneToOne(...any) {
-        return addDecorater("OneToOne", any);
+        return addDecorater("OneToOne", ...any);
     }
     exports.OneToOne = OneToOne;
     function OneToMany(...any) {
-        return addDecorater("OneToMany", any);
+        return addDecorater("OneToMany", ...any);
     }
     exports.OneToMany = OneToMany;
     function ManyToOne(...any) {
-        return addDecorater("ManyToOne", any);
+        return addDecorater("ManyToOne", ...any);
     }
     exports.ManyToOne = ManyToOne;
     function ManyToMany(...any) {
-        return addDecorater("ManyToMany", any);
+        return addDecorater("ManyToMany", ...any);
     }
     exports.ManyToMany = ManyToMany;
 });

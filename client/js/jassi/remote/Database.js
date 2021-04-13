@@ -20,7 +20,7 @@ define(["require", "exports", "jassi/remote/Jassi", "./Classes"], function (requ
             var test = this.fields[fieldname];
             for (let key in test) {
                 if (key === "OneToOne" || key === "OneToMany" || key === "ManyToOne" || key === "ManyToMany") {
-                    return { type: key, oclass: test[key][0][0]() };
+                    return { type: key, oclass: test[key][0]() };
                 }
             }
             return ret;

@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"local/remote/Book.ts": {
-		"date": 1615236283429,
+		"date": 1618335425588,
 		"local.Book": {
 			"$DBObject": []
 		}

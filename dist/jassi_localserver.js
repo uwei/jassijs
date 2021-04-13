@@ -218,10 +218,11 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
             //@ts-ignore
             var ret = await this.connection().manager.insert(obj.constructor, obj);
             //save also relations
-            ret = await this.save(context, obj);
-            return ret;
+            let retob = await this.save(context, obj);
+            return retob === null || retob === void 0 ? void 0 : retob.id;
         }
         async save(context, entity, options) {
+            var _a;
             await this._checkParentRightsForSave(context, entity);
             if (Classes_1.classes.getClassName(entity) === "jassi.remote.security.User" && entity.password !== undefined) {
                 entity.password = await new Promise((resolve) => {
@@ -238,9 +239,10 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
                 return this.addSaveTransaction(context, entity);
             }
             var ret = await this.connection().manager.save(entity, options);
-            delete entity.password;
-            delete ret["password"];
-            return ret;
+            //delete entity.password;
+            //delete ret["password"];
+            //@ts-ignore
+            return (_a = ret) === null || _a === void 0 ? void 0 : _a.id;
         }
         async _checkParentRightsForSave(context, entity) {
             if (context.request.user.isAdmin)
@@ -688,15 +690,9 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
                 for (var x = 0; x < all.length; x++) {
                     curPath = curPath + (curPath === "" ? "" : ".") + all[x];
                     if (this.relations[curPath] === undefined) {
-                        //read type
-                        var membername = (x === 0 ? curPath : "");
-                        if (Registry_1.default.getMemberData("$CheckParentRight") !== undefined) {
-                            var data = Registry_1.default.getMemberData("$CheckParentRight")[curClassname];
-                            for (var key in data) {
-                                membername = key;
-                            }
-                        }
                         var vdata = this.dbmanager.connection().getMetadata(Classes_1.classes.getClass(curClassname));
+                        //read type
+                        var membername = all[x];
                         for (var r = 0; r < vdata.relations.length; r++) {
                             var rel = vdata.relations[r];
                             if (rel.propertyName === membername) {
@@ -709,6 +705,30 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
                                     parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
                                     doSelect: doselect
                                 };
+                            }
+                        }
+                        //Parentrights
+                        membername = "";
+                        if (Registry_1.default.getMemberData("$CheckParentRight") !== undefined) {
+                            var data = Registry_1.default.getMemberData("$CheckParentRight")[curClassname];
+                            for (var key in data) {
+                                membername = key;
+                            }
+                        }
+                        if (membername !== "") {
+                            for (var r = 0; r < vdata.relations.length; r++) {
+                                var rel = vdata.relations[r];
+                                if (rel.propertyName === membername) {
+                                    var clname = Classes_1.classes.getClassName(rel.type);
+                                    var testPR = Registry_1.default.getData("$ParentRights", clname);
+                                    this.relations[curPath] = {
+                                        className: Classes_1.classes.getClassName(rel.type),
+                                        name: membername,
+                                        fullPath: curPath,
+                                        parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
+                                        doSelect: doselect
+                                    };
+                                }
                             }
                         }
                     }
@@ -740,7 +760,7 @@ define("jassi_localserver/DatabaseSchema", ["require", "exports", "jassi/remote/
     function Entity(...param) {
         //DEntity(param)(pclass, ...params);
         console.log("Ent:" + JSON.stringify(param));
-        return addDecorater("Entity", typeorm_2.Entity, param);
+        return addDecorater("Entity", typeorm_2.Entity, ...param);
     }
     exports.Entity = Entity;
     function PrimaryGeneratedColumn(...param) {

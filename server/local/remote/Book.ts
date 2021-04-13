@@ -10,6 +10,8 @@ export class Book extends DBObject {
     constructor() {
         super();
     }
+    @Column({	nullable: true})
+    tt: string;
 }
 export async function test() {
 }

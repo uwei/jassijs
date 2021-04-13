@@ -409,20 +409,20 @@ define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/
             var path = "https://uwei.github.io/jassijs/client/northwind/import";
             this.me.IDProtokoll.value = "";
             var s;
-            /*s = await CSVImport.startImport(path + "/customers.csv", "northwind.Customer", { "id": "CustomerID" });
+            s = await CSVImport_1.CSVImport.startImport(path + "/customers.csv", "northwind.Customer", { "id": "CustomerID" });
             this.me.IDProtokoll.value += "<br>Customer " + s;
-            s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees", { "id": "EmployeeID" });
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees", { "id": "EmployeeID" });
             this.me.IDProtokoll.value += "<br>Employees " + s;
-            s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/shippers.csv", "northwind.Shippers", { "id": "shipperid" });
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/shippers.csv", "northwind.Shippers", { "id": "shipperid" });
             this.me.IDProtokoll.value += "<br>Shippers " + s;
-            s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/categories.csv", "northwind.Categories", { "id": "categoryid" });
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/categories.csv", "northwind.Categories", { "id": "categoryid" });
             this.me.IDProtokoll.value += "<br>Categories " + s;
-            s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/suppliers.csv", "northwind.Suppliers", { "id": "supplierid" });
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/suppliers.csv", "northwind.Suppliers", { "id": "supplierid" });
             this.me.IDProtokoll.value += "<br>Suppliers " + s;
-            s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid","supplier":"supplierid","category":"categoryid" } );
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid", "supplier": "supplierid", "category": "categoryid" });
             this.me.IDProtokoll.value += "<br>Products " + s;
-            s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid","customer":"customerid","employee":"employeeid" });
-            this.me.IDProtokoll.value += "<br>Orders " + s;*/
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid", "customer": "customerid", "employee": "employeeid" });
+            this.me.IDProtokoll.value += "<br>Orders " + s;
             s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/order_details.csv", "northwind.OrderDetails", { "order": "orderid", "product": "productid" });
             this.me.IDProtokoll.value += "<br>OrderDetails " + s;
             this.me.IDProtokoll.value += "<br>Fertig";
@@ -464,7 +464,7 @@ define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/
     }
     exports.test = test;
 });
-define("northwind/OrdersView", ["require", "exports", "jassi/ui/Calendar", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Orders", "jassi/ui/DBObjectView"], function (require, exports, Calendar_2, ObjectChooser_2, HTMLPanel_3, NumberConverter_2, Textbox_5, Jassi_6, Property_5, Orders_1, DBObjectView_5) {
+define("northwind/OrdersView", ["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Repeater", "jassi/ui/Calendar", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Property", "northwind/remote/Orders", "jassi/ui/DBObjectView"], function (require, exports, BoxPanel_1, Repeater_1, Calendar_2, ObjectChooser_2, HTMLPanel_3, NumberConverter_2, Textbox_5, Jassi_6, Panel_2, Property_5, Orders_1, DBObjectView_5) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -496,52 +496,45 @@ define("northwind/OrdersView", ["require", "exports", "jassi/ui/Calendar", "jass
             me.shipCity = new Textbox_5.Textbox();
             me.shipCountry = new Textbox_5.Textbox();
             me.shipRegion = new Textbox_5.Textbox();
-            me.main.isAbsolute = true;
-            me.main.height = "500";
-            me.main.width = 735;
-            me.main.add(me.id);
-            me.main.add(me.customername);
-            me.main.add(me.shippedDate);
-            me.main.add(me.requiredDate);
-            me.main.add(me.orderDate);
-            me.main.add(me.choosecustomer);
-            me.main.add(me.chooseEmployee);
-            me.main.add(me.employeename);
-            me.main.add(me.shipVia);
-            me.main.add(me.shipviaChooser);
-            me.main.add(me.freight);
-            me.main.add(me.shipName);
-            me.main.add(me.shipAddress);
-            me.main.add(me.shipPostalCode);
-            me.main.add(me.shipCity);
-            me.main.add(me.shipRegion);
-            me.main.add(me.shipCountry);
+            me.repeater1 = new Repeater_1.Repeater();
+            me.panel1 = new Panel_2.Panel();
+            me.panel2 = new Panel_2.Panel();
+            me.panel3 = new Panel_2.Panel();
+            me.boxpanel1 = new BoxPanel_1.BoxPanel();
+            me.boxpanel2 = new BoxPanel_1.BoxPanel();
+            me.htmlpanel1 = new HTMLPanel_3.HTMLPanel();
+            me.htmlpanel2 = new HTMLPanel_3.HTMLPanel();
+            me.main.add(me.boxpanel1);
+            me.main.add(me.boxpanel2);
+            me.main.add(me.repeater1);
             me.id.x = 5;
-            me.id.y = 10;
+            me.id.y = 5;
             me.id.converter = new NumberConverter_2.NumberConverter();
             me.id.bind(me.databinder, "id");
             me.id.label = "Order ID";
             me.id.width = 70;
-            me.customername.x = 425;
-            me.customername.y = 10;
+            me.customername.x = 10;
+            me.customername.y = 5;
             me.customername.width = 265;
             me.customername.template = "{{id}} {{CompanyName}}";
             me.customername.bind(me.databinder, "Customer");
             me.customername.value = "VINET Vins et alcools Chevalier";
             me.customername.label = "Customer";
-            me.employeename.x = 425;
-            me.employeename.y = 100;
+            me.customername.height = 15;
+            me.employeename.x = 10;
+            me.employeename.y = 90;
             me.employeename.bind(me.databinder, "Employee");
             me.employeename.label = "Employee";
             me.employeename.width = 265;
             me.employeename.value = "5 Steven Buchanan";
             me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
-            me.chooseEmployee.x = 695;
-            me.chooseEmployee.y = 115;
+            me.chooseEmployee.x = 275;
+            me.chooseEmployee.y = 105;
             me.chooseEmployee.bind(me.databinder, "Employee");
             me.chooseEmployee.items = "northwind.Employees";
-            me.choosecustomer.x = 695;
-            me.choosecustomer.y = 25;
+            me.chooseEmployee.height = 20;
+            me.choosecustomer.x = 275;
+            me.choosecustomer.y = 15;
             me.choosecustomer.items = "northwind.Customer";
             me.choosecustomer.bind(me.databinder, "Customer");
             me.choosecustomer.onchange(function (event) {
@@ -553,67 +546,123 @@ define("northwind/OrdersView", ["require", "exports", "jassi/ui/Calendar", "jass
                 me.shipCountry.value = cust.Country;
                 me.shipRegion.value = cust.Region;
             });
-            me.orderDate.x = 425;
-            me.orderDate.y = 140;
+            me.orderDate.x = 10;
+            me.orderDate.y = 130;
             me.orderDate.bind(me.databinder, "OrderDate");
             me.orderDate.label = "Order Date";
             me.orderDate.width = 70;
-            me.requiredDate.x = 510;
-            me.requiredDate.y = 140;
+            me.requiredDate.x = 90;
+            me.requiredDate.y = 130;
             me.requiredDate.bind(me.databinder, "RequiredDate");
             me.requiredDate.label = "Required Date";
             me.requiredDate.width = 75;
-            me.shippedDate.x = 600;
-            me.shippedDate.y = 140;
+            me.shippedDate.x = 175;
+            me.shippedDate.y = 130;
             me.shippedDate.bind(me.databinder, "ShippedDate");
             me.shippedDate.width = 75;
             me.shippedDate.label = "Shipped Date";
-            me.shipVia.x = 425;
-            me.shipVia.y = 55;
+            me.shipVia.x = 10;
+            me.shipVia.y = 45;
             me.shipVia.bind(me.databinder, "ShipVia");
             me.shipVia.template = "{{id}} {{CompanyName}}";
             me.shipVia.label = "Ship via";
             me.shipVia.value = "3 Federal Shipping";
-            me.shipVia.width = 265;
-            me.shipviaChooser.x = 695;
-            me.shipviaChooser.y = 70;
+            me.shipVia.width = 260;
+            me.shipviaChooser.x = 275;
+            me.shipviaChooser.y = 60;
             me.shipviaChooser.bind(me.databinder, "ShipVia");
             me.shipviaChooser.items = "northwind.Shippers";
-            me.freight.x = 85;
-            me.freight.y = 10;
+            me.shipviaChooser.width = 30;
+            me.freight.x = 5;
+            me.freight.y = 50;
             me.freight.bind(me.databinder, "Freight");
-            me.freight.width = 60;
+            me.freight.width = 70;
             me.freight.label = "Freight";
             me.shipName.x = 5;
-            me.shipName.y = 60;
+            me.shipName.y = 5;
             me.shipName.bind(me.databinder, "ShipName");
             me.shipName.width = 220;
             me.shipName.label = "Ship Name";
             me.shipAddress.x = 5;
-            me.shipAddress.y = 105;
+            me.shipAddress.y = 50;
             me.shipAddress.bind(me.databinder, "ShipAddress");
             me.shipAddress.width = 220;
             me.shipAddress.label = "Ship Address";
             me.shipPostalCode.x = 5;
-            me.shipPostalCode.y = 150;
+            me.shipPostalCode.y = 95;
             me.shipPostalCode.bind(me.databinder, "ShipPostalCode");
             me.shipPostalCode.width = 55;
             me.shipPostalCode.label = "Postal Code";
             me.shipCity.x = 75;
-            me.shipCity.y = 150;
+            me.shipCity.y = 95;
             me.shipCity.bind(me.databinder, "ShipCity");
             me.shipCity.label = "Ship City";
             me.shipCity.width = 150;
             me.shipCountry.x = 135;
-            me.shipCountry.y = 195;
+            me.shipCountry.y = 140;
             me.shipCountry.bind(me.databinder, "ShipCountry");
             me.shipCountry.label = "Ship Country";
             me.shipCountry.width = 90;
             me.shipRegion.x = 5;
-            me.shipRegion.y = 195;
+            me.shipRegion.y = 140;
             me.shipRegion.bind(me.databinder, "ShipRegion");
             me.shipRegion.label = "Ship Region";
             me.shipRegion.width = 120;
+            me.repeater1.bind(me.databinder, "Details");
+            me.repeater1.width = 420;
+            me.repeater1.createRepeatingComponent(function (me) {
+                me.detailsQuantity = new Textbox_5.Textbox();
+                me.detailsProduct = new HTMLPanel_3.HTMLPanel();
+                me.objectchooser1 = new ObjectChooser_2.ObjectChooser();
+                this.design.add(me.detailsQuantity);
+                this.design.add(me.detailsProduct);
+                this.design.add(me.objectchooser1);
+                me.detailsQuantity.bind(me.repeater1.design.databinder, "Quantity");
+                me.detailsQuantity.width = 60;
+                me.detailsProduct.width = "100";
+                me.detailsProduct.bind(me.repeater1.design.databinder, "Product");
+                me.detailsProduct.template = "{{ProductName}}";
+                me.objectchooser1.bind(me.repeater1.design.databinder, "Product");
+                me.objectchooser1.items = "northwind.Products";
+            });
+            me.panel1.isAbsolute = true;
+            me.panel1.height = 185;
+            me.panel1.width = 250;
+            me.panel1.add(me.shipName);
+            me.panel1.add(me.shipAddress);
+            me.panel1.add(me.shipPostalCode);
+            me.panel1.add(me.shipCity);
+            me.panel1.add(me.shipCountry);
+            me.panel1.add(me.shipRegion);
+            me.panel2.width = 105;
+            me.panel2.height = 185;
+            me.panel2.isAbsolute = true;
+            me.panel2.add(me.id);
+            me.panel2.add(me.freight);
+            me.panel3.width = 320;
+            me.panel3.height = 185;
+            me.panel3.isAbsolute = true;
+            me.panel3.add(me.customername);
+            me.panel3.add(me.choosecustomer);
+            me.panel3.add(me.shipVia);
+            me.panel3.add(me.shipviaChooser);
+            me.panel3.add(me.employeename);
+            me.panel3.add(me.chooseEmployee);
+            me.panel3.add(me.orderDate);
+            me.panel3.add(me.requiredDate);
+            me.panel3.add(me.shippedDate);
+            me.boxpanel1.horizontal = true;
+            me.boxpanel1.add(me.panel1);
+            me.boxpanel1.add(me.panel2);
+            me.boxpanel1.add(me.panel3);
+            me.boxpanel1.height = 230;
+            me.boxpanel2.add(me.htmlpanel1);
+            me.boxpanel2.add(me.htmlpanel2);
+            me.boxpanel2.horizontal = true;
+            me.htmlpanel1.value = "Quantity<br>";
+            me.htmlpanel1.width = 65;
+            me.htmlpanel2.value = "Text<br>";
+            me.htmlpanel2.width = 100;
         }
     };
     __decorate([
@@ -715,9 +764,9 @@ define("northwind/ProductView", ["require", "exports", "jassi/ui/ObjectChooser",
             me.reorderLevel.width = 70;
             me.reorderLevel.label = "Reorder Level";
             me.reorderLevel.converter = new NumberConverter_3.NumberConverter();
-            me.discontinued.x = 268;
-            me.discontinued.y = 18;
-            me.discontinued.width = 10;
+            me.discontinued.x = 415;
+            me.discontinued.y = 10;
+            me.discontinued.width = 70;
             me.discontinued.bind(me.databinder, "Discontinued");
             me.discontinued.label = "Discontinued";
             me.category.x = 10;
@@ -1002,7 +1051,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ImportData.ts": {
-                "date": 1616781051951,
+                "date": 1618330765722,
                 "northwind.ImportData": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -1013,7 +1062,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551043267
             },
             "northwind/OrdersView.ts": {
-                "date": 1616613220667,
+                "date": 1617202926423,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1025,7 +1074,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1615988978608,
+                "date": 1616807008528,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -1055,13 +1104,13 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/OrderDetails.ts": {
-                "date": 1616705980340,
+                "date": 1616791057960,
                 "northwind.OrderDetails": {
                     "$DBObject": []
                 }
             },
             "northwind/remote/Orders.ts": {
-                "date": 1616106326699,
+                "date": 1616791058036,
                 "northwind.Orders": {
                     "$DBObject": []
                 }
@@ -1386,7 +1435,7 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_4.ManyToOne(type => Orders_2.Orders),
+        DatabaseSchema_4.ManyToOne(type => Orders_2.Orders, e => e.Details),
         __metadata("design:type", typeof (_a = typeof Orders_2.Orders !== "undefined" && Orders_2.Orders) === "function" ? _a : Object)
     ], OrderDetails.prototype, "Order", void 0);
     __decorate([
@@ -1416,9 +1465,9 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
     exports.test = test;
     ;
 });
-define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Employees", "northwind/remote/Customer", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, Employees_3, Customer_2, DBObject_5, Jassi_14, DatabaseSchema_5, Shippers_2) {
+define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_2, Employees_3, Customer_2, DBObject_5, Jassi_14, DatabaseSchema_5, Shippers_2) {
     "use strict";
-    var _a, _b, _c;
+    var _a, _b, _c, _d;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Orders = void 0;
     let Orders = class Orders extends DBObject_5.DBObject {
@@ -1482,6 +1531,10 @@ define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Emplo
         DatabaseSchema_5.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCountry", void 0);
+    __decorate([
+        DatabaseSchema_5.OneToMany(type => OrderDetails_2.OrderDetails, e => e.Order),
+        __metadata("design:type", typeof (_d = typeof OrderDetails_2.OrderDetails !== "undefined" && OrderDetails_2.OrderDetails) === "function" ? _d : Object)
+    ], Orders.prototype, "Details", void 0);
     Orders = __decorate([
         DBObject_5.$DBObject(),
         Jassi_14.$Class("northwind.Orders"),

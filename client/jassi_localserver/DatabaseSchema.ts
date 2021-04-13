@@ -17,7 +17,7 @@ function addDecorater(decoratername,delegate,...args){
 export function Entity(...param): Function{
     //DEntity(param)(pclass, ...params);
     console.log("Ent:"+JSON.stringify(param));
-    return addDecorater("Entity",DEntity,param);
+    return addDecorater("Entity",DEntity,...param);
 }
 export function PrimaryGeneratedColumn(...param): Function{
     return addDecorater("PrimaryGeneratedColumn",DPrimaryGeneratedColumn,...param);

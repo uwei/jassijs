@@ -20,6 +20,10 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
         DatabaseSchema_1.PrimaryColumn(),
         __metadata("design:type", Number)
     ], Book.prototype, "id", void 0);
+    __decorate([
+        DatabaseSchema_1.Column({ nullable: true }),
+        __metadata("design:type", String)
+    ], Book.prototype, "tt", void 0);
     Book = __decorate([
         DBObject_1.$DBObject(),
         Jassi_1.$Class("local.Book"),

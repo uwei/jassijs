@@ -83,7 +83,7 @@ export function Entity(options?: EntityOptions): Function;
 export function Entity(name?: string, options?: EntityOptions): Function;
 
 export function Entity(...param): Function{
-    return addDecorater("Entity",param);
+    return addDecorater("Entity",...param);
 }
 
 
@@ -153,14 +153,14 @@ export function PrimaryGeneratedColumn(strategy: "uuid", options?: PrimaryGenera
  */
 export function PrimaryGeneratedColumn(strategy: "rowid", options?: PrimaryGeneratedColumnUUIDOptions): Function;
 export function PrimaryGeneratedColumn(...param): Function{
-    return addDecorater("PrimaryGeneratedColumn",param);
+    return addDecorater("PrimaryGeneratedColumn",...param);
 }
 
 export function JoinColumn(...param): Function{
-    return addDecorater("JoinColumn",param);
+    return addDecorater("JoinColumn",...param);
 }
 export function JoinTable(...param): Function{
-    return addDecorater("JoinTable",param);
+    return addDecorater("JoinTable",...param);
 }
 /**
  * Column types where spatial properties are used.
@@ -411,7 +411,7 @@ export function Column(options: ColumnOptions): Function;
 export function Column(type: SimpleColumnType, options?: ColumnCommonOptions): Function;
 
 export function Column(...any): Function{
-    return addDecorater("Column",any);
+    return addDecorater("Column",...any);
 }
 
 /**
@@ -427,7 +427,7 @@ export function PrimaryColumn(options?: ColumnOptions): Function;
  */
 export function PrimaryColumn(type?: ColumnType, options?: ColumnOptions): Function;
 export function PrimaryColumn(...any): Function{
-    return addDecorater("PrimaryColumn",any);
+    return addDecorater("PrimaryColumn",...any);
 }
 
 /**
@@ -514,7 +514,7 @@ export function OneToOne<T>(typeFunctionOrTarget: string | ((type?: any) => Obje
  */
 export function OneToOne<T>(typeFunctionOrTarget: string | ((type?: any) => ObjectType<T>), inverseSide?: string | ((object: T) => any), options?: RelationOptions): Function;
 export function OneToOne(...any): Function{
-    return addDecorater("OneToOne",any);
+    return addDecorater("OneToOne",...any);
 }
 
 /**
@@ -523,7 +523,7 @@ export function OneToOne(...any): Function{
  */
 export function OneToMany<T>(typeFunctionOrTarget: string | ((type?: any) => ObjectType<T>), inverseSide: string | ((object: T) => any), options?: RelationOptions): Function;
 export function OneToMany(...any): Function{
-    return addDecorater("OneToMany",any);
+    return addDecorater("OneToMany",...any);
 }
 
 /**
@@ -539,7 +539,7 @@ export function ManyToOne<T>(typeFunctionOrTarget: string | ((type?: any) => Obj
  */
 export  function ManyToOne<T>(typeFunctionOrTarget: string | ((type?: any) => ObjectType<T>), inverseSide?: string | ((object: T) => any), options?: RelationOptions): Function;
 export function ManyToOne(...any): Function{
-    return addDecorater("ManyToOne",any);
+    return addDecorater("ManyToOne",...any);
 }
 
 /**
@@ -555,5 +555,5 @@ export  function ManyToMany<T>(typeFunctionOrTarget: string | ((type?: any) => O
  */
 export function ManyToMany<T>(typeFunctionOrTarget: string | ((type?: any) => ObjectType<T>), inverseSide?: string | ((object: T) => any), options?: RelationOptions): Function;
 export function ManyToMany(...any): Function{
-    return addDecorater("ManyToMany",any);
+    return addDecorater("ManyToMany",...any);
 }

@@ -62,7 +62,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.Classes": {}
 	},
 	"jassi/remote/Database.ts": {
-		"date": 1616788601845,
+		"date": 1618335375678,
 		"jassi.remote.Database": {}
 	},
 	"jassi/remote/DBArray.ts": {
@@ -861,7 +861,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/util/DatabaseSchema.ts": {
-		"date": 1615318935612
+		"date": 1618335325672
 	},
 	"jassi/util/Reloader.ts": {
 		"date": 1615324259508,

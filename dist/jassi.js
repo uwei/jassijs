@@ -100,7 +100,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.base.Database.Field": {}
             },
             "jassi/base/DatabaseSchema.ts": {
-                "date": 1615410630397,
+                "date": 1616791024045,
                 "jassi.base.DatabaseSchema": {}
             },
             "jassi/base/Errors.ts": {
@@ -144,7 +144,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.Classes": {}
             },
             "jassi/remote/Database.ts": {
-                "date": 1616788601845,
+                "date": 1618335375678,
                 "jassi.remote.Database": {}
             },
             "jassi/remote/DBArray.ts": {
@@ -289,7 +289,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi/ui/ActionNodeMenu": {}
             },
             "jassi/ui/BoxPanel.ts": {
-                "date": 1613218544160,
+                "date": 1616801823471,
                 "jassi.ui.BoxPanel": {
                     "$UIComponent": [
                         {
@@ -448,7 +448,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Databinder.ts": {
-                "date": 1616789749132,
+                "date": 1616794729521,
                 "jassi.ui.Databinder": {
                     "$UIComponent": [
                         {
@@ -532,7 +532,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.HTMLEditorPanel": {}
             },
             "jassi/ui/HTMLPanel.ts": {
-                "date": 1615988641923,
+                "date": 1617202756406,
                 "jassi.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -611,7 +611,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.OptionDialogTestProp": {}
             },
             "jassi/ui/Panel.ts": {
-                "date": 1615231285196,
+                "date": 1617031543751,
                 "jassi.ui.PanelCreateProperties": {},
                 "jassi.ui.Panel": {
                     "$UIComponent": [
@@ -786,7 +786,16 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Repeater.ts": {
-                "date": 1613218544158,
+                "date": 1616795708998,
+                "jassi.ui.RepeaterDesignPanel": {
+                    "$UIComponent": [
+                        {
+                            "editableChildComponents": [
+                                "databinder"
+                            ]
+                        }
+                    ]
+                },
                 "jassi.ui.Repeater": {
                     "$UIComponent": [
                         {
@@ -919,7 +928,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/VariablePanel.ts": {
-                "date": 1613914326592,
+                "date": 1616796607091,
                 "jassi.ui.VariablePanel": {}
             },
             "jassi/util/Cookies.ts": {
@@ -934,7 +943,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/util/DatabaseSchema.ts": {
-                "date": 1615318935612
+                "date": 1618335325672
             },
             "jassi/util/Reloader.ts": {
                 "date": 1615324259508,
@@ -1811,7 +1820,7 @@ define("jassi/base/DatabaseSchema", ["require", "exports", "jassi/remote/Jassi",
                 }
                 params.push("type => " + scl);
                 if (field.inverseSide && field.inverseSide !== "")
-                    params.push(field.inverseSide);
+                    params.push("e=>" + field.inverseSide);
                 if (s)
                     params.push(s);
                 decs[field.relation] = { name: field.relation, parameter: params };
@@ -3564,7 +3573,7 @@ define("jassi/remote/Database", ["require", "exports", "jassi/remote/Jassi", "ja
             var test = this.fields[fieldname];
             for (let key in test) {
                 if (key === "OneToOne" || key === "OneToMany" || key === "ManyToOne" || key === "ManyToMany") {
-                    return { type: key, oclass: test[key][0][0]() };
+                    return { type: key, oclass: test[key][0]() };
                 }
             }
             return ret;
@@ -5759,6 +5768,8 @@ define("jassi/ui/BoxPanel", ["require", "exports", "jassi/ui/Panel", "jassi/remo
             for (var x = 0; x < this._components.length; x++) {
                 if (this._components[x]["designDummyFor"])
                     continue;
+                //test
+                $(this._components[x].__dom).css("overflow", "scroll");
                 $(this._components[x].__dom).css("width", this.horizontal ? "calc(100% - 5px)" : "100%");
                 $(this._components[x].__dom).css("height", this.horizontal ? "100%" : "calc(100% - 5px)");
                 comp.push(this._components[x].domWrapper);
@@ -10317,7 +10328,7 @@ define("jassi/ui/Panel", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/
                 super(properties);
                 if (properties === undefined || properties.id === undefined) {
                     //super.init($('<div class="Panel"/>')[0]);
-                    super.init($('<' + tag + ' class="Panel" style="border:1px solid #ccc;"/>')[0]);
+                    super.init($('<' + tag + ' class="Panel" />')[0]);
                 }
             }
             this._designMode = false;
@@ -10363,7 +10374,7 @@ define("jassi/ui/Panel", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/
         * @param {jassi.ui.Component} component - the component to add
         */
         add(component) {
-            //     $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
+            // $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
             return super.add(component);
         }
         /**
@@ -11185,8 +11196,12 @@ define("jassi/ui/Repeater", ["require", "exports", "jassi/ui/Panel", "jassi/ui/D
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Repeater = void 0;
-    class DesignPanel extends Panel_15.Panel {
-    }
+    let RepeaterDesignPanel = class RepeaterDesignPanel extends Panel_15.Panel {
+    };
+    RepeaterDesignPanel = __decorate([
+        Component_18.$UIComponent({ editableChildComponents: ["databinder"] }),
+        Jassi_61.$Class("jassi.ui.RepeaterDesignPanel")
+    ], RepeaterDesignPanel);
     let Repeater = class Repeater extends Panel_15.Panel {
         /**
         *
@@ -11198,7 +11213,7 @@ define("jassi/ui/Repeater", ["require", "exports", "jassi/ui/Panel", "jassi/ui/D
         constructor(properties = undefined) {
             super();
             this._autocommit = false;
-            this.design = new DesignPanel();
+            this.design = new RepeaterDesignPanel();
             this.add(this.design);
             this.design.width = "100%";
             this.design.height = "100%";
@@ -11235,6 +11250,9 @@ define("jassi/ui/Repeater", ["require", "exports", "jassi/ui/Panel", "jassi/ui/D
                 }
                 if (this._isCreated !== true) {
                     this.design.databinder = new Databinder_3.Databinder();
+                    // var code:string=this._createRepeatingComponent.toString();
+                    // var varname=code.substring(code.indexOf("(")+1,code.indexOf(")"));
+                    // this._componentDesigner._codeEditor.variables.addVariable(varname,this.design.databinder);
                     this.me = {};
                     this._copyMeFromParent(this.me, this._parent);
                     this._createRepeatingComponent(this.me);
@@ -11265,7 +11283,7 @@ define("jassi/ui/Repeater", ["require", "exports", "jassi/ui/Panel", "jassi/ui/D
                     return;
                 var sic = this.design;
                 for (var x = 0; x < this.value.length; x++) {
-                    this.design = new DesignPanel();
+                    this.design = new RepeaterDesignPanel();
                     var ob = this.value[x];
                     this.design.databinder = new Databinder_3.Databinder();
                     this.design.databinder.value = ob;
@@ -13360,7 +13378,7 @@ define("jassi/ui/VariablePanel", ["require", "exports", "jassi/remote/Jassi", "j
                         }
                         if (comp === undefined)
                             comp = comp;
-                        var complist = comp._components;
+                        var complist = comp === null || comp === void 0 ? void 0 : comp._components;
                         if (complist !== undefined) {
                             for (var o = 0; o < complist.length; o++) {
                                 update(fname, complist[o]);
@@ -13422,6 +13440,11 @@ define("jassi/ui/VariablePanel", ["require", "exports", "jassi/remote/Jassi", "j
                     if (vars[z] instanceof type)
                         ret.push("me." + z);
                 }
+            }
+            //search in cache (published by updateCache)
+            for (let key in this._cache) {
+                if (!key.startsWith("this.") && this._cache[key] instanceof type && ret.indexOf(key) === -1)
+                    ret.push(key);
             }
             return ret;
         }
@@ -15592,43 +15615,43 @@ define("jassi/util/DatabaseSchema", ["require", "exports", "jassi/remote/Databas
         };
     }
     function Entity(...param) {
-        return addDecorater("Entity", param);
+        return addDecorater("Entity", ...param);
     }
     exports.Entity = Entity;
     function PrimaryGeneratedColumn(...param) {
-        return addDecorater("PrimaryGeneratedColumn", param);
+        return addDecorater("PrimaryGeneratedColumn", ...param);
     }
     exports.PrimaryGeneratedColumn = PrimaryGeneratedColumn;
     function JoinColumn(...param) {
-        return addDecorater("JoinColumn", param);
+        return addDecorater("JoinColumn", ...param);
     }
     exports.JoinColumn = JoinColumn;
     function JoinTable(...param) {
-        return addDecorater("JoinTable", param);
+        return addDecorater("JoinTable", ...param);
     }
     exports.JoinTable = JoinTable;
     function Column(...any) {
-        return addDecorater("Column", any);
+        return addDecorater("Column", ...any);
     }
     exports.Column = Column;
     function PrimaryColumn(...any) {
-        return addDecorater("PrimaryColumn", any);
+        return addDecorater("PrimaryColumn", ...any);
     }
     exports.PrimaryColumn = PrimaryColumn;
     function OneToOne(...any) {
-        return addDecorater("OneToOne", any);
+        return addDecorater("OneToOne", ...any);
     }
     exports.OneToOne = OneToOne;
     function OneToMany(...any) {
-        return addDecorater("OneToMany", any);
+        return addDecorater("OneToMany", ...any);
     }
     exports.OneToMany = OneToMany;
     function ManyToOne(...any) {
-        return addDecorater("ManyToOne", any);
+        return addDecorater("ManyToOne", ...any);
     }
     exports.ManyToOne = ManyToOne;
     function ManyToMany(...any) {
-        return addDecorater("ManyToMany", any);
+        return addDecorater("ManyToMany", ...any);
     }
     exports.ManyToMany = ManyToMany;
 });
