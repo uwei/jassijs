@@ -33,7 +33,7 @@ __decorate([
     __metadata("design:type", Suppliers_1.Suppliers)
 ], Products.prototype, "Supplier", void 0);
 __decorate([
-    DatabaseSchema_1.ManyToOne(type => Categories_1.Categories),
+    DatabaseSchema_1.ManyToOne(type => Categories_1.Categories, e => e.Products),
     __metadata("design:type", Categories_1.Categories)
 ], Products.prototype, "Category", void 0);
 __decorate([

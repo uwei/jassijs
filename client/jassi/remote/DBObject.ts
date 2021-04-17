@@ -40,6 +40,14 @@ export class MyFindManyOptions{
 export class DBObject extends RemoteObject {
     id: number|string;
     private static cache: { [classname: string]: { [id:string]: DBObject } } = {};
+    private static _init=DBObject._initFunc();
+    //clear cache on reload
+    private static _initFunc(){
+     
+        registry.onregister("$Class", (data: new (...args: any[]) => any, name: string)=>{
+            delete DBObject.cache[name];
+        });
+    }
 
     constructor() {
         super();

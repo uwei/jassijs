@@ -4,7 +4,7 @@
      // "rootDirs": ["../client/remote","./"],
       "target": "es2017",
       "module": "commonjs",
-      "outDir": "./js",
+      "outDir": "js",
       "allowJs": true, 
       "sourceMap": true,
       "moduleResolution": "Node",
@@ -15,9 +15,5 @@
  
         "typeorm":["../node_modules/typeorm","../server/node_modules/typeorm"]
       }
-    },
-    
-    "exclude": [
-      "js"
-    ]
+    }
   }

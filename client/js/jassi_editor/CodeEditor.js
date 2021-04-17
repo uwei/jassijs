@@ -44,7 +44,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             /*  this._codePanel.getDocTooltip = function (item) {
                   return _this.getDocTooltip(item);
               }*/
-            this._codeToolbar["horizontal"] = false;
+            this._codeToolbar["horizontal"] = true;
             this._codeToolbar.height = "30";
             this._codeView["horizontal"] = true;
             this._codeView.add(this._codeToolbar);

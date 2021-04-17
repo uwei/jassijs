@@ -766,7 +766,7 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             /*  this._codePanel.getDocTooltip = function (item) {
                   return _this.getDocTooltip(item);
               }*/
-            this._codeToolbar["horizontal"] = false;
+            this._codeToolbar["horizontal"] = true;
             this._codeToolbar.height = "30";
             this._codeView["horizontal"] = true;
             this._codeView.add(this._codeToolbar);
@@ -2783,7 +2783,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
-                "date": 1616191203135,
+                "date": 1618665085047,
                 "jassi_editor.CodeEditor": {}
             },
             "jassi_editor/CodeEditorInvisibleComponents.ts": {
@@ -2821,7 +2821,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "date": 1615231921384
             },
             "jassi_editor/util/DragAndDropper.ts": {
-                "date": 1617202816523,
+                "date": 1618661828596,
                 "jassi_editor.util.DragAndDropper": {}
             },
             "jassi_editor/util/monaco.ts": {
@@ -2832,7 +2832,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.base.Parser": {}
             },
             "jassi_editor/util/Resizer.ts": {
-                "date": 1617199366407,
+                "date": 1618661390450,
                 "jassi_editor.util.Resizer": {}
             },
             "jassi_editor/util/TSSourceMap.ts": {
@@ -3299,6 +3299,9 @@ define("jassi_editor/util/DragAndDropper", ["require", "exports", "jassi/remote/
             //all jcompoenents are proptargets                                         also jdesignummy     but no jcomponents in absolute Layout  no jcomponens that contains a jdesigndummy  absolutelayout container
             this.droppableComponents = $(this.parentPanel.dom).parent().parent().find(".jdesigndummy,.jcomponent:not(.jabsolutelayout>.jcomponent, :has(.jdesigndummy)),                      .jcontainer>.jabsolutelayout");
             console.log(this.droppableComponents.length);
+            for (var c = 0; c < this.droppableComponents.length; c++) {
+                console.log(this.droppableComponents[c].id);
+            }
             var isDropping = false;
             var dropWnd;
             var dropEvent;

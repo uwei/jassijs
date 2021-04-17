@@ -184,7 +184,7 @@ export class Component {
         this._eventHandler = {};
         //add _this to the dom element
         var lid = registry.nextID();
-        var st = 'style="display: inline"';
+        var st = 'style="display: inline-block"';
         if (this instanceof classes.getClass("jassi.ui.Container")) {
             st = "";
         }

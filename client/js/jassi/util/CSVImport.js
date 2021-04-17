@@ -248,6 +248,17 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
                 trans.add(obs, obs.save);
             }
             await trans.execute();
+            //remove relations
+            var rels = [];
+            for (var fname in meta) {
+                if (meta[fname].OneToOne || meta[fname].ManyToOne) {
+                    rels.push(fname);
+                }
+            }
+            for (var x = 0; x < allObjects.length; x++) {
+                var obs = allObjects[x];
+                rels.forEach(el => { delete obs[el]; });
+            }
             return "imported " + allObjects.length + " objects";
         }
     };

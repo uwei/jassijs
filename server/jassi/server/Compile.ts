@@ -172,7 +172,7 @@ export class Compile {
     if (spath.length < 2 && spath[1] !== "remote") {
       throw "fileName must startswith remote"
     }
-    var path = "../client";
+    var path = ".";   
     var data = fs.readFileSync(path + "/" + fileName, { encoding: 'utf-8' });
 
     var module = fileName.replace(".ts", "");
@@ -180,7 +180,7 @@ export class Compile {
 
     const parsedCmd = ts.getParsedCommandLineOfConfigFile("./tsconfig.json", undefined, host);
     const { options } = parsedCmd;
-    var outPath = "js/client";
+    var outPath = "js";
     var fdir = outPath + "/" + fileName;
     fdir = fdir.substring(0, fdir.lastIndexOf("/"));
     fs.mkdirSync(fdir, { recursive: true });

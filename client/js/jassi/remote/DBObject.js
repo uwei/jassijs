@@ -37,6 +37,12 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         constructor() {
             super();
         }
+        //clear cache on reload
+        static _initFunc() {
+            Registry_1.default.onregister("$Class", (data, name) => {
+                delete DBObject_1.cache[name];
+            });
+        }
         isAutoId() {
             var _a;
             var def = (_a = Database_1.db.getMetadata(this.constructor)) === null || _a === void 0 ? void 0 : _a.fields;
@@ -198,6 +204,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         }
     };
     DBObject.cache = {};
+    DBObject._init = DBObject_1._initFunc();
     DBObject = DBObject_1 = __decorate([
         Jassi_1.$Class("jassi.remote.DBObject"),
         __metadata("design:paramtypes", [])

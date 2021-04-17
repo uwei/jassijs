@@ -146,7 +146,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
             this._eventHandler = {};
             //add _this to the dom element
             var lid = Registry_1.default.nextID();
-            var st = 'style="display: inline"';
+            var st = 'style="display: inline-block"';
             if (this instanceof Classes_1.classes.getClass("jassi.ui.Container")) {
                 st = "";
             }

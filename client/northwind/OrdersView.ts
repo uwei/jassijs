@@ -205,6 +205,10 @@ export class OrdersView extends DBObjectView {
             me.detailsProduct.template = "{{ProductName}}";
             me.objectchooser1.bind(me.repeater1.design.databinder, "Product");
             me.objectchooser1.items = "northwind.Products";
+            me.detailsProduct.css({
+                overflow: "hidden"
+            });
+            me.detailsProduct.height = "18";
         });
         me.panel1.isAbsolute = true;
         me.panel1.height = 185;

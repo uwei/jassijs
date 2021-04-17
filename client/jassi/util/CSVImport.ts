@@ -172,13 +172,13 @@ export class CSVImport extends Panel {
 	 * @param replace - replace text e.g. {"für":"fuer"}
 	 * returns the message if succeeded
 	 */
-	static async startImport(urlcsv: string, dbclass: string, fieldmapping: { [field: string]: (string | number) } = undefined,replace:{[toReplace:string]:string}=undefined): Promise<string> {
+	static async startImport(urlcsv: string, dbclass: string, fieldmapping: { [field: string]: (string | number) } = undefined, replace: { [toReplace: string]: string } = undefined): Promise<string> {
 		var imp = new CSVImport();
 		var mapping = {};
 		let ret = await new Server().loadFile(urlcsv);
-		if(replace){
-			for(let key in replace){
-				ret=ret.replaceAll(key,replace[key]);
+		if (replace) {
+			for (let key in replace) {
+				ret = ret.replaceAll(key, replace[key]);
 			}
 		}
 		imp.readData(ret);
@@ -205,7 +205,7 @@ export class CSVImport extends Panel {
 				if (Number.isInteger(val)) {
 					mapping[key] = Number(val) - 1;
 				} else {
-					if (fieldids[(<string>val).toLowerCase()]!==undefined)
+					if (fieldids[(<string>val).toLowerCase()] !== undefined)
 						mapping[key] = fieldids[(<string>val).toLowerCase()];
 
 				}
@@ -242,7 +242,7 @@ export class CSVImport extends Panel {
 
 		var allObjects: DBObject[] = [];
 		var from = fromLine;
-		for (var x = from-1; x < data.length; x++) {
+		for (var x = from - 1; x < data.length; x++) {
 			var satz = data[x];
 
 			var ob = new Type();
@@ -255,15 +255,15 @@ export class CSVImport extends Panel {
 					if (mtype !== undefined) {
 						var mt = mtype[0][0];
 						if (mt === Number)
-							val = Number(val.replaceAll(",","."));
-						if (mt === Boolean){
-							val=(val==="true"||val===true||val===1||val==="1");
+							val = Number(val.replaceAll(",", "."));
+						if (mt === Boolean) {
+							val = (val === "true" || val === true || val === 1 || val === "1");
 						}
 						if (val === "#NV")
 							val = undefined;
 					}
-					if((meta[fname].OneToOne||meta[fname].ManyToOne)&& val!==undefined){
-						val={id:val};
+					if ((meta[fname].OneToOne || meta[fname].ManyToOne) && val !== undefined) {
+						val = { id: val };
 					}
 					ob[fname] = val;
 				}
@@ -276,17 +276,25 @@ export class CSVImport extends Panel {
 				allObjects.push(ob);
 		}
 		var ret: Promise<DBObject>[] = [];
-		var trans=new Transaction();
-	  
-			for (var x = 0; x <allObjects.length; x++) {
-				var obs:any=allObjects[x];
-				trans.add(obs,obs.save);
+		var trans = new Transaction();
+
+		for (var x = 0; x < allObjects.length; x++) {
+			var obs: any = allObjects[x];
+			trans.add(obs, obs.save);
 
 		}
-
-	
 		await trans.execute();
-		
+		//remove relations
+		var rels=[];
+		for (var fname in meta) {
+				if (meta[fname].OneToOne || meta[fname].ManyToOne) {
+					rels.push(fname);
+				}
+			}
+		for (var x = 0; x < allObjects.length; x++) {
+			var obs: any = allObjects[x];
+			rels.forEach(el=>{delete obs[el]});
+		}
 		return "imported " + allObjects.length + " objects";
 	}
 }
@@ -386,11 +394,11 @@ WHITC,89,White Clover Markets,Karl Jablonski,Owner,305 - 14th Ave. S. Suite 3B,S
 WILMK,90,Wilman Kala,Matti Karttunen,Owner/Marketing Assistant,Keskuskatu 45,Helsinki,#NV,21240,Finland,90-224 8858,90-224 8858
 WOLZA,91,Wolski  Zajazd,Zbyszek Piestrzeniewicz,Owner,ul. Filtrowa 68,Warszawa,#NV,01-012,Poland,(26) 642-7012,(26) 642-7012
 `;
-    var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products",
-	 { "id": "productid","supplier":"supplierid","category":"categoryid" });
-   
-//	var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees",
-//		{ "id": "EmployeeID" });
+	var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products",
+		{ "id": "productid", "supplier": "supplierid", "category": "categoryid" });
+
+	//	var s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/employees.csv", "northwind.Employees",
+	//		{ "id": "EmployeeID" });
 	console.log(s);
 	/*	var t = await classes.loadClass("northwind.Customer");
 		var ret = new CSVImport();

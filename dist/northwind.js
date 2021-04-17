@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("northwind/CategoriesView", ["require", "exports", "jassi/ui/Textarea", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Categories", "jassi/ui/DBObjectView"], function (require, exports, Textarea_1, Textbox_1, Jassi_1, Property_1, Categories_1, DBObjectView_1) {
+define("northwind/CategoriesView", ["require", "exports", "jassi/ui/Table", "jassi/ui/BoxPanel", "jassi/ui/Textarea", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Property", "northwind/remote/Categories", "jassi/ui/DBObjectView"], function (require, exports, Table_1, BoxPanel_1, Textarea_1, Textbox_1, Jassi_1, Panel_1, Property_1, Categories_1, DBObjectView_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -15,38 +15,69 @@ define("northwind/CategoriesView", ["require", "exports", "jassi/ui/Textarea", "
     let CategoriesView = class CategoriesView extends DBObjectView_1.DBObjectView {
         constructor() {
             super();
-            //this.me = {}; this is called in objectdialog
+            // this.me = {}; //this is called in objectdialog
             this.layout(this.me);
         }
         get title() {
             return this.value === undefined ? "CategoriesView" : "CategoriesView " + this.value.id;
         }
+        layout3(me) {
+            me.Id = new Textbox_1.Textbox();
+            me.name = new Textbox_1.Textbox();
+            me.description = new Textarea_1.Textarea();
+            me.boxpanel1 = new BoxPanel_1.BoxPanel();
+            me.table1 = new Table_1.Table();
+            me.textbox1 = new Textbox_1.Textbox();
+            this.add(me.boxpanel1);
+            this.add(me.table1);
+            this.add(me.description);
+            this.add(me.textbox1);
+            me.Id.label = "Id";
+            //   me.Id.bind(me.databinder, "id");
+            me.Id.width = 45;
+            // me.name.bind(me.databinder, "CategoryName");
+            me.name.label = "Name";
+            me.name.width = 180;
+            me.name.height = 10;
+            me.description.height = 70;
+            me.description.width = 260;
+            // me.description.bind(me.databinder, "Description");
+            me.description.label = "Description";
+            me.boxpanel1.add(me.Id);
+            me.boxpanel1.horizontal = true;
+            me.boxpanel1.width = 80;
+            me.boxpanel1.add(me.name);
+            me.table1.height = 85;
+        }
         layout(me) {
             me.Id = new Textbox_1.Textbox();
             me.name = new Textbox_1.Textbox();
             me.description = new Textarea_1.Textarea();
-            me.main.add(me.Id);
-            me.main.isAbsolute = true;
+            me.boxpanel1 = new BoxPanel_1.BoxPanel();
+            me.table1 = new Table_1.Table();
+            me.panel1 = new Panel_1.Panel();
+            me.main.add(me.boxpanel1);
             me.main.add(me.description);
-            me.main.add(me.name);
-            this.width = 626;
-            this.height = 178;
-            me.Id.x = 5;
-            me.Id.y = 5;
+            me.main.add(me.panel1);
+            me.main.add(me.table1);
             me.Id.label = "Id";
             me.Id.bind(me.databinder, "id");
-            me.Id.width = 65;
-            me.name.x = 85;
-            me.name.y = 5;
+            me.Id.width = 45;
             me.name.bind(me.databinder, "CategoryName");
             me.name.label = "Name";
-            me.name.width = 180;
-            me.description.x = 5;
-            me.description.y = 60;
-            me.description.height = 35;
-            me.description.width = 260;
+            me.name.width = 225;
+            me.name.height = 10;
+            me.description.height = 70;
+            me.description.width = 280;
             me.description.bind(me.databinder, "Description");
             me.description.label = "Description";
+            me.boxpanel1.add(me.Id);
+            me.boxpanel1.horizontal = true;
+            me.boxpanel1.width = 80;
+            me.boxpanel1.add(me.name);
+            me.table1.height = "100%";
+            me.table1.bindItems(me.databinder, "Products");
+            me.table1.width = "100%";
         }
     };
     __decorate([
@@ -60,8 +91,8 @@ define("northwind/CategoriesView", ["require", "exports", "jassi/ui/Textarea", "
     ], CategoriesView);
     exports.CategoriesView = CategoriesView;
     async function test() {
-        var ret = new CategoriesView;
-        ret["value"] = await Categories_1.Categories.findOne();
+        var ret = new CategoriesView();
+        ret["value"] = await Categories_1.Categories.findOne({ relations: ["*"] });
         return ret;
     }
     exports.test = test;
@@ -392,11 +423,11 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/ObjectChooser
     }
     exports.test = test;
 });
-define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/util/CSVImport", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Button_2, HTMLPanel_2, Jassi_5, Panel_1, CSVImport_1, Actions_1, Router_1) {
+define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/util/CSVImport", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Button_2, HTMLPanel_2, Jassi_5, Panel_2, CSVImport_1, Actions_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ImportData = void 0;
-    let ImportData = class ImportData extends Panel_1.Panel {
+    let ImportData = class ImportData extends Panel_2.Panel {
         constructor() {
             super();
             this.me = {};
@@ -464,7 +495,7 @@ define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/
     }
     exports.test = test;
 });
-define("northwind/OrdersView", ["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Repeater", "jassi/ui/Calendar", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Property", "northwind/remote/Orders", "jassi/ui/DBObjectView"], function (require, exports, BoxPanel_1, Repeater_1, Calendar_2, ObjectChooser_2, HTMLPanel_3, NumberConverter_2, Textbox_5, Jassi_6, Panel_2, Property_5, Orders_1, DBObjectView_5) {
+define("northwind/OrdersView", ["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Repeater", "jassi/ui/Calendar", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Property", "northwind/remote/Orders", "jassi/ui/DBObjectView"], function (require, exports, BoxPanel_2, Repeater_1, Calendar_2, ObjectChooser_2, HTMLPanel_3, NumberConverter_2, Textbox_5, Jassi_6, Panel_3, Property_5, Orders_1, DBObjectView_5) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -497,11 +528,11 @@ define("northwind/OrdersView", ["require", "exports", "jassi/ui/BoxPanel", "jass
             me.shipCountry = new Textbox_5.Textbox();
             me.shipRegion = new Textbox_5.Textbox();
             me.repeater1 = new Repeater_1.Repeater();
-            me.panel1 = new Panel_2.Panel();
-            me.panel2 = new Panel_2.Panel();
-            me.panel3 = new Panel_2.Panel();
-            me.boxpanel1 = new BoxPanel_1.BoxPanel();
-            me.boxpanel2 = new BoxPanel_1.BoxPanel();
+            me.panel1 = new Panel_3.Panel();
+            me.panel2 = new Panel_3.Panel();
+            me.panel3 = new Panel_3.Panel();
+            me.boxpanel1 = new BoxPanel_2.BoxPanel();
+            me.boxpanel2 = new BoxPanel_2.BoxPanel();
             me.htmlpanel1 = new HTMLPanel_3.HTMLPanel();
             me.htmlpanel2 = new HTMLPanel_3.HTMLPanel();
             me.main.add(me.boxpanel1);
@@ -624,6 +655,10 @@ define("northwind/OrdersView", ["require", "exports", "jassi/ui/BoxPanel", "jass
                 me.detailsProduct.template = "{{ProductName}}";
                 me.objectchooser1.bind(me.repeater1.design.databinder, "Product");
                 me.objectchooser1.items = "northwind.Products";
+                me.detailsProduct.css({
+                    overflow: "hidden"
+                });
+                me.detailsProduct.height = "18";
             });
             me.panel1.isAbsolute = true;
             me.panel1.height = 185;
@@ -1005,7 +1040,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1615758610480,
+                "date": 1618667588024,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -1062,7 +1097,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551043267
             },
             "northwind/OrdersView.ts": {
-                "date": 1617202926423,
+                "date": 1618558562886,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1086,7 +1121,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Categories.ts": {
-                "date": 1615758109294,
+                "date": 1618567139428,
                 "northwind.Categories": {
                     "$DBObject": []
                 }
@@ -1110,13 +1145,13 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
-                "date": 1616791058036,
+                "date": 1618561866283,
                 "northwind.Orders": {
                     "$DBObject": []
                 }
             },
             "northwind/remote/Products.ts": {
-                "date": 1616191766061,
+                "date": 1618559420486,
                 "northwind.Products": {
                     "$DBObject": []
                 }
@@ -1160,8 +1195,9 @@ define("northwind/registry", ["require"], function (require) {
         }
     };
 });
-define("northwind/remote/Categories", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, DBObject_1, Jassi_10, DatabaseSchema_1) {
+define("northwind/remote/Categories", ["require", "exports", "northwind/remote/Products", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, Products_2, DBObject_1, Jassi_10, DatabaseSchema_1) {
     "use strict";
+    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Categories = void 0;
     let Categories = class Categories extends DBObject_1.DBObject {
@@ -1185,6 +1221,10 @@ define("northwind/remote/Categories", ["require", "exports", "jassi/remote/DBObj
         DatabaseSchema_1.Column(),
         __metadata("design:type", String)
     ], Categories.prototype, "Picture", void 0);
+    __decorate([
+        DatabaseSchema_1.OneToMany(type => Products_2.Products, e => e.Category),
+        __metadata("design:type", typeof (_a = typeof Products_2.Products !== "undefined" && Products_2.Products) === "function" ? _a : Object)
+    ], Categories.prototype, "Products", void 0);
     Categories = __decorate([
         DBObject_1.$DBObject(),
         Jassi_10.$Class("northwind.Categories"),
@@ -1192,6 +1232,8 @@ define("northwind/remote/Categories", ["require", "exports", "jassi/remote/DBObj
     ], Categories);
     exports.Categories = Categories;
     async function test() {
+        var all = await Categories.find({ relations: ["*"] });
+        debugger;
     }
     exports.test = test;
     ;
@@ -1420,7 +1462,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObje
     exports.test2 = test2;
     ;
 });
-define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, Products_2, Orders_2, DBObject_4, Jassi_13, DatabaseSchema_4) {
+define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, Products_3, Orders_2, DBObject_4, Jassi_13, DatabaseSchema_4) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1439,8 +1481,8 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
         __metadata("design:type", typeof (_a = typeof Orders_2.Orders !== "undefined" && Orders_2.Orders) === "function" ? _a : Object)
     ], OrderDetails.prototype, "Order", void 0);
     __decorate([
-        DatabaseSchema_4.ManyToOne(type => Products_2.Products),
-        __metadata("design:type", typeof (_b = typeof Products_2.Products !== "undefined" && Products_2.Products) === "function" ? _b : Object)
+        DatabaseSchema_4.ManyToOne(type => Products_3.Products),
+        __metadata("design:type", typeof (_b = typeof Products_3.Products !== "undefined" && Products_3.Products) === "function" ? _b : Object)
     ], OrderDetails.prototype, "Product", void 0);
     __decorate([
         DatabaseSchema_4.Column({ nullable: false, type: "decimal" }),
@@ -1569,7 +1611,7 @@ define("northwind/remote/Products", ["require", "exports", "northwind/remote/Cat
         __metadata("design:type", typeof (_a = typeof Suppliers_2.Suppliers !== "undefined" && Suppliers_2.Suppliers) === "function" ? _a : Object)
     ], Products.prototype, "Supplier", void 0);
     __decorate([
-        DatabaseSchema_6.ManyToOne(type => Categories_2.Categories),
+        DatabaseSchema_6.ManyToOne(type => Categories_2.Categories, e => e.Products),
         __metadata("design:type", typeof (_b = typeof Categories_2.Categories !== "undefined" && Categories_2.Categories) === "function" ? _b : Object)
     ], Products.prototype, "Category", void 0);
     __decorate([

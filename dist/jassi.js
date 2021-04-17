@@ -152,7 +152,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.DBArray": {}
             },
             "jassi/remote/DBObject.ts": {
-                "date": 1616787993933,
+                "date": 1618567070113,
                 "jassi.remote.DBObject": {}
             },
             "jassi/remote/DBObjectQuery.ts": {
@@ -352,7 +352,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Component.ts": {
-                "date": 1613218566584,
+                "date": 1618665370438,
                 "jassi.ui.Component": {}
             },
             "jassi/ui/ComponentDescriptor.ts": {
@@ -844,7 +844,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Table.ts": {
-                "date": 1616196145911,
+                "date": 1618667343544,
                 "jassi.ui.TableEditorProperties": {},
                 "jassi.ui.Table": {
                     "$UIComponent": [
@@ -935,7 +935,7 @@ define("jassi/registry", ["require"], function (require) {
                 "date": 1611783871704
             },
             "jassi/util/CSVImport.ts": {
-                "date": 1616788006690,
+                "date": 1618558365447,
                 "jassi.util.CSVImport": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -3344,6 +3344,12 @@ define("jassi/remote/DBObject", ["require", "exports", "jassi/remote/Jassi", "ja
         constructor() {
             super();
         }
+        //clear cache on reload
+        static _initFunc() {
+            Registry_6.default.onregister("$Class", (data, name) => {
+                delete DBObject_1.cache[name];
+            });
+        }
         isAutoId() {
             var _a;
             var def = (_a = Database_1.db.getMetadata(this.constructor)) === null || _a === void 0 ? void 0 : _a.fields;
@@ -3505,6 +3511,7 @@ define("jassi/remote/DBObject", ["require", "exports", "jassi/remote/Jassi", "ja
         }
     };
     DBObject.cache = {};
+    DBObject._init = DBObject_1._initFunc();
     DBObject = DBObject_1 = __decorate([
         Jassi_12.$Class("jassi.remote.DBObject"),
         __metadata("design:paramtypes", [])
@@ -6343,7 +6350,7 @@ define("jassi/ui/Component", ["require", "exports", "jassi/remote/Jassi", "jassi
             this._eventHandler = {};
             //add _this to the dom element
             var lid = Registry_12.default.nextID();
-            var st = 'style="display: inline"';
+            var st = 'style="display: inline-block"';
             if (this instanceof Classes_15.classes.getClass("jassi.ui.Container")) {
                 st = "";
             }
@@ -11830,6 +11837,7 @@ define("jassi/ui/Table", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
+    ;
     let TableEditorProperties = class TableEditorProperties {
         cellDblClick() { }
     };
@@ -12161,6 +12169,10 @@ define("jassi/ui/Table", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/
             // this.tree = undefined;
             if (this._searchbox !== undefined)
                 this._searchbox.destroy();
+            if (this._databinderItems !== undefined) {
+                this._databinderItems.remove(this);
+                this._databinderItems = undefined;
+            }
             super.destroy();
         }
         set columns(value) {
@@ -12169,6 +12181,17 @@ define("jassi/ui/Table", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/
         }
         get columns() {
             return this.table.getColumnDefinitions();
+        }
+        bindItems(databinder, property) {
+            this._databinderItems = databinder;
+            var _this = this;
+            this._databinderItems.add(property, this, undefined, (tab) => {
+                return tab.items;
+            }, (tab, val) => {
+                tab.items = val;
+            });
+            //databinderItems.add(property, this, "onchange");
+            //databinder.checkAutocommit(this);
         }
     };
     __decorate([
@@ -12187,6 +12210,12 @@ define("jassi/ui/Table", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Table.prototype, "height", null);
+    __decorate([
+        Property_27.$Property({ type: "databinder" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:returntype", void 0)
+    ], Table.prototype, "bindItems", null);
     Table = __decorate([
         Component_21.$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
         Jassi_65.$Class("jassi.ui.Table"),
@@ -15463,6 +15492,17 @@ define("jassi/util/CSVImport", ["require", "exports", "jassi/ui/Upload", "jassi/
                 trans.add(obs, obs.save);
             }
             await trans.execute();
+            //remove relations
+            var rels = [];
+            for (var fname in meta) {
+                if (meta[fname].OneToOne || meta[fname].ManyToOne) {
+                    rels.push(fname);
+                }
+            }
+            for (var x = 0; x < allObjects.length; x++) {
+                var obs = allObjects[x];
+                rels.forEach(el => { delete obs[el]; });
+            }
             return "imported " + allObjects.length + " objects";
         }
     };

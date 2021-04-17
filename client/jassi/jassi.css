@@ -31,6 +31,11 @@ br[data-mce-bogus="1"] {
 .jdesignmode > .Panel {
   border:1px solid #ccc;
 }
+.ui-state-highlight> .jinlinecomponent{
+  border: 1px solid #dad55e;
+  background: #fffa90;
+  color: #777620;
+}
 .jselected{
   border-color: #C1E0FF; 
   border:1px;

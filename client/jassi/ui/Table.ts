@@ -1,4 +1,4 @@
-
+;
 import { $Class } from "jassi/remote/Jassi";
 
 import "jassi/ext/tabulator";
@@ -7,6 +7,7 @@ import { $Property } from "jassi/ui/Property";
 import { Component, $UIComponent } from "jassi/ui/Component";
 import { Textbox } from "jassi/ui/Textbox";
 import { Calendar } from "jassi/ui/Calendar";
+import { Databinder } from "jassi/ui/Databinder";
 
 interface TableOptions extends Tabulator.Options {
     dataTreeChildFunction?: ((data: any) => any)|any;
@@ -48,6 +49,7 @@ export class Table extends DataComponent {
     _tree;
     _items: any[];
     _searchbox: Textbox;
+    _databinderItems:Databinder;
     private dataTreeChildFunction: string | ((obj: any) => any);
     constructor(properties?: TableOptions) {
         super();
@@ -364,6 +366,10 @@ export class Table extends DataComponent {
         // this.tree = undefined;
         if (this._searchbox !== undefined)
             this._searchbox.destroy();
+       if(this._databinderItems!==undefined){
+            this._databinderItems.remove(this);
+            this._databinderItems=undefined;
+        }
         super.destroy();
     }
 
@@ -373,6 +379,19 @@ export class Table extends DataComponent {
     }
     get columns(): Tabulator.ColumnDefinition[] {
         return this.table.getColumnDefinitions();
+    }
+    @$Property({ type: "databinder" })
+    bindItems(databinder, property) {
+        this._databinderItems = databinder;
+        var _this=this;
+         this._databinderItems.add(property, this, undefined,(tab)=>{
+             return tab.items;
+         },(tab,val)=>{
+             tab.items=val;
+         });
+
+        //databinderItems.add(property, this, "onchange");
+        //databinder.checkAutocommit(this);
     }
 }
 

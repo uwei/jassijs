@@ -1,3 +1,6 @@
+import { Checkbox } from "jassi/ui/Checkbox";
+import { Table } from "jassi/ui/Table";
+import { BoxPanel } from "jassi/ui/BoxPanel";
 import { Textarea } from "jassi/ui/Textarea";
 import { Textbox } from "jassi/ui/Textbox";
 import { $Class } from "jassi/remote/Jassi";
@@ -11,8 +14,12 @@ type Me = {
     Id?: Textbox;
     name?: Textbox;
     description?: Textarea;
+    boxpanel1?: BoxPanel;
+    table1?: Table;
+    textbox1?: Textbox;
+    panel1?: Panel;
 } & DBObjectViewMe;
-@$DBObjectView({ classname: "northwind.Categories",actionname: "Northwind/Categories", icon:"mdi mdi-cube" })
+@$DBObjectView({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" })
 @$Class("northwind.CategoriesView")
 export class CategoriesView extends DBObjectView {
     me: Me;
@@ -20,42 +27,73 @@ export class CategoriesView extends DBObjectView {
     value: Categories;
     constructor() {
         super();
-        //this.me = {}; this is called in objectdialog
+        // this.me = {}; //this is called in objectdialog
         this.layout(this.me);
     }
     get title() {
         return this.value === undefined ? "CategoriesView" : "CategoriesView " + this.value.id;
     }
+    layout3(me: Me) {
+        me.Id = new Textbox();
+        me.name = new Textbox();
+        me.description = new Textarea();
+        me.boxpanel1 = new BoxPanel();
+        me.table1 = new Table();
+        me.textbox1 = new Textbox();
+        this.add(me.boxpanel1);
+        this.add(me.table1);
+        this.add(me.description);
+        this.add(me.textbox1);
+        me.Id.label = "Id";
+        //   me.Id.bind(me.databinder, "id");
+        me.Id.width = 45;
+        // me.name.bind(me.databinder, "CategoryName");
+        me.name.label = "Name";
+        me.name.width = 180;
+        me.name.height = 10;
+        me.description.height = 70;
+        me.description.width = 260;
+        // me.description.bind(me.databinder, "Description");
+        me.description.label = "Description";
+        me.boxpanel1.add(me.Id);
+        me.boxpanel1.horizontal = true;
+        me.boxpanel1.width = 80;
+        me.boxpanel1.add(me.name);
+        me.table1.height = 85;
+    }
     layout(me: Me) {
         me.Id = new Textbox();
         me.name = new Textbox();
         me.description = new Textarea();
-        me.main.add(me.Id);
-        me.main.isAbsolute = true;
+        me.boxpanel1 = new BoxPanel();
+        me.table1 = new Table();
+        me.panel1 = new Panel();
+        me.main.add(me.boxpanel1);
         me.main.add(me.description);
-        me.main.add(me.name);
-        this.width = 626;
-        this.height = 178;
-        me.Id.x = 5;
-        me.Id.y = 5;
+        me.main.add(me.panel1);
+        me.main.add(me.table1);
         me.Id.label = "Id";
         me.Id.bind(me.databinder, "id");
-        me.Id.width = 65;
-        me.name.x = 85;
-        me.name.y = 5;
+        me.Id.width = 45;
         me.name.bind(me.databinder, "CategoryName");
         me.name.label = "Name";
-        me.name.width = 180;
-        me.description.x = 5;
-        me.description.y = 60;
-        me.description.height = 35;
-        me.description.width = 260;
+        me.name.width = 225;
+        me.name.height = 10;
+        me.description.height = 70;
+        me.description.width = 280;
         me.description.bind(me.databinder, "Description");
         me.description.label = "Description";
+        me.boxpanel1.add(me.Id);
+        me.boxpanel1.horizontal = true;
+        me.boxpanel1.width = 80;
+        me.boxpanel1.add(me.name);
+        me.table1.height = "100%";
+        me.table1.bindItems(me.databinder, "Products");
+        me.table1.width = "100%";
     }
 }
 export async function test() {
-    var ret = new CategoriesView;
-    ret["value"] = <Categories>await Categories.findOne();
+    var ret = new CategoriesView();
+    ret["value"] = <Categories>await Categories.findOne({ relations: ["*"] });
     return ret;
 }
