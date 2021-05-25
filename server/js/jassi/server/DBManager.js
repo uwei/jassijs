@@ -111,6 +111,19 @@ let DBManager = DBManager_1 = class DBManager {
         }
         //wait for connection ready
         await _initrunning;
+        //on server we convert decimal type to Number https://github.com/brianc/node-postgres/issues/811
+        //@ts-ignore
+        if ((window === null || window === void 0 ? void 0 : window.document) === undefined) {
+            try {
+                //@ts-ignore
+                var types = (await Promise.resolve().then(() => require('pg'))).types;
+                types.setTypeParser(1700, function (val) {
+                    return parseFloat(val);
+                });
+            }
+            catch (_a) {
+            }
+        }
         return _instance;
     }
     async mySync() {

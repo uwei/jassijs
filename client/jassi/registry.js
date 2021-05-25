@@ -798,7 +798,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Textbox.ts": {
-		"date": 1621970914193,
+		"date": 1621975866396,
 		"jassi.ui.Textbox": {
 			"$UIComponent": [
 				{

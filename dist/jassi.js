@@ -880,7 +880,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Textbox.ts": {
-                "date": 1621970914193,
+                "date": 1621975866396,
                 "jassi.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -12408,7 +12408,7 @@ define("jassi/ui/Textbox", ["require", "exports", "jassi/remote/Jassi", "jassi/u
             if (this.converter)
                 v = this.converter.objectToString(v);
             if (this._format) {
-                v = Numberformatter_1.Numberformatter.format(this._format, v);
+                v = Numberformatter_1.Numberformatter.format(this._format, value);
             }
             $(this.dom).val(v);
         }

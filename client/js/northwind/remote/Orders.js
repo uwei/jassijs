@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_1, Employees_1, Customer_1, DBObject_1, Jassi_1, DatabaseSchema_1, Shippers_1) {
     "use strict";
+    var _a, _b, _c, _d, _e, _f, _g;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Orders = void 0;
     let Orders = class Orders extends DBObject_1.DBObject {
@@ -22,27 +23,27 @@ define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote
     ], Orders.prototype, "id", void 0);
     __decorate([
         DatabaseSchema_1.ManyToOne(type => Customer_1.Customer),
-        __metadata("design:type", Customer_1.Customer)
+        __metadata("design:type", typeof (_a = typeof Customer_1.Customer !== "undefined" && Customer_1.Customer) === "function" ? _a : Object)
     ], Orders.prototype, "Customer", void 0);
     __decorate([
         DatabaseSchema_1.ManyToOne(type => Employees_1.Employees),
-        __metadata("design:type", Employees_1.Employees)
+        __metadata("design:type", typeof (_b = typeof Employees_1.Employees !== "undefined" && Employees_1.Employees) === "function" ? _b : Object)
     ], Orders.prototype, "Employee", void 0);
     __decorate([
         DatabaseSchema_1.Column({ nullable: true }),
-        __metadata("design:type", Date)
+        __metadata("design:type", typeof (_c = typeof Date !== "undefined" && Date) === "function" ? _c : Object)
     ], Orders.prototype, "OrderDate", void 0);
     __decorate([
         DatabaseSchema_1.Column({ nullable: true }),
-        __metadata("design:type", Date)
+        __metadata("design:type", typeof (_d = typeof Date !== "undefined" && Date) === "function" ? _d : Object)
     ], Orders.prototype, "RequiredDate", void 0);
     __decorate([
         DatabaseSchema_1.Column({ nullable: true }),
-        __metadata("design:type", Date)
+        __metadata("design:type", typeof (_e = typeof Date !== "undefined" && Date) === "function" ? _e : Object)
     ], Orders.prototype, "ShippedDate", void 0);
     __decorate([
         DatabaseSchema_1.ManyToOne(type => Shippers_1.Shippers),
-        __metadata("design:type", Shippers_1.Shippers)
+        __metadata("design:type", typeof (_f = typeof Shippers_1.Shippers !== "undefined" && Shippers_1.Shippers) === "function" ? _f : Object)
     ], Orders.prototype, "ShipVia", void 0);
     __decorate([
         DatabaseSchema_1.Column({ nullable: true, type: "decimal" }),
@@ -74,7 +75,7 @@ define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote
     ], Orders.prototype, "ShipCountry", void 0);
     __decorate([
         DatabaseSchema_1.OneToMany(type => OrderDetails_1.OrderDetails, e => e.Order),
-        __metadata("design:type", OrderDetails_1.OrderDetails)
+        __metadata("design:type", typeof (_g = typeof OrderDetails_1.OrderDetails !== "undefined" && OrderDetails_1.OrderDetails) === "function" ? _g : Object)
     ], Orders.prototype, "Details", void 0);
     Orders = __decorate([
         DBObject_1.$DBObject(),

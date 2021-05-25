@@ -42,6 +42,12 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
     constructor() {
         super();
     }
+    //clear cache on reload
+    static _initFunc() {
+        Registry_1.default.onregister("$Class", (data, name) => {
+            delete DBObject_1.cache[name];
+        });
+    }
     isAutoId() {
         var _a;
         var def = (_a = Database_1.db.getMetadata(this.constructor)) === null || _a === void 0 ? void 0 : _a.fields;
@@ -203,6 +209,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
     }
 };
 DBObject.cache = {};
+DBObject._init = DBObject_1._initFunc();
 DBObject = DBObject_1 = __decorate([
     Jassi_1.$Class("jassi.remote.DBObject"),
     __metadata("design:paramtypes", [])

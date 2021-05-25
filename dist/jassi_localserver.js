@@ -106,12 +106,25 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
             }
             //wait for connection ready
             await _initrunning;
+            //on server we convert decimal type to Number https://github.com/brianc/node-postgres/issues/811
+            //@ts-ignore
+            if ((window === null || window === void 0 ? void 0 : window.document) === undefined) {
+                try {
+                    //@ts-ignore
+                    var types = (await new Promise((resolve_1, reject_1) => { require(['pg'], resolve_1, reject_1); })).types;
+                    types.setTypeParser(1700, function (val) {
+                        return parseFloat(val);
+                    });
+                }
+                catch (_a) {
+                }
+            }
             return _instance;
         }
         async mySync() {
             var con = typeorm_1.getConnection();
             //@ts-ignore
-            var schem = await new Promise((resolve_1, reject_1) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_1, reject_1); });
+            var schem = await new Promise((resolve_2, reject_2) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_2, reject_2); });
             var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
             schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"] = async function () {
                 //try{
@@ -975,7 +988,7 @@ define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jass
             }
             if (fileNames.length === 1 && fileNames[0].endsWith("/registry.js")) //no indexer save recurse
                 return;
-            var RegistryIndexer = (await new Promise((resolve_2, reject_2) => { require(["jassi_localserver/RegistryIndexer"], resolve_2, reject_2); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_3, reject_3) => { require(["jassi_localserver/RegistryIndexer"], resolve_3, reject_3); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             if (rollbackonerror) {
                 try {
@@ -1052,7 +1065,7 @@ define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jass
                 store.delete(entr[i].id);
                 await new Promise((resolve) => { transaction.oncomplete = resolve; });
             }
-            var RegistryIndexer = (await new Promise((resolve_3, reject_3) => { require(["jassi_localserver/RegistryIndexer"], resolve_3, reject_3); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassi_localserver/RegistryIndexer"], resolve_4, reject_4); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             //entr = await this.dirEntry(file);
             return "";
@@ -1062,7 +1075,7 @@ define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jass
          */
         async zip(directoryname, serverdir = undefined, context = undefined) {
             //@ts-ignore
-            var JSZip = (await new Promise((resolve_4, reject_4) => { require(["jassi_localserver/ext/jszip"], resolve_4, reject_4); })).default;
+            var JSZip = (await new Promise((resolve_5, reject_5) => { require(["jassi_localserver/ext/jszip"], resolve_5, reject_5); })).default;
             if (serverdir)
                 throw new Error("serverdir is unsupported on localserver");
             var zip = new JSZip();
@@ -1097,7 +1110,7 @@ define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jass
                 else
                     await this.createFile(oldf[i].id, oldf[i].data);
             }
-            var RegistryIndexer = (await new Promise((resolve_5, reject_5) => { require(["jassi_localserver/RegistryIndexer"], resolve_5, reject_5); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_6, reject_6) => { require(["jassi_localserver/RegistryIndexer"], resolve_6, reject_6); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             return "";
         }
@@ -1373,7 +1386,7 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
     RemoteProtocol_1.RemoteProtocol.prototype.exec = async function (config, ob) {
         var clname = JSON.parse(config.data).classname;
         var local = ["jassi.remote.Transaction", "northwind.Employees", "northwind.Customer"];
-        var classes = (await new Promise((resolve_6, reject_6) => { require(["jassi/remote/Classes"], resolve_6, reject_6); })).classes;
+        var classes = (await new Promise((resolve_7, reject_7) => { require(["jassi/remote/Classes"], resolve_7, reject_7); })).classes;
         var DBObject = await classes.loadClass("jassi.remote.DBObject");
         var ret;
         //
@@ -1419,7 +1432,7 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
         return ret;
     };
     async function localExec(prot, context = undefined) {
-        var classes = (await new Promise((resolve_7, reject_7) => { require(["jassi/remote/Classes"], resolve_7, reject_7); })).classes;
+        var classes = (await new Promise((resolve_8, reject_8) => { require(["jassi/remote/Classes"], resolve_8, reject_8); })).classes;
         var p = new RemoteProtocol_1.RemoteProtocol();
         var C = await classes.loadClass(prot.classname);
         if (context === undefined) {
@@ -1745,6 +1758,53 @@ define("jassi_localserver/modul", ["require", "exports"], function (require, exp
                 "window.SQL": "https://sql.js.org/dist/sql-wasm"
             },
             shim: {}
+        }
+    };
+});
+//this file is autogenerated don't modify
+define("jassi_localserver/registry", ["require"], function (require) {
+    return {
+        default: {
+            "jassi_localserver/DatabaseSchema.ts": {
+                "date": 1618335240687
+            },
+            "jassi_localserver/DBManager.ts": {
+                "date": 1618330522544,
+                "jassi_localserver.DBManager": {}
+            },
+            "jassi_localserver/Filesystem.ts": {
+                "date": 1615320036255,
+                "jassi_localserver.Filessystem": {}
+            },
+            "jassi_localserver/Indexer.ts": {
+                "date": 1614893991197
+            },
+            "jassi_localserver/LocalProtocol.ts": {
+                "date": 1615324690490
+            },
+            "jassi_localserver/modul.ts": {
+                "date": 1615410135735
+            },
+            "jassi_localserver/RegistryIndexer.ts": {
+                "date": 1615986957521,
+                "jassi_localserver.RegistryIndexer": {}
+            },
+            "jassi_localserver/Testserver.ts": {
+                "date": 1614365026599,
+                "jassi_localserver.Testserver": {}
+            },
+            "jassi_localserver/Testuser.ts": {
+                "date": 1614289287180,
+                "Testuser": {
+                    "$DBObject": []
+                }
+            },
+            "jassi_localserver/TypeORMListener.ts": {
+                "date": 1615320659610,
+                "jassi_localserver.TypeORMListener": {
+                    "EventSubscriber": []
+                }
+            }
         }
     };
 });

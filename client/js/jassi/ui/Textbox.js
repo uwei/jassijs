@@ -95,7 +95,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
             if (this.converter)
                 v = this.converter.objectToString(v);
             if (this._format) {
-                v = Numberformatter_1.Numberformatter.format(this._format, v);
+                v = Numberformatter_1.Numberformatter.format(this._format, value);
             }
             $(this.dom).val(v);
         }

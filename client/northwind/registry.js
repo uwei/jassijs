@@ -60,7 +60,7 @@ define("northwind/registry",["require"], function(require) {
 		"date": 1613551043267
 	},
 	"northwind/OrdersView.ts": {
-		"date": 1621971148044,
+		"date": 1621972279025,
 		"northwind.OrdersView": {
 			"$DBObjectView": [
 				{
@@ -108,13 +108,13 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Orders.ts": {
-		"date": 1618561866283,
+		"date": 1621974128940,
 		"northwind.Orders": {
 			"$DBObject": []
 		}
 	},
 	"northwind/remote/Products.ts": {
-		"date": 1618559420486,
+		"date": 1621973798469,
 		"northwind.Products": {
 			"$DBObject": []
 		}

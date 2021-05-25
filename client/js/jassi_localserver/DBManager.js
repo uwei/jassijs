@@ -106,12 +106,25 @@ define(["require", "exports", "typeorm", "jassi/remote/Classes", "jassi/remote/R
             }
             //wait for connection ready
             await _initrunning;
+            //on server we convert decimal type to Number https://github.com/brianc/node-postgres/issues/811
+            //@ts-ignore
+            if ((window === null || window === void 0 ? void 0 : window.document) === undefined) {
+                try {
+                    //@ts-ignore
+                    var types = (await new Promise((resolve_1, reject_1) => { require(['pg'], resolve_1, reject_1); })).types;
+                    types.setTypeParser(1700, function (val) {
+                        return parseFloat(val);
+                    });
+                }
+                catch (_a) {
+                }
+            }
             return _instance;
         }
         async mySync() {
             var con = typeorm_1.getConnection();
             //@ts-ignore
-            var schem = await new Promise((resolve_1, reject_1) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_1, reject_1); });
+            var schem = await new Promise((resolve_2, reject_2) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_2, reject_2); });
             var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
             schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"] = async function () {
                 //try{

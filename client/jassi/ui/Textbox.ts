@@ -109,7 +109,7 @@ export class Textbox extends DataComponent {
         if (this.converter)
             v = this.converter.objectToString(v);
         if(this._format){
-            v=Numberformatter.format(this._format, v);
+            v=Numberformatter.format(this._format, value);
         }
 
         $(this.dom).val(v);

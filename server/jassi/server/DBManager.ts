@@ -129,6 +129,19 @@ export class DBManager {
     }
     //wait for connection ready
     await _initrunning;
+    //on server we convert decimal type to Number https://github.com/brianc/node-postgres/issues/811
+    //@ts-ignore
+    if (window?.document === undefined) {
+      try {
+        //@ts-ignore
+        var types = (await import('pg')).types;
+        types.setTypeParser(1700, function (val) {
+          return parseFloat(val);
+        });
+      } catch {
+
+      }
+    }
     return _instance;
   }
 
