@@ -23,6 +23,6 @@ export class Categories extends DBObject {
 export async function test() {
     var all=await Categories.find({relations:["*"]});
 
-    debugger;
+
 }
 ;

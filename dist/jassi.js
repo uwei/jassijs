@@ -152,7 +152,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.DBArray": {}
             },
             "jassi/remote/DBObject.ts": {
-                "date": 1618567070113,
+                "date": 1618670223073,
                 "jassi.remote.DBObject": {}
             },
             "jassi/remote/DBObjectQuery.ts": {
@@ -310,7 +310,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Button.ts": {
-                "date": 1614117889882,
+                "date": 1621966337826,
                 "jassi.ui.Button": {
                     "$UIComponent": [
                         {
@@ -352,7 +352,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Component.ts": {
-                "date": 1618665370438,
+                "date": 1621967768029,
                 "jassi.ui.Component": {}
             },
             "jassi/ui/ComponentDescriptor.ts": {
@@ -404,7 +404,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/converters/NumberConverter.ts": {
-                "date": 1615231311640,
+                "date": 1621963163546,
                 "jassi.ui.converters.NumberConverter": {
                     "$Converter": [
                         {
@@ -448,7 +448,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Databinder.ts": {
-                "date": 1616794729521,
+                "date": 1621971369148,
                 "jassi.ui.Databinder": {
                     "$UIComponent": [
                         {
@@ -880,7 +880,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Textbox.ts": {
-                "date": 1614029152611,
+                "date": 1621970914193,
                 "jassi.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -944,6 +944,10 @@ define("jassi/registry", ["require"], function (require) {
             },
             "jassi/util/DatabaseSchema.ts": {
                 "date": 1618335325672
+            },
+            "jassi/util/Numberformatter.ts": {
+                "date": 1621963059248,
+                "jassi.util.Numberformatter": {}
             },
             "jassi/util/Reloader.ts": {
                 "date": 1615324259508,
@@ -5844,11 +5848,15 @@ define("jassi/ui/Button", ["require", "exports", "jassi/remote/Jassi", "jassi/ui
         * @param {function} handler - the function that is called on change
         */
         onclick(handler, removeOldHandler = true) {
-            if (removeOldHandler)
-                $("#" + this._id).prop("onclick", null).off("click");
-            $("#" + this._id).click(function (ob) {
-                handler(ob);
-            });
+            if (removeOldHandler) {
+                this.off("click");
+            }
+            return this.on("click", handler);
+            /*        if (removeOldHandler)
+                        $("#" + this._id).prop("onclick", null).off("click");
+                    $("#" + this._id).click(function (ob) {
+                        handler(ob);
+                    });*/
         }
         /**
         * @member {string} - the icon of the button
@@ -6304,6 +6312,34 @@ define("jassi/ui/Component", ["require", "exports", "jassi/remote/Jassi", "jassi
             }
             this.dom._this = this;
         }
+        /**
+        * called if the component get the focus
+        * @param {function} handler - the function which is executed
+        */
+        onfocus(handler) {
+            return this.on("focus", handler);
+        }
+        /**
+        * called if the component lost the focus
+        * @param {function} handler - the function which is executed
+        */
+        onblur(handler) {
+            return this.on("blur", handler);
+        }
+        /**
+         * attach an eventhandler
+         * @returns the handler to off the event
+         */
+        on(eventname, handler) {
+            let func = function (e) {
+                handler(e);
+            };
+            $(this.dom).on(eventname, func);
+            return func;
+        }
+        off(eventname, func = undefined) {
+            $(this.dom).off(eventname, func);
+        }
         static cloneAttributes(target, source) {
             [...source.attributes].forEach(attr => { target.setAttribute(attr.nodeName === "id" ? 'data-id' : attr.nodeName, attr.nodeValue); });
         }
@@ -6627,6 +6663,18 @@ define("jassi/ui/Component", ["require", "exports", "jassi/remote/Jassi", "jassi
         extensionCalled(action) {
         }
     };
+    __decorate([
+        Property_10.$Property({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], Component.prototype, "onfocus", null);
+    __decorate([
+        Property_10.$Property({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], Component.prototype, "onblur", null);
     __decorate([
         Property_10.$Property({ description: "adds a label above the component" }),
         __metadata("design:type", String),
@@ -8222,9 +8270,9 @@ define("jassi/ui/Databinder", ["require", "exports", "jassi/ui/InvisibleComponen
                     this.value = test;
                 }
                 else {
-                    if (comp["converter"] !== undefined) {
-                        test = comp["converter"].stringToObject(test);
-                    }
+                    // if (comp["converter"] !== undefined) {
+                    //     test = comp["converter"].stringToObject(test);
+                    // }
                     new PropertyAccessor().setNestedProperty(this.userObject, prop, test);
                 }
             }
@@ -12271,14 +12319,36 @@ define("jassi/ui/Textarea", ["require", "exports", "jassi/ui/Component", "jassi/
     ], Textarea);
     exports.Textarea = Textarea;
 });
-define("jassi/ui/Textbox", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/converters/DefaultConverter", "jassi/remote/Registry", "jassi/ui/Property"], function (require, exports, Jassi_67, Component_23, DataComponent_6, DefaultConverter_1, Registry_19, Property_29) {
+define("jassi/ui/Textbox", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/converters/DefaultConverter", "jassi/remote/Registry", "jassi/ui/Property", "jassi/util/Numberformatter"], function (require, exports, Jassi_67, Component_23, DataComponent_6, DefaultConverter_1, Registry_19, Property_29, Numberformatter_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Textbox = void 0;
+    //calc the default Formats
+    let allFormats = (() => {
+        var ret = [];
+        const format = new Intl.NumberFormat();
+        const parts = format.formatToParts(1234.6);
+        var decimal = ".";
+        var group = ",";
+        parts.forEach(p => {
+            if (p.type === "decimal")
+                decimal = p.value;
+            if (p.type === "group")
+                group = p.value;
+        });
+        ret.push("#" + group + "##0" + decimal + "00");
+        ret.push("#" + group + "##0" + decimal + "00 €");
+        ret.push("#" + group + "##0" + decimal + "00 $");
+        ret.push("0");
+        ret.push("0" + decimal + "00");
+        return ret;
+    })();
     let Textbox = class Textbox extends DataComponent_6.DataComponent {
         constructor(color = undefined) {
             super();
+            this._value = "";
+            this._formatProps = undefined;
             super.init($('<input type="text" />')[0]);
             $(this.dom).css("color", color);
             this.converter = undefined;
@@ -12295,58 +12365,94 @@ define("jassi/ui/Textbox", ["require", "exports", "jassi/remote/Jassi", "jassi/u
         /**
          * @member {string} value - value of the component
          */
-        set value(value) {
-            $(this.dom).val(value);
+        set format(value) {
+            this._format = value;
+            var _this = this;
+            if (value === undefined && this._formatProps) {
+                this.off("focus", this._formatProps.focus);
+                this.off("blur", this._formatProps.blur);
+            }
+            if (value && this._formatProps === undefined) {
+                _this._formatProps = { blur: undefined, focus: undefined, inEditMode: false };
+                this._formatProps.focus = this.on("focus", () => {
+                    let val = this.value;
+                    _this._formatProps.inEditMode = true;
+                    $(this.dom).val(Numberformatter_1.Numberformatter.numberToString(val));
+                });
+                this._formatProps.blur = this.on("blur", () => {
+                    _this.updateValue();
+                    _this._formatProps.inEditMode = false;
+                    $(this.dom).val(Numberformatter_1.Numberformatter.format(this._format, this.value));
+                });
+            }
+            if (this.value)
+                this.value = this.value; //apply the ne format
+            //      $(this.dom).val(value);
         }
-        get value() {
+        get format() {
+            return this._format;
+        }
+        updateValue() {
             var ret = $(this.dom).val();
             if (this.converter !== undefined) {
                 ret = this.converter.stringToObject(ret);
             }
-            return ret;
+            this._value = ret;
+        }
+        /**
+         * @member {string} value - value of the component
+         */
+        set value(value) {
+            this._value = value;
+            var v = value;
+            if (this.converter)
+                v = this.converter.objectToString(v);
+            if (this._format) {
+                v = Numberformatter_1.Numberformatter.format(this._format, v);
+            }
+            $(this.dom).val(v);
+        }
+        get value() {
+            if (this._formatProps && this._formatProps.inEditMode === false) //
+                var j = 0; //do nothing
+            else
+                this.updateValue();
+            return this._value;
         }
         /**
        * called if value has changed
        * @param {function} handler - the function which is executed
        */
         onclick(handler) {
-            $("#" + this._id).click(function (e) {
-                handler(e);
-            });
+            return this.on("click", handler);
         }
         /**
          * called if value has changed
          * @param {function} handler - the function which is executed
          */
         onchange(handler) {
-            $("#" + this._id).change(function (e) {
-                handler(e);
-            });
+            return this.on("change", handler);
         }
         /**
          * called if a key is pressed down
          * @param {function} handler - the function which is executed
          */
         onkeydown(handler) {
-            $(this.dom).keydown(function (e) {
-                handler(e);
-            });
+            return this.on("keydown", handler);
         }
         /**
          * called if user has something typed
          * @param {function} handler - the function which is executed
          */
         oninput(handler) {
-            $("#" + this._id).on("input", function () {
-                handler();
-            });
+            return this.on("input", handler);
         }
         /*
          * <input list="browsers" name="myBrowser" />
-<datalist id="browsers">
-  <option value="Chrome">
-  <option value="Firefox">
-</datalist>+>
+    <datalist id="browsers">
+    <option value="Chrome">
+    <option value="Firefox">
+    </datalist>+>
          */
         set placeholder(text) {
             $(this.dom).attr("placeholder", text);
@@ -12440,6 +12546,11 @@ define("jassi/ui/Textbox", ["require", "exports", "jassi/remote/Jassi", "jassi/u
         Property_29.$Property({ type: "classselector", service: "$Converter" }),
         __metadata("design:type", typeof (_a = typeof DefaultConverter_1.DefaultConverter !== "undefined" && DefaultConverter_1.DefaultConverter) === "function" ? _a : Object)
     ], Textbox.prototype, "converter", void 0);
+    __decorate([
+        Property_29.$Property({ type: "string", chooseFrom: allFormats }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Textbox.prototype, "format", null);
     __decorate([
         Property_29.$Property({ type: "string" }),
         __metadata("design:type", Object),
@@ -15171,7 +15282,7 @@ define("jassi/ui/converters/DefaultConverter", ["require", "exports", "jassi/rem
     ], DefaultConverter);
     exports.DefaultConverter = DefaultConverter;
 });
-define("jassi/ui/converters/NumberConverter", ["require", "exports", "jassi/ui/converters/DefaultConverter", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, DefaultConverter_2, Jassi_86, Property_34) {
+define("jassi/ui/converters/NumberConverter", ["require", "exports", "jassi/ui/converters/DefaultConverter", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/util/Numberformatter"], function (require, exports, DefaultConverter_2, Jassi_86, Property_34, Numberformatter_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NumberConverter = void 0;
@@ -15190,16 +15301,16 @@ define("jassi/ui/converters/NumberConverter", ["require", "exports", "jassi/ui/c
         stringToObject(str) {
             if (str === undefined || str === "")
                 return undefined;
-            return Number(str);
+            return Numberformatter_2.Numberformatter.stringToNumber(str);
         }
         /**
          * converts an object to string
-         * @param {string} obj - the object to convert
+         * @param  obj - the object to convert
          */
         objectToString(obj) {
             if (obj === undefined)
                 return undefined;
-            return obj.ToString();
+            return Numberformatter_2.Numberformatter.numberToString(obj);
         }
     };
     NumberConverter = __decorate([
@@ -15695,7 +15806,175 @@ define("jassi/util/DatabaseSchema", ["require", "exports", "jassi/remote/Databas
     }
     exports.ManyToMany = ManyToMany;
 });
-define("jassi/util/Reloader", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], function (require, exports, Jassi_89, Registry_25) {
+define("jassi/util/Numberformatter", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_89) {
+    "use strict";
+    var Numberformatter_3;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Numberformatter = void 0;
+    //https://github.com/Mottie/javascript-number-formatter/blob/master/src/format.js
+    //license https://github.com/Mottie/javascript-number-formatter/blob/master/LICENSE
+    const maskRegex = /[0-9\-+#]/;
+    const notMaskRegex = /[^\d\-+#]/g;
+    function getIndex(mask) {
+        return mask.search(maskRegex);
+    }
+    function processMask(mask = "#.##") {
+        const maskObj = {};
+        const len = mask.length;
+        const start = getIndex(mask);
+        maskObj.prefix = start > 0 ? mask.substring(0, start) : "";
+        // Reverse string: not an ideal method if there are surrogate pairs
+        const end = getIndex(mask.split("").reverse().join(""));
+        const offset = len - end;
+        const substr = mask.substring(offset, offset + 1);
+        // Add 1 to offset if mask has a trailing decimal/comma
+        const indx = offset + ((substr === "." || (substr === ",")) ? 1 : 0);
+        maskObj.suffix = end > 0 ? mask.substring(indx, len) : "";
+        maskObj.mask = mask.substring(start, indx);
+        maskObj.maskHasNegativeSign = maskObj.mask.charAt(0) === "-";
+        maskObj.maskHasPositiveSign = maskObj.mask.charAt(0) === "+";
+        // Search for group separator & decimal; anything not digit,
+        // not +/- sign, and not #
+        let result = maskObj.mask.match(notMaskRegex);
+        // Treat the right most symbol as decimal
+        maskObj.decimal = (result && result[result.length - 1]) || ".";
+        // Treat the left most symbol as group separator
+        maskObj.separator = (result && result[1] && result[0]) || ",";
+        // Split the decimal for the format string if any
+        result = maskObj.mask.split(maskObj.decimal);
+        maskObj.integer = result[0];
+        maskObj.fraction = result[1];
+        return maskObj;
+    }
+    function processValue(value, maskObj, options) {
+        let isNegative = false;
+        const valObj = {
+            value
+        };
+        if (value < 0) {
+            isNegative = true;
+            // Process only abs(), and turn on flag.
+            valObj.value = -valObj.value;
+        }
+        valObj.sign = isNegative ? "-" : "";
+        // Fix the decimal first, toFixed will auto fill trailing zero.
+        valObj.value = Number(valObj.value).toFixed(maskObj.fraction && maskObj.fraction.length);
+        // Convert number to string to trim off *all* trailing decimal zero(es)
+        valObj.value = Number(valObj.value).toString();
+        // Fill back any trailing zero according to format
+        // look for last zero in format
+        const posTrailZero = maskObj.fraction && maskObj.fraction.lastIndexOf("0");
+        let [valInteger = "0", valFraction = ""] = valObj.value.split(".");
+        if (!valFraction || (valFraction && valFraction.length <= posTrailZero)) {
+            valFraction = posTrailZero < 0
+                ? ""
+                : (Number("0." + valFraction).toFixed(posTrailZero + 1)).replace("0.", "");
+        }
+        valObj.integer = valInteger;
+        valObj.fraction = valFraction;
+        addSeparators(valObj, maskObj);
+        // Remove negative sign if result is zero
+        if (valObj.result === "0" || valObj.result === "") {
+            // Remove negative sign if result is zero
+            isNegative = false;
+            valObj.sign = "";
+        }
+        if (!isNegative && maskObj.maskHasPositiveSign) {
+            valObj.sign = "+";
+        }
+        else if (isNegative && maskObj.maskHasPositiveSign) {
+            valObj.sign = "-";
+        }
+        else if (isNegative) {
+            valObj.sign = options && options.enforceMaskSign && !maskObj.maskHasNegativeSign
+                ? ""
+                : "-";
+        }
+        return valObj;
+    }
+    function addSeparators(valObj, maskObj) {
+        valObj.result = "";
+        // Look for separator
+        const szSep = maskObj.integer.split(maskObj.separator);
+        // Join back without separator for counting the pos of any leading 0
+        const maskInteger = szSep.join("");
+        const posLeadZero = maskInteger && maskInteger.indexOf("0");
+        if (posLeadZero > -1) {
+            while (valObj.integer.length < (maskInteger.length - posLeadZero)) {
+                valObj.integer = "0" + valObj.integer;
+            }
+        }
+        else if (Number(valObj.integer) === 0) {
+            valObj.integer = "";
+        }
+        // Process the first group separator from decimal (.) only, the rest ignore.
+        // get the length of the last slice of split result.
+        const posSeparator = (szSep[1] && szSep[szSep.length - 1].length);
+        if (posSeparator) {
+            const len = valObj.integer.length;
+            const offset = len % posSeparator;
+            for (let indx = 0; indx < len; indx++) {
+                valObj.result += valObj.integer.charAt(indx);
+                // -posSeparator so that won't trail separator on full length
+                if (!((indx - offset + 1) % posSeparator) && indx < len - posSeparator) {
+                    valObj.result += maskObj.separator;
+                }
+            }
+        }
+        else {
+            valObj.result = valObj.integer;
+        }
+        valObj.result += (maskObj.fraction && valObj.fraction)
+            ? maskObj.decimal + valObj.fraction
+            : "";
+        return valObj;
+    }
+    function _format(mask, value, options = {}) {
+        if (!mask || isNaN(Number(value))) {
+            // Invalid inputs
+            return value;
+        }
+        const maskObj = processMask(mask);
+        const valObj = processValue(value, maskObj, options);
+        return maskObj.prefix + valObj.sign + valObj.result + maskObj.suffix;
+    }
+    ;
+    let Numberformatter = Numberformatter_3 = class Numberformatter {
+        static format(mask, value, options = {}) {
+            return _format(mask, value, options);
+        }
+        static getLocaleDecimal() {
+            const format = new Intl.NumberFormat();
+            const parts = format.formatToParts(12.6);
+            var dec = ".";
+            parts.forEach(p => {
+                if (p.type === "decimal")
+                    dec = p.value;
+            });
+            return dec;
+        }
+        static numberToString(num) {
+            var l = num.toString().replace(".", Numberformatter_3.getLocaleDecimal());
+            return l;
+        }
+        static stringToNumber(num) {
+            var l = num.replace(Numberformatter_3.getLocaleDecimal(), ".");
+            return Number.parseFloat(l);
+        }
+    };
+    Numberformatter = Numberformatter_3 = __decorate([
+        Jassi_89.$Class("jassi.util.Numberformatter")
+    ], Numberformatter);
+    exports.Numberformatter = Numberformatter;
+    function test() {
+        console.log(Numberformatter.format("##0,00", 90.8));
+        let t = Numberformatter.numberToString(90.8);
+        console.log(t);
+        console.log(Numberformatter.stringToNumber(t));
+    }
+    exports.test = test;
+});
+define("jassi/util/Reloader", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], function (require, exports, Jassi_90, Registry_25) {
     "use strict";
     var Reloader_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -15718,7 +15997,7 @@ define("jassi/util/Reloader", ["require", "exports", "jassi/remote/Jassi", "jass
             }
             var h = { date: 0, files: [] };
             var f = async function () {
-                Jassi_89.default.server.call("checkDir", h.date).then(function (t) {
+                Jassi_90.default.server.call("checkDir", h.date).then(function (t) {
                     h = JSON.parse(t);
                     var len = h.files.length;
                     if (len > 3)
@@ -15942,12 +16221,12 @@ define("jassi/util/Reloader", ["require", "exports", "jassi/remote/Jassi", "jass
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_1();
     Reloader = Reloader_1 = __decorate([
-        Jassi_89.$Class("jassi.util.Reloader"),
+        Jassi_90.$Class("jassi.util.Reloader"),
         __metadata("design:paramtypes", [])
     ], Reloader);
     exports.Reloader = Reloader;
 });
-define("jassi/util/Tools", ["require", "exports", "jassi/remote/Jassi", "jassi/ext/lodash"], function (require, exports, Jassi_90, lodash_1) {
+define("jassi/util/Tools", ["require", "exports", "jassi/remote/Jassi", "jassi/ext/lodash"], function (require, exports, Jassi_91, lodash_1) {
     "use strict";
     var Tools_4;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -16185,7 +16464,7 @@ define("jassi/util/Tools", ["require", "exports", "jassi/remote/Jassi", "jassi/e
         }
     };
     Tools = Tools_4 = __decorate([
-        Jassi_90.$Class("jassi.util.Tools"),
+        Jassi_91.$Class("jassi.util.Tools"),
         __metadata("design:paramtypes", [])
     ], Tools);
     exports.Tools = Tools;

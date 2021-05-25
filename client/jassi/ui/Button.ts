@@ -22,11 +22,15 @@ export class Button extends Component {
     */
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler, removeOldHandler: boolean = true) {
-        if (removeOldHandler)
+        if(removeOldHandler){
+            this.off("click");
+        }
+        return this.on("click",handler);
+/*        if (removeOldHandler)
             $("#" + this._id).prop("onclick", null).off("click");
         $("#" + this._id).click(function (ob) {
             handler(ob);
-        });
+        });*/
     }
     /**
     * @member {string} - the icon of the button

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Checkbox", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Panel"], function (require, exports, Checkbox_1, Button_1, Textbox_1, Jassi_1, Panel_1) {
+define(["require", "exports", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/converters/NumberConverter"], function (require, exports, Button_1, Textbox_1, Jassi_1, Panel_1, NumberConverter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog = void 0;
@@ -18,25 +18,40 @@ define(["require", "exports", "jassi/ui/Checkbox", "jassi/ui/Button", "jassi/ui/
             this.layout(this.me);
         }
         layout(me) {
-            me.panel2 = new Panel_1.Panel();
             me.textbox1 = new Textbox_1.Textbox();
-            me.checkbox1 = new Checkbox_1.Checkbox();
-            me.textbox2 = new Textbox_1.Textbox();
-            me.checkbox2 = new Checkbox_1.Checkbox();
             me.button1 = new Button_1.Button();
             this.width = 750;
             this.height = 206;
             this.isAbsolute = false;
-            this.add(me.panel2);
-            this.add(me.checkbox1);
-            this.add(me.textbox2);
+            me.textbox1.value = 50000;
+            me.textbox1.format = "#.##0,00€";
+            me.textbox1.converter = new NumberConverter_1.NumberConverter();
+            me.textbox1.onclick(() => {
+            });
+            me.textbox1.height = 10;
+            me.textbox1.width = 135;
+            /* let r=()=>{
+                 alert(1);
+             };
+             var a=$(me.textbox1.dom).on("click",r);
+             $(me.textbox1.dom).click("click",()=>{
+                 alert(2);
+             });
+             $(me.textbox1.dom).off("click",undefined,a);*/
+            /*   me.textbox1.dom.addEventListener('focus', (event) => {
+                   $(event.target).val(Numberformatter.numberToString(me.textbox1.value));
+               });
+       
+               me.textbox1.dom.addEventListener('blur', (event) => {
+                   $(event.target).val(Numberformatter.stringToNumber($(me.textbox1.dom).val()));
+               });*/
             this.add(me.textbox1);
-            me.panel2.width = 200;
-            me.panel2.height = 55;
-            me.panel2.isAbsolute = false;
-            me.panel2.add(me.checkbox2);
-            me.panel2.add(me.button1);
+            this.add(me.button1);
             me.button1.text = "button";
+            me.button1.onclick(function (event) {
+                var test = me.textbox1.value;
+                debugger;
+            });
         }
     };
     Dialog = __decorate([

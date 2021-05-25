@@ -7,13 +7,35 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/converters/DefaultConverter", "jassi/remote/Registry", "jassi/ui/Property"], function (require, exports, Jassi_1, Component_1, DataComponent_1, DefaultConverter_1, Registry_1, Property_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/converters/DefaultConverter", "jassi/remote/Registry", "jassi/ui/Property", "jassi/util/Numberformatter"], function (require, exports, Jassi_1, Component_1, DataComponent_1, DefaultConverter_1, Registry_1, Property_1, Numberformatter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Textbox = void 0;
+    //calc the default Formats
+    let allFormats = (() => {
+        var ret = [];
+        const format = new Intl.NumberFormat();
+        const parts = format.formatToParts(1234.6);
+        var decimal = ".";
+        var group = ",";
+        parts.forEach(p => {
+            if (p.type === "decimal")
+                decimal = p.value;
+            if (p.type === "group")
+                group = p.value;
+        });
+        ret.push("#" + group + "##0" + decimal + "00");
+        ret.push("#" + group + "##0" + decimal + "00 €");
+        ret.push("#" + group + "##0" + decimal + "00 $");
+        ret.push("0");
+        ret.push("0" + decimal + "00");
+        return ret;
+    })();
     let Textbox = class Textbox extends DataComponent_1.DataComponent {
         constructor(color = undefined) {
             super();
+            this._value = "";
+            this._formatProps = undefined;
             super.init($('<input type="text" />')[0]);
             $(this.dom).css("color", color);
             this.converter = undefined;
@@ -30,58 +52,94 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         /**
          * @member {string} value - value of the component
          */
-        set value(value) {
-            $(this.dom).val(value);
+        set format(value) {
+            this._format = value;
+            var _this = this;
+            if (value === undefined && this._formatProps) {
+                this.off("focus", this._formatProps.focus);
+                this.off("blur", this._formatProps.blur);
+            }
+            if (value && this._formatProps === undefined) {
+                _this._formatProps = { blur: undefined, focus: undefined, inEditMode: false };
+                this._formatProps.focus = this.on("focus", () => {
+                    let val = this.value;
+                    _this._formatProps.inEditMode = true;
+                    $(this.dom).val(Numberformatter_1.Numberformatter.numberToString(val));
+                });
+                this._formatProps.blur = this.on("blur", () => {
+                    _this.updateValue();
+                    _this._formatProps.inEditMode = false;
+                    $(this.dom).val(Numberformatter_1.Numberformatter.format(this._format, this.value));
+                });
+            }
+            if (this.value)
+                this.value = this.value; //apply the ne format
+            //      $(this.dom).val(value);
         }
-        get value() {
+        get format() {
+            return this._format;
+        }
+        updateValue() {
             var ret = $(this.dom).val();
             if (this.converter !== undefined) {
                 ret = this.converter.stringToObject(ret);
             }
-            return ret;
+            this._value = ret;
+        }
+        /**
+         * @member {string} value - value of the component
+         */
+        set value(value) {
+            this._value = value;
+            var v = value;
+            if (this.converter)
+                v = this.converter.objectToString(v);
+            if (this._format) {
+                v = Numberformatter_1.Numberformatter.format(this._format, v);
+            }
+            $(this.dom).val(v);
+        }
+        get value() {
+            if (this._formatProps && this._formatProps.inEditMode === false) //
+                var j = 0; //do nothing
+            else
+                this.updateValue();
+            return this._value;
         }
         /**
        * called if value has changed
        * @param {function} handler - the function which is executed
        */
         onclick(handler) {
-            $("#" + this._id).click(function (e) {
-                handler(e);
-            });
+            return this.on("click", handler);
         }
         /**
          * called if value has changed
          * @param {function} handler - the function which is executed
          */
         onchange(handler) {
-            $("#" + this._id).change(function (e) {
-                handler(e);
-            });
+            return this.on("change", handler);
         }
         /**
          * called if a key is pressed down
          * @param {function} handler - the function which is executed
          */
         onkeydown(handler) {
-            $(this.dom).keydown(function (e) {
-                handler(e);
-            });
+            return this.on("keydown", handler);
         }
         /**
          * called if user has something typed
          * @param {function} handler - the function which is executed
          */
         oninput(handler) {
-            $("#" + this._id).on("input", function () {
-                handler();
-            });
+            return this.on("input", handler);
         }
         /*
          * <input list="browsers" name="myBrowser" />
-<datalist id="browsers">
-  <option value="Chrome">
-  <option value="Firefox">
-</datalist>+>
+    <datalist id="browsers">
+    <option value="Chrome">
+    <option value="Firefox">
+    </datalist>+>
          */
         set placeholder(text) {
             $(this.dom).attr("placeholder", text);
@@ -175,6 +233,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         Property_1.$Property({ type: "classselector", service: "$Converter" }),
         __metadata("design:type", DefaultConverter_1.DefaultConverter)
     ], Textbox.prototype, "converter", void 0);
+    __decorate([
+        Property_1.$Property({ type: "string", chooseFrom: allFormats }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Textbox.prototype, "format", null);
     __decorate([
         Property_1.$Property({ type: "string" }),
         __metadata("design:type", Object),

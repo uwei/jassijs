@@ -2,6 +2,7 @@ import {DefaultConverter, $Converter } from "jassi/ui/converters/DefaultConverte
 
 import jassi, { $Class } from "jassi/remote/Jassi";
 import { $Property } from "jassi/ui/Property";
+import { Numberformatter } from "jassi/util/Numberformatter";
 
 @$Converter({name:"number"})
 @$Class("jassi.ui.converters.NumberConverter")
@@ -26,16 +27,16 @@ export class NumberConverter extends DefaultConverter
         stringToObject(str){
         	if(str===undefined||str==="")
         		return undefined;
-            return Number(str);
+            return  Numberformatter.stringToNumber(str);
         }
         /**
          * converts an object to string 
-         * @param {string} obj - the object to convert
+         * @param  obj - the object to convert
          */
         objectToString(obj){
         	if(obj===undefined)
         		return undefined;
-            return obj.ToString();
+            return Numberformatter.numberToString(obj);
         }
    
     }

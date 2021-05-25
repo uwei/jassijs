@@ -62,11 +62,10 @@ define("northwind/CategoriesView", ["require", "exports", "jassi/ui/Table", "jas
             me.main.add(me.table1);
             me.Id.label = "Id";
             me.Id.bind(me.databinder, "id");
-            me.Id.width = 45;
+            me.Id.width = 40;
             me.name.bind(me.databinder, "CategoryName");
             me.name.label = "Name";
             me.name.width = 225;
-            me.name.height = 10;
             me.description.height = 70;
             me.description.width = 280;
             me.description.bind(me.databinder, "Description");
@@ -609,6 +608,11 @@ define("northwind/OrdersView", ["require", "exports", "jassi/ui/BoxPanel", "jass
             me.freight.bind(me.databinder, "Freight");
             me.freight.width = 70;
             me.freight.label = "Freight";
+            me.freight.converter = new NumberConverter_2.NumberConverter();
+            me.freight.format = "#.##0,00";
+            me.freight.css({
+                text_align: "right"
+            });
             me.shipName.x = 5;
             me.shipName.y = 5;
             me.shipName.bind(me.databinder, "ShipName");
@@ -717,7 +721,7 @@ define("northwind/OrdersView", ["require", "exports", "jassi/ui/BoxPanel", "jass
     }
     exports.test = test;
 });
-define("northwind/ProductView", ["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/Checkbox", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Products", "jassi/ui/DBObjectView"], function (require, exports, ObjectChooser_3, HTMLPanel_4, Checkbox_1, NumberConverter_3, Textbox_6, Jassi_7, Property_6, Products_1, DBObjectView_6) {
+define("northwind/ProductView", ["require", "exports", "jassi/ui/Style", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/Checkbox", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Products", "jassi/ui/DBObjectView"], function (require, exports, Style_1, ObjectChooser_3, HTMLPanel_4, Checkbox_1, NumberConverter_3, Textbox_6, Jassi_7, Property_6, Products_1, DBObjectView_6) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -744,8 +748,10 @@ define("northwind/ProductView", ["require", "exports", "jassi/ui/ObjectChooser",
             me.categoryChooser = new ObjectChooser_3.ObjectChooser();
             me.supplier = new HTMLPanel_4.HTMLPanel();
             me.supplierchooser = new ObjectChooser_3.ObjectChooser();
+            me.styleNumber = new Style_1.Style();
             me.main.add(me.id);
             me.main.isAbsolute = true;
+            me.main.add(me.styleNumber);
             me.main.add(me.supplierchooser);
             me.main.add(me.supplier);
             me.main.add(me.categoryChooser);
@@ -781,24 +787,31 @@ define("northwind/ProductView", ["require", "exports", "jassi/ui/ObjectChooser",
             me.unitPrice.label = "Unit Price";
             me.unitPrice.width = 65;
             me.unitPrice.converter = new NumberConverter_3.NumberConverter();
+            me.unitPrice.format = "#.##0,00";
+            me.unitPrice.styles = [me.styleNumber];
             me.unitsInStock.x = 240;
             me.unitsInStock.y = 60;
             me.unitsInStock.bind(me.databinder, "UnitsInStock");
             me.unitsInStock.label = "Units in Stock";
             me.unitsInStock.width = 70;
             me.unitsInStock.converter = new NumberConverter_3.NumberConverter();
+            me.unitsInStock.format = "#.##0,00";
+            me.unitsInStock.styles = [me.styleNumber];
             me.unitsOnOrder.x = 325;
             me.unitsOnOrder.y = 60;
             me.unitsOnOrder.bind(me.databinder, "UnitsOnOrder");
             me.unitsOnOrder.label = "Units on Order";
             me.unitsOnOrder.width = 75;
             me.unitsOnOrder.converter = new NumberConverter_3.NumberConverter();
+            me.unitsOnOrder.format = "#.##0,00";
+            me.unitsOnOrder.styles = [me.styleNumber];
             me.reorderLevel.x = 415;
             me.reorderLevel.y = 60;
             me.reorderLevel.bind(me.databinder, "ReorderLevel");
             me.reorderLevel.width = 70;
             me.reorderLevel.label = "Reorder Level";
             me.reorderLevel.converter = new NumberConverter_3.NumberConverter();
+            me.reorderLevel.styles = [me.styleNumber];
             me.discontinued.x = 415;
             me.discontinued.y = 10;
             me.discontinued.width = 70;
@@ -827,6 +840,11 @@ define("northwind/ProductView", ["require", "exports", "jassi/ui/ObjectChooser",
             me.supplierchooser.y = 125;
             me.supplierchooser.bind(me.databinder, "Supplier");
             me.supplierchooser.items = "northwind.Suppliers";
+            me.styleNumber.x = 442;
+            me.styleNumber.y = 183;
+            me.styleNumber.css({
+                text_align: "right"
+            });
         }
     };
     __decorate([
@@ -1040,7 +1058,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1618667588024,
+                "date": 1621089178825,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -1097,7 +1115,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551043267
             },
             "northwind/OrdersView.ts": {
-                "date": 1618558562886,
+                "date": 1621971148044,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1109,7 +1127,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1616807008528,
+                "date": 1621971923402,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -1121,7 +1139,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Categories.ts": {
-                "date": 1618567139428,
+                "date": 1621089103134,
                 "northwind.Categories": {
                     "$DBObject": []
                 }
@@ -1233,7 +1251,6 @@ define("northwind/remote/Categories", ["require", "exports", "northwind/remote/P
     exports.Categories = Categories;
     async function test() {
         var all = await Categories.find({ relations: ["*"] });
-        debugger;
     }
     exports.test = test;
     ;

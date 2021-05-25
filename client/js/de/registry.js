@@ -12,7 +12,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1613922613218
 	},
 	"de/Dialog.ts": {
-		"date": 1618584214469,
+		"date": 1621970169599,
 		"de/Dialog": {}
 	},
 	"de/DialogKunde.ts": {
@@ -25,9 +25,6 @@ define("de/registry",["require"], function(require) {
 	},
 	"de/modul.ts": {
 		"date": 1612818328924
-	},
-	"de/NumberFormat.ts": {
-		"date": 1618677306878
 	},
 	"de/oo/dd.ts": {
 		"date": 1588091991590

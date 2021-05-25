@@ -1,3 +1,4 @@
+import { Style } from "jassi/ui/Style";
 import { ObjectChooser } from "jassi/ui/ObjectChooser";
 import { HTMLPanel } from "jassi/ui/HTMLPanel";
 import { Checkbox } from "jassi/ui/Checkbox";
@@ -23,6 +24,7 @@ type Me = {
     categoryChooser?: ObjectChooser;
     supplier?: HTMLPanel;
     supplierchooser?: ObjectChooser;
+    styleNumber?: Style;
 } & DBObjectViewMe;
 @$DBObjectView({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" })
 @$Class("northwind.ProductView")
@@ -51,8 +53,10 @@ export class ProductView extends DBObjectView {
         me.categoryChooser = new ObjectChooser();
         me.supplier = new HTMLPanel();
         me.supplierchooser = new ObjectChooser();
+        me.styleNumber = new Style();
         me.main.add(me.id);
         me.main.isAbsolute = true;
+        me.main.add(me.styleNumber);
         me.main.add(me.supplierchooser);
         me.main.add(me.supplier);
         me.main.add(me.categoryChooser);
@@ -88,24 +92,31 @@ export class ProductView extends DBObjectView {
         me.unitPrice.label = "Unit Price";
         me.unitPrice.width = 65;
         me.unitPrice.converter = new NumberConverter();
+        me.unitPrice.format = "#.##0,00";
+        me.unitPrice.styles = [me.styleNumber];
         me.unitsInStock.x = 240;
         me.unitsInStock.y = 60;
         me.unitsInStock.bind(me.databinder, "UnitsInStock");
         me.unitsInStock.label = "Units in Stock";
         me.unitsInStock.width = 70;
         me.unitsInStock.converter = new NumberConverter();
+        me.unitsInStock.format = "#.##0,00";
+        me.unitsInStock.styles = [me.styleNumber];
         me.unitsOnOrder.x = 325;
         me.unitsOnOrder.y = 60;
         me.unitsOnOrder.bind(me.databinder, "UnitsOnOrder");
         me.unitsOnOrder.label = "Units on Order";
         me.unitsOnOrder.width = 75;
         me.unitsOnOrder.converter = new NumberConverter();
+        me.unitsOnOrder.format = "#.##0,00";
+        me.unitsOnOrder.styles = [me.styleNumber];
         me.reorderLevel.x = 415;
         me.reorderLevel.y = 60;
         me.reorderLevel.bind(me.databinder, "ReorderLevel");
         me.reorderLevel.width = 70;
         me.reorderLevel.label = "Reorder Level";
         me.reorderLevel.converter = new NumberConverter();
+        me.reorderLevel.styles = [me.styleNumber];
         me.discontinued.x = 415;
         me.discontinued.y = 10;
         me.discontinued.width = 70;
@@ -134,6 +145,11 @@ export class ProductView extends DBObjectView {
         me.supplierchooser.y = 125;
         me.supplierchooser.bind(me.databinder, "Supplier");
         me.supplierchooser.items = "northwind.Suppliers";
+        me.styleNumber.x = 442;
+        me.styleNumber.y = 183;
+        me.styleNumber.css({
+            text_align: "right"
+        });
     }
 }
 export async function test() {

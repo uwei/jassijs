@@ -228,7 +228,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Button.ts": {
-		"date": 1614117889882,
+		"date": 1621966337826,
 		"jassi.ui.Button": {
 			"$UIComponent": [
 				{
@@ -270,7 +270,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Component.ts": {
-		"date": 1618665370438,
+		"date": 1621967768029,
 		"jassi.ui.Component": {}
 	},
 	"jassi/ui/ComponentDescriptor.ts": {
@@ -322,7 +322,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/converters/NumberConverter.ts": {
-		"date": 1615231311640,
+		"date": 1621963163546,
 		"jassi.ui.converters.NumberConverter": {
 			"$Converter": [
 				{
@@ -366,7 +366,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Databinder.ts": {
-		"date": 1616794729521,
+		"date": 1621971369148,
 		"jassi.ui.Databinder": {
 			"$UIComponent": [
 				{
@@ -798,7 +798,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Textbox.ts": {
-		"date": 1614029152611,
+		"date": 1621970914193,
 		"jassi.ui.Textbox": {
 			"$UIComponent": [
 				{
@@ -862,6 +862,10 @@ define("jassi/registry",["require"], function(require) {
 	},
 	"jassi/util/DatabaseSchema.ts": {
 		"date": 1618335325672
+	},
+	"jassi/util/Numberformatter.ts": {
+		"date": 1621963059248,
+		"jassi.util.Numberformatter": {}
 	},
 	"jassi/util/Reloader.ts": {
 		"date": 1615324259508,

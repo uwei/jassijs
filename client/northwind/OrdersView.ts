@@ -159,6 +159,11 @@ export class OrdersView extends DBObjectView {
         me.freight.bind(me.databinder, "Freight");
         me.freight.width = 70;
         me.freight.label = "Freight";
+        me.freight.converter = new NumberConverter();
+        me.freight.format = "#.##0,00";
+        me.freight.css({
+            text_align: "right"
+        });
         me.shipName.x = 5;
         me.shipName.y = 5;
         me.shipName.bind(me.databinder, "ShipName");

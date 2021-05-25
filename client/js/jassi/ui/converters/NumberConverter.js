@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/converters/DefaultConverter", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, DefaultConverter_1, Jassi_1, Property_1) {
+define(["require", "exports", "jassi/ui/converters/DefaultConverter", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/util/Numberformatter"], function (require, exports, DefaultConverter_1, Jassi_1, Property_1, Numberformatter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NumberConverter = void 0;
@@ -26,16 +26,16 @@ define(["require", "exports", "jassi/ui/converters/DefaultConverter", "jassi/rem
         stringToObject(str) {
             if (str === undefined || str === "")
                 return undefined;
-            return Number(str);
+            return Numberformatter_1.Numberformatter.stringToNumber(str);
         }
         /**
          * converts an object to string
-         * @param {string} obj - the object to convert
+         * @param  obj - the object to convert
          */
         objectToString(obj) {
             if (obj === undefined)
                 return undefined;
-            return obj.ToString();
+            return Numberformatter_1.Numberformatter.numberToString(obj);
         }
     };
     NumberConverter = __decorate([

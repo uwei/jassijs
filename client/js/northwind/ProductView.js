@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/Checkbox", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Products", "jassi/ui/DBObjectView"], function (require, exports, ObjectChooser_1, HTMLPanel_1, Checkbox_1, NumberConverter_1, Textbox_1, Jassi_1, Property_1, Products_1, DBObjectView_1) {
+define(["require", "exports", "jassi/ui/Style", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/Checkbox", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Products", "jassi/ui/DBObjectView"], function (require, exports, Style_1, ObjectChooser_1, HTMLPanel_1, Checkbox_1, NumberConverter_1, Textbox_1, Jassi_1, Property_1, Products_1, DBObjectView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ProductView = void 0;
@@ -33,8 +33,10 @@ define(["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "j
             me.categoryChooser = new ObjectChooser_1.ObjectChooser();
             me.supplier = new HTMLPanel_1.HTMLPanel();
             me.supplierchooser = new ObjectChooser_1.ObjectChooser();
+            me.styleNumber = new Style_1.Style();
             me.main.add(me.id);
             me.main.isAbsolute = true;
+            me.main.add(me.styleNumber);
             me.main.add(me.supplierchooser);
             me.main.add(me.supplier);
             me.main.add(me.categoryChooser);
@@ -70,24 +72,31 @@ define(["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "j
             me.unitPrice.label = "Unit Price";
             me.unitPrice.width = 65;
             me.unitPrice.converter = new NumberConverter_1.NumberConverter();
+            me.unitPrice.format = "#.##0,00";
+            me.unitPrice.styles = [me.styleNumber];
             me.unitsInStock.x = 240;
             me.unitsInStock.y = 60;
             me.unitsInStock.bind(me.databinder, "UnitsInStock");
             me.unitsInStock.label = "Units in Stock";
             me.unitsInStock.width = 70;
             me.unitsInStock.converter = new NumberConverter_1.NumberConverter();
+            me.unitsInStock.format = "#.##0,00";
+            me.unitsInStock.styles = [me.styleNumber];
             me.unitsOnOrder.x = 325;
             me.unitsOnOrder.y = 60;
             me.unitsOnOrder.bind(me.databinder, "UnitsOnOrder");
             me.unitsOnOrder.label = "Units on Order";
             me.unitsOnOrder.width = 75;
             me.unitsOnOrder.converter = new NumberConverter_1.NumberConverter();
+            me.unitsOnOrder.format = "#.##0,00";
+            me.unitsOnOrder.styles = [me.styleNumber];
             me.reorderLevel.x = 415;
             me.reorderLevel.y = 60;
             me.reorderLevel.bind(me.databinder, "ReorderLevel");
             me.reorderLevel.width = 70;
             me.reorderLevel.label = "Reorder Level";
             me.reorderLevel.converter = new NumberConverter_1.NumberConverter();
+            me.reorderLevel.styles = [me.styleNumber];
             me.discontinued.x = 415;
             me.discontinued.y = 10;
             me.discontinued.width = 70;
@@ -116,6 +125,11 @@ define(["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "j
             me.supplierchooser.y = 125;
             me.supplierchooser.bind(me.databinder, "Supplier");
             me.supplierchooser.items = "northwind.Suppliers";
+            me.styleNumber.x = 442;
+            me.styleNumber.y = 183;
+            me.styleNumber.css({
+                text_align: "right"
+            });
         }
     };
     __decorate([

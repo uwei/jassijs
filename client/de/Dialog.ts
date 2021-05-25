@@ -3,12 +3,10 @@ import { Button } from "jassi/ui/Button";
 import { Textbox } from "jassi/ui/Textbox";
 import { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
+import { Numberformatter } from "jassi/util/Numberformatter";
+import { NumberConverter } from "jassi/ui/converters/NumberConverter";
 type Me = {
-    panel2?: Panel;
     textbox1?: Textbox;
-    checkbox1?: Checkbox;
-    textbox2?: Textbox;
-    checkbox2?: Checkbox;
     button1?: Button;
 };
 @$Class("de/Dialog")
@@ -20,25 +18,41 @@ export class Dialog extends Panel {
         this.layout(this.me);
     }
     layout(me: Me) {
-        me.panel2 = new Panel();
         me.textbox1 = new Textbox();
-        me.checkbox1 = new Checkbox();
-        me.textbox2 = new Textbox();
-        me.checkbox2 = new Checkbox();
         me.button1 = new Button();
         this.width = 750;
         this.height = 206;
         this.isAbsolute = false;
-        this.add(me.panel2);
-        this.add(me.checkbox1);
-        this.add(me.textbox2);
+        me.textbox1.value = 50000;
+        me.textbox1.format = "#.##0,00€";
+        me.textbox1.converter = new NumberConverter();
+        me.textbox1.onclick(() => {
+           
+        });
+        me.textbox1.height = 10;
+        me.textbox1.width = 135;
+        /* let r=()=>{
+             alert(1);
+         };
+         var a=$(me.textbox1.dom).on("click",r);
+         $(me.textbox1.dom).click("click",()=>{
+             alert(2);
+         });
+         $(me.textbox1.dom).off("click",undefined,a);*/
+        /*   me.textbox1.dom.addEventListener('focus', (event) => {
+               $(event.target).val(Numberformatter.numberToString(me.textbox1.value));
+           });
+   
+           me.textbox1.dom.addEventListener('blur', (event) => {
+               $(event.target).val(Numberformatter.stringToNumber($(me.textbox1.dom).val()));
+           });*/
         this.add(me.textbox1);
-        me.panel2.width = 200;
-        me.panel2.height = 55;
-        me.panel2.isAbsolute = false;
-        me.panel2.add(me.checkbox2);
-        me.panel2.add(me.button1);
+        this.add(me.button1);
         me.button1.text = "button";
+        me.button1.onclick(function (event) {
+             var test = me.textbox1.value;
+            debugger;
+        });
     }
 }
 export async function test() {

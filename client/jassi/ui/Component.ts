@@ -37,7 +37,7 @@ export class UIComponentProperties {
     editableChildComponents?: string[];
 }
 export function $UIComponent(properties: UIComponentProperties): Function {
-    return function(pclass) {
+    return function (pclass) {
         registry.register("$UIComponent", pclass, properties);
     }
 }
@@ -110,7 +110,7 @@ export class Component {
         var events = this._eventHandler[name];
         if (events === undefined)
             return;
-        for (var x = 0;x < events.length;x++) {
+        for (var x = 0; x < events.length; x++) {
             ret.push(events[x](param1, param2, param3, param4));
         }
         return ret;
@@ -137,6 +137,36 @@ export class Component {
         }
         this.dom._this = this;
 
+    }
+    /**
+    * called if the component get the focus
+    * @param {function} handler - the function which is executed
+    */
+    @$Property({ default: "function(event){\n\t\n}" })
+    onfocus(handler) {
+       return this.on("focus",handler);
+    }
+    /**
+    * called if the component lost the focus
+    * @param {function} handler - the function which is executed
+    */
+    @$Property({ default: "function(event){\n\t\n}" })
+    onblur(handler) {
+        return this.on("blur",handler);
+    }
+    /**
+     * attach an eventhandler
+     * @returns the handler to off the event
+     */
+    on(eventname:string,handler):any{
+       let func = function (e) {
+            handler(e);
+        };
+        $(this.dom).on(eventname, func);
+        return func;
+    }
+    off(eventname:string,func=undefined){
+        $(this.dom).off(eventname,func);
     }
     private static cloneAttributes(target, source) {
         [...source.attributes].forEach(attr => { target.setAttribute(attr.nodeName === "id" ? 'data-id' : attr.nodeName, attr.nodeValue) })
@@ -277,7 +307,7 @@ export class Component {
         $(this.domWrapper).css("position", "absolute");
     }
 
-	/**
+    /**
      * @member {boolean} - component is hidden
      */
     @$Property()

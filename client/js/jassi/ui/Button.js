@@ -24,11 +24,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         * @param {function} handler - the function that is called on change
         */
         onclick(handler, removeOldHandler = true) {
-            if (removeOldHandler)
-                $("#" + this._id).prop("onclick", null).off("click");
-            $("#" + this._id).click(function (ob) {
-                handler(ob);
-            });
+            if (removeOldHandler) {
+                this.off("click");
+            }
+            return this.on("click", handler);
+            /*        if (removeOldHandler)
+                        $("#" + this._id).prop("onclick", null).off("click");
+                    $("#" + this._id).click(function (ob) {
+                        handler(ob);
+                    });*/
         }
         /**
         * @member {string} - the icon of the button

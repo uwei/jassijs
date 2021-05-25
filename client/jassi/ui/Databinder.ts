@@ -213,9 +213,9 @@ export class Databinder extends InvisibleComponent {
                 var val = test;
                 this.value = test;
             } else {
-                if (comp["converter"] !== undefined) {
-                    test = comp["converter"].stringToObject(test);
-                }
+               // if (comp["converter"] !== undefined) {
+               //     test = comp["converter"].stringToObject(test);
+               // }
                 new PropertyAccessor().setNestedProperty(this.userObject,prop, test);
             }
         }

@@ -100,6 +100,34 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
             }
             this.dom._this = this;
         }
+        /**
+        * called if the component get the focus
+        * @param {function} handler - the function which is executed
+        */
+        onfocus(handler) {
+            return this.on("focus", handler);
+        }
+        /**
+        * called if the component lost the focus
+        * @param {function} handler - the function which is executed
+        */
+        onblur(handler) {
+            return this.on("blur", handler);
+        }
+        /**
+         * attach an eventhandler
+         * @returns the handler to off the event
+         */
+        on(eventname, handler) {
+            let func = function (e) {
+                handler(e);
+            };
+            $(this.dom).on(eventname, func);
+            return func;
+        }
+        off(eventname, func = undefined) {
+            $(this.dom).off(eventname, func);
+        }
         static cloneAttributes(target, source) {
             [...source.attributes].forEach(attr => { target.setAttribute(attr.nodeName === "id" ? 'data-id' : attr.nodeName, attr.nodeValue); });
         }
@@ -423,6 +451,18 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
         extensionCalled(action) {
         }
     };
+    __decorate([
+        Property_1.$Property({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], Component.prototype, "onfocus", null);
+    __decorate([
+        Property_1.$Property({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], Component.prototype, "onblur", null);
     __decorate([
         Property_1.$Property({ description: "adds a label above the component" }),
         __metadata("design:type", String),
