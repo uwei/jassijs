@@ -339,6 +339,7 @@ export class ComponentDesigner extends Panel{
                 };
                
                 this._resizer.onpropertychanged=function(comp,prop,value){
+                	console.log("prop change "+comp._id);
                 	if(_this._propertyEditor.value!==comp)
                 		_this._propertyEditor.value=comp;
                     _this._propertyEditor.setPropertyInCode(prop,value+"",true);

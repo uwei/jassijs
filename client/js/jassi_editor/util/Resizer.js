@@ -53,6 +53,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
         }
         //not every event is fired there nly the last with delay
         firePropertyChange(...param) {
+            console.log("fire " + param[0]._id);
             var _this = this;
             if (this.propertyChangetimer) {
                 clearTimeout(this.propertyChangetimer);
@@ -280,20 +281,23 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
          */
         install(parentPanel, elements) {
             var _this = this;
-            $(parentPanel.domWrapper).resizable({
-                resize: function (evt) {
-                    var h = evt.target.offsetHeight;
-                    var w = evt.target.offsetWidth;
-                    if (_this.onpropertychanged !== undefined) {
-                        evt.target._this.width = w;
-                        evt.target._this.height = h;
-                        _this.onpropertychanged(evt.target._this, "width", w);
-                        _this.onpropertychanged(evt.target._this, "height", h);
-                        $(evt.target._this.domWrapper).css("width", w + "px");
-                        $(evt.target._this.domWrapper).css("height", h + "px");
+            if (!$(parentPanel.dom).hasClass("designerNoResizable")) {
+                $(parentPanel.domWrapper).resizable({
+                    resize: function (evt) {
+                        var h = evt.target.offsetHeight;
+                        var w = evt.target.offsetWidth;
+                        if (_this.onpropertychanged !== undefined) {
+                            evt.target._this.width = w;
+                            evt.target._this.height = h;
+                            console.log("cha" + evt.target._this._id);
+                            _this.onpropertychanged(evt.target._this, "width", w);
+                            _this.onpropertychanged(evt.target._this, "height", h);
+                            $(evt.target._this.domWrapper).css("width", w + "px");
+                            $(evt.target._this.domWrapper).css("height", h + "px");
+                        }
                     }
-                }
-            });
+                });
+            }
             if (parentPanel !== undefined)
                 this.parentPanel = parentPanel;
             if (elements !== undefined)

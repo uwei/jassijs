@@ -349,9 +349,9 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             var _this = this;
             //all jcompoenents are proptargets                                         also jdesignummy     but no jcomponents in absolute Layout  no jcomponens that contains a jdesigndummy  absolutelayout container
             this.droppableComponents = $(this.parentPanel.dom).parent().parent().find(".jdesigndummy,.jcomponent:not(.jabsolutelayout>.jcomponent, :has(.jdesigndummy)),                      .jcontainer>.jabsolutelayout");
-            console.log(this.droppableComponents.length);
+            //console.log(this.droppableComponents.length);
             for (var c = 0; c < this.droppableComponents.length; c++) {
-                console.log(this.droppableComponents[c].id);
+                //  console.log(this.droppableComponents[c].id);
             }
             var isDropping = false;
             var dropWnd;

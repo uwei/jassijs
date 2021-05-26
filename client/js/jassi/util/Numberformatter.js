@@ -152,10 +152,18 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             return dec;
         }
         static numberToString(num) {
+            if (num === undefined)
+                return undefined;
+            if (num === null)
+                return null;
             var l = num.toString().replace(".", Numberformatter_1.getLocaleDecimal());
             return l;
         }
         static stringToNumber(num) {
+            if (num === undefined)
+                return undefined;
+            if (num === null)
+                return null;
             var l = num.replace(Numberformatter_1.getLocaleDecimal(), ".");
             return Number.parseFloat(l);
         }

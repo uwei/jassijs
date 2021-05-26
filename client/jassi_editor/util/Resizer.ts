@@ -1,6 +1,6 @@
 import jassi, { $Class } from "jassi/remote/Jassi";
-import {Component} from "jassi/ui/Component";
-import {DragAndDropper} from "jassi_editor/util/DragAndDropper";
+import { Component } from "jassi/ui/Component";
+import { DragAndDropper } from "jassi_editor/util/DragAndDropper";
 
 @$Class("jassi_editor.util.Resizer")
 export class Resizer {
@@ -19,7 +19,7 @@ export class Resizer {
     lassoMode: boolean;
     draganddropper: DragAndDropper;
     topElement: string;
-	propertyChangetimer;
+    propertyChangetimer;
     constructor() {
         this.cursorType = "";
         this.isCursorOnBorder = false;
@@ -59,21 +59,22 @@ export class Resizer {
         if (event.data !== undefined)
             event.data._deActivateResize(event);
     }
-	//not every event is fired there nly the last with delay
-	firePropertyChange(...param:any[]){
-		var _this=this;
-		if(this.propertyChangetimer){
-			clearTimeout(this.propertyChangetimer);
-		}
-			
-		this.propertyChangetimer=setTimeout(()=>{
-			if (_this.onpropertychanged !== undefined) {
-                        _this.onpropertychanged(...param);
-            }		
-		},200);
-	}
+    //not every event is fired there nly the last with delay
+    firePropertyChange(...param: any[]) {
+        console.log("fire " + param[0]._id);
+        var _this = this;
+        if (this.propertyChangetimer) {
+            clearTimeout(this.propertyChangetimer);
+        }
 
-	/**
+        this.propertyChangetimer = setTimeout(() => {
+            if (_this.onpropertychanged !== undefined) {
+                _this.onpropertychanged(...param);
+            }
+        }, 200);
+    }
+
+    /**
          * resize the component
          * this is an onmousemove event called from _changeCursor()
          * @param {type} event
@@ -113,7 +114,7 @@ export class Resizer {
                 element._this.width = w;
                 this.firePropertyChange(element._this, "width", w);
                 /*if (this.onpropertychanged !== undefined) {
-                	    this.onpropertychanged(element._this, "width", w);
+                        this.onpropertychanged(element._this, "width", w);
                 }*/
                 //	element.style.width = Math.max(x - topLeftX,8)+'px';
 
@@ -151,12 +152,12 @@ export class Resizer {
                 }
                 this.topElement = elementID;
 
-                setTimeout(function() {
+                setTimeout(function () {
                     $(".jselected").removeClass("jselected");
                     $("#" + _this.topElement).addClass("jselected");
                     _this.lastSelected = [_this.topElement];
-                    if(!_this.onelementselected)
-                    	console.log("onselected undefined");
+                    if (!_this.onelementselected)
+                        console.log("onselected undefined");
                     _this.onelementselected(_this.lastSelected, e);
                     _this.topElement = undefined;
                 }, 50);
@@ -171,7 +172,7 @@ export class Resizer {
             this.isMouseDown = true;
         }
     }
-	/**
+    /**
          * switch off the resizing
          * @param {type} event
          */
@@ -186,7 +187,7 @@ export class Resizer {
 
     }
 
-	/**
+    /**
          * changes the cursor and determine the toResizedElement
          * @param {type} e
          */
@@ -196,7 +197,7 @@ export class Resizer {
 
         // var els=$(".one");//document.getElementsByClassName("one");
         var els = $(this.parentPanel.dom).find(this.elements);
-        for (var i = 0;i < els.length;i++) {
+        for (var i = 0; i < els.length; i++) {
             var element: HTMLElement = <HTMLElement>els[i];
             if ($(element).hasClass("designerNoResizable")) {
                 continue;
@@ -233,6 +234,7 @@ export class Resizer {
                 var test = $(element).closest(".jcomponent");
                 if (test !== undefined && test.hasClass("ui-draggable")) {
                     this.toResizedElement = test;
+
                     // test.draggable( "disable" );
                     //  if(this.toResizedElement[0]._this!=undefined&&this.toResizedElement[0]._this.dom!=undefined)
                     //    $(this.toResizedElement[0]._this.dom).prop('disabled', true);
@@ -272,11 +274,11 @@ export class Resizer {
         var _this = this;
         if (enable === true) {
             $(this.parentPanel.dom).selectable({
-                selected: function(event, ui) {
+                selected: function (event, ui) {
                     if (new Date().getTime() - lastTime > 500) {//new selection
                         _this.lastSelected = [];
                         $(".jselected").removeClass("jselected");
-                        setTimeout(function() {
+                        setTimeout(function () {
                             _this.onelementselected(_this.lastSelected);
                             _this.lastSelected = undefined;
                         }, 50);
@@ -305,28 +307,31 @@ export class Resizer {
      */
     install(parentPanel, elements) {
         var _this = this;
-        $(parentPanel.domWrapper).resizable({
-            resize: function(evt: any) {
-                var h = evt.target.offsetHeight;
-                var w = evt.target.offsetWidth;
-                if (_this.onpropertychanged !== undefined) {
-                    evt.target._this.width = w;
-                    evt.target._this.height = h;
-                    _this.onpropertychanged(evt.target._this, "width", w);
-                    _this.onpropertychanged(evt.target._this, "height", h);
-                    $(evt.target._this.domWrapper).css("width", w + "px");
-                    $(evt.target._this.domWrapper).css("height", h + "px");
+        if (!$(parentPanel.dom).hasClass("designerNoResizable")) {
+            $(parentPanel.domWrapper).resizable({
+                resize: function (evt: any) {
+                    var h = evt.target.offsetHeight;
+                    var w = evt.target.offsetWidth;
+                    if (_this.onpropertychanged !== undefined) {
+                        evt.target._this.width = w;
+                        evt.target._this.height = h;
+                        console.log("cha" + evt.target._this._id);
+                        _this.onpropertychanged(evt.target._this, "width", w);
+                        _this.onpropertychanged(evt.target._this, "height", h);
+                        $(evt.target._this.domWrapper).css("width", w + "px");
+                        $(evt.target._this.domWrapper).css("height", h + "px");
+                    }
                 }
-            }
-        });
+            });
+        }
         if (parentPanel !== undefined)
             this.parentPanel = parentPanel;
         if (elements !== undefined)
             this.elements = elements;
         $(this.parentPanel.dom).on("mousedown", this, this.mouseDown);
         this.mousedownElements = $(this.parentPanel.dom).find(this.elements);
-        for(let x=0;x<this.mousedownElements.length;x++){
-            this.mousedownElements[x]= this.mousedownElements[x].parentNode;
+        for (let x = 0; x < this.mousedownElements.length; x++) {
+            this.mousedownElements[x] = this.mousedownElements[x].parentNode;
         }
         this.mousedownElements.on("mousedown", this, this.mouseDown);
         $(this.parentPanel.dom).on("mousemove", this, this.mouseMove);
@@ -336,8 +341,8 @@ export class Resizer {
         //this.setLassoMode(false);
 
     }
-    tt(){
-    	 if (this.parentPanel !== undefined) {
+    tt() {
+        if (this.parentPanel !== undefined) {
             $(this.parentPanel.dom).off("mousedown", this.mouseDown);
             if (this.mousedownElements !== undefined)
                 this.mousedownElements.off("mousedown", this.mouseDown);

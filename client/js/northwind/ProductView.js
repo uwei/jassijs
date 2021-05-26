@@ -48,8 +48,8 @@ define(["require", "exports", "jassi/ui/Style", "jassi/ui/ObjectChooser", "jassi
             me.main.add(me.unitPrice);
             me.main.add(me.quantityPerUnit);
             me.main.add(me.productName);
-            this.width = 678;
-            this.height = 220;
+            me.main.width = 678;
+            me.main.height = "170";
             me.id.x = 10;
             me.id.y = 10;
             me.id.bind(me.databinder, "id");
@@ -130,6 +130,8 @@ define(["require", "exports", "jassi/ui/Style", "jassi/ui/ObjectChooser", "jassi
             me.styleNumber.css({
                 text_align: "right"
             });
+            console.log("main " + me.main._id);
+            console.log("this " + this._id);
         }
     };
     __decorate([

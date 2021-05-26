@@ -159,10 +159,18 @@ export class Numberformatter {
 		return dec;
 	}
 	public static numberToString(num:number):string{
+		if(num===undefined)
+			return undefined;
+		if(num===null)
+			return null;
 		var l=num.toString().replace(".",Numberformatter.getLocaleDecimal());
 		return l;
 	}
 	public static stringToNumber(num:string):number{
+		if(num===undefined)
+			return undefined;
+		if(num===null)
+			return null;
 		var l=num.replace(Numberformatter.getLocaleDecimal(),".");
 		return Number.parseFloat(l);
 	}

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/converters/NumberConverter"], function (require, exports, Button_1, Textbox_1, Jassi_1, Panel_1, NumberConverter_1) {
+define(["require", "exports", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Panel"], function (require, exports, Button_1, Textbox_1, Jassi_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog = void 0;
@@ -20,38 +20,16 @@ define(["require", "exports", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/remo
         layout(me) {
             me.textbox1 = new Textbox_1.Textbox();
             me.button1 = new Button_1.Button();
+            me.textbox2 = new Textbox_1.Textbox();
             this.width = 750;
             this.height = 206;
             this.isAbsolute = false;
-            me.textbox1.value = 50000;
-            me.textbox1.format = "#.##0,00€";
-            me.textbox1.converter = new NumberConverter_1.NumberConverter();
-            me.textbox1.onclick(() => {
-            });
-            me.textbox1.height = 10;
             me.textbox1.width = 135;
-            /* let r=()=>{
-                 alert(1);
-             };
-             var a=$(me.textbox1.dom).on("click",r);
-             $(me.textbox1.dom).click("click",()=>{
-                 alert(2);
-             });
-             $(me.textbox1.dom).off("click",undefined,a);*/
-            /*   me.textbox1.dom.addEventListener('focus', (event) => {
-                   $(event.target).val(Numberformatter.numberToString(me.textbox1.value));
-               });
-       
-               me.textbox1.dom.addEventListener('blur', (event) => {
-                   $(event.target).val(Numberformatter.stringToNumber($(me.textbox1.dom).val()));
-               });*/
+            me.textbox1.value = "5555";
             this.add(me.textbox1);
+            this.add(me.textbox2);
             this.add(me.button1);
-            me.button1.text = "button";
-            me.button1.onclick(function (event) {
-                var test = me.textbox1.value;
-                debugger;
-            });
+            me.textbox2.value = "555";
         }
     };
     Dialog = __decorate([

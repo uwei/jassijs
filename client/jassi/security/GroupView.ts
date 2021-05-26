@@ -19,6 +19,7 @@ export class GroupView extends DBObjectView {
         super();
         //this.me = {}; this is called in objectdialog
         this.layout(this.me);
+
     }
     get title() {
         return this.value === undefined ? "GroupView" : "GroupView " + this.value.id;
