@@ -4,63 +4,104 @@ import { DragAndDropper } from "jassi_editor/util/DragAndDropper";
 
 @$Class("jassi_editor.util.Resizer")
 export class Resizer {
-    cursorType: string;
-    isCursorOnBorder: boolean;
-    resizedElement: string;
-    isMouseDown: boolean;
-    elements: string;
-    toResizedElement: JQuery<HTMLElement>;
-    mousedownElements: JQuery<Element>;
-    onelementselected;
-    onpropertychanged;
-    parentPanel: Component;
-    lastSelected: string[];
-    componentUnderCursor: Element;
-    lassoMode: boolean;
-    draganddropper: DragAndDropper;
-    topElement: string;
-    propertyChangetimer;
+    //the current cursor e.g. "default","s-resize" 
+    private cursorType: string;
+    //is the cursor under th border of an element
+    private isCursorOnBorder: boolean;
+    //the element which is currently resized
+    private resizedElement: string;
+    //is the mousebutton down
+    private isMouseDown: boolean;
+    //all elements which can be resized e.g. "#100,#102"
+    private elements: string;
+    //all elements with registred mousedown handler
+    private mousedownElements: JQuery<Node>;
+    //called if elements are selected
+    public onelementselected: (ids: string[], event: any) => void;
+    //called if properties has changed e.g. the width of a component
+    public onpropertychanged: (component: Component, property: string, value: any) => void;
+    //the parent component and all childcomponents can be resized
+    private parentPanel: Component;
+    //id's of the last selected Elements
+    private lastSelected: string[];
+    //the component under the mouse cursor
+    public componentUnderCursor: Element;
+    //is the lasso acivated? 
+    private lassoMode: boolean;
+    //the connected DragAndDropper
+    public draganddropper: DragAndDropper;
+    //the top element in z-order which is clicked
+    private topElement: string;
+    //timer to detect the component which should be changed
+    private propertyChangetimer;
     constructor() {
         this.cursorType = "";
         this.isCursorOnBorder = false;
         this.isMouseDown = false;
         this.resizedElement = "";
         this.elements = undefined;
-        this.toResizedElement = undefined;
-        /** @member {function} - called when and element is selected function(domid,mouseevent */
         this.onelementselected = undefined;
-        /** @member {function} - called when an element is resized function(component,property,value) */
         this.onpropertychanged = undefined;
-        /** @member {jassi.ui.Component} - the parent panel */
         this.parentPanel = undefined;
         this.lastSelected = undefined;
         this.componentUnderCursor = undefined;
         this.lassoMode = false;
         this.draganddropper = undefined;
 
-        /* this.mouseDown=function(event){
-                 this._activateResize($(this).attr('id'),event);
-         }
-         this.mouseMove=function(event){
-             this._resizeDiv(event); 
-         };
-         this.mouseUp=function(event){
-             this._deActivateResize(event);
-         }*/
     }
-    mouseDown(event) {
-        event.data._resizeDiv(event);
-        event.data._activateResize($(this).attr('id'), event);
+   
+    private mouseDown(event) {
+        event.data._resizeComponent(event);
+        let elementID = $(this).attr('id');
+        var _this:Resizer = event?.data;
+        
+        if (_this.onelementselected !== undefined) {
+
+            //select with click
+            //delegate only the top window - this is the first event????
+            if (_this.topElement === undefined) {
+                if ($("#" + elementID).hasClass("designerNoSelectable")) {
+                    return;
+                }
+                _this.topElement = elementID;
+
+                setTimeout(function () {
+                    $(".jselected").removeClass("jselected");
+                    $("#" + _this.topElement).addClass("jselected");
+                    _this.lastSelected = [_this.topElement];
+                    if (!_this.onelementselected)
+                        console.log("onselected undefined");
+                    _this.onelementselected(_this.lastSelected, event);
+                    _this.topElement = undefined;
+                }, 50);
+            }
+
+            var lastTime = new Date().getTime();
+            //select with lasso
+
+        }
+        if (_this.resizedElement === "" || _this.resizedElement === undefined) {//if also parentcontainer will be fired->ignore
+            _this.resizedElement = elementID.toString();
+            _this.isMouseDown = true;
+        }
     }
-    mouseMove(event) {
-        event.data._resizeDiv(event);
+    private mouseMove(event) {
+        event.data._resizeComponent(event);
     };
-    mouseUp(event) {
-        if (event.data !== undefined)
-            event.data._deActivateResize(event);
+    private mouseUp(event) {
+        if (event.data !== undefined) {
+            var _this:Resizer = event?.data;
+            _this.isMouseDown = false;
+            _this.isCursorOnBorder = false;
+            _this.cursorType = "default";
+            if (_this.resizedElement !== "" && _this.resizedElement !== undefined) {
+                document.getElementById(_this.resizedElement).style.cursor = _this.cursorType;
+                _this.resizedElement = "";
+            }
+        }
     }
-    //not every event is fired there nly the last with delay
-    firePropertyChange(...param: any[]) {
+    //not every event should be fired - only the last with delay
+    private firePropertyChange(...param: any[]) {
         console.log("fire " + param[0]._id);
         var _this = this;
         if (this.propertyChangetimer) {
@@ -69,17 +110,18 @@ export class Resizer {
 
         this.propertyChangetimer = setTimeout(() => {
             if (_this.onpropertychanged !== undefined) {
+                //@ts-ignore
                 _this.onpropertychanged(...param);
             }
         }, 200);
     }
 
     /**
-         * resize the component
-         * this is an onmousemove event called from _changeCursor()
-         * @param {type} event
-         */
-    _resizeDiv(e) {
+    * resize the component
+    * this is an onmousemove event called from _changeCursor()
+    * @param {type} event
+    */
+    private _resizeComponent(e) {
 
         //window.status = event1.type;
         //check drag is activated or not
@@ -134,68 +176,16 @@ export class Resizer {
         }
 
     }
-    /**
-             * activate resizing
-             * @param {string} elementID
-             * @param {type} e
-             */
-    _activateResize(elementID: string, e) {
-        var _this = this;
 
-        if (this.onelementselected !== undefined) {
 
-            //select with click
-            //delegate only the top window - this is the first event????
-            if (this.topElement === undefined) {
-                if ($("#" + elementID).hasClass("designerNoSelectable")) {
-                    return;
-                }
-                this.topElement = elementID;
-
-                setTimeout(function () {
-                    $(".jselected").removeClass("jselected");
-                    $("#" + _this.topElement).addClass("jselected");
-                    _this.lastSelected = [_this.topElement];
-                    if (!_this.onelementselected)
-                        console.log("onselected undefined");
-                    _this.onelementselected(_this.lastSelected, e);
-                    _this.topElement = undefined;
-                }, 50);
-            }
-
-            var lastTime = new Date().getTime();
-            //select with lasso
-
-        }
-        if (this.resizedElement === "" || this.resizedElement === undefined) {//if also parentcontainer will be fired->ignore
-            this.resizedElement = elementID.toString();
-            this.isMouseDown = true;
-        }
-    }
-    /**
-         * switch off the resizing
-         * @param {type} event
-         */
-    _deActivateResize(event) {
-        this.isMouseDown = false;
-        this.isCursorOnBorder = false;
-        this.cursorType = "default";
-        if (this.resizedElement !== "" && this.resizedElement !== undefined) {
-            document.getElementById(this.resizedElement).style.cursor = this.cursorType;
-            this.resizedElement = "";
-        }
-
-    }
 
     /**
-         * changes the cursor and determine the toResizedElement
-         * @param {type} e
-         */
+    * changes the cursor
+    * @param {type} e
+    */
     _changeCursor(e) {
         var borderSize = 4;
         this.cursorType = "default";
-
-        // var els=$(".one");//document.getElementsByClassName("one");
         var els = $(this.parentPanel.dom).find(this.elements);
         for (var i = 0; i < els.length; i++) {
             var element: HTMLElement = <HTMLElement>els[i];
@@ -232,13 +222,6 @@ export class Resizer {
             }
             if (this.cursorType === "e-resize" || this.cursorType === "s-resize") {
                 var test = $(element).closest(".jcomponent");
-                if (test !== undefined && test.hasClass("ui-draggable")) {
-                    this.toResizedElement = test;
-
-                    // test.draggable( "disable" );
-                    //  if(this.toResizedElement[0]._this!=undefined&&this.toResizedElement[0]._this.dom!=undefined)
-                    //    $(this.toResizedElement[0]._this.dom).prop('disabled', true);
-                }
                 var isDragging = false;
                 if (this.draganddropper !== undefined) {
                     element == undefined;
@@ -257,19 +240,18 @@ export class Resizer {
             this.componentUnderCursor = undefined;
             element.style.cursor = this.cursorType;
         }
-        if (this.toResizedElement !== undefined) {
-            //     this.toResizedElement.draggable( "enable" );
-        }
     }
-    setLassoMode(enable) {
+    /**
+     * enable or disable the lasso
+     * with lasso some components can be selected with dragging
+     */
+    public setLassoMode(enable:boolean) {
         this.lassoMode = enable;
         this.lastSelected = [];
         this.resizedElement = "";
         this.cursorType = "";
         this.isCursorOnBorder = false;
         this.isMouseDown = false;
-
-        this.toResizedElement = undefined;
         var lastTime = new Date().getTime();
         var _this = this;
         if (enable === true) {
@@ -279,7 +261,7 @@ export class Resizer {
                         _this.lastSelected = [];
                         $(".jselected").removeClass("jselected");
                         setTimeout(function () {
-                            _this.onelementselected(_this.lastSelected);
+                            _this.onelementselected(_this.lastSelected, event);
                             _this.lastSelected = undefined;
                         }, 50);
                     }
@@ -302,10 +284,10 @@ export class Resizer {
     }
     /**
      * install the resizer
-     * @param {jassi.ui.Component} parentPanel - the parent component
-     * @param {string} elements - the search pattern for the components to resize e.q. ".jresizeable"
+     * @param parentPanel - the parent component
+     * @param elements - the search pattern for the components to resize e.q. ".jresizeable"
      */
-    install(parentPanel, elements) {
+    install(parentPanel:Component, elements:string) {
         var _this = this;
         if (!$(parentPanel.dom).hasClass("designerNoResizable")) {
             $(parentPanel.domWrapper).resizable({
@@ -341,16 +323,7 @@ export class Resizer {
         //this.setLassoMode(false);
 
     }
-    tt() {
-        if (this.parentPanel !== undefined) {
-            $(this.parentPanel.dom).off("mousedown", this.mouseDown);
-            if (this.mousedownElements !== undefined)
-                this.mousedownElements.off("mousedown", this.mouseDown);
-            this.mousedownElements = undefined;
-            $(this.parentPanel.dom).off("mousemove", this.mouseMove);
-            $(this.parentPanel.dom).on("mouseup", this.mouseUp);
-        }
-    }
+
     /**
      * uninstall the resizer
      */
@@ -367,7 +340,6 @@ export class Resizer {
         }
         this.resizedElement = "";
         this.elements = undefined;
-        this.toResizedElement = undefined;
         this.parentPanel = undefined;
         this.lastSelected = undefined;
         this.componentUnderCursor = undefined;

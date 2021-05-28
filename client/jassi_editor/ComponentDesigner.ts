@@ -47,14 +47,13 @@ export class ComponentDesigner extends Panel{
         _designPlaceholder:Panel;
         _resizer:Resizer;
         _draganddropper:DragAndDropper;
-        lastSelected:Component;
+
        
         constructor(){
             super();
             this._codeEditor=undefined;
             this._initDesign();
             this.editMode=true;
-           // this.lastSelected=undefined;
        
         }
         set codeEditor(value){
@@ -133,7 +132,8 @@ export class ComponentDesigner extends Panel{
             lasso.onclick(function(){
                 var val=lasso.toggle();
                 _this._resizer.setLassoMode(val);
-				_this._draganddropper.canDrop(!val);
+                _this._draganddropper.enableDraggable(!val);
+				//_this._draganddropper.activateDragging(!val);
             });
             this._designToolbar.add(lasso);
            
@@ -321,7 +321,7 @@ export class ComponentDesigner extends Panel{
                 //this._installTinyEditor();
                 this._draganddropper=new DragAndDropper();
                 this._resizer=new Resizer();
-                this._resizer.draganddropper= this._draganddropper;
+                this._resizer.draganddropper= this._draganddropper; 
                 
                console.log("onselect");
                 this._resizer.onelementselected=function(elementIDs,e){
@@ -335,10 +335,9 @@ export class ComponentDesigner extends Panel{
                         if(ret.length>0){
                         		_this._propertyEditor.value=ret[0];
                         }
-                      //  _this.lastSelected=_this._codeEditor.getVariableFromObject(_this._propertyEditor.value);
                 };
                
-                this._resizer.onpropertychanged=function(comp,prop,value){
+                this._resizer.onpropertychanged=function(comp:Component,prop:string,value:any){
                 	console.log("prop change "+comp._id);
                 	if(_this._propertyEditor.value!==comp)
                 		_this._propertyEditor.value=comp;

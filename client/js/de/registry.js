@@ -5,9 +5,6 @@ define("de/registry",["require"], function(require) {
 	"de/d2de.ts": {
 		"date": 1587933243841
 	},
-	"de/dd.ts": {
-		"date": 1615239782948
-	},
 	"de/del.ts": {
 		"date": 1613922613218
 	},

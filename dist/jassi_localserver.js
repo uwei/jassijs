@@ -1541,63 +1541,7 @@ define("jassi_localserver/RegistryIndexer", ["require", "exports", "jassi_locals
     ], RegistryIndexer);
     exports.RegistryIndexer = RegistryIndexer;
 });
-define("jassi_localserver/Testserver", ["require", "exports", "de/remote/Kunde", "jassi/remote/Jassi", "typeorm", "de/remote/AR", "de/remote/ARZeile", "jassi/server/DBManager"], function (require, exports, Kunde_1, Jassi_4, typeorm_3, AR_1, ARZeile_1, DBManager_3) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = void 0;
-    //@$ActionProvider("jassi.base.ActionNode")
-    let Testserver = class Testserver {
-        static async run() {
-            var man = await DBManager_3.DBManager.get();
-            var kd = new Kunde_1.Kunde();
-            kd.id = 9;
-            await man.save(kd);
-            var all = await man.find(Kunde_1.Kunde);
-            debugger;
-        }
-        // @$Action({ name: "Test/Testserver" })
-        static async rundirect() {
-            const initSqlJs = window["SQL"];
-            // or if you are in a browser:
-            // var initSqlJs = window.initSqlJs;
-            const SQL = await window["SQL"]({
-                // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
-                // You can omit locateFile completely when running in node
-                locateFile: file => `https://sql.js.org/dist/${file}`
-            });
-            var con = await typeorm_3.createConnection({
-                type: "sqljs",
-                entities: [
-                    Kunde_1.Kunde,
-                    AR_1.AR,
-                    ARZeile_1.ARZeile
-                ],
-                synchronize: true
-            });
-            var kd = new Kunde_1.Kunde();
-            kd.id = 500;
-            kd.nachname = "Weigelt";
-            var ent = await con.manager.save(kd);
-            var all = await con.manager.find(Kunde_1.Kunde);
-            alert(JSON.stringify(all[0]));
-            /*var us=new Testuser();
-            us.id=1;
-            us.firstname="f";
-            us.lastname="l";
-            var ent=await con.manager.save(us);
-            var all=await con.manager.find(Testuser);
-            alert(JSON.stringify(all[0]));*/
-        }
-    };
-    Testserver = __decorate([
-        Jassi_4.$Class("jassi_localserver.Testserver")
-    ], Testserver);
-    async function test() {
-        Testserver.run();
-    }
-    exports.test = test;
-});
-define("jassi_localserver/Testuser", ["require", "exports", "jassi/util/DatabaseSchema", "jassi/remote/DBObject", "jassi/remote/Jassi"], function (require, exports, DatabaseSchema_1, DBObject_1, Jassi_5) {
+define("jassi_localserver/Testuser", ["require", "exports", "jassi/util/DatabaseSchema", "jassi/remote/DBObject", "jassi/remote/Jassi"], function (require, exports, DatabaseSchema_1, DBObject_1, Jassi_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testuser = void 0;
@@ -1617,11 +1561,11 @@ define("jassi_localserver/Testuser", ["require", "exports", "jassi/util/Database
     ], Testuser.prototype, "lastname", void 0);
     Testuser = __decorate([
         DBObject_1.$DBObject(),
-        Jassi_5.$Class("Testuser")
+        Jassi_4.$Class("Testuser")
     ], Testuser);
     exports.Testuser = Testuser;
 });
-define("jassi_localserver/TypeORMListener", ["require", "exports", "jassi/remote/Jassi", "typeorm", "jassi_localserver/Filesystem", "jassi/util/Reloader", "jassi/remote/Registry", "jassi_localserver/DBManager"], function (require, exports, Jassi_6, typeorm_4, Filesystem_3, Reloader_2, Registry_3, DBManager_4) {
+define("jassi_localserver/TypeORMListener", ["require", "exports", "jassi/remote/Jassi", "typeorm", "jassi_localserver/Filesystem", "jassi/util/Reloader", "jassi/remote/Registry", "jassi_localserver/DBManager"], function (require, exports, Jassi_5, typeorm_3, Filesystem_3, Reloader_2, Registry_3, DBManager_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeORMListener = void 0;
@@ -1637,8 +1581,8 @@ define("jassi_localserver/TypeORMListener", ["require", "exports", "jassi/remote
             });
         }
         if (reload) {
-            await DBManager_4.DBManager.destroyConnection();
-            await DBManager_4.DBManager.get();
+            await DBManager_3.DBManager.destroyConnection();
+            await DBManager_3.DBManager.get();
         }
     });
     let TypeORMListener = class TypeORMListener {
@@ -1736,8 +1680,8 @@ define("jassi_localserver/TypeORMListener", ["require", "exports", "jassi/remote
         }
     };
     TypeORMListener = __decorate([
-        typeorm_4.EventSubscriber(),
-        Jassi_6.$Class("jassi_localserver.TypeORMListener")
+        typeorm_3.EventSubscriber(),
+        Jassi_5.$Class("jassi_localserver.TypeORMListener")
     ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
 });

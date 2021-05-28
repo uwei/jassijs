@@ -17,7 +17,6 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this._codeEditor = undefined;
             this._initDesign();
             this.editMode = true;
-            // this.lastSelected=undefined;
         }
         set codeEditor(value) {
             var _this = this;
@@ -87,7 +86,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             lasso.onclick(function () {
                 var val = lasso.toggle();
                 _this._resizer.setLassoMode(val);
-                _this._draganddropper.canDrop(!val);
+                _this._draganddropper.enableDraggable(!val);
+                //_this._draganddropper.activateDragging(!val);
             });
             this._designToolbar.add(lasso);
             var remove = new Button_1.Button();
@@ -276,7 +276,6 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                     if (ret.length > 0) {
                         _this._propertyEditor.value = ret[0];
                     }
-                    //  _this.lastSelected=_this._codeEditor.getVariableFromObject(_this._propertyEditor.value);
                 };
                 this._resizer.onpropertychanged = function (comp, prop, value) {
                     console.log("prop change " + comp._id);

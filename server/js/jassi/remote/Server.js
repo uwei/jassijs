@@ -349,20 +349,6 @@ Server = Server_1 = __decorate([
 ], Server);
 exports.Server = Server;
 async function test() {
-    var byteCharacters = atob(await new Server().zip("local"));
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-        byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    // If you want to use the image in your DOM:
-    var blob = new Blob([byteArray], { type: "application/zip" });
-    var url = URL.createObjectURL(blob);
-    var link = document.createElement('a');
-    document.body.appendChild(link);
-    link.href = url;
-    link.click();
-    link.remove();
 }
 exports.test = test;
 //# sourceMappingURL=Server.js.map

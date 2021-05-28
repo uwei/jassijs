@@ -14,7 +14,6 @@ define(["require", "exports", "jassi/ui/Textbox", "jassi/ui/Component", "jassi/r
     let Calendar = class Calendar extends Textbox_1.Textbox {
         constructor(properties = undefined) {
             super(properties);
-            this._value = undefined;
             $(this.dom).datepicker();
         }
         get value() {

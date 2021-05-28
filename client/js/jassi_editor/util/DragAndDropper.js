@@ -13,12 +13,15 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
     exports.DragAndDropper = void 0;
     let DragAndDropper = class DragAndDropper {
         constructor() {
-            /** @member {function} - called when an element is resized function(component,top,left) */
             this.onpropertychanged = undefined;
             this.onpropertyadded = undefined;
             this.lastDropCanceled = false;
-            this.allIDs = ""; //all ids
+            this.allIDs = "";
         }
+        ;
+        /**
+         * could be override to block dragging
+         */
         isDragEnabled(event, ui) {
             var mouse = event.target._this.dom.style.cursor;
             if (mouse === "e-resize" || mouse === "s-resize" || mouse === "se-resize")
@@ -26,47 +29,23 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             else
                 return false;
         }
+        //dragging is active
         isDragging() {
             return this._isDragging;
         }
-        canDrop(enable) {
+        /*public activateDragging(enable:boolean) {
             $(this.allIDs).find(".jcontainer").not(".jdesigncontainer").draggable(enable ? "enable" : "disable");
+        }*/
+        enableDraggable(enable) {
+            //  this.onpropertychanged = undefined;
+            // this.onpropertyadded = undefined;
+            if (this.draggableComponents !== undefined) {
+                if (!enable)
+                    this.draggableComponents.draggable('disable');
+                else
+                    this.draggableComponents.draggable('enable');
+            }
         }
-        /* testDropDesignDummy(target, event, ui) {
-             var _this = this;
-             if (target._this._designDummyPre !== undefined) {
-                 var dummy = target._this._designDummyPre;
-                 var oldParent = ui.draggable[0]._this._parent;
-                 var oldx = $(ui.helper).offset().left;
-                 var oldy = $(ui.helper).offset().top;
-                 if (ui.draggable[0]._this.createFromType !== undefined) {
-                     oldx = parseInt($(ui.helper).css('left'));
-                     oldy = parseInt($(ui.helper).css('top'));
-                 }
-     
-                 var com = dummy;
-                 var posx = $(com.dom).offset().left;
-                 var posy = $(com.dom).offset().top;
-                 var w = $(com.dom).outerWidth();
-                 var h = $(com.dom).outerHeight();
-     
-                 if ((oldx >= posx && oldx <= posx + w) && (oldy >= posy && oldy <= posy + h) && com !== ui.draggable[0]._this) {
-                     //com=com.designDummyFor;
-                     $(ui.draggable).css({ 'top': "", 'left': "", "position": "relative" });
-                     if (ui.draggable[0]._this.createFromType !== undefined) {
-                         if (this.onpropertyadded !== undefined)
-                             this.onpropertyadded(ui.draggable[0]._this.createFromType, ui.draggable[0]._this, undefined, undefined, target._this._parent, com);
-                         return true;
-                     }
-                     com.designDummyFor._parent.addBefore(ui.draggable[0]._this, com);
-                     if (_this.onpropertychanged !== undefined) {
-                         _this.onpropertychanged(ui.draggable[0]._this, undefined, undefined, oldParent, target._this._parent, com.designDummyFor);
-                     }
-                     return true;
-                 }
-             }
-             return false;
-         }*/
         _drop(target, event, ui) {
             var _this = this;
             var newComponent = ui.draggable[0]._this;
@@ -92,7 +71,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
                     //      ui.helper[0]._this.left=left;
                     //    ui.helper[0]._this.y=top;
                     if (this.onpropertyadded !== undefined)
-                        this.onpropertyadded(ui.draggable[0]._this.createFromType, newComponent, left, top, newParent);
+                        this.onpropertyadded(ui.draggable[0]._this.createFromType, newComponent, left, top, newParent, undefined);
                     return;
                 }
                 var oldParent = ui.draggable[0]._this._parent;
@@ -113,7 +92,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
                 $(ui.draggable).css({ 'top': top, 'left': left, position: 'absolute' });
                 target._this.add(ui.draggable[0]._this);
                 if (_this.onpropertychanged !== undefined) {
-                    _this.onpropertychanged(newComponent, left, top, oldParent, newParent);
+                    _this.onpropertychanged(newComponent, left, top, oldParent, newParent, undefined);
                 }
             }
             else { //relative layout
@@ -136,57 +115,6 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
                         _this.onpropertychanged(newComponent, undefined, undefined, oldParent, newParent, beforeComponent);
                     }
                 }
-                /*var t = $(ui.draggable).css('left');
-                var oldx = event.clientX;//["originalEvent"].offsetX; //$(ui.helper).offset().left;
-                var oldy = event.clientY;//["originalEvent"].offsetY;//$(ui.helper).offset().top;
-                var called = false;
-    
-                //  $(ui.draggable).css({ 'top': "", 'left': "", "position": "relative" });
-    
-    
-    
-                var all = [];
-                for (var x = 0;x < target._this._components.length;x++) {
-                    all.push(target._this._components[x]);
-                }
-                
-                for (var x = 0;x < all.length;x++) {
-                    var com = all[x];
-                    var postest = $(com.dom).position();
-                    var posx = $(com.dom).offset().left;
-                    var posy = $(com.dom).offset().top;
-                    var w = $(com.dom).outerWidth();
-                    var h = $(com.dom).outerHeight();
-                    if (com.designDummyFor)
-                        com = com.designDummyFor;
-                    if ((oldx >= posx && oldx <= posx + w) && (oldy >= posy && oldy <= posy + h) && com !== ui.draggable[0]._this) {
-                        if (ui.draggable[0]._this.createFromType !== undefined) {
-                            if (this.onpropertyadded !== undefined)
-                                this.onpropertyadded(ui.draggable[0]._this.createFromType, ui.draggable[0]._this, undefined, undefined, target._this, com);
-                            return;
-                        }
-                        var h = 0;
-                        console.debug(com._id);
-                        com._parent.addBefore(ui.draggable[0]._this, com);
-                        called = true;
-                        if (_this.onpropertychanged !== undefined) {
-                            _this.onpropertychanged(ui.draggable[0]._this, undefined, undefined, oldParent, target._this, com);
-                        }
-                        break;
-                    }
-    
-                }
-                if (!called) {//insert at the end
-                    if (ui.draggable[0]._this.createFromType !== undefined) {
-                        if (this.onpropertyadded !== undefined)
-                            this.onpropertyadded(ui.draggable[0]._this.createFromType, ui.draggable[0]._this, undefined, undefined, target._this);
-                        return;
-                    }
-                    target._this.add(ui.draggable[0]._this);
-                    if (_this.onpropertychanged !== undefined) {
-                        _this.onpropertychanged(ui.draggable[0]._this, undefined, undefined, oldParent, target._this);
-                    }
-                }*/
             }
             if (designDummyAtEnd) { //this Component should stand at last
                 var par = designDummyAtEnd._parent;
@@ -195,134 +123,21 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
                 par.designDummies.push(designDummyAtEnd); //bug insert dummy again
             }
         }
-        _dropoldsicherung(target, event, ui) {
-            var _this = this;
-            var l = $(ui.helper).offset().left;
-            var t = $(ui.helper).offset().top;
-            var lp = $(ui.helper[0].parentNode).offset().left;
-            var tp = $(ui.helper[0].parentNode).offset().top;
-            console.debug(l + ":" + t + "-->" + (l - lp) + ":" + (t - tp));
-            if (target._this.isAbsolute) {
-                var offsetNewParent = $(target._this.dom).offset();
-                var offsetOldParent = $(ui.draggable[0]._this._parent.dom).offset();
-                var x = offsetNewParent.left - offsetOldParent.left;
-                var y = offsetNewParent.top - offsetOldParent.top;
-                let t = $(ui.draggable).css('left');
-                var to = offsetOldParent.left;
-                var tn = offsetNewParent.left;
-                var tl = $(ui.draggable).offset().left;
-                var test = $(ui.draggable).offset();
-                var top = parseInt($(ui.helper).css('top')) - y;
-                var left = parseInt($(ui.helper).css('left')) - x;
-                if (ui.draggable[0]._this.createFromType !== undefined) {
-                    left = -offsetNewParent.left + parseInt($(ui.helper).css('left'));
-                    top = -offsetNewParent.top + parseInt($(ui.helper).css('top'));
-                    ui.helper[0]._this.left = top;
-                    ui.helper[0]._this.y = top;
-                    if (this.onpropertyadded !== undefined)
-                        this.onpropertyadded(ui.draggable[0]._this.createFromType, ui.draggable[0]._this, left, top, target._this);
-                    return;
-                }
-                //snap to 5
-                if (top !== 1) {
-                    top = Math.round(top / 5) * 5;
-                }
-                if (left !== 1) {
-                    left = Math.round(left / 5) * 5;
-                }
-                var oldParent = ui.draggable[0]._this._parent;
-                oldParent.remove(ui.draggable[0]._this);
-                $(ui.draggable).css({ 'top': top, 'left': left, position: 'absolute' });
-                target._this.add(ui.draggable[0]._this);
-                if (_this.onpropertychanged !== undefined) {
-                    _this.onpropertychanged(ui.draggable[0]._this, left, top, oldParent, target._this);
-                }
-            }
-            else { //relative layout
-                var oldParent = ui.draggable[0]._this._parent;
-                var newParent = target._this;
-                if (!$(newParent.dom).hasClass("jcontainer")) {
-                    newParent = newParent._parent;
-                }
-                if (ui.draggable[0]._this.createFromType !== undefined) {
-                    if (this.onpropertyadded !== undefined)
-                        this.onpropertyadded(ui.draggable[0]._this.createFromType, ui.draggable[0]._this, undefined, undefined, target._this);
-                    return;
-                }
-                newParent.add(ui.draggable[0]._this);
-                if (_this.onpropertychanged !== undefined) {
-                    _this.onpropertychanged(ui.draggable[0]._this, undefined, undefined, oldParent, newParent);
-                }
-                /*
-                
-                let t = $(ui.draggable).css('left');
-                var oldx = $(ui.helper).offset().left;
-                var oldy = $(ui.helper).offset().top;
-                var called = false;
-                if (ui.draggable[0]._this.createFromType !== undefined) {
-                    oldx = parseInt($(ui.helper).css('left'));
-                    oldy = parseInt($(ui.helper).css('top'));
-                }
-                $(ui.draggable).css({ 'top': "", 'left': "", "position": "relative" });
-    
-                var comps=[];
-                for(var xx=0;xx<target._this._components.length;x++){
-                    comps.push(target._this._components[x]);
-                }
-                
-                for (var x = 0;x < comps.length;x++) {
-                    var com = comps[x];
-                    var postest = $(com.dom).position();
-                    var posx = $(com.dom).offset().left;
-                    var posy = $(com.dom).offset().top;
-                    var w = $(com.dom).outerWidth();
-                    var h = $(com.dom).outerHeight();
-    
-                    if ((oldx >= posx && oldx <= posx + w) && (oldy >= posy && oldy <= posy + h) && com !== ui.draggable[0]._this) {
-                        if (ui.draggable[0]._this.createFromType !== undefined) {
-                            if (this.onpropertyadded !== undefined)
-                                this.onpropertyadded(ui.draggable[0]._this.createFromType, ui.draggable[0]._this, undefined, undefined, target._this, com);
-                            return;
-                        }
-                        var h = 0;
-                        console.debug(com._id);
-                        com._parent.addBefore(ui.draggable[0]._this, com);
-                        called = true;
-                        if (_this.onpropertychanged !== undefined) {
-                            _this.onpropertychanged(ui.draggable[0]._this, undefined, undefined, oldParent, target._this, com);
-                        }
-                        break;
-                    }
-    
-                }
-                if (!called) {//insert at the end
-                    if (ui.draggable[0]._this.createFromType !== undefined) {
-                        if (this.onpropertyadded !== undefined)
-                            this.onpropertyadded(ui.draggable[0]._this.createFromType, ui.draggable[0]._this, undefined, undefined, target._this);
-                        return;
-                    }
-                    target._this.add(ui.draggable[0]._this);
-                    if (_this.onpropertychanged !== undefined) {
-                        _this.onpropertychanged(ui.draggable[0]._this, undefined, undefined, oldParent, target._this);
-                    }
-                }*/
-            }
-        }
         /**
         * install the DragAndDropper
         * all child jomponents are draggable
         * all child containers are droppable
-        * @param {jassi.ui.Component} parentPanel - all childs are effected
-        * @param {string} all - ID's of all editable components e.g. #10,#12
+        * @param  parentPanel - all childs are effected
+        * @param allIDs - ID's of all editable components e.g. #10,#12
         * @returns {unresolved}
         */
-        install(parentPanel, all) {
+        install(parentPanel, allIDs) {
             //$(this.parentPainer");
             var _this = this;
             if (parentPanel !== undefined)
                 this.parentPanel = parentPanel;
-            if (all !== undefined)
-                this.allIDs = all;
+            if (allIDs !== undefined)
+                this.allIDs = allIDs;
             // this.draggableComponents = $(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
             this.draggableComponents = $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
             this.draggableComponents.draggable({
@@ -380,16 +195,6 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             //this.droppableComponents.droppable("enable");
             //$(this.allIDs).eq(".jcontainer").not(".jdesigncontainer").droppable("enable");
             //$(this.allIDs).filter(".jcontainer").not(".jdesigncontainer").droppable("enable");
-        }
-        enableDraggable(enable) {
-            //  this.onpropertychanged = undefined;
-            // this.onpropertyadded = undefined;
-            if (this.draggableComponents !== undefined) {
-                if (!enable)
-                    this.draggableComponents.draggable('disable');
-                else
-                    this.draggableComponents.draggable('enable');
-            }
         }
         /**
          * uninstall the DragAndDropper

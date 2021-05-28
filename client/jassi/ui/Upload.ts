@@ -36,7 +36,7 @@ export class Upload extends Component{
         set multiple(value:boolean){
         	$(this.dom).prop("multiple",value);
         }
-		private async readUpload(evt:JQueryEventObject){
+		private async readUpload(evt:JQuery.TriggeredEvent<any,any,any,any>){
 			var files:FileList = evt.target["files"];
 			var data:{[file:string]:string}={};
 			

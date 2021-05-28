@@ -7,7 +7,6 @@ import { $Property } from "jassi/ui/Property";
 @$Class("jassi.ui.Calendar")
 @$Property({name:"new",type:"string"})
 export  class Calendar extends Textbox{
-    private _value=undefined;
     constructor(properties=undefined){
         super(properties);
         $( this.dom ).datepicker();

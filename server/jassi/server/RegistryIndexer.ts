@@ -1,6 +1,4 @@
-import { fstat } from "fs";
 import { Indexer } from "./Indexer";
-import ts = require("typescript");
 import fs = require('fs');
 import Filesystem from "jassi/server/Filesystem";
 

@@ -149,7 +149,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1616191186093,
+		"date": 1622198971874,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -242,7 +242,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Calendar.ts": {
-		"date": 1614021824682,
+		"date": 1622198594778,
 		"jassi.ui.Calendar": {
 			"$UIComponent": [
 				{
@@ -429,7 +429,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.DockingContainer": {}
 	},
 	"jassi/ui/ErrorPanel.ts": {
-		"date": 1613512902725,
+		"date": 1622199248933,
 		"jassi.ui.ErrorPanel": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"
@@ -798,7 +798,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Textbox.ts": {
-		"date": 1621975866396,
+		"date": 1622197522304,
 		"jassi.ui.Textbox": {
 			"$UIComponent": [
 				{
@@ -835,7 +835,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Upload.ts": {
-		"date": 1613218544157,
+		"date": 1622198762488,
 		"jassi.ui.Upload": {
 			"$UIComponent": [
 				{

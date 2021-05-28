@@ -39,7 +39,7 @@ export class Textbox extends DataComponent {
     converter: DefaultConverter;
     _autocompleterDisplay;
     _autocompleter;
-    _value: any = "";
+    private _value: any = "";
     _format: string;
     _formatProps: { focus: any, blur: any, inEditMode: boolean } = undefined;
     constructor(color = undefined) { /* document.onkeydown = function(event) {

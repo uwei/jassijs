@@ -18,40 +18,61 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             this.isMouseDown = false;
             this.resizedElement = "";
             this.elements = undefined;
-            this.toResizedElement = undefined;
-            /** @member {function} - called when and element is selected function(domid,mouseevent */
             this.onelementselected = undefined;
-            /** @member {function} - called when an element is resized function(component,property,value) */
             this.onpropertychanged = undefined;
-            /** @member {jassi.ui.Component} - the parent panel */
             this.parentPanel = undefined;
             this.lastSelected = undefined;
             this.componentUnderCursor = undefined;
             this.lassoMode = false;
             this.draganddropper = undefined;
-            /* this.mouseDown=function(event){
-                     this._activateResize($(this).attr('id'),event);
-             }
-             this.mouseMove=function(event){
-                 this._resizeDiv(event);
-             };
-             this.mouseUp=function(event){
-                 this._deActivateResize(event);
-             }*/
         }
         mouseDown(event) {
-            event.data._resizeDiv(event);
-            event.data._activateResize($(this).attr('id'), event);
+            event.data._resizeComponent(event);
+            let elementID = $(this).attr('id');
+            var _this = event === null || event === void 0 ? void 0 : event.data;
+            if (_this.onelementselected !== undefined) {
+                //select with click
+                //delegate only the top window - this is the first event????
+                if (_this.topElement === undefined) {
+                    if ($("#" + elementID).hasClass("designerNoSelectable")) {
+                        return;
+                    }
+                    _this.topElement = elementID;
+                    setTimeout(function () {
+                        $(".jselected").removeClass("jselected");
+                        $("#" + _this.topElement).addClass("jselected");
+                        _this.lastSelected = [_this.topElement];
+                        if (!_this.onelementselected)
+                            console.log("onselected undefined");
+                        _this.onelementselected(_this.lastSelected, event);
+                        _this.topElement = undefined;
+                    }, 50);
+                }
+                var lastTime = new Date().getTime();
+                //select with lasso
+            }
+            if (_this.resizedElement === "" || _this.resizedElement === undefined) { //if also parentcontainer will be fired->ignore
+                _this.resizedElement = elementID.toString();
+                _this.isMouseDown = true;
+            }
         }
         mouseMove(event) {
-            event.data._resizeDiv(event);
+            event.data._resizeComponent(event);
         }
         ;
         mouseUp(event) {
-            if (event.data !== undefined)
-                event.data._deActivateResize(event);
+            if (event.data !== undefined) {
+                var _this = event === null || event === void 0 ? void 0 : event.data;
+                _this.isMouseDown = false;
+                _this.isCursorOnBorder = false;
+                _this.cursorType = "default";
+                if (_this.resizedElement !== "" && _this.resizedElement !== undefined) {
+                    document.getElementById(_this.resizedElement).style.cursor = _this.cursorType;
+                    _this.resizedElement = "";
+                }
+            }
         }
-        //not every event is fired there nly the last with delay
+        //not every event should be fired - only the last with delay
         firePropertyChange(...param) {
             console.log("fire " + param[0]._id);
             var _this = this;
@@ -60,16 +81,17 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             }
             this.propertyChangetimer = setTimeout(() => {
                 if (_this.onpropertychanged !== undefined) {
+                    //@ts-ignore
                     _this.onpropertychanged(...param);
                 }
             }, 200);
         }
         /**
-             * resize the component
-             * this is an onmousemove event called from _changeCursor()
-             * @param {type} event
-             */
-        _resizeDiv(e) {
+        * resize the component
+        * this is an onmousemove event called from _changeCursor()
+        * @param {type} event
+        */
+        _resizeComponent(e) {
             //window.status = event1.type;
             //check drag is activated or not
             if (this.isMouseDown) {
@@ -120,59 +142,12 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             }
         }
         /**
-                 * activate resizing
-                 * @param {string} elementID
-                 * @param {type} e
-                 */
-        _activateResize(elementID, e) {
-            var _this = this;
-            if (this.onelementselected !== undefined) {
-                //select with click
-                //delegate only the top window - this is the first event????
-                if (this.topElement === undefined) {
-                    if ($("#" + elementID).hasClass("designerNoSelectable")) {
-                        return;
-                    }
-                    this.topElement = elementID;
-                    setTimeout(function () {
-                        $(".jselected").removeClass("jselected");
-                        $("#" + _this.topElement).addClass("jselected");
-                        _this.lastSelected = [_this.topElement];
-                        if (!_this.onelementselected)
-                            console.log("onselected undefined");
-                        _this.onelementselected(_this.lastSelected, e);
-                        _this.topElement = undefined;
-                    }, 50);
-                }
-                var lastTime = new Date().getTime();
-                //select with lasso
-            }
-            if (this.resizedElement === "" || this.resizedElement === undefined) { //if also parentcontainer will be fired->ignore
-                this.resizedElement = elementID.toString();
-                this.isMouseDown = true;
-            }
-        }
-        /**
-             * switch off the resizing
-             * @param {type} event
-             */
-        _deActivateResize(event) {
-            this.isMouseDown = false;
-            this.isCursorOnBorder = false;
-            this.cursorType = "default";
-            if (this.resizedElement !== "" && this.resizedElement !== undefined) {
-                document.getElementById(this.resizedElement).style.cursor = this.cursorType;
-                this.resizedElement = "";
-            }
-        }
-        /**
-             * changes the cursor and determine the toResizedElement
-             * @param {type} e
-             */
+        * changes the cursor
+        * @param {type} e
+        */
         _changeCursor(e) {
             var borderSize = 4;
             this.cursorType = "default";
-            // var els=$(".one");//document.getElementsByClassName("one");
             var els = $(this.parentPanel.dom).find(this.elements);
             for (var i = 0; i < els.length; i++) {
                 var element = els[i];
@@ -208,12 +183,6 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
                 }
                 if (this.cursorType === "e-resize" || this.cursorType === "s-resize") {
                     var test = $(element).closest(".jcomponent");
-                    if (test !== undefined && test.hasClass("ui-draggable")) {
-                        this.toResizedElement = test;
-                        // test.draggable( "disable" );
-                        //  if(this.toResizedElement[0]._this!=undefined&&this.toResizedElement[0]._this.dom!=undefined)
-                        //    $(this.toResizedElement[0]._this.dom).prop('disabled', true);
-                    }
                     var isDragging = false;
                     if (this.draganddropper !== undefined) {
                         element == undefined;
@@ -233,10 +202,11 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
                 this.componentUnderCursor = undefined;
                 element.style.cursor = this.cursorType;
             }
-            if (this.toResizedElement !== undefined) {
-                //     this.toResizedElement.draggable( "enable" );
-            }
         }
+        /**
+         * enable or disable the lasso
+         * with lasso some components can be selected with dragging
+         */
         setLassoMode(enable) {
             this.lassoMode = enable;
             this.lastSelected = [];
@@ -244,7 +214,6 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             this.cursorType = "";
             this.isCursorOnBorder = false;
             this.isMouseDown = false;
-            this.toResizedElement = undefined;
             var lastTime = new Date().getTime();
             var _this = this;
             if (enable === true) {
@@ -254,7 +223,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
                             _this.lastSelected = [];
                             $(".jselected").removeClass("jselected");
                             setTimeout(function () {
-                                _this.onelementselected(_this.lastSelected);
+                                _this.onelementselected(_this.lastSelected, event);
                                 _this.lastSelected = undefined;
                             }, 50);
                         }
@@ -276,8 +245,8 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
         }
         /**
          * install the resizer
-         * @param {jassi.ui.Component} parentPanel - the parent component
-         * @param {string} elements - the search pattern for the components to resize e.q. ".jresizeable"
+         * @param parentPanel - the parent component
+         * @param elements - the search pattern for the components to resize e.q. ".jresizeable"
          */
         install(parentPanel, elements) {
             var _this = this;
@@ -313,16 +282,6 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             //this.setLassoMode(true);
             //this.setLassoMode(false);
         }
-        tt() {
-            if (this.parentPanel !== undefined) {
-                $(this.parentPanel.dom).off("mousedown", this.mouseDown);
-                if (this.mousedownElements !== undefined)
-                    this.mousedownElements.off("mousedown", this.mouseDown);
-                this.mousedownElements = undefined;
-                $(this.parentPanel.dom).off("mousemove", this.mouseMove);
-                $(this.parentPanel.dom).on("mouseup", this.mouseUp);
-            }
-        }
         /**
          * uninstall the resizer
          */
@@ -339,7 +298,6 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             }
             this.resizedElement = "";
             this.elements = undefined;
-            this.toResizedElement = undefined;
             this.parentPanel = undefined;
             this.lastSelected = undefined;
             this.componentUnderCursor = undefined;

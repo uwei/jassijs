@@ -1,8 +1,7 @@
 
 import { Indexer } from "jassi_localserver/Indexer";
-import ts = require("typescript");
-//@ts-ignore
-import Filesystem from "jassi/server/Filesystem";
+
+
 import { Server } from "jassi/remote/Server";
 import Filessystem from "jassi_localserver/Filesystem";
 import { $Class } from "jassi/remote/Jassi";

@@ -7,7 +7,7 @@
     "module": "amd",
     "moduleResolution": "node",
     "lib": [
-      "es2016", 
+      "esnext", 
       "dom",
       "es5"
     ],

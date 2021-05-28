@@ -231,7 +231,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/remote/Server.ts": {
-                "date": 1616191186093,
+                "date": 1622198971874,
                 "jassi.remote.Server": {}
             },
             "jassi/remote/Transaction.ts": {
@@ -239,7 +239,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.Transaction": {}
             },
             "jassi/security/GroupView.ts": {
-                "date": 1613218741242,
+                "date": 1622035450211,
                 "jassi/security/GroupView": {
                     "$DBObjectView": [
                         {
@@ -324,7 +324,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Calendar.ts": {
-                "date": 1614021824682,
+                "date": 1622198594778,
                 "jassi.ui.Calendar": {
                     "$UIComponent": [
                         {
@@ -486,7 +486,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.DBObjectExplorer": {}
             },
             "jassi/ui/DBObjectView.ts": {
-                "date": 1613557693832,
+                "date": 1622035473442,
                 "jassi/ui/DBObjectView": {
                     "$UIComponent": [
                         {
@@ -511,7 +511,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.DockingContainer": {}
             },
             "jassi/ui/ErrorPanel.ts": {
-                "date": 1613512902725,
+                "date": 1622199248933,
                 "jassi.ui.ErrorPanel": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -880,7 +880,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Textbox.ts": {
-                "date": 1621975866396,
+                "date": 1622197522304,
                 "jassi.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -917,7 +917,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/Upload.ts": {
-                "date": 1613218544157,
+                "date": 1622198762488,
                 "jassi.ui.Upload": {
                     "$UIComponent": [
                         {
@@ -946,7 +946,7 @@ define("jassi/registry", ["require"], function (require) {
                 "date": 1618335325672
             },
             "jassi/util/Numberformatter.ts": {
-                "date": 1621963059248,
+                "date": 1622031313274,
                 "jassi.util.Numberformatter": {}
             },
             "jassi/util/Reloader.ts": {
@@ -4918,20 +4918,6 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
     ], Server);
     exports.Server = Server;
     async function test() {
-        var byteCharacters = atob(await new Server().zip("local"));
-        const byteNumbers = new Array(byteCharacters.length);
-        for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-        }
-        const byteArray = new Uint8Array(byteNumbers);
-        // If you want to use the image in your DOM:
-        var blob = new Blob([byteArray], { type: "application/zip" });
-        var url = URL.createObjectURL(blob);
-        var link = document.createElement('a');
-        document.body.appendChild(link);
-        link.href = url;
-        link.click();
-        link.remove();
     }
     exports.test = test;
 });
@@ -6116,7 +6102,6 @@ define("jassi/ui/Calendar", ["require", "exports", "jassi/ui/Textbox", "jassi/ui
     let Calendar = class Calendar extends Textbox_2.Textbox {
         constructor(properties = undefined) {
             super(properties);
-            this._value = undefined;
             $(this.dom).datepicker();
         }
         get value() {
@@ -7675,6 +7660,7 @@ define("jassi/ui/DBObjectView", ["require", "exports", "jassi/ui/Button", "jassi
         constructor() {
             super();
             this.me = {};
+            $(this.dom).addClass("designerNoResizable"); //this should not be resized only me.main
             //everytime call super.layout
             DBObjectView_3.prototype.layout.bind(this)(this.me);
             // this.layout(this.me);
@@ -15954,10 +15940,18 @@ define("jassi/util/Numberformatter", ["require", "exports", "jassi/remote/Jassi"
             return dec;
         }
         static numberToString(num) {
+            if (num === undefined)
+                return undefined;
+            if (num === null)
+                return null;
             var l = num.toString().replace(".", Numberformatter_3.getLocaleDecimal());
             return l;
         }
         static stringToNumber(num) {
+            if (num === undefined)
+                return undefined;
+            if (num === null)
+                return null;
             var l = num.replace(Numberformatter_3.getLocaleDecimal(), ".");
             return Number.parseFloat(l);
         }
