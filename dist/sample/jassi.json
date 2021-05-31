@@ -1,11 +1,11 @@
 {
 	"modules": {
-		"jassi":"https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi.js?version=3",
-		"jassi_report": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_report.js?version=3",
-		"jassi_localserver": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_localserver.js?version=3",
-		"jassi_editor": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_editor.js?version=3",
-		"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js?version=3",
-		"demo": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/demo.js?version=3"
+		"jassi":"https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi.js?version=4",
+		"jassi_report": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_report.js?version=4",
+		"jassi_localserver": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_localserver.js?version=4",
+		"jassi_editor": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_editor.js?version=4",
+		"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js?version=4",
+		"demo": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/demo.js?version=4"
 	},
 	"require": {
 		"paths": {
