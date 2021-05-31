@@ -1,8 +1,6 @@
 export default {
-    "loadbeforestart":["js-sql-parser","typeormbrowser","jassi_localserver/Installserver"],
-    "loadonstart":[
-        "jassi_localserver/LocalProtocol"
-    ],
+    "loadbeforestart":["js-sql-parser","typeormbrowser","jassi_localserver/Installserver","jassi_localserver/LocalProtocol"],
+    
     "require":{ 
         paths: {
             "jszip":"https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip",
