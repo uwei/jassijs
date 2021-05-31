@@ -385,6 +385,7 @@ export class DatabaseSchema {
     private async parseFiles() {
         this.parsedClasses = {};
         this.definedImports = {};
+        await typescript.waitForInited;
         var data = await registry.getJSONData("$DBObject");
         data.forEach((entr) => {
             var parser = new Parser();

@@ -16,6 +16,7 @@ import { Test } from "jassi/base/Tests";
 import { AcePanel } from "jassi_editor/AcePanel";
 import { Typescript } from "jassi_editor/util/Typescript";
 import { MonacoPanel } from "jassi_editor/MonacoPanel";
+import { Settings } from "jassi/remote/Settings";
 
 
 
@@ -35,14 +36,31 @@ export class CodeEditor extends Panel {
     _design: Panel;
     editMode: boolean;
     __evalToCursorReached: boolean;
+    private _editorProvider: "ace" | "monaco" ;//= "ace";
+    get editorProvider(): "ace" | "monaco" {
+        if (this._editorProvider === undefined) {
+            let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+            if (mobil)
+                return "ace";
+            else
+                return "monaco";
+        }
+        return this._editorProvider;
+    }
+   
     private _line: number;
     constructor() {
         super();
+
+
+        console.log("use"+Settings.gets(Settings.keys.Development_DefaultEditor));
+        
         this.maximize();
         this._main = new DockingContainer();
         this._codeView = new Panel();
         this._codeToolbar = new Panel();
-        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+        if (this.editorProvider === "ace") {
             this._codePanel = new AcePanel();
         } else {
             this._codePanel = new MonacoPanel();
@@ -54,14 +72,22 @@ export class CodeEditor extends Panel {
         this._variables = new VariablePanel();
         this._design = new Panel();
         this._init();
-
+		
         this.editMode = true;
     }
-
-    _init() {
-        var _this = this;
+    private _initCodePanel() {
         this._codePanel.width = "100%";
         this._codePanel.mode = "typescript";
+        this._codePanel.height = "calc(100% - 31px)";
+        let _this=this;
+		this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
+            jassi.debugger.breakpointChanged(_this._file, line, column, enable, type);
+        });
+    }
+
+    private _init() {
+        var _this = this;
+        this._initCodePanel();
 
         /*  this._codePanel.getDocTooltip = function (item) {
               return _this.getDocTooltip(item);
@@ -71,8 +97,6 @@ export class CodeEditor extends Panel {
         this._codeView["horizontal"] = true;
         this._codeView.add(this._codeToolbar);
         this._codeView.add(this._codePanel);
-        this._codePanel.height = "calc(100% - 31px)";
-        this._codePanel.width = "100%";
         this._main.width = "calc(100% - 1px)";
         this._main.height = "99%";
         var lasttop = (<HTMLElement>this._main.dom).offsetTop;
@@ -137,12 +161,12 @@ export class CodeEditor extends Panel {
 
         this._installView();
         this.registerKeys();
-        this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
-            jassi.debugger.breakpointChanged(_this._file, line, column, enable, type);
-        });
+       
         this._variables.createTable();
         //   this._codePanel.setCompleter(this);
-
+        setTimeout(()=>{
+            //_this.editorProvider="ace";
+        },100);
     }
 
     _installView() {
@@ -154,20 +178,39 @@ export class CodeEditor extends Panel {
 
     }
 
-
+	set editorProvider(value: "ace" | "monaco") {
+        if (value !== this.editorProvider) {
+            //switch to new provider
+            let pos = this.cursorPosition;
+            let val = this.value;
+            let old = this._codePanel;
+            if (value === "ace") {
+                this._codePanel = new AcePanel();
+            } else {
+                this._codePanel = new MonacoPanel();
+            }
+            this._initCodePanel();
+            this._codeView.remove(old);
+            this._codeView.add(this._codePanel);
+            this.value=val;
+            this.cursorPosition=pos;
+            old.destroy();
+        }
+        this._editorProvider = value;
+    }
 
 
     private async _save(code) {
         await new Server().saveFile(this._file, code);
-        
-       
-            var f = this._file.replace(".ts", "");
-            if (code.indexOf("@$") > -1) {
-                await registry.reload();
-            }
-            Reloader.instance.reloadJS(f);
-     
-        
+
+
+        var f = this._file.replace(".ts", "");
+        if (code.indexOf("@$") > -1) {
+            await registry.reload();
+        }
+        Reloader.instance.reloadJS(f);
+
+
     }
     /**
     * save the code to server
@@ -306,10 +349,10 @@ export class CodeEditor extends Panel {
                 await jassi.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
             }
         }
-  
-        var islocaldb=classes.getClass("jassi_localserver.DBManager");
-        if(islocaldb&&code.indexOf("@$DBObject(")>-1){
-            
+
+        var islocaldb = classes.getClass("jassi_localserver.DBManager");
+        if (islocaldb && code.indexOf("@$DBObject(") > -1) {
+
             (<any>islocaldb).destroyConnection();
         }
         if (data.test !== undefined) {
@@ -565,7 +608,7 @@ export class CodeEditor extends Panel {
         this.cursorPosition = { row: this._line, column: 1 };
         var _this = this;
         setTimeout(function () {
-            _this.cursorPosition = { row: this._line, column: 1 };
+            _this.cursorPosition = { row: _this._line, column: 1 };
         }, 300);
         /*setTimeout(function() {
             _this.cursorPosition = { row: value, column: 0 };
@@ -611,9 +654,12 @@ export class CodeEditor extends Panel {
 
 export async function test() {
     var editor = new CodeEditor();
-    var url = "demo/DialogKunde.ts";
+    var url = "jassi_editor/AcePanel.ts";
     editor.height = 500;
     await editor.openFile(url);
+    setTimeout(()=>{
+        editor.editorProvider="ace";
+    },2000);
     return editor;
 
 };

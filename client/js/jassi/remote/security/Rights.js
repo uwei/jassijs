@@ -47,7 +47,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
         }
     };
     Rights = __decorate([
-        Jassi_1.$Class("jassi.remote.security.Rights")
+        Jassi_1.$Class("jassi.security.Rights")
     ], Rights);
     exports.Rights = Rights;
     var rights = new Rights();

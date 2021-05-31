@@ -49,7 +49,7 @@ let Rights = class Rights extends RemoteObject_1.RemoteObject {
     }
 };
 Rights = __decorate([
-    Jassi_1.$Class("jassi.remote.security.Rights")
+    Jassi_1.$Class("jassi.security.Rights")
 ], Rights);
 exports.Rights = Rights;
 var rights = new Rights();

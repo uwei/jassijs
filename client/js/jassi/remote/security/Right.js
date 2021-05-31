@@ -28,7 +28,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
     ], Right.prototype, "groups", void 0);
     Right = __decorate([
         DBObject_1.$DBObject({ name: "jassi_right" }),
-        Jassi_1.$Class("jassi.remote.security.Right")
+        Jassi_1.$Class("jassi.security.Right")
     ], Right);
     exports.Right = Right;
 });

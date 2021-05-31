@@ -6,7 +6,7 @@ import { Group } from "jassi/remote/security/Group";
 
 //import "jassi/ext/enableExtension.js?de.Kunde";
 @$DBObject({name:"jassi_parentright"})
-@$Class("jassi.remote.security.ParentRight")
+@$Class("jassi.security.ParentRight")
 
 export class ParentRight extends DBObject  {
 

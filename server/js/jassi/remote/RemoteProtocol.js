@@ -59,7 +59,22 @@ let RemoteProtocol = class RemoteProtocol {
         }
     }
     async exec(config, object) {
-        return await $.ajax(config, object);
+        return await new Promise((resolve, reject) => {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', config.url, true);
+            xhr.setRequestHeader("Content-Type", "text");
+            xhr.onload = function (data) {
+                if (this.status === 200)
+                    resolve(this.responseText);
+                else
+                    reject(this);
+            };
+            xhr.send(config.data);
+            xhr.onerror = function (data) {
+                reject(data);
+            };
+        });
+        //return await $.ajax(config, object);
     }
     /**
    * call the server
@@ -77,8 +92,9 @@ let RemoteProtocol = class RemoteProtocol {
             dataType: "text",
             data: this.stringify(this),
         };
+        var ret;
         try {
-            var ret = await this.exec(config, this._this);
+            ret = await this.exec(config, this._this);
         }
         catch (ex) {
             if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {

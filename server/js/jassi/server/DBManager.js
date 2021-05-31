@@ -242,7 +242,7 @@ let DBManager = DBManager_1 = class DBManager {
     async save(context, entity, options) {
         var _a;
         await this._checkParentRightsForSave(context, entity);
-        if (Classes_1.classes.getClassName(entity) === "jassi.remote.security.User" && entity.password !== undefined) {
+        if (Classes_1.classes.getClassName(entity) === "jassi.security.User" && entity.password !== undefined) {
             entity.password = await new Promise((resolve) => {
                 const crypto = require('crypto');
                 const salt = crypto.randomBytes(8).toString('base64');
@@ -554,7 +554,7 @@ class RelationInfo {
         var kk = context.request.user;
         var userid = context.request.user.user;
         var query = this.dbmanager.connection().createQueryBuilder().
-            select("me").from(Classes_1.classes.getClass("jassi.remote.security.ParentRight"), "me").
+            select("me").from(Classes_1.classes.getClass("jassi.security.ParentRight"), "me").
             leftJoin("me.groups", "me_groups").
             leftJoin("me_groups.users", "me_groups_users");
         query = query.andWhere("me_groups_users.id=:theUserId", { theUserId: userid });

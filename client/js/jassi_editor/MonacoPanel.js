@@ -88,7 +88,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_
         inited = true;
     }
     /**
-    * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
+    * wrapper for the Ace-Code editor with Typescript-Code-Completion an other features
     * @class jassi.ui.CodePanel
     */
     let MonacoPanel = class MonacoPanel extends CodePanel_1.CodePanel {
@@ -277,9 +277,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_
             return this._mode;
         }
         async loadsample() {
-            var code = await new Server_1.Server().loadFile("a/Dialog.ts");
             this.file = "a/Dialog.ts";
-            this.value = code;
+            this.value = "var a=window.document;";
         }
     };
     MonacoPanel = __decorate([
@@ -290,12 +289,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_
     async function test() {
         var dlg = new MonacoPanel();
         var code = await new Server_1.Server().loadFile("a/Dialog.ts");
-        dlg.file = "a/Dialog.ts";
-        dlg.value = code;
+        dlg.loadsample();
         dlg.width = "800";
         dlg.height = "800";
         //@ts-ignore
-        dlg._editor.layout();
+        //   dlg._editor.layout();
         //    dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
         //  dlg.mode = "javascript";
         //dlg._editor.renderer.setShowGutter(false);		

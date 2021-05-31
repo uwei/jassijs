@@ -7,11 +7,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_editor/util/Typescript", "jassi/base/Router"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Typescript_1, Router_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_editor/util/Typescript", "jassi/base/Router", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Typescript_1, Router_1, Actions_1, Windows_1) {
     "use strict";
+    var SearchExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SearchExplorer = void 0;
-    let SearchExplorer = class SearchExplorer extends Panel_1.Panel {
+    let SearchExplorer = SearchExplorer_1 = class SearchExplorer extends Panel_1.Panel {
         constructor() {
             super();
             //@member - maximal hits which are found 
@@ -22,6 +23,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             this.tree = new Tree_1.Tree();
             this.search = new Textbox_1.Textbox();
             this.layout();
+        }
+        static async show() {
+            Windows_1.default.addLeft(new SearchExplorer_1(), "Search");
         }
         async doSearch() {
             var Typescript = (await new Promise((resolve_1, reject_1) => { require(["jassi_editor/util/Typescript"], resolve_1, reject_1); })).Typescript;
@@ -88,7 +92,17 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             this.search.height = 15;
         }
     };
-    SearchExplorer = __decorate([
+    __decorate([
+        Actions_1.$Action({
+            name: "Windows/Development/Search",
+            icon: "mdi mdi-folder-search-outline",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], SearchExplorer, "show", null);
+    SearchExplorer = SearchExplorer_1 = __decorate([
+        Actions_1.$ActionProvider("jassi.base.ActionNode"),
         Jassi_1.$Class("jassi.ui.SearchExplorer"),
         __metadata("design:paramtypes", [])
     ], SearchExplorer);

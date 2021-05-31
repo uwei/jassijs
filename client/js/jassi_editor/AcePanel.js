@@ -433,11 +433,11 @@ define(["require", "exports", "jassi/jassi", "jassi_editor/ext/acelib", "jassi_e
             this._editor.focus();
             this._editor.gotoLine(cursor.row, cursor.column, true);
             var r = cursor.row;
-            if (r > 3)
-                r = r - 3;
+            if (r > 5)
+                r = r - 5;
             var _this = this;
-            _this._editor.renderer.scrollToRow(r);
-            _this._editor.renderer.scrollCursorIntoView({ row: cursor.row, column: cursor.column }, 0.5);
+            //_this._editor.renderer.scrollToRow(r);
+            // _this._editor.renderer.scrollCursorIntoView({ row: cursor.row, column: cursor.column  }, 0.5);
         }
         get cursorPosition() {
             var ret = this._editor.getCursorPosition();

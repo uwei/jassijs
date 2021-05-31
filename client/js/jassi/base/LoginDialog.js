@@ -1,4 +1,4 @@
-define(["require", "exports"], function (require, exports) {
+define(["require", "exports", "jassi/ext/jquerylib"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.login = exports.doAfterLogin = void 0;
@@ -19,6 +19,9 @@ define(["require", "exports"], function (require, exports) {
                 data[0](await data[1].call());
             }
             queue = [];
+            navigator.serviceWorker.controller.postMessage({
+                type: 'LOGGED_IN'
+            }); //, [channel.port2]);
         }
         else {
             setTimeout(() => {

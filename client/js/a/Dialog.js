@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/MenuItem", "jassi/ui/Checkbox", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/HTMLPanel"], function (require, exports, MenuItem_1, Checkbox_1, Textbox_1, Button_1, BoxPanel_1, Jassi_1, Panel_1, HTMLPanel_1) {
+define(["require", "exports", "jassi/ui/MenuItem", "jassi/ui/Checkbox", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/base/Windows", "jassi/ui/FileExplorer"], function (require, exports, MenuItem_1, Checkbox_1, Textbox_1, Button_1, BoxPanel_1, Jassi_1, Panel_1, HTMLPanel_1, Windows_1, FileExplorer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog = void 0;
@@ -59,10 +59,10 @@ define(["require", "exports", "jassi/ui/MenuItem", "jassi/ui/Checkbox", "jassi/u
     ], Dialog);
     exports.Dialog = Dialog;
     async function test() {
-        var ret = new Dialog();
-        var h = monaco.languages.typescript.typescriptDefaults;
-        debugger;
-        return ret;
+        Windows_1.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
+        //var ret = new Dialog();
+        //  	var h=monaco.languages.typescript.typescriptDefaults;
+        // return ret;
     }
     exports.test = test;
 });

@@ -38,7 +38,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
     ], Group.prototype, "users", void 0);
     Group = __decorate([
         DBObject_1.$DBObject({ name: "jassi_group" }),
-        Jassi_1.$Class("jassi.remote.security.Group")
+        Jassi_1.$Class("jassi.security.Group")
     ], Group);
     exports.Group = Group;
 });

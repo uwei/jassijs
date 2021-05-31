@@ -5,8 +5,10 @@ import {Textbox} from "jassi/ui/Textbox";
 import {Server} from "jassi/remote/Server";
 import typescript from "jassi_editor/util/Typescript";
 import { router } from "jassi/base/Router";
+import { $Action, $ActionProvider } from "jassi/base/Actions";
+import windows from "jassi/base/Windows";
 
-
+@$ActionProvider("jassi.base.ActionNode")
 @$Class("jassi.ui.SearchExplorer")
 export class SearchExplorer extends Panel {
     tree: Tree;
@@ -21,6 +23,13 @@ export class SearchExplorer extends Panel {
         this.tree = new Tree();
         this.search = new Textbox();
         this.layout();
+    }
+      @$Action ({
+    	name: "Windows/Development/Search",
+       	icon: "mdi mdi-folder-search-outline",
+    })
+    static async show(){
+         windows.addLeft(new SearchExplorer(), "Search");
     }
     async doSearch() { 
         var Typescript:any=(await import ("jassi_editor/util/Typescript")).Typescript;

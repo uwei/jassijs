@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/remote/Jassi", "jassi/base/Actions", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/base/Router", "jassi/ui/DBObjectDialog", "jassi/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Jassi_1, Actions_1, Panel_1, Registry_1, Router_1, DBObjectDialog_1, Windows_1) {
     "use strict";
+    var DBObjectExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObjectExplorer = exports.DBObjectActions = exports.DBFileActions = exports.DBObjectNode = void 0;
     let DBObjectNode = class DBObjectNode {
@@ -82,7 +83,7 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/re
         Jassi_1.$Class("jassi.ui.DBObjectActions")
     ], DBObjectActions);
     exports.DBObjectActions = DBObjectActions;
-    let DBObjectExplorer = class DBObjectExplorer extends Panel_1.Panel {
+    let DBObjectExplorer = DBObjectExplorer_1 = class DBObjectExplorer extends Panel_1.Panel {
         constructor() {
             super();
             this.me = {};
@@ -104,6 +105,9 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/re
             me.contextmenu.includeClassActions = true;
             this.update();
         }
+        static async show() {
+            Windows_1.default.addLeft(new DBObjectExplorer_1(), "DBObjects");
+        }
         async update() {
             var entrys = await Registry_1.default.getJSONData("$DBObject");
             var all = [];
@@ -117,7 +121,17 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/re
             this.me.tree.items = all;
         }
     };
-    DBObjectExplorer = __decorate([
+    __decorate([
+        Actions_1.$Action({
+            name: "Windows/Development/DBObjects",
+            icon: "mdi mdi-database-search",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], DBObjectExplorer, "show", null);
+    DBObjectExplorer = DBObjectExplorer_1 = __decorate([
+        Actions_1.$ActionProvider("jassi.base.ActionNode"),
         Jassi_1.$Class("jassi.ui.DBObjectExplorer"),
         __metadata("design:paramtypes", [])
     ], DBObjectExplorer);

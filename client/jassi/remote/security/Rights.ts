@@ -31,7 +31,7 @@ export function $CheckParentRight():Function{
     }
 }
 
-@$Class("jassi.remote.security.Rights")
+@$Class("jassi.security.Rights")
 export class Rights extends RemoteObject{
     private _isAdmin:boolean;
     async isAdmin(context:Context=undefined):Promise<boolean>{

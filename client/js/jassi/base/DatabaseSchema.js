@@ -361,6 +361,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
         async parseFiles() {
             this.parsedClasses = {};
             this.definedImports = {};
+            await Typescript_1.default.waitForInited;
             var data = await Registry_1.default.getJSONData("$DBObject");
             data.forEach((entr) => {
                 var parser = new Parser_1.Parser();

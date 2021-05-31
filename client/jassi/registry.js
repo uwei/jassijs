@@ -18,7 +18,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.base.Database.Field": {}
 	},
 	"jassi/base/DatabaseSchema.ts": {
-		"date": 1616791024045,
+		"date": 1622487662229,
 		"jassi.base.DatabaseSchema": {}
 	},
 	"jassi/base/Errors.ts": {
@@ -28,7 +28,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1613921826082
 	},
 	"jassi/base/LoginDialog.ts": {
-		"date": 1613218597119
+		"date": 1622500007876
 	},
 	"jassi/base/PropertyEditorService.ts": {
 		"date": 1613218566584,
@@ -101,12 +101,12 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.RemoteObject": {}
 	},
 	"jassi/remote/RemoteProtocol.ts": {
-		"date": 1614463817133,
+		"date": 1622499412074,
 		"jassi.remote.RemoteProtocol": {}
 	},
 	"jassi/remote/security/Group.ts": {
-		"date": 1613218997136,
-		"jassi.remote.security.Group": {
+		"date": 1622488337363,
+		"jassi.security.Group": {
 			"$DBObject": [
 				{
 					"name": "jassi_group"
@@ -115,8 +115,8 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/security/ParentRight.ts": {
-		"date": 1613219003253,
-		"jassi.remote.security.ParentRight": {
+		"date": 1622488385789,
+		"jassi.security.ParentRight": {
 			"$DBObject": [
 				{
 					"name": "jassi_parentright"
@@ -125,8 +125,8 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/security/Right.ts": {
-		"date": 1613219011774,
-		"jassi.remote.security.Right": {
+		"date": 1622488393617,
+		"jassi.security.Right": {
 			"$DBObject": [
 				{
 					"name": "jassi_right"
@@ -135,12 +135,22 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/security/Rights.ts": {
-		"date": 1614469207075,
-		"jassi.remote.security.Rights": {}
+		"date": 1622488403616,
+		"jassi.security.Rights": {}
+	},
+	"jassi/remote/security/Setting.ts": {
+		"date": 1622489979623,
+		"jassi.security.Setting": {
+			"$DBObject": [
+				{
+					"name": "jassi_setting"
+				}
+			]
+		}
 	},
 	"jassi/remote/security/User.ts": {
-		"date": 1615231236534,
-		"jassi.remote.security.User": {
+		"date": 1622488411714,
+		"jassi.security.User": {
 			"$DBObject": [
 				{
 					"name": "jassi_user"
@@ -151,6 +161,10 @@ define("jassi/registry",["require"], function(require) {
 	"jassi/remote/Server.ts": {
 		"date": 1622198971874,
 		"jassi.remote.Server": {}
+	},
+	"jassi/remote/Settings.ts": {
+		"date": 1622499850526,
+		"jassi.remote.Settings": {}
 	},
 	"jassi/remote/Transaction.ts": {
 		"date": 1614545262225,
@@ -389,7 +403,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/DBObjectExplorer.ts": {
-		"date": 1613416590967,
+		"date": 1622220307135,
 		"jassi.ui.DBObjectNode": {},
 		"jassi.ui.DBFileActions": {
 			"$ActionProvider": [
@@ -401,7 +415,11 @@ define("jassi/registry",["require"], function(require) {
 				"jassi.ui.DBObjectNode"
 			]
 		},
-		"jassi.ui.DBObjectExplorer": {}
+		"jassi.ui.DBObjectExplorer": {
+			"$ActionProvider": [
+				"jassi.base.ActionNode"
+			]
+		}
 	},
 	"jassi/ui/DBObjectView.ts": {
 		"date": 1622035473442,
@@ -437,13 +455,17 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/FileExplorer.ts": {
-		"date": 1614885881026,
+		"date": 1622220636361,
 		"jassi.ui.FileActions": {
 			"$ActionProvider": [
 				"jassi.remote.FileNode"
 			]
 		},
-		"jassi.ui.FileExplorer": {}
+		"jassi.ui.FileExplorer": {
+			"$ActionProvider": [
+				"jassi.base.ActionNode"
+			]
+		}
 	},
 	"jassi/ui/HTMLEditorPanel.ts": {
 		"date": 1613218566582,
@@ -728,8 +750,12 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/SearchExplorer.ts": {
-		"date": 1613218609627,
-		"jassi.ui.SearchExplorer": {}
+		"date": 1622220628238,
+		"jassi.ui.SearchExplorer": {
+			"$ActionProvider": [
+				"jassi.base.ActionNode"
+			]
+		}
 	},
 	"jassi/ui/Select.ts": {
 		"date": 1613338080789,

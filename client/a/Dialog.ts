@@ -8,6 +8,8 @@ import jassi, { $Class } from "jassi/remote/Jassi";
 import { Panel } from "jassi/ui/Panel";
 import { HTMLPanel } from "jassi/ui/HTMLPanel";
 import { Style } from "jassi/ui/Style";
+import windows from "jassi/base/Windows";
+import { FileExplorer } from "jassi/ui/FileExplorer";
 type Me = {
     htmlpanel1?: HTMLPanel; 
     htmlpanel2?: HTMLPanel;
@@ -70,8 +72,8 @@ export class Dialog extends Panel {
     }
 }
 export async function test() {
-    var ret = new Dialog();
-    	var h=monaco.languages.typescript.typescriptDefaults;
-    debugger;
-    return ret;
+     windows.addLeft(new FileExplorer(), "Files");
+    //var ret = new Dialog();
+  //  	var h=monaco.languages.typescript.typescriptDefaults;
+   // return ret;
 }

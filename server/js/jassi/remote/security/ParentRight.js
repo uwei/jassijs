@@ -51,7 +51,7 @@ __decorate([
 ], ParentRight.prototype, "groups", void 0);
 ParentRight = __decorate([
     DBObject_1.$DBObject({ name: "jassi_parentright" }),
-    Jassi_1.$Class("jassi.remote.security.ParentRight")
+    Jassi_1.$Class("jassi.security.ParentRight")
 ], ParentRight);
 exports.ParentRight = ParentRight;
 //# sourceMappingURL=ParentRight.js.map

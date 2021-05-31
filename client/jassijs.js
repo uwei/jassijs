@@ -129,6 +129,9 @@ async function run() {
             }
         }
         requirejs.config(requireconfig);
+        //read UserSettings after all beforestartlib are loaded
+        beforestartlib.push("jassi/jassi");
+        beforestartlib.push("jassi/remote/Settings");
         //load beforestartlib synchron
         async function loadBeforestart() {
             for (var x = 0; x < beforestartlib.length; x++) {
@@ -143,7 +146,13 @@ async function run() {
                         }
                     });
                 })
+                if(beforestartlib[x]==="jassi/jassi"){
+                    cssFiles.forEach((css) => {
+                        jassi.myRequire(css);//needed for Login Dialog
+                    });
+                }
             }
+            
         }
         loadBeforestart().then(() => {
             require(startlib, function (jassi, ...others) {

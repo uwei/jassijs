@@ -3,7 +3,7 @@ define("a/registry",["require"], function(require) {
  return {
   default: {
 	"a/Dialog.ts": {
-		"date": 1613218544157,
+		"date": 1622220020019,
 		"$/Dialog": {}
 	},
 	"a/modul.ts": {
@@ -15,8 +15,14 @@ define("a/registry",["require"], function(require) {
 	"a/rep.ts": {
 		"date": 1613330812614
 	},
+	"a/SampleSettings.ts": {
+		"date": 1622490404295
+	},
 	"a/testreport.ts": {
 		"date": 1613330812614
+	},
+	"a/Testsetting.ts": {
+		"date": 1622478991174
 	}
 }
  }

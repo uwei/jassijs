@@ -466,11 +466,11 @@ export class AcePanel extends CodePanel{
         this._editor.focus();
         this._editor.gotoLine(cursor.row, cursor.column, true);
         var r = cursor.row;
-        if (r > 3)
-            r = r - 3;
+        if (r > 5)
+            r = r -5;
         var _this = this;
-        _this._editor.renderer.scrollToRow(r);
-        _this._editor.renderer.scrollCursorIntoView({ row: cursor.row, column: cursor.column  }, 0.5);
+        //_this._editor.renderer.scrollToRow(r);
+       // _this._editor.renderer.scrollCursorIntoView({ row: cursor.row, column: cursor.column  }, 0.5);
     }
     get cursorPosition(): { row: number, column: number } {
         var ret= this._editor.getCursorPosition();

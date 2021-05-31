@@ -40,6 +40,7 @@ function JassiServer(properties = {}, expressApp = undefined) {
     app.use(cookieParser());
     app.use("/user", PassportLoginRegister_1.loginRegister);
     app.use(PassportLoginRegister_1.manageToken);
+    app.use(Filesystem_1.staticsecurefiles, passport.authenticate("jwt", { session: false }));
     app.post('/remoteprotocol', passport.authenticate("jwt", { session: false }), DoRemoteProtocol_1.remoteProtocol);
     /* if (properties.allowDownloadAsZip!==false)
          app.get('/zip', passport.authenticate("jwt", { session: false }), zip);*/

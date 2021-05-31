@@ -3,7 +3,7 @@ define("jassi_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassi_editor/AcePanel.ts": {
-		"date": 1613218566582,
+		"date": 1622292047807,
 		"jassi.ui.AcePanel": {}
 	},
 	"jassi_editor/ChromeDebugger.ts": {
@@ -11,7 +11,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi_editor.ChromeDebugger": {}
 	},
 	"jassi_editor/CodeEditor.ts": {
-		"date": 1618665085047,
+		"date": 1622496645626,
 		"jassi_editor.CodeEditor": {}
 	},
 	"jassi_editor/CodeEditorInvisibleComponents.ts": {
@@ -42,7 +42,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"date": 1614109063764
 	},
 	"jassi_editor/MonacoPanel.ts": {
-		"date": 1613573828092,
+		"date": 1622219255140,
 		"jassi_editor.MonacoPanel": {}
 	},
 	"jassi_editor/StartEditor.ts": {

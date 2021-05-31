@@ -64,8 +64,26 @@ export class RemoteProtocol {
         }
 
     }
-    async exec(config,object){
-        return await $.ajax(config,object);
+    async exec(config, object) {
+        return await new Promise((resolve,reject)=>{
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', config.url, true);
+            xhr.setRequestHeader("Content-Type", "text");
+
+            xhr.onload = function (data) {
+                if(this.status===200)
+                    resolve(this.responseText);
+                else
+                    reject(this);
+            };
+    
+            xhr.send(config.data);
+            xhr.onerror=function (data) {
+               reject(data);
+            };
+        }
+        );
+     //return await $.ajax(config, object);
     }
     /**
    * call the server
@@ -83,8 +101,9 @@ export class RemoteProtocol {
             dataType: "text",
             data: this.stringify(this),
         }
+        var ret;
         try {
-            var ret = await this.exec(config,this._this);
+            ret = await this.exec(config, this._this);
         } catch (ex) {
             if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                 redirect = new Promise((resolve) => {
@@ -120,14 +139,14 @@ export class RemoteProtocol {
             return "";
         //first get all classnames	
         var allclassnames = [];
-      
+
         JSON.parse(text, function (key, value) {
             if (value === null || value === undefined)
                 return value;
             if (value.__clname__ !== null && value.__clname__ !== undefined && allclassnames.indexOf(value.__clname__) === -1) {
                 allclassnames.push(value.__clname__);
             }
-            
+
             return value;
         });
 

@@ -9,7 +9,7 @@ import { Right } from "jassi/remote/security/Right";
 
 //import "jassi/ext/enableExtension.js?de.Kunde";
 @$DBObject({name:"jassi_group"})
-@$Class("jassi.remote.security.Group")
+@$Class("jassi.security.Group")
 
 export class Group extends DBObject  {
 

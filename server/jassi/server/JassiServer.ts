@@ -13,7 +13,7 @@ import "jassi/remote/Registry";
 //important: registry must be loaded after "reflect-metadata" and before the typeorm (because delegation of Reflect.metadata)
 import express = require('express');
 
-import { staticfiles, syncRemoteFiles } from "jassi/server/Filesystem";
+import { staticfiles,staticsecurefiles, syncRemoteFiles } from "jassi/server/Filesystem";
 import { Indexer } from 'jassi/server/Indexer';
 import { loginRegister, manageToken } from "jassi/server/PassportLoginRegister";
 const passport = require("passport");
@@ -57,9 +57,12 @@ export default function JassiServer(properties: JassiConnectionProperties={}, ex
     app.use(rawbody);
    // app.use(installGetRequest);
     app.use(passport.initialize());
+     
     app.use(cookieParser());
     app.use("/user", loginRegister);
     app.use(manageToken);
+    app.use(staticsecurefiles, passport.authenticate("jwt", { session: false }));
+   
     app.post('/remoteprotocol', passport.authenticate("jwt", { session: false }), remoteProtocol);
    /* if (properties.allowDownloadAsZip!==false)
         app.get('/zip', passport.authenticate("jwt", { session: false }), zip);*/

@@ -7,6 +7,7 @@ import { FileNode } from 'jassi/remote/FileNode';
 import JSZip = require("jszip");
 import { ServerIndexer } from './RegistryIndexer';
 let resolve = require('path').resolve;
+const passport = require("passport");
 
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"]
 export default class Filesystem {
@@ -95,8 +96,8 @@ export default class Filesystem {
         var results = [];
         var list = fs.readdirSync(dir);
         var _this = this;
-        for(let l=0;l<list.length;l++){
-            let file=list[l];
+        for (let l = 0; l < list.length; l++) {
+            let file = list[l];
             for (var x = 0; x < ignore.length; x++) {
                 if (file === ignore[x])
                     return;
@@ -106,7 +107,7 @@ export default class Filesystem {
             var stat = fs.statSync(file);
             if (stat && stat.isDirectory()) {
                 /* Recurse into a subdirectory */
-                var arr=await _this.dirFiles(file, extensions);
+                var arr = await _this.dirFiles(file, extensions);
                 results = results.concat(arr);
             } else {
                 /* Is a file */
@@ -488,6 +489,36 @@ export function staticfiles(req, res, next) {
 
     // console.log(req.path);
     let sfile = Filesystem.path + "/" + req.path;
+    if (sfile.indexOf("Settings.ts") > -1) {//&&!passport.authenticate("jwt", { session: false })){
+        next();
+        return;
+    }
+    if (fs.existsSync(sfile)) {
+        // let code=fs.readFileSync(Filesystem.path+"/"+req.path);
+        let dat = fs.statSync(sfile).mtime.getTime();
+        if (req.query.lastcachedate === dat.toString()) {
+            res.set('X-Custom-UpToDate', 'true');
+            res.send("");
+        } else {
+            res.sendFile(resolve(sfile), {
+                headers: { 'X-Custom-Date': dat.toString() }
+            });
+        }
+    } else {
+        next();
+    }
+    var s = 1;
+}
+export function staticsecurefiles(req, res, next) {
+
+    // console.log(req.path);
+    let sfile = Filesystem.path + "/" + req.path;
+    if (sfile.indexOf("Settings.ts") > -1) {//&&!passport.authenticate("jwt", { session: false })){
+        if (!req.isAuthenticated()) {
+            res.send(401, 'not logged in');
+            return;
+        }
+    }
     if (fs.existsSync(sfile)) {
         // let code=fs.readFileSync(Filesystem.path+"/"+req.path);
         let dat = fs.statSync(sfile).mtime.getTime();

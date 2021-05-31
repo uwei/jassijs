@@ -433,11 +433,11 @@ define("jassi_editor/AcePanel", ["require", "exports", "jassi/jassi", "jassi_edi
             this._editor.focus();
             this._editor.gotoLine(cursor.row, cursor.column, true);
             var r = cursor.row;
-            if (r > 3)
-                r = r - 3;
+            if (r > 5)
+                r = r - 5;
             var _this = this;
-            _this._editor.renderer.scrollToRow(r);
-            _this._editor.renderer.scrollCursorIntoView({ row: cursor.row, column: cursor.column }, 0.5);
+            //_this._editor.renderer.scrollToRow(r);
+            // _this._editor.renderer.scrollCursorIntoView({ row: cursor.row, column: cursor.column  }, 0.5);
         }
         get cursorPosition() {
             var ret = this._editor.getCursorPosition();
@@ -729,7 +729,7 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
     new ChromeDebugger();
     window.postMessage({ toJassiExtension: true, name: "connect" }, "*");
 });
-define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/ErrorPanel", "jassi/ui/Button", "jassi/remote/Registry", "jassi/remote/Server", "jassi/util/Reloader", "jassi/remote/Classes", "jassi/ui/Component", "jassi/ui/Property", "jassi/base/Tests", "jassi_editor/AcePanel", "jassi_editor/util/Typescript", "jassi_editor/MonacoPanel"], function (require, exports, Jassi_3, Panel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_2, Server_2, Reloader_2, Classes_1, Component_1, Property_1, Tests_1, AcePanel_2, Typescript_2, MonacoPanel_1) {
+define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/ErrorPanel", "jassi/ui/Button", "jassi/remote/Registry", "jassi/remote/Server", "jassi/util/Reloader", "jassi/remote/Classes", "jassi/ui/Component", "jassi/ui/Property", "jassi/base/Tests", "jassi_editor/AcePanel", "jassi_editor/util/Typescript", "jassi_editor/MonacoPanel", "jassi/remote/Settings"], function (require, exports, Jassi_3, Panel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_2, Server_2, Reloader_2, Classes_1, Component_1, Property_1, Tests_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -741,11 +741,13 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
     let CodeEditor = CodeEditor_1 = class CodeEditor extends Panel_1.Panel {
         constructor() {
             super();
+            console.log("use" + Settings_1.Settings.gets(Settings_1.Settings.keys.Development_DefaultEditor));
             this.maximize();
             this._main = new DockingContainer_1.DockingContainer();
             this._codeView = new Panel_1.Panel();
             this._codeToolbar = new Panel_1.Panel();
-            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+            if (this.editorProvider === "ace") {
                 this._codePanel = new AcePanel_2.AcePanel();
             }
             else {
@@ -759,10 +761,28 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             this._init();
             this.editMode = true;
         }
-        _init() {
-            var _this = this;
+        get editorProvider() {
+            if (this._editorProvider === undefined) {
+                let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+                if (mobil)
+                    return "ace";
+                else
+                    return "monaco";
+            }
+            return this._editorProvider;
+        }
+        _initCodePanel() {
             this._codePanel.width = "100%";
             this._codePanel.mode = "typescript";
+            this._codePanel.height = "calc(100% - 31px)";
+            let _this = this;
+            this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
+                Jassi_3.default.debugger.breakpointChanged(_this._file, line, column, enable, type);
+            });
+        }
+        _init() {
+            var _this = this;
+            this._initCodePanel();
             /*  this._codePanel.getDocTooltip = function (item) {
                   return _this.getDocTooltip(item);
               }*/
@@ -771,8 +791,6 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             this._codeView["horizontal"] = true;
             this._codeView.add(this._codeToolbar);
             this._codeView.add(this._codePanel);
-            this._codePanel.height = "calc(100% - 31px)";
-            this._codePanel.width = "100%";
             this._main.width = "calc(100% - 1px)";
             this._main.height = "99%";
             var lasttop = this._main.dom.offsetTop;
@@ -829,11 +847,11 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             super.add(this._main);
             this._installView();
             this.registerKeys();
-            this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
-                Jassi_3.default.debugger.breakpointChanged(_this._file, line, column, enable, type);
-            });
             this._variables.createTable();
             //   this._codePanel.setCompleter(this);
+            setTimeout(() => {
+                //_this.editorProvider="ace";
+            }, 100);
         }
         _installView() {
             this._main.add(this._codeView, "Code..", "code");
@@ -841,6 +859,27 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             this._main.add(this._design, "Design", "design");
             this._main.add(this._errors, "Errors", "errors");
             this._main.layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":100,"content":[{"type":"stack","width":33.333333333333336,"height":80.34682080924856,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":19.653179190751445,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":50,"content":[{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":50,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+        }
+        set editorProvider(value) {
+            if (value !== this.editorProvider) {
+                //switch to new provider
+                let pos = this.cursorPosition;
+                let val = this.value;
+                let old = this._codePanel;
+                if (value === "ace") {
+                    this._codePanel = new AcePanel_2.AcePanel();
+                }
+                else {
+                    this._codePanel = new MonacoPanel_1.MonacoPanel();
+                }
+                this._initCodePanel();
+                this._codeView.remove(old);
+                this._codeView.add(this._codePanel);
+                this.value = val;
+                this.cursorPosition = pos;
+                old.destroy();
+            }
+            this._editorProvider = value;
         }
         async _save(code) {
             await new Server_2.Server().saveFile(this._file, code);
@@ -1213,7 +1252,7 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             this.cursorPosition = { row: this._line, column: 1 };
             var _this = this;
             setTimeout(function () {
-                _this.cursorPosition = { row: this._line, column: 1 };
+                _this.cursorPosition = { row: _this._line, column: 1 };
             }, 300);
             /*setTimeout(function() {
                 _this.cursorPosition = { row: value, column: 0 };
@@ -1270,9 +1309,12 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
     exports.CodeEditor = CodeEditor;
     async function test() {
         var editor = new CodeEditor();
-        var url = "demo/DialogKunde.ts";
+        var url = "jassi_editor/AcePanel.ts";
         editor.height = 500;
         await editor.openFile(url);
+        setTimeout(() => {
+            editor.editorProvider = "ace";
+        }, 2000);
         return editor;
     }
     exports.test = test;
@@ -2506,7 +2548,7 @@ define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", 
         inited = true;
     }
     /**
-    * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
+    * wrapper for the Ace-Code editor with Typescript-Code-Completion an other features
     * @class jassi.ui.CodePanel
     */
     let MonacoPanel = class MonacoPanel extends CodePanel_3.CodePanel {
@@ -2695,9 +2737,8 @@ define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", 
             return this._mode;
         }
         async loadsample() {
-            var code = await new Server_3.Server().loadFile("a/Dialog.ts");
             this.file = "a/Dialog.ts";
-            this.value = code;
+            this.value = "var a=window.document;";
         }
     };
     MonacoPanel = __decorate([
@@ -2708,12 +2749,11 @@ define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", 
     async function test() {
         var dlg = new MonacoPanel();
         var code = await new Server_3.Server().loadFile("a/Dialog.ts");
-        dlg.file = "a/Dialog.ts";
-        dlg.value = code;
+        dlg.loadsample();
         dlg.width = "800";
         dlg.height = "800";
         //@ts-ignore
-        dlg._editor.layout();
+        //   dlg._editor.layout();
         //    dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
         //  dlg.mode = "javascript";
         //dlg._editor.renderer.setShowGutter(false);		
@@ -2775,7 +2815,7 @@ define("jassi_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassi_editor/AcePanel.ts": {
-                "date": 1613218566582,
+                "date": 1622292047807,
                 "jassi.ui.AcePanel": {}
             },
             "jassi_editor/ChromeDebugger.ts": {
@@ -2783,7 +2823,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
-                "date": 1618665085047,
+                "date": 1622496645626,
                 "jassi_editor.CodeEditor": {}
             },
             "jassi_editor/CodeEditorInvisibleComponents.ts": {
@@ -2814,7 +2854,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "date": 1614109063764
             },
             "jassi_editor/MonacoPanel.ts": {
-                "date": 1613573828092,
+                "date": 1622219255140,
                 "jassi_editor.MonacoPanel": {}
             },
             "jassi_editor/StartEditor.ts": {

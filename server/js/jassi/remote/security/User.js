@@ -54,7 +54,7 @@ __decorate([
 ], User.prototype, "isAdmin", void 0);
 User = __decorate([
     DBObject_1.$DBObject({ name: "jassi_user" }),
-    Jassi_1.$Class("jassi.remote.security.User")
+    Jassi_1.$Class("jassi.security.User")
 ], User);
 exports.User = User;
 async function test() {

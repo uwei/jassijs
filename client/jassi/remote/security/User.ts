@@ -8,7 +8,7 @@ import { Context } from "jassi/remote/RemoteObject";
 
 
 @$DBObject({name:"jassi_user"})
-@$Class("jassi.remote.security.User")
+@$Class("jassi.security.User")
 
 export class User extends DBObject  {
 

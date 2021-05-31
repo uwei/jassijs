@@ -14,6 +14,7 @@ export class DBObjectNode {
 	name?:string;
 	filename?:string;
 }
+
 @$ActionProvider("jassi.remote.FileNode")
 @$Class("jassi.ui.DBFileActions")
 export class DBFileActions {
@@ -68,7 +69,7 @@ type Me = {
 	tree?:Tree,
 	contextmenu?:ContextMenu
 }
-
+@$ActionProvider("jassi.base.ActionNode")
 @$Class("jassi.ui.DBObjectExplorer")
 export class DBObjectExplorer extends Panel {
     me: Me;
@@ -93,6 +94,13 @@ export class DBObjectExplorer extends Panel {
     	
     	me.contextmenu.includeClassActions=true;
     	this.update();
+    }
+	@$Action({
+    	name: "Windows/Development/DBObjects",
+       	icon: "mdi mdi-database-search",
+    })
+    static async show(){
+         windows.addLeft(new DBObjectExplorer(), "DBObjects");
     }
     async update(){
     	var entrys=await registry.getJSONData("$DBObject");

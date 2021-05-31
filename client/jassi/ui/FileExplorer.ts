@@ -12,6 +12,7 @@ import { MenuItem } from "jassi/ui/MenuItem";
 import typescript, { Typescript } from "jassi_editor/util/Typescript";
 import { ContextMenu } from "jassi/ui/ContextMenu";
 import { CSSProperties } from "jassi/ui/CSSProperties";
+import windows from "jassi/base/Windows";
 //drag from Desktop https://www.html5rocks.com/de/tutorials/file/dndfiles/
 @$ActionProvider("jassi.remote.FileNode")
 @$Class("jassi.ui.FileActions")
@@ -167,7 +168,7 @@ export class FileActions {
     }
 
 }
-
+@$ActionProvider("jassi.base.ActionNode")
 @$Class("jassi.ui.FileExplorer")
 export class FileExplorer extends Panel {
     tree: Tree;
@@ -184,6 +185,13 @@ export class FileExplorer extends Panel {
         this.search = new Textbox();
         this.layout();
         this.tree.propStyle=node=>{return  this.getStyle(node)};
+    }
+    @$Action({
+    	name: "Windows/Development/Files",
+       	icon: "mdi mdi-file-tree",
+    })
+    static async show(){
+         windows.addLeft(new FileExplorer(), "Files");
     }
     getStyle(node:FileNode):CSSProperties{
         var ret:CSSProperties=undefined;

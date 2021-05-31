@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.staticfiles = exports.syncRemoteFiles = void 0;
+exports.staticsecurefiles = exports.staticfiles = exports.syncRemoteFiles = void 0;
 const fs = require("fs");
 var fpath = require('path');
 const Compile_1 = require("jassi/server/Compile");
@@ -8,6 +8,7 @@ const DBManager_1 = require("jassi/server/DBManager");
 const JSZip = require("jszip");
 const RegistryIndexer_1 = require("./RegistryIndexer");
 let resolve = require('path').resolve;
+const passport = require("passport");
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
 class Filesystem {
     _pathForFile(fileName) {
@@ -473,6 +474,10 @@ exports.syncRemoteFiles = syncRemoteFiles;
 function staticfiles(req, res, next) {
     // console.log(req.path);
     let sfile = Filesystem.path + "/" + req.path;
+    if (sfile.indexOf("Settings.ts") > -1) { //&&!passport.authenticate("jwt", { session: false })){
+        next();
+        return;
+    }
     if (fs.existsSync(sfile)) {
         // let code=fs.readFileSync(Filesystem.path+"/"+req.path);
         let dat = fs.statSync(sfile).mtime.getTime();
@@ -492,4 +497,32 @@ function staticfiles(req, res, next) {
     var s = 1;
 }
 exports.staticfiles = staticfiles;
+function staticsecurefiles(req, res, next) {
+    // console.log(req.path);
+    let sfile = Filesystem.path + "/" + req.path;
+    if (sfile.indexOf("Settings.ts") > -1) { //&&!passport.authenticate("jwt", { session: false })){
+        if (!req.isAuthenticated()) {
+            res.send(401, 'not logged in');
+            return;
+        }
+    }
+    if (fs.existsSync(sfile)) {
+        // let code=fs.readFileSync(Filesystem.path+"/"+req.path);
+        let dat = fs.statSync(sfile).mtime.getTime();
+        if (req.query.lastcachedate === dat.toString()) {
+            res.set('X-Custom-UpToDate', 'true');
+            res.send("");
+        }
+        else {
+            res.sendFile(resolve(sfile), {
+                headers: { 'X-Custom-Date': dat.toString() }
+            });
+        }
+    }
+    else {
+        next();
+    }
+    var s = 1;
+}
+exports.staticsecurefiles = staticsecurefiles;
 //# sourceMappingURL=Filesystem.js.map

@@ -9,7 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, Categories_1, Suppliers_1, DBObject_1, Jassi_1, DatabaseSchema_1) {
     "use strict";
-    var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Products = void 0;
     let Products = class Products extends DBObject_1.DBObject {
@@ -27,11 +26,11 @@ define(["require", "exports", "northwind/remote/Categories", "northwind/remote/S
     ], Products.prototype, "ProductName", void 0);
     __decorate([
         DatabaseSchema_1.ManyToOne(type => Suppliers_1.Suppliers),
-        __metadata("design:type", typeof (_a = typeof Suppliers_1.Suppliers !== "undefined" && Suppliers_1.Suppliers) === "function" ? _a : Object)
+        __metadata("design:type", Suppliers_1.Suppliers)
     ], Products.prototype, "Supplier", void 0);
     __decorate([
         DatabaseSchema_1.ManyToOne(type => Categories_1.Categories, e => e.Products),
-        __metadata("design:type", typeof (_b = typeof Categories_1.Categories !== "undefined" && Categories_1.Categories) === "function" ? _b : Object)
+        __metadata("design:type", Categories_1.Categories)
     ], Products.prototype, "Category", void 0);
     __decorate([
         DatabaseSchema_1.Column({ nullable: true }),
