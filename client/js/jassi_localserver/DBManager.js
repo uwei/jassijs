@@ -17,7 +17,7 @@ define(["require", "exports", "typeorm", "jassi/remote/Classes", "jassi/remote/R
     var _instance = undefined;
     var _initrunning = undefined;
     /**
-     * database access with typeorm
+     * database access with typeorm ...
      */
     let DBManager = DBManager_1 = class DBManager {
         static async getConOpts() {

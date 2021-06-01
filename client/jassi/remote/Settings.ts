@@ -50,7 +50,7 @@ export class Settings extends RemoteObject {
             }
         }
     }
-    static gets<T>(name: T): Promise<T> {
+    static gets<T>(name: T): T {
         if (Settings.browserSettings && Settings.browserSettings[name])
             return Settings.browserSettings[name];
         if (Settings.userSettings && Settings.userSettings[name])
@@ -66,7 +66,12 @@ export class Settings extends RemoteObject {
         }
         if (scope === "user" || scope === "allusers") {
             if (!context?.isServer) {
-                return await this.call(this.remove, key, scope, context);
+                if(scope=="user"&&Settings.userSettings)
+                    delete Settings.userSettings[key];
+                if(scope=="allusers"&&Settings.allusersSettings)
+                    delete Settings.allusersSettings[key];
+                this.call(this.remove, key, scope, context);
+                
             } else {
                 //@ts-ignore
                 var man = await (await import("jassi/server/DBManager")).DBManager.get();
@@ -102,6 +107,18 @@ export class Settings extends RemoteObject {
         }
         if (scope === "user" || scope === "allusers") {
             if (!context?.isServer) {
+                
+
+                if(scope=="user"&&Settings.userSettings){
+                    if(removeOtherKeys)
+                        Settings.userSettings={};
+                   Object.assign(Settings.userSettings,namevaluepair);
+                }
+                if(scope=="allusers"&&Settings.allusersSettings){
+                    if(removeOtherKeys)
+                        Settings.allusersSettings={};
+                   Object.assign(Settings.allusersSettings,namevaluepair);
+                }
                 return await this.call(this.saveAll, namevaluepair, scope, removeOtherKeys, context);
             } else {
                 //@ts-ignore
@@ -127,23 +144,13 @@ export class Settings extends RemoteObject {
 }
 var settings = new Settings();
 export { settings };
-export function $SettingDescriptor(): Function {
+export function $SettingsDescriptor(): Function {
     return function (pclass) {
-        registry.register("$SettingProvider", pclass);
+        registry.register("$SettingsDescriptor", pclass);
     }
 }
 
-declare global {
-    export interface KnownSettings {
-        Development_DefaultEditor: "ace" | "monaco";
-    }
-}
-/*@$Class("MySettings")
-class MySettings {
-    @$Property({ name: "Development/Default Editor", chooseFrom: ["ace", "monaco"] })
-    Development_DefaultEditor: string;
-}
-*/
+
 export async function autostart(){
     await Settings.load();
 }
@@ -151,7 +158,7 @@ export async function autostart(){
 export async function test() {
     //
     //console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace1", "browser"));
-      console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace", "user"));
+      console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "monaco", "user"));
     //  console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace3", "allusers"));
     await Settings.load();
    // await Settings.remove(Settings.keys.Development_DefaultEditor, "browser");

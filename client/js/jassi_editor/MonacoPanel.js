@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_editor/util/Typescript", "jassi/remote/Server", "jassi_editor/CodePanel", "jassi_editor/Debugger", "jassi_editor/ext/monaco"], function (require, exports, Jassi_1, Router_1, Typescript_1, Server_1, CodePanel_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_editor/util/Typescript", "jassi/remote/Server", "jassi_editor/CodePanel", "jassi/remote/Settings", "jassi_editor/Debugger", "jassi_editor/ext/monaco"], function (require, exports, Jassi_1, Router_1, Typescript_1, Server_1, CodePanel_1, Settings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -116,10 +116,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_
                      _this.callEvent("breakpointChanged", row, column, false, type);
                  }
              });*/
+            let theme = Settings_1.Settings.gets(Settings_1.Settings.keys.Development_MoanacoEditorTheme);
             this._editor = monaco.editor.create(this.dom, {
                 //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
                 language: 'typescript',
-                theme: "vs-light",
+                theme: (theme ? theme : "vs-light"),
                 glyphMargin: true,
                 fontSize: 12,
                 automaticLayout: true
@@ -287,6 +288,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_
     ], MonacoPanel);
     exports.MonacoPanel = MonacoPanel;
     async function test() {
+        await Settings_1.Settings.save(Settings_1.Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user");
         var dlg = new MonacoPanel();
         var code = await new Server_1.Server().loadFile("a/Dialog.ts");
         dlg.loadsample();

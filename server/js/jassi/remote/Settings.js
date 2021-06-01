@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var Settings_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.autostart = exports.$SettingDescriptor = exports.settings = exports.Settings = void 0;
+exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
 const Jassi_1 = require("jassi/remote/Jassi");
 const Registry_1 = require("jassi/remote/Registry");
 const RemoteObject_1 = require("jassi/remote/RemoteObject");
@@ -68,7 +68,11 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
         }
         if (scope === "user" || scope === "allusers") {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await this.call(this.remove, key, scope, context);
+                if (scope == "user" && Settings_1.userSettings)
+                    delete Settings_1.userSettings[key];
+                if (scope == "allusers" && Settings_1.allusersSettings)
+                    delete Settings_1.allusersSettings[key];
+                this.call(this.remove, key, scope, context);
             }
             else {
                 //@ts-ignore
@@ -103,6 +107,16 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
         }
         if (scope === "user" || scope === "allusers") {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                if (scope == "user" && Settings_1.userSettings) {
+                    if (removeOtherKeys)
+                        Settings_1.userSettings = {};
+                    Object.assign(Settings_1.userSettings, namevaluepair);
+                }
+                if (scope == "allusers" && Settings_1.allusersSettings) {
+                    if (removeOtherKeys)
+                        Settings_1.allusersSettings = {};
+                    Object.assign(Settings_1.allusersSettings, namevaluepair);
+                }
                 return await this.call(this.saveAll, namevaluepair, scope, removeOtherKeys, context);
             }
             else {
@@ -137,18 +151,12 @@ Settings = Settings_1 = __decorate([
 exports.Settings = Settings;
 var settings = new Settings();
 exports.settings = settings;
-function $SettingDescriptor() {
+function $SettingsDescriptor() {
     return function (pclass) {
-        Registry_1.default.register("$SettingProvider", pclass);
+        Registry_1.default.register("$SettingsDescriptor", pclass);
     };
 }
-exports.$SettingDescriptor = $SettingDescriptor;
-/*@$Class("MySettings")
-class MySettings {
-    @$Property({ name: "Development/Default Editor", chooseFrom: ["ace", "monaco"] })
-    Development_DefaultEditor: string;
-}
-*/
+exports.$SettingsDescriptor = $SettingsDescriptor;
 async function autostart() {
     await Settings.load();
 }
@@ -156,7 +164,7 @@ exports.autostart = autostart;
 async function test() {
     //
     //console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace1", "browser"));
-    console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace", "user"));
+    console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "monaco", "user"));
     //  console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace3", "allusers"));
     await Settings.load();
     // await Settings.remove(Settings.keys.Development_DefaultEditor, "browser");

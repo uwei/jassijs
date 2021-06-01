@@ -17,7 +17,7 @@ define("jassi_localserver/DBManager", ["require", "exports", "typeorm", "jassi/r
     var _instance = undefined;
     var _initrunning = undefined;
     /**
-     * database access with typeorm
+     * database access with typeorm ...
      */
     let DBManager = DBManager_1 = class DBManager {
         static async getConOpts() {
@@ -1340,7 +1340,7 @@ define("jassi/server/DoRemoteProtocol", ["jassi_localserver/LocalProtocol"], fun
 define("jassi/server/Filesystem", ["jassi_localserver/Filesystem"], function (fs) {
     return fs;
 });
-define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry", "jassi_localserver/DBManager", "jassi_localserver/TypeORMListener", "typeorm", "jassi/remote/Database"], function (db, Classes_1, Registry_1, dbman, TypeORMListener, to, Database) {
+define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry", "jassi_localserver/DBManager", "jassi_localserver/TypeORMListener", "typeorm", "jassi/remote/Database", "typeormbrowser"], function (db, Classes_1, Registry_1, dbman, TypeORMListener, to, Database) {
     db.DBManager["getConOpts"] = async function () {
         var dbclasses = [];
         const initSqlJs = window["SQL"];

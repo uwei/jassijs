@@ -16,8 +16,22 @@ import { Test } from "jassi/base/Tests";
 import { AcePanel } from "jassi_editor/AcePanel";
 import { Typescript } from "jassi_editor/util/Typescript";
 import { MonacoPanel } from "jassi_editor/MonacoPanel";
-import { Settings } from "jassi/remote/Settings";
+import { $SettingsDescriptor, Settings } from "jassi/remote/Settings";
 
+declare global {
+    export interface KnownSettings {
+        Development_DefaultEditor: "ace" | "monaco"|"aceOnBrowser";
+        Development_MoanacoEditorTheme:"vs-dark"|"vs-light"|"hc-black";
+    }
+}
+@$SettingsDescriptor()
+@$Class("jassi_editor.CodeEditorSettingsDescriptor")
+class CodeEditorSettingsDescriptor {
+    @$Property({ chooseFrom: ["ace", "monaco","aceOnBrowser"] })
+    Development_DefaultEditor: string;
+    @$Property({ chooseFrom: ["vs-dark","vs-light","hc-black"] })
+    Development_MoanacoEditorTheme:string;
+}
 
 
 /**
@@ -36,17 +50,7 @@ export class CodeEditor extends Panel {
     _design: Panel;
     editMode: boolean;
     __evalToCursorReached: boolean;
-    private _editorProvider: "ace" | "monaco" ;//= "ace";
-    get editorProvider(): "ace" | "monaco" {
-        if (this._editorProvider === undefined) {
-            let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-            if (mobil)
-                return "ace";
-            else
-                return "monaco";
-        }
-        return this._editorProvider;
-    }
+   
    
     private _line: number;
     constructor() {
@@ -60,7 +64,9 @@ export class CodeEditor extends Panel {
         this._codeView = new Panel();
         this._codeToolbar = new Panel();
         //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-        if (this.editorProvider === "ace") {
+        let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+        let sett=Settings.gets(Settings.keys.Development_DefaultEditor);
+        if (sett==="ace"||(mobil&&(sett==="aceOnBrowser"||sett===undefined))){
             this._codePanel = new AcePanel();
         } else {
             this._codePanel = new MonacoPanel();
@@ -178,12 +184,13 @@ export class CodeEditor extends Panel {
 
     }
 
-	set editorProvider(value: "ace" | "monaco") {
+	/*set editorProvider(value: "ace" | "monaco") {
         if (value !== this.editorProvider) {
             //switch to new provider
             let pos = this.cursorPosition;
             let val = this.value;
             let old = this._codePanel;
+            
             if (value === "ace") {
                 this._codePanel = new AcePanel();
             } else {
@@ -196,8 +203,8 @@ export class CodeEditor extends Panel {
             this.cursorPosition=pos;
             old.destroy();
         }
-        this._editorProvider = value;
-    }
+        
+    }*/
 
 
     private async _save(code) {

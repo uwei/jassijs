@@ -7,6 +7,7 @@ import "jassi_editor/ext/monaco";
 import typescript from "jassi_editor/util/Typescript";
 import { Server } from "jassi/remote/Server";
 import { CodePanel } from "jassi_editor/CodePanel";
+import { Settings } from "jassi/remote/Settings";
 
 
 var inited = false;
@@ -128,11 +129,11 @@ export class MonacoPanel extends CodePanel {
                  _this.callEvent("breakpointChanged", row, column, false, type);
              }
          });*/
-
+        let theme=Settings.gets(Settings.keys.Development_MoanacoEditorTheme);
         this._editor = monaco.editor.create(this.dom, {
             //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
             language: 'typescript',
-            theme: "vs-light",
+            theme: (theme?theme:"vs-light"),
             glyphMargin: true,
             fontSize: 12,
             automaticLayout: true
@@ -300,7 +301,7 @@ export class MonacoPanel extends CodePanel {
 }
 
 export async function test() {
-
+    await Settings.save(Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user")
     var dlg = new MonacoPanel();
     var code = await new Server().loadFile("a/Dialog.ts");
     dlg.loadsample();

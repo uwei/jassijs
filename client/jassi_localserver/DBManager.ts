@@ -22,7 +22,7 @@ export interface MyFindManyOptions<Entity = any> extends FindManyOptions {
 var _instance: DBManager = undefined;
 var _initrunning = undefined;
 /** 
- * database access with typeorm
+ * database access with typeorm ...
  */
 @$Class("jassi_localserver.DBManager")
 export class DBManager {

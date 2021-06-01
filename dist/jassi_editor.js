@@ -734,6 +734,20 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CodeEditor = void 0;
+    let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
+    };
+    __decorate([
+        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"] }),
+        __metadata("design:type", String)
+    ], CodeEditorSettingsDescriptor.prototype, "Development_DefaultEditor", void 0);
+    __decorate([
+        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"] }),
+        __metadata("design:type", String)
+    ], CodeEditorSettingsDescriptor.prototype, "Development_MoanacoEditorTheme", void 0);
+    CodeEditorSettingsDescriptor = __decorate([
+        Settings_1.$SettingsDescriptor(),
+        Jassi_3.$Class("jassi_editor.CodeEditorSettingsDescriptor")
+    ], CodeEditorSettingsDescriptor);
     /**
      * Panel for editing sources
      * @class jassi_editor.CodeEditor
@@ -747,7 +761,9 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             this._codeView = new Panel_1.Panel();
             this._codeToolbar = new Panel_1.Panel();
             //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            if (this.editorProvider === "ace") {
+            let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+            let sett = Settings_1.Settings.gets(Settings_1.Settings.keys.Development_DefaultEditor);
+            if (sett === "ace" || (mobil && (sett === "aceOnBrowser" || sett === undefined))) {
                 this._codePanel = new AcePanel_2.AcePanel();
             }
             else {
@@ -760,16 +776,6 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             this._design = new Panel_1.Panel();
             this._init();
             this.editMode = true;
-        }
-        get editorProvider() {
-            if (this._editorProvider === undefined) {
-                let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-                if (mobil)
-                    return "ace";
-                else
-                    return "monaco";
-            }
-            return this._editorProvider;
         }
         _initCodePanel() {
             this._codePanel.width = "100%";
@@ -860,27 +866,27 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             this._main.add(this._errors, "Errors", "errors");
             this._main.layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":100,"content":[{"type":"stack","width":33.333333333333336,"height":80.34682080924856,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":19.653179190751445,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":50,"content":[{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":50,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
         }
-        set editorProvider(value) {
+        /*set editorProvider(value: "ace" | "monaco") {
             if (value !== this.editorProvider) {
                 //switch to new provider
                 let pos = this.cursorPosition;
                 let val = this.value;
                 let old = this._codePanel;
+                
                 if (value === "ace") {
-                    this._codePanel = new AcePanel_2.AcePanel();
-                }
-                else {
-                    this._codePanel = new MonacoPanel_1.MonacoPanel();
+                    this._codePanel = new AcePanel();
+                } else {
+                    this._codePanel = new MonacoPanel();
                 }
                 this._initCodePanel();
                 this._codeView.remove(old);
                 this._codeView.add(this._codePanel);
-                this.value = val;
-                this.cursorPosition = pos;
+                this.value=val;
+                this.cursorPosition=pos;
                 old.destroy();
             }
-            this._editorProvider = value;
-        }
+            
+        }*/
         async _save(code) {
             await new Server_2.Server().saveFile(this._file, code);
             var f = this._file.replace(".ts", "");
@@ -2467,7 +2473,7 @@ define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi"], fu
         Jassi_9.default.debugger = new Debugger();
     require(["jassi_editor/ChromeDebugger"]);
 });
-define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_editor/util/Typescript", "jassi/remote/Server", "jassi_editor/CodePanel", "jassi_editor/Debugger", "jassi_editor/ext/monaco"], function (require, exports, Jassi_10, Router_2, Typescript_4, Server_3, CodePanel_3) {
+define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_editor/util/Typescript", "jassi/remote/Server", "jassi_editor/CodePanel", "jassi/remote/Settings", "jassi_editor/Debugger", "jassi_editor/ext/monaco"], function (require, exports, Jassi_10, Router_2, Typescript_4, Server_3, CodePanel_3, Settings_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -2576,10 +2582,11 @@ define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", 
                      _this.callEvent("breakpointChanged", row, column, false, type);
                  }
              });*/
+            let theme = Settings_2.Settings.gets(Settings_2.Settings.keys.Development_MoanacoEditorTheme);
             this._editor = monaco.editor.create(this.dom, {
                 //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
                 language: 'typescript',
-                theme: "vs-light",
+                theme: (theme ? theme : "vs-light"),
                 glyphMargin: true,
                 fontSize: 12,
                 automaticLayout: true
@@ -2747,6 +2754,7 @@ define("jassi_editor/MonacoPanel", ["require", "exports", "jassi/remote/Jassi", 
     ], MonacoPanel);
     exports.MonacoPanel = MonacoPanel;
     async function test() {
+        await Settings_2.Settings.save(Settings_2.Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user");
         var dlg = new MonacoPanel();
         var code = await new Server_3.Server().loadFile("a/Dialog.ts");
         dlg.loadsample();
@@ -2823,7 +2831,10 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
-                "date": 1622496645626,
+                "date": 1622547652386,
+                "jassi_editor.CodeEditorSettingsDescriptor": {
+                    "$SettingsDescriptor": []
+                },
                 "jassi_editor.CodeEditor": {}
             },
             "jassi_editor/CodeEditorInvisibleComponents.ts": {
@@ -2854,7 +2865,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "date": 1614109063764
             },
             "jassi_editor/MonacoPanel.ts": {
-                "date": 1622219255140,
+                "date": 1622545815965,
                 "jassi_editor.MonacoPanel": {}
             },
             "jassi_editor/StartEditor.ts": {

@@ -12,6 +12,20 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CodeEditor = void 0;
+    let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
+    };
+    __decorate([
+        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"] }),
+        __metadata("design:type", String)
+    ], CodeEditorSettingsDescriptor.prototype, "Development_DefaultEditor", void 0);
+    __decorate([
+        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"] }),
+        __metadata("design:type", String)
+    ], CodeEditorSettingsDescriptor.prototype, "Development_MoanacoEditorTheme", void 0);
+    CodeEditorSettingsDescriptor = __decorate([
+        Settings_1.$SettingsDescriptor(),
+        Jassi_1.$Class("jassi_editor.CodeEditorSettingsDescriptor")
+    ], CodeEditorSettingsDescriptor);
     /**
      * Panel for editing sources
      * @class jassi_editor.CodeEditor
@@ -25,7 +39,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this._codeView = new Panel_1.Panel();
             this._codeToolbar = new Panel_1.Panel();
             //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            if (this.editorProvider === "ace") {
+            let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+            let sett = Settings_1.Settings.gets(Settings_1.Settings.keys.Development_DefaultEditor);
+            if (sett === "ace" || (mobil && (sett === "aceOnBrowser" || sett === undefined))) {
                 this._codePanel = new AcePanel_1.AcePanel();
             }
             else {
@@ -38,16 +54,6 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this._design = new Panel_1.Panel();
             this._init();
             this.editMode = true;
-        }
-        get editorProvider() {
-            if (this._editorProvider === undefined) {
-                let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-                if (mobil)
-                    return "ace";
-                else
-                    return "monaco";
-            }
-            return this._editorProvider;
         }
         _initCodePanel() {
             this._codePanel.width = "100%";
@@ -138,27 +144,27 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this._main.add(this._errors, "Errors", "errors");
             this._main.layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":100,"content":[{"type":"stack","width":33.333333333333336,"height":80.34682080924856,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":19.653179190751445,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":50,"content":[{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":50,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
         }
-        set editorProvider(value) {
+        /*set editorProvider(value: "ace" | "monaco") {
             if (value !== this.editorProvider) {
                 //switch to new provider
                 let pos = this.cursorPosition;
                 let val = this.value;
                 let old = this._codePanel;
+                
                 if (value === "ace") {
-                    this._codePanel = new AcePanel_1.AcePanel();
-                }
-                else {
-                    this._codePanel = new MonacoPanel_1.MonacoPanel();
+                    this._codePanel = new AcePanel();
+                } else {
+                    this._codePanel = new MonacoPanel();
                 }
                 this._initCodePanel();
                 this._codeView.remove(old);
                 this._codeView.add(this._codePanel);
-                this.value = val;
-                this.cursorPosition = pos;
+                this.value=val;
+                this.cursorPosition=pos;
                 old.destroy();
             }
-            this._editorProvider = value;
-        }
+            
+        }*/
         async _save(code) {
             await new Server_1.Server().saveFile(this._file, code);
             var f = this._file.replace(".ts", "");

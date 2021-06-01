@@ -11,7 +11,10 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi_editor.ChromeDebugger": {}
 	},
 	"jassi_editor/CodeEditor.ts": {
-		"date": 1622496645626,
+		"date": 1622547652386,
+		"jassi_editor.CodeEditorSettingsDescriptor": {
+			"$SettingsDescriptor": []
+		},
 		"jassi_editor.CodeEditor": {}
 	},
 	"jassi_editor/CodeEditorInvisibleComponents.ts": {
@@ -42,7 +45,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"date": 1614109063764
 	},
 	"jassi_editor/MonacoPanel.ts": {
-		"date": 1622219255140,
+		"date": 1622545815965,
 		"jassi_editor.MonacoPanel": {}
 	},
 	"jassi_editor/StartEditor.ts": {

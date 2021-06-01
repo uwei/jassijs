@@ -39,57 +39,62 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
             var isDescribeComponentOverided = undefined;
             if (cache === undefined || nocache === true) {
                 var family = [];
-                cache = new ComponentDescriptor_1();
-                cache.fields = [];
-                var hideBaseClassProperties = false;
-                do {
-                    family.push(type);
-                    var sclass = Classes_1.classes.getClassName(type);
-                    if (Registry_1.default.getMemberData("$Property") === undefined)
-                        return cache;
-                    var props = Registry_1.default.getMemberData("$Property")[sclass];
-                    if (props !== undefined) {
-                        var info = Registry_1.default.getMemberData("design:type")[sclass];
-                        for (var key in props) {
-                            var data = props[key];
-                            for (let x = 0; x < data.length; x++) {
-                                if ((_a = data[x][0]) === null || _a === void 0 ? void 0 : _a.hideBaseClassProperties) {
-                                    hideBaseClassProperties = data[x][0].hideBaseClassProperties;
-                                    continue;
-                                }
-                                var prop = new Property_1.Property(key);
-                                Object.assign(prop, data[x][0]);
-                                if (prop.type === undefined) {
-                                    if (info !== undefined && info[key] !== undefined) {
-                                        var tp = info[key][0][0];
-                                        if (tp.name === "String")
-                                            prop.type = "string";
-                                        else if (tp.name === "Number")
-                                            prop.type = "number";
-                                        else if (tp.name === "Boolean")
-                                            prop.type = "boolean";
-                                        else if (tp.name === "Function")
-                                            prop.type = "function";
-                                        else
-                                            prop.type = Classes_1.classes.getClassName(tp);
+                if (type.customComponentDescriptor) {
+                    cache = type.customComponentDescriptor();
+                }
+                else {
+                    cache = new ComponentDescriptor_1();
+                    cache.fields = [];
+                    var hideBaseClassProperties = false;
+                    do {
+                        family.push(type);
+                        var sclass = Classes_1.classes.getClassName(type);
+                        if (Registry_1.default.getMemberData("$Property") === undefined)
+                            return cache;
+                        var props = Registry_1.default.getMemberData("$Property")[sclass];
+                        if (props !== undefined) {
+                            var info = Registry_1.default.getMemberData("design:type")[sclass];
+                            for (var key in props) {
+                                var data = props[key];
+                                for (let x = 0; x < data.length; x++) {
+                                    if ((_a = data[x][0]) === null || _a === void 0 ? void 0 : _a.hideBaseClassProperties) {
+                                        hideBaseClassProperties = data[x][0].hideBaseClassProperties;
+                                        continue;
                                     }
-                                }
-                                if (prop.type === undefined && prop.hide !== true)
-                                    throw "Property Type not found:" + sclass + "." + key;
-                                if (cache.fields !== undefined && allFields.indexOf(prop.name) === -1) {
-                                    cache.fields.push(prop);
-                                    allFields.push(prop.name);
+                                    var prop = new Property_1.Property(key);
+                                    Object.assign(prop, data[x][0]);
+                                    if (prop.type === undefined) {
+                                        if (info !== undefined && info[key] !== undefined) {
+                                            var tp = info[key][0][0];
+                                            if (tp.name === "String")
+                                                prop.type = "string";
+                                            else if (tp.name === "Number")
+                                                prop.type = "number";
+                                            else if (tp.name === "Boolean")
+                                                prop.type = "boolean";
+                                            else if (tp.name === "Function")
+                                                prop.type = "function";
+                                            else
+                                                prop.type = Classes_1.classes.getClassName(tp);
+                                        }
+                                    }
+                                    if (prop.type === undefined && prop.hide !== true)
+                                        throw "Property Type not found:" + sclass + "." + key;
+                                    if (cache.fields !== undefined && allFields.indexOf(prop.name) === -1) {
+                                        cache.fields.push(prop);
+                                        allFields.push(prop.name);
+                                    }
                                 }
                             }
                         }
-                    }
-                    type = type.__proto__;
-                } while (type !== null && type.name !== "" && !hideBaseClassProperties);
-                //Hidden fields
-                if (cache.fields !== undefined) {
-                    for (let c = 0; c < cache.fields.length; c++) {
-                        if (cache.fields[c].hide === true) {
-                            cache.fields.splice(c--, 1);
+                        type = type.__proto__;
+                    } while (type !== null && type.name !== "" && !hideBaseClassProperties);
+                    //Hidden fields
+                    if (cache.fields !== undefined) {
+                        for (let c = 0; c < cache.fields.length; c++) {
+                            if (cache.fields[c].hide === true) {
+                                cache.fields.splice(c--, 1);
+                            }
                         }
                     }
                 }

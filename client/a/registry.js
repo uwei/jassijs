@@ -15,14 +15,8 @@ define("a/registry",["require"], function(require) {
 	"a/rep.ts": {
 		"date": 1613330812614
 	},
-	"a/SampleSettings.ts": {
-		"date": 1622490404295
-	},
 	"a/testreport.ts": {
 		"date": 1613330812614
-	},
-	"a/Testsetting.ts": {
-		"date": 1622478991174
 	}
 }
  }
