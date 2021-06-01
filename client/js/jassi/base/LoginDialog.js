@@ -1,14 +1,16 @@
 define(["require", "exports", "jassi/ext/jquerylib"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.login = exports.doAfterLogin = void 0;
+    exports.test = exports.login = exports.doAfterLogin = void 0;
     var queue = [];
     function doAfterLogin(resolve, prot) {
         queue.push([resolve, prot]);
     }
     exports.doAfterLogin = doAfterLogin;
     var isrunning = false;
+    var y = 0;
     async function check(dialog, win) {
+        //console.log("check"+(y++));
         var test = (win.document && win.document.body) ? win.document.body.innerHTML : "";
         if (test.indexOf("{}") !== -1) {
             dialog.dialog("destroy");
@@ -24,9 +26,11 @@ define(["require", "exports", "jassi/ext/jquerylib"], function (require, exports
             }); //, [channel.port2]);
         }
         else {
-            setTimeout(() => {
-                check(dialog, win);
-            }, 100);
+            if (!dialog.isClosed) {
+                setTimeout(() => {
+                    check(dialog, win);
+                }, 100);
+            }
         }
     }
     async function login() {
@@ -35,17 +39,27 @@ define(["require", "exports", "jassi/ext/jquerylib"], function (require, exports
         queue = [];
         isrunning = true;
         return new Promise((resolve) => {
-            var fr = $(`
-    <iframe src="/login.html" name="navigation"></iframe>
- `);
-            document.body.appendChild(fr[0]);
             setTimeout(() => {
                 if (!fr[0]["contentWindow"]) {
                     alert("no content window for login");
                 }
                 check(fr, fr[0]["contentWindow"]);
             }, 100);
-            fr.dialog();
+            var fr;
+            fr = $(`<iframe  src="/login.html" name="navigation"></iframe>`);
+            document.body.appendChild(fr[0]);
+            fr.dialog({
+                beforeClose: () => {
+                    //@ts-ignore
+                    fr.isClosed = true;
+                }
+            });
+            fr[0].contentWindow.focus();
+            setTimeout(() => {
+                $(fr).contents().find("#loginButton").focus();
+            }, 200);
+            //ts-ignore
+            //fr[0].contentWindow.document.body.focus();
             /* var sform = `
              
              <form    action="javascript:alert(9);" method="post" class="" >
@@ -64,7 +78,7 @@ define(["require", "exports", "jassi/ext/jquerylib"], function (require, exports
                  form.submit();
                  $.post({
                      url:"user/login",
-                     data:"user=admin&password=j@ssi"
+                     data:"user=admin&password=jsi"
                  })
                  form.dialog("destroy");
              })
@@ -78,5 +92,9 @@ define(["require", "exports", "jassi/ext/jquerylib"], function (require, exports
         });
     }
     exports.login = login;
+    function test() {
+        login();
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=LoginDialog.js.map

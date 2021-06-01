@@ -5,7 +5,9 @@ export function doAfterLogin(resolve, prot: RemoteProtocol) {
     queue.push([resolve, prot]);
 }
 var isrunning = false;
+var y=0;
 async function check(dialog, win: Window) {
+    //console.log("check"+(y++));
 
     var test: string = (win.document && win.document.body) ? win.document.body.innerHTML : "";
     if (test.indexOf("{}") !== -1) {
@@ -18,13 +20,15 @@ async function check(dialog, win: Window) {
             data[0](await data[1].call());
         }
         queue = [];
-         navigator.serviceWorker.controller.postMessage({
+        navigator.serviceWorker.controller.postMessage({
             type: 'LOGGED_IN'
         });//, [channel.port2]);
     } else {
-        setTimeout(() => {
-            check(dialog, win);
-        }, 100);
+        if (!dialog.isClosed) {
+            setTimeout(() => {
+                check(dialog, win);
+            }, 100);
+        }
     }
 }
 export async function login() {
@@ -33,20 +37,32 @@ export async function login() {
     queue = [];
     isrunning = true;
     return new Promise((resolve) => {
-        var fr = $(`
-    <iframe src="/login.html" name="navigation"></iframe>
- `);
+       
 
-
-        document.body.appendChild(fr[0]);
-
-        setTimeout(() => {
+       setTimeout(() => {
             if (!fr[0]["contentWindow"]) {
                 alert("no content window for login");
             }
             check(fr, fr[0]["contentWindow"]);
         }, 100);
-        fr.dialog();
+        var fr ;
+       
+            fr = $(`<iframe  src="/login.html" name="navigation"></iframe>`);
+            document.body.appendChild(fr[0]);
+            fr.dialog({
+                beforeClose: () => {
+                    //@ts-ignore
+                    fr.isClosed = true;
+                }
+            });
+            fr[0].contentWindow.focus();
+            setTimeout(()=>{
+                $(fr).contents().find("#loginButton").focus(); 
+            },200);
+        
+        //ts-ignore
+       
+//fr[0].contentWindow.document.body.focus();
         /* var sform = `
          
          <form    action="javascript:alert(9);" method="post" class="" >
@@ -65,7 +81,7 @@ export async function login() {
              form.submit();
              $.post({
                  url:"user/login",
-                 data:"user=admin&password=j@ssi"
+                 data:"user=admin&password=jsi"
              })
              form.dialog("destroy");
          })
@@ -78,4 +94,8 @@ export async function login() {
      });*/
 
     })
+}
+
+export function test() {
+    login();
 }

@@ -110,7 +110,7 @@ define("jassi/registry", ["require"], function (require) {
                 "date": 1613921826082
             },
             "jassi/base/LoginDialog.ts": {
-                "date": 1622500007876
+                "date": 1622584859609
             },
             "jassi/base/PropertyEditorService.ts": {
                 "date": 1613218566584,
@@ -144,7 +144,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.Classes": {}
             },
             "jassi/remote/Database.ts": {
-                "date": 1618335375678,
+                "date": 1622574367955,
                 "jassi.remote.Database": {}
             },
             "jassi/remote/DBArray.ts": {
@@ -245,7 +245,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.Server": {}
             },
             "jassi/remote/Settings.ts": {
-                "date": 1622548334897,
+                "date": 1622569749272,
                 "jassi.remote.Settings": {}
             },
             "jassi/remote/Transaction.ts": {
@@ -485,7 +485,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/DBObjectExplorer.ts": {
-                "date": 1622220307135,
+                "date": 1622585229596,
                 "jassi.ui.DBObjectNode": {},
                 "jassi.ui.DBFileActions": {
                     "$ActionProvider": [
@@ -537,7 +537,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/FileExplorer.ts": {
-                "date": 1622220636361,
+                "date": 1622585294035,
                 "jassi.ui.FileActions": {
                     "$ActionProvider": [
                         "jassi.remote.FileNode"
@@ -832,7 +832,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/SearchExplorer.ts": {
-                "date": 1622220628238,
+                "date": 1622585287990,
                 "jassi.ui.SearchExplorer": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -977,7 +977,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/util/DatabaseSchema.ts": {
-                "date": 1618335325672
+                "date": 1622574331537
             },
             "jassi/util/Numberformatter.ts": {
                 "date": 1622031313274,
@@ -2326,14 +2326,16 @@ define("jassi/base/Extensions", ["require", "exports", "jassi/remote/Jassi", "ja
 define("jassi/base/LoginDialog", ["require", "exports", "jassi/ext/jquerylib"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.login = exports.doAfterLogin = void 0;
+    exports.test = exports.login = exports.doAfterLogin = void 0;
     var queue = [];
     function doAfterLogin(resolve, prot) {
         queue.push([resolve, prot]);
     }
     exports.doAfterLogin = doAfterLogin;
     var isrunning = false;
+    var y = 0;
     async function check(dialog, win) {
+        //console.log("check"+(y++));
         var test = (win.document && win.document.body) ? win.document.body.innerHTML : "";
         if (test.indexOf("{}") !== -1) {
             dialog.dialog("destroy");
@@ -2349,9 +2351,11 @@ define("jassi/base/LoginDialog", ["require", "exports", "jassi/ext/jquerylib"], 
             }); //, [channel.port2]);
         }
         else {
-            setTimeout(() => {
-                check(dialog, win);
-            }, 100);
+            if (!dialog.isClosed) {
+                setTimeout(() => {
+                    check(dialog, win);
+                }, 100);
+            }
         }
     }
     async function login() {
@@ -2360,17 +2364,27 @@ define("jassi/base/LoginDialog", ["require", "exports", "jassi/ext/jquerylib"], 
         queue = [];
         isrunning = true;
         return new Promise((resolve) => {
-            var fr = $(`
-    <iframe src="/login.html" name="navigation"></iframe>
- `);
-            document.body.appendChild(fr[0]);
             setTimeout(() => {
                 if (!fr[0]["contentWindow"]) {
                     alert("no content window for login");
                 }
                 check(fr, fr[0]["contentWindow"]);
             }, 100);
-            fr.dialog();
+            var fr;
+            fr = $(`<iframe  src="/login.html" name="navigation"></iframe>`);
+            document.body.appendChild(fr[0]);
+            fr.dialog({
+                beforeClose: () => {
+                    //@ts-ignore
+                    fr.isClosed = true;
+                }
+            });
+            fr[0].contentWindow.focus();
+            setTimeout(() => {
+                $(fr).contents().find("#loginButton").focus();
+            }, 200);
+            //ts-ignore
+            //fr[0].contentWindow.document.body.focus();
             /* var sform = `
              
              <form    action="javascript:alert(9);" method="post" class="" >
@@ -2389,7 +2403,7 @@ define("jassi/base/LoginDialog", ["require", "exports", "jassi/ext/jquerylib"], 
                  form.submit();
                  $.post({
                      url:"user/login",
-                     data:"user=admin&password=j@ssi"
+                     data:"user=admin&password=jsi"
                  })
                  form.dialog("destroy");
              })
@@ -2403,6 +2417,10 @@ define("jassi/base/LoginDialog", ["require", "exports", "jassi/ext/jquerylib"], 
         });
     }
     exports.login = login;
+    function test() {
+        login();
+    }
+    exports.test = test;
 });
 define("jassi/base/PropertyEditorService", ["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/Registry", "jassi/ui/PropertyEditors/LoadingEditor"], function (require, exports, Jassi_7, Classes_3, Registry_4, LoadingEditor_1) {
     "use strict";
@@ -2826,7 +2844,8 @@ define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/rem
          */
         addLeft(component, title) {
             var parentname = 'xxxleft';
-            this._noRestore.push(title);
+            if (this._noRestore.indexOf(title) === -1)
+                this._noRestore.push(title);
             var config = {
                 name: parentname,
                 type: 'stack',
@@ -2840,7 +2859,7 @@ define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/rem
                 this._myLayout.root.contentItems[0].contentItems[0].config.width = 15;
                 this.components[parentname] = parent;
                 parent.on("itemDestroyed", () => {
-                    delete _this.components[parentname];
+                    //delete _this.components[config.name];
                     _this._myLayout.updateSize();
                 });
             }
@@ -2868,7 +2887,7 @@ define("jassi/base/Windows", ["require", "exports", "jassi/ui/Panel", "jassi/rem
                 parent.config.width = 15;
                 this.components[parentname] = parent;
                 parent.on("itemDestroyed", () => {
-                    delete _this.components[parentname];
+                    //delete _this.components[parentname];
                     _this._myLayout.updateSize();
                 });
             }
@@ -7895,7 +7914,10 @@ define("jassi/ui/DBObjectExplorer", ["require", "exports", "jassi/ui/ContextMenu
             this.update();
         }
         static async show() {
-            Windows_5.default.addLeft(new DBObjectExplorer_1(), "DBObjects");
+            if (Windows_5.default.contains("DBObjects"))
+                var window = Windows_5.default.show("DBObjects");
+            else
+                Windows_5.default.addLeft(new DBObjectExplorer_1(), "DBObjects");
         }
         async update() {
             var entrys = await Registry_16.default.getJSONData("$DBObject");
@@ -9482,7 +9504,10 @@ define("jassi/ui/FileExplorer", ["require", "exports", "jassi/remote/Jassi", "ja
             this.tree.propStyle = node => { return this.getStyle(node); };
         }
         static async show() {
-            Windows_6.default.addLeft(new FileExplorer_4(), "Files");
+            if (Windows_6.default.contains("Files"))
+                var window = Windows_6.default.show("Files");
+            else
+                Windows_6.default.addLeft(new FileExplorer_4(), "Files");
         }
         getStyle(node) {
             var _a;
@@ -11724,7 +11749,10 @@ define("jassi/ui/SearchExplorer", ["require", "exports", "jassi/remote/Jassi", "
             this.layout();
         }
         static async show() {
-            Windows_7.default.addLeft(new SearchExplorer_1(), "Search");
+            if (Windows_7.default.contains("Search"))
+                var window = Windows_7.default.show("Search");
+            else
+                Windows_7.default.addLeft(new SearchExplorer_1(), "Search");
         }
         async doSearch() {
             var Typescript = (await new Promise((resolve_33, reject_33) => { require(["jassi_editor/util/Typescript"], resolve_33, reject_33); })).Typescript;

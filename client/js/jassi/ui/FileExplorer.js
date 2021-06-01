@@ -214,7 +214,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             this.tree.propStyle = node => { return this.getStyle(node); };
         }
         static async show() {
-            Windows_1.default.addLeft(new FileExplorer_1(), "Files");
+            if (Windows_1.default.contains("Files"))
+                var window = Windows_1.default.show("Files");
+            else
+                Windows_1.default.addLeft(new FileExplorer_1(), "Files");
         }
         getStyle(node) {
             var _a;

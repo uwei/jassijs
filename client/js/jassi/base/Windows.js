@@ -130,7 +130,8 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
          */
         addLeft(component, title) {
             var parentname = 'xxxleft';
-            this._noRestore.push(title);
+            if (this._noRestore.indexOf(title) === -1)
+                this._noRestore.push(title);
             var config = {
                 name: parentname,
                 type: 'stack',
@@ -144,7 +145,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
                 this._myLayout.root.contentItems[0].contentItems[0].config.width = 15;
                 this.components[parentname] = parent;
                 parent.on("itemDestroyed", () => {
-                    delete _this.components[parentname];
+                    //delete _this.components[config.name];
                     _this._myLayout.updateSize();
                 });
             }
@@ -172,7 +173,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
                 parent.config.width = 15;
                 this.components[parentname] = parent;
                 parent.on("itemDestroyed", () => {
-                    delete _this.components[parentname];
+                    //delete _this.components[parentname];
                     _this._myLayout.updateSize();
                 });
             }

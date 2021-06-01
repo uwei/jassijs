@@ -106,7 +106,10 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/re
             this.update();
         }
         static async show() {
-            Windows_1.default.addLeft(new DBObjectExplorer_1(), "DBObjects");
+            if (Windows_1.default.contains("DBObjects"))
+                var window = Windows_1.default.show("DBObjects");
+            else
+                Windows_1.default.addLeft(new DBObjectExplorer_1(), "DBObjects");
         }
         async update() {
             var entrys = await Registry_1.default.getJSONData("$DBObject");

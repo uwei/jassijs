@@ -191,6 +191,9 @@ export class FileExplorer extends Panel {
        	icon: "mdi mdi-file-tree",
     })
     static async show(){
+        if (windows.contains("Files")) 
+			var window = windows.show("Files");
+		else
          windows.addLeft(new FileExplorer(), "Files");
     }
     getStyle(node:FileNode):CSSProperties{

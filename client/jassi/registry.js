@@ -28,7 +28,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1613921826082
 	},
 	"jassi/base/LoginDialog.ts": {
-		"date": 1622500007876
+		"date": 1622584859609
 	},
 	"jassi/base/PropertyEditorService.ts": {
 		"date": 1613218566584,
@@ -62,7 +62,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.Classes": {}
 	},
 	"jassi/remote/Database.ts": {
-		"date": 1618335375678,
+		"date": 1622574367955,
 		"jassi.remote.Database": {}
 	},
 	"jassi/remote/DBArray.ts": {
@@ -163,7 +163,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Settings.ts": {
-		"date": 1622548334897,
+		"date": 1622569749272,
 		"jassi.remote.Settings": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -403,7 +403,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/DBObjectExplorer.ts": {
-		"date": 1622220307135,
+		"date": 1622585229596,
 		"jassi.ui.DBObjectNode": {},
 		"jassi.ui.DBFileActions": {
 			"$ActionProvider": [
@@ -455,7 +455,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/FileExplorer.ts": {
-		"date": 1622220636361,
+		"date": 1622585294035,
 		"jassi.ui.FileActions": {
 			"$ActionProvider": [
 				"jassi.remote.FileNode"
@@ -750,7 +750,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/SearchExplorer.ts": {
-		"date": 1622220628238,
+		"date": 1622585287990,
 		"jassi.ui.SearchExplorer": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"
@@ -895,7 +895,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/util/DatabaseSchema.ts": {
-		"date": 1618335325672
+		"date": 1622574331537
 	},
 	"jassi/util/Numberformatter.ts": {
 		"date": 1622031313274,

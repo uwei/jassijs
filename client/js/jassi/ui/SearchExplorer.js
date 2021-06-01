@@ -25,7 +25,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             this.layout();
         }
         static async show() {
-            Windows_1.default.addLeft(new SearchExplorer_1(), "Search");
+            if (Windows_1.default.contains("Search"))
+                var window = Windows_1.default.show("Search");
+            else
+                Windows_1.default.addLeft(new SearchExplorer_1(), "Search");
         }
         async doSearch() {
             var Typescript = (await new Promise((resolve_1, reject_1) => { require(["jassi_editor/util/Typescript"], resolve_1, reject_1); })).Typescript;

@@ -145,7 +145,8 @@ export class Windows {
      */
     addLeft(component, title) {
     	var parentname='xxxleft';
-    	this._noRestore.push(title);
+        if(this._noRestore.indexOf(title)===-1)
+        	this._noRestore.push(title);
     	var config = {
             name: parentname,
             type: 'stack',
@@ -159,7 +160,7 @@ export class Windows {
             this._myLayout.root.contentItems[0].contentItems[0].config.width = 15;
 			this.components[parentname]=parent;
 			parent.on("itemDestroyed",()=>{
-				delete _this.components[parentname];
+				//delete _this.components[config.name];
 				_this._myLayout.updateSize();
 			});
         }
@@ -187,7 +188,7 @@ export class Windows {
             parent.config.width = 15;
 			this.components[parentname]=parent;
 			parent.on("itemDestroyed",()=>{
-				delete _this.components[parentname];
+				//delete _this.components[parentname];
 				_this._myLayout.updateSize();
 			});
         }

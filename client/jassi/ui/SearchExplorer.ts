@@ -29,6 +29,9 @@ export class SearchExplorer extends Panel {
        	icon: "mdi mdi-folder-search-outline",
     })
     static async show(){
+        if (windows.contains("Search")) 
+			var window = windows.show("Search");
+		else
          windows.addLeft(new SearchExplorer(), "Search");
     }
     async doSearch() { 
