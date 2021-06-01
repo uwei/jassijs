@@ -63,7 +63,7 @@ async function run() {
         let allmodules = {};
         let dowait = [];
         for (let modul in modules) {
-            if (modules[modul].endsWith(".js") || modules[modul].indexOf(".js?") > -1) {
+            if (modules[modul].endsWith(".js")||modules[modul].indexOf(".js?")>-1) {
                 dowait.push(loadScript(modules[modul]));
             }
             /*let modulpath = "./" + modul + "/jassi.json";
@@ -99,7 +99,7 @@ async function run() {
                     let f = res[x].default.css[key];
                     if (f.indexOf(":") > -1) //https://cdn
                         cssFiles.push(f);
-                    else if (modpath.endsWith(".js") || modpath.indexOf(".js?") > -1) {
+                    else if (modpath.endsWith(".js")||modpath.indexOf(".js?")>-1) {
                         var m = modpath.substring(0, modpath.lastIndexOf("/"));
                         cssFiles.push(m + "/" + f);
                     }
@@ -137,22 +137,22 @@ async function run() {
             for (var x = 0; x < beforestartlib.length; x++) {
                 await new Promise((resolve) => {
                     require([beforestartlib[x]], function (beforestart) {
-                        if (beforestart === null || beforestart === void 0 ? void 0 : beforestart.autostart) {
+                        if (beforestart?.autostart) {
                             beforestart.autostart().then(() => {
                                 resolve(undefined);
-                            });
-                        }
-                        else {
+                            })
+                        } else {
                             resolve(undefined);
                         }
                     });
-                });
-                if (beforestartlib[x] === "jassi/jassi") {
+                })
+                if(beforestartlib[x]==="jassi/jassi"){
                     cssFiles.forEach((css) => {
-                        jassi.myRequire(css); //needed for Login Dialog
+                        jassi.myRequire(css);//needed for Login Dialog
                     });
                 }
             }
+            
         }
         loadBeforestart().then(() => {
             require(startlib, function (jassi, ...others) {
@@ -167,6 +167,7 @@ async function run() {
                 }
             });
         });
+
     });
 }
 ;
@@ -184,5 +185,4 @@ run();
     err.appendChild(node);
     return true;
 }*/
-//# sourceMappingURL=jassijs.js.map
 //# sourceMappingURL=jassijs.js.map
