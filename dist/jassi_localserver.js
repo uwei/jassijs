@@ -772,7 +772,6 @@ define("jassi_localserver/DatabaseSchema", ["require", "exports", "jassi/remote/
     }
     function Entity(...param) {
         //DEntity(param)(pclass, ...params);
-        console.log("Ent:" + JSON.stringify(param));
         return addDecorater("Entity", typeorm_2.Entity, ...param);
     }
     exports.Entity = Entity;
@@ -1313,7 +1312,7 @@ define("jassi_localserver/Indexer", ["require", "exports", "jassi/server/Filesys
     }
     exports.Indexer = Indexer;
 });
-define("jassi_localserver/Installserver", ["jassi_localserver/Filesystem"], function (Filesystem) {
+define("jassi_localserver/Installserver", ["jassi_localserver/Filesystem", "jassi_localserver/DatabaseSchema"], function (Filesystem, schema) {
     return {
         autostart: async function () {
             var files = await new Filesystem.default().dirFiles("", ["js", "ts"]);
@@ -1326,6 +1325,7 @@ define("jassi_localserver/Installserver", ["jassi_localserver/Filesystem"], func
         }
     };
 });
+requirejs.undef("jassi/util/DatabaseSchema");
 define("jassi/util/DatabaseSchema", ["jassi_localserver/DatabaseSchema"], function (to) {
     return to;
 });
@@ -1340,7 +1340,7 @@ define("jassi/server/DoRemoteProtocol", ["jassi_localserver/LocalProtocol"], fun
 define("jassi/server/Filesystem", ["jassi_localserver/Filesystem"], function (fs) {
     return fs;
 });
-define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry", "jassi_localserver/DBManager", "jassi_localserver/TypeORMListener", "typeorm", "jassi/remote/Database", "typeormbrowser"], function (db, Classes_1, Registry_1, dbman, TypeORMListener, to, Database) {
+define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry", "jassi_localserver/DBManager", "jassi_localserver/TypeORMListener", "typeorm", "jassi/remote/Database"], function (db, Classes_1, Registry_1, dbman, TypeORMListener, to, Database) {
     db.DBManager["getConOpts"] = async function () {
         var dbclasses = [];
         const initSqlJs = window["SQL"];

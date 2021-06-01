@@ -42,8 +42,9 @@ define(["require", "exports", "jassi/remote/Jassi", "./Classes"], function (requ
             });
             this.decoratorCalls.forEach((value, key) => {
                 var testname = Classes_1.classes.getClassName(key);
-                if (testname === name && key !== oclass)
+                if (testname === name && key !== oclass) {
                     this.decoratorCalls.delete(key);
+                }
             });
         }
         _setMetadata(constructor, field, decoratername, fieldprops, decoraterprops, delegate) {
@@ -56,6 +57,9 @@ define(["require", "exports", "jassi/remote/Jassi", "./Classes"], function (requ
             if (field === "this") {
                 this.removeOld(constructor);
             }
+            /*if(delegate===undefined){
+                debugger;
+            }*/
             this.decoratorCalls.get(constructor).push([delegate, fieldprops, decoraterprops]);
             var afield = def.fields[field];
             if (def.fields[field] === undefined) {

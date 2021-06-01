@@ -31,8 +31,9 @@ export class Database{
         });
         this.decoratorCalls.forEach((value,key)=>{
             var testname=classes.getClassName(key);
-            if(testname===name&&key!==oclass)
+            if(testname===name&&key!==oclass){
                 this.decoratorCalls.delete(key);
+            }
         });
     }
     _setMetadata(constructor,field:string,decoratername:string,fieldprops:any[],decoraterprops:any[],delegate){
@@ -46,6 +47,9 @@ export class Database{
         if(field==="this"){
             this.removeOld(constructor);
         }
+        /*if(delegate===undefined){
+            debugger;
+        }*/
         this.decoratorCalls.get(constructor).push([delegate,fieldprops,decoraterprops]);
         var afield=def.fields[field];
         if(def.fields[field]===undefined){

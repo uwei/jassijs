@@ -3644,8 +3644,9 @@ define("jassi/remote/Database", ["require", "exports", "jassi/remote/Jassi", "ja
             });
             this.decoratorCalls.forEach((value, key) => {
                 var testname = Classes_9.classes.getClassName(key);
-                if (testname === name && key !== oclass)
+                if (testname === name && key !== oclass) {
                     this.decoratorCalls.delete(key);
+                }
             });
         }
         _setMetadata(constructor, field, decoratername, fieldprops, decoraterprops, delegate) {
@@ -3658,6 +3659,9 @@ define("jassi/remote/Database", ["require", "exports", "jassi/remote/Jassi", "ja
             if (field === "this") {
                 this.removeOld(constructor);
             }
+            /*if(delegate===undefined){
+                debugger;
+            }*/
             this.decoratorCalls.get(constructor).push([delegate, fieldprops, decoraterprops]);
             var afield = def.fields[field];
             if (def.fields[field] === undefined) {
@@ -4980,6 +4984,7 @@ define("jassi/remote/Settings", ["require", "exports", "jassi/remote/Jassi", "ja
     var Settings_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
+    console.log("....load class Settings");
     const proxyhandler = {
         get: function (target, prop, receiver) {
             return prop;

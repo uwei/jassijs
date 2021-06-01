@@ -1,4 +1,4 @@
-define("jassi_localserver/Installserver",["jassi_localserver/Filesystem"],function(Filesystem){
+define("jassi_localserver/Installserver",["jassi_localserver/Filesystem","jassi_localserver/DatabaseSchema"],function(Filesystem,schema){
     return{
         autostart:async function(){
             var files=await new Filesystem.default().dirFiles("",["js","ts"]);
@@ -12,6 +12,7 @@ define("jassi_localserver/Installserver",["jassi_localserver/Filesystem"],functi
         }
     }
 });
+requirejs.undef("jassi/util/DatabaseSchema");
 
 define("jassi/util/DatabaseSchema", ["jassi_localserver/DatabaseSchema"], function (to) {
     return to;
@@ -29,7 +30,7 @@ define("jassi/server/Filesystem",["jassi_localserver/Filesystem"],function(fs){
     return        fs
     
 })
-define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry","jassi_localserver/DBManager","jassi_localserver/TypeORMListener","typeorm","jassi/remote/Database","typeormbrowser"], function (db, Classes_1, Registry_1,dbman,TypeORMListener,to,Database) {
+define("jassi/server/DBManager", ["jassi_localserver/DBManager", "jassi/remote/Classes", "jassi/remote/Registry","jassi_localserver/DBManager","jassi_localserver/TypeORMListener","typeorm","jassi/remote/Database"], function (db, Classes_1, Registry_1,dbman,TypeORMListener,to,Database) {
     
     db.DBManager["getConOpts"] = async function () {
         var dbclasses = [];

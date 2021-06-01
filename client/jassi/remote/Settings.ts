@@ -3,7 +3,7 @@ import registry from "jassi/remote/Registry";
 
 import { Context, RemoteObject } from "jassi/remote/RemoteObject";
 import { Setting } from "jassi/remote/security/Setting";
-
+console.log("....load class Settings");
 
 
 const proxyhandler = {

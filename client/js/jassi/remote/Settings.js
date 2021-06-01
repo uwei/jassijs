@@ -9,6 +9,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
     var Settings_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
+    console.log("....load class Settings");
     const proxyhandler = {
         get: function (target, prop, receiver) {
             return prop;
