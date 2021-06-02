@@ -122,7 +122,8 @@ async function handleEvent(event) {
       headers: { "Content-Type": getMimeType(filename) }
     });
   }
-  var sfilename = filename.replace(self.serviceWorker.scriptURL.replace("service-worker.js", ""), "");
+  //var sfilename = filename.replace(self.serviceWorker.scriptURL.replace("service-worker.js", ""), "");//not work an Mozilla
+  var sfilename = filename.replace(self.registration.active.scriptURL.replace("service-worker.js", ""), "");
   var content = await loadFileFromDB(sfilename);
   if (content !== undefined) {
     return new Response(content, {
@@ -179,7 +180,8 @@ async function handleEvent(event) {
 // from the network before returning it to the page.
 var openrequests = [];
 self.addEventListener('fetch', event => {
-  var pr = handleEvent(event)
+  var pr = handleEvent(event);
+
   event.respondWith(pr);
 //  event.waitUntil(pr);
 });//self.addEventListener('fetch'
