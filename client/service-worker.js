@@ -122,8 +122,7 @@ async function handleEvent(event) {
       headers: { "Content-Type": getMimeType(filename) }
     });
   }
-  //var sfilename = filename.replace(self.serviceWorker.scriptURL.replace("service-worker.js", ""), "");//not work an Mozilla
-  var sfilename = filename.replace(self.registration.active.scriptURL.replace("service-worker.js", ""), "");
+  var sfilename = filename.replace(self.registration.scope, "");
   var content = await loadFileFromDB(sfilename);
   if (content !== undefined) {
     return new Response(content, {
@@ -179,6 +178,8 @@ async function handleEvent(event) {
 // If no response is found, it populates the runtime cache with the response
 // from the network before returning it to the page.
 var openrequests = [];
+
+
 self.addEventListener('fetch', event => {
   var pr = handleEvent(event);
 

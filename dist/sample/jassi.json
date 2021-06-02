@@ -1,11 +1,11 @@
 {
 	"modules": {
-		"jassi":"https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi.js?version=4",
-		"jassi_report": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_report.js?version=4",
-		"jassi_localserver": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_localserver.js?version=4",
-		"jassi_editor": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_editor.js?version=4",
-		"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js?version=4",
-		"demo": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/demo.js?version=4"
+		"jassi":"https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi.js?version=637582689322264884",
+		"jassi_report": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_report.js?version=637582689322264884",
+		"jassi_localserver": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_localserver.js?version=637582689322264884",
+		"jassi_editor": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/jassi_editor.js?version=637582689322264884",
+		"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js?version=637582689322264884",
+		"demo": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/demo.js?version=637582689322264884"
 	},
 	"require": {
 		"paths": {

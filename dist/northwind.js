@@ -467,7 +467,7 @@ define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/
             this.add(me.IDImport);
             this.add(me.htmlpanel2);
             this.add(me.IDProtokoll);
-            me.htmlpanel1.value = "Imports cvs-data from&nbsp;<a href='https://github.com/tmcnab/northwind-mongo' data-mce-selected='inline-boundary'>https://github.com/tmcnab/northwind-mongo</a><br>";
+            me.htmlpanel1.value = "Imports cvs-data from&nbsp;<a href='https://github.com/tmcnab/northwind-mongo' data-mce-selected='inline-boundary'>https://github.com/tmcnab/northwind-mongo</a><br/><br/>";
             me.htmlpanel1.newlineafter = true;
             me.IDImport.text = "Start Import";
             me.IDImport.onclick(function (event) {

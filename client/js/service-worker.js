@@ -109,8 +109,7 @@ async function handleEvent(event) {
             headers: { "Content-Type": getMimeType(filename) }
         });
     }
-    //var sfilename = filename.replace(self.serviceWorker.scriptURL.replace("service-worker.js", ""), "");//not work an Mozilla
-    var sfilename = filename.replace(self.registration.active.scriptURL.replace("service-worker.js", ""), "");
+    var sfilename = filename.replace(self.registration.scope, "");
     var content = await loadFileFromDB(sfilename);
     if (content !== undefined) {
         return new Response(content, {
