@@ -1,4 +1,5 @@
 import jassi, { $Class } from "jassi/remote/Jassi";
+import { ChromeDebugger } from "jassi_editor/ChromeDebugger";
 //https://developer.chrome.com/extensions/messaging
 @$Class("jassi_editor.Debugger")
 export class Debugger
@@ -58,6 +59,9 @@ export class Debugger
          * @param {string} type - the type default undefined->stop debugging 
          **/
         breakpointChanged(file,line,column,enable,type){
+            if(navigator.userAgent.indexOf("Chrome")>-1){
+                ChromeDebugger.showHintExtensionNotInstalled();
+            }
         //	console.log("break on"+file);
         }
         /**

@@ -26,7 +26,7 @@ export class ChromeDebugger extends Debugger {
             this.onChromeMessage(event);
         });
     }
-    private showHintExtensionNotInstalled(){
+    public static showHintExtensionNotInstalled(){
             $.notify.addStyle('downloadlink', {
         html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
         classes: {

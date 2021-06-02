@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/ChromeDebugger"], function (require, exports, Jassi_1, ChromeDebugger_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Debugger = void 0;
@@ -64,6 +64,9 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
          * @param {string} type - the type default undefined->stop debugging
          **/
         breakpointChanged(file, line, column, enable, type) {
+            if (navigator.userAgent.indexOf("Chrome") > -1) {
+                ChromeDebugger_1.ChromeDebugger.showHintExtensionNotInstalled();
+            }
             //	console.log("break on"+file);
         }
         /**

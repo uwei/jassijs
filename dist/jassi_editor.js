@@ -550,7 +550,7 @@ define("jassi_editor/ChromeDebugger", ["require", "exports", "jassi/remote/Jassi
                 this.onChromeMessage(event);
             });
         }
-        showHintExtensionNotInstalled() {
+        static showHintExtensionNotInstalled() {
             $.notify.addStyle('downloadlink', {
                 html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
                 classes: {
@@ -2333,7 +2333,7 @@ define("jassi_editor/ComponentPalette", ["require", "exports", "jassi/remote/Jas
     ], ComponentPalette);
     exports.ComponentPalette = ComponentPalette;
 });
-define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_9) {
+define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi", "jassi_editor/ChromeDebugger"], function (require, exports, Jassi_9, ChromeDebugger_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Debugger = void 0;
@@ -2390,6 +2390,9 @@ define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi"], fu
          * @param {string} type - the type default undefined->stop debugging
          **/
         breakpointChanged(file, line, column, enable, type) {
+            if (navigator.userAgent.indexOf("Chrome") > -1) {
+                ChromeDebugger_2.ChromeDebugger.showHintExtensionNotInstalled();
+            }
             //	console.log("break on"+file);
         }
         /**
@@ -2827,7 +2830,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi.ui.AcePanel": {}
             },
             "jassi_editor/ChromeDebugger.ts": {
-                "date": 1615316996160,
+                "date": 1622668205576,
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
@@ -2858,7 +2861,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.ComponentPalette": {}
             },
             "jassi_editor/Debugger.ts": {
-                "date": 1613218544158,
+                "date": 1622668572521,
                 "jassi_editor.Debugger": {}
             },
             "jassi_editor/modul.ts": {

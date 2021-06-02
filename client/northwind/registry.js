@@ -49,7 +49,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ImportData.ts": {
-		"date": 1618330765722,
+		"date": 1622667886290,
 		"northwind.ImportData": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"

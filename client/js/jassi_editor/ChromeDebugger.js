@@ -28,7 +28,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
                 this.onChromeMessage(event);
             });
         }
-        showHintExtensionNotInstalled() {
+        static showHintExtensionNotInstalled() {
             $.notify.addStyle('downloadlink', {
                 html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
                 classes: {

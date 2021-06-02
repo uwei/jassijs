@@ -48,7 +48,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.base.Test": {}
 	},
 	"jassi/base/Windows.ts": {
-		"date": 1613218544160,
+		"date": 1622585820357,
 		"jassi.base.Windows": {}
 	},
 	"jassi/jassi.ts": {
