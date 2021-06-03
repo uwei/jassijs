@@ -44,7 +44,7 @@ export async function test(){
 	ret["value"]=<{{dbclassname}}>await {{dbclassname}}.findOne({ relations: ["*"] });
 	return ret;
 }`;
-@$Class("jassi.ui.TemplateDBDialogProperties")
+@$Class("jassi.template.TemplateDBDialogProperties")
 export class TemplateDBDialogProperties {
 	@$Property({decription:"name of the dialog"})
 	dialogname:string;

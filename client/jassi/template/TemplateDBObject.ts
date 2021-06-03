@@ -32,7 +32,7 @@ export class {{classname}} extends DBObject {
 export async function test() {
 };`;
 
-@$Class("jassi.ui.TemplateDBDialogProperties")
+@$Class("jassi.template.TemplateDBDialogProperties")
 export class TemplateDBObjectProperties {
 	@$Property({decription:"name of the db class"})
 	name:string;

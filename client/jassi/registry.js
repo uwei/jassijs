@@ -101,7 +101,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.RemoteObject": {}
 	},
 	"jassi/remote/RemoteProtocol.ts": {
-		"date": 1622499412074,
+		"date": 1622747955210,
 		"jassi.remote.RemoteProtocol": {}
 	},
 	"jassi/remote/security/Group.ts": {
@@ -159,7 +159,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1622715804154,
+		"date": 1622737692864,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Settings.ts": {
@@ -191,8 +191,8 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/template/TemplateDBDialog.ts": {
-		"date": 1615921857812,
-		"jassi.ui.TemplateDBDialogProperties": {},
+		"date": 1622749330744,
+		"jassi.template.TemplateDBDialogProperties": {},
 		"jassi.ui.TemplateDBDialog": {
 			"$ActionProvider": [
 				"jassi.remote.FileNode"
@@ -200,8 +200,8 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/template/TemplateDBObject.ts": {
-		"date": 1613649434998,
-		"jassi.ui.TemplateDBDialogProperties": {},
+		"date": 1622749324100,
+		"jassi.template.TemplateDBDialogProperties": {},
 		"jassi.ui.TemplateDBObject": {
 			"$ActionProvider": [
 				"jassi.remote.FileNode"
@@ -209,8 +209,16 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/template/TemplateEmptyDialog.ts": {
-		"date": 1613504671112,
-		"jassi.ui.TemplateEmptyDialog": {
+		"date": 1622749314459,
+		"jassi.template.TemplateEmptyDialog": {
+			"$ActionProvider": [
+				"jassi.remote.FileNode"
+			]
+		}
+	},
+	"jassi/template/TemplateRemoteObject.ts": {
+		"date": 1622749522661,
+		"jassi.template.TemplateRemoteObject": {
 			"$ActionProvider": [
 				"jassi.remote.FileNode"
 			]
@@ -455,7 +463,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/FileExplorer.ts": {
-		"date": 1622585294035,
+		"date": 1622745576189,
 		"jassi.ui.FileActions": {
 			"$ActionProvider": [
 				"jassi.remote.FileNode"

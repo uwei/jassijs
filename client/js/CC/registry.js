@@ -1,0 +1,1 @@
+define("cc/registry",["require"], function(require) {return {  default: {	}}});

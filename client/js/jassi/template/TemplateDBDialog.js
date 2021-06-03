@@ -57,7 +57,7 @@ export async function test(){
         __metadata("design:type", DBObject_1.DBObject)
     ], TemplateDBDialogProperties.prototype, "dbobject", void 0);
     TemplateDBDialogProperties = __decorate([
-        Jassi_1.$Class("jassi.ui.TemplateDBDialogProperties")
+        Jassi_1.$Class("jassi.template.TemplateDBDialogProperties")
     ], TemplateDBDialogProperties);
     exports.TemplateDBDialogProperties = TemplateDBDialogProperties;
     let TemplateDBDialog = class TemplateDBDialog {

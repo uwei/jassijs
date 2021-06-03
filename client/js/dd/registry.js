@@ -1,0 +1,1 @@
+define("dd/registry",["require"], function(require) {return {  default: {	}}});

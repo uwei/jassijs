@@ -42,10 +42,17 @@ define(["require", "exports", "jassi/remote/RemoteProtocol"], function (require,
      
          }
          if (local.indexOf(clname) > -1||clname.startsWith("local")) {*/
-        var sret = await localExec(JSON.parse(config.data));
-        ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
-        if (ret === undefined)
-            ret = "$$undefined$$";
+        var data = JSON.parse(config.data);
+        var debugservermethods = []; //for testing run on server
+        if (debugservermethods.indexOf(data.method) > -1) {
+            ret = await $.ajax(config);
+        }
+        else {
+            var sret = await localExec(data);
+            ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
+            if (ret === undefined)
+                ret = "$$undefined$$";
+        }
         /* } else
              ret = await $.ajax(config);*/
         return ret;

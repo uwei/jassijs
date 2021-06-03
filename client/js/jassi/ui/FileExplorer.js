@@ -81,6 +81,32 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
                 FileExplorer.instance.tree.activateKey(newkey);
             }
         }
+        static async newModule(all) {
+            if (all.length === 0 || !all[0].isDirectory())
+                return;
+            var path = all[0].fullpath;
+            var res = await OptionDialog_1.OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
+            if (res.button === "ok" && res.text !== all[0].name) {
+                var smodule = res.text.toLocaleLowerCase();
+                if (Jassi_1.default.modules[smodule]) {
+                    alert("modul allready exists");
+                    return;
+                }
+                console.log("create Module" + smodule);
+                var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
+                var ret = await new Server_1.Server().createModule(smodule);
+                var newkey = path + "|" + smodule;
+                if (ret !== "") {
+                    alert(ret);
+                    return;
+                }
+                else {
+                    Jassi_1.default.modules[smodule] = smodule;
+                }
+                await FileExplorer.instance.refresh();
+                FileExplorer.instance.tree.activateKey(newkey);
+            }
+        }
         static async dodelete(all) {
             var s = "";
             all.forEach((node) => {
@@ -168,6 +194,17 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
         __metadata("design:returntype", Promise)
     ], FileActions, "newFolder", null);
     __decorate([
+        Actions_1.$Action({
+            name: "New/Module",
+            isEnabled: function (all) {
+                return all[0].name === "client" && all[0].fullpath === "";
+            }
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Array]),
+        __metadata("design:returntype", Promise)
+    ], FileActions, "newModule", null);
+    __decorate([
         Actions_1.$Action({ name: "Delete" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array]),
@@ -220,19 +257,31 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
                 Windows_1.default.addLeft(new FileExplorer_1(), "Files");
         }
         getStyle(node) {
-            var _a;
+            var _a, _b;
             var ret = undefined;
             if (((_a = node.flag) === null || _a === void 0 ? void 0 : _a.indexOf("fromMap")) > -1) {
                 ret = {
                     color: "green"
                 };
             }
+            if (((_b = node.flag) === null || _b === void 0 ? void 0 : _b.indexOf("module")) > -1) {
+                ret = {
+                    color: "blue"
+                };
+            }
             return ret;
         }
         async refresh() {
+            var _a;
             let root = (await new Server_1.Server().dir());
             root.fullpath = "";
             root.name = "client";
+            //flag modules
+            for (let x = 0; x < root.files.length; x++) {
+                if (Jassi_1.default.modules[root.files[x].name] !== undefined) {
+                    root.files[x].flag = (((_a = root.files[x].flag) === null || _a === void 0 ? void 0 : _a.length) > 0) ? "module" : root.files[x].flag + " module";
+                }
+            }
             var keys = this.tree.getExpandedKeys();
             this.tree.items = [root];
             if (keys.indexOf("client") === -1)

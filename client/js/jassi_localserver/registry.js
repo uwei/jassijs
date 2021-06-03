@@ -3,32 +3,28 @@ define("jassi_localserver/registry", ["require"], function (require) {
     return {
         default: {
             "jassi_localserver/DatabaseSchema.ts": {
-                "date": 1618335240687
+                "date": 1622574343539
             },
             "jassi_localserver/DBManager.ts": {
-                "date": 1618330522544,
+                "date": 1622566501459,
                 "jassi_localserver.DBManager": {}
             },
             "jassi_localserver/Filesystem.ts": {
-                "date": 1615320036255,
+                "date": 1622752756986,
                 "jassi_localserver.Filessystem": {}
             },
             "jassi_localserver/Indexer.ts": {
                 "date": 1614893991197
             },
             "jassi_localserver/LocalProtocol.ts": {
-                "date": 1615324690490
+                "date": 1622751551921
             },
             "jassi_localserver/modul.ts": {
-                "date": 1615410135735
+                "date": 1622570068950
             },
             "jassi_localserver/RegistryIndexer.ts": {
-                "date": 1615986957521,
+                "date": 1622198952646,
                 "jassi_localserver.RegistryIndexer": {}
-            },
-            "jassi_localserver/Testserver.ts": {
-                "date": 1614365026599,
-                "jassi_localserver.Testserver": {}
             },
             "jassi_localserver/Testuser.ts": {
                 "date": 1614289287180,

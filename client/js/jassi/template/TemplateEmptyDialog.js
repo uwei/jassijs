@@ -57,7 +57,7 @@ export async function test(){
     ], TemplateEmptyDialog, "newFile", null);
     TemplateEmptyDialog = __decorate([
         Actions_1.$ActionProvider("jassi.remote.FileNode"),
-        Jassi_1.$Class("jassi.ui.TemplateEmptyDialog")
+        Jassi_1.$Class("jassi.template.TemplateEmptyDialog")
     ], TemplateEmptyDialog);
     exports.TemplateEmptyDialog = TemplateEmptyDialog;
 });

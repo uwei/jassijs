@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jassi/server/DBManager", "jassi/remote/Registry"], function (require, exports, Jassi_1, Reloader_1, DBManager_1, Registry_1) {
+define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jassi/server/DBManager", "jassi/remote/Registry", "jassi/remote/Server"], function (require, exports, Jassi_1, Reloader_1, DBManager_1, Registry_1, Server_1) {
     "use strict";
     var Filessystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -74,7 +74,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                     else
                         resolve(undefined);
                 };
-                ret.onerror = ev => { resolve(undefined); };
+                ret.onerror = ev => {
+                    resolve(undefined);
+                };
             });
             return all;
         }
@@ -231,7 +233,38 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                 date: Date.now()
             };
             store.add(el);
+            transaction.onerror = (en) => {
+                debugger;
+            };
             await new Promise((resolve) => { transaction.oncomplete = resolve; });
+            return "";
+        }
+        /**
+         * create a module
+         * @param modulname - the name of the module
+      
+         */
+        async createModule(modulename) {
+            if (!(await this.existsDirectory(modulename))) {
+                await this.createFolder(modulename);
+            }
+            if (!(await this.existsDirectory(modulename + "/remote"))) {
+                await this.createFolder(modulename + "/remote");
+            }
+            if ((await this.dirEntry(modulename + "/registry.js")).length === 0) {
+                await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"], ['define("' + modulename + '/registry",["require"], function(require) { return {  default: {	} } } );',
+                    'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );'], false);
+            }
+            if ((await this.dirEntry(modulename + "/modul.ts")).length === 0) {
+                await this.saveFiles([modulename + "/modul.ts", "js/" + modulename + "/modul.js"], ["export default {}",
+                    'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'], false);
+            }
+            var json = await new Server_1.Server().loadFile("jassi.json");
+            var ob = JSON.parse(json);
+            if (!ob.modules[modulename]) {
+                ob.modules[modulename] = modulename;
+                await this.saveFile("jassi.json", JSON.stringify(ob, undefined, "\t"));
+            }
             return "";
         }
         async loadFile(fileName) {
@@ -253,6 +286,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                 const store = transaction.objectStore('files');
                 store.delete(entr[i].id);
                 await new Promise((resolve) => { transaction.oncomplete = resolve; });
+            }
+            //update client jassi.json if removing client module 
+            var json = await this.loadFile("jassi.json");
+            var ob = JSON.parse(json);
+            if (ob.modules[file]) {
+                delete ob.modules[file];
+                this.saveFile("jassi.json", JSON.stringify(ob, undefined, "\t"));
             }
             var RegistryIndexer = (await new Promise((resolve_2, reject_2) => { require(["jassi_localserver/RegistryIndexer"], resolve_2, reject_2); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();

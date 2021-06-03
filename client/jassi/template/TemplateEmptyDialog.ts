@@ -29,7 +29,7 @@ export async function test(){
 }`;
 
 @$ActionProvider("jassi.remote.FileNode")
-@$Class("jassi.ui.TemplateEmptyDialog")
+@$Class("jassi.template.TemplateEmptyDialog")
 export class TemplateEmptyDialog {
 	static code:string=code;
     @$Action({

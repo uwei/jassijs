@@ -814,7 +814,7 @@ define("jassi_localserver/DatabaseSchema", ["require", "exports", "jassi/remote/
 });
 //export function Entity(options?: EntityOptions): Function;
 //export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
-define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jassi/server/DBManager", "jassi/remote/Registry"], function (require, exports, Jassi_2, Reloader_1, DBManager_2, Registry_2) {
+define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jassi/server/DBManager", "jassi/remote/Registry", "jassi/remote/Server"], function (require, exports, Jassi_2, Reloader_1, DBManager_2, Registry_2, Server_1) {
     "use strict";
     var Filessystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -884,7 +884,9 @@ define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jass
                     else
                         resolve(undefined);
                 };
-                ret.onerror = ev => { resolve(undefined); };
+                ret.onerror = ev => {
+                    resolve(undefined);
+                };
             });
             return all;
         }
@@ -1041,7 +1043,38 @@ define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jass
                 date: Date.now()
             };
             store.add(el);
+            transaction.onerror = (en) => {
+                debugger;
+            };
             await new Promise((resolve) => { transaction.oncomplete = resolve; });
+            return "";
+        }
+        /**
+         * create a module
+         * @param modulname - the name of the module
+      
+         */
+        async createModule(modulename) {
+            if (!(await this.existsDirectory(modulename))) {
+                await this.createFolder(modulename);
+            }
+            if (!(await this.existsDirectory(modulename + "/remote"))) {
+                await this.createFolder(modulename + "/remote");
+            }
+            if ((await this.dirEntry(modulename + "/registry.js")).length === 0) {
+                await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"], ['define("' + modulename + '/registry",["require"], function(require) { return {  default: {	} } } );',
+                    'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );'], false);
+            }
+            if ((await this.dirEntry(modulename + "/modul.ts")).length === 0) {
+                await this.saveFiles([modulename + "/modul.ts", "js/" + modulename + "/modul.js"], ["export default {}",
+                    'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'], false);
+            }
+            var json = await new Server_1.Server().loadFile("jassi.json");
+            var ob = JSON.parse(json);
+            if (!ob.modules[modulename]) {
+                ob.modules[modulename] = modulename;
+                await this.saveFile("jassi.json", JSON.stringify(ob, undefined, "\t"));
+            }
             return "";
         }
         async loadFile(fileName) {
@@ -1063,6 +1096,13 @@ define("jassi_localserver/Filesystem", ["require", "exports", "jassi/remote/Jass
                 const store = transaction.objectStore('files');
                 store.delete(entr[i].id);
                 await new Promise((resolve) => { transaction.oncomplete = resolve; });
+            }
+            //update client jassi.json if removing client module 
+            var json = await this.loadFile("jassi.json");
+            var ob = JSON.parse(json);
+            if (ob.modules[file]) {
+                delete ob.modules[file];
+                this.saveFile("jassi.json", JSON.stringify(ob, undefined, "\t"));
             }
             var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassi_localserver/RegistryIndexer"], resolve_4, reject_4); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
@@ -1423,10 +1463,17 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
      
          }
          if (local.indexOf(clname) > -1||clname.startsWith("local")) {*/
-        var sret = await localExec(JSON.parse(config.data));
-        ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
-        if (ret === undefined)
-            ret = "$$undefined$$";
+        var data = JSON.parse(config.data);
+        var debugservermethods = []; //for testing run on server
+        if (debugservermethods.indexOf(data.method) > -1) {
+            ret = await $.ajax(config);
+        }
+        else {
+            var sret = await localExec(data);
+            ret = new RemoteProtocol_1.RemoteProtocol().stringify(sret);
+            if (ret === undefined)
+                ret = "$$undefined$$";
+        }
         /* } else
              ret = await $.ajax(config);*/
         return ret;
@@ -1500,14 +1547,14 @@ define("jassi_localserver/LocalProtocol", ["require", "exports", "jassi/remote/R
     }
     exports.localExec = localExec;
 });
-define("jassi_localserver/RegistryIndexer", ["require", "exports", "jassi_localserver/Indexer", "jassi/remote/Server", "jassi_localserver/Filesystem", "jassi/remote/Jassi"], function (require, exports, Indexer_1, Server_1, Filesystem_2, Jassi_3) {
+define("jassi_localserver/RegistryIndexer", ["require", "exports", "jassi_localserver/Indexer", "jassi/remote/Server", "jassi_localserver/Filesystem", "jassi/remote/Jassi"], function (require, exports, Indexer_1, Server_2, Filesystem_2, Jassi_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RegistryIndexer = void 0;
     let RegistryIndexer = class RegistryIndexer extends Indexer_1.Indexer {
         async updateRegistry() {
             //client modules
-            var data = await new Server_1.Server().loadFile("jassi.json");
+            var data = await new Server_2.Server().loadFile("jassi.json");
             var modules = JSON.parse(data).modules;
             for (var m in modules) {
                 if (!modules[m].endsWith(".js") && modules[m].indexOf(".js") === -1) { //.js are internet modules
@@ -1707,32 +1754,28 @@ define("jassi_localserver/registry", ["require"], function (require) {
     return {
         default: {
             "jassi_localserver/DatabaseSchema.ts": {
-                "date": 1618335240687
+                "date": 1622574343539
             },
             "jassi_localserver/DBManager.ts": {
-                "date": 1618330522544,
+                "date": 1622566501459,
                 "jassi_localserver.DBManager": {}
             },
             "jassi_localserver/Filesystem.ts": {
-                "date": 1615320036255,
+                "date": 1622752756986,
                 "jassi_localserver.Filessystem": {}
             },
             "jassi_localserver/Indexer.ts": {
                 "date": 1614893991197
             },
             "jassi_localserver/LocalProtocol.ts": {
-                "date": 1615324690490
+                "date": 1622751551921
             },
             "jassi_localserver/modul.ts": {
-                "date": 1615410135735
+                "date": 1622570068950
             },
             "jassi_localserver/RegistryIndexer.ts": {
-                "date": 1615986957521,
+                "date": 1622198952646,
                 "jassi_localserver.RegistryIndexer": {}
-            },
-            "jassi_localserver/Testserver.ts": {
-                "date": 1614365026599,
-                "jassi_localserver.Testserver": {}
             },
             "jassi_localserver/Testuser.ts": {
                 "date": 1614289287180,

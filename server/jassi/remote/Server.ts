@@ -335,6 +335,21 @@ export class Server extends RemoteObject {
             return await new fs.default().createFolder(foldername);
         }
     }
+    async createModule(modulname: string, context: Context = undefined): Promise<string> {
+        if (!context?.isServer) {
+            var ret = await this.call(this, this.createModule, modulname, context);
+            //@ts-ignore
+            //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+            return ret;
+        } else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can createFolder";
+            //@ts-ignore
+            var fs: any = await import("jassi/server/Filesystem");
+
+            return await new fs.default().createModule(modulname);
+        }
+    }
     static async mytest(context: Context = undefined) {
         if (!context?.isServer) {
             return await this.call(this.mytest, context);

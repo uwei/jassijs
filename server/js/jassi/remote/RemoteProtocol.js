@@ -60,6 +60,7 @@ let RemoteProtocol = class RemoteProtocol {
     }
     async exec(config, object) {
         return await new Promise((resolve, reject) => {
+            //@ts-ignore
             var xhr = new XMLHttpRequest();
             xhr.open('POST', config.url, true);
             xhr.setRequestHeader("Content-Type", "text");

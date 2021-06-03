@@ -339,6 +339,21 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                 return await new fs.default().createFolder(foldername);
             }
         }
+        async createModule(modulname, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret = await this.call(this, this.createModule, modulname, context);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw "only admins can createFolder";
+                //@ts-ignore
+                var fs = await new Promise((resolve_11, reject_11) => { require(["jassi/server/Filesystem"], resolve_11, reject_11); });
+                return await new fs.default().createModule(modulname);
+            }
+        }
         static async mytest(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 return await this.call(this.mytest, context);

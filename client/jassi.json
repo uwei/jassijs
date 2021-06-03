@@ -1,23 +1,21 @@
 {
-	"modalt":{
+	"modalt": {
 		"jassi_localserver": "jassi_localserver"
 	},
 	"modules": {
-		"jassi":"jassi",
+		"jassi": "jassi",
 		"jassi_report": "jassi_report",
 		"jassi_editor": "jassi_editor",
 		"local": "local",
 		"demo": "demo",
-		"northwind":"northwind",
-		"a": "a",
+		"northwind": "northwind",
 		"de": "de"
-		
 	},
 	"require": {
 		"paths": {
 			"require.js": "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js",
 			"1jassi_report": "https://uwei.github.io/jassijs/dist/jassi_report.js",
-			"1jassi":"http://localhost/jassijs/dist/jassi.js"
+			"1jassi": "http://localhost/jassijs/dist/jassi.js"
 		}
 	}
 }

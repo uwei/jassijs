@@ -1,0 +1,1 @@
+define("BB/registry",["require"], function(require) {return {  default: {	}}});

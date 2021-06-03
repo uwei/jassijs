@@ -11,7 +11,7 @@ export class ServerIndexer extends Indexer {
         for (var m in modules) {
             if (!modules[m].endsWith(".js"))//.js are internet modules
                 await this.updateModul(Filesystem.path, m, false);
-        }
+        } 
         //server modules
         data = fs.readFileSync("./jassi.json", 'utf-8');
         var modules = JSON.parse(data).modules;

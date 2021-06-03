@@ -60,7 +60,7 @@ export default function JassiServer(properties: JassiConnectionProperties={}, ex
      
     app.use(cookieParser());
     app.use("/user", loginRegister);
-    app.use(manageToken);
+    app.use(manageToken); 
     app.use(staticsecurefiles, passport.authenticate("jwt", { session: false }));
    
     app.post('/remoteprotocol', passport.authenticate("jwt", { session: false }), remoteProtocol);

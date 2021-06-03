@@ -4,6 +4,7 @@ import { Reloader } from "jassi/util/Reloader";
 //@ts-ignore force load this class
 import { DBManager } from "jassi/server/DBManager";
 import registry from "jassi/remote/Registry";
+import { Server } from "jassi/remote/Server";
 
 
 class FileEntry {
@@ -78,7 +79,10 @@ export default class Filessystem {
                 } else
                     resolve(undefined);
             }
-            ret.onerror = ev => { resolve(undefined) }
+            ret.onerror = ev => {
+
+                resolve(undefined)
+            }
         });
         return all;
     }
@@ -186,10 +190,10 @@ export default class Filessystem {
         if (rollbackonerror) {
             try {
                 await Reloader.instance.reloadJSAll(tsfiles);
-              /*  if (dbschemaHasChanged) {
-                    var man = await DBManager.destroyConnection();
-                    await DBManager.get();
-                }*/
+                /*  if (dbschemaHasChanged) {
+                      var man = await DBManager.destroyConnection();
+                      await DBManager.get();
+                  }*/
             } catch (err) {
                 console.error(err);
                 if (dbschemaHasChanged) {
@@ -235,9 +239,43 @@ export default class Filessystem {
             date: Date.now()
         }
         store.add(el);
-
+        transaction.onerror = (en) => {
+            debugger;
+        };
         await new Promise((resolve) => { transaction.oncomplete = resolve })
         return "";
+    }
+    /**
+     * create a module
+     * @param modulname - the name of the module
+  
+     */
+    public async createModule(modulename: string): Promise<string> {
+        if (!(await this.existsDirectory(modulename))) {
+            await this.createFolder(modulename);
+        }
+        if (!(await this.existsDirectory(modulename + "/remote"))) {
+            await this.createFolder(modulename + "/remote");
+        }
+
+        if ((await this.dirEntry(modulename + "/registry.js")).length === 0) {
+            await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"],
+                ['define("' + modulename + '/registry",["require"], function(require) { return {  default: {	} } } );',
+                'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );'], false);
+        }
+        if ((await this.dirEntry(modulename + "/modul.ts")).length === 0) {
+            await this.saveFiles([modulename + "/modul.ts", "js/" + modulename + "/modul.js"],
+                ["export default {}",
+                    'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'], false);
+        }
+        var json = await new Server().loadFile("jassi.json");
+        var ob = JSON.parse(json);
+        if (!ob.modules[modulename]) {
+            ob.modules[modulename] = modulename;
+            await this.saveFile("jassi.json", JSON.stringify(ob, undefined, "\t"));
+        }
+        return "";
+
     }
     async loadFile(fileName: string) {
         var r = await this.loadFileEntry(fileName);
@@ -258,6 +296,13 @@ export default class Filessystem {
             const store = transaction.objectStore('files');
             store.delete(entr[i].id);
             await new Promise((resolve) => { transaction.oncomplete = resolve })
+        }
+        //update client jassi.json if removing client module 
+        var json = await this.loadFile("jassi.json");
+        var ob = JSON.parse(json);
+        if (ob.modules[file]) {
+            delete ob.modules[file];
+            this.saveFile("jassi.json", JSON.stringify(ob, undefined, "\t"));
         }
         var RegistryIndexer = (await import("jassi_localserver/RegistryIndexer")).RegistryIndexer;
         await new RegistryIndexer().updateRegistry();

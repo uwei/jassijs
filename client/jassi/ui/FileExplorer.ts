@@ -107,6 +107,40 @@ export class FileActions {
         }
 
     }
+     @$Action({
+        name: "New/Module",
+        isEnabled: function (all: FileNode[]): boolean {
+            return all[0].name==="client"&&all[0].fullpath==="";
+        }
+    })
+    static async newModule(all: FileNode[]) {
+        if (all.length === 0 || !all[0].isDirectory())
+            return;
+        var path = all[0].fullpath;
+
+        var res = await OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
+        if (res.button === "ok" && res.text !== all[0].name) {
+            var smodule=res.text.toLocaleLowerCase();
+            if(jassi.modules[smodule]){
+                alert("modul allready exists");
+                return;
+            }
+            console.log("create Module" + smodule);
+            var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
+
+            var ret = await new Server().createModule(smodule);
+            var newkey = path + "|" + smodule;
+            if (ret !== "") {
+                alert(ret);
+                return;
+            }else{
+                jassi.modules[smodule]=smodule;
+            }
+            await FileExplorer.instance.refresh();
+            FileExplorer.instance.tree.activateKey(newkey);
+        }
+
+    }
     @$Action({ name: "Delete" })
     static async dodelete(all: FileNode[]) {
         var s = "";
@@ -203,6 +237,11 @@ export class FileExplorer extends Panel {
                 color:"green"
             }
         }
+        if(node.flag?.indexOf("module")>-1){
+            ret={
+                color:"blue"
+            }
+        }
 
         return ret;
     }
@@ -210,7 +249,13 @@ export class FileExplorer extends Panel {
         let root = (await new Server().dir());
         root.fullpath = "";
         root.name = "client";
-
+        //flag modules
+        for(let x=0;x<root.files.length;x++){
+            
+            if(jassi.modules[root.files[x].name]!==undefined){
+                root.files[x].flag=(root.files[x].flag?.length>0)?"module":root.files[x].flag+" module";
+            }
+        }
         var keys = this.tree.getExpandedKeys();
         this.tree.items = [root];
         if (keys.indexOf("client") === -1)

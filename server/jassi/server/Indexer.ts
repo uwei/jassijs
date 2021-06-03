@@ -7,7 +7,7 @@ import Filesystem from "jassi/server/Filesystem";
 
 export abstract class Indexer {
     
-    abstract fileExists(name);
+    abstract fileExists(name); 
     abstract readFile(name);
     abstract getFileTime(name);
     abstract createDirectory(name);

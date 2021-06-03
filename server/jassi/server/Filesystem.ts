@@ -181,19 +181,74 @@ export default class Filesystem {
 
     /**
      * create a folder
-     * @param filename - the name of the new file 
-     * @param content - then content
+     * @param foldername - the name of the new file 
      */
-    public async createFolder(filename: string): Promise<string> {
-        var newpath = this._pathForFile(filename);
+    public async createFolder(foldername: string): Promise<string> {
+        var newpath = this._pathForFile(foldername);
         if (fs.existsSync(newpath))
-            return filename + " allready exists";
+            return foldername + " allready exists";
         try {
             fs.mkdirSync(Filesystem.path + "/" + newpath, { recursive: true })
         } catch (ex) {
             return ex.message;
         }
         return "";
+    }
+    /**
+     * create a module
+     * @param modulname - the name of the module
+  
+     */
+    public async createModule(modulename: string): Promise<string> {
+        var newpath = this._pathForFile(modulename);
+        try {
+            //create folder
+            if (!fs.existsSync(newpath))
+                fs.mkdirSync(newpath, { recursive: true });
+            //create remotefolder
+            if (!fs.existsSync(newpath + "/remote"))
+                fs.mkdirSync(newpath + "/remote", { recursive: true });
+            if (!fs.existsSync(newpath + "/modul.ts")) {
+                await this.saveFiles([modulename + "/modul.js", "js/" + modulename + "/modul.js"], [
+                    "export default {}",
+                    'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'
+                ]);
+            }
+
+            if (!fs.existsSync(newpath + "/registry.js")) {
+                await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"], [
+                    'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	}}});',
+                    'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	}}});',
+                ]);
+            }
+            if (!fs.existsSync("./" + modulename))
+                fs.mkdirSync("./" + modulename, { recursive: true });
+            if (!fs.existsSync("./js/" + modulename))
+                fs.mkdirSync("./js/" + modulename, { recursive: true });
+            if (!fs.existsSync("./" + modulename + "/remote"))
+                fs.mkdirSync("./" + modulename + "/remote", { recursive: true });
+            if (!fs.existsSync("./" + modulename + "/registry.js")) {
+                fs.writeFileSync("./" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+                fs.writeFileSync("./js/" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+
+            }
+
+
+            //update client jassi.json
+            var json = fs.readFileSync(this._pathForFile("jassi.json"), 'utf-8');
+            var ob = JSON.parse(json);
+            if (!ob.modules[modulename])
+                ob.modules[modulename] = modulename;
+            fs.writeFileSync(this._pathForFile("jassi.json"), JSON.stringify(ob, undefined, "\t"));
+
+            this.createRemoteModulIfNeeded(modulename);
+
+
+        } catch (ex) {
+            return ex.message;
+        }
+        return "";
+
     }
     /**
      * create a file
@@ -253,9 +308,16 @@ export default class Filesystem {
         if (!fs.existsSync(path))
             return file + " not exists";
         try {
-            if (fs.lstatSync(path).isDirectory())
+            if (fs.lstatSync(path).isDirectory()) {
                 fs.rmdirSync(path, { recursive: true });
-            else
+                //update client jassi.json if removing client module 
+                var json = fs.readFileSync(this._pathForFile("jassi.json"), 'utf-8');
+                var ob = JSON.parse(json);
+                if (ob[file]) {
+                    delete ob[file];
+                    fs.writeFileSync(this._pathForFile("jassi.json"), JSON.stringify(ob, undefined, "\t"));
+                }
+            } else
                 fs.unlinkSync(path);
         } catch (ex) {
             return ex.message;
@@ -310,6 +372,12 @@ export default class Filesystem {
                 //transpile remoteCode for Server
                 let spath = fileName.split("/");
                 if (spath.length > 1 && spath[1].toLowerCase() === "remote" && fileName.toLowerCase().endsWith(".ts")) {
+                    let rpath = require('path').dirname("./" + fileName);
+                    try {
+                        fs.mkdirSync(rpath, { recursive: true });
+                    } catch (err) {
+                    }
+                    fs.writeFileSync("./" + fileName, contents[x]);
                     this.createRemoteModulIfNeeded(spath[0]);
                     new Compile().transpile(fileName);
                 }
