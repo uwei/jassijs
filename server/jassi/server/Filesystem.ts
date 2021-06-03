@@ -217,8 +217,8 @@ export default class Filesystem {
 
             if (!fs.existsSync(newpath + "/registry.js")) {
                 await this.saveFiles([modulename + "/registry.js", "js/" + modulename + "/registry.js"], [
-                    'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	}}});',
-                    'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	}}});',
+                    'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
+                    'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
                 ]);
             }
             if (!fs.existsSync("./" + modulename))
