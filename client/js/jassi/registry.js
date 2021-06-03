@@ -163,7 +163,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.Server": {}
             },
             "jassi/remote/Settings.ts": {
-                "date": 1622714168789,
+                "date": 1622725484953,
                 "jassi.remote.Settings": {}
             },
             "jassi/remote/Transaction.ts": {
@@ -288,7 +288,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.Component": {}
             },
             "jassi/ui/ComponentDescriptor.ts": {
-                "date": 1622549428373,
+                "date": 1622721942735,
                 "jassi.ui.ComponentDescriptor": {}
             },
             "jassi/ui/ComponentSpy.ts": {
@@ -777,12 +777,17 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/SettingsDialog.ts": {
-                "date": 1622548257613,
+                "date": 1622725297804,
                 "jassi_editor.Testuw": {
                     "$SettingsDescriptor": []
                 },
                 "jassi.ui.SettingsDialogCurrentSettings": {},
-                "jassi.ui.SettingsDialog": {}
+                "jassi.ui.SettingsObject": {},
+                "jassi.ui.SettingsDialog": {
+                    "$ActionProvider": [
+                        "jassi.base.ActionNode"
+                    ]
+                }
             },
             "jassi/ui/Style.ts": {
                 "date": 1613218544157,

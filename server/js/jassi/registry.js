@@ -108,7 +108,7 @@ exports.default = {
         "jassi.remote.Server": {}
     },
     "jassi/remote/Settings.ts": {
-        "date": 1622714168789,
+        "date": 1622725484953,
         "jassi.remote.Settings": {}
     },
     "jassi/remote/Transaction.ts": {

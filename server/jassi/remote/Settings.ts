@@ -54,27 +54,40 @@ export class Settings extends RemoteObject {
             }
         }
     }
-    static gets<T>(name: T): T {
-        if (Settings.browserSettings && Settings.browserSettings[name])
-            return Settings.browserSettings[name];
-        if (Settings.userSettings && Settings.userSettings[name])
-            return Settings.userSettings[name];
-        if (Settings.allusersSettings && Settings.allusersSettings[name])
-            return Settings.allusersSettings[name];
+    static getAll(scope: "browser" | "user" | "allusers"){
+        var ret={};
+        if(scope==="browser"){
+            Object.assign(ret,Settings.browserSettings);
+        }
+        if(scope==="user"){
+            Object.assign(ret,Settings.userSettings);
+        }
+        if(scope==="allusers"){
+            Object.assign(ret,Settings.allusersSettings);
+        }
+        return ret;
+    }
+    static gets<T>(Settings_key: T): T {
+        if (Settings.browserSettings && Settings.browserSettings[Settings_key])
+            return Settings.browserSettings[Settings_key];
+        if (Settings.userSettings && Settings.userSettings[Settings_key])
+            return Settings.userSettings[Settings_key];
+        if (Settings.allusersSettings && Settings.allusersSettings[Settings_key])
+            return Settings.allusersSettings[Settings_key];
         return undefined;
     }
-    static async remove(key: string, scope: "browser" | "user" | "allusers", context: Context = undefined) {
+    static async remove(Settings_key: string, scope: "browser" | "user" | "allusers", context: Context = undefined) {
         if (scope === "browser") {
-            delete Settings.browserSettings[key];
+            delete Settings.browserSettings[Settings_key];
             window.localStorage.setItem("jassijs.settings", JSON.stringify(Settings.browserSettings));
         }
         if (scope === "user" || scope === "allusers") {
             if (!context?.isServer) {
                 if(scope=="user"&&Settings.userSettings)
-                    delete Settings.userSettings[key];
+                    delete Settings.userSettings[Settings_key];
                 if(scope=="allusers"&&Settings.allusersSettings)
-                    delete Settings.allusersSettings[key];
-                this.call(this.remove, key, scope, context);
+                    delete Settings.allusersSettings[Settings_key];
+                this.call(this.remove, Settings_key, scope, context);
                 
             } else {
                 //@ts-ignore
@@ -85,7 +98,7 @@ export class Settings extends RemoteObject {
 
                 if (entr !== undefined) {
                     var data = JSON.parse(entr.data);
-                    delete data[key];
+                    delete data[Settings_key];
                     entr.data = JSON.stringify(data);
                     await man.save(context, entr);
                 }
@@ -93,25 +106,29 @@ export class Settings extends RemoteObject {
         }
     }
 
-    static async save<T>(name: T, value: T, scope: "browser" | "user" | "allusers") {
+    static async save<T>(Settings_key: T, value: T, scope: "browser" | "user" | "allusers") {
         let ob = {};
         //@ts-ignore
-        ob[name] = value;
+        ob[Settings_key] = value;
         return await this.saveAll(ob, scope);
     }
     static async saveAll(namevaluepair: { [key: string]: any }, scope: "browser" | "user" | "allusers", removeOtherKeys = false, context: Context = undefined) {
         if (scope === "browser") {
+        	
             let entr = window.localStorage.getItem("jassijs.settings");
             var data = namevaluepair;
             if (entr) {
                 data = JSON.parse(entr);
                 Object.assign(data, namevaluepair);
             }
+            if(removeOtherKeys)
+            	data=namevaluepair;
             window.localStorage.setItem("jassijs.settings", JSON.stringify(data));
         }
         if (scope === "user" || scope === "allusers") {
             if (!context?.isServer) {
-                
+                var props={};
+                Object.assign(props,namevaluepair);
 
                 if(scope=="user"&&Settings.userSettings){
                     if(removeOtherKeys)
@@ -123,7 +140,7 @@ export class Settings extends RemoteObject {
                         Settings.allusersSettings={};
                    Object.assign(Settings.allusersSettings,namevaluepair);
                 }
-                return await this.call(this.saveAll, namevaluepair, scope, removeOtherKeys, context);
+                return await this.call(this.saveAll, props, scope, removeOtherKeys, context);
             } else {
                 //@ts-ignore
                 var man = await (await import("jassi/server/DBManager")).DBManager.get();

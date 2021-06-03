@@ -50,27 +50,40 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
                 };
             }
         }
-        static gets(name) {
-            if (Settings_1.browserSettings && Settings_1.browserSettings[name])
-                return Settings_1.browserSettings[name];
-            if (Settings_1.userSettings && Settings_1.userSettings[name])
-                return Settings_1.userSettings[name];
-            if (Settings_1.allusersSettings && Settings_1.allusersSettings[name])
-                return Settings_1.allusersSettings[name];
+        static getAll(scope) {
+            var ret = {};
+            if (scope === "browser") {
+                Object.assign(ret, Settings_1.browserSettings);
+            }
+            if (scope === "user") {
+                Object.assign(ret, Settings_1.userSettings);
+            }
+            if (scope === "allusers") {
+                Object.assign(ret, Settings_1.allusersSettings);
+            }
+            return ret;
+        }
+        static gets(Settings_key) {
+            if (Settings_1.browserSettings && Settings_1.browserSettings[Settings_key])
+                return Settings_1.browserSettings[Settings_key];
+            if (Settings_1.userSettings && Settings_1.userSettings[Settings_key])
+                return Settings_1.userSettings[Settings_key];
+            if (Settings_1.allusersSettings && Settings_1.allusersSettings[Settings_key])
+                return Settings_1.allusersSettings[Settings_key];
             return undefined;
         }
-        static async remove(key, scope, context = undefined) {
+        static async remove(Settings_key, scope, context = undefined) {
             if (scope === "browser") {
-                delete Settings_1.browserSettings[key];
+                delete Settings_1.browserSettings[Settings_key];
                 window.localStorage.setItem("jassijs.settings", JSON.stringify(Settings_1.browserSettings));
             }
             if (scope === "user" || scope === "allusers") {
                 if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                     if (scope == "user" && Settings_1.userSettings)
-                        delete Settings_1.userSettings[key];
+                        delete Settings_1.userSettings[Settings_key];
                     if (scope == "allusers" && Settings_1.allusersSettings)
-                        delete Settings_1.allusersSettings[key];
-                    this.call(this.remove, key, scope, context);
+                        delete Settings_1.allusersSettings[Settings_key];
+                    this.call(this.remove, Settings_key, scope, context);
                 }
                 else {
                     //@ts-ignore
@@ -80,17 +93,17 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
                     let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });
                     if (entr !== undefined) {
                         var data = JSON.parse(entr.data);
-                        delete data[key];
+                        delete data[Settings_key];
                         entr.data = JSON.stringify(data);
                         await man.save(context, entr);
                     }
                 }
             }
         }
-        static async save(name, value, scope) {
+        static async save(Settings_key, value, scope) {
             let ob = {};
             //@ts-ignore
-            ob[name] = value;
+            ob[Settings_key] = value;
             return await this.saveAll(ob, scope);
         }
         static async saveAll(namevaluepair, scope, removeOtherKeys = false, context = undefined) {
@@ -101,10 +114,14 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
                     data = JSON.parse(entr);
                     Object.assign(data, namevaluepair);
                 }
+                if (removeOtherKeys)
+                    data = namevaluepair;
                 window.localStorage.setItem("jassijs.settings", JSON.stringify(data));
             }
             if (scope === "user" || scope === "allusers") {
                 if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                    var props = {};
+                    Object.assign(props, namevaluepair);
                     if (scope == "user" && Settings_1.userSettings) {
                         if (removeOtherKeys)
                             Settings_1.userSettings = {};
@@ -115,7 +132,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
                             Settings_1.allusersSettings = {};
                         Object.assign(Settings_1.allusersSettings, namevaluepair);
                     }
-                    return await this.call(this.saveAll, namevaluepair, scope, removeOtherKeys, context);
+                    return await this.call(this.saveAll, props, scope, removeOtherKeys, context);
                 }
                 else {
                     //@ts-ignore

@@ -25,7 +25,7 @@ export class ComponentDescriptor {
      * @param {boolean}  nocache - an uncached version 
      * @returns {jassi.ui.ComponentDescriptor} - which describes the component
      */
-    static describe(type, nocache = undefined) {
+    static describe(type, nocache:boolean = undefined):ComponentDescriptor {
         if (ComponentDescriptor.cache === undefined) {
             ComponentDescriptor.cache = {};
         }
