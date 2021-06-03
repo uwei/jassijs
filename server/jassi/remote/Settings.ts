@@ -5,7 +5,11 @@ import { Context, RemoteObject } from "jassi/remote/RemoteObject";
 import { Setting } from "jassi/remote/security/Setting";
 console.log("....load class Settings");
 
-
+declare global {
+    export interface KnownSettings {
+      
+    }
+}
 const proxyhandler = {
     get: function (target, prop, receiver) {
         return prop;
@@ -158,12 +162,12 @@ export async function autostart(){
 export async function test() {
     //
     //console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace1", "browser"));
-      console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "monaco", "user"));
+      console.log(await Settings.save("Development_DefaultEditor", "monaco", "user"));
     //  console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace3", "allusers"));
     await Settings.load();
    // await Settings.remove(Settings.keys.Development_DefaultEditor, "browser");
-    console.log(Settings.gets(Settings.keys.Development_DefaultEditor));
+    console.log(Settings.gets("Development_DefaultEditor"));
     await Settings.load();
-    console.log(Settings.gets(Settings.keys.Development_DefaultEditor));
+    console.log(Settings.gets("Development_DefaultEditor"));
     //console.log(await settings.gets(settings.keys.Development_DefaultEditor));
 }

@@ -213,6 +213,8 @@ export class Server extends RemoteObject {
             }
             return res;
         } else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can saveFiles";
             //@ts-ignore
             var fs: any = await import("jassi/server/Filesystem");
             var ret = await new fs.default().saveFiles(fileNames, contents, true);
@@ -253,6 +255,8 @@ export class Server extends RemoteObject {
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
         } else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can delete";
             //@ts-ignore
             var fs: any = await import("jassi/server/Filesystem");
 
@@ -269,6 +273,8 @@ export class Server extends RemoteObject {
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
         } else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can rename";
             //@ts-ignore
             var fs: any = await import("jassi/server/Filesystem");
 
@@ -303,6 +309,8 @@ export class Server extends RemoteObject {
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
         } else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can createFile";
             //@ts-ignore
             var fs: any = await import("jassi/server/Filesystem");
 
@@ -319,6 +327,8 @@ export class Server extends RemoteObject {
             //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
             return ret;
         } else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can createFolder";
             //@ts-ignore
             var fs: any = await import("jassi/server/Filesystem");
 

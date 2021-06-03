@@ -300,7 +300,7 @@ export class DBManager {
     return (<DBObject>ret)?.id;
   }
   private async _checkParentRightsForSave<Entity>(context: Context, entity: Entity) {
-    if (context.request.user.isAdmin)
+    if (context.request.user?.isAdmin)
       return;
     //Check if the object self has restrictions
     var cl = classes.getClass(classes.getClassName(entity));

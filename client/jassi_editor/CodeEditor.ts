@@ -664,9 +664,7 @@ export async function test() {
     var url = "jassi_editor/AcePanel.ts";
     editor.height = 500;
     await editor.openFile(url);
-    setTimeout(()=>{
-        editor.editorProvider="ace";
-    },2000);
+   
     return editor;
 
 };

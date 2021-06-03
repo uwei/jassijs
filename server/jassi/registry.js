@@ -104,11 +104,11 @@ exports.default={
 		}
 	},
 	"jassi/remote/Server.ts": {
-		"date": 1622198971874,
+		"date": 1622715804154,
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Settings.ts": {
-		"date": 1622569749272,
+		"date": 1622714168789,
 		"jassi.remote.Settings": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -119,7 +119,7 @@ exports.default={
 		"date": 1618564109929
 	},
 	"jassi/server/DBManager.ts": {
-		"date": 1622491956707,
+		"date": 1622714673039,
 		"jassi_localserver.DBManager": {}
 	},
 	"jassi/server/DoRemoteProtocol.ts": {
@@ -135,7 +135,7 @@ exports.default={
 		"date": 1622398327202
 	},
 	"jassi/server/PassportLoginRegister.ts": {
-		"date": 1614463987601
+		"date": 1622715047008
 	},
 	"jassi/server/PassportSetup.ts": {
 		"date": 1614464139513

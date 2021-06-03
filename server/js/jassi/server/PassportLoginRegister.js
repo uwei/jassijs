@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
         user.email=username;
         user.password=passwordHash;
         await (await DBManager.get()).save(user);*/
-        res.status(200).send({ username });
+        res.redirect("/login.html"); //status(200).send({ username });
     }
     catch (error) {
         res.status(400).send({

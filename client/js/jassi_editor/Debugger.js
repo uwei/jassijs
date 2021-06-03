@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/ChromeDebugger"], function (require, exports, Jassi_1, ChromeDebugger_1) {
+define(["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Debugger = void 0;
@@ -65,7 +65,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/ChromeDebugger
          **/
         breakpointChanged(file, line, column, enable, type) {
             if (navigator.userAgent.indexOf("Chrome") > -1) {
-                ChromeDebugger_1.ChromeDebugger.showHintExtensionNotInstalled();
+                (new Promise((resolve_1, reject_1) => { require(["jassi_editor/ChromeDebugger"], resolve_1, reject_1); })).then((deb) => {
+                    deb.ChromeDebugger.showHintExtensionNotInstalled();
+                });
             }
             //	console.log("break on"+file);
         }

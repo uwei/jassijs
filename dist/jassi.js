@@ -241,11 +241,11 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/remote/Server.ts": {
-                "date": 1622198971874,
+                "date": 1622715804154,
                 "jassi.remote.Server": {}
             },
             "jassi/remote/Settings.ts": {
-                "date": 1622569749272,
+                "date": 1622714168789,
                 "jassi.remote.Settings": {}
             },
             "jassi/remote/Transaction.ts": {
@@ -4863,6 +4863,8 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
                 return res;
             }
             else {
+                if (!context.request.user.isAdmin)
+                    throw "only admins can saveFiles";
                 //@ts-ignore
                 var fs = await new Promise((resolve_20, reject_20) => { require(["jassi/server/Filesystem"], resolve_20, reject_20); });
                 var ret = await new fs.default().saveFiles(fileNames, contents, true);
@@ -4904,6 +4906,8 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
                 return ret;
             }
             else {
+                if (!context.request.user.isAdmin)
+                    throw "only admins can delete";
                 //@ts-ignore
                 var fs = await new Promise((resolve_21, reject_21) => { require(["jassi/server/Filesystem"], resolve_21, reject_21); });
                 return await new fs.default().remove(name);
@@ -4920,6 +4924,8 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
                 return ret;
             }
             else {
+                if (!context.request.user.isAdmin)
+                    throw "only admins can rename";
                 //@ts-ignore
                 var fs = await new Promise((resolve_22, reject_22) => { require(["jassi/server/Filesystem"], resolve_22, reject_22); });
                 return await new fs.default().rename(oldname, newname);
@@ -4957,6 +4963,8 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
                 return ret;
             }
             else {
+                if (!context.request.user.isAdmin)
+                    throw "only admins can createFile";
                 //@ts-ignore
                 var fs = await new Promise((resolve_23, reject_23) => { require(["jassi/server/Filesystem"], resolve_23, reject_23); });
                 return await new fs.default().createFile(filename, content);
@@ -4973,6 +4981,8 @@ define("jassi/remote/Server", ["require", "exports", "jassi/remote/Jassi", "jass
                 return ret;
             }
             else {
+                if (!context.request.user.isAdmin)
+                    throw "only admins can createFolder";
                 //@ts-ignore
                 var fs = await new Promise((resolve_24, reject_24) => { require(["jassi/server/Filesystem"], resolve_24, reject_24); });
                 return await new fs.default().createFolder(foldername);
@@ -5156,13 +5166,13 @@ define("jassi/remote/Settings", ["require", "exports", "jassi/remote/Jassi", "ja
     async function test() {
         //
         //console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace1", "browser"));
-        console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "monaco", "user"));
+        console.log(await Settings.save("Development_DefaultEditor", "monaco", "user"));
         //  console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace3", "allusers"));
         await Settings.load();
         // await Settings.remove(Settings.keys.Development_DefaultEditor, "browser");
-        console.log(Settings.gets(Settings.keys.Development_DefaultEditor));
+        console.log(Settings.gets("Development_DefaultEditor"));
         await Settings.load();
-        console.log(Settings.gets(Settings.keys.Development_DefaultEditor));
+        console.log(Settings.gets("Development_DefaultEditor"));
         //console.log(await settings.gets(settings.keys.Development_DefaultEditor));
     }
     exports.test = test;

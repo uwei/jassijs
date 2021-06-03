@@ -217,6 +217,8 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
             return res;
         }
         else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can saveFiles";
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassi/server/Filesystem"));
             var ret = await new fs.default().saveFiles(fileNames, contents, true);
@@ -258,6 +260,8 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
             return ret;
         }
         else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can delete";
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassi/server/Filesystem"));
             return await new fs.default().remove(name);
@@ -274,6 +278,8 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
             return ret;
         }
         else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can rename";
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassi/server/Filesystem"));
             return await new fs.default().rename(oldname, newname);
@@ -311,6 +317,8 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
             return ret;
         }
         else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can createFile";
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassi/server/Filesystem"));
             return await new fs.default().createFile(filename, content);
@@ -327,6 +335,8 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
             return ret;
         }
         else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can createFolder";
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassi/server/Filesystem"));
             return await new fs.default().createFolder(foldername);

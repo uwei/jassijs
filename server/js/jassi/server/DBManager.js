@@ -263,7 +263,8 @@ let DBManager = DBManager_1 = class DBManager {
         return (_a = ret) === null || _a === void 0 ? void 0 : _a.id;
     }
     async _checkParentRightsForSave(context, entity) {
-        if (context.request.user.isAdmin)
+        var _a;
+        if ((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)
             return;
         //Check if the object self has restrictions
         var cl = Classes_1.classes.getClass(Classes_1.classes.getClassName(entity));

@@ -1318,9 +1318,6 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
         var url = "jassi_editor/AcePanel.ts";
         editor.height = 500;
         await editor.openFile(url);
-        setTimeout(() => {
-            editor.editorProvider = "ace";
-        }, 2000);
         return editor;
     }
     exports.test = test;
@@ -2333,7 +2330,7 @@ define("jassi_editor/ComponentPalette", ["require", "exports", "jassi/remote/Jas
     ], ComponentPalette);
     exports.ComponentPalette = ComponentPalette;
 });
-define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi", "jassi_editor/ChromeDebugger"], function (require, exports, Jassi_9, ChromeDebugger_2) {
+define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Debugger = void 0;
@@ -2391,7 +2388,9 @@ define("jassi_editor/Debugger", ["require", "exports", "jassi/remote/Jassi", "ja
          **/
         breakpointChanged(file, line, column, enable, type) {
             if (navigator.userAgent.indexOf("Chrome") > -1) {
-                ChromeDebugger_2.ChromeDebugger.showHintExtensionNotInstalled();
+                (new Promise((resolve_2, reject_2) => { require(["jassi_editor/ChromeDebugger"], resolve_2, reject_2); })).then((deb) => {
+                    deb.ChromeDebugger.showHintExtensionNotInstalled();
+                });
             }
             //	console.log("break on"+file);
         }
@@ -2834,7 +2833,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
-                "date": 1622547652386,
+                "date": 1622713946369,
                 "jassi_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": []
                 },
@@ -2861,7 +2860,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.ComponentPalette": {}
             },
             "jassi_editor/Debugger.ts": {
-                "date": 1622668572521,
+                "date": 1622714384772,
                 "jassi_editor.Debugger": {}
             },
             "jassi_editor/modul.ts": {
@@ -4316,7 +4315,7 @@ define("jassi_editor/util/Typescript", ["require", "exports", "jassi/remote/Jass
         async includeModulTypes() {
             var nodeFiles = {};
             for (var mod in Jassi_15.default.modules) {
-                var config = (await new Promise((resolve_2, reject_2) => { require([mod + "/modul"], resolve_2, reject_2); })).default;
+                var config = (await new Promise((resolve_3, reject_3) => { require([mod + "/modul"], resolve_3, reject_3); })).default;
                 if (config.types) {
                     for (var key in config.types) {
                         var file = config.types[key];

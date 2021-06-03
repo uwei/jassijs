@@ -596,9 +596,6 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         var url = "jassi_editor/AcePanel.ts";
         editor.height = 500;
         await editor.openFile(url);
-        setTimeout(() => {
-            editor.editorProvider = "ace";
-        }, 2000);
         return editor;
     }
     exports.test = test;
