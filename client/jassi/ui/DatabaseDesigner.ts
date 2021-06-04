@@ -9,6 +9,7 @@ import { DatabaseSchema, DatabaseClass, DatabaseField } from "jassi/base/Databas
 import { OptionDialog } from "jassi/ui/OptionDialog";
 import { router } from "jassi/base/Router";
 import { $Action, $ActionProvider } from "jassi/base/Actions";
+import windows from "jassi/base/Windows";
 type Me = {
     table?: Table;
     select?: Select;
@@ -18,6 +19,8 @@ type Me = {
     save?: Button;
     boxpanel2?: BoxPanel;
     newfield?: Button;
+    removefield?: Button;
+    boxpanel3?: BoxPanel;
 };
 var ttt = 1;
 @$ActionProvider("jassi.base.ActionNode")
@@ -46,6 +49,8 @@ export class DatabaseDesigner extends Panel {
         me.save = new Button();
         me.boxpanel2 = new BoxPanel(false);
         me.newfield = new Button();
+        me.removefield = new Button();
+        me.boxpanel3 = new BoxPanel();
         me.boxpanel1.horizontal = true;
         var _this = this;
         var xxx = 0;
@@ -96,6 +101,7 @@ export class DatabaseDesigner extends Panel {
         me.newclass.width = "150";
         me.boxpanel1.add(me.select);
         me.boxpanel1.width = 365;
+        me.boxpanel1.height = 25;
         me.boxpanel1.add(me.newclass);
         me.boxpanel1.add(me.save);
         me.save.text = "Save all Classes";
@@ -107,7 +113,7 @@ export class DatabaseDesigner extends Panel {
         me.save.width = 180;
         me.boxpanel2.height = 115;
         me.boxpanel2.horizontal = true;
-        me.boxpanel2.width = 50;
+        me.boxpanel2.width = 55;
         me.newfield.text = "Create Field";
         me.newfield.icon = "mdi mdi-playlist-plus";
         me.newfield.onclick(function (event) {
@@ -117,9 +123,30 @@ export class DatabaseDesigner extends Panel {
             _this.currentClass.fields.push(field);
             me.table.items = _this.currentClass.fields;
         });
-        me.newfield.width = "140";
+        me.newfield.width = "120";
+        me.newfield.height = 25;
+        me.newfield.css({
+            text_align: "left"
+        });
         me.boxpanel2.add(me.table);
-        me.boxpanel2.add(me.newfield);
+        me.boxpanel2.add(me.boxpanel3);
+        me.removefield.text = "Remove Field";
+        me.removefield.icon = "mdi mdi-playlist-minus";
+        me.removefield.width = "120";
+        me.removefield.css({
+            text_align: "left"
+        });
+        me.removefield.onclick(function (event) {
+            var field = me.table.value;
+            if (field) {
+                var pos = _this.currentClass.fields.indexOf(field);
+                _this.currentClass.fields.splice(pos, 1);
+                me.table.items = _this.currentClass.fields;
+                me.table.value = undefined;
+            }
+        });
+        me.boxpanel3.add(me.newfield);
+        me.boxpanel3.add(me.removefield);
     }
     async saveAll() {
         try {
@@ -127,6 +154,8 @@ export class DatabaseDesigner extends Panel {
             if (text !== "") {
                 if ((await OptionDialog.show("Do you won't this changes?<br/>" + text.replaceAll("\n", "<br/>"), ["Yes", "Cancel"])).button === "Yes") {
                     this.currentSchema.updateSchema(false);
+                    //@ts-ignore
+                    windows.findComponent("Files")?.refresh();
                 }
             }
             else {
@@ -143,7 +172,7 @@ export class DatabaseDesigner extends Panel {
         if (res.button === "OK") {
             this.currentClass = new DatabaseClass();
             this.currentClass.name = res.text;
-            this.currentClass.parent=this.currentSchema;
+            this.currentClass.parent = this.currentSchema;
             var f = new DatabaseField();
             f.name = "id";
             f.type = "int";

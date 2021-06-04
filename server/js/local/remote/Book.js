@@ -26,6 +26,10 @@ __decorate([
     DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Book.prototype, "tt", void 0);
+__decorate([
+    DatabaseSchema_1.Column(),
+    __metadata("design:type", String)
+], Book.prototype, "t2", void 0);
 Book = __decorate([
     DBObject_1.$DBObject(),
     Jassi_1.$Class("local.Book"),

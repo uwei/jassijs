@@ -10,8 +10,10 @@ export class Book extends DBObject {
     constructor() {
         super();
     }
-    @Column({	nullable: true})
+    @Column({ nullable: true })
     tt: string;
+    @Column()
+    t2: string;
 }
 export async function test() {
 }

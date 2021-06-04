@@ -44,6 +44,11 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/J
             super.ob = ob;
             //databinder,"prop"
             var value = this.propertyEditor.getPropertyValue(this.property);
+            if (value === null || value === void 0 ? void 0 : value.startsWith('"'))
+                value = value.substring(1);
+            if (value === null || value === void 0 ? void 0 : value.endsWith('"')) {
+                value = value.substring(0, value.length - 1);
+            }
             this._textbox.value = value;
         }
         get ob() {
@@ -63,7 +68,7 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/J
         _onchange(param = undefined) {
             var val = this._textbox.value;
             if (this.property) {
-                this.propertyEditor.setPropertyInCode(this.property.name, val);
+                this.propertyEditor.setPropertyInCode(this.property.name, '"' + val + '"');
                 this.propertyEditor.setPropertyInDesign(this.property.name, val);
             }
             super.callEvent("edit", param);

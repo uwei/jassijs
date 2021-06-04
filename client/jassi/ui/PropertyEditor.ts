@@ -14,9 +14,9 @@ import { Editor } from "jassi/ui/PropertyEditors/Editor";
 import { Component } from "jassi/ui/Component";
 import { Container } from "jassi/ui/Container";
 
-@$Class("jassi.ui.PropertyEditor") 
+@$Class("jassi.ui.PropertyEditor")
 export class PropertyEditor extends Panel {
-	readPropertyValueFromDesign:boolean=false;
+    readPropertyValueFromDesign: boolean = false;
     table: Panel;
     codeEditor;
     parser: Parser;
@@ -77,11 +77,11 @@ export class PropertyEditor extends Panel {
      */
     addProperty(name: string, editor: Editor, description: string) {
         var component = editor.getComponent();
-        var row = $('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="'+description+'">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>')[0];
-        var but = new Image();
-        but.src = "mdi mdi-delete-forever-outline";
+        var row = $('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>')[0];
+        var deletebutton = new Image();
+        deletebutton.src = "mdi mdi-delete-forever-outline";
         var _this = this;
-        but.onclick(function() {
+        deletebutton.onclick(function () {
             _this.removePropertyInDesign(name);
             _this.removePropertyInCode(name);
             _this.updateParser();
@@ -89,21 +89,21 @@ export class PropertyEditor extends Panel {
         });
 
         $(row.children[0]).tooltip();
-       // $(row.children[0]).css("font-size", "11px");
+        // $(row.children[0]).css("font-size", "11px");
 
-        $(row.children[0]).prepend(but.dom);
+        $(row.children[0]).prepend(deletebutton.dom);
         //$(component.dom).css("font-size", "11px");
         this.table.dom.children[1].appendChild(row);
-        row["_components"] = [editor, but];
-       /* $(component.dom).css({
-            "width":"100%",
-            "padding":"initial",
-            "font-size":"11px"
-        });*/
+        row["_components"] = [editor, deletebutton];
+        /* $(component.dom).css({
+             "width":"100%",
+             "padding":"initial",
+             "font-size":"11px"
+         });*/
         try {
-            
+
             row.children[1].appendChild(component.dom);
-        } catch{
+        } catch {
             //Why
             //debugger;
         }
@@ -127,10 +127,10 @@ export class PropertyEditor extends Panel {
      */
     clear() {
         var trs = $(this.dom).find(".propertyeditorrow");
-        for (var x = 0;x < trs.length;x++) {
+        for (var x = 0; x < trs.length; x++) {
             var row = trs[x];
             if (row["_components"] !== undefined) {
-                for (var c = 0;c < row["_components"].length;c++) {
+                for (var c = 0; c < row["_components"].length; c++) {
                     row["_components"][c]["__destroyed"] = true;
                     row["_components"][c].destroy();
                 }
@@ -209,23 +209,23 @@ export class PropertyEditor extends Panel {
      * @member {object}  - the rendered object 
      */
     set value(value) {
-    	
-    	if(value!==this._value&&this.parentPropertyEditor===undefined)
-	    	this.codeChanges={};
+
+        if (value !== this._value && this.parentPropertyEditor === undefined)
+            this.codeChanges = {};
         if (value !== undefined || value?.dom !== undefined) {
             if (!$(value.dom).is(":focus"))
                 $(value.dom).focus();
         }
         if (value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
             this._value = value;
-            if(this.codeEditor)
+            if (this.codeEditor)
                 this.variablename = this.codeEditor.getVariableFromObject(this._value);
             this.update();
             return;
         }
         this._multiselectEditors = [];
         if (value !== undefined && value.length > 1) {
-            for (var x = 1;x < value.length;x++) {
+            for (var x = 1; x < value.length; x++) {
                 var multi = new PropertyEditor(this.codeEditor);
                 multi.codeEditor = this.codeEditor;
                 multi.parentPropertyEditor = this.parentPropertyEditor;
@@ -250,10 +250,10 @@ export class PropertyEditor extends Panel {
         var _this = this;
         this._initValue();
         _this.update();
-        
+
     }
     swapComponents(first: Component, second: Component) {
-    	//swap Design
+        //swap Design
         if (first._parent !== second._parent)
             throw "swaped components must have the same parent"
         var parent: Container = first._parent;
@@ -266,12 +266,12 @@ export class PropertyEditor extends Panel {
         $(first.domWrapper).replaceWith(dummy);
         $(second.domWrapper).replaceWith($(first.domWrapper));
         dummy.replaceWith($(second.domWrapper));
-		//swap Code
-		var firstname=this.getVariableFromObject(first);
-		var secondname=this.getVariableFromObject(second);
-		var parentname=this.getVariableFromObject(parent);
-		this.parser.swapPropertyWithParameter(parentname,"add",firstname,secondname);
-		this.codeEditor.value = this.parser.getModifiedCode();
+        //swap Code
+        var firstname = this.getVariableFromObject(first);
+        var secondname = this.getVariableFromObject(second);
+        var parentname = this.getVariableFromObject(parent);
+        this.parser.swapPropertyWithParameter(parentname, "add", firstname, secondname);
+        this.codeEditor.value = this.parser.getModifiedCode();
         this.updateParser();
     }
     private _initValue() {
@@ -281,13 +281,13 @@ export class PropertyEditor extends Panel {
         else*/ {
             if (this.showThisProperties !== undefined)
                 props = this.showThisProperties;
-            else{
-            	if(!this._value)
-            		props=[];
-            	else
-                	props = ComponentDescriptor.describe(this._value.constructor)?.fields;
-                if(!props)
-                	props=[];
+            else {
+                if (!this._value)
+                    props = [];
+                else
+                    props = ComponentDescriptor.describe(this._value.constructor)?.fields;
+                if (!props)
+                    props = [];
             }
         }
         //TODO cache this
@@ -296,7 +296,7 @@ export class PropertyEditor extends Panel {
         /*for (var x = 0; x < props.length; x++) {
             _this.properties[props[x].name] = { name: props[x].name, component: undefined, description: props[x].description };
         }*/
-        var allProperties: { name: string, editor: Editor, description: string,isVisible?:(object)=>boolean }[] = [];
+        var allProperties: { name: string, editor: Editor, description: string, isVisible?: (object) => boolean }[] = [];
 
         if (_this._multiselectEditors.length === 0) {
             var hasvarname = _this.getVariableFromObject(_this._value);
@@ -311,17 +311,18 @@ export class PropertyEditor extends Panel {
                 //nameEditor.ob = _this._value;
             }
         }
-        for (var x = 0;x < props.length;x++) {
+        console.log(props.length);
+        for (var x = 0; x < props.length; x++) {
             if (props[x].name.indexOf("/") > -1) {
             } else {
-                _this.properties[props[x].name] = { isVisible:props[x].isVisible, name: props[x].name, component: undefined, description: props[x].description };
+                _this.properties[props[x].name] = { isVisible: props[x].isVisible, name: props[x].name, component: undefined, description: props[x].description };
                 var editor = propertyeditor.createFor(props[x], _this);
                 if (editor === undefined) {
                     console.log("Editor not found for " + _this.variablename);
                     continue;
                 }
                 var sname = editor.property.name;
-                editor.onedit(function(event) {
+                editor.onedit(function (event) {
                     _this.callEvent("propertyChanged", event);
                 });
                 //editor.ob = _this._value;
@@ -340,7 +341,7 @@ export class PropertyEditor extends Panel {
         for (var key in _this.properties) {
             var prop = _this.properties[key];
             var doAdd = true;
-            for (var m = 0;m < _this._multiselectEditors.length;m++) {
+            for (var m = 0; m < _this._multiselectEditors.length; m++) {
                 var test = _this._multiselectEditors[m].properties[prop.name];
                 if (test === undefined)
                     doAdd = false;
@@ -348,11 +349,11 @@ export class PropertyEditor extends Panel {
             if (doAdd) {
                 if (prop.component !== undefined)
                     //_this.addProperty(prop.name, prop.editor, prop.description);
-                    allProperties.push({ name: prop.name, editor: prop.editor, description: prop.description,isVisible:prop.isVisible});
+                    allProperties.push({ name: prop.name, editor: prop.editor, description: prop.description, isVisible: prop.isVisible });
             }
         }
         _this.clear();
-        for (let p = 0;p < allProperties.length;p++) {
+        for (let p = 0; p < allProperties.length; p++) {
             let prop = allProperties[p];
             _this.addProperty(prop.name, prop.editor, prop.description);
         }
@@ -370,16 +371,27 @@ export class PropertyEditor extends Panel {
                 continue;
             }
             //sometimes the component is already deleted e.g.resize
-            if (prop.editor["__destroyed"] !== true){
-            	if(prop.isVisible){
-            		var isVisible=prop.isVisible(this.value);
-            	    if(isVisible){
+            if (prop.editor["__destroyed"] !== true) {
+                if (prop.isVisible) {
+                    var isVisible = prop.isVisible(this.value);
+                    if (isVisible) {
                         $(prop.editor.component.dom.parentNode).css('display', '');
-            	    }else{
-            	        $(prop.editor.component.dom.parentNode).css('display', 'none');
-            	    }
+                    } else {
+                        $(prop.editor.component.dom.parentNode).css('display', 'none');
+                    }
 
-            	}
+                }
+                 let deletebutton=prop.editor.component.dom.parentNode.parentNode.children[0].children[0];
+                var ll= this.getPropertyValue(prop,false);
+                if(ll===undefined){
+                    $(deletebutton).css('visibility', 'hidden');
+                }else{
+                     $(deletebutton).css('visibility', 'visible');
+                }
+               /*   $(prop.editor.component.dom.parentNode).css('display', '');
+                    } else {
+                        $(prop.editor.component.dom.parentNode).css('display', 'none');
+*/
                 prop.editor.ob = this.value;
             }
         }
@@ -394,20 +406,20 @@ export class PropertyEditor extends Panel {
      * @returns {object}
      */
     getPropertyValue(property: Property, noDefaultValue = undefined) {
-    	if(this.readPropertyValueFromDesign){
-    	    let ret= this._value[property.name];
-    	    if(ret===undefined&&!noDefaultValue)
-    	       ret=property.default;
-    		return ret;
-    	}
+        if (this.readPropertyValueFromDesign) {
+            let ret = this._value[property.name];
+            if (ret === undefined && !noDefaultValue)
+                ret = property.default;
+            return ret;
+        }
         var ret = undefined;
         if (this.codeEditor === undefined) {//read property
-        	
+
             var r: string = <string>this.codeChanges[property.name];
 
             if (r === undefined) {
-				if(this.parentPropertyEditor===undefined&&this._value[property.name])
-        			return this._value[property.name];
+                if (this.parentPropertyEditor === undefined && this._value[property.name])
+                    return this._value[property.name];
                 if (noDefaultValue !== true)
                     return property.default;
                 return r;
@@ -415,15 +427,15 @@ export class PropertyEditor extends Panel {
             return r;
         }
         if (property.name === "new" && this.variablename.startsWith("me.")) {
-            if(this.parser.data["me"]===undefined)
+            if (this.parser.data["me"] === undefined)
                 return undefined;
             var prop = this.parser.data["me"][this.variablename.substring(3)];
             if (prop === undefined)
                 return undefined;
             var constr = prop[0].value;
-            if (constr.startsWith("typedeclaration:")&&prop.length>1)
+            if (constr.startsWith("typedeclaration:") && prop.length > 1)
                 constr = prop[1].value;
-                
+
             ret = constr.substring(constr.indexOf("(") + 1, constr.lastIndexOf(")"));
             if (ret === "")
                 ret = undefined;
@@ -440,7 +452,7 @@ export class PropertyEditor extends Panel {
                 ret = property.default;
         }
         if (this._multiselectEditors !== undefined) {
-            for (var m = 0;m < this._multiselectEditors.length;m++) {
+            for (var m = 0; m < this._multiselectEditors.length; m++) {
                 this._multiselectEditors[m].updateParser();
                 var test = this._multiselectEditors[m].getPropertyValue(property, noDefaultValue);
                 if (test !== ret) {
@@ -462,20 +474,20 @@ export class PropertyEditor extends Panel {
         if (this.parentPropertyEditor !== undefined) {
             this.parentPropertyEditor.updateParser();
         } else {
-        	var text = this.codeEditor.value; 
-        	var val=this.codeEditor.getObjectFromVariable("this");
-        	if(text)
-	            this.parser.parse(text, [{classname:val?.constructor?.name,methodname: "layout"},{classname:undefined,methodname:"test"}]);
+            var text = this.codeEditor.value;
+            var val = this.codeEditor.getObjectFromVariable("this");
+            if (text)
+                this.parser.parse(text, [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
         }
     }
 
     /**
      * adds an required file to the code
      */
-    addImportIfNeeded(name:string,file:string){
+    addImportIfNeeded(name: string, file: string) {
         if (this.codeEditor === undefined)
             return;
-        this.parser.addImportIfNeeded(name,file);
+        this.parser.addImportIfNeeded(name, file);
         this.codeEditor.value = this.parser.getModifiedCode();
         this.updateParser();
 
@@ -493,10 +505,10 @@ export class PropertyEditor extends Panel {
      * @returns  the name of the object
      */
     addVariableInCode(type: string, scopename: { variablename: string, methodname: string }): string {
-    	var val=this.codeEditor.getObjectFromVariable("this");
-    	var ret=this.parser.addVariableInCode(type,[{classname:val?.constructor?.name,methodname: "layout"},
-    				{classname:undefined,methodname:"test"}], scopename);
-    	this.codeEditor.value = this.parser.getModifiedCode();
+        var val = this.codeEditor.getObjectFromVariable("this");
+        var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
+        { classname: undefined, methodname: "test" }], scopename);
+        this.codeEditor.value = this.parser.getModifiedCode();
         this.updateParser();
         this.callEvent("codeChanged", {});
         return ret;
@@ -513,19 +525,19 @@ export class PropertyEditor extends Panel {
     setPropertyInCode(property: string, value, replace: boolean = undefined, variableName: string = undefined,
         before: { variablename: string, property: string, value?} = undefined,
         scopename: { variablename: string, methodname: string } = undefined) {
-        
+
         if (this.codeEditor === undefined) {
             this.codeChanges[property] = value;
             this.callEvent("codeChanged", {});
             return;
         }
-       
-        if (this.codeEditor === undefined || this.parentPropertyEditor !== undefined){
-        	this.callEvent("codeChanged", {});
+
+        if (this.codeEditor === undefined || this.parentPropertyEditor !== undefined) {
+            this.callEvent("codeChanged", {});
             return;
         }
         if (variableName === undefined && this._multiselectEditors !== undefined) {
-            for (var m = 0;m < this._multiselectEditors.length;m++) {
+            for (var m = 0; m < this._multiselectEditors.length; m++) {
                 this._multiselectEditors[m].updateParser();
                 this._multiselectEditors[m].setPropertyInCode(property, value, replace, variableName, before);
             }
@@ -539,29 +551,29 @@ export class PropertyEditor extends Panel {
         } else {
             prop = this.codeEditor.getObjectFromVariable(variableName)[property];
         }
-        var isFunction=(typeof (prop) === "function");
-        var val=this.codeEditor.getObjectFromVariable("this");
-        this.parser.setPropertyInCode(variableName,property,value,
-        			[{classname:val?.constructor?.name,methodname: "layout"},{classname:undefined,methodname:"test"}],
-    				isFunction,replace,before, scopename);
+        var isFunction = (typeof (prop) === "function");
+        var val = this.codeEditor.getObjectFromVariable("this");
+        this.parser.setPropertyInCode(variableName, property, value,
+            [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }],
+            isFunction, replace, before, scopename);
         //correct spaces
-        if(value&&value.indexOf("\n")>-1){
-         	this.codeEditor.value =this.parser.getModifiedCode();
-	        this.updateParser();
-		}
-		this.codeEditor.value =this.parser.getModifiedCode();
+        if (value && value.indexOf("\n") > -1) {
+            this.codeEditor.value = this.parser.getModifiedCode();
+            this.updateParser();
+        }
+        this.codeEditor.value = this.parser.getModifiedCode();
         this.updateParser();
         this.callEvent("codeChanged", {});
     }
-    
+
     /**
     * modify the property in design
     * @param {string} property - the property
     * @param {string} value - the new value
     */
     setPropertyInDesign(property: string, value) {
-        if(this._multiselectEditors){
-            for (var m = 0;m < this._multiselectEditors.length;m++) {
+        if (this._multiselectEditors) {
+            for (var m = 0; m < this._multiselectEditors.length; m++) {
                 this._multiselectEditors[m].setPropertyInDesign(property, value);
             }
         }
@@ -652,8 +664,8 @@ export class PropertyEditor extends Panel {
      * @param {string} varname - the variable to remove
      */
     removeVariableInCode(varname: string) {
-        if (this.codeEditor === undefined){
-        	this.callEvent("codeChanged", {});
+        if (this.codeEditor === undefined) {
+            this.callEvent("codeChanged", {});
             return;
         }
         this.parser.removeVariableInCode(varname);
@@ -678,15 +690,15 @@ export class PropertyEditor extends Panel {
             this.callEvent("codeChanged", {});
             return;
         }
-        for (var m = 0;m < this._multiselectEditors.length;m++) {
+        for (var m = 0; m < this._multiselectEditors.length; m++) {
             this._multiselectEditors[m].updateParser();
             this._multiselectEditors[m].removePropertyInCode(property, onlyValue, variablename);
         }
-       
+
         if (variablename === undefined)
             variablename = this.variablename;
         this.updateParser();;//notwendig?
-        this.parser.removePropertyInCode(property,onlyValue,variablename); 
+        this.parser.removePropertyInCode(property, onlyValue, variablename);
         var text = this.parser.getModifiedCode();
         this.codeEditor.value = text;
         this.updateParser()
@@ -696,18 +708,18 @@ export class PropertyEditor extends Panel {
     * removes the property in design
     */
     removePropertyInDesign(property: string) {
-        for (var m = 0;m < this._multiselectEditors.length;m++) {
+        for (var m = 0; m < this._multiselectEditors.length; m++) {
             this._multiselectEditors[m].removePropertyInDesign(property);
         }
         if (typeof (this._value[property]) === "function")
             this._value[property](undefined);
-        else{
-            try{
-                this._value[property]=undefined;
-            }catch{
-                
+        else {
+            try {
+                this._value[property] = undefined;
+            } catch {
+
             }
-            delete this._value[property] ;
+            delete this._value[property];
         }
     }
 
@@ -723,12 +735,12 @@ export class PropertyEditor extends Panel {
 }
 @$Class("jassi.ui.PropertyEditorTestProperties")
 export class TestProperties {
-	@$Property({decription:"name of the dialog",})
-	dialogname:string;
+    @$Property({ decription: "name of the dialog", })
+    dialogname: string;
 
 }
-export function test(){
-	var ret=new PropertyEditor(undefined);
-	ret.value=new TestProperties();
-	return ret;
+export function test() {
+    var ret = new PropertyEditor(undefined);
+    ret.value = new TestProperties();
+    return ret;
 }

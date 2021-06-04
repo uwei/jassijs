@@ -737,11 +737,11 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
     let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
     };
     __decorate([
-        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"] }),
+        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser" }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_DefaultEditor", void 0);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"] }),
+        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light" }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_MoanacoEditorTheme", void 0);
     CodeEditorSettingsDescriptor = __decorate([
@@ -843,13 +843,13 @@ define("jassi_editor/CodeEditor", ["require", "exports", "jassi/remote/Jassi", "
             $(goto.dom).attr("ondrop", "event.preventDefault();jassi.$CodeEditor.search(event.dataTransfer.getData('text'));");
             $(goto.dom).attr("ondragover", "event.preventDefault();");
             this._codeToolbar.add(goto);
-            var test = new Button_1.Button();
+            /*var test = new Button();
             test.icon = "mdi mdi-bug mdi-18px";
             test.tooltip = "Test";
             test.onclick(function () {
                 var kk = _this._main.layout;
             });
-            this._codeToolbar.add(test);
+            this._codeToolbar.add(test);*/
             super.add(this._main);
             this._installView();
             this.registerKeys();
@@ -1613,13 +1613,13 @@ define("jassi_editor/ComponentDesigner", ["require", "exports", "jassi/remote/Ja
                 _this.undo();
             });
             this._designToolbar.add(undo);
-            var test = new Button_3.Button();
-            test.icon = "mdi mdi-bug mdi-18px";
-            test.tooltip = "Test";
-            test.onclick(function () {
-                //var kk=_this._codeView.layout;
-            });
-            this._designToolbar.add(test);
+            /*  var test=new Button();
+             test.icon="mdi mdi-bug mdi-18px";
+             test.tooltip="Test";
+             test.onclick(function(){
+                         //var kk=_this._codeView.layout;
+             });
+             this._designToolbar.add(test);*/
             var edit = new Button_3.Button();
             edit.icon = "mdi mdi-run mdi-18px";
             edit.tooltip = "Test Dialog";
@@ -2833,7 +2833,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.ChromeDebugger": {}
             },
             "jassi_editor/CodeEditor.ts": {
-                "date": 1622713946369,
+                "date": 1622806482247,
                 "jassi_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": []
                 },
@@ -2848,7 +2848,7 @@ define("jassi_editor/registry", ["require"], function (require) {
                 "jassi_editor.CodePanel": {}
             },
             "jassi_editor/ComponentDesigner.ts": {
-                "date": 1622201889844,
+                "date": 1622795945991,
                 "jassi_editor.ComponentDesigner": {}
             },
             "jassi_editor/ComponentExplorer.ts": {

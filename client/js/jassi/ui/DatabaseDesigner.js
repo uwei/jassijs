@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/Databinder", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/base/DatabaseSchema", "jassi/ui/OptionDialog", "jassi/base/Router", "jassi/base/Actions"], function (require, exports, BoxPanel_1, Button_1, Databinder_1, Select_1, Table_1, Jassi_1, Panel_1, DatabaseSchema_1, OptionDialog_1, Router_1, Actions_1) {
+define(["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/Databinder", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/base/DatabaseSchema", "jassi/ui/OptionDialog", "jassi/base/Router", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, BoxPanel_1, Button_1, Databinder_1, Select_1, Table_1, Jassi_1, Panel_1, DatabaseSchema_1, OptionDialog_1, Router_1, Actions_1, Windows_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DatabaseDesigner = void 0;
@@ -29,6 +29,8 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/
             me.save = new Button_1.Button();
             me.boxpanel2 = new BoxPanel_1.BoxPanel(false);
             me.newfield = new Button_1.Button();
+            me.removefield = new Button_1.Button();
+            me.boxpanel3 = new BoxPanel_1.BoxPanel();
             me.boxpanel1.horizontal = true;
             var _this = this;
             var xxx = 0;
@@ -79,6 +81,7 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/
             me.newclass.width = "150";
             me.boxpanel1.add(me.select);
             me.boxpanel1.width = 365;
+            me.boxpanel1.height = 25;
             me.boxpanel1.add(me.newclass);
             me.boxpanel1.add(me.save);
             me.save.text = "Save all Classes";
@@ -90,7 +93,7 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/
             me.save.width = 180;
             me.boxpanel2.height = 115;
             me.boxpanel2.horizontal = true;
-            me.boxpanel2.width = 50;
+            me.boxpanel2.width = 55;
             me.newfield.text = "Create Field";
             me.newfield.icon = "mdi mdi-playlist-plus";
             me.newfield.onclick(function (event) {
@@ -100,16 +103,40 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/
                 _this.currentClass.fields.push(field);
                 me.table.items = _this.currentClass.fields;
             });
-            me.newfield.width = "140";
+            me.newfield.width = "120";
+            me.newfield.height = 25;
+            me.newfield.css({
+                text_align: "left"
+            });
             me.boxpanel2.add(me.table);
-            me.boxpanel2.add(me.newfield);
+            me.boxpanel2.add(me.boxpanel3);
+            me.removefield.text = "Remove Field";
+            me.removefield.icon = "mdi mdi-playlist-minus";
+            me.removefield.width = "120";
+            me.removefield.css({
+                text_align: "left"
+            });
+            me.removefield.onclick(function (event) {
+                var field = me.table.value;
+                if (field) {
+                    var pos = _this.currentClass.fields.indexOf(field);
+                    _this.currentClass.fields.splice(pos, 1);
+                    me.table.items = _this.currentClass.fields;
+                    me.table.value = undefined;
+                }
+            });
+            me.boxpanel3.add(me.newfield);
+            me.boxpanel3.add(me.removefield);
         }
         async saveAll() {
+            var _a;
             try {
                 var text = await this.currentSchema.updateSchema(true);
                 if (text !== "") {
                     if ((await OptionDialog_1.OptionDialog.show("Do you won't this changes?<br/>" + text.replaceAll("\n", "<br/>"), ["Yes", "Cancel"])).button === "Yes") {
                         this.currentSchema.updateSchema(false);
+                        //@ts-ignore
+                        (_a = Windows_1.default.findComponent("Files")) === null || _a === void 0 ? void 0 : _a.refresh();
                     }
                 }
                 else {

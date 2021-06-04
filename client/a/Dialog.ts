@@ -11,7 +11,7 @@ import { Style } from "jassi/ui/Style";
 import windows from "jassi/base/Windows";
 import { FileExplorer } from "jassi/ui/FileExplorer";
 type Me = {
-    htmlpanel1?: HTMLPanel; 
+    htmlpanel1?: HTMLPanel;
     htmlpanel2?: HTMLPanel;
     boxpanel1?: BoxPanel;
     button2?: Button;
@@ -35,7 +35,6 @@ export class Dialog extends Panel {
         this.layout(this.me);
     }
     layout(me: Me) {
-    	
         me.panel1 = new Panel();
         me.button3 = new Button();
         me.button5 = new Button();
@@ -66,14 +65,15 @@ export class Dialog extends Panel {
         me.htmlpanel1.newlineafter = false;
         me.htmlpanel1.height = 15;
         me.htmlpanel2.value = "dd";
-        me.button7.text = "button3";
+        me.button7.text = "dfdf";
+        me.button7.width = "150";
         me.button3.text = "button";
         me.menuitem2.text = "menu";
     }
 }
 export async function test() {
-     windows.addLeft(new FileExplorer(), "Files");
-    //var ret = new Dialog();
-  //  	var h=monaco.languages.typescript.typescriptDefaults;
-   // return ret;
+    //windows.addLeft(new FileExplorer(), "Files");
+    var ret = new Dialog();
+    //  	var h=monaco.languages.typescript.typescriptDefaults;
+    return ret;
 }

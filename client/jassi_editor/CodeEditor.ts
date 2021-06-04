@@ -27,9 +27,9 @@ declare global {
 @$SettingsDescriptor()
 @$Class("jassi_editor.CodeEditorSettingsDescriptor")
 class CodeEditorSettingsDescriptor {
-    @$Property({ chooseFrom: ["ace", "monaco","aceOnBrowser"] })
+    @$Property({ chooseFrom: ["ace", "monaco","aceOnBrowser"],default:"aceOnBrowser" })
     Development_DefaultEditor: string;
-    @$Property({ chooseFrom: ["vs-dark","vs-light","hc-black"] })
+    @$Property({ chooseFrom: ["vs-dark","vs-light","hc-black"],default:"vs-light" })
     Development_MoanacoEditorTheme:string;
 }
 

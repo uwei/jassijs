@@ -64,10 +64,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         addProperty(name, editor, description) {
             var component = editor.getComponent();
             var row = $('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>')[0];
-            var but = new Image_1.Image();
-            but.src = "mdi mdi-delete-forever-outline";
+            var deletebutton = new Image_1.Image();
+            deletebutton.src = "mdi mdi-delete-forever-outline";
             var _this = this;
-            but.onclick(function () {
+            deletebutton.onclick(function () {
                 _this.removePropertyInDesign(name);
                 _this.removePropertyInCode(name);
                 _this.updateParser();
@@ -75,10 +75,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             });
             $(row.children[0]).tooltip();
             // $(row.children[0]).css("font-size", "11px");
-            $(row.children[0]).prepend(but.dom);
+            $(row.children[0]).prepend(deletebutton.dom);
             //$(component.dom).css("font-size", "11px");
             this.table.dom.children[1].appendChild(row);
-            row["_components"] = [editor, but];
+            row["_components"] = [editor, deletebutton];
             /* $(component.dom).css({
                  "width":"100%",
                  "padding":"initial",
@@ -289,6 +289,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                     //nameEditor.ob = _this._value;
                 }
             }
+            console.log(props.length);
             for (var x = 0; x < props.length; x++) {
                 if (props[x].name.indexOf("/") > -1) {
                 }
@@ -356,6 +357,18 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                             $(prop.editor.component.dom.parentNode).css('display', 'none');
                         }
                     }
+                    let deletebutton = prop.editor.component.dom.parentNode.parentNode.children[0].children[0];
+                    var ll = this.getPropertyValue(prop, false);
+                    if (ll === undefined) {
+                        $(deletebutton).css('visibility', 'hidden');
+                    }
+                    else {
+                        $(deletebutton).css('visibility', 'visible');
+                    }
+                    /*   $(prop.editor.component.dom.parentNode).css('display', '');
+                         } else {
+                             $(prop.editor.component.dom.parentNode).css('display', 'none');
+     */
                     prop.editor.ob = this.value;
                 }
             }

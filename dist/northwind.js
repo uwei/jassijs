@@ -21,34 +21,6 @@ define("northwind/CategoriesView", ["require", "exports", "jassi/ui/Table", "jas
         get title() {
             return this.value === undefined ? "CategoriesView" : "CategoriesView " + this.value.id;
         }
-        layout3(me) {
-            me.Id = new Textbox_1.Textbox();
-            me.name = new Textbox_1.Textbox();
-            me.description = new Textarea_1.Textarea();
-            me.boxpanel1 = new BoxPanel_1.BoxPanel();
-            me.table1 = new Table_1.Table();
-            me.textbox1 = new Textbox_1.Textbox();
-            this.add(me.boxpanel1);
-            this.add(me.table1);
-            this.add(me.description);
-            this.add(me.textbox1);
-            me.Id.label = "Id";
-            //   me.Id.bind(me.databinder, "id");
-            me.Id.width = 45;
-            // me.name.bind(me.databinder, "CategoryName");
-            me.name.label = "Name";
-            me.name.width = 180;
-            me.name.height = 10;
-            me.description.height = 70;
-            me.description.width = 260;
-            // me.description.bind(me.databinder, "Description");
-            me.description.label = "Description";
-            me.boxpanel1.add(me.Id);
-            me.boxpanel1.horizontal = true;
-            me.boxpanel1.width = 80;
-            me.boxpanel1.add(me.name);
-            me.table1.height = 85;
-        }
         layout(me) {
             me.Id = new Textbox_1.Textbox();
             me.name = new Textbox_1.Textbox();
@@ -1060,7 +1032,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1621089178825,
+                "date": 1622795968803,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {

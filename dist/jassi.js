@@ -245,7 +245,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.remote.Server": {}
             },
             "jassi/remote/Settings.ts": {
-                "date": 1622725484953,
+                "date": 1622795887845,
                 "jassi.remote.Settings": {}
             },
             "jassi/remote/Transaction.ts": {
@@ -462,7 +462,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.CSSProperties": {}
             },
             "jassi/ui/DatabaseDesigner.ts": {
-                "date": 1616102745056,
+                "date": 1622803546972,
                 "jassi/ui/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -481,7 +481,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/DataComponent.ts": {
-                "date": 1615587905350,
+                "date": 1622796408720,
                 "jassi.ui.DataComponent": {}
             },
             "jassi/ui/DBObjectDialog.ts": {
@@ -667,7 +667,7 @@ define("jassi/registry", ["require"], function (require) {
                 "jassi.ui.Property": {}
             },
             "jassi/ui/PropertyEditor.ts": {
-                "date": 1615844604424,
+                "date": 1622806279462,
                 "jassi.ui.PropertyEditor": {},
                 "jassi.ui.PropertyEditorTestProperties": {}
             },
@@ -778,7 +778,7 @@ define("jassi/registry", ["require"], function (require) {
                 }
             },
             "jassi/ui/PropertyEditors/ImageEditor.ts": {
-                "date": 1614118659538,
+                "date": 1622804049120,
                 "jassi.ui.PropertyEditors.ImageEditor": {
                     "$ActionProvider": [
                         "jassi.base.ActionNode"
@@ -5042,7 +5042,6 @@ define("jassi/remote/Settings", ["require", "exports", "jassi/remote/Jassi", "ja
     var Settings_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
-    console.log("....load class Settings");
     const proxyhandler = {
         get: function (target, prop, receiver) {
             return prop;
@@ -8272,7 +8271,8 @@ define("jassi/ui/DataComponent", ["require", "exports", "jassi/ui/Component", "j
          */
         bind(databinder, property) {
             this._databinder = databinder;
-            databinder.add(property, this, "onchange");
+            if (databinder !== undefined)
+                databinder.add(property, this, "onchange");
             //databinder.checkAutocommit(this);
         }
         destroy() {
@@ -8300,7 +8300,7 @@ define("jassi/ui/DataComponent", ["require", "exports", "jassi/ui/Component", "j
     ], DataComponent);
     exports.DataComponent = DataComponent;
 });
-define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/Databinder", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/base/DatabaseSchema", "jassi/ui/OptionDialog", "jassi/base/Router", "jassi/base/Actions"], function (require, exports, BoxPanel_5, Button_3, Databinder_2, Select_2, Table_3, Jassi_47, Panel_8, DatabaseSchema_8, OptionDialog_6, Router_3, Actions_11) {
+define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/Databinder", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/base/DatabaseSchema", "jassi/ui/OptionDialog", "jassi/base/Router", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, BoxPanel_5, Button_3, Databinder_2, Select_2, Table_3, Jassi_47, Panel_8, DatabaseSchema_8, OptionDialog_6, Router_3, Actions_11, Windows_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DatabaseDesigner = void 0;
@@ -8322,6 +8322,8 @@ define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", 
             me.save = new Button_3.Button();
             me.boxpanel2 = new BoxPanel_5.BoxPanel(false);
             me.newfield = new Button_3.Button();
+            me.removefield = new Button_3.Button();
+            me.boxpanel3 = new BoxPanel_5.BoxPanel();
             me.boxpanel1.horizontal = true;
             var _this = this;
             var xxx = 0;
@@ -8372,6 +8374,7 @@ define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", 
             me.newclass.width = "150";
             me.boxpanel1.add(me.select);
             me.boxpanel1.width = 365;
+            me.boxpanel1.height = 25;
             me.boxpanel1.add(me.newclass);
             me.boxpanel1.add(me.save);
             me.save.text = "Save all Classes";
@@ -8383,7 +8386,7 @@ define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", 
             me.save.width = 180;
             me.boxpanel2.height = 115;
             me.boxpanel2.horizontal = true;
-            me.boxpanel2.width = 50;
+            me.boxpanel2.width = 55;
             me.newfield.text = "Create Field";
             me.newfield.icon = "mdi mdi-playlist-plus";
             me.newfield.onclick(function (event) {
@@ -8393,16 +8396,40 @@ define("jassi/ui/DatabaseDesigner", ["require", "exports", "jassi/ui/BoxPanel", 
                 _this.currentClass.fields.push(field);
                 me.table.items = _this.currentClass.fields;
             });
-            me.newfield.width = "140";
+            me.newfield.width = "120";
+            me.newfield.height = 25;
+            me.newfield.css({
+                text_align: "left"
+            });
             me.boxpanel2.add(me.table);
-            me.boxpanel2.add(me.newfield);
+            me.boxpanel2.add(me.boxpanel3);
+            me.removefield.text = "Remove Field";
+            me.removefield.icon = "mdi mdi-playlist-minus";
+            me.removefield.width = "120";
+            me.removefield.css({
+                text_align: "left"
+            });
+            me.removefield.onclick(function (event) {
+                var field = me.table.value;
+                if (field) {
+                    var pos = _this.currentClass.fields.indexOf(field);
+                    _this.currentClass.fields.splice(pos, 1);
+                    me.table.items = _this.currentClass.fields;
+                    me.table.value = undefined;
+                }
+            });
+            me.boxpanel3.add(me.newfield);
+            me.boxpanel3.add(me.removefield);
         }
         async saveAll() {
+            var _a;
             try {
                 var text = await this.currentSchema.updateSchema(true);
                 if (text !== "") {
                     if ((await OptionDialog_6.OptionDialog.show("Do you won't this changes?<br/>" + text.replaceAll("\n", "<br/>"), ["Yes", "Cancel"])).button === "Yes") {
                         this.currentSchema.updateSchema(false);
+                        //@ts-ignore
+                        (_a = Windows_6.default.findComponent("Files")) === null || _a === void 0 ? void 0 : _a.refresh();
                     }
                 }
                 else {
@@ -9403,7 +9430,7 @@ define("jassi/ui/ErrorPanel", ["require", "exports", "jassi/ui/Panel", "jassi/ba
     };
     Jassi_51.default.ErrorPanel = ErrorPanel;
 });
-define("jassi/ui/FileExplorer", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Server", "jassi/base/Router", "jassi/base/Actions", "jassi/ui/OptionDialog", "jassi_editor/util/Typescript", "jassi/ui/ContextMenu", "jassi/base/Windows"], function (require, exports, Jassi_52, Tree_2, Panel_10, Textbox_4, Server_3, Router_5, Actions_13, OptionDialog_7, Typescript_3, ContextMenu_2, Windows_6) {
+define("jassi/ui/FileExplorer", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Server", "jassi/base/Router", "jassi/base/Actions", "jassi/ui/OptionDialog", "jassi_editor/util/Typescript", "jassi/ui/ContextMenu", "jassi/base/Windows"], function (require, exports, Jassi_52, Tree_2, Panel_10, Textbox_4, Server_3, Router_5, Actions_13, OptionDialog_7, Typescript_3, ContextMenu_2, Windows_7) {
     "use strict";
     var FileExplorer_5;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -9647,10 +9674,10 @@ define("jassi/ui/FileExplorer", ["require", "exports", "jassi/remote/Jassi", "ja
             this.tree.propStyle = node => { return this.getStyle(node); };
         }
         static async show() {
-            if (Windows_6.default.contains("Files"))
-                var window = Windows_6.default.show("Files");
+            if (Windows_7.default.contains("Files"))
+                var window = Windows_7.default.show("Files");
             else
-                Windows_6.default.addLeft(new FileExplorer_5(), "Files");
+                Windows_7.default.addLeft(new FileExplorer_5(), "Files");
         }
         getStyle(node) {
             var _a, _b;
@@ -11074,10 +11101,10 @@ define("jassi/ui/PropertyEditor", ["require", "exports", "jassi/remote/Jassi", "
         addProperty(name, editor, description) {
             var component = editor.getComponent();
             var row = $('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>')[0];
-            var but = new Image_2.Image();
-            but.src = "mdi mdi-delete-forever-outline";
+            var deletebutton = new Image_2.Image();
+            deletebutton.src = "mdi mdi-delete-forever-outline";
             var _this = this;
-            but.onclick(function () {
+            deletebutton.onclick(function () {
                 _this.removePropertyInDesign(name);
                 _this.removePropertyInCode(name);
                 _this.updateParser();
@@ -11085,10 +11112,10 @@ define("jassi/ui/PropertyEditor", ["require", "exports", "jassi/remote/Jassi", "
             });
             $(row.children[0]).tooltip();
             // $(row.children[0]).css("font-size", "11px");
-            $(row.children[0]).prepend(but.dom);
+            $(row.children[0]).prepend(deletebutton.dom);
             //$(component.dom).css("font-size", "11px");
             this.table.dom.children[1].appendChild(row);
-            row["_components"] = [editor, but];
+            row["_components"] = [editor, deletebutton];
             /* $(component.dom).css({
                  "width":"100%",
                  "padding":"initial",
@@ -11299,6 +11326,7 @@ define("jassi/ui/PropertyEditor", ["require", "exports", "jassi/remote/Jassi", "
                     //nameEditor.ob = _this._value;
                 }
             }
+            console.log(props.length);
             for (var x = 0; x < props.length; x++) {
                 if (props[x].name.indexOf("/") > -1) {
                 }
@@ -11366,6 +11394,18 @@ define("jassi/ui/PropertyEditor", ["require", "exports", "jassi/remote/Jassi", "
                             $(prop.editor.component.dom.parentNode).css('display', 'none');
                         }
                     }
+                    let deletebutton = prop.editor.component.dom.parentNode.parentNode.children[0].children[0];
+                    var ll = this.getPropertyValue(prop, false);
+                    if (ll === undefined) {
+                        $(deletebutton).css('visibility', 'hidden');
+                    }
+                    else {
+                        $(deletebutton).css('visibility', 'visible');
+                    }
+                    /*   $(prop.editor.component.dom.parentNode).css('display', '');
+                         } else {
+                             $(prop.editor.component.dom.parentNode).css('display', 'none');
+     */
                     prop.editor.ob = this.value;
                 }
             }
@@ -11886,7 +11926,7 @@ define("jassi/ui/Repeater", ["require", "exports", "jassi/ui/Panel", "jassi/ui/D
     ], Repeater);
     exports.Repeater = Repeater;
 });
-define("jassi/ui/SearchExplorer", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_editor/util/Typescript", "jassi/base/Router", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, Jassi_65, Tree_3, Panel_16, Textbox_7, Typescript_4, Router_6, Actions_14, Windows_7) {
+define("jassi/ui/SearchExplorer", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_editor/util/Typescript", "jassi/base/Router", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, Jassi_65, Tree_3, Panel_16, Textbox_7, Typescript_4, Router_6, Actions_14, Windows_8) {
     "use strict";
     var SearchExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -11904,10 +11944,10 @@ define("jassi/ui/SearchExplorer", ["require", "exports", "jassi/remote/Jassi", "
             this.layout();
         }
         static async show() {
-            if (Windows_7.default.contains("Search"))
-                var window = Windows_7.default.show("Search");
+            if (Windows_8.default.contains("Search"))
+                var window = Windows_8.default.show("Search");
             else
-                Windows_7.default.addLeft(new SearchExplorer_1(), "Search");
+                Windows_8.default.addLeft(new SearchExplorer_1(), "Search");
         }
         async doSearch() {
             var Typescript = (await new Promise((resolve_34, reject_34) => { require(["jassi_editor/util/Typescript"], resolve_34, reject_34); })).Typescript;
@@ -12279,7 +12319,7 @@ define("jassi/ui/Select", ["require", "exports", "jassi/remote/Jassi", "jassi/ui
     }
     exports.test = test;
 });
-define("jassi/ui/SettingsDialog", ["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Select", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/PropertyEditor", "jassi/ui/Button", "jassi/ui/Property", "jassi/remote/Settings", "jassi/ui/ComponentDescriptor", "jassi/remote/Registry", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, HTMLPanel_5, Select_3, Jassi_67, Panel_17, PropertyEditor_3, Button_9, Property_26, Settings_2, ComponentDescriptor_5, Registry_20, Actions_15, Windows_8) {
+define("jassi/ui/SettingsDialog", ["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Select", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/PropertyEditor", "jassi/ui/Button", "jassi/ui/Property", "jassi/remote/Settings", "jassi/ui/ComponentDescriptor", "jassi/remote/Registry", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, HTMLPanel_5, Select_3, Jassi_67, Panel_17, PropertyEditor_3, Button_9, Property_26, Settings_2, ComponentDescriptor_5, Registry_20, Actions_15, Windows_9) {
     "use strict";
     var SettingsDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -12329,7 +12369,7 @@ define("jassi/ui/SettingsDialog", ["require", "exports", "jassi/ui/HTMLPanel", "
             this.layout(this.me);
         }
         static async show() {
-            Windows_8.default.add(new SettingsDialog_1(), "Settings");
+            Windows_9.default.add(new SettingsDialog_1(), "Settings");
         }
         async update() {
             await Settings_2.Settings.load();
@@ -15416,6 +15456,11 @@ define("jassi/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassi/ui/
             super.ob = ob;
             //databinder,"prop"
             var value = this.propertyEditor.getPropertyValue(this.property);
+            if (value === null || value === void 0 ? void 0 : value.startsWith('"'))
+                value = value.substring(1);
+            if (value === null || value === void 0 ? void 0 : value.endsWith('"')) {
+                value = value.substring(0, value.length - 1);
+            }
             this._textbox.value = value;
         }
         get ob() {
@@ -15435,7 +15480,7 @@ define("jassi/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassi/ui/
         _onchange(param = undefined) {
             var val = this._textbox.value;
             if (this.property) {
-                this.propertyEditor.setPropertyInCode(this.property.name, val);
+                this.propertyEditor.setPropertyInCode(this.property.name, '"' + val + '"');
                 this.propertyEditor.setPropertyInDesign(this.property.name, val);
             }
             super.callEvent("edit", param);

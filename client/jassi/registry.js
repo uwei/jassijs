@@ -380,7 +380,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.CSSProperties": {}
 	},
 	"jassi/ui/DatabaseDesigner.ts": {
-		"date": 1616102745056,
+		"date": 1622803546972,
 		"jassi/ui/DatabaseDesigner": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"
@@ -585,7 +585,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.ui.Property": {}
 	},
 	"jassi/ui/PropertyEditor.ts": {
-		"date": 1615844604424,
+		"date": 1622806279462,
 		"jassi.ui.PropertyEditor": {},
 		"jassi.ui.PropertyEditorTestProperties": {}
 	},
@@ -696,7 +696,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/PropertyEditors/ImageEditor.ts": {
-		"date": 1614118659538,
+		"date": 1622804049120,
 		"jassi.ui.PropertyEditors.ImageEditor": {
 			"$ActionProvider": [
 				"jassi.base.ActionNode"

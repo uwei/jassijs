@@ -15,11 +15,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
     let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
     };
     __decorate([
-        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"] }),
+        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser" }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_DefaultEditor", void 0);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"] }),
+        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light" }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_MoanacoEditorTheme", void 0);
     CodeEditorSettingsDescriptor = __decorate([
