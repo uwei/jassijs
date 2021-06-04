@@ -121,13 +121,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             $(goto.dom).attr("ondrop", "event.preventDefault();jassi.$CodeEditor.search(event.dataTransfer.getData('text'));");
             $(goto.dom).attr("ondragover", "event.preventDefault();");
             this._codeToolbar.add(goto);
-            var test = new Button_1.Button();
+            /*var test = new Button();
             test.icon = "mdi mdi-bug mdi-18px";
             test.tooltip = "Test";
             test.onclick(function () {
                 var kk = _this._main.layout;
             });
-            this._codeToolbar.add(test);
+            this._codeToolbar.add(test);*/
             super.add(this._main);
             this._installView();
             this.registerKeys();

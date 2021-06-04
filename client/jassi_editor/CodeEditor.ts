@@ -154,13 +154,13 @@ export class CodeEditor extends Panel {
         $(goto.dom).attr("ondragover", "event.preventDefault();");
         this._codeToolbar.add(goto);
 
-        var test = new Button();
+        /*var test = new Button();
         test.icon = "mdi mdi-bug mdi-18px";
         test.tooltip = "Test";
         test.onclick(function () {
             var kk = _this._main.layout;
         });
-        this._codeToolbar.add(test);
+        this._codeToolbar.add(test);*/
 
 
         super.add(this._main);

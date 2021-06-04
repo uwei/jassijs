@@ -87,6 +87,8 @@ class Filesystem {
     }
     async dirFiles(dir, extensions, ignore = []) {
         var results = [];
+        if (!fs.existsSync(dir))
+            return results;
         var list = fs.readdirSync(dir);
         var _this = this;
         for (let l = 0; l < list.length; l++) {
@@ -192,8 +194,8 @@ class Filesystem {
             if (!fs.existsSync(newpath))
                 fs.mkdirSync(newpath, { recursive: true });
             //create remotefolder
-            if (!fs.existsSync(newpath + "/remote"))
-                fs.mkdirSync(newpath + "/remote", { recursive: true });
+            //if (!fs.existsSync(newpath + "/remote"))
+            //    fs.mkdirSync(newpath + "/remote", { recursive: true });
             if (!fs.existsSync(newpath + "/modul.ts")) {
                 await this.saveFiles([modulename + "/modul.js", "js/" + modulename + "/modul.js"], [
                     "export default {}",
@@ -206,23 +208,24 @@ class Filesystem {
                     'define("' + modulename + '/registry",["require"], function(require) {return {  default: {	} } } );',
                 ]);
             }
-            if (!fs.existsSync("./" + modulename))
-                fs.mkdirSync("./" + modulename, { recursive: true });
-            if (!fs.existsSync("./js/" + modulename))
-                fs.mkdirSync("./js/" + modulename, { recursive: true });
-            if (!fs.existsSync("./" + modulename + "/remote"))
-                fs.mkdirSync("./" + modulename + "/remote", { recursive: true });
-            if (!fs.existsSync("./" + modulename + "/registry.js")) {
-                fs.writeFileSync("./" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
-                fs.writeFileSync("./js/" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
-            }
+            /* if (!fs.existsSync("./" + modulename))
+                 fs.mkdirSync("./" + modulename, { recursive: true });
+             if (!fs.existsSync("./js/" + modulename))
+                 fs.mkdirSync("./js/" + modulename, { recursive: true });
+             if (!fs.existsSync("./" + modulename + "/remote"))
+                 fs.mkdirSync("./" + modulename + "/remote", { recursive: true });
+             if (!fs.existsSync("./" + modulename + "/registry.js")) {
+                 fs.writeFileSync("./" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+                 fs.writeFileSync("./js/" + modulename + "/registry.js", 'Object.defineProperty(exports, "__esModule", { value: true });exports.default={}');
+ 
+             }*/
             //update client jassi.json
             var json = fs.readFileSync(this._pathForFile("jassi.json"), 'utf-8');
             var ob = JSON.parse(json);
             if (!ob.modules[modulename])
                 ob.modules[modulename] = modulename;
             fs.writeFileSync(this._pathForFile("jassi.json"), JSON.stringify(ob, undefined, "\t"));
-            this.createRemoteModulIfNeeded(modulename);
+            //this.createRemoteModulIfNeeded(modulename);
         }
         catch (ex) {
             return ex.message;
@@ -286,14 +289,14 @@ class Filesystem {
             return file + " not exists";
         try {
             if (fs.lstatSync(path).isDirectory()) {
-                fs.rmdirSync(path, { recursive: true });
                 //update client jassi.json if removing client module 
                 var json = fs.readFileSync(this._pathForFile("jassi.json"), 'utf-8');
                 var ob = JSON.parse(json);
-                if (ob[file]) {
-                    delete ob[file];
+                if (ob.modules[file]) {
+                    delete ob.modules[file];
                     fs.writeFileSync(this._pathForFile("jassi.json"), JSON.stringify(ob, undefined, "\t"));
                 }
+                fs.rmdirSync(path, { recursive: true });
             }
             else
                 fs.unlinkSync(path);

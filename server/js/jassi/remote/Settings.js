@@ -12,7 +12,6 @@ const Jassi_1 = require("jassi/remote/Jassi");
 const Registry_1 = require("jassi/remote/Registry");
 const RemoteObject_1 = require("jassi/remote/RemoteObject");
 const Setting_1 = require("jassi/remote/security/Setting");
-console.log("....load class Settings");
 const proxyhandler = {
     get: function (target, prop, receiver) {
         return prop;

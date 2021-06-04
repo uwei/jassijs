@@ -44,7 +44,8 @@ export class DataComponent extends Component {
     @$Property({ type: "databinder" })
     bind(databinder, property) {
         this._databinder = databinder;
-        databinder.add(property, this, "onchange");
+        if(databinder!==undefined)
+            databinder.add(property, this, "onchange");
         //databinder.checkAutocommit(this);
     }
     destroy() {

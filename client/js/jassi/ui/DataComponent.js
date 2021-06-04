@@ -43,7 +43,8 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
          */
         bind(databinder, property) {
             this._databinder = databinder;
-            databinder.add(property, this, "onchange");
+            if (databinder !== undefined)
+                databinder.add(property, this, "onchange");
             //databinder.checkAutocommit(this);
         }
         destroy() {

@@ -107,13 +107,13 @@ export class ComponentDesigner extends Panel{
             });
             this._designToolbar.add(undo);
             
-             var test=new Button();
+           /*  var test=new Button();
             test.icon="mdi mdi-bug mdi-18px";
             test.tooltip="Test";
             test.onclick(function(){
             			//var kk=_this._codeView.layout;
             });
-            this._designToolbar.add(test);
+            this._designToolbar.add(test);*/
             
            
             var edit=new Button();

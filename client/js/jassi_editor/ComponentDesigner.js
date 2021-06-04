@@ -65,13 +65,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                 _this.undo();
             });
             this._designToolbar.add(undo);
-            var test = new Button_1.Button();
-            test.icon = "mdi mdi-bug mdi-18px";
-            test.tooltip = "Test";
-            test.onclick(function () {
-                //var kk=_this._codeView.layout;
-            });
-            this._designToolbar.add(test);
+            /*  var test=new Button();
+             test.icon="mdi mdi-bug mdi-18px";
+             test.tooltip="Test";
+             test.onclick(function(){
+                         //var kk=_this._codeView.layout;
+             });
+             this._designToolbar.add(test);*/
             var edit = new Button_1.Button();
             edit.icon = "mdi mdi-run mdi-18px";
             edit.tooltip = "Test Dialog";

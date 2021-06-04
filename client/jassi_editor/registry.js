@@ -11,7 +11,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi_editor.ChromeDebugger": {}
 	},
 	"jassi_editor/CodeEditor.ts": {
-		"date": 1622713946369,
+		"date": 1622795925658,
 		"jassi_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": []
 		},
@@ -26,7 +26,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi_editor.CodePanel": {}
 	},
 	"jassi_editor/ComponentDesigner.ts": {
-		"date": 1622201889844,
+		"date": 1622795945991,
 		"jassi_editor.ComponentDesigner": {}
 	},
 	"jassi_editor/ComponentExplorer.ts": {

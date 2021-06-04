@@ -163,7 +163,7 @@ define("jassi/registry",["require"], function(require) {
 		"jassi.remote.Server": {}
 	},
 	"jassi/remote/Settings.ts": {
-		"date": 1622725484953,
+		"date": 1622795887845,
 		"jassi.remote.Settings": {}
 	},
 	"jassi/remote/Transaction.ts": {
@@ -399,7 +399,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/DataComponent.ts": {
-		"date": 1615587905350,
+		"date": 1622796408720,
 		"jassi.ui.DataComponent": {}
 	},
 	"jassi/ui/DBObjectDialog.ts": {
