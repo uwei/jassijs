@@ -8,9 +8,9 @@
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "declaration": true,
-      "outDir": ".././dist/server",
-      "rootDir": "./",
+      "outDir": ".././deployserver",
+      "rootDir": "./"
   },
-  "include":["./jassi"],
+  "include":["./jassijs"],
   
 }

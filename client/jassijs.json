@@ -10,8 +10,7 @@
 		"local": "local",
 		"demo": "demo",
 		"northwind": "northwind",
-		"de": "de",
-		"tg": "tg"
+		"de": "de"
 	},
 	"require": {
 		"paths": {
