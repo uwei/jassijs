@@ -36,7 +36,14 @@ define(["require", "exports", "jassi/remote/Registry"], function (require, expor
             var cl = await Registry_1.default.getJSONData("$Class", classname);
             if (cl === undefined) {
                 try {
-                    await new Promise((resolve_1, reject_1) => { require([classname.replaceAll(".", "/")], resolve_1, reject_1); });
+                    //@ts-ignore
+                    if (require.main) { //nodes load project class from module
+                        //@ts-ignore
+                        await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
+                    }
+                    else {
+                        await new Promise((resolve_1, reject_1) => { require([classname.replaceAll(".", "/")], resolve_1, reject_1); });
+                    }
                 }
                 catch (err) {
                     err = err;
@@ -54,7 +61,14 @@ define(["require", "exports", "jassi/remote/Registry"], function (require, expor
                         throw "failed loadClass " + classname + " on server only remote classes coud be loaded";
                     }
                 }
-                var imp = await new Promise((resolve_2, reject_2) => { require([file.replace(".ts", "")], resolve_2, reject_2); });
+                //@ts-ignore
+                if (require.main) { //nodes load project class from module
+                    //@ts-ignore
+                    var imp = await Promise.resolve().then(() => require.main.require(file.replace(".ts", "")));
+                }
+                else {
+                    var imp = await new Promise((resolve_2, reject_2) => { require([file.replace(".ts", "")], resolve_2, reject_2); });
+                }
             }
             return this.getClass(classname);
         }

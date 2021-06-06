@@ -252,6 +252,14 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this.codeEditor.value = this.parser.getModifiedCode();
             this.updateParser();
         }
+        controlEditor(editor) {
+            let _this = this;
+            editor.onedit(function (event) {
+                _this.callEvent("propertyChanged", event);
+                let deletebutton = editor.component.dom.parentNode.parentNode.children[0].children[0];
+                $(deletebutton).css('visibility', 'visible');
+            });
+        }
         _initValue() {
             var _a;
             var props = [];
@@ -301,9 +309,12 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                         continue;
                     }
                     var sname = editor.property.name;
-                    editor.onedit(function (event) {
-                        _this.callEvent("propertyChanged", event);
-                    });
+                    this.controlEditor(editor);
+                    /*                editor.onedit(function (event) {
+                                        _this.callEvent("propertyChanged", event);
+                                        let deletebutton = editor.component.dom.parentNode.parentNode.children[0].children[0];
+                                        $(deletebutton).css('visibility', 'visible');
+                                    });*/
                     //editor.ob = _this._value;
                     if (_this.properties[editor.property.name] === undefined) {
                         console.log("Property not found " + editor.property);
@@ -383,6 +394,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
          * @returns {object}
          */
         getPropertyValue(property, noDefaultValue = undefined) {
+            var _a;
             if (this.readPropertyValueFromDesign) {
                 let ret = this._value[property.name];
                 if (ret === undefined && !noDefaultValue)
@@ -401,7 +413,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                 }
                 return r;
             }
-            if (property.name === "new" && this.variablename.startsWith("me.")) {
+            if (property.name === "new" && ((_a = this.variablename) === null || _a === void 0 ? void 0 : _a.startsWith("me."))) {
                 if (this.parser.data["me"] === undefined)
                     return undefined;
                 var prop = this.parser.data["me"][this.variablename.substring(3)];

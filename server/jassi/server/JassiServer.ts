@@ -67,7 +67,7 @@ export default function JassiServer(properties: JassiConnectionProperties={}, ex
    /* if (properties.allowDownloadAsZip!==false)
         app.get('/zip', passport.authenticate("jwt", { session: false }), zip);*/
     const PORT=(process.env.PORT || 5000)
-    app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+    app.listen(PORT, () => console.log(`Listening on ${PORT} ->browse http://localhost:${PORT}/app.html`));
     return app;
 }
 

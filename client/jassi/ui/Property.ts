@@ -21,12 +21,14 @@ export class Property
         [key:string]:any;
         public constructorClass?;
         public default?;
-        /** @member - the name of the property*/
+        /** the name of the property*/
         public name?:string;
-        /** @member - the type of the property*/
+        /** the type of the property*/
         public type?:string;
-        /** @member - the user can choose this entries*/
+        /** the user can choose this entries */
         public chooseFrom?:any[]|((comp:any)=>any[]);
+        /** @member - the user can select from chooseFrom but can not input own entries*/
+        public chooseFromStrict?:boolean;
         /** @member - the description for tooltip **/
         public decription?:string;
         /** @member - hides the properties from the base class **/

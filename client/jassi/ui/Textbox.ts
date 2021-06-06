@@ -186,7 +186,6 @@ export class Textbox extends DataComponent {
     }
     private fillCompletionList(values: any) {
         var h: any[] | (() => any);
-        console.log("fill");
         var list = $(this.dom).attr("list");
         var html = "";
         var comp: any = $("#" + list);

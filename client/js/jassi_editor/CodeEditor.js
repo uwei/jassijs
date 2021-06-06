@@ -15,11 +15,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
     let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
     };
     __decorate([
-        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser" }),
+        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser", chooseFromStrict: true }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_DefaultEditor", void 0);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light" }),
+        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light", chooseFromStrict: true }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_MoanacoEditorTheme", void 0);
     CodeEditorSettingsDescriptor = __decorate([
@@ -33,7 +33,6 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
     let CodeEditor = CodeEditor_1 = class CodeEditor extends Panel_1.Panel {
         constructor() {
             super();
-            console.log("use" + Settings_1.Settings.gets(Settings_1.Settings.keys.Development_DefaultEditor));
             this.maximize();
             this._main = new DockingContainer_1.DockingContainer();
             this._codeView = new Panel_1.Panel();

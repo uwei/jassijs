@@ -7,28 +7,38 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Textbox", "jassi/ui/PropertyEditors/Editor", "jassi/remote/Jassi"], function (require, exports, Textbox_1, Editor_1, Jassi_1) {
+define(["require", "exports", "jassi/ui/Textbox", "jassi/ui/PropertyEditors/Editor", "jassi/remote/Jassi", "jassi/ui/Select"], function (require, exports, Textbox_1, Editor_1, Jassi_1, Select_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     let DefaultEditor = class DefaultEditor extends Editor_1.Editor {
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
-            /** @member - the renedering component **/
-            this.component = new Textbox_1.Textbox();
+            if (property.chooseFrom !== undefined) {
+                if (typeof (property.chooseFrom) === "function") {
+                    this.component = new Textbox_1.Textbox();
+                    this.component.autocompleter = function () {
+                        return property.chooseFrom(_this.ob);
+                    };
+                }
+                else {
+                    if (property.chooseFromStrict) {
+                        this.component = new Select_1.Select();
+                        this.component.items = property.chooseFrom;
+                    }
+                    else {
+                        this.component = new Textbox_1.Textbox();
+                        this.component.autocompleter = property.chooseFrom;
+                    }
+                }
+            }
+            else {
+                this.component = new Textbox_1.Textbox();
+            }
             this.component.width = "100%";
             var _this = this;
             this.component.onchange(function (param) {
                 _this._onchange(param);
             });
-            if (property.chooseFrom !== undefined) {
-                if (typeof (property.chooseFrom) === "function") {
-                    this.component.autocompleter = function () {
-                        return property.chooseFrom(_this.ob);
-                    };
-                }
-                else
-                    this.component.autocompleter = property.chooseFrom;
-            }
         }
         /**
          * @member {object} ob - the object which is edited

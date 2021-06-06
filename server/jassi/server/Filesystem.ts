@@ -6,6 +6,7 @@ import { DBManager } from 'jassi/server/DBManager';
 import { FileNode } from 'jassi/remote/FileNode';
 import JSZip = require("jszip");
 import { ServerIndexer } from './RegistryIndexer';
+import registry from 'jassi/remote/Registry';
 let resolve = require('path').resolve;
 const passport = require("passport");
 
@@ -396,20 +397,23 @@ export default class Filesystem {
             if (spath.length > 1 && spath[1].toLowerCase() === "remote" && fileName.toLowerCase().endsWith(".ts")) {
                 //reload Modules
                 var remotecodeincluded = true;
-                var root = require.resolve("jassi/remote/Classes");
-                root = root.substring(0, root.length - "jassi/remote/Classes.js".length);
+                var root = require.main["path"]+"\\";  //require.resolve("jassi/remote/Classes");
+               // root = root.substring(0, root.length - "jassi/remote/Classes.js".length);
                 var modules = JSON.parse(fs.readFileSync("./jassi.json", 'utf-8')).modules;
                 var jfiles = [];
                 for (var modul in modules) {
                     for (var jfile in require.cache) {
-                        if (jfile.replaceAll("\\", "/").startsWith(root.replaceAll("\\", "/") + modul + "/remote")) {
+                        if(jfile.replaceAll("\\", "/").indexOf("/"+modul+"/remote/")>-1){
                             //save Modules
                             var p = jfile.substring(root.length).replaceAll("\\", "/");
+                            if(jfile.indexOf("node_modules")>-1){//jassi modules
+                                p=jfile.split("node_modules")[1].substring(1).replaceAll("\\", "/");;
+                            }
                             p = p.substring(0, p.length - 3);
                             if (Filesystem.allModules[p] === undefined) {
                                 Filesystem.allModules[p] = [];
                             }
-                            var mod = await import(p);
+                            var mod = await Promise.resolve().then(() => require.main.require(p));
                             if (Filesystem.allModules[p].indexOf(mod) === -1)
                                 Filesystem.allModules[p].push(mod);
 
@@ -430,7 +434,7 @@ export default class Filesystem {
         try {
             for (var key in Filesystem.allModules) {//load and migrate modules
                 var all = Filesystem.allModules[key];
-                var mod = await import(key);
+                var mod = await Promise.resolve().then(() => require.main.require(key));
                 for (var a = 0; a < all.length; a++) {
                     for (key in mod) {
                         all[a][key] = mod[key];
@@ -442,7 +446,9 @@ export default class Filesystem {
             console.error(err.stack);
             return err + "DB corrupt changes are reverted " + restore;
         }
-
+        if(remotecodeincluded){
+            await registry.reload(); 
+        }
         if (remotecodeincluded && rollbackonerror) {//verify DB-Schema
             try {
                 await DBManager.get();

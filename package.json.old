@@ -1,0 +1,29 @@
+{
+  "name": "jassijs",
+  "version": "0.1.0",
+  "description": "jassijs",
+  "engines": {
+    "node": "10.x"
+  },
+  "main": "server/main2.js",
+  "scripts": {
+    "start": "node server/main2.js",
+    "build": "sh installnpm.sh",
+    "test": "node out/test.js"
+  },
+  "dependencies": {
+
+  },
+  "devDependencies": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uwei/jassijs"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "MIT"
+}

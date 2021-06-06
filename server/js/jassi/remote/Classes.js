@@ -36,7 +36,14 @@ let Classes = class Classes {
         var cl = await Registry_1.default.getJSONData("$Class", classname);
         if (cl === undefined) {
             try {
-                await Promise.resolve().then(() => require(classname.replaceAll(".", "/")));
+                //@ts-ignore
+                if (require.main) { //nodes load project class from module
+                    //@ts-ignore
+                    await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
+                }
+                else {
+                    await Promise.resolve().then(() => require(classname.replaceAll(".", "/")));
+                }
             }
             catch (err) {
                 err = err;
@@ -54,7 +61,14 @@ let Classes = class Classes {
                     throw "failed loadClass " + classname + " on server only remote classes coud be loaded";
                 }
             }
-            var imp = await Promise.resolve().then(() => require(file.replace(".ts", "")));
+            //@ts-ignore
+            if (require.main) { //nodes load project class from module
+                //@ts-ignore
+                var imp = await Promise.resolve().then(() => require.main.require(file.replace(".ts", "")));
+            }
+            else {
+                var imp = await Promise.resolve().then(() => require(file.replace(".ts", "")));
+            }
         }
         return this.getClass(classname);
     }

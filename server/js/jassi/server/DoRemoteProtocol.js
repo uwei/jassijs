@@ -50,7 +50,8 @@ async function _execute(protext, request, context) {
     if (path.length < 2 || path[1] !== "remote")
         throw "only remote packages can be loadeded";
     file = file.replace(".ts", "");
-    var ret = await Promise.resolve().then(() => require(file));
+    //var ret = await import(file);
+    var ret = await Promise.resolve().then(() => require.main.require(file));
     var C = Classes_1.classes.getClass(prot.classname);
     if (prot._this === "static") {
         try {

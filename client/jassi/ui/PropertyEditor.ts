@@ -274,6 +274,14 @@ export class PropertyEditor extends Panel {
         this.codeEditor.value = this.parser.getModifiedCode();
         this.updateParser();
     }
+    private controlEditor(editor) {
+        let _this = this;
+        editor.onedit(function (event) {
+            _this.callEvent("propertyChanged", event);
+            let deletebutton = editor.component.dom.parentNode.parentNode.children[0].children[0];
+            $(deletebutton).css('visibility', 'visible');
+        });
+    }
     private _initValue() {
         var props = [];
        /* if (this.parentPropertyEditor !== undefined)
@@ -322,9 +330,12 @@ export class PropertyEditor extends Panel {
                     continue;
                 }
                 var sname = editor.property.name;
-                editor.onedit(function (event) {
+                this.controlEditor(editor);
+/*                editor.onedit(function (event) {
                     _this.callEvent("propertyChanged", event);
-                });
+                    let deletebutton = editor.component.dom.parentNode.parentNode.children[0].children[0];
+                    $(deletebutton).css('visibility', 'visible');
+                });*/
                 //editor.ob = _this._value;
                 if (_this.properties[editor.property.name] === undefined) {
                     console.log("Property not found " + editor.property);
@@ -381,17 +392,17 @@ export class PropertyEditor extends Panel {
                     }
 
                 }
-                 let deletebutton=prop.editor.component.dom.parentNode.parentNode.children[0].children[0];
-                var ll= this.getPropertyValue(prop,false);
-                if(ll===undefined){
+                let deletebutton = prop.editor.component.dom.parentNode.parentNode.children[0].children[0];
+                var ll = this.getPropertyValue(prop, false);
+                if (ll === undefined) {
                     $(deletebutton).css('visibility', 'hidden');
-                }else{
-                     $(deletebutton).css('visibility', 'visible');
+                } else {
+                    $(deletebutton).css('visibility', 'visible');
                 }
-               /*   $(prop.editor.component.dom.parentNode).css('display', '');
-                    } else {
-                        $(prop.editor.component.dom.parentNode).css('display', 'none');
-*/
+                /*   $(prop.editor.component.dom.parentNode).css('display', '');
+                     } else {
+                         $(prop.editor.component.dom.parentNode).css('display', 'none');
+ */
                 prop.editor.ob = this.value;
             }
         }
@@ -426,7 +437,7 @@ export class PropertyEditor extends Panel {
             }
             return r;
         }
-        if (property.name === "new" && this.variablename.startsWith("me.")) {
+        if (property.name === "new" && this.variablename?.startsWith("me.")) {
             if (this.parser.data["me"] === undefined)
                 return undefined;
             var prop = this.parser.data["me"][this.variablename.substring(3)];

@@ -16,9 +16,10 @@ declare global {
         myuw: number;
     }
 }
+/** sample
 @$SettingsDescriptor()
 @$Class("jassi_editor.Testuw")
-export class Testuw {
+class Testuw {
     @$Property()
     myuw: number;
 }
@@ -27,13 +28,13 @@ class SettingsDialogCurrentSettings {
     @$Property()
     test: string;
 }
+*/
 type Me = {
     propertyeditor?: PropertyEditor;
     Save?: Button;
     Scope?: Select;
     htmlpanel1?: HTMLPanel;
 };
-
 @$Class("jassi.ui.SettingsObject")
 class SettingsObject {
     static customComponentDescriptor() {
@@ -60,11 +61,11 @@ export class SettingsDialog extends Panel {
         this.layout(this.me);
     }
     @$Action({
-    	name: "Settings",
-       	icon: "mdi mdi-settings-helper",
+        name: "Settings",
+        icon: "mdi mdi-settings-helper",
     })
-    static async show(){
-       windows.add(new SettingsDialog(),"Settings");
+    static async show() {
+        windows.add(new SettingsDialog(), "Settings");
     }
     private async update() {
         await Settings.load();
@@ -108,6 +109,7 @@ export class SettingsDialog extends Panel {
         this.add(me.propertyeditor);
         this.add(me.Save);
         me.propertyeditor.width = "400";
+        me.propertyeditor.height = 145;
         me.Save.text = "Save";
         me.Save.onclick(function (event) {
             _this.save();
@@ -117,9 +119,13 @@ export class SettingsDialog extends Panel {
         me.Scope.onchange(function (event) {
             _this.update();
         });
-        me.htmlpanel1.width = "80";
-        me.htmlpanel1.value = "Settings for&nbsp;<br>";
         this.update();
+        me.htmlpanel1.value = "Settings for  ";
+        me.htmlpanel1.width = "80";
+        me.htmlpanel1.css({
+            font_size: "small",
+            font_weight: "bold"
+        });
     }
 }
 export async function test() {

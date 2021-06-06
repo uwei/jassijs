@@ -58,7 +58,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1615134737730
 	},
 	"jassi/remote/Classes.ts": {
-		"date": 1613925159863,
+		"date": 1622921407363,
 		"jassi.remote.Classes": {}
 	},
 	"jassi/remote/Database.ts": {
@@ -94,7 +94,7 @@ define("jassi/registry",["require"], function(require) {
 		"date": 1614468824546
 	},
 	"jassi/remote/Registry.ts": {
-		"date": 1615986605063
+		"date": 1622975829651
 	},
 	"jassi/remote/RemoteObject.ts": {
 		"date": 1614545171594,
@@ -581,11 +581,11 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Property.ts": {
-		"date": 1613218566584,
+		"date": 1622808301014,
 		"jassi.ui.Property": {}
 	},
 	"jassi/ui/PropertyEditor.ts": {
-		"date": 1622806279462,
+		"date": 1622809932079,
 		"jassi.ui.PropertyEditor": {},
 		"jassi.ui.PropertyEditorTestProperties": {}
 	},
@@ -630,7 +630,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/PropertyEditors/DatabinderEditor.ts": {
-		"date": 1613421449783,
+		"date": 1622809010852,
 		"jassi.ui.PropertyEditors.DatabinderEditor": {
 			"$PropertyEditor": [
 				[
@@ -650,7 +650,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/PropertyEditors/DefaultEditor.ts": {
-		"date": 1613421239003,
+		"date": 1622809002906,
 		"jassi.ui.PropertyEditors.DefaultEditor": {
 			"$PropertyEditor": [
 				[
@@ -785,11 +785,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/SettingsDialog.ts": {
-		"date": 1622725297804,
-		"jassi_editor.Testuw": {
-			"$SettingsDescriptor": []
-		},
-		"jassi.ui.SettingsDialogCurrentSettings": {},
+		"date": 1622808598291,
 		"jassi.ui.SettingsObject": {},
 		"jassi.ui.SettingsDialog": {
 			"$ActionProvider": [
@@ -845,7 +841,7 @@ define("jassi/registry",["require"], function(require) {
 		}
 	},
 	"jassi/ui/Textbox.ts": {
-		"date": 1622197522304,
+		"date": 1622806862158,
 		"jassi.ui.Textbox": {
 			"$UIComponent": [
 				{

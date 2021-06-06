@@ -161,7 +161,6 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         }
         fillCompletionList(values) {
             var h;
-            console.log("fill");
             var list = $(this.dom).attr("list");
             var html = "";
             var comp = $("#" + list);

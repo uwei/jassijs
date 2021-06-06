@@ -1,5 +1,5 @@
 {
-  "name": "uwei",
+  "name": "jassijs",
   "version": "0.1.0",
   "description": "jassijs",
   "engines": {
@@ -8,7 +8,7 @@
   "main": "server/main2.js",
   "scripts": {
     "start": "node server/main2.js",
-    "build": "sh installnpm.sh",
+    "build": "npm install --prefix server",
     "test": "node out/test.js"
   },
   "dependencies": {

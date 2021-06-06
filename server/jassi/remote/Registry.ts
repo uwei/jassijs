@@ -247,17 +247,21 @@ export class Registry {
             var modules = JSON.parse(modultext).modules;
             for (let modul in modules) {
                 try { 
-                    //@ts-ignore
-                    delete require.cache[require.resolve(modul + "/registry")];
-                    var data = (await require(modul + "/registry")).default;
+                   
+                    try{
+                         //@ts-ignore
+                        delete require.cache[require.resolve(modul + "/registry")];
+                    }catch{
+                        //@ts-ignore
+                        var s=(require.main["path"]+"/"+modul + "/registry").replaceAll("\\","/")+".js";
+                        //@ts-ignore
+                        delete require.cache[s];
+                        //@ts-ignore
+                        delete require.cache[s.replaceAll("/","\\")];
+                    }
+                    var data = (await require.main.require(modul + "/registry")).default;
                     this.initJSONData(data);
-                    /*    //requirejs.undef("js/"+modul+"/registry.js");
-                        var text = fs.readFileSync("./../client/" + modul + "/registry.js", 'utf-8');
-                        text = text.substring(text.indexOf("default:") + 8);
-                        text = text.substring(0, text.lastIndexOf("}") - 1);
-                        text = text.substring(0, text.lastIndexOf("}") - 1);
-                        var d = JSON.parse(text)
-                        _*/
+     
                 } catch {
                     console.error("failed load registry " + modul + "/registry.js");
                 }

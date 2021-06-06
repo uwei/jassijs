@@ -33,24 +33,36 @@ export class Classes {
         var cl = await registry.getJSONData("$Class", classname);
         if (cl === undefined) {
             try {
-                await import(classname.replaceAll(".", "/"));
-            } catch(err) {
-                err=err;
+                //@ts-ignore
+                if (require.main) {//nodes load project class from module
+                    //@ts-ignore
+                    await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
+                } else {
+                    await import(classname.replaceAll(".", "/"));
+                }
+            } catch (err) {
+                err = err;
             }
         } else {
             if (cl === undefined || cl.length === 0) {
                 throw "Class not found:" + classname;
             }
- 
+
             var file = cl[0].filename;
             //@ts-ignore
             if (window.document === undefined) {
-                var pack=file.split("/");
-                if (pack.length<2||pack[1]!=="remote") {
+                var pack = file.split("/");
+                if (pack.length < 2 || pack[1] !== "remote") {
                     throw "failed loadClass " + classname + " on server only remote classes coud be loaded";
                 }
             }
-            var imp = await import(file.replace(".ts", ""));
+            //@ts-ignore
+            if (require.main) { //nodes load project class from module
+                //@ts-ignore
+                var imp = await Promise.resolve().then(() => require.main.require(file.replace(".ts", "")));
+            } else {
+                var imp = await import(file.replace(".ts", ""));
+            }
         }
         return this.getClass(classname);
     }
@@ -76,9 +88,9 @@ export class Classes {
     getClassName(_class): string {
         if (_class === undefined)
             return undefined;
-        if(_class.constructor?._classname)
+        if (_class.constructor?._classname)
             return _class.constructor?._classname;
-        if(_class.prototype?.constructor?._classname)
+        if (_class.prototype?.constructor?._classname)
             return _class.prototype?.constructor?._classname;
         return undefined;
     }

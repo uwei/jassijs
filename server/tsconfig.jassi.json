@@ -1,0 +1,16 @@
+{
+  "compilerOptions": { 
+    "target": "es2017",
+      "module": "commonjs",
+      "allowJs": true, 
+      "moduleResolution": "Node",
+      "lib": [ "es6" ],
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "declaration": true,
+      "outDir": ".././dist/server",
+      "rootDir": "./",
+  },
+  "include":["./jassi"],
+  
+}

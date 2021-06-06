@@ -11,7 +11,7 @@ define("jassi_editor/registry",["require"], function(require) {
 		"jassi_editor.ChromeDebugger": {}
 	},
 	"jassi_editor/CodeEditor.ts": {
-		"date": 1622806482247,
+		"date": 1622808358531,
 		"jassi_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": []
 		},

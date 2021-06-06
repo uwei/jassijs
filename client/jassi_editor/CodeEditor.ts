@@ -27,9 +27,9 @@ declare global {
 @$SettingsDescriptor()
 @$Class("jassi_editor.CodeEditorSettingsDescriptor")
 class CodeEditorSettingsDescriptor {
-    @$Property({ chooseFrom: ["ace", "monaco","aceOnBrowser"],default:"aceOnBrowser" })
+    @$Property({ chooseFrom: ["ace", "monaco","aceOnBrowser"],default:"aceOnBrowser",chooseFromStrict:true })
     Development_DefaultEditor: string;
-    @$Property({ chooseFrom: ["vs-dark","vs-light","hc-black"],default:"vs-light" })
+    @$Property({ chooseFrom: ["vs-dark","vs-light","hc-black"],default:"vs-light",chooseFromStrict:true })
     Development_MoanacoEditorTheme:string;
 }
 
@@ -55,10 +55,6 @@ export class CodeEditor extends Panel {
     private _line: number;
     constructor() {
         super();
-
-
-        console.log("use"+Settings.gets(Settings.keys.Development_DefaultEditor));
-        
         this.maximize();
         this._main = new DockingContainer();
         this._codeView = new Panel();

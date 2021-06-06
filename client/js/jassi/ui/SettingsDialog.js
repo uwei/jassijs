@@ -7,31 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Select", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/PropertyEditor", "jassi/ui/Button", "jassi/ui/Property", "jassi/remote/Settings", "jassi/ui/ComponentDescriptor", "jassi/remote/Registry", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, HTMLPanel_1, Select_1, Jassi_1, Panel_1, PropertyEditor_1, Button_1, Property_1, Settings_1, ComponentDescriptor_1, Registry_1, Actions_1, Windows_1) {
+define(["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Select", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/PropertyEditor", "jassi/ui/Button", "jassi/remote/Settings", "jassi/ui/ComponentDescriptor", "jassi/remote/Registry", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, HTMLPanel_1, Select_1, Jassi_1, Panel_1, PropertyEditor_1, Button_1, Settings_1, ComponentDescriptor_1, Registry_1, Actions_1, Windows_1) {
     "use strict";
     var SettingsDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.SettingsDialog = exports.Testuw = void 0;
-    let Testuw = class Testuw {
-    };
-    __decorate([
-        Property_1.$Property(),
-        __metadata("design:type", Number)
-    ], Testuw.prototype, "myuw", void 0);
-    Testuw = __decorate([
-        Settings_1.$SettingsDescriptor(),
-        Jassi_1.$Class("jassi_editor.Testuw")
-    ], Testuw);
-    exports.Testuw = Testuw;
-    let SettingsDialogCurrentSettings = class SettingsDialogCurrentSettings {
-    };
-    __decorate([
-        Property_1.$Property(),
-        __metadata("design:type", String)
-    ], SettingsDialogCurrentSettings.prototype, "test", void 0);
-    SettingsDialogCurrentSettings = __decorate([
-        Jassi_1.$Class("jassi.ui.SettingsDialogCurrentSettings")
-    ], SettingsDialogCurrentSettings);
+    exports.test = exports.SettingsDialog = void 0;
     let SettingsObject = class SettingsObject {
         static customComponentDescriptor() {
             var allcl = Registry_1.default.getData("$SettingsDescriptor");
@@ -101,6 +81,7 @@ define(["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Select", "jassi/re
             this.add(me.propertyeditor);
             this.add(me.Save);
             me.propertyeditor.width = "400";
+            me.propertyeditor.height = 145;
             me.Save.text = "Save";
             me.Save.onclick(function (event) {
                 _this.save();
@@ -110,9 +91,13 @@ define(["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Select", "jassi/re
             me.Scope.onchange(function (event) {
                 _this.update();
             });
-            me.htmlpanel1.width = "80";
-            me.htmlpanel1.value = "Settings for&nbsp;<br>";
             this.update();
+            me.htmlpanel1.value = "Settings for  ";
+            me.htmlpanel1.width = "80";
+            me.htmlpanel1.css({
+                font_size: "small",
+                font_weight: "bold"
+            });
         }
     };
     __decorate([

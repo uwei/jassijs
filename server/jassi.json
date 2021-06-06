@@ -1,8 +1,6 @@
 {
 	"modules": {
 		"jassi": "jassi",
-		"northwind": "northwind",
-		"de": "de",
-		"local": "local"
+		"tg": "tg"
 	}
 }
