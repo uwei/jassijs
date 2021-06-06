@@ -12,11 +12,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/security/ParentRight", "jassi/remote/security/User", "jassi/remote/security/Right"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, ParentRight_1, User_1, Right_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/ParentRight", "jassijs/remote/security/User", "jassijs/remote/security/Right"], function (require, exports, DBObject_1, jassijs_1, DatabaseSchema_1, ParentRight_1, User_1, Right_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Group = void 0;
-    //import "jassi/ext/enableExtension.js?de.Kunde";
+    //import "jassijs/ext/enableExtension.js?de.Kunde";
     let Group = class Group extends DBObject_1.DBObject {
     };
     __decorate([
@@ -42,8 +42,8 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
         __metadata("design:type", Array)
     ], Group.prototype, "users", void 0);
     Group = __decorate([
-        DBObject_1.$DBObject({ name: "jassi_group" }),
-        Jassi_1.$Class("jassi.remote.security.Group")
+        DBObject_1.$DBObject({ name: "jassijs_group" }),
+        jassijs_1.$Class("jassijs.remote.security.Group")
     ], Group);
     exports.Group = Group;
 });

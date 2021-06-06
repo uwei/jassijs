@@ -1,0 +1,54 @@
+import { $Class } from "jassijs/remote/Jassi";
+
+/**
+ * get a context object which is registred in a callerfunction
+ */
+@$Class("jassijs/remote/Context")
+export class Context {
+    objects = {}
+    static nextid = 1;
+    static all: Context[] = [];
+    constructor() {
+        Context.all.push(this);
+    }
+    /**
+     * @param name - the contextname
+     * @param obj - the object is saved to the context
+     * @param func - the function wich calls the childcontext
+     */
+    register(name: string, obj, func) {
+        var iname = "__context__" + name + Context.nextid;
+        this.objects[iname] = obj;
+        Context.nextid++;
+        this[iname] = function () {
+            return func();
+        };
+        let ret = this[iname]();
+        delete this[iname];
+        return ret;
+
+    }
+    /**
+     * gets the registred object in the context
+     */
+    static get(name: string) {
+        var stack = new Error().stack;
+        var test = stack.split("__context__" + name);
+
+        if (test.length > 1) {
+            var iname = "__context__" + name + test[1].substring(0, test[1].indexOf(" ")).replace("]", "");
+            for (let x = 0; x < Context.all.length; x++) {
+                var con = Context.all[x];
+                if (con.objects[iname])
+                    return con.objects[iname];
+            }
+        }
+        return undefined;
+
+    }
+    destroy() {
+        this.objects = {};
+        var pos = Context.all.indexOf(this);
+        Context.all.splice(pos, 1);
+    }
+}

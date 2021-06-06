@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "typeorm", "jassi/remote/Classes", "jassi/remote/Registry", "jassi/remote/security/User", "jassi/remote/Jassi"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, Jassi_1) {
+define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Jassi"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, jassijs_1) {
     "use strict";
     var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -229,7 +229,7 @@ define(["require", "exports", "typeorm", "jassi/remote/Classes", "jassi/remote/R
         async save(context, entity, options) {
             var _a;
             await this._checkParentRightsForSave(context, entity);
-            if (Classes_1.classes.getClassName(entity) === "jassi.remote.security.User" && entity.password !== undefined) {
+            if (Classes_1.classes.getClassName(entity) === "jassijs.remote.security.User" && entity.password !== undefined) {
                 entity.password = await new Promise((resolve) => {
                     const crypto = require('crypto');
                     const salt = crypto.randomBytes(8).toString('base64');
@@ -456,7 +456,7 @@ define(["require", "exports", "typeorm", "jassi/remote/Classes", "jassi/remote/R
         }
     };
     DBManager = DBManager_1 = __decorate([
-        Jassi_1.$Class("jassi_localserver.DBManager"),
+        jassijs_1.$Class("jassijs_localserver.DBManager"),
         __metadata("design:paramtypes", [])
     ], DBManager);
     exports.DBManager = DBManager;
@@ -541,7 +541,7 @@ define(["require", "exports", "typeorm", "jassi/remote/Classes", "jassi/remote/R
             var kk = context.request.user;
             var userid = context.request.user.user;
             var query = this.dbmanager.connection().createQueryBuilder().
-                select("me").from(Classes_1.classes.getClass("jassi.remote.security.ParentRight"), "me").
+                select("me").from(Classes_1.classes.getClass("jassijs.remote.security.ParentRight"), "me").
                 leftJoin("me.groups", "me_groups").
                 leftJoin("me_groups.users", "me_groups_users");
             query = query.andWhere("me_groups_users.id=:theUserId", { theUserId: userid });

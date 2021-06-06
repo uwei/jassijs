@@ -1,10 +1,10 @@
 
-import { $Class } from "jassi/remote/Jassi";
-import { classes } from "jassi/remote/Classes";
-import { $ActionProvider } from "jassi/base/Actions";
-import {Panel} from "jassi/ui/Panel";
-import {HTMLPanel} from "jassi/ui/HTMLPanel";
-import {Button} from "jassi/ui/Button";
+import { $Class } from "jassijs/remote/Jassi";
+import { classes } from "jassijs/remote/Classes";
+import { $ActionProvider } from "jassijs/base/Actions";
+import {Panel} from "jassijs/ui/Panel";
+import {HTMLPanel} from "jassijs/ui/HTMLPanel";
+import {Button} from "jassijs/ui/Button";
 
 @$ActionProvider("3")
 @$Class("de.KK3")

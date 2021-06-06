@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/ErrorPanel", "jassi/ui/Button", "jassi/remote/Registry", "jassi/remote/Server", "jassi/util/Reloader", "jassi/remote/Classes", "jassi/ui/Component", "jassi/ui/Property", "jassi/base/Tests", "jassi_editor/AcePanel", "jassi_editor/util/Typescript", "jassi_editor/MonacoPanel", "jassi/remote/Settings"], function (require, exports, Jassi_1, Panel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_1, Server_1, Reloader_1, Classes_1, Component_1, Property_1, Tests_1, AcePanel_1, Typescript_1, MonacoPanel_1, Settings_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/base/Tests", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings"], function (require, exports, jassijs_1, Panel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_1, Server_1, Reloader_1, Classes_1, Component_1, Property_1, Tests_1, AcePanel_1, Typescript_1, MonacoPanel_1, Settings_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -24,11 +24,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
     ], CodeEditorSettingsDescriptor.prototype, "Development_MoanacoEditorTheme", void 0);
     CodeEditorSettingsDescriptor = __decorate([
         Settings_1.$SettingsDescriptor(),
-        Jassi_1.$Class("jassi_editor.CodeEditorSettingsDescriptor")
+        jassijs_1.$Class("jassijs_editor.CodeEditorSettingsDescriptor")
     ], CodeEditorSettingsDescriptor);
     /**
      * Panel for editing sources
-     * @class jassi_editor.CodeEditor
+     * @class jassijs_editor.CodeEditor
      */
     let CodeEditor = CodeEditor_1 = class CodeEditor extends Panel_1.Panel {
         constructor() {
@@ -60,7 +60,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this._codePanel.height = "calc(100% - 31px)";
             let _this = this;
             this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
-                Jassi_1.default.debugger.breakpointChanged(_this._file, line, column, enable, type);
+                jassijs_1.default.debugger.breakpointChanged(_this._file, line, column, enable, type);
             });
         }
         _init() {
@@ -116,8 +116,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             goto.onclick(function () {
                 _this.gotoDeclaration();
             });
-            Jassi_1.default["$CodeEditor"] = CodeEditor_1;
-            $(goto.dom).attr("ondrop", "event.preventDefault();jassi.$CodeEditor.search(event.dataTransfer.getData('text'));");
+            jassijs_1.default["$CodeEditor"] = CodeEditor_1;
+            $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
             $(goto.dom).attr("ondragover", "event.preventDefault();");
             this._codeToolbar.add(goto);
             /*var test = new Button();
@@ -189,7 +189,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         /**
          * search text in classes at the given text
          * @param {string} text - the text to search
-         * @returns {jassi_editor.CodeEditor} - the editor instance
+         * @returns {jassijs_editor.CodeEditor} - the editor instance
          */
         static async search(text) {
             //TODO ask typescript service
@@ -223,8 +223,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
              }
              if (found !== undefined) {
                  var line = code.substring(0, content.indexOf(text)).split("\n").length + 1;
-                 router.navigate("#do=jassi_editor.CodeEditor&file=" + found + "&line=" + line.toString());
-                 //                return await jassi_editor.CodeEditor.open(found+":"+line.toString()+":0");
+                 router.navigate("#do=jassijs_editor.CodeEditor&file=" + found + "&line=" + line.toString());
+                 //                return await jassijs_editor.CodeEditor.open(found+":"+line.toString()+":0");
              }*/
             return undefined;
         }
@@ -290,14 +290,14 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             var _this = this;
             var breakpoints = _this._codePanel.getBreakpoints();
             var filename = _this._file.replace(".ts", "$temp.ts");
-            await Jassi_1.default.debugger.removeBreakpointsForFile(filename);
+            await jassijs_1.default.debugger.removeBreakpointsForFile(filename);
             for (var line in breakpoints) {
                 if (breakpoints[line]) {
                     var row = lines[line].length;
-                    await Jassi_1.default.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
+                    await jassijs_1.default.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
                 }
             }
-            var islocaldb = Classes_1.classes.getClass("jassi_localserver.DBManager");
+            var islocaldb = Classes_1.classes.getClass("jassijs_localserver.DBManager");
             if (islocaldb && code.indexOf("@$DBObject(") > -1) {
                 islocaldb.destroyConnection();
             }
@@ -318,8 +318,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                     _this.variables.addVariable("me", ret.me);
                     _this.variables.updateCache();
                     if (ret instanceof Component_1.Component && ret["reporttype"] === undefined) {
-                        require(["jassi_editor/ComponentDesigner"], function () {
-                            var ComponentDesigner = Classes_1.classes.getClass("jassi_editor.ComponentDesigner");
+                        require(["jassijs_editor/ComponentDesigner"], function () {
+                            var ComponentDesigner = Classes_1.classes.getClass("jassijs_editor.ComponentDesigner");
                             if (!((_this._design) instanceof ComponentDesigner)) {
                                 _this._design = new ComponentDesigner();
                                 _this._main.add(_this._design, "Design", "design");
@@ -329,16 +329,16 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                         });
                     }
                     else if (ret["reporttype"] !== undefined) {
-                        require(["jassi_report/designer/ReportDesigner"], function () {
-                            var ReportDesigner = Classes_1.classes.getClass("jassi_report.designer.ReportDesigner");
+                        require(["jassijs_report/designer/ReportDesigner"], function () {
+                            var ReportDesigner = Classes_1.classes.getClass("jassijs_report.designer.ReportDesigner");
                             if (!((_this._design) instanceof ReportDesigner)) {
                                 _this._design = new ReportDesigner();
                                 _this._main.add(_this._design, "Design", "design");
                                 _this._design["codeEditor"] = _this;
                             }
                             _this._design["designedComponent"] = ret;
-                            /*   require(["jassi_report/ReportDesign"], function() {
-                                   var rd = classes.getClass("jassi_report.ReportDesign");
+                            /*   require(["jassijs_report/ReportDesign"], function() {
+                                   var rd = classes.getClass("jassijs_report.ReportDesign");
                                    let rep = rd["fromJSON"](ret);
                                    
                                    _this._design["designedComponent"] = rep;
@@ -351,7 +351,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
         async saveTempFile(file, code) {
             //@ts-ignore 
-            var tss = await new Promise((resolve_1, reject_1) => { require(["jassi_editor/util/Typescript"], resolve_1, reject_1); });
+            var tss = await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); });
             var settings = Typescript_1.Typescript.compilerSettings;
             settings["inlineSourceMap"] = true;
             settings["inlineSources"] = true;
@@ -479,7 +479,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                 this._design["_componentExplorer"].update();
         }
         /**
-         * @member { jassi_editor.VariablePanel} - the variable
+         * @member { jassijs_editor.VariablePanel} - the variable
          */
         set variables(value) {
             this._variables = value;
@@ -586,13 +586,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         __metadata("design:paramtypes", [Number])
     ], CodeEditor.prototype, "line", null);
     CodeEditor = CodeEditor_1 = __decorate([
-        Jassi_1.$Class("jassi_editor.CodeEditor"),
+        jassijs_1.$Class("jassijs_editor.CodeEditor"),
         __metadata("design:paramtypes", [])
     ], CodeEditor);
     exports.CodeEditor = CodeEditor;
     async function test() {
         var editor = new CodeEditor();
-        var url = "jassi_editor/AcePanel.ts";
+        var url = "jassijs_editor/AcePanel.ts";
         editor.height = 500;
         await editor.openFile(url);
         return editor;

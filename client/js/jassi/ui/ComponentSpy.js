@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Table", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/remote/Classes", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Jassi_1, Panel_1, Table_1, HTMLPanel_1, Button_1, BoxPanel_1, Select_1, Classes_1, Actions_1, Router_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router"], function (require, exports, jassijs_1, Panel_1, Table_1, HTMLPanel_1, Button_1, BoxPanel_1, Select_1, Classes_1, Actions_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentSpy = void 0;
@@ -21,7 +21,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this.layout();
         }
         static async showDialog() {
-            Router_1.router.navigate("#do=jassi.ui.ComponentSpy");
+            Router_1.router.navigate("#do=jassijs.ui.ComponentSpy");
         }
         layout() {
             var me = this.me = {};
@@ -60,14 +60,14 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
         update() {
             var data = [];
-            for (var k in Jassi_1.default.componentSpy.ids) {
-                data.push(Jassi_1.default.componentSpy.ids[k]);
+            for (var k in jassijs_1.default.componentSpy.ids) {
+                data.push(jassijs_1.default.componentSpy.ids[k]);
             }
             this.me.IDTable.items = data;
         }
         clear() {
-            Jassi_1.default.componentSpy.ids = {};
-            Jassi_1.default.componentSpy.labelids = {};
+            jassijs_1.default.componentSpy.ids = {};
+            jassijs_1.default.componentSpy.labelids = {};
             this.update();
         }
         watch(component) {
@@ -114,14 +114,14 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         __metadata("design:returntype", Promise)
     ], ComponentSpy, "showDialog", null);
     ComponentSpy = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_1.$Class("jassi.ui.ComponentSpy"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
+        jassijs_1.$Class("jassijs.ui.ComponentSpy"),
         __metadata("design:paramtypes", [])
     ], ComponentSpy);
     exports.ComponentSpy = ComponentSpy;
-    Jassi_1.default.test = function () {
+    jassijs_1.default.test = function () {
         return new ComponentSpy();
     };
-    Jassi_1.default.componentSpy = new ComponentSpy();
+    jassijs_1.default.componentSpy = new ComponentSpy();
 });
 //# sourceMappingURL=ComponentSpy.js.map

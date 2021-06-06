@@ -1,10 +1,10 @@
-import {Panel} from "jassi/ui/Panel";
-import jassi from "jassi/jassi";
-import {HTMLPanel} from "jassi/ui/HTMLPanel";
-import {Textbox} from "jassi/ui/Textbox";
-import {Button} from "jassi/ui/Button";
-import {BoxPanel} from "jassi/ui/BoxPanel";
-import { $Class } from "jassi/remote/Jassi";
+import {Panel} from "jassijs/ui/Panel";
+import jassi from "jassijs/jassi";
+import {HTMLPanel} from "jassijs/ui/HTMLPanel";
+import {Textbox} from "jassijs/ui/Textbox";
+import {Button} from "jassijs/ui/Button";
+import {BoxPanel} from "jassijs/ui/BoxPanel";
+import { $Class } from "jassijs/remote/Jassi";
 
 @$Class("demo.DialogKunde2")
 export class DialogKunde2 extends Panel {

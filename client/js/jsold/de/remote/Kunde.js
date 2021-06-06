@@ -12,12 +12,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/DBObject", "de/remote/AR", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/DBObjectQuery", "jassi/remote/security/Rights", "de/remote/Kunde.ext"], function (require, exports, DBObject_1, AR_1, Jassi_1, DatabaseSchema_1, DBObjectQuery_1, Rights_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObjectQuery", "jassijs/remote/security/Rights", "de/remote/Kunde.ext"], function (require, exports, DBObject_1, AR_1, jassijs_1, DatabaseSchema_1, DBObjectQuery_1, Rights_1) {
     "use strict";
     var Kunde_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Kunde = void 0;
-    //import "jassi/ext/enableExtension.js?de.Kunde";
+    //import "jassijs/ext/enableExtension.js?de.Kunde";
     let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
         constructor() {
             super();
@@ -34,8 +34,8 @@ define(["require", "exports", "jassi/remote/DBObject", "de/remote/AR", "jassi/re
         }
         /**
         * add here all properties for the PropertyEditor
-        * @param {[jassi.ui.ComponentDescriptor]} desc - describe fields for propertyeditor
-        * e.g.  desc.fields.push(new jassi.ui.Property("id","number"));
+        * @param {[jassijs.ui.ComponentDescriptor]} desc - describe fields for propertyeditor
+        * e.g.  desc.fields.push(new jassijs.ui.Property("id","number"));
         */
         static describeComponent(desc) {
             desc.actions.push({
@@ -59,7 +59,7 @@ define(["require", "exports", "jassi/remote/DBObject", "de/remote/AR", "jassi/re
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
                 return man.find(context, this, options);
             }
         }
@@ -77,7 +77,7 @@ define(["require", "exports", "jassi/remote/DBObject", "de/remote/AR", "jassi/re
             await kunde3.save();
             await kunde4.save();
             //  $(document.body).html(h);
-            //jassi.db.delete(kunde);
+            //jassijs.db.delete(kunde);
         }
     };
     __decorate([
@@ -136,7 +136,7 @@ define(["require", "exports", "jassi/remote/DBObject", "de/remote/AR", "jassi/re
                     i2: "bis"
                 } }]),
         DBObject_1.$DBObject(),
-        Jassi_1.$Class("de.Kunde"),
+        jassijs_1.$Class("de.Kunde"),
         __metadata("design:paramtypes", [])
     ], Kunde);
     exports.Kunde = Kunde;
@@ -154,7 +154,7 @@ define(["require", "exports", "jassi/remote/DBObject", "de/remote/AR", "jassi/re
         k.PLZ = "99992";
         k.save();
         //	new de.Kunde().generate();
-        //jassi.db.uploadType(de.Kunde);
+        //jassijs.db.uploadType(de.Kunde);
     }
     exports.test = test;
     ;

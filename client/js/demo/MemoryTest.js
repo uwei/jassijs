@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/remote/Server", "jassi/util/Reloader", "jassi/remote/Registry"], function (require, exports, Server_1, Reloader_1, Registry_1) {
+define(["require", "exports", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Registry"], function (require, exports, Server_1, Reloader_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MemoryTest = void 0;

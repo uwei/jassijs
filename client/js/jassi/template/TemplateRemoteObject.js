@@ -7,12 +7,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/base/Actions", "jassi/remote/Jassi", "jassi/ui/OptionDialog", "jassi/ui/FileExplorer"], function (require, exports, Actions_1, Jassi_1, OptionDialog_1, FileExplorer_1) {
+define(["require", "exports", "jassijs/base/Actions", "jassijs/remote/Jassi", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_1, jassijs_1, OptionDialog_1, FileExplorer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateRemoteObject = void 0;
-    const code = `import { $Class } from "jassi/remote/Jassi";
-import { Context, RemoteObject } from "jassi/remote/RemoteObject";
+    const code = `import { $Class } from "jassijs/remote/Jassi";
+import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 
 @$Class("{{fullclassname}}")
 export class {{name}} extends RemoteObject{
@@ -52,8 +52,8 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateRemoteObject, "newFile", null);
     TemplateRemoteObject = __decorate([
-        Actions_1.$ActionProvider("jassi.remote.FileNode"),
-        Jassi_1.$Class("jassi.template.TemplateRemoteObject")
+        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
+        jassijs_1.$Class("jassijs.template.TemplateRemoteObject")
     ], TemplateRemoteObject);
     exports.TemplateRemoteObject = TemplateRemoteObject;
 });

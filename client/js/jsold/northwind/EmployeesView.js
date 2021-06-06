@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Employees", "jassi/ui/DBObjectView"], function (require, exports, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Image_1, Textarea_1, Calendar_1, Textbox_1, Button_1, Jassi_1, Property_1, Employees_1, DBObjectView_1) {
+define(["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Calendar", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView"], function (require, exports, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Image_1, Textarea_1, Calendar_1, Textbox_1, Button_1, jassijs_1, Property_1, Employees_1, DBObjectView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmployeesView = void 0;
@@ -166,12 +166,12 @@ define(["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "j
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Employees_1.Employees)
     ], EmployeesView.prototype, "value", void 0);
     EmployeesView = __decorate([
         DBObjectView_1.$DBObjectView({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" }),
-        Jassi_1.$Class("northwind.EmployeesView"),
+        jassijs_1.$Class("northwind.EmployeesView"),
         __metadata("design:paramtypes", [])
     ], EmployeesView);
     exports.EmployeesView = EmployeesView;

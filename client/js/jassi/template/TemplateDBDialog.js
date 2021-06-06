@@ -7,17 +7,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/base/Actions", "jassi/remote/Jassi", "jassi/ui/OptionDialog", "jassi/ui/FileExplorer", "jassi/ui/Property", "jassi/remote/DBObject", "jassi/remote/Classes", "jassi/remote/Registry"], function (require, exports, Actions_1, Jassi_1, OptionDialog_1, FileExplorer_1, Property_1, DBObject_1, Classes_1, Registry_1) {
+define(["require", "exports", "jassijs/base/Actions", "jassijs/remote/Jassi", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer", "jassijs/ui/Property", "jassijs/remote/DBObject", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Actions_1, jassijs_1, OptionDialog_1, FileExplorer_1, Property_1, DBObject_1, Classes_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateDBDialog = exports.TemplateDBDialogProperties = void 0;
-    const code = `import { $Class } from "jassi/remote/Jassi";
-import {Panel} from "jassi/ui/Panel";
-import { $Property } from "jassi/ui/Property";
+    const code = `import { $Class } from "jassijs/remote/Jassi";
+import {Panel} from "jassijs/ui/Panel";
+import { $Property } from "jassijs/ui/Property";
 import { {{dbclassname}} } from "{{dbfilename}}";
-import { Databinder } from "jassi/ui/Databinder";
-import { DBObjectView,  $DBObjectView, DBObjectViewMe } from "jassi/ui/DBObjectView";
-import { DBObjectDialog } from "jassi/ui/DBObjectDialog";
+import { Databinder } from "jassijs/ui/Databinder";
+import { DBObjectView,  $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
+import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
 
 type Me = {
 }&DBObjectViewMe
@@ -26,7 +26,7 @@ type Me = {
 @$Class("{{fullclassname}}")
 export class {{dialogname}} extends DBObjectView {
     me: Me;
-    @$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" })
+    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
     value: {{dbclassname}};
     constructor() {
         super();
@@ -57,7 +57,7 @@ export async function test(){
         __metadata("design:type", DBObject_1.DBObject)
     ], TemplateDBDialogProperties.prototype, "dbobject", void 0);
     TemplateDBDialogProperties = __decorate([
-        Jassi_1.$Class("jassi.template.TemplateDBDialogProperties")
+        jassijs_1.$Class("jassijs.template.TemplateDBDialogProperties")
     ], TemplateDBDialogProperties);
     exports.TemplateDBDialogProperties = TemplateDBDialogProperties;
     let TemplateDBDialog = class TemplateDBDialog {
@@ -92,8 +92,8 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateDBDialog, "newFile", null);
     TemplateDBDialog = __decorate([
-        Actions_1.$ActionProvider("jassi.remote.FileNode"),
-        Jassi_1.$Class("jassi.ui.TemplateDBDialog")
+        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
+        jassijs_1.$Class("jassijs.ui.TemplateDBDialog")
     ], TemplateDBDialog);
     exports.TemplateDBDialog = TemplateDBDialog;
 });

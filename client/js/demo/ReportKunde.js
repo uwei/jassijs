@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi", "jassi/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_1, Jassi_1, Property_1, Kunde_1) {
+define(["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_1, Jassi_1, Property_1, Kunde_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportKunde = void 0;
@@ -27,7 +27,7 @@ define(["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi",
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Kunde_1.Kunde)
     ], ReportKunde.prototype, "value", void 0);
     ReportKunde = __decorate([
@@ -39,7 +39,7 @@ define(["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi",
         // kk.o=0;
         var dlg = new ReportKunde();
         //  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};
-        //	dlg.value=jassi.db.load("de.Kunde",9);	
+        //	dlg.value=jassijs.db.load("de.Kunde",9);	
         //console.log(JSON.stringify(dlg.toJSON()));
         return dlg;
     }

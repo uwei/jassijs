@@ -7,26 +7,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext/goldenlayout", "jassi/ui/ComponentDescriptor", "jassi/remote/Classes", "jassi/util/Cookies"], function (require, exports, Panel_1, Jassi_1, goldenlayout_1, ComponentDescriptor_1, Classes_1, Cookies_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ext/goldenlayout", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/util/Cookies"], function (require, exports, Panel_1, jassijs_1, goldenlayout_1, ComponentDescriptor_1, Classes_1, Cookies_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Windows = void 0;
     let Windows = class Windows {
         /**
-         * the window system -> jassi.windows
-         * @class jassi.base.Windows
+         * the window system -> jassijs.windows
+         * @class jassijs.base.Windows
          */
         constructor() {
             this._noRestore = [];
             this._myLayout = undefined;
             this._counter = 0;
-            this._id = "jassi.windows";
-            this.dom = $('<div class="Windows" id="' + this._id + 'jassi.windows"/>')[0];
+            this._id = "jassijs.windows";
+            this.dom = $('<div class="Windows" id="' + this._id + 'jassijs.windows"/>')[0];
             this._desktop = new Panel_1.Panel();
             this._desktop.maximize();
             //@member {Object.<string,lm.items.Component>} holds all known windows 
             this.components = [];
-            //  this._desktop.add(new jassi.ui.Button());
+            //  this._desktop.add(new jassijs.ui.Button());
             $(document.body).append(this.dom);
             //formemoryleak
             this._init();
@@ -111,7 +111,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
         /**
          * finds the component for the name
          * @param {string} name - the name of the window
-         * @returns {jassi.ui.Component} - the found dom element
+         * @returns {jassijs.ui.Component} - the found dom element
          */
         findComponent(name) {
             var m = this.components[name]; //this._find(this._myLayout.root,name);
@@ -125,7 +125,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
         }
         /**
          * adds a window to the side (left - area)
-         * @param {dom|jassi.ui.Component} component - the component to add
+         * @param {dom|jassijs.ui.Component} component - the component to add
          * @param {string} title - the title
          */
         addLeft(component, title) {
@@ -153,7 +153,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
         }
         /**
         * adds a window to the side (left - area)
-        * @param {dom|jassi.ui.Component} component - the component to add
+        * @param {dom|jassijs.ui.Component} component - the component to add
         * @param {string} title - the title
         */
         addRight(component, title) {
@@ -187,7 +187,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
         }
         /**
          * add a window to the main area
-         * @param {dom|jassi.ui.Component} component - the component to add
+         * @param {dom|jassijs.ui.Component} component - the component to add
          * @param {string} title - the title
          * @param {string} [id] - the name (id) - =title if undefined
          */
@@ -269,7 +269,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
         }
         /**
          * gets the url for the given component
-         * @param {jassi.ui.component} comp - the component to read
+         * @param {jassijs.ui.component} comp - the component to read
          */
         getUrlFromComponent(comp) {
             var props = ComponentDescriptor_1.ComponentDescriptor.describe(comp.constructor).fields;
@@ -320,7 +320,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
         }
         /**
          * fired if component is closing
-         * @param {dom|jassi.UI.Component} component - the component to register this event
+         * @param {dom|jassijs.UI.Component} component - the component to register this event
          * @param {function} func
          */
         onclose(component, func) {
@@ -332,7 +332,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
         }
     };
     Windows = __decorate([
-        Jassi_1.$Class("jassi.base.Windows"),
+        jassijs_1.$Class("jassijs.base.Windows"),
         __metadata("design:paramtypes", [])
     ], Windows);
     exports.Windows = Windows;
@@ -341,7 +341,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ext
     exports.default = windows;
 });
 //   myRequire("lib/goldenlayout.js",function(){
-//  jassi.windows._init();
+//  jassijs.windows._init();
 //  });
 //return Component.constructor;
 //# sourceMappingURL=Windows.js.map

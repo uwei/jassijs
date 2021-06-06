@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/security/Group"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, Group_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group"], function (require, exports, DBObject_1, jassijs_1, DatabaseSchema_1, Group_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ParentRight = void 0;
-    //import "jassi/ext/enableExtension.js?de.Kunde";
+    //import "jassijs/ext/enableExtension.js?de.Kunde";
     let ParentRight = class ParentRight extends DBObject_1.DBObject {
     };
     __decorate([
@@ -47,8 +47,8 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
         __metadata("design:type", Array)
     ], ParentRight.prototype, "groups", void 0);
     ParentRight = __decorate([
-        DBObject_1.$DBObject({ name: "jassi_parentright" }),
-        Jassi_1.$Class("jassi.security.ParentRight")
+        DBObject_1.$DBObject({ name: "jassijs_parentright" }),
+        jassijs_1.$Class("jassijs.security.ParentRight")
     ], ParentRight);
     exports.ParentRight = ParentRight;
 });

@@ -7,14 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/Registry", "jassi/ui/PropertyEditors/LoadingEditor"], function (require, exports, Jassi_1, Classes_1, Registry_1, LoadingEditor_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/LoadingEditor"], function (require, exports, jassijs_1, Classes_1, Registry_1, LoadingEditor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.propertyeditor = exports.PropertyEditorService = void 0;
     let PropertyEditorService = class PropertyEditorService {
         /**
         * manage all PropertyEditors
-        * @class jassi.ui.PropertyEditorService
+        * @class jassijs.ui.PropertyEditorService
         */
         constructor() {
             /** @member {Object.<string,[class]>}
@@ -45,8 +45,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
          * creates PropertyEditor for type
          *
          * @param {string} variablename - the name of the variable
-         * @param {jassi.ui.Property} property - name of the type
-         * @param {jassi.ui.PropertyEditor} propertyEditor - the PropertyEditor instance
+         * @param {jassijs.ui.Property} property - name of the type
+         * @param {jassijs.ui.PropertyEditor} propertyEditor - the PropertyEditor instance
          */
         createFor(property, propertyEditor) {
             var sclass = undefined;
@@ -82,7 +82,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         }
     };
     PropertyEditorService = __decorate([
-        Jassi_1.$Class("jassi.base.PropertyEditorService"),
+        jassijs_1.$Class("jassijs.base.PropertyEditorService"),
         __metadata("design:paramtypes", [])
     ], PropertyEditorService);
     exports.PropertyEditorService = PropertyEditorService;

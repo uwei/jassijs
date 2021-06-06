@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi"], function (require, exports, Component_1, Property_1, Jassi_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Jassi"], function (require, exports, Component_1, Property_1, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DataComponent = void 0;
@@ -20,7 +20,7 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
     let DataComponent = class DataComponent extends Component_1.Component {
         /**
         * base class for each Component
-        * @class jassi.ui.Component
+        * @class jassijs.ui.Component
          * @param {object} properties - properties to init
          * @param {string} [properties.id] -  connect to existing id (not reqired)
          *
@@ -43,7 +43,7 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
         }
         /**
          * binds a component to a databinder
-         * @param {jassi.ui.Databinder} databinder - the databinder to bind
+         * @param {jassijs.ui.Databinder} databinder - the databinder to bind
          * @param {string} property - the property to bind
          */
         bind(databinder, property) {
@@ -71,7 +71,7 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Property", "jassi/
         __metadata("design:returntype", void 0)
     ], DataComponent.prototype, "bind", null);
     DataComponent = __decorate([
-        Jassi_1.$Class("jassi.ui.DataComponent"),
+        jassijs_1.$Class("jassijs.ui.DataComponent"),
         __metadata("design:paramtypes", [Object])
     ], DataComponent);
     exports.DataComponent = DataComponent;

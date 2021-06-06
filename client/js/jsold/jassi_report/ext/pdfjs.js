@@ -11,7 +11,7 @@
         'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
         }
   });*/
-define("jassi_report/ext/pdfjs", ["pdfjs-dist/build/pdf", "pdfjs-dist/build/pdf.worker"], function (pdfjs, worker, pdfjsWorker) {
+define("jassijs_report/ext/pdfjs", ["pdfjs-dist/build/pdf", "pdfjs-dist/build/pdf.worker"], function (pdfjs, worker, pdfjsWorker) {
     pdfjs.GlobalWorkerOptions.workerSrc = '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
     //pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     return {

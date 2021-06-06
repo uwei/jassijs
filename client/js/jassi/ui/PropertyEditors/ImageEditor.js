@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/base/Actions"], function (require, exports, Editor_1, Jassi_1, Panel_1, Textbox_1, Button_1, Actions_1) {
+define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions"], function (require, exports, Editor_1, jassijs_1, Panel_1, Textbox_1, Button_1, Actions_1) {
     "use strict";
     var ImageEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -16,7 +16,7 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/J
         /**
          * Checkbox Editor for boolean values
          * used by PropertyEditor
-         * @class jassi.ui.PropertyEditors.BooleanEditor
+         * @class jassijs.ui.PropertyEditors.BooleanEditor
          */
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
@@ -95,7 +95,7 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/J
                             ic.setAttribute("style", "display:none");
                     }
                 });
-                var file = (await new Promise((resolve_1, reject_1) => { require(["jassi/modul"], resolve_1, reject_1); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
+                var file = (await new Promise((resolve_1, reject_1) => { require(["jassijs/modul"], resolve_1, reject_1); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
                 var text = await $.ajax({ method: "get", url: file, crossDomain: true, contentType: "text/plain" });
                 var all = text.split("}.");
                 var html = "";
@@ -125,9 +125,9 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/J
         __metadata("design:returntype", Promise)
     ], ImageEditor, "show", null);
     ImageEditor = ImageEditor_1 = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
         Editor_1.$PropertyEditor(["image"]),
-        Jassi_1.$Class("jassi.ui.PropertyEditors.ImageEditor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.ImageEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ImageEditor);
     exports.ImageEditor = ImageEditor;

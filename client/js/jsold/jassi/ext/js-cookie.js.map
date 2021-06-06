@@ -1,1 +1,1 @@
-{"version":3,"file":"js-cookie.js","sourceRoot":"","sources":["../../../../jsold/jassi/ext/js-cookie.js"],"names":[],"mappings":"AAAA,MAAM,CAAC,qBAAqB,EAAE,CAAC,WAAW,CAAC,EAAE,UAAU,MAAM;IACzD,OAAO;QACH,OAAO,EAAE,MAAM;KAClB,CAAC;AACN,CAAC,CAAC,CAAC;AACH,qCAAqC"}
+{"version":3,"file":"js-cookie.js","sourceRoot":"","sources":["../../../../jsold/jassijs/ext/js-cookie.js"],"names":[],"mappings":"AAAA,MAAM,CAAC,qBAAqB,EAAE,CAAC,WAAW,CAAC,EAAE,UAAU,MAAM;IACzD,OAAO;QACH,OAAO,EAAE,MAAM;KAClB,CAAC;AACN,CAAC,CAAC,CAAC;AACH,qCAAqC"}

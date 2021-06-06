@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
                 r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteProtocol"], function (require, exports, Jassi_1, Classes_1, RemoteProtocol_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol"], function (require, exports, jassijs_1, Classes_1, RemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteObject = exports.Context = void 0;
@@ -17,7 +17,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
     exports.Context = Context;
     let RemoteObject = class RemoteObject {
         static async call(method, ...parameter) {
-            if (Jassi_1.default.isServer)
+            if (jassijs_1.default.isServer)
                 throw "should be called on client";
             var prot = new RemoteProtocol_1.RemoteProtocol();
             var context = parameter[parameter.length - 1];
@@ -31,7 +31,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                 ret = await context.transactionitem.transaction.wait(context.transactionitem, prot);
                 return ret;
             }
-            //let Transaction= (await import("jassi/remote/Transaction")).Transaction;
+            //let Transaction= (await import("jassijs/remote/Transaction")).Transaction;
             //var trans=Transaction.cache.get(_this);
             //if(trans&&trans[method.name]){
             //	throw "not implemented"
@@ -41,7 +41,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             return ret;
         }
         async call(_this, method, ...parameter) {
-            if (Jassi_1.default.isServer)
+            if (jassijs_1.default.isServer)
                 throw "should be called on client";
             var prot = new RemoteProtocol_1.RemoteProtocol();
             var context = parameter[parameter.length - 1];
@@ -51,8 +51,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             prot.method = method.name;
             prot.parameter.splice(parameter.length - 1, 1);
             var ret;
-            //let context=(await import("jassi/remote/Context")).Context;
-            //let Transaction= (await import("jassi/remote/Transaction")).Transaction;
+            //let context=(await import("jassijs/remote/Context")).Context;
+            //let Transaction= (await import("jassijs/remote/Transaction")).Transaction;
             //var trans=Transaction.cache.get(_this);
             //var trans=context.get("transaction");
             if (context === null || context === void 0 ? void 0 : context.transactionitem) {
@@ -64,7 +64,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         }
     };
     RemoteObject = __decorate([
-        Jassi_1.$Class("jassi.remote.RemoteObject")
+        jassijs_1.$Class("jassijs.remote.RemoteObject")
     ], RemoteObject);
     exports.RemoteObject = RemoteObject;
 });

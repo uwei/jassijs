@@ -19,7 +19,7 @@ define("de/registry", ["require"], function (require) {
                 "date": 1615590194855,
                 "de.DialogKunde": {
                     "$ActionProvider": [
-                        "jassi.base.ActionNode"
+                        "jassijs.base.ActionNode"
                     ]
                 }
             },

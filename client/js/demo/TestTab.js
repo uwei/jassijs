@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Actions", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/Button"], function (require, exports, Jassi_1, Actions_1, Panel_1, HTMLPanel_1, Button_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button"], function (require, exports, Jassi_1, Actions_1, Panel_1, HTMLPanel_1, Button_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.KK4 = exports.KK3 = void 0;

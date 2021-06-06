@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Server", "jassi_editor/ext/monaco", "jassi/ext/requestidlecallback"], function (require, exports, Jassi_1, Server_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Server", "jassijs_editor/ext/monaco", "jassijs/ext/requestidlecallback"], function (require, exports, jassijs_1, Server_1) {
     "use strict";
     var Typescript_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -33,7 +33,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Server", "jass
          */
         async transpile(fileName, content, compilerSettings = undefined) {
             //@ts-ignore
-            //await import("jassi/ext/typescript");
+            //await import("jassijs/ext/typescript");
             var ret = { fileNames: [fileName], contents: [content] };
             /*  var opt = {
                 //  compilerOptions: {
@@ -82,7 +82,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Server", "jass
         //load  d.ts from modulpackage
         async includeModulTypes() {
             var nodeFiles = {};
-            for (var mod in Jassi_1.default.modules) {
+            for (var mod in jassijs_1.default.modules) {
                 var config = (await new Promise((resolve_1, reject_1) => { require([mod + "/modul"], resolve_1, reject_1); })).default;
                 if (config.types) {
                     for (var key in config.types) {
@@ -103,7 +103,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Server", "jass
             Typescript_1._isInited = false;
             Typescript_1.initMonaco();
             //@ts-ignore
-            //  import("jassi/ext/typescript").then(async function(ts1) {
+            //  import("jassijs/ext/typescript").then(async function(ts1) {
             Typescript_1.ts = ts;
             var _this = this;
             var f = (await new Server_1.Server().dir(true)).resolveChilds();
@@ -114,7 +114,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Server", "jass
             for (let x in f) {
                 let fname = f[x].fullpath;
                 let fdat = f[x].date;
-                //include js in jassi/ext
+                //include js in jassijs/ext
                 if (fname.startsWith("node_modules"))
                     continue;
                 if (fname.toLowerCase().endsWith(".ts") || fname.toLowerCase().endsWith(".js") || fname.toLowerCase().endsWith(".json")) {
@@ -221,7 +221,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Server", "jass
         }
         /**
          * get the code for a file
-         * @params file - the filename e.g. jassi/base/Parser.ts
+         * @params file - the filename e.g. jassijs/base/Parser.ts
          */
         getCode(file) {
             var ffile = monaco.Uri.from({ path: "/" + file, scheme: 'file' });
@@ -413,7 +413,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Server", "jass
         experimentalDecorators: true,
     };
     Typescript = Typescript_1 = __decorate([
-        Jassi_1.$Class("jassi_editor.util.Typescript"),
+        jassijs_1.$Class("jassijs_editor.util.Typescript"),
         __metadata("design:paramtypes", [])
     ], Typescript);
     exports.Typescript = Typescript;

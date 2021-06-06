@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/RemoteObject", "jassi/remote/Registry", "jassi/util/DatabaseSchema", "jassi/remote/Database"], function (require, exports, Jassi_1, Classes_1, RemoteObject_1, Registry_1, DatabaseSchema_1, Database_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database"], function (require, exports, jassijs_1, Classes_1, RemoteObject_1, Registry_1, DatabaseSchema_1, Database_1) {
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -30,7 +30,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
     exports.MyFindManyOptions = MyFindManyOptions;
     /**
     * base class for all database entfities
-    * all objects which use the jassi.db must implement this
+    * all objects which use the jassijs.db must implement this
     * @class DBObject
     */
     let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
@@ -100,7 +100,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             return ret;
         }
         /**
-        * save the object to jassi.db
+        * save the object to jassijs.db
         */
         async save(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -145,9 +145,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
                 return man.save(context, this);
-                // return ["jassi/base/ChromeDebugger.ts"];
+                // return ["jassijs/base/ChromeDebugger.ts"];
             }
         }
         async _createObjectInDB(context = undefined) {
@@ -156,7 +156,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_2, reject_2) => { require(["jassi/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
+                var man = await (await new Promise((resolve_2, reject_2) => { require(["jassijs/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
                 return man.insert(context, this);
             }
         }
@@ -166,7 +166,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_3, reject_3) => { require(["jassi/server/DBManager"], resolve_3, reject_3); })).DBManager.get();
+                var man = await (await new Promise((resolve_3, reject_3) => { require(["jassijs/server/DBManager"], resolve_3, reject_3); })).DBManager.get();
                 return man.findOne(context, this, options);
             }
         }
@@ -176,12 +176,12 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_4, reject_4) => { require(["jassi/server/DBManager"], resolve_4, reject_4); })).DBManager.get();
+                var man = await (await new Promise((resolve_4, reject_4) => { require(["jassijs/server/DBManager"], resolve_4, reject_4); })).DBManager.get();
                 return man.find(context, this, options);
             }
         }
         /**
-        * reload the object from jassi.db
+        * reload the object from jassijs.db
         */
         async remove(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -194,7 +194,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_5, reject_5) => { require(["jassi/server/DBManager"], resolve_5, reject_5); })).DBManager.get();
+                var man = await (await new Promise((resolve_5, reject_5) => { require(["jassijs/server/DBManager"], resolve_5, reject_5); })).DBManager.get();
                 await man.remove(context, this);
             }
         }
@@ -206,7 +206,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
     DBObject.cache = {};
     DBObject._init = DBObject_1._initFunc();
     DBObject = DBObject_1 = __decorate([
-        Jassi_1.$Class("jassi.remote.DBObject"),
+        jassijs_1.$Class("jassijs.remote.DBObject"),
         __metadata("design:paramtypes", [])
     ], DBObject);
     exports.DBObject = DBObject;

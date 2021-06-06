@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Server", "jassi/base/Router", "jassi/base/Actions", "jassi/ui/OptionDialog", "jassi_editor/util/Typescript", "jassi/ui/ContextMenu"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Server_1, Router_1, Actions_1, OptionDialog_1, Typescript_1, ContextMenu_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs_editor/util/Typescript", "jassijs/ui/ContextMenu"], function (require, exports, jassijs_1, Tree_1, Panel_1, Textbox_1, Server_1, Router_1, Actions_1, OptionDialog_1, Typescript_1, ContextMenu_1) {
     "use strict";
     var FileExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -44,7 +44,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
                 await FileExplorer.instance.refresh();
                 await FileExplorer.instance.tree.activateKey(newkey);
                 if (open)
-                    Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + newkey.replaceAll("|", "/"));
+                    Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + newkey.replaceAll("|", "/"));
             }
             catch (err) {
                 debugger;
@@ -135,7 +135,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             var node = all[0];
             if (node.isDirectory())
                 return;
-            Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + node.fullpath);
+            Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + node.fullpath);
         }
     };
     __decorate([
@@ -202,8 +202,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
         __metadata("design:returntype", Promise)
     ], FileActions, "open", null);
     FileActions = __decorate([
-        Actions_1.$ActionProvider("jassi.remote.FileNode"),
-        Jassi_1.$Class("jassi.ui.FileActions")
+        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
+        jassijs_1.$Class("jassijs.ui.FileActions")
     ], FileActions);
     exports.FileActions = FileActions;
     let FileExplorer = FileExplorer_1 = class FileExplorer extends Panel_1.Panel {
@@ -270,7 +270,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
     };
     FileExplorer.instance = undefined;
     FileExplorer = FileExplorer_1 = __decorate([
-        Jassi_1.$Class("jassi.ui.FileExplorer"),
+        jassijs_1.$Class("jassijs.ui.FileExplorer"),
         __metadata("design:paramtypes", [])
     ], FileExplorer);
     exports.FileExplorer = FileExplorer;

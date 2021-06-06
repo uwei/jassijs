@@ -3,26 +3,26 @@ define("demo/registry",["require"], function(require) {
  return {
   default: {
 	"demo/DBTest.ts": {
-		"date": 1613330812615
+		"date": 1622984379898
 	},
 	"demo/Dialog.ts": {
-		"date": 1614895450330,
+		"date": 1622984213677,
 		"demo/Dialog": {}
 	},
 	"demo/DialogKunde2.ts": {
-		"date": 1613391153926,
+		"date": 1622984213677,
 		"demo.DialogKunde2": {}
 	},
 	"demo/DK.ts": {
-		"date": 1614892605286,
+		"date": 1622985638961,
 		"demo.DK": {}
 	},
 	"demo/EmptyDialog.ts": {
-		"date": 1613218544157,
+		"date": 1622984213677,
 		"demo.EmptyDialog": {}
 	},
 	"demo/KundeView.ts": {
-		"date": 1617199730431,
+		"date": 1622984379898,
 		"demo.KundeView": {
 			"$DBObjectView": [
 				{
@@ -32,31 +32,31 @@ define("demo/registry",["require"], function(require) {
 		}
 	},
 	"demo/MemoryTest.ts": {
-		"date": 1615317035748
+		"date": 1622984213677
 	},
 	"demo/modul.ts": {
 		"date": 1612818333557
 	},
 	"demo/ParentRightCheck.ts": {
-		"date": 1613330812615
+		"date": 1622984213677
 	},
 	"demo/ReportKunde.ts": {
-		"date": 1613330812614,
+		"date": 1622984379892,
 		"demo.ReportKunde": {}
 	},
 	"demo/ReportRechnung.ts": {
-		"date": 1615756706461,
+		"date": 1622984379897,
 		"demo.ReportRechnung": {}
 	},
 	"demo/StyleDialog.ts": {
-		"date": 1613218544157,
+		"date": 1622984213677,
 		"demo/StyleDialog": {}
 	},
 	"demo/TableContextmenu.ts": {
-		"date": 1588526093408
+		"date": 1622984379892
 	},
 	"demo/TestComponent.ts": {
-		"date": 1613218544158,
+		"date": 1622984213677,
 		"demo.TestComponent": {
 			"$UIComponent": [
 				{
@@ -70,18 +70,18 @@ define("demo/registry",["require"], function(require) {
 		}
 	},
 	"demo/Testcontextmenu.ts": {
-		"date": 1613394627144,
+		"date": 1622984213677,
 		"demo.Testcontextmenu": {}
 	},
 	"demo/TestExtension.ts": {
 		"date": 1613330812614
 	},
 	"demo/Testmenu.ts": {
-		"date": 1613218544157,
+		"date": 1622985794017,
 		"demo.Testmenu": {}
 	},
 	"demo/TestTab.ts": {
-		"date": 1613218544160,
+		"date": 1622984213677,
 		"de.KK3": {
 			"$ActionProvider": [
 				"3"
@@ -94,18 +94,18 @@ define("demo/registry",["require"], function(require) {
 		}
 	},
 	"demo/TestTree.ts": {
-		"date": 1613218544157,
+		"date": 1622984213677,
 		"demo.TestTree": {}
 	},
 	"demo/TestUpload.ts": {
-		"date": 1613218544157,
+		"date": 1622984213677,
 		"demo/TestUpload": {}
 	},
 	"demo/TreeContextmenu.ts": {
-		"date": 1612387959952
+		"date": 1622984213677
 	},
 	"demo/TreeTable.ts": {
-		"date": 1613914171753,
+		"date": 1622984213677,
 		"demo.TreeTable": {}
 	}
 }

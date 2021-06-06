@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/security/Rights", "de/remote/AR"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, Rights_1, AR_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "de/remote/AR"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, Rights_1, AR_1) {
     "use strict";
     var ARZeile_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -22,7 +22,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
                 return man.find(context, this, options);
             }
         }
@@ -45,15 +45,15 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
             /*var z1=new de.ARZeile();
             z1.id=110;
             z1.text="lkjlk";
-            jassi.db.save(z1);
+            jassijs.db.save(z1);
             var z2=new de.ARZeile();
             z2.id=120;
             z2.text="lddkjlk";
-            jassi.db.save(z2);
-            var ar=jassi.db.load("de.AR",30);
-            ar.zeilen=new jassi.base.DBArray(z1,z2);
-            jassi.db.save(ar);
-            var arz=jassi.db.load("de.ARZeile",1);
+            jassijs.db.save(z2);
+            var ar=jassijs.db.load("de.AR",30);
+            ar.zeilen=new jassijs.base.DBArray(z1,z2);
+            jassijs.db.save(ar);
+            var arz=jassijs.db.load("de.ARZeile",1);
             var test=ar.zeilen;*/
         }
     };
@@ -91,7 +91,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
         var z = new ARZeile();
         z.id = 150;
         z.text = "jjj";
-        //   jassi.db.save(z);
+        //   jassijs.db.save(z);
         return undefined;
     };
 });

@@ -1,23 +1,23 @@
-import { Tree } from "jassi/ui/Tree";
-import { Panel } from "jassi/ui/Panel";
+import { Tree } from "jassijs/ui/Tree";
+import { Panel } from "jassijs/ui/Panel";
 import { Kunde } from "de/remote/Kunde";
-import { ObjectChooser } from "jassi/ui/ObjectChooser";
-import { Databinder } from "jassi/ui/Databinder";
-import { NumberConverter } from "jassi/ui/converters/NumberConverter";
-import { Button } from "jassi/ui/Button";
-import { HTMLPanel } from "jassi/ui/HTMLPanel";
-import { Textbox } from "jassi/ui/Textbox";
-import { Select } from "jassi/ui/Select";
-import { BoxPanel } from "jassi/ui/BoxPanel";
-import { Repeater } from "jassi/ui/Repeater";
-import { Table } from "jassi/ui/Table";
-import { Checkbox } from "jassi/ui/Checkbox";
-import db from "jassi/base/Database";
-import jassi, { $Class } from "jassi/remote/Jassi";
+import { ObjectChooser } from "jassijs/ui/ObjectChooser";
+import { Databinder } from "jassijs/ui/Databinder";
+import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
+import { Button } from "jassijs/ui/Button";
+import { HTMLPanel } from "jassijs/ui/HTMLPanel";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Select } from "jassijs/ui/Select";
+import { BoxPanel } from "jassijs/ui/BoxPanel";
+import { Repeater } from "jassijs/ui/Repeater";
+import { Table } from "jassijs/ui/Table";
+import { Checkbox } from "jassijs/ui/Checkbox";
+import db from "jassijs/base/Database";
+import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { TestComponent } from "demo/TestComponent";
-import { Property, $Property } from "jassi/ui/Property";
-import { router } from "jassi/base/Router";
-import { $Action, $ActionProvider } from "jassi/base/Actions";
+import { Property, $Property } from "jassijs/ui/Property";
+import { router } from "jassijs/base/Router";
+import { $Action, $ActionProvider } from "jassijs/base/Actions";
 type Me = {
     repeater1?: Repeater;
     textbox1?: Textbox;
@@ -30,11 +30,11 @@ type Me = {
     idnachname?: Textbox;
     [name: string]: any;
 };
-@$ActionProvider("jassi.base.ActionNode")
+@$ActionProvider("jassijs.base.ActionNode")
 @$Class("de.DialogKunde")
 export class DialogKunde extends Panel {
     me: Me;
-    @$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" })
+    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
     value: Kunde;
     constructor() {
         super();

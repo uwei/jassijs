@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/ui/Textbox", "jassi/ui/PropertyEditors/Editor"], function (require, exports, Textbox_1, Editor_1) {
+define(["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor"], function (require, exports, Textbox_1, Editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.LoadingEditor = void 0;

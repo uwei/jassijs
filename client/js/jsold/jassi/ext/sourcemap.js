@@ -5,7 +5,7 @@ define("fs", [], function () {
 define("path", [], function () {
     return undefined;
 });
-define("jassi/ext/sourcemap", ["source.map", "exports"], function (sm, exp) {
+define("jassijs/ext/sourcemap", ["source.map", "exports"], function (sm, exp) {
     exp = 1;
     // requirejs.undef("fs");
     // requirejs.undef("path");

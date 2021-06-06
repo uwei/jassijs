@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Select", "jassi/remote/Classes", "jassi/remote/Jassi"], function (require, exports, Editor_1, Select_1, Classes_1, Jassi_1) {
+define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Jassi"], function (require, exports, Editor_1, Select_1, Classes_1, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSelectorEditor = void 0;
@@ -79,7 +79,7 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Selec
     };
     ComponentSelectorEditor = __decorate([
         Editor_1.$PropertyEditor(["componentselector"]),
-        Jassi_1.$Class("jassi.ui.PropertyEditors.ComponentSelectorEditor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.ComponentSelectorEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ComponentSelectorEditor);
     exports.ComponentSelectorEditor = ComponentSelectorEditor;

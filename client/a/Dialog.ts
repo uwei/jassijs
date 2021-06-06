@@ -1,15 +1,15 @@
-import { MenuItem } from "jassi/ui/MenuItem";
-import { Menu } from "jassi/ui/Menu";
-import { Checkbox } from "jassi/ui/Checkbox";
-import { Textbox } from "jassi/ui/Textbox";
-import { Button } from "jassi/ui/Button";
-import { BoxPanel } from "jassi/ui/BoxPanel";
-import jassi, { $Class } from "jassi/remote/Jassi";
-import { Panel } from "jassi/ui/Panel";
-import { HTMLPanel } from "jassi/ui/HTMLPanel";
-import { Style } from "jassi/ui/Style";
-import windows from "jassi/base/Windows";
-import { FileExplorer } from "jassi/ui/FileExplorer";
+import { MenuItem } from "jassijs/ui/MenuItem";
+import { Menu } from "jassijs/ui/Menu";
+import { Checkbox } from "jassijs/ui/Checkbox";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Button } from "jassijs/ui/Button";
+import { BoxPanel } from "jassijs/ui/BoxPanel";
+import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { Panel } from "jassijs/ui/Panel";
+import { HTMLPanel } from "jassijs/ui/HTMLPanel";
+import { Style } from "jassijs/ui/Style";
+import windows from "jassijs/base/Windows";
+import { FileExplorer } from "jassijs/ui/FileExplorer";
 type Me = {
     htmlpanel1?: HTMLPanel;
     htmlpanel2?: HTMLPanel;
@@ -40,7 +40,7 @@ export class Dialog extends Panel {
         me.button5 = new Button();
         me.checkbox2 = new Checkbox();
         me.menuitem2 = new MenuItem();
-        jassi.includeCSS("kkkk", {
+        jassijs.includeCSS("kkkk", {
             ".ui-state-highlight": {
                 border: "3px solid yellow"
             }

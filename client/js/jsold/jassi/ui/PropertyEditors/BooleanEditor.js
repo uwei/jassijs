@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Checkbox", "jassi/ui/PropertyEditors/Editor"], function (require, exports, Jassi_1, Checkbox_1, Editor_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Checkbox", "jassijs/ui/PropertyEditors/Editor"], function (require, exports, jassijs_1, Checkbox_1, Editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BooleanEditor = void 0;
@@ -57,7 +57,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Checkbox", "jassi/
     };
     BooleanEditor = __decorate([
         Editor_1.$PropertyEditor(["boolean"]),
-        Jassi_1.$Class("jassi.ui.PropertyEditors.BooleanEditor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.BooleanEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], BooleanEditor);
     exports.BooleanEditor = BooleanEditor;

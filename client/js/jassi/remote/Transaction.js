@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject"], function (require, exports, Jassi_1, RemoteObject_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject"], function (require, exports, jassijs_1, RemoteObject_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Transaction = exports.TransactionItem = void 0;
@@ -93,7 +93,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject"]
             else {
                 //@ts-ignore
                 //@ts-ignore
-                var ObjectTransaction = (await new Promise((resolve_1, reject_1) => { require(["jassi/remote/ObjectTransaction"], resolve_1, reject_1); })).ObjectTransaction;
+                var ObjectTransaction = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/ObjectTransaction"], resolve_1, reject_1); })).ObjectTransaction;
                 var ot = new ObjectTransaction();
                 ot.statements = [];
                 let ret = [];
@@ -114,7 +114,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject"]
         }
         async doServerStatement(statements, ot /*:ObjectTransaction*/, num, context) {
             //@ts-ignore
-            var _execute = (await new Promise((resolve_2, reject_2) => { require(["jassi/server/DoRemoteProtocol"], resolve_2, reject_2); }))._execute;
+            var _execute = (await new Promise((resolve_2, reject_2) => { require(["jassijs/server/DoRemoteProtocol"], resolve_2, reject_2); }))._execute;
             var _this = this;
             var newcontext = {};
             Object.assign(newcontext, context);
@@ -134,7 +134,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject"]
         }
     };
     Transaction = __decorate([
-        Jassi_1.$Class("jassi.remote.Transaction")
+        jassijs_1.$Class("jassijs.remote.Transaction")
     ], Transaction);
     exports.Transaction = Transaction;
 });

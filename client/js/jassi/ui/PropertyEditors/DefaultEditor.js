@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Textbox", "jassi/ui/PropertyEditors/Editor", "jassi/remote/Jassi", "jassi/ui/Select"], function (require, exports, Textbox_1, Editor_1, Jassi_1, Select_1) {
+define(["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Select"], function (require, exports, Textbox_1, Editor_1, jassijs_1, Select_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     let DefaultEditor = class DefaultEditor extends Editor_1.Editor {
@@ -100,7 +100,7 @@ define(["require", "exports", "jassi/ui/Textbox", "jassi/ui/PropertyEditors/Edit
     };
     DefaultEditor = __decorate([
         Editor_1.$PropertyEditor(["string", "number", "number[]"]),
-        Jassi_1.$Class("jassi.ui.PropertyEditors.DefaultEditor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.DefaultEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DefaultEditor);
 });

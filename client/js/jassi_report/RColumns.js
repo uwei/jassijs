@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi_report/ReportDesign", "jassi_report/ReportComponent"], function (require, exports, Jassi_1, Property_1, ReportDesign_1, ReportComponent_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/ReportComponent"], function (require, exports, jassijs_1, Property_1, ReportDesign_1, ReportComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RColumns = void 0;
@@ -30,8 +30,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi_
         }
         /**
        * adds a component to the container before an other component
-       * @param {jassi.ui.Component} component - the component to add
-       * @param {jassi.ui.Component} before - the component before then component to add
+       * @param {jassijs.ui.Component} component - the component to add
+       * @param {jassijs.ui.Component} before - the component before then component to add
        */
         addBefore(component, before) {
             if (component["reporttype"] === "text") {
@@ -42,7 +42,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi_
         }
         /**
       * adds a component to the container
-      * @param {jassi.ui.Component} component - the component to add
+      * @param {jassijs.ui.Component} component - the component to add
       */
         add(component) {
             super.add(component);
@@ -71,11 +71,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi_
     };
     RColumns = __decorate([
         ReportComponent_1.$ReportComponent({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassi_report.RColumns"),
+        jassijs_1.$Class("jassijs_report.RColumns"),
         Property_1.$Property({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], RColumns);
     exports.RColumns = RColumns;
 });
-//    jassi.register("reportcomponent","jassi_report.Stack","report/Stack","res/boxpanel.ico");
+//    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
 //# sourceMappingURL=RColumns.js.map

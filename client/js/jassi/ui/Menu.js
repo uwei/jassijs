@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/jassi", "jassi/ui/Container", "jassi/ui/Property", "jassi/ui/MenuItem", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DesignDummy"], function (require, exports, jassi_1, Container_1, Property_1, MenuItem_1, Jassi_1, Component_1, DesignDummy_1) {
+define(["require", "exports", "jassijs/jassi", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/MenuItem", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DesignDummy"], function (require, exports, jassijs_1, Container_1, Property_1, MenuItem_1, jassijs_1, Component_1, DesignDummy_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Menu = void 0;
@@ -64,8 +64,8 @@ define(["require", "exports", "jassi/jassi", "jassi/ui/Container", "jassi/ui/Pro
         }
         /**
         * adds a component to the container before an other component
-        * @param {jassi.ui.Component} component - the component to add
-        * @param {jassi.ui.Component} before - the component before then component to add
+        * @param {jassijs.ui.Component} component - the component to add
+        * @param {jassijs.ui.Component} before - the component before then component to add
         */
         addBefore(component, before) {
             super.addBefore(component, before);
@@ -73,7 +73,7 @@ define(["require", "exports", "jassi/jassi", "jassi/ui/Container", "jassi/ui/Pro
         }
         /**
           * adds a component to the container
-          * @param {jassi.ui.Menu} component - the component to add
+          * @param {jassijs.ui.Menu} component - the component to add
           */
         add(component) {
             if (this._designDummy !== undefined && this._components[this._components.length - 1] === this._designDummy)
@@ -134,16 +134,16 @@ define(["require", "exports", "jassi/jassi", "jassi/ui/Container", "jassi/ui/Pro
     ], Menu.prototype, "onclick", null);
     Menu = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
-        Jassi_1.$Class("jassi.ui.Menu"),
+        jassijs_1.$Class("jassijs.ui.Menu"),
         __metadata("design:paramtypes", [Object])
     ], Menu);
     exports.Menu = Menu;
-    jassi_1.default.test = async function () {
+    jassijs_1.default.test = async function () {
         // kk.o=0;
         var menu = new Menu();
         menu.width = 200;
-        /*	var save=new jassi.ui.Menu();
-            var save2=new jassi.ui.Menu();
+        /*	var save=new jassijs.ui.Menu();
+            var save2=new jassijs.ui.Menu();
         
             menu.add(save);
             save.onclick(function(){

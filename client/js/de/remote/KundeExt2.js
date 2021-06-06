@@ -18,5 +18,5 @@ define(["require", "exports"], function (require, exports) {
         }
     }
 });
-//jassi.register("extensions", "de.Kunde", KundeExt2, "KundeExt2");
+//jassijs.register("extensions", "de.Kunde", KundeExt2, "KundeExt2");
 //# sourceMappingURL=KundeExt2.js.map

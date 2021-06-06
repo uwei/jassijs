@@ -1,7 +1,7 @@
-import { Panel } from "jassi/ui/Panel";
+import { Panel } from "jassijs/ui/Panel";
 
-import { $Class } from "jassi/remote/Jassi";
-import { Table } from "jassi/ui/Table";
+import { $Class } from "jassijs/remote/Jassi";
+import { Table } from "jassijs/ui/Table";
 
 class Person {
     name;

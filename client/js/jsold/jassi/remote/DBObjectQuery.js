@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/remote/Classes", "jassi/remote/Registry"], function (require, exports, Classes_1, Registry_1) {
+define(["require", "exports", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Classes_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObjectQuery = exports.$DBObjectQuery = exports.DBObjectQueryProperties = void 0;

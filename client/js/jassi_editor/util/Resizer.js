@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_1) {
+define(["require", "exports", "jassijs/remote/Jassi"], function (require, exports, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Resizer = void 0;
@@ -308,7 +308,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
         }
     };
     Resizer = __decorate([
-        Jassi_1.$Class("jassi_editor.util.Resizer"),
+        jassijs_1.$Class("jassijs_editor.util.Resizer"),
         __metadata("design:paramtypes", [])
     ], Resizer);
     exports.Resizer = Resizer;

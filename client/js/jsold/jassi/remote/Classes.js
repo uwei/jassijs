@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Registry"], function (require, exports, Registry_1) {
+define(["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.classes = exports.Classes = void 0;
@@ -22,8 +22,8 @@ define(["require", "exports", "jassi/remote/Registry"], function (require, expor
         };
     }
     /**
-    * manage all registered classes ->jassi.register("classes")
-    * @class jassi.base.Classes
+    * manage all registered classes ->jassijs.register("classes")
+    * @class jassijs.base.Classes
     */
     let Classes = class Classes {
         constructor() {
@@ -98,7 +98,7 @@ define(["require", "exports", "jassi/remote/Registry"], function (require, expor
         }
     };
     Classes = __decorate([
-        $Class("jassi.remote.Classes"),
+        $Class("jassijs.remote.Classes"),
         __metadata("design:paramtypes", [])
     ], Classes);
     exports.Classes = Classes;

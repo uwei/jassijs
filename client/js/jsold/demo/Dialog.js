@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi/ui/Panel"], function (require, exports, Button_1, BoxPanel_1, Jassi_1, Panel_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Button_1, BoxPanel_1, jassijs_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog = void 0;
@@ -35,7 +35,7 @@ define(["require", "exports", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/rem
         }
     };
     Dialog = __decorate([
-        Jassi_1.$Class("demo/Dialog"),
+        jassijs_1.$Class("demo/Dialog"),
         __metadata("design:paramtypes", [])
     ], Dialog);
     exports.Dialog = Dialog;

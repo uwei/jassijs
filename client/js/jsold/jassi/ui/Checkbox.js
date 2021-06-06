@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property", "jassi/ui/DataComponent"], function (require, exports, Jassi_1, Component_1, Property_1, DataComponent_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, jassijs_1, Component_1, Property_1, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Checkbox = void 0;
@@ -66,11 +66,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
     ], Checkbox.prototype, "text", null);
     Checkbox = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
-        Jassi_1.$Class("jassi.ui.Checkbox"),
+        jassijs_1.$Class("jassijs.ui.Checkbox"),
         __metadata("design:paramtypes", [])
     ], Checkbox);
     exports.Checkbox = Checkbox;
 });
-//@class({longname:"jassi.ui.Checkbox"})
+//@class({longname:"jassijs.ui.Checkbox"})
 //# sourceMappingURL=Checkbox.js.map
 //# sourceMappingURL=Checkbox.js.map

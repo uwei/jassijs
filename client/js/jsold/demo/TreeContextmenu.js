@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/ui/Tree", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Panel", "jassi/ui/Button"], function (require, exports, Tree_1, ContextMenu_1, MenuItem_1, Panel_1, Button_1) {
+define(["require", "exports", "jassijs/ui/Tree", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Panel", "jassijs/ui/Button"], function (require, exports, Tree_1, ContextMenu_1, MenuItem_1, Panel_1, Button_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;

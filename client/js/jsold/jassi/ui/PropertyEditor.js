@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Image", "jassi_editor/util/Parser", "jassi/ui/ComponentDescriptor", "jassi/ui/PropertyEditors/NameEditor", "jassi/base/PropertyEditorService", "jassi/ui/Property", "jassi/base/PropertyEditorService"], function (require, exports, Jassi_1, Panel_1, Image_1, Parser_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs_editor/util/Parser", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/base/PropertyEditorService"], function (require, exports, jassijs_1, Panel_1, Image_1, Parser_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1) {
     "use strict";
     var PropertyEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -47,23 +47,23 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this.clear();
             this.layout();
             /**
-             * @member {jassi_editor.CodeEditor} - the parent CodeEditor
+             * @member {jassijs_editor.CodeEditor} - the parent CodeEditor
              * if undefined - no code changes would be done
              * */
             this.codeEditor = codeEditor;
-            /** @member {jassi.base.Parser} - the code-parser*/
+            /** @member {jassijs.base.Parser} - the code-parser*/
             this.parser = new Parser_1.Parser();
             /** @member {string} - the name of the variable in code*/
             this.variablename = "";
-            /** @member {jassi.ui.PropertyEditor} - parent propertyeditor*/
+            /** @member {jassijs.ui.PropertyEditor} - parent propertyeditor*/
             this.parentPropertyEditor;
-            /** @member {[jassi.ui.PropertyEditor]} - if multiselect - the propertyeditors of the other elements*/
+            /** @member {[jassijs.ui.PropertyEditor]} - if multiselect - the propertyeditors of the other elements*/
             this._multiselectEditors;
         }
         /**
          * adds a new property
          * @param {string} name  - the name of the property
-         * @param {jassi.ui.PropertyEditors.Editor} editor - the propertyeditor to render the property
+         * @param {jassijs.ui.PropertyEditors.Editor} editor - the propertyeditor to render the property
          * @param {string} description - the the description is tooltip over the name
          */
         addProperty(name, editor, description) {
@@ -129,7 +129,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
         /**
        * if parentPropertyEditor is defined then the value of the property must be substituted
-       * @param {jassi.ui.PropertyEditor propertyEditor
+       * @param {jassijs.ui.PropertyEditor propertyEditor
        * @param {[opject} props
        * @param {string} propname the propertyName
        */
@@ -138,7 +138,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
          }*/
         /**
          * if parentPropertyEditor is defined then the properties are defined there
-         * @param {jassi.ui.PropertyEditor propertyEditor
+         * @param {jassijs.ui.PropertyEditor propertyEditor
          * @param {[opject} props
          * @param {string} propname the propertyName
         
@@ -689,7 +689,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
     };
     PropertyEditor = PropertyEditor_1 = __decorate([
-        Jassi_1.$Class("jassi.ui.PropertyEditor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditor"),
         __metadata("design:paramtypes", [Object])
     ], PropertyEditor);
     exports.PropertyEditor = PropertyEditor;
@@ -700,7 +700,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     TestProperties = __decorate([
-        Jassi_1.$Class("jassi.ui.PropertyEditorTestProperties")
+        jassijs_1.$Class("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     exports.TestProperties = TestProperties;
     function test() {

@@ -33,7 +33,7 @@ define(["require", "exports", "de/remote/AR", "de/remote/Kunde", "de/remote/ARZe
             debugger;
         }
         //	new de.Kunde().generate();
-        //jassi.db.uploadType(de.Kunde);
+        //jassijs.db.uploadType(de.Kunde);
     }
     exports.test2 = test2;
     ;

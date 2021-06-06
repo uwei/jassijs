@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Container", "jassi/ui/Component", "jassi/ui/Property", "jassi/ui/DesignDummy"], function (require, exports, Jassi_1, Container_1, Component_1, Property_1, DesignDummy_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DesignDummy"], function (require, exports, jassijs_1, Container_1, Component_1, Property_1, DesignDummy_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Panel = void 0;
@@ -23,7 +23,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Container", "jassi
         __metadata("design:type", Boolean)
     ], PanelCreateProperties.prototype, "useSpan", void 0);
     PanelCreateProperties = __decorate([
-        Jassi_1.$Class("jassi.ui.PanelCreateProperties")
+        jassijs_1.$Class("jassijs.ui.PanelCreateProperties")
     ], PanelCreateProperties);
     let Panel = 
     //@$Property({ name: "new/useSpan", type: "boolean", default: false })
@@ -95,7 +95,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Container", "jassi
         }
         /**
         * adds a component to the container
-        * @param {jassi.ui.Component} component - the component to add
+        * @param {jassijs.ui.Component} component - the component to add
         */
         add(component) {
             // $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
@@ -103,8 +103,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Container", "jassi
         }
         /**
          * adds a component to the container before an other component
-         * @param {jassi.ui.Component} component - the component to add
-         * @param {jassi.ui.Component} before - the component before then component to add
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
          */
         addBefore(component, before) {
             //   $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
@@ -179,8 +179,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Container", "jassi
     ], Panel.prototype, "isAbsolute", null);
     Panel = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassi.ui.Panel"),
-        Property_1.$Property({ name: "new", type: "json", componentType: "jassi.ui.PanelCreateProperties" })
+        jassijs_1.$Class("jassijs.ui.Panel"),
+        Property_1.$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelCreateProperties" })
         //@$Property({ name: "new/useSpan", type: "boolean", default: false })
         ,
         __metadata("design:paramtypes", [PanelCreateProperties])

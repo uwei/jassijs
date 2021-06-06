@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/CSSProperties"], function (require, exports, Jassi_1, Property_1, Registry_1, Classes_1, CSSProperties_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties"], function (require, exports, jassijs_1, Property_1, Registry_1, Classes_1, CSSProperties_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Component = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
@@ -40,7 +40,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
           }*/
         /**
          * base class for each Component
-         * @class jassi.ui.Component
+         * @class jassijs.ui.Component
          * @param {object} properties - properties to init
          * @param {string} [properties.id] -  connect to existing id (not reqired)
          *
@@ -141,8 +141,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
                 this.__dom._this = undefined;
             }
             //allready watched?
-            if (Jassi_1.default.componentSpy !== undefined) {
-                Jassi_1.default.componentSpy.unwatch(this);
+            if (jassijs_1.default.componentSpy !== undefined) {
+                jassijs_1.default.componentSpy.unwatch(this);
             }
             this.dom = dom;
             this._id = Registry_1.default.nextID();
@@ -152,7 +152,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
             //add _this to the dom element
             var lid = Registry_1.default.nextID();
             var st = 'style="display: inline"';
-            if (this instanceof Classes_1.classes.getClass("jassi.ui.Container")) {
+            if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
                 st = "";
             }
             if (properties !== undefined && properties.noWrapper === true) {
@@ -173,8 +173,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
                 $(document.body).append(temp);
             }
             //for profilling save code pos
-            if (Jassi_1.default.componentSpy !== undefined) {
-                Jassi_1.default.componentSpy.watch(this);
+            if (jassijs_1.default.componentSpy !== undefined) {
+                jassijs_1.default.componentSpy.watch(this);
             }
             $("#jassitemp")[0].appendChild(this.domWrapper);
         }
@@ -381,15 +381,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
             return this._contextMenu;
         }
         /**
-         * @member {jassi.ui.ContextMenu} - the contextmenu of the component
+         * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
          **/
         set contextMenu(value) {
             if (this._contextMenu !== undefined)
                 this._contextMenu.unregisterComponent(this);
             if (value !== undefined) {
-                var ContextMenu = Classes_1.classes.getClass("jassi.ui.ContextMenu");
+                var ContextMenu = Classes_1.classes.getClass("jassijs.ui.ContextMenu");
                 if (value instanceof ContextMenu === false) {
-                    throw "value is not of type jassi.ui.ContextMenu";
+                    throw "value is not of type jassijs.ui.ContextMenu";
                 }
                 this._contextMenu = value;
                 value.registerComponent(this);
@@ -401,8 +401,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
             if (this.contextMenu !== undefined) {
                 this.contextMenu.destroy();
             }
-            if (Jassi_1.default.componentSpy !== undefined) {
-                Jassi_1.default.componentSpy.unwatch(this);
+            if (jassijs_1.default.componentSpy !== undefined) {
+                jassijs_1.default.componentSpy.unwatch(this);
             }
             if (this._parent !== undefined) {
                 this._parent.remove(this);
@@ -464,23 +464,23 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "height", null);
     __decorate([
-        Property_1.$Property({ type: "json", componentType: "jassi.ui.CSSProperties" }),
+        Property_1.$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [CSSProperties_1.CSSProperties, Boolean]),
         __metadata("design:returntype", void 0)
     ], Component.prototype, "css", null);
     __decorate([
-        Property_1.$Property({ type: "componentselector", componentType: "[jassi.ui.Style]" }),
+        Property_1.$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
     ], Component.prototype, "styles", null);
     __decorate([
-        Property_1.$Property({ type: "componentselector", componentType: "jassi.ui.ContextMenu" }),
+        Property_1.$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "contextMenu", null);
     Component = __decorate([
-        Jassi_1.$Class("jassi.ui.Component"),
+        jassijs_1.$Class("jassijs.ui.Component"),
         __metadata("design:paramtypes", [ComponentCreateProperties])
     ], Component);
     exports.Component = Component;

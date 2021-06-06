@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_1) {
+define(["require", "exports", "jassijs/remote/Jassi"], function (require, exports, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DragAndDropper = void 0;
@@ -317,7 +317,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
         * install the DragAndDropper
         * all child jomponents are draggable
         * all child containers are droppable
-        * @param {jassi.ui.Component} parentPanel - all childs are effected
+        * @param {jassijs.ui.Component} parentPanel - all childs are effected
         * @param {string} all - ID's of all editable components e.g. #10,#12
         * @returns {unresolved}
         */
@@ -415,7 +415,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
         }
     };
     DragAndDropper = __decorate([
-        Jassi_1.$Class("jassi_editor.util.DragAndDropper"),
+        jassijs_1.$Class("jassijs_editor.util.DragAndDropper"),
         __metadata("design:paramtypes", [])
     ], DragAndDropper);
     exports.DragAndDropper = DragAndDropper;

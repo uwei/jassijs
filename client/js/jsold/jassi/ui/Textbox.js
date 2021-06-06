@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/converters/DefaultConverter", "jassi/remote/Registry", "jassi/ui/Property"], function (require, exports, Jassi_1, Component_1, DataComponent_1, DefaultConverter_1, Registry_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, jassijs_1, Component_1, DataComponent_1, DefaultConverter_1, Registry_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Textbox = void 0;
@@ -216,7 +216,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
     ], Textbox.prototype, "placeholder", null);
     Textbox = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
-        Jassi_1.$Class("jassi.ui.Textbox"),
+        jassijs_1.$Class("jassijs.ui.Textbox"),
         Property_1.$Property({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [Object])
     ], Textbox);

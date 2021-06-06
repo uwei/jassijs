@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi/remote/Classes"], function (require, exports, Jassi_1, Registry_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, jassijs_1, Registry_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Property = exports.$Property = void 0;
@@ -25,7 +25,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
     let Property = class Property {
         /**
          * Property for PropertyEditor
-         * @class jassi.ui.EditorProperty
+         * @class jassijs.ui.EditorProperty
          */
         constructor(name = undefined, type = undefined) {
             this.name = name;
@@ -33,7 +33,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
         }
     };
     Property = __decorate([
-        Jassi_1.$Class("jassi.ui.Property"),
+        jassijs_1.$Class("jassijs.ui.Property"),
         __metadata("design:paramtypes", [Object, Object])
     ], Property);
     exports.Property = Property;

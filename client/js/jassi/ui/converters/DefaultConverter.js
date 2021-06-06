@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi/ui/Property"], function (require, exports, Jassi_1, Registry_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, jassijs_1, Registry_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DefaultConverter = exports.$Converter = exports.$ConverterProperties = void 0;
@@ -31,7 +31,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
         __metadata("design:returntype", void 0)
     ], DefaultConverterProperties.prototype, "stringToObject", null);
     DefaultConverterProperties = __decorate([
-        Jassi_1.$Class("jassi.ui.converters.DefaultConverterProperties")
+        jassijs_1.$Class("jassijs.ui.converters.DefaultConverterProperties")
     ], DefaultConverterProperties);
     let DefaultConverter = 
     //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
@@ -56,8 +56,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
     };
     DefaultConverter = __decorate([
         $Converter({ name: "custom" }),
-        Jassi_1.$Class("jassi.ui.converters.DefaultConverter"),
-        Property_1.$Property({ name: "new", type: "json", componentType: "jassi.ui.converters.DefaultConverterProperties" })
+        jassijs_1.$Class("jassijs.ui.converters.DefaultConverter"),
+        Property_1.$Property({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
         //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
         ,
         __metadata("design:paramtypes", [])

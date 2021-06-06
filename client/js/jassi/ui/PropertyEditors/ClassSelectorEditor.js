@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Select", "jassi/ui/PropertyEditors/Editor", "jassi/ui/PropertyEditors/JsonEditor", "jassi/util/Tools", "jassi/ui/converters/StringConverter", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Registry", "jassi/ui/ComponentDescriptor", "jassi/remote/Classes"], function (require, exports, Select_1, Editor_1, JsonEditor_1, Tools_1, StringConverter_1, Jassi_1, Panel_1, Textbox_1, Registry_1, ComponentDescriptor_1, Classes_1) {
+define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/PropertyEditors/JsonEditor", "jassijs/util/Tools", "jassijs/ui/converters/StringConverter", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes"], function (require, exports, Select_1, Editor_1, JsonEditor_1, Tools_1, StringConverter_1, jassijs_1, Panel_1, Textbox_1, Registry_1, ComponentDescriptor_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClassSelectorEditor = void 0;
@@ -15,7 +15,7 @@ define(["require", "exports", "jassi/ui/Select", "jassi/ui/PropertyEditors/Edito
         /**
          * Checkbox Editor for boolean values
          * used by PropertyEditor
-         * @class jassi.ui.PropertyEditors.BooleanEditor
+         * @class jassijs.ui.PropertyEditors.BooleanEditor
          */
         constructor(property = undefined, propertyEditor = undefined) {
             super(property, propertyEditor);
@@ -160,11 +160,11 @@ define(["require", "exports", "jassi/ui/Select", "jassi/ui/PropertyEditors/Edito
     };
     ClassSelectorEditor = __decorate([
         Editor_1.$PropertyEditor(["classselector"]),
-        Jassi_1.$Class("jassi.ui.PropertyEditors.ClassSelectorEditor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.ClassSelectorEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ClassSelectorEditor);
     exports.ClassSelectorEditor = ClassSelectorEditor;
-    Jassi_1.default.test = function () {
+    jassijs_1.default.test = function () {
         ComponentDescriptor_1.ComponentDescriptor.cache = {};
         var t = new ClassSelectorEditor();
         t.layout();

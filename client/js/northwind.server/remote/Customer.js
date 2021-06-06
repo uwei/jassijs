@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema"], function (require, exports, DBObject_1, jassijs_1, DatabaseSchema_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Customer = void 0;
@@ -74,7 +74,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
     ], Customer.prototype, "Fax", void 0);
     Customer = __decorate([
         DBObject_1.$DBObject(),
-        Jassi_1.$Class("northwind.Customer"),
+        jassijs_1.$Class("northwind.Customer"),
         __metadata("design:paramtypes", [])
     ], Customer);
     exports.Customer = Customer;
@@ -84,7 +84,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
         //debugger;
         //await Kunde.sample();
         //	new de.Kunde().generate();
-        //jassi.db.uploadType(de.Kunde);
+        //jassijs.db.uploadType(de.Kunde);
     }
     exports.test = test;
     ;

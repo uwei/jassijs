@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi/ui/Property", "jassi/remote/RemoteObject"], function (require, exports, Jassi_1, Registry_1, Property_1, RemoteObject_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/RemoteObject"], function (require, exports, jassijs_1, Registry_1, Property_1, RemoteObject_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.$SettingDescriptor = exports.settings = exports.Settings = void 0;
@@ -33,7 +33,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
                 return man.find(context, this, { "id": "admin" });
             }
         }
@@ -67,7 +67,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
                 }
                 else {
                     //@ts-ignore
-                    var man = await (await new Promise((resolve_2, reject_2) => { require(["jassi/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
+                    var man = await (await new Promise((resolve_2, reject_2) => { require(["jassijs/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
                     return man.find(context, this, { "id": "admin" });
                 }
             }
@@ -80,7 +80,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
         }
     };
     Settings = __decorate([
-        Jassi_1.$Class("jassi.remote.Settings")
+        jassijs_1.$Class("jassijs.remote.Settings")
     ], Settings);
     exports.Settings = Settings;
     var settings = new Settings();
@@ -98,7 +98,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
         __metadata("design:type", String)
     ], MySettings.prototype, "Development_DefaultEditor", void 0);
     MySettings = __decorate([
-        Jassi_1.$Class("MySettings")
+        jassijs_1.$Class("MySettings")
     ], MySettings);
     async function test() {
         await Settings.load();

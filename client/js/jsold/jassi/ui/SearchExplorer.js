@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_editor/util/Typescript", "jassi/base/Router"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Typescript_1, Router_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs_editor/util/Typescript", "jassijs/base/Router"], function (require, exports, jassijs_1, Tree_1, Panel_1, Textbox_1, Typescript_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SearchExplorer = void 0;
@@ -29,7 +29,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             this.layout();
         }
         async doSearch() {
-            var Typescript = (await new Promise((resolve_1, reject_1) => { require(["jassi_editor/util/Typescript"], resolve_1, reject_1); })).Typescript;
+            var Typescript = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); })).Typescript;
             var all = [];
             var files = []; // [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
             var toFind = this.search.value.toLocaleLowerCase();
@@ -75,10 +75,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
                 if (evt.data !== undefined && evt.data.file !== undefined) {
                     var pos = evt.data.pos;
                     var file = evt.data.file;
-                    new Promise((resolve_2, reject_2) => { require(["jassi_editor/util/Typescript"], resolve_2, reject_2); }).then(Typescript => {
+                    new Promise((resolve_2, reject_2) => { require(["jassijs_editor/util/Typescript"], resolve_2, reject_2); }).then(Typescript => {
                         var text = Typescript_1.default.getCode(file);
                         var line = text.substring(0, pos).split("\n").length;
-                        Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + file + "&line=" + line);
+                        Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
                     });
                 }
             });
@@ -94,7 +94,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
         }
     };
     SearchExplorer = __decorate([
-        Jassi_1.$Class("jassi.ui.SearchExplorer"),
+        jassijs_1.$Class("jassijs.ui.SearchExplorer"),
         __metadata("design:paramtypes", [])
     ], SearchExplorer);
     exports.SearchExplorer = SearchExplorer;

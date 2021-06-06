@@ -3,19 +3,19 @@
 //require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs' } });
 //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
 /*require.config({ paths: {
-    monacoLib:"jassi_editor/ext/monacoLib",
+    monacoLib:"jassijs_editor/ext/monacoLib",
     vs: monacopath+"/vs"
  }
 });
 */
-define("jassi_editor/ext/monacoLib", ["require"], function (require, editor) {
+define("jassijs_editor/ext/monacoLib", ["require"], function (require, editor) {
     window["module"] = {};
     window["module"].exports = {};
     return {};
 });
-define("jassi_editor/ext/monaco", ["jassi_editor/ext/monacoLib", "require", 'vs/editor/editor.main', "vs/language/typescript/tsWorker" /*,"monacoLib_editorWorkerServiceImpl","monacoLib_editorSimpleWorker","tsWorker"*/], function (mlib, require, monaco, tsWorker /*,editorWorkerServiceImpl,editorSimpleWorker,tsWorker*/) {
+define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 'vs/editor/editor.main', "vs/language/typescript/tsWorker" /*,"monacoLib_editorWorkerServiceImpl","monacoLib_editorSimpleWorker","tsWorker"*/], function (mlib, require, monaco, tsWorker /*,editorWorkerServiceImpl,editorSimpleWorker,tsWorker*/) {
     //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
-    let monacopath = require("jassi_editor/modul").default.require.paths.vs.replace("/vs", "");
+    let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
     //get Typescript instance
     window.ts = window["module"].exports;
     delete window["module"];

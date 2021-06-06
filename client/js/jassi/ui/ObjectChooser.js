@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/Textbox", "jassi/ui/Property", "jassi/ui/Component", "jassi/remote/Classes"], function (require, exports, Jassi_1, Table_1, Panel_1, Button_1, Textbox_1, Property_1, Component_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes"], function (require, exports, jassijs_1, Table_1, Panel_1, Button_1, Textbox_1, Property_1, Component_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ObjectChooser = void 0;
@@ -155,7 +155,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/
         }
         /**
          * binds a component to a databinder
-         * @param {jassi.ui.Databinder} databinder - the databinder to bind
+         * @param {jassijs.ui.Databinder} databinder - the databinder to bind
          * @param {string} property - the property to bind
          */
         bind(databinder, property) {
@@ -201,7 +201,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/
     ], ObjectChooser.prototype, "bind", null);
     ObjectChooser = __decorate([
         Component_1.$UIComponent({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
-        Jassi_1.$Class("jassi.ui.ObjectChooser"),
+        jassijs_1.$Class("jassijs.ui.ObjectChooser"),
         __metadata("design:paramtypes", [])
     ], ObjectChooser);
     exports.ObjectChooser = ObjectChooser;
@@ -211,7 +211,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Table", "jassi/ui/
         var dlg = new ObjectChooser();
         dlg.items = "de.Kunde";
         dlg.value = (await Kunde.find({ id: 1 }))[0];
-        //	var kunden=await jassi.db.load("de.Kunde");
+        //	var kunden=await jassijs.db.load("de.Kunde");
         //	dlg.value=kunden[4];
         //	dlg.me.IDTable.items=kunden;
         return dlg;

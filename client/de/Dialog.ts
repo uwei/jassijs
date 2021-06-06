@@ -1,10 +1,10 @@
-import { Checkbox } from "jassi/ui/Checkbox";
-import { Button } from "jassi/ui/Button";
-import { Textbox } from "jassi/ui/Textbox";
-import { $Class } from "jassi/remote/Jassi";
-import { Panel } from "jassi/ui/Panel";
-import { Numberformatter } from "jassi/util/Numberformatter";
-import { NumberConverter } from "jassi/ui/converters/NumberConverter";
+import { Checkbox } from "jassijs/ui/Checkbox";
+import { Button } from "jassijs/ui/Button";
+import { Textbox } from "jassijs/ui/Textbox";
+import { $Class } from "jassijs/remote/Jassi";
+import { Panel } from "jassijs/ui/Panel";
+import { Numberformatter } from "jassijs/util/Numberformatter";
+import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
 type Me = {
     textbox1?: Textbox;
     button1?: Button;

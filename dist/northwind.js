@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("northwind/CategoriesView", ["require", "exports", "jassi/ui/Table", "jassi/ui/BoxPanel", "jassi/ui/Textarea", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Property", "northwind/remote/Categories", "jassi/ui/DBObjectView"], function (require, exports, Table_1, BoxPanel_1, Textarea_1, Textbox_1, Jassi_1, Panel_1, Property_1, Categories_1, DBObjectView_1) {
+define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Categories", "jassijs/ui/DBObjectView"], function (require, exports, Table_1, BoxPanel_1, Textarea_1, Textbox_1, Jassi_1, Panel_1, Property_1, Categories_1, DBObjectView_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -52,7 +52,7 @@ define("northwind/CategoriesView", ["require", "exports", "jassi/ui/Table", "jas
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Categories_1.Categories !== "undefined" && Categories_1.Categories) === "function" ? _a : Object)
     ], CategoriesView.prototype, "value", void 0);
     CategoriesView = __decorate([
@@ -68,7 +68,7 @@ define("northwind/CategoriesView", ["require", "exports", "jassi/ui/Table", "jas
     }
     exports.test = test;
 });
-define("northwind/CustomerView", ["require", "exports", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Customer", "jassi/ui/DBObjectView"], function (require, exports, Textbox_2, Jassi_2, Property_2, Customer_1, DBObjectView_2) {
+define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Customer", "jassijs/ui/DBObjectView"], function (require, exports, Textbox_2, Jassi_2, Property_2, Customer_1, DBObjectView_2) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -164,7 +164,7 @@ define("northwind/CustomerView", ["require", "exports", "jassi/ui/Textbox", "jas
         }
     };
     __decorate([
-        Property_2.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_2.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Customer_1.Customer !== "undefined" && Customer_1.Customer) === "function" ? _a : Object)
     ], CustomerView.prototype, "value", void 0);
     CustomerView = __decorate([
@@ -184,7 +184,7 @@ define("northwind/CustomerView", ["require", "exports", "jassi/ui/Textbox", "jas
     }
     exports.test = test;
 });
-define("northwind/DetailTest", ["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/OrderDetails", "jassi/ui/DBObjectView", "jassi/ui/Textbox"], function (require, exports, Jassi_3, Property_3, OrderDetails_1, DBObjectView_3, Textbox_3) {
+define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/OrderDetails", "jassijs/ui/DBObjectView", "jassijs/ui/Textbox"], function (require, exports, Jassi_3, Property_3, OrderDetails_1, DBObjectView_3, Textbox_3) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -205,7 +205,7 @@ define("northwind/DetailTest", ["require", "exports", "jassi/remote/Jassi", "jas
         }
     };
     __decorate([
-        Property_3.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_3.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof OrderDetails_1.OrderDetails !== "undefined" && OrderDetails_1.OrderDetails) === "function" ? _a : Object)
     ], DetailTest.prototype, "value", void 0);
     DetailTest = __decorate([
@@ -222,7 +222,7 @@ define("northwind/DetailTest", ["require", "exports", "jassi/remote/Jassi", "jas
     }
     exports.test = test;
 });
-define("northwind/EmployeesView", ["require", "exports", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Image", "jassi/ui/Textarea", "jassi/ui/Calendar", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Employees", "jassi/ui/DBObjectView"], function (require, exports, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Image_1, Textarea_2, Calendar_1, Textbox_4, Button_1, Jassi_4, Property_4, Employees_1, DBObjectView_4) {
+define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Calendar", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView"], function (require, exports, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Image_1, Textarea_2, Calendar_1, Textbox_4, Button_1, Jassi_4, Property_4, Employees_1, DBObjectView_4) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -377,7 +377,7 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/ObjectChooser
         }
     };
     __decorate([
-        Property_4.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_4.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Employees_1.Employees !== "undefined" && Employees_1.Employees) === "function" ? _a : Object)
     ], EmployeesView.prototype, "value", void 0);
     EmployeesView = __decorate([
@@ -394,7 +394,7 @@ define("northwind/EmployeesView", ["require", "exports", "jassi/ui/ObjectChooser
     }
     exports.test = test;
 });
-define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/util/CSVImport", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Button_2, HTMLPanel_2, Jassi_5, Panel_2, CSVImport_1, Actions_1, Router_1) {
+define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router"], function (require, exports, Button_2, HTMLPanel_2, Jassi_5, Panel_2, CSVImport_1, Actions_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ImportData = void 0;
@@ -455,7 +455,7 @@ define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/
         __metadata("design:returntype", Promise)
     ], ImportData, "showDialog", null);
     ImportData = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
         Jassi_5.$Class("northwind.ImportData"),
         __metadata("design:paramtypes", [])
     ], ImportData);
@@ -466,7 +466,7 @@ define("northwind/ImportData", ["require", "exports", "jassi/ui/Button", "jassi/
     }
     exports.test = test;
 });
-define("northwind/OrdersView", ["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Repeater", "jassi/ui/Calendar", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Property", "northwind/remote/Orders", "jassi/ui/DBObjectView"], function (require, exports, BoxPanel_2, Repeater_1, Calendar_2, ObjectChooser_2, HTMLPanel_3, NumberConverter_2, Textbox_5, Jassi_6, Panel_3, Property_5, Orders_1, DBObjectView_5) {
+define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/Calendar", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, BoxPanel_2, Repeater_1, Calendar_2, ObjectChooser_2, HTMLPanel_3, NumberConverter_2, Textbox_5, Jassi_6, Panel_3, Property_5, Orders_1, DBObjectView_5) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -677,7 +677,7 @@ define("northwind/OrdersView", ["require", "exports", "jassi/ui/BoxPanel", "jass
         }
     };
     __decorate([
-        Property_5.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_5.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Orders_1.Orders !== "undefined" && Orders_1.Orders) === "function" ? _a : Object)
     ], OrdersView.prototype, "value", void 0);
     OrdersView = __decorate([
@@ -693,7 +693,7 @@ define("northwind/OrdersView", ["require", "exports", "jassi/ui/BoxPanel", "jass
     }
     exports.test = test;
 });
-define("northwind/ProductView", ["require", "exports", "jassi/ui/Style", "jassi/ui/ObjectChooser", "jassi/ui/HTMLPanel", "jassi/ui/Checkbox", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Products", "jassi/ui/DBObjectView"], function (require, exports, Style_1, ObjectChooser_3, HTMLPanel_4, Checkbox_1, NumberConverter_3, Textbox_6, Jassi_7, Property_6, Products_1, DBObjectView_6) {
+define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Products", "jassijs/ui/DBObjectView"], function (require, exports, Style_1, ObjectChooser_3, HTMLPanel_4, Checkbox_1, NumberConverter_3, Textbox_6, Jassi_7, Property_6, Products_1, DBObjectView_6) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -822,7 +822,7 @@ define("northwind/ProductView", ["require", "exports", "jassi/ui/Style", "jassi/
         }
     };
     __decorate([
-        Property_6.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_6.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Products_1.Products !== "undefined" && Products_1.Products) === "function" ? _a : Object)
     ], ProductView.prototype, "value", void 0);
     ProductView = __decorate([
@@ -839,7 +839,7 @@ define("northwind/ProductView", ["require", "exports", "jassi/ui/Style", "jassi/
     }
     exports.test = test;
 });
-define("northwind/ShippersView", ["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Shippers", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_4, Textbox_7, Jassi_8, Property_7, Shippers_1, DBObjectView_7) {
+define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_4, Textbox_7, Jassi_8, Property_7, Shippers_1, DBObjectView_7) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -883,7 +883,7 @@ define("northwind/ShippersView", ["require", "exports", "jassi/ui/converters/Num
         }
     };
     __decorate([
-        Property_7.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_7.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Shippers_1.Shippers !== "undefined" && Shippers_1.Shippers) === "function" ? _a : Object)
     ], ShippersView.prototype, "value", void 0);
     ShippersView = __decorate([
@@ -899,7 +899,7 @@ define("northwind/ShippersView", ["require", "exports", "jassi/ui/converters/Num
     }
     exports.test = test;
 });
-define("northwind/SuppliersView", ["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Suppliers", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_5, Textbox_8, Jassi_9, Property_8, Suppliers_1, DBObjectView_8) {
+define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_5, Textbox_8, Jassi_9, Property_8, Suppliers_1, DBObjectView_8) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1004,7 +1004,7 @@ define("northwind/SuppliersView", ["require", "exports", "jassi/ui/converters/Nu
         }
     };
     __decorate([
-        Property_8.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_8.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Suppliers_1.Suppliers !== "undefined" && Suppliers_1.Suppliers) === "function" ? _a : Object)
     ], SuppliersView.prototype, "value", void 0);
     SuppliersView = __decorate([
@@ -1032,7 +1032,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1622795968803,
+                "date": 1622984379867,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -1044,7 +1044,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
-                "date": 1615490345648,
+                "date": 1622984379867,
                 "northwind/CustomerView": {
                     "$DBObjectView": [
                         {
@@ -1056,7 +1056,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/DetailTest.ts": {
-                "date": 1616779216863,
+                "date": 1622984379867,
                 "northwind.DetailTest": {
                     "$DBObjectView": [
                         {
@@ -1066,7 +1066,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1615590101914,
+                "date": 1622984379867,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -1078,10 +1078,10 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ImportData.ts": {
-                "date": 1622667886290,
+                "date": 1622984379867,
                 "northwind.ImportData": {
                     "$ActionProvider": [
-                        "jassi.base.ActionNode"
+                        "jassijs.base.ActionNode"
                     ]
                 }
             },
@@ -1089,7 +1089,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551043267
             },
             "northwind/OrdersView.ts": {
-                "date": 1621972279025,
+                "date": 1622984379867,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1101,7 +1101,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1622035569523,
+                "date": 1622984379867,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -1113,55 +1113,55 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Categories.ts": {
-                "date": 1621089103134,
+                "date": 1622985438512,
                 "northwind.Categories": {
                     "$DBObject": []
                 }
             },
             "northwind/remote/Customer.ts": {
-                "date": 1615052487959,
+                "date": 1622985441740,
                 "northwind.Customer": {
                     "$DBObject": []
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1615492081804,
+                "date": 1622985442891,
                 "northwind.Employees": {
                     "$DBObject": []
                 }
             },
             "northwind/remote/OrderDetails.ts": {
-                "date": 1616791057960,
+                "date": 1622985444817,
                 "northwind.OrderDetails": {
                     "$DBObject": []
                 }
             },
             "northwind/remote/Orders.ts": {
-                "date": 1621974128940,
+                "date": 1622985448646,
                 "northwind.Orders": {
                     "$DBObject": []
                 }
             },
             "northwind/remote/Products.ts": {
-                "date": 1622198624616,
+                "date": 1622985451618,
                 "northwind.Products": {
                     "$DBObject": []
                 }
             },
             "northwind/remote/Shippers.ts": {
-                "date": 1615757238969,
+                "date": 1622985453719,
                 "northwind.Shippers": {
                     "$DBObject": []
                 }
             },
             "northwind/remote/Suppliers.ts": {
-                "date": 1615758951978,
+                "date": 1622985455688,
                 "northwind.Suppliers": {
                     "$DBObject": []
                 }
             },
             "northwind/ShippersView.ts": {
-                "date": 1615757648366,
+                "date": 1622984379867,
                 "northwind.ShippersView": {
                     "$DBObjectView": [
                         {
@@ -1173,7 +1173,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/SuppliersView.ts": {
-                "date": 1615759779463,
+                "date": 1622984379867,
                 "northwind.SuppliersView": {
                     "$DBObjectView": [
                         {
@@ -1187,7 +1187,7 @@ define("northwind/registry", ["require"], function (require) {
         }
     };
 });
-define("northwind/remote/Categories", ["require", "exports", "northwind/remote/Products", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, Products_2, DBObject_1, Jassi_10, DatabaseSchema_1) {
+define("northwind/remote/Categories", ["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema"], function (require, exports, Products_2, DBObject_1, Jassi_10, DatabaseSchema_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1229,7 +1229,7 @@ define("northwind/remote/Categories", ["require", "exports", "northwind/remote/P
     exports.test = test;
     ;
 });
-define("northwind/remote/Customer", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, DBObject_2, Jassi_11, DatabaseSchema_2) {
+define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema"], function (require, exports, DBObject_2, Jassi_11, DatabaseSchema_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Customer = void 0;
@@ -1306,12 +1306,12 @@ define("northwind/remote/Customer", ["require", "exports", "jassi/remote/DBObjec
         //debugger;
         //await Kunde.sample();
         //	new de.Kunde().generate();
-        //jassi.db.uploadType(de.Kunde);
+        //jassijs.db.uploadType(de.Kunde);
     }
     exports.test = test;
     ;
 });
-define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/Transaction"], function (require, exports, DBObject_3, Jassi_12, DatabaseSchema_3, Transaction_1) {
+define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction"], function (require, exports, DBObject_3, Jassi_12, DatabaseSchema_3, Transaction_1) {
     "use strict";
     var Employees_2;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1328,7 +1328,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObje
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
                 return man.find(context, this, options);
             }
         }
@@ -1339,7 +1339,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObje
             }
             else {
                 return num + 1;
-                // return ["jassi/base/ChromeDebugger.ts"];
+                // return ["jassijs/base/ChromeDebugger.ts"];
             }
         }
     };
@@ -1453,7 +1453,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassi/remote/DBObje
     exports.test2 = test2;
     ;
 });
-define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, Products_3, Orders_2, DBObject_4, Jassi_13, DatabaseSchema_4) {
+define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote/Products", "northwind/remote/Orders", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema"], function (require, exports, Products_3, Orders_2, DBObject_4, Jassi_13, DatabaseSchema_4) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1498,7 +1498,7 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
     exports.test = test;
     ;
 });
-define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_2, Employees_3, Customer_2, DBObject_5, Jassi_14, DatabaseSchema_5, Shippers_2) {
+define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_2, Employees_3, Customer_2, DBObject_5, Jassi_14, DatabaseSchema_5, Shippers_2) {
     "use strict";
     var _a, _b, _c, _d;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1579,7 +1579,7 @@ define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Order
     exports.test = test;
     ;
 });
-define("northwind/remote/Products", ["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, Categories_2, Suppliers_2, DBObject_6, Jassi_15, DatabaseSchema_6) {
+define("northwind/remote/Products", ["require", "exports", "northwind/remote/Categories", "northwind/remote/Suppliers", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema"], function (require, exports, Categories_2, Suppliers_2, DBObject_6, Jassi_15, DatabaseSchema_6) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1645,7 +1645,7 @@ define("northwind/remote/Products", ["require", "exports", "northwind/remote/Cat
     exports.test = test;
     ;
 });
-define("northwind/remote/Shippers", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, DBObject_7, Jassi_16, DatabaseSchema_7) {
+define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema"], function (require, exports, DBObject_7, Jassi_16, DatabaseSchema_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Shippers = void 0;
@@ -1677,7 +1677,7 @@ define("northwind/remote/Shippers", ["require", "exports", "jassi/remote/DBObjec
     exports.test = test;
     ;
 });
-define("northwind/remote/Suppliers", ["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema"], function (require, exports, DBObject_8, Jassi_17, DatabaseSchema_8) {
+define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema"], function (require, exports, DBObject_8, Jassi_17, DatabaseSchema_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Suppliers = void 0;

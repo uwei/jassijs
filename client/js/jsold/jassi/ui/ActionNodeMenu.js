@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Menu", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/base/Actions", "jassi/base/ActionNode", "jassi/ui/MenuItem"], function (require, exports, Menu_1, Jassi_1, Panel_1, Actions_1, ActionNode_1, MenuItem_1) {
+define(["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/ActionNode", "jassijs/ui/MenuItem"], function (require, exports, Menu_1, jassijs_1, Panel_1, Actions_1, ActionNode_1, MenuItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ActionNodeMenu = void 0;
@@ -65,7 +65,7 @@ define(["require", "exports", "jassi/ui/Menu", "jassi/remote/Jassi", "jassi/ui/P
         }
     };
     ActionNodeMenu = __decorate([
-        Jassi_1.$Class("jassi/ui/ActionNodeMenu"),
+        jassijs_1.$Class("jassijs/ui/ActionNodeMenu"),
         __metadata("design:paramtypes", [])
     ], ActionNodeMenu);
     exports.ActionNodeMenu = ActionNodeMenu;

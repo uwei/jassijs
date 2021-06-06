@@ -1,0 +1,53 @@
+import {NumberConverter} from "jassijs/ui/converters/NumberConverter";
+import {Textbox} from "jassijs/ui/Textbox";
+import { $Class } from "jassijs/remote/Jassi";
+import {Panel} from "jassijs/ui/Panel";
+import { $Property } from "jassijs/ui/Property";
+import { User } from "jassijs/remote/security/User";
+import { Databinder } from "jassijs/ui/Databinder";
+import { DBObjectView, DBObjectViewMe, $DBObjectView } from "jassijs/ui/DBObjectView";
+import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
+
+type Me = {
+	textbox1?:Textbox,
+	textbox2?:Textbox
+}&DBObjectViewMe
+
+@$DBObjectView({classname:"jassijs.security.User"})
+@$Class("jassijs/UserView")
+export class UserView extends DBObjectView {
+    me: Me;
+    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
+    value: User;
+    constructor() {
+        super();
+        //this.me = {}; this is called in objectdialog
+        this.layout(this.me);
+    }
+    get title() {
+        return this.value === undefined ? "User" : "User " + this.value.email;
+    }
+    layout(me: Me) {
+        me.textbox1=new Textbox();
+	    me.textbox2=new Textbox();
+    	this.add(me.textbox1);
+    	this.add(me.textbox2); 
+    	me.textbox1.bind(me.databinder,"id");
+    	me.textbox1.width=40;
+    	me.textbox1.converter=new NumberConverter();
+    	me.textbox2.bind(me.databinder,"email");
+    }
+	createObject():any{
+		super.createObject();
+		this.value.password=Math.random().toString(36).slice(-8);//random password
+		$.notify( "random password set: "+this.value.password,"info",{position:"right"});
+		console.log("random password set: "+this.value.password);
+	}
+}
+
+export async function test(){
+	var ret=new UserView();
+	
+	ret["value"]=<User>await User.findOne();
+	return ret;
+}

@@ -1,0 +1,83 @@
+import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  {classes} from "jassijs/remote/Classes";
+let cl=classes;//force Classes.
+
+@$Class("jassijs.remote.DBArray")
+export  class DBArray
+
+/**
+* Array for jassijs.base.DBObject's
+* can be saved to db
+* @class jassijs.base.DBArray
+*/ 
+extends Array{
+   constructor(...args){
+       super(...args);
+   }
+   private _parentObject;
+   private _parentObjectMember;
+   /**
+    * adds an object 
+    * if the object is linked to an other object then update this
+    * @param {object} ob - the object to add
+    */
+   add(ob){
+       if(ob===undefined||ob===null)
+           throw "Error cannot add object null";
+       this.push(ob);
+       if(this._parentObject!==undefined){ 
+           //set linked object
+           var link=jassijs.db.typeDef.linkForField(this._parentObject.__proto__._dbtype,this._parentObjectMember);
+           if(link!==undefined&&link.type==="array"){//array can not connected){
+               var test=ob._objectProperties[link.name];//do not resolve!
+               if(test!==undefined&&test.unresolvedclassname===undefined){
+                   if(test.indexOf(this._parentObject)<0)
+                       test.add(this._parentObject);
+               }
+           }
+           if(link!==undefined&&link.type==="object"){
+               var test=ob.__objectProperties[link.name];//do not resolve!
+               if(test!==undefined&&test.unresolvedclassname!==undefined&&test!==this){
+                   ob._setObjectProperty(link.name,this._parentObject);
+               }
+           }
+       }
+   }
+   /**
+    * for compatibility
+    */
+   async resolve(){
+       //Object was already resolved   
+       return this;
+   }
+
+   /**
+    * remove an object 
+    * if the object is linked to an other object then update this
+    * @param {object} ob - the object to remove
+    */
+   remove(ob){ 
+       var pos=this.indexOf(ob); 
+       if(pos>=0)
+           this.splice(pos, 1);
+        if(this._parentObject!==undefined){
+           //set linked object
+           var link=jassijs.db.typeDef.linkForField(this._parentObject.__proto__._dbtype,this._parentObjectMember);
+          
+           if(link!==undefined&&link.type==="array"){//array can not connected){
+               var test=ob._objectProperties[link.name];//do not resolve!
+               if(test!==undefined&&test.unresolvedclassname===undefined){
+                   if(test.indexOf(this._parentObject)>=0)
+                       test.remove(this._parentObject);
+               }
+           }
+           if(link!==undefined&&link.type==="object"){
+               var test=ob._getObjectProperty(link.name);
+               if(test!==undefined&&test.unresolvedclassname!==undefined&&test!==this){
+                   ob._setObjectProperty(link.name,null);
+               }
+           }
+       }
+       
+   }
+}

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/remote/Registry", "jassi/ui/Property", "jassi/ext/fancytree"], function (require, exports, Jassi_1, Component_1, Registry_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ext/fancytree"], function (require, exports, jassijs_1, Component_1, Registry_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Tree = void 0;
@@ -23,7 +23,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         __metadata("design:type", String)
     ], TreeEditorPropertiesMulti.prototype, "mode", void 0);
     TreeEditorPropertiesMulti = __decorate([
-        Jassi_1.$Class("jassi.ui.TreeEditorPropertiesMulti")
+        jassijs_1.$Class("jassijs.ui.TreeEditorPropertiesMulti")
     ], TreeEditorPropertiesMulti);
     let TreeEditorProperties = class TreeEditorProperties {
     };
@@ -36,11 +36,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         __metadata("design:type", Boolean)
     ], TreeEditorProperties.prototype, "checkbox", void 0);
     __decorate([
-        Property_1.$Property({ type: "json", componentType: "jassi.ui.TreeEditorPropertiesMulti" }),
+        Property_1.$Property({ type: "json", componentType: "jassijs.ui.TreeEditorPropertiesMulti" }),
         __metadata("design:type", TreeEditorPropertiesMulti)
     ], TreeEditorProperties.prototype, "multi", void 0);
     TreeEditorProperties = __decorate([
-        Jassi_1.$Class("jassi.ui.TreeEditorProperties")
+        jassijs_1.$Class("jassijs.ui.TreeEditorProperties")
     ], TreeEditorProperties);
     let Tree = 
     /*@$Property({ name: "new/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
@@ -539,7 +539,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
             }
         }
         /**
-         * @member {jassi.ui.ContextMenu} - the contextmenu of the component
+         * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
          **/
         set contextMenu(value) {
             super.contextMenu = value;
@@ -574,8 +574,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
     ], Tree.prototype, "onclick", null);
     Tree = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Tree", icon: "mdi mdi-file-tree" }),
-        Jassi_1.$Class("jassi.ui.Tree"),
-        Property_1.$Property({ name: "new", type: "json", componentType: "jassi.ui.TreeEditorProperties" })
+        jassijs_1.$Class("jassijs.ui.Tree"),
+        Property_1.$Property({ name: "new", type: "json", componentType: "jassijs.ui.TreeEditorProperties" })
         /*@$Property({ name: "new/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
         @$Property({ name: "new/checkbox", type: "boolean", default: false, description: "desplay a checkbos before the node" })
         @$Property({ name: "new/multi", type: "json" })
@@ -618,7 +618,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
             var ret = this.tree.getTitleFromItem(this.item);
             var bt = "";
             if (this.tree.contextMenu !== undefined)
-                bt = "<span class='MenuButton menu mdi mdi-menu-down' id=900  treeid=" + this.tree._id + "  height='10' width='10' onclick='/*jassi.ui.Tree._callContextmenu(event);*/'>";
+                bt = "<span class='MenuButton menu mdi mdi-menu-down' id=900  treeid=" + this.tree._id + "  height='10' width='10' onclick='/*jassijs.ui.Tree._callContextmenu(event);*/'>";
             //prevent XSS
             ret = (ret === undefined ? "" : ret).replaceAll("<", "&lt").replaceAll(">", "&gt");
             ret = "<span id=" + this._id + " style='" + this.getStyle() + "'  >" + ret + "</span>";

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, Jassi_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, jassijs_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CSSProperties = exports.loadFontIfNedded = void 0;
@@ -20,7 +20,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property"], functi
         if (systemFonts.indexOf(font) === -1) {
             var sfont = font.replaceAll(" ", "+");
             if (!document.getElementById("-->" + api + sfont)) { //"-->https://fonts.googleapis.com/css?family=Aclonica">
-                Jassi_1.default.myRequire(api + sfont);
+                jassijs_1.default.myRequire(api + sfont);
             }
         }
     }
@@ -172,7 +172,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property"], functi
         __metadata("design:type", String)
     ], CSSProperties.prototype, "z_index", void 0);
     CSSProperties = __decorate([
-        Jassi_1.$Class("jassi.ui.CSSProperties")
+        jassijs_1.$Class("jassijs.ui.CSSProperties")
     ], CSSProperties);
     exports.CSSProperties = CSSProperties;
 });

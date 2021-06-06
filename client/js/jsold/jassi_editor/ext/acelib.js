@@ -8,12 +8,12 @@ requirejs.config({
         'ace/ext/language_tools': ['ace/ace'],
     }
 });*/
-define("jassi_editor/ext/acelib", ["require", 'ace/ace',
+define("jassijs_editor/ext/acelib", ["require", 'ace/ace',
     'ace/ext/language_tools'], function (require, ac) {
     //  var tsmode= require("ace/mode/typescript");
     /*  var WorkerClient = require("ace/worker/worker_client").WorkerClient;
       var createWorker = function (session) {
-          var worker = new WorkerClient(["ace"], "jassi/ext/ace_tsmode", "WorkerModule");
+          var worker = new WorkerClient(["ace"], "jassijs/ext/ace_tsmode", "WorkerModule");
           worker.attachToDocument(session.getDocument());
 
           worker.on("lint", function (results) {

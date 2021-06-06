@@ -1,0 +1,9 @@
+{
+	"modules": {
+		"jassijs": "jassijs",
+		"northwind": "northwind",
+		"de": "de",
+		"local": "local",
+		"tg": "tg"
+	}
+}

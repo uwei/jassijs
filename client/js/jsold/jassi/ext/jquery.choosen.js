@@ -1,7 +1,7 @@
-define("jassi/ext/jquery.choosen", ["jassi/remote/Jassi", "jquery.choosen"], function () {
-    var path = require('jassi/modul').default.require.paths["jquery.choosen"];
+define("jassijs/ext/jquery.choosen", ["jassijs/remote/Jassi", "jquery.choosen"], function () {
+    var path = require('jassijs/modul').default.require.paths["jquery.choosen"];
     path = path.substring(0, path.lastIndexOf("/"));
-    jassi.myRequire(path + "/chosen.css");
+    jassijs.myRequire(path + "/chosen.css");
     return {
         default: ""
     };

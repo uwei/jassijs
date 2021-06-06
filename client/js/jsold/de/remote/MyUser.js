@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/util/DatabaseSchema", "jassi/remote/DBObject", "jassi/remote/Jassi"], function (require, exports, DatabaseSchema_1, DBObject_1, Jassi_1) {
+define(["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObject", "jassijs/remote/Jassi"], function (require, exports, DatabaseSchema_1, DBObject_1, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MyUser = void 0;
@@ -37,7 +37,7 @@ define(["require", "exports", "jassi/util/DatabaseSchema", "jassi/remote/DBObjec
     MyUser = __decorate([
         DBObject_1.$DBObject(),
         DatabaseSchema_1.Entity(),
-        Jassi_1.$Class("de.MyUser")
+        jassijs_1.$Class("de.MyUser")
     ], MyUser);
     exports.MyUser = MyUser;
 });

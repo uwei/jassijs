@@ -7,21 +7,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remote/Jassi", "jassi/ui/Button", "jassi_editor/util/TSSourceMap", "jassi/base/Router", "jassi/base/Actions"], function (require, exports, Panel_1, Errors_1, Jassi_1, Button_1, TSSourceMap_1, Router_1, Actions_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Jassi", "jassijs/ui/Button", "jassijs_editor/util/TSSourceMap", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_1, Errors_1, jassijs_1, Button_1, TSSourceMap_1, Router_1, Actions_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ErrorPanel = void 0;
     let ErrorPanel = class ErrorPanel extends Panel_1.Panel {
         /**
      * shows errors
-     * @class jassi.ui.ErrorPanel
+     * @class jassijs.ui.ErrorPanel
      */
         constructor() {
             super();
             this.layout();
         }
         static async showDialog() {
-            Router_1.router.navigate("#do=jassi.ui.ErrorPanel");
+            Router_1.router.navigate("#do=jassijs.ui.ErrorPanel");
         }
         layout() {
             var _this = this;
@@ -30,7 +30,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remo
             this.IDClear.icon = "mdi mdi-delete";
             this.IDClear.onclick(function () {
                 _this.clear();
-                Jassi_1.default.errors.items = [];
+                jassijs_1.default.errors.items = [];
             });
             this.IDClear.width = 35;
             this.IDSearch = new Button_1.Button();
@@ -50,17 +50,17 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remo
             this._container = $(this.dom).find(".errorpanel")[0];
             this.registerError();
             //old Errors
-            for (var x = 0; x < Jassi_1.default.errors.items.length; x++) {
-                this.addError(Jassi_1.default.errors.items[x]);
+            for (var x = 0; x < jassijs_1.default.errors.items.length; x++) {
+                this.addError(jassijs_1.default.errors.items[x]);
             }
-            if (window["jassi_debug"] === undefined)
-                window["jassi_debug"] = { variables: [] };
+            if (window["jassijs_debug"] === undefined)
+                window["jassijs_debug"] = { variables: [] };
         }
         /**
          * search Errors in code
          **/
         async search() {
-            var typescript = (await new Promise((resolve_1, reject_1) => { require(["jassi_editor/util/Typescript"], resolve_1, reject_1); })).default;
+            var typescript = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); })).default;
             await typescript.initService();
             var all = await typescript.getDiagnosticsForAll();
             if (all.length === 0)
@@ -115,7 +115,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remo
                     var line = stack[i];
                     if (line.indexOf(".ts:") > 0) {
                         msg = msg + '<div>' + line.substring(0, line.lastIndexOf("(")) +
-                            '<a href="#" onclick="jassi.ErrorPanel.prototype.onsrclink(this);">' +
+                            '<a href="#" onclick="jassijs.ErrorPanel.prototype.onsrclink(this);">' +
                             line.substr(line.lastIndexOf("(") + 1, line.length - 1) + '</a>)' + "" + '</div>';
                     }
                     else {
@@ -126,7 +126,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remo
                         line = line.replace("\n", "");
                         var ident = (i === 0 ? "0" : "20");
                         msg = msg + '<div style="text-indent:' + ident + 'px;">' + line.substring(0, poshttp) +
-                            '<a href="#" onclick="jassi.ErrorPanel.prototype.onsrclink(this);">' +
+                            '<a href="#" onclick="jassijs.ErrorPanel.prototype.onsrclink(this);">' +
                             url + '</a>' + (line.endsWith(")") ? ")" : "") + '</div>';
                     }
                 }
@@ -169,12 +169,12 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remo
         }
         registerError() {
             var _this = this;
-            Jassi_1.default.errors.onerror(function (err) {
+            jassijs_1.default.errors.onerror(function (err) {
                 _this.addError(err);
             }, this._id);
         }
         unregisterError() {
-            Jassi_1.default.errors.offerror(this._id);
+            jassijs_1.default.errors.offerror(this._id);
         }
         destroy() {
             this.unregisterError();
@@ -192,8 +192,8 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remo
         __metadata("design:returntype", Promise)
     ], ErrorPanel, "showDialog", null);
     ErrorPanel = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_1.$Class("jassi.ui.ErrorPanel"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
+        jassijs_1.$Class("jassijs.ui.ErrorPanel"),
         __metadata("design:paramtypes", [])
     ], ErrorPanel);
     exports.ErrorPanel = ErrorPanel;
@@ -207,9 +207,9 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/base/Errors", "jassi/remo
         var data = param.text.split(":");
         if (data[1] === "")
             return;
-        Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + data[0] + "&line=" + data[1]);
-        // jassi_editor.CodeEditor.open(param.text);
+        Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + data[0] + "&line=" + data[1]);
+        // jassijs_editor.CodeEditor.open(param.text);
     };
-    Jassi_1.default.ErrorPanel = ErrorPanel;
+    jassijs_1.default.ErrorPanel = ErrorPanel;
 });
 //# sourceMappingURL=ErrorPanel.js.map

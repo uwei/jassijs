@@ -12,16 +12,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], function (require, exports, Jassi_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, jassijs_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBArray = void 0;
     let cl = Classes_1.classes; //force Classes.
     let DBArray = class DBArray
     /**
-    * Array for jassi.base.DBObject's
+    * Array for jassijs.base.DBObject's
     * can be saved to db
-    * @class jassi.base.DBArray
+    * @class jassijs.base.DBArray
     */
      extends Array {
         constructor(...args) {
@@ -38,7 +38,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], fun
             this.push(ob);
             if (this._parentObject !== undefined) {
                 //set linked object
-                var link = Jassi_1.default.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
+                var link = jassijs_1.default.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
                 if (link !== undefined && link.type === "array") { //array can not connected){
                     var test = ob._objectProperties[link.name]; //do not resolve!
                     if (test !== undefined && test.unresolvedclassname === undefined) {
@@ -72,7 +72,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], fun
                 this.splice(pos, 1);
             if (this._parentObject !== undefined) {
                 //set linked object
-                var link = Jassi_1.default.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
+                var link = jassijs_1.default.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
                 if (link !== undefined && link.type === "array") { //array can not connected){
                     var test = ob._objectProperties[link.name]; //do not resolve!
                     if (test !== undefined && test.unresolvedclassname === undefined) {
@@ -90,7 +90,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], fun
         }
     };
     DBArray = __decorate([
-        Jassi_1.$Class("jassi.remote.DBArray"),
+        jassijs_1.$Class("jassijs.remote.DBArray"),
         __metadata("design:paramtypes", [Object])
     ], DBArray);
     exports.DBArray = DBArray;

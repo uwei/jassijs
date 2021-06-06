@@ -42,7 +42,7 @@ define("demo/DBTest", ["require", "exports", "de/remote/AR", "de/remote/Kunde", 
             debugger;
         }
         //	new de.Kunde().generate();
-        //jassi.db.uploadType(de.Kunde);
+        //jassijs.db.uploadType(de.Kunde);
     }
     exports.test2 = test2;
     ;
@@ -57,7 +57,7 @@ define("demo/DBTest", ["require", "exports", "de/remote/AR", "de/remote/Kunde", 
     }
     exports.test3 = test3;
 });
-define("demo/DK", ["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_localserver/Filesystem"], function (require, exports, Table_1, Jassi_1, Panel_1, Textbox_1, Filesystem_1) {
+define("demo/DK", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs_localserver/Filesystem"], function (require, exports, Table_1, Jassi_1, Panel_1, Textbox_1, Filesystem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DK = void 0;
@@ -103,7 +103,7 @@ define("demo/DK", ["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi",
     }
     exports.test = test;
 });
-define("demo/Dialog", ["require", "exports", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi/ui/Panel"], function (require, exports, Button_1, BoxPanel_1, Jassi_2, Panel_2) {
+define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Button_1, BoxPanel_1, Jassi_2, Panel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog = void 0;
@@ -136,7 +136,7 @@ define("demo/Dialog", ["require", "exports", "jassi/ui/Button", "jassi/ui/BoxPan
     }
     exports.test = test;
 });
-define("demo/DialogKunde2", ["require", "exports", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi"], function (require, exports, Panel_3, HTMLPanel_1, Textbox_2, Button_2, BoxPanel_2, Jassi_3) {
+define("demo/DialogKunde2", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi"], function (require, exports, Panel_3, HTMLPanel_1, Textbox_2, Button_2, BoxPanel_2, Jassi_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DialogKunde2 = void 0;
@@ -235,7 +235,7 @@ define("demo/DialogKunde2", ["require", "exports", "jassi/ui/Panel", "jassi/ui/H
     }
     exports.test = test;
 });
-define("demo/EmptyDialog", ["require", "exports", "jassi/ui/Button", "jassi/ui/Repeater", "jassi/remote/Jassi", "jassi/ui/Panel"], function (require, exports, Button_3, Repeater_1, Jassi_4, Panel_4) {
+define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Button_3, Repeater_1, Jassi_4, Panel_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmptyDialog = void 0;
@@ -265,7 +265,7 @@ define("demo/EmptyDialog", ["require", "exports", "jassi/ui/Button", "jassi/ui/R
     }
     exports.test = test;
 });
-define("demo/KundeView", ["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/Property", "jassi/remote/Jassi", "de/remote/Kunde", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_3, Property_1, Jassi_5, Kunde_2, DBObjectView_1) {
+define("demo/KundeView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/remote/Jassi", "de/remote/Kunde", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_3, Property_1, Jassi_5, Kunde_2, DBObjectView_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -349,7 +349,7 @@ define("demo/KundeView", ["require", "exports", "jassi/ui/converters/NumberConve
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Kunde_2.Kunde !== "undefined" && Kunde_2.Kunde) === "function" ? _a : Object)
     ], KundeView.prototype, "value", void 0);
     KundeView = __decorate([
@@ -366,7 +366,7 @@ define("demo/KundeView", ["require", "exports", "jassi/ui/converters/NumberConve
     }
     exports.test = test;
 });
-define("demo/MemoryTest", ["require", "exports", "jassi/remote/Server", "jassi/util/Reloader", "jassi/remote/Registry"], function (require, exports, Server_1, Reloader_1, Registry_1) {
+define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Registry"], function (require, exports, Server_1, Reloader_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MemoryTest = void 0;
@@ -389,7 +389,7 @@ define("demo/MemoryTest", ["require", "exports", "jassi/remote/Server", "jassi/u
     }
     exports.MemoryTest = MemoryTest;
 });
-define("demo/ParentRightCheck", ["require", "exports", "jassi/remote/security/Group", "jassi/remote/security/User", "de/remote/ARZeile", "de/remote/Kunde", "de/remote/AR", "jassi/remote/Registry", "jassi/remote/RemoteProtocol", "jassi/remote/DBObject", "jassi/remote/security/ParentRight"], function (require, exports, Group_1, User_1, ARZeile_2, Kunde_3, AR_2, Registry_2, RemoteProtocol_1, DBObject_1, ParentRight_1) {
+define("demo/ParentRightCheck", ["require", "exports", "jassijs/remote/security/Group", "jassijs/remote/security/User", "de/remote/ARZeile", "de/remote/Kunde", "de/remote/AR", "jassijs/remote/Registry", "jassijs/remote/RemoteProtocol", "jassijs/remote/DBObject", "jassijs/remote/security/ParentRight"], function (require, exports, Group_1, User_1, ARZeile_2, Kunde_3, AR_2, Registry_2, RemoteProtocol_1, DBObject_1, ParentRight_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -489,7 +489,7 @@ define("demo/ParentRightCheck", ["require", "exports", "jassi/remote/security/Gr
     }
     exports.test = test;
 });
-define("demo/ReportKunde", ["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi", "jassi/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_1, Jassi_6, Property_2, Kunde_4) {
+define("demo/ReportKunde", ["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_1, Jassi_6, Property_2, Kunde_4) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -510,7 +510,7 @@ define("demo/ReportKunde", ["require", "exports", "jassi_report/ReportDesign", "
         }
     };
     __decorate([
-        Property_2.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_2.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Kunde_4.Kunde !== "undefined" && Kunde_4.Kunde) === "function" ? _a : Object)
     ], ReportKunde.prototype, "value", void 0);
     ReportKunde = __decorate([
@@ -522,13 +522,13 @@ define("demo/ReportKunde", ["require", "exports", "jassi_report/ReportDesign", "
         // kk.o=0;
         var dlg = new ReportKunde();
         //  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};
-        //	dlg.value=jassi.db.load("de.Kunde",9);	
+        //	dlg.value=jassijs.db.load("de.Kunde",9);	
         //console.log(JSON.stringify(dlg.toJSON()));
         return dlg;
     }
     exports.test = test;
 });
-define("demo/ReportRechnung", ["require", "exports", "jassi_report/ReportDesign", "jassi/remote/Jassi", "jassi/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_2, Jassi_7, Property_3, Kunde_5) {
+define("demo/ReportRechnung", ["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_2, Jassi_7, Property_3, Kunde_5) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -679,7 +679,7 @@ define("demo/ReportRechnung", ["require", "exports", "jassi_report/ReportDesign"
         }
     };
     __decorate([
-        Property_3.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_3.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Kunde_5.Kunde !== "undefined" && Kunde_5.Kunde) === "function" ? _a : Object)
     ], ReportRechnung.prototype, "value", void 0);
     ReportRechnung = __decorate([
@@ -691,13 +691,13 @@ define("demo/ReportRechnung", ["require", "exports", "jassi_report/ReportDesign"
         // kk.o=0;
         var dlg = new ReportRechnung();
         //  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};
-        //	dlg.value=jassi.db.load("de.Kunde",9);	
+        //	dlg.value=jassijs.db.load("de.Kunde",9);	
         //console.log(JSON.stringify(dlg.toJSON()));
         return dlg;
     }
     exports.test = test;
 });
-define("demo/StyleDialog", ["require", "exports", "jassi/ui/Style", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Panel"], function (require, exports, Style_1, Button_4, Jassi_8, Panel_5) {
+define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Style_1, Button_4, Jassi_8, Panel_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.StyleDialog = void 0;
@@ -733,7 +733,7 @@ define("demo/StyleDialog", ["require", "exports", "jassi/ui/Style", "jassi/ui/Bu
     }
     exports.test = test;
 });
-define("demo/TableContextmenu", ["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Table"], function (require, exports, ContextMenu_1, MenuItem_1, Table_2) {
+define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Table"], function (require, exports, ContextMenu_1, MenuItem_1, Table_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -772,13 +772,13 @@ define("demo/TableContextmenu", ["require", "exports", "jassi/ui/ContextMenu", "
         tab.items = tabledata;
         tab.selectComponent = { value: "" };
         tab.showSearchbox = true;
-        //    var kunden = await jassi.db.load("de.Kunde");
+        //    var kunden = await jassijs.db.load("de.Kunde");
         //   tab.items = kunden;
         return tab;
     }
     exports.test = test;
 });
-define("demo/TestComponent", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Component"], function (require, exports, Panel_6, Button_5, HTMLPanel_2, Jassi_9, Component_1) {
+define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_6, Button_5, HTMLPanel_2, Jassi_9, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestComponent = void 0;
@@ -849,7 +849,7 @@ define("demo/TestExtension", ["require", "exports", "de/remote/Kunde"], function
     }
     exports.test = test;
 });
-define("demo/TestTab", ["require", "exports", "jassi/remote/Jassi", "jassi/base/Actions", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/Button"], function (require, exports, Jassi_10, Actions_1, Panel_7, HTMLPanel_3, Button_6) {
+define("demo/TestTab", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button"], function (require, exports, Jassi_10, Actions_1, Panel_7, HTMLPanel_3, Button_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.KK4 = exports.KK3 = void 0;
@@ -885,7 +885,7 @@ define("demo/TestTab", ["require", "exports", "jassi/remote/Jassi", "jassi/base/
     }
     exports.test = test;
 });
-define("demo/TestTree", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Tree", "jassi/remote/Jassi"], function (require, exports, Panel_8, Tree_1, Jassi_11) {
+define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Jassi"], function (require, exports, Panel_8, Tree_1, Jassi_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestTree = void 0;
@@ -928,7 +928,7 @@ define("demo/TestTree", ["require", "exports", "jassi/ui/Panel", "jassi/ui/Tree"
     }
     exports.test = test;
 });
-define("demo/TestUpload", ["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Upload", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse"], function (require, exports, HTMLPanel_4, Upload_1, Jassi_12, Panel_9, papaparse_1) {
+define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_4, Upload_1, Jassi_12, Panel_9, papaparse_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestUpload = void 0;
@@ -969,7 +969,7 @@ define("demo/TestUpload", ["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui
     }
     exports.test = test;
 });
-define("demo/Testcontextmenu", ["require", "exports", "jassi/ui/Panel", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Button", "jassi/remote/Jassi"], function (require, exports, Panel_10, ContextMenu_2, MenuItem_2, Button_7, Jassi_13) {
+define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_10, ContextMenu_2, MenuItem_2, Button_7, Jassi_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Testcontextmenu = void 0;
@@ -1026,7 +1026,7 @@ define("demo/Testcontextmenu", ["require", "exports", "jassi/ui/Panel", "jassi/u
     }
     exports.test = test;
 });
-define("demo/Testmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", "jassi/ui/Menu", "jassi/ui/MenuItem", "jassi/ui/Button", "jassi/remote/Jassi"], function (require, exports, Panel_11, jassi_1, Menu_1, MenuItem_3, Button_8, Jassi_14) {
+define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_11, Menu_1, MenuItem_3, Button_8, Jassi_14) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testmenu = void 0;
@@ -1102,13 +1102,8 @@ define("demo/Testmenu", ["require", "exports", "jassi/ui/Panel", "jassi/jassi", 
         __metadata("design:paramtypes", [])
     ], Testmenu);
     exports.Testmenu = Testmenu;
-    jassi_1.default.test = async function () {
-        // kk.o=0;
-        var dlg = new Testmenu();
-        return dlg;
-    };
 });
-define("demo/TreeContextmenu", ["require", "exports", "jassi/ui/Tree", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Panel", "jassi/ui/Button"], function (require, exports, Tree_2, ContextMenu_3, MenuItem_4, Panel_12, Button_9) {
+define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Panel", "jassijs/ui/Button"], function (require, exports, Tree_2, ContextMenu_3, MenuItem_4, Panel_12, Button_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -1168,7 +1163,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassi/ui/Tree", "jassi/ui
     }
     exports.test = test;
 });
-define("demo/TreeTable", ["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/Table"], function (require, exports, Panel_13, Jassi_15, Table_3) {
+define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Table"], function (require, exports, Panel_13, Jassi_15, Table_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
@@ -1294,26 +1289,26 @@ define("demo/registry", ["require"], function (require) {
     return {
         default: {
             "demo/DBTest.ts": {
-                "date": 1613330812615
+                "date": 1622984379898
             },
             "demo/Dialog.ts": {
-                "date": 1614895450330,
+                "date": 1622984213677,
                 "demo/Dialog": {}
             },
             "demo/DialogKunde2.ts": {
-                "date": 1613391153926,
+                "date": 1622984213677,
                 "demo.DialogKunde2": {}
             },
             "demo/DK.ts": {
-                "date": 1614892605286,
+                "date": 1622985638961,
                 "demo.DK": {}
             },
             "demo/EmptyDialog.ts": {
-                "date": 1613218544157,
+                "date": 1622984213677,
                 "demo.EmptyDialog": {}
             },
             "demo/KundeView.ts": {
-                "date": 1617199730431,
+                "date": 1622984379898,
                 "demo.KundeView": {
                     "$DBObjectView": [
                         {
@@ -1323,31 +1318,31 @@ define("demo/registry", ["require"], function (require) {
                 }
             },
             "demo/MemoryTest.ts": {
-                "date": 1615317035748
+                "date": 1622984213677
             },
             "demo/modul.ts": {
                 "date": 1612818333557
             },
             "demo/ParentRightCheck.ts": {
-                "date": 1613330812615
+                "date": 1622984213677
             },
             "demo/ReportKunde.ts": {
-                "date": 1613330812614,
+                "date": 1622984379892,
                 "demo.ReportKunde": {}
             },
             "demo/ReportRechnung.ts": {
-                "date": 1615756706461,
+                "date": 1622984379897,
                 "demo.ReportRechnung": {}
             },
             "demo/StyleDialog.ts": {
-                "date": 1613218544157,
+                "date": 1622984213677,
                 "demo/StyleDialog": {}
             },
             "demo/TableContextmenu.ts": {
-                "date": 1588526093408
+                "date": 1622984379892
             },
             "demo/TestComponent.ts": {
-                "date": 1613218544158,
+                "date": 1622984213677,
                 "demo.TestComponent": {
                     "$UIComponent": [
                         {
@@ -1361,18 +1356,18 @@ define("demo/registry", ["require"], function (require) {
                 }
             },
             "demo/Testcontextmenu.ts": {
-                "date": 1613394627144,
+                "date": 1622984213677,
                 "demo.Testcontextmenu": {}
             },
             "demo/TestExtension.ts": {
                 "date": 1613330812614
             },
             "demo/Testmenu.ts": {
-                "date": 1613218544157,
+                "date": 1622985794017,
                 "demo.Testmenu": {}
             },
             "demo/TestTab.ts": {
-                "date": 1613218544160,
+                "date": 1622984213677,
                 "de.KK3": {
                     "$ActionProvider": [
                         "3"
@@ -1385,18 +1380,18 @@ define("demo/registry", ["require"], function (require) {
                 }
             },
             "demo/TestTree.ts": {
-                "date": 1613218544157,
+                "date": 1622984213677,
                 "demo.TestTree": {}
             },
             "demo/TestUpload.ts": {
-                "date": 1613218544157,
+                "date": 1622984213677,
                 "demo/TestUpload": {}
             },
             "demo/TreeContextmenu.ts": {
-                "date": 1612387959952
+                "date": 1622984213677
             },
             "demo/TreeTable.ts": {
-                "date": 1613914171753,
+                "date": 1622984213677,
                 "demo.TreeTable": {}
             }
         }

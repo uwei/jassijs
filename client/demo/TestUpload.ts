@@ -1,9 +1,9 @@
-import {HTMLPanel} from "jassi/ui/HTMLPanel";
-import {Upload} from "jassi/ui/Upload";
-import { $Class } from "jassi/remote/Jassi";
-import {Panel} from "jassi/ui/Panel";
+import {HTMLPanel} from "jassijs/ui/HTMLPanel";
+import {Upload} from "jassijs/ui/Upload";
+import { $Class } from "jassijs/remote/Jassi";
+import {Panel} from "jassijs/ui/Panel";
 //@ts-ignore
-import {Papa} from "jassi/ext/papaparse";
+import {Papa} from "jassijs/ext/papaparse";
 
 type Me = {
 	upload1?:Upload,

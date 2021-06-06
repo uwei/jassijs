@@ -7,13 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/VariablePanel", "jassi/ui/DockingContainer", "jassi/ui/Button", "jassi/util/Tools", "jassi_report/designer/ReportDesigner", "jassi_editor/AcePanel"], function (require, exports, Jassi_1, Panel_1, VariablePanel_1, DockingContainer_1, Button_1, Tools_1, ReportDesigner_1, AcePanel_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/Button", "jassijs/util/Tools", "jassijs_report/designer/ReportDesigner", "jassijs_editor/AcePanel"], function (require, exports, jassijs_1, Panel_1, VariablePanel_1, DockingContainer_1, Button_1, Tools_1, ReportDesigner_1, AcePanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportEditor = void 0;
     /**
      * Panel for editing sources
-     * @class jassi_report.ReportEditor
+     * @class jassijs_report.ReportEditor
      */
     let ReportEditor = class ReportEditor extends Panel_1.Panel {
         constructor() {
@@ -110,7 +110,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         renameVariable(oldName, newName) {
         }
         /**
-         * @member { jassi.ui.VariablePanel} - the variable
+         * @member { jassijs.ui.VariablePanel} - the variable
          */
         set variables(value) {
             this._variables = value;
@@ -157,7 +157,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
     };
     ReportEditor = __decorate([
-        Jassi_1.$Class("jassi_report.ReportEditor"),
+        jassijs_1.$Class("jassijs_report.ReportEditor"),
         __metadata("design:paramtypes", [])
     ], ReportEditor);
     exports.ReportEditor = ReportEditor;

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/Textbox", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi"], function (require, exports, Panel_1, HTMLPanel_1, Textbox_1, Button_1, BoxPanel_1, Jassi_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi"], function (require, exports, Panel_1, HTMLPanel_1, Textbox_1, Button_1, BoxPanel_1, Jassi_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DialogKunde2 = void 0;

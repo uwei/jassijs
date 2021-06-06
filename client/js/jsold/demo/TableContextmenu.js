@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jassi/ui/Table"], function (require, exports, ContextMenu_1, MenuItem_1, Table_1) {
+define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Table"], function (require, exports, ContextMenu_1, MenuItem_1, Table_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -37,7 +37,7 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/MenuItem", "jass
         tab.items = tabledata;
         tab.selectComponent = { value: "" };
         tab.showSearchbox = true;
-        //    var kunden = await jassi.db.load("de.Kunde");
+        //    var kunden = await jassijs.db.load("de.Kunde");
         //   tab.items = kunden;
         return tab;
     }

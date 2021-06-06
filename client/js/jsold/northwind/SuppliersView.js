@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Suppliers", "jassi/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_1, Jassi_1, Property_1, Suppliers_1, DBObjectView_1) {
+define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_1, jassijs_1, Property_1, Suppliers_1, DBObjectView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SuppliersView = void 0;
@@ -116,12 +116,12 @@ define(["require", "exports", "jassi/ui/converters/NumberConverter", "jassi/ui/T
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Suppliers_1.Suppliers)
     ], SuppliersView.prototype, "value", void 0);
     SuppliersView = __decorate([
         DBObjectView_1.$DBObjectView({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" }),
-        Jassi_1.$Class("northwind.SuppliersView"),
+        jassijs_1.$Class("northwind.SuppliersView"),
         __metadata("design:paramtypes", [])
     ], SuppliersView);
     exports.SuppliersView = SuppliersView;

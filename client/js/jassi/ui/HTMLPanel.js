@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/ui/DataComponent"], function (require, exports, Component_1, Jassi_1, Property_1, DataComponent_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_1, jassijs_1, Property_1, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLPanel = void 0;
@@ -129,14 +129,14 @@ define(["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi
         /**
          * activates or deactivates designmode
          * @param {boolean} enable - true if activate designMode
-         * @param {jassi.ui.ComponentDesigner} editor - editor instance
+         * @param {jassijs.ui.ComponentDesigner} editor - editor instance
          */
         _setDesignMode(enable, editor) {
             var _this = this;
             this._designMode = enable;
             if (enable) {
                 console.log("activate tiny");
-                requirejs(["jassi/ext/tinymce"], function (tinymcelib) {
+                requirejs(["jassijs/ext/tinymce"], function (tinymcelib) {
                     if (!bugtinymce) { //https://stackoverflow.com/questions/20008384/tinymce-how-do-i-prevent-br-data-mce-bogus-1-text-in-editor
                         const tinymceBind = window["tinymce"].DOM.bind;
                         window["tinymce"].DOM.bind = (target, name, func, scope) => {
@@ -223,7 +223,7 @@ define(["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi
     ], HTMLPanel.prototype, "value", null);
     HTMLPanel = __decorate([
         Component_1.$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
-        Jassi_1.$Class("jassi.ui.HTMLPanel"),
+        jassijs_1.$Class("jassijs.ui.HTMLPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel);
     exports.HTMLPanel = HTMLPanel;

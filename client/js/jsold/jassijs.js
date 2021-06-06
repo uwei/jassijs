@@ -2,7 +2,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js');
     navigator.serviceWorker.addEventListener("message", (evt) => {
         if (evt.data === "wait for login") {
-            new Promise((resolve_1, reject_1) => { require(["jassi/base/LoginDialog"], resolve_1, reject_1); }).then((data) => {
+            new Promise((resolve_1, reject_1) => { require(["jassijs/base/LoginDialog"], resolve_1, reject_1); }).then((data) => {
                 data.login();
                 //          navigator.serviceWorker.controller.postMessage("logindialog closed");
             });
@@ -66,9 +66,9 @@ async function run() {
             if (modules[modul].endsWith(".js") || modules[modul].indexOf(".js?") > -1) {
                 dowait.push(loadScript(modules[modul]));
             }
-            /*let modulpath = "./" + modul + "/jassi.json";
+            /*let modulpath = "./" + modul + "/jassijs.json";
             if(data.require&&data.require.paths&&data.require.paths[modul])
-                modulpath=data.require.paths[modul]+"/jassi.json";
+                modulpath=data.require.paths[modul]+"/jassijs.json";
             allmodules[modul] = loadText(modulpath);*/
         }
         for (let x = 0; x < dowait.length; x++) {
@@ -79,15 +79,15 @@ async function run() {
         waitSeconds: 200,
         baseUrl: 'js',
         paths: {
-            //"jassi/ext": '../../jassi/ext',
-            "remote/jassi/ext": '../../remote/jassi/ext'
+            //"jassijs/ext": '../../jassijs/ext',
+            "remote/jassijs/ext": '../../remote/jassijs/ext'
         }
     });
     var mods = [];
     for (let key in modules) {
         mods.push(key + "/modul");
     }
-    var startlib = ["jassi/jassi"];
+    var startlib = ["jassijs/jassi"];
     var beforestartlib = [];
     require(mods, function (...res) {
         for (let x = 0; x < res.length; x++) {
@@ -149,10 +149,10 @@ async function run() {
         loadBeforestart().then(() => {
             require(startlib, function (jassi, ...others) {
                 cssFiles.forEach((css) => {
-                    jassi.default.myRequire(css);
+                    jassijs.default.myRequire(css);
                 });
-                //this.myRequire("jassi/jassi.css");
-                jassi.default.modules = modules;
+                //this.myRequire("jassijs/jassijs.css");
+                jassijs.default.modules = modules;
                 if (runScript) {
                     require([runScript], function () {
                     });

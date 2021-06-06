@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component"], function (require, exports, Jassi_1, Component_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, jassijs_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Container = void 0;
@@ -33,7 +33,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component"], funct
         }
         /**
          * adds a component to the container
-         * @param {jassi.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} component - the component to add
          */
         add(component) {
             if (component._parent !== undefined) {
@@ -54,8 +54,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component"], funct
         }
         /**
          * adds a component to the container before an other component
-         * @param {jassi.ui.Component} component - the component to add
-         * @param {jassi.ui.Component} before - the component before then component to add
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
          */
         addBefore(component, before) {
             component._parent = this;
@@ -72,7 +72,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component"], funct
         }
         /**
        * remove the component
-       * @param {jassi.ui.Component} component - the component to remove
+       * @param {jassijs.ui.Component} component - the component to remove
        * @param {boolean} destroy - if true the component would be destroyed
        */
         remove(component, destroy = false) {
@@ -113,7 +113,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component"], funct
         }
     };
     Container = __decorate([
-        Jassi_1.$Class("jassi.ui.Container"),
+        jassijs_1.$Class("jassijs.ui.Container"),
         __metadata("design:paramtypes", [Object])
     ], Container);
     exports.Container = Container;

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ext/tinymce", "jassi/remote/Registry"], function (require, exports, Panel_1, HTMLPanel_1, Button_1, Jassi_1, tinymce_1, Registry_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_1, HTMLPanel_1, Button_1, jassijs_1, tinymce_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLEditorPanel = void 0;
@@ -65,13 +65,13 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/HTMLPanel", "jassi/ui/
         }
     };
     HTMLEditorPanel = __decorate([
-        Jassi_1.$Class("jassi.ui.HTMLEditorPanel"),
+        jassijs_1.$Class("jassijs.ui.HTMLEditorPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLEditorPanel);
     exports.HTMLEditorPanel = HTMLEditorPanel;
-    Jassi_1.default.test = async function () {
+    jassijs_1.default.test = async function () {
         var dlg = new HTMLEditorPanel();
-        //	dlg.value=jassi.db.load("de.Kunde",9);	
+        //	dlg.value=jassijs.db.load("de.Kunde",9);	
         return dlg;
     };
 });

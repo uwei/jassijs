@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/converters/DefaultConverter", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, DefaultConverter_1, Jassi_1, Property_1) {
+define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, DefaultConverter_1, jassijs_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StringConverter = void 0;
@@ -36,7 +36,7 @@ define(["require", "exports", "jassi/ui/converters/DefaultConverter", "jassi/rem
     };
     StringConverter = __decorate([
         DefaultConverter_1.$Converter({ name: "string" }),
-        Jassi_1.$Class("jassi.ui.converters.StringConverter"),
+        jassijs_1.$Class("jassijs.ui.converters.StringConverter"),
         Property_1.$Property({ name: "new", type: "json" })
         //@$Property({ name: "new/minChars", type: "number", default: undefined })
         //@$Property({ name: "new/maxChars", type: "number", default: undefined })

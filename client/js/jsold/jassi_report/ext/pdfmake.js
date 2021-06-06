@@ -18,7 +18,7 @@
           }
       }
     });*/
-define("jassi_report/ext/pdfmake", ['pdfMake', "vfs_fonts"], function (ttt, vfs) {
+define("jassijs_report/ext/pdfmake", ['pdfMake', "vfs_fonts"], function (ttt, vfs) {
     var fonts = require("vfs_fonts");
     return {
         default: pdfMake

@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponent", "jassi/ui/HTMLPanel", "jassi/ui/Property", "jassi_report/ReportDesign"], function (require, exports, Jassi_1, ReportComponent_1, HTMLPanel_1, Property_1, ReportDesign_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign"], function (require, exports, jassijs_1, ReportComponent_1, HTMLPanel_1, Property_1, ReportDesign_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RText = void 0;
@@ -81,7 +81,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponen
             var api = 'https://fonts.googleapis.com/css?family=';
             var sfont = value.replaceAll(" ", "+");
             if (!document.getElementById("-->" + api + sfont)) { //"-->https://fonts.googleapis.com/css?family=Aclonica">
-                Jassi_1.default.myRequire(api + sfont);
+                jassijs_1.default.myRequire(api + sfont);
             }
             if (value === undefined)
                 $(this.dom).css("font_family", "");
@@ -466,7 +466,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponen
     ], RText.prototype, "lineHeight", null);
     RText = __decorate([
         ReportComponent_1.$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
-        Jassi_1.$Class("jassi_report.RText")
+        jassijs_1.$Class("jassijs_report.RText")
         //@$Property({hideBaseClassProperties:true})
         ,
         Property_1.$Property({ name: "value", type: "string", description: "text" }),

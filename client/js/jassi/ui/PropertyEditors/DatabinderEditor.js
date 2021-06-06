@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Databinder", "jassi/remote/Jassi"], function (require, exports, Editor_1, Databinder_1, Jassi_1) {
+define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Databinder", "jassijs/remote/Jassi"], function (require, exports, Editor_1, Databinder_1, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DatabinderEditor = void 0;
@@ -83,7 +83,7 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Datab
     };
     DatabinderEditor = __decorate([
         Editor_1.$PropertyEditor(["databinder"]),
-        Jassi_1.$Class("jassi.ui.PropertyEditors.DatabinderEditor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.DatabinderEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DatabinderEditor);
     exports.DatabinderEditor = DatabinderEditor;

@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Component"], function (require, exports, Panel_1, Button_1, HTMLPanel_1, Jassi_1, Component_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_1, Button_1, HTMLPanel_1, jassijs_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestComponent = void 0;
@@ -63,7 +63,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Button", "jassi/ui/HTM
     };
     TestComponent = __decorate([
         Component_1.$UIComponent({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
-        Jassi_1.$Class("demo.TestComponent"),
+        jassijs_1.$Class("demo.TestComponent"),
         __metadata("design:paramtypes", [])
     ], TestComponent);
     exports.TestComponent = TestComponent;

@@ -12,18 +12,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Component", "jassi/ui/ComponentDescriptor"], function (require, exports, Jassi_1, Panel_1, Component_1, ComponentDescriptor_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/ComponentDescriptor"], function (require, exports, jassijs_1, Panel_1, Component_1, ComponentDescriptor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.VariablePanel = void 0;
-    Jassi_1.default.d = function (id) {
-        if (Jassi_1.default.d[id] === true)
+    jassijs_1.default.d = function (id) {
+        if (jassijs_1.default.d[id] === true)
             return false;
-        Jassi_1.default.d[id] = true;
+        jassijs_1.default.d[id] = true;
         return true;
     };
-    // console.log(jassi.d(9)?debug:0);
-    // console.log(jassi.d(9)?debug:0);
+    // console.log(jassijs.d(9)?debug:0);
+    // console.log(jassijs.d(9)?debug:0);
     let VariablePanel = class VariablePanel extends Panel_1.Panel {
         constructor() {
             super();
@@ -32,7 +32,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this.debugpoints = {};
         }
         async createTable() {
-            var Table = (await new Promise((resolve_1, reject_1) => { require(["jassi/ui/Table"], resolve_1, reject_1); })).Table;
+            var Table = (await new Promise((resolve_1, reject_1) => { require(["jassijs/ui/Table"], resolve_1, reject_1); })).Table;
             this.table = new Table({
                 dataTreeChildFunction: function (obj) {
                     var ret = [];
@@ -55,7 +55,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         /**
          * VariabelPanel for id
          * @id {number} - the id
-         * @returns  {jassi.ui.VariablePanel}
+         * @returns  {jassijs.ui.VariablePanel}
         **/
         static get(id) {
             if ($("#" + id).length === 0) //dummy for Codeeditor has closed
@@ -154,7 +154,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
         /**
          * get the ids of all editable Components by the designer
-         * @param {jassi.ui.Component} component - the component to inspect
+         * @param {jassijs.ui.Component} component - the component to inspect
          * @param {boolean} idFromLabel - if true not the id but the id form label is returned
          **/
         getEditableComponents(component, idFromLabel = undefined) {
@@ -337,7 +337,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
     };
     VariablePanel = __decorate([
-        Jassi_1.$Class("jassi.ui.VariablePanel"),
+        jassijs_1.$Class("jassijs.ui.VariablePanel"),
         __metadata("design:paramtypes", [])
     ], VariablePanel);
     exports.VariablePanel = VariablePanel;

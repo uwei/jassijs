@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Textbox", "jassi/remote/Jassi"], function (require, exports, Editor_1, Textbox_1, Jassi_1) {
+define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi"], function (require, exports, Editor_1, Textbox_1, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NameEditor = void 0;
@@ -77,7 +77,7 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Textb
     };
     NameEditor = __decorate([
         Editor_1.$PropertyEditor(["*name*"]),
-        Jassi_1.$Class("jassi.ui.PropertyEditors.NameEditor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.NameEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], NameEditor);
     exports.NameEditor = NameEditor;

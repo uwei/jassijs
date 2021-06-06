@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, Component_1, Jassi_1, Property_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, Component_1, jassijs_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InvisibleComponent = void 0;
@@ -20,7 +20,7 @@ define(["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi
         }
     };
     InvisibleComponent = __decorate([
-        Jassi_1.$Class("jassi.ui.InvisibleComponent")
+        jassijs_1.$Class("jassijs.ui.InvisibleComponent")
         /*@$Property({name:"label",hide:true})
         @$Property({name:"icon",hide:true})
         @$Property({name:"tooltip",hide:true})

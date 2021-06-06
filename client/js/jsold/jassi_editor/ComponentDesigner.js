@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/PropertyEditor", "jassi_editor/ComponentExplorer", "jassi_editor/ComponentPalette", "jassi_editor/util/Resizer", "jassi_editor/CodeEditorInvisibleComponents", "jassi/ui/Repeater", "jassi/ui/Button", "jassi_editor/util/DragAndDropper", "jassi/remote/Classes", "jassi/ui/Databinder"], function (require, exports, Jassi_1, Panel_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_1, DragAndDropper_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/remote/Classes", "jassijs/ui/Databinder"], function (require, exports, jassijs_1, Panel_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_1, DragAndDropper_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentDesigner = void 0;
@@ -315,11 +315,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
         /**
          * move a component
-         * @param {jassi.ui.Component} component - the component to move
+         * @param {jassijs.ui.Component} component - the component to move
          * @param {number} top - the top absolute position
          * @param {number} left - the left absolute position
-         * @param {jassi.ui.Container} newParent - the new parent container where the component move to
-         * @param {jassi.ui.Component} beforeComponent - insert the component before beforeComponent
+         * @param {jassijs.ui.Container} newParent - the new parent container where the component move to
+         * @param {jassijs.ui.Component} beforeComponent - insert the component before beforeComponent
          **/
         moveComponent(component, top, left, oldParent, newParent, beforeComponent) {
             var _this = this;
@@ -367,11 +367,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         /**
          * create a new component
          * @param {string} type - the type of the new component
-         * @param {jassi.ui.Component} component - the component themself
+         * @param {jassijs.ui.Component} component - the component themself
          * @param {number} top - the top absolute position
          * @param {number} left - the left absolute position
-         * @param {jassi.ui.Container} newParent - the new parent container where the component is placed
-         * @param {jassi.ui.Component} beforeComponent - insert the new component before beforeComponent
+         * @param {jassijs.ui.Container} newParent - the new parent container where the component is placed
+         * @param {jassijs.ui.Component} beforeComponent - insert the new component before beforeComponent
          **/
         createComponent(type, component, top, left, newParent, beforeComponent) {
             var _this = this;
@@ -388,7 +388,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                 var test = _this._propertyEditor.parser.getPropertyValue(repeatername, "createRepeatingComponent");
                 scope = { variablename: repeatername, methodname: "createRepeatingComponent" };
                 if (test === undefined) {
-                    var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassi.ui.Databinder");
+                    var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassijs.ui.Databinder");
                     _this._propertyEditor.setPropertyInCode("createRepeatingComponent", "function(me:Me){\n\t\n}", true, repeatername);
                     repeater.createRepeatingComponent(function (me) {
                         if (this._designMode !== true)
@@ -396,7 +396,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
                         //_this._variables.addVariable(vardatabinder,databinder);
                         _this._variables.updateCache();
                     });
-                    /*var db=new jassi.ui.Databinder();
+                    /*var db=new jassijs.ui.Databinder();
                     if(repeater.value!==undefined&&repeater.value.length>0)
                         db.value=repeater.value[0];
                     _this._variables.add(vardatabinder,db);
@@ -488,7 +488,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             return this._hasRepeatingContainer(component._parent);
         }
         /**
-         * @member {jassi.ui.Component} - the designed component
+         * @member {jassijs.ui.Component} - the designed component
          */
         set designedComponent(component) {
             var com = component;
@@ -508,7 +508,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this._componentExplorer.value = component;
             $(this.dom).focus();
             this._updateInvisibleComponents();
-            //var parser=new jassi.ui.PropertyEditor.Parser();
+            //var parser=new jassijs.ui.PropertyEditor.Parser();
             //parser.parse(_this.value);
         }
         get designedComponent() {
@@ -530,7 +530,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
     };
     ComponentDesigner = __decorate([
-        Jassi_1.$Class("jassi_editor.ComponentDesigner"),
+        jassijs_1.$Class("jassijs_editor.ComponentDesigner"),
         __metadata("design:paramtypes", [])
     ], ComponentDesigner);
     exports.ComponentDesigner = ComponentDesigner;

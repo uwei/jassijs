@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property"], function (require, exports, Jassi_1, Component_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, jassijs_1, Component_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Button = void 0;
@@ -98,12 +98,12 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
     ], Button.prototype, "text", null);
     Button = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } }),
-        Jassi_1.$Class("jassi.ui.Button"),
+        jassijs_1.$Class("jassijs.ui.Button"),
         __metadata("design:paramtypes", [])
     ], Button);
     exports.Button = Button;
     async function test() {
-        var Panel = (await (new Promise((resolve_1, reject_1) => { require(["jassi/ui/Panel"], resolve_1, reject_1); }))).Panel;
+        var Panel = (await (new Promise((resolve_1, reject_1) => { require(["jassijs/ui/Panel"], resolve_1, reject_1); }))).Panel;
         var pan = new Panel();
         var but = new Button();
         but.text = "Hallo";

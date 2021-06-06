@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi/remote/RemoteObject", "jassi/remote/security/Setting"], function (require, exports, Jassi_1, Registry_1, RemoteObject_1, Setting_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting"], function (require, exports, jassijs_1, Registry_1, RemoteObject_1, Setting_1) {
     "use strict";
     var Settings_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -41,7 +41,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
                 var id = context.request.user.user;
                 return {
                     user: await man.findOne(context, Setting_1.Setting, { "id": 1 }),
@@ -86,7 +86,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
                 }
                 else {
                     //@ts-ignore
-                    var man = await (await new Promise((resolve_2, reject_2) => { require(["jassi/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
+                    var man = await (await new Promise((resolve_2, reject_2) => { require(["jassijs/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
                     var id = context.request.user.user;
                     //first load
                     let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });
@@ -135,7 +135,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
                 }
                 else {
                     //@ts-ignore
-                    var man = await (await new Promise((resolve_3, reject_3) => { require(["jassi/server/DBManager"], resolve_3, reject_3); })).DBManager.get();
+                    var man = await (await new Promise((resolve_3, reject_3) => { require(["jassijs/server/DBManager"], resolve_3, reject_3); })).DBManager.get();
                     var id = context.request.user.user;
                     //first load
                     let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });
@@ -160,7 +160,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
     Settings.userSettings = undefined;
     Settings.allusersSettings = undefined;
     Settings = Settings_1 = __decorate([
-        Jassi_1.$Class("jassi.remote.Settings")
+        jassijs_1.$Class("jassijs.remote.Settings")
     ], Settings);
     exports.Settings = Settings;
     var settings = new Settings();

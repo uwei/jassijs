@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/BoxPanel"], function (require, exports, Jassi_1, BoxPanel_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/BoxPanel"], function (require, exports, jassijs_1, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Report = void 0;
@@ -27,7 +27,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/BoxPanel"], functi
         }
     };
     Report = __decorate([
-        Jassi_1.$Class("jassi_report.Report")
+        jassijs_1.$Class("jassijs_report.Report")
         //@$UIComponent({editableChildComponents:["this"]})
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -35,6 +35,6 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/BoxPanel"], functi
     ], Report);
     exports.Report = Report;
 });
-//jassi.register("reportcomponent", "jassi_report.Report", "report/Report", "res/report.ico");
+//jassijs.register("reportcomponent", "jassijs_report.Report", "report/Report", "res/report.ico");
 // return CodeEditor.constructor;
 //# sourceMappingURL=Report.js.map

@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/PropertyEditor", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Select", "jassi/ui/BoxPanel", "jassi/ext/spectrum"], function (require, exports, PropertyEditor_1, Editor_1, Textbox_1, Jassi_1, Select_1, BoxPanel_1) {
+define(["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ext/spectrum"], function (require, exports, PropertyEditor_1, Editor_1, Textbox_1, jassijs_1, Select_1, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.ColorEditor = void 0;
@@ -117,7 +117,7 @@ define(["require", "exports", "jassi/ui/PropertyEditor", "jassi/ui/PropertyEdito
     };
     ColorEditor = __decorate([
         Editor_1.$PropertyEditor(["color"]),
-        Jassi_1.$Class("jassi.ui.PropertyEditors.ColorEditor")
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.ColorEditor")
         /**
         * Editor for color
         * used by PropertyEditor

@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], function (require, exports, Jassi_1, Registry_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"], function (require, exports, jassijs_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Extensions = void 0;
@@ -42,7 +42,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
                 config.paths[clname]=file;
                 config.map["*"][file]=clname;
                 
-                var files=["jassi/jassi"];
+                var files=["jassijs/jassi"];
                 for(var f=0;f<items[clname].length;f++){
                     files.push("js/"+items[clname][f].file.replace(".ts",".js"));
                 }
@@ -65,7 +65,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
         }
     }
     exports.Extensions = Extensions;
-    var extensions = Jassi_1.default.extensions;
+    var extensions = jassijs_1.default.extensions;
     exports.default = extensions;
 });
 //# sourceMappingURL=Extensions.js.map

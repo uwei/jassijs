@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ext/pdfmake", "jassi_report/PDFViewer"], function (require, exports, Jassi_1, pdfmake_1, PDFViewer_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ext/pdfmake", "jassijs_report/PDFViewer"], function (require, exports, jassijs_1, pdfmake_1, PDFViewer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.PDFReport = void 0;
@@ -67,7 +67,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ext/pdfmake", 
         ;
     };
     PDFReport = __decorate([
-        Jassi_1.$Class("jassi_report.PDFReport"),
+        jassijs_1.$Class("jassijs_report.PDFReport"),
         __metadata("design:paramtypes", [])
     ], PDFReport);
     exports.PDFReport = PDFReport;

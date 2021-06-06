@@ -25,10 +25,10 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
     class JSONDataEntry {
     }
     /**
-    * Manage all known data registered by jassi.register
+    * Manage all known data registered by jassijs.register
     * the data is downloaded by /registry.json
     * registry.json is updated by the server on code upload
-    * @class jassi.base.Registry
+    * @class jassijs.base.Registry
     */
     class Registry {
         constructor() {
@@ -213,7 +213,7 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
             if ((window === null || window === void 0 ? void 0 : window.document) === undefined) { //on server
                 //@ts-ignore
                 var fs = await new Promise((resolve_1, reject_1) => { require(['fs'], resolve_1, reject_1); });
-                modultext = fs.readFileSync("./jassi.json", 'utf-8');
+                modultext = fs.readFileSync("./jassijs.json", 'utf-8');
                 var modules = JSON.parse(modultext).modules;
                 for (let modul in modules) {
                     try {
@@ -236,7 +236,7 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
             }
             else { //on client
                 var all = {};
-                var mod = JSON.parse(await (this.loadText("jassi.json")));
+                var mod = JSON.parse(await (this.loadText("jassijs.json")));
                 for (let modul in mod.modules) {
                     if (!mod.modules[modul].endsWith(".js") && mod.modules[modul].indexOf(".js?") === -1)
                         //@ts-ignore
@@ -389,6 +389,6 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
     }
     exports.migrateModul = migrateModul;
 });
-//jassi.registry=registry;
+//jassijs.registry=registry;
 //# sourceMappingURL=Registry.js.map
 //# sourceMappingURL=Registry.js.map

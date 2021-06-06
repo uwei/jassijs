@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], function (require, exports, Jassi_1, Registry_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"], function (require, exports, jassijs_1, Registry_1) {
     "use strict";
     var Reloader_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -30,7 +30,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
             }
             var h = { date: 0, files: [] };
             var f = async function () {
-                Jassi_1.default.server.call("checkDir", h.date).then(function (t) {
+                jassijs_1.default.server.call("checkDir", h.date).then(function (t) {
                     h = JSON.parse(t);
                     var len = h.files.length;
                     if (len > 3)
@@ -128,7 +128,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
                             }
                             //delete class - its better to get an exception if sonething goes wrong
                             //  classes[key]=undefined;
-                            //jassi.classes.removeClass(key);
+                            //jassijs.classes.removeClass(key);
                         }
                     }
                 }
@@ -254,7 +254,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_1();
     Reloader = Reloader_1 = __decorate([
-        Jassi_1.$Class("jassi.util.Reloader"),
+        jassijs_1.$Class("jassijs.util.Reloader"),
         __metadata("design:paramtypes", [])
     ], Reloader);
     exports.Reloader = Reloader;

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/Transaction"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, Transaction_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction"], function (require, exports, DBObject_1, jassijs_1, DatabaseSchema_1, Transaction_1) {
     "use strict";
     var Employees_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -24,18 +24,18 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
                 return man.find(context, this, options);
             }
         }
         async hallo(num) {
-            if (!Jassi_1.default.isServer) {
+            if (!jassijs_1.default.isServer) {
                 var ret = await this.call(this, this.hallo, num);
                 return ret * 10;
             }
             else {
                 return num + 1;
-                // return ["jassi/base/ChromeDebugger.ts"];
+                // return ["jassijs/base/ChromeDebugger.ts"];
             }
         }
     };
@@ -114,7 +114,7 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
     ], Employees.prototype, "HireDate", void 0);
     Employees = Employees_1 = __decorate([
         DBObject_1.$DBObject(),
-        Jassi_1.$Class("northwind.Employees"),
+        jassijs_1.$Class("northwind.Employees"),
         __metadata("design:paramtypes", [])
     ], Employees);
     exports.Employees = Employees;

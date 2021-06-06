@@ -1,0 +1,317 @@
+import jassijs, { $Class } from "remote/jassijs/base/Jassi";
+import w2ui from "jassijs/ext/jquery.w2ui";
+import Component, { $UIComponent } from "jassijs/ui/Component";
+import {DataComponent} from "jassijs/ui/DataComponent";
+import { $Property } from "./Property";
+
+declare global {
+    interface JQuery {
+		w2grid:any;
+    }
+}
+
+//uwei Memoryleak in w2ui-1.5.rc1.js throw the next line on new chrome versions
+                            // if (!$input.is(':focus')) $input.triggerHandler( "focus" );
+
+@$UIComponent({fullPath:"common/Table",icon:"res/table.ico"})
+@$Class("jassijs.ui.Table")
+@$Property({ name: "new", type: "json" })
+@$Property({name: "new/multiSelect", type: "boolean", default: true })
+@$Property({name: "new/reorderColumns", type: "boolean", default: true })
+@$Property({name: "new/show", type: "json"})
+@$Property({name: "new/show/toolbar", type: "boolean"})
+export default class Table extends DataComponent {
+    _intersectionObserver;
+    _inited:boolean;
+    _selectHandler;
+    _select;
+    _tree;
+    /* get dom(){
+         return this.dom;
+     }*/
+    constructor(properties=undefined) {
+        super();
+        super.init($('<div class="Table"></div>')[0]);
+        var _this = this;
+        this._inited = true;
+        var props = $.extend({
+            name: this._id,
+            recid: "id",
+            // show:{toolbar:true},
+            records: [],
+            columns: [],
+            reorderColumns: true,
+        }, properties || {});
+        $('#' + this._id).w2grid(props);
+        this.layout();
+
+
+        //update Table if become visible
+        this._intersectionObserver = new IntersectionObserver(entries => {
+            if (entries[0].intersectionRatio <= 0) {
+                return;
+            }
+            w2ui[_this._id].refresh();
+        }, { rootMargin: `0px 0px 0px 0px` });
+        this._intersectionObserver.observe(_this.dom);
+    }
+
+    layout() {
+
+        /* $('#'+this._id).w2grid({
+            name: this._id,
+            recid:"id",
+           // show:{toolbar:true},
+            records: [                 ],
+            columns: [                        ],
+            reorderColumns: true,
+          
+        });*/
+
+        var _this = this;
+        w2ui[this._id].on("select",  function (event) {
+            _this._onselect(event);
+        });
+
+        this._selectHandler = [];
+    }
+
+    @$Property({ name: "setProperties", type: "json" })
+    @$Property({ name: "setProperties/multiSelect", type: "boolean", default: true })
+    @$Property({ name: "setProperties/reorderColumns", type: "boolean", default: true })
+    @$Property({ name: "setProperties/show", type: "json" })
+    @$Property({ name: "setProperties/show/toolbar", type: "boolean" })
+    setProperties(properties) {
+        var test = w2ui[this._id];
+        for (var key in properties) {
+            w2ui[this._id][key] = properties[key];
+        }
+        if (w2ui[this._id].show !== undefined && w2ui[this._id].show.columnHeaders === undefined)
+            w2ui[this._id].show.columnHeaders = true;
+        if (w2ui[this._id].show !== undefined && w2ui[this._id].show.toolbarReload === undefined)
+            w2ui[this._id].show.toolbarReload = false;
+        w2ui[this._id].refresh();
+    }
+    _onselect(event) {
+        var selection = [];
+        var aids = undefined;
+        if (this.select === undefined && this._eventHandler["select"] === undefined)
+            return;
+        if (event.recids !== undefined) {
+            aids = event.recids;
+        }
+        if (event.recid !== undefined) {
+            aids = [event.recid];
+        }
+        if (aids === undefined)
+            return;
+        var obs = w2ui[this._id].records;
+        for (var x = 0; x < obs.length; x++) {
+            for (var y = 0; y < aids.length; y++) {
+                if (obs[x].id.toString() === aids[y]) {
+                    var test = obs[x]._originalObject;
+                    if (test !== undefined)//extract proxy
+                        selection.push(obs[x]._originalObject);
+                    else
+                        selection.push(obs[x]);
+                }
+            }
+        }
+        event.selection = selection;
+
+        if (event.selection.length === 1 && this._select !== undefined)
+            this._select.value = event.selection[0];
+        if (event.selection.length === 0)
+            event.selection = undefined;
+        var _this = this;
+        setTimeout(function () {
+            _this.callEvent("select", event);
+        }, 1);
+        //            var sel = w2ui[this._id].getSelection();
+
+    }
+    /**
+     * register an event if an item is selected
+     * @param {function} handler - the function that is called on change
+     */
+    @$Property({  default: "function(event){\n\t\n}" })
+    onchange(handler) {
+        this.addEvent("select", handler);
+    }
+    set select(value) { //the Code
+        this._select = value;
+    }
+    get select() {
+        return this._select;//$(this.dom).text();
+    }
+    set recid(value) { //the Code
+        w2ui[this._id].recid = value;
+    }
+    get recid() {
+        return w2ui[this._id].recid;//$(this.dom).text();
+    }
+    set tree(value) { //the Code
+        this._tree = value;
+    }
+    get tree() {
+        return this._tree;//$(this.dom).text();
+    }
+    set items(value) { //the Code
+        if (w2ui[this._id] === undefined)//allready destroyed
+            return;
+        if (value !== undefined && value.length > 0 && w2ui[this._id].columns.length === 0) {//autogenerate fields
+            for (var field in value[0]) {
+
+                if (Array.isArray(value[0][field]))
+                    continue;
+                if (!field.startsWith("_") && field !== "recid")
+                    w2ui[this._id].columns.push({ field: field, caption: field, resizable: true, sortable: true });
+            }
+            // var pro=(100/(w2ui[this._id].columns.length));
+            for (var c = 0; c < w2ui[this._id].columns.length; c++) {
+                w2ui[this._id].columns[c].size = "20";
+                //   w2ui[this._id].columns[c].size= pro+'%';
+            }
+        }
+        if (this.tree !== undefined) {
+            w2ui[this._id].records = this._proxyTreeObject(value);
+            if (value.length > 0 && (value[0][this.recid]) == undefined)
+                throw "no id:value elements must contain property id or table.recid must be defined!"
+        } else
+            w2ui[this._id].records = value;
+        w2ui[this._id].refresh();
+        var _this = this;
+        //setTimeout(()=>{w2ui[this._id].refresh();},2000);
+
+        /*   for(var x=0;x<value.length;x++){
+               delete value[x].recid;
+           }*/
+    }
+    get items() {
+        if (w2ui[this._id] === undefined)
+            return undefined;
+        return w2ui[this._id].records;//$(this.dom).text();
+    }
+
+    /**
+     * @member {object} sel - the selected object
+     */
+    set value(sel) {
+        var unsel = w2ui[this._id].getSelection();
+        for (var x = 0; x < unsel.length; x++) {
+            w2ui[this._id].unselect(unsel[x]);
+        }
+        if (sel !== undefined) {
+            w2ui[this._id].select(sel.id);
+            w2ui[this._id].scrollIntoView();
+        }
+    }
+    get value() {
+        var aids = w2ui[this._id].getSelection();
+        if (aids.length === 0)
+            return undefined;
+        var obs = w2ui[this._id].records;
+        var selection = [];
+        for (var x = 0; x < obs.length; x++) {
+            for (var y = 0; y < aids.length; y++) {
+                if (obs[x].id === aids[y]) {
+                    var test = obs[x]._originalObject;
+                    if (test !== undefined)//extract proxy
+                        selection.push(obs[x]._originalObject);
+                    else
+                        selection.push(obs[x]);
+                }
+            }
+        }
+        return selection.length === 1 ? selection[0] : selection;
+    }
+    //add virtual property w2ui for tree support
+    _proxyTreeObject(original) {
+        if (original instanceof Array) {
+            for (var x = 0; x < original.length; x++) {
+                if (original[x]._originalObject === undefined)
+                    original[x] = this._proxyTreeObject(original[x]);
+            }
+            return original;
+        }
+        var _thisTable = this;
+        var ret = new Proxy(original, {
+            get: function (target, name, receiver) {
+                if (name === "w2ui") {
+                    if (this.w2ui === undefined) {
+                        var childs = undefined;
+                        if (typeof (_thisTable.tree) === "function") {
+                            if (target._originalObject !== undefined)
+                                childs = _thisTable.tree(target._originalObject);
+                            else
+                                childs = _thisTable.tree(target);
+                        } else
+                            childs = target[_thisTable.tree];
+                        if (childs !== undefined && childs.length > 0) {
+                            var proxyChilds = [];
+                            for (var x = 0; x < childs.length; x++) {
+                                var ch = childs[x];
+                                var pob = _thisTable._proxyTreeObject(ch);
+                                proxyChilds.push(pob);
+                            }
+                            this.w2ui = { children: proxyChilds };
+                        } else
+                            this.w2ui = { children: [] };
+
+                    }
+                    return this.w2ui;
+                }
+                if (name === "_originalObject") {
+                    return target;
+                }
+                var rv = target[name];
+                return rv;
+            }
+        });
+        return ret;
+    }
+    /**
+     * binds a component to a databinder
+     * @param {jassijs.ui.Databinder} databinder - the databinder to bind
+     * @param {string} property - the property to bind
+     
+    bind(databinder,property){
+        this._databinder=databinder;
+        databinder.add(property,this,"onselect");
+        databinder.checkAutocommit(this);
+    }*/
+    /**
+     * Searches records in the grid
+     * @param {string} field - name of the search field
+     * @param {string} value - value of the search field
+     * @param {boolean} [doSelect] - if true the first entry is selected
+     */
+    search(field, value, doSelect) {
+        w2ui[this._id].search(field, value);
+        if (doSelect === true) {
+            var ids = w2ui[this._id].last.searchIds;
+            if (ids !== undefined && ids.length > 0) {
+                w2ui[this._id].select(w2ui[this._id].records[ids[0]]);
+            }
+        }
+    }
+    destroy() {
+        this.tree = undefined;
+        console.debug("table destroy");
+        this._intersectionObserver.unobserve(this.dom);
+        w2ui[this._id].destroy();
+        super.destroy();
+    }
+}
+export async function test () {
+    var tab = new Table();
+
+//    var kunden = await jassijs.db.load("de.Kunde");
+ //   tab.items = kunden;
+
+    return tab;
+
+}
+
+
+

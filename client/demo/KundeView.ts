@@ -1,13 +1,13 @@
-import { Table } from "jassi/ui/Table";
-import { Button } from "jassi/ui/Button";
-import { NumberConverter } from "jassi/ui/converters/NumberConverter";
-import { Databinder } from "jassi/ui/Databinder";
-import { Textbox } from "jassi/ui/Textbox";
-import { Panel } from "jassi/ui/Panel";
-import { $Property } from "jassi/ui/Property";
-import { $Class } from "jassi/remote/Jassi";
+import { Table } from "jassijs/ui/Table";
+import { Button } from "jassijs/ui/Button";
+import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
+import { Databinder } from "jassijs/ui/Databinder";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Panel } from "jassijs/ui/Panel";
+import { $Property } from "jassijs/ui/Property";
+import { $Class } from "jassijs/remote/Jassi";
 import { Kunde } from "de/remote/Kunde";
-import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassi/ui/DBObjectView";
+import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
 type Me = {
     textbox1?: Textbox;
     textbox2?: Textbox;
@@ -22,7 +22,7 @@ type Me = {
 @$Class("demo.KundeView")
 export class KundeView extends DBObjectView {
     me: Me;
-    @$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" })
+    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
     value: Kunde;
     constructor() {
         super();

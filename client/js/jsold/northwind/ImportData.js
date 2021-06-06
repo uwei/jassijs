@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/util/CSVImport", "jassi/base/Actions", "jassi/base/Router"], function (require, exports, Button_1, HTMLPanel_1, Jassi_1, Panel_1, CSVImport_1, Actions_1, Router_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router"], function (require, exports, Button_1, HTMLPanel_1, jassijs_1, Panel_1, CSVImport_1, Actions_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ImportData = void 0;
@@ -73,8 +73,8 @@ define(["require", "exports", "jassi/ui/Button", "jassi/ui/HTMLPanel", "jassi/re
         __metadata("design:returntype", Promise)
     ], ImportData, "showDialog", null);
     ImportData = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_1.$Class("northwind.ImportData"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
+        jassijs_1.$Class("northwind.ImportData"),
         __metadata("design:paramtypes", [])
     ], ImportData);
     exports.ImportData = ImportData;

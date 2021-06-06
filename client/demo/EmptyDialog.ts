@@ -1,7 +1,7 @@
-import { Button } from "jassi/ui/Button";
-import { Repeater } from "jassi/ui/Repeater";
-import { $Class } from "jassi/remote/Jassi";
-import { Panel } from "jassi/ui/Panel";
+import { Button } from "jassijs/ui/Button";
+import { Repeater } from "jassijs/ui/Repeater";
+import { $Class } from "jassijs/remote/Jassi";
+import { Panel } from "jassijs/ui/Panel";
 type Me = {
     repeater1?: Repeater;
     button1?: Button;

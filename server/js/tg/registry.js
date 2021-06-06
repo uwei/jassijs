@@ -3,8 +3,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     "tg/remote/MyRemoteObject.ts": {
-        "date": 1622922501315,
+        "date": 1622999304732,
         "tg/remote/MyRemoteObject": {}
+    },
+    "tg/remote/Person.ts": {
+        "date": 1622999405219,
+        "tg.Person": {
+            "$DBObject": []
+        }
     }
 };
 //# sourceMappingURL=registry.js.map

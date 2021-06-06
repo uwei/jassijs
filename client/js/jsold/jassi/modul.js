@@ -4,7 +4,7 @@ define(["require", "exports"], function (require, exports) {
     var jquery_language = 'https://cdn.jsdelivr.net/gh/jquery/jquery-ui@main/ui/i18n/datepicker-' + navigator.language.split("-")[0];
     exports.default = {
         "css": {
-            "jassi.css": "jassi.css",
+            "jassijs.css": "jassijs.css",
             "materialdesignicons.min.css": "https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css",
             "jquery-ui.css": "https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"
         },
@@ -59,7 +59,7 @@ define(["require", "exports"], function (require, exports) {
                 'jquery.notify': ["jquery"],
                 'jquery.ui.touch': ["jquery", "jquery.ui"],
                 'jquery.doubletap': ["jquery"],
-                'jassi/jassi': ['jquery', 'jquery.ui', 'jquery.ui.touch'],
+                'jassijs/jassi': ['jquery', 'jquery.ui', 'jquery.ui.touch'],
                 "spectrum": ["jquery"]
             }
         }

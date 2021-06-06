@@ -1,15 +1,15 @@
-define(["require", "exports", "jassi/remote/RemoteProtocol"], function (require, exports, RemoteProtocol_1) {
+define(["require", "exports", "jassijs/remote/RemoteProtocol"], function (require, exports, RemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.localExec = void 0;
     RemoteProtocol_1.RemoteProtocol.prototype.exec = async function (config, ob) {
         var clname = JSON.parse(config.data).classname;
-        var local = ["jassi.remote.Transaction", "northwind.Employees", "northwind.Customer"];
-        var classes = (await new Promise((resolve_1, reject_1) => { require(["jassi/remote/Classes"], resolve_1, reject_1); })).classes;
-        var DBObject = await classes.loadClass("jassi.remote.DBObject");
+        var local = ["jassijs.remote.Transaction", "northwind.Employees", "northwind.Customer"];
+        var classes = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/Classes"], resolve_1, reject_1); })).classes;
+        var DBObject = await classes.loadClass("jassijs.remote.DBObject");
         var ret;
         //
-        /* if (clname === "jassi.remote.Server") {
+        /* if (clname === "jassijs.remote.Server") {
              var tst = JSON.parse(config.data);
              if (tst.method === "dir") {
                  var retserver = JSON.parse(await $.ajax(config));
@@ -51,7 +51,7 @@ define(["require", "exports", "jassi/remote/RemoteProtocol"], function (require,
         return ret;
     };
     async function localExec(prot, context = undefined) {
-        var classes = (await new Promise((resolve_2, reject_2) => { require(["jassi/remote/Classes"], resolve_2, reject_2); })).classes;
+        var classes = (await new Promise((resolve_2, reject_2) => { require(["jassijs/remote/Classes"], resolve_2, reject_2); })).classes;
         var p = new RemoteProtocol_1.RemoteProtocol();
         var C = await classes.loadClass(prot.classname);
         if (context === undefined) {

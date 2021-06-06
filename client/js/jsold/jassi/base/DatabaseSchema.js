@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
                 r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi_editor/util/Typescript", "jassi_editor/util/Parser", "jassi/template/TemplateDBObject", "jassi/util/Tools", "jassi/remote/Server", "jassi/base/Windows", "jassi/ui/OptionDialog", "jassi/ext/jquery.choosen"], function (require, exports, Jassi_1, Registry_1, Typescript_1, Parser_1, TemplateDBObject_1, Tools_1, Server_1, Windows_1, OptionDialog_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs_editor/util/Parser", "jassijs/template/TemplateDBObject", "jassijs/util/Tools", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/OptionDialog", "jassijs/ext/jquery.choosen"], function (require, exports, jassijs_1, Registry_1, Typescript_1, Parser_1, TemplateDBObject_1, Tools_1, Server_1, Windows_1, OptionDialog_1) {
     "use strict";
     var DatabaseSchema_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -277,7 +277,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
             this.parsedClasses[dbcl.name].parent.addOrModifyMember({ name: field.name, type: realtype, decorator: decs }, this.parsedClasses[dbcl.name]);
         }
         async reloadCodeInEditor(file, text) {
-            var editor = Windows_1.default.findComponent("jassi_editor.CodeEditor-" + file);
+            var editor = Windows_1.default.findComponent("jassijs_editor.CodeEditor-" + file);
             if (editor !== undefined) {
                 if (editor._codeToReload === undefined) {
                     var data = await OptionDialog_1.OptionDialog.show("The source was updated in Chrome. Do you want to load this modification?", ["Yes", "No"], editor, false);
@@ -529,11 +529,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
     };
     DatabaseSchema.basicdatatypes = ["string", "int", "decimal", "boolean", "Date"];
     DatabaseSchema = DatabaseSchema_1 = __decorate([
-        Jassi_1.$Class("jassi.base.DatabaseSchema")
+        jassijs_1.$Class("jassijs.base.DatabaseSchema")
     ], DatabaseSchema);
     exports.DatabaseSchema = DatabaseSchema;
     /*
-    @$Class("jassi.base.DatabaseColumnOptions")
+    @$Class("jassijs.base.DatabaseColumnOptions")
     class ColumnOptions{
     //	@$Property({type:"string",chooseFrom:DatabaseSchema.basicdatatypes,description:"Column type. Must be one of the value from the ColumnTypes class."})
       //  type?: ColumnType;

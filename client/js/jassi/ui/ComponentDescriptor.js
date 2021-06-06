@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/remote/Classes", "jassi/remote/Registry"], function (require, exports, Jassi_1, Property_1, Classes_1, Registry_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, jassijs_1, Property_1, Classes_1, Registry_1) {
     "use strict";
     var ComponentDescriptor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -15,19 +15,19 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
     let ComponentDescriptor = ComponentDescriptor_1 = class ComponentDescriptor {
         /**
         * describes a Component
-        * @class jassi.ui.EditorProperty
+        * @class jassijs.ui.EditorProperty
         */
         constructor() {
-            /** @member {[jassi.ui.Property]}  - all property fields which should visible in PropertyEditor*/
+            /** @member {[jassijs.ui.Property]}  - all property fields which should visible in PropertyEditor*/
             this.fields = [];
-            /** @member {[jassi.ui.Property]}  - all property fields which acts are editable*/
+            /** @member {[jassijs.ui.Property]}  - all property fields which acts are editable*/
             this.editableComponents = [];
         }
         /**
          * describes a class
          * @param {class}  type - the type of the class
          * @param {boolean}  nocache - an uncached version
-         * @returns {jassi.ui.ComponentDescriptor} - which describes the component
+         * @returns {jassijs.ui.ComponentDescriptor} - which describes the component
          */
         static describe(type, nocache = undefined) {
             var _a;
@@ -103,7 +103,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
         }
         /**
          * get the ids of all editable Components by the designer
-         * @param {jassi.ui.Component} component - the component to inspect
+         * @param {jassijs.ui.Component} component - the component to inspect
          * @param {boolean} idFromLabel - if true not the id but the id form label is returned
          * @param {flag} - undocumented-used for recursation
          **/
@@ -136,7 +136,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
         }
         /** calc editableComponents
          * @param {object} ob - the object to resolve
-         * @returns {Object.<string,jassi.ui.Component> - <name,component>
+         * @returns {Object.<string,jassijs.ui.Component> - <name,component>
          **/
         resolveEditableComponents(ob) {
             var ret = {};
@@ -179,7 +179,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
         }
     };
     ComponentDescriptor = ComponentDescriptor_1 = __decorate([
-        Jassi_1.$Class("jassi.ui.ComponentDescriptor"),
+        jassijs_1.$Class("jassijs.ui.ComponentDescriptor"),
         __metadata("design:paramtypes", [])
     ], ComponentDescriptor);
     exports.ComponentDescriptor = ComponentDescriptor;

@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jassi/remote/DBArray"], function (require, exports, Jassi_1, Classes_1, DBArray_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/DBArray"], function (require, exports, jassijs_1, Classes_1, DBArray_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Database = void 0;
@@ -20,15 +20,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
     let Database = class Database {
         /**
          * database service
-         * @class jassi.base.Database
+         * @class jassijs.base.Database
          */
         constructor() {
-            /** @member {jassi.base.Database.TypeResolver} holds typedefinitions for each type
+            /** @member {jassijs.base.Database.TypeResolver} holds typedefinitions for each type
              *  use  typeDef[sclassname]
              */
             this.typeDef = new TypeResolver(this);
             /**
-             * @member {Object.<string,{Object.<number,jassi.base.DBObject>}>} holds all known databaseobjects
+             * @member {Object.<string,{Object.<number,jassijs.base.DBObject>}>} holds all known databaseobjects
              * cache[typename][id]=ob
              **/
             this.cache = {};
@@ -54,16 +54,16 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         }
         /**
          * uploads the type definition to the server
-         * @param {jassi.base.Database.Type} the type definition
+         * @param {jassijs.base.Database.Type} the type definition
          */
         async uploadType(definition) {
             var sdef = JSON.stringify(definition, undefined, "\t");
-            return Jassi_1.default.server.call("uploadType", sdef);
+            return jassijs_1.default.server.call("uploadType", sdef);
         }
         /**
          * reloads a database object
          * @param {DBObject} objectToReload - the object to reload
-         * @returns {jassi.base.DBObject} - the reloaded object
+         * @returns {jassijs.base.DBObject} - the reloaded object
          */
         async reload(objectToReload) {
             var type = objectToReload.__proto__._dbtype;
@@ -76,7 +76,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
          * @param {string} type - the typename
          * @param {int} id - the id of the object, load all if undefined
          * @param [{string}] resolveFields - the fields to resolve
-         * @returns {jassi.base.DBObject}
+         * @returns {jassijs.base.DBObject}
          */
         async load(type, id, resolveFields = undefined) {
             var sid = "id>0";
@@ -94,8 +94,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         }
         /**
          * Child objects are not loaded completly. This loads the object completly.
-         * @param {jassi.base.DBObject} ob - the object to resolve
-         * @returns {jassi.base.DBObject|jassi.base.DBArray}
+         * @param {jassijs.base.DBObject} ob - the object to resolve
+         * @returns {jassijs.base.DBObject|jassijs.base.DBArray}
          */
         async resolve(ob) {
             if (ob !== undefined) {
@@ -139,7 +139,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                     type: ob.__proto__._dbtype,
                     member: member
                 };
-                var sret = await Jassi_1.default.server.call("getMember", data);
+                var sret = await jassijs_1.default.server.call("getMember", data);
                 var obret = await this._fromJSON(memberclassname, sret);
                 return obret;
             }
@@ -153,7 +153,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                 return (await this.query(memberclassname, "id in (" + ids + ")"))[0];
             }
             if (field.type === "array") {
-                var ret = new Jassi_1.default.base.DBArray();
+                var ret = new jassijs_1.default.base.DBArray();
                 var vids = ids.split(",");
                 var idsToResolve = "";
                 for (var x = 0; x < vids.length; x++) {
@@ -172,7 +172,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                     await this.query(memberclassname, "id in (" + idsToResolve + ")")[0]; //would be resolved with cache
                 return ret;
             }
-            //var sret=jassi.server.call("getMember",data);
+            //var sret=jassijs.server.call("getMember",data);
             //var obret= this._fromJSON(memberclassname,sret);
             return obret;
         }
@@ -180,7 +180,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
          * createObjects from returned json array retObs
          */
         _createObjects(type, retObs, resolvedFields) {
-            var ret = new Jassi_1.default.base.DBArray();
+            var ret = new jassijs_1.default.base.DBArray();
             for (var x = 0; x < retObs.length; x++) {
                 var props = retObs[x];
                 var ob = this.cache[type][props["id"]];
@@ -211,7 +211,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                          data.member=prop;
                          data.id=data["id"];
                          data.resolve=async function(){
-                             var res=await jassi.db.resolve(this);
+                             var res=await jassijs.db.resolve(this);
                              this.parent._setObjectProperty(this.member,res);
                              ret=this.parent._objectProperties[this.member];
                              return ret;
@@ -231,7 +231,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
          * loads an object from a jsonstring
          * @param {string} type - the name of the type
          * @param {string} json - the json string
-         * @returns {jassi.base.DBObject}
+         * @returns {jassijs.base.DBObject}
          */
         async _fromJSON(type, json) {
             //   if(json==undefined)
@@ -284,7 +284,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                             ob._setObjectProperty(field, mob);
                         }
                         else {
-                            var arr = new Jassi_1.default.base.DBArray();
+                            var arr = new jassijs_1.default.base.DBArray();
                             var adata = rels[id];
                             for (var x = 0; x < adata.length; x++) {
                                 var mob = this.cache[fieldtype][Number(adata[x])];
@@ -304,20 +304,20 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
          * @param {string} type - the name of the returned type
          * @param {type} query - the query string
          * @param [{string}] resolveFields - the fields to resolve
-         * @returns {jassi.base.DBArray}
+         * @returns {jassijs.base.DBArray}
          */
         async query(type, query, resolveFields = undefined) {
             var parameter = {
                 type: type,
                 resolve: resolveFields
             };
-            var sret = await Jassi_1.default.server.call("query", query, parameter);
+            var sret = await jassijs_1.default.server.call("query", query, parameter);
             var ret = await this._fromJSON(type, sret);
             return ret;
         }
         /**
          * save the object to database
-         * @param {jassi.base.DBObject} ob - the object to save
+         * @param {jassijs.base.DBObject} ob - the object to save
          */
         async save(ob) {
             var parameter = { type: ob.__proto__._dbtype };
@@ -360,7 +360,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
                 }
             }
             var sob = JSON.stringify(toSave, undefined, "\t");
-            var ret = await Jassi_1.default.server.call("save", sob, parameter);
+            var ret = await jassijs_1.default.server.call("save", sob, parameter);
             if (!$.isNumeric(ret))
                 throw ret;
             ob.id = Number(ret);
@@ -369,22 +369,22 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         }
         /**
          * deletes an object in the database
-         * @param {jassi.base.DBObject} ob - the object to remove
+         * @param {jassijs.base.DBObject} ob - the object to remove
          */
         async remove(ob) {
             var parameter = { type: ob.__proto__._dbtype };
-            return await Jassi_1.default.server.call("remove", { id: ob.id }, parameter);
+            return await jassijs_1.default.server.call("remove", { id: ob.id }, parameter);
         }
     };
     Database = __decorate([
-        Jassi_1.$Class("jassi.base.Database"),
+        jassijs_1.$Class("jassijs.base.Database"),
         __metadata("design:paramtypes", [])
     ], Database);
     exports.Database = Database;
     let TypeResolver = class TypeResolver {
         /**
          * database definition of database classes
-         * @class jassi.base.Database.TypeResolver
+         * @class jassijs.base.Database.TypeResolver
          */
         constructor(db) {
             this.db = db;
@@ -434,13 +434,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
             var sclassname = classname.replaceAll(".", "_");
             if (this[sclassname] === undefined) {
                 //var def=JSON.parse(ret.responseText);
-                this[sclassname] = new Jassi_1.default.base.Database.Type(sclassname);
+                this[sclassname] = new jassijs_1.default.base.Database.Type(sclassname);
                 debugger;
                 alert("is the next line right?");
                 var def = this[sclassname];
                 for (var x = 0; x < def.fields.length; x++) {
                     var jf = def.fields[x];
-                    var field = new Jassi_1.default.base.Database.Field(jf.name, jf.type, jf.usertype, jf.link);
+                    var field = new jassijs_1.default.base.Database.Field(jf.name, jf.type, jf.usertype, jf.link);
                     this[sclassname][field.name] = field;
                     if (field.link !== undefined) {
                         this[sclassname].linkedfields[field.link] = field;
@@ -451,13 +451,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         }
     };
     TypeResolver = __decorate([
-        Jassi_1.$Class("jassi.base.Database.TypeResolver"),
+        jassijs_1.$Class("jassijs.base.Database.TypeResolver"),
         __metadata("design:paramtypes", [Object])
     ], TypeResolver);
     let Type = class Type {
         /**
      * type definition of database class
-     * @class jassi.base.Database.Type
+     * @class jassijs.base.Database.Type
      */
         constructor(name) {
             /**
@@ -465,24 +465,24 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
              */
             this.name = name;
             /**
-             * @member {[jassi.base.Database.Field]} - the persistent fields
+             * @member {[jassijs.base.Database.Field]} - the persistent fields
              */
             this.fields = undefined;
             /**
              * all linked fields
-             * @member {Object.<string,jassi.base.Database.Field>} [classname+"."+field]
+             * @member {Object.<string,jassijs.base.Database.Field>} [classname+"."+field]
              */
             this.linkedfields = {};
         }
     };
     Type = __decorate([
-        Jassi_1.$Class("jassi.base.Database.Type"),
+        jassijs_1.$Class("jassijs.base.Database.Type"),
         __metadata("design:paramtypes", [Object])
     ], Type);
     let Field = class Field {
         /**
      * type definition of database field
-     * @class jassi.base.Database.Field
+     * @class jassijs.base.Database.Field
      */
         constructor(name, type, usertype, link) {
             /**
@@ -509,16 +509,16 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes", "jas
         }
     };
     Field = __decorate([
-        Jassi_1.$Class("jassi.base.Database.Field"),
+        jassijs_1.$Class("jassijs.base.Database.Field"),
         __metadata("design:paramtypes", [Object, Object, Object, Object])
     ], Field);
     var db = new Database();
     exports.default = db;
-    Jassi_1.default.test = async function () {
+    jassijs_1.default.test = async function () {
         var all = await db.load("de.Kunde", undefined, ["rechnungen", "rechnungen.zeilen", "rechnungen.zeilen.ar"]);
-        //var all=await jassi.db.load("de.ARZeile",undefined,["ar"]);
+        //var all=await jassijs.db.load("de.ARZeile",undefined,["ar"]);
         all = all;
-        //jassi.server.call("testQuery");
+        //jassijs.server.call("testQuery");
     };
 });
 //# sourceMappingURL=Database.js.map

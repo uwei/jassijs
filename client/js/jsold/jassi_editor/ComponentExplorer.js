@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Tree", "jassi/ui/ComponentDescriptor", "jassi/ui/ContextMenu", "jassi_editor/CodeEditor", "jassi/ui/PropertyEditor"], function (require, exports, Jassi_1, Panel_1, Tree_1, ComponentDescriptor_1, ContextMenu_1, CodeEditor_1, PropertyEditor_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs_editor/CodeEditor", "jassijs/ui/PropertyEditor"], function (require, exports, jassijs_1, Panel_1, Tree_1, ComponentDescriptor_1, ContextMenu_1, CodeEditor_1, PropertyEditor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentExplorer = void 0;
@@ -22,7 +22,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         */
         constructor(codeEditor, propertyEditor) {
             super();
-            /** @member {jassi_editor.CodeEditor} - the parent CodeEditor */
+            /** @member {jassijs_editor.CodeEditor} - the parent CodeEditor */
             this.codeEditor = codeEditor;
             this.tree = new Tree_1.Tree();
             this.tree.height = "100%";
@@ -32,7 +32,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
             this.propertyEditor = propertyEditor;
         }
         /**
-         * @member {jassi.ui.Component}  - the rendered object
+         * @member {jassijs.ui.Component}  - the rendered object
          */
         set value(value) {
             this._value = value;
@@ -136,12 +136,12 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
     };
     ComponentExplorer = __decorate([
-        Jassi_1.$Class("jassi_editor.ComponentExplorer"),
+        jassijs_1.$Class("jassijs_editor.ComponentExplorer"),
         __metadata("design:paramtypes", [CodeEditor_1.CodeEditor, PropertyEditor_1.PropertyEditor])
     ], ComponentExplorer);
     exports.ComponentExplorer = ComponentExplorer;
-    Jassi_1.default.test = async function () {
-        var dlg = new Jassi_1.default.ui.ComponentExplorer();
+    jassijs_1.default.test = async function () {
+        var dlg = new jassijs_1.default.ui.ComponentExplorer();
         dlg.getComponentName = function (item) {
             return "hallo";
         };

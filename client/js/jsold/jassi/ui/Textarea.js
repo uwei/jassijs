@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/ui/Textbox"], function (require, exports, Component_1, Jassi_1, Property_1, Textbox_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Component_1, jassijs_1, Property_1, Textbox_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Textarea = void 0;
@@ -24,7 +24,7 @@ define(["require", "exports", "jassi/ui/Component", "jassi/remote/Jassi", "jassi
     };
     Textarea = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
-        Jassi_1.$Class("jassi.ui.Textarea"),
+        jassijs_1.$Class("jassijs.ui.Textarea"),
         Property_1.$Property({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [])
     ], Textarea);

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi_report/RStack", "jassi_report/RText", "jassi_report/RColumns", "jassi_report/RUnknown", "jassi_report/ReportComponent", "jassi_report/RDatatable", "jassi/ui/Property"], function (require, exports, BoxPanel_1, Jassi_1, RStack_1, RText_1, RColumns_1, RUnknown_1, ReportComponent_1, RDatatable_1, Property_1) {
+define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs_report/ReportComponent", "jassijs_report/RDatatable", "jassijs/ui/Property"], function (require, exports, BoxPanel_1, jassijs_1, RStack_1, RText_1, RColumns_1, RUnknown_1, ReportComponent_1, RDatatable_1, Property_1) {
     "use strict";
     var ReportDesign_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -39,7 +39,7 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi_
         __metadata("design:type", String)
     ], InfoProperties.prototype, "producer", void 0);
     InfoProperties = __decorate([
-        Jassi_1.$Class("jassi_report.InfoProperties")
+        jassijs_1.$Class("jassijs_report.InfoProperties")
     ], InfoProperties);
     let PermissionProperties = class PermissionProperties {
         constructor() {
@@ -80,7 +80,7 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi_
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "documentAssembly", void 0);
     PermissionProperties = __decorate([
-        Jassi_1.$Class("jassi_report.PermissionProperties")
+        jassijs_1.$Class("jassijs_report.PermissionProperties")
     ], PermissionProperties);
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
@@ -102,7 +102,7 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi_
             this._pageSize = undefined;
             /**
            * adds a component to the container
-           * @param {jassi.ui.Component} component - the component to add
+           * @param {jassijs.ui.Component} component - the component to add
            */
             /* add(component) {
                  if (component["designPanel"])
@@ -408,11 +408,11 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi_
         __metadata("design:type", String)
     ], ReportDesign.prototype, "ownerPassword", void 0);
     __decorate([
-        Property_1.$Property({ type: "json", componentType: "jassi_report.InfoProperties" }),
+        Property_1.$Property({ type: "json", componentType: "jassijs_report.InfoProperties" }),
         __metadata("design:type", InfoProperties)
     ], ReportDesign.prototype, "info", void 0);
     __decorate([
-        Property_1.$Property({ type: "json", componentType: "jassi_report.PermissionProperties" }),
+        Property_1.$Property({ type: "json", componentType: "jassijs_report.PermissionProperties" }),
         __metadata("design:type", PermissionProperties)
     ], ReportDesign.prototype, "permissions", void 0);
     __decorate([
@@ -432,7 +432,7 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi_
     ], ReportDesign.prototype, "pageOrientation", null);
     ReportDesign = ReportDesign_1 = __decorate([
         ReportComponent_1.$ReportComponent({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
-        Jassi_1.$Class("jassi_report.ReportDesign"),
+        jassijs_1.$Class("jassijs_report.ReportDesign"),
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);
     exports.ReportDesign = ReportDesign;

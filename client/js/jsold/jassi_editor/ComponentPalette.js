@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Image", "jassi/remote/Registry", "jassi/remote/Classes"], function (require, exports, Jassi_1, Panel_1, Image_1, Registry_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, jassijs_1, Panel_1, Image_1, Registry_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ComponentPalette = void 0;
@@ -73,7 +73,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
         /**
          * install the draggable
-         * @param {jassi.ui.Image} component
+         * @param {jassijs.ui.Image} component
          */
         _makeDraggable(component) {
             var helper = undefined;
@@ -117,7 +117,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/
         }
     };
     ComponentPalette = __decorate([
-        Jassi_1.$Class("jassi_editor.ComponentPalette"),
+        jassijs_1.$Class("jassijs_editor.ComponentPalette"),
         __metadata("design:paramtypes", [])
     ], ComponentPalette);
     exports.ComponentPalette = ComponentPalette;

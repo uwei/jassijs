@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject", "jassi/remote/FileNode", "./Classes"], function (require, exports, Jassi_1, RemoteObject_1, FileNode_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "./Classes"], function (require, exports, jassijs_1, RemoteObject_1, FileNode_1, Classes_1) {
     "use strict";
     var Server_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -33,11 +33,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             if (Server_1.filesInMap)
                 return;
             var ret = {};
-            for (var mod in Jassi_1.default.modules) {
-                if (Jassi_1.default.modules[mod].endsWith(".js") || Jassi_1.default.modules[mod].indexOf(".js?") > -1) {
-                    let mapname = Jassi_1.default.modules[mod].split("?")[0] + ".map";
-                    if (Jassi_1.default.modules[mod].indexOf(".js?") > -1)
-                        mapname = mapname + "?" + Jassi_1.default.modules[mod].split("?")[1];
+            for (var mod in jassijs_1.default.modules) {
+                if (jassijs_1.default.modules[mod].endsWith(".js") || jassijs_1.default.modules[mod].indexOf(".js?") > -1) {
+                    let mapname = jassijs_1.default.modules[mod].split("?")[0] + ".map";
+                    if (jassijs_1.default.modules[mod].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + jassijs_1.default.modules[mod].split("?")[1];
                     var code = await $.ajax({ url: mapname, dataType: "text" });
                     var data = JSON.parse(code);
                     var files = data.sources;
@@ -104,10 +104,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_1, reject_1) => { require(["jassi/server/Filesystem"], resolve_1, reject_1); });
+                var fs = await new Promise((resolve_1, reject_1) => { require(["jassijs/server/Filesystem"], resolve_1, reject_1); });
                 var rett = await new fs.default().dir("", withDate);
                 return rett;
-                // return ["jassi/base/ChromeDebugger.ts"];
+                // return ["jassijs/base/ChromeDebugger.ts"];
             }
         }
         async zip(directoryname, serverdir = undefined, context = undefined) {
@@ -116,9 +116,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_2, reject_2) => { require(["jassi/server/Filesystem"], resolve_2, reject_2); });
+                var fs = await new Promise((resolve_2, reject_2) => { require(["jassijs/server/Filesystem"], resolve_2, reject_2); });
                 return await new fs.default().zip(directoryname, serverdir);
-                // return ["jassi/base/ChromeDebugger.ts"];
+                // return ["jassijs/base/ChromeDebugger.ts"];
             }
         }
         /**
@@ -132,9 +132,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_3, reject_3) => { require(["jassi/server/Filesystem"], resolve_3, reject_3); });
+                var fs = await new Promise((resolve_3, reject_3) => { require(["jassijs/server/Filesystem"], resolve_3, reject_3); });
                 return new fs.default().loadFiles(fileNames);
-                // return ["jassi/base/ChromeDebugger.ts"];
+                // return ["jassijs/base/ChromeDebugger.ts"];
             }
         }
         /**
@@ -147,15 +147,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                 await this.fillFilesInMapIfNeeded();
                 if (Server_1.filesInMap[fileName]) {
                     //perhabs the files ar in localserver?
-                    var Filessystem = Classes_1.classes.getClass("jassi_localserver.Filessystem");
+                    var Filessystem = Classes_1.classes.getClass("jassijs_localserver.Filessystem");
                     if (Filessystem && (await new Filessystem().loadFileEntry(fileName) !== undefined)) {
                         //use ajax
                     }
                     else {
                         var found = Server_1.filesInMap[fileName];
-                        let mapname = Jassi_1.default.modules[found.modul].split("?")[0] + ".map";
-                        if (Jassi_1.default.modules[found.modul].indexOf(".js?") > -1)
-                            mapname = mapname + "?" + Jassi_1.default.modules[found.modul].split("?")[1];
+                        let mapname = jassijs_1.default.modules[found.modul].split("?")[0] + ".map";
+                        if (jassijs_1.default.modules[found.modul].indexOf(".js?") > -1)
+                            mapname = mapname + "?" + jassijs_1.default.modules[found.modul].split("?")[1];
                         var code = await this.loadFile(mapname, context);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;
@@ -166,7 +166,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
             }
             else {
                 //@ts-ignore
-                var fs = await new Promise((resolve_4, reject_4) => { require(["jassi/server/Filesystem"], resolve_4, reject_4); });
+                var fs = await new Promise((resolve_4, reject_4) => { require(["jassijs/server/Filesystem"], resolve_4, reject_4); });
                 var rett = new fs.default().loadFile(fileName);
                 return rett;
             }
@@ -187,7 +187,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                     var content = contents[f];
                     if (fileName.endsWith(".ts") || fileName.endsWith(".js")) {
                         //@ts-ignore
-                        var tss = await new Promise((resolve_5, reject_5) => { require(["jassi_editor/util/Typescript"], resolve_5, reject_5); });
+                        var tss = await new Promise((resolve_5, reject_5) => { require(["jassijs_editor/util/Typescript"], resolve_5, reject_5); });
                         var rets = await tss.default.transpile(fileName, content);
                         allfileNames = allfileNames.concat(rets.fileNames);
                         allcontents = allcontents.concat(rets.contents);
@@ -217,7 +217,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                 if (!context.request.user.isAdmin)
                     throw "only admins can saveFiles";
                 //@ts-ignore
-                var fs = await new Promise((resolve_6, reject_6) => { require(["jassi/server/Filesystem"], resolve_6, reject_6); });
+                var fs = await new Promise((resolve_6, reject_6) => { require(["jassijs/server/Filesystem"], resolve_6, reject_6); });
                 var ret = await new fs.default().saveFiles(fileNames, contents, true);
                 return ret;
             }
@@ -235,14 +235,14 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                 return;
             }*/
             return await this.saveFiles([fileName], [content], context);
-            /* if (!jassi.isServer) {
+            /* if (!jassijs.isServer) {
                  var ret = await this.call(this, "saveFiles", fileNames, contents);
                  //@ts-ignore
                  //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
                  return ret;
              } else {
                  //@ts-ignore
-                 var fs: any = await import("jassi/server/Filesystem");
+                 var fs: any = await import("jassijs/server/Filesystem");
                  return new fs.default().saveFiles(fileNames, contents);
              }*/
         }
@@ -260,7 +260,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                 if (!context.request.user.isAdmin)
                     throw "only admins can delete";
                 //@ts-ignore
-                var fs = await new Promise((resolve_7, reject_7) => { require(["jassi/server/Filesystem"], resolve_7, reject_7); });
+                var fs = await new Promise((resolve_7, reject_7) => { require(["jassijs/server/Filesystem"], resolve_7, reject_7); });
                 return await new fs.default().remove(name);
             }
         }
@@ -278,7 +278,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                 if (!context.request.user.isAdmin)
                     throw "only admins can rename";
                 //@ts-ignore
-                var fs = await new Promise((resolve_8, reject_8) => { require(["jassi/server/Filesystem"], resolve_8, reject_8); });
+                var fs = await new Promise((resolve_8, reject_8) => { require(["jassijs/server/Filesystem"], resolve_8, reject_8); });
                 return await new fs.default().rename(oldname, newname);
                 ;
             }
@@ -317,7 +317,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                 if (!context.request.user.isAdmin)
                     throw "only admins can createFile";
                 //@ts-ignore
-                var fs = await new Promise((resolve_9, reject_9) => { require(["jassi/server/Filesystem"], resolve_9, reject_9); });
+                var fs = await new Promise((resolve_9, reject_9) => { require(["jassijs/server/Filesystem"], resolve_9, reject_9); });
                 return await new fs.default().createFile(filename, content);
             }
         }
@@ -335,7 +335,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                 if (!context.request.user.isAdmin)
                     throw "only admins can createFolder";
                 //@ts-ignore
-                var fs = await new Promise((resolve_10, reject_10) => { require(["jassi/server/Filesystem"], resolve_10, reject_10); });
+                var fs = await new Promise((resolve_10, reject_10) => { require(["jassijs/server/Filesystem"], resolve_10, reject_10); });
                 return await new fs.default().createFolder(foldername);
             }
         }
@@ -350,7 +350,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
                 if (!context.request.user.isAdmin)
                     throw "only admins can createFolder";
                 //@ts-ignore
-                var fs = await new Promise((resolve_11, reject_11) => { require(["jassi/server/Filesystem"], resolve_11, reject_11); });
+                var fs = await new Promise((resolve_11, reject_11) => { require(["jassijs/server/Filesystem"], resolve_11, reject_11); });
                 return await new fs.default().createModule(modulname);
             }
         }
@@ -363,10 +363,10 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/RemoteObject",
         }
     };
     Server.isonline = undefined;
-    //files found in js.map of modules in the jassi.json
+    //files found in js.map of modules in the jassijs.json
     Server.filesInMap = undefined;
     Server = Server_1 = __decorate([
-        Jassi_1.$Class("jassi.remote.Server"),
+        jassijs_1.$Class("jassijs.remote.Server"),
         __metadata("design:paramtypes", [])
     ], Server);
     exports.Server = Server;

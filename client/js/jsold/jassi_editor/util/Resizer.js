@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_1) {
+define(["require", "exports", "jassijs/remote/Jassi"], function (require, exports, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Resizer = void 0;
@@ -28,7 +28,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
             this.onelementselected = undefined;
             /** @member {function} - called when an element is resized function(component,property,value) */
             this.onpropertychanged = undefined;
-            /** @member {jassi.ui.Component} - the parent panel */
+            /** @member {jassijs.ui.Component} - the parent panel */
             this.parentPanel = undefined;
             this.lastSelected = undefined;
             this.componentUnderCursor = undefined;
@@ -280,7 +280,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
         }
         /**
          * install the resizer
-         * @param {jassi.ui.Component} parentPanel - the parent component
+         * @param {jassijs.ui.Component} parentPanel - the parent component
          * @param {string} elements - the search pattern for the components to resize e.q. ".jresizeable"
          */
         install(parentPanel, elements) {
@@ -351,7 +351,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
         }
     };
     Resizer = __decorate([
-        Jassi_1.$Class("jassi_editor.util.Resizer"),
+        jassijs_1.$Class("jassijs_editor.util.Resizer"),
         __metadata("design:paramtypes", [])
     ], Resizer);
     exports.Resizer = Resizer;

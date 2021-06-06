@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/remote/security/Group", "jassi/ui/DBObjectView"], function (require, exports, Jassi_1, Property_1, Group_1, DBObjectView_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/security/Group", "jassijs/ui/DBObjectView"], function (require, exports, jassijs_1, Property_1, Group_1, DBObjectView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.GroupView = void 0;
@@ -24,12 +24,12 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Group_1.Group)
     ], GroupView.prototype, "value", void 0);
     GroupView = __decorate([
         DBObjectView_1.$DBObjectView({ classname: "{{dbfullclassname}}" }),
-        Jassi_1.$Class("jassi/security/GroupView"),
+        jassijs_1.$Class("jassijs/security/GroupView"),
         __metadata("design:paramtypes", [])
     ], GroupView);
     exports.GroupView = GroupView;

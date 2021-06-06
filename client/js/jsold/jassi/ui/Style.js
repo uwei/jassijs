@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/ui/CSSProperties"], function (require, exports, InvisibleComponent_1, Component_1, Jassi_1, Property_1, CSSProperties_1) {
+define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/CSSProperties"], function (require, exports, InvisibleComponent_1, Component_1, jassijs_1, Property_1, CSSProperties_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.Style = void 0;
@@ -57,14 +57,14 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
         }
     };
     __decorate([
-        Property_1.$Property({ type: "json", componentType: "jassi.ui.CSSProperties" }),
+        Property_1.$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [CSSProperties_1.CSSProperties, Boolean]),
         __metadata("design:returntype", void 0)
     ], Style.prototype, "css", null);
     Style = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
-        Jassi_1.$Class("jassi.ui.Style")
+        jassijs_1.$Class("jassijs.ui.Style")
         /**
          * on ore mors Style can be assigned to component
          * the style is appended to the head
@@ -77,14 +77,14 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
         var css = {
             filter: "drop-shadow(16px 16px 20px blue)"
         };
-        Jassi_1.default.includeCSS("mytest2id", {
+        jassijs_1.default.includeCSS("mytest2id", {
             ".Panel": css,
             ".jinlinecomponent": {
                 color: "red"
             }
         });
         setTimeout(() => {
-            Jassi_1.default.includeCSS("mytest2id", undefined); //remove
+            jassijs_1.default.includeCSS("mytest2id", undefined); //remove
         }, 400);
         // includeCSS("mytest2id",undefined);
     }

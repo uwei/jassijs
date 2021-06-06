@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Textarea", "jassi/ui/Textbox", "jassi/remote/Jassi", "jassi/ui/Property", "northwind/remote/Categories", "jassi/ui/DBObjectView"], function (require, exports, Textarea_1, Textbox_1, Jassi_1, Property_1, Categories_1, DBObjectView_1) {
+define(["require", "exports", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Categories", "jassijs/ui/DBObjectView"], function (require, exports, Textarea_1, Textbox_1, jassijs_1, Property_1, Categories_1, DBObjectView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CategoriesView = void 0;
@@ -54,12 +54,12 @@ define(["require", "exports", "jassi/ui/Textarea", "jassi/ui/Textbox", "jassi/re
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
+        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Categories_1.Categories)
     ], CategoriesView.prototype, "value", void 0);
     CategoriesView = __decorate([
         DBObjectView_1.$DBObjectView({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
-        Jassi_1.$Class("northwind.CategoriesView"),
+        jassijs_1.$Class("northwind.CategoriesView"),
         __metadata("design:paramtypes", [])
     ], CategoriesView);
     exports.CategoriesView = CategoriesView;

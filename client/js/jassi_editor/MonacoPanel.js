@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_editor/util/Typescript", "jassi/remote/Server", "jassi_editor/CodePanel", "jassi/remote/Settings", "jassi_editor/Debugger", "jassi_editor/ext/monaco"], function (require, exports, Jassi_1, Router_1, Typescript_1, Server_1, CodePanel_1, Settings_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs/remote/Server", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, jassijs_1, Router_1, Typescript_1, Server_1, CodePanel_1, Settings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -43,7 +43,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_
             if (result === null) {
                 var file = input.resource.path.substring(1);
                 var line = input.options.selection.startLineNumber;
-                Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + file + "&line=" + line);
+                Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
             }
             return result; // always return the base result
         };
@@ -89,7 +89,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_
     }
     /**
     * wrapper for the Ace-Code editor with Typescript-Code-Completion an other features
-    * @class jassi.ui.CodePanel
+    * @class jassijs.ui.CodePanel
     */
     let MonacoPanel = class MonacoPanel extends CodePanel_1.CodePanel {
         constructor() {
@@ -283,7 +283,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Router", "jassi_
         }
     };
     MonacoPanel = __decorate([
-        Jassi_1.$Class("jassi_editor.MonacoPanel"),
+        jassijs_1.$Class("jassijs_editor.MonacoPanel"),
         __metadata("design:paramtypes", [])
     ], MonacoPanel);
     exports.MonacoPanel = MonacoPanel;

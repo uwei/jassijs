@@ -1,4 +1,4 @@
-define("jassi/ext/jquerylib", [
+define("jassijs/ext/jquerylib", [
     "jquery",
     "jquery.ui",
     "jquery.ui.touch",

@@ -4,11 +4,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "de/remote/Kunde", "jassi/remote/Jassi", "typeorm", "de/remote/AR", "de/remote/ARZeile", "jassi/server/DBManager"], function (require, exports, Kunde_1, Jassi_1, typeorm_1, AR_1, ARZeile_1, DBManager_1) {
+define(["require", "exports", "de/remote/Kunde", "jassijs/remote/Jassi", "typeorm", "de/remote/AR", "de/remote/ARZeile", "jassijs/server/DBManager"], function (require, exports, Kunde_1, jassijs_1, typeorm_1, AR_1, ARZeile_1, DBManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
-    //@$ActionProvider("jassi.base.ActionNode")
+    //@$ActionProvider("jassijs.base.ActionNode")
     let Testserver = class Testserver {
         static async run() {
             var man = await DBManager_1.DBManager.get();
@@ -53,7 +53,7 @@ define(["require", "exports", "de/remote/Kunde", "jassi/remote/Jassi", "typeorm"
         }
     };
     Testserver = __decorate([
-        Jassi_1.$Class("jassi_localserver.Testserver")
+        jassijs_1.$Class("jassijs_localserver.Testserver")
     ], Testserver);
     async function test() {
         Testserver.run();

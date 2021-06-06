@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/security/Rights", "de/remote/AR"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, Rights_1, AR_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "de/remote/AR"], function (require, exports, DBObject_1, jassijs_1, DatabaseSchema_1, Rights_1, AR_1) {
     "use strict";
     var ARZeile_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -22,12 +22,12 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
             super();
         }
         static async find(options = undefined, context = undefined) {
-            if (!Jassi_1.default.isServer) {
+            if (!jassijs_1.default.isServer) {
                 return await this.call(this.find, options, context);
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassi/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
+                var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
                 return man.find(context, this, options);
             }
         }
@@ -39,9 +39,9 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
         }
         async sample() {
             var ret;
-            var az = await Jassi_1.default.db.load("de.ARZeile", 120);
+            var az = await jassijs_1.default.db.load("de.ARZeile", 120);
             var h = await az.ar.resolve();
-            var ar2 = await Jassi_1.default.db.load("de.AR", 30);
+            var ar2 = await jassijs_1.default.db.load("de.AR", 30);
             var az3 = new ARZeile_1();
             var h = await ar2.zeilen.resolve();
             ar2.zeilen.add(az3);
@@ -50,15 +50,15 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
             /*var z1=new de.ARZeile();
             z1.id=110;
             z1.text="lkjlk";
-            jassi.db.save(z1);
+            jassijs.db.save(z1);
             var z2=new de.ARZeile();
             z2.id=120;
             z2.text="lddkjlk";
-            jassi.db.save(z2);
-            var ar=jassi.db.load("de.AR",30);
-            ar.zeilen=new jassi.base.DBArray(z1,z2);
-            jassi.db.save(ar);
-            var arz=jassi.db.load("de.ARZeile",1);
+            jassijs.db.save(z2);
+            var ar=jassijs.db.load("de.AR",30);
+            ar.zeilen=new jassijs.base.DBArray(z1,z2);
+            jassijs.db.save(ar);
+            var arz=jassijs.db.load("de.ARZeile",1);
             var test=ar.zeilen;*/
         }
     };
@@ -85,18 +85,18 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
     ], ARZeile.prototype, "ar", void 0);
     ARZeile = ARZeile_1 = __decorate([
         DBObject_1.$DBObject(),
-        Jassi_1.$Class("de.ARZeile"),
+        jassijs_1.$Class("de.ARZeile"),
         __metadata("design:paramtypes", [])
     ], ARZeile);
     exports.ARZeile = ARZeile;
-    Jassi_1.default.test = async function () {
+    jassijs_1.default.test = async function () {
         //	var k=new Kunde();
         //k=k;
-        var test = await Jassi_1.default.db.load("de.ARZeile");
+        var test = await jassijs_1.default.db.load("de.ARZeile");
         var z = new ARZeile();
         z.id = 150;
         z.text = "jjj";
-        //   jassi.db.save(z);
+        //   jassijs.db.save(z);
         return undefined;
     };
 });

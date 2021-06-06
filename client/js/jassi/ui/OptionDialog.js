@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/ui/BoxPanel", "jassi/ui/HTMLPanel", "jassi/ui/Button", "jassi/remote/Jassi", "jassi/ui/Property", "jassi/ui/Textbox", "jassi/ui/PropertyEditor"], function (require, exports, Panel_1, BoxPanel_1, HTMLPanel_1, Button_1, Jassi_1, Property_1, Textbox_1, PropertyEditor_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditor"], function (require, exports, Panel_1, BoxPanel_1, HTMLPanel_1, Button_1, jassijs_1, Property_1, Textbox_1, PropertyEditor_1) {
     "use strict";
     var OptionDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -122,7 +122,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/BoxPanel", "jassi/ui/H
         __metadata("design:type", String)
     ], OptionDialog.prototype, "text", void 0);
     OptionDialog = OptionDialog_1 = __decorate([
-        Jassi_1.$Class("jassi.ui.OptionDialog"),
+        jassijs_1.$Class("jassijs.ui.OptionDialog"),
         __metadata("design:paramtypes", [Object])
     ], OptionDialog);
     exports.OptionDialog = OptionDialog;
@@ -137,7 +137,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/BoxPanel", "jassi/ui/H
         __metadata("design:type", String)
     ], Testprop.prototype, "text", void 0);
     Testprop = __decorate([
-        Jassi_1.$Class("jassi.ui.OptionDialogTestProp")
+        jassijs_1.$Class("jassijs.ui.OptionDialogTestProp")
     ], Testprop);
     async function test() {
         var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);
@@ -148,7 +148,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/BoxPanel", "jassi/ui/H
             var prop = new Testprop();
             var ret2 = await OptionDialog.askProperties("Please fill:", prop, ["ok", "cancel"]);
         }
-        //var ret=new jassi.ui.Dialog();
+        //var ret=new jassijs.ui.Dialog();
         //return ret;
     }
     exports.test = test;

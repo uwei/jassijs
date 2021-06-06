@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi_editor/util/Typescript", "jassi/base/Router"], function (require, exports, Jassi_1, Panel_1, Typescript_1, Router_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/util/Typescript", "jassijs/base/Router"], function (require, exports, jassijs_1, Panel_1, Typescript_1, Router_1) {
     "use strict";
     var CodePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -129,13 +129,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi_edi
                     var p = entr.textSpan.start;
                     var newPos = CodePanel_1.numberToPosition(file, p, undefined);
                     var line = newPos.row;
-                    Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + file + "&line=" + line);
+                    Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
                 }
             });
         }
     };
     CodePanel = CodePanel_1 = __decorate([
-        Jassi_1.$Class("jassi_editor.CodePanel")
+        jassijs_1.$Class("jassijs_editor.CodePanel")
     ], CodePanel);
     exports.CodePanel = CodePanel;
 });

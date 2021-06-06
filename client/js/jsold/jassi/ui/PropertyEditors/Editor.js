@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], function (require, exports, Jassi_1, Registry_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"], function (require, exports, jassijs_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Editor = exports.$PropertyEditor = void 0;
@@ -26,7 +26,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
         /**
         * Editor for number and string
         * used by PropertyEditor
-        * @class jassi.ui.PropertyEditors.DefaultEditor
+        * @class jassijs.ui.PropertyEditors.DefaultEditor
         */
         constructor(property, propertyEditor) {
             /** @member - the renedering component **/
@@ -34,9 +34,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
             /** @member - the edited object */
             this._ob = undefined;
             /** @member {string} - the name of the variable */
-            /** @member {jassi.ui.Property} - the property to edit */
+            /** @member {jassijs.ui.Property} - the property to edit */
             this.property = property;
-            /** @member {jassi.ui.PropertEditor} - the PropertyEditor instance */
+            /** @member {jassijs.ui.PropertEditor} - the PropertyEditor instance */
             this.propertyEditor = propertyEditor;
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
@@ -104,7 +104,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry"], fu
         }
     };
     Editor = __decorate([
-        Jassi_1.$Class("jassi.ui.PropertyEditors.Editor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.Editor"),
         __metadata("design:paramtypes", [Object, Object])
     ], Editor);
     exports.Editor = Editor;

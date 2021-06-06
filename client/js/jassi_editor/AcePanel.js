@@ -7,14 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/jassi", "jassi_editor/ext/acelib", "jassi_editor/util/Typescript", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi_editor/CodePanel", "jassi_editor/Debugger"], function (require, exports, jassi_1, acelib_1, Typescript_1, Jassi_1, Registry_1, CodePanel_1) {
+define(["require", "exports", "jassijs/jassi", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs_editor/Debugger"], function (require, exports, jassijs_1, acelib_1, Typescript_1, jassijs_1, Registry_1, CodePanel_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.AcePanel = void 0;
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
-    * @class jassi.ui.CodePanel
+    * @class jassijs.ui.CodePanel
     */
     let AcePanel = AcePanel_1 = class AcePanel extends CodePanel_1.CodePanel {
         constructor() {
@@ -270,11 +270,11 @@ define(["require", "exports", "jassi/jassi", "jassi_editor/ext/acelib", "jassi_e
                     constructor: {},
                     getDocTooltip: function (item) {
                         return item.codePanel.getDocTooltip(item);
-                        // if (item.jassi !== undefined && item.jassi.getDocTooltip !== undefined)
-                        //     return item.jassi.getDocTooltip(item);
+                        // if (item.jassi !== undefined && item.jassijs.getDocTooltip !== undefined)
+                        //     return item.jassijs.getDocTooltip(item);
                     },
                     getCompletions: function (editor, session, pos, prefix, callback) {
-                        return editor.jassi.getCompletions(editor, session, pos, prefix, callback);
+                        return editor.jassijs.getCompletions(editor, session, pos, prefix, callback);
                     }
                 };
             }
@@ -481,7 +481,7 @@ define(["require", "exports", "jassi/jassi", "jassi_editor/ext/acelib", "jassi_e
         }
     };
     AcePanel = AcePanel_1 = __decorate([
-        Jassi_1.$Class("jassi.ui.AcePanel"),
+        jassijs_1.$Class("jassijs.ui.AcePanel"),
         __metadata("design:paramtypes", [])
     ], AcePanel);
     exports.AcePanel = AcePanel;
@@ -517,7 +517,7 @@ define(["require", "exports", "jassi/jassi", "jassi_editor/ext/acelib", "jassi_e
             }
         }
     }
-    jassi_1.default.test = async function () {
+    jassijs_1.default.test = async function () {
         var dlg = new AcePanel();
         dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
         dlg.mode = "javascript";

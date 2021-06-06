@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/ui/ObjectChooser", "jassi/remote/Classes"], function (require, exports, Editor_1, Jassi_1, Panel_1, Textbox_1, ObjectChooser_1, Classes_1) {
+define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/remote/Classes"], function (require, exports, Editor_1, jassijs_1, Panel_1, Textbox_1, ObjectChooser_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectEditor = void 0;
@@ -15,7 +15,7 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/J
         /**
          * Checkbox Editor for boolean values
          * used by PropertyEditor
-         * @class jassi.ui.PropertyEditors.BooleanEditor
+         * @class jassijs.ui.PropertyEditors.BooleanEditor
          */
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
@@ -49,8 +49,8 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/J
             //databinder,"prop"
             var value = this.propertyEditor.getPropertyValue(this.property);
             if (value !== undefined) {
-                //jassi.db.load("de.Kunde",9);
-                if (value.startsWith("jassi.db.load")) {
+                //jassijs.db.load("de.Kunde",9);
+                if (value.startsWith("jassijs.db.load")) {
                     var nr = value.split(",")[1];
                     nr = nr.substring(0, nr.indexOf(")") - 1);
                     this._textbox.value = nr;
@@ -82,7 +82,7 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/J
         _onchange(param = undefined) {
             var val = this._textbox.value;
             var type = this.property.componentType;
-            var sval = "jassi.db.load(\"" + type + "\"," + val + ")";
+            var sval = "jassijs.db.load(\"" + type + "\"," + val + ")";
             var _this = this;
             this.propertyEditor.setPropertyInCode(this.property.name, sval);
             if (val && val !== "" && this.dbobject === undefined) {
@@ -94,7 +94,7 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/J
             else
                 this.propertyEditor.setPropertyInDesign(this.property.name, this.dbobject);
             /* var _this=this;
-             jassi.db.load("de.Kunde",val).then(function(ob){
+             jassijs.db.load("de.Kunde",val).then(function(ob){
                  _this.propertyEditor.setPropertyInDesign(_this.property.name,ob);
              });*/
             /*
@@ -107,7 +107,7 @@ define(["require", "exports", "jassi/ui/PropertyEditors/Editor", "jassi/remote/J
     };
     DBObjectEditor = __decorate([
         Editor_1.$PropertyEditor(["dbobject"]),
-        Jassi_1.$Class("jassi.ui.PropertyEditors.DBObjectEditor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.DBObjectEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DBObjectEditor);
     exports.DBObjectEditor = DBObjectEditor;

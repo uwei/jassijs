@@ -1,7 +1,7 @@
-define("jassi/ext/jquery.contextmenu", ["jassi/remote/Jassi", "jquery.contextMenu"], function () {
-    var path = require('jassi/modul').default.require.paths["jquery.contextMenu"];
+define("jassijs/ext/jquery.contextmenu", ["jassijs/remote/Jassi", "jquery.contextMenu"], function () {
+    var path = require('jassijs/modul').default.require.paths["jquery.contextMenu"];
     path = path.substring(0, path.lastIndexOf("/"));
-    jassi.myRequire(path + "/contextMenu.css");
+    jassijs.myRequire(path + "/contextMenu.css");
     return {
         default: ""
     };

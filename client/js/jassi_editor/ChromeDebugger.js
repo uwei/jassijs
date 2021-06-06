@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "jassi/ui/OptionDialog", "jassi_editor/util/TSSourceMap", "jassi/util/Reloader", "jassi/remote/Server", "jassi/base/Windows"], function (require, exports, Jassi_1, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/Debugger", "jassijs/ui/OptionDialog", "jassijs_editor/util/TSSourceMap", "jassijs/util/Reloader", "jassijs/remote/Server", "jassijs/base/Windows"], function (require, exports, jassijs_1, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1) {
     "use strict";
     var ChromeDebugger_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -51,9 +51,9 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
             if (event.data.fromJassiExtension && event.data.connected) {
                 installed = true;
                 //clearTimeout(checkExtensionInstalled);
-                if (Jassi_1.default.debugger !== undefined)
-                    Jassi_1.default.debugger.destroy();
-                Jassi_1.default.debugger = this;
+                if (jassijs_1.default.debugger !== undefined)
+                    jassijs_1.default.debugger.destroy();
+                jassijs_1.default.debugger = this;
             }
             if (event.data.fromJassiExtension && event.data.mid) {
                 var test = this.responseList[event.data.mid];
@@ -84,7 +84,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
             var filename = file.replace("$temp", "");
             var _this = this;
             //give the user the option to reload the changes in codeeditor
-            var editor = Windows_1.default.findComponent("jassi_editor.CodeEditor-" + filename);
+            var editor = Windows_1.default.findComponent("jassijs_editor.CodeEditor-" + filename);
             if (editor !== undefined) {
                 if (editor._codeToReload === undefined) {
                     OptionDialog_1.OptionDialog.show("The source was updated in Chrome. Do you want to load this modification?", ["Yes", "No"], editor, false).then(function (data) {
@@ -109,8 +109,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
             }
             new Server_1.Server().saveFile(file, code).then(function () {
                 Reloader_1.Reloader.instance.reloadJS(file.replace(".ts", ""));
-                if (code.indexOf("jassi.register(") > -1) {
-                    Jassi_1.default.registry.reload();
+                if (code.indexOf("jassijs.register(") > -1) {
+                    jassijs_1.default.registry.reload();
                 }
             });
         }
@@ -149,7 +149,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
             var _this = this;
             var newline = await new TSSourceMap_1.TSSourceMap().getLineFromTS(file, line, column);
             var ret = new Promise(function (resolve) {
-                //http://localhost/jassi/public_html/demo/TreeTable.js?bust=1551539152470
+                //http://localhost/jassijs/public_html/demo/TreeTable.js?bust=1551539152470
                 var sfile = newline.jsfilename; //file.replace(".ts", ".js");
                 var root = window.location.origin + window.location.pathname;
                 root = root.substring(0, root.lastIndexOf("/"));
@@ -173,7 +173,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
         * add debugpoints in code
         * @param {[string]} lines - code
         * @param {Object.<number, boolean>} debugpoints - the debugpoints
-        * @param {jassi_editor.CodeEditor} codeEditor
+        * @param {jassijs_editor.CodeEditor} codeEditor
         */
         addDebugpoints(lines, debugpoints, codeEditor) {
             //added directly
@@ -187,7 +187,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
             return;
             var file = this.urlToFile(url);
             var _this = this;
-            var editor = Jassi_1.default.windows.findComponent("jassi_editor.CodeEditor-" + file);
+            var editor = jassijs_1.default.windows.findComponent("jassijs_editor.CodeEditor-" + file);
             if (editor !== undefined) {
                 editor.addVariables(variables);
             }
@@ -199,11 +199,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/Debugger", "ja
     };
     ChromeDebugger.mid = 0;
     ChromeDebugger = ChromeDebugger_1 = __decorate([
-        Jassi_1.$Class("jassi_editor.ChromeDebugger"),
+        jassijs_1.$Class("jassijs_editor.ChromeDebugger"),
         __metadata("design:paramtypes", [])
     ], ChromeDebugger);
     exports.ChromeDebugger = ChromeDebugger;
-    //if connected then this instance is registred to jassi.debugger;
+    //if connected then this instance is registred to jassijs.debugger;
     new ChromeDebugger();
     window.postMessage({ toJassiExtension: true, name: "connect" }, "*");
 });

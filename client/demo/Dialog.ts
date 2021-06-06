@@ -1,7 +1,7 @@
-import { Button } from "jassi/ui/Button";
-import { BoxPanel } from "jassi/ui/BoxPanel";
-import { $Class } from "jassi/remote/Jassi";
-import { Panel } from "jassi/ui/Panel";
+import { Button } from "jassijs/ui/Button";
+import { BoxPanel } from "jassijs/ui/BoxPanel";
+import { $Class } from "jassijs/remote/Jassi";
+import { Panel } from "jassijs/ui/Panel";
 type Me = {
     boxpanel1?: BoxPanel;
     button1?: Button;

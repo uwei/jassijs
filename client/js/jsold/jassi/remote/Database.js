@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "./Classes"], function (require, exports, Jassi_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "./Classes"], function (require, exports, jassijs_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.db = exports.Database = exports.TypeDef = void 0;
@@ -81,7 +81,7 @@ define(["require", "exports", "jassi/remote/Jassi", "./Classes"], function (requ
         }
     };
     Database = __decorate([
-        Jassi_1.$Class("jassi.remote.Database"),
+        jassijs_1.$Class("jassijs.remote.Database"),
         __metadata("design:paramtypes", [])
     ], Database);
     exports.Database = Database;

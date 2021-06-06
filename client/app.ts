@@ -1,14 +1,14 @@
 
 
 
-import {FileExplorer} from "jassi/ui/FileExplorer";
-import windows from "jassi/base/Windows";
-import {Panel} from "jassi/ui/Panel";
-import {Button} from "jassi/ui/Button";
-import { router } from "jassi/base/Router";
-import {SearchExplorer} from "jassi/ui/SearchExplorer";
-import { DBObjectExplorer } from "jassi/ui/DBObjectExplorer";
-import { ActionNodeMenu } from "jassi/ui/ActionNodeMenu";
+import {FileExplorer} from "jassijs/ui/FileExplorer";
+import windows from "jassijs/base/Windows";
+import {Panel} from "jassijs/ui/Panel";
+import {Button} from "jassijs/ui/Button";
+import { router } from "jassijs/base/Router";
+import {SearchExplorer} from "jassijs/ui/SearchExplorer";
+import { DBObjectExplorer } from "jassijs/ui/DBObjectExplorer";
+import { ActionNodeMenu } from "jassijs/ui/ActionNodeMenu";
 
 
 
@@ -17,7 +17,7 @@ import { ActionNodeMenu } from "jassi/ui/ActionNodeMenu";
 //var h=new RemoteObject().test();
 
 async function test() {
-  //  jassi.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
+  //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
     var body = new Panel({ id: "body" });
     body.max();
     windows.addLeft(new DBObjectExplorer(), "DBObjects");
@@ -39,7 +39,7 @@ async function test() {
     bts.text = "Spy";
     bts.y = 100;
     bts.onclick(function() {
-        require(["jassi/ui/ComponentSpy"], function() {
+        require(["jassijs/ui/ComponentSpy"], function() {
             windows.add(new ComponentSpy, "ComponentSpy");
         });
     });
@@ -49,7 +49,7 @@ async function test() {
     btt.text = "memorytest";
     btt.y = 150;
     btt.onclick(function() {
-        require(["jassi/ui/ComponentSpy"], function() {
+        require(["jassijs/ui/ComponentSpy"], function() {
             //new MemoryTest().MemoryTest();
             var sel = new Select();
             sel.height = 200;

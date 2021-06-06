@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/Table"], function (require, exports, Panel_1, Jassi_1, Table_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Table"], function (require, exports, Panel_1, jassijs_1, Table_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
@@ -115,7 +115,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/
         }
     };
     TreeTable = __decorate([
-        Jassi_1.$Class("demo.TreeTable"),
+        jassijs_1.$Class("demo.TreeTable"),
         __metadata("design:paramtypes", [])
     ], TreeTable);
     exports.TreeTable = TreeTable;

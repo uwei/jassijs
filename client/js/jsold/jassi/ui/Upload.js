@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property"], function (require, exports, Jassi_1, Component_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, jassijs_1, Component_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Upload = void 0;
@@ -83,7 +83,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
     ], Upload.prototype, "onuploaded", null);
     Upload = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
-        Jassi_1.$Class("jassi.ui.Upload"),
+        jassijs_1.$Class("jassijs.ui.Upload"),
         __metadata("design:paramtypes", [])
     ], Upload);
     exports.Upload = Upload;

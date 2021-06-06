@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "jassi/ui/Property", "jassi/ui/Component", "jassi/ui/Textbox", "jassi/ui/Calendar", "jassi/ext/tabulator"], function (require, exports, Jassi_1, DataComponent_1, Property_1, Component_1, Textbox_1, Calendar_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Calendar", "jassijs/ext/tabulator"], function (require, exports, jassijs_1, DataComponent_1, Property_1, Component_1, Textbox_1, Calendar_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -46,7 +46,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
         __metadata("design:returntype", void 0)
     ], TableEditorProperties.prototype, "cellDblClick", null);
     TableEditorProperties = __decorate([
-        Jassi_1.$Class("jassi.ui.TableEditorProperties")
+        jassijs_1.$Class("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
     let Table = 
     /*
@@ -375,8 +375,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
     ], Table.prototype, "height", null);
     Table = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
-        Jassi_1.$Class("jassi.ui.Table"),
-        Property_1.$Property({ name: "new", type: "json", componentType: "jassi.ui.TableEditorProperties" })
+        jassijs_1.$Class("jassijs.ui.Table"),
+        Property_1.$Property({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
         /*
         @$Property({ name: "new/paginationSize", type: "number", default: undefined })
         @$Property({ name: "new/headerSort", type: "boolean", default: true })
@@ -404,7 +404,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/DataComponent", "j
         }, 100);
         //tab.select = {};
         // tab.showSearchbox = true;
-        //    var kunden = await jassi.db.load("de.Kunde");
+        //    var kunden = await jassijs.db.load("de.Kunde");
         //   tab.items = kunden;
         return tab;
     }

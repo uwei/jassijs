@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi_report/ReportDesign", "jassi_report/ReportComponent"], function (require, exports, Jassi_1, Component_1, ReportDesign_1, ReportComponent_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs_report/ReportDesign", "jassijs_report/ReportComponent"], function (require, exports, jassijs_1, Component_1, ReportDesign_1, ReportComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTablerow = void 0;
@@ -86,7 +86,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         }
         /**
         * adds a component to the container
-        * @param {jassi.ui.Component} component - the component to add
+        * @param {jassijs.ui.Component} component - the component to add
         */
         add(component) {
             this.wrapComponent(component);
@@ -98,8 +98,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         }
         /**
       * adds a component to the container before an other component
-      * @param {jassi.ui.Component} component - the component to add
-      * @param {jassi.ui.Component} before - the component before then component to add
+      * @param {jassijs.ui.Component} component - the component to add
+      * @param {jassijs.ui.Component} before - the component before then component to add
       */
         addBefore(component, before) {
             this.wrapComponent(component);
@@ -122,13 +122,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
     };
     RTablerow = __decorate([
         ReportComponent_1.$ReportComponent({ editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassi_report.RTablerow")
+        jassijs_1.$Class("jassijs_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
     ], RTablerow);
     exports.RTablerow = RTablerow;
 });
-//    jassi.register("reportcomponent","jassi_report.Stack","report/Stack","res/boxpanel.ico");
+//    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
 //# sourceMappingURL=RTablerow.js.map
 //# sourceMappingURL=RTablerow.js.map

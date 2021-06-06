@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/security/Rights"], function (require, exports, ARZeile_1, Kunde_1, DBObject_1, Jassi_1, DatabaseSchema_1, Rights_1) {
+define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, ARZeile_1, Kunde_1, DBObject_1, jassijs_1, DatabaseSchema_1, Rights_1) {
     "use strict";
     var AR_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -30,14 +30,14 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassi/rem
             this.nummer = 0;
         }
         static async myfind(options = undefined, context = undefined) {
-            if (!Jassi_1.default.isServer) {
+            if (!jassijs_1.default.isServer) {
                 return await this.call(this.myfind, options, context);
             }
             else {
                 //@ts-ignore
                 var Brackets = (await new Promise((resolve_1, reject_1) => { require(["typeorm"], resolve_1, reject_1); })).Brackets;
                 //@ts-ignore
-                var man = await (await new Promise((resolve_2, reject_2) => { require(["jassi/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
+                var man = await (await new Promise((resolve_2, reject_2) => { require(["jassijs/server/DBManager"], resolve_2, reject_2); })).DBManager.get();
                 var man2 = man;
                 var ret = await man.connection().manager.createQueryBuilder().
                     select("me").from(AR_1, "me").
@@ -69,16 +69,16 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassi/rem
             ar.nummer = 7;
             ar.id = 30;
             ar.save();
-            /*        var ar2 = await jassi.db.load("de.AR", 30);
+            /*        var ar2 = await jassijs.db.load("de.AR", 30);
                     var test = await ar2.kunden.resolve();
-                    var kd = await jassi.db.load("de.Kunde", 9);
+                    var kd = await jassijs.db.load("de.Kunde", 9);
                     ar.kunde = kd;
-                    await jassi.db.save(ar);
-                    var arneu = await jassi.db.load("de.AR", 30);
+                    await jassijs.db.save(ar);
+                    var arneu = await jassijs.db.load("de.AR", 30);
                     var test = await arneu.kunde.resolve();
-                    await jassi.db.save(ar);
+                    await jassijs.db.save(ar);
             */
-            //jassi.db.delete(kunde);
+            //jassijs.db.delete(kunde);
         }
     };
     __decorate([
@@ -112,14 +112,14 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassi/rem
         Rights_1.$Rights([{ name: "Auftragswesen/Ausgangsrechnung/festschreiben" },
             { name: "Auftragswesen/Ausgangsrechnung/löschen" }]),
         DBObject_1.$DBObject(),
-        Jassi_1.$Class("de.AR"),
+        jassijs_1.$Class("de.AR"),
         __metadata("design:paramtypes", [])
     ], AR);
     exports.AR = AR;
     async function test() {
-        //jassi.db.clearCache();
-        //var ar = await jassi.db.load("de.AR", 30, "kunde");
-        //ar.zeilen = await jassi.db.load("de.ARZeile");
+        //jassijs.db.clearCache();
+        //var ar = await jassijs.db.load("de.AR", 30, "kunde");
+        //ar.zeilen = await jassijs.db.load("de.ARZeile");
         var ak = await AR.myfind();
         return;
         //var z: AR = (await AR.find({ id: 902 }))[0];

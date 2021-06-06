@@ -35,7 +35,7 @@ export async function test2() {
     	debugger;
     }
     //	new de.Kunde().generate();
-    //jassi.db.uploadType(de.Kunde);
+    //jassijs.db.uploadType(de.Kunde);
 };
 export async function test3() {
     var all = await AR.find();

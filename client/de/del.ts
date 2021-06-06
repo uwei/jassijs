@@ -1,10 +1,10 @@
-import { Panel } from "jassi/ui/Panel";
-import { Textbox } from "jassi/ui/Textbox";
-import { Server } from "jassi/remote/Server";
-import jassi from "jassi/jassi";
+import { Panel } from "jassijs/ui/Panel";
+import { Textbox } from "jassijs/ui/Textbox";
+import { Server } from "jassijs/remote/Server";
+import jassi from "jassijs/jassi";
 import { AR } from "de/remote/AR";
 import { ARZeile } from "de/remote/ARZeile";
-import { Transaction } from "jassi/remote/Transaction";
+import { Transaction } from "jassijs/remote/Transaction";
 import { Kunde } from "de/remote/Kunde";
 var systemFonts= ["Arial","Helvetica Neue","Courier New","Times New Roman","Comic Sans MS","Impact"];
 

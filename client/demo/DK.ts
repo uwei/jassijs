@@ -1,10 +1,10 @@
-import {Table} from "jassi/ui/Table";
+import {Table} from "jassijs/ui/Table";
 
-import jassi, { $Class } from "jassi/remote/Jassi";
-import {Panel} from "jassi/ui/Panel";
-import {Button} from "jassi/ui/Button";
-import {Textbox} from "jassi/ui/Textbox";
-import Filessystem from "jassi_localserver/Filesystem";
+import jassijs, { $Class } from "jassijs/remote/Jassi";
+import {Panel} from "jassijs/ui/Panel";
+import {Button} from "jassijs/ui/Button";
+import {Textbox} from "jassijs/ui/Textbox";
+import Filessystem from "jassijs_localserver/Filesystem";
 
 var g=Filessystem;
 debugger;

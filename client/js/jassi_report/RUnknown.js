@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponent"], function (require, exports, Jassi_1, ReportComponent_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportComponent"], function (require, exports, jassijs_1, ReportComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RUnknown = void 0;
@@ -39,7 +39,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportComponen
         }
     };
     RUnknown = __decorate([
-        Jassi_1.$Class("jassi_report.RUnknown"),
+        jassijs_1.$Class("jassijs_report.RUnknown"),
         __metadata("design:paramtypes", [Object])
     ], RUnknown);
     exports.RUnknown = RUnknown;

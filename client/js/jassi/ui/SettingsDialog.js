@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Select", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/PropertyEditor", "jassi/ui/Button", "jassi/remote/Settings", "jassi/ui/ComponentDescriptor", "jassi/remote/Registry", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, HTMLPanel_1, Select_1, Jassi_1, Panel_1, PropertyEditor_1, Button_1, Settings_1, ComponentDescriptor_1, Registry_1, Actions_1, Windows_1) {
+define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_1, Select_1, jassijs_1, Panel_1, PropertyEditor_1, Button_1, Settings_1, ComponentDescriptor_1, Registry_1, Actions_1, Windows_1) {
     "use strict";
     var SettingsDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -28,7 +28,7 @@ define(["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Select", "jassi/re
         }
     };
     SettingsObject = __decorate([
-        Jassi_1.$Class("jassi.ui.SettingsObject")
+        jassijs_1.$Class("jassijs.ui.SettingsObject")
     ], SettingsObject);
     let SettingsDialog = SettingsDialog_1 = class SettingsDialog extends Panel_1.Panel {
         constructor() {
@@ -110,8 +110,8 @@ define(["require", "exports", "jassi/ui/HTMLPanel", "jassi/ui/Select", "jassi/re
         __metadata("design:returntype", Promise)
     ], SettingsDialog, "show", null);
     SettingsDialog = SettingsDialog_1 = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_1.$Class("jassi.ui.SettingsDialog"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
+        jassijs_1.$Class("jassijs.ui.SettingsDialog"),
         __metadata("design:paramtypes", [])
     ], SettingsDialog);
     exports.SettingsDialog = SettingsDialog;

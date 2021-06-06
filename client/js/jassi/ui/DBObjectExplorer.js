@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/remote/Jassi", "jassi/base/Actions", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/base/Router", "jassi/ui/DBObjectDialog", "jassi/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Jassi_1, Actions_1, Panel_1, Registry_1, Router_1, DBObjectDialog_1, Windows_1) {
+define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs/ui/DBObjectDialog", "jassijs/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, jassijs_1, Actions_1, Panel_1, Registry_1, Router_1, DBObjectDialog_1, Windows_1) {
     "use strict";
     var DBObjectExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -15,7 +15,7 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/re
     let DBObjectNode = class DBObjectNode {
     };
     DBObjectNode = __decorate([
-        Jassi_1.$Class("jassi.ui.DBObjectNode")
+        jassijs_1.$Class("jassijs.ui.DBObjectNode")
     ], DBObjectNode);
     exports.DBObjectNode = DBObjectNode;
     let DBFileActions = class DBFileActions {
@@ -51,8 +51,8 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/re
         __metadata("design:returntype", Promise)
     ], DBFileActions, "ViewData", null);
     DBFileActions = __decorate([
-        Actions_1.$ActionProvider("jassi.remote.FileNode"),
-        Jassi_1.$Class("jassi.ui.DBFileActions")
+        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
+        jassijs_1.$Class("jassijs.ui.DBFileActions")
     ], DBFileActions);
     exports.DBFileActions = DBFileActions;
     let DBObjectActions = class DBObjectActions {
@@ -63,7 +63,7 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/re
             Windows_1.default.add(ret, all[0].name);
         }
         static async OpenCode(all) {
-            Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + all[0].filename);
+            Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + all[0].filename);
         }
     };
     __decorate([
@@ -79,8 +79,8 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/re
         __metadata("design:returntype", Promise)
     ], DBObjectActions, "OpenCode", null);
     DBObjectActions = __decorate([
-        Actions_1.$ActionProvider("jassi.ui.DBObjectNode"),
-        Jassi_1.$Class("jassi.ui.DBObjectActions")
+        Actions_1.$ActionProvider("jassijs.ui.DBObjectNode"),
+        jassijs_1.$Class("jassijs.ui.DBObjectActions")
     ], DBObjectActions);
     exports.DBObjectActions = DBObjectActions;
     let DBObjectExplorer = DBObjectExplorer_1 = class DBObjectExplorer extends Panel_1.Panel {
@@ -134,8 +134,8 @@ define(["require", "exports", "jassi/ui/ContextMenu", "jassi/ui/Tree", "jassi/re
         __metadata("design:returntype", Promise)
     ], DBObjectExplorer, "show", null);
     DBObjectExplorer = DBObjectExplorer_1 = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_1.$Class("jassi.ui.DBObjectExplorer"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
+        jassijs_1.$Class("jassijs.ui.DBObjectExplorer"),
         __metadata("design:paramtypes", [])
     ], DBObjectExplorer);
     exports.DBObjectExplorer = DBObjectExplorer;

@@ -17,7 +17,7 @@ define([],function() {
         success: function(result){
 		    for(var x=0;x<result.length;x++){
 		    	var tit=result[x].title.replaceAll("&amp;","&");;
-		    	if(tit.indexOf("localhost/jassi/public_html/app.html")===0){
+		    	if(tit.indexOf("localhost/jassijs/public_html/app.html")===0){
 		    		var url=result[x].webSocketDebuggerUrl;
 		    		  window.debuggersession=ws= new WebSocket(url);
 				

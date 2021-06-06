@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Tree", "jassi/remote/Jassi"], function (require, exports, Panel_1, Tree_1, Jassi_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Jassi"], function (require, exports, Panel_1, Tree_1, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestTree = void 0;
@@ -25,7 +25,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Tree", "jassi/remote/J
         }
     };
     TestTree = __decorate([
-        Jassi_1.$Class("demo.TestTree"),
+        jassijs_1.$Class("demo.TestTree"),
         __metadata("design:paramtypes", [])
     ], TestTree);
     exports.TestTree = TestTree;

@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi_localserver/Filesystem"], function (require, exports, Table_1, Jassi_1, Panel_1, Textbox_1, Filesystem_1) {
+define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs_localserver/Filesystem"], function (require, exports, Table_1, jassijs_1, Panel_1, Textbox_1, Filesystem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DK = void 0;
@@ -48,7 +48,7 @@ define(["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/
         }
     };
     DK = __decorate([
-        Jassi_1.$Class("demo.DK"),
+        jassijs_1.$Class("demo.DK"),
         __metadata("design:paramtypes", [])
     ], DK);
     exports.DK = DK;

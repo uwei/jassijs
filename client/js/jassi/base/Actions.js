@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Registry", "jassi/remote/Jassi", "jassi/remote/Classes"], function (require, exports, Registry_1, Jassi_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, Registry_1, jassijs_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Actions = exports.$ActionProvider = exports.$Action = exports.$Actions = exports.ActionProperties = void 0;
@@ -80,7 +80,7 @@ define(["require", "exports", "jassi/remote/Registry", "jassi/remote/Jassi", "ja
         }
     };
     Actions = __decorate([
-        Jassi_1.$Class("jassi.base.Actions")
+        jassijs_1.$Class("jassijs.base.Actions")
     ], Actions);
     exports.Actions = Actions;
     async function test() {

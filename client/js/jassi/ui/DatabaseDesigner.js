@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/Databinder", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/base/DatabaseSchema", "jassi/ui/OptionDialog", "jassi/base/Router", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, BoxPanel_1, Button_1, Databinder_1, Select_1, Table_1, Jassi_1, Panel_1, DatabaseSchema_1, OptionDialog_1, Router_1, Actions_1, Windows_1) {
+define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Databinder", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/base/DatabaseSchema", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, BoxPanel_1, Button_1, Databinder_1, Select_1, Table_1, jassijs_1, Panel_1, DatabaseSchema_1, OptionDialog_1, Router_1, Actions_1, Windows_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DatabaseDesigner = void 0;
@@ -21,7 +21,7 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/
             this.layout(this.me);
         }
         static async showDialog() {
-            Router_1.router.navigate("#do=jassi/ui/DatabaseDesigner");
+            Router_1.router.navigate("#do=jassijs/ui/DatabaseDesigner");
         }
         layout(me) {
             me.newclass = new Button_1.Button();
@@ -204,8 +204,8 @@ define(["require", "exports", "jassi/ui/BoxPanel", "jassi/ui/Button", "jassi/ui/
         __metadata("design:returntype", Promise)
     ], DatabaseDesigner, "showDialog", null);
     DatabaseDesigner = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_1.$Class("jassi/ui/DatabaseDesigner"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
+        jassijs_1.$Class("jassijs/ui/DatabaseDesigner"),
         __metadata("design:paramtypes", [])
     ], DatabaseDesigner);
     exports.DatabaseDesigner = DatabaseDesigner;

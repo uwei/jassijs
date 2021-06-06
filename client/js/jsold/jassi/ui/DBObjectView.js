@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui/Component", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/Property"], function (require, exports, Button_1, BoxPanel_1, Jassi_1, Panel_1, Databinder_1, Component_1, Registry_1, Classes_1, Property_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Button_1, BoxPanel_1, jassijs_1, Panel_1, Databinder_1, Component_1, Registry_1, Classes_1, Property_1) {
     "use strict";
     var DBObjectView_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -178,7 +178,7 @@ define(["require", "exports", "jassi/ui/Button", "jassi/ui/BoxPanel", "jassi/rem
     ], DBObjectView.prototype, "ondeleted", null);
     DBObjectView = DBObjectView_1 = __decorate([
         Component_1.$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh"] }),
-        Jassi_1.$Class("jassi/ui/DBObjectView"),
+        jassijs_1.$Class("jassijs/ui/DBObjectView"),
         __metadata("design:paramtypes", [])
     ], DBObjectView);
     exports.DBObjectView = DBObjectView;

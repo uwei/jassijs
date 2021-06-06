@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jassi/server/DBManager", "jassi/remote/Registry", "jassi/remote/Server"], function (require, exports, Jassi_1, Reloader_1, DBManager_1, Registry_1, Server_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "jassijs/server/DBManager", "jassijs/remote/Registry", "jassijs/remote/Server"], function (require, exports, jassijs_1, Reloader_1, DBManager_1, Registry_1, Server_1) {
     "use strict";
     var Filessystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -179,7 +179,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
             }
             if (fileNames.length === 1 && fileNames[0].endsWith("/registry.js")) //no indexer save recurse
                 return;
-            var RegistryIndexer = (await new Promise((resolve_1, reject_1) => { require(["jassi_localserver/RegistryIndexer"], resolve_1, reject_1); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_1, reject_1) => { require(["jassijs_localserver/RegistryIndexer"], resolve_1, reject_1); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             if (rollbackonerror) {
                 try {
@@ -259,11 +259,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                 await this.saveFiles([modulename + "/modul.ts", "js/" + modulename + "/modul.js"], ["export default {}",
                     'define(["require", "exports"], function (require, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = {};});'], false);
             }
-            var json = await new Server_1.Server().loadFile("jassi.json");
+            var json = await new Server_1.Server().loadFile("jassijs.json");
             var ob = JSON.parse(json);
             if (!ob.modules[modulename]) {
                 ob.modules[modulename] = modulename;
-                await this.saveFile("jassi.json", JSON.stringify(ob, undefined, "\t"));
+                await this.saveFile("jassijs.json", JSON.stringify(ob, undefined, "\t"));
             }
             return "";
         }
@@ -287,14 +287,14 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                 store.delete(entr[i].id);
                 await new Promise((resolve) => { transaction.oncomplete = resolve; });
             }
-            //update client jassi.json if removing client module 
-            var json = await this.loadFile("jassi.json");
+            //update client jassijs.json if removing client module 
+            var json = await this.loadFile("jassijs.json");
             var ob = JSON.parse(json);
             if (ob.modules[file]) {
                 delete ob.modules[file];
-                this.saveFile("jassi.json", JSON.stringify(ob, undefined, "\t"));
+                this.saveFile("jassijs.json", JSON.stringify(ob, undefined, "\t"));
             }
-            var RegistryIndexer = (await new Promise((resolve_2, reject_2) => { require(["jassi_localserver/RegistryIndexer"], resolve_2, reject_2); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_2, reject_2) => { require(["jassijs_localserver/RegistryIndexer"], resolve_2, reject_2); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             //entr = await this.dirEntry(file);
             return "";
@@ -304,7 +304,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
          */
         async zip(directoryname, serverdir = undefined, context = undefined) {
             //@ts-ignore
-            var JSZip = (await new Promise((resolve_3, reject_3) => { require(["jassi_localserver/ext/jszip"], resolve_3, reject_3); })).default;
+            var JSZip = (await new Promise((resolve_3, reject_3) => { require(["jassijs_localserver/ext/jszip"], resolve_3, reject_3); })).default;
             if (serverdir)
                 throw new Error("serverdir is unsupported on localserver");
             var zip = new JSZip();
@@ -339,13 +339,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/Reloader", "jass
                 else
                     await this.createFile(oldf[i].id, oldf[i].data);
             }
-            var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassi_localserver/RegistryIndexer"], resolve_4, reject_4); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassijs_localserver/RegistryIndexer"], resolve_4, reject_4); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             return "";
         }
     };
     Filessystem = Filessystem_1 = __decorate([
-        Jassi_1.$Class("jassi_localserver.Filessystem")
+        jassijs_1.$Class("jassijs_localserver.Filessystem")
     ], Filessystem);
     exports.default = Filessystem;
     async function test() {

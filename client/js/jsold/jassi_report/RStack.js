@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportDesign", "jassi_report/ReportComponent"], function (require, exports, Jassi_1, ReportDesign_1, ReportComponent_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesign", "jassijs_report/ReportComponent"], function (require, exports, jassijs_1, ReportDesign_1, ReportComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RStack = void 0;
@@ -55,13 +55,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/ReportDesign",
     };
     RStack = __decorate([
         ReportComponent_1.$ReportComponent({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassi_report.RStack")
+        jassijs_1.$Class("jassijs_report.RStack")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
     ], RStack);
     exports.RStack = RStack;
 });
-//    jassi.register("reportcomponent","jassi_report.Stack","report/Stack","res/boxpanel.ico");
+//    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
 //# sourceMappingURL=RStack.js.map
 //# sourceMappingURL=RStack.js.map

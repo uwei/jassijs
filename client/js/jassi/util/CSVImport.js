@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/converters/NumberConverter", "jassi/ui/Textbox", "jassi/ui/BoxPanel", "jassi/ui/Select", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/ext/papaparse", "jassi/remote/Database", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/remote/DBObject", "jassi/base/Actions", "jassi/base/Router", "jassi/remote/Server", "jassi/remote/Transaction"], function (require, exports, Upload_1, Button_1, NumberConverter_1, Textbox_1, BoxPanel_1, Select_1, Table_1, Jassi_1, Panel_1, papaparse_1, Database_1, Registry_1, Classes_1, DBObject_1, Actions_1, Router_1, Server_1, Transaction_1) {
+define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_1, NumberConverter_1, Textbox_1, BoxPanel_1, Select_1, Table_1, jassijs_1, Panel_1, papaparse_1, Database_1, Registry_1, Classes_1, DBObject_1, Actions_1, Router_1, Server_1, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -19,7 +19,7 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
             this.layout(this.me);
         }
         static async showDialog() {
-            Router_1.router.navigate("#do=jassi.util.CSVImport");
+            Router_1.router.navigate("#do=jassijs.util.CSVImport");
         }
         async initTableHeaders() {
             var _a;
@@ -269,8 +269,8 @@ define(["require", "exports", "jassi/ui/Upload", "jassi/ui/Button", "jassi/ui/co
         __metadata("design:returntype", Promise)
     ], CSVImport, "showDialog", null);
     CSVImport = CSVImport_1 = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_1.$Class("jassi.util.CSVImport"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
+        jassijs_1.$Class("jassijs.util.CSVImport"),
         __metadata("design:paramtypes", [])
     ], CSVImport);
     exports.CSVImport = CSVImport;

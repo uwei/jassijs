@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/Panel", "jassi/ui/Textbox", "jassi/remote/Server", "jassi/base/Router", "jassi/base/Actions", "jassi/ui/OptionDialog", "jassi_editor/util/Typescript", "jassi/ui/ContextMenu", "jassi/base/Windows"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Server_1, Router_1, Actions_1, OptionDialog_1, Typescript_1, ContextMenu_1, Windows_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs_editor/util/Typescript", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, jassijs_1, Tree_1, Panel_1, Textbox_1, Server_1, Router_1, Actions_1, OptionDialog_1, Typescript_1, ContextMenu_1, Windows_1) {
     "use strict";
     var FileExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -39,7 +39,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
                 await FileExplorer.instance.refresh();
                 await FileExplorer.instance.tree.activateKey(newkey);
                 if (open)
-                    Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + newkey.replaceAll("|", "/"));
+                    Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + newkey.replaceAll("|", "/"));
             }
             catch (err) {
                 debugger;
@@ -88,7 +88,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             var res = await OptionDialog_1.OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
             if (res.button === "ok" && res.text !== all[0].name) {
                 var smodule = res.text.toLocaleLowerCase();
-                if (Jassi_1.default.modules[smodule]) {
+                if (jassijs_1.default.modules[smodule]) {
                     alert("modul allready exists");
                     return;
                 }
@@ -101,7 +101,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
                     return;
                 }
                 else {
-                    Jassi_1.default.modules[smodule] = smodule;
+                    jassijs_1.default.modules[smodule] = smodule;
                 }
                 await FileExplorer.instance.refresh();
                 FileExplorer.instance.tree.activateKey(newkey);
@@ -156,7 +156,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             var node = all[0];
             if (node.isDirectory())
                 return;
-            Router_1.router.navigate("#do=jassi_editor.CodeEditor&file=" + node.fullpath);
+            Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + node.fullpath);
         }
     };
     __decorate([
@@ -234,8 +234,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
         __metadata("design:returntype", Promise)
     ], FileActions, "open", null);
     FileActions = __decorate([
-        Actions_1.$ActionProvider("jassi.remote.FileNode"),
-        Jassi_1.$Class("jassi.ui.FileActions")
+        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
+        jassijs_1.$Class("jassijs.ui.FileActions")
     ], FileActions);
     exports.FileActions = FileActions;
     let FileExplorer = FileExplorer_1 = class FileExplorer extends Panel_1.Panel {
@@ -278,7 +278,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
             root.name = "client";
             //flag modules
             for (let x = 0; x < root.files.length; x++) {
-                if (Jassi_1.default.modules[root.files[x].name] !== undefined) {
+                if (jassijs_1.default.modules[root.files[x].name] !== undefined) {
                     root.files[x].flag = (((_a = root.files[x].flag) === null || _a === void 0 ? void 0 : _a.length) > 0) ? "module" : root.files[x].flag + " module";
                 }
             }
@@ -329,8 +329,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Tree", "jassi/ui/P
         __metadata("design:returntype", Promise)
     ], FileExplorer, "show", null);
     FileExplorer = FileExplorer_1 = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_1.$Class("jassi.ui.FileExplorer"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
+        jassijs_1.$Class("jassijs.ui.FileExplorer"),
         __metadata("design:paramtypes", [])
     ], FileExplorer);
     exports.FileExplorer = FileExplorer;

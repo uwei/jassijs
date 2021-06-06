@@ -1,8 +1,8 @@
-import {Tree} from "jassi/ui/Tree";
-import {ContextMenu} from "jassi/ui/ContextMenu";
-import {MenuItem} from "jassi/ui/MenuItem";
-import {Panel} from "jassi/ui/Panel";
-import  {Button} from "jassi/ui/Button";
+import {Tree} from "jassijs/ui/Tree";
+import {ContextMenu} from "jassijs/ui/ContextMenu";
+import {MenuItem} from "jassijs/ui/MenuItem";
+import {Panel} from "jassijs/ui/Panel";
+import  {Button} from "jassijs/ui/Button";
 
 class Me { 
     tree?:Tree;

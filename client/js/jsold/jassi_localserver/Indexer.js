@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/server/Filesystem", "jassi_editor/util/Typescript"], function (require, exports, Filesystem_1) {
+define(["require", "exports", "jassijs/server/Filesystem", "jassijs_editor/util/Typescript"], function (require, exports, Filesystem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -69,7 +69,7 @@ define(["require", "exports", "jassi/server/Filesystem", "jassi_editor/util/Type
                 await this.writeFile(path + "/registry.js", text);
             }
             else { //write server
-                var modules = JSON.parse(await this.readFile("./jassi.json")).modules;
+                var modules = JSON.parse(await this.readFile("./jassijs.json")).modules;
                 for (let smodul in modules) {
                     if (modul === smodul) {
                         var text = JSON.stringify(index, undefined, "\t");

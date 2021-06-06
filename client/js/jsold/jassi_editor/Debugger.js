@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi"], function (require, exports, Jassi_1) {
+define(["require", "exports", "jassijs/remote/Jassi"], function (require, exports, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Debugger = void 0;
@@ -20,7 +20,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
     let Debugger = class Debugger {
         /**
          * routing of url
-         * @class jassi.base.Debugger
+         * @class jassijs.base.Debugger
          */
         constructor() {
         }
@@ -85,17 +85,17 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
         * add debugpoints in code
         * @param {[string]} lines - code
         * @param {Object.<number, boolean>} debugpoints - the debugpoints
-        * @param {jassi_editor.CodeEditor} codeEditor
+        * @param {jassijs_editor.CodeEditor} codeEditor
         */
         addDebugpoints(lines, debugpoints, codeEditor) {
-            Jassi_1.default.d[codeEditor._id] = undefined;
-            //        	jassi.ui.VariablePanel.get(this._id).__db=undefined;
+            jassijs_1.default.d[codeEditor._id] = undefined;
+            //        	jassijs.ui.VariablePanel.get(this._id).__db=undefined;
             var hassome = undefined;
             this.debugpoints = debugpoints;
             for (var point in debugpoints) {
                 if (debugpoints[point] === true) {
-                    //lines[point]="if(jassi.ui.VariablePanel.get("+this._id+").__db===undefined){ jassi.ui.VariablePanel.get("+this._id+").__db=true;debugger;}"+lines[point];
-                    lines[point] = "if(jassi.d(" + codeEditor._id + ")) debugger;" + lines[point];
+                    //lines[point]="if(jassijs.ui.VariablePanel.get("+this._id+").__db===undefined){ jassijs.ui.VariablePanel.get("+this._id+").__db=true;debugger;}"+lines[point];
+                    lines[point] = "if(jassijs.d(" + codeEditor._id + ")) debugger;" + lines[point];
                     /*if(hassome===undefined){
                         hassome=true;
                         lines[0]="var _variables_=$('#"+this._id+"')[0]._this;"+lines[0];
@@ -106,7 +106,7 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
         /**
          *
          * @param {string} code - full source code
-         * @param {jassi_editor.CodeEditor} codeEditor
+         * @param {jassijs_editor.CodeEditor} codeEditor
          * @returns {string}
          */
         getCodeForBreakpoint(code, codeEditor) {
@@ -144,13 +144,13 @@ define(["require", "exports", "jassi/remote/Jassi"], function (require, exports,
         }
     };
     Debugger = __decorate([
-        Jassi_1.$Class("jassi_editor.Debugger"),
+        jassijs_1.$Class("jassijs_editor.Debugger"),
         __metadata("design:paramtypes", [])
     ], Debugger);
     exports.Debugger = Debugger;
-    if (Jassi_1.default.debugger === undefined)
-        Jassi_1.default.debugger = new Debugger();
-    require(["jassi_editor/ChromeDebugger"]);
+    if (jassijs_1.default.debugger === undefined)
+        jassijs_1.default.debugger = new Debugger();
+    require(["jassijs_editor/ChromeDebugger"]);
 });
 //# sourceMappingURL=Debugger.js.map
 //# sourceMappingURL=Debugger.js.map

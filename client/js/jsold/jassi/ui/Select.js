@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/DataComponent", "jassi/ui/Property", "jassi/remote/Classes", "jassi/ext/jquery.choosen"], function (require, exports, Jassi_1, Component_1, DataComponent_1, Property_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/jquery.choosen"], function (require, exports, jassijs_1, Component_1, DataComponent_1, Property_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Select = void 0;
@@ -38,7 +38,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
         __metadata("design:type", String)
     ], SelectCreateProperties.prototype, "placeholder", void 0);
     SelectCreateProperties = __decorate([
-        Jassi_1.$Class("jassi.ui.SelectCreateProperties")
+        jassijs_1.$Class("jassijs.ui.SelectCreateProperties")
     ], SelectCreateProperties);
     let Select = class Select extends DataComponent_1.DataComponent {
         constructor(properties = undefined) {
@@ -256,14 +256,14 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Component", "jassi
     ], Select.prototype, "display", null);
     Select = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
-        Jassi_1.$Class("jassi.ui.Select"),
-        Property_1.$Property({ name: "new", type: "json", componentType: "jassi.ui.SelectCreateProperties" }),
+        jassijs_1.$Class("jassijs.ui.Select"),
+        Property_1.$Property({ name: "new", type: "json", componentType: "jassijs.ui.SelectCreateProperties" }),
         __metadata("design:paramtypes", [SelectCreateProperties])
     ], Select);
     exports.Select = Select;
     async function test() {
-        var Panel = Classes_1.classes.getClass("jassi.ui.Panel");
-        var Button = Classes_1.classes.getClass("jassi.ui.Button");
+        var Panel = Classes_1.classes.getClass("jassijs.ui.Panel");
+        var Button = Classes_1.classes.getClass("jassijs.ui.Button");
         var me = {};
         var pan = new Panel();
         var bt = new Button();

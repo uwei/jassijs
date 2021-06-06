@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi_report/RText", "jassi_report/ReportComponent", "jassi_report/RTablerow", "jassi/ui/Property"], function (require, exports, Jassi_1, RText_1, ReportComponent_1, RTablerow_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/ReportComponent", "jassijs_report/RTablerow", "jassijs/ui/Property"], function (require, exports, jassijs_1, RText_1, ReportComponent_1, RTablerow_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RDatatable = void 0;
@@ -202,7 +202,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_report/RText", "jassi
     ], RDatatable.prototype, "dataforeach", void 0);
     RDatatable = __decorate([
         ReportComponent_1.$ReportComponent({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
-        Jassi_1.$Class("jassi_report.RDatatable"),
+        jassijs_1.$Class("jassijs_report.RDatatable"),
         __metadata("design:paramtypes", [Object])
     ], RDatatable);
     exports.RDatatable = RDatatable;

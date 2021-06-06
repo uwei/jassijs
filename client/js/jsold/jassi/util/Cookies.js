@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/ext/js-cookie"], function (require, exports, js_cookie_1) {
+define(["require", "exports", "jassijs/ext/js-cookie"], function (require, exports, js_cookie_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Cookies = void 0;

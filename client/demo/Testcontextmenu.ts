@@ -1,9 +1,9 @@
-import {Panel} from "jassi/ui/Panel";
-import jassi from "jassi/jassi";
-import {ContextMenu} from "jassi/ui/ContextMenu";
-import {MenuItem} from "jassi/ui/MenuItem";
-import {Button} from "jassi/ui/Button";
-import { $Class } from "jassi/remote/Jassi";
+import {Panel} from "jassijs/ui/Panel";
+import jassi from "jassijs/jassi";
+import {ContextMenu} from "jassijs/ui/ContextMenu";
+import {MenuItem} from "jassijs/ui/MenuItem";
+import {Button} from "jassijs/ui/Button";
+import { $Class } from "jassijs/remote/Jassi";
 
 @$Class("demo.Testcontextmenu")
 export  class Testcontextmenu extends Panel{

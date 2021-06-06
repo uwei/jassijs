@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditors/Editor", "jassi/ui/Button", "jassi/ui/PropertyEditor", "jassi/util/Tools", "jassi/remote/Classes", "jassi/ui/Property"], function (require, exports, Jassi_1, Editor_1, Button_1, PropertyEditor_1, Tools_1, Classes_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, jassijs_1, Editor_1, Button_1, PropertyEditor_1, Tools_1, Classes_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.JsonEditor = void 0;
@@ -15,7 +15,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditors/Ed
         /**
          * Editor for number and string
          * used by PropertyEditor
-         * @class jassi.ui.PropertyEditors.DefaultEditor
+         * @class jassijs.ui.PropertyEditors.DefaultEditor
          */
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
@@ -192,7 +192,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditors/Ed
     };
     JsonEditor = __decorate([
         Editor_1.$PropertyEditor(["json"]),
-        Jassi_1.$Class("jassi.ui.PropertyEditors.JsonEditor"),
+        jassijs_1.$Class("jassijs.ui.PropertyEditors.JsonEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], JsonEditor);
     exports.JsonEditor = JsonEditor;
@@ -204,11 +204,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditors/Ed
     ], TestProperties.prototype, "dialogname", void 0);
     __decorate([
         Property_1.$Property({ name: "jo/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
-        Property_1.$Property({ name: "jo", type: "json", componentType: "jassi.ui.PropertyEditorTestProperties2" }),
+        Property_1.$Property({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2" }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "jo", void 0);
     TestProperties = __decorate([
-        Jassi_1.$Class("jassi.ui.PropertyEditorTestProperties")
+        jassijs_1.$Class("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     let TestProperties2 = class TestProperties2 {
     };
@@ -221,7 +221,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditors/Ed
         __metadata("design:type", String)
     ], TestProperties2.prototype, "name2", void 0);
     TestProperties2 = __decorate([
-        Jassi_1.$Class("jassi.ui.PropertyEditorTestProperties2")
+        jassijs_1.$Class("jassijs.ui.PropertyEditorTestProperties2")
     ], TestProperties2);
     function test() {
         var ret = new PropertyEditor_1.PropertyEditor(undefined);

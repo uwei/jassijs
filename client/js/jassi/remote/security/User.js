@@ -7,13 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/security/Group", "jassi/remote/security/ParentRight"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, Group_1, ParentRight_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight"], function (require, exports, DBObject_1, jassijs_1, DatabaseSchema_1, Group_1, ParentRight_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.User = void 0;
     let User = class User extends DBObject_1.DBObject {
         /**
-       * reload the object from jassi.db
+       * reload the object from jassijs.db
        */
         async hallo(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -49,8 +49,8 @@ define(["require", "exports", "jassi/remote/DBObject", "jassi/remote/Jassi", "ja
         __metadata("design:type", Boolean)
     ], User.prototype, "isAdmin", void 0);
     User = __decorate([
-        DBObject_1.$DBObject({ name: "jassi_user" }),
-        Jassi_1.$Class("jassi.security.User")
+        DBObject_1.$DBObject({ name: "jassijs_user" }),
+        jassijs_1.$Class("jassijs.security.User")
     ], User);
     exports.User = User;
     async function test() {

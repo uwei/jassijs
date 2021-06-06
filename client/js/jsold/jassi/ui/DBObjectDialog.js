@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/remote/Classes", "jassi/ui/BoxPanel", "jassi/base/Actions", "jassi/base/Windows"], function (require, exports, Table_1, Jassi_1, Panel_1, Registry_1, Classes_1, BoxPanel_1, Actions_1, Windows_1) {
+define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_1, jassijs_1, Panel_1, Registry_1, Classes_1, BoxPanel_1, Actions_1, Windows_1) {
     "use strict";
     var DBObjectDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -144,13 +144,13 @@ define(["require", "exports", "jassi/ui/Table", "jassi/remote/Jassi", "jassi/ui/
         __metadata("design:returntype", Promise)
     ], DBObjectDialog, "createAcions", null);
     DBObjectDialog = DBObjectDialog_1 = __decorate([
-        Actions_1.$ActionProvider("jassi.base.ActionNode"),
-        Jassi_1.$Class("jassi.ui.DBObjectDialog"),
+        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
+        jassijs_1.$Class("jassijs.ui.DBObjectDialog"),
         __metadata("design:paramtypes", [])
     ], DBObjectDialog);
     exports.DBObjectDialog = DBObjectDialog;
     async function test() {
-        //var ret = await DBObjectDialog.createFor("jassi.security.User");
+        //var ret = await DBObjectDialog.createFor("jassijs.security.User");
         var ret = await DBObjectDialog.createFor("northwind.Customer");
         return ret;
     }

@@ -5,7 +5,7 @@ define(["require", "exports"], function (require, exports) {
     class Errors {
         /**
         * Error handling.
-        * @class jassi.base.Error
+        * @class jassijs.base.Error
         */
         constructor() {
             this.items = [];

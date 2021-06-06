@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Textbox", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/ui/Property"], function (require, exports, Textbox_1, Component_1, Jassi_1, Property_1) {
+define(["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, Textbox_1, Component_1, jassijs_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Calendar = void 0;
@@ -45,7 +45,7 @@ define(["require", "exports", "jassi/ui/Textbox", "jassi/ui/Component", "jassi/r
     };
     Calendar = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Calendar", icon: "mdi mdi-calendar-month" }),
-        Jassi_1.$Class("jassi.ui.Calendar"),
+        jassijs_1.$Class("jassijs.ui.Calendar"),
         Property_1.$Property({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [Object])
     ], Calendar);

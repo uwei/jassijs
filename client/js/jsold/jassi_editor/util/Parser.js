@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/util/Typescript"], function (require, exports, Jassi_1, Typescript_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Typescript"], function (require, exports, jassijs_1, Typescript_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Parser = exports.ParsedClass = void 0;
@@ -37,7 +37,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/util/Typescrip
     let Parser = class Parser {
         /**
          * parses Code for UI relevant settings
-         * @class jassi_editor.util.Parser
+         * @class jassijs_editor.util.Parser
          */
         constructor() {
             this.sourceFile = undefined;
@@ -622,7 +622,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi_editor/util/Typescrip
         }
     };
     Parser = __decorate([
-        Jassi_1.$Class("jassi_editor.base.Parser"),
+        jassijs_1.$Class("jassijs_editor.base.Parser"),
         __metadata("design:paramtypes", [])
     ], Parser);
     exports.Parser = Parser;

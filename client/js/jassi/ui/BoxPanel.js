@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Classes", "jassi/ext/split"], function (require, exports, Panel_1, Jassi_1, Component_1, Property_1, Classes_1, split_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/split"], function (require, exports, Panel_1, jassijs_1, Component_1, Property_1, Classes_1, split_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.BoxPanel = void 0;
@@ -50,7 +50,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/
         }
         /**
         * adds a component to the container
-        * @param {jassi.ui.Component} component - the component to add
+        * @param {jassijs.ui.Component} component - the component to add
         */
         add(component) {
             /* if(this._horizontal){
@@ -63,8 +63,8 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/
         }
         /**
         * adds a component to the container before an other component
-        * @param {jassi.ui.Component} component - the component to add
-        * @param {jassi.ui.Component} before - the component before then component to add
+        * @param {jassijs.ui.Component} component - the component to add
+        * @param {jassijs.ui.Component} before - the component before then component to add
         */
         addBefore(component, before) {
             /*if(this._horizontal){
@@ -122,13 +122,13 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/remote/Jassi", "jassi/ui/
     ], BoxPanel.prototype, "spliter", null);
     BoxPanel = __decorate([
         Component_1.$UIComponent({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassi.ui.BoxPanel"),
+        jassijs_1.$Class("jassijs.ui.BoxPanel"),
         Property_1.$Property({ name: "isAbsolute", hide: true, type: "boolean" }),
         __metadata("design:paramtypes", [Object])
     ], BoxPanel);
     exports.BoxPanel = BoxPanel;
     async function test() {
-        var HTMLPanel = await Classes_1.classes.loadClass("jassi.ui.HTMLPanel");
+        var HTMLPanel = await Classes_1.classes.loadClass("jassijs.ui.HTMLPanel");
         var ret = new BoxPanel();
         var me = {};
         ret["me"] = me;

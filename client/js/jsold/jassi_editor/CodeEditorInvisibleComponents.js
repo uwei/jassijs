@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/remote/Registry", "jassi/ui/InvisibleComponent", "jassi/ui/Button", "jassi/remote/Classes", "jassi/ui/Image"], function (require, exports, Jassi_1, Panel_1, Registry_1, InvisibleComponent_1, Button_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/InvisibleComponent", "jassijs/ui/Button", "jassijs/remote/Classes", "jassijs/ui/Image"], function (require, exports, jassijs_1, Panel_1, Registry_1, InvisibleComponent_1, Button_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodeEditorInvisibleComponents = void 0;
@@ -21,7 +21,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/rem
             super();
             super.init($('<span class="Panel" style="border:1px solid #ccc;"/>')[0]);
             /**
-           * @member {jassi_editor.CodeEditor} - the parent CodeEditor
+           * @member {jassijs_editor.CodeEditor} - the parent CodeEditor
            * */
             this.codeeditor = codeeditor;
             this.layout();
@@ -65,7 +65,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/rem
                   return;
               for(var key in entries){
                   var entry=entries[key].data;
-                  var img=new jassi.ui.Image();
+                  var img=new jassijs.ui.Image();
                   var name=entry[1].split("/");
                   name=name[name.length-1];
                   img.tooltip=name;
@@ -79,7 +79,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/rem
         }
         /**
          * install the draggable
-         * @param {jassi.ui.Component} component
+         * @param {jassijs.ui.Component} component
          */
         _makeDraggable(component) {
             var helper = new (Classes_1.classes.getClass(component.createFromType))();
@@ -104,7 +104,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Panel", "jassi/rem
         }
     };
     CodeEditorInvisibleComponents = __decorate([
-        Jassi_1.$Class("jassi_editor.CodeEditorInvisibleComponents"),
+        jassijs_1.$Class("jassijs_editor.CodeEditorInvisibleComponents"),
         __metadata("design:paramtypes", [Object])
     ], CodeEditorInvisibleComponents);
     exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;

@@ -1,9 +1,9 @@
-import {Panel} from "jassi/ui/Panel";
-import jassi from "jassi/jassi";
-import {Menu} from "jassi/ui/Menu";
-import {MenuItem} from "jassi/ui/MenuItem";
-import {Button} from "jassi/ui/Button";
-import { $Class } from "jassi/remote/Jassi";
+import {Panel} from "jassijs/ui/Panel";
+import jassijs from "jassijs/jassi";
+import {Menu} from "jassijs/ui/Menu";
+import {MenuItem} from "jassijs/ui/MenuItem";
+import {Button} from "jassijs/ui/Button";
+import { $Class } from "jassijs/remote/Jassi";
 @$Class("demo.Testmenu")
 export  class Testmenu extends Panel {
 	me={};
@@ -80,8 +80,3 @@ export  class Testmenu extends Panel {
 
 }
 
-jassi.test = async function () {
-	// kk.o=0;
-	var dlg = new Testmenu();
-	return dlg;
-}

@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditor", "jassi_editor/ComponentExplorer", "jassi_editor/ComponentPalette", "jassi_editor/CodeEditorInvisibleComponents", "jassi_editor/ComponentDesigner", "jassi_report/PDFReport", "jassi_report/PDFViewer", "jassi_report/ReportDesign", "jassi/util/Tools"], function (require, exports, Jassi_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, jassijs_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportDesigner = void 0;
@@ -110,7 +110,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditor", "
             }
         }
         /**
-          * @member {jassi.ui.Component} - the designed component
+          * @member {jassijs.ui.Component} - the designed component
           */
         set designedComponent(component) {
             //create _children
@@ -165,7 +165,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/PropertyEditor", "
         }
     };
     ReportDesigner = __decorate([
-        Jassi_1.$Class("jassi_report.designer.ReportDesigner"),
+        jassijs_1.$Class("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;

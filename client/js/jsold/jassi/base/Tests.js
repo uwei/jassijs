@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Actions", "jassi_editor/util/Typescript", "jassi/ui/Component", "jassi/ui/Container", "jassi/ui/BoxPanel", "jassi/base/Windows", "jassi/ui/HTMLPanel"], function (require, exports, Jassi_1, Actions_1, Typescript_1, Component_1, Container_1, BoxPanel_1, Windows_1, HTMLPanel_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs_editor/util/Typescript", "jassijs/ui/Component", "jassijs/ui/Container", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel"], function (require, exports, jassijs_1, Actions_1, Typescript_1, Component_1, Container_1, BoxPanel_1, Windows_1, HTMLPanel_1) {
     "use strict";
     var TestAction_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -66,8 +66,8 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Actions", "jassi
         __metadata("design:returntype", Promise)
     ], TestAction, "testNode", null);
     TestAction = TestAction_1 = __decorate([
-        Actions_1.$ActionProvider("jassi.remote.FileNode"),
-        Jassi_1.$Class("jassi.ui.TestAction")
+        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
+        jassijs_1.$Class("jassijs.ui.TestAction")
     ], TestAction);
     exports.TestAction = TestAction;
     let Test = class Test {
@@ -113,7 +113,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/base/Actions", "jassi
         }
     };
     Test = __decorate([
-        Jassi_1.$Class("jassi.base.Test")
+        jassijs_1.$Class("jassijs.base.Test")
     ], Test);
     exports.Test = Test;
     class Tests {

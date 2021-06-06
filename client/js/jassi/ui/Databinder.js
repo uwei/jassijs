@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Jassi", "jassi/remote/Database"], function (require, exports, InvisibleComponent_1, Component_1, Jassi_1, Database_1) {
+define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/remote/Database"], function (require, exports, InvisibleComponent_1, Component_1, jassijs_1, Database_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Databinder = void 0;
@@ -15,7 +15,7 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
         constructor() {
             super();
             super.init($('<span class="InvisibleComponent"></span>')[0]);
-            /** @member {[jassi.ui.Component]} components - all binded components*/
+            /** @member {[jassijs.ui.Component]} components - all binded components*/
             this.components = [];
             /** @member {[string]} properties - all binded properties*/
             this._properties = [];
@@ -33,7 +33,7 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
         /**
         * binds the component to the property of the userObject
         * @param {string} property - the name of the property to bind
-        * @param {jassi.ui.Component} component - the component to bind
+        * @param {jassijs.ui.Component} component - the component to bind
         * @param {string} [onChange] - functionname to register the  changehandler - if missing no autocommit is possible
         * @param {function} [getter] - function to get the value of the component - if missing .value is used
         * @param {function} [setter] - function to put the value of the component - if missing .value is used
@@ -208,7 +208,7 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
         }
         /**
          * register the autocommit handler if needed
-         * @param {jassi.ui.DataComponent} component
+         * @param {jassijs.ui.DataComponent} component
          */
         /* checkAutocommit(component){
              if(component.autocommit!==true)
@@ -239,7 +239,7 @@ define(["require", "exports", "jassi/ui/InvisibleComponent", "jassi/ui/Component
     };
     Databinder = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Databinder", icon: "mdi mdi-connection" }),
-        Jassi_1.$Class("jassi.ui.Databinder"),
+        jassijs_1.$Class("jassijs.ui.Databinder"),
         __metadata("design:paramtypes", [])
     ], Databinder);
     exports.Databinder = Databinder;

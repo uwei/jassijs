@@ -1,4 +1,4 @@
-define("jassi/ext/requestidlecallback", ["ric"], function () {
+define("jassijs/ext/requestidlecallback", ["ric"], function () {
     return { default: "" };
 });
 //# sourceMappingURL=requestidlecallback.js.map

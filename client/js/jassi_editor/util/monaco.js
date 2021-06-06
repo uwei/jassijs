@@ -1,4 +1,4 @@
-define(["require", "exports", "jassi/ui/Component"], function (require, exports, Component_1) {
+define(["require", "exports", "jassijs/ui/Component"], function (require, exports, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoEditor = void 0;

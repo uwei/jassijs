@@ -1,1 +1,1 @@
-{"version":3,"file":"requestidlecallback.js","sourceRoot":"","sources":["../../../jassi/ext/requestidlecallback.js"],"names":[],"mappings":"AAEA,MAAM,CAAC,+BAA+B,EAAC,CAAC,KAAK,CAAC,EAAE;IAC5C,OAAO,EAAC,OAAO,EAAC,EAAE,EAAC,CAAC;AACxB,CAAC,CAAC,CAAC"}
+{"version":3,"file":"requestidlecallback.js","sourceRoot":"","sources":["../../../jassijs/ext/requestidlecallback.js"],"names":[],"mappings":"AAEA,MAAM,CAAC,+BAA+B,EAAC,CAAC,KAAK,CAAC,EAAE;IAC5C,OAAO,EAAC,OAAO,EAAC,EAAE,EAAC,CAAC;AACxB,CAAC,CAAC,CAAC"}

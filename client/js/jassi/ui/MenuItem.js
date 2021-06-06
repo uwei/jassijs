@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Component", "jassi/ui/Menu", "jassi/ui/Property", "jassi/remote/Jassi", "jassi/ui/Container"], function (require, exports, Component_1, Menu_1, Property_1, Jassi_1, Container_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassijs/ui/Property", "jassijs/remote/Jassi", "jassijs/ui/Container"], function (require, exports, Component_1, Menu_1, Property_1, jassijs_1, Container_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MenuItem = void 0;
-    //jassi.myRequire("lib/contextMenu.css");
+    //jassijs.myRequire("lib/contextMenu.css");
     let MenuItem = class MenuItem extends Container_1.Container {
         constructor() {
             super();
@@ -132,7 +132,7 @@ define(["require", "exports", "jassi/ui/Component", "jassi/ui/Menu", "jassi/ui/P
     ], MenuItem.prototype, "text", null);
     MenuItem = __decorate([
         Component_1.$UIComponent({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] }),
-        Jassi_1.$Class("jassi.ui.MenuItem"),
+        jassijs_1.$Class("jassijs.ui.MenuItem"),
         __metadata("design:paramtypes", [])
     ], MenuItem);
     exports.MenuItem = MenuItem;

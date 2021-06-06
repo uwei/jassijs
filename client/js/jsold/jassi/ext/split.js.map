@@ -1,1 +1,1 @@
-{"version":3,"file":"split.js","sourceRoot":"","sources":["../../../../jsold/jassi/ext/split.js"],"names":[],"mappings":"AAAA,MAAM,CAAC,iBAAiB,EAAE,CAAC,UAAU,CAAC,EAAE,UAAU,KAAK;IACnD,OAAO;QACH,OAAO,EAAE,KAAK;KACjB,CAAC;AACN,CAAC,CAAC,CAAC;AACH,iCAAiC"}
+{"version":3,"file":"split.js","sourceRoot":"","sources":["../../../../jsold/jassijs/ext/split.js"],"names":[],"mappings":"AAAA,MAAM,CAAC,iBAAiB,EAAE,CAAC,UAAU,CAAC,EAAE,UAAU,KAAK;IACnD,OAAO;QACH,OAAO,EAAE,KAAK;KACjB,CAAC;AACN,CAAC,CAAC,CAAC;AACH,iCAAiC"}

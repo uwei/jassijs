@@ -7,8 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.MyRemoteObject = void 0;
-const Jassi_1 = require("jassi/remote/Jassi");
-const RemoteObject_1 = require("jassi/remote/RemoteObject");
+const Jassi_1 = require("jassijs/remote/Jassi");
+const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 let MyRemoteObject = class MyRemoteObject extends RemoteObject_1.RemoteObject {
     //this is a sample remote function
     async sayHello(name, context = undefined) {
@@ -16,7 +16,7 @@ let MyRemoteObject = class MyRemoteObject extends RemoteObject_1.RemoteObject {
             return await this.call(this, this.sayHello, name, context);
         }
         else {
-            return "Heillo " + name; //this would be execute on server  
+            return "Hello " + name; //this would be execute on server  
         }
     }
 };

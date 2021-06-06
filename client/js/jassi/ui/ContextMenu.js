@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/InvisibleComponent", "jassi/ui/Component", "jassi/remote/Classes", "jassi/ui/Property", "jassi/base/Actions", "jassi/ui/MenuItem", "jassi/ext/jquery.contextmenu"], function (require, exports, Jassi_1, Menu_1, InvisibleComponent_1, Component_1, Classes_1, Property_1, Actions_1, MenuItem_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquery.contextmenu"], function (require, exports, jassijs_1, Menu_1, InvisibleComponent_1, Component_1, Classes_1, Property_1, Actions_1, MenuItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ContextMenu = void 0;
@@ -147,7 +147,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/I
         }
         /**
          * register the contextMenu (right click) on the component
-         * @member {jassi.ui.Component} - the component which gets the contextmenu
+         * @member {jassijs.ui.Component} - the component which gets the contextmenu
          **/
         registerComponent(component) {
             this.contextComponents.push(component);
@@ -158,7 +158,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/I
         }
         /**
          * unregister the contextMenu (right click) on the component
-         * @member {jassi.ui.Component} - the component which gets the contextmenu
+         * @member {jassijs.ui.Component} - the component which gets the contextmenu
          **/
         unregisterComponent(component) {
             //$(component.dom).contextmenu(function(ob){});//now we always can destroy
@@ -229,15 +229,15 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/ui/Menu", "jassi/ui/I
     ], ContextMenu.prototype, "onbeforeshow", null);
     ContextMenu = __decorate([
         Component_1.$UIComponent({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
-        Jassi_1.$Class("jassi.ui.ContextMenu"),
+        jassijs_1.$Class("jassijs.ui.ContextMenu"),
         __metadata("design:paramtypes", [])
     ], ContextMenu);
     exports.ContextMenu = ContextMenu;
     async function test() {
-        var Panel = Classes_1.classes.getClass("jassi.ui.Panel");
-        var Button = Classes_1.classes.getClass("jassi.ui.Button");
-        var MenuItem = Classes_1.classes.getClass("jassi.ui.MenuItem");
-        var FileNode = Classes_1.classes.getClass("jassi.remote.FileNode");
+        var Panel = Classes_1.classes.getClass("jassijs.ui.Panel");
+        var Button = Classes_1.classes.getClass("jassijs.ui.Button");
+        var MenuItem = Classes_1.classes.getClass("jassijs.ui.MenuItem");
+        var FileNode = Classes_1.classes.getClass("jassijs.remote.FileNode");
         var bt = new Button();
         var cmen = new ContextMenu();
         var men = new MenuItem();

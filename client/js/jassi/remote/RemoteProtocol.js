@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], function (require, exports, Jassi_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, jassijs_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteProtocol = void 0;
@@ -42,13 +42,13 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], fun
             });
         }
         static async simulateUser(user = undefined, password = undefined) {
-            var rights = (await new Promise((resolve_1, reject_1) => { require(["jassi/remote/security/Rights"], resolve_1, reject_1); })).default;
+            var rights = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/security/Rights"], resolve_1, reject_1); })).default;
             //	if(await rights.isAdmin()){
             //		throw new Error("not an admin")
             //	}
             if (user === undefined) {
                 //@ts-ignore
-                var Cookies = (await new Promise((resolve_2, reject_2) => { require(["jassi/util/Cookies"], resolve_2, reject_2); })).Cookies;
+                var Cookies = (await new Promise((resolve_2, reject_2) => { require(["jassijs/util/Cookies"], resolve_2, reject_2); })).Cookies;
                 Cookies.remove("simulateUser", {});
                 Cookies.remove("simulateUserPassword", {});
             }
@@ -80,7 +80,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], fun
        * call the server
        */
         async call() {
-            if (Jassi_1.default.isServer)
+            if (jassijs_1.default.isServer)
                 throw new Error("should be called on client");
             var sdataObject = undefined;
             var url = "remoteprotocol?" + Date.now();
@@ -100,7 +100,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], fun
                 if (ex.status === 401 || (ex.responseText && ex.responseText.indexOf("jwt expired") !== -1)) {
                     redirect = new Promise((resolve) => {
                         //@ts-ignore
-                        new Promise((resolve_3, reject_3) => { require(["jassi/base/LoginDialog"], resolve_3, reject_3); }).then((lib) => {
+                        new Promise((resolve_3, reject_3) => { require(["jassijs/base/LoginDialog"], resolve_3, reject_3); }).then((lib) => {
                             lib.doAfterLogin(resolve, _this);
                         });
                     });
@@ -208,14 +208,14 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Classes"], fun
     };
     RemoteProtocol.counter = 0;
     RemoteProtocol = __decorate([
-        Jassi_1.$Class("jassi.remote.RemoteProtocol")
+        jassijs_1.$Class("jassijs.remote.RemoteProtocol")
     ], RemoteProtocol);
     exports.RemoteProtocol = RemoteProtocol;
     class A {
     }
-    //jassi.register("classes", "de.A", A);
+    //jassijs.register("classes", "de.A", A);
     class B {
     }
 });
-//jassi.register("classes", "de.B", B);
+//jassijs.register("classes", "de.B", B);
 //# sourceMappingURL=RemoteProtocol.js.map

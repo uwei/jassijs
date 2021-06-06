@@ -1,7 +1,7 @@
-import {Tree} from "jassi/ui/Tree";
-import {ContextMenu} from "jassi/ui/ContextMenu";
-import {MenuItem} from "jassi/ui/MenuItem";
-import {Table} from "jassi/ui/Table";
+import {Tree} from "jassijs/ui/Tree";
+import {ContextMenu} from "jassijs/ui/ContextMenu";
+import {MenuItem} from "jassijs/ui/MenuItem";
+import {Table} from "jassijs/ui/Table";
 
 export async function test() {
     var tab = new Table({
@@ -45,7 +45,7 @@ export async function test() {
     tab.showSearchbox = true;
     
     
-    //    var kunden = await jassi.db.load("de.Kunde");
+    //    var kunden = await jassijs.db.load("de.Kunde");
     //   tab.items = kunden;
 
     return tab;

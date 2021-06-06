@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui/Component", "jassi/ui/Property", "jassi/remote/Jassi"], function (require, exports, Panel_1, Databinder_1, Component_1, Property_1, Jassi_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Jassi"], function (require, exports, Panel_1, Databinder_1, Component_1, Property_1, jassijs_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Repeater = void 0;
@@ -20,7 +20,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui
     };
     RepeaterDesignPanel = __decorate([
         Component_1.$UIComponent({ editableChildComponents: ["databinder"] }),
-        Jassi_1.$Class("jassi.ui.RepeaterDesignPanel")
+        jassijs_1.$Class("jassijs.ui.RepeaterDesignPanel")
     ], RepeaterDesignPanel);
     let Repeater = class Repeater extends Panel_1.Panel {
         /**
@@ -118,7 +118,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui
         }
         /**
          * adds a component to the container
-         * @param {jassi.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} component - the component to add
          */
         add(component) {
             super.add(component);
@@ -157,7 +157,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui
         }
         /**
          * binds a component to a databinder
-         * @param {jassi.ui.Databinder} databinder - the databinder to bind
+         * @param {jassijs.ui.Databinder} databinder - the databinder to bind
          * @param {string} property - the property to bind
          */
         bind(databinder, property) {
@@ -178,7 +178,7 @@ define(["require", "exports", "jassi/ui/Panel", "jassi/ui/Databinder", "jassi/ui
     ], Repeater.prototype, "bind", null);
     Repeater = __decorate([
         Component_1.$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
-        Jassi_1.$Class("jassi.ui.Repeater"),
+        jassijs_1.$Class("jassijs.ui.Repeater"),
         __metadata("design:paramtypes", [Object])
     ], Repeater);
     exports.Repeater = Repeater;

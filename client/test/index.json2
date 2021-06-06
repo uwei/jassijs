@@ -74,69 +74,69 @@
 		"date": 1587664392937,
 		"demo.TreeTable": {}
 	},
-	"jassi/base/Actions.ts": {
+	"jassijs/base/Actions.ts": {
 		"date": 1587574136536,
-		"jassi.base.Actions": {}
+		"jassijs.base.Actions": {}
 	},
-	"jassi/base/ChromeDebugger.ts": {
+	"jassijs/base/ChromeDebugger.ts": {
 		"date": 1587580514423,
-		"jassi.base.ChromeDebugger": {}
+		"jassijs.base.ChromeDebugger": {}
 	},
-	"jassi/base/Database.ts": {
+	"jassijs/base/Database.ts": {
 		"date": 1578503929726,
-		"jassi.base.Database": {},
-		"jassi.base.Database.TypeResolver": {},
-		"jassi.base.Database.Type": {},
-		"jassi.base.Database.Field": {}
+		"jassijs.base.Database": {},
+		"jassijs.base.Database.TypeResolver": {},
+		"jassijs.base.Database.Type": {},
+		"jassijs.base.Database.Field": {}
 	},
-	"jassi/base/Debugger.ts": {
+	"jassijs/base/Debugger.ts": {
 		"date": 1586970806101,
-		"jassi.base.Debugger": {}
+		"jassijs.base.Debugger": {}
 	},
-	"jassi/base/Errors.ts": {
+	"jassijs/base/Errors.ts": {
 		"date": 1579449103191
 	},
-	"jassi/base/Extensions.ts": {
+	"jassijs/base/Extensions.ts": {
 		"date": 1578488658560
 	},
-	"jassi/base/FileNode.ts": {
+	"jassijs/base/FileNode.ts": {
 		"date": 1587293006025,
-		"jassi.base.FileNode": {}
+		"jassijs.base.FileNode": {}
 	},
-	"jassi/base/Parser.ts": {
+	"jassijs/base/Parser.ts": {
 		"date": 1578593817888,
-		"jassi.base.Parser": {}
+		"jassijs.base.Parser": {}
 	},
-	"jassi/base/PropertyEditorService.ts": {
+	"jassijs/base/PropertyEditorService.ts": {
 		"date": 1579210738388,
-		"jassi.base.PropertyEditorService": {}
+		"jassijs.base.PropertyEditorService": {}
 	},
-	"jassi/base/Router.ts": {
+	"jassijs/base/Router.ts": {
 		"date": 1578943360891,
-		"jassi.base.Router": {}
+		"jassijs.base.Router": {}
 	},
-	"jassi/base/Windows.ts": {
+	"jassijs/base/Windows.ts": {
 		"date": 1586966857144,
-		"jassi.base.Windows": {}
+		"jassijs.base.Windows": {}
 	},
-	"jassi/jassi.ts": {
+	"jassijs/jassijs.ts": {
 		"date": 1580324099474
 	},
-	"jassi_report/Columns.ts": {
+	"jassijs_report/Columns.ts": {
 		"date": 1579203329295,
-		"jassi_report.Columns": {}
+		"jassijs_report.Columns": {}
 	},
-	"jassi_report/ReportDesign.ts": {
+	"jassijs_report/ReportDesign.ts": {
 		"date": 1587203854286,
-		"jassi_report.ReportDesign": {}
+		"jassijs_report.ReportDesign": {}
 	},
-	"jassi_report/RStack.ts": {
+	"jassijs_report/RStack.ts": {
 		"date": 1587203849102,
-		"jassi_report.RStack": {}
+		"jassijs_report.RStack": {}
 	},
-	"jassi_report/RText.ts": {
+	"jassijs_report/RText.ts": {
 		"date": 1586591636339,
-		"jassi_report.RText": {
+		"jassijs_report.RText": {
 			"$ReportComponent": [
 				{
 					"fullPath": "report/Text",
@@ -148,9 +148,9 @@
 			]
 		}
 	},
-	"jassi/ui/BoxPanel.ts": {
+	"jassijs/ui/BoxPanel.ts": {
 		"date": 1579035421456,
-		"jassi.ui.BoxPanel": {
+		"jassijs.ui.BoxPanel": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/BoxPanel",
@@ -169,9 +169,9 @@
 			]
 		}
 	},
-	"jassi/ui/Button.ts": {
+	"jassijs/ui/Button.ts": {
 		"date": 1586591444609,
-		"jassi.ui.Button": {
+		"jassijs.ui.Button": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/Button",
@@ -183,9 +183,9 @@
 			]
 		}
 	},
-	"jassi/ui/Checkbox.ts": {
+	"jassijs/ui/Checkbox.ts": {
 		"date": 1579208303878,
-		"jassi.ui.Checkbox": {
+		"jassijs.ui.Checkbox": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/Ceckbox",
@@ -194,45 +194,45 @@
 			]
 		}
 	},
-	"jassi/ui/CodeEditor.ts": {
+	"jassijs/ui/CodeEditor.ts": {
 		"date": 1587573220084,
-		"jassi.ui.CodeEditor": {}
+		"jassijs.ui.CodeEditor": {}
 	},
-	"jassi/ui/CodeEditorInvisibleComponents.ts": {
+	"jassijs/ui/CodeEditorInvisibleComponents.ts": {
 		"date": 1579118925540,
-		"jassi.ui.CodeEditorInvisibleComponents": {}
+		"jassijs.ui.CodeEditorInvisibleComponents": {}
 	},
-	"jassi/ui/CodePanel.ts": {
+	"jassijs/ui/CodePanel.ts": {
 		"date": 1587751540297,
-		"jassi.ui.CodePanel": {}
+		"jassijs.ui.CodePanel": {}
 	},
-	"jassi/ui/Component.ts": {
+	"jassijs/ui/Component.ts": {
 		"date": 1587741090134,
-		"jassi.ui.Component": {}
+		"jassijs.ui.Component": {}
 	},
-	"jassi/ui/ComponentDescriptor.ts": {
+	"jassijs/ui/ComponentDescriptor.ts": {
 		"date": 1587578616297,
-		"jassi.ui.ComponentDescriptor": {}
+		"jassijs.ui.ComponentDescriptor": {}
 	},
-	"jassi/ui/ComponentExplorer.ts": {
+	"jassijs/ui/ComponentExplorer.ts": {
 		"date": 1587664449124,
-		"jassi.ui.ComponentExplorer": {}
+		"jassijs.ui.ComponentExplorer": {}
 	},
-	"jassi/ui/ComponentPalette.ts": {
+	"jassijs/ui/ComponentPalette.ts": {
 		"date": 1578695092181,
-		"jassi.ui.ComponentPalette": {}
+		"jassijs.ui.ComponentPalette": {}
 	},
-	"jassi/ui/ComponentSpy.ts": {
+	"jassijs/ui/ComponentSpy.ts": {
 		"date": 1586794941003,
-		"jassi.ui.ComponentSpy": {}
+		"jassijs.ui.ComponentSpy": {}
 	},
-	"jassi/ui/Container.ts": {
+	"jassijs/ui/Container.ts": {
 		"date": 1587324000290,
-		"jassi.ui.Container": {}
+		"jassijs.ui.Container": {}
 	},
-	"jassi/ui/ContextMenu.ts": {
+	"jassijs/ui/ContextMenu.ts": {
 		"date": 1587739220470,
-		"jassi.ui.ContextMenu": {
+		"jassijs.ui.ContextMenu": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/ContextMenu",
@@ -244,9 +244,9 @@
 			]
 		}
 	},
-	"jassi/ui/converters/DefaultConverter.ts": {
+	"jassijs/ui/converters/DefaultConverter.ts": {
 		"date": 1579036779064,
-		"jassi.ui.converters.DefaultConverter": {
+		"jassijs.ui.converters.DefaultConverter": {
 			"$Converter": [
 				"custom"
 			],
@@ -263,9 +263,9 @@
 			]
 		}
 	},
-	"jassi/ui/converters/NumberConverter.ts": {
+	"jassijs/ui/converters/NumberConverter.ts": {
 		"date": 1580153130000,
-		"jassi.ui.converters.NumberConverter": {
+		"jassijs.ui.converters.NumberConverter": {
 			"$Converter": [
 				"number"
 			],
@@ -287,9 +287,9 @@
 			]
 		}
 	},
-	"jassi/ui/converters/StringConverter.ts": {
+	"jassijs/ui/converters/StringConverter.ts": {
 		"date": 1579036889519,
-		"jassi.ui.converters.StringConverter": {
+		"jassijs.ui.converters.StringConverter": {
 			"$Converter": [
 				"string"
 			],
@@ -311,9 +311,9 @@
 			]
 		}
 	},
-	"jassi/ui/Databinder.ts": {
+	"jassijs/ui/Databinder.ts": {
 		"date": 1578504019338,
-		"jassi.ui.Databinder": {
+		"jassijs.ui.Databinder": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/Databinder",
@@ -322,58 +322,58 @@
 			]
 		}
 	},
-	"jassi/ui/DataComponent.ts": {
+	"jassijs/ui/DataComponent.ts": {
 		"date": 1580070153812,
-		"jassi.ui.DataComponent": {}
+		"jassijs.ui.DataComponent": {}
 	},
-	"jassi/ui/designer/ComponentDesigner.ts": {
+	"jassijs/ui/designer/ComponentDesigner.ts": {
 		"date": 1587578179708,
-		"jassi.ui.designer.ComponentDesigner": {}
+		"jassijs.ui.designer.ComponentDesigner": {}
 	},
-	"jassi/ui/designer/Report.ts": {
+	"jassijs/ui/designer/Report.ts": {
 		"date": 1579203401615,
-		"jassi_report.Report": {}
+		"jassijs_report.Report": {}
 	},
-	"jassi/ui/designer/ReportDesigner.ts": {
+	"jassijs/ui/designer/ReportDesigner.ts": {
 		"date": 1581015240880,
-		"jassi.ui.designer.ReportDesigner": {}
+		"jassijs.ui.designer.ReportDesigner": {}
 	},
-	"jassi/ui/Dialog.ts": {
+	"jassijs/ui/Dialog.ts": {
 		"date": 1587580597961,
-		"jassi.ui.Dialog": {}
+		"jassijs.ui.Dialog": {}
 	},
-	"jassi/ui/DockingContainer.ts": {
+	"jassijs/ui/DockingContainer.ts": {
 		"date": 1580486985302,
-		"jassi.ui.DockingContainer": {}
+		"jassijs.ui.DockingContainer": {}
 	},
-	"jassi/ui/ErrorPanel.ts": {
+	"jassijs/ui/ErrorPanel.ts": {
 		"date": 1586978382939,
-		"jassi.ui.ErrorPanel": {}
+		"jassijs.ui.ErrorPanel": {}
 	},
-	"jassi/ui/FileExplorer.ts": {
+	"jassijs/ui/FileExplorer.ts": {
 		"date": 1587742339887,
-		"jassi.ui.FileActions": {
+		"jassijs.ui.FileActions": {
 			"$ActionProvider": [
-				"jassi.base.FileNode"
+				"jassijs.base.FileNode"
 			]
 		},
-		"jassi.ui.FileExplorer": {}
+		"jassijs.ui.FileExplorer": {}
 	},
-	"jassi/ui/helper/DragAndDropper.ts": {
+	"jassijs/ui/helper/DragAndDropper.ts": {
 		"date": 1587397949758,
-		"jassi.ui.helper.DragAndDropper": {}
+		"jassijs.ui.helper.DragAndDropper": {}
 	},
-	"jassi/ui/helper/Resizer.ts": {
+	"jassijs/ui/helper/Resizer.ts": {
 		"date": 1587577979507,
-		"jassi.ui.helper.Resizer": {}
+		"jassijs.ui.helper.Resizer": {}
 	},
-	"jassi/ui/HTMLEditorPanel.ts": {
+	"jassijs/ui/HTMLEditorPanel.ts": {
 		"date": 1579036982434,
-		"jassi.ui.HTMLEditorPanel": {}
+		"jassijs.ui.HTMLEditorPanel": {}
 	},
-	"jassi/ui/HTMLPanel.ts": {
+	"jassijs/ui/HTMLPanel.ts": {
 		"date": 1586276196642,
-		"jassi.ui.HTMLPanel": {
+		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/HTMLPanel",
@@ -385,9 +385,9 @@
 			]
 		}
 	},
-	"jassi/ui/Image.ts": {
+	"jassijs/ui/Image.ts": {
 		"date": 1579037070216,
-		"jassi.ui.Image": {
+		"jassijs.ui.Image": {
 			"$UIComponent": [
 				{
 					"fullPath": "default/Image"
@@ -395,9 +395,9 @@
 			]
 		}
 	},
-	"jassi/ui/InvisibleComponent.ts": {
+	"jassijs/ui/InvisibleComponent.ts": {
 		"date": 1579037330343,
-		"jassi.ui.InvisibleComponent": {
+		"jassijs.ui.InvisibleComponent": {
 			"$Property": [
 				{
 					"name": "label",
@@ -434,9 +434,9 @@
 			]
 		}
 	},
-	"jassi/ui/Menu.ts": {
+	"jassijs/ui/Menu.ts": {
 		"date": 1587324149949,
-		"jassi.ui.Menu": {
+		"jassijs.ui.Menu": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/Menu",
@@ -448,9 +448,9 @@
 			]
 		}
 	},
-	"jassi/ui/MenuItem.ts": {
+	"jassijs/ui/MenuItem.ts": {
 		"date": 1586276243190,
-		"jassi.ui.MenuItem": {
+		"jassijs.ui.MenuItem": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/MenuItem",
@@ -465,9 +465,9 @@
 			]
 		}
 	},
-	"jassi/ui/ObjectChooser.ts": {
+	"jassijs/ui/ObjectChooser.ts": {
 		"date": 1586798603620,
-		"jassi.ui.ObjectChooser": {
+		"jassijs.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/ObjectChooser",
@@ -476,9 +476,9 @@
 			]
 		}
 	},
-	"jassi/ui/Panel.ts": {
+	"jassijs/ui/Panel.ts": {
 		"date": 1586276266900,
-		"jassi.ui.Panel": {
+		"jassijs.ui.Panel": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/Panel",
@@ -501,21 +501,21 @@
 			]
 		}
 	},
-	"jassi/ui/PDFViewer.ts": {
+	"jassijs/ui/PDFViewer.ts": {
 		"date": 1579206466656,
-		"jassi.ui.PDFViewer": {}
+		"jassijs.ui.PDFViewer": {}
 	},
-	"jassi/ui/Property.ts": {
+	"jassijs/ui/Property.ts": {
 		"date": 1586629943550,
-		"jassi.ui.Property": {}
+		"jassijs.ui.Property": {}
 	},
-	"jassi/ui/PropertyEditor.ts": {
+	"jassijs/ui/PropertyEditor.ts": {
 		"date": 1587577863285,
-		"jassi.ui.PropertyEditor": {}
+		"jassijs.ui.PropertyEditor": {}
 	},
-	"jassi/ui/PropertyEditors/BooleanEditor.ts": {
+	"jassijs/ui/PropertyEditors/BooleanEditor.ts": {
 		"date": 1579645089635,
-		"jassi.ui.PropertyEditors.BooleanEditor": {
+		"jassijs.ui.PropertyEditors.BooleanEditor": {
 			"$PropertyEditor": [
 				[
 					"boolean"
@@ -523,9 +523,9 @@
 			]
 		}
 	},
-	"jassi/ui/PropertyEditors/ClassSelectorEditor.ts": {
+	"jassijs/ui/PropertyEditors/ClassSelectorEditor.ts": {
 		"date": 1579551465753,
-		"jassi.ui.PropertyEditors.ClassSelectorEditor": {
+		"jassijs.ui.PropertyEditors.ClassSelectorEditor": {
 			"$PropertyEditor": [
 				[
 					"classselector"
@@ -533,9 +533,9 @@
 			]
 		}
 	},
-	"jassi/ui/PropertyEditors/ComponentSelectorEditor.ts": {
+	"jassijs/ui/PropertyEditors/ComponentSelectorEditor.ts": {
 		"date": 1579545469542,
-		"jassi.ui.PropertyEditors.ComponentSelectorEditor": {
+		"jassijs.ui.PropertyEditors.ComponentSelectorEditor": {
 			"$PropertyEditor": [
 				[
 					"componentselector"
@@ -543,9 +543,9 @@
 			]
 		}
 	},
-	"jassi/ui/PropertyEditors/DatabinderEditor.ts": {
+	"jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
 		"date": 1578481420500,
-		"jassi.ui.PropertyEditors.DatabinderEditor": {
+		"jassijs.ui.PropertyEditors.DatabinderEditor": {
 			"$PropertyEditor": [
 				[
 					"databinder"
@@ -553,9 +553,9 @@
 			]
 		}
 	},
-	"jassi/ui/PropertyEditors/DBObjectEditor.ts": {
+	"jassijs/ui/PropertyEditors/DBObjectEditor.ts": {
 		"date": 1578481427984,
-		"jassi.ui.PropertyEditors.DBObjectEditor": {
+		"jassijs.ui.PropertyEditors.DBObjectEditor": {
 			"$PropertyEditor": [
 				[
 					"dbobject"
@@ -563,9 +563,9 @@
 			]
 		}
 	},
-	"jassi/ui/PropertyEditors/DefaultEditor.ts": {
+	"jassijs/ui/PropertyEditors/DefaultEditor.ts": {
 		"date": 1586721308131,
-		"jassi.ui.PropertyEditors.DefaultEditor": {
+		"jassijs.ui.PropertyEditors.DefaultEditor": {
 			"$PropertyEditor": [
 				[
 					"string",
@@ -574,13 +574,13 @@
 			]
 		}
 	},
-	"jassi/ui/PropertyEditors/Editor.ts": {
+	"jassijs/ui/PropertyEditors/Editor.ts": {
 		"date": 1578695603146,
-		"jassi.ui.PropertyEditors.Editor": {}
+		"jassijs.ui.PropertyEditors.Editor": {}
 	},
-	"jassi/ui/PropertyEditors/FunctionEditor.ts": {
+	"jassijs/ui/PropertyEditors/FunctionEditor.ts": {
 		"date": 1578481437384,
-		"jassi.ui.PropertyEditors.FunctionEditor": {
+		"jassijs.ui.PropertyEditors.FunctionEditor": {
 			"$PropertyEditor": [
 				[
 					"function"
@@ -588,9 +588,9 @@
 			]
 		}
 	},
-	"jassi/ui/PropertyEditors/HTMLEditor.ts": {
+	"jassijs/ui/PropertyEditors/HTMLEditor.ts": {
 		"date": 1578695574526,
-		"jassi.ui.PropertyEditors.HTMLEditor": {
+		"jassijs.ui.PropertyEditors.HTMLEditor": {
 			"$PropertyEditor": [
 				[
 					"html"
@@ -598,9 +598,9 @@
 			]
 		}
 	},
-	"jassi/ui/PropertyEditors/JsonEditor.ts": {
+	"jassijs/ui/PropertyEditors/JsonEditor.ts": {
 		"date": 1587571063077,
-		"jassi.ui.PropertyEditors.JsonEditor": {
+		"jassijs.ui.PropertyEditors.JsonEditor": {
 			"$PropertyEditor": [
 				[
 					"json"
@@ -608,9 +608,9 @@
 			]
 		}
 	},
-	"jassi/ui/PropertyEditors/NameEditor.ts": {
+	"jassijs/ui/PropertyEditors/NameEditor.ts": {
 		"date": 1578481443660,
-		"jassi.ui.PropertyEditors.NameEditor": {
+		"jassijs.ui.PropertyEditors.NameEditor": {
 			"$PropertyEditor": [
 				[
 					"*name*"
@@ -618,9 +618,9 @@
 			]
 		}
 	},
-	"jassi/ui/Repeater.ts": {
+	"jassijs/ui/Repeater.ts": {
 		"date": 1579448277451,
-		"jassi.ui.Repeater": {
+		"jassijs.ui.Repeater": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/Repeater",
@@ -633,13 +633,13 @@
 			]
 		}
 	},
-	"jassi/ui/SearchExplorer.ts": {
+	"jassijs/ui/SearchExplorer.ts": {
 		"date": 1587664647517,
-		"jassi.ui.SearchExplorer": {}
+		"jassijs.ui.SearchExplorer": {}
 	},
-	"jassi/ui/Select.ts": {
+	"jassijs/ui/Select.ts": {
 		"date": 1580485230245,
-		"jassi.ui.Select": {
+		"jassijs.ui.Select": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/Select",
@@ -669,13 +669,13 @@
 			]
 		}
 	},
-	"jassi/ui/SplitPanel.ts": {
+	"jassijs/ui/SplitPanel.ts": {
 		"date": 1578695092182,
-		"jassi.ui.SplitPanel": {}
+		"jassijs.ui.SplitPanel": {}
 	},
-	"jassi/ui/Table.ts": {
+	"jassijs/ui/Table.ts": {
 		"date": 1587573654455,
-		"jassi.ui.Table": {
+		"jassijs.ui.Table": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/Table",
@@ -726,9 +726,9 @@
 			]
 		}
 	},
-	"jassi/ui/Tree.ts": {
+	"jassijs/ui/Tree.ts": {
 		"date": 1587754753241,
-		"jassi.ui.Tree": {
+		"jassijs.ui.Tree": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/Tree",
@@ -737,27 +737,27 @@
 			]
 		}
 	},
-	"jassi/ui/VariablePanel.ts": {
+	"jassijs/ui/VariablePanel.ts": {
 		"date": 1587495384769,
-		"jassi.ui.VariablePanel": {}
+		"jassijs.ui.VariablePanel": {}
 	},
-	"jassi/util/PDFReport.ts": {
+	"jassijs/util/PDFReport.ts": {
 		"date": 1581715445621,
-		"jassi.ui.PDFReport": {}
+		"jassijs.ui.PDFReport": {}
 	},
-	"jassi/util/Reloader.ts": {
+	"jassijs/util/Reloader.ts": {
 		"date": 1587754316984,
-		"jassi.util.Reloader": {}
+		"jassijs.util.Reloader": {}
 	},
-	"jassi/util/Tools.ts": {
+	"jassijs/util/Tools.ts": {
 		"date": 1587571068912,
-		"jassi.util.Tools": {}
+		"jassijs.util.Tools": {}
 	},
-	"jassi/util/TSSourceMap.ts": {
+	"jassijs/util/TSSourceMap.ts": {
 		"date": 1578481535178,
-		"jassi.util.TSSourceMap": {}
+		"jassijs.util.TSSourceMap": {}
 	},
-	"jassi/util/typeorm.ts": {
+	"jassijs/util/typeorm.ts": {
 		"date": 1576348127280
 	},
 	"remote/de/AR.ts": {
@@ -817,52 +817,52 @@
 			"$DBObject": []
 		}
 	},
-	"remote/jassi/base/Classes.ts": {
+	"remote/jassijs/base/Classes.ts": {
 		"date": 1579284953211,
-		"jassi.base.Classes": {}
+		"jassijs.base.Classes": {}
 	},
-	"remote/jassi/base/Database.ts": {
+	"remote/jassijs/base/Database.ts": {
 		"date": 1578478628377,
-		"remote.jassi.base.Database": {}
+		"remote.jassijs.base.Database": {}
 	},
-	"remote/jassi/base/DBArray.ts": {
+	"remote/jassijs/base/DBArray.ts": {
 		"date": 1578477060403,
-		"jassi.base.DBArray": {}
+		"jassijs.base.DBArray": {}
 	},
-	"remote/jassi/base/DBObject.ts": {
+	"remote/jassijs/base/DBObject.ts": {
 		"date": 1579447540903,
-		"jassi.base.DBObject": {}
+		"jassijs.base.DBObject": {}
 	},
-	"remote/jassi/base/Extensions.ts": {
+	"remote/jassijs/base/Extensions.ts": {
 		"date": 1586622168850
 	},
-	"remote/jassi/base/FileNode.ts": {
+	"remote/jassijs/base/FileNode.ts": {
 		"date": 1587231615500,
-		"jassi.base.FileNode": {}
+		"jassijs.base.FileNode": {}
 	},
-	"remote/jassi/base/hallo.ts": {
+	"remote/jassijs/base/hallo.ts": {
 		"date": 1578943024284
 	},
-	"remote/jassi/base/Jassi.ts": {
+	"remote/jassijs/base/jassijs.ts": {
 		"date": 1586677135690,
-		"jassi.base.Jassi": {}
+		"jassijs.base.Jassi": {}
 	},
-	"remote/jassi/base/Registry.ts": {
+	"remote/jassijs/base/Registry.ts": {
 		"date": 1587310848615
 	},
-	"remote/jassi/base/RemoteObject.ts": {
+	"remote/jassijs/base/RemoteObject.ts": {
 		"date": 1578339903020,
-		"jassi.base.RemoteObject": {}
+		"jassijs.base.RemoteObject": {}
 	},
-	"remote/jassi/base/RemoteProtocol.ts": {
+	"remote/jassijs/base/RemoteProtocol.ts": {
 		"date": 1578671490123,
-		"jassi.base.RemoteProtocol": {}
+		"jassijs.base.RemoteProtocol": {}
 	},
-	"remote/jassi/base/Server.ts": {
+	"remote/jassijs/base/Server.ts": {
 		"date": 1587754338963,
-		"remote.jassi.base.Server": {}
+		"remote.jassijs.base.Server": {}
 	},
-	"remote/jassi/ext/registry.ts": {
+	"remote/jassijs/ext/registry.ts": {
 		"date": 1578951573443
 	},
 	"demo/TreeContextmenu.ts": {
@@ -871,13 +871,13 @@
 	"demo/TableContextmenu.ts": {
 		"date": 1587574256951
 	},
-	"jassi/util/Typescript.ts": {
+	"jassijs/util/Typescript.ts": {
 		"date": 1587572919051,
-		"jassi/util/Typescript": {}
+		"jassijs/util/Typescript": {}
 	},
-	"jassi/ui/Textbox.ts": {
+	"jassijs/ui/Textbox.ts": {
 		"date": 1587743405866,
-		"jassi.ui.Textbox": {
+		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{
 					"fullPath": "common/Textbox",

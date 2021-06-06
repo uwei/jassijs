@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
                 r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/util/DatabaseSchema", "jassi/remote/Extensions"], function (require, exports, Jassi_1, DatabaseSchema_1, Extensions_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/Extensions"], function (require, exports, jassijs_1, DatabaseSchema_1, Extensions_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     Extensions_1.extensions.annotateMember("de.Kunde", "extField", String, DatabaseSchema_1.Column({ nullable: true }));
@@ -37,11 +37,11 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/util/DatabaseSchema",
     };
     KundeExt = __decorate([
         Extensions_1.$Extension("de.Kunde"),
-        Jassi_1.$Class("de.KundeExt")
+        jassijs_1.$Class("de.KundeExt")
     ], KundeExt);
     //Hack for tabulator.js
     KundeExt.prototype.extFunc["match"] = function () { return false; };
 });
-//jassi.register("extensions", "de.Kunde", KundeExt, "KundeExt");
+//jassijs.register("extensions", "de.Kunde", KundeExt, "KundeExt");
 //# sourceMappingURL=KundeExt.js.map
 //# sourceMappingURL=KundeExt.js.map

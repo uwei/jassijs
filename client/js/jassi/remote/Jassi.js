@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassi/remote/Registry"], function (require, exports, Registry_1) {
+define(["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Jassi = exports.$register = exports.$Class = void 0;
@@ -48,7 +48,7 @@ define(["require", "exports", "jassi/remote/Registry"], function (require, expor
             //@ts-ignore
             this.isServer = window.document === undefined;
             if (!this.isServer) {
-                //  this.myRequire("jassi/jassi.css");
+                //  this.myRequire("jassijs/jassijs.css");
                 //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
                 //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
             }
@@ -145,7 +145,7 @@ define(["require", "exports", "jassi/remote/Registry"], function (require, expor
         }
     };
     Jassi = __decorate([
-        $Class("jassi.remote.Jassi"),
+        $Class("jassijs.remote.Jassi"),
         __metadata("design:paramtypes", [])
     ], Jassi);
     exports.Jassi = Jassi;
@@ -158,4 +158,4 @@ define(["require", "exports", "jassi/remote/Registry"], function (require, expor
     }
     exports.default = jassi;
 });
-//# sourceMappingURL=Jassi.js.map
+//# sourceMappingURL=jassijs.js.map

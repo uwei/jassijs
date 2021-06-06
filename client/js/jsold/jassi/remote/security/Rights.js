@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
                 r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "jassi/remote/RemoteObject"], function (require, exports, Jassi_1, Registry_1, RemoteObject_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, jassijs_1, Registry_1, RemoteObject_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Rights = exports.$CheckParentRight = exports.$ParentRights = exports.$Rights = exports.ParentRightProperties = exports.RightProperties = void 0;
@@ -51,7 +51,7 @@ define(["require", "exports", "jassi/remote/Jassi", "jassi/remote/Registry", "ja
         }
     };
     Rights = __decorate([
-        Jassi_1.$Class("jassi.remote.security.Rights")
+        jassijs_1.$Class("jassijs.remote.security.Rights")
     ], Rights);
     exports.Rights = Rights;
     var rights = new Rights();
