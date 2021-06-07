@@ -16,7 +16,7 @@ import { ActionNodeMenu } from "jassijs/ui/ActionNodeMenu";
 
 //var h=new RemoteObject().test();
 
-async function test() {
+async function start() {
   //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
     var body = new Panel({ id: "body" });
     body.max();
@@ -37,7 +37,7 @@ async function test() {
 
 
 }
-test().then();
+start().then();
 
 
 

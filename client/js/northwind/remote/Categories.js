@@ -43,7 +43,6 @@ define(["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObj
     ], Categories);
     exports.Categories = Categories;
     async function test() {
-        var all = await Categories.find({ relations: ["*"] });
     }
     exports.test = test;
     ;

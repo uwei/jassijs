@@ -7,19 +7,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs_editor/util/Typescript", "jassijs/ui/Component", "jassijs/ui/Container", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel"], function (require, exports, Jassi_1, Actions_1, Typescript_1, Component_1, Container_1, BoxPanel_1, Windows_1, HTMLPanel_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs_editor/util/Typescript", "jassijs/ui/Component", "jassijs/ui/Container", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel", "jassijs/base/Errors", "jassijs/ui/ErrorPanel"], function (require, exports, Jassi_1, Actions_1, Typescript_1, Component_1, Container_1, BoxPanel_1, Windows_1, HTMLPanel_1, Errors_1, ErrorPanel_1) {
     "use strict";
     var TestAction_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Tests = exports.Test = exports.TestAction = void 0;
+    exports.test = exports.Tests = exports.Test = exports.TestAction = void 0;
     let TestAction = TestAction_1 = class TestAction {
         static async testNode(all, container = undefined) {
+            var alltests = 0;
+            var failedtests = 0;
             //var isRoot=false;
             if (container === undefined) {
                 container = new BoxPanel_1.BoxPanel();
                 Windows_1.default.add(container, "Tests");
                 //	isRoot=true;
             }
+            Errors_1.Errors.errors.onerror((err) => {
+                var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
+                newerrorpanel.addError(err);
+                container.add(newerrorpanel);
+            }, container._id);
             for (var x = 0; x < all.length; x++) {
                 var file = all[x];
                 if (file.isDirectory()) {
@@ -31,25 +38,34 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
                     if (text !== undefined) {
                         text = text.toLowerCase();
                         console.log("test " + file.fullpath);
-                        if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
-                            var func = (await new Promise((resolve_1, reject_1) => { require([file.fullpath.substring(0, file.fullpath.length - 3)], resolve_1, reject_1); })).test;
-                            if (typeof func === "function") {
-                                var ret = await func(new Test());
-                                if (ret instanceof Component_1.Component) {
-                                    $(ret.dom).css({ position: "relative" });
-                                    ret.width = 400;
-                                    var head = new HTMLPanel_1.HTMLPanel();
-                                    head.value = "<b>" + file.fullpath + "</b>";
-                                    container.add(head);
-                                    container.add(ret);
+                        try {
+                            if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
+                                var func = (await new Promise((resolve_1, reject_1) => { require([file.fullpath.substring(0, file.fullpath.length - 3)], resolve_1, reject_1); })).test;
+                                if (typeof func === "function") {
+                                    alltests++;
+                                    var ret = await func(new Test());
+                                    if (ret instanceof Component_1.Component) {
+                                        $(ret.dom).css({ position: "relative" });
+                                        ret.width = "100%";
+                                        var head = new HTMLPanel_1.HTMLPanel();
+                                        head.value = "<b>" + file.fullpath + "</b>";
+                                        container.add(head);
+                                        container.add(ret);
+                                    }
                                 }
                             }
+                        }
+                        catch (err) {
+                            failedtests++;
+                            var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
+                            newerrorpanel.addError({ error: err });
+                            container.add(newerrorpanel);
                         }
                     }
                 }
             }
-            // if(isRoot&&container._components.length>0){
-            //  }
+            console.log("Finished " + alltests + " Tests. " + (failedtests) + " Tests failed.");
+            Errors_1.Errors.errors.offerror(container._id);
         }
     };
     __decorate([
@@ -114,5 +130,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
     class Tests {
     }
     exports.Tests = Tests;
+    //Selftest
+    async function test(test) {
+        test.expectEqual(1 === 1);
+        test.expectError(() => {
+            var h;
+            h.a = 9;
+        });
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=Tests.js.map

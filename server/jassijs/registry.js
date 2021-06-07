@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"jassijs/remote/Classes.ts": {
-		"date": 1622985391483,
+		"date": 1623094343197,
 		"jassijs.remote.Classes": {}
 	},
 	"jassijs/remote/Database.ts": {

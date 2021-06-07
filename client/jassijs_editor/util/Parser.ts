@@ -635,13 +635,14 @@ export class Parser {
 }
 
 export async function test() {
-    var code = typescript.getCode("remote/de/AR.ts");
+    var code = typescript.getCode("jassijs_editor/util/Parser.ts");
     var parser = new Parser();
     parser.parse(code, undefined);
-    const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
+
+  /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
     const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
     const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);
-    console.log(result);
+    console.log(result);*/
 
 
 

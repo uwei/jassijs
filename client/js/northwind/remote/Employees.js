@@ -123,7 +123,6 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
     }
     async function test() {
         var all = await Employees.find({ where: "id>:p", whereParams: { p: 5 } });
-        debugger;
     }
     exports.test = test;
     async function test2() {

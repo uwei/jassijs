@@ -2,7 +2,7 @@ define(["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows",
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     //var h=new RemoteObject().test();
-    async function test() {
+    async function start() {
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
         var body = new Panel_1.Panel({ id: "body" });
         body.max();
@@ -21,6 +21,6 @@ define(["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows",
         Windows_1.default._desktop.add(am);
         Router_1.router.navigate(window.location.hash);
     }
-    test().then();
+    start().then();
 });
 //# sourceMappingURL=StartEditor.js.map

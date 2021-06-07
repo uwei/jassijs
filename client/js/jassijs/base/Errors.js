@@ -65,9 +65,10 @@ define(["require", "exports"], function (require, exports) {
             if (id === undefined)
                 id = Errors._randomID++;
             this.handler[id] = func;
+            return id;
         }
         /**
-         * raise if error is thrown
+         * delete the error handler
          * @param {function} func - callback function
          * @param {string} [id] - the id of the component that registers the error
          */
@@ -76,7 +77,7 @@ define(["require", "exports"], function (require, exports) {
         }
     }
     exports.Errors = Errors;
-    Errors._randomID = 10000;
+    Errors._randomID = 100000;
     ;
 });
 //# sourceMappingURL=Errors.js.map

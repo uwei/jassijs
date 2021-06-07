@@ -547,11 +547,13 @@ class Runlater {
         }
     }
 }
-jassijs.test = async function () {
+export async function test() {
 
     var dlg = new AcePanel();
     dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
-    dlg.mode = "javascript";
+    dlg.mode = "typescript";
+    dlg.height=100;
+
     //dlg._editor.renderer.setShowGutter(false);		
     //dlg._editor.getSession().addGutterDecoration(1,"error_line");
     //  dlg._editor.getSession().setBreakpoint(1);

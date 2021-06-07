@@ -3,7 +3,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1622985694862,
+                "date": 1623100103030,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
@@ -11,7 +11,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1622998616949,
+                "date": 1623100158447,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": []
                 },
@@ -22,19 +22,19 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
-                "date": 1622998616949,
+                "date": 1623097926572,
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1622998616949,
+                "date": 1623098090050,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1622998616949,
+                "date": 1623100288249,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1622998616949,
+                "date": 1623099899741,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/Debugger.ts": {
@@ -45,21 +45,18 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1622998616843
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1622998616949,
+                "date": 1623100121857,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {
-                "date": 1622984379897
+                "date": 1623098599960
             },
             "jassijs_editor/util/DragAndDropper.ts": {
                 "date": 1622998616949,
                 "jassijs_editor.util.DragAndDropper": {}
             },
-            "jassijs_editor/util/monaco.ts": {
-                "date": 1622984292907
-            },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1622998616949,
+                "date": 1623098989289,
                 "jassijs_editor.base.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {

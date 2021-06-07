@@ -16,8 +16,11 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
      * shows errors
      * @class jassijs.ui.ErrorPanel
      */
-        constructor() {
+        constructor(withControls = true, withLastErrors = true, withNewErrors = true) {
             super();
+            this.withControls = withControls;
+            this.withLastErrors = withLastErrors;
+            this.withNewErrors = withNewErrors;
             this.layout();
         }
         static async showDialog() {
@@ -25,33 +28,38 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
         }
         layout() {
             var _this = this;
-            this.IDClear = new Button_1.Button();
-            this.IDClear.tooltip = "Clear log";
-            this.IDClear.icon = "mdi mdi-delete";
-            this.IDClear.onclick(function () {
-                _this.clear();
-                Jassi_1.default.errors.items = [];
-            });
-            this.IDClear.width = 35;
-            this.IDSearch = new Button_1.Button();
-            this.IDSearch.tooltip = "search errors";
-            this.IDSearch.icon = "mdi mdi-file-search-outline";
-            this.IDSearch.onclick(function () {
-                _this.search();
-            });
-            this.IDToolbar = new Panel_1.Panel();
-            this.IDToolbar.width = "99%";
-            this.IDToolbar.add(this.IDClear);
-            this.IDToolbar.add(this.IDSearch);
-            this.IDToolbar.height = 20;
-            super.add(this.IDToolbar);
+            if (this.withControls) {
+                this.IDClear = new Button_1.Button();
+                this.IDClear.tooltip = "Clear log";
+                this.IDClear.icon = "mdi mdi-delete";
+                this.IDClear.onclick(function () {
+                    _this.clear();
+                    Jassi_1.default.errors.items = [];
+                });
+                this.IDClear.width = 35;
+                this.IDSearch = new Button_1.Button();
+                this.IDSearch.tooltip = "search errors";
+                this.IDSearch.icon = "mdi mdi-file-search-outline";
+                this.IDSearch.onclick(function () {
+                    _this.search();
+                });
+                this.IDToolbar = new Panel_1.Panel();
+                this.IDToolbar.width = "99%";
+                this.IDToolbar.add(this.IDClear);
+                this.IDToolbar.add(this.IDSearch);
+                this.IDToolbar.height = 20;
+                super.add(this.IDToolbar);
+            }
             var value = $('<span><font  size="2"><span class="errorpanel"></span></font></span>')[0];
             this.dom.appendChild(value);
             this._container = $(this.dom).find(".errorpanel")[0];
-            this.registerError();
-            //old Errors
-            for (var x = 0; x < Jassi_1.default.errors.items.length; x++) {
-                this.addError(Jassi_1.default.errors.items[x]);
+            if (this.withNewErrors)
+                this.registerError();
+            if (this.withLastErrors) {
+                //old Errors
+                for (var x = 0; x < Jassi_1.default.errors.items.length; x++) {
+                    this.addError(Jassi_1.default.errors.items[x]);
+                }
             }
             if (window["jassijs_debug"] === undefined)
                 window["jassijs_debug"] = { variables: [] };
@@ -194,7 +202,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
     ErrorPanel = __decorate([
         Actions_1.$ActionProvider("jassijs.base.ActionNode"),
         Jassi_1.$Class("jassijs.ui.ErrorPanel"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object, Object, Object])
     ], ErrorPanel);
     exports.ErrorPanel = ErrorPanel;
     function test() {

@@ -657,10 +657,36 @@ export class CodeEditor extends Panel {
 
 export async function test() {
     var editor = new CodeEditor();
-    var url = "jassijs_editor/AcePanel.ts";
-    editor.height = 500;
-    await editor.openFile(url);
-   
+    //var url = "jassijs_editor/AcePanel.ts";
+    editor.height = 300;
+    editor.width="100%";
+    //await editor.openFile(url);
+    editor.value=`import { Button } from "jassijs/ui/Button";
+import { Repeater } from "jassijs/ui/Repeater";
+import { $Class } from "jassijs/remote/Jassi";
+import { Panel } from "jassijs/ui/Panel";
+type Me = {
+    button1?: Button;
+};
+@$Class("demo.EmptyDialog")
+export class EmptyDialog extends Panel {
+    me: Me;
+    constructor() {
+        super();
+        this.me = {};
+        this.layout(this.me);
+    }
+    layout(me: Me) {
+        me.button1 = new Button();
+        this.add(me.button1);
+    }
+}
+export async function test() {
+    var ret = new EmptyDialog();
+    return ret;
+}
+`;
+    editor.evalCode();
     return editor;
 
 };

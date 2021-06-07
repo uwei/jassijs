@@ -7,12 +7,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define(["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ActionNode = void 0;
+    exports.test = exports.ActionNode = void 0;
     let ActionNode = class ActionNode {
     };
     ActionNode = __decorate([
         Jassi_1.$Class("jassijs.base.ActionNode")
     ], ActionNode);
     exports.ActionNode = ActionNode;
+    async function test() {
+        var Actions = (await new Promise((resolve_1, reject_1) => { require(["jassijs/base/Actions"], resolve_1, reject_1); })).Actions;
+        var actions = await Actions.getActionsFor([new ActionNode()]); //Class Actions
+        console.log("found " + actions.length + " Actions");
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=ActionNode.js.map

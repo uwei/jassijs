@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Jassi_1, Panel_1, Image_1, Registry_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ComponentPalette = void 0;
+    exports.test = exports.ComponentPalette = void 0;
     let ComponentPalette = class ComponentPalette extends Panel_1.Panel {
         constructor() {
             super();
@@ -116,5 +116,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         __metadata("design:paramtypes", [])
     ], ComponentPalette);
     exports.ComponentPalette = ComponentPalette;
+    function test() {
+        var comp = new ComponentPalette();
+        comp.service = "$UIComponent";
+        return comp;
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=ComponentPalette.js.map

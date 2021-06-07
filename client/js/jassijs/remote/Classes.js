@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.classes = exports.Classes = void 0;
+    exports.test = exports.classes = exports.Classes = void 0;
     function $Class(longclassname) {
         return function (pclass) {
             Registry_1.default.register("$Class", pclass, longclassname);
@@ -114,5 +114,11 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
     ;
     let classes = new Classes();
     exports.classes = classes;
+    async function test(t) {
+        var cl = classes.getClass("jassijs.ui.Button");
+        t.expectEqual(cl === await classes.loadClass("jassijs.ui.Button"));
+        t.expectEqual(classes.getClassName(cl) === "jassijs.ui.Button");
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=Classes.js.map

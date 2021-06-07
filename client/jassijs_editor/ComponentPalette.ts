@@ -1,7 +1,7 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import {Panel} from "jassijs/ui/Panel";
-import {HTMLPanel} from "jassijs/ui/HTMLPanel";
-import {Image} from "jassijs/ui/Image";
+import { Panel } from "jassijs/ui/Panel";
+import { HTMLPanel } from "jassijs/ui/HTMLPanel";
+import { Image } from "jassijs/ui/Image";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { $UIComponent, UIComponentProperties } from "jassijs/ui/Component";
@@ -24,18 +24,18 @@ export class ComponentPalette extends Panel {
         while (this._components.length > 0) {
             this.remove(this._components[0]);
         }
-        registry.getJSONData(this._service).then((jdata)=>{
-            for (var x = 0;x < jdata.length;x++) {
+        registry.getJSONData(this._service).then((jdata) => {
+            for (var x = 0; x < jdata.length; x++) {
                 var mdata = jdata[x];
                 var data: UIComponentProperties = mdata.params[0];
-                if(data.fullPath===undefined||data.fullPath==="undefined")
+                if (data.fullPath === undefined || data.fullPath === "undefined")
                     continue;
                 var img = new Image();
                 var name = data.fullPath.split("/");
                 var sname = name[name.length - 1];
                 img.tooltip = sname;
 
-                img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon+(data.icon.startsWith("mdi")?" mdi-18px":"");
+                img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon + (data.icon.startsWith("mdi") ? " mdi-18px" : "");
                 //img.height = 24;
                 //img.width = 24;
                 img["createFromType"] = mdata.classname;
@@ -44,7 +44,7 @@ export class ComponentPalette extends Panel {
                 _this.add(img);
             }
         });
-        
+
 
 
         /*registry.loadAllFilesForService(this._service).then(function(){
@@ -75,16 +75,16 @@ export class ComponentPalette extends Panel {
         var helper = undefined;
 
 
-        $(component.dom).draggable({            
-cancel: "false", revert: "invalid",
-			
+        $(component.dom).draggable({
+            cancel: "false", revert: "invalid",
+
             appendTo: "body",
-            helper: function(event) {
+            helper: function (event) {
                 if (helper === undefined) {
                     var cl = classes.getClass(component.createFromType);
                     if (cl === undefined) {
                         classes.loadClass(component.createFromType);//for later
-                    	cl=Panel;
+                        cl = Panel;
                     }
                     helper = new cl();
                     var img = new Image();
@@ -106,7 +106,7 @@ cancel: "false", revert: "invalid",
         });
     }
     destroy() {
-        for (var x = 0;x < this._components.length;x++) {
+        for (var x = 0; x < this._components.length; x++) {
             var comp = this._components[x];
             $(comp.dom).draggable("destroy");
             if (comp["_helper"] !== undefined)
@@ -114,4 +114,9 @@ cancel: "false", revert: "invalid",
         }
         super.destroy();
     }
+}
+export function test() {
+    var comp=new ComponentPalette();
+    comp.service="$UIComponent";
+    return comp;
 }

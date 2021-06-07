@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs/remote/Server", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_1, Router_1, Typescript_1, Server_1, CodePanel_1, Settings_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_1, Router_1, Typescript_1, CodePanel_1, Settings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -288,12 +288,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
     ], MonacoPanel);
     exports.MonacoPanel = MonacoPanel;
     async function test() {
-        await Settings_1.Settings.save(Settings_1.Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user");
+        //await Settings.save(Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user")
         var dlg = new MonacoPanel();
-        var code = await new Server_1.Server().loadFile("a/Dialog.ts");
+        //  var code = await new Server().loadFile("a/Dialog.ts");
         dlg.loadsample();
-        dlg.width = "800";
-        dlg.height = "800";
+        setTimeout(() => {
+            dlg.width = "800";
+            dlg.height = "100";
+        }, 200);
         //@ts-ignore
         //   dlg._editor.layout();
         //    dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";

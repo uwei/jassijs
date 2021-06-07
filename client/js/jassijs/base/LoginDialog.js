@@ -93,7 +93,7 @@ define(["require", "exports", "jassijs/ext/jquerylib"], function (require, expor
     }
     exports.login = login;
     function test() {
-        login();
+        //login();
     }
     exports.test = test;
 });

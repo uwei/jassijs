@@ -7,10 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs_editor/CodeEditor", "jassijs/ui/PropertyEditor"], function (require, exports, Jassi_1, Panel_1, Tree_1, ComponentDescriptor_1, ContextMenu_1, CodeEditor_1, PropertyEditor_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs_editor/CodeEditor", "jassijs/ui/PropertyEditor", "jassijs/remote/Classes"], function (require, exports, Jassi_1, Panel_1, Tree_1, ComponentDescriptor_1, ContextMenu_1, CodeEditor_1, PropertyEditor_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ComponentExplorer = void 0;
+    exports.test = exports.ComponentExplorer = void 0;
     let ComponentExplorer = class ComponentExplorer extends Panel_1.Panel {
         /**
         * edit object properties
@@ -135,13 +135,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         __metadata("design:paramtypes", [CodeEditor_1.CodeEditor, PropertyEditor_1.PropertyEditor])
     ], ComponentExplorer);
     exports.ComponentExplorer = ComponentExplorer;
-    Jassi_1.default.test = async function () {
-        var dlg = new Jassi_1.default.ui.ComponentExplorer();
+    async function test() {
+        var dlg = new ComponentExplorer(undefined, undefined);
         dlg.getComponentName = function (item) {
-            return "hallo";
+            return Classes_1.classes.getClassName(item);
         };
         dlg.value = dlg;
         return dlg;
-    };
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=ComponentExplorer.js.map

@@ -510,6 +510,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             return this._designPlaceholder._components[0];
         }
         destroy() {
+            var _a, _b, _c, _d;
             if (this._resizer !== undefined) {
                 this._resizer.uninstall();
             }
@@ -517,10 +518,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 this._draganddropper.isDragEnabled = undefined;
                 this._draganddropper.uninstall();
             }
-            this._propertyEditor.destroy();
-            this._componentPalette.destroy();
-            this._componentExplorer.destroy();
-            this._invisibleComponents.destroy();
+            (_a = this._propertyEditor) === null || _a === void 0 ? void 0 : _a.destroy();
+            (_b = this._componentPalette) === null || _b === void 0 ? void 0 : _b.destroy();
+            (_c = this._componentExplorer) === null || _c === void 0 ? void 0 : _c.destroy();
+            (_d = this._invisibleComponents) === null || _d === void 0 ? void 0 : _d.destroy();
             super.destroy();
         }
     };
@@ -530,6 +531,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
     ], ComponentDesigner);
     exports.ComponentDesigner = ComponentDesigner;
     async function test() {
+        return new ComponentDesigner();
     }
     exports.test = test;
     ;

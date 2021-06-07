@@ -12,7 +12,7 @@ import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { Repeater } from "jassijs/ui/Repeater";
 import { Table } from "jassijs/ui/Table";
 import { Checkbox } from "jassijs/ui/Checkbox";
-import db from "jassijs/base/Database";
+
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { TestComponent } from "demo/TestComponent";
 import { Property, $Property } from "jassijs/ui/Property";
@@ -20,7 +20,7 @@ import { router } from "jassijs/base/Router";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 type Me = {
     repeater1?: Repeater;
-    textbox1?: Textbox;
+    textbox1?: Textbox; 
     textbox2?: Textbox;
     idtable?: Table;
     select1?: Select;

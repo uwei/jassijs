@@ -68,10 +68,6 @@ Products = __decorate([
 exports.Products = Products;
 async function test() {
     var p = await Products.findOne();
-    debugger;
-    p.ProductName = "udo";
-    var p2 = await Products.findOne({ onlyColumns: [], relations: ["*"] });
-    var k = p === p2;
 }
 exports.test = test;
 ;

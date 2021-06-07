@@ -3,7 +3,7 @@ export class Errors {
     public static errors: Errors;
     public items;
     public handler;
-    private static _randomID = 10000;
+    private static _randomID = 100000;
     /**
     * Error handling.
     * @class jassijs.base.Error
@@ -68,9 +68,10 @@ export class Errors {
         if (id === undefined)
             id = Errors._randomID++;
         this.handler[id] = func;
+        return id;
     }
     /**
-     * raise if error is thrown
+     * delete the error handler
      * @param {function} func - callback function
      * @param {string} [id] - the id of the component that registers the error
      */

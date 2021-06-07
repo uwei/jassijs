@@ -3,32 +3,25 @@ define("jassijs/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs/base/ActionNode.ts": {
-		"date": 1622984379892,
+		"date": 1623097148247,
 		"jassijs.base.ActionNode": {}
 	},
 	"jassijs/base/Actions.ts": {
 		"date": 1622984379898,
 		"jassijs.base.Actions": {}
 	},
-	"jassijs/base/Database.ts": {
-		"date": 1622985638954,
-		"jassijs.base.Database": {},
-		"jassijs.base.Database.TypeResolver": {},
-		"jassijs.base.Database.Type": {},
-		"jassijs.base.Database.Field": {}
-	},
 	"jassijs/base/DatabaseSchema.ts": {
 		"date": 1622998607065,
 		"jassijs.base.DatabaseSchema": {}
 	},
 	"jassijs/base/Errors.ts": {
-		"date": 1622984379897
+		"date": 1623094943021
 	},
 	"jassijs/base/Extensions.ts": {
 		"date": 1622985781831
 	},
 	"jassijs/base/LoginDialog.ts": {
-		"date": 1622984213677
+		"date": 1623093221162
 	},
 	"jassijs/base/PropertyEditorService.ts": {
 		"date": 1622998316409,
@@ -39,7 +32,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Router": {}
 	},
 	"jassijs/base/Tests.ts": {
-		"date": 1622984379892,
+		"date": 1623099756021,
 		"jassijs.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -58,7 +51,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622984492212
 	},
 	"jassijs/remote/Classes.ts": {
-		"date": 1622985391483,
+		"date": 1623094343197,
 		"jassijs.remote.Classes": {}
 	},
 	"jassijs/remote/Database.ts": {
@@ -455,7 +448,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/ErrorPanel.ts": {
-		"date": 1622998616949,
+		"date": 1623095592011,
 		"jassijs.ui.ErrorPanel": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"

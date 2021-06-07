@@ -301,12 +301,15 @@ export class MonacoPanel extends CodePanel {
 }
 
 export async function test() {
-    await Settings.save(Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user")
+    //await Settings.save(Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user")
     var dlg = new MonacoPanel();
-    var code = await new Server().loadFile("a/Dialog.ts");
+  //  var code = await new Server().loadFile("a/Dialog.ts");
     dlg.loadsample();
+    setTimeout(()=>{
     dlg.width = "800";
-    dlg.height = "800";
+    dlg.height = "100";
+
+    },200);
     //@ts-ignore
  //   dlg._editor.layout();
     

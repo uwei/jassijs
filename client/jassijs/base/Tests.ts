@@ -7,6 +7,8 @@ import { Container } from "jassijs/ui/Container";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import windows from "jassijs/base/Windows";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
+import { Errors } from "jassijs/base/Errors";
+import { ErrorPanel } from "jassijs/ui/ErrorPanel";
 
 
 
@@ -16,17 +18,25 @@ export class TestAction {
     @$Action({
         name: "Test"
     })
-    static async testNode(all: FileNode[],container:Container=undefined) {
-    	//var isRoot=false;
-    	if(container===undefined){
-    		container=new BoxPanel();
-    		windows.add(container,"Tests");
-    	//	isRoot=true;
-    	}
-        for (var x = 0;x < all.length;x++) {
+    static async testNode(all: FileNode[], container: Container = undefined) {
+        var alltests=0;
+        var failedtests=0;
+        //var isRoot=false;
+        if (container === undefined) {
+            container = new BoxPanel();
+            windows.add(container, "Tests");
+            //	isRoot=true;
+        }
+        Errors.errors.onerror((err) => {
+            var newerrorpanel = new ErrorPanel(false, false, false);
+            newerrorpanel.addError(err);
+            container.add(newerrorpanel);
+
+        }, container._id);
+        for (var x = 0; x < all.length; x++) {
             var file = all[x];
             if (file.isDirectory()) {
-                await TestAction.testNode(file.files,container);
+                await TestAction.testNode(file.files, container);
 
             } else {
                 await typescript.initService();
@@ -34,35 +44,44 @@ export class TestAction {
                 if (text !== undefined) {
                     text = text.toLowerCase();
                     console.log("test " + file.fullpath);
-                    if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
-                        var func = (await import(file.fullpath.substring(0, file.fullpath.length - 3))).test;
-                        if(typeof func==="function"){
-							var ret = await func(new Test());
-							if (ret instanceof Component) {
-								$(ret.dom).css({position:"relative"});
-								ret.width=400;
-								var head=new HTMLPanel();
-								head.value="<b>"+file.fullpath+"</b>";
-								container.add(head);
-                                container.add(ret);
+                    try {
+                        if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
+                            var func = (await import(file.fullpath.substring(0, file.fullpath.length - 3))).test;
+                            if (typeof func === "function") {
+                                alltests++;
+                                var ret = await func(new Test());
+                                if (ret instanceof Component) {
+                                    $(ret.dom).css({ position: "relative" });
+                                    ret.width = "100%";
+                                    var head = new HTMLPanel();
+                                    head.value = "<b>" + file.fullpath + "</b>";
+                                    container.add(head);
+                                    container.add(ret);
+                                }
                             }
                         }
+                    } catch (err) {
+                        failedtests++;
+                        var newerrorpanel = new ErrorPanel(false, false, false);
+                        newerrorpanel.addError({error:err});
+                        container.add(newerrorpanel);
                     }
                 }
             }
         }
-       // if(isRoot&&container._components.length>0){
-        	
-      //  }
+        console.log("Finished "+alltests+" Tests. "+(failedtests)+" Tests failed.");
+        Errors.errors.offerror(container._id);
     }
+
 }
 
 @$Class("jassijs.base.Test")
 export class Test {
-	/**
-	 * fails if the condition is false
-	 * @parameter condition 
-	 **/
+
+    /**
+     * fails if the condition is false
+     * @parameter condition 
+     **/
     expectEqual(condition: boolean) {
         if (!condition)
             throw new Error("Test fails");
@@ -74,7 +93,7 @@ export class Test {
     expectError(func) {
         try {
 
-            if (func.toString().startsWith("async ")){
+            if (func.toString().startsWith("async ")) {
                 var errobj;
                 try {
                     throw new Error("test fails");
@@ -89,10 +108,10 @@ export class Test {
                     var k = 1;//io
                 });
                 return;
-            }else {
+            } else {
                 func();
             }
-        } catch{
+        } catch {
             return;//io
         }
         throw new Error("test fails");
@@ -102,4 +121,14 @@ export class Tests {
 
 }
 
+//Selftest
+export async function test(test: Test) {
 
+    test.expectEqual(1 === 1);
+    test.expectError(() => {
+        var h;
+        h.a = 9;
+    });
+    
+
+}

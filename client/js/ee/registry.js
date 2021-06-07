@@ -1,1 +1,0 @@
-define("ee/registry",["require"], function(require) {return {  default: {	}}});

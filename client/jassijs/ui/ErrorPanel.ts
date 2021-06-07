@@ -14,15 +14,21 @@ export class ErrorPanel extends Panel {
     _container;
     IDToolbar: Panel;
     IDSearch: Button;
+    withControls: boolean;
+    withLastErrors: boolean;
+    withNewErrors: boolean;
     /**
  * shows errors 
  * @class jassijs.ui.ErrorPanel
  */
-    constructor() {
+    constructor(withControls = true, withLastErrors = true, withNewErrors = true) {
         super();
+        this.withControls = withControls;
+        this.withLastErrors = withLastErrors;
+        this.withNewErrors = withNewErrors;
         this.layout();
     }
-    @$Action ({
+    @$Action({
         name: "Administration/Errors",
         icon: "mdi mdi-emoticon-confused-outline",
     })
@@ -31,35 +37,40 @@ export class ErrorPanel extends Panel {
     }
     layout() {
         var _this = this;
-        this.IDClear = new Button();
-        this.IDClear.tooltip = "Clear log";
-        this.IDClear.icon = "mdi mdi-delete";
-        this.IDClear.onclick(function () {
-            _this.clear();
-            jassijs.errors.items = [];
-        });
-        this.IDClear.width = 35;
-        this.IDSearch = new Button();
-        this.IDSearch.tooltip = "search errors";
-        this.IDSearch.icon = "mdi mdi-file-search-outline";
-        this.IDSearch.onclick(function () {
-            _this.search();
+        if (this.withControls) {
+            this.IDClear = new Button();
+            this.IDClear.tooltip = "Clear log";
+            this.IDClear.icon = "mdi mdi-delete";
+            this.IDClear.onclick(function () {
+                _this.clear();
+                jassijs.errors.items = [];
+            });
+            this.IDClear.width = 35;
+            this.IDSearch = new Button();
+            this.IDSearch.tooltip = "search errors";
+            this.IDSearch.icon = "mdi mdi-file-search-outline";
+            this.IDSearch.onclick(function () {
+                _this.search();
 
-        });
-        this.IDToolbar = new Panel();
-        this.IDToolbar.width = "99%";
+            });
+            this.IDToolbar = new Panel();
+            this.IDToolbar.width = "99%";
 
-        this.IDToolbar.add(this.IDClear);
-        this.IDToolbar.add(this.IDSearch);
-        this.IDToolbar.height = 20;
-        super.add(this.IDToolbar);
+            this.IDToolbar.add(this.IDClear);
+            this.IDToolbar.add(this.IDSearch);
+            this.IDToolbar.height = 20;
+            super.add(this.IDToolbar);
+        }
         var value = $('<span><font  size="2"><span class="errorpanel"></span></font></span>')[0];
         this.dom.appendChild(value);
         this._container = $(this.dom).find(".errorpanel")[0];
-        this.registerError();
-        //old Errors
-        for (var x = 0; x < jassijs.errors.items.length; x++) {
-            this.addError(jassijs.errors.items[x]);
+        if (this.withNewErrors)
+            this.registerError();
+        if (this.withLastErrors) {
+            //old Errors
+            for (var x = 0; x < jassijs.errors.items.length; x++) {
+                this.addError(jassijs.errors.items[x]);
+            }
         }
         if (window["jassijs_debug"] === undefined)
             window["jassijs_debug"] = { variables: [] };
@@ -72,7 +83,7 @@ export class ErrorPanel extends Panel {
         var typescript = (await import("jassijs_editor/util/Typescript")).default;
         await typescript.initService();
         var all = await typescript.getDiagnosticsForAll();
-        if(all.length===0)
+        if (all.length === 0)
             $.notify("no Errors found", "info", { position: "right" });
         for (var x = 0; x < all.length; x++) {
             var diag = all[x];
@@ -106,11 +117,11 @@ export class ErrorPanel extends Panel {
             msg = error.infoMsg + "<br>";
         } else {
             var sstack = "";
-            var m=error.error?.message;
-            if(!m)
-                m="";
-            if(m.messageText)
-                m=m.messageText;
+            var m = error.error?.message;
+            if (!m)
+                m = "";
+            if (m.messageText)
+                m = m.messageText;
             if (error.error) {
                 sstack = m.replaceAll(":", "") + "(" + error.filename + ":" + error.lineno + ":" + error.colno + ")\n";
                 if (error.error.stack !== undefined)
@@ -127,8 +138,8 @@ export class ErrorPanel extends Panel {
                 var line = stack[i];
                 if (line.indexOf(".ts:") > 0) {
                     msg = msg + '<div>' + line.substring(0, line.lastIndexOf("(")) +
-                    '<a href="#" onclick="jassijs.ErrorPanel.prototype.onsrclink(this);">' +
-                   line.substr(line.lastIndexOf("(")+1,line.length-1) + '</a>)' + "" + '</div>';
+                        '<a href="#" onclick="jassijs.ErrorPanel.prototype.onsrclink(this);">' +
+                        line.substr(line.lastIndexOf("(") + 1, line.length - 1) + '</a>)' + "" + '</div>';
 
                 } else {
                     if (line.split(":").length < 4)
@@ -138,11 +149,11 @@ export class ErrorPanel extends Panel {
                     line = line.replace("\n", "");
                     var ident = (i === 0 ? "0" : "20");
                     msg = msg + '<div style="text-indent:' + ident + 'px;">' + line.substring(0, poshttp) +
-                    '<a href="#" onclick="jassijs.ErrorPanel.prototype.onsrclink(this);">' +
-                    url + '</a>' + (line.endsWith(")") ? ")" : "") + '</div>';
+                        '<a href="#" onclick="jassijs.ErrorPanel.prototype.onsrclink(this);">' +
+                        url + '</a>' + (line.endsWith(")") ? ")" : "") + '</div>';
 
                 }
-                          }
+            }
 
         }
         var value = $('<span>' + msg + '</span>');

@@ -77,7 +77,7 @@ function getRandomInt(max) {
 }
 export async function test() {
     var all=await Employees.find({where:"id>:p",whereParams:{p:5}});
-    debugger;
+
 }
 export async function test2() {
     var em = new Employees();

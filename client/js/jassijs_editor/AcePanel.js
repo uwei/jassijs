@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/jassi", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs_editor/Debugger"], function (require, exports, jassi_1, acelib_1, Typescript_1, Jassi_1, Registry_1, CodePanel_1) {
+define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs_editor/Debugger"], function (require, exports, acelib_1, Typescript_1, Jassi_1, Registry_1, CodePanel_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.AcePanel = void 0;
+    exports.test = exports.AcePanel = void 0;
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
     * @class jassijs.ui.CodePanel
@@ -517,16 +517,18 @@ define(["require", "exports", "jassijs/jassi", "jassijs_editor/ext/acelib", "jas
             }
         }
     }
-    jassi_1.default.test = async function () {
+    async function test() {
         var dlg = new AcePanel();
         dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
-        dlg.mode = "javascript";
+        dlg.mode = "typescript";
+        dlg.height = 100;
         //dlg._editor.renderer.setShowGutter(false);		
         //dlg._editor.getSession().addGutterDecoration(1,"error_line");
         //  dlg._editor.getSession().setBreakpoint(1);
         // dlg._editor.getSession().setBreakpoint(2);
         var h = dlg.getBreakpoints();
         return dlg;
-    };
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=AcePanel.js.map

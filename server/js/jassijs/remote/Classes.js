@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.classes = exports.Classes = void 0;
+exports.test = exports.classes = exports.Classes = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
 function $Class(longclassname) {
     return function (pclass) {
@@ -114,4 +114,10 @@ exports.Classes = Classes;
 ;
 let classes = new Classes();
 exports.classes = classes;
+async function test(t) {
+    var cl = classes.getClass("jassijs.ui.Button");
+    t.expectEqual(cl === await classes.loadClass("jassijs.ui.Button"));
+    t.expectEqual(classes.getClassName(cl) === "jassijs.ui.Button");
+}
+exports.test = test;
 //# sourceMappingURL=Classes.js.map

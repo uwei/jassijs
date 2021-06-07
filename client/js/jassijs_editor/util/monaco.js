@@ -15,7 +15,6 @@ define(["require", "exports", "jassijs/ui/Component"], function (require, export
     function test() {
         var ed = new MonacoEditor();
         var hh = monaco.languages.typescript.typescriptDefaults;
-        debugger;
         //@ts-ignore
         var editor = monaco.editor.create(ed.dom, {
             value: ['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),

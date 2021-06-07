@@ -2,6 +2,7 @@
 import registry from "jassijs/remote/Registry";
 
 
+
 function $Class(longclassname: string): Function {
     return function (pclass) {
         registry.register("$Class", pclass, longclassname);
@@ -111,3 +112,9 @@ export class Classes {
 
 let classes = new Classes();
 export { classes };
+
+export async function test(t){
+    var cl=classes.getClass("jassijs.ui.Button");
+    t.expectEqual(cl===await classes.loadClass("jassijs.ui.Button"));
+    t.expectEqual(classes.getClassName(cl)==="jassijs.ui.Button");
+}

@@ -9,6 +9,7 @@ import { CodeEditor } from "jassijs_editor/CodeEditor";
 import { ComponentDesigner } from "jassijs_editor/ComponentDesigner";
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { propertyeditor } from "jassijs/base/PropertyEditorService";
+import { classes } from "jassijs/remote/Classes";
 
 @$Class("jassijs_editor.ComponentExplorer")
 export class ComponentExplorer extends Panel {
@@ -140,10 +141,10 @@ export class ComponentExplorer extends Panel {
     	super.destroy();
     }
 }
-jassijs.test = async function () {
-    var dlg = new jassijs.ui.ComponentExplorer();
+export async function test() {
+    var dlg = new ComponentExplorer(undefined,undefined);
     dlg.getComponentName = function (item) {
-        return "hallo";
+        return classes.getClassName(item);
     };
     dlg.value = dlg;
     return dlg;

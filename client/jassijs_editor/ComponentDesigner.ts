@@ -590,16 +590,16 @@ export class ComponentDesigner extends Panel{
             	this._draganddropper.isDragEnabled=undefined;
                 this._draganddropper.uninstall();
             }
-        	this._propertyEditor.destroy();
-			this._componentPalette.destroy();
-            this._componentExplorer.destroy();
-            this._invisibleComponents.destroy();
+        	this._propertyEditor?.destroy();
+			this._componentPalette?.destroy();
+            this._componentExplorer?.destroy();
+            this._invisibleComponents?.destroy();
             super.destroy();
         }
         
     }
    export async function test(){
-        
+        return new ComponentDesigner();
          
     };
    
