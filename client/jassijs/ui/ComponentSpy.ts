@@ -124,7 +124,10 @@ export class ComponentSpy extends Panel {
         super.destroy();
     }
 }
-jassijs.test = function () {
-    return new ComponentSpy();
+export function test() {
+    var sp=new ComponentSpy();
+    sp.update();
+    sp.height=100;
+    return sp;
 }
 jassijs.componentSpy = new ComponentSpy();

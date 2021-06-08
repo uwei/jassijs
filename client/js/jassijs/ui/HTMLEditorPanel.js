@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_1, HTMLPanel_1, Button_1, Jassi_1, tinymce_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.HTMLEditorPanel = void 0;
+    exports.te = exports.HTMLEditorPanel = void 0;
     class Me {
     }
     let HTMLEditorPanel = class HTMLEditorPanel extends Panel_1.Panel {
@@ -69,11 +69,13 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassi
         __metadata("design:paramtypes", [Object])
     ], HTMLEditorPanel);
     exports.HTMLEditorPanel = HTMLEditorPanel;
-    Jassi_1.default.test = async function () {
-        var dlg = new HTMLEditorPanel();
+    function te() {
+        //var dlg=new HTMLEditorPanel();
+        // dlg.value="Sample text";
         //	dlg.value=jassijs.db.load("de.Kunde",9);	
-        return dlg;
-    };
+        //return dlg;
+    }
+    exports.te = te;
 });
 // return CodeEditor.constructor;
 //# sourceMappingURL=HTMLEditorPanel.js.map

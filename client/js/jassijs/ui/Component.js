@@ -412,7 +412,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
             if (value !== undefined) {
                 var ContextMenu = Classes_1.classes.getClass("jassijs.ui.ContextMenu");
                 if (value instanceof ContextMenu === false) {
-                    throw "value is not of type jassijs.ui.ContextMenu";
+                    throw new Error("value is not of type jassijs.ui.ContextMenu");
                 }
                 this._contextMenu = value;
                 value.registerComponent(this);

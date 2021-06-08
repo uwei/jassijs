@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/MenuItem", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DesignDummy"], function (require, exports, Container_1, Property_1, MenuItem_1, Jassi_1, Component_1, DesignDummy_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Menu = void 0;
+    exports.test = exports.Menu = void 0;
     /*declare global {
         interface JQuery {
                 //menu: any;
@@ -138,5 +138,14 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
         __metadata("design:paramtypes", [Object])
     ], Menu);
     exports.Menu = Menu;
+    function test() {
+        var men = new Menu();
+        var it = new MenuItem_1.MenuItem();
+        it.text = "Hallo";
+        it.onclick(() => alert("ok"));
+        men.add(it);
+        return men;
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=Menu.js.map

@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs_editor/util/Parser", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/base/PropertyEditorService"], function (require, exports, Jassi_1, Panel_1, Image_1, Parser_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs_editor/util/Parser", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/base/PropertyEditorService"], function (require, exports, Jassi_1, Panel_1, Image_1, Parser_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1, Component_1) {
     "use strict";
     var PropertyEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.TestProperties = exports.PropertyEditor = void 0;
+    exports.test = exports.PropertyEditorTestSubProperties = exports.PropertyEditor = void 0;
     let PropertyEditor = PropertyEditor_1 = class PropertyEditor extends Panel_1.Panel {
         /**
         * edit object properties
@@ -713,16 +713,85 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         __metadata("design:paramtypes", [Object])
     ], PropertyEditor);
     exports.PropertyEditor = PropertyEditor;
+    let PropertyEditorTestSubProperties = class PropertyEditorTestSubProperties {
+        constructor() {
+            this.num = 19;
+            this.text = "prop";
+        }
+    };
+    __decorate([
+        Property_1.$Property(),
+        __metadata("design:type", Number)
+    ], PropertyEditorTestSubProperties.prototype, "num", void 0);
+    __decorate([
+        Property_1.$Property(),
+        __metadata("design:type", String)
+    ], PropertyEditorTestSubProperties.prototype, "text", void 0);
+    PropertyEditorTestSubProperties = __decorate([
+        Jassi_1.$Class("jassijs.ui.PropertyEditorTestSubProperties")
+    ], PropertyEditorTestSubProperties);
+    exports.PropertyEditorTestSubProperties = PropertyEditorTestSubProperties;
     let TestProperties = class TestProperties {
+        constructor() {
+            this.html = "sample";
+        }
+        func(any) {
+        }
+        ;
     };
     __decorate([
         Property_1.$Property({ decription: "name of the dialog", }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
+    __decorate([
+        Property_1.$Property(),
+        __metadata("design:type", Boolean)
+    ], TestProperties.prototype, "checked", void 0);
+    __decorate([
+        Property_1.$Property({ type: "color" }),
+        __metadata("design:type", String)
+    ], TestProperties.prototype, "color", void 0);
+    __decorate([
+        Property_1.$Property({ type: "componentselector", componentType: "jassi.ui.Component" }),
+        __metadata("design:type", Component_1.Component)
+    ], TestProperties.prototype, "component", void 0);
+    __decorate([
+        Property_1.$Property({ type: "databinder" }),
+        __metadata("design:type", Object)
+    ], TestProperties.prototype, "databinder", void 0);
+    __decorate([
+        Property_1.$Property({ type: "dbobject", componentType: "de.Kunde" }),
+        __metadata("design:type", Object)
+    ], TestProperties.prototype, "dbobject", void 0);
+    __decorate([
+        Property_1.$Property({ default: 80 }),
+        __metadata("design:type", Number)
+    ], TestProperties.prototype, "num", void 0);
+    __decorate([
+        Property_1.$Property({ type: "font" }),
+        __metadata("design:type", Number)
+    ], TestProperties.prototype, "font", void 0);
+    __decorate([
+        Property_1.$Property({ type: "function" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], TestProperties.prototype, "func", null);
+    __decorate([
+        Property_1.$Property({ type: "html" }),
+        __metadata("design:type", String)
+    ], TestProperties.prototype, "html", void 0);
+    __decorate([
+        Property_1.$Property({ type: "image" }),
+        __metadata("design:type", String)
+    ], TestProperties.prototype, "image", void 0);
+    __decorate([
+        Property_1.$Property({ type: "json", componentType: "jassijs.ui.PropertyEditorTestSubProperties" }),
+        __metadata("design:type", Object)
+    ], TestProperties.prototype, "json", void 0);
     TestProperties = __decorate([
         Jassi_1.$Class("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
-    exports.TestProperties = TestProperties;
     function test() {
         var ret = new PropertyEditor(undefined);
         ret.value = new TestProperties();

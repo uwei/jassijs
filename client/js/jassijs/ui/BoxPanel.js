@@ -141,8 +141,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassi
         ret.add(me.tb);
         ret.add(me.tb2);
         ret.spliter = [40, 60];
-        ret.height = "400px";
-        ret.width = "400px";
+        ret.height = 50;
+        ret.width = "100%";
         return ret;
     }
     exports.test = test;

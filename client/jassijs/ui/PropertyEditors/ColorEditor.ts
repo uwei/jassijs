@@ -115,7 +115,7 @@ export class ColorEditor extends Editor{
         super.callEvent("edit", param);
     }
 }
-export function test(){
+export function test3(){
 	
 	var prop=new PropertyEditor(undefined);
 	prop.value=new Textbox();

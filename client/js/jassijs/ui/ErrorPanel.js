@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Jassi", "jassijs/ui/Button", "jassijs_editor/util/TSSourceMap", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_1, Errors_1, Jassi_1, Button_1, TSSourceMap_1, Router_1, Actions_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ErrorPanel = void 0;
+    exports.test2 = exports.ErrorPanel = void 0;
     let ErrorPanel = class ErrorPanel extends Panel_1.Panel {
         /**
      * shows errors
@@ -205,11 +205,11 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
         __metadata("design:paramtypes", [Object, Object, Object])
     ], ErrorPanel);
     exports.ErrorPanel = ErrorPanel;
-    function test() {
+    function test2() {
         var ret = new ErrorPanel();
         return ret;
     }
-    exports.test = test;
+    exports.test2 = test2;
     ;
     ErrorPanel.prototype["onsrclink"] = function (param) {
         var data = param.text.split(":");

@@ -141,6 +141,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
     exports.DBObjectExplorer = DBObjectExplorer;
     async function test() {
         var ret = new DBObjectExplorer();
+        ret.height = 100;
         return ret;
     }
     exports.test = test;

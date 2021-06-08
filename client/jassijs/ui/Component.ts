@@ -471,7 +471,7 @@ export class Component {
         if (value !== undefined) {
             var ContextMenu = classes.getClass("jassijs.ui.ContextMenu");
             if (value instanceof ContextMenu === false) {
-                throw "value is not of type jassijs.ui.ContextMenu";
+                throw new Error("value is not of type jassijs.ui.ContextMenu");
             }
             this._contextMenu = value;
             value.registerComponent(this);

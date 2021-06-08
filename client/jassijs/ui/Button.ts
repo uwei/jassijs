@@ -86,7 +86,8 @@ export async function test() {
     var pan = new Panel();
     var but = new Button();
     but.text = "Hallo";
-    but.icon ="res/red.jpg"; //"mdi mdi-car";//"res/red.jpg";
+    but.icon ="mdi mdi-car"; //"mdi mdi-car";//"res/red.jpg";
+    but.onclick(()=>alert(1));
     //alert(but.icon);
     pan.add(but);
     pan.width = 100;

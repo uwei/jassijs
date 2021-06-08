@@ -7,20 +7,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs_editor/util/Typescript", "jassijs/ui/Component", "jassijs/ui/Container", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel", "jassijs/base/Errors", "jassijs/ui/ErrorPanel"], function (require, exports, Jassi_1, Actions_1, Typescript_1, Component_1, Container_1, BoxPanel_1, Windows_1, HTMLPanel_1, Errors_1, ErrorPanel_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs_editor/util/Typescript", "jassijs/ui/Component", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel", "jassijs/base/Errors", "jassijs/ui/ErrorPanel"], function (require, exports, Jassi_1, Actions_1, Typescript_1, Component_1, BoxPanel_1, Windows_1, HTMLPanel_1, Errors_1, ErrorPanel_1) {
     "use strict";
     var TestAction_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Tests = exports.Test = exports.TestAction = void 0;
+    class MyContainer extends BoxPanel_1.BoxPanel {
+        constructor() {
+            super(...arguments);
+            this.alltests = 0;
+            this.failedtests = 0;
+            this.finished = false;
+        }
+        update() {
+            if (this.failedtests === 0) {
+            }
+            this.statustext.css({
+                color: (this.failedtests === 0 ? "green" : "red")
+            });
+            this.statustext.value = (this.finished ? "Finished " : "test... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
+        }
+    }
     let TestAction = TestAction_1 = class TestAction {
         static async testNode(all, container = undefined) {
-            var alltests = 0;
-            var failedtests = 0;
-            //var isRoot=false;
+            var isRoot = false;
             if (container === undefined) {
-                container = new BoxPanel_1.BoxPanel();
+                container = new MyContainer();
                 Windows_1.default.add(container, "Tests");
-                //	isRoot=true;
+                container.statustext = new HTMLPanel_1.HTMLPanel();
+                container.add(container.statustext);
+                isRoot = true;
             }
             Errors_1.Errors.errors.onerror((err) => {
                 var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
@@ -37,12 +53,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
                     var text = Typescript_1.default.getCode(file.fullpath);
                     if (text !== undefined) {
                         text = text.toLowerCase();
-                        console.log("test " + file.fullpath);
                         try {
                             if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
+                                console.log("test " + file.fullpath);
                                 var func = (await new Promise((resolve_1, reject_1) => { require([file.fullpath.substring(0, file.fullpath.length - 3)], resolve_1, reject_1); })).test;
                                 if (typeof func === "function") {
-                                    alltests++;
+                                    container.alltests++;
+                                    container.update();
                                     var ret = await func(new Test());
                                     if (ret instanceof Component_1.Component) {
                                         $(ret.dom).css({ position: "relative" });
@@ -56,15 +73,24 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
                             }
                         }
                         catch (err) {
-                            failedtests++;
                             var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
-                            newerrorpanel.addError({ error: err });
+                            newerrorpanel.addError({
+                                error: err
+                            });
+                            newerrorpanel.css({
+                                background_color: "red"
+                            });
                             container.add(newerrorpanel);
+                            container.failedtests++;
+                            container.update();
                         }
                     }
                 }
             }
-            console.log("Finished " + alltests + " Tests. " + (failedtests) + " Tests failed.");
+            if (isRoot) {
+                container.finished = true;
+                container.update();
+            }
             Errors_1.Errors.errors.offerror(container._id);
         }
     };
@@ -73,7 +99,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
             name: "Test"
         }),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Array, Container_1.Container]),
+        __metadata("design:paramtypes", [Array, MyContainer]),
         __metadata("design:returntype", Promise)
     ], TestAction, "testNode", null);
     TestAction = TestAction_1 = __decorate([

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_1, Jassi_1, Property_1, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.HTMLPanel = void 0;
+    exports.test = exports.HTMLPanel = void 0;
     var bugtinymce = undefined;
     let HTMLPanel = class HTMLPanel extends DataComponent_1.DataComponent {
         /*[
@@ -227,5 +227,11 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel);
     exports.HTMLPanel = HTMLPanel;
+    function test() {
+        var ret = new HTMLPanel();
+        ret.value = "Sample <b>Text</b>";
+        return ret;
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=HTMLPanel.js.map

@@ -335,7 +335,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
     ], FileExplorer);
     exports.FileExplorer = FileExplorer;
     function test() {
-        return new FileExplorer();
+        var exp = new FileExplorer();
+        exp.height = 100;
+        return exp;
     }
     exports.test = test;
 });

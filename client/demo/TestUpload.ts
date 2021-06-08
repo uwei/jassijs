@@ -41,6 +41,5 @@ export class TestUpload extends Panel {
 export async function test(){
 	var ret=new TestUpload();
 	var data = Papa;
-	debugger;
 	return ret;
 }

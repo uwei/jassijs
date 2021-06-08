@@ -76,7 +76,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
         static async show() {
             await new ImageEditor_1(undefined, undefined).showDialog();
         }
-        async showDialog() {
+        async showDialog(onlytest = undefined) {
             if (!this.dialog) {
                 var _this = this;
                 this.dialog = new Panel_1.Panel();
@@ -105,13 +105,15 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
                     _this._onchange();
                     console.log(data);
                 };
-                for (var x = 1; x < all.length; x++) {
+                var len = onlytest ? 20 : all.length;
+                for (var x = 1; x < len; x++) {
                     var icon = all[x].split(":")[0];
                     html = html + "<span title='" + icon + "' onclick=ImageEditorClicked('" + icon + "') class='mdi " + icon + "'></span>";
                 }
                 var node = $("<span style='font-size:18pt'>" + html + "</span>");
                 icons.__dom.appendChild(node[0]);
-                $(this.dialog.__dom).dialog({ height: "400", width: "400" });
+                if (!onlytest)
+                    $(this.dialog.__dom).dialog({ height: "400", width: "400" });
             }
         }
     };
@@ -133,7 +135,8 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
     exports.ImageEditor = ImageEditor;
     function test() {
         var ed = new ImageEditor(undefined, undefined);
-        ed.showDialog();
+        ed.showDialog(true);
+        return ed.dialog;
     }
     exports.test = test;
 });

@@ -221,4 +221,8 @@ export class HTMLPanel extends DataComponent {
     }
 }
 
-
+export function test(){
+    var ret=new HTMLPanel();
+    ret.value="Sample <b>Text</b>";
+    return ret;
+}

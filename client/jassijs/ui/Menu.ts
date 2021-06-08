@@ -137,3 +137,11 @@ export class Menu extends Container{
 }
  
 
+export function test(){
+    var men=new Menu();
+    var it=new MenuItem();
+    it.text="Hallo";
+    it.onclick(()=>alert("ok"));
+    men.add(it);
+    return men;
+}

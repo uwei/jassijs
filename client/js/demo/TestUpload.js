@@ -43,7 +43,6 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jass
     async function test() {
         var ret = new TestUpload();
         var data = papaparse_1.Papa;
-        debugger;
         return ret;
     }
     exports.test = test;

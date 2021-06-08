@@ -53,4 +53,9 @@ export class Checkbox extends DataComponent{
         }
        
     }
-    //@class({longname:"jassijs.ui.Checkbox"})
+    export function test(){
+        var cb=new Checkbox();
+        cb.label="label";
+        cb.value=true;
+        return cb;
+    }

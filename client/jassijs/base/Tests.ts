@@ -9,23 +9,41 @@ import windows from "jassijs/base/Windows";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Errors } from "jassijs/base/Errors";
 import { ErrorPanel } from "jassijs/ui/ErrorPanel";
+import { Panel } from "jassijs/ui/Panel";
 
 
 
+class MyContainer extends BoxPanel {
+    statustext: HTMLPanel;
+    alltests = 0;
+    failedtests = 0;
+    finished = false;
+    update() {
+        if (this.failedtests === 0) {
+
+        }
+        this.statustext.css({
+            color: (this.failedtests === 0 ? "green" : "red")
+        });
+        this.statustext.value = (this.finished ? "Finished " : "test... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed."
+    }
+}
 @$ActionProvider("jassijs.remote.FileNode")
 @$Class("jassijs.ui.TestAction")
 export class TestAction {
     @$Action({
         name: "Test"
     })
-    static async testNode(all: FileNode[], container: Container = undefined) {
-        var alltests=0;
-        var failedtests=0;
-        //var isRoot=false;
+    static async testNode(all: FileNode[], container: MyContainer = undefined) {
+
+        var isRoot = false;
         if (container === undefined) {
-            container = new BoxPanel();
+            container = new MyContainer();
             windows.add(container, "Tests");
-            //	isRoot=true;
+            container.statustext = new HTMLPanel();
+
+            container.add(container.statustext);
+            isRoot = true;
         }
         Errors.errors.onerror((err) => {
             var newerrorpanel = new ErrorPanel(false, false, false);
@@ -43,12 +61,13 @@ export class TestAction {
                 var text: string = typescript.getCode(file.fullpath);
                 if (text !== undefined) {
                     text = text.toLowerCase();
-                    console.log("test " + file.fullpath);
                     try {
                         if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
+                            console.log("test " + file.fullpath);
                             var func = (await import(file.fullpath.substring(0, file.fullpath.length - 3))).test;
                             if (typeof func === "function") {
-                                alltests++;
+                                container.alltests++;
+                                container.update();
                                 var ret = await func(new Test());
                                 if (ret instanceof Component) {
                                     $(ret.dom).css({ position: "relative" });
@@ -61,15 +80,24 @@ export class TestAction {
                             }
                         }
                     } catch (err) {
-                        failedtests++;
                         var newerrorpanel = new ErrorPanel(false, false, false);
-                        newerrorpanel.addError({error:err});
+                        newerrorpanel.addError({
+                            error: err
+                        });
+                        newerrorpanel.css({
+                            background_color: "red"
+                        });
                         container.add(newerrorpanel);
+                        container.failedtests++;
+                        container.update();
                     }
                 }
             }
         }
-        console.log("Finished "+alltests+" Tests. "+(failedtests)+" Tests failed.");
+        if (isRoot) {
+            container.finished = true;
+            container.update();
+        }
         Errors.errors.offerror(container._id);
     }
 
@@ -129,6 +157,6 @@ export async function test(test: Test) {
         var h;
         h.a = 9;
     });
-    
+
 
 }

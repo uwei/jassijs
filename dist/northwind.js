@@ -1101,7 +1101,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1622984379867,
+                "date": 1623092962878,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -1113,7 +1113,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Categories.ts": {
-                "date": 1622985438512,
+                "date": 1623093051242,
                 "northwind.Categories": {
                     "$DBObject": []
                 }
@@ -1125,7 +1125,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1622985442891,
+                "date": 1623093098474,
                 "northwind.Employees": {
                     "$DBObject": []
                 }
@@ -1143,7 +1143,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Products.ts": {
-                "date": 1622985451618,
+                "date": 1623093056588,
                 "northwind.Products": {
                     "$DBObject": []
                 }
@@ -1224,7 +1224,6 @@ define("northwind/remote/Categories", ["require", "exports", "northwind/remote/P
     ], Categories);
     exports.Categories = Categories;
     async function test() {
-        var all = await Categories.find({ relations: ["*"] });
     }
     exports.test = test;
     ;
@@ -1427,7 +1426,6 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
     }
     async function test() {
         var all = await Employees.find({ where: "id>:p", whereParams: { p: 5 } });
-        debugger;
     }
     exports.test = test;
     async function test2() {
@@ -1637,10 +1635,6 @@ define("northwind/remote/Products", ["require", "exports", "northwind/remote/Cat
     exports.Products = Products;
     async function test() {
         var p = await Products.findOne();
-        debugger;
-        p.ProductName = "udo";
-        var p2 = await Products.findOne({ onlyColumns: [], relations: ["*"] });
-        var k = p === p2;
     }
     exports.test = test;
     ;

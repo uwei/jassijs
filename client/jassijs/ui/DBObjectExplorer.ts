@@ -120,6 +120,6 @@ export class DBObjectExplorer extends Panel {
 
 export async function test() {
 	var ret = new DBObjectExplorer();
-
+	ret.height=100;
 	return ret;
 }

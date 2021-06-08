@@ -119,6 +119,9 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
             if (removeOtherKeys)
                 data = namevaluepair;
             window.localStorage.setItem("jassijs.settings", JSON.stringify(data));
+            if (removeOtherKeys)
+                Settings_1.browserSettings = {};
+            Object.assign(Settings_1.browserSettings, namevaluepair);
         }
         if (scope === "user" || scope === "allusers") {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -178,17 +181,35 @@ async function autostart() {
     await Settings.load();
 }
 exports.autostart = autostart;
-async function test() {
-    //
-    //console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace1", "browser"));
-    console.log(await Settings.save("Development_DefaultEditor", "monaco", "user"));
-    //  console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace3", "allusers"));
-    await Settings.load();
-    // await Settings.remove(Settings.keys.Development_DefaultEditor, "browser");
-    console.log(Settings.gets("Development_DefaultEditor"));
-    await Settings.load();
-    console.log(Settings.gets("Development_DefaultEditor"));
-    //console.log(await settings.gets(settings.keys.Development_DefaultEditor));
+async function test(t) {
+    try {
+        await Settings.remove("antestsetting", "user");
+        await Settings.remove("antestsetting", "browser");
+        await Settings.remove("antestsetting", "allusers");
+        t.expectEqual(Settings.gets("antestsetting") === undefined);
+        await Settings.load();
+        t.expectEqual(Settings.gets("antestsetting") === undefined);
+        await Settings.save("antestsetting", "1", "allusers");
+        t.expectEqual(Settings.gets("antestsetting") === "1");
+        await Settings.load();
+        t.expectEqual(Settings.gets("antestsetting") === "1");
+        await Settings.save("antestsetting", "2", "user");
+        t.expectEqual(Settings.gets("antestsetting") === "2");
+        await Settings.load();
+        t.expectEqual(Settings.gets("antestsetting") === "2");
+        await Settings.save("antestsetting", "3", "browser");
+        t.expectEqual(Settings.gets("antestsetting") === "3");
+        await Settings.load();
+        t.expectEqual(Settings.gets("antestsetting") === "3");
+    }
+    catch (ex) {
+        throw ex;
+    }
+    finally {
+        await Settings.remove("antestsetting", "user");
+        await Settings.remove("antestsetting", "browser");
+        await Settings.remove("antestsetting", "allusers");
+    }
 }
 exports.test = test;
 //# sourceMappingURL=Settings.js.map

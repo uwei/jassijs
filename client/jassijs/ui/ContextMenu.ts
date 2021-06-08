@@ -1,13 +1,13 @@
 import "jassijs/ext/jquery.contextmenu";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import {Menu} from "jassijs/ui/Menu";
-import {InvisibleComponent} from "jassijs/ui/InvisibleComponent";
-import {Component,  $UIComponent } from "jassijs/ui/Component";
+import { Menu } from "jassijs/ui/Menu";
+import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
+import { Component, $UIComponent } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { $Property } from "jassijs/ui/Property";
 import { Actions, Action } from "jassijs/base/Actions";
-import {MenuItem} from "jassijs/ui/MenuItem";
+import { MenuItem } from "jassijs/ui/MenuItem";
 
 
 declare global {
@@ -18,20 +18,20 @@ declare global {
 //https://github.com/s-yadav/contextMenu.js/
 @$UIComponent({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] })
 @$Class("jassijs.ui.ContextMenu")
-export  class ContextMenu extends InvisibleComponent {
+export class ContextMenu extends InvisibleComponent {
     menu: Menu;
     contextComponents;
     _components: Component[];
 
     @$Property()
-	/**
-	 * @member - includes Actions from @ActionProvider for the objects in value
-	 */
+    /**
+     * @member - includes Actions from @ActionProvider for the objects in value
+     */
     includeClassActions: boolean;
     private _value;
-	/**
-	 * @member - the objects for the includeClassActions @ActionProvider if  is enabled
-	 **/
+    /**
+     * @member - the objects for the includeClassActions @ActionProvider if  is enabled
+     **/
     set value(value: any[]) {
         this._value = value;
     }
@@ -53,7 +53,7 @@ export  class ContextMenu extends InvisibleComponent {
         //this.menu._parent=this;
         $(this.menu.dom).addClass("jcontainer");
         this._components = [this.menu];//neede for getEditablecontextComponents
-        this.onbeforeshow(function() {
+        this.onbeforeshow(function () {
             return _this._updateClassActions();
         })
     }
@@ -71,23 +71,23 @@ export  class ContextMenu extends InvisibleComponent {
     /*	registerActions(func:{(any[]):Promise<{name:string,icon?:string,call:(objects:any[])}[]}>){
             this._getActions=func;
         }*/
-    private _removeClassActions(menu){
-    	 for (var y = 0;y < menu._components.length;y++) {
+    private _removeClassActions(menu) {
+        for (var y = 0; y < menu._components.length; y++) {
             var test = menu._components[y];
             if (test["_classaction"] == true) {
                 menu.remove(test);
                 test.destroy();
                 y--;
             }
-            if(test._components!==undefined){
-            	this._removeClassActions(test);
+            if (test._components !== undefined) {
+                this._removeClassActions(test);
             }
         }
     }
-     protected _setDesignMode(enable){
-    	var h=9;
-     	
-     }
+    protected _setDesignMode(enable) {
+        var h = 9;
+
+    }
     private async _updateClassActions() {
 
 
@@ -100,92 +100,92 @@ export  class ContextMenu extends InvisibleComponent {
             actions = actions;//do nothing
         else {
             var a = await Actions.getActionsFor(this.value)//Class Actions
-            for (var x = 0;x < a.length;x++) {
+            for (var x = 0; x < a.length; x++) {
                 actions.push(a[x]);
             }
         }
         actions.forEach(action => {
-        	var path=action.name.split("/");//childmenus
-        	var parent:Menu=this.menu;
-        	for(var i=0;i<path.length;i++){
-        		if(i===path.length-1){
-	            	var men = new MenuItem();
-		            men["_classaction"] = true;
-		            men.text = path[i];
-		            men.icon = action.icon;
-		            men.onclick(() => action.call(_this.value));
-		            parent.add(men);
-        		}else{
-        			var name=path[i];
-        			var found=undefined;
-        			parent._components.forEach((men)=>{
-        				if((<MenuItem>men).text===name)
-        					found=(<MenuItem>men).items;
-        			});
-        			if(found===undefined){
-        				var men= new MenuItem();
-        				men["_classaction"] = true;
-		            	men.text = name;
-		            	parent.add(men);
-		            	parent=men.items;
-        			}else{
-        				parent=found;
-        			}
-        		}
-        	}
+            var path = action.name.split("/");//childmenus
+            var parent: Menu = this.menu;
+            for (var i = 0; i < path.length; i++) {
+                if (i === path.length - 1) {
+                    var men = new MenuItem();
+                    men["_classaction"] = true;
+                    men.text = path[i];
+                    men.icon = action.icon;
+                    men.onclick(() => action.call(_this.value));
+                    parent.add(men);
+                } else {
+                    var name = path[i];
+                    var found = undefined;
+                    parent._components.forEach((men) => {
+                        if ((<MenuItem>men).text === name)
+                            found = (<MenuItem>men).items;
+                    });
+                    if (found === undefined) {
+                        var men = new MenuItem();
+                        men["_classaction"] = true;
+                        men.text = name;
+                        parent.add(men);
+                        parent = men.items;
+                    } else {
+                        parent = found;
+                    }
+                }
+            }
         })
     }
-	_menueChanged(){
-		
-	}
+    _menueChanged() {
+
+    }
     getMainMenu() {
         return this;
     }
-	/**
-	 * register an event if the contextmenu is showing
-	 * @param {function} handler - the function that is called on change
-	 * @returns {boolean} - false if the contextmenu should not been shown
-	 */
+    /**
+     * register an event if the contextmenu is showing
+     * @param {function} handler - the function that is called on change
+     * @returns {boolean} - false if the contextmenu should not been shown
+     */
     @$Property({ default: "function(event){\n\t\n}" })
     onbeforeshow(handler) {
         this.addEvent("beforeshow", handler);
     }
     async _callContextmenu(evt) {
-    	if(evt.preventDefault!==undefined)
-    	    evt.preventDefault();
+        if (evt.preventDefault !== undefined)
+            evt.preventDefault();
         var cancel = this.callEvent("beforeshow", evt);
         if (cancel !== undefined) {
-            for (var x = 0;x < cancel.length;x++) {
+            for (var x = 0; x < cancel.length; x++) {
                 if (cancel[x] !== undefined && cancel[x].then !== undefined)
                     cancel[x] = await cancel[x];
                 if (cancel[x] === false)
                     return;
             }
         }
-        let y=evt.originalEvent.clientY;
-        
+        let y = evt.originalEvent.clientY;
+
         //$(_this.menu.dom).contextMenu("menu","#"+_this.menu._id);//,{triggerOn:'contextmenu'});
         //$(_this.menu.dom).contextMenu('open',evt);
         this.show({ left: evt.originalEvent.clientX, top: y });
-        
+
     }
 
 
-	/**
-	 * register the contextMenu (right click) on the component
-	 * @member {jassijs.ui.Component} - the component which gets the contextmenu
-	 **/
+    /**
+     * register the contextMenu (right click) on the component
+     * @member {jassijs.ui.Component} - the component which gets the contextmenu
+     **/
     registerComponent(component) {
         this.contextComponents.push(component);
         var _this = this;
-        $(component.dom).contextmenu(function(evt) {
+        $(component.dom).contextmenu(function (evt) {
             _this._callContextmenu(evt);
         });
     }
-	/**
-	 * unregister the contextMenu (right click) on the component
-	 * @member {jassijs.ui.Component} - the component which gets the contextmenu
-	 **/
+    /**
+     * unregister the contextMenu (right click) on the component
+     * @member {jassijs.ui.Component} - the component which gets the contextmenu
+     **/
     unregisterComponent(component) {
         //$(component.dom).contextmenu(function(ob){});//now we always can destroy
         $(component.dom).off("contextmenu");
@@ -195,9 +195,9 @@ export  class ContextMenu extends InvisibleComponent {
             this.contextComponents.splice(pos, 1);
     }
 
-	/**
-	 * shows the contextMenu
-	 */
+    /**
+     * shows the contextMenu
+     */
     show(event) {
         //@ts-ignore
         if (this.domWrapper.parentNode.getAttribute('id') === "jassitemp" && this.contextComponents.length > 0) {
@@ -205,20 +205,20 @@ export  class ContextMenu extends InvisibleComponent {
             this.contextComponents[0].domWrapper.appendChild(this.domWrapper);
         }
         var _this = this;
-        window.setTimeout(function() {
+        window.setTimeout(function () {
             $(_this.menu.dom).menu();
             $(_this.menu.dom).menu("destroy");
             $(_this.menu.dom).contextMenu("menu", "#" + _this.menu._id, { triggerOn: 'dummyevent' });
             //correct pos menu not visible
-            
-        
-            if(event.top+$(_this.menu.dom).height()>window.innerHeight){
-                event.top=window.innerHeight-$(_this.menu.dom).height();
+
+
+            if (event.top + $(_this.menu.dom).height() > window.innerHeight) {
+                event.top = window.innerHeight - $(_this.menu.dom).height();
             }
-            if(event.left+$(_this.menu.dom).width()>window.innerWidth){
-                event.left=window.innerWidth-$(_this.menu.dom).width();
+            if (event.left + $(_this.menu.dom).width() > window.innerWidth) {
+                event.left = window.innerWidth - $(_this.menu.dom).width();
             }
-            
+
 
             $(_this.menu.dom).contextMenu('open', event);
         }, 10);
@@ -235,13 +235,13 @@ export  class ContextMenu extends InvisibleComponent {
             var design = action.componentDesignerInvisibleComponentClicked.designButton.dom;
             //return this.show({ top: $(design).offset().top + 30, left: $(design).offset().left + 5 });
             return this.show(design);//{ top: $(design).offset().top, left: $(design).offset().left });
-            
+
         }
         super.extensionCalled(action);
     }
 
     destroy() {
-    	this._value=undefined;
+        this._value = undefined;
         while (this.contextComponents.length > 0) {
             this.unregisterComponent(this.contextComponents[0]);
         }
@@ -271,13 +271,13 @@ export async function test() {
     var nd = new FileNode();
     nd.name = "File";
     cmen.value = [nd];
-    cmen.getActions = async function(objects: []): Promise<Action[]> {
+    cmen.getActions = async function (objects: []): Promise<Action[]> {
         var all = objects;
         return [{
-            name: "getActions-Action", call: function(ob: any[]) {
+            name: "getActions-Action", call: function (ob: any[]) {
                 alert(ob[0]["name"]);
-            }        
-}]
+            }
+        }]
     };
     bt.contextMenu = cmen;
     bt.text = "hallo";

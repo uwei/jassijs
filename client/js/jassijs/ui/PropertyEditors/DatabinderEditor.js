@@ -30,9 +30,15 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/D
             //databinder,"prop"
             var value = this.propertyEditor.getPropertyValue(this.property);
             if (value !== undefined) {
-                var sp = value.replaceAll('"', "").split(",");
-                value = sp[1] + "-" + sp[0];
-                this.component.value = value;
+                try {
+                    var sp = value.replaceAll('"', "").split(",");
+                    value = sp[1] + "-" + sp[0];
+                    this.component.value = value;
+                }
+                catch ( //PropertyEditor without codeeditor
+                _a) { //PropertyEditor without codeeditor
+                    this.component.value = "";
+                }
             }
             else {
                 this.component.value = "";

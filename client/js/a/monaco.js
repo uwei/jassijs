@@ -14,13 +14,15 @@ define(["require", "exports", "jassijs/ui/Component"], function (require, export
     exports.MonacoEditor = MonacoEditor;
     function test() {
         var ed = new MonacoEditor();
-        var hh = monaco.languages.typescript.typescriptDefaults;
-        debugger;
-        //@ts-ignore
-        var editor = monaco.editor.create(ed.dom, {
-            value: ['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
-            language: 'typescript'
-        });
+        /*var hh=monaco.languages.typescript.typescriptDefaults;
+        
+   
+       //@ts-ignore
+       var editor = monaco.editor.create(ed.dom, {
+                       value: ['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
+                       language: 'typescript'
+                   });
+               */
         return ed;
     }
     exports.test = test;

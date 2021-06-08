@@ -9,10 +9,6 @@ define("demo/registry",["require"], function(require) {
 		"date": 1622984213677,
 		"demo/Dialog": {}
 	},
-	"demo/DialogKunde2.ts": {
-		"date": 1622984213677,
-		"demo.DialogKunde2": {}
-	},
 	"demo/DK.ts": {
 		"date": 1622985638961,
 		"demo.DK": {}
@@ -98,7 +94,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.TestTree": {}
 	},
 	"demo/TestUpload.ts": {
-		"date": 1622984213677,
+		"date": 1623178689366,
 		"demo/TestUpload": {}
 	},
 	"demo/TreeContextmenu.ts": {

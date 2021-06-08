@@ -3,11 +3,12 @@ import registry from "jassijs/remote/Registry";
 
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { Setting } from "jassijs/remote/security/Setting";
+import { Test } from "jassijs/base/Tests";
 
 
 declare global {
     export interface KnownSettings {
-      
+
     }
 }
 const proxyhandler = {
@@ -54,16 +55,16 @@ export class Settings extends RemoteObject {
             }
         }
     }
-    static getAll(scope: "browser" | "user" | "allusers"){
-        var ret={};
-        if(scope==="browser"){
-            Object.assign(ret,Settings.browserSettings);
+    static getAll(scope: "browser" | "user" | "allusers") {
+        var ret = {};
+        if (scope === "browser") {
+            Object.assign(ret, Settings.browserSettings);
         }
-        if(scope==="user"){
-            Object.assign(ret,Settings.userSettings);
+        if (scope === "user") {
+            Object.assign(ret, Settings.userSettings);
         }
-        if(scope==="allusers"){
-            Object.assign(ret,Settings.allusersSettings);
+        if (scope === "allusers") {
+            Object.assign(ret, Settings.allusersSettings);
         }
         return ret;
     }
@@ -83,12 +84,12 @@ export class Settings extends RemoteObject {
         }
         if (scope === "user" || scope === "allusers") {
             if (!context?.isServer) {
-                if(scope=="user"&&Settings.userSettings)
+                if (scope == "user" && Settings.userSettings)
                     delete Settings.userSettings[Settings_key];
-                if(scope=="allusers"&&Settings.allusersSettings)
+                if (scope == "allusers" && Settings.allusersSettings)
                     delete Settings.allusersSettings[Settings_key];
                 this.call(this.remove, Settings_key, scope, context);
-                
+
             } else {
                 //@ts-ignore
                 var man = await (await import("jassijs/server/DBManager")).DBManager.get();
@@ -114,34 +115,37 @@ export class Settings extends RemoteObject {
     }
     static async saveAll(namevaluepair: { [key: string]: any }, scope: "browser" | "user" | "allusers", removeOtherKeys = false, context: Context = undefined) {
         if (scope === "browser") {
-        	
+
             let entr = window.localStorage.getItem("jassijs.settings");
             var data = namevaluepair;
             if (entr) {
                 data = JSON.parse(entr);
                 Object.assign(data, namevaluepair);
             }
-            if(removeOtherKeys)
-            	data=namevaluepair;
+            if (removeOtherKeys)
+                data = namevaluepair;
             window.localStorage.setItem("jassijs.settings", JSON.stringify(data));
+            if (removeOtherKeys)
+                Settings.browserSettings = {};
+            Object.assign(Settings.browserSettings, namevaluepair);
         }
         if (scope === "user" || scope === "allusers") {
             if (!context?.isServer) {
-                var props={};
-                Object.assign(props,namevaluepair);
+                var props = {};
+                Object.assign(props, namevaluepair);
 
-                if(scope=="user"&&Settings.userSettings){
-                    if(removeOtherKeys)
-                        Settings.userSettings={};
-                   Object.assign(Settings.userSettings,namevaluepair);
+                if (scope == "user" && Settings.userSettings) {
+                    if (removeOtherKeys)
+                        Settings.userSettings = {};
+                    Object.assign(Settings.userSettings, namevaluepair);
                 }
-                if(scope=="allusers"&&Settings.allusersSettings){
-                    if(removeOtherKeys)
-                        Settings.allusersSettings={};
-                   Object.assign(Settings.allusersSettings,namevaluepair);
+                if (scope == "allusers" && Settings.allusersSettings) {
+                    if (removeOtherKeys)
+                        Settings.allusersSettings = {};
+                    Object.assign(Settings.allusersSettings, namevaluepair);
                 }
                 return await this.call(this.saveAll, props, scope, removeOtherKeys, context);
-            } else { 
+            } else {
                 //@ts-ignore
                 var man = await (await import("jassijs/server/DBManager")).DBManager.get();
                 var id = context.request.user.user;
@@ -172,19 +176,41 @@ export function $SettingsDescriptor(): Function {
 }
 
 
-export async function autostart(){
+export async function autostart() {
     await Settings.load();
 }
 
-export async function test() {
-    //
-    //console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace1", "browser"));
-      console.log(await Settings.save("Development_DefaultEditor", "monaco", "user"));
-    //  console.log(await Settings.save(Settings.keys.Development_DefaultEditor, "ace3", "allusers"));
-    await Settings.load();
-   // await Settings.remove(Settings.keys.Development_DefaultEditor, "browser");
-    console.log(Settings.gets("Development_DefaultEditor"));
-    await Settings.load();
-    console.log(Settings.gets("Development_DefaultEditor"));
-    //console.log(await settings.gets(settings.keys.Development_DefaultEditor));
+export async function test(t: Test) {
+    try {
+        await Settings.remove("antestsetting", "user");
+        await Settings.remove("antestsetting", "browser");
+        await Settings.remove("antestsetting", "allusers");
+          t.expectEqual(Settings.gets("antestsetting") === undefined);
+        await Settings.load();
+        t.expectEqual(Settings.gets("antestsetting") === undefined);
+
+        await Settings.save("antestsetting", "1", "allusers");
+        t.expectEqual(<string>Settings.gets("antestsetting") === "1");
+        await Settings.load();
+        t.expectEqual(<string>Settings.gets("antestsetting") === "1");
+
+        await Settings.save("antestsetting", "2", "user");
+        t.expectEqual(<string>Settings.gets("antestsetting") === "2");
+        await Settings.load();
+        t.expectEqual(<string>Settings.gets("antestsetting") === "2");
+
+        await Settings.save("antestsetting", "3", "browser");
+        t.expectEqual(<string>Settings.gets("antestsetting") === "3");
+        await Settings.load();
+        t.expectEqual(<string>Settings.gets("antestsetting") === "3");
+    } catch (ex) {
+      
+
+        throw ex;
+    } finally {
+        await Settings.remove("antestsetting", "user");
+        await Settings.remove("antestsetting", "browser");
+        await Settings.remove("antestsetting", "allusers");
+    }
+
 }

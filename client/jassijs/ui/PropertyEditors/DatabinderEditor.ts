@@ -1,8 +1,8 @@
-import {Checkbox} from "jassijs/ui/Checkbox";
-import {Editor,  $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
-import {Databinder} from "jassijs/ui/Databinder";
+import { Checkbox } from "jassijs/ui/Checkbox";
+import { Editor, $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
+import { Databinder } from "jassijs/ui/Databinder";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import {Textbox} from "jassijs/ui/Textbox";
+import { Textbox } from "jassijs/ui/Textbox";
 import { Select } from "../Select";
 
 
@@ -14,11 +14,11 @@ export class DatabinderEditor extends Editor
      * used by PropertyEditor
      * @class jassijs.ui.PropertyEditors.BooleanEditor
      */ {
-    constructor( property, propertyEditor) {
-        super( property, propertyEditor);
+    constructor(property, propertyEditor) {
+        super(property, propertyEditor);
         /** @member - the renedering component **/
-        this.component = new Select ();
-        this.component.width="100%";
+        this.component = new Select();
+        this.component.width = "100%";
         var _this = this;
         this.component.onchange(function (param) {
             _this._onchange(param);
@@ -32,9 +32,13 @@ export class DatabinderEditor extends Editor
         //databinder,"prop"
         var value = this.propertyEditor.getPropertyValue(this.property);
         if (value !== undefined) {
-            var sp = value.replaceAll('"', "").split(",");
-            value = sp[1] + "-" + sp[0];
-            this.component.value = value;
+            try {
+                var sp = value.replaceAll('"', "").split(",");
+                value = sp[1] + "-" + sp[0];
+                this.component.value = value;
+            } catch { //PropertyEditor without codeeditor
+                this.component.value = "";
+            }
         } else {
             this.component.value = "";
         }
@@ -59,7 +63,7 @@ export class DatabinderEditor extends Editor
         }
     }
     get ob() {
-       return this._ob;
+        return this._ob;
     }
 
     /**

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router"], function (require, exports, Jassi_1, Panel_1, Table_1, HTMLPanel_1, Button_1, BoxPanel_1, Select_1, Classes_1, Actions_1, Router_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ComponentSpy = void 0;
+    exports.test = exports.ComponentSpy = void 0;
     class Me {
     }
     let ComponentSpy = class ComponentSpy extends Panel_1.Panel {
@@ -119,9 +119,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         __metadata("design:paramtypes", [])
     ], ComponentSpy);
     exports.ComponentSpy = ComponentSpy;
-    Jassi_1.default.test = function () {
-        return new ComponentSpy();
-    };
+    function test() {
+        var sp = new ComponentSpy();
+        sp.update();
+        sp.height = 100;
+        return sp;
+    }
+    exports.test = test;
     Jassi_1.default.componentSpy = new ComponentSpy();
 });
 //# sourceMappingURL=ComponentSpy.js.map

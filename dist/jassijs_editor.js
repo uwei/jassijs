@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("jassijs_editor/AcePanel", ["require", "exports", "jassijs/jassi", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs_editor/Debugger"], function (require, exports, jassi_1, acelib_1, Typescript_1, Jassi_1, Registry_1, CodePanel_1) {
+define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs_editor/Debugger"], function (require, exports, acelib_1, Typescript_1, Jassi_1, Registry_1, CodePanel_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.AcePanel = void 0;
+    exports.test = exports.AcePanel = void 0;
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
     * @class jassijs.ui.CodePanel
@@ -517,17 +517,19 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs/jassi", "jassi
             }
         }
     }
-    jassi_1.default.test = async function () {
+    async function test() {
         var dlg = new AcePanel();
         dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
-        dlg.mode = "javascript";
+        dlg.mode = "typescript";
+        dlg.height = 100;
         //dlg._editor.renderer.setShowGutter(false);		
         //dlg._editor.getSession().addGutterDecoration(1,"error_line");
         //  dlg._editor.getSession().setBreakpoint(1);
         // dlg._editor.getSession().setBreakpoint(2);
         var h = dlg.getBreakpoints();
         return dlg;
-    };
+    }
+    exports.test = test;
 });
 define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/Debugger", "jassijs/ui/OptionDialog", "jassijs_editor/util/TSSourceMap", "jassijs/util/Reloader", "jassijs/remote/Server", "jassijs/base/Windows"], function (require, exports, Jassi_2, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1) {
     "use strict";
@@ -1314,9 +1316,36 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
     exports.CodeEditor = CodeEditor;
     async function test() {
         var editor = new CodeEditor();
-        var url = "jassijs_editor/AcePanel.ts";
-        editor.height = 500;
-        await editor.openFile(url);
+        //var url = "jassijs_editor/AcePanel.ts";
+        editor.height = 300;
+        editor.width = "100%";
+        //await editor.openFile(url);
+        editor.value = `import { Button } from "jassijs/ui/Button";
+import { Repeater } from "jassijs/ui/Repeater";
+import { $Class } from "jassijs/remote/Jassi";
+import { Panel } from "jassijs/ui/Panel";
+type Me = {
+    button1?: Button;
+};
+@$Class("demo.EmptyDialog")
+export class EmptyDialog extends Panel {
+    me: Me;
+    constructor() {
+        super();
+        this.me = {};
+        this.layout(this.me);
+    }
+    layout(me: Me) {
+        me.button1 = new Button();
+        this.add(me.button1);
+    }
+}
+export async function test() {
+    var ret = new EmptyDialog();
+    return ret;
+}
+`;
+        editor.evalCode();
         return editor;
     }
     exports.test = test;
@@ -2057,6 +2086,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             return this._designPlaceholder._components[0];
         }
         destroy() {
+            var _a, _b, _c, _d;
             if (this._resizer !== undefined) {
                 this._resizer.uninstall();
             }
@@ -2064,10 +2094,10 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 this._draganddropper.isDragEnabled = undefined;
                 this._draganddropper.uninstall();
             }
-            this._propertyEditor.destroy();
-            this._componentPalette.destroy();
-            this._componentExplorer.destroy();
-            this._invisibleComponents.destroy();
+            (_a = this._propertyEditor) === null || _a === void 0 ? void 0 : _a.destroy();
+            (_b = this._componentPalette) === null || _b === void 0 ? void 0 : _b.destroy();
+            (_c = this._componentExplorer) === null || _c === void 0 ? void 0 : _c.destroy();
+            (_d = this._invisibleComponents) === null || _d === void 0 ? void 0 : _d.destroy();
             super.destroy();
         }
     };
@@ -2077,15 +2107,16 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
     ], ComponentDesigner);
     exports.ComponentDesigner = ComponentDesigner;
     async function test() {
+        return new ComponentDesigner();
     }
     exports.test = test;
     ;
 });
-define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs_editor/CodeEditor", "jassijs/ui/PropertyEditor"], function (require, exports, Jassi_7, Panel_5, Tree_1, ComponentDescriptor_1, ContextMenu_1, CodeEditor_2, PropertyEditor_2) {
+define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs_editor/CodeEditor", "jassijs/ui/PropertyEditor", "jassijs/remote/Classes"], function (require, exports, Jassi_7, Panel_5, Tree_1, ComponentDescriptor_1, ContextMenu_1, CodeEditor_2, PropertyEditor_2, Classes_4) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ComponentExplorer = void 0;
+    exports.test = exports.ComponentExplorer = void 0;
     let ComponentExplorer = class ComponentExplorer extends Panel_5.Panel {
         /**
         * edit object properties
@@ -2210,19 +2241,20 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
         __metadata("design:paramtypes", [typeof (_a = typeof CodeEditor_2.CodeEditor !== "undefined" && CodeEditor_2.CodeEditor) === "function" ? _a : Object, typeof (_b = typeof PropertyEditor_2.PropertyEditor !== "undefined" && PropertyEditor_2.PropertyEditor) === "function" ? _b : Object])
     ], ComponentExplorer);
     exports.ComponentExplorer = ComponentExplorer;
-    Jassi_7.default.test = async function () {
-        var dlg = new Jassi_7.default.ui.ComponentExplorer();
+    async function test() {
+        var dlg = new ComponentExplorer(undefined, undefined);
         dlg.getComponentName = function (item) {
-            return "hallo";
+            return Classes_4.classes.getClassName(item);
         };
         dlg.value = dlg;
         return dlg;
-    };
+    }
+    exports.test = test;
 });
-define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Jassi_8, Panel_6, Image_1, Registry_4, Classes_4) {
+define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Jassi_8, Panel_6, Image_1, Registry_4, Classes_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ComponentPalette = void 0;
+    exports.test = exports.ComponentPalette = void 0;
     let ComponentPalette = class ComponentPalette extends Panel_6.Panel {
         constructor() {
             super();
@@ -2289,9 +2321,9 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
                 appendTo: "body",
                 helper: function (event) {
                     if (helper === undefined) {
-                        var cl = Classes_4.classes.getClass(component.createFromType);
+                        var cl = Classes_5.classes.getClass(component.createFromType);
                         if (cl === undefined) {
-                            Classes_4.classes.loadClass(component.createFromType); //for later
+                            Classes_5.classes.loadClass(component.createFromType); //for later
                             cl = Panel_6.Panel;
                         }
                         helper = new cl();
@@ -2328,6 +2360,12 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
         __metadata("design:paramtypes", [])
     ], ComponentPalette);
     exports.ComponentPalette = ComponentPalette;
+    function test() {
+        var comp = new ComponentPalette();
+        comp.service = "$UIComponent";
+        return comp;
+    }
+    exports.test = test;
 });
 define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_9) {
     "use strict";
@@ -2474,7 +2512,7 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Jassi"]
         Jassi_9.default.debugger = new Debugger();
     require(["jassijs_editor/ChromeDebugger"]);
 });
-define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs/remote/Server", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_10, Router_2, Typescript_4, Server_3, CodePanel_3, Settings_2) {
+define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_10, Router_2, Typescript_4, CodePanel_3, Settings_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -2755,12 +2793,14 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
     ], MonacoPanel);
     exports.MonacoPanel = MonacoPanel;
     async function test() {
-        await Settings_2.Settings.save(Settings_2.Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user");
+        //await Settings.save(Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user")
         var dlg = new MonacoPanel();
-        var code = await new Server_3.Server().loadFile("a/Dialog.ts");
+        //  var code = await new Server().loadFile("a/Dialog.ts");
         dlg.loadsample();
-        dlg.width = "800";
-        dlg.height = "800";
+        setTimeout(() => {
+            dlg.width = "800";
+            dlg.height = "100";
+        }, 200);
         //@ts-ignore
         //   dlg._editor.layout();
         //    dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
@@ -2777,7 +2817,7 @@ define("jassijs_editor/StartEditor", ["require", "exports", "jassijs/ui/FileExpl
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     //var h=new RemoteObject().test();
-    async function test() {
+    async function start() {
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
         var body = new Panel_7.Panel({ id: "body" });
         body.max();
@@ -2796,7 +2836,7 @@ define("jassijs_editor/StartEditor", ["require", "exports", "jassijs/ui/FileExpl
         Windows_2.default._desktop.add(am);
         Router_3.router.navigate(window.location.hash);
     }
-    test().then();
+    start().then();
 });
 define("jassijs_editor/modul", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -2824,7 +2864,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1622985694862,
+                "date": 1623100103030,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
@@ -2832,7 +2872,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1622998616949,
+                "date": 1623100158447,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": []
                 },
@@ -2843,19 +2883,19 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
-                "date": 1622998616949,
+                "date": 1623097926572,
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1622998616949,
+                "date": 1623098090050,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1622998616949,
+                "date": 1623100288249,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1622998616949,
+                "date": 1623099899741,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/Debugger.ts": {
@@ -2866,21 +2906,18 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1622998616843
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1622998616949,
+                "date": 1623100121857,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {
-                "date": 1622984379897
+                "date": 1623098599960
             },
             "jassijs_editor/util/DragAndDropper.ts": {
                 "date": 1622998616949,
                 "jassijs_editor.util.DragAndDropper": {}
             },
-            "jassijs_editor/util/monaco.ts": {
-                "date": 1622984292907
-            },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1622998616949,
+                "date": 1623098989289,
                 "jassijs_editor.base.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -3839,13 +3876,13 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
     ], Parser);
     exports.Parser = Parser;
     async function test() {
-        var code = Typescript_5.default.getCode("remote/de/AR.ts");
+        var code = Typescript_5.default.getCode("jassijs_editor/util/Parser.ts");
         var parser = new Parser();
         parser.parse(code, undefined);
-        const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
-        const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
-        const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);
-        console.log(result);
+        /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
+          const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
+          const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);
+          console.log(result);*/
     }
     exports.test = test;
 });
@@ -4155,7 +4192,7 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
     ], Resizer);
     exports.Resizer = Resizer;
 });
-define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs/remote/Server", "jassijs/remote/Jassi"], function (require, exports, sourcemap_1, jassi_2, Server_4, Jassi_14) {
+define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs/remote/Server", "jassijs/remote/Jassi"], function (require, exports, sourcemap_1, jassi_1, Server_3, Jassi_14) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TSSourceMap = void 0;
@@ -4166,11 +4203,11 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             var mapcode = "";
             var filenumber = 0;
             var jsfilename;
-            if (Server_4.Server.filesInMap && Server_4.Server.filesInMap[tsfile]) {
-                var mod = Server_4.Server.filesInMap[tsfile].modul;
-                jsfilename = jassi_2.default.modules[mod];
+            if (Server_3.Server.filesInMap && Server_3.Server.filesInMap[tsfile]) {
+                var mod = Server_3.Server.filesInMap[tsfile].modul;
+                jsfilename = jassi_1.default.modules[mod];
                 mapcode = await $.ajax({ url: jsfilename + ".map", dataType: "text" });
-                filenumber = Server_4.Server.filesInMap[tsfile].id;
+                filenumber = Server_3.Server.filesInMap[tsfile].id;
             }
             else {
                 jsfilename = "js/" + tsfile.replace(".ts", ".js");
@@ -4243,7 +4280,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
     ], TSSourceMap);
     exports.TSSourceMap = TSSourceMap;
 });
-define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Server", "jassijs_editor/ext/monaco", "jassijs/ext/requestidlecallback"], function (require, exports, Jassi_15, Server_5) {
+define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Server", "jassijs_editor/ext/monaco", "jassijs/ext/requestidlecallback"], function (require, exports, Jassi_15, Server_4) {
     "use strict";
     var Typescript_6;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4318,7 +4355,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                 if (config.types) {
                     for (var key in config.types) {
                         var file = config.types[key];
-                        nodeFiles[key] = new Server_5.Server().loadFile(file);
+                        nodeFiles[key] = new Server_4.Server().loadFile(file);
                     }
                 }
             }
@@ -4337,7 +4374,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
             //  import("jassijs/ext/typescript").then(async function(ts1) {
             Typescript_6.ts = ts;
             var _this = this;
-            var f = (await new Server_5.Server().dir(true)).resolveChilds();
+            var f = (await new Server_4.Server().dir(true)).resolveChilds();
             var nodeFiles = await this.includeModulTypes();
             //Load all files to in cache
             //node_modules with ajax - so we kann cache 
@@ -4353,7 +4390,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
                         monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
                     }
                     if (fdat === undefined) {
-                        nodeFiles[fname] = new Server_5.Server().loadFile(fname);
+                        nodeFiles[fname] = new Server_4.Server().loadFile(fname);
                     }
                     else {
                         nodeFiles[fname] = $.ajax({
@@ -4651,32 +4688,5 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
     //@ts-ignore
     var typescript = new Typescript();
     exports.default = typescript;
-});
-define("jassijs_editor/util/monaco", ["require", "exports", "jassijs/ui/Component"], function (require, exports, Component_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.MonacoEditor = void 0;
-    class MonacoEditor extends Component_2.Component {
-        /* get dom(){
-             return this.dom;
-         }*/
-        constructor() {
-            super();
-            super.init($('<div style="width: 800px; height: 600px; border: 1px solid grey"></div>')[0]);
-        }
-    }
-    exports.MonacoEditor = MonacoEditor;
-    function test() {
-        var ed = new MonacoEditor();
-        var hh = monaco.languages.typescript.typescriptDefaults;
-        debugger;
-        //@ts-ignore
-        var editor = monaco.editor.create(ed.dom, {
-            value: ['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
-            language: 'typescript'
-        });
-        return ed;
-    }
-    exports.test = test;
 });
 //# sourceMappingURL=jassijs_editor.js.map

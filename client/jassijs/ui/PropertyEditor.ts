@@ -744,11 +744,45 @@ export class PropertyEditor extends Panel {
         super.destroy();
     }
 }
+@$Class("jassijs.ui.PropertyEditorTestSubProperties")
+export class PropertyEditorTestSubProperties {
+    @$Property()
+    num:number=19;
+    @$Property()
+    text:string="prop";
+ }
+
+
+
 @$Class("jassijs.ui.PropertyEditorTestProperties")
-export class TestProperties {
+class TestProperties {
     @$Property({ decription: "name of the dialog", })
     dialogname: string;
+    @$Property()
+    checked:boolean;
+    @$Property({type:"color"})
+    color:string;
+    @$Property({type:"componentselector",componentType:"jassi.ui.Component"})
+    component:Component;
+    @$Property({type:"databinder"})
+    databinder:any;
+    @$Property({type:"dbobject",componentType:"de.Kunde"})
+    dbobject;
+    @$Property({default:80})
+    num:number;
+    @$Property({type:"font"})
+    font:number;
+    @$Property({type:"function"})
+    func(any){
 
+    };
+    @$Property({type:"html"})
+    html:string="sample";
+    @$Property({type:"image"})
+    image:string;
+    @$Property({type:"json",componentType:"jassijs.ui.PropertyEditorTestSubProperties"})
+    json:any;
+    
 }
 export function test() {
     var ret = new PropertyEditor(undefined);

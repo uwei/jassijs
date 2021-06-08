@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Jassi_1, Component_1, Property_1, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Checkbox = void 0;
+    exports.test = exports.Checkbox = void 0;
     let Checkbox = class Checkbox extends DataComponent_1.DataComponent {
         /* get dom(){
              return this.dom;
@@ -65,6 +65,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         __metadata("design:paramtypes", [])
     ], Checkbox);
     exports.Checkbox = Checkbox;
+    function test() {
+        var cb = new Checkbox();
+        cb.label = "label";
+        cb.value = true;
+        return cb;
+    }
+    exports.test = test;
 });
-//@class({longname:"jassijs.ui.Checkbox"})
 //# sourceMappingURL=Checkbox.js.map

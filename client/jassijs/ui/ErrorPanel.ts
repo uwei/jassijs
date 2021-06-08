@@ -216,7 +216,7 @@ export class ErrorPanel extends Panel {
           //return this.table.value;
       }*/
 }
-export function test() {
+export function test2() {
     var ret = new ErrorPanel();
     return ret;
 };

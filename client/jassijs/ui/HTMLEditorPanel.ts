@@ -81,11 +81,12 @@ export  class HTMLEditorPanel extends Panel{
             return  $(el).html();
         }   
 	}
-      jassijs.test=async function(){
-     	var dlg=new HTMLEditorPanel();
+export function te(){
+     	//var dlg=new HTMLEditorPanel();
+		// dlg.value="Sample text";
 	//	dlg.value=jassijs.db.load("de.Kunde",9);	
 		
 	
-        return dlg;
+        //return dlg;
     }
    // return CodeEditor.constructor;

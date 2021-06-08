@@ -298,7 +298,9 @@ export class FileExplorer extends Panel {
 
 }
 export function test() {
-    return new FileExplorer();
+    var exp=new FileExplorer();
+    exp.height=100;
+    return exp;
 
 }
 

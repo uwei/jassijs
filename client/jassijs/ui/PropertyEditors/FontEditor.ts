@@ -81,9 +81,14 @@ export class FontEditor extends Editor{
         super.callEvent("edit", param);
     }
 }
-export function test(){
+export function test2(){
 	
 	var prop=new PropertyEditor(undefined);
 	prop.value=new Textbox();
 	return prop;
+} 
+export function test(){
+	
+	var prop=new FontEditor(undefined,undefined);
+	return prop.component;
 } 
