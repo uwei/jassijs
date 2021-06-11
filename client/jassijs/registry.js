@@ -32,7 +32,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Router": {}
 	},
 	"jassijs/base/Tests.ts": {
-		"date": 1623174752853,
+		"date": 1623439827023,
 		"jassijs.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -63,7 +63,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1622985398544,
+		"date": 1623444166042,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {

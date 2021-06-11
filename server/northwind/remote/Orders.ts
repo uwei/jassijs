@@ -41,7 +41,7 @@ export class Orders extends DBObject {
     @Column({ nullable: true })
     ShipCountry: string;
     @OneToMany(type => OrderDetails, e=>e.Order)
-    Details: OrderDetails;
+    Details: OrderDetails[];
 }
 export async function test() {
 }

@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b, _c, _d;
+var _a, _b, _c;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.Orders = void 0;
 const OrderDetails_1 = require("northwind/remote/OrderDetails");
@@ -81,7 +81,7 @@ __decorate([
 ], Orders.prototype, "ShipCountry", void 0);
 __decorate([
     DatabaseSchema_1.OneToMany(type => OrderDetails_1.OrderDetails, e => e.Order),
-    __metadata("design:type", typeof (_d = typeof OrderDetails_1.OrderDetails !== "undefined" && OrderDetails_1.OrderDetails) === "function" ? _d : Object)
+    __metadata("design:type", Array)
 ], Orders.prototype, "Details", void 0);
 Orders = __decorate([
     DBObject_1.$DBObject(),

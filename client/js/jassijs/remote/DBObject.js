@@ -53,6 +53,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
                 return undefined;
             return DBObject_1.cache[classname][id.toString()];
         }
+        static clearCache(classname) {
+            DBObject_1.cache[classname] = {};
+        }
         removeFromCache() {
             var clname = Classes_1.classes.getClassName(this);
             if (!DBObject_1.cache[clname])

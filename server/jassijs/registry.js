@@ -15,7 +15,7 @@ exports.default={
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1622985398544,
+		"date": 1623444166042,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {

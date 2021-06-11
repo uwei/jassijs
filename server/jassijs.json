@@ -3,6 +3,7 @@
 		"jassijs": "jassijs",
 		"northwind": "northwind",
 		"de": "de",
-		"local": "local"
+		"local": "local",
+		"tests": "tests"
 	}
 }

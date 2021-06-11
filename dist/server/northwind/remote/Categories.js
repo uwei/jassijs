@@ -47,7 +47,6 @@ Categories = __decorate([
 ], Categories);
 exports.Categories = Categories;
 async function test() {
-    var all = await Categories.find({ relations: ["*"] });
 }
 exports.test = test;
 ;

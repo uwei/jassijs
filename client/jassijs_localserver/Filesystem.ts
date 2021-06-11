@@ -226,6 +226,8 @@ export default class Filessystem {
     * @param content - then content
     */
     public async createFolder(filename: string): Promise<string> {
+        if(filename.startsWith("/"))
+            filename=filename.substring(1);
         var test = await this.loadFileEntry(filename);
         if (test)
             return filename + " allready exists";

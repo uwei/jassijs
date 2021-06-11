@@ -220,6 +220,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
         * @param content - then content
         */
         async createFolder(filename) {
+            if (filename.startsWith("/"))
+                filename = filename.substring(1);
             var test = await this.loadFileEntry(filename);
             if (test)
                 return filename + " allready exists";

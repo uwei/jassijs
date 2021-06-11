@@ -74,7 +74,7 @@ define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote
     ], Orders.prototype, "ShipCountry", void 0);
     __decorate([
         DatabaseSchema_1.OneToMany(type => OrderDetails_1.OrderDetails, e => e.Order),
-        __metadata("design:type", OrderDetails_1.OrderDetails)
+        __metadata("design:type", Array)
     ], Orders.prototype, "Details", void 0);
     Orders = __decorate([
         DBObject_1.$DBObject(),

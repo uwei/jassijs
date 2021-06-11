@@ -61,6 +61,9 @@ export class DBObject extends RemoteObject {
     		return undefined;
     	return  DBObject.cache[classname][id.toString()];
     }
+    public static clearCache(classname:string){
+        DBObject.cache[classname]={};
+    }
     public removeFromCache(){
     
         var clname = classes.getClassName(this);
