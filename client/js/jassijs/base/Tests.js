@@ -148,6 +148,25 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
             }
             throw new Error("test fails");
         }
+        /**
+        * fails if the func does not throw an error
+        * @parameter func - the function that should failed
+        **/
+        async expectErrorAsync(func) {
+            var errors = false;
+            try {
+                var errobj;
+                await func().then((e) => {
+                }).catch((e) => {
+                    errors = true;
+                });
+            }
+            catch (_a) {
+                errors = true;
+            }
+            if (!errors)
+                throw new Error("test fails");
+        }
     };
     Test = __decorate([
         Jassi_1.$Class("jassijs.base.Test")

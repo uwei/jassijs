@@ -47,9 +47,9 @@ let RemoteProtocol = class RemoteProtocol {
         //	if(await rights.isAdmin()){
         //		throw new Error("not an admin")
         //	}
+        //@ts-ignore
+        var Cookies = (await Promise.resolve().then(() => require("jassijs/util/Cookies"))).Cookies;
         if (user === undefined) {
-            //@ts-ignore
-            var Cookies = (await Promise.resolve().then(() => require("jassijs/util/Cookies"))).Cookies;
             Cookies.remove("simulateUser", {});
             Cookies.remove("simulateUserPassword", {});
         }

@@ -27,8 +27,8 @@ let User = class User extends DBObject_1.DBObject {
             return 11;
         }
     }
-    async save() {
-        return await super.save();
+    async save(context = undefined) {
+        return await super.save(context);
     }
 };
 __decorate([

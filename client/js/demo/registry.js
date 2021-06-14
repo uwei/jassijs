@@ -33,9 +33,6 @@ define("demo/registry",["require"], function(require) {
 	"demo/modul.ts": {
 		"date": 1612818333557
 	},
-	"demo/ParentRightCheck.ts": {
-		"date": 1622984213677
-	},
 	"demo/ReportKunde.ts": {
 		"date": 1622984379892,
 		"demo.ReportKunde": {}

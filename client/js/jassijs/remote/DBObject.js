@@ -45,6 +45,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
         }
         isAutoId() {
             var _a;
+            var h = Database_1.db;
             var def = (_a = Database_1.db.getMetadata(this.constructor)) === null || _a === void 0 ? void 0 : _a.fields;
             return def.id.PrimaryGeneratedColumn !== undefined;
         }
@@ -52,6 +53,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
             if (!DBObject_1.cache[classname])
                 return undefined;
             return DBObject_1.cache[classname][id.toString()];
+        }
+        static addToCache(ob) {
+            if (ob === undefined)
+                return undefined;
+            var clname = Classes_1.classes.getClassName(ob);
+            var cl = DBObject_1.cache[clname];
+            if (cl === undefined) {
+                cl = {};
+                DBObject_1.cache[clname] = cl;
+            }
+            cl[ob.id] = ob;
         }
         static clearCache(classname) {
             DBObject_1.cache[classname] = {};
@@ -109,25 +121,27 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 if (this.id !== undefined) {
                     var cname = Classes_1.classes.getClassName(this);
-                    var cl = DBObject_1.cache[cname];
-                    if (cl === undefined) {
-                        cl = {};
-                        DBObject_1.cache[cname] = cl;
-                    }
-                    if (cl[this.id] === undefined) {
-                        cl[this.id] = this; //must be cached before inserting, so the new properties are introduced to the existing
-                        /*if (this.isAutoId())
+                    /* var cl = DBObject.cache[cname];
+                     if (cl === undefined) {
+                         cl = {};
+                         DBObject.cache[cname] = cl;
+                     }*/
+                    var cached = DBObject_1.getFromCache(cname, this.id);
+                    if (cached === undefined) {
+                        DBObject_1.addToCache(this); //must be cached before inserting, so the new properties are introduced to the existing
+                        if (this.isAutoId())
                             throw new Error("autoid - load the object  before saving or remove id");
-                        else{*/
-                        return await this.call(this, this._createObjectInDB, context);
+                        else
+                            return await this.call(this, this._createObjectInDB, context);
                         //}//fails if the Object is saved before loading 
                     }
                     else {
-                        if (cl[this.id] !== this) {
+                        if (cached !== this) {
                             throw new Error("the object must be loaded before save");
                         }
                     }
-                    cl[this.id] = this; //Update cache on save
+                    DBObject_1.addToCache(this);
+                    //                cl[this.id] = this;//Update cache on save
                     var newob = this._replaceObjectWithId(this);
                     var id = await this.call(newob, this.save, context);
                     this.id = id;
@@ -140,8 +154,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
                     else {
                         var newob = this._replaceObjectWithId(this);
                         var h = await this.call(newob, this._createObjectInDB, context);
-                        this.id = h.id;
-                        DBObject_1.cache[Classes_1.classes.getClassName(this)][this.id] = this;
+                        this.id = h;
+                        DBObject_1.addToCache(this);
+                        //                	 DBObject.cache[classes.getClassName(this)][this.id]=this;
                         return this;
                     }
                 }

@@ -1137,7 +1137,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
-                "date": 1622985448646,
+                "date": 1623442707275,
                 "northwind.Orders": {
                     "$DBObject": []
                 }
@@ -1498,7 +1498,7 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
 });
 define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_2, Employees_3, Customer_2, DBObject_5, Jassi_14, DatabaseSchema_5, Shippers_2) {
     "use strict";
-    var _a, _b, _c, _d;
+    var _a, _b, _c;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Orders = void 0;
     let Orders = class Orders extends DBObject_5.DBObject {
@@ -1564,7 +1564,7 @@ define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Order
     ], Orders.prototype, "ShipCountry", void 0);
     __decorate([
         DatabaseSchema_5.OneToMany(type => OrderDetails_2.OrderDetails, e => e.Order),
-        __metadata("design:type", typeof (_d = typeof OrderDetails_2.OrderDetails !== "undefined" && OrderDetails_2.OrderDetails) === "function" ? _d : Object)
+        __metadata("design:type", Array)
     ], Orders.prototype, "Details", void 0);
     Orders = __decorate([
         DBObject_5.$DBObject(),

@@ -23,8 +23,8 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
                 return 11;
             }
         }
-        async save() {
-            return await super.save();
+        async save(context = undefined) {
+            return await super.save(context);
         }
     };
     __decorate([

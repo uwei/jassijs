@@ -3,19 +3,32 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"tests/remote/TestCustomer.ts": {
-		"date": 1623440377887,
+		"date": 1623488386702,
 		"tests.TestCustomer": {
+			"$ParentRights": [
+				[
+					{
+						"name": "TestCustomers",
+						"sqlToCheck": "me.id>=:i1 and me.id<=:i2",
+						"description": {
+							"text": "TestCustomer",
+							"i1": "from",
+							"i2": "to"
+						}
+					}
+				]
+			],
 			"$DBObject": []
 		}
 	},
 	"tests/remote/TestOrder.ts": {
-		"date": 1623442886394,
+		"date": 1623488474823,
 		"tests.TestOrder": {
 			"$DBObject": []
 		}
 	},
 	"tests/remote/TestOrderDetails.ts": {
-		"date": 1623443590163,
+		"date": 1623488500029,
 		"tests.TestOrderDetails": {
 			"$DBObject": []
 		}

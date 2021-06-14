@@ -49,7 +49,7 @@ define(["require", "exports", "jassijs/remote/security/Group", "jassijs/remote/s
             var arw = await ARZeile_1.ARZeile.findOne({ id: z.id, relations: ["ar.kunde"] });
             tst.expectEqual(arw.ar.kunde.nachname === kd.nachname);
             //wrong relation
-            tst.expectError(async () => { await ARZeile_1.ARZeile.findOne({ id: z.id, relations: ["sdafsd"] }); });
+            await tst.expectErrorAsync(async () => { await ARZeile_1.ARZeile.findOne({ id: z.id, relations: ["sdafsd"] }); });
             //User
             var user = new User_1.User();
             user.email = "mail" + await freeNumber(User_1.User);

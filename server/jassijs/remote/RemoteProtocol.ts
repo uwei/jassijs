@@ -53,9 +53,10 @@ export class RemoteProtocol {
         //	if(await rights.isAdmin()){
         //		throw new Error("not an admin")
         //	}
+        //@ts-ignore
+        var Cookies = (await import("jassijs/util/Cookies")).Cookies;
         if (user === undefined) {
-            //@ts-ignore
-            var Cookies = (await import("jassijs/util/Cookies")).Cookies;
+            
             Cookies.remove("simulateUser", {});
             Cookies.remove("simulateUserPassword", {});
         } else {

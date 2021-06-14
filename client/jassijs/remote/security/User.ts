@@ -34,8 +34,8 @@ export class User extends DBObject  {
 			return 11;
         }
 	}
-	async save(){
-		return await super.save();
+	async save(context:Context=undefined){
+		return await super.save(context); 
 	}
 }
 export async function test(){

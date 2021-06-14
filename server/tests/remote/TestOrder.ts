@@ -4,6 +4,7 @@ import { DBObject, $DBObject } from "jassijs/remote/DBObject";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, JoinColumn, JoinTable } from "jassijs/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
+import { $CheckParentRight } from "jassijs/remote/security/Rights";
 @$DBObject()
 @$Class("tests.TestOrder")
 export class TestOrder extends DBObject {
@@ -12,6 +13,7 @@ export class TestOrder extends DBObject {
     constructor() {
         super();
     }
+    @$CheckParentRight()
     @ManyToOne(type => TestCustomer)
     customer: TestCustomer; 
     @OneToMany(type => TestOrderDetails,e=>e.Order)

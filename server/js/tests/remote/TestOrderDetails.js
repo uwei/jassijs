@@ -14,6 +14,7 @@ const TestOrder_1 = require("tests/remote/TestOrder");
 const DBObject_1 = require("jassijs/remote/DBObject");
 const Jassi_1 = require("jassijs/remote/Jassi");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
+const Rights_1 = require("jassijs/remote/security/Rights");
 let TestOrderDetails = class TestOrderDetails extends DBObject_1.DBObject {
     constructor() {
         super();
@@ -24,6 +25,7 @@ __decorate([
     __metadata("design:type", Number)
 ], TestOrderDetails.prototype, "id", void 0);
 __decorate([
+    Rights_1.$CheckParentRight(),
     DatabaseSchema_1.ManyToOne(type => TestOrder_1.TestOrder, e => e.details),
     __metadata("design:type", TestOrder_1.TestOrder)
 ], TestOrderDetails.prototype, "Order", void 0);

@@ -53,6 +53,7 @@ export class DBObject extends RemoteObject {
         super();
     }
     public isAutoId() {
+        var h=db;
         var def = db.getMetadata(this.constructor)?.fields;
         return def.id.PrimaryGeneratedColumn !== undefined;
     }
@@ -60,6 +61,17 @@ export class DBObject extends RemoteObject {
     	if(!DBObject.cache[classname])
     		return undefined;
     	return  DBObject.cache[classname][id.toString()];
+    }
+    private static addToCache(ob){
+        if (ob === undefined)
+            return undefined;
+        var clname=classes.getClassName(ob);
+        var cl = DBObject.cache[clname];
+        if (cl === undefined) {
+            cl = {};
+            DBObject.cache[clname] = cl;
+        }
+        cl[ob.id]=ob;
     }
     public static clearCache(classname:string){
         DBObject.cache[classname]={};
@@ -119,25 +131,26 @@ export class DBObject extends RemoteObject {
         if (!context?.isServer) {
             if (this.id !== undefined) {
                 var cname = classes.getClassName(this);
-                var cl = DBObject.cache[cname];
+               /* var cl = DBObject.cache[cname];
                 if (cl === undefined) {
                     cl = {};
                     DBObject.cache[cname] = cl;
-                }
-
-                if (cl[this.id] === undefined) {
-                    cl[this.id] = this;//must be cached before inserting, so the new properties are introduced to the existing
-                    /*if (this.isAutoId())
+                }*/ 
+                var cached=DBObject.getFromCache(cname,this.id);
+                if (cached === undefined) {
+                    DBObject.addToCache(this);//must be cached before inserting, so the new properties are introduced to the existing
+                    if (this.isAutoId())
                         throw new Error("autoid - load the object  before saving or remove id");
-                    else{*/
+                    else
                         return await this.call(this,this._createObjectInDB,context);
                     //}//fails if the Object is saved before loading 
                 } else {
-                    if (cl[this.id] !== this) {
+                    if (cached !== this) {
                         throw new Error("the object must be loaded before save");
                     }
                 }
-                cl[this.id] = this;//Update cache on save
+                DBObject.addToCache(this);
+//                cl[this.id] = this;//Update cache on save
                 var newob=this._replaceObjectWithId(this);
                 var id= await this.call(newob, this.save,context);
                 this.id=id;
@@ -148,8 +161,9 @@ export class DBObject extends RemoteObject {
                 } else{
                      var newob=this._replaceObjectWithId(this);
                 	 var h= await this.call(newob, this._createObjectInDB,context);
-                	 this.id=h.id;
-                	 DBObject.cache[classes.getClassName(this)][this.id]=this;
+                	 this.id=h;
+                     DBObject.addToCache(this);
+//                	 DBObject.cache[classes.getClassName(this)][this.id]=this;
                     return this;
                 }
             }

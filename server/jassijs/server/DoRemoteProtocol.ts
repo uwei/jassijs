@@ -13,7 +13,7 @@ async function checkSimulateUser(context: Context, request) {
 
     var rights = (await import("jassijs/remote/security/Rights")).default;
     var test = request.cookies["simulateUser"];
-    if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && await rights.isAdmin() === true) {
+    if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && context.request.user.isAdmin) {
         var db = await (await import("jassijs/server/DBManager")).DBManager.get();
 
         var user = await db.getUser(context, context.request.cookies["simulateUser"], context.request.cookies["simulateUserPassword"]);

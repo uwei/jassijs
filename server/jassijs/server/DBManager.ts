@@ -260,11 +260,16 @@ export class DBManager {
     if (context.objecttransaction) {
       return this.addSaveTransaction(context, obj);
     }
+    if(obj.id!==undefined){
+      if((await this.connection().manager.findOne(obj.constructor,obj.id))!==undefined){
+        throw new Error("object is already in DB: "+obj.id);
+      }
+    }
     //@ts-ignore
     var ret = await this.connection().manager.insert(obj.constructor, obj);
     //save also relations
     let retob = await this.save(context, obj);
-    return retob?.id;
+    return retob;
   }
   /**
   * Saves all given entities in the database.
@@ -402,21 +407,21 @@ export class DBManager {
     var onlyColumns = options?.onlyColumns;
     var clname = classes.getClassName(entityClass);
     var cl = classes.getClass(clname);
-    var relations = new RelationInfo(clname, this);
+    var relations = new RelationInfo(context, clname, this);
     var allRelations = this.resolveWildcharInRelations(clname, options?.relations);
     if (options && options.relations) {
-      relations.addRelations(allRelations, true);
+      relations.addRelations(context, allRelations, true);
     }
     var ret = await this.connection().manager.createQueryBuilder().
       select("me").from(cl, "me");
     if (options)
-      ret = relations.addWhere(<string>options.where, options.whereParams, ret);
+      ret = relations.addWhere(context, <string>options.where, options.whereParams, ret);
     delete options?.where;
     delete options?.whereParams;
     delete options?.onlyColumns;
-    ret = relations.addWhereBySample(options, ret);
+    ret = relations.addWhereBySample(context, options, ret);
     ret = relations.join(ret);
-    if (context.request.user.isAdmin)
+    if (!context.request.user.isAdmin)
       ret = await relations.addParentRightDestriction(context, ret);
 
 
@@ -522,7 +527,7 @@ export class DBManager {
 
     var clname = classes.getClassName(entityClass);
     var cl = classes.getClass(clname);
-    var relations = new RelationInfo(clname, this);
+    var relations = new RelationInfo(context, clname, this);
 
     var ret = await this.connection().manager.createQueryBuilder().
       select("me").from(cl, "me");
@@ -554,7 +559,7 @@ class RelationInfo {
       doSelect: boolean
     }
   }
-  constructor(className: string, dbmanager: DBManager) {
+  constructor(context: Context, className: string, dbmanager: DBManager) {
     this.className = className;
     this.dbmanager = dbmanager
     this.relations = {};
@@ -566,10 +571,10 @@ class RelationInfo {
       parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
       doSelect: true
     }
-    this.addRelationsFromParentRights("");
+    this.addRelationsFromParentRights(context, "");
   }
 
-  private addRelationsFromParentRights(relationname: string) {
+  private addRelationsFromParentRights(context, relationname: string) {
     var pr = this.relations[relationname];
     if (registry.getMemberData("$CheckParentRight") !== undefined) {
       var data = registry.getMemberData("$CheckParentRight")[pr.className];
@@ -579,8 +584,8 @@ class RelationInfo {
           membername = key;
         }
         var r = relationname + (relationname === "" ? "" : ".") + membername
-        this.addRelations([r], false);
-        this.addRelationsFromParentRights(r);
+        this.addRelations(context, [r], false);
+        this.addRelationsFromParentRights(context, r);
       }
     }
 
@@ -690,7 +695,7 @@ class RelationInfo {
                   if (field !== "classname" && field !== "groups" && field !== "name") {
                     sql = sql.replaceAll(":" + field, ":" + field + this.counter);
                     if (relation.fullPath !== "")
-                      sql = sql.replaceAll("me.", "me_" + relation.fullPath.replaceAll(".", "_") + ".");
+                      sql = sql.replaceAll("me.", "\"me_" + relation.fullPath.replaceAll(".", "_") + "\".");
                     param[field + this.counter] = oneRight[field];
                   }
                 }
@@ -710,9 +715,9 @@ class RelationInfo {
 
     return ret;
   }
-  private _checkExpression(node) {
+  private _checkExpression(context, node) {
     if (node.operator !== undefined) {
-      this._parseNode(node);
+      this._parseNode(context, node);
     }
     //replace id to me.id and ar.zeile.id to me_ar_zeile.id
     if (node.type === "Identifier" && !node.value.startsWith("xxxparams")) {
@@ -731,25 +736,25 @@ class RelationInfo {
       node.value = path;
       var pack = path.split(".")[0].substring(3);
       if (pack !== "")
-        this.addRelations([pack], false);
+        this.addRelations(context, [pack], false);
     }
     var _this = this;
     if (node.type === "SimpleExprParentheses") {
       node.value.value.forEach(element => {
-        _this._parseNode(element);
+        _this._parseNode(context, element);
       });
     }
   }
-  private _parseNode(node) {
+  private _parseNode(context: Context, node) {
     if (node.operator !== undefined) {
       var left = node.left;
       var right = node.right;
-      this._checkExpression(left);
-      this._checkExpression(right);
+      this._checkExpression(context, left);
+      this._checkExpression(context, right);
     }
 
   }
-  addWhereBySample<Entity>(param: any, builder: SelectQueryBuilder<Entity>): SelectQueryBuilder<Entity> {
+  addWhereBySample<Entity>(context: Context, param: any, builder: SelectQueryBuilder<Entity>): SelectQueryBuilder<Entity> {
 
     var ret = builder;
     for (var key in param) {
@@ -764,7 +769,7 @@ class RelationInfo {
       var field = this._getRelationFromProperty(key);
       var pack = field.split(".")[0].substring(3);
       if (pack !== "")
-        this.addRelations([pack], false);
+        this.addRelations(context, [pack], false);
 
       var placeholder = "pp" + this.counter++;
       var par = {};
@@ -780,29 +785,30 @@ class RelationInfo {
      ret.andWhere(newsql.substring(dummyselect.length),whereParams);
      return ret;*/
   }
-  addWhere<Entity>(sql: string, whereParams: any, builder: SelectQueryBuilder<Entity>): SelectQueryBuilder<Entity> {
+  addWhere<Entity>(context: Context, sql: string, whereParams: any, builder: SelectQueryBuilder<Entity>): SelectQueryBuilder<Entity> {
     var ret = builder;
     if (sql === undefined)
       return ret;
     var dummyselect = "select * from k where ";
     //we must replace because parsing Exception
     var ast = parser.parse(dummyselect + sql.replaceAll(":", "xxxparams"));
-    this._parseNode(ast.value.where);
+    this._parseNode(context, ast.value.where);
     var newsql = parser.stringify(ast).replaceAll("xxxparams", ":");
     ret.andWhere(newsql.substring(dummyselect.length), whereParams);
     return ret;
   }
 
-  addRelations(relations: string[], doselect: boolean) {
+  addRelations(context: Context, relations: string[], doselect: boolean) {
     if (relations === undefined)
       return;
     for (var z = 0; z < relations.length; z++) {
       var relation = relations[z];
       var all = relation.split(".");
       var curPath = "";
-      var parent = "";
+      var parentPath = "";
       var curClassname = this.className;
       for (var x = 0; x < all.length; x++) {
+        parentPath = curPath;
         curPath = curPath + (curPath === "" ? "" : ".") + all[x];
         if (this.relations[curPath] === undefined) {
           var vdata = this.dbmanager.connection().getMetadata(classes.getClass(curClassname));
@@ -824,10 +830,12 @@ class RelationInfo {
           }
           //Parentrights
           membername = "";
-          if (registry.getMemberData("$CheckParentRight") !== undefined) {
-            var data = registry.getMemberData("$CheckParentRight")[curClassname];
-            for (var key in data) {
-              membername = key;
+          if (!context.request.user?.isAdmin) {
+            if (registry.getMemberData("$CheckParentRight") !== undefined) {
+              var data = registry.getMemberData("$CheckParentRight")[curClassname];
+              for (var key in data) {
+                membername = key;
+              }
             }
           }
           if (membername !== "") {
@@ -836,10 +844,11 @@ class RelationInfo {
               if (rel.propertyName === membername) {
                 var clname = classes.getClassName(rel.type);
                 var testPR = registry.getData("$ParentRights", clname);
-                this.relations[curPath] = {
+                var mpath = parentPath+(parentPath === "" ? "" : ".") + membername;
+                this.relations[mpath] = {
                   className: classes.getClassName(rel.type),
                   name: membername,
-                  fullPath: curPath,
+                  fullPath: mpath,
                   parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
                   doSelect: doselect
                 }
@@ -850,7 +859,6 @@ class RelationInfo {
           this.relations[curPath].doSelect = true;
         }
 
-        parent = curPath;
         curClassname = this.relations[curPath].className;
       }
     }

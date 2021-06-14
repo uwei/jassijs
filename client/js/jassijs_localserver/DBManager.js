@@ -17,7 +17,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
     var _instance = undefined;
     var _initrunning = undefined;
     /**
-     * database access with typeorm ...
+     * Database access with typeorm
      */
     let DBManager = DBManager_1 = class DBManager {
         static async getConOpts() {
@@ -228,11 +228,16 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             if (context.objecttransaction) {
                 return this.addSaveTransaction(context, obj);
             }
+            if (obj.id !== undefined) {
+                if ((await this.connection().manager.findOne(obj.constructor, obj.id)) !== undefined) {
+                    throw new Error("object is already in DB: " + obj.id);
+                }
+            }
             //@ts-ignore
             var ret = await this.connection().manager.insert(obj.constructor, obj);
             //save also relations
             let retob = await this.save(context, obj);
-            return retob === null || retob === void 0 ? void 0 : retob.id;
+            return retob;
         }
         async save(context, entity, options) {
             var _a;
@@ -258,7 +263,8 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             return (_a = ret) === null || _a === void 0 ? void 0 : _a.id;
         }
         async _checkParentRightsForSave(context, entity) {
-            if (context.request.user.isAdmin)
+            var _a;
+            if ((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)
                 return;
             //Check if the object self has restrictions
             var cl = Classes_1.classes.getClass(Classes_1.classes.getClassName(entity));
@@ -337,21 +343,21 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             var onlyColumns = options === null || options === void 0 ? void 0 : options.onlyColumns;
             var clname = Classes_1.classes.getClassName(entityClass);
             var cl = Classes_1.classes.getClass(clname);
-            var relations = new RelationInfo(clname, this);
+            var relations = new RelationInfo(context, clname, this);
             var allRelations = this.resolveWildcharInRelations(clname, options === null || options === void 0 ? void 0 : options.relations);
             if (options && options.relations) {
-                relations.addRelations(allRelations, true);
+                relations.addRelations(context, allRelations, true);
             }
             var ret = await this.connection().manager.createQueryBuilder().
                 select("me").from(cl, "me");
             if (options)
-                ret = relations.addWhere(options.where, options.whereParams, ret);
+                ret = relations.addWhere(context, options.where, options.whereParams, ret);
             options === null || options === void 0 ? true : delete options.where;
             options === null || options === void 0 ? true : delete options.whereParams;
             options === null || options === void 0 ? true : delete options.onlyColumns;
-            ret = relations.addWhereBySample(options, ret);
+            ret = relations.addWhereBySample(context, options, ret);
             ret = relations.join(ret);
-            if (context.request.user.isAdmin)
+            if (!context.request.user.isAdmin)
                 ret = await relations.addParentRightDestriction(context, ret);
             var test = ret.getSql();
             let objs = await ret.getMany();
@@ -451,7 +457,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
         async checkParentRight(context, entityClass, ids) {
             var clname = Classes_1.classes.getClassName(entityClass);
             var cl = Classes_1.classes.getClass(clname);
-            var relations = new RelationInfo(clname, this);
+            var relations = new RelationInfo(context, clname, this);
             var ret = await this.connection().manager.createQueryBuilder().
                 select("me").from(cl, "me");
             ret = relations.join(ret);
@@ -464,12 +470,12 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
         }
     };
     DBManager = DBManager_1 = __decorate([
-        Jassi_1.$Class("jassijs_localserver.DBManager"),
+        Jassi_1.$Class("jassi_localserver.DBManager"),
         __metadata("design:paramtypes", [])
     ], DBManager);
     exports.DBManager = DBManager;
     class RelationInfo {
-        constructor(className, dbmanager) {
+        constructor(context, className, dbmanager) {
             this.counter = 100;
             this.className = className;
             this.dbmanager = dbmanager;
@@ -482,9 +488,9 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
                 doSelect: true
             };
-            this.addRelationsFromParentRights("");
+            this.addRelationsFromParentRights(context, "");
         }
-        addRelationsFromParentRights(relationname) {
+        addRelationsFromParentRights(context, relationname) {
             var pr = this.relations[relationname];
             if (Registry_1.default.getMemberData("$CheckParentRight") !== undefined) {
                 var data = Registry_1.default.getMemberData("$CheckParentRight")[pr.className];
@@ -494,8 +500,8 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                         membername = key;
                     }
                     var r = relationname + (relationname === "" ? "" : ".") + membername;
-                    this.addRelations([r], false);
-                    this.addRelationsFromParentRights(r);
+                    this.addRelations(context, [r], false);
+                    this.addRelationsFromParentRights(context, r);
                 }
             }
         }
@@ -594,7 +600,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                                         if (field !== "classname" && field !== "groups" && field !== "name") {
                                             sql = sql.replaceAll(":" + field, ":" + field + this.counter);
                                             if (relation.fullPath !== "")
-                                                sql = sql.replaceAll("me.", "me_" + relation.fullPath.replaceAll(".", "_") + ".");
+                                                sql = sql.replaceAll("me.", "\"me_" + relation.fullPath.replaceAll(".", "_") + "\".");
                                             param[field + this.counter] = oneRight[field];
                                         }
                                     }
@@ -612,9 +618,9 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             }
             return ret;
         }
-        _checkExpression(node) {
+        _checkExpression(context, node) {
             if (node.operator !== undefined) {
-                this._parseNode(node);
+                this._parseNode(context, node);
             }
             //replace id to me.id and ar.zeile.id to me_ar_zeile.id
             if (node.type === "Identifier" && !node.value.startsWith("xxxparams")) {
@@ -633,24 +639,24 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 node.value = path;
                 var pack = path.split(".")[0].substring(3);
                 if (pack !== "")
-                    this.addRelations([pack], false);
+                    this.addRelations(context, [pack], false);
             }
             var _this = this;
             if (node.type === "SimpleExprParentheses") {
                 node.value.value.forEach(element => {
-                    _this._parseNode(element);
+                    _this._parseNode(context, element);
                 });
             }
         }
-        _parseNode(node) {
+        _parseNode(context, node) {
             if (node.operator !== undefined) {
                 var left = node.left;
                 var right = node.right;
-                this._checkExpression(left);
-                this._checkExpression(right);
+                this._checkExpression(context, left);
+                this._checkExpression(context, right);
             }
         }
-        addWhereBySample(param, builder) {
+        addWhereBySample(context, param, builder) {
             var ret = builder;
             for (var key in param) {
                 if (key === "cache" || key === "join" || key === "loadEagerRelations" || key === "loadRelationids" || key == "lock" || key == "order" ||
@@ -664,7 +670,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 var field = this._getRelationFromProperty(key);
                 var pack = field.split(".")[0].substring(3);
                 if (pack !== "")
-                    this.addRelations([pack], false);
+                    this.addRelations(context, [pack], false);
                 var placeholder = "pp" + this.counter++;
                 var par = {};
                 par[placeholder] = param[key];
@@ -679,28 +685,30 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
              ret.andWhere(newsql.substring(dummyselect.length),whereParams);
              return ret;*/
         }
-        addWhere(sql, whereParams, builder) {
+        addWhere(context, sql, whereParams, builder) {
             var ret = builder;
             if (sql === undefined)
                 return ret;
             var dummyselect = "select * from k where ";
             //we must replace because parsing Exception
             var ast = parser.parse(dummyselect + sql.replaceAll(":", "xxxparams"));
-            this._parseNode(ast.value.where);
+            this._parseNode(context, ast.value.where);
             var newsql = parser.stringify(ast).replaceAll("xxxparams", ":");
             ret.andWhere(newsql.substring(dummyselect.length), whereParams);
             return ret;
         }
-        addRelations(relations, doselect) {
+        addRelations(context, relations, doselect) {
+            var _a;
             if (relations === undefined)
                 return;
             for (var z = 0; z < relations.length; z++) {
                 var relation = relations[z];
                 var all = relation.split(".");
                 var curPath = "";
-                var parent = "";
+                var parentPath = "";
                 var curClassname = this.className;
                 for (var x = 0; x < all.length; x++) {
+                    parentPath = curPath;
                     curPath = curPath + (curPath === "" ? "" : ".") + all[x];
                     if (this.relations[curPath] === undefined) {
                         var vdata = this.dbmanager.connection().getMetadata(Classes_1.classes.getClass(curClassname));
@@ -722,10 +730,12 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                         }
                         //Parentrights
                         membername = "";
-                        if (Registry_1.default.getMemberData("$CheckParentRight") !== undefined) {
-                            var data = Registry_1.default.getMemberData("$CheckParentRight")[curClassname];
-                            for (var key in data) {
-                                membername = key;
+                        if (!((_a = context.request.user) === null || _a === void 0 ? void 0 : _a.isAdmin)) {
+                            if (Registry_1.default.getMemberData("$CheckParentRight") !== undefined) {
+                                var data = Registry_1.default.getMemberData("$CheckParentRight")[curClassname];
+                                for (var key in data) {
+                                    membername = key;
+                                }
                             }
                         }
                         if (membername !== "") {
@@ -734,10 +744,11 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                                 if (rel.propertyName === membername) {
                                     var clname = Classes_1.classes.getClassName(rel.type);
                                     var testPR = Registry_1.default.getData("$ParentRights", clname);
-                                    this.relations[curPath] = {
+                                    var mpath = parentPath + (parentPath === "" ? "" : ".") + membername;
+                                    this.relations[mpath] = {
                                         className: Classes_1.classes.getClassName(rel.type),
                                         name: membername,
-                                        fullPath: curPath,
+                                        fullPath: mpath,
                                         parentRights: (testPR.length !== 0 ? testPR[0].params[0] : undefined),
                                         doSelect: doselect
                                     };
@@ -748,7 +759,6 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                     else if (doselect) {
                         this.relations[curPath].doSelect = true;
                     }
-                    parent = curPath;
                     curClassname = this.relations[curPath].className;
                 }
             }

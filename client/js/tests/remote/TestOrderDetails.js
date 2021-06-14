@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema"], function (require, exports, TestOrder_1, DBObject_1, Jassi_1, DatabaseSchema_1) {
+define(["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_1, DBObject_1, Jassi_1, DatabaseSchema_1, Rights_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestOrderDetails = void 0;
@@ -21,6 +21,7 @@ define(["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject
         __metadata("design:type", Number)
     ], TestOrderDetails.prototype, "id", void 0);
     __decorate([
+        Rights_1.$CheckParentRight(),
         DatabaseSchema_1.ManyToOne(type => TestOrder_1.TestOrder, e => e.details),
         __metadata("design:type", TestOrder_1.TestOrder)
     ], TestOrderDetails.prototype, "Order", void 0);

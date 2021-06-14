@@ -14,6 +14,7 @@ const TestOrder_1 = require("tests/remote/TestOrder");
 const DBObject_1 = require("jassijs/remote/DBObject");
 const Jassi_1 = require("jassijs/remote/Jassi");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
+const Rights_1 = require("jassijs/remote/security/Rights");
 let TestCustomer = class TestCustomer extends DBObject_1.DBObject {
     constructor() {
         super();
@@ -32,6 +33,12 @@ __decorate([
     __metadata("design:type", Array)
 ], TestCustomer.prototype, "orders", void 0);
 TestCustomer = __decorate([
+    Rights_1.$ParentRights([{ name: "TestCustomers", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
+            description: {
+                text: "TestCustomer",
+                i1: "from",
+                i2: "to"
+            } }]),
     DBObject_1.$DBObject(),
     Jassi_1.$Class("tests.TestCustomer"),
     __metadata("design:paramtypes", [])

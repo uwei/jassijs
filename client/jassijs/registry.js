@@ -32,7 +32,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Router": {}
 	},
 	"jassijs/base/Tests.ts": {
-		"date": 1623439827023,
+		"date": 1623507738740,
 		"jassijs.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -63,7 +63,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1623444166042,
+		"date": 1623577283286,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -94,7 +94,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.RemoteObject": {}
 	},
 	"jassijs/remote/RemoteProtocol.ts": {
-		"date": 1622985421326,
+		"date": 1623528977868,
 		"jassijs.remote.RemoteProtocol": {}
 	},
 	"jassijs/remote/security/Group.ts": {
@@ -142,7 +142,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/security/User.ts": {
-		"date": 1622998616949,
+		"date": 1623528369317,
 		"jassijs.security.User": {
 			"$DBObject": [
 				{

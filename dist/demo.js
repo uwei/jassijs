@@ -290,107 +290,7 @@ define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassi
     }
     exports.MemoryTest = MemoryTest;
 });
-define("demo/ParentRightCheck", ["require", "exports", "jassijs/remote/security/Group", "jassijs/remote/security/User", "de/remote/ARZeile", "de/remote/Kunde", "de/remote/AR", "jassijs/remote/Registry", "jassijs/remote/RemoteProtocol", "jassijs/remote/DBObject", "jassijs/remote/security/ParentRight"], function (require, exports, Group_1, User_1, ARZeile_2, Kunde_3, AR_2, Registry_2, RemoteProtocol_1, DBObject_1, ParentRight_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = void 0;
-    async function freeNumber(cl) {
-        var max = 1000000;
-        var c = DBObject_1.DBObject["cache"];
-        var num = Math.floor(Math.random() * Math.floor(1000000));
-        var ob = await cl.findOne(num);
-        while (ob !== undefined) {
-            num = Math.floor(Math.random() * Math.floor(1000000));
-            ob = await cl.find(num);
-        }
-        return num;
-    }
-    async function test(tst) {
-        await RemoteProtocol_1.RemoteProtocol.simulateUser();
-        //$.removeCookie("openedwindows", {})
-        try {
-            var kdid = await freeNumber(Kunde_3.Kunde);
-            var kd = new Kunde_3.Kunde();
-            kd.id = kdid;
-            kd.nachname = "Nachname";
-            kd.vorname = "Vorname";
-            await kd.save();
-            var kd5 = new Kunde_3.Kunde();
-            kd5.id = await freeNumber(Kunde_3.Kunde);
-            kd5.nachname = "Nachname";
-            kd5.vorname = "Vorname";
-            await kd5.save();
-            //cache an reload
-            var kd3 = await Kunde_3.Kunde.findOne(kdid);
-            var kd2 = await Kunde_3.Kunde.findOne(kdid);
-            tst.expectEqual(kd2 === kd3);
-            //test removefromCache
-            kd2.removeFromCache();
-            kd2 = await Kunde_3.Kunde.findOne(kdid);
-            tst.expectEqual(kd !== kd2);
-            var ar = new AR_2.AR();
-            ar.id = 8544 + Number(Registry_2.default.nextID());
-            ar.kunde = kd;
-            await ar.save();
-            var z = new ARZeile_2.ARZeile();
-            z.text = "w";
-            z.position = 3;
-            z.ar = ar;
-            await z.save();
-            //Load relations
-            var arw = await ARZeile_2.ARZeile.findOne({ id: z.id, relations: ["ar.kunde"] });
-            tst.expectEqual(arw.ar.kunde.nachname === kd.nachname);
-            //wrong relation
-            tst.expectError(async () => { await ARZeile_2.ARZeile.findOne({ id: z.id, relations: ["sdafsd"] }); });
-            //User
-            var user = new User_1.User();
-            user.email = "mail" + await freeNumber(User_1.User);
-            user.password = "hallo";
-            await user.save();
-            var group = new Group_1.Group();
-            group.id = await freeNumber(Group_1.Group);
-            group.name = "Group";
-            await group.save();
-            user.groups = [group];
-            await user.save();
-            var sec = new ParentRight_1.ParentRight();
-            sec.classname = "de.Kunde";
-            sec.name = "Kundennummern";
-            sec.i1 = kdid;
-            sec.i2 = kdid;
-            sec.groups = [group];
-            await sec.save();
-            await RemoteProtocol_1.RemoteProtocol.simulateUser(user.email, user.password);
-            var kunden = await Kunde_3.Kunde.find();
-            tst.expectEqual(kunden.length === 1);
-            await RemoteProtocol_1.RemoteProtocol.simulateUser();
-            kunden = await Kunde_3.Kunde.find();
-            tst.expectEqual(kunden.length > 1);
-        }
-        catch (err) {
-            throw err;
-        }
-        finally {
-            if (sec)
-                await sec.remove();
-            if (user)
-                await user.remove();
-            if (group)
-                await group.remove();
-            if (arw)
-                await arw.remove();
-            if (ar)
-                await ar.remove();
-            if (kd)
-                await kd.remove();
-            if (kd5)
-                await kd5.remove();
-        }
-        console.log("ready");
-    }
-    exports.test = test;
-});
-define("demo/ReportKunde", ["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_1, Jassi_5, Property_2, Kunde_4) {
+define("demo/ReportKunde", ["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_1, Jassi_5, Property_2, Kunde_3) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -412,7 +312,7 @@ define("demo/ReportKunde", ["require", "exports", "jassijs_report/ReportDesign",
     };
     __decorate([
         Property_2.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Kunde_4.Kunde !== "undefined" && Kunde_4.Kunde) === "function" ? _a : Object)
+        __metadata("design:type", typeof (_a = typeof Kunde_3.Kunde !== "undefined" && Kunde_3.Kunde) === "function" ? _a : Object)
     ], ReportKunde.prototype, "value", void 0);
     ReportKunde = __decorate([
         Jassi_5.$Class("demo.ReportKunde"),
@@ -429,7 +329,7 @@ define("demo/ReportKunde", ["require", "exports", "jassijs_report/ReportDesign",
     }
     exports.test = test;
 });
-define("demo/ReportRechnung", ["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_2, Jassi_6, Property_3, Kunde_5) {
+define("demo/ReportRechnung", ["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, ReportDesign_2, Jassi_6, Property_3, Kunde_4) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -581,7 +481,7 @@ define("demo/ReportRechnung", ["require", "exports", "jassijs_report/ReportDesig
     };
     __decorate([
         Property_3.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", typeof (_a = typeof Kunde_5.Kunde !== "undefined" && Kunde_5.Kunde) === "function" ? _a : Object)
+        __metadata("design:type", typeof (_a = typeof Kunde_4.Kunde !== "undefined" && Kunde_4.Kunde) === "function" ? _a : Object)
     ], ReportRechnung.prototype, "value", void 0);
     ReportRechnung = __decorate([
         Jassi_6.$Class("demo.ReportRechnung"),
@@ -740,12 +640,12 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
     }
     exports.test = test;
 });
-define("demo/TestExtension", ["require", "exports", "de/remote/Kunde"], function (require, exports, Kunde_6) {
+define("demo/TestExtension", ["require", "exports", "de/remote/Kunde"], function (require, exports, Kunde_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     function test() {
-        var kd = new Kunde_6.Kunde();
+        var kd = new Kunde_5.Kunde();
         console.log(kd.extFunc());
     }
     exports.test = test;
@@ -1218,9 +1118,6 @@ define("demo/registry", ["require"], function (require) {
             },
             "demo/modul.ts": {
                 "date": 1612818333557
-            },
-            "demo/ParentRightCheck.ts": {
-                "date": 1622984213677
             },
             "demo/ReportKunde.ts": {
                 "date": 1622984379892,
