@@ -103,6 +103,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
                     console.log("DB Schema could not be saved");
                     throw err;
                 }
+                await _instance.hasLoaded();
             }
             //wait for connection ready
             await _initrunning;
@@ -120,6 +121,11 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
                 }
             }
             return _instance;
+        }
+        /**
+         * loading is finished
+         */
+        async hasLoaded() {
         }
         async mySync() {
             var con = typeorm_1.getConnection();
@@ -242,16 +248,18 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         async save(context, entity, options) {
             var _a;
             await this._checkParentRightsForSave(context, entity);
-            if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
-                entity.password = await new Promise((resolve) => {
-                    const crypto = require('crypto');
-                    const salt = crypto.randomBytes(8).toString('base64');
-                    crypto.pbkdf2(entity.password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
-                        if (err)
-                            throw err;
-                        resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64')); //.toString('base64'));  // '3745e48...aa39b34'
+            if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
+                if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
+                    entity.password = await new Promise((resolve) => {
+                        const crypto = require('crypto');
+                        const salt = crypto.randomBytes(8).toString('base64');
+                        crypto.pbkdf2(entity.password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
+                            if (err)
+                                throw err;
+                            resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64')); //.toString('base64'));  // '3745e48...aa39b34'
+                        });
                     });
-                });
+                }
             }
             if (context.objecttransaction && options === undefined) {
                 return this.addSaveTransaction(context, entity);
@@ -416,7 +424,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             delete user.password;
             return user;
         }
-        async getUser(context, user, password) {
+        async login(context, user, password) {
             /* const users = await this.connection().getRepository(User)
              .createQueryBuilder()
              .select("user.id", "id")
@@ -1364,71 +1372,107 @@ define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/server/Fil
     }
     exports.Indexer = Indexer;
 });
-define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "jassijs_localserver/DatabaseSchema"], function (Filesystem, schema) {
-    return {
-        autostart: async function () {
-            var files = await new Filesystem.default().dirFiles("", ["js", "ts"]);
-            files.forEach((fname) => {
-                if (!fname.startsWith("js/")) {
-                    var name = fname.substring(0, fname.length - 3);
-                    requirejs.undef(name);
-                }
-            });
-        }
-    };
-});
-requirejs.undef("jassijs/util/DatabaseSchema");
-define("jassijs/util/DatabaseSchema", ["jassijs_localserver/DatabaseSchema"], function (to) {
-    return to;
-});
-define("jassijs/server/DoRemoteProtocol", ["jassijs_localserver/LocalProtocol"], function (locprot) {
-    return {
-        _execute: async function (protext, request, context) {
-            var prot = JSON.parse(protext);
-            return await locprot.localExec(prot, context);
-        }
-    };
-});
-define("jassijs/server/Filesystem", ["jassijs_localserver/Filesystem"], function (fs) {
-    return fs;
-});
-define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs_localserver/DBManager", "jassijs_localserver/TypeORMListener", "typeorm", "jassijs/remote/Database"], function (db, Classes_1, Registry_1, dbman, TypeORMListener, to, Database) {
-    db.DBManager["getConOpts"] = async function () {
-        var dbclasses = [];
-        const initSqlJs = window["SQL"];
-        const SQL = await window["SQL"]({
-            // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
-            // You can omit locateFile completely when running in node
-            locateFile: file => `https://sql.js.org/dist/${file}`
-        });
-        var dbobjects = await Registry_1.default.getJSONData("$DBObject");
-        var dbfiles = [];
-        for (var o = 0; o < dbobjects.length; o++) {
-            var clname = dbobjects[o].classname;
+define("jassijs_localserver/Installserver", ["require", "exports"], function (require, exports) {
+    "use strict";
+    define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "jassijs_localserver/DatabaseSchema"], function (Filesystem, schema) {
+        return {
+            //search for file in local-DB and undefine this files 
+            //so this files could be loaded from local-DB
+            autostart: async function () {
+                var files = await new Filesystem.default().dirFiles("", ["js", "ts"]);
+                files.forEach((fname) => {
+                    if (!fname.startsWith("js/")) {
+                        var name = fname.substring(0, fname.length - 3);
+                        requirejs.undef(name);
+                    }
+                });
+            }
+        };
+    });
+    requirejs.undef("jassijs/util/DatabaseSchema");
+    define("jassijs/util/DatabaseSchema", ["jassijs_localserver/DatabaseSchema"], function (to) {
+        return to;
+    });
+    define("jassijs/server/DoRemoteProtocol", ["jassijs_localserver/LocalProtocol"], function (locprot) {
+        return {
+            _execute: async function (protext, request, context) {
+                var prot = JSON.parse(protext);
+                return await locprot.localExec(prot, context);
+            }
+        };
+    });
+    define("jassijs/server/Filesystem", ["jassijs_localserver/Filesystem"], function (fs) {
+        return fs;
+    });
+    define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs_localserver/DBManager", "jassijs_localserver/TypeORMListener", "typeorm", "jassijs/remote/Database"], function (db, Classes_1, Registry_1, dbman, TypeORMListener, to, Database) {
+        //create Admin User if doesn't a user exists 
+        db.DBManager.prototype["hasLoaded"] = async function () {
+            var User = await Classes_1.classes.loadClass("jassijs.security.User");
+            var us = User.findOne();
+            if (us) {
+                us = new User();
+                us.email = "admin";
+                us.password = "jassi";
+                us.isAdmin = true;
+                await us.save();
+            }
+        };
+        db.DBManager.prototype["login"] = async function (context, user, password) {
             try {
-                dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
-                dbclasses.push(await Classes_1.classes.loadClass(clname));
+                var User = (await new Promise((resolve_7, reject_7) => { require(["jassijs/remote/security/User"], resolve_7, reject_7); })).User;
+                var ret = await this.connection().manager.createQueryBuilder().
+                    select("me").from(User, "me").addSelect("me.password").
+                    andWhere("me.email=:email", { email: user });
+                var auser = await ret.getOne();
+                if (!auser || !password)
+                    return undefined;
+                if (auser.password === password) {
+                    delete auser.password;
+                    return auser;
+                }
             }
             catch (err) {
-                console.log(err);
-                throw err;
+                err = err;
             }
-        }
-        db.DBManager.clearMetadata();
-        Database.db.fillDecorators();
-        var tcl = await Classes_1.classes.loadClass("jassijs_localserver.TypeORMListener");
-        to.EventSubscriber()(tcl);
-        var Filessystem = await Classes_1.classes.loadClass("jassijs_localserver.Filessystem");
-        var data = await new Filessystem().loadFile("__default.db");
-        var opt = {
-            database: data,
-            type: "sqljs",
-            subscribers: [TypeORMListener.TypeORMListener],
-            "entities": dbclasses
+            return undefined;
         };
-        return opt;
-    };
-    return db;
+        db.DBManager["getConOpts"] = async function () {
+            var dbclasses = [];
+            const initSqlJs = window["SQL"];
+            const SQL = await window["SQL"]({
+                // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
+                // You can omit locateFile completely when running in node
+                locateFile: file => `https://sql.js.org/dist/${file}`
+            });
+            var dbobjects = await Registry_1.default.getJSONData("$DBObject");
+            var dbfiles = [];
+            for (var o = 0; o < dbobjects.length; o++) {
+                var clname = dbobjects[o].classname;
+                try {
+                    dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
+                    dbclasses.push(await Classes_1.classes.loadClass(clname));
+                }
+                catch (err) {
+                    console.log(err);
+                    throw err;
+                }
+            }
+            db.DBManager.clearMetadata();
+            Database.db.fillDecorators();
+            var tcl = await Classes_1.classes.loadClass("jassijs_localserver.TypeORMListener");
+            to.EventSubscriber()(tcl);
+            var Filessystem = await Classes_1.classes.loadClass("jassijs_localserver.Filessystem");
+            var data = await new Filessystem().loadFile("__default.db");
+            var opt = {
+                database: data,
+                type: "sqljs",
+                subscribers: [TypeORMListener.TypeORMListener],
+                "entities": dbclasses
+            };
+            return opt;
+        };
+        return db;
+    });
 });
 //DatabaseSchema
 define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remote/RemoteProtocol"], function (require, exports, RemoteProtocol_1) {
@@ -1438,7 +1482,7 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
     RemoteProtocol_1.RemoteProtocol.prototype.exec = async function (config, ob) {
         var clname = JSON.parse(config.data).classname;
         var local = ["jassijs.remote.Transaction", "northwind.Employees", "northwind.Customer"];
-        var classes = (await new Promise((resolve_7, reject_7) => { require(["jassijs/remote/Classes"], resolve_7, reject_7); })).classes;
+        var classes = (await new Promise((resolve_8, reject_8) => { require(["jassijs/remote/Classes"], resolve_8, reject_8); })).classes;
         var DBObject = await classes.loadClass("jassijs.remote.DBObject");
         var ret;
         //
@@ -1491,7 +1535,7 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
         return ret;
     };
     async function localExec(prot, context = undefined) {
-        var classes = (await new Promise((resolve_8, reject_8) => { require(["jassijs/remote/Classes"], resolve_8, reject_8); })).classes;
+        var classes = (await new Promise((resolve_9, reject_9) => { require(["jassijs/remote/Classes"], resolve_9, reject_9); })).classes;
         var p = new RemoteProtocol_1.RemoteProtocol();
         var C = await classes.loadClass(prot.classname);
         if (context === undefined) {
@@ -1504,6 +1548,19 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
                     }
                 }
             };
+            var Cookies = (await new Promise((resolve_10, reject_10) => { require(["jassijs/util/Cookies"], resolve_10, reject_10); })).Cookies;
+            if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
+                var DBManager = await classes.loadClass("jassi_localserver.DBManager");
+                var man = await DBManager.get();
+                var user = await man.login(context, Cookies.get("simulateUser"), Cookies.get("simulateUserPassword"));
+                if (user === undefined) {
+                    throw Error("simulated login failed");
+                }
+                else {
+                    context.request.user.user = user.id;
+                    context.request.user.isAdmin = user.isAdmin ? true : false;
+                }
+            }
         }
         if (prot._this === "static") {
             try {
@@ -1766,37 +1823,37 @@ define("jassijs_localserver/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_localserver/DatabaseSchema.ts": {
-                "date": 1622574343539
+                "date": 1622984213677
             },
             "jassijs_localserver/DBManager.ts": {
-                "date": 1622566501459,
-                "jassijs_localserver.DBManager": {}
+                "date": 1623702092878,
+                "jassi_localserver.DBManager": {}
             },
             "jassijs_localserver/Filesystem.ts": {
-                "date": 1622752756986,
+                "date": 1623438498416,
                 "jassijs_localserver.Filessystem": {}
             },
             "jassijs_localserver/Indexer.ts": {
-                "date": 1614893991197
+                "date": 1622984492296
             },
             "jassijs_localserver/LocalProtocol.ts": {
-                "date": 1622751551921
+                "date": 1623703076526
             },
             "jassijs_localserver/modul.ts": {
-                "date": 1622570068950
+                "date": 1622998474045
             },
             "jassijs_localserver/RegistryIndexer.ts": {
-                "date": 1622198952646,
+                "date": 1622998616949,
                 "jassijs_localserver.RegistryIndexer": {}
             },
             "jassijs_localserver/Testuser.ts": {
-                "date": 1614289287180,
+                "date": 1622984213666,
                 "Testuser": {
                     "$DBObject": []
                 }
             },
             "jassijs_localserver/TypeORMListener.ts": {
-                "date": 1615320659610,
+                "date": 1622998616949,
                 "jassijs_localserver.TypeORMListener": {
                     "EventSubscriber": []
                 }

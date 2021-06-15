@@ -2929,7 +2929,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1622998616949,
+                "date": 1623782321611,
                 "jassijs_editor.util.Typescript": {}
             }
         }
@@ -4464,7 +4464,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
         async renameFile(oldfile, newfile) {
             var ffile = monaco.Uri.from({ path: "/" + oldfile, scheme: 'file' });
             var oldmodell = monaco.editor.getModel(ffile);
-            oldmodell.dispose();
+            oldmodell === null || oldmodell === void 0 ? void 0 : oldmodell.dispose();
             var text = await $.ajax({
                 url: newfile,
                 beforeSend: function (request) {
