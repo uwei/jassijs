@@ -124,6 +124,9 @@ define(["require", "exports", "tests/remote/TestOrderDetails", "tests/remote/Tes
         DBObject_1.DBObject.clearCache("tests.TestOrder");
         DBObject_1.DBObject.clearCache("tests.TestOrderDetails");
         console.log("simulate User " + user.id);
+        var allus = await User_1.User.find({ relations: ["groups"] });
+        var allg = await Group_1.Group.find();
+        var allr = await ParentRight_1.ParentRight.find();
         await RemoteProtocol_1.RemoteProtocol.simulateUser(user.email, user.password);
         var kunden = await TestCustomer_1.TestCustomer.find();
         test.expectEqual(kunden.length === 1);

@@ -1,4 +1,4 @@
-import { $Class } from  "jassijs/remote/Jassi";;
+import { $Class } from "jassijs/remote/Jassi";;
 
 @$Class("jassijs.remote.FileNode")
 export class FileNode {
@@ -7,18 +7,24 @@ export class FileNode {
     parent?: FileNode;
     files?: FileNode[];
     date?: any;
-    flag?:string;
+    flag?: string;
+    constructor(fullpath: string = undefined) {
+        if (fullpath) {
+            this.fullpath = fullpath;
+            this.name = fullpath.split("/")[fullpath.split("/").length - 1];
+        }
+    }
     isDirectory?() {
         return this.files !== undefined;
     }
-    resolveChilds?(all?: {[path:string]:FileNode}): {[path:string]:FileNode} {
+    resolveChilds?(all?: { [path: string]: FileNode }): { [path: string]: FileNode } {
         if (all === undefined)
-            all = {}; 
+            all = {};
         //var ret:FileNode[]=[];
-        
+
         if (this.files !== undefined) {
             for (let x = 0; x < this.files.length; x++) {
-                all[this.files[x].fullpath]=this.files[x];
+                all[this.files[x].fullpath] = this.files[x];
                 this.files[x].resolveChilds(all);
             }
         }

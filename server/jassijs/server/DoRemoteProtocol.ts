@@ -16,7 +16,7 @@ async function checkSimulateUser(context: Context, request) {
     if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && context.request.user.isAdmin) {
         var db = await (await import("jassijs/server/DBManager")).DBManager.get();
 
-        var user = await db.getUser(context, context.request.cookies["simulateUser"], context.request.cookies["simulateUserPassword"]);
+        var user = await db.login(context, context.request.cookies["simulateUser"], context.request.cookies["simulateUserPassword"]);
         if (!user) {
             console.log("simulateUser not found");
             return;

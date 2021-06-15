@@ -103,6 +103,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                     console.log("DB Schema could not be saved");
                     throw err;
                 }
+                await _instance.hasLoaded();
             }
             //wait for connection ready
             await _initrunning;
@@ -120,6 +121,11 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 }
             }
             return _instance;
+        }
+        /**
+         * loading is finished
+         */
+        async hasLoaded() {
         }
         async mySync() {
             var con = typeorm_1.getConnection();
@@ -242,16 +248,18 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
         async save(context, entity, options) {
             var _a;
             await this._checkParentRightsForSave(context, entity);
-            if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
-                entity.password = await new Promise((resolve) => {
-                    const crypto = require('crypto');
-                    const salt = crypto.randomBytes(8).toString('base64');
-                    crypto.pbkdf2(entity.password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
-                        if (err)
-                            throw err;
-                        resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64')); //.toString('base64'));  // '3745e48...aa39b34'
+            if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
+                if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
+                    entity.password = await new Promise((resolve) => {
+                        const crypto = require('crypto');
+                        const salt = crypto.randomBytes(8).toString('base64');
+                        crypto.pbkdf2(entity.password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
+                            if (err)
+                                throw err;
+                            resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64')); //.toString('base64'));  // '3745e48...aa39b34'
+                        });
                     });
-                });
+                }
             }
             if (context.objecttransaction && options === undefined) {
                 return this.addSaveTransaction(context, entity);
@@ -416,7 +424,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             delete user.password;
             return user;
         }
-        async getUser(context, user, password) {
+        async login(context, user, password) {
             /* const users = await this.connection().getRepository(User)
              .createQueryBuilder()
              .select("user.id", "id")

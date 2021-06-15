@@ -143,7 +143,15 @@ async function testParentRights(test: Test) {
     DBObject.clearCache("tests.TestOrder");
     DBObject.clearCache("tests.TestOrderDetails");
     console.log("simulate User "+user.id);
+    var allus=await User.find({relations:["groups"]});
+    var allg=await Group.find();
+    var allr=await ParentRight.find();
+
+
      await RemoteProtocol.simulateUser(user.email, user.password);
+    
+   
+
     var kunden = await TestCustomer.find();
     test.expectEqual(kunden.length === 1);
     

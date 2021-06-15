@@ -18,7 +18,7 @@ passport.use(new LocalStrategy({
         var context = {
             isServer: true
         };
-        const userDocument = await (await DBManager_1.DBManager.get()).getUser(context, username, password); //UserModel.findOne({username: username});
+        const userDocument = await (await DBManager_1.DBManager.get()).login(context, username, password); //UserModel.findOne({username: username});
         if (userDocument) {
             return done(null, userDocument);
         }

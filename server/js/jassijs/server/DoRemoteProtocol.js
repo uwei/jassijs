@@ -12,7 +12,7 @@ async function checkSimulateUser(context, request) {
     var test = request.cookies["simulateUser"];
     if (request.cookies["simulateUser"] !== undefined && request.cookies["simulateUserPassword"] !== undefined && context.request.user.isAdmin) {
         var db = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
-        var user = await db.getUser(context, context.request.cookies["simulateUser"], context.request.cookies["simulateUserPassword"]);
+        var user = await db.login(context, context.request.cookies["simulateUser"], context.request.cookies["simulateUserPassword"]);
         if (!user) {
             console.log("simulateUser not found");
             return;

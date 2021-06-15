@@ -43,7 +43,7 @@ RemoteProtocol.prototype.exec = async function (config, ob) {
      }
      if (local.indexOf(clname) > -1||clname.startsWith("local")) {*/
     var data = JSON.parse(config.data);
-    var debugservermethods = [];//for testing run on server
+    var debugservermethods = ["dir"];//for testing run on server
     if (debugservermethods.indexOf(data.method) > -1) {
         ret = await $.ajax(config);
     } else {
@@ -62,6 +62,7 @@ export async function localExec(prot: RemoteProtocol, context: Context = undefin
 
     var C = await classes.loadClass(prot.classname);
     if (context === undefined) {
+        
         context = {
             isServer: true,
             request: {
@@ -71,6 +72,19 @@ export async function localExec(prot: RemoteProtocol, context: Context = undefin
                 }
             }
         };
+        var Cookies = (await import("jassijs/util/Cookies")).Cookies;
+        if(Cookies.get("simulateUser")&&Cookies.get("simulateUserPassword")){
+            var DBManager:any = await classes.loadClass("jassi_localserver.DBManager");
+            var man=await DBManager.get();
+            var user=await man.login(context,Cookies.get("simulateUser"),Cookies.get("simulateUserPassword"));
+            if(user===undefined){
+                throw Error("simulated login failed")
+            }else{
+                context.request.user.user=user.id;
+                context.request.user.isAdmin=user.isAdmin?true:false;
+            }
+            
+        }
     }
 
     if (prot._this === "static") {

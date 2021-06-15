@@ -126,6 +126,7 @@ export class DBManager {
         console.log("DB Schema could not be saved");
         throw err;
       }
+      await _instance.hasLoaded();
     }
     //wait for connection ready
     await _initrunning;
@@ -144,7 +145,12 @@ export class DBManager {
     }
     return _instance;
   }
+  /**
+   * loading is finished
+   */
+  public async hasLoaded() {
 
+  }
 
 
   private async mySync() {
@@ -260,9 +266,9 @@ export class DBManager {
     if (context.objecttransaction) {
       return this.addSaveTransaction(context, obj);
     }
-    if(obj.id!==undefined){
-      if((await this.connection().manager.findOne(obj.constructor,obj.id))!==undefined){
-        throw new Error("object is already in DB: "+obj.id);
+    if (obj.id !== undefined) {
+      if ((await this.connection().manager.findOne(obj.constructor, obj.id)) !== undefined) {
+        throw new Error("object is already in DB: " + obj.id);
       }
     }
     //@ts-ignore
@@ -283,16 +289,17 @@ export class DBManager {
   async save<Entity>(context: Context, entity: Entity, options?: SaveOptions): Promise<Entity>;
   async save<Entity>(context: Context, entity, options) {
     await this._checkParentRightsForSave(context, entity);
-    if (classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
-      entity.password = await new Promise((resolve) => {
-        const crypto = require('crypto');
-        const salt = crypto.randomBytes(8).toString('base64');
-        crypto.pbkdf2(entity.password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
-          if (err) throw err;
-          resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
-        });
-      })
-
+    if ((window?.document === undefined)) {//crypt password only in nodes
+      if (classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
+        entity.password = await new Promise((resolve) => {
+          const crypto = require('crypto');
+          const salt = crypto.randomBytes(8).toString('base64');
+          crypto.pbkdf2(entity.password, salt, passwordIteration, 512, 'sha512', (err, derivedKey) => {
+            if (err) throw err;
+            resolve(passwordIteration.toString() + ":" + salt + ":" + derivedKey.toString('base64'));//.toString('base64'));  // '3745e48...aa39b34'
+          });
+        })
+      }
     }
 
     if (context.objecttransaction && options === undefined) {
@@ -484,7 +491,7 @@ export class DBManager {
     return user;
   }
 
-  async getUser(context: Context, user: string, password) {
+  async login(context: Context, user: string, password) {
 
     /* const users = await this.connection().getRepository(User)
      .createQueryBuilder()
@@ -844,7 +851,7 @@ class RelationInfo {
               if (rel.propertyName === membername) {
                 var clname = classes.getClassName(rel.type);
                 var testPR = registry.getData("$ParentRights", clname);
-                var mpath = parentPath+(parentPath === "" ? "" : ".") + membername;
+                var mpath = parentPath + (parentPath === "" ? "" : ".") + membername;
                 this.relations[mpath] = {
                   className: classes.getClassName(rel.type),
                   name: membername,

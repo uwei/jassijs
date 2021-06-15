@@ -191,7 +191,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Server", "
         async renameFile(oldfile, newfile) {
             var ffile = monaco.Uri.from({ path: "/" + oldfile, scheme: 'file' });
             var oldmodell = monaco.editor.getModel(ffile);
-            oldmodell.dispose();
+            oldmodell === null || oldmodell === void 0 ? void 0 : oldmodell.dispose();
             var text = await $.ajax({
                 url: newfile,
                 beforeSend: function (request) {

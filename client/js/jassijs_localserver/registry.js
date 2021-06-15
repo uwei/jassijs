@@ -3,37 +3,37 @@ define("jassijs_localserver/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_localserver/DatabaseSchema.ts": {
-                "date": 1622574343539
+                "date": 1622984213677
             },
             "jassijs_localserver/DBManager.ts": {
-                "date": 1622566501459,
-                "jassijs_localserver.DBManager": {}
+                "date": 1623702092878,
+                "jassi_localserver.DBManager": {}
             },
             "jassijs_localserver/Filesystem.ts": {
-                "date": 1622752756986,
+                "date": 1623438498416,
                 "jassijs_localserver.Filessystem": {}
             },
             "jassijs_localserver/Indexer.ts": {
-                "date": 1614893991197
+                "date": 1622984492296
             },
             "jassijs_localserver/LocalProtocol.ts": {
-                "date": 1622751551921
+                "date": 1623703076526
             },
             "jassijs_localserver/modul.ts": {
-                "date": 1622570068950
+                "date": 1622998474045
             },
             "jassijs_localserver/RegistryIndexer.ts": {
-                "date": 1622198952646,
+                "date": 1622998616949,
                 "jassijs_localserver.RegistryIndexer": {}
             },
             "jassijs_localserver/Testuser.ts": {
-                "date": 1614289287180,
+                "date": 1622984213666,
                 "Testuser": {
                     "$DBObject": []
                 }
             },
             "jassijs_localserver/TypeORMListener.ts": {
-                "date": 1615320659610,
+                "date": 1622998616949,
                 "jassijs_localserver.TypeORMListener": {
                     "EventSubscriber": []
                 }

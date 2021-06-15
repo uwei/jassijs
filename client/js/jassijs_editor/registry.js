@@ -68,7 +68,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-		"date": 1622998616949,
+		"date": 1623782321611,
 		"jassijs_editor.util.Typescript": {}
 	}
 }

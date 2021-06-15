@@ -15,6 +15,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
     //drag from Desktop https://www.html5rocks.com/de/tutorials/file/dndfiles/
     let FileActions = class FileActions {
         static async newFile(all, fileName = undefined, code = "", open = false) {
+            var _a, _b, _c, _d;
             if (all.length === 0 || !all[0].isDirectory())
                 return;
             var path = all[0].fullpath;
@@ -27,7 +28,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                     return;
             }
             console.log("create " + fileName);
-            var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
+            var key = (_b = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree) === null || _b === void 0 ? void 0 : _b.getKeyFromItem(all[0]);
             var newfile = path + "/" + fileName;
             var ret = await new Server_1.Server().createFile(newfile, code);
             var newkey = path + "|" + fileName;
@@ -36,8 +37,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                 return;
             }
             try {
-                await FileExplorer.instance.refresh();
-                await FileExplorer.instance.tree.activateKey(newkey);
+                await ((_c = FileExplorer.instance) === null || _c === void 0 ? void 0 : _c.refresh());
+                await ((_d = FileExplorer.instance) === null || _d === void 0 ? void 0 : _d.tree.activateKey(newkey));
                 if (open)
                     Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + newkey.replaceAll("|", "/"));
             }
@@ -62,14 +63,20 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
             link.click();
             link.remove();
         }
-        static async newFolder(all) {
+        static async newFolder(all, filename = undefined) {
+            var _a, _b, _c;
             if (all.length === 0 || !all[0].isDirectory())
                 return;
             var path = all[0].fullpath;
-            var res = await OptionDialog_1.OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
+            var res;
+            if (filename) {
+                res = { button: "ok", text: filename };
+            }
+            else
+                res = await OptionDialog_1.OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
             if (res.button === "ok" && res.text !== all[0].name) {
                 console.log("create Folder" + res.text);
-                var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
+                var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0]);
                 var newfile = path + "/" + res.text;
                 var ret = await new Server_1.Server().createFolder(newfile);
                 var newkey = path + "|" + res.text;
@@ -77,8 +84,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                     alert(ret);
                     return;
                 }
-                await FileExplorer.instance.refresh();
-                FileExplorer.instance.tree.activateKey(newkey);
+                await ((_b = FileExplorer.instance) === null || _b === void 0 ? void 0 : _b.refresh());
+                (_c = FileExplorer.instance) === null || _c === void 0 ? void 0 : _c.tree.activateKey(newkey);
             }
         }
         static async newModule(all) {
@@ -107,43 +114,53 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                 FileExplorer.instance.tree.activateKey(newkey);
             }
         }
-        static async dodelete(all) {
+        static async dodelete(all, withwarning = true) {
+            var _a, _b, _c;
             var s = "";
             all.forEach((node) => {
                 s = s + "" + node.fullpath + "<br/>";
             });
-            var res = await OptionDialog_1.OptionDialog.show("Delete this?<br/>" + s, ["ok", "cancel"], undefined, true);
-            if (res.button === "ok" && res.text !== all[0].name) {
+            var res;
+            if (withwarning) {
+                res = await OptionDialog_1.OptionDialog.show("Delete this?<br/>" + s, ["ok", "cancel"], undefined, true);
+            }
+            if (!withwarning || (res.button === "ok" && res.text !== all[0].name)) {
                 var ret = await new Server_1.Server().delete(all[0].fullpath);
                 if (ret !== "") {
                     alert(ret);
                     return;
                 }
-                var key = FileExplorer.instance.tree.getKeyFromItem(all[0].parent);
-                await FileExplorer.instance.refresh();
-                FileExplorer.instance.tree.activateKey(key);
+                var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0].parent);
+                await ((_b = FileExplorer.instance) === null || _b === void 0 ? void 0 : _b.refresh());
+                (_c = FileExplorer.instance) === null || _c === void 0 ? void 0 : _c.tree.activateKey(key);
             }
         }
-        static async rename(all) {
+        static async rename(all, foldername = undefined) {
+            var _a, _b, _c;
             if (all.length !== 1)
                 alert("only one file could be renamed");
             else {
-                var res = await OptionDialog_1.OptionDialog.show("Enter new name:", ["ok", "cancel"], undefined, true, all[0].name);
+                var res;
+                if (foldername) {
+                    res = { button: "ok", text: foldername };
+                }
+                else
+                    res = await OptionDialog_1.OptionDialog.show("Enter new name:", ["ok", "cancel"], undefined, true, all[0].name);
                 if (res.button === "ok" && res.text !== all[0].name) {
                     console.log("rename " + all[0].name + " to " + res.text);
-                    var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
+                    var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0]);
                     var path = all[0].parent !== undefined ? all[0].parent.fullpath : "";
                     var newfile = path + "/" + res.text;
                     var ret = await new Server_1.Server().rename(all[0].fullpath, newfile);
-                    var newkey = key.replace(all[0].name, res.text);
+                    var newkey = key === null || key === void 0 ? void 0 : key.replace(all[0].name, res.text);
                     if (ret !== "") {
                         alert(ret);
                         return;
                     }
                     if (!all[0].isDirectory())
-                        Typescript_1.default.renameFile(all[0].fullpath, newfile);
-                    await FileExplorer.instance.refresh();
-                    FileExplorer.instance.tree.activateKey(newkey);
+                        Typescript_1.default === null || Typescript_1.default === void 0 ? void 0 : Typescript_1.default.renameFile(all[0].fullpath, newfile);
+                    await ((_b = FileExplorer.instance) === null || _b === void 0 ? void 0 : _b.refresh());
+                    (_c = FileExplorer.instance) === null || _c === void 0 ? void 0 : _c.tree.activateKey(newkey);
                 }
             }
         }
@@ -190,7 +207,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
             }
         }),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Array]),
+        __metadata("design:paramtypes", [Array, String]),
         __metadata("design:returntype", Promise)
     ], FileActions, "newFolder", null);
     __decorate([
@@ -207,13 +224,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
     __decorate([
         Actions_1.$Action({ name: "Delete" }),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Array]),
+        __metadata("design:paramtypes", [Array, Object]),
         __metadata("design:returntype", Promise)
     ], FileActions, "dodelete", null);
     __decorate([
         Actions_1.$Action({ name: "Rename" }),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Array]),
+        __metadata("design:paramtypes", [Array, Object]),
         __metadata("design:returntype", Promise)
     ], FileActions, "rename", null);
     __decorate([

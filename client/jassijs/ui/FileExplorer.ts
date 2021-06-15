@@ -37,7 +37,7 @@ export class FileActions {
                 return;
         }
         console.log("create " + fileName);
-        var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
+        var key = FileExplorer.instance?.tree?.getKeyFromItem(all[0]);
         var newfile = path + "/" + fileName;
 
         var ret = await new Server().createFile(newfile, code);
@@ -47,8 +47,8 @@ export class FileActions {
             return;
         }
         try {
-            await FileExplorer.instance.refresh();
-            await FileExplorer.instance.tree.activateKey(newkey);
+            await FileExplorer.instance?.refresh();
+            await FileExplorer.instance?.tree.activateKey(newkey);
             if (open)
                 router.navigate("#do=jassijs_editor.CodeEditor&file=" + newkey.replaceAll("|", "/"));
         } catch (err) {
@@ -86,15 +86,19 @@ export class FileActions {
             return all[0].isDirectory();
         }
     })
-    static async newFolder(all: FileNode[]) {
+    static async newFolder(all: FileNode[], filename: string = undefined) {
         if (all.length === 0 || !all[0].isDirectory())
             return;
         var path = all[0].fullpath;
 
-        var res = await OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
+        var res;
+        if (filename) {
+            res = { button: "ok", text: filename };
+        } else
+            res = await OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
         if (res.button === "ok" && res.text !== all[0].name) {
             console.log("create Folder" + res.text);
-            var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
+            var key = FileExplorer.instance?.tree.getKeyFromItem(all[0]);
             var newfile = path + "/" + res.text;
             var ret = await new Server().createFolder(newfile);
             var newkey = path + "|" + res.text;
@@ -102,15 +106,15 @@ export class FileActions {
                 alert(ret);
                 return;
             }
-            await FileExplorer.instance.refresh();
-            FileExplorer.instance.tree.activateKey(newkey);
+            await FileExplorer.instance?.refresh();
+            FileExplorer.instance?.tree.activateKey(newkey);
         }
 
     }
-     @$Action({
+    @$Action({
         name: "New/Module",
         isEnabled: function (all: FileNode[]): boolean {
-            return all[0].name==="client"&&all[0].fullpath==="";
+            return all[0].name === "client" && all[0].fullpath === "";
         }
     })
     static async newModule(all: FileNode[]) {
@@ -120,8 +124,8 @@ export class FileActions {
 
         var res = await OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
         if (res.button === "ok" && res.text !== all[0].name) {
-            var smodule=res.text.toLocaleLowerCase();
-            if(jassijs.modules[smodule]){
+            var smodule = res.text.toLocaleLowerCase();
+            if (jassijs.modules[smodule]) {
                 alert("modul allready exists");
                 return;
             }
@@ -133,8 +137,8 @@ export class FileActions {
             if (ret !== "") {
                 alert(ret);
                 return;
-            }else{
-                jassijs.modules[smodule]=smodule;
+            } else {
+                jassijs.modules[smodule] = smodule;
             }
             await FileExplorer.instance.refresh();
             FileExplorer.instance.tree.activateKey(newkey);
@@ -142,44 +146,51 @@ export class FileActions {
 
     }
     @$Action({ name: "Delete" })
-    static async dodelete(all: FileNode[]) {
+    static async dodelete(all: FileNode[], withwarning = true) {
         var s = "";
         all.forEach((node) => {
             s = s + "" + node.fullpath + "<br/>";
         })
-        var res = await OptionDialog.show("Delete this?<br/>" + s, ["ok", "cancel"], undefined, true);
-        if (res.button === "ok" && res.text !== all[0].name) {
+        var res;
+        if (withwarning) {
+            res = await OptionDialog.show("Delete this?<br/>" + s, ["ok", "cancel"], undefined, true);
+        }
+        if (!withwarning || (res.button === "ok" && res.text !== all[0].name)) {
             var ret = await new Server().delete(all[0].fullpath);
             if (ret !== "") {
                 alert(ret);
                 return;
             }
-            var key = FileExplorer.instance.tree.getKeyFromItem(all[0].parent);
-            await FileExplorer.instance.refresh();
-            FileExplorer.instance.tree.activateKey(key);
+            var key = FileExplorer.instance?.tree.getKeyFromItem(all[0].parent);
+            await FileExplorer.instance?.refresh();
+            FileExplorer.instance?.tree.activateKey(key);
         }
     }
     @$Action({ name: "Rename" })
-    static async rename(all: FileNode[]) {
+    static async rename(all: FileNode[], foldername = undefined) {
         if (all.length !== 1)
             alert("only one file could be renamed");
         else {
-            var res = await OptionDialog.show("Enter new name:", ["ok", "cancel"], undefined, true, all[0].name);
+            var res;
+            if (foldername) {
+                res = { button: "ok", text: foldername };
+            } else
+                res = await OptionDialog.show("Enter new name:", ["ok", "cancel"], undefined, true, all[0].name);
             if (res.button === "ok" && res.text !== all[0].name) {
                 console.log("rename " + all[0].name + " to " + res.text);
-                var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
+                var key = FileExplorer.instance?.tree.getKeyFromItem(all[0]);
                 var path = all[0].parent !== undefined ? all[0].parent.fullpath : "";
                 var newfile = path + "/" + res.text;
                 var ret = await new Server().rename(all[0].fullpath, newfile);
-                var newkey = key.replace(all[0].name, res.text);
+                var newkey = key?.replace(all[0].name, res.text);
                 if (ret !== "") {
                     alert(ret);
                     return;
                 }
                 if (!all[0].isDirectory())
-                    typescript.renameFile(all[0].fullpath, newfile);
-                await FileExplorer.instance.refresh();
-                FileExplorer.instance.tree.activateKey(newkey);
+                    typescript?.renameFile(all[0].fullpath, newfile);
+                await FileExplorer.instance?.refresh();
+                FileExplorer.instance?.tree.activateKey(newkey);
             }
         }
     }
@@ -218,28 +229,28 @@ export class FileExplorer extends Panel {
         this.tree = new Tree();
         this.search = new Textbox();
         this.layout();
-        this.tree.propStyle=node=>{return  this.getStyle(node)};
+        this.tree.propStyle = node => { return this.getStyle(node) };
     }
     @$Action({
-    	name: "Windows/Development/Files",
-       	icon: "mdi mdi-file-tree",
+        name: "Windows/Development/Files",
+        icon: "mdi mdi-file-tree",
     })
-    static async show(){
-        if (windows.contains("Files")) 
-			var window = windows.show("Files");
-		else
-         windows.addLeft(new FileExplorer(), "Files");
+    static async show() {
+        if (windows.contains("Files"))
+            var window = windows.show("Files");
+        else
+            windows.addLeft(new FileExplorer(), "Files");
     }
-    getStyle(node:FileNode):CSSProperties{
-        var ret:CSSProperties=undefined;
-        if(node.flag?.indexOf("fromMap")>-1){
-            ret={
-                color:"green"
+    getStyle(node: FileNode): CSSProperties {
+        var ret: CSSProperties = undefined;
+        if (node.flag?.indexOf("fromMap") > -1) {
+            ret = {
+                color: "green"
             }
         }
-        if(node.flag?.indexOf("module")>-1){
-            ret={
-                color:"blue"
+        if (node.flag?.indexOf("module") > -1) {
+            ret = {
+                color: "blue"
             }
         }
 
@@ -250,10 +261,10 @@ export class FileExplorer extends Panel {
         root.fullpath = "";
         root.name = "client";
         //flag modules
-        for(let x=0;x<root.files.length;x++){
-            
-            if(jassijs.modules[root.files[x].name]!==undefined){
-                root.files[x].flag=(root.files[x].flag?.length>0)?"module":root.files[x].flag+" module";
+        for (let x = 0; x < root.files.length; x++) {
+
+            if (jassijs.modules[root.files[x].name] !== undefined) {
+                root.files[x].flag = (root.files[x].flag?.length > 0) ? "module" : root.files[x].flag + " module";
             }
         }
         var keys = this.tree.getExpandedKeys();
@@ -298,8 +309,8 @@ export class FileExplorer extends Panel {
 
 }
 export function test() {
-    var exp=new FileExplorer();
-    exp.height=100;
+    var exp = new FileExplorer();
+    exp.height = 100;
     return exp;
 
 }

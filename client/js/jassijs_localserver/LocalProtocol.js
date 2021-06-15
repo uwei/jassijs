@@ -43,7 +43,7 @@ define(["require", "exports", "jassijs/remote/RemoteProtocol"], function (requir
          }
          if (local.indexOf(clname) > -1||clname.startsWith("local")) {*/
         var data = JSON.parse(config.data);
-        var debugservermethods = []; //for testing run on server
+        var debugservermethods = ["dir"]; //for testing run on server
         if (debugservermethods.indexOf(data.method) > -1) {
             ret = await $.ajax(config);
         }
@@ -71,6 +71,19 @@ define(["require", "exports", "jassijs/remote/RemoteProtocol"], function (requir
                     }
                 }
             };
+            var Cookies = (await new Promise((resolve_3, reject_3) => { require(["jassijs/util/Cookies"], resolve_3, reject_3); })).Cookies;
+            if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
+                var DBManager = await classes.loadClass("jassi_localserver.DBManager");
+                var man = await DBManager.get();
+                var user = await man.login(context, Cookies.get("simulateUser"), Cookies.get("simulateUserPassword"));
+                if (user === undefined) {
+                    throw Error("simulated login failed");
+                }
+                else {
+                    context.request.user.user = user.id;
+                    context.request.user.isAdmin = user.isAdmin ? true : false;
+                }
+            }
         }
         if (prot._this === "static") {
             try {

@@ -225,7 +225,7 @@ export class Typescript {
     async renameFile(oldfile: string, newfile: string) {
         var ffile = monaco.Uri.from({ path: "/" + oldfile, scheme: 'file' });
         var oldmodell = monaco.editor.getModel(ffile); 
-        oldmodell.dispose();
+        oldmodell?.dispose();
         var text = await $.ajax({
             url: newfile,
             beforeSend: function (request) {
