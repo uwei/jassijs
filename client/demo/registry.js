@@ -3,7 +3,7 @@ define("demo/registry",["require"], function(require) {
  return {
   default: {
 	"demo/DBTest.ts": {
-		"date": 1622984379898
+		"date": 1623868743374
 	},
 	"demo/Dialog.ts": {
 		"date": 1622984213677,

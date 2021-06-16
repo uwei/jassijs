@@ -2,7 +2,10 @@ import { AR } from "de/remote/AR";
 import { Kunde } from "de/remote/Kunde";
 import {ARZeile} from "de/remote/ARZeile";
 
-
+export async function test(){
+   var h;
+    h.o=9;
+}
 export async function test4() {
     //await Kunde.sample();
     var ar:AR = <AR> (await AR.find({ id: 900 }))[0];

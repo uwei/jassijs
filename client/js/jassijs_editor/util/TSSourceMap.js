@@ -10,6 +10,9 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
     exports.TSSourceMap = void 0;
     //var sourceMap=window["sourceMap"];
     let TSSourceMap = class TSSourceMap {
+        async getCode(file) {
+            return await new Server_1.Server().loadFile(file);
+        }
         async getLineFromTS(tsfile, line, column) {
             var jscode;
             var mapcode = "";
@@ -18,12 +21,12 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
             if (Server_1.Server.filesInMap && Server_1.Server.filesInMap[tsfile]) {
                 var mod = Server_1.Server.filesInMap[tsfile].modul;
                 jsfilename = jassi_1.default.modules[mod];
-                mapcode = await $.ajax({ url: jsfilename + ".map", dataType: "text" });
+                mapcode = await this.getCode(jsfilename + ".map"); //await $.ajax({ url: jsfilename+".map", dataType: "text" });
                 filenumber = Server_1.Server.filesInMap[tsfile].id;
             }
             else {
                 jsfilename = "js/" + tsfile.replace(".ts", ".js");
-                jscode = await $.ajax({ url: jsfilename, dataType: "text" });
+                jscode = await this.getCode(jsfilename); // await $.ajax({ url: jsfilename, dataType: "text" });
                 var pos = jscode.indexOf("//" + "# sourceMappingURL=");
                 if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
                     var b64 = jscode.substring(pos + 50);
@@ -31,7 +34,8 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
                     //mapcode = decodeURIComponent(escape((b64)));
                 }
                 else {
-                    mapcode = await $.ajax({ url: "js/" + tsfile.replace(".ts", ".js.map"), dataType: "text" });
+                    //mapcode = await $.ajax({ url: "js/" + tsfile.replace(".ts", ".js.map"), dataType: "text" });
+                    mapcode = await this.getCode("js/" + tsfile.replace(".ts", ".js.map"));
                 }
             }
             var ret = new Promise((resolve, reject) => {
@@ -56,7 +60,7 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
             return ret;
         }
         async getLineFromJS(jsfile, line, column) {
-            var jscode = await $.ajax({ url: jsfile, dataType: "text" });
+            var jscode =  = await this.getCode(jsfile); // await $.ajax({ url: jsfile, dataType: "text" });
             var mapcode = "";
             var pos = jscode.indexOf("//" + "# sourceMappingURL=");
             if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
@@ -64,7 +68,8 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
                 mapcode = atob(b64);
             }
             else {
-                mapcode = await $.ajax({ url: jsfile.replace(".js", ".js.map"), dataType: "text" });
+                //mapcode = await $.ajax({ url: jsfile.replace(".js", ".js.map"), dataType: "text" });
+                mapcode = await new Server_1.Server().loadFile(jsfile.replace(".js", ".js.map"));
             }
             var ret = new Promise((resolve, reject) => {
                 sourcemap_1.default.SourceMapConsumer.initialize({

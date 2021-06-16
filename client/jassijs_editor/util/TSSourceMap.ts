@@ -15,6 +15,9 @@ import { $Class } from "jassijs/remote/Jassi";
 //var sourceMap=window["sourceMap"];
 @$Class("jassijs_editor.util.TSSourceMap")
 export class TSSourceMap {
+    async getCode(file:string){
+        return await new Server().loadFile(file);
+    }
     async getLineFromTS(tsfile: string, line, column):Promise<{line:number,column:number,jsfilename:string}> {
         var jscode;
         var mapcode = "";
@@ -23,11 +26,11 @@ export class TSSourceMap {
         if (Server.filesInMap && Server.filesInMap[tsfile]) {
             var mod = Server.filesInMap[tsfile].modul;
             jsfilename = jassijs.modules[mod];
-            mapcode = await $.ajax({ url: jsfilename+".map", dataType: "text" });
+            mapcode =await this.getCode( jsfilename+".map");//await $.ajax({ url: jsfilename+".map", dataType: "text" });
             filenumber=Server.filesInMap[tsfile].id;
         } else {
             jsfilename="js/" + tsfile.replace(".ts", ".js");
-            jscode = await $.ajax({ url: jsfilename, dataType: "text" });
+            jscode =await this.getCode(jsfilename);// await $.ajax({ url: jsfilename, dataType: "text" });
 
             var pos = jscode.indexOf("//" + "# sourceMappingURL=");
             if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
@@ -35,7 +38,8 @@ export class TSSourceMap {
                 mapcode = ts["base64decode"](undefined, b64);
                 //mapcode = decodeURIComponent(escape((b64)));
             } else {
-                mapcode = await $.ajax({ url: "js/" + tsfile.replace(".ts", ".js.map"), dataType: "text" });
+                //mapcode = await $.ajax({ url: "js/" + tsfile.replace(".ts", ".js.map"), dataType: "text" });
+                mapcode=await this.getCode( "js/" + tsfile.replace(".ts", ".js.map"));
             }
         }
         var ret:Promise<{line:number,column:number,jsfilename:string}> = new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
@@ -61,14 +65,15 @@ export class TSSourceMap {
     }
 
     async getLineFromJS(jsfile, line, column) {
-        var jscode = await $.ajax({ url: jsfile, dataType: "text" });
+        var jscode = =await this.getCode(jsfile)// await $.ajax({ url: jsfile, dataType: "text" });
         var mapcode = "";
         var pos = jscode.indexOf("//" + "# sourceMappingURL=");
         if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
             var b64 = jscode.substring(pos + 50);
             mapcode = atob(b64);
         } else {
-            mapcode = await $.ajax({ url: jsfile.replace(".js", ".js.map"), dataType: "text" });
+            //mapcode = await $.ajax({ url: jsfile.replace(".js", ".js.map"), dataType: "text" });
+            mapcode=await new Server().loadFile(jsfile.replace(".js", ".js.map"));
         }
 
         var ret = new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
