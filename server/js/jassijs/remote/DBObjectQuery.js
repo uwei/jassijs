@@ -38,8 +38,8 @@ class DBObjectQuery {
 }
 exports.DBObjectQuery = DBObjectQuery;
 async function test() {
-    var qu = (await DBObjectQuery.getQueries("de.Kunde"))[0];
-    var j = await qu.execute();
+    //	var qu=(await DBObjectQuery.getQueries("de.Kunde"))[0];
+    //	var j=await qu.execute();
 }
 exports.test = test;
 //# sourceMappingURL=DBObjectQuery.js.map

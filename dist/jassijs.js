@@ -93,7 +93,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/DatabaseSchema.ts": {
-                "date": 1622998607065,
+                "date": 1623876611416,
                 "jassijs.base.DatabaseSchema": {}
             },
             "jassijs/base/Errors.ts": {
@@ -114,7 +114,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Router": {}
             },
             "jassijs/base/Tests.ts": {
-                "date": 1623865837364,
+                "date": 1623877920287,
                 "jassijs.ui.TestAction": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -149,7 +149,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.DBObject": {}
             },
             "jassijs/remote/DBObjectQuery.ts": {
-                "date": 1622985400447
+                "date": 1623876712108
             },
             "jassijs/remote/Extensions.ts": {
                 "date": 1622985402466
@@ -530,7 +530,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/ErrorPanel.ts": {
-                "date": 1623176823112,
+                "date": 1623875382912,
                 "jassijs.ui.ErrorPanel": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -618,7 +618,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ObjectChooser.ts": {
-                "date": 1622985638955,
+                "date": 1623876837701,
                 "jassijs.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -1101,7 +1101,7 @@ define("jassijs/base/DatabaseSchema", ["require", "exports", "jassijs/remote/Jas
     "use strict";
     var DatabaseSchema_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.test = exports.DatabaseSchema = exports.DatabaseClass = exports.DatabaseField = void 0;
+    exports.test2 = exports.test3 = exports.DatabaseSchema = exports.DatabaseClass = exports.DatabaseField = void 0;
     class DatabaseField {
         get nullable() {
             var _a;
@@ -1636,7 +1636,7 @@ define("jassijs/base/DatabaseSchema", ["require", "exports", "jassijs/remote/Jas
         length?: number;
         [name:string]:any;
     }*/
-    async function test() {
+    async function test3() {
         var schema = new DatabaseSchema();
         await schema.loadSchemaFromCode();
         var schema2 = new DatabaseSchema();
@@ -1660,7 +1660,7 @@ define("jassijs/base/DatabaseSchema", ["require", "exports", "jassijs/remote/Jas
         //test.pop();
         //schema.visitNode(sourceFile);
     }
-    exports.test = test;
+    exports.test3 = test3;
     async function test2() {
         var schema = new DatabaseSchema();
         await schema.loadSchemaFromCode();
@@ -2145,9 +2145,15 @@ define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jas
                 container.add(container.statustext);
                 isRoot = true;
                 Errors_2.Errors.errors.onerror((err) => {
-                    var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
-                    newerrorpanel.addError(err);
-                    container.add(newerrorpanel);
+                    try {
+                        if (container.dom) { //sometimes off register was not called
+                            var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
+                            newerrorpanel.addError(err);
+                            container.add(newerrorpanel);
+                        }
+                    }
+                    catch (_a) {
+                    }
                 }, container._id);
             }
             for (var x = 0; x < all.length; x++) {
@@ -2180,16 +2186,22 @@ define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jas
                             }
                         }
                         catch (err) {
-                            var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
-                            newerrorpanel.addError({
-                                error: err
-                            });
-                            newerrorpanel.css({
-                                background_color: "red"
-                            });
-                            container.add(newerrorpanel);
-                            container.failedtests++;
-                            container.update();
+                            if (container.dom) {
+                                try {
+                                    var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
+                                    newerrorpanel.addError({
+                                        error: err
+                                    });
+                                    newerrorpanel.css({
+                                        background_color: "red"
+                                    });
+                                    container.add(newerrorpanel);
+                                    container.failedtests++;
+                                    container.update();
+                                }
+                                catch (_a) {
+                                }
+                            }
                         }
                     }
                 }
@@ -3233,8 +3245,8 @@ define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Cl
     }
     exports.DBObjectQuery = DBObjectQuery;
     async function test() {
-        var qu = (await DBObjectQuery.getQueries("de.Kunde"))[0];
-        var j = await qu.execute();
+        //	var qu=(await DBObjectQuery.getQueries("de.Kunde"))[0];
+        //	var j=await qu.execute();
     }
     exports.test = test;
 });
@@ -9005,26 +9017,47 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
         }
         async _convertURL(url) {
             //eliminate ?
-            var lpos = url.indexOf("?");
+            /*var lpos = url.indexOf("?");
             if (lpos > 0)
                 url = url.substring(0, lpos) + url.substring(url.indexOf(":", lpos));
             var href = window.location.href;
+    
             href = href.substring(0, window.location.href.lastIndexOf("/"));
             url = url.replace("$temp", "");
             url = url.replace(href + "/", "");
+            
+            //var wurl = window.location.href.split("/app.html")[0];
+            //url = url.replace(wurl, "");*/
             if (url.endsWith(")"))
                 url = url.substring(0, url.length - 1);
-            var wurl = window.location.href.split("/app.html")[0];
-            url = url.replace(wurl, "");
-            if (!url.startsWith("/"))
-                url = "/" + url;
-            if (url.startsWith("/js") && url.indexOf(".js") > -1) {
-                var aurl = url.substring(1).split(":");
-                var newline = await new TSSourceMap_1.TSSourceMap().getLineFromJS(aurl[0], Number(aurl[1]), Number(aurl[2]));
-                url = aurl[0].substring(3).replace(".js", ".ts") + ":" + newline + ":" + aurl[2];
-                if (url.startsWith("tmp/"))
-                    url = url.substring(4);
+            var wurl = url.substring(0, url.indexOf("#"));
+            var aurl = url.split(":");
+            if (aurl.length >= 3) {
+                var line = aurl[aurl.length - 2];
+                var col = aurl[aurl.length - 1];
+                var u = url.substring(0, url.length - 2 - line.length - col.length);
+                if (line === "" || col === "" || u === "")
+                    return url;
+                try {
+                    var pos = await new TSSourceMap_1.TSSourceMap().getLineFromJS(u, Number(line), Number(col));
+                    if (pos) {
+                        return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp", "") +
+                            ":" + pos.line + ":" + pos.column;
+                    }
+                }
+                catch (err) {
+                    return url;
+                }
             }
+            /* if (!url.startsWith("/"))
+                 url = "/" + url;
+             if (url.startsWith("/js") && url.indexOf(".js") > -1) {
+                 var aurl = url.substring(1).split(":");
+                 var newline = await new TSSourceMap().getLineFromJS(aurl[0], Number(aurl[1]), Number(aurl[2]));
+                 url = aurl[0].substring(3).replace(".js", ".ts") + ":" + newline + ":" + aurl[2];
+                 if (url.startsWith("tmp/"))
+                     url = url.substring(4);
+             }*/
             return url;
         }
         /**
@@ -10149,7 +10182,7 @@ define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "ja
 define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes"], function (require, exports, Jassi_58, Table_4, Panel_12, Button_7, Textbox_5, Property_20, Component_16, Classes_20) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ObjectChooser = void 0;
+    exports.test2 = exports.test = exports.ObjectChooser = void 0;
     /*
     https://blog.openshift.com/using-filezilla-and-sftp-on-windows-with-openshift/
     */
@@ -10346,7 +10379,19 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     exports.ObjectChooser = ObjectChooser;
     async function test() {
         // kk.o=0;
-        var Kunde = (await new Promise((resolve_34, reject_34) => { require(["de/remote/Kunde"], resolve_34, reject_34); })).Kunde;
+        var User = (await new Promise((resolve_34, reject_34) => { require(["jassijs/remote/security/User"], resolve_34, reject_34); })).User;
+        var dlg = new ObjectChooser();
+        dlg.items = "jassijs.security.User";
+        dlg.value = (await User.findOne());
+        //	var kunden=await jassijs.db.load("de.Kunde");
+        //	dlg.value=kunden[4];
+        //	dlg.me.IDTable.items=kunden;
+        return dlg;
+    }
+    exports.test = test;
+    async function test2() {
+        // kk.o=0;
+        var Kunde = (await new Promise((resolve_35, reject_35) => { require(["de/remote/Kunde"], resolve_35, reject_35); })).Kunde;
         var dlg = new ObjectChooser();
         dlg.items = "de.Kunde";
         dlg.value = (await Kunde.find({ id: 1 }))[0];
@@ -10355,7 +10400,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
         //	dlg.me.IDTable.items=kunden;
         return dlg;
     }
-    exports.test = test;
+    exports.test2 = test2;
 });
 define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditor"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_4, Button_8, Jassi_59, Property_21, Textbox_6, PropertyEditor_1) {
     "use strict";
@@ -11697,7 +11742,7 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi
                 Windows_8.default.addLeft(new SearchExplorer_1(), "Search");
         }
         async doSearch() {
-            var Typescript = (await new Promise((resolve_35, reject_35) => { require(["jassijs_editor/util/Typescript"], resolve_35, reject_35); })).Typescript;
+            var Typescript = (await new Promise((resolve_36, reject_36) => { require(["jassijs_editor/util/Typescript"], resolve_36, reject_36); })).Typescript;
             var all = [];
             var files = []; // [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
             var toFind = this.search.value.toLocaleLowerCase();
@@ -11743,7 +11788,7 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi
                 if (evt.data !== undefined && evt.data.file !== undefined) {
                     var pos = evt.data.pos;
                     var file = evt.data.file;
-                    new Promise((resolve_36, reject_36) => { require(["jassijs_editor/util/Typescript"], resolve_36, reject_36); }).then(Typescript => {
+                    new Promise((resolve_37, reject_37) => { require(["jassijs_editor/util/Typescript"], resolve_37, reject_37); }).then(Typescript => {
                         var text = Typescript_4.default.getCode(file);
                         var line = text.substring(0, pos).split("\n").length;
                         Router_6.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
@@ -13799,7 +13844,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
             this.debugpoints = {};
         }
         async createTable() {
-            var Table = (await new Promise((resolve_37, reject_37) => { require(["jassijs/ui/Table"], resolve_37, reject_37); })).Table;
+            var Table = (await new Promise((resolve_38, reject_38) => { require(["jassijs/ui/Table"], resolve_38, reject_38); })).Table;
             this.table = new Table({
                 dataTreeChildFunction: function (obj) {
                     var ret = [];
@@ -15259,7 +15304,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
                             ic.setAttribute("style", "display:none");
                     }
                 });
-                var file = (await new Promise((resolve_38, reject_38) => { require(["jassijs/modul"], resolve_38, reject_38); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
+                var file = (await new Promise((resolve_39, reject_39) => { require(["jassijs/modul"], resolve_39, reject_39); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
                 var text = await $.ajax({ method: "get", url: file, crossDomain: true, contentType: "text/plain" });
                 var all = text.split("}.");
                 var html = "";

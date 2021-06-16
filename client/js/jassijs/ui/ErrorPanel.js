@@ -145,26 +145,47 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
         }
         async _convertURL(url) {
             //eliminate ?
-            var lpos = url.indexOf("?");
+            /*var lpos = url.indexOf("?");
             if (lpos > 0)
                 url = url.substring(0, lpos) + url.substring(url.indexOf(":", lpos));
             var href = window.location.href;
+    
             href = href.substring(0, window.location.href.lastIndexOf("/"));
             url = url.replace("$temp", "");
             url = url.replace(href + "/", "");
+            
+            //var wurl = window.location.href.split("/app.html")[0];
+            //url = url.replace(wurl, "");*/
             if (url.endsWith(")"))
                 url = url.substring(0, url.length - 1);
-            var wurl = window.location.href.split("/app.html")[0];
-            url = url.replace(wurl, "");
-            if (!url.startsWith("/"))
-                url = "/" + url;
-            if (url.startsWith("/js") && url.indexOf(".js") > -1) {
-                var aurl = url.substring(1).split(":");
-                var newline = await new TSSourceMap_1.TSSourceMap().getLineFromJS(aurl[0], Number(aurl[1]), Number(aurl[2]));
-                url = aurl[0].substring(3).replace(".js", ".ts") + ":" + newline + ":" + aurl[2];
-                if (url.startsWith("tmp/"))
-                    url = url.substring(4);
+            var wurl = url.substring(0, url.indexOf("#"));
+            var aurl = url.split(":");
+            if (aurl.length >= 3) {
+                var line = aurl[aurl.length - 2];
+                var col = aurl[aurl.length - 1];
+                var u = url.substring(0, url.length - 2 - line.length - col.length);
+                if (line === "" || col === "" || u === "")
+                    return url;
+                try {
+                    var pos = await new TSSourceMap_1.TSSourceMap().getLineFromJS(u, Number(line), Number(col));
+                    if (pos) {
+                        return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp", "") +
+                            ":" + pos.line + ":" + pos.column;
+                    }
+                }
+                catch (err) {
+                    return url;
+                }
             }
+            /* if (!url.startsWith("/"))
+                 url = "/" + url;
+             if (url.startsWith("/js") && url.indexOf(".js") > -1) {
+                 var aurl = url.substring(1).split(":");
+                 var newline = await new TSSourceMap().getLineFromJS(aurl[0], Number(aurl[1]), Number(aurl[2]));
+                 url = aurl[0].substring(3).replace(".js", ".ts") + ":" + newline + ":" + aurl[2];
+                 if (url.startsWith("tmp/"))
+                     url = url.substring(4);
+             }*/
             return url;
         }
         /**

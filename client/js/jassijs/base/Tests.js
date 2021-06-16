@@ -38,9 +38,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
                 container.add(container.statustext);
                 isRoot = true;
                 Errors_1.Errors.errors.onerror((err) => {
-                    var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
-                    newerrorpanel.addError(err);
-                    container.add(newerrorpanel);
+                    try {
+                        if (container.dom) { //sometimes off register was not called
+                            var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
+                            newerrorpanel.addError(err);
+                            container.add(newerrorpanel);
+                        }
+                    }
+                    catch (_a) {
+                    }
                 }, container._id);
             }
             for (var x = 0; x < all.length; x++) {
@@ -73,16 +79,22 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
                             }
                         }
                         catch (err) {
-                            var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
-                            newerrorpanel.addError({
-                                error: err
-                            });
-                            newerrorpanel.css({
-                                background_color: "red"
-                            });
-                            container.add(newerrorpanel);
-                            container.failedtests++;
-                            container.update();
+                            if (container.dom) {
+                                try {
+                                    var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
+                                    newerrorpanel.addError({
+                                        error: err
+                                    });
+                                    newerrorpanel.css({
+                                        background_color: "red"
+                                    });
+                                    container.add(newerrorpanel);
+                                    container.failedtests++;
+                                    container.update();
+                                }
+                                catch (_a) {
+                                }
+                            }
                         }
                     }
                 }

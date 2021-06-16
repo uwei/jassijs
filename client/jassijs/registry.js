@@ -11,7 +11,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Actions": {}
 	},
 	"jassijs/base/DatabaseSchema.ts": {
-		"date": 1622998607065,
+		"date": 1623876611416,
 		"jassijs.base.DatabaseSchema": {}
 	},
 	"jassijs/base/Errors.ts": {
@@ -32,7 +32,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Router": {}
 	},
 	"jassijs/base/Tests.ts": {
-		"date": 1623865837364,
+		"date": 1623877920287,
 		"jassijs.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -67,7 +67,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
-		"date": 1622985400447
+		"date": 1623876712108
 	},
 	"jassijs/remote/Extensions.ts": {
 		"date": 1622985402466
@@ -448,7 +448,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/ErrorPanel.ts": {
-		"date": 1623176823112,
+		"date": 1623875382912,
 		"jassijs.ui.ErrorPanel": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -536,7 +536,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/ObjectChooser.ts": {
-		"date": 1622985638955,
+		"date": 1623876837701,
 		"jassijs.ui.ObjectChooser": {
 			"$UIComponent": [
 				{

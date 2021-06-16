@@ -16,7 +16,8 @@ import { $Class } from "jassijs/remote/Jassi";
 @$Class("jassijs_editor.util.TSSourceMap")
 export class TSSourceMap {
     async getCode(file:string){
-        return await new Server().loadFile(file);
+        return $.ajax({ url: file, dataType: "text" });
+// await new Server().loadFile(file);
     }
     async getLineFromTS(tsfile: string, line, column):Promise<{line:number,column:number,jsfilename:string}> {
         var jscode;
@@ -64,19 +65,20 @@ export class TSSourceMap {
         return ret;
     }
 
-    async getLineFromJS(jsfile, line, column) {
-        var jscode = =await this.getCode(jsfile)// await $.ajax({ url: jsfile, dataType: "text" });
+    async getLineFromJS(jsfile, line, column):Promise<{source:string,line:number,column:number}> {
+        var jscode = await this.getCode(jsfile)// await $.ajax({ url: jsfile, dataType: "text" });
         var mapcode = "";
         var pos = jscode.indexOf("//" + "# sourceMappingURL=");
         if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
             var b64 = jscode.substring(pos + 50);
             mapcode = atob(b64);
-        } else {
-            //mapcode = await $.ajax({ url: jsfile.replace(".js", ".js.map"), dataType: "text" });
+        }else if(pos){
+            //TODO parse the correct map
             mapcode=await new Server().loadFile(jsfile.replace(".js", ".js.map"));
-        }
+        }else
+            return undefined;
 
-        var ret = new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
+        var ret:any = new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
             sourceMap.SourceMapConsumer.initialize({
                 "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
             });
@@ -90,7 +92,7 @@ export class TSSourceMap {
                 })
                 return l;
             }).then(function (whatever) {
-                resolve(whatever.line);
+                resolve(whatever);
             });
         });
 

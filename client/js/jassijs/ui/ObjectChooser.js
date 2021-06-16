@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes"], function (require, exports, Jassi_1, Table_1, Panel_1, Button_1, Textbox_1, Property_1, Component_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ObjectChooser = void 0;
+    exports.test2 = exports.test = exports.ObjectChooser = void 0;
     /*
     https://blog.openshift.com/using-filezilla-and-sftp-on-windows-with-openshift/
     */
@@ -207,7 +207,19 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassi
     exports.ObjectChooser = ObjectChooser;
     async function test() {
         // kk.o=0;
-        var Kunde = (await new Promise((resolve_1, reject_1) => { require(["de/remote/Kunde"], resolve_1, reject_1); })).Kunde;
+        var User = (await new Promise((resolve_1, reject_1) => { require(["jassijs/remote/security/User"], resolve_1, reject_1); })).User;
+        var dlg = new ObjectChooser();
+        dlg.items = "jassijs.security.User";
+        dlg.value = (await User.findOne());
+        //	var kunden=await jassijs.db.load("de.Kunde");
+        //	dlg.value=kunden[4];
+        //	dlg.me.IDTable.items=kunden;
+        return dlg;
+    }
+    exports.test = test;
+    async function test2() {
+        // kk.o=0;
+        var Kunde = (await new Promise((resolve_2, reject_2) => { require(["de/remote/Kunde"], resolve_2, reject_2); })).Kunde;
         var dlg = new ObjectChooser();
         dlg.items = "de.Kunde";
         dlg.value = (await Kunde.find({ id: 1 }))[0];
@@ -216,6 +228,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassi
         //	dlg.me.IDTable.items=kunden;
         return dlg;
     }
-    exports.test = test;
+    exports.test2 = test2;
 });
 //# sourceMappingURL=ObjectChooser.js.map

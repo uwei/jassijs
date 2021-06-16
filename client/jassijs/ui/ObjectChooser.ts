@@ -210,8 +210,18 @@ export class ObjectChooser extends Button {
 		super.destroy();
 	}
 }
-
 export async function test() {
+	// kk.o=0;
+	var User = (await import("jassijs/remote/security/User")).User;
+	var dlg = new ObjectChooser();
+	dlg.items = "jassijs.security.User";
+	dlg.value = (await User.findOne());
+	//	var kunden=await jassijs.db.load("de.Kunde");
+	//	dlg.value=kunden[4];
+	//	dlg.me.IDTable.items=kunden;
+	return dlg;
+}
+export async function test2() {
 	// kk.o=0;
 	var Kunde = (await import("de/remote/Kunde")).Kunde
 	var dlg = new ObjectChooser();

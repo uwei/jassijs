@@ -11,7 +11,8 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
     //var sourceMap=window["sourceMap"];
     let TSSourceMap = class TSSourceMap {
         async getCode(file) {
-            return await new Server_1.Server().loadFile(file);
+            return $.ajax({ url: file, dataType: "text" });
+            // await new Server().loadFile(file);
         }
         async getLineFromTS(tsfile, line, column) {
             var jscode;
@@ -60,17 +61,19 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
             return ret;
         }
         async getLineFromJS(jsfile, line, column) {
-            var jscode =  = await this.getCode(jsfile); // await $.ajax({ url: jsfile, dataType: "text" });
+            var jscode = await this.getCode(jsfile); // await $.ajax({ url: jsfile, dataType: "text" });
             var mapcode = "";
             var pos = jscode.indexOf("//" + "# sourceMappingURL=");
             if (jscode.indexOf("//" + "# sourceMappingURL=data:application") > -1) {
                 var b64 = jscode.substring(pos + 50);
                 mapcode = atob(b64);
             }
-            else {
-                //mapcode = await $.ajax({ url: jsfile.replace(".js", ".js.map"), dataType: "text" });
+            else if (pos) {
+                //TODO parse the correct map
                 mapcode = await new Server_1.Server().loadFile(jsfile.replace(".js", ".js.map"));
             }
+            else
+                return undefined;
             var ret = new Promise((resolve, reject) => {
                 sourcemap_1.default.SourceMapConsumer.initialize({
                     "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
@@ -85,7 +88,7 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
                     });
                     return l;
                 }).then(function (whatever) {
-                    resolve(whatever.line);
+                    resolve(whatever);
                 });
             });
             return ret;

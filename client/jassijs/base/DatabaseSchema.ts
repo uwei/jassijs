@@ -555,7 +555,7 @@ class ColumnOptions{
     length?: number;
     [name:string]:any;
 }*/
-export async function test() {
+export async function test3() {
     var schema = new DatabaseSchema();
     await schema.loadSchemaFromCode();
     var schema2 = new DatabaseSchema();

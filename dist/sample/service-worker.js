@@ -143,7 +143,7 @@ async function handleEvent(event) {
       if (event.request.url.indexOf("?") > 0) {
         s = event.request.url + "&lastcachedate=" + dat;
       }
-      if (dat !== undefined) {
+      if (dat !== undefined&&dat !== null) {
         let networkResponse = await fetch(s, { cache: "no-store" });
         //networkResponse = await refetchIfNeeded(s, event, networkResponse);
         if (networkResponse.headers.get("X-Custom-UpToDate") === "true") {

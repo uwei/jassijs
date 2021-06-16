@@ -8,7 +8,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
     "use strict";
     var DatabaseSchema_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.test = exports.DatabaseSchema = exports.DatabaseClass = exports.DatabaseField = void 0;
+    exports.test2 = exports.test3 = exports.DatabaseSchema = exports.DatabaseClass = exports.DatabaseField = void 0;
     class DatabaseField {
         get nullable() {
             var _a;
@@ -543,7 +543,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
         length?: number;
         [name:string]:any;
     }*/
-    async function test() {
+    async function test3() {
         var schema = new DatabaseSchema();
         await schema.loadSchemaFromCode();
         var schema2 = new DatabaseSchema();
@@ -567,7 +567,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
         //test.pop();
         //schema.visitNode(sourceFile);
     }
-    exports.test = test;
+    exports.test3 = test3;
     async function test2() {
         var schema = new DatabaseSchema();
         await schema.loadSchemaFromCode();

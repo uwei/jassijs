@@ -45,10 +45,15 @@ export class TestAction {
             container.add(container.statustext);
             isRoot = true;
             Errors.errors.onerror((err) => {
-                var newerrorpanel = new ErrorPanel(false, false, false);
-                newerrorpanel.addError(err);
-                container.add(newerrorpanel);
+                try {
+                    if (container.dom) {//sometimes off register was not called
+                        var newerrorpanel = new ErrorPanel(false, false, false);
+                        newerrorpanel.addError(err);
+                        container.add(newerrorpanel);
+                    }
+                } catch {
 
+                }
             }, container._id);
         }
 
@@ -81,16 +86,22 @@ export class TestAction {
                             }
                         }
                     } catch (err) {
-                        var newerrorpanel = new ErrorPanel(false, false, false);
-                        newerrorpanel.addError({
-                            error: err
-                        });
-                        newerrorpanel.css({
-                            background_color: "red"
-                        });
-                        container.add(newerrorpanel);
-                        container.failedtests++;
-                        container.update();
+                        if (container.dom) {
+                            try {
+                                var newerrorpanel = new ErrorPanel(false, false, false);
+                                newerrorpanel.addError({
+                                    error: err
+                                });
+                                newerrorpanel.css({
+                                    background_color: "red"
+                                });
+                                container.add(newerrorpanel);
+                                container.failedtests++;
+                                container.update();
+                            } catch {
+
+                            }
+                        }
                     }
                 }
             }
@@ -101,7 +112,7 @@ export class TestAction {
             Errors.errors.offerror(container._id);
             console.log("off error");
         }
-        
+
     }
 
 }
