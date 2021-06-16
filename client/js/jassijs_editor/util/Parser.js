@@ -622,6 +622,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
     ], Parser);
     exports.Parser = Parser;
     async function test() {
+        await Typescript_1.default.waitForInited;
         var code = Typescript_1.default.getCode("jassijs_editor/util/Parser.ts");
         var parser = new Parser();
         parser.parse(code, undefined);

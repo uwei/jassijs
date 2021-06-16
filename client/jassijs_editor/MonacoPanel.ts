@@ -304,7 +304,7 @@ export async function test() {
     //await Settings.save(Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user")
     var dlg = new MonacoPanel();
   //  var code = await new Server().loadFile("a/Dialog.ts");
-    dlg.loadsample();
+    await dlg.loadsample();
     setTimeout(()=>{
     dlg.width = "800";
     dlg.height = "100";

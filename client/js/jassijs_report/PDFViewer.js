@@ -32,6 +32,9 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
             this.layout(this.me);
         }
         layout(me) {
+            this.css({
+                overflow: "auto"
+            });
             me.toolbar = new BoxPanel_1.BoxPanel();
             me.canavasPanel = new Canavas();
             me.plus = new Button_1.Button();
@@ -75,8 +78,8 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
                 var viewport = page.getViewport({ scale: _this.scale });
                 _this.canvas.height = viewport.height;
                 _this.canvas.width = viewport.width;
-                _this.width = viewport.width;
-                _this.height = viewport.height;
+                //   _this.width=viewport.width;
+                //   _this.height=viewport.height;
                 // Render PDF page into canvas context
                 var renderContext = {
                     canvasContext: _this.ctx,
@@ -174,6 +177,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
             'MDAwIG4gCjAwMDAwMDAzODAgMDAwMDAgbiAKdHJhaWxlcgo8PAogIC9TaXplIDYKICAvUm9v' +
             'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G';
         ret.value = data;
+        //    ret.height=160;
         return ret;
     }
     exports.test = test;

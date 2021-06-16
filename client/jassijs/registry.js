@@ -32,7 +32,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Router": {}
 	},
 	"jassijs/base/Tests.ts": {
-		"date": 1623507738740,
+		"date": 1623865837364,
 		"jassijs.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -456,7 +456,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/FileExplorer.ts": {
-		"date": 1623782288949,
+		"date": 1623862680407,
 		"jassijs.ui.FileActions": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -852,7 +852,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Tree.ts": {
-		"date": 1622984379893,
+		"date": 1623866476580,
 		"jassijs.ui.TreeEditorPropertiesMulti": {},
 		"jassijs.ui.TreeEditorProperties": {},
 		"jassijs.ui.Tree": {

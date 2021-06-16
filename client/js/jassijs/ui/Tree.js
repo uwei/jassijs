@@ -365,7 +365,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             if (nd === null) {
                 var path = "";
                 var geskey = "";
-                key.split("|").forEach((k) => {
+                key === null || key === void 0 ? void 0 : key.split("|").forEach((k) => {
                     geskey = geskey + (geskey === "" ? "" : "|") + k;
                     path = path + "/" + geskey;
                 });

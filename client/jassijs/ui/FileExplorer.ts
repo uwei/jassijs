@@ -36,7 +36,7 @@ export class FileActions {
             } else
                 return;
         }
-        console.log("create " + fileName);
+        //console.log("create " + fileName);
         var key = FileExplorer.instance?.tree?.getKeyFromItem(all[0]);
         var newfile = path + "/" + fileName;
 
@@ -97,7 +97,7 @@ export class FileActions {
         } else
             res = await OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
         if (res.button === "ok" && res.text !== all[0].name) {
-            console.log("create Folder" + res.text);
+           // console.log("create Folder" + res.text);
             var key = FileExplorer.instance?.tree.getKeyFromItem(all[0]);
             var newfile = path + "/" + res.text;
             var ret = await new Server().createFolder(newfile);
@@ -177,7 +177,7 @@ export class FileActions {
             } else
                 res = await OptionDialog.show("Enter new name:", ["ok", "cancel"], undefined, true, all[0].name);
             if (res.button === "ok" && res.text !== all[0].name) {
-                console.log("rename " + all[0].name + " to " + res.text);
+                //console.log("rename " + all[0].name + " to " + res.text);
                 var key = FileExplorer.instance?.tree.getKeyFromItem(all[0]);
                 var path = all[0].parent !== undefined ? all[0].parent.fullpath : "";
                 var newfile = path + "/" + res.text;
@@ -188,7 +188,7 @@ export class FileActions {
                     return;
                 }
                 if (!all[0].isDirectory())
-                    typescript?.renameFile(all[0].fullpath, newfile);
+                    await typescript?.renameFile(all[0].fullpath, newfile);
                 await FileExplorer.instance?.refresh();
                 FileExplorer.instance?.tree.activateKey(newkey);
             }

@@ -47,6 +47,9 @@ export class PDFViewer extends Panel {
         this.layout(this.me);
     }
     layout(me: Me) {
+        this.css({
+            overflow:"auto"
+        });
         me.toolbar = new BoxPanel();
         me.canavasPanel = new Canavas();
         me.plus = new Button();
@@ -90,8 +93,8 @@ export class PDFViewer extends Panel {
             var viewport = page.getViewport({scale:_this.scale});
             _this.canvas.height = viewport.height;
             _this.canvas.width = viewport.width;
-            _this.width=viewport.width;
-            _this.height=viewport.height;
+         //   _this.width=viewport.width;
+         //   _this.height=viewport.height;
             
             // Render PDF page into canvas context
             var renderContext = {
@@ -185,5 +188,6 @@ export async function test() {
         'MDAwIG4gCjAwMDAwMDAzODAgMDAwMDAgbiAKdHJhaWxlcgo8PAogIC9TaXplIDYKICAvUm9v' +
         'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G';
     ret.value = data;
+//    ret.height=160;
     return ret;
 }

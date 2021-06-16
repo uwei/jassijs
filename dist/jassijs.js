@@ -114,7 +114,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Router": {}
             },
             "jassijs/base/Tests.ts": {
-                "date": 1623507738740,
+                "date": 1623865837364,
                 "jassijs.ui.TestAction": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -538,7 +538,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/FileExplorer.ts": {
-                "date": 1623782288949,
+                "date": 1623862680407,
                 "jassijs.ui.FileActions": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -934,7 +934,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Tree.ts": {
-                "date": 1622984379893,
+                "date": 1623866476580,
                 "jassijs.ui.TreeEditorPropertiesMulti": {},
                 "jassijs.ui.TreeEditorProperties": {},
                 "jassijs.ui.Tree": {
@@ -2144,12 +2144,12 @@ define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jas
                 container.statustext = new HTMLPanel_1.HTMLPanel();
                 container.add(container.statustext);
                 isRoot = true;
+                Errors_2.Errors.errors.onerror((err) => {
+                    var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
+                    newerrorpanel.addError(err);
+                    container.add(newerrorpanel);
+                }, container._id);
             }
-            Errors_2.Errors.errors.onerror((err) => {
-                var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
-                newerrorpanel.addError(err);
-                container.add(newerrorpanel);
-            }, container._id);
             for (var x = 0; x < all.length; x++) {
                 var file = all[x];
                 if (file.isDirectory()) {
@@ -2197,8 +2197,9 @@ define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jas
             if (isRoot) {
                 container.finished = true;
                 container.update();
+                Errors_2.Errors.errors.offerror(container._id);
+                console.log("off error");
             }
-            Errors_2.Errors.errors.offerror(container._id);
         }
     };
     __decorate([
@@ -9099,7 +9100,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
                 else
                     return;
             }
-            console.log("create " + fileName);
+            //console.log("create " + fileName);
             var key = (_b = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree) === null || _b === void 0 ? void 0 : _b.getKeyFromItem(all[0]);
             var newfile = path + "/" + fileName;
             var ret = await new Server_3.Server().createFile(newfile, code);
@@ -9147,7 +9148,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
             else
                 res = await OptionDialog_7.OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
             if (res.button === "ok" && res.text !== all[0].name) {
-                console.log("create Folder" + res.text);
+                // console.log("create Folder" + res.text);
                 var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0]);
                 var newfile = path + "/" + res.text;
                 var ret = await new Server_3.Server().createFolder(newfile);
@@ -9219,7 +9220,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
                 else
                     res = await OptionDialog_7.OptionDialog.show("Enter new name:", ["ok", "cancel"], undefined, true, all[0].name);
                 if (res.button === "ok" && res.text !== all[0].name) {
-                    console.log("rename " + all[0].name + " to " + res.text);
+                    //console.log("rename " + all[0].name + " to " + res.text);
                     var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0]);
                     var path = all[0].parent !== undefined ? all[0].parent.fullpath : "";
                     var newfile = path + "/" + res.text;
@@ -9230,7 +9231,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
                         return;
                     }
                     if (!all[0].isDirectory())
-                        Typescript_3.default === null || Typescript_3.default === void 0 ? void 0 : Typescript_3.default.renameFile(all[0].fullpath, newfile);
+                        await (Typescript_3.default === null || Typescript_3.default === void 0 ? void 0 : Typescript_3.default.renameFile(all[0].fullpath, newfile));
                     await ((_b = FileExplorer.instance) === null || _b === void 0 ? void 0 : _b.refresh());
                     (_c = FileExplorer.instance) === null || _c === void 0 ? void 0 : _c.tree.activateKey(newkey);
                 }
@@ -13344,7 +13345,7 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
             if (nd === null) {
                 var path = "";
                 var geskey = "";
-                key.split("|").forEach((k) => {
+                key === null || key === void 0 ? void 0 : key.split("|").forEach((k) => {
                     geskey = geskey + (geskey === "" ? "" : "|") + k;
                     path = path + "/" + geskey;
                 });

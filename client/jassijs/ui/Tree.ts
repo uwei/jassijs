@@ -382,7 +382,7 @@ export class Tree extends Component {
         if (nd === null) {
             var path = "";
             var geskey = "";
-            key.split("|").forEach((k) => {
+            key?.split("|").forEach((k) => {
                 geskey = geskey + (geskey === "" ? "" : "|") + k;
                 path = path + "/" + geskey;
             });

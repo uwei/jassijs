@@ -36,11 +36,7 @@ define(["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jas
     ], ReportKunde);
     exports.ReportKunde = ReportKunde;
     async function test() {
-        // kk.o=0;
         var dlg = new ReportKunde();
-        //  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};
-        //	dlg.value=jassijs.db.load("de.Kunde",9);	
-        //console.log(JSON.stringify(dlg.toJSON()));
         return dlg;
     }
     exports.test = test;

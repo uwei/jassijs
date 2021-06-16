@@ -836,7 +836,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
     "use strict";
     var Filessystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = void 0;
+    exports.test2 = void 0;
     class FileEntry {
     }
     let Filessystem = Filessystem_1 = class Filessystem {
@@ -1178,7 +1178,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
         Jassi_2.$Class("jassijs_localserver.Filessystem")
     ], Filessystem);
     exports.default = Filessystem;
-    async function test() {
+    async function test2() {
         var fs = new Filessystem();
         var hh = await fs.dir("local");
         /*await fs.createFolder("demo");
@@ -1210,7 +1210,7 @@ define("local/registry",["require"], function(require) {
  }
 });`]);
     }
-    exports.test = test;
+    exports.test2 = test2;
 });
 define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/server/Filesystem", "jassijs_editor/util/Typescript"], function (require, exports, Filesystem_1) {
     "use strict";

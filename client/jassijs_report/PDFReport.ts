@@ -399,6 +399,7 @@ export async function test() {
     rep.value = def;
     var viewer = new PDFViewer();
     viewer.value = await rep.getBase64();
+    viewer.height=300;
     return viewer;
 }
 

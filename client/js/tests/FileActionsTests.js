@@ -18,10 +18,10 @@ define(["require", "exports", "jassijs/ui/FileExplorer", "jassijs/remote/FileNod
             await FileExplorer_1.FileActions.newFolder([tests], "testfolder");
             var tf = new FileNode_1.FileNode("tests/testfolder");
             tf.parent = tests;
+            tf.files = [];
             await FileExplorer_1.FileActions.rename([tf], "testfolder2");
             var tf2 = new FileNode_1.FileNode("tests/testfolder2");
             tf2.files = [];
-            await FileExplorer_1.FileActions.newFile([tf2], "TestFile.ts", code, false);
             await FileExplorer_1.FileActions.download([tf2]);
             await FileExplorer_1.FileActions.dodelete([tf2], false);
         }
@@ -29,16 +29,20 @@ define(["require", "exports", "jassijs/ui/FileExplorer", "jassijs/remote/FileNod
             throw err;
         }
         finally {
-            new Server_1.Server().delete("tests/TestFile.ts");
             try {
-                new Server_1.Server().delete("tests/testfolder");
+                new Server_1.Server().delete("tests/TestFile.ts");
             }
             catch (_a) {
             }
             try {
-                new Server_1.Server().delete("tests/testfolder2");
+                new Server_1.Server().delete("tests/testfolder");
             }
             catch (_b) {
+            }
+            try {
+                new Server_1.Server().delete("tests/testfolder2");
+            }
+            catch (_c) {
             }
         }
     }

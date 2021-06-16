@@ -635,6 +635,7 @@ export class Parser {
 }
 
 export async function test() {
+    await typescript.waitForInited;
     var code = typescript.getCode("jassijs_editor/util/Parser.ts");
     var parser = new Parser();
     parser.parse(code, undefined);

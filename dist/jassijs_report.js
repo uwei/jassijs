@@ -384,6 +384,7 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
         rep.value = def;
         var viewer = new PDFViewer_1.PDFViewer();
         viewer.value = await rep.getBase64();
+        viewer.height = 300;
         return viewer;
     }
     exports.test = test;
@@ -413,6 +414,9 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
             this.layout(this.me);
         }
         layout(me) {
+            this.css({
+                overflow: "auto"
+            });
             me.toolbar = new BoxPanel_1.BoxPanel();
             me.canavasPanel = new Canavas();
             me.plus = new Button_1.Button();
@@ -456,8 +460,8 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
                 var viewport = page.getViewport({ scale: _this.scale });
                 _this.canvas.height = viewport.height;
                 _this.canvas.width = viewport.width;
-                _this.width = viewport.width;
-                _this.height = viewport.height;
+                //   _this.width=viewport.width;
+                //   _this.height=viewport.height;
                 // Render PDF page into canvas context
                 var renderContext = {
                     canvasContext: _this.ctx,
@@ -555,6 +559,7 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
             'MDAwIG4gCjAwMDAwMDAzODAgMDAwMDAgbiAKdHJhaWxlcgo8PAogIC9TaXplIDYKICAvUm9v' +
             'dCAxIDAgUgo+PgpzdGFydHhyZWYKNDkyCiUlRU9G';
         ret.value = data;
+        //    ret.height=160;
         return ret;
     }
     exports.test = test;
@@ -2045,170 +2050,6 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     }
     exports.test = test;
 });
-define("jassijs_report/ReportEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/Button", "jassijs/util/Tools", "jassijs_report/designer/ReportDesigner", "jassijs_editor/AcePanel"], function (require, exports, Jassi_11, Panel_3, VariablePanel_1, DockingContainer_1, Button_2, Tools_1, ReportDesigner_1, AcePanel_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ReportEditor = void 0;
-    /**
-     * Panel for editing sources
-     * @class jassijs_report.ReportEditor
-     */
-    let ReportEditor = class ReportEditor extends Panel_3.Panel {
-        constructor() {
-            super();
-            this.maximize();
-            this._main = new DockingContainer_1.DockingContainer();
-            this._codeView = new Panel_3.Panel();
-            this._codePanel = new AcePanel_1.AcePanel();
-            this._design = new ReportDesigner_1.ReportDesigner();
-            this._variables = new VariablePanel_1.VariablePanel();
-            this._codeToolbar = new Panel_3.Panel();
-            this._init();
-        }
-        _init() {
-            var _this = this;
-            this._codePanel.width = "100%";
-            this._codePanel.mode = "typescript";
-            /*  this._codePanel.getDocTooltip = function (item) {
-                  return _this.getDocTooltip(item);
-              }*/
-            this._codeToolbar["horizontal"] = false;
-            this._codeToolbar.height = "30";
-            this._codeView["horizontal"] = true;
-            this._codeView.add(this._codeToolbar);
-            this._codeView.add(this._codePanel);
-            this._codePanel.height = "calc(100% - 31px)";
-            this._codePanel.width = "100%";
-            this._main.width = "calc(100% - 1px)";
-            this._main.height = "99%";
-            var undo = new Button_2.Button();
-            undo.icon = "mdi mdi-undo";
-            undo.tooltip = "Undo (Strg+Z)";
-            undo.onclick(function () {
-                console.log(_this._main.layout);
-                _this._main.layout = _this._main.layout;
-                _this._codePanel.undo();
-            });
-            this._codeToolbar.add(undo);
-            var lasttop = this._main.dom.offsetTop;
-            var lasttop2 = 0;
-            this._main.onresize = function () {
-                setTimeout(function () {
-                    _this._codePanel.resize();
-                }, 1000);
-                /*     if(_this._main.dom.offsetTop!==lasttop){//resize to height
-                        lasttop=_this._main.dom.offsetTop;
-                        var i="calc(100% - "+(lasttop+1)+"px)";
-                        _this._main.height=i;
-                    }*/
-                //TODO _this._designView.resize();
-            };
-            super.add(this._main);
-            this._variables.value = [];
-            this._variables.addVariable(this, {});
-            this._installView();
-            //Dockingview
-            this._design.codeEditor = this;
-            //   this._codePanel.setCompleter(this);
-        }
-        _installView() {
-            //	debugger;
-            this._main.add(this._codeView, "Code..", "code");
-            this._main.add(this._design, "Design", "design");
-            var des = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},        "content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"",	        "content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,		        "content":[		        	{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,			        "content":[	{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},			        			{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}			        		  ]		        },		        {"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,		        "content":[		        	{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,			        "content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}			        		]		        	},			        {"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,			        	"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true			        					        	}]			        },			         {"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,			        	"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true			        					        	}]			        },			     ]}			     ]},			 ]	        }	    	],	    	"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
-            this._design.mainLayout = JSON.stringify(des);
-        }
-        /**
-        * get all known instances for type
-        * @param {type} type - the type we are interested
-        * @returns {[string]}
-        */
-        getVariablesForType(type) {
-            return this._variables.getVariablesForType(type);
-        }
-        /**
-         * gets the name of the variabel that holds the object
-         * @param {object} ob - the
-         */
-        getVariableFromObject(ob) {
-            return this._variables.getVariableFromObject(ob);
-        }
-        /**
-         * gets the name object of the given variabel
-         * @param {string} ob - the name of the variable
-         */
-        getObjectFromVariable(varname) {
-            return this._variables.getObjectFromVariable(varname);
-        }
-        /**
-          * renames a variable in design
-          * @param {string} oldName
-          * @param {string} newName
-          */
-        renameVariable(oldName, newName) {
-        }
-        /**
-         * @member { jassijs.ui.VariablePanel} - the variable
-         */
-        set variables(value) {
-            this._variables = value;
-        }
-        get variables() {
-            return undefined;
-            return this._variables;
-        }
-        /**
-         * @member {string} - the code
-         */
-        set value(value) {
-            // this._codePanel.file = this._file;
-            this._codePanel.value = value;
-        }
-        get value() {
-            return this._codePanel.value;
-        }
-        setCursorPorition(position) {
-            this.cursorPosition = this._codePanel.numberToPosition(position);
-        }
-        /**
-        * @param {object} position - the current cursor position {row= ,column=}
-        */
-        set cursorPosition(cursor) {
-            this._codePanel.cursorPosition = cursor;
-        }
-        get cursorPosition() {
-            return this._codePanel.cursorPosition;
-        }
-        destroy() {
-            this._codeView.destroy();
-            this._codePanel.destroy();
-            this._design.destroy();
-            this._codeToolbar.destroy();
-            //this._main.destroy();
-            super.destroy();
-        }
-        /**
-        * undo action
-        */
-        undo() {
-            this._codePanel.undo();
-        }
-    };
-    ReportEditor = __decorate([
-        Jassi_11.$Class("jassijs_report.ReportEditor"),
-        __metadata("design:paramtypes", [])
-    ], ReportEditor);
-    exports.ReportEditor = ReportEditor;
-    async function test() {
-        var editor = new ReportEditor();
-        editor.height = 500;
-        var rep = { "content": { "stack": [{ "text": "Halloso" }, { "text": "sdsfsdf" }] } };
-        editor.value = Tools_1.Tools.objectToJson(rep, "", true);
-        return editor;
-    }
-    exports.test = test;
-    ;
-});
 define("jassijs_report/modul", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2238,18 +2079,18 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1622998616949,
+                "date": 1623864446610,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/modul.ts": {
                 "date": 1622998616843
             },
             "jassijs_report/PDFReport.ts": {
-                "date": 1622998616949,
+                "date": 1623864507761,
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
-                "date": 1622998616843,
+                "date": 1623863773400,
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
@@ -2324,10 +2165,6 @@ define("jassijs_report/registry", ["require"], function (require) {
                     ]
                 }
             },
-            "jassijs_report/ReportEditor.ts": {
-                "date": 1622998616890,
-                "jassijs_report.ReportEditor": {}
-            },
             "jassijs_report/RStack.ts": {
                 "date": 1622998616843,
                 "jassijs_report.RStack": {
@@ -2379,7 +2216,7 @@ define("jassijs_report/registry", ["require"], function (require) {
         }
     };
 });
-define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/BoxPanel"], function (require, exports, Jassi_12, BoxPanel_3) {
+define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/BoxPanel"], function (require, exports, Jassi_11, BoxPanel_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Report = void 0;
@@ -2399,7 +2236,7 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
         }
     };
     Report = __decorate([
-        Jassi_12.$Class("jassijs_report.Report")
+        Jassi_11.$Class("jassijs_report.Report")
         //@$UIComponent({editableChildComponents:["this"]})
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -2409,10 +2246,10 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
 });
 //jassijs.register("reportcomponent", "jassijs_report.Report", "report/Report", "res/report.ico");
 // return CodeEditor.constructor;
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_13, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_2, ReportDesign_6, Tools_2) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_12, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_2, ReportDesign_6, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ReportDesigner = void 0;
+    exports.test = exports.test2 = exports.ReportDesigner = void 0;
     let ReportDesigner = class ReportDesigner extends ComponentDesigner_1.ComponentDesigner {
         constructor() {
             super();
@@ -2454,7 +2291,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                 var rep = new PDFReport_1.PDFReport();
                 //rep.content=this.designedComponent["design];
                 var data = this._codeChanger.value.toJSON();
-                rep.value = Tools_2.Tools.copyObject(data); // designedComponent["design"];
+                rep.value = Tools_1.Tools.copyObject(data); // designedComponent["design"];
                 //viewer.value = await rep.getBase64();
                 rep.getBase64().then((data) => {
                     this.pdfviewer.report = rep;
@@ -2480,7 +2317,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             if (this._codeChanger.parser.sourceFile === undefined)
                 this._codeChanger.updateParser();
             //@ts-ignore
-            let ob = Tools_2.Tools.objectToJson(this.designedComponent.toJSON(), undefined, false);
+            let ob = Tools_1.Tools.objectToJson(this.designedComponent.toJSON(), undefined, false);
             this._codeChanger.setPropertyInCode("design", ob);
         }
         createComponent(type, component, top, left, newParent, beforeComponent) {
@@ -2562,11 +2399,11 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         }
     };
     ReportDesigner = __decorate([
-        Jassi_13.$Class("jassijs_report.designer.ReportDesigner"),
+        Jassi_12.$Class("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;
-    async function test() {
+    async function test2() {
         var rep = new PDFReport_1.PDFReport();
         var def = {
             content: {
@@ -2590,13 +2427,61 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                         ]
                     }
                 ]
+            },
+            data: {
+                invoice: {
+                    number: 1000,
+                    date: "20.07.2018",
+                    customer: {
+                        firstname: "Henry",
+                        lastname: "Klaus",
+                        street: "Hauptstr. 157",
+                        place: "chemnitz"
+                    }
+                }
             }
         };
         //	def.content=replaceTemplates(def.content,def.data);
         rep.value = def;
         var viewer = new PDFViewer_2.PDFViewer();
         viewer.value = await rep.getBase64();
+        viewer.height = "200";
         return viewer;
+    }
+    exports.test2 = test2;
+    ;
+    async function test() {
+        var CodeEditor = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/CodeEditor"], resolve_1, reject_1); })).CodeEditor;
+        var editor = new CodeEditor();
+        //var url = "jassijs_editor/AcePanel.ts";
+        editor.height = 300;
+        editor.width = "100%";
+        //await editor.openFile(url);
+        editor.value = `import { ReportDesign } from "jassijs_report/ReportDesign";
+
+import { $Class } from "jassijs/remote/Jassi";
+import { $Property } from "jassijs/ui/Property";
+
+export class SampleReport extends ReportDesign {
+    me = {};
+    constructor() {
+        super();
+        this.layout(this.me);
+    }
+    async setdata() {
+    }
+    layout(me) {
+        this.design = { "content": { "stack": [{ "text": "Hallo" }, { "text": "ok" }, { "columns": [{ "text": "text" }, { "text": "text" }] }] } };
+    }
+}
+export async function test() {
+    var dlg = new SampleReport();
+    return dlg;
+}
+
+`;
+        editor.evalCode();
+        return editor;
     }
     exports.test = test;
     ;

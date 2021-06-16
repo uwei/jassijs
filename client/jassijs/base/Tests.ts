@@ -44,13 +44,14 @@ export class TestAction {
 
             container.add(container.statustext);
             isRoot = true;
-        }
-        Errors.errors.onerror((err) => {
-            var newerrorpanel = new ErrorPanel(false, false, false);
-            newerrorpanel.addError(err);
-            container.add(newerrorpanel);
+            Errors.errors.onerror((err) => {
+                var newerrorpanel = new ErrorPanel(false, false, false);
+                newerrorpanel.addError(err);
+                container.add(newerrorpanel);
 
-        }, container._id);
+            }, container._id);
+        }
+
         for (var x = 0; x < all.length; x++) {
             var file = all[x];
             if (file.isDirectory()) {
@@ -97,8 +98,10 @@ export class TestAction {
         if (isRoot) {
             container.finished = true;
             container.update();
+            Errors.errors.offerror(container._id);
+            console.log("off error");
         }
-        Errors.errors.offerror(container._id);
+        
     }
 
 }
@@ -149,20 +152,20 @@ export class Test {
     * @parameter func - the function that should failed
     **/
     async expectErrorAsync(func) {
-        var errors=false;
+        var errors = false;
         try {
             var errobj;
-            
+
             await func().then((e) => {
-                
+
             }).catch((e) => {
-                errors=true;
+                errors = true;
             });
         } catch {
-           errors=true;
+            errors = true;
         }
-    if(!errors)
-        throw new Error("test fails");
+        if (!errors)
+            throw new Error("test fails");
     }
 }
 export class Tests {

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ReportDesigner = void 0;
+    exports.test = exports.test2 = exports.ReportDesigner = void 0;
     let ReportDesigner = class ReportDesigner extends ComponentDesigner_1.ComponentDesigner {
         constructor() {
             super();
@@ -164,7 +164,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;
-    async function test() {
+    async function test2() {
         var rep = new PDFReport_1.PDFReport();
         var def = {
             content: {
@@ -188,13 +188,61 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
                         ]
                     }
                 ]
+            },
+            data: {
+                invoice: {
+                    number: 1000,
+                    date: "20.07.2018",
+                    customer: {
+                        firstname: "Henry",
+                        lastname: "Klaus",
+                        street: "Hauptstr. 157",
+                        place: "chemnitz"
+                    }
+                }
             }
         };
         //	def.content=replaceTemplates(def.content,def.data);
         rep.value = def;
         var viewer = new PDFViewer_1.PDFViewer();
         viewer.value = await rep.getBase64();
+        viewer.height = "200";
         return viewer;
+    }
+    exports.test2 = test2;
+    ;
+    async function test() {
+        var CodeEditor = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/CodeEditor"], resolve_1, reject_1); })).CodeEditor;
+        var editor = new CodeEditor();
+        //var url = "jassijs_editor/AcePanel.ts";
+        editor.height = 300;
+        editor.width = "100%";
+        //await editor.openFile(url);
+        editor.value = `import { ReportDesign } from "jassijs_report/ReportDesign";
+
+import { $Class } from "jassijs/remote/Jassi";
+import { $Property } from "jassijs/ui/Property";
+
+export class SampleReport extends ReportDesign {
+    me = {};
+    constructor() {
+        super();
+        this.layout(this.me);
+    }
+    async setdata() {
+    }
+    layout(me) {
+        this.design = { "content": { "stack": [{ "text": "Hallo" }, { "text": "ok" }, { "columns": [{ "text": "text" }, { "text": "text" }] }] } };
+    }
+}
+export async function test() {
+    var dlg = new SampleReport();
+    return dlg;
+}
+
+`;
+        editor.evalCode();
+        return editor;
     }
     exports.test = test;
     ;

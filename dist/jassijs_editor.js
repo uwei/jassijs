@@ -2796,7 +2796,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
         //await Settings.save(Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user")
         var dlg = new MonacoPanel();
         //  var code = await new Server().loadFile("a/Dialog.ts");
-        dlg.loadsample();
+        await dlg.loadsample();
         setTimeout(() => {
             dlg.width = "800";
             dlg.height = "100";
@@ -2906,7 +2906,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1622998616843
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1623100121857,
+                "date": 1623865080120,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {
@@ -2917,7 +2917,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1623098989289,
+                "date": 1623862933088,
                 "jassijs_editor.base.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -3876,6 +3876,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
     ], Parser);
     exports.Parser = Parser;
     async function test() {
+        await Typescript_5.default.waitForInited;
         var code = Typescript_5.default.getCode("jassijs_editor/util/Parser.ts");
         var parser = new Parser();
         parser.parse(code, undefined);

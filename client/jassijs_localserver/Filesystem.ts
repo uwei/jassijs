@@ -359,7 +359,7 @@ export default class Filessystem {
     }
 }
 
-export async function test() {
+export async function test2() {
     var fs = new Filessystem();
     var hh = await fs.dir("local");
     /*await fs.createFolder("demo");

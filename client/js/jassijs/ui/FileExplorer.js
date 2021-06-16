@@ -27,7 +27,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                 else
                     return;
             }
-            console.log("create " + fileName);
+            //console.log("create " + fileName);
             var key = (_b = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree) === null || _b === void 0 ? void 0 : _b.getKeyFromItem(all[0]);
             var newfile = path + "/" + fileName;
             var ret = await new Server_1.Server().createFile(newfile, code);
@@ -75,7 +75,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
             else
                 res = await OptionDialog_1.OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
             if (res.button === "ok" && res.text !== all[0].name) {
-                console.log("create Folder" + res.text);
+                // console.log("create Folder" + res.text);
                 var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0]);
                 var newfile = path + "/" + res.text;
                 var ret = await new Server_1.Server().createFolder(newfile);
@@ -147,7 +147,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                 else
                     res = await OptionDialog_1.OptionDialog.show("Enter new name:", ["ok", "cancel"], undefined, true, all[0].name);
                 if (res.button === "ok" && res.text !== all[0].name) {
-                    console.log("rename " + all[0].name + " to " + res.text);
+                    //console.log("rename " + all[0].name + " to " + res.text);
                     var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0]);
                     var path = all[0].parent !== undefined ? all[0].parent.fullpath : "";
                     var newfile = path + "/" + res.text;
@@ -158,7 +158,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                         return;
                     }
                     if (!all[0].isDirectory())
-                        Typescript_1.default === null || Typescript_1.default === void 0 ? void 0 : Typescript_1.default.renameFile(all[0].fullpath, newfile);
+                        await (Typescript_1.default === null || Typescript_1.default === void 0 ? void 0 : Typescript_1.default.renameFile(all[0].fullpath, newfile));
                     await ((_b = FileExplorer.instance) === null || _b === void 0 ? void 0 : _b.refresh());
                     (_c = FileExplorer.instance) === null || _c === void 0 ? void 0 : _c.tree.activateKey(newkey);
                 }

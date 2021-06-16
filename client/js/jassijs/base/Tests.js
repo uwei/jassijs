@@ -37,12 +37,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
                 container.statustext = new HTMLPanel_1.HTMLPanel();
                 container.add(container.statustext);
                 isRoot = true;
+                Errors_1.Errors.errors.onerror((err) => {
+                    var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
+                    newerrorpanel.addError(err);
+                    container.add(newerrorpanel);
+                }, container._id);
             }
-            Errors_1.Errors.errors.onerror((err) => {
-                var newerrorpanel = new ErrorPanel_1.ErrorPanel(false, false, false);
-                newerrorpanel.addError(err);
-                container.add(newerrorpanel);
-            }, container._id);
             for (var x = 0; x < all.length; x++) {
                 var file = all[x];
                 if (file.isDirectory()) {
@@ -90,8 +90,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
             if (isRoot) {
                 container.finished = true;
                 container.update();
+                Errors_1.Errors.errors.offerror(container._id);
+                console.log("off error");
             }
-            Errors_1.Errors.errors.offerror(container._id);
         }
     };
     __decorate([

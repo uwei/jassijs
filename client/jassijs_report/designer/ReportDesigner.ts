@@ -174,7 +174,7 @@ export class ReportDesigner extends ComponentDesigner {
     }
 }
 
-export async function test() {
+export async function test2() {
     var rep = new PDFReport();
 	var def = {
 	
@@ -198,13 +198,60 @@ export async function test() {
 				  	}
 				  ]
 			}
-		]}
+		]},
+         data: {
+                invoice: {
+                    number: 1000,
+                    date: "20.07.2018",
+                    customer: {
+                        firstname: "Henry",
+                        lastname: "Klaus",
+                        street: "Hauptstr. 157",
+                        place: "chemnitz"
+                    }
+                }
+            }
 	};
 //	def.content=replaceTemplates(def.content,def.data);
 	rep.value =def;
 	var viewer = new PDFViewer();
 	viewer.value = await rep.getBase64();
+    viewer.height="200";
 	return viewer;
 
 };
 
+export async function test() {
+    var CodeEditor=(await import("jassijs_editor/CodeEditor")).CodeEditor;
+    var editor = new CodeEditor();
+    //var url = "jassijs_editor/AcePanel.ts";
+    editor.height = 300;
+    editor.width="100%";
+    //await editor.openFile(url);
+    editor.value=`import { ReportDesign } from "jassijs_report/ReportDesign";
+
+import { $Class } from "jassijs/remote/Jassi";
+import { $Property } from "jassijs/ui/Property";
+
+export class SampleReport extends ReportDesign {
+    me = {};
+    constructor() {
+        super();
+        this.layout(this.me);
+    }
+    async setdata() {
+    }
+    layout(me) {
+        this.design = { "content": { "stack": [{ "text": "Hallo" }, { "text": "ok" }, { "columns": [{ "text": "text" }, { "text": "text" }] }] } };
+    }
+}
+export async function test() {
+    var dlg = new SampleReport();
+    return dlg;
+}
+
+`;
+    editor.evalCode();
+    return editor;
+
+};

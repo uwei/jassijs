@@ -384,6 +384,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ext/pdfmak
         rep.value = def;
         var viewer = new PDFViewer_1.PDFViewer();
         viewer.value = await rep.getBase64();
+        viewer.height = 300;
         return viewer;
     }
     exports.test = test;
