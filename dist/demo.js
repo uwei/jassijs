@@ -10,7 +10,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define("demo/DBTest", ["require", "exports", "de/remote/AR", "de/remote/Kunde", "de/remote/ARZeile"], function (require, exports, AR_1, Kunde_1, ARZeile_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test3 = exports.test2 = exports.test4 = void 0;
+    exports.test3 = exports.test2 = exports.test4 = exports.test = void 0;
+    async function test() {
+        var h;
+        h.o = 9;
+    }
+    exports.test = test;
     async function test4() {
         //await Kunde.sample();
         var ar = (await AR_1.AR.find({ id: 900 }))[0];
@@ -1039,7 +1044,7 @@ define("demo/registry", ["require"], function (require) {
     return {
         default: {
             "demo/DBTest.ts": {
-                "date": 1622984379898
+                "date": 1623868743374
             },
             "demo/Dialog.ts": {
                 "date": 1622984213677,
