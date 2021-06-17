@@ -290,7 +290,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
                 await new Promise((resolve) => { transaction.oncomplete = resolve; });
             }
             //update client jassijs.json if removing client module 
-            var json = await this.loadFile("jassijs.json");
+            var json = await new Server_1.Server().loadFile("jassijs.json");
             var ob = JSON.parse(json);
             if (ob.modules[file]) {
                 delete ob.modules[file];

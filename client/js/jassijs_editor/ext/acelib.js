@@ -8,6 +8,7 @@ requirejs.config({
         'ace/ext/language_tools': ['ace/ace'],
     }
 });*/
+//ok
 define("jassijs_editor/ext/acelib", ["require", 'ace/ace',
     'ace/ext/language_tools'], function (require, ac) {
     //  var tsmode= require("ace/mode/typescript");

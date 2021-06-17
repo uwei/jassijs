@@ -1,3 +1,6 @@
+define("jassijs/util/DatabaseSchema", ["jassijs_localserver/DatabaseSchema"], function (to) {
+    return to;
+});
 define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "jassijs_localserver/DatabaseSchema"], function (Filesystem, schema) {
     return {
         //search for file in local-DB and undefine this files 
@@ -16,9 +19,7 @@ define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "
 });
 requirejs.undef("jassijs/util/DatabaseSchema");
 
-define("jassijs/util/DatabaseSchema", ["jassijs_localserver/DatabaseSchema"], function (to) {
-    return to;
-});
+
 define("jassijs/server/DoRemoteProtocol", ["jassijs_localserver/LocalProtocol"], function (locprot) {
     return {
         _execute: async function (protext, request, context) {
@@ -32,6 +33,7 @@ define("jassijs/server/Filesystem", ["jassijs_localserver/Filesystem"], function
     return fs
 
 })
+
 define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs_localserver/DBManager", "jassijs_localserver/TypeORMListener", "typeorm", "jassijs/remote/Database"], function (db, Classes_1, Registry_1, dbman, TypeORMListener, to, Database) {
     //create Admin User if doesn't a user exists 
     db.DBManager.prototype["hasLoaded"] = async function () {
@@ -48,7 +50,7 @@ define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/re
     }
     db.DBManager.prototype["login"] = async function (context, user, password) {
         try {
-            var User = (await import("jassijs/remote/security/User")).User;
+            var User = (await Classes_1.classes.loadClass("jassijs/remote/security/User")).User;
             var ret = await this.connection().manager.createQueryBuilder().
                 select("me").from(User, "me").addSelect("me.password").
                 andWhere("me.email=:email", { email: user });
@@ -101,5 +103,4 @@ define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/re
         return opt;
     }
     return db;
-});
-//DatabaseSchema
+})

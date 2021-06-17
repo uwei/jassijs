@@ -11,7 +11,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1623100158447,
+		"date": 1623952076642,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": []
 		},
@@ -68,7 +68,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-		"date": 1623782321611,
+		"date": 1623951966985,
 		"jassijs_editor.util.Typescript": {}
 	}
 }

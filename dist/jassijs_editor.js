@@ -2872,7 +2872,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1623100158447,
+                "date": 1623952076642,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": []
                 },
@@ -2929,7 +2929,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1623782321611,
+                "date": 1623951966985,
                 "jassijs_editor.util.Typescript": {}
             }
         }
@@ -2945,6 +2945,7 @@ requirejs.config({
         'ace/ext/language_tools': ['ace/ace'],
     }
 });*/
+//ok
 define("jassijs_editor/ext/acelib", ["require", 'ace/ace',
     'ace/ext/language_tools'], function (require, ac) {
     //  var tsmode= require("ace/mode/typescript");
@@ -4309,31 +4310,27 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
          * @param content
          */
         async transpile(fileName, content, compilerSettings = undefined) {
-            //@ts-ignore
-            //await import("jassijs/ext/typescript");
             var ret = { fileNames: [fileName], contents: [content] };
-            /*  var opt = {
-                //  compilerOptions: {
-                      baseUrl: "./",
-                      target: ts.ScriptTarget.ES2017,
-                      module: ts.ModuleKind.AMD,
-                      sourceMap: true
-               //   }
-              };*/
-            var prefix = "";
-            for (let x = 0; x < fileName.split("/").length; x++) {
-                prefix = "../" + prefix;
+            if (fileName.toLocaleLowerCase().endsWith(".js")) { //js Code would be not transpiled
+                ret.fileNames.push("js/" + fileName);
+                ret.contents.push(content);
             }
-            var opt = {
-                compilerOptions: compilerSettings ? compilerSettings : Typescript_6.compilerSettings,
-                fileName: prefix + fileName,
-            };
-            //@ts-ignore
-            var comp = ts.transpileModule(content, opt);
-            ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js");
-            ret.contents.push(comp.outputText);
-            ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js.map");
-            ret.contents.push(comp.sourceMapText);
+            else {
+                var prefix = "";
+                for (let x = 0; x < fileName.split("/").length; x++) {
+                    prefix = "../" + prefix;
+                }
+                var opt = {
+                    compilerOptions: compilerSettings ? compilerSettings : Typescript_6.compilerSettings,
+                    fileName: prefix + fileName,
+                };
+                //@ts-ignore
+                var comp = ts.transpileModule(content, opt);
+                ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js");
+                ret.contents.push(comp.outputText);
+                ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js.map");
+                ret.contents.push(comp.sourceMapText);
+            }
             return ret;
         }
         static initMonaco() {
@@ -4686,6 +4683,8 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
         module: "AMD",
         sourceMap: true,
         outDir: "./js",
+        allowJs: true,
+        moduleResolution: "node",
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
     };

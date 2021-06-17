@@ -300,7 +300,7 @@ export default class Filessystem {
             await new Promise((resolve) => { transaction.oncomplete = resolve })
         }
         //update client jassijs.json if removing client module 
-        var json = await this.loadFile("jassijs.json");
+        var json = await new Server().loadFile("jassijs.json");
         var ob = JSON.parse(json);
         if (ob.modules[file]) {
             delete ob.modules[file];

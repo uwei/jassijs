@@ -1,6 +1,6 @@
 
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import { Server } from "jassijs/remote/Server"; 
+import { Server } from "jassijs/remote/Server";
 import { FileNode } from "jassijs/remote/FileNode";
 //@ts-ignore
 import "jassijs_editor/ext/monaco";
@@ -26,6 +26,8 @@ export class Typescript {
         module: "AMD",
         sourceMap: true,
         outDir: "./js",
+        allowJs: true,
+        moduleResolution: "node",
         emitDecoratorMetadata: true,
         experimentalDecorators: true,
     }
@@ -38,34 +40,31 @@ export class Typescript {
      * @param fileName 
      * @param content 
      */
-    async transpile(fileName: string, content: string,compilerSettings:any=undefined): Promise<{ fileNames: string[]; contents: string[] }> {
-        //@ts-ignore
-        //await import("jassijs/ext/typescript");
+    async transpile(fileName: string, content: string, compilerSettings: any = undefined): Promise<{ fileNames: string[]; contents: string[] }> {
         var ret = { fileNames: [fileName], contents: [content] }
-        /*  var opt = {
-            //  compilerOptions: {
-                  baseUrl: "./",
-                  target: ts.ScriptTarget.ES2017,
-                  module: ts.ModuleKind.AMD,
-                  sourceMap: true
-           //   }
-          };*/
-        var prefix = "";
-        for (let x = 0; x < fileName.split("/").length; x++) {
-            prefix = "../" + prefix;
-        }
-        var opt = {
-            compilerOptions: compilerSettings?compilerSettings:Typescript.compilerSettings,
-            fileName: prefix + fileName,
-        };
-        //@ts-ignore
-        var comp: any = ts.transpileModule(content, opt);
+        if (fileName.toLocaleLowerCase().endsWith(".js")) {//js Code would be not transpiled
+            ret.fileNames.push("js/" + fileName);
+            ret.contents.push(content);
+        } else {
+            var prefix = "";
+            for (let x = 0; x < fileName.split("/").length; x++) {
+                prefix = "../" + prefix;
+            }
+            var opt = {
+                compilerOptions: compilerSettings ? compilerSettings : Typescript.compilerSettings,
+                fileName: prefix + fileName,
+            };
+            //@ts-ignore
+            var comp: any = ts.transpileModule(content, opt);
 
-        ret.fileNames.push("js/" + fileName.substring(0,fileName.length-3)+".js");
-        ret.contents.push(comp.outputText);
-        ret.fileNames.push("js/" + fileName.substring(0,fileName.length-3)+".js.map");
-        ret.contents.push(comp.sourceMapText);
+            ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js");
+            ret.contents.push(comp.outputText);
+            ret.fileNames.push("js/" + fileName.substring(0, fileName.length - 3) + ".js.map");
+            ret.contents.push(comp.sourceMapText);
+
+        }
         return ret;
+
     }
     private constructor() {
 
@@ -98,14 +97,14 @@ export class Typescript {
     }
     initInIdle = true;
     //load  d.ts from modulpackage
-    private async includeModulTypes(){
-        var nodeFiles={}
-        for(var mod in jassijs.modules){
-            var config=(await import(mod+"/modul")).default;
-            if(config.types){
-                for(var key in config.types){
-                    var file=config.types[key];
-                    nodeFiles[key]=new Server().loadFile(file);
+    private async includeModulTypes() {
+        var nodeFiles = {}
+        for (var mod in jassijs.modules) {
+            var config = (await import(mod + "/modul")).default;
+            if (config.types) {
+                for (var key in config.types) {
+                    var file = config.types[key];
+                    nodeFiles[key] = new Server().loadFile(file);
 
                 }
             }
@@ -127,8 +126,8 @@ export class Typescript {
 
         var _this = this;
         var f: { [path: string]: FileNode } = (await new Server().dir(true)).resolveChilds();
-        
-        var nodeFiles =await  this.includeModulTypes();
+
+        var nodeFiles = await this.includeModulTypes();
         //Load all files to in cache
         //node_modules with ajax - so we kann cache 
         var myfiles = [];
@@ -144,9 +143,9 @@ export class Typescript {
                 if (fname.toLocaleLowerCase().endsWith(".js")) {
                     monaco.languages.typescript.typescriptDefaults.addExtraLib("export default const test=1;", "file:///" + fname);
                 }
-                if(fdat===undefined){
-                    nodeFiles[fname]=new Server().loadFile(fname);
-                }else{
+                if (fdat === undefined) {
+                    nodeFiles[fname] = new Server().loadFile(fname);
+                } else {
                     nodeFiles[fname] = $.ajax({
                         url: fname,
                         beforeSend: function (request) {
@@ -216,7 +215,7 @@ export class Typescript {
             throw Error("check isInited before call ")
         }
         //@ts-ignore
-        return await this.tsWorker.getSignatureHelpItems("file:///" + file, position,undefined);
+        return await this.tsWorker.getSignatureHelpItems("file:///" + file, position, undefined);
 
     }
     async includefileIfNeeded(file: string) {
@@ -224,7 +223,7 @@ export class Typescript {
     }
     async renameFile(oldfile: string, newfile: string) {
         var ffile = monaco.Uri.from({ path: "/" + oldfile, scheme: 'file' });
-        var oldmodell = monaco.editor.getModel(ffile); 
+        var oldmodell = monaco.editor.getModel(ffile);
         oldmodell?.dispose();
         var text = await $.ajax({
             url: newfile,
@@ -367,25 +366,25 @@ export class Typescript {
         return finalText;
     }
     async getDiagnosticsForAll(): Promise<ts.Diagnostic[]> {
-        var mods=monaco.editor.getModels();
-        var ret=[]; 
-        for(var x=0;x<mods.length;x++){
-            var url="file:///"+mods[x].uri.path;
-            if(url.indexOf("node_modules/")>0)
+        var mods = monaco.editor.getModels();
+        var ret = [];
+        for (var x = 0; x < mods.length; x++) {
+            var url = "file:///" + mods[x].uri.path;
+            if (url.indexOf("node_modules/") > 0)
                 continue;
-            var sug=await this.tsWorker.getSemanticDiagnostics(url);
-            for(var s=0;s<sug.length;s++){
+            var sug = await this.tsWorker.getSemanticDiagnostics(url);
+            for (var s = 0; s < sug.length; s++) {
                 //@ts-ignore
-                sug[s]["file"]={
-                    fileName:mods[x].uri.path.substring(1)
+                sug[s]["file"] = {
+                    fileName: mods[x].uri.path.substring(1)
                 }
                 ret.push(sug[s]);
             }
-            sug=await this.tsWorker.getSyntacticDiagnostics(url);
-            for(var s=0;s<sug.length;s++){
+            sug = await this.tsWorker.getSyntacticDiagnostics(url);
+            for (var s = 0; s < sug.length; s++) {
                 //@ts-ignore
-                sug[s]["file"]={
-                    fileName:mods[x].uri.path.substring(1)
+                sug[s]["file"] = {
+                    fileName: mods[x].uri.path.substring(1)
                 }
                 ret.push(sug[s]);
             }
