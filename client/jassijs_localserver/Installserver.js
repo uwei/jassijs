@@ -48,7 +48,7 @@ define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/re
     }
     db.DBManager.prototype["login"] = async function (context, user, password) {
         try {
-            var User = (await import("jassijs/remote/security/User")).User;
+            var User = await Classes_1.classes.loadClass("jassijs.security.User");
             var ret = await this.connection().manager.createQueryBuilder().
                 select("me").from(User, "me").addSelect("me.password").
                 andWhere("me.email=:email", { email: user });

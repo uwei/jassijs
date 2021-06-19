@@ -12,7 +12,10 @@ export abstract class Indexer {
     abstract getFileTime(name);
     abstract createDirectory(name);
     abstract writeFile(name:string,content:string);
+    abstract dirFiles(modul:string,path: string, extensions: string[], ignore: string[]): Promise<string[]> ;
+  
     public async updateModul(root,modul: string, isserver: boolean ) {
+        
         var path = root +(root===""?"":"/") + modul;
 
         //create empty if needed
@@ -36,7 +39,7 @@ export abstract class Indexer {
             }
         }
  
-        var jsFiles: string[] =await  new Filesystem().dirFiles(path, [".ts"], ["node_modules"])
+        var jsFiles: string[] =await  this.dirFiles(modul,path, [".ts"], ["node_modules"])
         for (let x = 0; x < jsFiles.length; x++) {
             var jsFile = jsFiles[x];
             var fileName = jsFile.substring((root.length + (root===""?0:1)));

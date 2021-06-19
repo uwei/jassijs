@@ -1,24 +1,22 @@
 {
 	"modalt": {
 		"jassijs_localserver": "jassijs_localserver",
-		"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js?version=637584105640736230"
+		"northwind": "https://cdn.jsdelivr.net/gh/uwei/jassijs@main/dist/northwind.js?version=637584105640736230",
+		"jassijs_report": "https://uwei.github.io/jassijs/dist/jassijs_report.js",
+		"jassi": "http://localhost/jassijs/dist/jassijs.js"
 	},
 	"modules": {
 		"jassijs": "jassijs",
-		"jassijs_report": "jassijs_report",
 		"jassijs_editor": "jassijs_editor",
 		"local": "local",
 		"demo": "demo",
 		"northwind": "northwind",
 		"de": "de",
-		"tests": "tests",
-		"jassijs_localserver": "jassijs_localserver"
+		"tests": "tests"
 	},
 	"require": {
 		"paths": {
-			"require.js": "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js",
-			"1jassijs_report": "https://uwei.github.io/jassijs/dist/jassijs_report.js",
-			"1jassi": "http://localhost/jassijs/dist/jassijs.js"
+			"require.js": "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js"
 		}
 	}
 }

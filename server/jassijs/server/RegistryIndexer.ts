@@ -21,6 +21,10 @@ export class ServerIndexer extends Indexer {
         }
         return;
     }
+    async dirFiles(modul:string,path: string, extensions: string[], ignore: string[] = []): Promise<string[]> {
+        var jsFiles: string[] =await  new Filesystem().dirFiles(path, extensions, ignore);
+        return jsFiles;
+    }
     async writeFile(name:string,content:string){
         fs.writeFileSync(name, content);
     }

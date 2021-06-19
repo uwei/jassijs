@@ -6,20 +6,55 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 define(["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Server", "jassijs_localserver/Filesystem", "jassijs/remote/Jassi"], function (require, exports, Indexer_1, Server_1, Filesystem_1, Jassi_1) {
     "use strict";
+    var RegistryIndexer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RegistryIndexer = void 0;
-    let RegistryIndexer = class RegistryIndexer extends Indexer_1.Indexer {
+    let RegistryIndexer = RegistryIndexer_1 = class RegistryIndexer extends Indexer_1.Indexer {
+        constructor() {
+            super(...arguments);
+            this.mapcache = {};
+        }
         async updateRegistry() {
             //client modules
             var data = await new Server_1.Server().loadFile("jassijs.json");
             var modules = JSON.parse(data).modules;
             for (var m in modules) {
-                if (!modules[m].endsWith(".js") && modules[m].indexOf(".js") === -1) { //.js are internet modules
-                    if (await new Filesystem_1.default().existsDirectory(modules[m]))
+                if (await new Filesystem_1.default().existsDirectory(modules[m]) || await new Filesystem_1.default().existsDirectory(m)) {
+                    if (modules[m].indexOf(".js") === -1) { //.js are internet modules
                         await this.updateModul("", m, false);
+                    }
+                    else {
+                        await this.updateModul("", m, false);
+                    }
                 }
             }
             return;
+        }
+        async dirFiles(modul, path, extensions, ignore = []) {
+            var tsfiles = await new Filesystem_1.default().dirFiles(path, extensions, ignore);
+            //add files from map
+            if (this.mapcache[modul] === undefined && Jassi_1.default.modules[modul] !== undefined && Jassi_1.default.modules[modul].indexOf(".js") > 0) { //read webtsfiles
+                let ret = {};
+                let mapname = Jassi_1.default.modules[modul].split("?")[0] + ".map";
+                if (Jassi_1.default.modules[modul].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + Jassi_1.default.modules[modul].split("?")[1];
+                var code = await $.ajax({ url: mapname, dataType: "text" });
+                var data = JSON.parse(code);
+                var files = data.sources;
+                for (let x = 0; x < files.length; x++) {
+                    let fname = files[x].substring(files[x].indexOf(modul + "/"));
+                    ret[fname] = data.sourcesContent[x];
+                }
+                this.mapcache[modul] = ret;
+            }
+            if (this.mapcache[modul]) {
+                for (var key in this.mapcache[modul]) {
+                    if (tsfiles.indexOf(key) === -1) {
+                        tsfiles.push(key);
+                    }
+                }
+            }
+            return tsfiles;
         }
         async writeFile(name, content) {
             await new Filesystem_1.default().saveFile(name, content);
@@ -30,17 +65,38 @@ define(["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Ser
         }
         async getFileTime(filename) {
             var entry = await new Filesystem_1.default().loadFileEntry(filename);
-            return entry.date;
+            if (entry !== undefined)
+                return RegistryIndexer_1.version;
+            for (var modul in this.mapcache) {
+                if (this.mapcache[modul][filename]) {
+                    return 0;
+                }
+            }
+            return undefined;
         }
         async fileExists(filename) {
+            for (var modul in this.mapcache) {
+                if (this.mapcache[modul][filename]) {
+                    return true;
+                }
+            }
             var test = await new Filesystem_1.default().loadFileEntry(filename);
             return test !== undefined;
         }
         async readFile(filename) {
-            return await new Filesystem_1.default().loadFile(filename);
+            var ret = await new Filesystem_1.default().loadFile(filename);
+            if (ret !== undefined)
+                return ret;
+            for (var modul in this.mapcache) {
+                if (this.mapcache[modul][filename]) {
+                    return this.mapcache[modul][filename];
+                }
+            }
+            return undefined;
         }
     };
-    RegistryIndexer = __decorate([
+    RegistryIndexer.version = Math.floor(Math.random() * 100000);
+    RegistryIndexer = RegistryIndexer_1 = __decorate([
         Jassi_1.$Class("jassijs_localserver.RegistryIndexer")
     ], RegistryIndexer);
     exports.RegistryIndexer = RegistryIndexer;

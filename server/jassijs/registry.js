@@ -133,7 +133,7 @@ exports.default={
 		"date": 1624055249217
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1622984454021
+		"date": 1624131966767
 	},
 	"jassijs/server/JassiServer.ts": {
 		"date": 1622984045173
@@ -148,7 +148,7 @@ exports.default={
 		"date": 1589573020012
 	},
 	"jassijs/server/RegistryIndexer.ts": {
-		"date": 1622984454021
+		"date": 1624131213085
 	},
 	"jassijs/server/Zip.ts": {
 		"date": 1622984045173

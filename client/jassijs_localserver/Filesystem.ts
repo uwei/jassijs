@@ -149,16 +149,14 @@ export default class Filessystem {
         var rollbackcontents: string[] = [];
         var tsfiles = [];
         var dbschemaHasChanged = false;
-        var dbobjects = await registry.getJSONData("$DBObject");
-
+      
         for (let x = 0; x < fileNames.length; x++) {
             let fname = fileNames[x];
             if (fname.endsWith(".ts"))
                 tsfiles.push(fname.replace(".ts", ""));
-            dbobjects.forEach((test) => {
-                if (test.filename === fname)
-                    dbschemaHasChanged = true;
-            });
+            if(contents[x]?.indexOf("@$DBObject(")>-1)
+                dbschemaHasChanged = true;
+          
             let exists = await this.loadFileEntry(fname);
             if (exists) {
                 rollbackcontents.push(exists.data);
@@ -186,14 +184,14 @@ export default class Filessystem {
             return;
         var RegistryIndexer = (await import("jassijs_localserver/RegistryIndexer")).RegistryIndexer;
         await new RegistryIndexer().updateRegistry();
-
+        await registry.reload();
         if (rollbackonerror) {
             try {
                 await Reloader.instance.reloadJSAll(tsfiles);
-                 /* if (dbschemaHasChanged) {
+                 if (dbschemaHasChanged) {
                       var man = await DBManager.destroyConnection();
                       await DBManager.get();
-                  }*/
+                  }
             } catch (err) {
                 console.error(err);
                 if (dbschemaHasChanged) {

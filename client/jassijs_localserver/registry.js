@@ -14,7 +14,7 @@ define("jassijs_localserver/registry",["require"], function(require) {
 		"jassijs_localserver.Filessystem": {}
 	},
 	"jassijs_localserver/Indexer.ts": {
-		"date": 1622984492296
+		"date": 1624131940284
 	},
 	"jassijs_localserver/LocalProtocol.ts": {
 		"date": 1624105941572
@@ -23,7 +23,7 @@ define("jassijs_localserver/registry",["require"], function(require) {
 		"date": 1622998474045
 	},
 	"jassijs_localserver/RegistryIndexer.ts": {
-		"date": 1622998616949,
+		"date": 1624131740939,
 		"jassijs_localserver.RegistryIndexer": {}
 	},
 	"jassijs_localserver/Testuser.ts": {

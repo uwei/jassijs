@@ -25,7 +25,7 @@ define(["require", "exports", "jassijs/server/Filesystem", "jassijs_editor/util/
                     delete index[key];
                 }
             }
-            var jsFiles = await new Filesystem_1.default().dirFiles(path, [".ts"], ["node_modules"]);
+            var jsFiles = await this.dirFiles(modul, path, [".ts"], ["node_modules"]);
             for (let x = 0; x < jsFiles.length; x++) {
                 var jsFile = jsFiles[x];
                 var fileName = jsFile.substring((root.length + (root === "" ? 0 : 1)));

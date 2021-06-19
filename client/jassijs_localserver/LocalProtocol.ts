@@ -43,7 +43,7 @@ RemoteProtocol.prototype.exec = async function (config, ob) {
      }
      if (local.indexOf(clname) > -1||clname.startsWith("local")) {*/
     var data = JSON.parse(config.data);
-    var debugservermethods = ["dir"];//for testing run on server
+    var debugservermethods = [];//["dir"];//for testing run on server
     if (debugservermethods.indexOf(data.method) > -1) {
         ret = await $.ajax(config);
     } else {

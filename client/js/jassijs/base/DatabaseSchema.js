@@ -344,8 +344,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
                     var text = this.parsedClasses[mcl.name].parent.getModifiedCode();
                     files.push(mcl.filename);
                     contents.push(text);
-                    //console.log(mcl.filename + "\n");
-                    //console.log(text + "\n");
+                    // console.log(mcl.filename + "\n");
+                    //  console.log(text + "\n");
                 }
                 try {
                     await new Server_1.Server().saveFiles(files, contents);

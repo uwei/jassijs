@@ -22,6 +22,10 @@ class ServerIndexer extends Indexer_1.Indexer {
         }
         return;
     }
+    async dirFiles(modul, path, extensions, ignore = []) {
+        var jsFiles = await new Filesystem_1.default().dirFiles(path, extensions, ignore);
+        return jsFiles;
+    }
     async writeFile(name, content) {
         fs.writeFileSync(name, content);
     }

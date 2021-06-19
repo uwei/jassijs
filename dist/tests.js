@@ -176,6 +176,7 @@ define("tests/FileActionsTests", ["require", "exports", "jassijs/ui/FileExplorer
             await FileExplorer_1.FileActions.newFile([tests], "TestFile.ts", code, false);
             var testcode = await new Server_1.Server().loadFile("tests/TestFile.ts");
             t.expectEqual(testcode === code);
+            await new Server_1.Server().saveFile("tests/TestFile.ts", code);
             //@ts-ignore
             var imp = (await new Promise((resolve_1, reject_1) => { require(["tests/TestFile"], resolve_1, reject_1); })).testfunc;
             t.expectEqual(imp() === 2);

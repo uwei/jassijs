@@ -140,19 +140,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
             return await this.saveFiles([filename], [content]);
         }
         async saveFiles(fileNames, contents, rollbackonerror = true) {
+            var _a;
             var db = await Filessystem_1.getDB();
             var rollbackcontents = [];
             var tsfiles = [];
             var dbschemaHasChanged = false;
-            var dbobjects = await Registry_1.default.getJSONData("$DBObject");
             for (let x = 0; x < fileNames.length; x++) {
                 let fname = fileNames[x];
                 if (fname.endsWith(".ts"))
                     tsfiles.push(fname.replace(".ts", ""));
-                dbobjects.forEach((test) => {
-                    if (test.filename === fname)
-                        dbschemaHasChanged = true;
-                });
+                if (((_a = contents[x]) === null || _a === void 0 ? void 0 : _a.indexOf("@$DBObject(")) > -1)
+                    dbschemaHasChanged = true;
                 let exists = await this.loadFileEntry(fname);
                 if (exists) {
                     rollbackcontents.push(exists.data);
@@ -181,13 +179,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
                 return;
             var RegistryIndexer = (await new Promise((resolve_1, reject_1) => { require(["jassijs_localserver/RegistryIndexer"], resolve_1, reject_1); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
+            await Registry_1.default.reload();
             if (rollbackonerror) {
                 try {
                     await Reloader_1.Reloader.instance.reloadJSAll(tsfiles);
-                    /* if (dbschemaHasChanged) {
-                         var man = await DBManager.destroyConnection();
-                         await DBManager.get();
-                     }*/
+                    if (dbschemaHasChanged) {
+                        var man = await DBManager_1.DBManager.destroyConnection();
+                        await DBManager_1.DBManager.get();
+                    }
                 }
                 catch (err) {
                     console.error(err);

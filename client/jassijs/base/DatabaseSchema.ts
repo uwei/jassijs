@@ -368,8 +368,8 @@ export class DatabaseSchema {
                 var text = this.parsedClasses[mcl.name].parent.getModifiedCode();
                 files.push(mcl.filename);
                 contents.push(text);
-                //console.log(mcl.filename + "\n");
-                //console.log(text + "\n");
+               // console.log(mcl.filename + "\n");
+              //  console.log(text + "\n");
 
             }
             try {
