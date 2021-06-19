@@ -6,7 +6,7 @@ define("tests/registry",["require"], function(require) {
 		"date": 1623704929319
 	},
 	"tests/FileActionsTests.ts": {
-		"date": 1623862638070
+		"date": 1624136666335
 	},
 	"tests/remote/TestCustomer.ts": {
 		"date": 1623488386702,

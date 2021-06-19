@@ -11,7 +11,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Actions": {}
 	},
 	"jassijs/base/DatabaseSchema.ts": {
-		"date": 1624097285700,
+		"date": 1624139099724,
 		"jassijs.base.DatabaseSchema": {}
 	},
 	"jassijs/base/Errors.ts": {

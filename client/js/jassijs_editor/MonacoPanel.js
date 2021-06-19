@@ -24,13 +24,18 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
             var p = Typescript_1.default.getPositionOfLineAndCharacter(file, {
                 line: pos.lineNumber, character: pos.column
             });
+            const oldpos = model["lastEditor"].getPosition();
             setTimeout(() => {
                 CodePanel_1.CodePanel.getAutoimport(p, file, code).then((data) => {
                     if (data !== undefined) {
                         model.pushEditOperations([], [{
                                 range: monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row + 1 }),
                                 text: data.text
-                            }], () => null);
+                            }], (a) => {
+                            return null;
+                        });
+                        oldpos.lineNumber = oldpos.lineNumber + (data.text.indexOf("\r") ? 1 : 0);
+                        model["lastEditor"].setPosition(oldpos);
                     }
                 });
             }, 100);
@@ -204,6 +209,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
          */
         set value(value) {
             var lastcursor = this.cursorPosition;
+            var _this = this;
             if (this.file) {
                 var ffile = monaco.Uri.from({ path: "/" + this.file, scheme: 'file' });
                 var mod = monaco.editor.getModel(ffile);
@@ -213,6 +219,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
                     this._editor.setValue(value);
                 }
                 else if (mod !== this._editor.getModel()) {
+                    delete this._editor.getModel()["lastEditor"];
                     this._editor.setModel(mod);
                     this._editor.setValue(value);
                 }
@@ -220,7 +227,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
                     this._editor.getModel().pushEditOperations([], [{
                             range: this._editor.getModel().getFullModelRange(),
                             text: value
-                        }], () => null);
+                        }], (a) => {
+                        return null;
+                    });
+                }
+                if (this._editor.getModel()) {
+                    this._editor.getModel()["lastEditor"] = _this._editor;
                 }
             }
             else
@@ -251,6 +263,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
         destroy() {
             //this._editor.destroy();
             super.destroy();
+            delete this._editor.getModel()["lastEditor"];
         }
         /**
         * undo action

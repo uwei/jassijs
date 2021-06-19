@@ -9,7 +9,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1622984213677
 	},
 	"de/Dialog.ts": {
-		"date": 1622984213677,
+		"date": 1624143167811,
 		"de/Dialog": {}
 	},
 	"de/DialogKunde.ts": {

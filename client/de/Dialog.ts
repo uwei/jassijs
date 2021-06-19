@@ -5,6 +5,7 @@ import { $Class } from "jassijs/remote/Jassi";
 import { Panel } from "jassijs/ui/Panel";
 import { Numberformatter } from "jassijs/util/Numberformatter";
 import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
+import { Property } from "jassijs/ui/Property";
 type Me = {
     textbox1?: Textbox;
     button1?: Button;
