@@ -39,6 +39,9 @@ define("tests/registry",["require"], function(require) {
 			"$DBObject": []
 		}
 	},
+	"tests/RemoteModulTests.ts": {
+		"date": 1624102866600
+	},
 	"tests/TestReport.ts": {
 		"date": 1623864072454
 	}

@@ -227,6 +227,10 @@ export class DBManager {
   connection() {
     return getConnection();
   }
+  async runSQL(context: Context,sql:string,parameters:any[]=undefined){
+    var ret=await (await DBManager.get()).connection().query(sql,parameters);
+    return ret;
+  }
   async remove<Entity>(context: Context, entity: Entity) {
     var test = await (await DBManager.get()).checkParentRight(context, entity, [entity["id"]]);
     if (test === false)
@@ -641,6 +645,7 @@ class RelationInfo {
 
     return ret;
   }
+ 
   /**
    * add an andWhere to the sql-Query to check the parent rights
    * @param builder 

@@ -143,13 +143,15 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
         }
         static getLocaleDecimal() {
             const format = new Intl.NumberFormat();
-            const parts = format.formatToParts(12.6);
+            /*const parts = format.formatToParts(12.6);
+    
             var dec = ".";
             parts.forEach(p => {
                 if (p.type === "decimal")
                     dec = p.value;
             });
-            return dec;
+            return dec;*/
+            return format.format(1.1).substring(1, 2);
         }
         static numberToString(num) {
             if (num === undefined)

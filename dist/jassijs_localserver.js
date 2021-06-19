@@ -196,6 +196,10 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         connection() {
             return typeorm_1.getConnection();
         }
+        async runSQL(context, sql, parameters = undefined) {
+            var ret = await (await DBManager_1.get()).connection().query(sql, parameters);
+            return ret;
+        }
         async remove(context, entity) {
             var test = await (await DBManager_1.get()).checkParentRight(context, entity, [entity["id"]]);
             if (test === false)
@@ -1041,6 +1045,13 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 ret.onerror = ev => { resolve(undefined); };
             });
             return r;
+        }
+        /**
+        * deletes a server module (nothing to do on localserver)
+        * @param modul - to delete
+        */
+        async removeServerModul(modul) {
+            return "";
         }
         /**
         * create a folder

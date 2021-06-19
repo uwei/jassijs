@@ -11,7 +11,8 @@
 		"demo": "demo",
 		"northwind": "northwind",
 		"de": "de",
-		"tests": "tests"
+		"tests": "tests",
+		"jassijs_localserver": "jassijs_localserver"
 	},
 	"require": {
 		"paths": {

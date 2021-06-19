@@ -190,7 +190,7 @@ export default class Filessystem {
         if (rollbackonerror) {
             try {
                 await Reloader.instance.reloadJSAll(tsfiles);
-                /*  if (dbschemaHasChanged) {
+                 /* if (dbschemaHasChanged) {
                       var man = await DBManager.destroyConnection();
                       await DBManager.get();
                   }*/
@@ -220,6 +220,13 @@ export default class Filessystem {
 
         return r;
     }
+    /**
+    * deletes a server module (nothing to do on localserver)
+    * @param modul - to delete
+    */
+     public async removeServerModul(modul: string): Promise<string> {
+         return "";
+     }
     /**
     * create a folder
     * @param filename - the name of the new file 

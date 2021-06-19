@@ -247,6 +247,24 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
              }*/
         }
         /**
+       * deletes a server modul
+       **/
+        async removeServerModul(name, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret = await this.call(this, this.removeServerModul, name, context);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                if (!context.request.user.isAdmin)
+                    throw "only admins can delete";
+                //@ts-ignore
+                var fs = await new Promise((resolve_7, reject_7) => { require(["jassijs/server/Filesystem"], resolve_7, reject_7); });
+                return await new fs.default().removeServerModul(name);
+            }
+        }
+        /**
         * deletes a file or directory
         **/
         async delete(name, context = undefined) {
@@ -260,7 +278,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                 if (!context.request.user.isAdmin)
                     throw "only admins can delete";
                 //@ts-ignore
-                var fs = await new Promise((resolve_7, reject_7) => { require(["jassijs/server/Filesystem"], resolve_7, reject_7); });
+                var fs = await new Promise((resolve_8, reject_8) => { require(["jassijs/server/Filesystem"], resolve_8, reject_8); });
                 return await new fs.default().remove(name);
             }
         }
@@ -278,7 +296,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                 if (!context.request.user.isAdmin)
                     throw "only admins can rename";
                 //@ts-ignore
-                var fs = await new Promise((resolve_8, reject_8) => { require(["jassijs/server/Filesystem"], resolve_8, reject_8); });
+                var fs = await new Promise((resolve_9, reject_9) => { require(["jassijs/server/Filesystem"], resolve_9, reject_9); });
                 return await new fs.default().rename(oldname, newname);
                 ;
             }
@@ -317,7 +335,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                 if (!context.request.user.isAdmin)
                     throw "only admins can createFile";
                 //@ts-ignore
-                var fs = await new Promise((resolve_9, reject_9) => { require(["jassijs/server/Filesystem"], resolve_9, reject_9); });
+                var fs = await new Promise((resolve_10, reject_10) => { require(["jassijs/server/Filesystem"], resolve_10, reject_10); });
                 return await new fs.default().createFile(filename, content);
             }
         }
@@ -335,7 +353,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                 if (!context.request.user.isAdmin)
                     throw "only admins can createFolder";
                 //@ts-ignore
-                var fs = await new Promise((resolve_10, reject_10) => { require(["jassijs/server/Filesystem"], resolve_10, reject_10); });
+                var fs = await new Promise((resolve_11, reject_11) => { require(["jassijs/server/Filesystem"], resolve_11, reject_11); });
                 return await new fs.default().createFolder(foldername);
             }
         }
@@ -350,7 +368,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                 if (!context.request.user.isAdmin)
                     throw "only admins can createFolder";
                 //@ts-ignore
-                var fs = await new Promise((resolve_11, reject_11) => { require(["jassijs/server/Filesystem"], resolve_11, reject_11); });
+                var fs = await new Promise((resolve_12, reject_12) => { require(["jassijs/server/Filesystem"], resolve_12, reject_12); });
                 return await new fs.default().createModule(modulname);
             }
         }

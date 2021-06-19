@@ -173,26 +173,36 @@ export class ErrorPanel extends Panel {
         
         //var wurl = window.location.href.split("/app.html")[0];
         //url = url.replace(wurl, "");*/
+        var wurl = window.location.href.split("/app.html")[0];
         if (url.endsWith(")"))
             url = url.substring(0, url.length - 1);
         var wurl = url.substring(0, url.indexOf("#"));
+
 
         var aurl = url.split(":");
         if (aurl.length >= 3) {
             var line = aurl[aurl.length - 2];
             var col = aurl[aurl.length - 1];
             var u = url.substring(0, url.length - 2 - line.length - col.length);
-            if (line === "" || col === ""||u==="")
+            if (line === "" || col === "" || u === "")
                 return url;
-            try {
-                var pos = await new TSSourceMap().getLineFromJS(u, Number(line), Number(col));
-                if (pos) {
-                    return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp","") +
-                     ":" + pos.line + ":" + pos.column;
-                }
-            } catch(err) {
-                return url;
+            var ismodul = false;
+            for (var mod in jassijs.modules) {
+                if (jassijs.modules[mod] === u)
+                    ismodul = true;
             }
+            if (u.indexOf("/js/") > -1 || ismodul) {
+                try {
+                    var pos = await new TSSourceMap().getLineFromJS(u, Number(line), Number(col));
+                    if (pos) {
+                        return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp", "") +
+                            ":" + pos.line + ":" + pos.column;
+                    }
+                } catch (err) {
+                    return url;
+                }
+            }
+
         }
         /* if (!url.startsWith("/"))
              url = "/" + url;

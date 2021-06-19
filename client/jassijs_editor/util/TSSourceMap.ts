@@ -27,7 +27,7 @@ export class TSSourceMap {
         if (Server.filesInMap && Server.filesInMap[tsfile]) {
             var mod = Server.filesInMap[tsfile].modul;
             jsfilename = jassijs.modules[mod];
-            mapcode =await this.getCode( jsfilename+".map");//await $.ajax({ url: jsfilename+".map", dataType: "text" });
+            mapcode =await this.getCode( jsfilename.replace(".js",".js.map"));//await $.ajax({ url: jsfilename+".map", dataType: "text" });
             filenumber=Server.filesInMap[tsfile].id;
         } else {
             jsfilename="js/" + tsfile.replace(".ts", ".js");

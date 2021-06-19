@@ -2925,7 +2925,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/TSSourceMap.ts": {
-                "date": 1623875321662,
+                "date": 1624105277947,
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
@@ -4212,7 +4212,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             if (Server_3.Server.filesInMap && Server_3.Server.filesInMap[tsfile]) {
                 var mod = Server_3.Server.filesInMap[tsfile].modul;
                 jsfilename = jassi_1.default.modules[mod];
-                mapcode = await this.getCode(jsfilename + ".map"); //await $.ajax({ url: jsfilename+".map", dataType: "text" });
+                mapcode = await this.getCode(jsfilename.replace(".js", ".js.map")); //await $.ajax({ url: jsfilename+".map", dataType: "text" });
                 filenumber = Server_3.Server.filesInMap[tsfile].id;
             }
             else {

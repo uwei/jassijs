@@ -245,6 +245,24 @@ export class Server extends RemoteObject {
              return new fs.default().saveFiles(fileNames, contents);
          }*/
     }
+     /**
+    * deletes a server modul
+    **/
+    async removeServerModul(name: string, context: Context = undefined): Promise<string> {
+        if (!context?.isServer) {
+            var ret = await this.call(this, this.removeServerModul, name, context);
+            //@ts-ignore
+            //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+            return ret;
+        } else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can delete";
+            //@ts-ignore
+            var fs: any = await import("jassijs/server/Filesystem");
+
+            return await new fs.default().removeServerModul(name);
+        }
+    }
     /**
     * deletes a file or directory
     **/

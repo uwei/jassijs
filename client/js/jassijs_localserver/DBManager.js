@@ -196,6 +196,10 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
         connection() {
             return typeorm_1.getConnection();
         }
+        async runSQL(context, sql, parameters = undefined) {
+            var ret = await (await DBManager_1.get()).connection().query(sql, parameters);
+            return ret;
+        }
         async remove(context, entity) {
             var test = await (await DBManager_1.get()).checkParentRight(context, entity, [entity["id"]]);
             if (test === false)

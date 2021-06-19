@@ -31,10 +31,10 @@ export class DatabaseDesigner extends Panel {
     currentClass: DatabaseClass;
     allTypes = { values: [""] };
     posibleRelations = { values: [""] };
-    constructor() {
+    constructor(readShema=true) {
         super();
         this.me = {};
-        this.layout(this.me);
+        this.layout(this.me,readShema);
     }
     @$Action({
         name: "Administration/Database Designer",
@@ -43,7 +43,8 @@ export class DatabaseDesigner extends Panel {
     static async showDialog() {
         router.navigate("#do=jassijs/ui/DatabaseDesigner");
     }
-    layout(me: Me) {
+    
+    layout(me: Me,readShema=true) {
         me.newclass = new Button();
         me.boxpanel1 = new BoxPanel();
         me.save = new Button();
@@ -87,14 +88,16 @@ export class DatabaseDesigner extends Panel {
             _this.update();
         });
         me.select.width = 210;
-        this.readSchema();
+        if(readShema){
+            this.readSchema();
+        }
         this.width = 719;
         this.height = 386;
         this.add(me.boxpanel1);
         this.add(me.boxpanel2);
         me.newclass.text = "Create DBClass";
         me.newclass.onclick(function (event) {
-            _this.newClass();
+            _this.addClass();
         });
         me.newclass.icon = "mdi mdi-note-plus-outline";
         me.newclass.tooltip = "new DBClass";
@@ -106,7 +109,11 @@ export class DatabaseDesigner extends Panel {
         me.boxpanel1.add(me.save);
         me.save.text = "Save all Classes";
         me.save.onclick(function (event) {
-            _this.saveAll();
+            _this.saveAll().then((s)=>{
+                if(s!==""){
+                    alert(s);
+                }
+            })
         });
         me.save.width = 150;
         me.save.icon = "mdi mdi-content-save";
@@ -117,11 +124,7 @@ export class DatabaseDesigner extends Panel {
         me.newfield.text = "Create Field";
         me.newfield.icon = "mdi mdi-playlist-plus";
         me.newfield.onclick(function (event) {
-            var field = new DatabaseField();
-            //@ts-ignore
-            field.parent = _this.currentClass;
-            _this.currentClass.fields.push(field);
-            me.table.items = _this.currentClass.fields;
+            _this.addField();
         });
         me.newfield.width = "120";
         me.newfield.height = 25;
@@ -148,27 +151,50 @@ export class DatabaseDesigner extends Panel {
         me.boxpanel3.add(me.newfield);
         me.boxpanel3.add(me.removefield);
     }
-    async saveAll() {
+    async saveAll(showChanges=undefined):Promise<string> {
         try {
             var text = await this.currentSchema.updateSchema(true);
             if (text !== "") {
-                if ((await OptionDialog.show("Do you won't this changes?<br/>" + text.replaceAll("\n", "<br/>"), ["Yes", "Cancel"])).button === "Yes") {
-                    this.currentSchema.updateSchema(false);
+                if (showChanges===false|| (await OptionDialog.show("Do you won't this changes?<br/>" + text.replaceAll("\n", "<br/>"), ["Yes", "Cancel"])).button === "Yes") {
+                    await this.currentSchema.updateSchema(false);
                     //@ts-ignore
                     windows.findComponent("Files")?.refresh();
                 }
             }
             else {
-                alert("no changes detected");
+                return "no changes detected";
             }
         }
         catch (err) {
-            alert(err.message);
+            return err.message;
         }
+        return "";
     }
-    async newClass() {
+    addField(typename:string=undefined,name:string=undefined,nullable:boolean=undefined,relation:string=undefined){
+            var field = new DatabaseField();
+            //@ts-ignore
+            field.parent = this.currentClass;
+            if(name)
+                field.name=name;
+            if(nullable)
+                field.nullable=nullable;
+            if(typename)
+                field.type = typename;
+            if(relation)
+                field.relation = relation;
+            this.currentClass.fields.push(field);
+            this.me.table.items = this.currentClass.fields;
+    }
+    async addClass(classname:string=undefined) {
         var sub = this.currentClass.name.substring(0, this.currentClass.name.lastIndexOf("."));
-        var res = await OptionDialog.show("Enter classname", ["OK", "Cancel"], undefined, true, sub + ".MyOb");
+        var res;
+        if(classname){
+            res={
+                button:"OK",
+                text:classname
+            }
+        }else
+            res=await OptionDialog.show("Enter classname", ["OK", "Cancel"], undefined, true, sub + ".MyOb");
         if (res.button === "OK") {
             this.currentClass = new DatabaseClass();
             this.currentClass.name = res.text;
@@ -215,5 +241,6 @@ export class DatabaseDesigner extends Panel {
 }
 export async function test() {
     var ret = new DatabaseDesigner();
+   
     return ret;
 }

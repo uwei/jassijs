@@ -12,28 +12,22 @@ define("jassijs_localserver/Installserver", ["jassijs_localserver/Filesystem", "
                     var name = fname.substring(0, fname.length - 3);
                     requirejs.undef(name);
                 }
-
             });
         }
-    }
+    };
 });
 requirejs.undef("jassijs/util/DatabaseSchema");
-
-
 define("jassijs/server/DoRemoteProtocol", ["jassijs_localserver/LocalProtocol"], function (locprot) {
     return {
         _execute: async function (protext, request, context) {
             var prot = JSON.parse(protext);
             return await locprot.localExec(prot, context);
         }
-    }
-})
-
+    };
+});
 define("jassijs/server/Filesystem", ["jassijs_localserver/Filesystem"], function (fs) {
-    return fs
-
-})
-
+    return fs;
+});
 define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs_localserver/DBManager", "jassijs_localserver/TypeORMListener", "typeorm", "jassijs/remote/Database"], function (db, Classes_1, Registry_1, dbman, TypeORMListener, to, Database) {
     //create Admin User if doesn't a user exists 
     db.DBManager.prototype["hasLoaded"] = async function () {
@@ -46,15 +40,13 @@ define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/re
             us.isAdmin = true;
             await us.save();
         }
-
-    }
+    };
     db.DBManager.prototype["login"] = async function (context, user, password) {
         try {
             var User = (await Classes_1.classes.loadClass("jassijs/remote/security/User")).User;
             var ret = await this.connection().manager.createQueryBuilder().
                 select("me").from(User, "me").addSelect("me.password").
                 andWhere("me.email=:email", { email: user });
-
             var auser = await ret.getOne();
             if (!auser || !password)
                 return undefined;
@@ -62,20 +54,20 @@ define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/re
                 delete auser.password;
                 return auser;
             }
-        } catch (err) {
-            err=err;
+        }
+        catch (err) {
+            err = err;
         }
         return undefined;
-    }
+    };
     db.DBManager["getConOpts"] = async function () {
-        var dbclasses = []; 
+        var dbclasses = [];
         const initSqlJs = window["SQL"];
         const SQL = await window["SQL"]({
             // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
             // You can omit locateFile completely when running in node
             locateFile: file => `https://sql.js.org/dist/${file}`
         });
-
         var dbobjects = await Registry_1.default.getJSONData("$DBObject");
         var dbfiles = [];
         for (var o = 0; o < dbobjects.length; o++) {
@@ -83,7 +75,8 @@ define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/re
             try {
                 dbfiles.push(dbobjects[o].filename.replace(".ts", ""));
                 dbclasses.push(await Classes_1.classes.loadClass(clname));
-            } catch (err) {
+            }
+            catch (err) {
                 console.log(err);
                 throw err;
             }
@@ -101,6 +94,7 @@ define("jassijs/server/DBManager", ["jassijs_localserver/DBManager", "jassijs/re
             "entities": dbclasses
         };
         return opt;
-    }
+    };
     return db;
-})
+});
+//# sourceMappingURL=test.js.map

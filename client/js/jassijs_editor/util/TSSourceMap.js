@@ -22,7 +22,7 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
             if (Server_1.Server.filesInMap && Server_1.Server.filesInMap[tsfile]) {
                 var mod = Server_1.Server.filesInMap[tsfile].modul;
                 jsfilename = jassi_1.default.modules[mod];
-                mapcode = await this.getCode(jsfilename + ".map"); //await $.ajax({ url: jsfilename+".map", dataType: "text" });
+                mapcode = await this.getCode(jsfilename.replace(".js", ".js.map")); //await $.ajax({ url: jsfilename+".map", dataType: "text" });
                 filenumber = Server_1.Server.filesInMap[tsfile].id;
             }
             else {

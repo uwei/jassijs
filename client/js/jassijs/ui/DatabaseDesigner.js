@@ -13,17 +13,17 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
     exports.test = exports.DatabaseDesigner = void 0;
     var ttt = 1;
     let DatabaseDesigner = class DatabaseDesigner extends Panel_1.Panel {
-        constructor() {
+        constructor(readShema = true) {
             super();
             this.allTypes = { values: [""] };
             this.posibleRelations = { values: [""] };
             this.me = {};
-            this.layout(this.me);
+            this.layout(this.me, readShema);
         }
         static async showDialog() {
             Router_1.router.navigate("#do=jassijs/ui/DatabaseDesigner");
         }
-        layout(me) {
+        layout(me, readShema = true) {
             me.newclass = new Button_1.Button();
             me.boxpanel1 = new BoxPanel_1.BoxPanel();
             me.save = new Button_1.Button();
@@ -67,14 +67,16 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
                 _this.update();
             });
             me.select.width = 210;
-            this.readSchema();
+            if (readShema) {
+                this.readSchema();
+            }
             this.width = 719;
             this.height = 386;
             this.add(me.boxpanel1);
             this.add(me.boxpanel2);
             me.newclass.text = "Create DBClass";
             me.newclass.onclick(function (event) {
-                _this.newClass();
+                _this.addClass();
             });
             me.newclass.icon = "mdi mdi-note-plus-outline";
             me.newclass.tooltip = "new DBClass";
@@ -86,7 +88,11 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
             me.boxpanel1.add(me.save);
             me.save.text = "Save all Classes";
             me.save.onclick(function (event) {
-                _this.saveAll();
+                _this.saveAll().then((s) => {
+                    if (s !== "") {
+                        alert(s);
+                    }
+                });
             });
             me.save.width = 150;
             me.save.icon = "mdi mdi-content-save";
@@ -97,11 +103,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
             me.newfield.text = "Create Field";
             me.newfield.icon = "mdi mdi-playlist-plus";
             me.newfield.onclick(function (event) {
-                var field = new DatabaseSchema_1.DatabaseField();
-                //@ts-ignore
-                field.parent = _this.currentClass;
-                _this.currentClass.fields.push(field);
-                me.table.items = _this.currentClass.fields;
+                _this.addField();
             });
             me.newfield.width = "120";
             me.newfield.height = 25;
@@ -128,28 +130,52 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
             me.boxpanel3.add(me.newfield);
             me.boxpanel3.add(me.removefield);
         }
-        async saveAll() {
+        async saveAll(showChanges = undefined) {
             var _a;
             try {
                 var text = await this.currentSchema.updateSchema(true);
                 if (text !== "") {
-                    if ((await OptionDialog_1.OptionDialog.show("Do you won't this changes?<br/>" + text.replaceAll("\n", "<br/>"), ["Yes", "Cancel"])).button === "Yes") {
-                        this.currentSchema.updateSchema(false);
+                    if (showChanges === false || (await OptionDialog_1.OptionDialog.show("Do you won't this changes?<br/>" + text.replaceAll("\n", "<br/>"), ["Yes", "Cancel"])).button === "Yes") {
+                        await this.currentSchema.updateSchema(false);
                         //@ts-ignore
                         (_a = Windows_1.default.findComponent("Files")) === null || _a === void 0 ? void 0 : _a.refresh();
                     }
                 }
                 else {
-                    alert("no changes detected");
+                    return "no changes detected";
                 }
             }
             catch (err) {
-                alert(err.message);
+                return err.message;
             }
+            return "";
         }
-        async newClass() {
+        addField(typename = undefined, name = undefined, nullable = undefined, relation = undefined) {
+            var field = new DatabaseSchema_1.DatabaseField();
+            //@ts-ignore
+            field.parent = this.currentClass;
+            if (name)
+                field.name = name;
+            if (nullable)
+                field.nullable = nullable;
+            if (typename)
+                field.type = typename;
+            if (relation)
+                field.relation = relation;
+            this.currentClass.fields.push(field);
+            this.me.table.items = this.currentClass.fields;
+        }
+        async addClass(classname = undefined) {
             var sub = this.currentClass.name.substring(0, this.currentClass.name.lastIndexOf("."));
-            var res = await OptionDialog_1.OptionDialog.show("Enter classname", ["OK", "Cancel"], undefined, true, sub + ".MyOb");
+            var res;
+            if (classname) {
+                res = {
+                    button: "OK",
+                    text: classname
+                };
+            }
+            else
+                res = await OptionDialog_1.OptionDialog.show("Enter classname", ["OK", "Cancel"], undefined, true, sub + ".MyOb");
             if (res.button === "OK") {
                 this.currentClass = new DatabaseSchema_1.DatabaseClass();
                 this.currentClass.name = res.text;
@@ -206,7 +232,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
     DatabaseDesigner = __decorate([
         Actions_1.$ActionProvider("jassijs.base.ActionNode"),
         Jassi_1.$Class("jassijs/ui/DatabaseDesigner"),
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [Object])
     ], DatabaseDesigner);
     exports.DatabaseDesigner = DatabaseDesigner;
     async function test() {

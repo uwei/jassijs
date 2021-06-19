@@ -368,8 +368,8 @@ export class DatabaseSchema {
                 var text = this.parsedClasses[mcl.name].parent.getModifiedCode();
                 files.push(mcl.filename);
                 contents.push(text);
-                console.log(mcl.filename + "\n");
-                console.log(text + "\n");
+                //console.log(mcl.filename + "\n");
+                //console.log(text + "\n");
 
             }
             try {
@@ -422,6 +422,7 @@ export class DatabaseSchema {
             dbclass.parent = _this;
             this.databaseClasses.push(dbclass);
             var pclass = this.parsedClasses[entr.classname];
+        
             dbclass.filename = pclass["filename"];
             dbclass.simpleclassname = pclass.name;
             dbclass.name = pclass.fullClassname;
@@ -575,7 +576,7 @@ export async function test3() {
     f.type = "string";
     schema2.getClass("de.AR").fields.push(f);
     schema2.getClass("de.AR").getField("nummer").properties = { nullable: false };
-    console.log(await schema2.updateSchema(true));
+    var text=await schema2.updateSchema(true);
     //console.log(result);
     //test.pop();
     //schema.visitNode(sourceFile);

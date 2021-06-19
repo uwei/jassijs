@@ -149,14 +149,15 @@ export class Numberformatter {
 	}
 	private static getLocaleDecimal(): string {
 		const format = new Intl.NumberFormat();
-		const parts = format.formatToParts(12.6);
+		/*const parts = format.formatToParts(12.6);
 
 		var dec = ".";
 		parts.forEach(p => {
 			if (p.type === "decimal")
 				dec = p.value;
 		});
-		return dec;
+		return dec;*/
+		return format.format(1.1).substring(1,2);
 	}
 	public static numberToString(num:number):string{
 		if(num===undefined)

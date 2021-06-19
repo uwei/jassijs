@@ -156,6 +156,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
             
             //var wurl = window.location.href.split("/app.html")[0];
             //url = url.replace(wurl, "");*/
+            var wurl = window.location.href.split("/app.html")[0];
             if (url.endsWith(")"))
                 url = url.substring(0, url.length - 1);
             var wurl = url.substring(0, url.indexOf("#"));
@@ -166,15 +167,22 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                 var u = url.substring(0, url.length - 2 - line.length - col.length);
                 if (line === "" || col === "" || u === "")
                     return url;
-                try {
-                    var pos = await new TSSourceMap_1.TSSourceMap().getLineFromJS(u, Number(line), Number(col));
-                    if (pos) {
-                        return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp", "") +
-                            ":" + pos.line + ":" + pos.column;
-                    }
+                var ismodul = false;
+                for (var mod in Jassi_1.default.modules) {
+                    if (Jassi_1.default.modules[mod] === u)
+                        ismodul = true;
                 }
-                catch (err) {
-                    return url;
+                if (u.indexOf("/js/") > -1 || ismodul) {
+                    try {
+                        var pos = await new TSSourceMap_1.TSSourceMap().getLineFromJS(u, Number(line), Number(col));
+                        if (pos) {
+                            return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp", "") +
+                                ":" + pos.line + ":" + pos.column;
+                        }
+                    }
+                    catch (err) {
+                        return url;
+                    }
                 }
             }
             /* if (!url.startsWith("/"))

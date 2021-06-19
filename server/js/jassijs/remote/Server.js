@@ -250,6 +250,24 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
          }*/
     }
     /**
+   * deletes a server modul
+   **/
+    async removeServerModul(name, context = undefined) {
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+            var ret = await this.call(this, this.removeServerModul, name, context);
+            //@ts-ignore
+            //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+            return ret;
+        }
+        else {
+            if (!context.request.user.isAdmin)
+                throw "only admins can delete";
+            //@ts-ignore
+            var fs = await Promise.resolve().then(() => require("jassijs/server/Filesystem"));
+            return await new fs.default().removeServerModul(name);
+        }
+    }
+    /**
     * deletes a file or directory
     **/
     async delete(name, context = undefined) {

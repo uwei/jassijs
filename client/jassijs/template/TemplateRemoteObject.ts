@@ -39,7 +39,7 @@ export class TemplateRemoteObject {
         var res = await OptionDialog.show("Enter RemoteObject name:", ["ok", "cancel"], undefined, true, "MyRemoteObject");
         if (res.button === "ok" && res.text !== all[0].name) {
 	    	var scode=code.replaceAll("{{name}}",res.text);
-	    	scode=scode.replaceAll("{{fullclassname}}",all[0].fullpath+"/"+res.text);
+	    	scode=scode.replaceAll("{{fullclassname}}",(all[0].fullpath+"/"+res.text).replaceAll("/","."));
 	    	FileActions.newFile(all,res.text+".ts",scode,true);
         }
     }

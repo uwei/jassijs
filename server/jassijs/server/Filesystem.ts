@@ -301,7 +301,19 @@ export default class Filesystem {
         await new ServerIndexer().updateRegistry();
         return "";
     }
-
+    /**
+    * deletes a server module
+    * @param modul - to delete
+    */
+     public async removeServerModul(modul: string): Promise<string> {
+        var modules = JSON.parse(fs.readFileSync("./jassijs.json", 'utf-8'));
+        delete modules.modules[modul];
+        fs.writeFileSync("./jassijs.json", JSON.stringify(modules, undefined, "\t"));
+        if(fs.existsSync(modul)){
+            fs.rmdirSync(modul, { recursive: true });
+        }
+        return "";
+    }
     /**
     * deletes a file or directory 
     * @param file - old filename

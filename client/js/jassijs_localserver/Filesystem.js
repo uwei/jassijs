@@ -184,10 +184,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
             if (rollbackonerror) {
                 try {
                     await Reloader_1.Reloader.instance.reloadJSAll(tsfiles);
-                    /*  if (dbschemaHasChanged) {
-                          var man = await DBManager.destroyConnection();
-                          await DBManager.get();
-                      }*/
+                    /* if (dbschemaHasChanged) {
+                         var man = await DBManager.destroyConnection();
+                         await DBManager.get();
+                     }*/
                 }
                 catch (err) {
                     console.error(err);
@@ -213,6 +213,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
                 ret.onerror = ev => { resolve(undefined); };
             });
             return r;
+        }
+        /**
+        * deletes a server module (nothing to do on localserver)
+        * @param modul - to delete
+        */
+        async removeServerModul(modul) {
+            return "";
         }
         /**
         * create a folder

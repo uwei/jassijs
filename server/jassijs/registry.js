@@ -10,6 +10,10 @@ exports.default={
 		"date": 1622985395292,
 		"jassijs.remote.Database": {}
 	},
+	"jassijs/remote/DatabaseTools.ts": {
+		"date": 1624102876283,
+		"jassijs.remote.DatabaseTools": {}
+	},
 	"jassijs/remote/DBArray.ts": {
 		"date": 1622985396385,
 		"jassijs.remote.DBArray": {}
@@ -104,7 +108,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1622998616949,
+		"date": 1624058362083,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {
@@ -119,14 +123,14 @@ exports.default={
 		"date": 1622984470670
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1623703098549,
+		"date": 1624098619237,
 		"jassi_localserver.DBManager": {}
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
 		"date": 1623702870098
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1623782783192
+		"date": 1624055249217
 	},
 	"jassijs/server/Indexer.ts": {
 		"date": 1622984454021

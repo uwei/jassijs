@@ -72,6 +72,7 @@ export class Dialog extends Panel {
     }
 }
 export async function test() {
+   
     //windows.addLeft(new FileExplorer(), "Files");
     var ret = new Dialog();
     //  	var h=monaco.languages.typescript.typescriptDefaults;

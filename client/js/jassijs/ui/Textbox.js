@@ -15,15 +15,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
     let allFormats = (() => {
         var ret = [];
         const format = new Intl.NumberFormat();
-        const parts = format.formatToParts(1234.6);
-        var decimal = ".";
-        var group = ",";
-        parts.forEach(p => {
-            if (p.type === "decimal")
-                decimal = p.value;
-            if (p.type === "group")
-                group = p.value;
-        });
+        var decimal = format.format(1.1).substring(1, 2);
+        var group = format.format(1234).substring(1, 2);
+        /*	const parts = format.formatToParts(1234.6);
+            var decimal = ".";
+            var group=",";
+            parts.forEach(p => {
+                if (p.type === "decimal")
+                    decimal = p.value;
+                if (p.type === "group")
+                    group = p.value;
+            });*/
         ret.push("#" + group + "##0" + decimal + "00");
         ret.push("#" + group + "##0" + decimal + "00 €");
         ret.push("#" + group + "##0" + decimal + "00 $");

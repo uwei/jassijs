@@ -6,18 +6,18 @@ define("jassijs_localserver/registry", ["require"], function (require) {
                 "date": 1622984213677
             },
             "jassijs_localserver/DBManager.ts": {
-                "date": 1623702092878,
+                "date": 1624103920275,
                 "jassi_localserver.DBManager": {}
             },
             "jassijs_localserver/Filesystem.ts": {
-                "date": 1623438498416,
+                "date": 1624107072713,
                 "jassijs_localserver.Filessystem": {}
             },
             "jassijs_localserver/Indexer.ts": {
                 "date": 1622984492296
             },
             "jassijs_localserver/LocalProtocol.ts": {
-                "date": 1623703076526
+                "date": 1624105941572
             },
             "jassijs_localserver/modul.ts": {
                 "date": 1622998474045

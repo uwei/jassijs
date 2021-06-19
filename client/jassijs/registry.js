@@ -11,7 +11,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Actions": {}
 	},
 	"jassijs/base/DatabaseSchema.ts": {
-		"date": 1623876611416,
+		"date": 1624097285700,
 		"jassijs.base.DatabaseSchema": {}
 	},
 	"jassijs/base/Errors.ts": {
@@ -57,6 +57,10 @@ define("jassijs/registry",["require"], function(require) {
 	"jassijs/remote/Database.ts": {
 		"date": 1622985395292,
 		"jassijs.remote.Database": {}
+	},
+	"jassijs/remote/DatabaseTools.ts": {
+		"date": 1624102876283,
+		"jassijs.remote.DatabaseTools": {}
 	},
 	"jassijs/remote/DBArray.ts": {
 		"date": 1622985396385,
@@ -152,7 +156,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1622998616949,
+		"date": 1624058362083,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {
@@ -210,7 +214,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/template/TemplateRemoteObject.ts": {
-		"date": 1622984492196,
+		"date": 1624056721957,
 		"jassijs.template.TemplateRemoteObject": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -373,7 +377,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.CSSProperties": {}
 	},
 	"jassijs/ui/DatabaseDesigner.ts": {
-		"date": 1622984492198,
+		"date": 1624096683489,
 		"jassijs/ui/DatabaseDesigner": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -448,7 +452,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/ErrorPanel.ts": {
-		"date": 1623875382912,
+		"date": 1624104577887,
 		"jassijs.ui.ErrorPanel": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -835,7 +839,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1622985638954,
+		"date": 1624054511642,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{
@@ -901,7 +905,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622984213666
 	},
 	"jassijs/util/Numberformatter.ts": {
-		"date": 1622984379896,
+		"date": 1624054580506,
 		"jassijs.util.Numberformatter": {}
 	},
 	"jassijs/util/Reloader.ts": {
