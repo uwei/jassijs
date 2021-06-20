@@ -2529,13 +2529,18 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
             var p = Typescript_4.default.getPositionOfLineAndCharacter(file, {
                 line: pos.lineNumber, character: pos.column
             });
+            const oldpos = model["lastEditor"].getPosition();
             setTimeout(() => {
                 CodePanel_3.CodePanel.getAutoimport(p, file, code).then((data) => {
                     if (data !== undefined) {
                         model.pushEditOperations([], [{
                                 range: monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row + 1 }),
                                 text: data.text
-                            }], () => null);
+                            }], (a) => {
+                            return null;
+                        });
+                        oldpos.lineNumber = oldpos.lineNumber + (data.text.indexOf("\r") ? 1 : 0);
+                        model["lastEditor"].setPosition(oldpos);
                     }
                 });
             }, 100);
@@ -2709,6 +2714,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
          */
         set value(value) {
             var lastcursor = this.cursorPosition;
+            var _this = this;
             if (this.file) {
                 var ffile = monaco.Uri.from({ path: "/" + this.file, scheme: 'file' });
                 var mod = monaco.editor.getModel(ffile);
@@ -2718,6 +2724,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
                     this._editor.setValue(value);
                 }
                 else if (mod !== this._editor.getModel()) {
+                    delete this._editor.getModel()["lastEditor"];
                     this._editor.setModel(mod);
                     this._editor.setValue(value);
                 }
@@ -2725,7 +2732,12 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
                     this._editor.getModel().pushEditOperations([], [{
                             range: this._editor.getModel().getFullModelRange(),
                             text: value
-                        }], () => null);
+                        }], (a) => {
+                        return null;
+                    });
+                }
+                if (this._editor.getModel()) {
+                    this._editor.getModel()["lastEditor"] = _this._editor;
                 }
             }
             else
@@ -2756,6 +2768,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
         destroy() {
             //this._editor.destroy();
             super.destroy();
+            delete this._editor.getModel()["lastEditor"];
         }
         /**
         * undo action
@@ -2906,7 +2919,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1622998616843
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1623865080120,
+                "date": 1624143090748,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {

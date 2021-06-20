@@ -913,7 +913,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Reloader": {}
 	},
 	"jassijs/util/Tools.ts": {
-		"date": 1622985638953,
+		"date": 1624207512293,
 		"jassijs.util.Tools": {}
 	}
 }

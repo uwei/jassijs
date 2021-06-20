@@ -5,6 +5,9 @@ define("de/registry", ["require"], function (require) {
             "de/d2de.ts": {
                 "date": 1587933243841
             },
+            "de/DBTest.ts": {
+                "date": 1624208048098
+            },
             "de/del.ts": {
                 "date": 1622984213677
             },
@@ -17,6 +20,16 @@ define("de/registry", ["require"], function (require) {
                 "de.DialogKunde": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
+                    ]
+                }
+            },
+            "de/KundeView.ts": {
+                "date": 1624207911110,
+                "de.KundeView": {
+                    "$DBObjectView": [
+                        {
+                            "classname": "de.Kunde"
+                        }
                     ]
                 }
             },
@@ -99,6 +112,10 @@ define("de/registry", ["require"], function (require) {
                     "$DBObject": [],
                     "Entity": []
                 }
+            },
+            "de/ReportKunde.ts": {
+                "date": 1624208090062,
+                "de.ReportKunde": {}
             }
         }
     };

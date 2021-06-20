@@ -93,7 +93,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/DatabaseSchema.ts": {
-                "date": 1624097285700,
+                "date": 1624139099724,
                 "jassijs.base.DatabaseSchema": {}
             },
             "jassijs/base/Errors.ts": {
@@ -995,7 +995,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Tools.ts": {
-                "date": 1622985638953,
+                "date": 1624207512293,
                 "jassijs.util.Tools": {}
             }
         }
@@ -17042,7 +17042,7 @@ define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi", "jas
     exports.Tools = Tools;
     async function test() {
         var k = Tools.objectToJson({
-            a: "h\no", b: 1, function() {
+            a: "h\no", b: 1, c: function () {
                 var ad = "\n";
             }
         });

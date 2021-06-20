@@ -2,9 +2,6 @@
 define("demo/registry",["require"], function(require) {
  return {
   default: {
-	"demo/DBTest.ts": {
-		"date": 1623868743374
-	},
 	"demo/Dialog.ts": {
 		"date": 1622984213677,
 		"demo/Dialog": {}
@@ -13,29 +10,15 @@ define("demo/registry",["require"], function(require) {
 		"date": 1622984213677,
 		"demo.EmptyDialog": {}
 	},
-	"demo/KundeView.ts": {
-		"date": 1622984379898,
-		"demo.KundeView": {
-			"$DBObjectView": [
-				{
-					"classname": "de.Kunde"
-				}
-			]
-		}
-	},
 	"demo/MemoryTest.ts": {
 		"date": 1622984213677
 	},
 	"demo/modul.ts": {
 		"date": 1612818333557
 	},
-	"demo/ReportKunde.ts": {
-		"date": 1623863960416,
-		"demo.ReportKunde": {}
-	},
-	"demo/ReportRechnung.ts": {
-		"date": 1622984379897,
-		"demo.ReportRechnung": {}
+	"demo/ReportInvoice.ts": {
+		"date": 1624208215985,
+		"demo.ReportInvoice": {}
 	},
 	"demo/StyleDialog.ts": {
 		"date": 1622984213677,

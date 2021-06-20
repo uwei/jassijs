@@ -5,11 +5,10 @@ import { $Property } from "jassijs/ui/Property";
 import { $UIComponent } from "jassijs/ui/Component";
 import { Kunde } from "de/remote/Kunde";
 import { RText } from "jassijs_report/RText";
-@$Class("demo.ReportRechnung")
-export class ReportRechnung extends ReportDesign {
+@$Class("demo.ReportInvoice")
+export class ReportInvoice extends ReportDesign {
     me = {};
-    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    value: Kunde;
+
     constructor() {
         super();
         this.layout(this.me);
@@ -17,7 +16,7 @@ export class ReportRechnung extends ReportDesign {
     async setdata() {
     }
     get title() {
-        return this.value === undefined ? "Kundenreport" : "Kundenreport " + this.value.id;
+        return "Invoicreport";
     }
     layout(me) {
         this.design = {
@@ -155,7 +154,7 @@ export class ReportRechnung extends ReportDesign {
 }
 export async function test() {
     // kk.o=0;
-    var dlg = new ReportRechnung();
+    var dlg = new ReportInvoice();
     //  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};
     //	dlg.value=jassijs.db.load("de.Kunde",9);	
     //console.log(JSON.stringify(dlg.toJSON()));

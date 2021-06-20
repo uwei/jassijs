@@ -19,7 +19,7 @@ type Me = {
 } & DBObjectViewMe;
 //;
 @$DBObjectView({ classname: "de.Kunde" })
-@$Class("demo.KundeView")
+@$Class("de.KundeView")
 export class KundeView extends DBObjectView {
     me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })

@@ -237,7 +237,7 @@ export class Tools {
 
 export async function test() {
     var k = Tools.objectToJson({        
-a: "h\no", b: 1, function() {
+a: "h\no", b: 1, c:function() {
             var ad = "\n";
         }    
 });

@@ -11,7 +11,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.designer.ReportDesigner": {}
 	},
 	"jassijs_report/modul.ts": {
-		"date": 1622998616843
+		"date": 1624207660636
 	},
 	"jassijs_report/PDFReport.ts": {
 		"date": 1623864507761,

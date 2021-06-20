@@ -3,7 +3,7 @@ import { ReportDesign } from "jassijs_report/ReportDesign";
 import { $Class } from "jassijs/remote/Jassi";
 import { $Property } from "jassijs/ui/Property";
 import { Kunde } from "de/remote/Kunde";
-@$Class("demo.ReportKunde")
+@$Class("de.ReportKunde")
 export class ReportKunde extends ReportDesign {
     me = {};
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
