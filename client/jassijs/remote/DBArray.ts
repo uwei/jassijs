@@ -1,5 +1,5 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import  {classes} from "jassijs/remote/Classes";
+import  {classes, JassiError} from "jassijs/remote/Classes";
 let cl=classes;//force Classes.
 
 @$Class("jassijs.remote.DBArray")
@@ -23,7 +23,7 @@ extends Array{
     */
    add(ob){
        if(ob===undefined||ob===null)
-           throw "Error cannot add object null";
+           throw new JassiError("Error cannot add object null");
        this.push(ob);
        if(this._parentObject!==undefined){ 
            //set linked object

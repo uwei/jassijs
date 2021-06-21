@@ -18,8 +18,8 @@ export class SearchExplorer extends Panel {
     constructor() {
         super();
         //this.maximize();
-        $(this.dom).css("width", "calc(100% - 2px)");
-        $(this.dom).css("height", "calc(100% - 2px)");
+           $(this.dom).css("width", "calc(100% - 8px)");
+        $(this.dom).css("height", "calc(100% - 25px)");//why 25????
         this.tree = new Tree();
         this.search = new Textbox();
         this.layout();
@@ -43,6 +43,8 @@ export class SearchExplorer extends Panel {
         var filenames=typescript.getFiles();
         for (var f=0;f<filenames.length;f++){
             var file=filenames[f];
+            if(file.indexOf("node_modules")>-1)//no search in node modules
+                continue;
             var code=typescript.getCode(file);
             if(code){
                 var text = code.toLowerCase();

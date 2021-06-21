@@ -1,7 +1,8 @@
 import { FileActions } from "jassijs/ui/FileExplorer";
 import { FileNode } from "jassijs/remote/FileNode";
 import { Server } from "jassijs/remote/Server";
-import { Test } from "jassijs/base/Tests";
+import { Test } from "jassijs/remote/Test";
+
 
 export async function test(t: Test) {
     var tests = new FileNode("tests");

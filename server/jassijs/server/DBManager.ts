@@ -1,6 +1,6 @@
 //@ts-ignore
 import { ConnectionOptions, createConnection, getConnection, SaveOptions, FindConditions, FindOneOptions, ObjectType, ObjectID, FindManyOptions, Connection, SelectQueryBuilder, Brackets, EntitySchema, getMetadataArgsStorage, Entity } from "typeorm";
-import { classes } from "jassijs/remote/Classes";
+import { classes, JassiError } from "jassijs/remote/Classes";
 
 import registry from "jassijs/remote/Registry";
 import { DBObject } from "jassijs/remote/DBObject";
@@ -234,7 +234,7 @@ export class DBManager {
   async remove<Entity>(context: Context, entity: Entity) {
     var test = await (await DBManager.get()).checkParentRight(context, entity, [entity["id"]]);
     if (test === false)
-      throw new Error("you are not allowed to delete " + classes.getClassName(entity) + " with id " + entity["id"]);
+      throw new JassiError("you are not allowed to delete " + classes.getClassName(entity) + " with id " + entity["id"]);
     await this.connection().manager.remove(entity);
   }
 
@@ -272,7 +272,7 @@ export class DBManager {
     }
     if (obj.id !== undefined) {
       if ((await this.connection().manager.findOne(obj.constructor, obj.id)) !== undefined) {
-        throw new Error("object is already in DB: " + obj.id);
+        throw new JassiError("object is already in DB: " + obj.id);
       }
     }
     //@ts-ignore
@@ -325,7 +325,7 @@ export class DBManager {
       if (exist !== undefined) {
         var t = await this.checkParentRight(context, cl, [entity["id"]]);
         if (!t) {
-          throw new Error("you are not allowed to save " + classes.getClassName(cl) + " with id " + entity["id"]);
+          throw new JassiError("you are not allowed to save " + classes.getClassName(cl) + " with id " + entity["id"]);
         }
       }
     }
@@ -334,7 +334,7 @@ export class DBManager {
       var data = registry.getMemberData("$CheckParentRight")[classes.getClassName(entity)];
       for (var key in data) {
         if (entity[key] === undefined) {
-          throw new Error("the field " + key + " must not be undefined");
+          throw new JassiError("the CheckParentRight field " + key + " must not be undefined");
         }
       }
     }
@@ -348,7 +348,7 @@ export class DBManager {
         let cl = rel.type;
         var t = await this.checkParentRight(context, cl, [data["id"]]);
         if (!t) {
-          throw new Error("you are not allowed to save " + classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+          throw new JassiError("you are not allowed to save " + classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
         }
       }
       if (data !== undefined && Array.isArray(data)) {
@@ -359,7 +359,7 @@ export class DBManager {
         }
         let t = await this.checkParentRight(context, cl, arr);
         if (!t) {
-          throw new Error("you are not allowed to save " + classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+          throw new JassiError("you are not allowed to save " + classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
         }
       }
       /* var tp=await p1.__proto__.constructor;
@@ -777,7 +777,7 @@ class RelationInfo {
       //this should prevent sql injection
       var test = /[A-Z,a-z][A-Z,a-z,0-9,\.]*/g.exec(key);
       if (test === null || test[0] !== key)
-        throw new Error("could not set property " + key + " in where clause");
+        throw new JassiError("could not set property " + key + " in where clause");
       var field = this._getRelationFromProperty(key);
       var pack = field.split(".")[0].substring(3);
       if (pack !== "")

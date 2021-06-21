@@ -1,5 +1,6 @@
 
 import registry from "jassijs/remote/Registry"; 
+import { JassiError } from "./Classes";
 
 
 
@@ -106,7 +107,7 @@ export class Jassi {
     */
     myRequire(href, event = undefined, param = undefined) {
         if (this.isServer)
-            throw "jass.Require is only available on client";
+            throw new JassiError("jass.Require is only available on client");
         if ((typeof href) === "string") {
             href = [href];
         }

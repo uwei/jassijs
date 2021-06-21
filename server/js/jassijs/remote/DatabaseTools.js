@@ -10,6 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.DatabaseTools = void 0;
 const Jassi_1 = require("jassijs/remote/Jassi");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
+const Classes_1 = require("jassijs/remote/Classes");
 let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1.RemoteObject {
     //this is a sample remote function
     static async runSQL(sql, parameter = undefined, context = undefined) {
@@ -18,7 +19,7 @@ let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1
         }
         else {
             if (!context.request.user.isAdmin)
-                throw "only admins can delete";
+                throw new Classes_1.JassiError("only admins can delete");
             //@ts-ignore
             var man = await (await Promise.resolve().then(() => require("jassijs/server/DBManager"))).DBManager.get();
             return man.runSQL(context, sql, parameter);
@@ -27,11 +28,11 @@ let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1
     static async dropTables(tables) {
         for (var i = 0; i < tables.length; i++) {
             if ((/[A-Z,a-z,_,0-9]+/g).exec(tables[i])[0] !== tables[i]) {
-                throw new Error(tables[i] + " is not a valid tablename");
+                throw new Classes_1.JassiError(tables[i] + " is not a valid tablename");
             }
         }
         if (tables.length === 0) {
-            throw new Error("no tables to drop");
+            throw new Classes_1.JassiError("no tables to drop");
         }
         return await DatabaseTools_1.runSQL("DROP TABLE " + tables.join(","));
     }

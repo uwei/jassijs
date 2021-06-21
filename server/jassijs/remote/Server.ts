@@ -2,7 +2,7 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { FileNode } from "jassijs/remote/FileNode";
-import { classes } from "./Classes";
+import { classes, JassiError } from "./Classes";
 
 
 
@@ -209,12 +209,12 @@ export class Server extends RemoteObject {
             } else {
                 //@ts-ignore
                 $.notify(fileName + " not saved", "error", { position: "bottom right" });
-                throw Error(res);
+                throw new JassiError(res);
             }
             return res;
         } else {
             if (!context.request.user.isAdmin)
-                throw "only admins can saveFiles";
+                throw new JassiError("only admins can saveFiles");
             //@ts-ignore
             var fs: any = await import("jassijs/server/Filesystem");
             var ret = await new fs.default().saveFiles(fileNames, contents, true);
@@ -256,7 +256,7 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             if (!context.request.user.isAdmin)
-                throw "only admins can delete";
+                throw new JassiError("only admins can delete");
             //@ts-ignore
             var fs: any = await import("jassijs/server/Filesystem");
 
@@ -274,7 +274,7 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             if (!context.request.user.isAdmin)
-                throw "only admins can delete";
+                throw new JassiError("only admins can delete");
             //@ts-ignore
             var fs: any = await import("jassijs/server/Filesystem");
 
@@ -292,7 +292,7 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             if (!context.request.user.isAdmin)
-                throw "only admins can rename";
+                throw new JassiError("only admins can rename");
             //@ts-ignore
             var fs: any = await import("jassijs/server/Filesystem");
 
@@ -328,7 +328,7 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             if (!context.request.user.isAdmin)
-                throw "only admins can createFile";
+                throw new JassiError("only admins can createFile");
             //@ts-ignore
             var fs: any = await import("jassijs/server/Filesystem");
 
@@ -346,7 +346,7 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             if (!context.request.user.isAdmin)
-                throw "only admins can createFolder";
+                throw new JassiError("only admins can createFolder");
             //@ts-ignore
             var fs: any = await import("jassijs/server/Filesystem");
 
@@ -361,7 +361,7 @@ export class Server extends RemoteObject {
             return ret;
         } else {
             if (!context.request.user.isAdmin)
-                throw "only admins can createFolder";
+                throw new JassiError("only admins can createFolder");
             //@ts-ignore
             var fs: any = await import("jassijs/server/Filesystem");
 

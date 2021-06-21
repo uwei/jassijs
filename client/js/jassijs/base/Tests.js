@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs_editor/util/Typescript", "jassijs/ui/Component", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel", "jassijs/base/Errors", "jassijs/ui/ErrorPanel"], function (require, exports, Jassi_1, Actions_1, Typescript_1, Component_1, BoxPanel_1, Windows_1, HTMLPanel_1, Errors_1, ErrorPanel_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs_editor/util/Typescript", "jassijs/ui/Component", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel", "jassijs/base/Errors", "jassijs/ui/ErrorPanel", "jassijs/remote/Test"], function (require, exports, Jassi_1, Actions_1, Typescript_1, Component_1, BoxPanel_1, Windows_1, HTMLPanel_1, Errors_1, ErrorPanel_1, Test_1) {
     "use strict";
     var TestAction_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Tests = exports.Test = exports.TestAction = void 0;
+    exports.test = exports.Tests = exports.TestAction = void 0;
     class MyContainer extends BoxPanel_1.BoxPanel {
         constructor() {
             super(...arguments);
@@ -66,7 +66,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
                                 if (typeof func === "function") {
                                     container.alltests++;
                                     container.update();
-                                    var ret = await func(new Test());
+                                    var ret = await func(new Test_1.Test());
                                     if (ret instanceof Component_1.Component) {
                                         $(ret.dom).css({ position: "relative" });
                                         ret.width = "100%";
@@ -109,7 +109,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
     };
     __decorate([
         Actions_1.$Action({
-            name: "Test"
+            name: "Run Tests"
         }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, MyContainer]),
@@ -120,78 +120,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
         Jassi_1.$Class("jassijs.ui.TestAction")
     ], TestAction);
     exports.TestAction = TestAction;
-    let Test = class Test {
-        /**
-         * fails if the condition is false
-         * @parameter condition
-         **/
-        expectEqual(condition) {
-            if (!condition)
-                throw new Error("Test fails");
-        }
-        /**
-         * fails if the func does not throw an error
-         * @parameter func - the function that should failed
-         **/
-        expectError(func) {
-            try {
-                if (func.toString().startsWith("async ")) {
-                    var errobj;
-                    try {
-                        throw new Error("test fails");
-                    }
-                    catch (err) {
-                        errobj = err;
-                    }
-                    func().then(() => {
-                        throw errobj;
-                    }).catch((err) => {
-                        if (err.message === "test fails")
-                            throw errobj;
-                        var k = 1; //io
-                    });
-                    return;
-                }
-                else {
-                    func();
-                }
-            }
-            catch (_a) {
-                return; //io
-            }
-            throw new Error("test fails");
-        }
-        /**
-        * fails if the func does not throw an error
-        * @parameter func - the function that should failed
-        **/
-        async expectErrorAsync(func) {
-            var errors = false;
-            try {
-                var errobj;
-                await func().then((e) => {
-                }).catch((e) => {
-                    errors = true;
-                });
-            }
-            catch (_a) {
-                errors = true;
-            }
-            if (!errors)
-                throw new Error("test fails");
-        }
-    };
-    Test = __decorate([
-        Jassi_1.$Class("jassijs.base.Test")
-    ], Test);
-    exports.Test = Test;
     class Tests {
     }
     exports.Tests = Tests;
     //Selftest
-    async function test(test) {
-        test.expectEqual(1 === 1);
-        test.expectError(() => {
+    async function test(tst) {
+        tst.expectEqual(1 === 1);
+        tst.expectError(() => {
             var h;
             h.a = 9;
         });

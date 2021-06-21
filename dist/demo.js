@@ -75,7 +75,7 @@ define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassi
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MemoryTest = void 0;
     function test() {
-        let j = new Promise((resolve_1, reject_1) => { require(["demo/DK"], resolve_1, reject_1); });
+        //let j=import("de/DK");
         // let dk=new DK();
         // dk.destroy();
     }
@@ -396,16 +396,6 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
     async function test() {
         var dlg = new TestComponent();
         return dlg;
-    }
-    exports.test = test;
-});
-define("demo/TestExtension", ["require", "exports", "de/remote/Kunde"], function (require, exports, Kunde_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = void 0;
-    function test() {
-        var kd = new Kunde_1.Kunde();
-        console.log(kd.extFunc());
     }
     exports.test = test;
 });
@@ -856,7 +846,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo.EmptyDialog": {}
             },
             "demo/MemoryTest.ts": {
-                "date": 1622984213677
+                "date": 1624296679246
             },
             "demo/modul.ts": {
                 "date": 1612818333557
@@ -889,9 +879,6 @@ define("demo/registry", ["require"], function (require) {
             "demo/Testcontextmenu.ts": {
                 "date": 1622984213677,
                 "demo.Testcontextmenu": {}
-            },
-            "demo/TestExtension.ts": {
-                "date": 1613330812614
             },
             "demo/Testmenu.ts": {
                 "date": 1622985794017,

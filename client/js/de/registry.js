@@ -116,6 +116,9 @@ define("de/registry", ["require"], function (require) {
             "de/ReportKunde.ts": {
                 "date": 1624208090062,
                 "de.ReportKunde": {}
+            },
+            "de/TestExtension.ts": {
+                "date": 1624293154792
             }
         }
     };

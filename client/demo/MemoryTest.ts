@@ -7,7 +7,7 @@ import { Kunde } from "de/remote/Kunde";
 
 
 function test(){
-   let j=import("demo/DK");
+   //let j=import("de/DK");
     // let dk=new DK();
    // dk.destroy();
 }

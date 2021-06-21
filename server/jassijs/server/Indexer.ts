@@ -2,6 +2,7 @@ import ts = require("typescript");
 //import "jassijs_editor/util/Typescript";
 //@ts-ignore
 import Filesystem from "jassijs/server/Filesystem";
+import { JassiError } from "jassijs/remote/Classes";
 
 
 
@@ -131,7 +132,7 @@ export abstract class Indexer {
             return Number(arg.text);
         }
 
-        throw "Error typ not found";
+        throw new JassiError("Error typ not found");
     }
     collectAnnotations(node: ts.Node, outDecorations, depth = 0) {
         //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);

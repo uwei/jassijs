@@ -3,7 +3,8 @@ import registry from "jassijs/remote/Registry";
 
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { Setting } from "jassijs/remote/security/Setting";
-import { Test } from "jassijs/base/Tests";
+import { Test } from "./Test";
+ 
 
 
 declare global {

@@ -18,8 +18,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
             //@member - maximal hits which are found 
             this.maximalFounds = 100;
             //this.maximize();
-            $(this.dom).css("width", "calc(100% - 2px)");
-            $(this.dom).css("height", "calc(100% - 2px)");
+            $(this.dom).css("width", "calc(100% - 8px)");
+            $(this.dom).css("height", "calc(100% - 25px)"); //why 25????
             this.tree = new Tree_1.Tree();
             this.search = new Textbox_1.Textbox();
             this.layout();
@@ -39,6 +39,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
             var filenames = Typescript_1.default.getFiles();
             for (var f = 0; f < filenames.length; f++) {
                 var file = filenames[f];
+                if (file.indexOf("node_modules") > -1) //no search in node modules
+                    continue;
                 var code = Typescript_1.default.getCode(file);
                 if (code) {
                     var text = code.toLowerCase();

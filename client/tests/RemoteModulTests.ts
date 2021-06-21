@@ -2,11 +2,12 @@ import { FileNode } from "jassijs/remote/FileNode";
 import { FileActions } from "jassijs/ui/FileExplorer";
 import { Server } from "jassijs/remote/Server";
 import { classes } from "jassijs/remote/Classes";
-import { Test, Tests } from "jassijs/base/Tests";
+import { Tests } from "jassijs/base/Tests";
 import registry from "jassijs/remote/Registry";
 import { DatabaseDesigner } from "jassijs/ui/DatabaseDesigner";
 import { DBObject } from "jassijs/remote/DBObject";
 import { DatabaseTools } from "jassijs/remote/DatabaseTools";
+import { Test } from "jassijs/remote/Test";
 
 export async function test(teste: Test) {
     try {

@@ -1,5 +1,5 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import { classes } from "jassijs/remote/Classes";
+import { classes, JassiError } from "jassijs/remote/Classes";
 
 
 
@@ -92,7 +92,7 @@ export class RemoteProtocol {
    */
     async call() {
         if (jassijs.isServer)
-            throw new Error("should be called on client");
+            throw new JassiError("should be called on client");
         var sdataObject = undefined;
         var url = "remoteprotocol?" + Date.now();
         var _this = this;
@@ -125,7 +125,7 @@ export class RemoteProtocol {
             return undefined;
         var retval = await this.parse(ret);
         if (retval["**throw error**"] !== undefined) {
-            throw new Error(retval["**throw error**"]);
+            throw new JassiError(retval["**throw error**"]);
         }
         return retval;
     }

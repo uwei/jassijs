@@ -13,24 +13,25 @@ exports.test = exports.Setting = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
 const Jassi_1 = require("jassijs/remote/Jassi");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
+const Classes_1 = require("../Classes");
 let Setting = class Setting extends DBObject_1.DBObject {
     constructor() {
         super();
     }
     async save(context = undefined) {
-        throw "not suported";
+        throw new Classes_1.JassiError("not suported");
     }
     static async findOne(options = undefined, context = undefined) {
-        throw "not suported";
+        throw new Classes_1.JassiError("not suported");
     }
     static async find(options = undefined, context = undefined) {
-        throw "not suported";
+        throw new Classes_1.JassiError("not suported");
     }
     /**
     * reload the object from jassijs.db
     */
     async remove(context = undefined) {
-        throw "not suported";
+        throw new Classes_1.JassiError("not suported");
     }
 };
 __decorate([

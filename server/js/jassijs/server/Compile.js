@@ -5,6 +5,7 @@ exports.Compile = void 0;
 //import ts = require('typescript');
 const ts = require("typescript");
 const fs = require("fs");
+const Classes_1 = require("jassijs/remote/Classes");
 var rpath = require('path');
 //var chokidar = require('chokidar');
 var path = "./../public_html";
@@ -72,7 +73,7 @@ class Compile {
         const configPath = ts.findConfigFile(path + "/", /*searchPath*/ //"./",
         ts.sys.fileExists, "tsconfig.json");
         if (!configPath) {
-            throw new Error("Could not find a valid 'tsconfig.json'.");
+            throw new Classes_1.JassiError("Could not find a valid 'tsconfig.json'.");
         }
         const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
         const host = ts.createWatchCompilerHost(configPath, {}, ts.sys, createProgram, this.reportDiagnostic.bind(this), this.reportWatchStatusChanged.bind(this));
@@ -131,7 +132,7 @@ class Compile {
     transpile(fileName) {
         let spath = fileName.split("/");
         if (spath.length < 2 && spath[1] !== "remote") {
-            throw "fileName must startswith remote";
+            throw new Classes_1.JassiError("fileName must startswith remote");
         }
         var path = ".";
         var data = fs.readFileSync(path + "/" + fileName, { encoding: 'utf-8' });

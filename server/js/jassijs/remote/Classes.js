@@ -9,8 +9,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.classes = exports.Classes = void 0;
+exports.test = exports.classes = exports.Classes = exports.JassiError = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
+let JassiError = class JassiError extends Error {
+    constructor(msg) {
+        super(msg);
+    }
+};
+JassiError = __decorate([
+    $Class("jassijs.remote.JassiError"),
+    __metadata("design:paramtypes", [String])
+], JassiError);
+exports.JassiError = JassiError;
 function $Class(longclassname) {
     return function (pclass) {
         Registry_1.default.register("$Class", pclass, longclassname);
@@ -51,14 +61,14 @@ let Classes = class Classes {
         }
         else {
             if (cl === undefined || cl.length === 0) {
-                throw "Class not found:" + classname;
+                throw new JassiError("Class not found:" + classname);
             }
             var file = cl[0].filename;
             //@ts-ignore
             if (window.document === undefined) {
                 var pack = file.split("/");
                 if (pack.length < 2 || pack[1] !== "remote") {
-                    throw "failed loadClass " + classname + " on server only remote classes coud be loaded";
+                    throw new JassiError("failed loadClass " + classname + " on server only remote classes coud be loaded");
                 }
             }
             //@ts-ignore

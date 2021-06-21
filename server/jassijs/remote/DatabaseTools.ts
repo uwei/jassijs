@@ -1,5 +1,6 @@
 import { $Class } from "jassijs/remote/Jassi";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
+import { JassiError } from "jassijs/remote/Classes";
 
 @$Class("jassijs.remote.DatabaseTools")
 export class DatabaseTools extends RemoteObject {
@@ -9,7 +10,7 @@ export class DatabaseTools extends RemoteObject {
             return await this.call(this.runSQL, sql, parameter, context);
         } else {
             if (!context.request.user.isAdmin)
-                throw "only admins can delete";
+                throw new JassiError( "only admins can delete");
             //@ts-ignore
             var man = await (await import("jassijs/server/DBManager")).DBManager.get();
             return man.runSQL(context, sql, parameter);
@@ -18,11 +19,11 @@ export class DatabaseTools extends RemoteObject {
     public static async dropTables(tables: string[]): Promise<string> {
         for (var i = 0; i < tables.length; i++) {
             if ((/[A-Z,a-z,_,0-9]+/g).exec(tables[i])[0] !== tables[i]) {
-                throw new Error(tables[i] + " is not a valid tablename");
+                throw new JassiError(tables[i] + " is not a valid tablename");
             }
         }
         if (tables.length === 0) {
-            throw new Error("no tables to drop")
+            throw new JassiError("no tables to drop")
         }
         return await DatabaseTools.runSQL("DROP TABLE " + tables.join(","));
     }

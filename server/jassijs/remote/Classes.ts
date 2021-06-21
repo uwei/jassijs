@@ -2,6 +2,12 @@
 import registry from "jassijs/remote/Registry";
 
 
+@$Class("jassijs.remote.JassiError")
+export class JassiError extends Error{
+    constructor(msg:string){
+        super(msg);
+    }
+} 
 
 function $Class(longclassname: string): Function {
     return function (pclass) {
@@ -46,7 +52,7 @@ export class Classes {
             }
         } else {
             if (cl === undefined || cl.length === 0) {
-                throw "Class not found:" + classname;
+                throw new JassiError("Class not found:" + classname);
             }
  
             var file = cl[0].filename;
@@ -54,7 +60,7 @@ export class Classes {
             if (window.document === undefined) {
                 var pack = file.split("/");
                 if (pack.length < 2 || pack[1] !== "remote") {
-                    throw "failed loadClass " + classname + " on server only remote classes coud be loaded";
+                    throw new JassiError("failed loadClass " + classname + " on server only remote classes coud be loaded");
                 }
             }
             //@ts-ignore

@@ -16,7 +16,7 @@ exports.Context = Context;
 let RemoteObject = class RemoteObject {
     static async call(method, ...parameter) {
         if (Jassi_1.default.isServer)
-            throw "should be called on client";
+            throw new Classes_1.JassiError("should be called on client");
         var prot = new RemoteProtocol_1.RemoteProtocol();
         var context = parameter[parameter.length - 1];
         prot.classname = Classes_1.classes.getClassName(this);
@@ -40,7 +40,7 @@ let RemoteObject = class RemoteObject {
     }
     async call(_this, method, ...parameter) {
         if (Jassi_1.default.isServer)
-            throw "should be called on client";
+            throw new Classes_1.JassiError("should be called on client");
         var prot = new RemoteProtocol_1.RemoteProtocol();
         var context = parameter[parameter.length - 1];
         prot.classname = Classes_1.classes.getClassName(this);

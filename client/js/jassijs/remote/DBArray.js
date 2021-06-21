@@ -29,7 +29,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"],
          */
         add(ob) {
             if (ob === undefined || ob === null)
-                throw "Error cannot add object null";
+                throw new Classes_1.JassiError("Error cannot add object null");
             this.push(ob);
             if (this._parentObject !== undefined) {
                 //set linked object

@@ -3,10 +3,10 @@ define("tests/registry", ["require"], function (require) {
     return {
         default: {
             "tests/DBTests.ts": {
-                "date": 1623704929319
+                "date": 1624296651725
             },
             "tests/FileActionsTests.ts": {
-                "date": 1624136666335
+                "date": 1624296373069
             },
             "tests/remote/TestCustomer.ts": {
                 "date": 1623488386702,
@@ -40,7 +40,7 @@ define("tests/registry", ["require"], function (require) {
                 }
             },
             "tests/RemoteModulTests.ts": {
-                "date": 1624102866600
+                "date": 1624296469637
             },
             "tests/TestReport.ts": {
                 "date": 1623864072454

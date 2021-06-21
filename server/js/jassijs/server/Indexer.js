@@ -5,6 +5,7 @@ const ts = require("typescript");
 //import "jassijs_editor/util/Typescript";
 //@ts-ignore
 const Filesystem_1 = require("jassijs/server/Filesystem");
+const Classes_1 = require("jassijs/remote/Classes");
 class Indexer {
     async updateModul(root, modul, isserver) {
         var path = root + (root === "" ? "" : "/") + modul;
@@ -124,7 +125,7 @@ class Indexer {
         else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
             return Number(arg.text);
         }
-        throw "Error typ not found";
+        throw new Classes_1.JassiError("Error typ not found");
     }
     collectAnnotations(node, outDecorations, depth = 0) {
         //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);

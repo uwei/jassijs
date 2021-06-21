@@ -130,14 +130,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
                     if (cached === undefined) {
                         DBObject_1.addToCache(this); //must be cached before inserting, so the new properties are introduced to the existing
                         if (this.isAutoId())
-                            throw new Error("autoid - load the object  before saving or remove id");
+                            throw new Classes_1.JassiError("autoid - load the object  before saving or remove id");
                         else
                             return await this.call(this, this._createObjectInDB, context);
                         //}//fails if the Object is saved before loading 
                     }
                     else {
                         if (cached !== this) {
-                            throw new Error("the object must be loaded before save");
+                            throw new Classes_1.JassiError("the object must be loaded before save");
                         }
                     }
                     DBObject_1.addToCache(this);
@@ -149,7 +149,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
                 }
                 else {
                     if (!this.isAutoId()) {
-                        throw new Error("error while saving the Id is not set");
+                        throw new Classes_1.JassiError("error while saving the Id is not set");
                     }
                     else {
                         var newob = this._replaceObjectWithId(this);
@@ -170,7 +170,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
         }
         async _createObjectInDB(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                throw new Error("createObject could oly be called on server");
+                throw new Classes_1.JassiError("createObject could oly be called on server");
             }
             else {
                 //@ts-ignore

@@ -208,7 +208,7 @@ let DBManager = DBManager_1 = class DBManager {
     async remove(context, entity) {
         var test = await (await DBManager_1.get()).checkParentRight(context, entity, [entity["id"]]);
         if (test === false)
-            throw new Error("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
+            throw new Classes_1.JassiError("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
         await this.connection().manager.remove(entity);
     }
     async addSaveTransaction(context, entity) {
@@ -245,7 +245,7 @@ let DBManager = DBManager_1 = class DBManager {
         }
         if (obj.id !== undefined) {
             if ((await this.connection().manager.findOne(obj.constructor, obj.id)) !== undefined) {
-                throw new Error("object is already in DB: " + obj.id);
+                throw new Classes_1.JassiError("object is already in DB: " + obj.id);
             }
         }
         //@ts-ignore
@@ -290,7 +290,7 @@ let DBManager = DBManager_1 = class DBManager {
             if (exist !== undefined) {
                 var t = await this.checkParentRight(context, cl, [entity["id"]]);
                 if (!t) {
-                    throw new Error("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"]);
+                    throw new Classes_1.JassiError("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"]);
                 }
             }
         }
@@ -299,7 +299,7 @@ let DBManager = DBManager_1 = class DBManager {
             var data = Registry_1.default.getMemberData("$CheckParentRight")[Classes_1.classes.getClassName(entity)];
             for (var key in data) {
                 if (entity[key] === undefined) {
-                    throw new Error("the field " + key + " must not be undefined");
+                    throw new Classes_1.JassiError("the CheckParentRight field " + key + " must not be undefined");
                 }
             }
         }
@@ -312,7 +312,7 @@ let DBManager = DBManager_1 = class DBManager {
                 let cl = rel.type;
                 var t = await this.checkParentRight(context, cl, [data["id"]]);
                 if (!t) {
-                    throw new Error("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+                    throw new Classes_1.JassiError("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
                 }
             }
             if (data !== undefined && Array.isArray(data)) {
@@ -323,7 +323,7 @@ let DBManager = DBManager_1 = class DBManager {
                 }
                 let t = await this.checkParentRight(context, cl, arr);
                 if (!t) {
-                    throw new Error("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+                    throw new Classes_1.JassiError("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
                 }
             }
             /* var tp=await p1.__proto__.constructor;
@@ -683,7 +683,7 @@ class RelationInfo {
             //this should prevent sql injection
             var test = /[A-Z,a-z][A-Z,a-z,0-9,\.]*/g.exec(key);
             if (test === null || test[0] !== key)
-                throw new Error("could not set property " + key + " in where clause");
+                throw new Classes_1.JassiError("could not set property " + key + " in where clause");
             var field = this._getRelationFromProperty(key);
             var pack = field.split(".")[0].substring(3);
             if (pack !== "")

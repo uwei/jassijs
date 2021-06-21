@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject"], function (require, exports, Jassi_1, RemoteObject_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject", "jassijs/remote/Classes"], function (require, exports, Jassi_1, RemoteObject_1, Classes_1) {
     "use strict";
     var DatabaseTools_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17,7 +17,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
             }
             else {
                 if (!context.request.user.isAdmin)
-                    throw "only admins can delete";
+                    throw new Classes_1.JassiError("only admins can delete");
                 //@ts-ignore
                 var man = await (await new Promise((resolve_1, reject_1) => { require(["jassijs/server/DBManager"], resolve_1, reject_1); })).DBManager.get();
                 return man.runSQL(context, sql, parameter);
@@ -26,11 +26,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
         static async dropTables(tables) {
             for (var i = 0; i < tables.length; i++) {
                 if ((/[A-Z,a-z,_,0-9]+/g).exec(tables[i])[0] !== tables[i]) {
-                    throw new Error(tables[i] + " is not a valid tablename");
+                    throw new Classes_1.JassiError(tables[i] + " is not a valid tablename");
                 }
             }
             if (tables.length === 0) {
-                throw new Error("no tables to drop");
+                throw new Classes_1.JassiError("no tables to drop");
             }
             return await DatabaseTools_1.runSQL("DROP TABLE " + tables.join(","));
         }

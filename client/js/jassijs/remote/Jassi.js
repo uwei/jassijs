@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_1) {
+define(["require", "exports", "jassijs/remote/Registry", "./Classes"], function (require, exports, Registry_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Jassi = exports.$register = exports.$Class = void 0;
@@ -90,7 +90,7 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
         */
         myRequire(href, event = undefined, param = undefined) {
             if (this.isServer)
-                throw "jass.Require is only available on client";
+                throw new Classes_1.JassiError("jass.Require is only available on client");
             if ((typeof href) === "string") {
                 href = [href];
             }

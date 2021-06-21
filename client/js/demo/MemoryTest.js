@@ -3,7 +3,7 @@ define(["require", "exports", "jassijs/remote/Server", "jassijs/util/Reloader", 
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MemoryTest = void 0;
     function test() {
-        let j = new Promise((resolve_1, reject_1) => { require(["demo/DK"], resolve_1, reject_1); });
+        //let j=import("de/DK");
         // let dk=new DK();
         // dk.destroy();
     }

@@ -10,6 +10,7 @@ import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Errors } from "jassijs/base/Errors";
 import { ErrorPanel } from "jassijs/ui/ErrorPanel";
 import { Panel } from "jassijs/ui/Panel";
+import { Test } from "jassijs/remote/Test";
 
 
 
@@ -32,7 +33,7 @@ class MyContainer extends BoxPanel {
 @$Class("jassijs.ui.TestAction")
 export class TestAction {
     @$Action({
-        name: "Test"
+        name: "Run Tests"
     })
     static async testNode(all: FileNode[], container: MyContainer = undefined) {
 
@@ -117,77 +118,16 @@ export class TestAction {
 
 }
 
-@$Class("jassijs.base.Test")
-export class Test {
 
-    /**
-     * fails if the condition is false
-     * @parameter condition 
-     **/
-    expectEqual(condition: boolean) {
-        if (!condition)
-            throw new Error("Test fails");
-    }
-    /**
-     * fails if the func does not throw an error
-     * @parameter func - the function that should failed
-     **/
-    expectError(func) {
-        try {
-
-            if (func.toString().startsWith("async ")) {
-                var errobj;
-                try {
-                    throw new Error("test fails");
-                } catch (err) {
-                    errobj = err;
-                }
-                func().then(() => {
-                    throw errobj;
-                }).catch((err) => {
-                    if (err.message === "test fails")
-                        throw errobj;
-                    var k = 1;//io
-                });
-                return;
-            } else {
-                func();
-            }
-        } catch {
-            return;//io
-        }
-        throw new Error("test fails");
-    }
-    /**
-    * fails if the func does not throw an error
-    * @parameter func - the function that should failed
-    **/
-    async expectErrorAsync(func) {
-        var errors = false;
-        try {
-            var errobj;
-
-            await func().then((e) => {
-
-            }).catch((e) => {
-                errors = true;
-            });
-        } catch {
-            errors = true;
-        }
-        if (!errors)
-            throw new Error("test fails");
-    }
-}
 export class Tests {
 
 }
 
 //Selftest
-export async function test(test: Test) {
+export async function test(tst: Test) {
 
-    test.expectEqual(1 === 1);
-    test.expectError(() => {
+    tst.expectEqual(1 === 1);
+    tst.expectError(() => {
         var h;
         h.a = 9;
     });

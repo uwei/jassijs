@@ -20,7 +20,7 @@ async function checkSimulateUser(context, request) {
         request.user.user = user.id;
         request.user.isAdmin = (user.isAdmin === null ? false : user.isAdmin);
         if (!user)
-            throw new Error("simulateUser not logged in");
+            throw new Classes_1.JassiError("simulateUser not logged in");
     }
 }
 async function execute(request, res) {
@@ -48,7 +48,7 @@ async function _execute(protext, request, context) {
     var file = files[0];
     var path = file.split("/");
     if (path.length < 2 || path[1] !== "remote")
-        throw "only remote packages can be loadeded";
+        throw new Classes_1.JassiError("only remote packages can be loadeded");
     file = file.replace(".ts", "");
     //var ret = await import(file);
     var ret = await Promise.resolve().then(() => require.main.require(file));
@@ -87,7 +87,9 @@ async function _execute(protext, request, context) {
                 ret = await (obj[prot.method](...prot.parameter, context));
         }
         catch (ex) {
-            console.error(ex.stack);
+            if (!(ex instanceof Classes_1.JassiError)) {
+                console.error(ex.stack);
+            }
             var msg = ex.message;
             if (!msg)
                 msg = ex;

@@ -84,7 +84,7 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
         register(service, oclass, ...params) {
             var sclass = oclass.prototype.constructor._classname;
             if (sclass === undefined && service !== "$Class") {
-                throw "@$Class member is missing or must be set at last";
+                throw new Error("@$Class member is missing or must be set at last");
                 return;
             }
             if (service === "$Class") {

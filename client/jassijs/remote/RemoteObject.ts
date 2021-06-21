@@ -1,5 +1,5 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import { classes } from "jassijs/remote/Classes";
+import { classes, JassiError } from "jassijs/remote/Classes";
 import {RemoteProtocol} from "jassijs/remote/RemoteProtocol";
 
 export class Context{
@@ -11,7 +11,7 @@ export class RemoteObject{
 	public static async call(method:(...ars:any)=>any,...parameter){
 	  
 		if(jassijs.isServer)
-			throw "should be called on client";
+			throw new JassiError("should be called on client");
 		var prot=new RemoteProtocol();
 		var context=parameter[parameter.length-1];
 		prot.classname=classes.getClassName(this);
@@ -39,7 +39,7 @@ export class RemoteObject{
 
 	public async call(_this,method:(...ars:any)=>any,...parameter){
 		if(jassijs.isServer)
-			throw "should be called on client";
+			throw new JassiError( "should be called on client");
 		var prot=new RemoteProtocol();
 		var context=parameter[parameter.length-1];
 		prot.classname=classes.getClassName(this);

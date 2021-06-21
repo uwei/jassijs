@@ -3,7 +3,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"jassijs/remote/Classes.ts": {
-		"date": 1623094343197,
+		"date": 1624296519695,
+		"jassijs.remote.JassiError": {},
 		"jassijs.remote.Classes": {}
 	},
 	"jassijs/remote/Database.ts": {
@@ -11,15 +12,15 @@ exports.default={
 		"jassijs.remote.Database": {}
 	},
 	"jassijs/remote/DatabaseTools.ts": {
-		"date": 1624102876283,
+		"date": 1624296507755,
 		"jassijs.remote.DatabaseTools": {}
 	},
 	"jassijs/remote/DBArray.ts": {
-		"date": 1622985396385,
+		"date": 1624295775441,
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1623577283286,
+		"date": 1624295824039,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -36,21 +37,21 @@ exports.default={
 		"date": 1622985408207
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1622985409707,
+		"date": 1624295844684,
 		"jassijs.remote.Jassi": {}
 	},
 	"jassijs/remote/ObjectTransaction.ts": {
 		"date": 1622985412199
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1622985737498
+		"date": 1624295873451
 	},
 	"jassijs/remote/RemoteObject.ts": {
-		"date": 1622985417345,
+		"date": 1624295890257,
 		"jassijs.remote.RemoteObject": {}
 	},
 	"jassijs/remote/RemoteProtocol.ts": {
-		"date": 1623528977868,
+		"date": 1624295908903,
 		"jassijs.remote.RemoteProtocol": {}
 	},
 	"jassijs/remote/security/Group.ts": {
@@ -88,7 +89,7 @@ exports.default={
 		"jassijs.security.Rights": {}
 	},
 	"jassijs/remote/security/Setting.ts": {
-		"date": 1622998616949,
+		"date": 1624296035777,
 		"jassijs.security.Setting": {
 			"$DBObject": [
 				{
@@ -108,32 +109,36 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1624058362083,
+		"date": 1624295985074,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {
-		"date": 1623173497673,
+		"date": 1624297039992,
 		"jassijs.remote.Settings": {}
+	},
+	"jassijs/remote/Test.ts": {
+		"date": 1624296336207,
+		"jassijs.remote.Test": {}
 	},
 	"jassijs/remote/Transaction.ts": {
 		"date": 1622985430225,
 		"jassijs.remote.Transaction": {}
 	},
 	"jassijs/server/Compile.ts": {
-		"date": 1622984470670
+		"date": 1624296732806
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1624098619237,
+		"date": 1624297023088,
 		"jassi_localserver.DBManager": {}
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
-		"date": 1623702870098
+		"date": 1624297017569
 	},
 	"jassijs/server/Filesystem.ts": {
 		"date": 1624055249217
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1624131966767
+		"date": 1624296856615
 	},
 	"jassijs/server/JassiServer.ts": {
 		"date": 1622984045173

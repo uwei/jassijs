@@ -212,13 +212,13 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
             else {
                 //@ts-ignore
                 $.notify(fileName + " not saved", "error", { position: "bottom right" });
-                throw Error(res);
+                throw new Classes_1.JassiError(res);
             }
             return res;
         }
         else {
             if (!context.request.user.isAdmin)
-                throw "only admins can saveFiles";
+                throw new Classes_1.JassiError("only admins can saveFiles");
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassijs/server/Filesystem"));
             var ret = await new fs.default().saveFiles(fileNames, contents, true);
@@ -261,7 +261,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         }
         else {
             if (!context.request.user.isAdmin)
-                throw "only admins can delete";
+                throw new Classes_1.JassiError("only admins can delete");
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassijs/server/Filesystem"));
             return await new fs.default().removeServerModul(name);
@@ -279,7 +279,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         }
         else {
             if (!context.request.user.isAdmin)
-                throw "only admins can delete";
+                throw new Classes_1.JassiError("only admins can delete");
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassijs/server/Filesystem"));
             return await new fs.default().remove(name);
@@ -297,7 +297,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         }
         else {
             if (!context.request.user.isAdmin)
-                throw "only admins can rename";
+                throw new Classes_1.JassiError("only admins can rename");
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassijs/server/Filesystem"));
             return await new fs.default().rename(oldname, newname);
@@ -336,7 +336,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         }
         else {
             if (!context.request.user.isAdmin)
-                throw "only admins can createFile";
+                throw new Classes_1.JassiError("only admins can createFile");
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassijs/server/Filesystem"));
             return await new fs.default().createFile(filename, content);
@@ -354,7 +354,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         }
         else {
             if (!context.request.user.isAdmin)
-                throw "only admins can createFolder";
+                throw new Classes_1.JassiError("only admins can createFolder");
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassijs/server/Filesystem"));
             return await new fs.default().createFolder(foldername);
@@ -369,7 +369,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         }
         else {
             if (!context.request.user.isAdmin)
-                throw "only admins can createFolder";
+                throw new Classes_1.JassiError("only admins can createFolder");
             //@ts-ignore
             var fs = await Promise.resolve().then(() => require("jassijs/server/Filesystem"));
             return await new fs.default().createModule(modulname);

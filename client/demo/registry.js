@@ -11,7 +11,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.EmptyDialog": {}
 	},
 	"demo/MemoryTest.ts": {
-		"date": 1622984213677
+		"date": 1624296679246
 	},
 	"demo/modul.ts": {
 		"date": 1612818333557
@@ -44,9 +44,6 @@ define("demo/registry",["require"], function(require) {
 	"demo/Testcontextmenu.ts": {
 		"date": 1622984213677,
 		"demo.Testcontextmenu": {}
-	},
-	"demo/TestExtension.ts": {
-		"date": 1613330812614
 	},
 	"demo/Testmenu.ts": {
 		"date": 1622985794017,

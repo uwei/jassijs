@@ -3,6 +3,7 @@
 import * as ts from "typescript";
 import fs = require('fs');
 import { file } from "jszip";
+import { JassiError } from "jassijs/remote/Classes";
 var rpath = require('path')
 
 //var chokidar = require('chokidar');
@@ -88,7 +89,7 @@ export class Compile {
       "tsconfig.json"
     );
     if (!configPath) {
-      throw new Error("Could not find a valid 'tsconfig.json'.");
+      throw new JassiError("Could not find a valid 'tsconfig.json'.");
     }
     const createProgram = ts.createSemanticDiagnosticsBuilderProgram;
     const host = ts.createWatchCompilerHost(
@@ -170,7 +171,7 @@ export class Compile {
   transpile(fileName: string) {
     let spath = fileName.split("/");
     if (spath.length < 2 && spath[1] !== "remote") {
-      throw "fileName must startswith remote"
+      throw new JassiError("fileName must startswith remote");
     }
     var path = ".";   
     var data = fs.readFileSync(path + "/" + fileName, { encoding: 'utf-8' });

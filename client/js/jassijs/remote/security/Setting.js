@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "../Classes"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Setting = void 0;
@@ -16,19 +16,19 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
             super();
         }
         async save(context = undefined) {
-            throw "not suported";
+            throw new Classes_1.JassiError("not suported");
         }
         static async findOne(options = undefined, context = undefined) {
-            throw "not suported";
+            throw new Classes_1.JassiError("not suported");
         }
         static async find(options = undefined, context = undefined) {
-            throw "not suported";
+            throw new Classes_1.JassiError("not suported");
         }
         /**
         * reload the object from jassijs.db
         */
         async remove(context = undefined) {
-            throw "not suported";
+            throw new Classes_1.JassiError("not suported");
         }
     };
     __decorate([

@@ -81,7 +81,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"],
        */
         async call() {
             if (Jassi_1.default.isServer)
-                throw new Error("should be called on client");
+                throw new Classes_1.JassiError("should be called on client");
             var sdataObject = undefined;
             var url = "remoteprotocol?" + Date.now();
             var _this = this;
@@ -115,7 +115,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"],
                 return undefined;
             var retval = await this.parse(ret);
             if (retval["**throw error**"] !== undefined) {
-                throw new Error(retval["**throw error**"]);
+                throw new Classes_1.JassiError(retval["**throw error**"]);
             }
             return retval;
         }

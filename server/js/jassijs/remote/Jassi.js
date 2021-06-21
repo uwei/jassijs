@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Jassi = exports.$register = exports.$Class = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
+const Classes_1 = require("./Classes");
 /*
 window.extentsionCalled = function (param:  ExtensionAction) {
     if (param.sample) {
@@ -90,7 +91,7 @@ let Jassi = class Jassi {
     */
     myRequire(href, event = undefined, param = undefined) {
         if (this.isServer)
-            throw "jass.Require is only available on client";
+            throw new Classes_1.JassiError("jass.Require is only available on client");
         if ((typeof href) === "string") {
             href = [href];
         }

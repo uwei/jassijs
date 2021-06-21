@@ -1,5 +1,5 @@
 import registry from "jassijs/remote/Registry";
-import { classes } from "jassijs/remote/Classes";
+import { classes, JassiError } from "jassijs/remote/Classes";
 
 
 
@@ -25,7 +25,7 @@ async function checkSimulateUser(context: Context, request) {
         request.user.user = user.id;
         request.user.isAdmin = (user.isAdmin === null ? false : user.isAdmin);
         if (!user)
-            throw new Error("simulateUser not logged in");
+            throw new JassiError("simulateUser not logged in");
 
 
 
@@ -66,7 +66,7 @@ export async function _execute(protext: string, request, context: Context): Prom
     var file: string = files[0];
     var path = file.split("/");
     if (path.length < 2 || path[1] !== "remote")
-        throw "only remote packages can be loadeded";
+        throw new JassiError("only remote packages can be loadeded");
     file = file.replace(".ts", "");
     //var ret = await import(file);
     var ret = await Promise.resolve().then(() => require.main.require(file));
@@ -104,7 +104,9 @@ export async function _execute(protext: string, request, context: Context): Prom
             else
                 ret = await (obj[prot.method](...prot.parameter, context));
         } catch (ex) {
-            console.error(ex.stack);
+            if(!(ex instanceof JassiError)){
+                console.error(ex.stack);
+            }
             var msg = ex.message;
             if (!msg)
                 msg = ex;

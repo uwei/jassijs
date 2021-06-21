@@ -1,5 +1,5 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import { classes } from "jassijs/remote/Classes";
+import { classes, JassiError } from "jassijs/remote/Classes";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import registry from "jassijs/remote/Registry";
 let cl = classes;//force Classes
@@ -140,13 +140,13 @@ export class DBObject extends RemoteObject {
                 if (cached === undefined) {
                     DBObject.addToCache(this);//must be cached before inserting, so the new properties are introduced to the existing
                     if (this.isAutoId())
-                        throw new Error("autoid - load the object  before saving or remove id");
+                        throw new JassiError("autoid - load the object  before saving or remove id");
                     else
                         return await this.call(this,this._createObjectInDB,context);
                     //}//fails if the Object is saved before loading 
                 } else {
                     if (cached !== this) {
-                        throw new Error("the object must be loaded before save");
+                        throw new JassiError("the object must be loaded before save");
                     }
                 }
                 DBObject.addToCache(this);
@@ -157,7 +157,7 @@ export class DBObject extends RemoteObject {
                 return this;
             } else {
                 if (!this.isAutoId()) {
-                    throw new Error("error while saving the Id is not set");
+                    throw new JassiError("error while saving the Id is not set");
                 } else{
                      var newob=this._replaceObjectWithId(this);
                 	 var h= await this.call(newob, this._createObjectInDB,context);
@@ -176,7 +176,7 @@ export class DBObject extends RemoteObject {
     }
     async _createObjectInDB(context:Context=undefined) {
         if (!context?.isServer) {
-            throw new Error("createObject could oly be called on server");
+            throw new JassiError("createObject could oly be called on server");
 
         } else {
             //@ts-ignore

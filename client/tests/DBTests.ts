@@ -1,7 +1,7 @@
 import { TestOrderDetails } from "tests/remote/TestOrderDetails";
 import { TestCustomer } from "tests/remote/TestCustomer";
 import { TestOrder } from "tests/remote/TestOrder";
-import { Test } from "jassijs/base/Tests";
+import { Test } from "jassijs/remote/Test";
 import { Database } from "jassijs/remote/Database";
 import { DBObject } from "jassijs/remote/DBObject";
 import { classes } from "jassijs/remote/Classes";

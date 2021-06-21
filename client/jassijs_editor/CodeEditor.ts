@@ -12,11 +12,12 @@ import { classes } from "jassijs/remote/Classes";
 import { Component } from "jassijs/ui/Component";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { $Property } from "jassijs/ui/Property";
-import { Test } from "jassijs/base/Tests";
+
 import { AcePanel } from "jassijs_editor/AcePanel";
 import { Typescript } from "jassijs_editor/util/Typescript";
 import { MonacoPanel } from "jassijs_editor/MonacoPanel";
 import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
+import { Test } from "jassijs/remote/Test";
 
 declare global {
     export interface KnownSettings {
