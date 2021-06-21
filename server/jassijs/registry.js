@@ -7,6 +7,10 @@ exports.default={
 		"jassijs.remote.JassiError": {},
 		"jassijs.remote.Classes": {}
 	},
+	"jassijs/remote/ClientError.ts": {
+		"date": 1624295333733,
+		"jassijs.remote.ClientError": {}
+	},
 	"jassijs/remote/Database.ts": {
 		"date": 1622985395292,
 		"jassijs.remote.Database": {}

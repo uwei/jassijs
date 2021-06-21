@@ -12,7 +12,7 @@ export class Button extends Component {
      }*/
     constructor() {
         super();
-        super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
+        super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
     }
 
 
@@ -43,8 +43,9 @@ export class Button extends Component {
          $(this.dom).find(".buttonimg").attr("src", "");
         if (icon?.startsWith("mdi")) {
             el1.addClass(icon);
-
+            $(this.dom).find(".buttonimg").css("display","none");
         } else {
+            $(this.dom).find(".buttonimg").css("display","initial");
             $(this.dom).find(".buttonimg").attr("src", icon);
         }
     }

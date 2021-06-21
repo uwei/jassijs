@@ -47,7 +47,7 @@ define(["require", "exports"], function (require, exports) {
                 'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
                 'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
                 'tabulatorlib': '//unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator',
-                'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min' //also define in tinymce.js
+                'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.8.1/tinymce.min' //also define in tinymce.js
             },
             "shim": {
                 'goldenlayout': ["jquery"],

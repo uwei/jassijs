@@ -17,7 +17,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
          }*/
         constructor() {
             super();
-            super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
+            super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
         }
         /**
         * register an event if the button is clicked
@@ -45,8 +45,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             $(this.dom).find(".buttonimg").attr("src", "");
             if (icon === null || icon === void 0 ? void 0 : icon.startsWith("mdi")) {
                 el1.addClass(icon);
+                $(this.dom).find(".buttonimg").css("display", "none");
             }
             else {
+                $(this.dom).find(".buttonimg").css("display", "initial");
                 $(this.dom).find(".buttonimg").attr("src", icon);
             }
         }

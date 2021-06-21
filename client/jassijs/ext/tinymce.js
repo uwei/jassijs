@@ -9,7 +9,7 @@
 //var path="//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min";
 var tinyMCEPreInit = {
     suffix: '.min',
-    base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2",
+    base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/5.8.1",
     query: ''
 
 };

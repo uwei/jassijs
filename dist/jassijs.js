@@ -62,7 +62,7 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
                 'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
                 'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
                 'tabulatorlib': '//unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator',
-                'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min' //also define in tinymce.js
+                'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.8.1/tinymce.min' //also define in tinymce.js
             },
             "shim": {
                 'goldenlayout': ["jquery"],
@@ -129,7 +129,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985800636
             },
             "jassijs/modul.ts": {
-                "date": 1622984492212
+                "date": 1624300442620
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1624296519695,
@@ -337,7 +337,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Button.ts": {
-                "date": 1623175983507,
+                "date": 1624301518140,
                 "jassijs.ui.Button": {
                     "$UIComponent": [
                         {
@@ -2721,7 +2721,7 @@ define("jassijs/ext/tabulator", ['tabulatorlib'], function (Tabulator) {
 //var path="//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min";
 var tinyMCEPreInit = {
     suffix: '.min',
-    base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2",
+    base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/5.8.1",
     query: ''
 };
 define("jassijs/ext/tinymce", ["tinymcelib"], function (require) {
@@ -5965,7 +5965,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Jassi", "jass
          }*/
         constructor() {
             super();
-            super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
+            super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
         }
         /**
         * register an event if the button is clicked
@@ -5993,8 +5993,10 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Jassi", "jass
             $(this.dom).find(".buttonimg").attr("src", "");
             if (icon === null || icon === void 0 ? void 0 : icon.startsWith("mdi")) {
                 el1.addClass(icon);
+                $(this.dom).find(".buttonimg").css("display", "none");
             }
             else {
+                $(this.dom).find(".buttonimg").css("display", "initial");
                 $(this.dom).find(".buttonimg").attr("src", icon);
             }
         }
