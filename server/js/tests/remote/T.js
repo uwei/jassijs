@@ -6,31 +6,32 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.MyRemoteObject = void 0;
+exports.test2 = exports.test = exports.T = void 0;
 const Jassi_1 = require("jassijs/remote/Jassi");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
-let MyRemoteObject = class MyRemoteObject {
-};
-MyRemoteObject = __decorate([
-    Jassi_1.$Class("local/remote/MyRemoteObject.ts")
-], MyRemoteObject);
-exports.MyRemoteObject = MyRemoteObject;
-ts;
-RemoteObject_1.RemoteObject;
-{
-    async;
-    sayHello(name, string, context, RemoteObject_1.Context = undefined);
-    {
+const Server_1 = require("jassijs/remote/Server");
+let T = class T extends RemoteObject_1.RemoteObject {
+    //this is a sample remote function
+    async sayHello(name, context = undefined) {
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             return await this.call(this, this.sayHello, name, context);
         }
         else {
-            return "Hello " + name; //this would be execute on server  
+            var H = await Promise.resolve().then(() => require("Hallo"));
+            return "Hello " + name + H.test(); //this would be execute on server  
         }
     }
-}
+};
+T = __decorate([
+    Jassi_1.$Class("tests.remote.T")
+], T);
+exports.T = T;
 async function test() {
-    console.log(await new MyRemoteObject.ts().sayHello("Kurt"));
+    await new Server_1.Server().saveFile("Hallo.ts", "export class Hallo{};export function test(){return 2 };", true);
+    console.log(await new T().sayHello("Kurt"));
 }
 exports.test = test;
-//# sourceMappingURL=MyRemoteObject.ts.js.map
+async function test2() {
+}
+exports.test2 = test2;
+//# sourceMappingURL=T.js.map

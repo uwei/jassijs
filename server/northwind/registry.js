@@ -49,5 +49,8 @@ exports.default={
 		"northwind.Suppliers": {
 			"$DBObject": []
 		}
+	},
+	"northwind/SampleServerReport.ts": {
+		"date": 1624805090091
 	}
 }

@@ -25,7 +25,7 @@ class Indexer {
         var index = JSON.parse(text);
         //remove deleted files
         for (var key in index) {
-            if (!(await this.fileExists(path + "/" + key))) {
+            if (!(await this.fileExists(root + (root === "" ? "" : "/") + key))) {
                 delete index[key];
             }
         }

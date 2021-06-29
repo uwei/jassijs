@@ -12,8 +12,10 @@ let resolve = require('path').resolve;
 const passport = require("passport");
 var ignore = ["phpMyAdmin", "lib", "tmp", "_node_modules"];
 class Filesystem {
-    _pathForFile(fileName) {
+    _pathForFile(fileName, fromServerdirectory = undefined) {
         var path = Filesystem.path + "/" + fileName;
+        if (fromServerdirectory)
+            path = "./" + fileName;
         return path;
     }
     /*   _getDirectory(file:string,main:FileNode[]):FileNode[]{
@@ -66,7 +68,10 @@ class Filesystem {
         });
         return parent;
     }
-    loadFile(fileName) {
+    loadFile(fileName, fromServerdirectory = undefined) {
+        let file = this._pathForFile(fileName);
+        if (fromServerdirectory)
+            file = "./" + fileName;
         return fs.readFileSync(this._pathForFile(fileName), { encoding: 'utf-8' });
     }
     loadFiles(fileNames) {
@@ -343,31 +348,31 @@ class Filesystem {
      * @param contents
      * @returns "" or the error
      */
-    async saveFiles(fileNames, contents, rollbackonerror = true) {
+    async saveFiles(fileNames, contents, fromServerdirectory = undefined, rollbackonerror = true) {
         var ret = "";
         var rollbackcontents = [];
         for (var x = 0; x < fileNames.length; x++) {
             let fileName = fileNames[x];
-            var path = require('path').dirname(this._pathForFile(fileName));
+            var path = require('path').dirname(this._pathForFile(fileName, fromServerdirectory));
             try {
                 //var fdir = fpath.dirname(path + "/" + fileName).split(fpath.sep).pop();
                 fs.mkdirSync(path, { recursive: true });
             }
             catch (err) {
             }
-            if (fs.existsSync(this._pathForFile(fileName))) {
-                rollbackcontents.push(fs.readFileSync(this._pathForFile(fileName), { encoding: 'utf-8' }));
+            if (fs.existsSync(this._pathForFile(fileName, fromServerdirectory))) {
+                rollbackcontents.push(fs.readFileSync(this._pathForFile(fileName, fromServerdirectory), { encoding: 'utf-8' }));
             }
             else {
                 rollbackcontents.push(undefined); //this file would be killed at revert
             }
             if (contents[x] === undefined)
-                fs.unlinkSync(this._pathForFile(fileName)); //remove file on revert
+                fs.unlinkSync(this._pathForFile(fileName, fromServerdirectory)); //remove file on revert
             else {
-                fs.writeFileSync(this._pathForFile(fileName), contents[x]);
+                fs.writeFileSync(this._pathForFile(fileName, fromServerdirectory), contents[x]);
                 //transpile remoteCode for Server
                 let spath = fileName.split("/");
-                if (spath.length > 1 && spath[1].toLowerCase() === "remote" && fileName.toLowerCase().endsWith(".ts")) {
+                if ((fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote")) && fileName.toLowerCase().endsWith(".ts")) {
                     let rpath = require('path').dirname("./" + fileName);
                     try {
                         fs.mkdirSync(rpath, { recursive: true });
@@ -375,8 +380,9 @@ class Filesystem {
                     catch (err) {
                     }
                     fs.writeFileSync("./" + fileName, contents[x]);
-                    this.createRemoteModulIfNeeded(spath[0]);
-                    new Compile_1.Compile().transpile(fileName);
+                    if (spath.length > 1)
+                        this.createRemoteModulIfNeeded(spath[0]);
+                    new Compile_1.Compile().transpile(fileName, fromServerdirectory);
                 }
             }
         }
@@ -387,7 +393,7 @@ class Filesystem {
             if (contents[f] === undefined)
                 continue;
             var spath = fileName.split("/");
-            if (spath.length > 1 && spath[1].toLowerCase() === "remote" && fileName.toLowerCase().endsWith(".ts")) {
+            if (fromServerdirectory || (spath.length > 1 && spath[1].toLowerCase() === "remote") && fileName.toLowerCase().endsWith(".ts")) {
                 //reload Modules
                 var remotecodeincluded = true;
                 var root = require.main["path"] + "\\"; //require.resolve("jassijs/remote/Classes");
@@ -396,7 +402,10 @@ class Filesystem {
                 var jfiles = [];
                 for (var modul in modules) {
                     for (var jfile in require.cache) {
-                        if (jfile.replaceAll("\\", "/").indexOf("/" + modul + "/remote/") > -1) {
+                        if (jfile.endsWith("Hallo.js"))
+                            jfile = jfile;
+                        if (jfile.replaceAll("\\", "/").indexOf("/" + modul + "/remote/") > -1 ||
+                            (fromServerdirectory && jfile.replaceAll("\\", "/").endsWith("/js/" + fileName.replace(".ts", ".js")))) {
                             //save Modules
                             var p = jfile.substring(root.length).replaceAll("\\", "/");
                             if (jfile.indexOf("node_modules") > -1) { //jassi modules
@@ -407,6 +416,7 @@ class Filesystem {
                             if (Filesystem.allModules[p] === undefined) {
                                 Filesystem.allModules[p] = [];
                             }
+                            //save all modules
                             var mod = await Promise.resolve().then(() => require.main.require(p));
                             if (Filesystem.allModules[p].indexOf(mod) === -1)
                                 Filesystem.allModules[p].push(mod);
@@ -435,7 +445,7 @@ class Filesystem {
             }
         }
         catch (err) {
-            var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+            var restore = await this.saveFiles(fileNames, rollbackcontents, fromServerdirectory, false);
             console.error(err.stack);
             return err + "DB corrupt changes are reverted " + restore;
         }
@@ -447,7 +457,7 @@ class Filesystem {
                 await DBManager_1.DBManager.get();
             }
             catch (err) {
-                var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                var restore = await this.saveFiles(fileNames, rollbackcontents, fromServerdirectory, false);
                 console.error(err.stack);
                 return err + "DB corrupt changes are reverted " + restore;
             }

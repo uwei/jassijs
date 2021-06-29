@@ -839,7 +839,121 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
     }
     exports.test = test;
 });
-define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_4, Textbox_7, Jassi_8, Property_7, Shippers_1, DBObjectView_7) {
+define("northwind/SampleServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_1, Property_7) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.SampleClientReport = exports.SampleServerReport = exports.$Report = exports.ReportProperties = void 0;
+    class ReportProperties {
+    }
+    exports.ReportProperties = ReportProperties;
+    function $Report(properties) {
+        return function (pclass) {
+            Registry_1.default.register("$Report", pclass, properties);
+        };
+    }
+    exports.$Report = $Report;
+    let SampleServerReport = class SampleServerReport {
+        constructor() {
+            this.content = undefined;
+        }
+        async open() {
+            //  this.report.open();
+        }
+        async download() {
+            //  this.report.download();
+        }
+        async print() {
+            // this.report.print();
+        }
+        async getBase64() {
+            //holt sichs vom Server - parameter übertragen
+            this.content = undefined; //report;
+        }
+        //this would be rendered on server
+        layout(me) {
+            this.content = {
+                stack: [
+                    {
+                        columns: [
+                            {
+                                stack: [
+                                    {
+                                        text: "{{name}}{{name2}}"
+                                    },
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            };
+        }
+    };
+    __decorate([
+        Property_7.$Property(),
+        __metadata("design:type", String)
+    ], SampleServerReport.prototype, "name", void 0);
+    SampleServerReport = __decorate([
+        $Report({ fullPath: "northwind.SampleServerReport", serverReportClass: "northwind.SampleServerReport" })
+    ], SampleServerReport);
+    exports.SampleServerReport = SampleServerReport;
+    let SampleClientReport = class SampleClientReport {
+        constructor() {
+            this.content = undefined;
+        }
+        async open() {
+            //  this.report.open();
+        }
+        async download() {
+            //  this.report.download();
+        }
+        async print() {
+            // this.report.print();
+        }
+        async getBase64() {
+            //holt sichs vom Server - parameter übertragen
+            this.content = undefined; //report;
+        }
+        layout(me) {
+            this.content = {
+                stack: [
+                    {
+                        columns: [
+                            {
+                                stack: [
+                                    {
+                                        text: "{{name}}{{name2}}"
+                                    },
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            };
+        }
+    };
+    __decorate([
+        Property_7.$Property(),
+        __metadata("design:type", String)
+    ], SampleClientReport.prototype, "name", void 0);
+    SampleClientReport = __decorate([
+        $Report({ fullPath: "northwind.SampleServerReport" })
+    ], SampleClientReport);
+    exports.SampleClientReport = SampleClientReport;
+    async function test() {
+        // kk.o=0;
+        var dlg = new SampleClientReport();
+        dlg.name = "hh";
+        this.data = {
+            name2: "Hallo"
+        };
+        //  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};
+        //	dlg.value=jassijs.db.load("de.Kunde",9);	
+        //console.log(JSON.stringify(dlg.toJSON()));
+        return dlg;
+    }
+    exports.test = test;
+});
+define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_4, Textbox_7, Jassi_8, Property_8, Shippers_1, DBObjectView_7) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -883,7 +997,7 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
         }
     };
     __decorate([
-        Property_7.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        Property_8.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Shippers_1.Shippers !== "undefined" && Shippers_1.Shippers) === "function" ? _a : Object)
     ], ShippersView.prototype, "value", void 0);
     ShippersView = __decorate([
@@ -899,7 +1013,7 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
     }
     exports.test = test;
 });
-define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_5, Textbox_8, Jassi_9, Property_8, Suppliers_1, DBObjectView_8) {
+define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_5, Textbox_8, Jassi_9, Property_9, Suppliers_1, DBObjectView_8) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1004,7 +1118,7 @@ define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/
         }
     };
     __decorate([
-        Property_8.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        Property_9.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Suppliers_1.Suppliers !== "undefined" && Suppliers_1.Suppliers) === "function" ? _a : Object)
     ], SuppliersView.prototype, "value", void 0);
     SuppliersView = __decorate([
@@ -1159,6 +1273,9 @@ define("northwind/registry", ["require"], function (require) {
                 "northwind.Suppliers": {
                     "$DBObject": []
                 }
+            },
+            "northwind/SampleServerReport.ts": {
+                "date": 1624805055969
             },
             "northwind/ShippersView.ts": {
                 "date": 1622984379867,

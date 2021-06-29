@@ -131,6 +131,9 @@ define("northwind/registry",["require"], function(require) {
 			"$DBObject": []
 		}
 	},
+	"northwind/SampleServerReport.ts": {
+		"date": 1624805055969
+	},
 	"northwind/ShippersView.ts": {
 		"date": 1622984379867,
 		"northwind.ShippersView": {

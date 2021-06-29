@@ -210,8 +210,15 @@ export class DBManager {
   }
 
   public static async destroyConnection() {
-    if (_instance !== undefined)
+    
+    if (_instance !== undefined){
+      try{
+        await DBManager.get();
       await getConnection().close();
+      }catch {
+
+      }
+    }
     _instance = undefined;
     DBManager.clearMetadata();
 

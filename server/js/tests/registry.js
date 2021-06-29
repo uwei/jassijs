@@ -32,5 +32,9 @@ exports.default={
 		"tests.TestOrderDetails": {
 			"$DBObject": []
 		}
+	},
+	"tests/remote/T.ts": {
+		"date": 1625000533863,
+		"tests.remote.T": {}
 	}
 }

@@ -44,6 +44,13 @@ define("tests/registry",["require"], function(require) {
 	},
 	"tests/TestReport.ts": {
 		"date": 1623864072454
+	},
+	"tests/remote/T.ts": {
+		"date": 1625000533863,
+		"tests.remote.T": {}
+	},
+	"tests/remote/TestServerfile.ts": {
+		"date": 1624999036922
 	}
 }
  }

@@ -185,8 +185,14 @@ let DBManager = DBManager_1 = class DBManager {
         DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().uniques);
     }
     static async destroyConnection() {
-        if (_instance !== undefined)
-            await typeorm_1.getConnection().close();
+        if (_instance !== undefined) {
+            try {
+                await DBManager_1.get();
+                await typeorm_1.getConnection().close();
+            }
+            catch (_a) {
+            }
+        }
         _instance = undefined;
         DBManager_1.clearMetadata();
     }

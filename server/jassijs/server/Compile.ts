@@ -168,9 +168,9 @@ export class Compile {
     }
     console.info(s);
   }
-  transpile(fileName: string) {
+  transpile(fileName: string,inServerdirectory:boolean=undefined) {
     let spath = fileName.split("/");
-    if (spath.length < 2 && spath[1] !== "remote") {
+    if (!inServerdirectory&&spath.length < 2 && spath[1] !== "remote") {
       throw new JassiError("fileName must startswith remote");
     }
     var path = ".";   
@@ -198,7 +198,8 @@ export class Compile {
     if (!fs.existsSync(pathname)) {
       fs.mkdirSync(pathname, { recursive: true });
     }
-    fs.copyFileSync("../client/" + fileName, fileName);
+    if(!inServerdirectory)
+      fs.copyFileSync("../client/" + fileName, fileName);
     fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js"), content.outputText);
     fs.writeFileSync(outPath + "/" + fileName.replace(".ts", ".js.map"), content.sourceMapText);
     
