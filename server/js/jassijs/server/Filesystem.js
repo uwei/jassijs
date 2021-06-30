@@ -402,11 +402,10 @@ class Filesystem {
                 var jfiles = [];
                 for (var modul in modules) {
                     for (var jfile in require.cache) {
-                        if (jfile.endsWith("Hallo.js"))
-                            jfile = jfile;
                         if (jfile.replaceAll("\\", "/").indexOf("/" + modul + "/remote/") > -1 ||
                             (fromServerdirectory && jfile.replaceAll("\\", "/").endsWith("/js/" + fileName.replace(".ts", ".js")))) {
                             //save Modules
+                            console.log(jfile);
                             var p = jfile.substring(root.length).replaceAll("\\", "/");
                             if (jfile.indexOf("node_modules") > -1) { //jassi modules
                                 p = jfile.split("node_modules")[1].substring(1).replaceAll("\\", "/");

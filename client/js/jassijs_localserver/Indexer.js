@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/server/Filesystem", "jassijs_editor/util/Typescript"], function (require, exports, Filesystem_1) {
+define(["require", "exports", "jassijs/server/Filesystem", "jassijs/remote/Classes", "jassijs_editor/util/Typescript"], function (require, exports, Filesystem_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Indexer = void 0;
@@ -21,7 +21,7 @@ define(["require", "exports", "jassijs/server/Filesystem", "jassijs_editor/util/
             var index = JSON.parse(text);
             //remove deleted files
             for (var key in index) {
-                if (!(await this.fileExists(path + "/" + key))) {
+                if (!(await this.fileExists(root + (root === "" ? "" : "/") + key))) {
                     delete index[key];
                 }
             }
@@ -121,7 +121,7 @@ define(["require", "exports", "jassijs/server/Filesystem", "jassijs_editor/util/
             else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
                 return Number(arg.text);
             }
-            throw "Error typ not found";
+            throw new Classes_1.JassiError("Error typ not found");
         }
         collectAnnotations(node, outDecorations, depth = 0) {
             //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);

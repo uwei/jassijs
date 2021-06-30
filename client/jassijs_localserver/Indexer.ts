@@ -2,6 +2,7 @@
 import "jassijs_editor/util/Typescript";
 //@ts-ignore
 import Filesystem from "jassijs/server/Filesystem";
+import { JassiError } from "jassijs/remote/Classes";
 
 
 
@@ -15,9 +16,7 @@ export abstract class Indexer {
     abstract dirFiles(modul:string,path: string, extensions: string[], ignore: string[]): Promise<string[]> ;
   
     public async updateModul(root,modul: string, isserver: boolean ) {
-        
         var path = root +(root===""?"":"/") + modul;
-
         //create empty if needed
         var text = "{}";
         if (await this.fileExists(path + "/registry.js")) {
@@ -34,7 +33,7 @@ export abstract class Indexer {
         var index = JSON.parse(text);
         //remove deleted files
         for (var key in index) {
-            if (!(await this.fileExists(path + "/" + key))) {
+            if (!(await this.fileExists(root +(root===""?"":"/")  + key))) {
                 delete index[key];
             }
         }
@@ -133,7 +132,7 @@ export abstract class Indexer {
             return Number(arg.text);
         }
 
-        throw "Error typ not found";
+        throw new JassiError("Error typ not found");
     }
     collectAnnotations(node: ts.Node, outDecorations, depth = 0) {
         //console.log(new Array(depth + 1).join('----'), node.kind, node.pos, node.end);
