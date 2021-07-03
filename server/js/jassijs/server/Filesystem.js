@@ -415,13 +415,16 @@ class Filesystem {
                             if (Filesystem.allModules[p] === undefined) {
                                 Filesystem.allModules[p] = [];
                             }
-                            if (p === "r/js/jassijs/remote/Registry")
-                                throw new Error("could not load " + jfile);
-                            //save all modules
-                            var mod = await Promise.resolve().then(() => require.main.require(p));
-                            if (Filesystem.allModules[p].indexOf(mod) === -1)
-                                Filesystem.allModules[p].push(mod);
-                            jfiles.push(jfile);
+                            try {
+                                //save all modules
+                                var mod = await Promise.resolve().then(() => require.main.require(p));
+                                if (Filesystem.allModules[p].indexOf(mod) === -1)
+                                    Filesystem.allModules[p].push(mod);
+                                jfiles.push(jfile);
+                            }
+                            catch (err) {
+                                console.log(err);
+                            }
                         }
                     }
                 }
