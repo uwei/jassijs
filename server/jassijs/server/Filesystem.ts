@@ -418,8 +418,9 @@ export default class Filesystem {
             if (fromServerdirectory||(spath.length > 1 &&  spath[1].toLowerCase() === "remote") && fileName.toLowerCase().endsWith(".ts")) {
                 //reload Modules
                 var remotecodeincluded = true;
-                var root = require.main["path"]+"\\";  //require.resolve("jassijs/remote/Classes");
-               // root = root.substring(0, root.length - "jassijs/remote/Classes.js".length);
+                //var root = require.main["path"]+"\\";  //not work on heroku
+                var root =  require('path').dirname(require.main.filename)+"\\";
+                // root = root.substring(0, root.length - "jassijs/remote/Classes.js".length);
                 var modules = JSON.parse(fs.readFileSync("./jassijs.json", 'utf-8')).modules;
                 var jfiles = [];
                 for (var modul in modules) {
