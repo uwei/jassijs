@@ -415,6 +415,8 @@ class Filesystem {
                             if (Filesystem.allModules[p] === undefined) {
                                 Filesystem.allModules[p] = [];
                             }
+                            if (p === "r/js/jassijs/remote/Registry")
+                                throw "could not load " + jfile;
                             //save all modules
                             var mod = await Promise.resolve().then(() => require.main.require(p));
                             if (Filesystem.allModules[p].indexOf(mod) === -1)
