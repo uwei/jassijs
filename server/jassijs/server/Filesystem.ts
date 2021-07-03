@@ -437,16 +437,14 @@ export default class Filesystem {
                             if (Filesystem.allModules[p] === undefined) {
                                 Filesystem.allModules[p] = [];
                             }
-                            try{
+                           
                             //save all modules
                             var mod = await Promise.resolve().then(() => require.main.require(p));
                             if (Filesystem.allModules[p].indexOf(mod) === -1)
                                 Filesystem.allModules[p].push(mod);
 
                             jfiles.push(jfile);
-                            }catch(err){
-                                console.log(err);
-                            }
+                            
                         }
                     }
                 }
