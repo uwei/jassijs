@@ -419,7 +419,8 @@ export default class Filesystem {
                 //reload Modules
                 var remotecodeincluded = true;
                 //var root = require.main["path"]+"\\";  //not work on heroku
-                var root =  require('path').dirname(require.main.filename)+"\\";
+                var root:string =  require('path').dirname(require.main.filename).replaceAll("\\","/");
+                root=root+(root.endsWith("/js")?"/":"/js/");
                 // root = root.substring(0, root.length - "jassijs/remote/Classes.js".length);
                 var modules = JSON.parse(fs.readFileSync("./jassijs.json", 'utf-8')).modules;
                 var jfiles = [];
@@ -429,12 +430,13 @@ export default class Filesystem {
                         if(jfile.replaceAll("\\", "/").indexOf("/"+modul+"/remote/")>-1||
                         (fromServerdirectory&&jfile.replaceAll("\\", "/").endsWith("/js/"+fileName.replace(".ts",".js") ))){
                             //save Modules
-                            console.log(jfile);
+                           
                             var p = jfile.substring(root.length).replaceAll("\\", "/");
                             if(jfile.indexOf("node_modules")>-1){//jassi modules
                                 p=jfile.split("node_modules")[1].substring(1).replaceAll("\\", "/");;
                             }
                             p = p.substring(0, p.length - 3);
+                            console.log(jfile+"->"+p);
                             if (Filesystem.allModules[p] === undefined) {
                                 Filesystem.allModules[p] = [];
                             }
