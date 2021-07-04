@@ -15,7 +15,8 @@
     "@types/requirejs": "^2.1.32",
     "@types/sizzle": "^2.3.2",
     "@types/tabulator-tables": "^4.9.1",
-    "@types/typescript": "^2.0.0"
+    "@types/typescript": "^2.0.0",
+    "typescript": "^4.3.5"
   },
   "devDependencies": {},
   "scripts": {

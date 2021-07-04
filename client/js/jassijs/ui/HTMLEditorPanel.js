@@ -42,6 +42,18 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassi
                 //toolbar: true,
                 menubar: false,
                 selector: '.' + randclass,
+                //  setup:function(ed) {
+                //   ed.on('blur', function(e) {
+                //    		if($("#"+ed.id)[0]===undefined)
+                //  			return;
+                //    var html=$("#"+ed.id)[0]._this;
+                //  var text= ed.getContent();
+                //text='"'+text.substring(31,text.length-7).replaceAll("\"","\\\"")+'"';
+                //_this._propertyEditor.setPropertyInCode("text",text,true);
+                //$(html.domWrapper).draggable('enable');
+                //   }
+                // );
+                // }
             });
             // editor.setContent("Hallo");
             //tinymce.activeEditor.remove();

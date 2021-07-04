@@ -241,8 +241,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
     ], FileActions, "refresh", null);
     __decorate([
         Actions_1.$Action({
-            name: "Open",
-            isEnabled: function (all) {
+            name: "Open", isEnabled: function (all) {
                 return !all[0].isDirectory();
             }
         }),

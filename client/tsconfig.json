@@ -13,8 +13,8 @@
     ],
     //"outFile": "./js/build.js",
     "rootDir": "./",
-
-     "sourceMap": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
     "outDir": "./js", 
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -23,7 +23,6 @@
   "exclude": [
     "js",
     "jassichrome",
-    "../server",
     "jassijs/service-worker.js",
     "jassijs.js"
   ] 

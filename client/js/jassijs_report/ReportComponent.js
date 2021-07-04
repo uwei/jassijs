@@ -91,8 +91,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
     ], ReportComponent.prototype, "foreach", void 0);
     __decorate([
         Property_1.$Property({
-            type: "string",
-            isVisible: (component) => {
+            type: "string", isVisible: (component) => {
                 var _a;
                 //only in table and column width is posible
                 return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "tablerow";

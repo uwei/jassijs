@@ -152,7 +152,7 @@ export class ReportInvoice extends ReportDesign {
         };
     }
 }
-export async function test() {
+export async function test(){
     // kk.o=0;
     var dlg = new ReportInvoice();
     //  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};

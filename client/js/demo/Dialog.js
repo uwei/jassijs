@@ -24,7 +24,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
             me.boxpanel1.add(me.button1);
             me.boxpanel1.add(me.button2);
             me.boxpanel1.spliter = [60, 40];
-            me.button1.text = "button";
+            me.button1.text = "button1";
             me.button2.text = "button";
             this.add(me.boxpanel1);
         }

@@ -131,20 +131,19 @@ async function handleEvent(event) {
             if (event.request.url.indexOf("?") > 0) {
                 s = event.request.url + "&lastcachedate=" + dat;
             }
-            if (dat !== undefined && dat !== null) {
-                let networkResponse = await fetch(s, { cache: "no-store" });
-                //networkResponse = await refetchIfNeeded(s, event, networkResponse);
-                if (networkResponse.headers.get("X-Custom-UpToDate") === "true") {
-                    return response; //server says the cache is upToDate
-                }
-                else {
-                    //server has new data
-                    cache.put(event.request, networkResponse.clone());
-                    return networkResponse;
-                }
-            } /*end self origin*/
-            else
-                return response;
+            // if (dat !== undefined&&dat !== null) {
+            let networkResponse = await fetch(s, { cache: "no-store" });
+            //networkResponse = await refetchIfNeeded(s, event, networkResponse);
+            if (networkResponse.headers.get("X-Custom-UpToDate") === "true") {
+                return response; //server says the cache is upToDate
+            }
+            else {
+                //server has new data
+                cache.put(event.request, networkResponse.clone());
+                return networkResponse;
+            }
+            // } else
+            // return response;
         }
         //external sites
         if (response)

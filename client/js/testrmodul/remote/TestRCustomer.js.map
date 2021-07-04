@@ -1,1 +1,1 @@
-null
+{"version":3,"file":"TestRCustomer.js","sourceRoot":"","sources":["../../../../testrmodul/remote/TestRCustomer.ts"],"names":[],"mappings":";;;;;;;;;;;;;IAMA,IAAa,aAAa,GAA1B,MAAa,aAAc,SAAQ,mBAAQ;QAGvC;YACI,KAAK,EAAE,CAAC;QACZ,CAAC;KAGJ,CAAA;IANG;QADC,8BAAa,EAAE;;6CACL;IAKX;QADC,uBAAM,EAAE;;+CACI;IAPJ,aAAa;QAFzB,oBAAS,EAAE;QACX,cAAM,CAAC,0BAA0B,CAAC;;OACtB,aAAa,CAQzB;IARY,sCAAa;IASnB,KAAK,UAAU,IAAI;IAC1B,CAAC;IADD,oBACC;IACD,CAAC"}

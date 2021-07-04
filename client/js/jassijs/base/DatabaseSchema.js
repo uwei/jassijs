@@ -399,125 +399,127 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
                 dbclass.parent = _this;
                 this.databaseClasses.push(dbclass);
                 var pclass = this.parsedClasses[entr.classname];
-                dbclass.filename = pclass["filename"];
-                dbclass.simpleclassname = pclass.name;
-                dbclass.name = pclass.fullClassname;
-                for (var fname in pclass.members) {
-                    var pfield = pclass.members[fname];
-                    if (!pfield.decorator["Column"] && !pfield.decorator["PrimaryColumn"] && !pfield.decorator["PrimaryGeneratedColumn"] && !pfield.decorator["OneToOne"] && !pfield.decorator["ManyToOne"] && !pfield.decorator["OneToMany"] && !pfield.decorator["ManyToMany"])
-                        continue;
-                    var field = new DatabaseField();
-                    field["parent"] = dbclass;
-                    field.name = fname;
-                    dbclass.fields.push(field);
-                    var meta = pfield.decorator;
-                    if (meta["PrimaryColumn"]) {
-                        field.relation = "PrimaryColumn";
-                    }
-                    else if (meta["PrimaryGeneratedColumn"]) {
-                        field.relation = "PrimaryColumn";
-                    }
-                    else if (meta["Column"]) {
-                        field.relation = undefined;
-                        //var mt=mtype[0][0];
-                        if (meta["Column"].parameter.length > 0 && meta["Column"].parameter.length > 0) {
-                            field.properties = meta["Column"].parsedParameter[0];
+                if (pclass) {
+                    dbclass.filename = pclass["filename"];
+                    dbclass.simpleclassname = pclass.name;
+                    dbclass.name = pclass.fullClassname;
+                    for (var fname in pclass.members) {
+                        var pfield = pclass.members[fname];
+                        if (!pfield.decorator["Column"] && !pfield.decorator["PrimaryColumn"] && !pfield.decorator["PrimaryGeneratedColumn"] && !pfield.decorator["OneToOne"] && !pfield.decorator["ManyToOne"] && !pfield.decorator["OneToMany"] && !pfield.decorator["ManyToMany"])
+                            continue;
+                        var field = new DatabaseField();
+                        field["parent"] = dbclass;
+                        field.name = fname;
+                        dbclass.fields.push(field);
+                        var meta = pfield.decorator;
+                        if (meta["PrimaryColumn"]) {
+                            field.relation = "PrimaryColumn";
                         }
-                    }
-                    else if (meta["ManyToOne"]) {
-                        field.relation = "ManyToOne";
-                        if (meta["ManyToOne"].parameter.length > 0) {
-                            for (var x = 0; x < meta["ManyToOne"].parameter.length; x++) {
-                                let vd = meta["ManyToOne"].parameter[x];
-                                if (x === 0) {
-                                    field.type = this.getFulltype(meta["ManyToOne"].parameter[0], pclass).fullClassname;
-                                }
-                                else {
-                                    if (!meta["ManyToOne"].parameter[x].startsWith("{")) {
-                                        field.inverseSide = vd.split(">")[1].trim();
+                        else if (meta["PrimaryGeneratedColumn"]) {
+                            field.relation = "PrimaryColumn";
+                        }
+                        else if (meta["Column"]) {
+                            field.relation = undefined;
+                            //var mt=mtype[0][0];
+                            if (meta["Column"].parameter.length > 0 && meta["Column"].parameter.length > 0) {
+                                field.properties = meta["Column"].parsedParameter[0];
+                            }
+                        }
+                        else if (meta["ManyToOne"]) {
+                            field.relation = "ManyToOne";
+                            if (meta["ManyToOne"].parameter.length > 0) {
+                                for (var x = 0; x < meta["ManyToOne"].parameter.length; x++) {
+                                    let vd = meta["ManyToOne"].parameter[x];
+                                    if (x === 0) {
+                                        field.type = this.getFulltype(meta["ManyToOne"].parameter[0], pclass).fullClassname;
                                     }
                                     else {
-                                        field.properties = meta["ManyToOne"].parsedParameter[x];
+                                        if (!meta["ManyToOne"].parameter[x].startsWith("{")) {
+                                            field.inverseSide = vd.split(">")[1].trim();
+                                        }
+                                        else {
+                                            field.properties = meta["ManyToOne"].parsedParameter[x];
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    else if (meta["OneToMany"]) {
-                        field.relation = "OneToMany";
-                        if (meta["OneToMany"].parameter.length > 0) {
-                            for (var x = 0; x < meta["OneToMany"].parameter.length; x++) {
-                                let vd = meta["OneToMany"].parameter[x];
-                                if (x === 0) {
-                                    field.type = this.getFulltype(meta["OneToMany"].parameter[0], pclass).fullClassname + "[]";
-                                }
-                                else {
-                                    if (!meta["OneToMany"].parameter[x].startsWith("{")) {
-                                        field.inverseSide = vd.split(">")[1].trim();
+                        else if (meta["OneToMany"]) {
+                            field.relation = "OneToMany";
+                            if (meta["OneToMany"].parameter.length > 0) {
+                                for (var x = 0; x < meta["OneToMany"].parameter.length; x++) {
+                                    let vd = meta["OneToMany"].parameter[x];
+                                    if (x === 0) {
+                                        field.type = this.getFulltype(meta["OneToMany"].parameter[0], pclass).fullClassname + "[]";
                                     }
                                     else {
-                                        field.properties = meta["OneToMany"].parsedParameter[x];
+                                        if (!meta["OneToMany"].parameter[x].startsWith("{")) {
+                                            field.inverseSide = vd.split(">")[1].trim();
+                                        }
+                                        else {
+                                            field.properties = meta["OneToMany"].parsedParameter[x];
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    else if (meta["ManyToMany"]) {
-                        field.relation = "ManyToMany";
-                        if (meta["ManyToMany"].parameter.length > 0) {
-                            for (var x = 0; x < meta["ManyToMany"].parameter.length; x++) {
-                                let vd = meta["ManyToMany"].parameter[x];
-                                if (x === 0) {
-                                    field.type = this.getFulltype(meta["ManyToMany"].parameter[0], pclass).fullClassname + "[]";
-                                }
-                                else {
-                                    if (!meta["ManyToMany"].parameter[x].startsWith("{")) {
-                                        field.inverseSide = vd.split(">")[1].trim();
+                        else if (meta["ManyToMany"]) {
+                            field.relation = "ManyToMany";
+                            if (meta["ManyToMany"].parameter.length > 0) {
+                                for (var x = 0; x < meta["ManyToMany"].parameter.length; x++) {
+                                    let vd = meta["ManyToMany"].parameter[x];
+                                    if (x === 0) {
+                                        field.type = this.getFulltype(meta["ManyToMany"].parameter[0], pclass).fullClassname + "[]";
                                     }
                                     else {
-                                        field.properties = meta["ManyToMany"].parsedParameter[x];
+                                        if (!meta["ManyToMany"].parameter[x].startsWith("{")) {
+                                            field.inverseSide = vd.split(">")[1].trim();
+                                        }
+                                        else {
+                                            field.properties = meta["ManyToMany"].parsedParameter[x];
+                                        }
                                     }
                                 }
                             }
+                            if (meta["JoinTable"])
+                                field.join = true;
                         }
-                        if (meta["JoinTable"])
-                            field.join = true;
-                    }
-                    else if (meta["OneToOne"]) {
-                        field.relation = "OneToOne";
-                        if (meta["OneToOne"].parameter.length > 0) {
-                            for (var x = 0; x < meta["OneToOne"].parameter.length; x++) {
-                                let vd = meta["OneToOne"].parameter[x];
-                                if (x === 0) {
-                                    field.type = this.getFulltype(meta["OneToOne"].parameter[0], pclass).fullClassname;
-                                }
-                                else {
-                                    if (!meta["OneToOne"].parameter[x].startsWith("{")) {
-                                        field.inverseSide = vd.split(">")[1].trim();
+                        else if (meta["OneToOne"]) {
+                            field.relation = "OneToOne";
+                            if (meta["OneToOne"].parameter.length > 0) {
+                                for (var x = 0; x < meta["OneToOne"].parameter.length; x++) {
+                                    let vd = meta["OneToOne"].parameter[x];
+                                    if (x === 0) {
+                                        field.type = this.getFulltype(meta["OneToOne"].parameter[0], pclass).fullClassname;
                                     }
                                     else {
-                                        field.properties = meta["OneToOne"].parsedParameter[x];
+                                        if (!meta["OneToOne"].parameter[x].startsWith("{")) {
+                                            field.inverseSide = vd.split(">")[1].trim();
+                                        }
+                                        else {
+                                            field.properties = meta["OneToOne"].parsedParameter[x];
+                                        }
                                     }
                                 }
                             }
+                            if (meta["JoinColumn"])
+                                field.join = true;
                         }
-                        if (meta["JoinColumn"])
-                            field.join = true;
-                    }
-                    if (meta["PrimaryColumn"] || meta["PrimaryGeneratedColumn"] || meta["Column"]) {
-                        var tp = pfield.type;
-                        if (tp === "string")
-                            field.type = "string";
-                        else if (tp === "number")
-                            field.type = "int";
-                        else if (tp === "boolean")
-                            field.type = "boolean";
-                        else if (tp === "Date")
-                            field.type = "Date";
-                        else
-                            throw new Error("type unknown " + dbclass.name + ":" + field.name);
-                        if (field.properties !== undefined && field.properties["type"]) {
-                            field.type = field.properties["type"];
+                        if (meta["PrimaryColumn"] || meta["PrimaryGeneratedColumn"] || meta["Column"]) {
+                            var tp = pfield.type;
+                            if (tp === "string")
+                                field.type = "string";
+                            else if (tp === "number")
+                                field.type = "int";
+                            else if (tp === "boolean")
+                                field.type = "boolean";
+                            else if (tp === "Date")
+                                field.type = "Date";
+                            else
+                                throw new Error("type unknown " + dbclass.name + ":" + field.name);
+                            if (field.properties !== undefined && field.properties["type"]) {
+                                field.type = field.properties["type"];
+                            }
                         }
                     }
                 }

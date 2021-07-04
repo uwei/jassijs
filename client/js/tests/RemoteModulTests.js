@@ -46,9 +46,13 @@ export class TestRModul extends RemoteObject{
         finally {
             var root = new FileNode_1.FileNode("");
             root.files = [];
-            new Server_1.Server().delete("testrmodul");
-            new Server_1.Server().removeServerModul("testrmodul");
-            DatabaseTools_1.DatabaseTools.dropTables(["testrmodul_testrcustomer"]);
+            await new Server_1.Server().delete("testrmodul");
+            await new Server_1.Server().removeServerModul("testrmodul");
+            try {
+                await DatabaseTools_1.DatabaseTools.dropTables(["testrmodul_testrcustomer"]);
+            }
+            catch (_a) {
+            }
         }
     }
     exports.test = test;

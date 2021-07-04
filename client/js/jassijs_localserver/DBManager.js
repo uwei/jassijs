@@ -62,6 +62,13 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 //"synchronize": true,
                 "logging": false,
                 "entities": dbclasses,
+                //"js/client/remote/de/**/*.js"
+                // "migrations": [
+                //    "src/migration/**/*.ts"
+                // ],
+                // "subscribers": [
+                //    "src/subscriber/**/*.ts"
+                // ]
             };
             return opt;
         }

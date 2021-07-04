@@ -29,6 +29,12 @@ define("jassijs_editor/ext/acelib", ["require", 'ace/ace',
       };*/
     return {
         default: ac,
+        /*  createWorker:createWorker,
+          changeTSMode:function(session){
+            //  var tsmode=session.$mode;
+              session.$mode.createWorker=createWorker;
+              var k=9;
+          }*/
     };
 });
 //# sourceMappingURL=acelib.js.map

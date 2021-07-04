@@ -252,8 +252,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Menu", "jassij
         cmen.getActions = async function (objects) {
             var all = objects;
             return [{
-                    name: "getActions-Action",
-                    call: function (ob) {
+                    name: "getActions-Action", call: function (ob) {
                         alert(ob[0]["name"]);
                     }
                 }];

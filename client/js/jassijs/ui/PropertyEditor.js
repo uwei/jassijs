@@ -493,7 +493,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         addVariableInCode(type, scopename) {
             var _a;
             var val = this.codeEditor.getObjectFromVariable("this");
-            var ret = this.parser.addVariableInCode(type, [{ classname: (_a = val === null || val === void 0 ? void 0 : val.constructor) === null || _a === void 0 ? void 0 : _a.name, methodname: "layout" }, { classname: undefined, methodname: "test" }], scopename);
+            var ret = this.parser.addVariableInCode(type, [{ classname: (_a = val === null || val === void 0 ? void 0 : val.constructor) === null || _a === void 0 ? void 0 : _a.name, methodname: "layout" },
+                { classname: undefined, methodname: "test" }], scopename);
             this.codeEditor.value = this.parser.getModifiedCode();
             this.updateParser();
             this.callEvent("codeChanged", {});

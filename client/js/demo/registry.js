@@ -3,7 +3,7 @@ define("demo/registry",["require"], function(require) {
  return {
   default: {
 	"demo/Dialog.ts": {
-		"date": 1622984213677,
+		"date": 1625398187422,
 		"demo/Dialog": {}
 	},
 	"demo/EmptyDialog.ts": {
@@ -17,7 +17,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1612818333557
 	},
 	"demo/ReportInvoice.ts": {
-		"date": 1624208215985,
+		"date": 1625398305568,
 		"demo.ReportInvoice": {}
 	},
 	"demo/StyleDialog.ts": {

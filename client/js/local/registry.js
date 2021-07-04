@@ -3,7 +3,7 @@ define("local/registry",["require"], function(require) {
  return {
   default: {
 	"local/modul.ts": {
-		"date": 1614616375403
+		"date": 1625396399710
 	},
 	"local/remote/Book.ts": {
 		"date": 1622985545033,

@@ -21,8 +21,8 @@ export class Dialog extends Panel {
         me.button2 = new Button();
         me.boxpanel1.add(me.button1);
         me.boxpanel1.add(me.button2);
-        me.boxpanel1.spliter = [60,40];
-        me.button1.text = "button";
+        me.boxpanel1.spliter = [60, 40];
+        me.button1.text = "button1";
         me.button2.text = "button";
         this.add(me.boxpanel1);
     }
