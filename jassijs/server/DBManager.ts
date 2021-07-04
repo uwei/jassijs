@@ -104,10 +104,8 @@ export class DBManager {
         try {
           _initrunning = undefined;
           //@ts-ignore //heroku need this
-          opts.extra= {
-            ssl: true
-          }
-        //  opts["ssl"] = true;
+         
+          opts["ssl"] = true;
           _initrunning = createConnection(opts);
           await _initrunning;
 
