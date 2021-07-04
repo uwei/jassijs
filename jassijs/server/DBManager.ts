@@ -72,7 +72,8 @@ export class DBManager {
       "database": sdb,
       //"synchronize": true,
       "logging": false,
-      "entities": dbclasses,
+      "entities": dbclasses
+    
       //"js/client/remote/de/**/*.js"
 
       // "migrations": [
@@ -102,7 +103,11 @@ export class DBManager {
       } catch (err1) {
         try {
           _initrunning = undefined;
-          opts["ssl"] = true;//heroku need this
+          //@ts-ignore //heroku need this
+          opts.extra= {
+            ssl: true
+          }
+        //  opts["ssl"] = true;
           _initrunning = createConnection(opts);
           await _initrunning;
 

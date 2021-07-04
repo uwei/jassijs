@@ -132,7 +132,7 @@ exports.default={
 		"date": 1625397511839
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1625000487229,
+		"date": 1625409417620,
 		"jassi_localserver.DBManager": {}
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
