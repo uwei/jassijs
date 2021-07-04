@@ -93,7 +93,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/DatabaseSchema.ts": {
-                "date": 1624139099724,
+                "date": 1625398849039,
                 "jassijs.base.DatabaseSchema": {}
             },
             "jassijs/base/Errors.ts": {
@@ -1504,125 +1504,127 @@ define("jassijs/base/DatabaseSchema", ["require", "exports", "jassijs/remote/Jas
                 dbclass.parent = _this;
                 this.databaseClasses.push(dbclass);
                 var pclass = this.parsedClasses[entr.classname];
-                dbclass.filename = pclass["filename"];
-                dbclass.simpleclassname = pclass.name;
-                dbclass.name = pclass.fullClassname;
-                for (var fname in pclass.members) {
-                    var pfield = pclass.members[fname];
-                    if (!pfield.decorator["Column"] && !pfield.decorator["PrimaryColumn"] && !pfield.decorator["PrimaryGeneratedColumn"] && !pfield.decorator["OneToOne"] && !pfield.decorator["ManyToOne"] && !pfield.decorator["OneToMany"] && !pfield.decorator["ManyToMany"])
-                        continue;
-                    var field = new DatabaseField();
-                    field["parent"] = dbclass;
-                    field.name = fname;
-                    dbclass.fields.push(field);
-                    var meta = pfield.decorator;
-                    if (meta["PrimaryColumn"]) {
-                        field.relation = "PrimaryColumn";
-                    }
-                    else if (meta["PrimaryGeneratedColumn"]) {
-                        field.relation = "PrimaryColumn";
-                    }
-                    else if (meta["Column"]) {
-                        field.relation = undefined;
-                        //var mt=mtype[0][0];
-                        if (meta["Column"].parameter.length > 0 && meta["Column"].parameter.length > 0) {
-                            field.properties = meta["Column"].parsedParameter[0];
+                if (pclass) {
+                    dbclass.filename = pclass["filename"];
+                    dbclass.simpleclassname = pclass.name;
+                    dbclass.name = pclass.fullClassname;
+                    for (var fname in pclass.members) {
+                        var pfield = pclass.members[fname];
+                        if (!pfield.decorator["Column"] && !pfield.decorator["PrimaryColumn"] && !pfield.decorator["PrimaryGeneratedColumn"] && !pfield.decorator["OneToOne"] && !pfield.decorator["ManyToOne"] && !pfield.decorator["OneToMany"] && !pfield.decorator["ManyToMany"])
+                            continue;
+                        var field = new DatabaseField();
+                        field["parent"] = dbclass;
+                        field.name = fname;
+                        dbclass.fields.push(field);
+                        var meta = pfield.decorator;
+                        if (meta["PrimaryColumn"]) {
+                            field.relation = "PrimaryColumn";
                         }
-                    }
-                    else if (meta["ManyToOne"]) {
-                        field.relation = "ManyToOne";
-                        if (meta["ManyToOne"].parameter.length > 0) {
-                            for (var x = 0; x < meta["ManyToOne"].parameter.length; x++) {
-                                let vd = meta["ManyToOne"].parameter[x];
-                                if (x === 0) {
-                                    field.type = this.getFulltype(meta["ManyToOne"].parameter[0], pclass).fullClassname;
-                                }
-                                else {
-                                    if (!meta["ManyToOne"].parameter[x].startsWith("{")) {
-                                        field.inverseSide = vd.split(">")[1].trim();
+                        else if (meta["PrimaryGeneratedColumn"]) {
+                            field.relation = "PrimaryColumn";
+                        }
+                        else if (meta["Column"]) {
+                            field.relation = undefined;
+                            //var mt=mtype[0][0];
+                            if (meta["Column"].parameter.length > 0 && meta["Column"].parameter.length > 0) {
+                                field.properties = meta["Column"].parsedParameter[0];
+                            }
+                        }
+                        else if (meta["ManyToOne"]) {
+                            field.relation = "ManyToOne";
+                            if (meta["ManyToOne"].parameter.length > 0) {
+                                for (var x = 0; x < meta["ManyToOne"].parameter.length; x++) {
+                                    let vd = meta["ManyToOne"].parameter[x];
+                                    if (x === 0) {
+                                        field.type = this.getFulltype(meta["ManyToOne"].parameter[0], pclass).fullClassname;
                                     }
                                     else {
-                                        field.properties = meta["ManyToOne"].parsedParameter[x];
+                                        if (!meta["ManyToOne"].parameter[x].startsWith("{")) {
+                                            field.inverseSide = vd.split(">")[1].trim();
+                                        }
+                                        else {
+                                            field.properties = meta["ManyToOne"].parsedParameter[x];
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    else if (meta["OneToMany"]) {
-                        field.relation = "OneToMany";
-                        if (meta["OneToMany"].parameter.length > 0) {
-                            for (var x = 0; x < meta["OneToMany"].parameter.length; x++) {
-                                let vd = meta["OneToMany"].parameter[x];
-                                if (x === 0) {
-                                    field.type = this.getFulltype(meta["OneToMany"].parameter[0], pclass).fullClassname + "[]";
-                                }
-                                else {
-                                    if (!meta["OneToMany"].parameter[x].startsWith("{")) {
-                                        field.inverseSide = vd.split(">")[1].trim();
+                        else if (meta["OneToMany"]) {
+                            field.relation = "OneToMany";
+                            if (meta["OneToMany"].parameter.length > 0) {
+                                for (var x = 0; x < meta["OneToMany"].parameter.length; x++) {
+                                    let vd = meta["OneToMany"].parameter[x];
+                                    if (x === 0) {
+                                        field.type = this.getFulltype(meta["OneToMany"].parameter[0], pclass).fullClassname + "[]";
                                     }
                                     else {
-                                        field.properties = meta["OneToMany"].parsedParameter[x];
+                                        if (!meta["OneToMany"].parameter[x].startsWith("{")) {
+                                            field.inverseSide = vd.split(">")[1].trim();
+                                        }
+                                        else {
+                                            field.properties = meta["OneToMany"].parsedParameter[x];
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
-                    else if (meta["ManyToMany"]) {
-                        field.relation = "ManyToMany";
-                        if (meta["ManyToMany"].parameter.length > 0) {
-                            for (var x = 0; x < meta["ManyToMany"].parameter.length; x++) {
-                                let vd = meta["ManyToMany"].parameter[x];
-                                if (x === 0) {
-                                    field.type = this.getFulltype(meta["ManyToMany"].parameter[0], pclass).fullClassname + "[]";
-                                }
-                                else {
-                                    if (!meta["ManyToMany"].parameter[x].startsWith("{")) {
-                                        field.inverseSide = vd.split(">")[1].trim();
+                        else if (meta["ManyToMany"]) {
+                            field.relation = "ManyToMany";
+                            if (meta["ManyToMany"].parameter.length > 0) {
+                                for (var x = 0; x < meta["ManyToMany"].parameter.length; x++) {
+                                    let vd = meta["ManyToMany"].parameter[x];
+                                    if (x === 0) {
+                                        field.type = this.getFulltype(meta["ManyToMany"].parameter[0], pclass).fullClassname + "[]";
                                     }
                                     else {
-                                        field.properties = meta["ManyToMany"].parsedParameter[x];
+                                        if (!meta["ManyToMany"].parameter[x].startsWith("{")) {
+                                            field.inverseSide = vd.split(">")[1].trim();
+                                        }
+                                        else {
+                                            field.properties = meta["ManyToMany"].parsedParameter[x];
+                                        }
                                     }
                                 }
                             }
+                            if (meta["JoinTable"])
+                                field.join = true;
                         }
-                        if (meta["JoinTable"])
-                            field.join = true;
-                    }
-                    else if (meta["OneToOne"]) {
-                        field.relation = "OneToOne";
-                        if (meta["OneToOne"].parameter.length > 0) {
-                            for (var x = 0; x < meta["OneToOne"].parameter.length; x++) {
-                                let vd = meta["OneToOne"].parameter[x];
-                                if (x === 0) {
-                                    field.type = this.getFulltype(meta["OneToOne"].parameter[0], pclass).fullClassname;
-                                }
-                                else {
-                                    if (!meta["OneToOne"].parameter[x].startsWith("{")) {
-                                        field.inverseSide = vd.split(">")[1].trim();
+                        else if (meta["OneToOne"]) {
+                            field.relation = "OneToOne";
+                            if (meta["OneToOne"].parameter.length > 0) {
+                                for (var x = 0; x < meta["OneToOne"].parameter.length; x++) {
+                                    let vd = meta["OneToOne"].parameter[x];
+                                    if (x === 0) {
+                                        field.type = this.getFulltype(meta["OneToOne"].parameter[0], pclass).fullClassname;
                                     }
                                     else {
-                                        field.properties = meta["OneToOne"].parsedParameter[x];
+                                        if (!meta["OneToOne"].parameter[x].startsWith("{")) {
+                                            field.inverseSide = vd.split(">")[1].trim();
+                                        }
+                                        else {
+                                            field.properties = meta["OneToOne"].parsedParameter[x];
+                                        }
                                     }
                                 }
                             }
+                            if (meta["JoinColumn"])
+                                field.join = true;
                         }
-                        if (meta["JoinColumn"])
-                            field.join = true;
-                    }
-                    if (meta["PrimaryColumn"] || meta["PrimaryGeneratedColumn"] || meta["Column"]) {
-                        var tp = pfield.type;
-                        if (tp === "string")
-                            field.type = "string";
-                        else if (tp === "number")
-                            field.type = "int";
-                        else if (tp === "boolean")
-                            field.type = "boolean";
-                        else if (tp === "Date")
-                            field.type = "Date";
-                        else
-                            throw new Error("type unknown " + dbclass.name + ":" + field.name);
-                        if (field.properties !== undefined && field.properties["type"]) {
-                            field.type = field.properties["type"];
+                        if (meta["PrimaryColumn"] || meta["PrimaryGeneratedColumn"] || meta["Column"]) {
+                            var tp = pfield.type;
+                            if (tp === "string")
+                                field.type = "string";
+                            else if (tp === "number")
+                                field.type = "int";
+                            else if (tp === "boolean")
+                                field.type = "boolean";
+                            else if (tp === "Date")
+                                field.type = "Date";
+                            else
+                                throw new Error("type unknown " + dbclass.name + ":" + field.name);
+                            if (field.properties !== undefined && field.properties["type"]) {
+                                field.type = field.properties["type"];
+                            }
                         }
                     }
                 }
@@ -2536,7 +2538,7 @@ define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassi
             if (save === undefined || save === "")
                 return;
             var all = save.split(",");
-            new Promise((resolve_4, reject_4) => { require(["./Router"], resolve_4, reject_4); }).then(function (router) {
+            new Promise((resolve_4, reject_4) => { require(["jassijs/base/Router"], resolve_4, reject_4); }).then(function (router) {
                 for (var x = 0; x < all.length; x++) {
                     router.router.navigate(all[x]);
                 }
@@ -7526,8 +7528,7 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", 
         cmen.getActions = async function (objects) {
             var all = objects;
             return [{
-                    name: "getActions-Action",
-                    call: function (ob) {
+                    name: "getActions-Action", call: function (ob) {
                         alert(ob[0]["name"]);
                     }
                 }];
@@ -9494,8 +9495,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
     ], FileActions, "refresh", null);
     __decorate([
         Actions_13.$Action({
-            name: "Open",
-            isEnabled: function (all) {
+            name: "Open", isEnabled: function (all) {
                 return !all[0].isDirectory();
             }
         }),
@@ -9646,6 +9646,18 @@ define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", 
                 //toolbar: true,
                 menubar: false,
                 selector: '.' + randclass,
+                //  setup:function(ed) {
+                //   ed.on('blur', function(e) {
+                //    		if($("#"+ed.id)[0]===undefined)
+                //  			return;
+                //    var html=$("#"+ed.id)[0]._this;
+                //  var text= ed.getContent();
+                //text='"'+text.substring(31,text.length-7).replaceAll("\"","\\\"")+'"';
+                //_this._propertyEditor.setPropertyInCode("text",text,true);
+                //$(html.domWrapper).draggable('enable');
+                //   }
+                // );
+                // }
             });
             // editor.setContent("Hallo");
             //tinymce.activeEditor.remove();
@@ -11388,7 +11400,8 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
         addVariableInCode(type, scopename) {
             var _a;
             var val = this.codeEditor.getObjectFromVariable("this");
-            var ret = this.parser.addVariableInCode(type, [{ classname: (_a = val === null || val === void 0 ? void 0 : val.constructor) === null || _a === void 0 ? void 0 : _a.name, methodname: "layout" }, { classname: undefined, methodname: "test" }], scopename);
+            var ret = this.parser.addVariableInCode(type, [{ classname: (_a = val === null || val === void 0 ? void 0 : val.constructor) === null || _a === void 0 ? void 0 : _a.name, methodname: "layout" },
+                { classname: undefined, methodname: "test" }], scopename);
             this.codeEditor.value = this.parser.getModifiedCode();
             this.updateParser();
             this.callEvent("codeChanged", {});

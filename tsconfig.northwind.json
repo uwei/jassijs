@@ -10,7 +10,7 @@
       "experimentalDecorators": true,
 
     "inlineSources": true,
-    "outDir": ".././dist/server",
+    "outDir": ".././deployserver",
     "rootDir": "./",
   },
   "include":["./northwind"],

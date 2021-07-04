@@ -1,1 +1,0 @@
-export function testfunc(){return 2;}

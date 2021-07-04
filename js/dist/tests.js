@@ -268,9 +268,13 @@ export class TestRModul extends RemoteObject{
         finally {
             var root = new FileNode_2.FileNode("");
             root.files = [];
-            new Server_2.Server().delete("testrmodul");
-            new Server_2.Server().removeServerModul("testrmodul");
-            DatabaseTools_1.DatabaseTools.dropTables(["testrmodul_testrcustomer"]);
+            await new Server_2.Server().delete("testrmodul");
+            await new Server_2.Server().removeServerModul("testrmodul");
+            try {
+                await DatabaseTools_1.DatabaseTools.dropTables(["testrmodul_testrcustomer"]);
+            }
+            catch (_a) {
+            }
         }
     }
     exports.test = test;
@@ -322,13 +326,13 @@ define("tests/registry", ["require"], function (require) {
                 }
             },
             "tests/RemoteModulTests.ts": {
-                "date": 1624296469637
+                "date": 1625399289447
             },
             "tests/TestReport.ts": {
                 "date": 1623864072454
             },
             "tests/remote/T.ts": {
-                "date": 1625000533863,
+                "date": 1625333609235,
                 "tests.remote.T": {}
             },
             "tests/remote/TestServerfile.ts": {

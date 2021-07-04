@@ -2979,6 +2979,12 @@ define("jassijs_editor/ext/acelib", ["require", 'ace/ace',
       };*/
     return {
         default: ac,
+        /*  createWorker:createWorker,
+          changeTSMode:function(session){
+            //  var tsmode=session.$mode;
+              session.$mode.createWorker=createWorker;
+              var k=9;
+          }*/
     };
 });
 //require.config({ paths: { vs: '//cdn.jsdelivr.net/npm/monaco-editor@0.20.0/dev/vs' } });
