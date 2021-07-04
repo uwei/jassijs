@@ -91,6 +91,7 @@ let DBManager = DBManager_1 = class DBManager {
                 try {
                     _initrunning = undefined;
                     //@ts-ignore //heroku need this
+                    opts["rejectUnauthorized"] = false;
                     opts["ssl"] = true;
                     _initrunning = typeorm_1.createConnection(opts);
                     await _initrunning;
