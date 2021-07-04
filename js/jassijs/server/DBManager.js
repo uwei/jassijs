@@ -67,6 +67,13 @@ let DBManager = DBManager_1 = class DBManager {
             //"synchronize": true,
             "logging": false,
             "entities": dbclasses,
+            //"js/client/remote/de/**/*.js"
+            // "migrations": [
+            //    "src/migration/**/*.ts"
+            // ],
+            // "subscribers": [
+            //    "src/subscriber/**/*.ts"
+            // ]
         };
         return opt;
     }
@@ -89,6 +96,7 @@ let DBManager = DBManager_1 = class DBManager {
                 }
                 catch (err) {
                     console.log("DB corrupt - revert the last change");
+                    console.error(err);
                     _instance = undefined;
                     _initrunning = undefined;
                     if (err.message === "The server does not support SSL connections") {

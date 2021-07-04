@@ -16,5 +16,5 @@
         "typeorm":["../node_modules/typeorm","../server/node_modules/typeorm"]
       }
     }, 
-    "exclude": ["client","js"]
+    "exclude": ["client","js","private","deployserver"]
   }
