@@ -132,7 +132,7 @@ exports.default={
 		"date": 1625397511839
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1625409417620,
+		"date": 1625410375240,
 		"jassi_localserver.DBManager": {}
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
@@ -142,7 +142,7 @@ exports.default={
 		"date": 1625402891866
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1624998850503
+		"date": 1625423533473
 	},
 	"jassijs/server/JassiServer.ts": {
 		"date": 1622984045173

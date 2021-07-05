@@ -2146,7 +2146,7 @@ define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jas
             this.statustext.css({
                 color: (this.failedtests === 0 ? "green" : "red")
             });
-            this.statustext.value = (this.finished ? "Finished " : "test... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
+            this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
         }
     }
     let TestAction = TestAction_1 = class TestAction {
@@ -4491,7 +4491,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
                     var _this = this;
                     var fileName = fileNames[f];
                     var content = contents[f];
-                    if (!fromServerdirectory && fileName.endsWith(".ts") || fileName.endsWith(".js")) {
+                    if (!fromServerdirectory && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                         //@ts-ignore
                         var tss = await new Promise((resolve_21, reject_21) => { require(["jassijs_editor/util/Typescript"], resolve_21, reject_21); });
                         var rets = await tss.default.transpile(fileName, content);

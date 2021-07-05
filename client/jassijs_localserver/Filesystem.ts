@@ -144,19 +144,38 @@ export default class Filessystem {
     async saveFile(filename, content) {
         return await this.saveFiles([filename], [content]);
     }
-    async saveFiles(fileNames: string[], contents: any[], rollbackonerror: boolean = true) {
+    async saveFiles(fileNames: string[], contents: any[], fromServerdirectory: boolean = undefined, rollbackonerror: boolean = true) {
+        //serverside compile
+        if (fromServerdirectory) {
+            var allfileNames: string[] = [];
+            var allcontents: string[] = [];
+            for (var f = 0; f < fileNames.length; f++) {
+                var fileName = fileNames[f];
+                var content = contents[f];
+                if (fileName.endsWith(".ts") || fileName.endsWith(".js")) {
+                    //@ts-ignore
+                    var tss = await import("jassijs_editor/util/Typescript");
+                    var rets = await tss.default.transpile(fileName, content);
+                    allfileNames = allfileNames.concat(rets.fileNames);
+                    allcontents = allcontents.concat(rets.contents);
+                }
+            }
+            fileNames=allfileNames;
+            contents=allcontents;
+        }
+
         var db = await Filessystem.getDB();
         var rollbackcontents: string[] = [];
         var tsfiles = [];
         var dbschemaHasChanged = false;
-      
+
         for (let x = 0; x < fileNames.length; x++) {
             let fname = fileNames[x];
             if (fname.endsWith(".ts"))
                 tsfiles.push(fname.replace(".ts", ""));
-            if(contents[x]?.indexOf("@$DBObject(")>-1)
+            if (contents[x]?.indexOf("@$DBObject(") > -1)
                 dbschemaHasChanged = true;
-          
+
             let exists = await this.loadFileEntry(fname);
             if (exists) {
                 rollbackcontents.push(exists.data);
@@ -188,16 +207,16 @@ export default class Filessystem {
         if (rollbackonerror) {
             try {
                 await Reloader.instance.reloadJSAll(tsfiles);
-                 if (dbschemaHasChanged) {
-                      var man = await DBManager.destroyConnection();
-                      await DBManager.get();
-                  }
+                if (dbschemaHasChanged) {
+                    var man = await DBManager.destroyConnection();
+                    await DBManager.get();
+                }
             } catch (err) {
                 console.error(err);
                 if (dbschemaHasChanged) {
                     await DBManager.destroyConnection();
                 }
-                var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                var restore = await this.saveFiles(fileNames, rollbackcontents, fromServerdirectory, false);
                 if (dbschemaHasChanged) {
                     await DBManager.get();
                 }
@@ -222,17 +241,17 @@ export default class Filessystem {
     * deletes a server module (nothing to do on localserver)
     * @param modul - to delete
     */
-     public async removeServerModul(modul: string): Promise<string> {
-         return "";
-     }
+    public async removeServerModul(modul: string): Promise<string> {
+        return "";
+    }
     /**
     * create a folder
     * @param filename - the name of the new file 
     * @param content - then content
     */
     public async createFolder(filename: string): Promise<string> {
-        if(filename.startsWith("/"))
-            filename=filename.substring(1);
+        if (filename.startsWith("/"))
+            filename = filename.substring(1);
         var test = await this.loadFileEntry(filename);
         if (test)
             return filename + " allready exists";
@@ -284,7 +303,7 @@ export default class Filessystem {
         return "";
 
     }
-    async loadFile(fileName: string) {
+    async loadFile(fileName: string, fromServerdirectory: boolean = undefined) {
         var r = await this.loadFileEntry(fileName);
         return (r ? r.data : undefined);
     }

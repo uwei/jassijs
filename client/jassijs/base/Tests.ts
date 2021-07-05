@@ -26,7 +26,7 @@ class MyContainer extends BoxPanel {
         this.statustext.css({
             color: (this.failedtests === 0 ? "green" : "red")
         });
-        this.statustext.value = (this.finished ? "Finished " : "test... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed."
+        this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed."
     }
 }
 @$ActionProvider("jassijs.remote.FileNode")

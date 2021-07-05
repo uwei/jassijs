@@ -191,7 +191,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                     var _this = this;
                     var fileName = fileNames[f];
                     var content = contents[f];
-                    if (!fromServerdirectory && fileName.endsWith(".ts") || fileName.endsWith(".js")) {
+                    if (!fromServerdirectory && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                         //@ts-ignore
                         var tss = await new Promise((resolve_5, reject_5) => { require(["jassijs_editor/util/Typescript"], resolve_5, reject_5); });
                         var rets = await tss.default.transpile(fileName, content);

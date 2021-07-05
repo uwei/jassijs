@@ -194,7 +194,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                 var _this = this;
                 var fileName = fileNames[f];
                 var content = contents[f];
-                if (!fromServerdirectory && fileName.endsWith(".ts") || fileName.endsWith(".js")) {
+                if (!fromServerdirectory && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                     //@ts-ignore
                     var tss = await Promise.resolve().then(() => require("jassijs_editor/util/Typescript"));
                     var rets = await tss.default.transpile(fileName, content);

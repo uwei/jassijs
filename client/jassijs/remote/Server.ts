@@ -193,7 +193,7 @@ export class Server extends RemoteObject {
 
                 var fileName = fileNames[f];
                 var content = contents[f];
-                if (!fromServerdirectory && fileName.endsWith(".ts") || fileName.endsWith(".js")) {
+                if (!fromServerdirectory && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                     //@ts-ignore
                     var tss = await import("jassijs_editor/util/Typescript");
                     var rets = await tss.default.transpile(fileName, content);

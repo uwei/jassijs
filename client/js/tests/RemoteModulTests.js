@@ -34,11 +34,13 @@ export class TestRModul extends RemoteObject{
             var TestRCustomer = await Classes_1.classes.loadClass("testrmodul.TestRCustomer");
             DBObject_1.DBObject.clearCache("testrmodul.TestRCustomer");
             var cust = new TestRCustomer();
-            cust.id = 50;
+            cust.id = 52;
             cust.name = "Hallo";
             await cust.save();
             var tcust = await TestRCustomer.findOne();
+            //@ts-ignore
             teste.expectEqual((tcust === null || tcust === void 0 ? void 0 : tcust.name) === "Hallo");
+            await tcust.remove();
         }
         catch (err) {
             throw err;
@@ -49,9 +51,9 @@ export class TestRModul extends RemoteObject{
             await new Server_1.Server().delete("testrmodul");
             await new Server_1.Server().removeServerModul("testrmodul");
             try {
-                await DatabaseTools_1.DatabaseTools.dropTables(["testrmodul_testrcustomer"]);
+                var hh = await DatabaseTools_1.DatabaseTools.dropTables(["testrmodul_testrcustomer"]);
             }
-            catch (_a) {
+            catch (err) {
             }
         }
     }

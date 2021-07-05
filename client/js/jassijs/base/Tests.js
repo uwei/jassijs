@@ -25,7 +25,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
             this.statustext.css({
                 color: (this.failedtests === 0 ? "green" : "red")
             });
-            this.statustext.value = (this.finished ? "Finished " : "test... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
+            this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
         }
     }
     let TestAction = TestAction_1 = class TestAction {

@@ -64,7 +64,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.Resizer": {}
 	},
 	"jassijs_editor/util/TSSourceMap.ts": {
-		"date": 1624105277947,
+		"date": 1625511336878,
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {

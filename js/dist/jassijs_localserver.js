@@ -982,8 +982,26 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
         async saveFile(filename, content) {
             return await this.saveFiles([filename], [content]);
         }
-        async saveFiles(fileNames, contents, rollbackonerror = true) {
+        async saveFiles(fileNames, contents, fromServerdirectory = undefined, rollbackonerror = true) {
             var _a;
+            //serverside compile
+            if (fromServerdirectory) {
+                var allfileNames = [];
+                var allcontents = [];
+                for (var f = 0; f < fileNames.length; f++) {
+                    var fileName = fileNames[f];
+                    var content = contents[f];
+                    if (fileName.endsWith(".ts") || fileName.endsWith(".js")) {
+                        //@ts-ignore
+                        var tss = await new Promise((resolve_3, reject_3) => { require(["jassijs_editor/util/Typescript"], resolve_3, reject_3); });
+                        var rets = await tss.default.transpile(fileName, content);
+                        allfileNames = allfileNames.concat(rets.fileNames);
+                        allcontents = allcontents.concat(rets.contents);
+                    }
+                }
+                fileNames = allfileNames;
+                contents = allcontents;
+            }
             var db = await Filessystem_1.getDB();
             var rollbackcontents = [];
             var tsfiles = [];
@@ -1020,7 +1038,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             }
             if (fileNames.length === 1 && fileNames[0].endsWith("/registry.js")) //no indexer save recurse
                 return;
-            var RegistryIndexer = (await new Promise((resolve_3, reject_3) => { require(["jassijs_localserver/RegistryIndexer"], resolve_3, reject_3); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassijs_localserver/RegistryIndexer"], resolve_4, reject_4); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             await Registry_2.default.reload();
             if (rollbackonerror) {
@@ -1036,7 +1054,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                     if (dbschemaHasChanged) {
                         await DBManager_2.DBManager.destroyConnection();
                     }
-                    var restore = await this.saveFiles(fileNames, rollbackcontents, false);
+                    var restore = await this.saveFiles(fileNames, rollbackcontents, fromServerdirectory, false);
                     if (dbschemaHasChanged) {
                         await DBManager_2.DBManager.get();
                     }
@@ -1118,7 +1136,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             }
             return "";
         }
-        async loadFile(fileName) {
+        async loadFile(fileName, fromServerdirectory = undefined) {
             var r = await this.loadFileEntry(fileName);
             return (r ? r.data : undefined);
         }
@@ -1145,7 +1163,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 delete ob.modules[file];
                 this.saveFile("jassijs.json", JSON.stringify(ob, undefined, "\t"));
             }
-            var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassijs_localserver/RegistryIndexer"], resolve_4, reject_4); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_5, reject_5) => { require(["jassijs_localserver/RegistryIndexer"], resolve_5, reject_5); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             //entr = await this.dirEntry(file);
             return "";
@@ -1155,7 +1173,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
          */
         async zip(directoryname, serverdir = undefined, context = undefined) {
             //@ts-ignore
-            var JSZip = (await new Promise((resolve_5, reject_5) => { require(["jassijs_localserver/ext/jszip"], resolve_5, reject_5); })).default;
+            var JSZip = (await new Promise((resolve_6, reject_6) => { require(["jassijs_localserver/ext/jszip"], resolve_6, reject_6); })).default;
             if (serverdir)
                 throw new Error("serverdir is unsupported on localserver");
             var zip = new JSZip();
@@ -1190,7 +1208,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 else
                     await this.createFile(oldf[i].id, oldf[i].data);
             }
-            var RegistryIndexer = (await new Promise((resolve_6, reject_6) => { require(["jassijs_localserver/RegistryIndexer"], resolve_6, reject_6); })).RegistryIndexer;
+            var RegistryIndexer = (await new Promise((resolve_7, reject_7) => { require(["jassijs_localserver/RegistryIndexer"], resolve_7, reject_7); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
             return "";
         }
@@ -1502,7 +1520,7 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
     RemoteProtocol_1.RemoteProtocol.prototype.exec = async function (config, ob) {
         var clname = JSON.parse(config.data).classname;
         var local = ["jassijs.remote.Transaction", "northwind.Employees", "northwind.Customer"];
-        var classes = (await new Promise((resolve_7, reject_7) => { require(["jassijs/remote/Classes"], resolve_7, reject_7); })).classes;
+        var classes = (await new Promise((resolve_8, reject_8) => { require(["jassijs/remote/Classes"], resolve_8, reject_8); })).classes;
         var DBObject = await classes.loadClass("jassijs.remote.DBObject");
         var ret;
         //
@@ -1555,7 +1573,7 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
         return ret;
     };
     async function localExec(prot, context = undefined) {
-        var classes = (await new Promise((resolve_8, reject_8) => { require(["jassijs/remote/Classes"], resolve_8, reject_8); })).classes;
+        var classes = (await new Promise((resolve_9, reject_9) => { require(["jassijs/remote/Classes"], resolve_9, reject_9); })).classes;
         var p = new RemoteProtocol_1.RemoteProtocol();
         var C = await classes.loadClass(prot.classname);
         if (context === undefined) {
@@ -1568,7 +1586,7 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
                     }
                 }
             };
-            var Cookies = (await new Promise((resolve_9, reject_9) => { require(["jassijs/util/Cookies"], resolve_9, reject_9); })).Cookies;
+            var Cookies = (await new Promise((resolve_10, reject_10) => { require(["jassijs/util/Cookies"], resolve_10, reject_10); })).Cookies;
             if (Cookies.get("simulateUser") && Cookies.get("simulateUserPassword")) {
                 var DBManager = await classes.loadClass("jassi_localserver.DBManager");
                 var man = await DBManager.get();
