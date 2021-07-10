@@ -160,8 +160,8 @@ export default class Filessystem {
                     allcontents = allcontents.concat(rets.contents);
                 }
             }
-            fileNames=allfileNames;
-            contents=allcontents;
+            fileNames = allfileNames;
+            contents = allcontents;
         }
 
         var db = await Filessystem.getDB();
@@ -206,7 +206,9 @@ export default class Filessystem {
         await registry.reload();
         if (rollbackonerror) {
             try {
-                await Reloader.instance.reloadJSAll(tsfiles);
+                let jsFiles = [];
+                tsfiles.forEach((entr) => { if (entr.endsWith(".js")) jsFiles.push(entr) });
+                await Reloader.instance.reloadJSAll(jsFiles);
                 if (dbschemaHasChanged) {
                     var man = await DBManager.destroyConnection();
                     await DBManager.get();

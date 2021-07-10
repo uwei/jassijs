@@ -1043,7 +1043,12 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             await Registry_2.default.reload();
             if (rollbackonerror) {
                 try {
-                    await Reloader_1.Reloader.instance.reloadJSAll(tsfiles);
+                    let jsFiles = [];
+                    tsfiles.forEach((entr) => {
+                        if (entr.endsWith(".js"))
+                            jsFiles.push(entr);
+                    });
+                    await Reloader_1.Reloader.instance.reloadJSAll(jsFiles);
                     if (dbschemaHasChanged) {
                         var man = await DBManager_2.DBManager.destroyConnection();
                         await DBManager_2.DBManager.get();
