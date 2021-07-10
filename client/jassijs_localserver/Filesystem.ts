@@ -166,13 +166,13 @@ export default class Filessystem {
 
         var db = await Filessystem.getDB();
         var rollbackcontents: string[] = [];
-        var tsfiles = [];
+        var jsToReload = [];
         var dbschemaHasChanged = false;
 
         for (let x = 0; x < fileNames.length; x++) {
             let fname = fileNames[x];
-            if (fname.endsWith(".ts"))
-                tsfiles.push(fname.replace(".ts", ""));
+            if (fname.startsWith("js/")&&fname.endsWith(".js"))
+                jsToReload.push(fname.substring(3).replace(".ts",".js"));
             if (contents[x]?.indexOf("@$DBObject(") > -1)
                 dbschemaHasChanged = true;
 
@@ -206,9 +206,7 @@ export default class Filessystem {
         await registry.reload();
         if (rollbackonerror) {
             try {
-                let jsFiles = [];
-                tsfiles.forEach((entr) => { if (entr.endsWith(".js")) jsFiles.push(entr) });
-                await Reloader.instance.reloadJSAll(jsFiles);
+                await Reloader.instance.reloadJSAll(jsToReload);
                 if (dbschemaHasChanged) {
                     var man = await DBManager.destroyConnection();
                     await DBManager.get();

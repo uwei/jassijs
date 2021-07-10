@@ -119,7 +119,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Router": {}
             },
             "jassijs/base/Tests.ts": {
-                "date": 1624296418851,
+                "date": 1625515524994,
                 "jassijs.ui.TestAction": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -247,7 +247,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1624997181352,
+                "date": 1625515074672,
                 "jassijs.remote.Server": {}
             },
             "jassijs/remote/Settings.ts": {

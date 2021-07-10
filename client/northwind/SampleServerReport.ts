@@ -98,7 +98,7 @@ export class SampleClientReport{
     
 }
 
-export async function test() {
+export async function test2() {
     // kk.o=0;
     var dlg = new SampleClientReport();
     dlg.name="hh";

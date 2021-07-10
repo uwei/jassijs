@@ -847,7 +847,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
 define("northwind/SampleServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_1, Property_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.SampleClientReport = exports.SampleServerReport = exports.$Report = exports.ReportProperties = void 0;
+    exports.test2 = exports.SampleClientReport = exports.SampleServerReport = exports.$Report = exports.ReportProperties = void 0;
     class ReportProperties {
     }
     exports.ReportProperties = ReportProperties;
@@ -944,7 +944,7 @@ define("northwind/SampleServerReport", ["require", "exports", "jassijs/remote/Re
         $Report({ fullPath: "northwind.SampleServerReport" })
     ], SampleClientReport);
     exports.SampleClientReport = SampleClientReport;
-    async function test() {
+    async function test2() {
         // kk.o=0;
         var dlg = new SampleClientReport();
         dlg.name = "hh";
@@ -956,7 +956,7 @@ define("northwind/SampleServerReport", ["require", "exports", "jassijs/remote/Re
         //console.log(JSON.stringify(dlg.toJSON()));
         return dlg;
     }
-    exports.test = test;
+    exports.test2 = test2;
 });
 define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_4, Textbox_7, Jassi_8, Property_8, Shippers_1, DBObjectView_7) {
     "use strict";

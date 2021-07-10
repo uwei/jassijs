@@ -161,12 +161,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
             }
             var db = await Filessystem_1.getDB();
             var rollbackcontents = [];
-            var tsfiles = [];
+            var jsToReload = [];
             var dbschemaHasChanged = false;
             for (let x = 0; x < fileNames.length; x++) {
                 let fname = fileNames[x];
-                if (fname.endsWith(".ts"))
-                    tsfiles.push(fname.replace(".ts", ""));
+                if (fname.startsWith("js/") && fname.endsWith(".js"))
+                    jsToReload.push(fname.substring(3).replace(".ts", ".js"));
                 if (((_a = contents[x]) === null || _a === void 0 ? void 0 : _a.indexOf("@$DBObject(")) > -1)
                     dbschemaHasChanged = true;
                 let exists = await this.loadFileEntry(fname);
@@ -200,10 +200,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
             await Registry_1.default.reload();
             if (rollbackonerror) {
                 try {
-                    let jsFiles = [];
-                    tsfiles.forEach((entr) => { if (entr.endsWith(".js"))
-                        jsFiles.push(entr); });
-                    await Reloader_1.Reloader.instance.reloadJSAll(jsFiles);
+                    await Reloader_1.Reloader.instance.reloadJSAll(jsToReload);
                     if (dbschemaHasChanged) {
                         var man = await DBManager_1.DBManager.destroyConnection();
                         await DBManager_1.DBManager.get();

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.SampleClientReport = exports.SampleServerReport = exports.$Report = exports.ReportProperties = void 0;
+    exports.test2 = exports.SampleClientReport = exports.SampleServerReport = exports.$Report = exports.ReportProperties = void 0;
     class ReportProperties {
     }
     exports.ReportProperties = ReportProperties;
@@ -107,7 +107,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
         $Report({ fullPath: "northwind.SampleServerReport" })
     ], SampleClientReport);
     exports.SampleClientReport = SampleClientReport;
-    async function test() {
+    async function test2() {
         // kk.o=0;
         var dlg = new SampleClientReport();
         dlg.name = "hh";
@@ -119,6 +119,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
         //console.log(JSON.stringify(dlg.toJSON()));
         return dlg;
     }
-    exports.test = test;
+    exports.test2 = test2;
 });
 //# sourceMappingURL=SampleServerReport.js.map
