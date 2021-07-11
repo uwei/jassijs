@@ -3,7 +3,7 @@ import { Panel } from "jassijs/ui/Panel";
 import { Errors } from "jassijs/base/Errors";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { Button } from "jassijs/ui/Button";
-import { TSSourceMap } from "jassijs_editor/util/TSSourceMap";
+
 import { classes } from "jassijs/remote/Classes";
 import { router } from "jassijs/base/Router";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
@@ -193,6 +193,7 @@ export class ErrorPanel extends Panel {
             }
             if (u.indexOf("/js/") > -1 || ismodul) {
                 try {
+                    var TSSourceMap = (await import("jassijs_editor/util/TSSourceMap")).TSSourceMap;
                     var pos = await new TSSourceMap().getLineFromJS(u, Number(line), Number(col));
                     if (pos) {
                         return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp", "") +

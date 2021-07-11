@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Jassi", "jassijs/ui/Button", "jassijs_editor/util/TSSourceMap", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_1, Errors_1, Jassi_1, Button_1, TSSourceMap_1, Router_1, Actions_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Jassi", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_1, Errors_1, Jassi_1, Button_1, Router_1, Actions_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.ErrorPanel = void 0;
@@ -174,7 +174,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                 }
                 if (u.indexOf("/js/") > -1 || ismodul) {
                     try {
-                        var pos = await new TSSourceMap_1.TSSourceMap().getLineFromJS(u, Number(line), Number(col));
+                        var TSSourceMap = (await new Promise((resolve_2, reject_2) => { require(["jassijs_editor/util/TSSourceMap"], resolve_2, reject_2); })).TSSourceMap;
+                        var pos = await new TSSourceMap().getLineFromJS(u, Number(line), Number(col));
                         if (pos) {
                             return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp", "") +
                                 ":" + pos.line + ":" + pos.column;

@@ -9,9 +9,10 @@ import {Select} from "jassijs/ui/Select";
 import { classes } from "jassijs/remote/Classes";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import { router } from "jassijs/base/Router";
+import { ErrorPanel } from "jassijs/ui/ErrorPanel";
 
 class Me {
-    IDText? : HTMLPanel;
+    IDText? : ErrorPanel;
     boxpanel1? : BoxPanel;
     IDUpdate? : Button;
     IDClear ?: Button;
@@ -40,7 +41,7 @@ export class ComponentSpy extends Panel {
     layout() {
         var me:Me = this.me = {};
 
-        me.IDText = new HTMLPanel();
+        me.IDText = new  ErrorPanel();//HTMLPanel();
         var _this = this;
         me.boxpanel1 = new BoxPanel();
         me.IDUpdate = new Button();
@@ -71,7 +72,7 @@ export class ComponentSpy extends Panel {
         me.IDTable.height = "400";
        
         me.IDTable.onchange(function (ob) {
-            me.IDText.value = ob.data.stack.replaceAll("\n", "<br>");
+            me.IDText.addError({error:ob.data});//.stack.replaceAll("\n", "<br>");
         });
     }
     update() {

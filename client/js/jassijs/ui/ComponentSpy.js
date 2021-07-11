@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router"], function (require, exports, Jassi_1, Panel_1, Table_1, HTMLPanel_1, Button_1, BoxPanel_1, Select_1, Classes_1, Actions_1, Router_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/ui/ErrorPanel"], function (require, exports, Jassi_1, Panel_1, Table_1, Button_1, BoxPanel_1, Select_1, Classes_1, Actions_1, Router_1, ErrorPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSpy = void 0;
@@ -25,7 +25,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
         layout() {
             var me = this.me = {};
-            me.IDText = new HTMLPanel_1.HTMLPanel();
+            me.IDText = new ErrorPanel_1.ErrorPanel(); //HTMLPanel();
             var _this = this;
             me.boxpanel1 = new BoxPanel_1.BoxPanel();
             me.IDUpdate = new Button_1.Button();
@@ -55,7 +55,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             me.IDTable.width = "100%";
             me.IDTable.height = "400";
             me.IDTable.onchange(function (ob) {
-                me.IDText.value = ob.data.stack.replaceAll("\n", "<br>");
+                me.IDText.addError({ error: ob.data }); //.stack.replaceAll("\n", "<br>");
             });
         }
         update() {
