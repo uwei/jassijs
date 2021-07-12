@@ -105,6 +105,10 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
             me.contextmenu.includeClassActions = true;
             this.update();
         }
+        static async dummy() {
+        }
+        static async dummy2() {
+        }
         static async show() {
             if (Windows_1.default.contains("DBObjects"))
                 var window = Windows_1.default.show("DBObjects");
@@ -124,6 +128,24 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
             this.me.tree.items = all;
         }
     };
+    __decorate([
+        Actions_1.$Action({
+            name: "Windows",
+            icon: "mdi mdi-iframe-array-outline",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], DBObjectExplorer, "dummy", null);
+    __decorate([
+        Actions_1.$Action({
+            name: "Windows/Development",
+            icon: "mdi mdi-dev-to",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], DBObjectExplorer, "dummy2", null);
     __decorate([
         Actions_1.$Action({
             name: "Windows/Development/DBObjects",

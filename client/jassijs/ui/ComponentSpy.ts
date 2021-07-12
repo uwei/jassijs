@@ -31,6 +31,16 @@ export class ComponentSpy extends Panel {
         this.labelids = {};
         this.layout();
     }
+
+    @$Action ({
+        name: "Administration",
+        icon: "mdi mdi-account-cog-outline",
+    })
+    static async dummy() {
+        
+    }
+    
+
     @$Action ({
         name: "Administration/Spy Components",
         icon: "mdi mdi-police-badge",

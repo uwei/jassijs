@@ -2,21 +2,12 @@
 define("de/registry", ["require"], function (require) {
     return {
         default: {
-            "de/d2de.ts": {
-                "date": 1587933243841
-            },
-            "de/DBTest.ts": {
-                "date": 1624208048098
-            },
-            "de/del.ts": {
-                "date": 1622984213677
-            },
             "de/Dialog.ts": {
                 "date": 1624143167811,
                 "de/Dialog": {}
             },
             "de/DialogKunde.ts": {
-                "date": 1623093789041,
+                "date": 1626121518630,
                 "de.DialogKunde": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -32,18 +23,6 @@ define("de/registry", ["require"], function (require) {
                         }
                     ]
                 }
-            },
-            "de/modul.ts": {
-                "date": 1612818328924
-            },
-            "de/oo/dd.ts": {
-                "date": 1588091991590
-            },
-            "de/pp/aa/a.ts": {
-                "date": 1588092762645
-            },
-            "de/q.ts": {
-                "date": 1588091498058
             },
             "de/remote/AR.ts": {
                 "date": 1622985477990,
@@ -67,11 +46,8 @@ define("de/registry", ["require"], function (require) {
                     "$DBObject": []
                 }
             },
-            "de/remote/Kunde.ext.ts": {
-                "date": 1622985482440
-            },
             "de/remote/Kunde.ts": {
-                "date": 1622985484542,
+                "date": 1626122987760,
                 "de.Kunde": {
                     "$ParentRights": [
                         [
@@ -90,7 +66,7 @@ define("de/registry", ["require"], function (require) {
                 }
             },
             "de/remote/KundeExt.ts": {
-                "date": 1622985486232,
+                "date": 1626122322826,
                 "de.KundeExt": {
                     "$Extension": [
                         "de.Kunde"
@@ -98,7 +74,12 @@ define("de/registry", ["require"], function (require) {
                 }
             },
             "de/remote/KundeExt2.ts": {
-                "date": 1622985488536
+                "date": 1626123322693,
+                "de.KundeExt2": {
+                    "$Extension": [
+                        "de.Kunde"
+                    ]
+                }
             },
             "de/remote/Lieferant.ts": {
                 "date": 1622985489873,
@@ -119,6 +100,12 @@ define("de/registry", ["require"], function (require) {
             },
             "de/TestExtension.ts": {
                 "date": 1624293154792
+            },
+            "de/modul.ts": {
+                "date": 1626121321303
+            },
+            "de/T.ts": {
+                "date": 1626122755250
             }
         }
     };

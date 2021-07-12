@@ -15,7 +15,6 @@ const DBObject_1 = require("jassijs/remote/DBObject");
 const AR_1 = require("de/remote/AR");
 const Jassi_1 = require("jassijs/remote/Jassi");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
-require("de/remote/Kunde.ext");
 const DBObjectQuery_1 = require("jassijs/remote/DBObjectQuery");
 const Rights_1 = require("jassijs/remote/security/Rights");
 //import "jassijs/ext/enableExtension.js?de.Kunde";
@@ -143,6 +142,8 @@ Kunde = Kunde_1 = __decorate([
 exports.Kunde = Kunde;
 async function test() {
     let test = new Kunde();
+    var g = test.extFunc2();
+    var h = test.extFunc();
     for (var key in test) {
         console.log(key);
     }

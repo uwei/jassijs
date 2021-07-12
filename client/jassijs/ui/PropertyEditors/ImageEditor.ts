@@ -82,6 +82,12 @@ export class ImageEditor extends Editor {
         }
         super.callEvent("edit", param);
     }
+      @$Action({
+        name: "Tools",
+       icon: "mdi mdi-tools",
+    })
+    static async dummy(){
+    }
      @$Action({
         name: "Tools/Icons",
        icon: "mdi mdi-image-area",

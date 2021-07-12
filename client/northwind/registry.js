@@ -49,7 +49,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ImportData.ts": {
-		"date": 1622984379867,
+		"date": 1626121456721,
 		"northwind.ImportData": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -132,7 +132,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/SampleServerReport.ts": {
-		"date": 1624805055969
+		"date": 1625946848694
 	},
 	"northwind/ShippersView.ts": {
 		"date": 1622984379867,

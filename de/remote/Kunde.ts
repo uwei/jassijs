@@ -2,7 +2,6 @@ import { DBObject, $DBObject } from "jassijs/remote/DBObject";
 import { AR } from "de/remote/AR";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassijs/util/DatabaseSchema";
-import "de/remote/Kunde.ext";
 import { ExtensionProvider } from "jassijs/remote/Extensions";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { $ParentRights } from "jassijs/remote/security/Rights";
@@ -15,7 +14,7 @@ import { Context } from "jassijs/remote/RemoteObject";
             i2: "bis"
         } }])
 @$DBObject()
-@$Class("de.Kunde")
+@$Class("de.Kunde") 
 export class Kunde extends DBObject implements ExtensionProvider {
     @PrimaryColumn()
     id: number;
@@ -100,6 +99,8 @@ export class Kunde extends DBObject implements ExtensionProvider {
 }
 export async function test() {
     let test=new Kunde();
+    var g=test.extFunc2();   
+    var h=test.extFunc();
     for(var key in test) {
         console.log(key);
     }

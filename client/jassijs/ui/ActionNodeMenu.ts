@@ -1,7 +1,7 @@
 import { Menu } from "jassijs/ui/Menu";
 import { $Class } from "jassijs/remote/Jassi";
 import { Panel } from "jassijs/ui/Panel";
-import { Actions } from "jassijs/base/Actions";
+import { Action, Actions } from "jassijs/base/Actions";
 import { ActionNode} from "jassijs/base/ActionNode";
 import { MenuItem } from "jassijs/ui/MenuItem";
 type Me = {
@@ -24,7 +24,9 @@ export class ActionNodeMenu extends Panel {
     async fillActions(){
         
         var actions = await Actions.getActionsFor([new ActionNode()])//Class Actions
-       
+        actions.sort((a:Action,b:Action)=>{
+			return a.name.localeCompare(b.name);
+		});
         actions.forEach(action => {
         	var path=action.name.split("/");//childmenus
         	var parent:Menu=this.me.menu;

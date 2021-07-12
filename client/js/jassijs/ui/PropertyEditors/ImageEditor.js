@@ -73,6 +73,8 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
             }
             super.callEvent("edit", param);
         }
+        static async dummy() {
+        }
         static async show() {
             await new ImageEditor_1(undefined, undefined).showDialog();
         }
@@ -117,6 +119,15 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
             }
         }
     };
+    __decorate([
+        Actions_1.$Action({
+            name: "Tools",
+            icon: "mdi mdi-tools",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], ImageEditor, "dummy", null);
     __decorate([
         Actions_1.$Action({
             name: "Tools/Icons",

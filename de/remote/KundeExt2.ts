@@ -1,12 +1,17 @@
 
-import jassi from "jassijs/remote/Jassi";
+import { Kunde } from "de/remote/Kunde";
+import { extensions, $Extension } from "jassijs/remote/Extensions";
+import { $Class } from "jassijs/remote/Jassi";
+
 //Do not import the class we want to extend!
 declare module "de/remote/Kunde"{
     export interface Kunde{
         extFunc2;
     }
 }
-//  de.Kunde.prototype.extFunc=function(){return 6;}
+
+@$Extension("de.Kunde")
+@$Class("de.KundeExt2")
 class KundeExt2 {
     /**
     * sample Extension
@@ -14,6 +19,7 @@ class KundeExt2 {
     constructor() {
 
     }
+    extFunc2() { return 8; }
     /**
      * is called after main class is loaded
      * example type.prototype.hallo=function(){}

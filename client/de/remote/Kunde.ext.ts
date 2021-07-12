@@ -1,2 +1,0 @@
-import "de/remote/KundeExt";
- 

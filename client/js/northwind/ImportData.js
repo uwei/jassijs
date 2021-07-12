@@ -17,6 +17,8 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jass
             this.me = {};
             this.layout(this.me);
         }
+        static async dummy() {
+        }
         static async showDialog() {
             Router_1.router.navigate("#do=northwind.ImportData");
         }
@@ -61,6 +63,12 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jass
             me.htmlpanel2.newlineafter = true;
         }
     };
+    __decorate([
+        Actions_1.$Action({ name: "Northwind", icon: "mdi mdi-warehouse" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], ImportData, "dummy", null);
     __decorate([
         Actions_1.$Action({ name: "Northwind/Import sample data", icon: "mdi mdi-database-import" }),
         __metadata("design:type", Function),

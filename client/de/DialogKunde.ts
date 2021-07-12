@@ -12,7 +12,7 @@ import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { Repeater } from "jassijs/ui/Repeater";
 import { Table } from "jassijs/ui/Table";
 import { Checkbox } from "jassijs/ui/Checkbox";
-
+ 
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { TestComponent } from "demo/TestComponent";
 import { Property, $Property } from "jassijs/ui/Property";
@@ -40,6 +40,13 @@ export class DialogKunde extends Panel {
         super();
         this.me = {};
         this.layout(this.me);
+    }
+     @$Action({
+        name: "Demo",
+        icon: "mdi mdi-television-play"
+    })
+    static async dummy() {
+        
     }
     @$Action({
         name: "Demo/Kunden",

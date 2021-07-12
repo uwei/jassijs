@@ -26,7 +26,7 @@ export class Extensions {
         //we must wait with to extent because forclass ist not loaded
         var func = registry.onregister("$Class", function (oclass, params) {
             if (oclass.prototype.constructor._classname === forclass) {
-                registry.offregister("$Class", func);
+               // reloading code-> registry.offregister("$Class", func);
                 let props = Object.getOwnPropertyNames(extensionclass.prototype);
                 for (var m = 0; m < props.length; m++) {
                     var member = props[m];

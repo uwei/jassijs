@@ -17,6 +17,8 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
             this.me = {};
             this.layout(this.me);
         }
+        static async dummy() {
+        }
         static async showDialog() {
             Router_1.router.navigate("#do=de.DialogKunde");
         }
@@ -189,6 +191,15 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
         Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Kunde_1.Kunde)
     ], DialogKunde.prototype, "value", void 0);
+    __decorate([
+        Actions_1.$Action({
+            name: "Demo",
+            icon: "mdi mdi-television-play"
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], DialogKunde, "dummy", null);
     __decorate([
         Actions_1.$Action({
             name: "Demo/Kunden",

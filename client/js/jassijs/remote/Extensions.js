@@ -22,7 +22,7 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
             //we must wait with to extent because forclass ist not loaded
             var func = Registry_1.default.onregister("$Class", function (oclass, params) {
                 if (oclass.prototype.constructor._classname === forclass) {
-                    Registry_1.default.offregister("$Class", func);
+                    // reloading code-> registry.offregister("$Class", func);
                     let props = Object.getOwnPropertyNames(extensionclass.prototype);
                     for (var m = 0; m < props.length; m++) {
                         var member = props[m];

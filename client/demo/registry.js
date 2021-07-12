@@ -49,19 +49,6 @@ define("demo/registry",["require"], function(require) {
 		"date": 1622985794017,
 		"demo.Testmenu": {}
 	},
-	"demo/TestTab.ts": {
-		"date": 1622984213677,
-		"de.KK3": {
-			"$ActionProvider": [
-				"3"
-			]
-		},
-		"de.KK4": {
-			"$ActionProvider": [
-				"4"
-			]
-		}
-	},
 	"demo/TestTree.ts": {
 		"date": 1622984213677,
 		"demo.TestTree": {}

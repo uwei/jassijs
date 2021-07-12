@@ -20,6 +20,11 @@ export class ImportData extends Panel {
         this.me = {};
         this.layout(this.me);
     }
+     @$Action({ name: "Northwind", icon: "mdi mdi-warehouse" })
+    static async dummy() {
+
+        
+    }
     @$Action({ name: "Northwind/Import sample data", icon: "mdi mdi-database-import" })
     static async showDialog() {
 

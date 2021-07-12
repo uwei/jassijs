@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObjectQuery", "jassijs/remote/security/Rights", "de/remote/Kunde.ext"], function (require, exports, DBObject_1, AR_1, Jassi_1, DatabaseSchema_1, DBObjectQuery_1, Rights_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObjectQuery", "jassijs/remote/security/Rights"], function (require, exports, DBObject_1, AR_1, Jassi_1, DatabaseSchema_1, DBObjectQuery_1, Rights_1) {
     "use strict";
     var Kunde_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -137,6 +137,8 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
     exports.Kunde = Kunde;
     async function test() {
         let test = new Kunde();
+        var g = test.extFunc2();
+        var h = test.extFunc();
         for (var key in test) {
             console.log(key);
         }

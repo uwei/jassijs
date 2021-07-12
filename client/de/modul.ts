@@ -1,5 +1,4 @@
+
 export default {
-    "require":{ 
-        
-    }
+    loadonstart:["de/remote/KundeExt","de/remote/KundeExt2"]
 }

@@ -96,6 +96,20 @@ export class DBObjectExplorer extends Panel {
 		this.update();
 	}
 	@$Action({
+		name: "Windows",
+		icon: "mdi mdi-iframe-array-outline",
+	})
+	static async dummy() {
+	
+	}
+	@$Action({
+		name: "Windows/Development",
+		icon: "mdi mdi-dev-to",
+	})
+	static async dummy2() {
+	
+	}
+	@$Action({
 		name: "Windows/Development/DBObjects",
 		icon: "mdi mdi-database-search",
 	})

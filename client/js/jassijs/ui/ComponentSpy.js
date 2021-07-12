@@ -20,6 +20,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             this.labelids = {};
             this.layout();
         }
+        static async dummy() {
+        }
         static async showDialog() {
             Router_1.router.navigate("#do=jassijs.ui.ComponentSpy");
         }
@@ -104,6 +106,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             super.destroy();
         }
     };
+    __decorate([
+        Actions_1.$Action({
+            name: "Administration",
+            icon: "mdi mdi-account-cog-outline",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], ComponentSpy, "dummy", null);
     __decorate([
         Actions_1.$Action({
             name: "Administration/Spy Components",

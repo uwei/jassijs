@@ -28,7 +28,7 @@ exports.default={
 		"date": 1622985482440
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1622985484542,
+		"date": 1626122987760,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -47,7 +47,7 @@ exports.default={
 		}
 	},
 	"de/remote/KundeExt.ts": {
-		"date": 1622985486232,
+		"date": 1626122322826,
 		"de.KundeExt": {
 			"$Extension": [
 				"de.Kunde"
@@ -55,7 +55,12 @@ exports.default={
 		}
 	},
 	"de/remote/KundeExt2.ts": {
-		"date": 1622985488536
+		"date": 1626123322693,
+		"de.KundeExt2": {
+			"$Extension": [
+				"de.Kunde"
+			]
+		}
 	},
 	"de/remote/Lieferant.ts": {
 		"date": 1622985489873,

@@ -9,7 +9,7 @@ declare module "de/remote/Kunde"{
         extFunc():string;
         extField:string;
     }
-} 
+}
 
  
 

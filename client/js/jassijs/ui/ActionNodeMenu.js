@@ -25,6 +25,9 @@ define(["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Jassi", "jassij
         }
         async fillActions() {
             var actions = await Actions_1.Actions.getActionsFor([new ActionNode_1.ActionNode()]); //Class Actions
+            actions.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            });
             actions.forEach(action => {
                 var path = action.name.split("/"); //childmenus
                 var parent = this.me.menu;
