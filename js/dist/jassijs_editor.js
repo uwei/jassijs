@@ -2862,14 +2862,14 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
     exports.default = {
         "css": { "jassijs_editor.css": "jassijs_editor.css" },
         "types": {
-            "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.22.3/monaco.d.ts",
+            "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/monaco.d.ts",
         },
         "require": {
             paths: {
                 'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
                 'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools',
                 monacoLib: "jassijs_editor/ext/monacoLib",
-                vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev/vs"
+                vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/vs"
             },
             shim: {
                 'ace/ext/language_tools': ['ace/ace'],
@@ -2921,7 +2921,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.Debugger": {}
             },
             "jassijs_editor/modul.ts": {
-                "date": 1622998616843
+                "date": 1627320631266
             },
             "jassijs_editor/MonacoPanel.ts": {
                 "date": 1624143090748,
@@ -3007,6 +3007,7 @@ define("jassijs_editor/ext/monacoLib", ["require"], function (require, editor) {
     window["module"].exports = {};
     return {};
 });
+//hach to make autocompletion for autoimports from other modules
 define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 'vs/editor/editor.main', "vs/language/typescript/tsWorker" /*,"monacoLib_editorWorkerServiceImpl","monacoLib_editorSimpleWorker","tsWorker"*/], function (mlib, require, monaco, tsWorker /*,editorWorkerServiceImpl,editorSimpleWorker,tsWorker*/) {
     //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
     let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
@@ -3016,16 +3017,28 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
     var platform_1 = require("vs/base/common/platform");
     platform_1.globals.MonacoEnvironment = {};
     function myfunc() {
-        var worker = require(['vs/language/typescript/tsWorker'], function (tsWorker) {
-            tsWorker.TypeScriptWorker.prototype.getCompletionsAtPosition = async function (fileName, position, properties) {
-                return await this._languageService.getCompletionsAtPosition(fileName, position, properties);
-            };
-        });
+        setTimeout(() => {
+            var worker = require(['vs/language/typescript/tsWorker'], function (tsWorker) {
+                tsWorker.TypeScriptWorker.prototype.getCompletionsAtPosition = async function (fileName, position, properties) {
+                    return await this._languageService.getCompletionsAtPosition(fileName, position, properties);
+                };
+            });
+        }, 1000); //perhaps it must be higher - means autoimport from other modules is ready after 1 second
     }
     platform_1.globals.MonacoEnvironment.getWorker = function (workerId, label) {
-        var js = "/*editorWorkerService*/self.MonacoEnvironment={baseUrl: '" + monacopath + "/'};importScripts('" + monacopath + "/vs/base/worker/workerMain.js');/*editorWorkerService*/" + myfunc.toString() + ";myfunc();";
+        //var js="/*editorWorkerService*/self.MonacoEnvironment={baseUrl: '"+monacopath+"/'};importScripts('"+monacopath+"/vs/base/worker/"+workerId+"');/*editorWorkerService*/"+myfunc.toString()+";myfunc();";
+        //const blob = new Blob([js], { type: 'application/javascript' });
+        const myPath = 'vs/base/worker/defaultWorkerFactory.js';
+        //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/vs/base/worker/workerMain.js"
+        let scriptPath = monacopath + "/vs/base/worker/workerMain.js"; // require.toUrl('./' + workerId);
+        //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/"
+        const workerBaseUrl = require.toUrl(myPath).slice(0, -myPath.length); // explicitly using require.toUrl(), see https://github.com/microsoft/vscode/issues/107440#issuecomment-698982321
+        let js = `/*${label}*/self.MonacoEnvironment={baseUrl: '${workerBaseUrl}'};const ttPolicy = self.trustedTypes?.createPolicy('defaultWorkerFactory', { createScriptURL: value => value });importScripts(ttPolicy?.createScriptURL('${scriptPath}') ?? '${scriptPath}');/*${label}*/;`;
+        if (label === "typescript")
+            js += myfunc.toString() + ";myfunc();";
         const blob = new Blob([js], { type: 'application/javascript' });
         var workerUrl = URL.createObjectURL(blob);
+        //var workerUrl=URL.createObjectURL(blob);
         return new Worker(workerUrl, { name: label });
     };
     return {};
@@ -3033,7 +3046,7 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
 /*
  //hack to get languageService
     /*var orgLS=ts.createLanguageService;
-    
+
     var funcResolve=undefined;
     var waiter=new Promise((resolve)=>{
         funcResolve=resolve;

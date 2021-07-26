@@ -160,7 +160,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1623876712108
             },
             "jassijs/remote/Extensions.ts": {
-                "date": 1622985402466
+                "date": 1626209335323
             },
             "jassijs/remote/FileNode.ts": {
                 "date": 1623779781658,
@@ -312,7 +312,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ActionNodeMenu.ts": {
-                "date": 1622984492196,
+                "date": 1626118491026,
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
@@ -387,7 +387,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/ComponentSpy.ts": {
-                "date": 1623178934174,
+                "date": 1626118685062,
                 "jassijs.ui.ComponentSpy": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -498,7 +498,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectExplorer.ts": {
-                "date": 1623178844974,
+                "date": 1626119077184,
                 "jassijs.ui.DBObjectNode": {},
                 "jassijs.ui.DBFileActions": {
                     "$ActionProvider": [
@@ -542,7 +542,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/ErrorPanel.ts": {
-                "date": 1624104577887,
+                "date": 1626029485637,
                 "jassijs.ui.ErrorPanel": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -630,7 +630,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ObjectChooser.ts": {
-                "date": 1623876837701,
+                "date": 1626122220300,
                 "jassijs.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -784,7 +784,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/ImageEditor.ts": {
-                "date": 1623175096651,
+                "date": 1626118889580,
                 "jassijs.ui.PropertyEditors.ImageEditor": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -3509,6 +3509,14 @@ define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Regis
         };
     }
     exports.$Extension = $Extension;
+    class ExtensionTarget {
+        addFunction(name, func, ifExists) {
+        }
+        addMember(name) {
+        }
+        annotateMember(member, type, ...annotations) {
+        }
+    }
     class Extensions {
         constructor() {
             this.funcRegister = Registry_9.default.onregister("$Extension", this.register.bind(this));
@@ -3517,13 +3525,14 @@ define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Regis
             Registry_9.default.offregister("$Extension", this.funcRegister);
         }
         annotate(oclass, ...annotations) {
+            throw new Error("not implemented yet");
         }
         register(extensionclass, forclass) {
             //TODO reloading???
             //we must wait with to extent because forclass ist not loaded
             var func = Registry_9.default.onregister("$Class", function (oclass, params) {
                 if (oclass.prototype.constructor._classname === forclass) {
-                    Registry_9.default.offregister("$Class", func);
+                    // reloading code-> registry.offregister("$Class", func);
                     let props = Object.getOwnPropertyNames(extensionclass.prototype);
                     for (var m = 0; m < props.length; m++) {
                         var member = props[m];
@@ -5779,6 +5788,9 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
         }
         async fillActions() {
             var actions = await Actions_6.Actions.getActionsFor([new ActionNode_1.ActionNode()]); //Class Actions
+            actions.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            });
             actions.forEach(action => {
                 var path = action.name.split("/"); //childmenus
                 var parent = this.me.menu;
@@ -7051,7 +7063,7 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
     ], ComponentDescriptor);
     exports.ComponentDescriptor = ComponentDescriptor;
 });
-define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router"], function (require, exports, Jassi_42, Panel_4, Table_1, HTMLPanel_2, Button_1, BoxPanel_2, Select_1, Classes_19, Actions_7, Router_1) {
+define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/ui/ErrorPanel"], function (require, exports, Jassi_42, Panel_4, Table_1, Button_1, BoxPanel_2, Select_1, Classes_19, Actions_7, Router_1, ErrorPanel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSpy = void 0;
@@ -7064,12 +7076,14 @@ define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi",
             this.labelids = {};
             this.layout();
         }
+        static async dummy() {
+        }
         static async showDialog() {
             Router_1.router.navigate("#do=jassijs.ui.ComponentSpy");
         }
         layout() {
             var me = this.me = {};
-            me.IDText = new HTMLPanel_2.HTMLPanel();
+            me.IDText = new ErrorPanel_2.ErrorPanel(); //HTMLPanel();
             var _this = this;
             me.boxpanel1 = new BoxPanel_2.BoxPanel();
             me.IDUpdate = new Button_1.Button();
@@ -7099,7 +7113,7 @@ define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi",
             me.IDTable.width = "100%";
             me.IDTable.height = "400";
             me.IDTable.onchange(function (ob) {
-                me.IDText.value = ob.data.stack.replaceAll("\n", "<br>");
+                me.IDText.addError({ error: ob.data }); //.stack.replaceAll("\n", "<br>");
             });
         }
         update() {
@@ -7148,6 +7162,15 @@ define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi",
             super.destroy();
         }
     };
+    __decorate([
+        Actions_7.$Action({
+            name: "Administration",
+            icon: "mdi mdi-account-cog-outline",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], ComponentSpy, "dummy", null);
     __decorate([
         Actions_7.$Action({
             name: "Administration/Spy Components",
@@ -7784,6 +7807,10 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
             me.contextmenu.includeClassActions = true;
             this.update();
         }
+        static async dummy() {
+        }
+        static async dummy2() {
+        }
         static async show() {
             if (Windows_5.default.contains("DBObjects"))
                 var window = Windows_5.default.show("DBObjects");
@@ -7803,6 +7830,24 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
             this.me.tree.items = all;
         }
     };
+    __decorate([
+        Actions_10.$Action({
+            name: "Windows",
+            icon: "mdi mdi-iframe-array-outline",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], DBObjectExplorer, "dummy", null);
+    __decorate([
+        Actions_10.$Action({
+            name: "Windows/Development",
+            icon: "mdi mdi-dev-to",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], DBObjectExplorer, "dummy2", null);
     __decorate([
         Actions_10.$Action({
             name: "Windows/Development/DBObjects",
@@ -9019,7 +9064,7 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
     }
     exports.test = test;
 });
-define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Jassi", "jassijs/ui/Button", "jassijs_editor/util/TSSourceMap", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_9, Errors_3, Jassi_53, Button_5, TSSourceMap_1, Router_4, Actions_12) {
+define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Jassi", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_9, Errors_3, Jassi_53, Button_5, Router_4, Actions_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.ErrorPanel = void 0;
@@ -9186,7 +9231,8 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
                 }
                 if (u.indexOf("/js/") > -1 || ismodul) {
                     try {
-                        var pos = await new TSSourceMap_1.TSSourceMap().getLineFromJS(u, Number(line), Number(col));
+                        var TSSourceMap = (await new Promise((resolve_36, reject_36) => { require(["jassijs_editor/util/TSSourceMap"], resolve_36, reject_36); })).TSSourceMap;
+                        var pos = await new TSSourceMap().getLineFromJS(u, Number(line), Number(col));
                         if (pos) {
                             return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp", "") +
                                 ":" + pos.line + ":" + pos.column;
@@ -9611,7 +9657,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
     }
     exports.test = test;
 });
-define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_11, HTMLPanel_3, Button_6, Jassi_55, tinymce_1, Registry_18) {
+define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_11, HTMLPanel_2, Button_6, Jassi_55, tinymce_1, Registry_18) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.te = exports.HTMLEditorPanel = void 0;
@@ -9624,7 +9670,7 @@ define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", 
         }
         async layout() {
             var me = this.me = {};
-            me.IDHtml = new HTMLPanel_3.HTMLPanel();
+            me.IDHtml = new HTMLPanel_2.HTMLPanel();
             me.IDChange = new Button_6.Button();
             this.add(me.IDHtml);
             this.add(me.IDChange);
@@ -10538,7 +10584,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     exports.ObjectChooser = ObjectChooser;
     async function test() {
         // kk.o=0;
-        var User = (await new Promise((resolve_36, reject_36) => { require(["jassijs/remote/security/User"], resolve_36, reject_36); })).User;
+        var User = (await new Promise((resolve_37, reject_37) => { require(["jassijs/remote/security/User"], resolve_37, reject_37); })).User;
         var dlg = new ObjectChooser();
         dlg.items = "jassijs.security.User";
         dlg.value = (await User.findOne());
@@ -10550,7 +10596,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     exports.test = test;
     async function test2() {
         // kk.o=0;
-        var Kunde = (await new Promise((resolve_37, reject_37) => { require(["de/remote/Kunde"], resolve_37, reject_37); })).Kunde;
+        var Kunde = (await new Promise((resolve_38, reject_38) => { require(["de/remote/Kunde"], resolve_38, reject_38); })).Kunde;
         var dlg = new ObjectChooser();
         dlg.items = "de.Kunde";
         dlg.value = (await Kunde.find({ id: 1 }))[0];
@@ -10561,7 +10607,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditor"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_4, Button_8, Jassi_62, Property_21, Textbox_6, PropertyEditor_1) {
+define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditor"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_3, Button_8, Jassi_62, Property_21, Textbox_6, PropertyEditor_1) {
     "use strict";
     var OptionDialog_8;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -10588,7 +10634,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
             var me = this.me = {};
             var _this = this;
             me.boxpanel1 = new BoxPanel_6.BoxPanel();
-            me.htmlpanel1 = new HTMLPanel_4.HTMLPanel();
+            me.htmlpanel1 = new HTMLPanel_3.HTMLPanel();
             me.buttons = new BoxPanel_6.BoxPanel();
             me.buttons.horizontal = true;
             me.htmlpanel1.value = this.text;
@@ -11902,7 +11948,7 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi
                 Windows_8.default.addLeft(new SearchExplorer_1(), "Search");
         }
         async doSearch() {
-            var Typescript = (await new Promise((resolve_38, reject_38) => { require(["jassijs_editor/util/Typescript"], resolve_38, reject_38); })).Typescript;
+            var Typescript = (await new Promise((resolve_39, reject_39) => { require(["jassijs_editor/util/Typescript"], resolve_39, reject_39); })).Typescript;
             var all = [];
             var files = []; // [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
             var toFind = this.search.value.toLocaleLowerCase();
@@ -11950,7 +11996,7 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi
                 if (evt.data !== undefined && evt.data.file !== undefined) {
                     var pos = evt.data.pos;
                     var file = evt.data.file;
-                    new Promise((resolve_39, reject_39) => { require(["jassijs_editor/util/Typescript"], resolve_39, reject_39); }).then(Typescript => {
+                    new Promise((resolve_40, reject_40) => { require(["jassijs_editor/util/Typescript"], resolve_40, reject_40); }).then(Typescript => {
                         var text = Typescript_4.default.getCode(file);
                         var line = text.substring(0, pos).split("\n").length;
                         Router_6.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
@@ -12273,7 +12319,7 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
     }
     exports.test = test;
 });
-define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_5, Select_3, Jassi_69, Panel_17, PropertyEditor_3, Button_9, Settings_2, ComponentDescriptor_5, Registry_20, Actions_15, Windows_9) {
+define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_4, Select_3, Jassi_69, Panel_17, PropertyEditor_3, Button_9, Settings_2, ComponentDescriptor_5, Registry_20, Actions_15, Windows_9) {
     "use strict";
     var SettingsDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -12339,7 +12385,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
             me.propertyeditor = new PropertyEditor_3.PropertyEditor(undefined);
             me.Save = new Button_9.Button();
             me.Scope = new Select_3.Select();
-            me.htmlpanel1 = new HTMLPanel_5.HTMLPanel();
+            me.htmlpanel1 = new HTMLPanel_4.HTMLPanel();
             me.Scope.items = ["this browser", "current user", "all users"];
             me.Scope.value = "current user";
             this.add(me.htmlpanel1);
@@ -14008,7 +14054,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
             this.debugpoints = {};
         }
         async createTable() {
-            var Table = (await new Promise((resolve_40, reject_40) => { require(["jassijs/ui/Table"], resolve_40, reject_40); })).Table;
+            var Table = (await new Promise((resolve_41, reject_41) => { require(["jassijs/ui/Table"], resolve_41, reject_41); })).Table;
             this.table = new Table({
                 dataTreeChildFunction: function (obj) {
                     var ret = [];
@@ -15446,6 +15492,8 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
             }
             super.callEvent("edit", param);
         }
+        static async dummy() {
+        }
         static async show() {
             await new ImageEditor_1(undefined, undefined).showDialog();
         }
@@ -15468,7 +15516,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
                             ic.setAttribute("style", "display:none");
                     }
                 });
-                var file = (await new Promise((resolve_41, reject_41) => { require(["jassijs/modul"], resolve_41, reject_41); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
+                var file = (await new Promise((resolve_42, reject_42) => { require(["jassijs/modul"], resolve_42, reject_42); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
                 var text = await $.ajax({ method: "get", url: file, crossDomain: true, contentType: "text/plain" });
                 var all = text.split("}.");
                 var html = "";
@@ -15490,6 +15538,15 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
             }
         }
     };
+    __decorate([
+        Actions_16.$Action({
+            name: "Tools",
+            icon: "mdi mdi-tools",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], ImageEditor, "dummy", null);
     __decorate([
         Actions_16.$Action({
             name: "Tools/Icons",
