@@ -78,7 +78,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1623876712108
 	},
 	"jassijs/remote/Extensions.ts": {
-		"date": 1626122879360
+		"date": 1626209335323
 	},
 	"jassijs/remote/FileNode.ts": {
 		"date": 1623779781658,

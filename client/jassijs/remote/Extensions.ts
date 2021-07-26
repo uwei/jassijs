@@ -6,8 +6,19 @@ export function $Extension(forclass): Function {
         registry.register("$Extension", pclass, forclass);
     }
 }
+class ExtensionTarget{
+    oclass:any;
+    addFunction(name:string,func:(...any)=>any,ifExists:"replace"|"append"|"prepend"){
+
+    }
+    addMember(name:string){
+
+    }
+    annotateMember( member, type, ...annotations) {
+    }
+}
 export interface ExtensionProvider {
-    initExtensions();
+    initExtensions(extend:ExtensionTarget);
 }
 export class Extensions {
     constructor() {
@@ -18,9 +29,9 @@ export class Extensions {
         registry.offregister("$Extension", this.funcRegister);
     }
     annotate(oclass, ...annotations) {
-
+        throw new Error("not implemented yet");
     }
-
+    
     register(extensionclass: new (...args: any[]) => any, forclass) {
         //TODO reloading???
         //we must wait with to extent because forclass ist not loaded

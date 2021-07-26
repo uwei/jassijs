@@ -8,6 +8,14 @@ function $Extension(forclass) {
     };
 }
 exports.$Extension = $Extension;
+class ExtensionTarget {
+    addFunction(name, func, ifExists) {
+    }
+    addMember(name) {
+    }
+    annotateMember(member, type, ...annotations) {
+    }
+}
 class Extensions {
     constructor() {
         this.funcRegister = Registry_1.default.onregister("$Extension", this.register.bind(this));
@@ -16,6 +24,7 @@ class Extensions {
         Registry_1.default.offregister("$Extension", this.funcRegister);
     }
     annotate(oclass, ...annotations) {
+        throw new Error("not implemented yet");
     }
     register(extensionclass, forclass) {
         //TODO reloading???

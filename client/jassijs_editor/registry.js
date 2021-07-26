@@ -42,7 +42,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.Debugger": {}
 	},
 	"jassijs_editor/modul.ts": {
-		"date": 1622998616843
+		"date": 1627320631266
 	},
 	"jassijs_editor/MonacoPanel.ts": {
 		"date": 1624143090748,
