@@ -3,7 +3,7 @@ import {Tree} from "jassijs/ui/Tree";
 import {Panel} from "jassijs/ui/Panel";
 import {Textbox} from "jassijs/ui/Textbox";
 import {Server} from "jassijs/remote/Server";
-import typescript from "jassijs_editor/util/Typescript";
+
 import { router } from "jassijs/base/Router";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import windows from "jassijs/base/Windows";
@@ -35,7 +35,8 @@ export class SearchExplorer extends Panel {
          windows.addLeft(new SearchExplorer(), "Search");
     }
     async doSearch() { 
-        var Typescript:any=(await import ("jassijs_editor/util/Typescript")).Typescript;
+        //import typescript from "jassijs_editor/util/Typescript";
+        var typescript=(await import ("jassijs_editor/util/Typescript")).default;
         var all = [];
         var files = [];// [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
         var toFind: string =( <string>this.search.value).toLocaleLowerCase();
@@ -87,7 +88,7 @@ export class SearchExplorer extends Panel {
             	var pos=evt.data.pos;
                 var file=evt.data.file;
                 import ("jassijs_editor/util/Typescript").then(Typescript=>{
-                    var text:string=typescript.getCode(file);
+                    var text:string=Typescript.default.getCode(file);
                     var line=text.substring(0,pos).split("\n").length;
                     router.navigate("#do=jassijs_editor.CodeEditor&file=" + file+"&line="+line);
                 });

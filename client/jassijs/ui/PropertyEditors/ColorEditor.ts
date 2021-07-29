@@ -117,7 +117,7 @@ export class ColorEditor extends Editor{
 }
 export function test3(){
 	
-	var prop=new PropertyEditor(undefined);
+	var prop=new PropertyEditor();
 	prop.value=new Textbox();
 	return prop;
 } 

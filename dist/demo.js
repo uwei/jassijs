@@ -802,7 +802,7 @@ define("demo/registry", ["require"], function (require) {
     return {
         default: {
             "demo/Dialog.ts": {
-                "date": 1625398187422,
+                "date": 1627586451134,
                 "demo/Dialog": {}
             },
             "demo/EmptyDialog.ts": {

@@ -70,7 +70,7 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jass
         }
         layout(me) {
             var _this = this;
-            me.propertyeditor = new PropertyEditor_1.PropertyEditor(undefined);
+            me.propertyeditor = new PropertyEditor_1.PropertyEditor();
             me.Save = new Button_1.Button();
             me.Scope = new Select_1.Select();
             me.htmlpanel1 = new HTMLPanel_1.HTMLPanel();

@@ -3,13 +3,21 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"testrmodul/remote/TestRModul.ts": {
-		"date": 1625511417390,
+		"date": 1627586549322,
 		"testrmodul.remote.TestRModul": {}
 	},
 	"testrmodul/remote/TestRCustomer.ts": {
-		"date": 1625511419895,
+		"date": 1627586551813,
 		"testrmodul.TestRCustomer": {
-			"$DBObject": []
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"name": {
+					"Column": []
+				}
+			}
 		}
 	}
 }

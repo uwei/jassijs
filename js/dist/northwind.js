@@ -1167,7 +1167,18 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Categories",
                             "icon": "mdi mdi-cube"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/CustomerView.ts": {
@@ -1179,7 +1190,18 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Customers",
                             "icon": "mdi mdi-nature-people"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/DetailTest.ts": {
@@ -1189,7 +1211,18 @@ define("northwind/registry", ["require"], function (require) {
                         {
                             "classname": "northwind.OrderDetails"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/EmployeesView.ts": {
@@ -1201,7 +1234,18 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Employees",
                             "icon": "mdi mdi-account-tie"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/ImportData.ts": {
@@ -1209,7 +1253,25 @@ define("northwind/registry", ["require"], function (require) {
                 "northwind.ImportData": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
-                    ]
+                    ],
+                    "@members": {
+                        "dummy": {
+                            "$Action": [
+                                {
+                                    "name": "Northwind",
+                                    "icon": "mdi mdi-warehouse"
+                                }
+                            ]
+                        },
+                        "showDialog": {
+                            "$Action": [
+                                {
+                                    "name": "Northwind/Import sample data",
+                                    "icon": "mdi mdi-database-import"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/modul.ts": {
@@ -1224,7 +1286,18 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Orders",
                             "icon": "mdi mdi-script-text"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/ProductView.ts": {
@@ -1236,55 +1309,571 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Products",
                             "icon": "mdi mdi-reproduction"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/remote/Categories.ts": {
                 "date": 1623093051242,
                 "northwind.Categories": {
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "CategoryName": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Description": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Picture": {
+                            "Column": []
+                        },
+                        "Products": {
+                            "OneToMany": [
+                                "function",
+                                "function"
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/remote/Customer.ts": {
                 "date": 1622985441740,
                 "northwind.Customer": {
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "CompanyName": {
+                            "Column": []
+                        },
+                        "ContactName": {
+                            "Column": []
+                        },
+                        "ContactTitle": {
+                            "Column": []
+                        },
+                        "Address": {
+                            "Column": []
+                        },
+                        "City": {
+                            "Column": []
+                        },
+                        "Region": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "PostalCode": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Country": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Phone": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Fax": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/remote/Employees.ts": {
                 "date": 1623093098474,
                 "northwind.Employees": {
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "LastName": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "FirstName": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Title": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "TitleOfCourtesy": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Address": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "City": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Region": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "PostalCode": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Country": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "HomePhone": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Extension": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Photo": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Notes": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "PhotoPath": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ReportsTo": {
+                            "JoinColumn": [],
+                            "ManyToOne": [
+                                "function"
+                            ]
+                        },
+                        "BirthDate": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "HireDate": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/remote/OrderDetails.ts": {
                 "date": 1622985444817,
                 "northwind.OrderDetails": {
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryGeneratedColumn": []
+                        },
+                        "Order": {
+                            "ManyToOne": [
+                                "function",
+                                "function"
+                            ]
+                        },
+                        "Product": {
+                            "ManyToOne": [
+                                "function"
+                            ]
+                        },
+                        "UnitPrice": {
+                            "Column": [
+                                {
+                                    "nullable": false,
+                                    "type": "decimal"
+                                }
+                            ]
+                        },
+                        "Quantity": {
+                            "Column": []
+                        },
+                        "Discount": {
+                            "Column": [
+                                {
+                                    "nullable": true,
+                                    "type": "decimal"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/remote/Orders.ts": {
                 "date": 1623442707275,
                 "northwind.Orders": {
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "Customer": {
+                            "ManyToOne": [
+                                "function"
+                            ]
+                        },
+                        "Employee": {
+                            "ManyToOne": [
+                                "function"
+                            ]
+                        },
+                        "OrderDate": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "RequiredDate": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ShippedDate": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ShipVia": {
+                            "ManyToOne": [
+                                "function"
+                            ]
+                        },
+                        "Freight": {
+                            "Column": [
+                                {
+                                    "nullable": true,
+                                    "type": "decimal"
+                                }
+                            ]
+                        },
+                        "ShipName": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ShipAddress": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ShipCity": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ShipRegion": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ShipPostalCode": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ShipCountry": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Details": {
+                            "OneToMany": [
+                                "function",
+                                "function"
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/remote/Products.ts": {
                 "date": 1623093056588,
                 "northwind.Products": {
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "ProductName": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Supplier": {
+                            "ManyToOne": [
+                                "function"
+                            ]
+                        },
+                        "Category": {
+                            "ManyToOne": [
+                                "function",
+                                "function"
+                            ]
+                        },
+                        "QuantityPerUnit": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "UnitPrice": {
+                            "Column": [
+                                {
+                                    "nullable": true,
+                                    "type": "decimal"
+                                }
+                            ]
+                        },
+                        "UnitsInStock": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "UnitsOnOrder": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ReorderLevel": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Discontinued": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/remote/Shippers.ts": {
                 "date": 1622985453719,
                 "northwind.Shippers": {
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "CompanyName": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Phone": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/remote/Suppliers.ts": {
                 "date": 1622985455688,
                 "northwind.Suppliers": {
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "CompanyName": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ContactName": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "ContactTitle": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Address": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "City": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Region": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "PostalCode": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Country": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Phone": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "Fax": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "HomePage": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/SampleServerReport.ts": {
@@ -1299,7 +1888,18 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Shippers",
                             "icon": "mdi mdi-truck-delivery"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "northwind/SuppliersView.ts": {
@@ -1311,7 +1911,18 @@ define("northwind/registry", ["require"], function (require) {
                             "actionname": "Northwind/Suppliers",
                             "icon": "mdi mdi-office-building-outline"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
                 }
             }
         }

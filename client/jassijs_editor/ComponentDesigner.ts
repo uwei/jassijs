@@ -16,6 +16,7 @@ import {DragAndDropper} from "jassijs_editor/util/DragAndDropper";
 import {ComponentDescriptor} from "jassijs/ui/ComponentDescriptor";
 import { classes } from "jassijs/remote/Classes";
 import {Container} from "jassijs/ui/Container";
+import { Parser } from "./util/Parser";
 
 declare global {
     export interface ExtensionAction {
@@ -60,7 +61,7 @@ export class ComponentDesigner extends Panel{
         	var _this=this;
         	this._codeEditor=value;
         	this._variables=this._codeEditor._variables; 
-            this._propertyEditor=new PropertyEditor(value);
+            this._propertyEditor=new PropertyEditor(value,new Parser());
          //   this._propertyEditor=new PropertyEditor(undefined);
             this._errors=this._codeEditor._errors;
             this._componentPalette=new ComponentPalette();

@@ -7,11 +7,38 @@ define("de/registry",["require"], function(require) {
 		"de/Dialog": {}
 	},
 	"de/DialogKunde.ts": {
-		"date": 1626121518630,
+		"date": 1627562582252,
 		"de.DialogKunde": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
-			]
+			],
+			"@members": {
+				"value": {
+					"$Property": [
+						{
+							"isUrlTag": true,
+							"id": true,
+							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+						}
+					]
+				},
+				"dummy": {
+					"$Action": [
+						{
+							"name": "Demo",
+							"icon": "mdi mdi-television-play"
+						}
+					]
+				},
+				"showDialog": {
+					"$Action": [
+						{
+							"name": "Demo/Kunden",
+							"icon": "mdi mdi-account"
+						}
+					]
+				}
+			}
 		}
 	},
 	"de/KundeView.ts": {
@@ -21,8 +48,22 @@ define("de/registry",["require"], function(require) {
 				{
 					"classname": "de.Kunde"
 				}
-			]
+			],
+			"@members": {
+				"value": {
+					"$Property": [
+						{
+							"isUrlTag": true,
+							"id": true,
+							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+						}
+					]
+				}
+			}
 		}
+	},
+	"de/modul.ts": {
+		"date": 1626121321303
 	},
 	"de/remote/AR.ts": {
 		"date": 1622985477990,
@@ -37,13 +78,70 @@ define("de/registry",["require"], function(require) {
 					}
 				]
 			],
-			"$DBObject": []
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"strasse": {
+					"Column": []
+				},
+				"nummer": {
+					"Column": []
+				},
+				"ort": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"kunde": {
+					"$CheckParentRight": [],
+					"ManyToOne": [
+						"function",
+						"function"
+					]
+				},
+				"zeilen": {
+					"OneToMany": [
+						"function",
+						"function"
+					]
+				}
+			}
 		}
 	},
 	"de/remote/ARZeile.ts": {
 		"date": 1622985479813,
 		"de.ARZeile": {
-			"$DBObject": []
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryGeneratedColumn": []
+				},
+				"text": {
+					"Column": []
+				},
+				"position": {
+					"Column": []
+				},
+				"preis": {
+					"Column": [
+						{
+							"nullable": true,
+							"type": "decimal"
+						}
+					]
+				},
+				"ar": {
+					"$CheckParentRight": [],
+					"ManyToOne": [
+						"function",
+						"function"
+					]
+				}
+			}
 		}
 	},
 	"de/remote/Kunde.ts": {
@@ -62,7 +160,63 @@ define("de/registry",["require"], function(require) {
 					}
 				]
 			],
-			"$DBObject": []
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"vorname": {
+					"Column": []
+				},
+				"nachname": {
+					"Column": []
+				},
+				"strasse": {
+					"Column": []
+				},
+				"PLZ": {
+					"Column": []
+				},
+				"ort": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"hausnummer": {
+					"Column": []
+				},
+				"rechnungen": {
+					"OneToMany": [
+						"function",
+						"function"
+					]
+				},
+				"alleKundenNachNachname": {
+					"$DBObjectQuery": [
+						{
+							"name": "Alle nach Namen",
+							"description": "Kundenliste nach Namen"
+						}
+					]
+				},
+				"alleKundenNachNummer": {
+					"$DBObjectQuery": [
+						{
+							"name": "Alle nach Nummer",
+							"description": "Kundenliste nach Nummer"
+						}
+					]
+				},
+				"land": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				}
+			}
 		}
 	},
 	"de/remote/KundeExt.ts": {
@@ -84,28 +238,66 @@ define("de/registry",["require"], function(require) {
 	"de/remote/Lieferant.ts": {
 		"date": 1622985489873,
 		"de.Lieferant": {
-			"$DBObject": []
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"name": {
+					"Column": [
+						{
+							"nullable": false
+						}
+					]
+				}
+			}
 		}
 	},
 	"de/remote/MyUser.ts": {
 		"date": 1622985491688,
 		"de.MyUser": {
 			"$DBObject": [],
-			"Entity": []
+			"Entity": [],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"firstName": {
+					"Column": []
+				},
+				"lastName": {
+					"Column": []
+				},
+				"age": {
+					"Column": []
+				}
+			}
 		}
 	},
 	"de/ReportKunde.ts": {
 		"date": 1624208090062,
-		"de.ReportKunde": {}
+		"de.ReportKunde": {
+			"@members": {
+				"value": {
+					"$Property": [
+						{
+							"isUrlTag": true,
+							"id": true,
+							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+						}
+					]
+				}
+			}
+		}
+	},
+	"de/T.ts": {
+		"date": 1626210632530
 	},
 	"de/TestExtension.ts": {
 		"date": 1624293154792
 	},
-	"de/modul.ts": {
-		"date": 1626121321303
-	},
-	"de/T.ts": {
-		"date": 1626210632530
+	"de/remote/Kunde.ext.ts": {
+		"date": 1622985482440
 	}
 }
  }

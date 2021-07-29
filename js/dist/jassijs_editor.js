@@ -1588,1718 +1588,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Jassi"
     ], CodePanel);
     exports.CodePanel = CodePanel;
 });
-define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/remote/Classes", "jassijs/ui/Databinder"], function (require, exports, Jassi_6, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, Classes_3) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ComponentDesigner = void 0;
-    let ComponentDesigner = class ComponentDesigner extends Panel_4.Panel {
-        constructor() {
-            super();
-            this._codeEditor = undefined;
-            this._initDesign();
-            this.editMode = true;
-        }
-        set codeEditor(value) {
-            var _this = this;
-            this._codeEditor = value;
-            this._variables = this._codeEditor._variables;
-            this._propertyEditor = new PropertyEditor_1.PropertyEditor(value);
-            //   this._propertyEditor=new PropertyEditor(undefined);
-            this._errors = this._codeEditor._errors;
-            this._componentPalette = new ComponentPalette_1.ComponentPalette();
-            this._componentPalette.service = "$UIComponent";
-            this._componentExplorer = new ComponentExplorer_1.ComponentExplorer(value, this._propertyEditor);
-            this._invisibleComponents = new CodeEditorInvisibleComponents_1.CodeEditorInvisibleComponents(value);
-            this.add(this._invisibleComponents);
-            this._initComponentExplorer();
-            this._installView();
-            this._codeEditor._codePanel.onblur(function (evt) {
-                _this._propertyEditor.updateParser();
-            });
-            this.registerKeys();
-        }
-        get codeEditor() {
-            return this._codeEditor;
-        }
-        _initDesign() {
-            var _this = this;
-            this._designToolbar = new Panel_4.Panel();
-            this._designPlaceholder = new Panel_4.Panel();
-            var save = new Button_3.Button();
-            save.tooltip = "Save(Ctrl+S)";
-            save.icon = "mdi mdi-content-save mdi-18px";
-            save.onclick(function () {
-                _this.save();
-            });
-            this._designToolbar.add(save);
-            var run = new Button_3.Button();
-            run.icon = "mdi mdi-car-hatchback mdi-18px";
-            run.tooltip = "Run(F4)";
-            run.onclick(function () {
-                _this.evalCode();
-            });
-            this._designToolbar.add(run);
-            var undo = new Button_3.Button();
-            undo.icon = "mdi mdi-undo mdi-18px";
-            undo.tooltip = "Undo (Strg+Z)";
-            undo.onclick(function () {
-                _this.undo();
-            });
-            this._designToolbar.add(undo);
-            /*  var test=new Button();
-             test.icon="mdi mdi-bug mdi-18px";
-             test.tooltip="Test";
-             test.onclick(function(){
-                         //var kk=_this._codeView.layout;
-             });
-             this._designToolbar.add(test);*/
-            var edit = new Button_3.Button();
-            edit.icon = "mdi mdi-run mdi-18px";
-            edit.tooltip = "Test Dialog";
-            edit.onclick(function () {
-                _this.editDialog(!_this.editMode);
-                edit.toggle(!_this.editMode);
-            });
-            this._designToolbar.add(edit);
-            var lasso = new Button_3.Button();
-            lasso.icon = "mdi mdi-lasso mdi-18px";
-            lasso.tooltip = "Select rubberband";
-            lasso.onclick(function () {
-                var val = lasso.toggle();
-                _this._resizer.setLassoMode(val);
-                _this._draganddropper.enableDraggable(!val);
-                //_this._draganddropper.activateDragging(!val);
-            });
-            this._designToolbar.add(lasso);
-            var remove = new Button_3.Button();
-            remove.icon = "mdi mdi-delete-forever-outline mdi-18px";
-            remove.tooltip = "Delete selected Control (ENTF)";
-            remove.onclick(function () {
-                _this.removeComponent();
-            });
-            this._designToolbar.add(remove);
-            this.add(this._designToolbar);
-            $(this._designPlaceholder.domWrapper).css("position", "relative");
-            this.add(this._designPlaceholder);
-        }
-        /**
-       * manage shortcuts
-       */
-        registerKeys() {
-            var _this = this;
-            $(this._codeEditor._design.dom).attr("tabindex", "1");
-            $(this._codeEditor._design.dom).keydown(function (evt) {
-                if (evt.keyCode === 115 && evt.shiftKey) { //F4
-                    // var thiss=this._this._id;
-                    // var editor = ace.edit(this._this._id);
-                    _this.evalCode(true);
-                    evt.preventDefault();
-                    return false;
-                }
-                else if (evt.keyCode === 115) { //F4
-                    _this.evalCode(false);
-                    evt.preventDefault();
-                    return false;
-                }
-                if (evt.keyCode === 90 || evt.ctrlKey) { //Ctrl+Z
-                    _this.undo();
-                }
-                if (evt.keyCode === 116) { //F5
-                    evt.preventDefault();
-                    return false;
-                }
-                if (evt.keyCode === 46) { //Del
-                    _this.removeComponent();
-                    evt.preventDefault();
-                    return false;
-                }
-                if ((String.fromCharCode(evt.which).toLowerCase() === 's' && evt.ctrlKey) /* && (evt.which == 19)*/) { //Str+s
-                    _this.save();
-                    event.preventDefault();
-                    return false;
-                }
-            });
-        }
-        resize() {
-            this._updateInvisibleComponents();
-        }
-        _installView() {
-            this._codeEditor._main.add(this._propertyEditor, "Properties", "properties");
-            this._codeEditor._main.add(this._componentExplorer, "Components", "components");
-            this._codeEditor._main.add(this._componentPalette, "Palette", "componentPalette");
-            this._codeEditor._main.layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]}]}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":18.957059337410122,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":18.957059337410122,"width":77.70034843205575,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true},{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.299651567944256,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
-        }
-        _updateInvisibleComponents() {
-            var _this = this;
-            this._invisibleComponents.update().then(function () {
-                /* var h=_this._invisibleComponents.dom.offsetHeight;
-                 h=h+6+31;
-                 _this._designPlaceholder.height="calc(100% - "+h+"px)";*/
-            });
-        }
-        _initComponentExplorer() {
-            var _this = this;
-            this._componentExplorer.onclick(function (data) {
-                var ob = data.data;
-                _this._propertyEditor.value = ob;
-            });
-            this._componentExplorer.getComponentName = function (item) {
-                var varname = _this._codeEditor.getVariableFromObject(item);
-                if (varname === undefined)
-                    return;
-                if (varname.startsWith("this."))
-                    return varname.substring(5);
-                return varname;
-            };
-        }
-        /**
-         * removes the selected component
-         */
-        removeComponent() {
-            var todel = this._propertyEditor.value;
-            var varname = this._codeEditor.getVariableFromObject(todel);
-            if (varname !== "this") {
-                if (todel.domWrapper._parent !== undefined) {
-                    todel.domWrapper._parent.remove(todel);
-                }
-                this._propertyEditor.removeVariableInCode(varname);
-                this._propertyEditor.removeVariableInDesign(varname);
-                this._updateInvisibleComponents();
-            }
-        }
-        /**
-        * execute the current code
-        * @param {boolean} toCursor -  if true the variables were inspected on cursor position,
-        *                              if false at the end of the layout() function or at the end of the code
-        */
-        evalCode(toCursor = undefined) {
-            this._codeEditor.evalCode(toCursor);
-        }
-        /**
-        * save the code to server
-        */
-        save() {
-            this._codeEditor.save();
-        }
-        /**
-         * undo action
-         */
-        undo() {
-            this._codeEditor.undo();
-        }
-        getComponentIDsInDesign(component, collect) {
-            collect.push("#" + component._id);
-            var childs = component["_components"];
-            if (childs !== undefined) {
-                for (let x = 0; x < childs.length; x++) {
-                    this.getComponentIDsInDesign(childs[x], collect);
-                }
-            }
-        }
-        /**
-         * dialog edit mode
-         * @param {boolean} enable - if true allow resizing and drag and drop
-         */
-        editDialog(enable) {
-            var _this = this;
-            this.editMode = enable;
-            var component = this._designPlaceholder._components[0];
-            //switch designmode
-            var comps = $(component.dom).find(".jcomponent");
-            comps.addClass("jdesignmode");
-            for (var c = 0; c < comps.length; c++) {
-                if (comps[c]._this["extensionCalled"] !== undefined) {
-                    comps[c]._this["extensionCalled"]({
-                        componentDesignerSetDesignMode: { enable, componentDesigner: this }
-                    });
-                    //comps[c]._this["setDesignMode"](enable,this);
-                }
-            }
-            if (component["extensionCalled"] !== undefined) {
-                component["extensionCalled"]({
-                    componentDesignerSetDesignMode: { enable, componentDesigner: this }
-                });
-            }
-            //if(component["setDesignMode"]!==undefined){
-            //        component["setDesignMode"](enable,this);
-            //    }
-            this._variables.updateCache(); //variables can be added with Repeater.setDesignMode
-            if (this._resizer !== undefined) {
-                this._resizer.uninstall();
-                console.log("uninstall");
-            }
-            if (this._draganddropper !== undefined) {
-                this._draganddropper.uninstall();
-            }
-            if (enable === true) {
-                var _this = this;
-                var allcomponents = this._variables.getEditableComponents(component);
-                if (this._propertyEditor.codeEditor === undefined) {
-                    var ret = [];
-                    this.getComponentIDsInDesign(component, ret);
-                    allcomponents = ret.join(",");
-                }
-                else
-                    allcomponents = this._variables.getEditableComponents(component);
-                //this._installTinyEditor();
-                this._draganddropper = new DragAndDropper_1.DragAndDropper();
-                this._resizer = new Resizer_1.Resizer();
-                this._resizer.draganddropper = this._draganddropper;
-                console.log("onselect");
-                this._resizer.onelementselected = function (elementIDs, e) {
-                    var ret = [];
-                    for (var x = 0; x < elementIDs.length; x++) {
-                        var ob = $("#" + elementIDs[x])[0]._this;
-                        if (ob["editorselectthis"])
-                            ob = ob["editorselectthis"];
-                        ret.push(ob);
-                    }
-                    if (ret.length > 0) {
-                        _this._propertyEditor.value = ret[0];
-                    }
-                };
-                this._resizer.onpropertychanged = function (comp, prop, value) {
-                    console.log("prop change " + comp._id);
-                    if (_this._propertyEditor.value !== comp)
-                        _this._propertyEditor.value = comp;
-                    _this._propertyEditor.setPropertyInCode(prop, value + "", true);
-                    _this._propertyEditor.value = _this._propertyEditor.value;
-                };
-                this._resizer.install(component, allcomponents);
-                allcomponents = this._variables.getEditableComponents(component, true);
-                this._draganddropper.install(component, allcomponents);
-                this._draganddropper.onpropertychanged = function (component, top, left, oldParent, newParent, beforeComponent) {
-                    _this.moveComponent(component, top, left, oldParent, newParent, beforeComponent);
-                };
-                this._draganddropper.onpropertyadded = function (type, component, top, left, newParent, beforeComponent) {
-                    _this.createComponent(type, component, top, left, newParent, beforeComponent);
-                };
-                this._draganddropper.isDragEnabled = function (event, ui) {
-                    if (_this._resizer === undefined)
-                        return false;
-                    return _this._resizer.componentUnderCursor !== undefined;
-                };
-            }
-            else {
-            }
-            /*  $(".hoho2").selectable({});
-              $(".hoho2").selectable("disable");*/
-            /*  $(".HTMLPanel").selectable({});
-              $(".HTMLPanel").selectable("disable");
-              $(".HTMLPanel").draggable({});
-              $(".HTMLPanel").draggable("disable");*/
-        }
-        /**
-         * move a component
-         * @param {jassijs.ui.Component} component - the component to move
-         * @param {number} top - the top absolute position
-         * @param {number} left - the left absolute position
-         * @param {jassijs.ui.Container} newParent - the new parent container where the component move to
-         * @param {jassijs.ui.Component} beforeComponent - insert the component before beforeComponent
-         **/
-        moveComponent(component, top, left, oldParent, newParent, beforeComponent) {
-            var _this = this;
-            /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor!==undefined){
-                beforeComponent=undefined;
-            }*/
-            var oldName = _this._codeEditor.getVariableFromObject(oldParent);
-            var newName = _this._codeEditor.getVariableFromObject(newParent);
-            var compName = _this._codeEditor.getVariableFromObject(component);
-            if (top !== undefined) {
-                _this._propertyEditor.setPropertyInCode("x", top + "", true);
-            }
-            else {
-                _this._propertyEditor.removePropertyInCode("x");
-            }
-            if (left !== undefined) {
-                _this._propertyEditor.setPropertyInCode("y", left + "", true);
-            }
-            else {
-                _this._propertyEditor.removePropertyInCode("y");
-            }
-            if (oldParent !== newParent || beforeComponent !== undefined || top === undefined) { //top=undefined ->on relative position at the end call the block
-                //get Position
-                _this._propertyEditor.removePropertyInCode("add", compName, oldName);
-                var before;
-                if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //designdummy atEnd
-                    var on = _this._codeEditor.getVariableFromObject(beforeComponent);
-                    var par = _this._codeEditor.getVariableFromObject(beforeComponent._parent);
-                    before = { variablename: par, property: "add", value: on };
-                }
-                _this._propertyEditor.setPropertyInCode("add", compName, false, newName, before);
-            }
-            /* if(newParent._components.length>1){//correct dummy
-                 var dummy=	newParent._components[newParent._components.length-2];
-                 if(dummy.designDummyFor!==undefined){
-                     //var tmp=newParent._components[newParent._components.length-1];
-                     newParent.remove(dummy);//._components[newParent._components.length-1]=newParent._components[newParent._components.length-2];
-                     newParent.add(dummy);//._components[newParent._components.length-1]=tmp;
-                 }
-             }*/
-            _this._variables.updateCache();
-            _this._propertyEditor.value = _this._propertyEditor.value;
-            _this._componentExplorer.value = _this._componentExplorer.value;
-        }
-        /**
-         * create a new component
-         * @param {string} type - the type of the new component
-         * @param {jassijs.ui.Component} component - the component themself
-         * @param {number} top - the top absolute position
-         * @param {number} left - the left absolute position
-         * @param {jassijs.ui.Container} newParent - the new parent container where the component is placed
-         * @param {jassijs.ui.Component} beforeComponent - insert the new component before beforeComponent
-         **/
-        createComponent(type, component, top, left, newParent, beforeComponent) {
-            var _this = this;
-            /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor&&beforeComponent.type==="atEnd"){
-                beforeComponent=undefined;
-            }*/
-            var file = type.replaceAll(".", "/");
-            var stype = file.split("/")[file.split("/").length - 1];
-            _this._propertyEditor.addImportIfNeeded(stype, file);
-            var repeater = _this._hasRepeatingContainer(newParent);
-            var scope = undefined;
-            if (repeater !== undefined) {
-                var repeatername = _this._codeEditor.getVariableFromObject(repeater);
-                var test = _this._propertyEditor.parser.getPropertyValue(repeatername, "createRepeatingComponent");
-                scope = { variablename: repeatername, methodname: "createRepeatingComponent" };
-                if (test === undefined) {
-                    var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassijs.ui.Databinder");
-                    _this._propertyEditor.setPropertyInCode("createRepeatingComponent", "function(me:Me){\n\t\n}", true, repeatername);
-                    repeater.createRepeatingComponent(function (me) {
-                        if (this._designMode !== true)
-                            return;
-                        //_this._variables.addVariable(vardatabinder,databinder);
-                        _this._variables.updateCache();
-                    });
-                    /*var db=new jassijs.ui.Databinder();
-                    if(repeater.value!==undefined&&repeater.value.length>0)
-                        db.value=repeater.value[0];
-                    _this._variables.add(vardatabinder,db);
-                    _this._variables.updateCache();*/
-                }
-            }
-            var varvalue = new (Classes_3.classes.getClass(type));
-            if (this._propertyEditor.codeEditor !== undefined) {
-                var varname = _this._propertyEditor.addVariableInCode(type, scope);
-                if (varname.startsWith("me.")) {
-                    var me = _this._codeEditor.getObjectFromVariable("me");
-                    me[varname.substring(3)] = varvalue;
-                }
-                else if (varname.startsWith("this.")) {
-                    var th = _this._codeEditor.getObjectFromVariable("this");
-                    th[varname.substring(5)] = varvalue;
-                }
-                else
-                    _this._variables.addVariable(varname, varvalue);
-                var newName = _this._codeEditor.getVariableFromObject(newParent);
-                var before;
-                if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //Designdummy atEnd
-                    //if(beforeComponent.type==="beforeComponent")
-                    //   beforeComponent=beforeComponent.designDummyFor;
-                    var on = _this._codeEditor.getVariableFromObject(beforeComponent);
-                    var par = _this._codeEditor.getVariableFromObject(beforeComponent._parent);
-                    before = { variablename: par, property: "add", value: on };
-                }
-                _this._propertyEditor.setPropertyInCode("add", varname, false, newName, before, scope);
-            }
-            if (beforeComponent !== undefined) {
-                newParent.addBefore(varvalue, beforeComponent);
-            }
-            else {
-                newParent.add(varvalue);
-            }
-            /* if(newParent._components.length>1){//correct dummy
-                 if(newParent._designDummy){
-                     //var tmp=newParent._components[newParent._components.length-1];
-                     newParent.dom.removeChild(newParent._designDummy.domWrapper)
-                     newParent.dom.append(newParent._designDummy.domWrapper)
-                 }
-             }*/
-            _this._variables.updateCache();
-            //set initial properties for the new component
-            if (component.createFromParam !== undefined) {
-                for (var key in component.createFromParam) {
-                    var val = component.createFromParam[key];
-                    if (typeof val === 'string')
-                        val = '"' + val + '"';
-                    _this._propertyEditor.setPropertyInCode(key, val, true, varname);
-                }
-                $.extend(varvalue, component.createFromParam);
-            }
-            if (top !== undefined) {
-                _this._propertyEditor.setPropertyInCode("x", top + "", true, varname);
-                varvalue.x = top;
-            }
-            if (left !== undefined) {
-                _this._propertyEditor.setPropertyInCode("y", left + "", true, varname);
-                varvalue.y = left;
-            }
-            //notify componentdescriptor 
-            var ac = varvalue.extensionCalled;
-            if (ac !== undefined) {
-                varvalue.extensionCalled({ componentDesignerComponentCreated: {
-                        newParent: newParent
-                    } });
-            }
-            //include the new element
-            _this.editDialog(true);
-            _this._propertyEditor.value = varvalue;
-            _this._componentExplorer.update();
-            //var test=_this._invisibleComponents;
-            _this._updateInvisibleComponents();
-            return varvalue;
-        }
-        /**
-         * is there a parent that acts a repeating container?
-         **/
-        _hasRepeatingContainer(component) {
-            if (component === undefined)
-                return undefined;
-            if (this._codeEditor.getVariableFromObject(component) === undefined)
-                return undefined;
-            if (component instanceof Repeater_1.Repeater) {
-                return component;
-            }
-            return this._hasRepeatingContainer(component._parent);
-        }
-        /**
-         * @member {jassijs.ui.Component} - the designed component
-         */
-        set designedComponent(component) {
-            var com = component;
-            if (com["isAbsolute"] !== true && com.width === "0" && com.height === "0") {
-                component.width = "calc(100% - 1px)";
-                component.height = "calc(100% - 1px)";
-            }
-            if (this._codeEditor.__evalToCursorReached !== true) {
-                this._codeEditor._main.show("design");
-            }
-            if (this._designPlaceholder._components.length > 0)
-                this._designPlaceholder.remove(this._designPlaceholder._components[0], true);
-            this._designPlaceholder.add(component);
-            // 
-            this._propertyEditor.updateParser();
-            this.editDialog(true);
-            this._componentExplorer.value = component;
-            $(this.dom).focus();
-            this._updateInvisibleComponents();
-            //var parser=new jassijs.ui.PropertyEditor.Parser();
-            //parser.parse(_this.value);
-        }
-        get designedComponent() {
-            return this._designPlaceholder._components[0];
-        }
-        destroy() {
-            var _a, _b, _c, _d;
-            if (this._resizer !== undefined) {
-                this._resizer.uninstall();
-            }
-            if (this._draganddropper !== undefined) {
-                this._draganddropper.isDragEnabled = undefined;
-                this._draganddropper.uninstall();
-            }
-            (_a = this._propertyEditor) === null || _a === void 0 ? void 0 : _a.destroy();
-            (_b = this._componentPalette) === null || _b === void 0 ? void 0 : _b.destroy();
-            (_c = this._componentExplorer) === null || _c === void 0 ? void 0 : _c.destroy();
-            (_d = this._invisibleComponents) === null || _d === void 0 ? void 0 : _d.destroy();
-            super.destroy();
-        }
-    };
-    ComponentDesigner = __decorate([
-        Jassi_6.$Class("jassijs_editor.ComponentDesigner"),
-        __metadata("design:paramtypes", [])
-    ], ComponentDesigner);
-    exports.ComponentDesigner = ComponentDesigner;
-    async function test() {
-        return new ComponentDesigner();
-    }
-    exports.test = test;
-    ;
-});
-define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs_editor/CodeEditor", "jassijs/ui/PropertyEditor", "jassijs/remote/Classes"], function (require, exports, Jassi_7, Panel_5, Tree_1, ComponentDescriptor_1, ContextMenu_1, CodeEditor_2, PropertyEditor_2, Classes_4) {
-    "use strict";
-    var _a, _b;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ComponentExplorer = void 0;
-    let ComponentExplorer = class ComponentExplorer extends Panel_5.Panel {
-        /**
-        * edit object properties
-        */
-        constructor(codeEditor, propertyEditor) {
-            super();
-            /** @member {jassijs_editor.CodeEditor} - the parent CodeEditor */
-            this.codeEditor = codeEditor;
-            this.tree = new Tree_1.Tree();
-            this.tree.height = "100%";
-            this.contextMenu = new ContextMenu_1.ContextMenu();
-            this.add(this.contextMenu);
-            this.layout();
-            this.propertyEditor = propertyEditor;
-        }
-        /**
-         * @member {jassijs.ui.Component}  - the rendered object
-         */
-        set value(value) {
-            this._value = value;
-            this.tree.items = value;
-            this.tree.expandAll();
-        }
-        get value() {
-            return this._value;
-        }
-        /**
-         * get the displayname of the item
-         * must be override
-         * @param {object} item
-         */
-        getComponentName(item) {
-            return item;
-        }
-        /**
-         * get the child components
-         * must be override
-         * @param {object} item
-         */
-        getComponentChilds(item) {
-            if (item === this.value)
-                return item._components;
-            var comps = ComponentDescriptor_1.ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);
-            var ret = [];
-            for (var name in comps) {
-                var comp = comps[name];
-                if (comp === undefined)
-                    continue;
-                var complist = comp._components;
-                if (name !== "this" && this.getComponentName(comp) !== undefined) {
-                    if (ret.indexOf(comp) === -1)
-                        ret.push(comp);
-                }
-                if (complist !== undefined) {
-                    for (var y = 0; y < complist.length; y++) {
-                        if (this.getComponentName(complist[y]) !== undefined) {
-                            if (ret.indexOf(complist[y]) === -1)
-                                ret.push(complist[y]);
-                        }
-                    }
-                }
-            }
-            return ret;
-        }
-        layout() {
-            var _this = this;
-            this.tree.width = "100%";
-            this.tree.height = "100%";
-            this.tree.propChilds = function (item) {
-                return _this.getComponentChilds(item);
-            };
-            this.tree.propDisplay = function (item) {
-                return _this.getComponentName(item);
-            };
-            this.contextMenu.getActions = async function (data) {
-                var ret = [];
-                var parent = data[0]._parent;
-                if (parent !== undefined && parent._components !== undefined) {
-                    var hasDummy = (parent._components[parent._components.length - 1]["designDummyFor"] !== undefined ? 1 : 0);
-                    if ((parent._components.length > 1 + hasDummy) && parent._components.indexOf(data[0]) !== 0) {
-                        var ac = {
-                            call: function () {
-                                _this.propertyEditor.swapComponents(parent._components[parent._components.indexOf(data[0]) + -1], data[0]);
-                                _this.tree.items = _this.tree.items;
-                                _this.tree.value = data[0];
-                            },
-                            name: "move up"
-                        };
-                        ret.push(ac);
-                    }
-                    if (parent._components.length > 1 + hasDummy &&
-                        parent._components.indexOf(data[0]) + hasDummy + 1 < parent._components.length) {
-                        var ac = {
-                            call: function () {
-                                _this.propertyEditor.swapComponents(data[0], parent._components[parent._components.indexOf(data[0]) + 1]);
-                                _this.tree.items = _this.tree.items;
-                                _this.tree.value = data[0];
-                            },
-                            name: "move down"
-                        };
-                        ret.push(ac);
-                    }
-                }
-                return ret;
-            };
-            this.tree.contextMenu = this.contextMenu;
-            this.add(this.tree);
-        }
-        update() {
-            this.value = this.value;
-        }
-        onclick(handler) {
-            this.tree.addEvent("click", handler);
-        }
-        destroy() {
-            this._value = undefined;
-            super.destroy();
-        }
-    };
-    ComponentExplorer = __decorate([
-        Jassi_7.$Class("jassijs_editor.ComponentExplorer"),
-        __metadata("design:paramtypes", [typeof (_a = typeof CodeEditor_2.CodeEditor !== "undefined" && CodeEditor_2.CodeEditor) === "function" ? _a : Object, typeof (_b = typeof PropertyEditor_2.PropertyEditor !== "undefined" && PropertyEditor_2.PropertyEditor) === "function" ? _b : Object])
-    ], ComponentExplorer);
-    exports.ComponentExplorer = ComponentExplorer;
-    async function test() {
-        var dlg = new ComponentExplorer(undefined, undefined);
-        dlg.getComponentName = function (item) {
-            return Classes_4.classes.getClassName(item);
-        };
-        dlg.value = dlg;
-        return dlg;
-    }
-    exports.test = test;
-});
-define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Jassi_8, Panel_6, Image_1, Registry_4, Classes_5) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ComponentPalette = void 0;
-    let ComponentPalette = class ComponentPalette extends Panel_6.Panel {
-        constructor() {
-            super();
-            this.layout();
-        }
-        layout() {
-        }
-        /**
-         * @member {string} - the service where the palette-items are registred
-         **/
-        set service(value) {
-            var _this = this;
-            this._service = value;
-            while (this._components.length > 0) {
-                this.remove(this._components[0]);
-            }
-            Registry_4.default.getJSONData(this._service).then((jdata) => {
-                for (var x = 0; x < jdata.length; x++) {
-                    var mdata = jdata[x];
-                    var data = mdata.params[0];
-                    if (data.fullPath === undefined || data.fullPath === "undefined")
-                        continue;
-                    var img = new Image_1.Image();
-                    var name = data.fullPath.split("/");
-                    var sname = name[name.length - 1];
-                    img.tooltip = sname;
-                    img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon + (data.icon.startsWith("mdi") ? " mdi-18px" : "");
-                    //img.height = 24;
-                    //img.width = 24;
-                    img["createFromType"] = mdata.classname;
-                    img["createFromParam"] = data.initialize;
-                    _this._makeDraggable(img);
-                    _this.add(img);
-                }
-            });
-            /*registry.loadAllFilesForService(this._service).then(function(){
-                registry.getData(_this._service).forEach(function(mdata){
-                    var data:UIComponentProperties=mdata.params[0];
-                    var img=new Image();
-                    var name=data.fullPath.split("/");
-                    var sname=name[name.length-1];
-                    img.tooltip=sname;
-                    img.src=data.icon===undefined?"res/unknowncomponent.png":data.icon;
-                    img.height=24;
-                    img.width=24;
-                    img["createFromType"]=classes.getClassName(mdata.oclass);
-                    img["createFromParam"]=data.initialize;
-                    _this._makeDraggable(img);
-                    _this.add(img);
-                });
-           });*/
-        }
-        get service() {
-            return this._service;
-        }
-        /**
-         * install the draggable
-         * @param {jassijs.ui.Image} component
-         */
-        _makeDraggable(component) {
-            var helper = undefined;
-            $(component.dom).draggable({
-                cancel: "false", revert: "invalid",
-                appendTo: "body",
-                helper: function (event) {
-                    if (helper === undefined) {
-                        var cl = Classes_5.classes.getClass(component.createFromType);
-                        if (cl === undefined) {
-                            Classes_5.classes.loadClass(component.createFromType); //for later
-                            cl = Panel_6.Panel;
-                        }
-                        helper = new cl();
-                        var img = new Image_1.Image();
-                        img.src = component.src;
-                        img.height = 24;
-                        img.width = 24;
-                        img.x = component.x;
-                        img.y = component.y;
-                        helper._position = img;
-                        component._helper = helper;
-                        if (component.createFromParam !== undefined) {
-                            $.extend(helper, component.createFromParam);
-                        }
-                        $("#jassitemp")[0].removeChild(helper.domWrapper);
-                        $("#jassitemp")[0].removeChild(helper._position.domWrapper);
-                    }
-                    return helper._position.dom; //$(helper.dom);
-                }
-            });
-        }
-        destroy() {
-            for (var x = 0; x < this._components.length; x++) {
-                var comp = this._components[x];
-                $(comp.dom).draggable("destroy");
-                if (comp["_helper"] !== undefined)
-                    comp["_helper"].destroy();
-            }
-            super.destroy();
-        }
-    };
-    ComponentPalette = __decorate([
-        Jassi_8.$Class("jassijs_editor.ComponentPalette"),
-        __metadata("design:paramtypes", [])
-    ], ComponentPalette);
-    exports.ComponentPalette = ComponentPalette;
-    function test() {
-        var comp = new ComponentPalette();
-        comp.service = "$UIComponent";
-        return comp;
-    }
-    exports.test = test;
-});
-define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_9) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Debugger = void 0;
-    //https://developer.chrome.com/extensions/messaging
-    let Debugger = class Debugger {
-        /**
-         * routing of url
-         * @class jassijs.base.Debugger
-         */
-        constructor() {
-        }
-        /**
-         * @param {string} file - the file to save
-         * @param {string} code - the code to Transform
-         * @param [number] debuglines - lines which updates the variables
-         * @param {Object.<int,string>}  debuglinesConditions - is the breakpoint in line conitionally [line]->condition
-         **/
-        async debugCode(file, code, debuglines, debuglinesConditions, evalToCursorPosition) {
-        }
-        /**
-         * remove all breakpoints for the file
-         * @param file
-         */
-        async removeBreakpointsForFile(file) {
-        }
-        /**
-        * extract all variables in code
-        * @param {string} code - the code to inspect
-        */
-        _extractVariables(code) {
-            var pos = 0;
-            var ret = [];
-            while (pos !== -1) {
-                pos = code.indexOf("var" + " ", pos);
-                if (pos !== -1) {
-                    var p1 = code.indexOf(" ", pos + 4);
-                    var p2 = code.indexOf(";", pos + 4);
-                    var p3 = code.indexOf("=", pos + 4);
-                    var p = Math.min(p1 === -1 ? 999999999 : p1, p2 === -1 ? 999999999 : p2, p3 === -1 ? 999999999 : p3);
-                    var variabel = code.substring(pos + 4, p);
-                    var patt = new RegExp("\\W");
-                    if (!patt.test(variabel))
-                        ret.push(variabel);
-                    pos = pos + 1;
-                }
-            }
-            return ret;
-        }
-        /**
-         * sets a breakpoint for debugging
-         * @param {string} file
-         * @param {number} line
-         * @param {number} enable - if true then breakpoint is set if false then removed
-         * @param {string} type - the type default undefined->stop debugging
-         **/
-        breakpointChanged(file, line, column, enable, type) {
-            if (navigator.userAgent.indexOf("Chrome") > -1) {
-                (new Promise((resolve_2, reject_2) => { require(["jassijs_editor/ChromeDebugger"], resolve_2, reject_2); })).then((deb) => {
-                    deb.ChromeDebugger.showHintExtensionNotInstalled();
-                });
-            }
-            //	console.log("break on"+file);
-        }
-        /**
-         * report current variable scope
-         * @param {numer} id - id of the variablepanel
-         * @param {[Object.<string,object>]} variables
-         */
-        reportVariables(id, variables) {
-            var editor = $("#" + id)[0]._this;
-            alert(editor);
-            editor["addVariables"](variables);
-        }
-        /**
-        * add debugpoints in code
-        * @param {[string]} lines - code
-        * @param {Object.<number, boolean>} debugpoints - the debugpoints
-        * @param {jassijs_editor.CodeEditor} codeEditor
-        */
-        addDebugpoints(lines, debugpoints, codeEditor) {
-            Jassi_9.default.d[codeEditor._id] = undefined;
-            //        	jassijs.ui.VariablePanel.get(this._id).__db=undefined;
-            var hassome = undefined;
-            this.debugpoints = debugpoints;
-            for (var point in debugpoints) {
-                if (debugpoints[point] === true) {
-                    //lines[point]="if(jassijs.ui.VariablePanel.get("+this._id+").__db===undefined){ jassijs.ui.VariablePanel.get("+this._id+").__db=true;debugger;}"+lines[point];
-                    lines[point] = "if(jassijs.d(" + codeEditor._id + ")) debugger;" + lines[point];
-                    /*if(hassome===undefined){
-                        hassome=true;
-                        lines[0]="var _variables_=$('#"+this._id+"')[0]._this;"+lines[0];
-                    }*/
-                }
-            }
-        }
-        /**
-         *
-         * @param {string} code - full source code
-         * @param {jassijs_editor.CodeEditor} codeEditor
-         * @returns {string}
-         */
-        getCodeForBreakpoint(code, codeEditor) {
-            /*	var reg = /([\w]*)[\(][^\)]*[\)]/g;
-                var test=reg.exec(code);
-                test=reg.exec();
-                alert(test);*/
-            var vars = this._extractVariables(code);
-            var reg = /[A-Z,a-z,0-9,\_]*[/w]*[\(][A-Z,a-z,0-9,\_,\,]*\)\{/g;
-            var test = reg.exec(code);
-            while (test) {
-                if (!test[0].startsWith("while") && !test[0].startsWith("if")) {
-                    var params = test[0].substring(test[0].indexOf("(") + 1, test[0].indexOf(")"));
-                    if (params.length > 0) {
-                        var ps = params.split(",");
-                        for (var p = 0; p < ps.length; p++) {
-                            if (vars.indexOf(ps[p]) === -1)
-                                vars.push(ps[p]);
-                        }
-                    }
-                }
-                test = reg.exec(code);
-            }
-            var svars = "{var debug_editor=$('#'+" + codeEditor._id + ")[0]._this;var _variables_={} ;try{if(this!==jassi)_variables_['this']=this;}catch(ex){};";
-            //svars=svars+"try{_variables_.addParameters(arguments);}catch(ex){};";
-            for (var x = 0; x < vars.length; x++) {
-                //        alert(vars[x]);
-                svars = svars + "try{_variables_['" + vars[x] + "']=" + vars[x] + ";}catch(ex){};";
-            }
-            svars = svars + "debug_editor.addVariables(_variables_);}";
-            return svars;
-        }
-        destroy() {
-            this.destroyed = true;
-        }
-    };
-    Debugger = __decorate([
-        Jassi_9.$Class("jassijs_editor.Debugger"),
-        __metadata("design:paramtypes", [])
-    ], Debugger);
-    exports.Debugger = Debugger;
-    if (Jassi_9.default.debugger === undefined)
-        Jassi_9.default.debugger = new Debugger();
-    require(["jassijs_editor/ChromeDebugger"]);
-});
-define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_10, Router_2, Typescript_4, CodePanel_3, Settings_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.MonacoPanel = void 0;
-    var inited = false;
-    function __init(editor) {
-        if (inited)
-            return;
-        //auto import 
-        const cs = editor._commandService;
-        var CommandsRegistry = require("vs/platform/commands/common/commands").CommandsRegistry;
-        CommandsRegistry.registerCommand("autoimport", (o1, model, pos) => {
-            var file = model.uri.path.substring(1);
-            var code = model.getValue();
-            var p = Typescript_4.default.getPositionOfLineAndCharacter(file, {
-                line: pos.lineNumber, character: pos.column
-            });
-            const oldpos = model["lastEditor"].getPosition();
-            setTimeout(() => {
-                CodePanel_3.CodePanel.getAutoimport(p, file, code).then((data) => {
-                    if (data !== undefined) {
-                        model.pushEditOperations([], [{
-                                range: monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row + 1 }),
-                                text: data.text
-                            }], (a) => {
-                            return null;
-                        });
-                        oldpos.lineNumber = oldpos.lineNumber + (data.text.indexOf("\r") ? 1 : 0);
-                        model["lastEditor"].setPosition(oldpos);
-                    }
-                });
-            }, 100);
-        });
-        //implement go to definition
-        const editorService = editor["_codeEditorService"];
-        const openEditorBase = editorService.openCodeEditor.bind(editorService);
-        editorService.openCodeEditor = async (input, source) => {
-            const result = await openEditorBase(input, source);
-            if (result === null) {
-                var file = input.resource.path.substring(1);
-                var line = input.options.selection.startLineNumber;
-                Router_2.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
-            }
-            return result; // always return the base result
-        };
-        //completion for autonimport
-        monaco.languages.registerCompletionItemProvider('typescript', {
-            provideCompletionItems: async function (model, position) {
-                var textUntilPosition = model.getValueInRange({ startLineNumber: 1, startColumn: 1, endLineNumber: position.lineNumber, endColumn: position.column });
-                var word = model.getWordUntilPosition(position);
-                var range = {
-                    startLineNumber: position.lineNumber,
-                    endLineNumber: position.lineNumber,
-                    startColumn: word.startColumn,
-                    endColumn: word.endColumn
-                };
-                var file = model.uri.path.substring(1);
-                var pos = Typescript_4.default.getPositionOfLineAndCharacter(file, { line: position.lineNumber, character: position.column });
-                var all = await Typescript_4.default.getCompletion(file, pos, undefined, { includeExternalModuleExports: true });
-                var sug = [];
-                for (var x = 0; x < all.entries.length; x++) {
-                    var it = all.entries[x];
-                    if ((it.kindModifiers === "export" || it.kindModifiers === "") && it.hasAction === true) {
-                        var item = {
-                            label: it.name,
-                            kind: it.kind,
-                            documentation: "import from " + it.source,
-                            insertText: it.name,
-                            range: range,
-                            command: {
-                                arguments: [model, position],
-                                id: "autoimport",
-                                title: "autoimport"
-                            }
-                        };
-                        sug.push(item);
-                    }
-                }
-                return {
-                    suggestions: sug
-                };
-            }
-        });
-        inited = true;
-    }
-    /**
-    * wrapper for the Ace-Code editor with Typescript-Code-Completion an other features
-    * @class jassijs.ui.CodePanel
-    */
-    let MonacoPanel = class MonacoPanel extends CodePanel_3.CodePanel {
-        constructor() {
-            super();
-            var _this = this;
-            // super.init($('<div style="width: 800px; height: 600px; border: 1px solid grey"></div>')[0]);
-            var test = $('<div class="MonacoPanel" style="height: 100px; width: 100px"></div>')[0];
-            super.init(test);
-            $(this.domWrapper).css("overflow", "hidden");
-            $(this.domWrapper).css("display", "");
-            /* _this._editor.on("guttermousedown", function(e) {
-     
-                 var row = e.getDocumentPosition().row;
-                 var breakpoints = e.editor.session.getBreakpoints(row, 0);
-                 var type = "debugpoint";
-                 if (e.domEvent.ctrlKey)
-                     type = "checkpoint";
-                 var column = _this._editor.session.getLine(row).length;
-                 if (typeof breakpoints[row] === typeof undefined) {
-                     e.editor.session.setBreakpoint(row);
-                     _this.callEvent("breakpointChanged", row, column, true, type);
-                 } else {
-                     e.editor.session.clearBreakpoint(row, false, undefined);
-                     _this.callEvent("breakpointChanged", row, column, false, type);
-                 }
-             });*/
-            let theme = Settings_2.Settings.gets(Settings_2.Settings.keys.Development_MoanacoEditorTheme);
-            this._editor = monaco.editor.create(this.dom, {
-                //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
-                language: 'typescript',
-                theme: (theme ? theme : "vs-light"),
-                glyphMargin: true,
-                fontSize: 12,
-                automaticLayout: true
-            });
-            __init(this._editor);
-            this._editor.onMouseDown(function (e) {
-                _this._mouseDown(e);
-            });
-            //this._editor.setModel(monaco.editor.getModels() [1]);
-        }
-        getBreakpointDecoration(line) {
-            var decs = this._editor.getLineDecorations(line);
-            for (var x = 0; x < decs.length; x++) {
-                if (decs[x].options.glyphMarginClassName === "jbreackpoint")
-                    return decs[x];
-            }
-            return undefined;
-        }
-        _mouseDown(e) {
-            if (e.target.type === 2) {
-                var line = e.target.position.lineNumber;
-                var column = this._editor.getModel().getLineContent(line - 1).length;
-                var type = "debugpoint";
-                var dec = this.getBreakpointDecoration(line);
-                if (dec) {
-                    this._editor.deltaDecorations([dec.id], []);
-                    this.callEvent("breakpointChanged", line - 1, column, false, type);
-                }
-                else {
-                    this.callEvent("breakpointChanged", line - 1, column, true, type);
-                    var decorations = this._editor.deltaDecorations([], [
-                        {
-                            range: new monaco.Range(line, 1, line, 1),
-                            options: {
-                                isWholeLine: true,
-                                className: 'jbreackpointclass',
-                                glyphMarginClassName: 'jbreackpoint'
-                            }
-                        }
-                    ]);
-                }
-            }
-        }
-        /**
-         * gets a list of all lines with breakpoint
-         * @returns {Object.<number, boolean>}
-         */
-        getBreakpoints() {
-            var ret = {};
-            var decs = this._editor.getModel().getLineCount();
-            for (var x = 1; x <= this._editor.getModel().getLineCount(); x++) {
-                if (this.getBreakpointDecoration(x)) {
-                    ret[x - 1] = true;
-                }
-            }
-            return ret;
-        }
-        /**
-         * breakpoint changed
-         * @param {function} handler - function(line,enabled,type)
-         */
-        onBreakpointChanged(handler) {
-            this.addEvent("breakpointChanged", handler);
-        }
-        /**
-         * component get focus
-         * @param {function} handler
-         */
-        onfocus(handler) {
-            //   this._editor.on("focus", handler);
-        }
-        /**
-         * component lost focus
-         * @param {function} handler
-         */
-        onblur(handler) {
-            // this._editor.on("blur", handler);
-        }
-        /**
-         * @param - the codetext
-         */
-        set value(value) {
-            var lastcursor = this.cursorPosition;
-            var _this = this;
-            if (this.file) {
-                var ffile = monaco.Uri.from({ path: "/" + this.file, scheme: 'file' });
-                var mod = monaco.editor.getModel(ffile);
-                if (!mod) {
-                    mod = monaco.editor.createModel(value, "typescript", ffile);
-                    this._editor.setModel(mod);
-                    this._editor.setValue(value);
-                }
-                else if (mod !== this._editor.getModel()) {
-                    delete this._editor.getModel()["lastEditor"];
-                    this._editor.setModel(mod);
-                    this._editor.setValue(value);
-                }
-                else {
-                    this._editor.getModel().pushEditOperations([], [{
-                            range: this._editor.getModel().getFullModelRange(),
-                            text: value
-                        }], (a) => {
-                        return null;
-                    });
-                }
-                if (this._editor.getModel()) {
-                    this._editor.getModel()["lastEditor"] = _this._editor;
-                }
-            }
-            else
-                this._editor.setValue(value);
-        }
-        get value() {
-            return this._editor.getValue();
-        }
-        /**
-         * @param {object} position - the current cursor position {row= ,column=}
-         */
-        set cursorPosition(cursor) {
-            this._editor.focus();
-            try {
-                this._editor.revealLine(cursor.row);
-                //this._editor.setPosition({ column: cursor.column, lineNumber: cursor.row });
-            }
-            catch (_a) {
-            }
-        }
-        get cursorPosition() {
-            var pos = this._editor.getPosition();
-            return {
-                row: pos.lineNumber,
-                column: pos.column
-            };
-        }
-        destroy() {
-            //this._editor.destroy();
-            super.destroy();
-            delete this._editor.getModel()["lastEditor"];
-        }
-        /**
-        * undo action
-        */
-        undo() {
-            //@ts-ignore
-            this._editor.getModel().undo();
-        }
-        /**
-         * resize the editor
-         * */
-        resize() {
-            //
-            //   this._editor.resize();
-        }
-        /**
-       * @member {string} - the language of the editor e.g. "ace/mode/javascript"
-       */
-        set mode(mode) {
-            //  alert(mode);
-            this._mode = mode;
-            //  this._editor.getSession().setMode("ace/mode/" + mode);
-        }
-        get mode() {
-            return this._mode;
-        }
-        async loadsample() {
-            this.file = "a/Dialog.ts";
-            this.value = "var a=window.document;";
-        }
-    };
-    MonacoPanel = __decorate([
-        Jassi_10.$Class("jassijs_editor.MonacoPanel"),
-        __metadata("design:paramtypes", [])
-    ], MonacoPanel);
-    exports.MonacoPanel = MonacoPanel;
-    async function test() {
-        //await Settings.save(Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user")
-        var dlg = new MonacoPanel();
-        //  var code = await new Server().loadFile("a/Dialog.ts");
-        await dlg.loadsample();
-        setTimeout(() => {
-            dlg.width = "800";
-            dlg.height = "100";
-        }, 200);
-        //@ts-ignore
-        //   dlg._editor.layout();
-        //    dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
-        //  dlg.mode = "javascript";
-        //dlg._editor.renderer.setShowGutter(false);		
-        //dlg._editor.getSession().addGutterDecoration(1,"error_line");
-        //  dlg._editor.getSession().setBreakpoint(1);
-        // dlg._editor.getSession().setBreakpoint(2);
-        return dlg;
-    }
-    exports.test = test;
-});
-define("jassijs_editor/StartEditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/ui/SearchExplorer", "jassijs/ui/DBObjectExplorer", "jassijs/ui/ActionNodeMenu"], function (require, exports, FileExplorer_1, Windows_2, Panel_7, Button_4, Router_3, SearchExplorer_1, DBObjectExplorer_1, ActionNodeMenu_1) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    //var h=new RemoteObject().test();
-    async function start() {
-        //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
-        var body = new Panel_7.Panel({ id: "body" });
-        body.max();
-        Windows_2.default.addLeft(new DBObjectExplorer_1.DBObjectExplorer(), "DBObjects");
-        Windows_2.default.addLeft(new SearchExplorer_1.SearchExplorer(), "Search");
-        Windows_2.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
-        var bt = new Button_4.Button();
-        Windows_2.default._desktop.add(bt);
-        bt.icon = "mdi mdi-refresh";
-        var am = new ActionNodeMenu_1.ActionNodeMenu();
-        bt.onclick(() => {
-            Windows_2.default._desktop.remove(am);
-            am = new ActionNodeMenu_1.ActionNodeMenu();
-            Windows_2.default._desktop.add(am);
-        });
-        Windows_2.default._desktop.add(am);
-        Router_3.router.navigate(window.location.hash);
-    }
-    start().then();
-});
-define("jassijs_editor/modul", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        "css": { "jassijs_editor.css": "jassijs_editor.css" },
-        "types": {
-            "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/monaco.d.ts",
-        },
-        "require": {
-            paths: {
-                'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
-                'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools',
-                monacoLib: "jassijs_editor/ext/monacoLib",
-                vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/vs"
-            },
-            shim: {
-                'ace/ext/language_tools': ['ace/ace'],
-            }
-        }
-    };
-});
-//this file is autogenerated don't modify
-define("jassijs_editor/registry", ["require"], function (require) {
-    return {
-        default: {
-            "jassijs_editor/AcePanel.ts": {
-                "date": 1623100103030,
-                "jassijs.ui.AcePanel": {}
-            },
-            "jassijs_editor/ChromeDebugger.ts": {
-                "date": 1622998653413,
-                "jassijs_editor.ChromeDebugger": {}
-            },
-            "jassijs_editor/CodeEditor.ts": {
-                "date": 1624296590297,
-                "jassijs_editor.CodeEditorSettingsDescriptor": {
-                    "$SettingsDescriptor": []
-                },
-                "jassijs_editor.CodeEditor": {}
-            },
-            "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-                "date": 1622998616949,
-                "jassijs_editor.CodeEditorInvisibleComponents": {}
-            },
-            "jassijs_editor/CodePanel.ts": {
-                "date": 1623097926572,
-                "jassijs_editor.CodePanel": {}
-            },
-            "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1623098090050,
-                "jassijs_editor.ComponentDesigner": {}
-            },
-            "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1623100288249,
-                "jassijs_editor.ComponentExplorer": {}
-            },
-            "jassijs_editor/ComponentPalette.ts": {
-                "date": 1623099899741,
-                "jassijs_editor.ComponentPalette": {}
-            },
-            "jassijs_editor/Debugger.ts": {
-                "date": 1622998616949,
-                "jassijs_editor.Debugger": {}
-            },
-            "jassijs_editor/modul.ts": {
-                "date": 1627320631266
-            },
-            "jassijs_editor/MonacoPanel.ts": {
-                "date": 1624143090748,
-                "jassijs_editor.MonacoPanel": {}
-            },
-            "jassijs_editor/StartEditor.ts": {
-                "date": 1623098599960
-            },
-            "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1622998616949,
-                "jassijs_editor.util.DragAndDropper": {}
-            },
-            "jassijs_editor/util/Parser.ts": {
-                "date": 1623862933088,
-                "jassijs_editor.base.Parser": {}
-            },
-            "jassijs_editor/util/Resizer.ts": {
-                "date": 1622998616949,
-                "jassijs_editor.util.Resizer": {}
-            },
-            "jassijs_editor/util/TSSourceMap.ts": {
-                "date": 1625511336878,
-                "jassijs_editor.util.TSSourceMap": {}
-            },
-            "jassijs_editor/util/Typescript.ts": {
-                "date": 1623951966985,
-                "jassijs_editor.util.Typescript": {}
-            }
-        }
-    };
-});
-/*
-requirejs.config({
-    paths: {
-        'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
-        'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools'
-    },
-    shim: {
-        'ace/ext/language_tools': ['ace/ace'],
-    }
-});*/
-//ok
-define("jassijs_editor/ext/acelib", ["require", 'ace/ace',
-    'ace/ext/language_tools'], function (require, ac) {
-    //  var tsmode= require("ace/mode/typescript");
-    /*  var WorkerClient = require("ace/worker/worker_client").WorkerClient;
-      var createWorker = function (session) {
-          var worker = new WorkerClient(["ace"], "jassijs/ext/ace_tsmode", "WorkerModule");
-          worker.attachToDocument(session.getDocument());
-
-          worker.on("lint", function (results) {
-              session.setAnnotations(results.data);
-          });
-
-          worker.on("terminate", function () {
-              session.clearAnnotations();
-          });
-
-          return worker;
-      };*/
-    return {
-        default: ac,
-        /*  createWorker:createWorker,
-          changeTSMode:function(session){
-            //  var tsmode=session.$mode;
-              session.$mode.createWorker=createWorker;
-              var k=9;
-          }*/
-    };
-});
-//require.config({ paths: { vs: '//cdn.jsdelivr.net/npm/monaco-editor@0.20.0/dev/vs' } });
-//require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev/vs' } });
-//require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs' } });
-//let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
-/*require.config({ paths: {
-    monacoLib:"jassijs_editor/ext/monacoLib",
-    vs: monacopath+"/vs"
- }
-});
-*/
-define("jassijs_editor/ext/monacoLib", ["require"], function (require, editor) {
-    window["module"] = {};
-    window["module"].exports = {};
-    return {};
-});
-//hach to make autocompletion for autoimports from other modules
-define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 'vs/editor/editor.main', "vs/language/typescript/tsWorker" /*,"monacoLib_editorWorkerServiceImpl","monacoLib_editorSimpleWorker","tsWorker"*/], function (mlib, require, monaco, tsWorker /*,editorWorkerServiceImpl,editorSimpleWorker,tsWorker*/) {
-    //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
-    let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
-    //get Typescript instance
-    window.ts = window["module"].exports;
-    delete window["module"];
-    var platform_1 = require("vs/base/common/platform");
-    platform_1.globals.MonacoEnvironment = {};
-    function myfunc() {
-        setTimeout(() => {
-            var worker = require(['vs/language/typescript/tsWorker'], function (tsWorker) {
-                tsWorker.TypeScriptWorker.prototype.getCompletionsAtPosition = async function (fileName, position, properties) {
-                    return await this._languageService.getCompletionsAtPosition(fileName, position, properties);
-                };
-            });
-        }, 1000); //perhaps it must be higher - means autoimport from other modules is ready after 1 second
-    }
-    platform_1.globals.MonacoEnvironment.getWorker = function (workerId, label) {
-        //var js="/*editorWorkerService*/self.MonacoEnvironment={baseUrl: '"+monacopath+"/'};importScripts('"+monacopath+"/vs/base/worker/"+workerId+"');/*editorWorkerService*/"+myfunc.toString()+";myfunc();";
-        //const blob = new Blob([js], { type: 'application/javascript' });
-        const myPath = 'vs/base/worker/defaultWorkerFactory.js';
-        //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/vs/base/worker/workerMain.js"
-        let scriptPath = monacopath + "/vs/base/worker/workerMain.js"; // require.toUrl('./' + workerId);
-        //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/"
-        const workerBaseUrl = require.toUrl(myPath).slice(0, -myPath.length); // explicitly using require.toUrl(), see https://github.com/microsoft/vscode/issues/107440#issuecomment-698982321
-        let js = `/*${label}*/self.MonacoEnvironment={baseUrl: '${workerBaseUrl}'};const ttPolicy = self.trustedTypes?.createPolicy('defaultWorkerFactory', { createScriptURL: value => value });importScripts(ttPolicy?.createScriptURL('${scriptPath}') ?? '${scriptPath}');/*${label}*/;`;
-        if (label === "typescript")
-            js += myfunc.toString() + ";myfunc();";
-        const blob = new Blob([js], { type: 'application/javascript' });
-        var workerUrl = URL.createObjectURL(blob);
-        //var workerUrl=URL.createObjectURL(blob);
-        return new Worker(workerUrl, { name: label });
-    };
-    return {};
-});
-/*
- //hack to get languageService
-    /*var orgLS=ts.createLanguageService;
-
-    var funcResolve=undefined;
-    var waiter=new Promise((resolve)=>{
-        funcResolve=resolve;
-    });
-    ts.createLanguageService=function(host, documentRegistry, syntaxOnlyOrLanguageServiceMode){
-            let ret=orgLS(host, documentRegistry, syntaxOnlyOrLanguageServiceMode);
-            funcResolve(ret);
-            return ret;
-    }
-    var ret = {
-        getLanguageService:async function(){
-            return await waiter;
-        }
-    }
-    //hack monaco allways create a worker which not run as serviceWorker - so we can share the languageservice
-    var EditorWorkerHost = require("vs/editor/common/services/editorWorkerServiceImpl").EditorWorkerHost;
-    var EditorSimpleWorker = require("vs/editor/common/services/editorSimpleWorker").EditorSimpleWorker;
-    var EditorWorkerClient = require("vs/editor/common/services/editorWorkerServiceImpl").EditorWorkerClient;
-    class SynchronousWorkerClient {
-        constructor(instance) {
-            this._instance = instance;
-            this._proxyObj = Promise.resolve(this._instance);
-        }
-        dispose() {
-            this._instance.dispose();
-        }
-        getProxyObject() {
-            return this._proxyObj;
-        }
-    }
-    EditorWorkerClient.prototype._getOrCreateWorker = function() {
-        if (!this._worker)
-            this._worker = new SynchronousWorkerClient(new EditorSimpleWorker(new EditorWorkerHost(this), null));
-        return this._worker;
-
-    }*/
-define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_11) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.DragAndDropper = void 0;
-    let DragAndDropper = class DragAndDropper {
-        constructor() {
-            this.onpropertychanged = undefined;
-            this.onpropertyadded = undefined;
-            this.lastDropCanceled = false;
-            this.allIDs = "";
-        }
-        ;
-        /**
-         * could be override to block dragging
-         */
-        isDragEnabled(event, ui) {
-            var mouse = event.target._this.dom.style.cursor;
-            if (mouse === "e-resize" || mouse === "s-resize" || mouse === "se-resize")
-                return true;
-            else
-                return false;
-        }
-        //dragging is active
-        isDragging() {
-            return this._isDragging;
-        }
-        /*public activateDragging(enable:boolean) {
-            $(this.allIDs).find(".jcontainer").not(".jdesigncontainer").draggable(enable ? "enable" : "disable");
-        }*/
-        enableDraggable(enable) {
-            //  this.onpropertychanged = undefined;
-            // this.onpropertyadded = undefined;
-            if (this.draggableComponents !== undefined) {
-                if (!enable)
-                    this.draggableComponents.draggable('disable');
-                else
-                    this.draggableComponents.draggable('enable');
-            }
-        }
-        _drop(target, event, ui) {
-            var _this = this;
-            var newComponent = ui.draggable[0]._this;
-            var newParent = target._this;
-            var beforeComponent = target._this;
-            var designDummyAtEnd;
-            if ((beforeComponent === null || beforeComponent === void 0 ? void 0 : beforeComponent.type) === "atEnd") {
-                designDummyAtEnd = beforeComponent;
-                beforeComponent = undefined;
-                newParent = newParent.designDummyFor;
-            }
-            if ((beforeComponent === null || beforeComponent === void 0 ? void 0 : beforeComponent.type) === "beforeComponent") {
-                beforeComponent = newParent.designDummyFor;
-                newParent = newParent.designDummyFor._parent;
-            }
-            if (target._this.isAbsolute) {
-                var left = parseInt($(ui.helper).css('left'));
-                var top = parseInt($(ui.helper).css('top'));
-                if (ui.draggable[0]._this.createFromType !== undefined) {
-                    var offsetNewParent = $(target._this.dom).offset();
-                    left = -offsetNewParent.left + parseInt($(ui.helper).css('left'));
-                    top = -offsetNewParent.top + parseInt($(ui.helper).css('top'));
-                    //      ui.helper[0]._this.left=left;
-                    //    ui.helper[0]._this.y=top;
-                    if (this.onpropertyadded !== undefined)
-                        this.onpropertyadded(ui.draggable[0]._this.createFromType, newComponent, left, top, newParent, undefined);
-                    return;
-                }
-                var oldParent = ui.draggable[0]._this._parent;
-                var pleft = $(newParent.dom).offset().left;
-                var ptop = $(newParent.dom).offset().top;
-                var oleft = $(oldParent.dom).offset().left;
-                var otop = $(oldParent.dom).offset().top;
-                left = left + oleft - pleft;
-                top = top + otop - ptop;
-                //snap to 5
-                if (top !== 1) {
-                    top = Math.round(top / 5) * 5;
-                }
-                if (left !== 1) {
-                    left = Math.round(left / 5) * 5;
-                }
-                oldParent.remove(ui.draggable[0]._this);
-                $(ui.draggable).css({ 'top': top, 'left': left, position: 'absolute' });
-                target._this.add(ui.draggable[0]._this);
-                if (_this.onpropertychanged !== undefined) {
-                    _this.onpropertychanged(newComponent, left, top, oldParent, newParent, undefined);
-                }
-            }
-            else { //relative layout
-                var oldParent = ui.draggable[0]._this._parent;
-                if (!$(newParent.domWrapper).hasClass("jcontainer") && newParent._parent) {
-                    newParent = newParent._parent;
-                }
-                $(ui.draggable).css({ 'top': "", 'left': "", "position": "relative" });
-                if (ui.draggable[0]._this.createFromType !== undefined) {
-                    if (this.onpropertyadded !== undefined)
-                        this.onpropertyadded(newComponent.createFromType, ui.draggable[0]._this, undefined, undefined, newParent, beforeComponent);
-                }
-                else {
-                    //newParent.add(ui.draggable[0]._this);
-                    if (target._this !== newParent)
-                        newParent.addBefore(ui.draggable[0]._this, target._this);
-                    else
-                        newParent.add(ui.draggable[0]._this);
-                    if (_this.onpropertychanged !== undefined) {
-                        _this.onpropertychanged(newComponent, undefined, undefined, oldParent, newParent, beforeComponent);
-                    }
-                }
-            }
-            if (designDummyAtEnd) { //this Component should stand at last
-                var par = designDummyAtEnd._parent;
-                par.remove(designDummyAtEnd);
-                par.add(designDummyAtEnd);
-                par.designDummies.push(designDummyAtEnd); //bug insert dummy again
-            }
-        }
-        /**
-        * install the DragAndDropper
-        * all child jomponents are draggable
-        * all child containers are droppable
-        * @param  parentPanel - all childs are effected
-        * @param allIDs - ID's of all editable components e.g. #10,#12
-        * @returns {unresolved}
-        */
-        install(parentPanel, allIDs) {
-            //$(this.parentPainer");
-            var _this = this;
-            if (parentPanel !== undefined)
-                this.parentPanel = parentPanel;
-            if (allIDs !== undefined)
-                this.allIDs = allIDs;
-            // this.draggableComponents = $(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
-            this.draggableComponents = $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
-            this.draggableComponents.draggable({
-                cancel: "false",
-                revert: "invalid",
-                drag: function (event, ui) {
-                    _this.lastDropCanceled = _this.isDragEnabled(event, ui);
-                    setTimeout(function () {
-                        _this.lastDropCanceled = false;
-                    }, 100);
-                    return !_this.lastDropCanceled;
-                },
-                start: function () {
-                    _this._isDragging = true;
-                },
-                stop: function () {
-                    _this._isDragging = false;
-                },
-                //appendTo: "body"
-                helper: "clone",
-            });
-            $(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('disable');
-            $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('enable');
-            var _this = this;
-            //all jcompoenents are proptargets                                         also jdesignummy     but no jcomponents in absolute Layout  no jcomponens that contains a jdesigndummy  absolutelayout container
-            this.droppableComponents = $(this.parentPanel.dom).parent().parent().find(".jdesigndummy,.jcomponent:not(.jabsolutelayout>.jcomponent, :has(.jdesigndummy)),                      .jcontainer>.jabsolutelayout");
-            //console.log(this.droppableComponents.length);
-            for (var c = 0; c < this.droppableComponents.length; c++) {
-                //  console.log(this.droppableComponents[c].id);
-            }
-            var isDropping = false;
-            var dropWnd;
-            var dropEvent;
-            var dropUI;
-            this.droppableComponents.droppable({
-                greedy: true,
-                hoverClass: "ui-state-highlight",
-                tolerance: "pointer",
-                drop: function (event, ui) {
-                    //function is called for every Window in z-Index - we need the last one
-                    if (_this.lastDropCanceled)
-                        return;
-                    dropWnd = this;
-                    dropEvent = event;
-                    dropUI = ui;
-                    if (!isDropping) {
-                        isDropping = true;
-                        window.setTimeout(function () {
-                            isDropping = false;
-                            _this._drop(dropWnd, dropEvent, dropUI);
-                        }, 50);
-                    }
-                }
-            });
-            //this.droppableComponents.droppable("enable");
-            //$(this.allIDs).eq(".jcontainer").not(".jdesigncontainer").droppable("enable");
-            //$(this.allIDs).filter(".jcontainer").not(".jdesigncontainer").droppable("enable");
-        }
-        /**
-         * uninstall the DragAndDropper
-         */
-        uninstall() {
-            this.onpropertychanged = undefined;
-            this.onpropertyadded = undefined;
-            // 	$(this.allIDs).eq(".jcontainer").not(".jdesigncontainer").droppable("disable");  
-            //$(this.parentPanel.dom).parent().parent().find(".jcontainer").droppable("destroy");
-            // var components=$(this.allIDs);
-            if (this.draggableComponents !== undefined) {
-                this.draggableComponents.draggable();
-                this.draggableComponents.draggable('destroy');
-                delete $.ui["ddmanager"].current; //memory leak https://bugs.jqueryui.com/ticket/10667
-                this.draggableComponents = undefined;
-            }
-            if (this.droppableComponents !== undefined) {
-                this.droppableComponents.droppable();
-                this.droppableComponents.droppable("destroy");
-            }
-        }
-    };
-    DragAndDropper = __decorate([
-        Jassi_11.$Class("jassijs_editor.util.DragAndDropper"),
-        __metadata("design:paramtypes", [])
-    ], DragAndDropper);
-    exports.DragAndDropper = DragAndDropper;
-});
-define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Typescript"], function (require, exports, Jassi_12, Typescript_5) {
+define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Typescript"], function (require, exports, Jassi_6, Typescript_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Parser = exports.ParsedClass = void 0;
@@ -3909,13 +2198,13 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         }
     };
     Parser = __decorate([
-        Jassi_12.$Class("jassijs_editor.base.Parser"),
+        Jassi_6.$Class("jassijs_editor.base.Parser"),
         __metadata("design:paramtypes", [])
     ], Parser);
     exports.Parser = Parser;
     async function test() {
-        await Typescript_5.default.waitForInited;
-        var code = Typescript_5.default.getCode("jassijs_editor/util/Parser.ts");
+        await Typescript_4.default.waitForInited;
+        var code = Typescript_4.default.getCode("jassijs_editor/util/Parser.ts");
         var parser = new Parser();
         parser.parse(code, undefined);
         /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
@@ -3924,6 +2213,1763 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
           console.log(result);*/
     }
     exports.test = test;
+});
+define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/remote/Classes", "jassijs_editor/util/Parser", "jassijs/ui/Databinder"], function (require, exports, Jassi_7, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, Classes_3, Parser_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.ComponentDesigner = void 0;
+    let ComponentDesigner = class ComponentDesigner extends Panel_4.Panel {
+        constructor() {
+            super();
+            this._codeEditor = undefined;
+            this._initDesign();
+            this.editMode = true;
+        }
+        set codeEditor(value) {
+            var _this = this;
+            this._codeEditor = value;
+            this._variables = this._codeEditor._variables;
+            this._propertyEditor = new PropertyEditor_1.PropertyEditor(value, new Parser_1.Parser());
+            //   this._propertyEditor=new PropertyEditor(undefined);
+            this._errors = this._codeEditor._errors;
+            this._componentPalette = new ComponentPalette_1.ComponentPalette();
+            this._componentPalette.service = "$UIComponent";
+            this._componentExplorer = new ComponentExplorer_1.ComponentExplorer(value, this._propertyEditor);
+            this._invisibleComponents = new CodeEditorInvisibleComponents_1.CodeEditorInvisibleComponents(value);
+            this.add(this._invisibleComponents);
+            this._initComponentExplorer();
+            this._installView();
+            this._codeEditor._codePanel.onblur(function (evt) {
+                _this._propertyEditor.updateParser();
+            });
+            this.registerKeys();
+        }
+        get codeEditor() {
+            return this._codeEditor;
+        }
+        _initDesign() {
+            var _this = this;
+            this._designToolbar = new Panel_4.Panel();
+            this._designPlaceholder = new Panel_4.Panel();
+            var save = new Button_3.Button();
+            save.tooltip = "Save(Ctrl+S)";
+            save.icon = "mdi mdi-content-save mdi-18px";
+            save.onclick(function () {
+                _this.save();
+            });
+            this._designToolbar.add(save);
+            var run = new Button_3.Button();
+            run.icon = "mdi mdi-car-hatchback mdi-18px";
+            run.tooltip = "Run(F4)";
+            run.onclick(function () {
+                _this.evalCode();
+            });
+            this._designToolbar.add(run);
+            var undo = new Button_3.Button();
+            undo.icon = "mdi mdi-undo mdi-18px";
+            undo.tooltip = "Undo (Strg+Z)";
+            undo.onclick(function () {
+                _this.undo();
+            });
+            this._designToolbar.add(undo);
+            /*  var test=new Button();
+             test.icon="mdi mdi-bug mdi-18px";
+             test.tooltip="Test";
+             test.onclick(function(){
+                         //var kk=_this._codeView.layout;
+             });
+             this._designToolbar.add(test);*/
+            var edit = new Button_3.Button();
+            edit.icon = "mdi mdi-run mdi-18px";
+            edit.tooltip = "Test Dialog";
+            edit.onclick(function () {
+                _this.editDialog(!_this.editMode);
+                edit.toggle(!_this.editMode);
+            });
+            this._designToolbar.add(edit);
+            var lasso = new Button_3.Button();
+            lasso.icon = "mdi mdi-lasso mdi-18px";
+            lasso.tooltip = "Select rubberband";
+            lasso.onclick(function () {
+                var val = lasso.toggle();
+                _this._resizer.setLassoMode(val);
+                _this._draganddropper.enableDraggable(!val);
+                //_this._draganddropper.activateDragging(!val);
+            });
+            this._designToolbar.add(lasso);
+            var remove = new Button_3.Button();
+            remove.icon = "mdi mdi-delete-forever-outline mdi-18px";
+            remove.tooltip = "Delete selected Control (ENTF)";
+            remove.onclick(function () {
+                _this.removeComponent();
+            });
+            this._designToolbar.add(remove);
+            this.add(this._designToolbar);
+            $(this._designPlaceholder.domWrapper).css("position", "relative");
+            this.add(this._designPlaceholder);
+        }
+        /**
+       * manage shortcuts
+       */
+        registerKeys() {
+            var _this = this;
+            $(this._codeEditor._design.dom).attr("tabindex", "1");
+            $(this._codeEditor._design.dom).keydown(function (evt) {
+                if (evt.keyCode === 115 && evt.shiftKey) { //F4
+                    // var thiss=this._this._id;
+                    // var editor = ace.edit(this._this._id);
+                    _this.evalCode(true);
+                    evt.preventDefault();
+                    return false;
+                }
+                else if (evt.keyCode === 115) { //F4
+                    _this.evalCode(false);
+                    evt.preventDefault();
+                    return false;
+                }
+                if (evt.keyCode === 90 || evt.ctrlKey) { //Ctrl+Z
+                    _this.undo();
+                }
+                if (evt.keyCode === 116) { //F5
+                    evt.preventDefault();
+                    return false;
+                }
+                if (evt.keyCode === 46) { //Del
+                    _this.removeComponent();
+                    evt.preventDefault();
+                    return false;
+                }
+                if ((String.fromCharCode(evt.which).toLowerCase() === 's' && evt.ctrlKey) /* && (evt.which == 19)*/) { //Str+s
+                    _this.save();
+                    event.preventDefault();
+                    return false;
+                }
+            });
+        }
+        resize() {
+            this._updateInvisibleComponents();
+        }
+        _installView() {
+            this._codeEditor._main.add(this._propertyEditor, "Properties", "properties");
+            this._codeEditor._main.add(this._componentExplorer, "Components", "components");
+            this._codeEditor._main.add(this._componentPalette, "Palette", "componentPalette");
+            this._codeEditor._main.layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]}]}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":18.957059337410122,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":18.957059337410122,"width":77.70034843205575,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true},{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.299651567944256,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+        }
+        _updateInvisibleComponents() {
+            var _this = this;
+            this._invisibleComponents.update().then(function () {
+                /* var h=_this._invisibleComponents.dom.offsetHeight;
+                 h=h+6+31;
+                 _this._designPlaceholder.height="calc(100% - "+h+"px)";*/
+            });
+        }
+        _initComponentExplorer() {
+            var _this = this;
+            this._componentExplorer.onclick(function (data) {
+                var ob = data.data;
+                _this._propertyEditor.value = ob;
+            });
+            this._componentExplorer.getComponentName = function (item) {
+                var varname = _this._codeEditor.getVariableFromObject(item);
+                if (varname === undefined)
+                    return;
+                if (varname.startsWith("this."))
+                    return varname.substring(5);
+                return varname;
+            };
+        }
+        /**
+         * removes the selected component
+         */
+        removeComponent() {
+            var todel = this._propertyEditor.value;
+            var varname = this._codeEditor.getVariableFromObject(todel);
+            if (varname !== "this") {
+                if (todel.domWrapper._parent !== undefined) {
+                    todel.domWrapper._parent.remove(todel);
+                }
+                this._propertyEditor.removeVariableInCode(varname);
+                this._propertyEditor.removeVariableInDesign(varname);
+                this._updateInvisibleComponents();
+            }
+        }
+        /**
+        * execute the current code
+        * @param {boolean} toCursor -  if true the variables were inspected on cursor position,
+        *                              if false at the end of the layout() function or at the end of the code
+        */
+        evalCode(toCursor = undefined) {
+            this._codeEditor.evalCode(toCursor);
+        }
+        /**
+        * save the code to server
+        */
+        save() {
+            this._codeEditor.save();
+        }
+        /**
+         * undo action
+         */
+        undo() {
+            this._codeEditor.undo();
+        }
+        getComponentIDsInDesign(component, collect) {
+            collect.push("#" + component._id);
+            var childs = component["_components"];
+            if (childs !== undefined) {
+                for (let x = 0; x < childs.length; x++) {
+                    this.getComponentIDsInDesign(childs[x], collect);
+                }
+            }
+        }
+        /**
+         * dialog edit mode
+         * @param {boolean} enable - if true allow resizing and drag and drop
+         */
+        editDialog(enable) {
+            var _this = this;
+            this.editMode = enable;
+            var component = this._designPlaceholder._components[0];
+            //switch designmode
+            var comps = $(component.dom).find(".jcomponent");
+            comps.addClass("jdesignmode");
+            for (var c = 0; c < comps.length; c++) {
+                if (comps[c]._this["extensionCalled"] !== undefined) {
+                    comps[c]._this["extensionCalled"]({
+                        componentDesignerSetDesignMode: { enable, componentDesigner: this }
+                    });
+                    //comps[c]._this["setDesignMode"](enable,this);
+                }
+            }
+            if (component["extensionCalled"] !== undefined) {
+                component["extensionCalled"]({
+                    componentDesignerSetDesignMode: { enable, componentDesigner: this }
+                });
+            }
+            //if(component["setDesignMode"]!==undefined){
+            //        component["setDesignMode"](enable,this);
+            //    }
+            this._variables.updateCache(); //variables can be added with Repeater.setDesignMode
+            if (this._resizer !== undefined) {
+                this._resizer.uninstall();
+                console.log("uninstall");
+            }
+            if (this._draganddropper !== undefined) {
+                this._draganddropper.uninstall();
+            }
+            if (enable === true) {
+                var _this = this;
+                var allcomponents = this._variables.getEditableComponents(component);
+                if (this._propertyEditor.codeEditor === undefined) {
+                    var ret = [];
+                    this.getComponentIDsInDesign(component, ret);
+                    allcomponents = ret.join(",");
+                }
+                else
+                    allcomponents = this._variables.getEditableComponents(component);
+                //this._installTinyEditor();
+                this._draganddropper = new DragAndDropper_1.DragAndDropper();
+                this._resizer = new Resizer_1.Resizer();
+                this._resizer.draganddropper = this._draganddropper;
+                console.log("onselect");
+                this._resizer.onelementselected = function (elementIDs, e) {
+                    var ret = [];
+                    for (var x = 0; x < elementIDs.length; x++) {
+                        var ob = $("#" + elementIDs[x])[0]._this;
+                        if (ob["editorselectthis"])
+                            ob = ob["editorselectthis"];
+                        ret.push(ob);
+                    }
+                    if (ret.length > 0) {
+                        _this._propertyEditor.value = ret[0];
+                    }
+                };
+                this._resizer.onpropertychanged = function (comp, prop, value) {
+                    console.log("prop change " + comp._id);
+                    if (_this._propertyEditor.value !== comp)
+                        _this._propertyEditor.value = comp;
+                    _this._propertyEditor.setPropertyInCode(prop, value + "", true);
+                    _this._propertyEditor.value = _this._propertyEditor.value;
+                };
+                this._resizer.install(component, allcomponents);
+                allcomponents = this._variables.getEditableComponents(component, true);
+                this._draganddropper.install(component, allcomponents);
+                this._draganddropper.onpropertychanged = function (component, top, left, oldParent, newParent, beforeComponent) {
+                    _this.moveComponent(component, top, left, oldParent, newParent, beforeComponent);
+                };
+                this._draganddropper.onpropertyadded = function (type, component, top, left, newParent, beforeComponent) {
+                    _this.createComponent(type, component, top, left, newParent, beforeComponent);
+                };
+                this._draganddropper.isDragEnabled = function (event, ui) {
+                    if (_this._resizer === undefined)
+                        return false;
+                    return _this._resizer.componentUnderCursor !== undefined;
+                };
+            }
+            else {
+            }
+            /*  $(".hoho2").selectable({});
+              $(".hoho2").selectable("disable");*/
+            /*  $(".HTMLPanel").selectable({});
+              $(".HTMLPanel").selectable("disable");
+              $(".HTMLPanel").draggable({});
+              $(".HTMLPanel").draggable("disable");*/
+        }
+        /**
+         * move a component
+         * @param {jassijs.ui.Component} component - the component to move
+         * @param {number} top - the top absolute position
+         * @param {number} left - the left absolute position
+         * @param {jassijs.ui.Container} newParent - the new parent container where the component move to
+         * @param {jassijs.ui.Component} beforeComponent - insert the component before beforeComponent
+         **/
+        moveComponent(component, top, left, oldParent, newParent, beforeComponent) {
+            var _this = this;
+            /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor!==undefined){
+                beforeComponent=undefined;
+            }*/
+            var oldName = _this._codeEditor.getVariableFromObject(oldParent);
+            var newName = _this._codeEditor.getVariableFromObject(newParent);
+            var compName = _this._codeEditor.getVariableFromObject(component);
+            if (top !== undefined) {
+                _this._propertyEditor.setPropertyInCode("x", top + "", true);
+            }
+            else {
+                _this._propertyEditor.removePropertyInCode("x");
+            }
+            if (left !== undefined) {
+                _this._propertyEditor.setPropertyInCode("y", left + "", true);
+            }
+            else {
+                _this._propertyEditor.removePropertyInCode("y");
+            }
+            if (oldParent !== newParent || beforeComponent !== undefined || top === undefined) { //top=undefined ->on relative position at the end call the block
+                //get Position
+                _this._propertyEditor.removePropertyInCode("add", compName, oldName);
+                var before;
+                if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //designdummy atEnd
+                    var on = _this._codeEditor.getVariableFromObject(beforeComponent);
+                    var par = _this._codeEditor.getVariableFromObject(beforeComponent._parent);
+                    before = { variablename: par, property: "add", value: on };
+                }
+                _this._propertyEditor.setPropertyInCode("add", compName, false, newName, before);
+            }
+            /* if(newParent._components.length>1){//correct dummy
+                 var dummy=	newParent._components[newParent._components.length-2];
+                 if(dummy.designDummyFor!==undefined){
+                     //var tmp=newParent._components[newParent._components.length-1];
+                     newParent.remove(dummy);//._components[newParent._components.length-1]=newParent._components[newParent._components.length-2];
+                     newParent.add(dummy);//._components[newParent._components.length-1]=tmp;
+                 }
+             }*/
+            _this._variables.updateCache();
+            _this._propertyEditor.value = _this._propertyEditor.value;
+            _this._componentExplorer.value = _this._componentExplorer.value;
+        }
+        /**
+         * create a new component
+         * @param {string} type - the type of the new component
+         * @param {jassijs.ui.Component} component - the component themself
+         * @param {number} top - the top absolute position
+         * @param {number} left - the left absolute position
+         * @param {jassijs.ui.Container} newParent - the new parent container where the component is placed
+         * @param {jassijs.ui.Component} beforeComponent - insert the new component before beforeComponent
+         **/
+        createComponent(type, component, top, left, newParent, beforeComponent) {
+            var _this = this;
+            /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor&&beforeComponent.type==="atEnd"){
+                beforeComponent=undefined;
+            }*/
+            var file = type.replaceAll(".", "/");
+            var stype = file.split("/")[file.split("/").length - 1];
+            _this._propertyEditor.addImportIfNeeded(stype, file);
+            var repeater = _this._hasRepeatingContainer(newParent);
+            var scope = undefined;
+            if (repeater !== undefined) {
+                var repeatername = _this._codeEditor.getVariableFromObject(repeater);
+                var test = _this._propertyEditor.parser.getPropertyValue(repeatername, "createRepeatingComponent");
+                scope = { variablename: repeatername, methodname: "createRepeatingComponent" };
+                if (test === undefined) {
+                    var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassijs.ui.Databinder");
+                    _this._propertyEditor.setPropertyInCode("createRepeatingComponent", "function(me:Me){\n\t\n}", true, repeatername);
+                    repeater.createRepeatingComponent(function (me) {
+                        if (this._designMode !== true)
+                            return;
+                        //_this._variables.addVariable(vardatabinder,databinder);
+                        _this._variables.updateCache();
+                    });
+                    /*var db=new jassijs.ui.Databinder();
+                    if(repeater.value!==undefined&&repeater.value.length>0)
+                        db.value=repeater.value[0];
+                    _this._variables.add(vardatabinder,db);
+                    _this._variables.updateCache();*/
+                }
+            }
+            var varvalue = new (Classes_3.classes.getClass(type));
+            if (this._propertyEditor.codeEditor !== undefined) {
+                var varname = _this._propertyEditor.addVariableInCode(type, scope);
+                if (varname.startsWith("me.")) {
+                    var me = _this._codeEditor.getObjectFromVariable("me");
+                    me[varname.substring(3)] = varvalue;
+                }
+                else if (varname.startsWith("this.")) {
+                    var th = _this._codeEditor.getObjectFromVariable("this");
+                    th[varname.substring(5)] = varvalue;
+                }
+                else
+                    _this._variables.addVariable(varname, varvalue);
+                var newName = _this._codeEditor.getVariableFromObject(newParent);
+                var before;
+                if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //Designdummy atEnd
+                    //if(beforeComponent.type==="beforeComponent")
+                    //   beforeComponent=beforeComponent.designDummyFor;
+                    var on = _this._codeEditor.getVariableFromObject(beforeComponent);
+                    var par = _this._codeEditor.getVariableFromObject(beforeComponent._parent);
+                    before = { variablename: par, property: "add", value: on };
+                }
+                _this._propertyEditor.setPropertyInCode("add", varname, false, newName, before, scope);
+            }
+            if (beforeComponent !== undefined) {
+                newParent.addBefore(varvalue, beforeComponent);
+            }
+            else {
+                newParent.add(varvalue);
+            }
+            /* if(newParent._components.length>1){//correct dummy
+                 if(newParent._designDummy){
+                     //var tmp=newParent._components[newParent._components.length-1];
+                     newParent.dom.removeChild(newParent._designDummy.domWrapper)
+                     newParent.dom.append(newParent._designDummy.domWrapper)
+                 }
+             }*/
+            _this._variables.updateCache();
+            //set initial properties for the new component
+            if (component.createFromParam !== undefined) {
+                for (var key in component.createFromParam) {
+                    var val = component.createFromParam[key];
+                    if (typeof val === 'string')
+                        val = '"' + val + '"';
+                    _this._propertyEditor.setPropertyInCode(key, val, true, varname);
+                }
+                $.extend(varvalue, component.createFromParam);
+            }
+            if (top !== undefined) {
+                _this._propertyEditor.setPropertyInCode("x", top + "", true, varname);
+                varvalue.x = top;
+            }
+            if (left !== undefined) {
+                _this._propertyEditor.setPropertyInCode("y", left + "", true, varname);
+                varvalue.y = left;
+            }
+            //notify componentdescriptor 
+            var ac = varvalue.extensionCalled;
+            if (ac !== undefined) {
+                varvalue.extensionCalled({ componentDesignerComponentCreated: {
+                        newParent: newParent
+                    } });
+            }
+            //include the new element
+            _this.editDialog(true);
+            _this._propertyEditor.value = varvalue;
+            _this._componentExplorer.update();
+            //var test=_this._invisibleComponents;
+            _this._updateInvisibleComponents();
+            return varvalue;
+        }
+        /**
+         * is there a parent that acts a repeating container?
+         **/
+        _hasRepeatingContainer(component) {
+            if (component === undefined)
+                return undefined;
+            if (this._codeEditor.getVariableFromObject(component) === undefined)
+                return undefined;
+            if (component instanceof Repeater_1.Repeater) {
+                return component;
+            }
+            return this._hasRepeatingContainer(component._parent);
+        }
+        /**
+         * @member {jassijs.ui.Component} - the designed component
+         */
+        set designedComponent(component) {
+            var com = component;
+            if (com["isAbsolute"] !== true && com.width === "0" && com.height === "0") {
+                component.width = "calc(100% - 1px)";
+                component.height = "calc(100% - 1px)";
+            }
+            if (this._codeEditor.__evalToCursorReached !== true) {
+                this._codeEditor._main.show("design");
+            }
+            if (this._designPlaceholder._components.length > 0)
+                this._designPlaceholder.remove(this._designPlaceholder._components[0], true);
+            this._designPlaceholder.add(component);
+            // 
+            this._propertyEditor.updateParser();
+            this.editDialog(true);
+            this._componentExplorer.value = component;
+            $(this.dom).focus();
+            this._updateInvisibleComponents();
+            //var parser=new jassijs.ui.PropertyEditor.Parser();
+            //parser.parse(_this.value);
+        }
+        get designedComponent() {
+            return this._designPlaceholder._components[0];
+        }
+        destroy() {
+            var _a, _b, _c, _d;
+            if (this._resizer !== undefined) {
+                this._resizer.uninstall();
+            }
+            if (this._draganddropper !== undefined) {
+                this._draganddropper.isDragEnabled = undefined;
+                this._draganddropper.uninstall();
+            }
+            (_a = this._propertyEditor) === null || _a === void 0 ? void 0 : _a.destroy();
+            (_b = this._componentPalette) === null || _b === void 0 ? void 0 : _b.destroy();
+            (_c = this._componentExplorer) === null || _c === void 0 ? void 0 : _c.destroy();
+            (_d = this._invisibleComponents) === null || _d === void 0 ? void 0 : _d.destroy();
+            super.destroy();
+        }
+    };
+    ComponentDesigner = __decorate([
+        Jassi_7.$Class("jassijs_editor.ComponentDesigner"),
+        __metadata("design:paramtypes", [])
+    ], ComponentDesigner);
+    exports.ComponentDesigner = ComponentDesigner;
+    async function test() {
+        return new ComponentDesigner();
+    }
+    exports.test = test;
+    ;
+});
+define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs_editor/CodeEditor", "jassijs/ui/PropertyEditor", "jassijs/remote/Classes"], function (require, exports, Jassi_8, Panel_5, Tree_1, ComponentDescriptor_1, ContextMenu_1, CodeEditor_2, PropertyEditor_2, Classes_4) {
+    "use strict";
+    var _a, _b;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.ComponentExplorer = void 0;
+    let ComponentExplorer = class ComponentExplorer extends Panel_5.Panel {
+        /**
+        * edit object properties
+        */
+        constructor(codeEditor, propertyEditor) {
+            super();
+            /** @member {jassijs_editor.CodeEditor} - the parent CodeEditor */
+            this.codeEditor = codeEditor;
+            this.tree = new Tree_1.Tree();
+            this.tree.height = "100%";
+            this.contextMenu = new ContextMenu_1.ContextMenu();
+            this.add(this.contextMenu);
+            this.layout();
+            this.propertyEditor = propertyEditor;
+        }
+        /**
+         * @member {jassijs.ui.Component}  - the rendered object
+         */
+        set value(value) {
+            this._value = value;
+            this.tree.items = value;
+            this.tree.expandAll();
+        }
+        get value() {
+            return this._value;
+        }
+        /**
+         * get the displayname of the item
+         * must be override
+         * @param {object} item
+         */
+        getComponentName(item) {
+            return item;
+        }
+        /**
+         * get the child components
+         * must be override
+         * @param {object} item
+         */
+        getComponentChilds(item) {
+            if (item === this.value)
+                return item._components;
+            var comps = ComponentDescriptor_1.ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);
+            var ret = [];
+            for (var name in comps) {
+                var comp = comps[name];
+                if (comp === undefined)
+                    continue;
+                var complist = comp._components;
+                if (name !== "this" && this.getComponentName(comp) !== undefined) {
+                    if (ret.indexOf(comp) === -1)
+                        ret.push(comp);
+                }
+                if (complist !== undefined) {
+                    for (var y = 0; y < complist.length; y++) {
+                        if (this.getComponentName(complist[y]) !== undefined) {
+                            if (ret.indexOf(complist[y]) === -1)
+                                ret.push(complist[y]);
+                        }
+                    }
+                }
+            }
+            return ret;
+        }
+        layout() {
+            var _this = this;
+            this.tree.width = "100%";
+            this.tree.height = "100%";
+            this.tree.propChilds = function (item) {
+                return _this.getComponentChilds(item);
+            };
+            this.tree.propDisplay = function (item) {
+                return _this.getComponentName(item);
+            };
+            this.contextMenu.getActions = async function (data) {
+                var ret = [];
+                var parent = data[0]._parent;
+                if (parent !== undefined && parent._components !== undefined) {
+                    var hasDummy = (parent._components[parent._components.length - 1]["designDummyFor"] !== undefined ? 1 : 0);
+                    if ((parent._components.length > 1 + hasDummy) && parent._components.indexOf(data[0]) !== 0) {
+                        var ac = {
+                            call: function () {
+                                _this.propertyEditor.swapComponents(parent._components[parent._components.indexOf(data[0]) + -1], data[0]);
+                                _this.tree.items = _this.tree.items;
+                                _this.tree.value = data[0];
+                            },
+                            name: "move up"
+                        };
+                        ret.push(ac);
+                    }
+                    if (parent._components.length > 1 + hasDummy &&
+                        parent._components.indexOf(data[0]) + hasDummy + 1 < parent._components.length) {
+                        var ac = {
+                            call: function () {
+                                _this.propertyEditor.swapComponents(data[0], parent._components[parent._components.indexOf(data[0]) + 1]);
+                                _this.tree.items = _this.tree.items;
+                                _this.tree.value = data[0];
+                            },
+                            name: "move down"
+                        };
+                        ret.push(ac);
+                    }
+                }
+                return ret;
+            };
+            this.tree.contextMenu = this.contextMenu;
+            this.add(this.tree);
+        }
+        update() {
+            this.value = this.value;
+        }
+        onclick(handler) {
+            this.tree.addEvent("click", handler);
+        }
+        destroy() {
+            this._value = undefined;
+            super.destroy();
+        }
+    };
+    ComponentExplorer = __decorate([
+        Jassi_8.$Class("jassijs_editor.ComponentExplorer"),
+        __metadata("design:paramtypes", [typeof (_a = typeof CodeEditor_2.CodeEditor !== "undefined" && CodeEditor_2.CodeEditor) === "function" ? _a : Object, typeof (_b = typeof PropertyEditor_2.PropertyEditor !== "undefined" && PropertyEditor_2.PropertyEditor) === "function" ? _b : Object])
+    ], ComponentExplorer);
+    exports.ComponentExplorer = ComponentExplorer;
+    async function test() {
+        var dlg = new ComponentExplorer(undefined, undefined);
+        dlg.getComponentName = function (item) {
+            return Classes_4.classes.getClassName(item);
+        };
+        dlg.value = dlg;
+        return dlg;
+    }
+    exports.test = test;
+});
+define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Jassi_9, Panel_6, Image_1, Registry_4, Classes_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.ComponentPalette = void 0;
+    let ComponentPalette = class ComponentPalette extends Panel_6.Panel {
+        constructor() {
+            super();
+            this.layout();
+        }
+        layout() {
+        }
+        /**
+         * @member {string} - the service where the palette-items are registred
+         **/
+        set service(value) {
+            var _this = this;
+            this._service = value;
+            while (this._components.length > 0) {
+                this.remove(this._components[0]);
+            }
+            Registry_4.default.getJSONData(this._service).then((jdata) => {
+                for (var x = 0; x < jdata.length; x++) {
+                    var mdata = jdata[x];
+                    var data = mdata.params[0];
+                    if (data.fullPath === undefined || data.fullPath === "undefined")
+                        continue;
+                    var img = new Image_1.Image();
+                    var name = data.fullPath.split("/");
+                    var sname = name[name.length - 1];
+                    img.tooltip = sname;
+                    img.src = data.icon === undefined ? "mdi mdi-chart-tree mdi-18px" : data.icon + (data.icon.startsWith("mdi") ? " mdi-18px" : "");
+                    //img.height = 24;
+                    //img.width = 24;
+                    img["createFromType"] = mdata.classname;
+                    img["createFromParam"] = data.initialize;
+                    _this._makeDraggable(img);
+                    _this.add(img);
+                }
+            });
+            /*registry.loadAllFilesForService(this._service).then(function(){
+                registry.getData(_this._service).forEach(function(mdata){
+                    var data:UIComponentProperties=mdata.params[0];
+                    var img=new Image();
+                    var name=data.fullPath.split("/");
+                    var sname=name[name.length-1];
+                    img.tooltip=sname;
+                    img.src=data.icon===undefined?"res/unknowncomponent.png":data.icon;
+                    img.height=24;
+                    img.width=24;
+                    img["createFromType"]=classes.getClassName(mdata.oclass);
+                    img["createFromParam"]=data.initialize;
+                    _this._makeDraggable(img);
+                    _this.add(img);
+                });
+           });*/
+        }
+        get service() {
+            return this._service;
+        }
+        /**
+         * install the draggable
+         * @param {jassijs.ui.Image} component
+         */
+        _makeDraggable(component) {
+            var helper = undefined;
+            $(component.dom).draggable({
+                cancel: "false", revert: "invalid",
+                appendTo: "body",
+                helper: function (event) {
+                    if (helper === undefined) {
+                        var cl = Classes_5.classes.getClass(component.createFromType);
+                        if (cl === undefined) {
+                            Classes_5.classes.loadClass(component.createFromType); //for later
+                            cl = Panel_6.Panel;
+                        }
+                        helper = new cl();
+                        var img = new Image_1.Image();
+                        img.src = component.src;
+                        img.height = 24;
+                        img.width = 24;
+                        img.x = component.x;
+                        img.y = component.y;
+                        helper._position = img;
+                        component._helper = helper;
+                        if (component.createFromParam !== undefined) {
+                            $.extend(helper, component.createFromParam);
+                        }
+                        $("#jassitemp")[0].removeChild(helper.domWrapper);
+                        $("#jassitemp")[0].removeChild(helper._position.domWrapper);
+                    }
+                    return helper._position.dom; //$(helper.dom);
+                }
+            });
+        }
+        destroy() {
+            for (var x = 0; x < this._components.length; x++) {
+                var comp = this._components[x];
+                $(comp.dom).draggable("destroy");
+                if (comp["_helper"] !== undefined)
+                    comp["_helper"].destroy();
+            }
+            super.destroy();
+        }
+    };
+    ComponentPalette = __decorate([
+        Jassi_9.$Class("jassijs_editor.ComponentPalette"),
+        __metadata("design:paramtypes", [])
+    ], ComponentPalette);
+    exports.ComponentPalette = ComponentPalette;
+    function test() {
+        var comp = new ComponentPalette();
+        comp.service = "$UIComponent";
+        return comp;
+    }
+    exports.test = test;
+});
+define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_10) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Debugger = void 0;
+    //https://developer.chrome.com/extensions/messaging
+    let Debugger = class Debugger {
+        /**
+         * routing of url
+         * @class jassijs.base.Debugger
+         */
+        constructor() {
+        }
+        /**
+         * @param {string} file - the file to save
+         * @param {string} code - the code to Transform
+         * @param [number] debuglines - lines which updates the variables
+         * @param {Object.<int,string>}  debuglinesConditions - is the breakpoint in line conitionally [line]->condition
+         **/
+        async debugCode(file, code, debuglines, debuglinesConditions, evalToCursorPosition) {
+        }
+        /**
+         * remove all breakpoints for the file
+         * @param file
+         */
+        async removeBreakpointsForFile(file) {
+        }
+        /**
+        * extract all variables in code
+        * @param {string} code - the code to inspect
+        */
+        _extractVariables(code) {
+            var pos = 0;
+            var ret = [];
+            while (pos !== -1) {
+                pos = code.indexOf("var" + " ", pos);
+                if (pos !== -1) {
+                    var p1 = code.indexOf(" ", pos + 4);
+                    var p2 = code.indexOf(";", pos + 4);
+                    var p3 = code.indexOf("=", pos + 4);
+                    var p = Math.min(p1 === -1 ? 999999999 : p1, p2 === -1 ? 999999999 : p2, p3 === -1 ? 999999999 : p3);
+                    var variabel = code.substring(pos + 4, p);
+                    var patt = new RegExp("\\W");
+                    if (!patt.test(variabel))
+                        ret.push(variabel);
+                    pos = pos + 1;
+                }
+            }
+            return ret;
+        }
+        /**
+         * sets a breakpoint for debugging
+         * @param {string} file
+         * @param {number} line
+         * @param {number} enable - if true then breakpoint is set if false then removed
+         * @param {string} type - the type default undefined->stop debugging
+         **/
+        breakpointChanged(file, line, column, enable, type) {
+            if (navigator.userAgent.indexOf("Chrome") > -1) {
+                (new Promise((resolve_2, reject_2) => { require(["jassijs_editor/ChromeDebugger"], resolve_2, reject_2); })).then((deb) => {
+                    deb.ChromeDebugger.showHintExtensionNotInstalled();
+                });
+            }
+            //	console.log("break on"+file);
+        }
+        /**
+         * report current variable scope
+         * @param {numer} id - id of the variablepanel
+         * @param {[Object.<string,object>]} variables
+         */
+        reportVariables(id, variables) {
+            var editor = $("#" + id)[0]._this;
+            alert(editor);
+            editor["addVariables"](variables);
+        }
+        /**
+        * add debugpoints in code
+        * @param {[string]} lines - code
+        * @param {Object.<number, boolean>} debugpoints - the debugpoints
+        * @param {jassijs_editor.CodeEditor} codeEditor
+        */
+        addDebugpoints(lines, debugpoints, codeEditor) {
+            Jassi_10.default.d[codeEditor._id] = undefined;
+            //        	jassijs.ui.VariablePanel.get(this._id).__db=undefined;
+            var hassome = undefined;
+            this.debugpoints = debugpoints;
+            for (var point in debugpoints) {
+                if (debugpoints[point] === true) {
+                    //lines[point]="if(jassijs.ui.VariablePanel.get("+this._id+").__db===undefined){ jassijs.ui.VariablePanel.get("+this._id+").__db=true;debugger;}"+lines[point];
+                    lines[point] = "if(jassijs.d(" + codeEditor._id + ")) debugger;" + lines[point];
+                    /*if(hassome===undefined){
+                        hassome=true;
+                        lines[0]="var _variables_=$('#"+this._id+"')[0]._this;"+lines[0];
+                    }*/
+                }
+            }
+        }
+        /**
+         *
+         * @param {string} code - full source code
+         * @param {jassijs_editor.CodeEditor} codeEditor
+         * @returns {string}
+         */
+        getCodeForBreakpoint(code, codeEditor) {
+            /*	var reg = /([\w]*)[\(][^\)]*[\)]/g;
+                var test=reg.exec(code);
+                test=reg.exec();
+                alert(test);*/
+            var vars = this._extractVariables(code);
+            var reg = /[A-Z,a-z,0-9,\_]*[/w]*[\(][A-Z,a-z,0-9,\_,\,]*\)\{/g;
+            var test = reg.exec(code);
+            while (test) {
+                if (!test[0].startsWith("while") && !test[0].startsWith("if")) {
+                    var params = test[0].substring(test[0].indexOf("(") + 1, test[0].indexOf(")"));
+                    if (params.length > 0) {
+                        var ps = params.split(",");
+                        for (var p = 0; p < ps.length; p++) {
+                            if (vars.indexOf(ps[p]) === -1)
+                                vars.push(ps[p]);
+                        }
+                    }
+                }
+                test = reg.exec(code);
+            }
+            var svars = "{var debug_editor=$('#'+" + codeEditor._id + ")[0]._this;var _variables_={} ;try{if(this!==jassi)_variables_['this']=this;}catch(ex){};";
+            //svars=svars+"try{_variables_.addParameters(arguments);}catch(ex){};";
+            for (var x = 0; x < vars.length; x++) {
+                //        alert(vars[x]);
+                svars = svars + "try{_variables_['" + vars[x] + "']=" + vars[x] + ";}catch(ex){};";
+            }
+            svars = svars + "debug_editor.addVariables(_variables_);}";
+            return svars;
+        }
+        destroy() {
+            this.destroyed = true;
+        }
+    };
+    Debugger = __decorate([
+        Jassi_10.$Class("jassijs_editor.Debugger"),
+        __metadata("design:paramtypes", [])
+    ], Debugger);
+    exports.Debugger = Debugger;
+    if (Jassi_10.default.debugger === undefined)
+        Jassi_10.default.debugger = new Debugger();
+    require(["jassijs_editor/ChromeDebugger"]);
+});
+define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_11, Router_2, Typescript_5, CodePanel_3, Settings_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.MonacoPanel = void 0;
+    var inited = false;
+    function __init(editor) {
+        if (inited)
+            return;
+        //auto import 
+        const cs = editor._commandService;
+        var CommandsRegistry = require("vs/platform/commands/common/commands").CommandsRegistry;
+        CommandsRegistry.registerCommand("autoimport", (o1, model, pos) => {
+            var file = model.uri.path.substring(1);
+            var code = model.getValue();
+            var p = Typescript_5.default.getPositionOfLineAndCharacter(file, {
+                line: pos.lineNumber, character: pos.column
+            });
+            const oldpos = model["lastEditor"].getPosition();
+            setTimeout(() => {
+                CodePanel_3.CodePanel.getAutoimport(p, file, code).then((data) => {
+                    if (data !== undefined) {
+                        model.pushEditOperations([], [{
+                                range: monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row + 1 }),
+                                text: data.text
+                            }], (a) => {
+                            return null;
+                        });
+                        oldpos.lineNumber = oldpos.lineNumber + (data.text.indexOf("\r") ? 1 : 0);
+                        model["lastEditor"].setPosition(oldpos);
+                    }
+                });
+            }, 100);
+        });
+        //implement go to definition
+        const editorService = editor["_codeEditorService"];
+        const openEditorBase = editorService.openCodeEditor.bind(editorService);
+        editorService.openCodeEditor = async (input, source) => {
+            const result = await openEditorBase(input, source);
+            if (result === null) {
+                var file = input.resource.path.substring(1);
+                var line = input.options.selection.startLineNumber;
+                Router_2.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
+            }
+            return result; // always return the base result
+        };
+        //completion for autonimport
+        monaco.languages.registerCompletionItemProvider('typescript', {
+            provideCompletionItems: async function (model, position) {
+                var textUntilPosition = model.getValueInRange({ startLineNumber: 1, startColumn: 1, endLineNumber: position.lineNumber, endColumn: position.column });
+                var word = model.getWordUntilPosition(position);
+                var range = {
+                    startLineNumber: position.lineNumber,
+                    endLineNumber: position.lineNumber,
+                    startColumn: word.startColumn,
+                    endColumn: word.endColumn
+                };
+                var file = model.uri.path.substring(1);
+                var pos = Typescript_5.default.getPositionOfLineAndCharacter(file, { line: position.lineNumber, character: position.column });
+                var all = await Typescript_5.default.getCompletion(file, pos, undefined, { includeExternalModuleExports: true });
+                var sug = [];
+                for (var x = 0; x < all.entries.length; x++) {
+                    var it = all.entries[x];
+                    if ((it.kindModifiers === "export" || it.kindModifiers === "") && it.hasAction === true) {
+                        var item = {
+                            label: it.name,
+                            kind: it.kind,
+                            documentation: "import from " + it.source,
+                            insertText: it.name,
+                            range: range,
+                            command: {
+                                arguments: [model, position],
+                                id: "autoimport",
+                                title: "autoimport"
+                            }
+                        };
+                        sug.push(item);
+                    }
+                }
+                return {
+                    suggestions: sug
+                };
+            }
+        });
+        inited = true;
+    }
+    /**
+    * wrapper for the Ace-Code editor with Typescript-Code-Completion an other features
+    * @class jassijs.ui.CodePanel
+    */
+    let MonacoPanel = class MonacoPanel extends CodePanel_3.CodePanel {
+        constructor() {
+            super();
+            var _this = this;
+            // super.init($('<div style="width: 800px; height: 600px; border: 1px solid grey"></div>')[0]);
+            var test = $('<div class="MonacoPanel" style="height: 100px; width: 100px"></div>')[0];
+            super.init(test);
+            $(this.domWrapper).css("overflow", "hidden");
+            $(this.domWrapper).css("display", "");
+            /* _this._editor.on("guttermousedown", function(e) {
+     
+                 var row = e.getDocumentPosition().row;
+                 var breakpoints = e.editor.session.getBreakpoints(row, 0);
+                 var type = "debugpoint";
+                 if (e.domEvent.ctrlKey)
+                     type = "checkpoint";
+                 var column = _this._editor.session.getLine(row).length;
+                 if (typeof breakpoints[row] === typeof undefined) {
+                     e.editor.session.setBreakpoint(row);
+                     _this.callEvent("breakpointChanged", row, column, true, type);
+                 } else {
+                     e.editor.session.clearBreakpoint(row, false, undefined);
+                     _this.callEvent("breakpointChanged", row, column, false, type);
+                 }
+             });*/
+            let theme = Settings_2.Settings.gets(Settings_2.Settings.keys.Development_MoanacoEditorTheme);
+            this._editor = monaco.editor.create(this.dom, {
+                //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
+                language: 'typescript',
+                theme: (theme ? theme : "vs-light"),
+                glyphMargin: true,
+                fontSize: 12,
+                automaticLayout: true
+            });
+            __init(this._editor);
+            this._editor.onMouseDown(function (e) {
+                _this._mouseDown(e);
+            });
+            //this._editor.setModel(monaco.editor.getModels() [1]);
+        }
+        getBreakpointDecoration(line) {
+            var decs = this._editor.getLineDecorations(line);
+            for (var x = 0; x < decs.length; x++) {
+                if (decs[x].options.glyphMarginClassName === "jbreackpoint")
+                    return decs[x];
+            }
+            return undefined;
+        }
+        _mouseDown(e) {
+            if (e.target.type === 2) {
+                var line = e.target.position.lineNumber;
+                var column = this._editor.getModel().getLineContent(line - 1).length;
+                var type = "debugpoint";
+                var dec = this.getBreakpointDecoration(line);
+                if (dec) {
+                    this._editor.deltaDecorations([dec.id], []);
+                    this.callEvent("breakpointChanged", line - 1, column, false, type);
+                }
+                else {
+                    this.callEvent("breakpointChanged", line - 1, column, true, type);
+                    var decorations = this._editor.deltaDecorations([], [
+                        {
+                            range: new monaco.Range(line, 1, line, 1),
+                            options: {
+                                isWholeLine: true,
+                                className: 'jbreackpointclass',
+                                glyphMarginClassName: 'jbreackpoint'
+                            }
+                        }
+                    ]);
+                }
+            }
+        }
+        /**
+         * gets a list of all lines with breakpoint
+         * @returns {Object.<number, boolean>}
+         */
+        getBreakpoints() {
+            var ret = {};
+            var decs = this._editor.getModel().getLineCount();
+            for (var x = 1; x <= this._editor.getModel().getLineCount(); x++) {
+                if (this.getBreakpointDecoration(x)) {
+                    ret[x - 1] = true;
+                }
+            }
+            return ret;
+        }
+        /**
+         * breakpoint changed
+         * @param {function} handler - function(line,enabled,type)
+         */
+        onBreakpointChanged(handler) {
+            this.addEvent("breakpointChanged", handler);
+        }
+        /**
+         * component get focus
+         * @param {function} handler
+         */
+        onfocus(handler) {
+            //   this._editor.on("focus", handler);
+        }
+        /**
+         * component lost focus
+         * @param {function} handler
+         */
+        onblur(handler) {
+            // this._editor.on("blur", handler);
+        }
+        /**
+         * @param - the codetext
+         */
+        set value(value) {
+            var lastcursor = this.cursorPosition;
+            var _this = this;
+            if (this.file) {
+                var ffile = monaco.Uri.from({ path: "/" + this.file, scheme: 'file' });
+                var mod = monaco.editor.getModel(ffile);
+                if (!mod) {
+                    mod = monaco.editor.createModel(value, "typescript", ffile);
+                    this._editor.setModel(mod);
+                    this._editor.setValue(value);
+                }
+                else if (mod !== this._editor.getModel()) {
+                    delete this._editor.getModel()["lastEditor"];
+                    this._editor.setModel(mod);
+                    this._editor.setValue(value);
+                }
+                else {
+                    this._editor.getModel().pushEditOperations([], [{
+                            range: this._editor.getModel().getFullModelRange(),
+                            text: value
+                        }], (a) => {
+                        return null;
+                    });
+                }
+                if (this._editor.getModel()) {
+                    this._editor.getModel()["lastEditor"] = _this._editor;
+                }
+            }
+            else
+                this._editor.setValue(value);
+        }
+        get value() {
+            return this._editor.getValue();
+        }
+        /**
+         * @param {object} position - the current cursor position {row= ,column=}
+         */
+        set cursorPosition(cursor) {
+            this._editor.focus();
+            try {
+                this._editor.revealLine(cursor.row);
+                //this._editor.setPosition({ column: cursor.column, lineNumber: cursor.row });
+            }
+            catch (_a) {
+            }
+        }
+        get cursorPosition() {
+            var pos = this._editor.getPosition();
+            return {
+                row: pos.lineNumber,
+                column: pos.column
+            };
+        }
+        destroy() {
+            //this._editor.destroy();
+            super.destroy();
+            delete this._editor.getModel()["lastEditor"];
+        }
+        /**
+        * undo action
+        */
+        undo() {
+            //@ts-ignore
+            this._editor.getModel().undo();
+        }
+        /**
+         * resize the editor
+         * */
+        resize() {
+            //
+            //   this._editor.resize();
+        }
+        /**
+       * @member {string} - the language of the editor e.g. "ace/mode/javascript"
+       */
+        set mode(mode) {
+            //  alert(mode);
+            this._mode = mode;
+            //  this._editor.getSession().setMode("ace/mode/" + mode);
+        }
+        get mode() {
+            return this._mode;
+        }
+        async loadsample() {
+            this.file = "a/Dialog.ts";
+            this.value = "var a=window.document;";
+        }
+    };
+    MonacoPanel = __decorate([
+        Jassi_11.$Class("jassijs_editor.MonacoPanel"),
+        __metadata("design:paramtypes", [])
+    ], MonacoPanel);
+    exports.MonacoPanel = MonacoPanel;
+    async function test() {
+        //await Settings.save(Settings.keys.Development_MoanacoEditorTheme, "vs-dark", "user")
+        var dlg = new MonacoPanel();
+        //  var code = await new Server().loadFile("a/Dialog.ts");
+        await dlg.loadsample();
+        setTimeout(() => {
+            dlg.width = "800";
+            dlg.height = "100";
+        }, 200);
+        //@ts-ignore
+        //   dlg._editor.layout();
+        //    dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
+        //  dlg.mode = "javascript";
+        //dlg._editor.renderer.setShowGutter(false);		
+        //dlg._editor.getSession().addGutterDecoration(1,"error_line");
+        //  dlg._editor.getSession().setBreakpoint(1);
+        // dlg._editor.getSession().setBreakpoint(2);
+        return dlg;
+    }
+    exports.test = test;
+});
+define("jassijs_editor/StartEditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/ui/SearchExplorer", "jassijs/ui/DBObjectExplorer", "jassijs/ui/ActionNodeMenu"], function (require, exports, FileExplorer_1, Windows_2, Panel_7, Button_4, Router_3, SearchExplorer_1, DBObjectExplorer_1, ActionNodeMenu_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    //var h=new RemoteObject().test();
+    async function start() {
+        //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
+        var body = new Panel_7.Panel({ id: "body" });
+        body.max();
+        Windows_2.default.addLeft(new DBObjectExplorer_1.DBObjectExplorer(), "DBObjects");
+        Windows_2.default.addLeft(new SearchExplorer_1.SearchExplorer(), "Search");
+        Windows_2.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
+        var bt = new Button_4.Button();
+        Windows_2.default._desktop.add(bt);
+        bt.icon = "mdi mdi-refresh";
+        var am = new ActionNodeMenu_1.ActionNodeMenu();
+        bt.onclick(() => {
+            Windows_2.default._desktop.remove(am);
+            am = new ActionNodeMenu_1.ActionNodeMenu();
+            Windows_2.default._desktop.add(am);
+        });
+        Windows_2.default._desktop.add(am);
+        Router_3.router.navigate(window.location.hash);
+    }
+    start().then();
+});
+define("jassijs_editor/modul", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = {
+        "css": { "jassijs_editor.css": "jassijs_editor.css" },
+        "types": {
+            "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/monaco.d.ts",
+        },
+        "require": {
+            paths: {
+                'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
+                'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools',
+                monacoLib: "jassijs_editor/ext/monacoLib",
+                vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/vs"
+            },
+            shim: {
+                'ace/ext/language_tools': ['ace/ace'],
+            }
+        }
+    };
+});
+//this file is autogenerated don't modify
+define("jassijs_editor/registry", ["require"], function (require) {
+    return {
+        default: {
+            "jassijs_editor/AcePanel.ts": {
+                "date": 1623100103030,
+                "jassijs.ui.AcePanel": {}
+            },
+            "jassijs_editor/ChromeDebugger.ts": {
+                "date": 1622998653413,
+                "jassijs_editor.ChromeDebugger": {}
+            },
+            "jassijs_editor/CodeEditor.ts": {
+                "date": 1624296590297,
+                "jassijs_editor.CodeEditorSettingsDescriptor": {
+                    "$SettingsDescriptor": [],
+                    "@members": {
+                        "Development_DefaultEditor": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "ace",
+                                        "monaco",
+                                        "aceOnBrowser"
+                                    ],
+                                    "default": "aceOnBrowser",
+                                    "chooseFromStrict": true
+                                }
+                            ]
+                        },
+                        "Development_MoanacoEditorTheme": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "vs-dark",
+                                        "vs-light",
+                                        "hc-black"
+                                    ],
+                                    "default": "vs-light",
+                                    "chooseFromStrict": true
+                                }
+                            ]
+                        }
+                    }
+                },
+                "jassijs_editor.CodeEditor": {
+                    "@members": {
+                        "file": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true
+                                }
+                            ]
+                        },
+                        "line": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "jassijs_editor/CodeEditorInvisibleComponents.ts": {
+                "date": 1622998616949,
+                "jassijs_editor.CodeEditorInvisibleComponents": {}
+            },
+            "jassijs_editor/CodePanel.ts": {
+                "date": 1623097926572,
+                "jassijs_editor.CodePanel": {}
+            },
+            "jassijs_editor/ComponentDesigner.ts": {
+                "date": 1627596252446,
+                "jassijs_editor.ComponentDesigner": {}
+            },
+            "jassijs_editor/ComponentExplorer.ts": {
+                "date": 1623100288249,
+                "jassijs_editor.ComponentExplorer": {}
+            },
+            "jassijs_editor/ComponentPalette.ts": {
+                "date": 1623099899741,
+                "jassijs_editor.ComponentPalette": {}
+            },
+            "jassijs_editor/Debugger.ts": {
+                "date": 1622998616949,
+                "jassijs_editor.Debugger": {}
+            },
+            "jassijs_editor/modul.ts": {
+                "date": 1627320631266
+            },
+            "jassijs_editor/MonacoPanel.ts": {
+                "date": 1624143090748,
+                "jassijs_editor.MonacoPanel": {}
+            },
+            "jassijs_editor/StartEditor.ts": {
+                "date": 1623098599960
+            },
+            "jassijs_editor/util/DragAndDropper.ts": {
+                "date": 1622998616949,
+                "jassijs_editor.util.DragAndDropper": {}
+            },
+            "jassijs_editor/util/Parser.ts": {
+                "date": 1623862933088,
+                "jassijs_editor.base.Parser": {}
+            },
+            "jassijs_editor/util/Resizer.ts": {
+                "date": 1622998616949,
+                "jassijs_editor.util.Resizer": {}
+            },
+            "jassijs_editor/util/TSSourceMap.ts": {
+                "date": 1625511336878,
+                "jassijs_editor.util.TSSourceMap": {}
+            },
+            "jassijs_editor/util/Typescript.ts": {
+                "date": 1623951966985,
+                "jassijs_editor.util.Typescript": {}
+            }
+        }
+    };
+});
+/*
+requirejs.config({
+    paths: {
+        'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
+        'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools'
+    },
+    shim: {
+        'ace/ext/language_tools': ['ace/ace'],
+    }
+});*/
+//ok
+define("jassijs_editor/ext/acelib", ["require", 'ace/ace',
+    'ace/ext/language_tools'], function (require, ac) {
+    //  var tsmode= require("ace/mode/typescript");
+    /*  var WorkerClient = require("ace/worker/worker_client").WorkerClient;
+      var createWorker = function (session) {
+          var worker = new WorkerClient(["ace"], "jassijs/ext/ace_tsmode", "WorkerModule");
+          worker.attachToDocument(session.getDocument());
+
+          worker.on("lint", function (results) {
+              session.setAnnotations(results.data);
+          });
+
+          worker.on("terminate", function () {
+              session.clearAnnotations();
+          });
+
+          return worker;
+      };*/
+    return {
+        default: ac,
+        /*  createWorker:createWorker,
+          changeTSMode:function(session){
+            //  var tsmode=session.$mode;
+              session.$mode.createWorker=createWorker;
+              var k=9;
+          }*/
+    };
+});
+//require.config({ paths: { vs: '//cdn.jsdelivr.net/npm/monaco-editor@0.20.0/dev/vs' } });
+//require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev/vs' } });
+//require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs' } });
+//let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
+/*require.config({ paths: {
+    monacoLib:"jassijs_editor/ext/monacoLib",
+    vs: monacopath+"/vs"
+ }
+});
+*/
+define("jassijs_editor/ext/monacoLib", ["require"], function (require, editor) {
+    window["module"] = {};
+    window["module"].exports = {};
+    return {};
+});
+//hach to make autocompletion for autoimports from other modules
+define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 'vs/editor/editor.main', "vs/language/typescript/tsWorker" /*,"monacoLib_editorWorkerServiceImpl","monacoLib_editorSimpleWorker","tsWorker"*/], function (mlib, require, monaco, tsWorker /*,editorWorkerServiceImpl,editorSimpleWorker,tsWorker*/) {
+    //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
+    let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
+    //get Typescript instance
+    window.ts = window["module"].exports;
+    delete window["module"];
+    var platform_1 = require("vs/base/common/platform");
+    platform_1.globals.MonacoEnvironment = {};
+    function myfunc() {
+        setTimeout(() => {
+            var worker = require(['vs/language/typescript/tsWorker'], function (tsWorker) {
+                tsWorker.TypeScriptWorker.prototype.getCompletionsAtPosition = async function (fileName, position, properties) {
+                    return await this._languageService.getCompletionsAtPosition(fileName, position, properties);
+                };
+            });
+        }, 1000); //perhaps it must be higher - means autoimport from other modules is ready after 1 second
+    }
+    platform_1.globals.MonacoEnvironment.getWorker = function (workerId, label) {
+        //var js="/*editorWorkerService*/self.MonacoEnvironment={baseUrl: '"+monacopath+"/'};importScripts('"+monacopath+"/vs/base/worker/"+workerId+"');/*editorWorkerService*/"+myfunc.toString()+";myfunc();";
+        //const blob = new Blob([js], { type: 'application/javascript' });
+        const myPath = 'vs/base/worker/defaultWorkerFactory.js';
+        //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/vs/base/worker/workerMain.js"
+        let scriptPath = monacopath + "/vs/base/worker/workerMain.js"; // require.toUrl('./' + workerId);
+        //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/"
+        const workerBaseUrl = require.toUrl(myPath).slice(0, -myPath.length); // explicitly using require.toUrl(), see https://github.com/microsoft/vscode/issues/107440#issuecomment-698982321
+        let js = `/*${label}*/self.MonacoEnvironment={baseUrl: '${workerBaseUrl}'};const ttPolicy = self.trustedTypes?.createPolicy('defaultWorkerFactory', { createScriptURL: value => value });importScripts(ttPolicy?.createScriptURL('${scriptPath}') ?? '${scriptPath}');/*${label}*/;`;
+        if (label === "typescript")
+            js += myfunc.toString() + ";myfunc();";
+        const blob = new Blob([js], { type: 'application/javascript' });
+        var workerUrl = URL.createObjectURL(blob);
+        //var workerUrl=URL.createObjectURL(blob);
+        return new Worker(workerUrl, { name: label });
+    };
+    return {};
+});
+/*
+ //hack to get languageService
+    /*var orgLS=ts.createLanguageService;
+
+    var funcResolve=undefined;
+    var waiter=new Promise((resolve)=>{
+        funcResolve=resolve;
+    });
+    ts.createLanguageService=function(host, documentRegistry, syntaxOnlyOrLanguageServiceMode){
+            let ret=orgLS(host, documentRegistry, syntaxOnlyOrLanguageServiceMode);
+            funcResolve(ret);
+            return ret;
+    }
+    var ret = {
+        getLanguageService:async function(){
+            return await waiter;
+        }
+    }
+    //hack monaco allways create a worker which not run as serviceWorker - so we can share the languageservice
+    var EditorWorkerHost = require("vs/editor/common/services/editorWorkerServiceImpl").EditorWorkerHost;
+    var EditorSimpleWorker = require("vs/editor/common/services/editorSimpleWorker").EditorSimpleWorker;
+    var EditorWorkerClient = require("vs/editor/common/services/editorWorkerServiceImpl").EditorWorkerClient;
+    class SynchronousWorkerClient {
+        constructor(instance) {
+            this._instance = instance;
+            this._proxyObj = Promise.resolve(this._instance);
+        }
+        dispose() {
+            this._instance.dispose();
+        }
+        getProxyObject() {
+            return this._proxyObj;
+        }
+    }
+    EditorWorkerClient.prototype._getOrCreateWorker = function() {
+        if (!this._worker)
+            this._worker = new SynchronousWorkerClient(new EditorSimpleWorker(new EditorWorkerHost(this), null));
+        return this._worker;
+
+    }*/
+define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_12) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.DragAndDropper = void 0;
+    let DragAndDropper = class DragAndDropper {
+        constructor() {
+            this.onpropertychanged = undefined;
+            this.onpropertyadded = undefined;
+            this.lastDropCanceled = false;
+            this.allIDs = "";
+        }
+        ;
+        /**
+         * could be override to block dragging
+         */
+        isDragEnabled(event, ui) {
+            var mouse = event.target._this.dom.style.cursor;
+            if (mouse === "e-resize" || mouse === "s-resize" || mouse === "se-resize")
+                return true;
+            else
+                return false;
+        }
+        //dragging is active
+        isDragging() {
+            return this._isDragging;
+        }
+        /*public activateDragging(enable:boolean) {
+            $(this.allIDs).find(".jcontainer").not(".jdesigncontainer").draggable(enable ? "enable" : "disable");
+        }*/
+        enableDraggable(enable) {
+            //  this.onpropertychanged = undefined;
+            // this.onpropertyadded = undefined;
+            if (this.draggableComponents !== undefined) {
+                if (!enable)
+                    this.draggableComponents.draggable('disable');
+                else
+                    this.draggableComponents.draggable('enable');
+            }
+        }
+        _drop(target, event, ui) {
+            var _this = this;
+            var newComponent = ui.draggable[0]._this;
+            var newParent = target._this;
+            var beforeComponent = target._this;
+            var designDummyAtEnd;
+            if ((beforeComponent === null || beforeComponent === void 0 ? void 0 : beforeComponent.type) === "atEnd") {
+                designDummyAtEnd = beforeComponent;
+                beforeComponent = undefined;
+                newParent = newParent.designDummyFor;
+            }
+            if ((beforeComponent === null || beforeComponent === void 0 ? void 0 : beforeComponent.type) === "beforeComponent") {
+                beforeComponent = newParent.designDummyFor;
+                newParent = newParent.designDummyFor._parent;
+            }
+            if (target._this.isAbsolute) {
+                var left = parseInt($(ui.helper).css('left'));
+                var top = parseInt($(ui.helper).css('top'));
+                if (ui.draggable[0]._this.createFromType !== undefined) {
+                    var offsetNewParent = $(target._this.dom).offset();
+                    left = -offsetNewParent.left + parseInt($(ui.helper).css('left'));
+                    top = -offsetNewParent.top + parseInt($(ui.helper).css('top'));
+                    //      ui.helper[0]._this.left=left;
+                    //    ui.helper[0]._this.y=top;
+                    if (this.onpropertyadded !== undefined)
+                        this.onpropertyadded(ui.draggable[0]._this.createFromType, newComponent, left, top, newParent, undefined);
+                    return;
+                }
+                var oldParent = ui.draggable[0]._this._parent;
+                var pleft = $(newParent.dom).offset().left;
+                var ptop = $(newParent.dom).offset().top;
+                var oleft = $(oldParent.dom).offset().left;
+                var otop = $(oldParent.dom).offset().top;
+                left = left + oleft - pleft;
+                top = top + otop - ptop;
+                //snap to 5
+                if (top !== 1) {
+                    top = Math.round(top / 5) * 5;
+                }
+                if (left !== 1) {
+                    left = Math.round(left / 5) * 5;
+                }
+                oldParent.remove(ui.draggable[0]._this);
+                $(ui.draggable).css({ 'top': top, 'left': left, position: 'absolute' });
+                target._this.add(ui.draggable[0]._this);
+                if (_this.onpropertychanged !== undefined) {
+                    _this.onpropertychanged(newComponent, left, top, oldParent, newParent, undefined);
+                }
+            }
+            else { //relative layout
+                var oldParent = ui.draggable[0]._this._parent;
+                if (!$(newParent.domWrapper).hasClass("jcontainer") && newParent._parent) {
+                    newParent = newParent._parent;
+                }
+                $(ui.draggable).css({ 'top': "", 'left': "", "position": "relative" });
+                if (ui.draggable[0]._this.createFromType !== undefined) {
+                    if (this.onpropertyadded !== undefined)
+                        this.onpropertyadded(newComponent.createFromType, ui.draggable[0]._this, undefined, undefined, newParent, beforeComponent);
+                }
+                else {
+                    //newParent.add(ui.draggable[0]._this);
+                    if (target._this !== newParent)
+                        newParent.addBefore(ui.draggable[0]._this, target._this);
+                    else
+                        newParent.add(ui.draggable[0]._this);
+                    if (_this.onpropertychanged !== undefined) {
+                        _this.onpropertychanged(newComponent, undefined, undefined, oldParent, newParent, beforeComponent);
+                    }
+                }
+            }
+            if (designDummyAtEnd) { //this Component should stand at last
+                var par = designDummyAtEnd._parent;
+                par.remove(designDummyAtEnd);
+                par.add(designDummyAtEnd);
+                par.designDummies.push(designDummyAtEnd); //bug insert dummy again
+            }
+        }
+        /**
+        * install the DragAndDropper
+        * all child jomponents are draggable
+        * all child containers are droppable
+        * @param  parentPanel - all childs are effected
+        * @param allIDs - ID's of all editable components e.g. #10,#12
+        * @returns {unresolved}
+        */
+        install(parentPanel, allIDs) {
+            //$(this.parentPainer");
+            var _this = this;
+            if (parentPanel !== undefined)
+                this.parentPanel = parentPanel;
+            if (allIDs !== undefined)
+                this.allIDs = allIDs;
+            // this.draggableComponents = $(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
+            this.draggableComponents = $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
+            this.draggableComponents.draggable({
+                cancel: "false",
+                revert: "invalid",
+                drag: function (event, ui) {
+                    _this.lastDropCanceled = _this.isDragEnabled(event, ui);
+                    setTimeout(function () {
+                        _this.lastDropCanceled = false;
+                    }, 100);
+                    return !_this.lastDropCanceled;
+                },
+                start: function () {
+                    _this._isDragging = true;
+                },
+                stop: function () {
+                    _this._isDragging = false;
+                },
+                //appendTo: "body"
+                helper: "clone",
+            });
+            $(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('disable');
+            $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('enable');
+            var _this = this;
+            //all jcompoenents are proptargets                                         also jdesignummy     but no jcomponents in absolute Layout  no jcomponens that contains a jdesigndummy  absolutelayout container
+            this.droppableComponents = $(this.parentPanel.dom).parent().parent().find(".jdesigndummy,.jcomponent:not(.jabsolutelayout>.jcomponent, :has(.jdesigndummy)),                      .jcontainer>.jabsolutelayout");
+            //console.log(this.droppableComponents.length);
+            for (var c = 0; c < this.droppableComponents.length; c++) {
+                //  console.log(this.droppableComponents[c].id);
+            }
+            var isDropping = false;
+            var dropWnd;
+            var dropEvent;
+            var dropUI;
+            this.droppableComponents.droppable({
+                greedy: true,
+                hoverClass: "ui-state-highlight",
+                tolerance: "pointer",
+                drop: function (event, ui) {
+                    //function is called for every Window in z-Index - we need the last one
+                    if (_this.lastDropCanceled)
+                        return;
+                    dropWnd = this;
+                    dropEvent = event;
+                    dropUI = ui;
+                    if (!isDropping) {
+                        isDropping = true;
+                        window.setTimeout(function () {
+                            isDropping = false;
+                            _this._drop(dropWnd, dropEvent, dropUI);
+                        }, 50);
+                    }
+                }
+            });
+            //this.droppableComponents.droppable("enable");
+            //$(this.allIDs).eq(".jcontainer").not(".jdesigncontainer").droppable("enable");
+            //$(this.allIDs).filter(".jcontainer").not(".jdesigncontainer").droppable("enable");
+        }
+        /**
+         * uninstall the DragAndDropper
+         */
+        uninstall() {
+            this.onpropertychanged = undefined;
+            this.onpropertyadded = undefined;
+            // 	$(this.allIDs).eq(".jcontainer").not(".jdesigncontainer").droppable("disable");  
+            //$(this.parentPanel.dom).parent().parent().find(".jcontainer").droppable("destroy");
+            // var components=$(this.allIDs);
+            if (this.draggableComponents !== undefined) {
+                this.draggableComponents.draggable();
+                this.draggableComponents.draggable('destroy');
+                delete $.ui["ddmanager"].current; //memory leak https://bugs.jqueryui.com/ticket/10667
+                this.draggableComponents = undefined;
+            }
+            if (this.droppableComponents !== undefined) {
+                this.droppableComponents.droppable();
+                this.droppableComponents.droppable("destroy");
+            }
+        }
+    };
+    DragAndDropper = __decorate([
+        Jassi_12.$Class("jassijs_editor.util.DragAndDropper"),
+        __metadata("design:paramtypes", [])
+    ], DragAndDropper);
+    exports.DragAndDropper = DragAndDropper;
 });
 define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_13) {
     "use strict";

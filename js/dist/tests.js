@@ -296,6 +296,10 @@ define("tests/registry", ["require"], function (require) {
             "tests/FileActionsTests.ts": {
                 "date": 1624296373069
             },
+            "tests/remote/T.ts": {
+                "date": 1625333609235,
+                "tests.remote.T": {}
+            },
             "tests/remote/TestCustomer.ts": {
                 "date": 1623488386702,
                 "tests.TestCustomer": {
@@ -312,33 +316,76 @@ define("tests/registry", ["require"], function (require) {
                             }
                         ]
                     ],
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "name": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "orders": {
+                            "OneToMany": [
+                                "function",
+                                "function"
+                            ]
+                        }
+                    }
                 }
             },
             "tests/remote/TestOrder.ts": {
                 "date": 1623488474823,
                 "tests.TestOrder": {
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "customer": {
+                            "$CheckParentRight": [],
+                            "ManyToOne": [
+                                "function"
+                            ]
+                        },
+                        "details": {
+                            "OneToMany": [
+                                "function",
+                                "function"
+                            ]
+                        }
+                    }
                 }
             },
             "tests/remote/TestOrderDetails.ts": {
                 "date": 1623488500029,
                 "tests.TestOrderDetails": {
-                    "$DBObject": []
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "Order": {
+                            "$CheckParentRight": [],
+                            "ManyToOne": [
+                                "function",
+                                "function"
+                            ]
+                        }
+                    }
                 }
+            },
+            "tests/remote/TestServerfile.ts": {
+                "date": 1624999036922
             },
             "tests/RemoteModulTests.ts": {
                 "date": 1625513478377
             },
             "tests/TestReport.ts": {
                 "date": 1623864072454
-            },
-            "tests/remote/T.ts": {
-                "date": 1625333609235,
-                "tests.remote.T": {}
-            },
-            "tests/remote/TestServerfile.ts": {
-                "date": 1624999036922
             }
         }
     };

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs_editor/util/Parser", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/base/PropertyEditorService"], function (require, exports, Jassi_1, Panel_1, Image_1, Parser_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1, Component_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/base/PropertyEditorService"], function (require, exports, Jassi_1, Panel_1, Image_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1, Component_1) {
     "use strict";
     var PropertyEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -16,11 +16,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         /**
         * edit object properties
         */
-        constructor(codeEditor) {
+        constructor(codeEditor = undefined, parser = undefined) {
             super();
             this.readPropertyValueFromDesign = false;
             this.codeChanges = {};
             this.table = new Panel_1.Panel();
+            this.parser = parser;
             this.table.init($(`<table style="table-layout: fixed;font-size:11px">
                             <thead>
                                 <tr>
@@ -47,7 +48,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
              * */
             this.codeEditor = codeEditor;
             /** @member {jassijs.base.Parser} - the code-parser*/
-            this.parser = new Parser_1.Parser();
             /** @member {string} - the name of the variable in code*/
             this.variablename = "";
             /** @member {jassijs.ui.PropertyEditor} - parent propertyeditor*/
@@ -208,7 +208,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             this._multiselectEditors = [];
             if (value !== undefined && value.length > 1) {
                 for (var x = 1; x < value.length; x++) {
-                    var multi = new PropertyEditor_1(this.codeEditor);
+                    var multi = new PropertyEditor_1(this.codeEditor, this.parser);
                     multi.codeEditor = this.codeEditor;
                     multi.parentPropertyEditor = this.parentPropertyEditor;
                     multi.value = value[x];
@@ -711,7 +711,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
     };
     PropertyEditor = PropertyEditor_1 = __decorate([
         Jassi_1.$Class("jassijs.ui.PropertyEditor"),
-        __metadata("design:paramtypes", [Object])
+        __metadata("design:paramtypes", [Object, Object])
     ], PropertyEditor);
     exports.PropertyEditor = PropertyEditor;
     let PropertyEditorTestSubProperties = class PropertyEditorTestSubProperties {
@@ -794,7 +794,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         Jassi_1.$Class("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     function test() {
-        var ret = new PropertyEditor(undefined);
+        var ret = new PropertyEditor();
         ret.value = new TestProperties();
         return ret;
     }

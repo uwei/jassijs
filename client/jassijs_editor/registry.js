@@ -13,9 +13,55 @@ define("jassijs_editor/registry",["require"], function(require) {
 	"jassijs_editor/CodeEditor.ts": {
 		"date": 1624296590297,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
-			"$SettingsDescriptor": []
+			"$SettingsDescriptor": [],
+			"@members": {
+				"Development_DefaultEditor": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"ace",
+								"monaco",
+								"aceOnBrowser"
+							],
+							"default": "aceOnBrowser",
+							"chooseFromStrict": true
+						}
+					]
+				},
+				"Development_MoanacoEditorTheme": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"vs-dark",
+								"vs-light",
+								"hc-black"
+							],
+							"default": "vs-light",
+							"chooseFromStrict": true
+						}
+					]
+				}
+			}
 		},
-		"jassijs_editor.CodeEditor": {}
+		"jassijs_editor.CodeEditor": {
+			"@members": {
+				"file": {
+					"$Property": [
+						{
+							"isUrlTag": true,
+							"id": true
+						}
+					]
+				},
+				"line": {
+					"$Property": [
+						{
+							"isUrlTag": true
+						}
+					]
+				}
+			}
+		}
 	},
 	"jassijs_editor/CodeEditorInvisibleComponents.ts": {
 		"date": 1622998616949,
@@ -26,7 +72,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1623098090050,
+		"date": 1627596252446,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {

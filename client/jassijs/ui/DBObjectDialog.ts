@@ -118,7 +118,7 @@ export class DBObjectDialog extends Panel {
      * create Action for all DBObjectView with actionname is defined
      */
     @$Actions()
-    private static async createAcions(): Promise<ActionProperties[]> {
+    private static async createActions(): Promise<ActionProperties[]> {
         var ret: ActionProperties[] = [];
         var data = await registry.getJSONData("$DBObjectView");
         for (var x = 0; x < data.length; x++) {

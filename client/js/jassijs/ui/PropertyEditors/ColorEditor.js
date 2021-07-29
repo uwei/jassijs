@@ -122,7 +122,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyE
     ], ColorEditor);
     exports.ColorEditor = ColorEditor;
     function test3() {
-        var prop = new PropertyEditor_1.PropertyEditor(undefined);
+        var prop = new PropertyEditor_1.PropertyEditor();
         prop.value = new Textbox_1.Textbox();
         return prop;
     }

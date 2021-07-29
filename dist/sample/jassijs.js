@@ -137,7 +137,7 @@ async function run() {
             for (var x = 0; x < beforestartlib.length; x++) {
                 await new Promise((resolve) => {
                     require([beforestartlib[x]], function (beforestart) {
-                        if (beforestart?.autostart) {
+                        if (beforestart&&beforestart.autostart) {
                             beforestart.autostart().then(() => {
                                 resolve(undefined);
                             })

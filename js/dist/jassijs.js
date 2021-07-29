@@ -90,11 +90,11 @@ define("jassijs/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs/base/ActionNode.ts": {
-                "date": 1623097148247,
+                "date": 1627587195941,
                 "jassijs.base.ActionNode": {}
             },
             "jassijs/base/Actions.ts": {
-                "date": 1622984379898,
+                "date": 1627596979716,
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/DatabaseSchema.ts": {
@@ -123,7 +123,16 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.TestAction": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
-                    ]
+                    ],
+                    "@members": {
+                        "testNode": {
+                            "$Action": [
+                                {
+                                    "name": "Run Tests"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/base/Windows.ts": {
@@ -182,7 +191,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985412199
             },
             "jassijs/remote/Registry.ts": {
-                "date": 1624295873451
+                "date": 1627590048776
             },
             "jassijs/remote/RemoteObject.ts": {
                 "date": 1624295890257,
@@ -199,7 +208,35 @@ define("jassijs/registry", ["require"], function (require) {
                         {
                             "name": "jassijs_group"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "name": {
+                            "Column": []
+                        },
+                        "parentRights": {
+                            "JoinTable": [],
+                            "ManyToMany": [
+                                "function",
+                                "function"
+                            ]
+                        },
+                        "rights": {
+                            "JoinTable": [],
+                            "ManyToMany": [
+                                "function",
+                                "function"
+                            ]
+                        },
+                        "users": {
+                            "ManyToMany": [
+                                "function",
+                                "function"
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/remote/security/ParentRight.ts": {
@@ -209,7 +246,52 @@ define("jassijs/registry", ["require"], function (require) {
                         {
                             "name": "jassijs_parentright"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "id": {
+                            "PrimaryGeneratedColumn": []
+                        },
+                        "name": {
+                            "Column": []
+                        },
+                        "classname": {
+                            "Column": []
+                        },
+                        "i1": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "i2": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "s1": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "s2": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "groups": {
+                            "ManyToMany": [
+                                "function",
+                                "function"
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/remote/security/Right.ts": {
@@ -219,7 +301,21 @@ define("jassijs/registry", ["require"], function (require) {
                         {
                             "name": "jassijs_right"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "name": {
+                            "Column": []
+                        },
+                        "groups": {
+                            "ManyToMany": [
+                                "function",
+                                "function"
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/remote/security/Rights.ts": {
@@ -233,7 +329,19 @@ define("jassijs/registry", ["require"], function (require) {
                         {
                             "name": "jassijs_setting"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "id": {
+                            "PrimaryColumn": []
+                        },
+                        "data": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/remote/security/User.ts": {
@@ -243,7 +351,36 @@ define("jassijs/registry", ["require"], function (require) {
                         {
                             "name": "jassijs_user"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "id": {
+                            "PrimaryGeneratedColumn": []
+                        },
+                        "email": {
+                            "Column": []
+                        },
+                        "password": {
+                            "Column": [
+                                {
+                                    "select": false
+                                }
+                            ]
+                        },
+                        "groups": {
+                            "JoinTable": [],
+                            "ManyToMany": [
+                                "function",
+                                "function"
+                            ]
+                        },
+                        "isAdmin": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/remote/Server.ts": {
@@ -269,7 +406,18 @@ define("jassijs/registry", ["require"], function (require) {
                         {
                             "classname": "{{dbfullclassname}}"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/security/UserView.ts": {
@@ -279,25 +427,92 @@ define("jassijs/registry", ["require"], function (require) {
                         {
                             "classname": "jassijs.security.User"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/template/TemplateDBDialog.ts": {
                 "date": 1622984492201,
-                "jassijs.template.TemplateDBDialogProperties": {},
+                "jassijs.template.TemplateDBDialogProperties": {
+                    "@members": {
+                        "dialogname": {
+                            "$Property": [
+                                {
+                                    "decription": "name of the dialog"
+                                }
+                            ]
+                        },
+                        "dbobject": {
+                            "$Property": [
+                                {
+                                    "type": "classselector",
+                                    "service": "$DBObject"
+                                }
+                            ]
+                        }
+                    }
+                },
                 "jassijs.ui.TemplateDBDialog": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
-                    ]
+                    ],
+                    "@members": {
+                        "newFile": {
+                            "$Action": [
+                                {
+                                    "name": "New/DBDialog",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/template/TemplateDBObject.ts": {
                 "date": 1622985638953,
-                "jassijs.template.TemplateDBDialogProperties": {},
+                "jassijs.template.TemplateDBDialogProperties": {
+                    "@members": {
+                        "name": {
+                            "$Property": [
+                                {
+                                    "decription": "name of the db class"
+                                }
+                            ]
+                        },
+                        "autogeneratedid": {
+                            "$Property": [
+                                {
+                                    "default": "true",
+                                    "description": "the primary column alue will be automatically generated with an auto-increment value"
+                                }
+                            ]
+                        }
+                    }
+                },
                 "jassijs.ui.TemplateDBObject": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
-                    ]
+                    ],
+                    "@members": {
+                        "newFile": {
+                            "$Action": [
+                                {
+                                    "name": "New/DBObject",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/template/TemplateEmptyDialog.ts": {
@@ -305,7 +520,17 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.template.TemplateEmptyDialog": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
-                    ]
+                    ],
+                    "@members": {
+                        "newFile": {
+                            "$Action": [
+                                {
+                                    "name": "New/Dialog",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/template/TemplateRemoteObject.ts": {
@@ -313,11 +538,21 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.template.TemplateRemoteObject": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
-                    ]
+                    ],
+                    "@members": {
+                        "newFile": {
+                            "$Action": [
+                                {
+                                    "name": "New/RemoteObject",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/ActionNodeMenu.ts": {
-                "date": 1626118491026,
+                "date": 1627592863188,
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
@@ -338,7 +573,24 @@ define("jassijs/registry", ["require"], function (require) {
                             "hide": true,
                             "type": "boolean"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "horizontal": {
+                            "$Property": [
+                                {
+                                    "default": true
+                                }
+                            ]
+                        },
+                        "spliter": {
+                            "$Property": [
+                                {
+                                    "type": "number[]",
+                                    "description": "set the size of splitter e.g. [40,60] the firstcomponent size is 40%"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/Button.ts": {
@@ -352,7 +604,26 @@ define("jassijs/registry", ["require"], function (require) {
                                 "text": "button"
                             }
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "onclick": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "icon": {
+                            "$Property": [
+                                {
+                                    "type": "image"
+                                }
+                            ]
+                        },
+                        "text": {
+                            "$Property": []
+                        }
+                    }
                 }
             },
             "jassijs/ui/Calendar.ts": {
@@ -380,12 +651,104 @@ define("jassijs/registry", ["require"], function (require) {
                             "fullPath": "common/Ceckbox",
                             "icon": "mdi mdi-checkbox-marked-outline"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "type": "boolean"
+                                }
+                            ]
+                        },
+                        "text": {
+                            "$Property": []
+                        }
+                    }
                 }
             },
             "jassijs/ui/Component.ts": {
                 "date": 1623176352614,
-                "jassijs.ui.Component": {}
+                "jassijs.ui.Component": {
+                    "@members": {
+                        "onfocus": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "onblur": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "label": {
+                            "$Property": [
+                                {
+                                    "description": "adds a label above the component"
+                                }
+                            ]
+                        },
+                        "tooltip": {
+                            "$Property": [
+                                {
+                                    "description": "tooltip are displayed on mouse over"
+                                }
+                            ]
+                        },
+                        "x": {
+                            "$Property": [
+                                {}
+                            ]
+                        },
+                        "y": {
+                            "$Property": []
+                        },
+                        "hidden": {
+                            "$Property": []
+                        },
+                        "width": {
+                            "$Property": [
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "height": {
+                            "$Property": [
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "css": {
+                            "$Property": [
+                                {
+                                    "type": "json",
+                                    "componentType": "jassijs.ui.CSSProperties"
+                                }
+                            ]
+                        },
+                        "styles": {
+                            "$Property": [
+                                {
+                                    "type": "componentselector",
+                                    "componentType": "[jassijs.ui.Style]"
+                                }
+                            ]
+                        },
+                        "contextMenu": {
+                            "$Property": [
+                                {
+                                    "type": "componentselector",
+                                    "componentType": "jassijs.ui.ContextMenu"
+                                }
+                            ]
+                        }
+                    }
+                }
             },
             "jassijs/ui/ComponentDescriptor.ts": {
                 "date": 1622985638953,
@@ -396,7 +759,25 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ComponentSpy": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
-                    ]
+                    ],
+                    "@members": {
+                        "dummy": {
+                            "$Action": [
+                                {
+                                    "name": "Administration",
+                                    "icon": "mdi mdi-account-cog-outline"
+                                }
+                            ]
+                        },
+                        "showDialog": {
+                            "$Action": [
+                                {
+                                    "name": "Administration/Spy Components",
+                                    "icon": "mdi mdi-police-badge"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/Container.ts": {
@@ -404,7 +785,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
-                "date": 1623176398589,
+                "date": 1627587520578,
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -414,12 +795,34 @@ define("jassijs/registry", ["require"], function (require) {
                                 "menu"
                             ]
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "includeClassActions": {
+                            "$Property": []
+                        },
+                        "onbeforeshow": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/converters/DefaultConverter.ts": {
                 "date": 1622985638950,
-                "jassijs.ui.converters.DefaultConverterProperties": {},
+                "jassijs.ui.converters.DefaultConverterProperties": {
+                    "@members": {
+                        "stringToObject": {
+                            "$Property": [
+                                {
+                                    "default": "function(ob){}"
+                                }
+                            ]
+                        }
+                    }
+                },
                 "jassijs.ui.converters.DefaultConverter": {
                     "$Converter": [
                         {
@@ -469,14 +872,473 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/ui/CSSProperties.ts": {
                 "date": 1622985638950,
-                "jassijs.ui.CSSProperties": {}
+                "jassijs.ui.CSSProperties": {
+                    "@members": {
+                        "background_color": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "background_image": {
+                            "$Property": []
+                        },
+                        "border_color": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "border_style": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "none",
+                                        "hidden",
+                                        "dotted",
+                                        "dashed",
+                                        "solid",
+                                        "double",
+                                        "groove",
+                                        "ridge",
+                                        "inset",
+                                        "outset",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "border_width": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "thin",
+                                        "medium",
+                                        "thick",
+                                        "2px",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "color": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "cursor": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "auto",
+                                        "default",
+                                        "none",
+                                        "context-menu",
+                                        "help",
+                                        "pointer",
+                                        "progress",
+                                        "wait",
+                                        "cell",
+                                        "crosshair",
+                                        "text",
+                                        "vertical-text",
+                                        "alias",
+                                        "copy",
+                                        "move",
+                                        "no-drop",
+                                        "not-allowed",
+                                        "grab",
+                                        "grabbing",
+                                        "all-scroll",
+                                        "col-resize",
+                                        "row-resize",
+                                        "n-resize",
+                                        "e-resize",
+                                        "s-resize",
+                                        "w-resize",
+                                        "ne-resize",
+                                        "nw-resize",
+                                        "se-resize",
+                                        "sw-resize",
+                                        "ew-resize",
+                                        "ns-resize",
+                                        "nesw-resize",
+                                        "nwse-resize",
+                                        "zoom-in",
+                                        "zoom-out",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "filter": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "blur(5px)",
+                                        "brightness(0.4)",
+                                        "contrast(200%)",
+                                        "drop-shadow(16px 16px 20px blue)",
+                                        "grayscale(50%)",
+                                        "hue-rotate(90deg)",
+                                        "invert(75%)",
+                                        "opacity(25%)",
+                                        "saturate(30%)",
+                                        "sepia(60%)",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "float": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "left",
+                                        "right",
+                                        "none",
+                                        "inline-start",
+                                        "inline-end",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "font_family": {
+                            "$Property": [
+                                {
+                                    "type": "font"
+                                }
+                            ]
+                        },
+                        "font_size": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "12px",
+                                        "xx-small",
+                                        "x-small",
+                                        "small",
+                                        "medium",
+                                        "large",
+                                        "x-large",
+                                        "xx-large",
+                                        "xxx-large",
+                                        "larger",
+                                        "smaller",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "font_variant": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "normal",
+                                        "small-caps",
+                                        "small-caps slashed-zero",
+                                        "common-ligatures tabular-nums",
+                                        "no-common-ligatures proportional-nums",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "font_weight": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "normal",
+                                        "bold",
+                                        "lighter",
+                                        "bolder",
+                                        "100",
+                                        "900",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "letter_spacing": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "normal",
+                                        "1px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "line_height": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "normal",
+                                        "32px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "margin_bottom": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "3px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "margin_left": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "3px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "margin_right": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "3px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "margin_top": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "3px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "overflow": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "visible",
+                                        "hidden",
+                                        "clip",
+                                        "scroll",
+                                        "auto",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "padding_bottom": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "3px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "padding_left": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "3px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "padding_right": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "3px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "padding_top": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "3px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "position": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "static",
+                                        "relative",
+                                        "absolute",
+                                        "sticky",
+                                        "fixed",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "text_align": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "start",
+                                        "end",
+                                        "left",
+                                        "right",
+                                        "center",
+                                        "justify",
+                                        "match-parent",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "text_decoration_color": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "text_decoration_line": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "none",
+                                        "underline",
+                                        "overline",
+                                        "line-through",
+                                        "blink",
+                                        "spelling-error",
+                                        "grammar-error",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "text_decoration_style": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "solid",
+                                        "double",
+                                        "dotted",
+                                        "dashed",
+                                        "wavy",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "text_decoration_thickness": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "3px"
+                                    ]
+                                }
+                            ]
+                        },
+                        "text_transform": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "none",
+                                        "capitalize",
+                                        "uppercase",
+                                        "lowercase",
+                                        "full-width",
+                                        "full-size-kana",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "vertical_align": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "baseline",
+                                        "sub",
+                                        "super",
+                                        "text-top",
+                                        "text-bottom",
+                                        "middle",
+                                        "top",
+                                        "bottom",
+                                        "3px",
+                                        "inherit",
+                                        "initial",
+                                        "unset"
+                                    ]
+                                }
+                            ]
+                        },
+                        "z_index": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "1",
+                                        "2",
+                                        "auto"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
             },
             "jassijs/ui/DatabaseDesigner.ts": {
                 "date": 1624096683489,
                 "jassijs/ui/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
-                    ]
+                    ],
+                    "@members": {
+                        "showDialog": {
+                            "$Action": [
+                                {
+                                    "name": "Administration/Database Designer",
+                                    "icon": "mdi mdi-database-edit"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/Databinder.ts": {
@@ -492,14 +1354,32 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/ui/DataComponent.ts": {
                 "date": 1622984379896,
-                "jassijs.ui.DataComponent": {}
+                "jassijs.ui.DataComponent": {
+                    "@members": {
+                        "autocommit": {
+                            "$Property": []
+                        },
+                        "bind": {
+                            "$Property": [
+                                {
+                                    "type": "databinder"
+                                }
+                            ]
+                        }
+                    }
+                }
             },
             "jassijs/ui/DBObjectDialog.ts": {
-                "date": 1622984379896,
+                "date": 1627590894445,
                 "jassijs.ui.DBObjectDialog": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
-                    ]
+                    ],
+                    "@members": {
+                        "createActions": {
+                            "$Actions": []
+                        }
+                    }
                 }
             },
             "jassijs/ui/DBObjectExplorer.ts": {
@@ -508,21 +1388,73 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DBFileActions": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
-                    ]
+                    ],
+                    "@members": {
+                        "ViewData": {
+                            "$Action": [
+                                {
+                                    "name": "View Data",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        }
+                    }
                 },
                 "jassijs.ui.DBObjectActions": {
                     "$ActionProvider": [
                         "jassijs.ui.DBObjectNode"
-                    ]
+                    ],
+                    "@members": {
+                        "ViewData": {
+                            "$Action": [
+                                {
+                                    "name": "View Data"
+                                }
+                            ]
+                        },
+                        "OpenCode": {
+                            "$Action": [
+                                {
+                                    "name": "Open Code"
+                                }
+                            ]
+                        }
+                    }
                 },
                 "jassijs.ui.DBObjectExplorer": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
-                    ]
+                    ],
+                    "@members": {
+                        "dummy": {
+                            "$Action": [
+                                {
+                                    "name": "Windows",
+                                    "icon": "mdi mdi-iframe-array-outline"
+                                }
+                            ]
+                        },
+                        "dummy2": {
+                            "$Action": [
+                                {
+                                    "name": "Windows/Development",
+                                    "icon": "mdi mdi-dev-to"
+                                }
+                            ]
+                        },
+                        "show": {
+                            "$Action": [
+                                {
+                                    "name": "Windows/Development/DBObjects",
+                                    "icon": "mdi mdi-database-search"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1622984492201,
+                "date": 1627590777599,
                 "jassijs/ui/DBObjectView": {
                     "$UIComponent": [
                         {
@@ -535,7 +1467,37 @@ define("jassijs/registry", ["require"], function (require) {
                                 "me.refresh"
                             ]
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "oncreated": {
+                            "$Property": [
+                                {
+                                    "default": "function(obj?/*: DBObject*/){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "onsaved": {
+                            "$Property": [
+                                {
+                                    "default": "function(obj?/*: DBObject*/){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "onrefreshed": {
+                            "$Property": [
+                                {
+                                    "default": "function(obj?/*: DBObject*/){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "ondeleted": {
+                            "$Property": [
+                                {
+                                    "default": "function(obj?/*: DBObject*/){\n\t\n}"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/DesignDummy.ts": {
@@ -551,20 +1513,104 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.ErrorPanel": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
-                    ]
+                    ],
+                    "@members": {
+                        "showDialog": {
+                            "$Action": [
+                                {
+                                    "name": "Administration/Errors",
+                                    "icon": "mdi mdi-emoticon-confused-outline"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/FileExplorer.ts": {
-                "date": 1623862680407,
+                "date": 1627593837699,
                 "jassijs.ui.FileActions": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
-                    ]
+                    ],
+                    "@members": {
+                        "newFile": {
+                            "$Action": [
+                                {
+                                    "name": "New/File",
+                                    "icon": "mdi mdi-file",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        },
+                        "download": {
+                            "$Action": [
+                                {
+                                    "name": "Download",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        },
+                        "newFolder": {
+                            "$Action": [
+                                {
+                                    "name": "New/Folder",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        },
+                        "newModule": {
+                            "$Action": [
+                                {
+                                    "name": "New/Module",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        },
+                        "dodelete": {
+                            "$Action": [
+                                {
+                                    "name": "Delete"
+                                }
+                            ]
+                        },
+                        "rename": {
+                            "$Action": [
+                                {
+                                    "name": "Rename"
+                                }
+                            ]
+                        },
+                        "refresh": {
+                            "$Action": [
+                                {
+                                    "name": "Refresh"
+                                }
+                            ]
+                        },
+                        "open": {
+                            "$Action": [
+                                {
+                                    "name": "Open",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        }
+                    }
                 },
                 "jassijs.ui.FileExplorer": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
-                    ]
+                    ],
+                    "@members": {
+                        "show": {
+                            "$Action": [
+                                {
+                                    "name": "Windows/Development/Files",
+                                    "icon": "mdi mdi-file-tree"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/HTMLEditorPanel.ts": {
@@ -579,7 +1625,27 @@ define("jassijs/registry", ["require"], function (require) {
                             "fullPath": "common/HTMLPanel",
                             "icon": "mdi mdi-cloud-tags"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "newlineafter": {
+                            "$Property": [
+                                {
+                                    "description": "line break after element",
+                                    "default": false
+                                }
+                            ]
+                        },
+                        "template": {
+                            "$Property": [
+                                {
+                                    "decription": "e.g. component.value=new Person();component.template:\"{{name}}\""
+                                }
+                            ]
+                        },
+                        "value": {
+                            "$Property": []
+                        }
+                    }
                 }
             },
             "jassijs/ui/Image.ts": {
@@ -590,7 +1656,23 @@ define("jassijs/registry", ["require"], function (require) {
                             "fullPath": "default/Image",
                             "icon": "mdi mdi-file-image"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "src": {
+                            "$Property": [
+                                {
+                                    "type": "image"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/InvisibleComponent.ts": {
@@ -614,7 +1696,18 @@ define("jassijs/registry", ["require"], function (require) {
                                 "text": "menu"
                             }
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "onclick": {
+                            "$Property": [
+                                {
+                                    "name": "onclick",
+                                    "type": "function",
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/MenuItem.ts": {
@@ -631,7 +1724,22 @@ define("jassijs/registry", ["require"], function (require) {
                                 "items"
                             ]
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "onclick": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "icon": {
+                            "$Property": []
+                        },
+                        "text": {
+                            "$Property": []
+                        }
+                    }
                 }
             },
             "jassijs/ui/ObjectChooser.ts": {
@@ -642,17 +1750,83 @@ define("jassijs/registry", ["require"], function (require) {
                             "fullPath": "common/ObjectChooser",
                             "icon": "mdi mdi-glasses"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "dialogHeight": {
+                            "$Property": [
+                                {
+                                    "default": 450
+                                }
+                            ]
+                        },
+                        "dialogWidth": {
+                            "$Property": [
+                                {
+                                    "default": 300
+                                }
+                            ]
+                        },
+                        "items": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "description": "the classname for to choose"
+                                }
+                            ]
+                        },
+                        "onchange": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "autocommit": {
+                            "$Property": []
+                        },
+                        "bind": {
+                            "$Property": [
+                                {
+                                    "type": "databinder"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/OptionDialog.ts": {
-                "date": 1623174800968,
-                "jassijs.ui.OptionDialog": {},
-                "jassijs.ui.OptionDialogTestProp": {}
+                "date": 1627595112830,
+                "jassijs.ui.OptionDialog": {
+                    "@members": {
+                        "text": {
+                            "$Property": []
+                        }
+                    }
+                },
+                "jassijs.ui.OptionDialogTestProp": {
+                    "@members": {
+                        "visible": {
+                            "$Property": []
+                        },
+                        "text": {
+                            "$Property": []
+                        }
+                    }
+                }
             },
             "jassijs/ui/Panel.ts": {
                 "date": 1622985638954,
-                "jassijs.ui.PanelCreateProperties": {},
+                "jassijs.ui.PanelCreateProperties": {
+                    "@members": {
+                        "useSpan": {
+                            "$Property": [
+                                {
+                                    "default": false
+                                }
+                            ]
+                        }
+                    }
+                },
                 "jassijs.ui.Panel": {
                     "$UIComponent": [
                         {
@@ -669,7 +1843,12 @@ define("jassijs/registry", ["require"], function (require) {
                             "type": "json",
                             "componentType": "jassijs.ui.PanelCreateProperties"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "isAbsolute": {
+                            "$Property": []
+                        }
+                    }
                 }
             },
             "jassijs/ui/Property.ts": {
@@ -677,10 +1856,105 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1623178512772,
+                "date": 1627596182837,
                 "jassijs.ui.PropertyEditor": {},
-                "jassijs.ui.PropertyEditorTestSubProperties": {},
-                "jassijs.ui.PropertyEditorTestProperties": {}
+                "jassijs.ui.PropertyEditorTestSubProperties": {
+                    "@members": {
+                        "num": {
+                            "$Property": []
+                        },
+                        "text": {
+                            "$Property": []
+                        }
+                    }
+                },
+                "jassijs.ui.PropertyEditorTestProperties": {
+                    "@members": {
+                        "dialogname": {
+                            "$Property": [
+                                {
+                                    "decription": "name of the dialog"
+                                }
+                            ]
+                        },
+                        "checked": {
+                            "$Property": []
+                        },
+                        "color": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "component": {
+                            "$Property": [
+                                {
+                                    "type": "componentselector",
+                                    "componentType": "jassi.ui.Component"
+                                }
+                            ]
+                        },
+                        "databinder": {
+                            "$Property": [
+                                {
+                                    "type": "databinder"
+                                }
+                            ]
+                        },
+                        "dbobject": {
+                            "$Property": [
+                                {
+                                    "type": "dbobject",
+                                    "componentType": "de.Kunde"
+                                }
+                            ]
+                        },
+                        "num": {
+                            "$Property": [
+                                {
+                                    "default": 80
+                                }
+                            ]
+                        },
+                        "font": {
+                            "$Property": [
+                                {
+                                    "type": "font"
+                                }
+                            ]
+                        },
+                        "func": {
+                            "$Property": [
+                                {
+                                    "type": "function"
+                                }
+                            ]
+                        },
+                        "html": {
+                            "$Property": [
+                                {
+                                    "type": "html"
+                                }
+                            ]
+                        },
+                        "image": {
+                            "$Property": [
+                                {
+                                    "type": "image"
+                                }
+                            ]
+                        },
+                        "json": {
+                            "$Property": [
+                                {
+                                    "type": "json",
+                                    "componentType": "jassijs.ui.PropertyEditorTestSubProperties"
+                                }
+                            ]
+                        }
+                    }
+                }
             },
             "jassijs/ui/PropertyEditors/BooleanEditor.ts": {
                 "date": 1622985638954,
@@ -703,7 +1977,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/ColorEditor.ts": {
-                "date": 1623178819014,
+                "date": 1627596203109,
                 "jassijs.ui.PropertyEditors.ColorEditor": {
                     "$PropertyEditor": [
                         [
@@ -759,7 +2033,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.PropertyEditors.Editor": {}
             },
             "jassijs/ui/PropertyEditors/FontEditor.ts": {
-                "date": 1623175625777,
+                "date": 1627596209522,
                 "jassijs.ui.PropertyEditors.FontEditor": {
                     "$PropertyEditor": [
                         [
@@ -798,11 +2072,29 @@ define("jassijs/registry", ["require"], function (require) {
                         [
                             "image"
                         ]
-                    ]
+                    ],
+                    "@members": {
+                        "dummy": {
+                            "$Action": [
+                                {
+                                    "name": "Tools",
+                                    "icon": "mdi mdi-tools"
+                                }
+                            ]
+                        },
+                        "show": {
+                            "$Action": [
+                                {
+                                    "name": "Tools/Icons",
+                                    "icon": "mdi mdi-image-area"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/PropertyEditors/JsonEditor.ts": {
-                "date": 1622985638954,
+                "date": 1627596234626,
                 "jassijs.ui.PropertyEditors.JsonEditor": {
                     "$PropertyEditor": [
                         [
@@ -810,8 +2102,55 @@ define("jassijs/registry", ["require"], function (require) {
                         ]
                     ]
                 },
-                "jassijs.ui.PropertyEditorTestProperties": {},
-                "jassijs.ui.PropertyEditorTestProperties2": {}
+                "jassijs.ui.PropertyEditorTestProperties": {
+                    "@members": {
+                        "dialogname": {
+                            "$Property": [
+                                {
+                                    "decription": "name of the dialog"
+                                }
+                            ]
+                        },
+                        "jo": {
+                            "$Property": [
+                                {
+                                    "name": "jo/selectMode",
+                                    "type": "number",
+                                    "default": 3,
+                                    "chooseFrom": [
+                                        1,
+                                        2,
+                                        3
+                                    ],
+                                    "description": "1=single 2=multi 3=multi_hier"
+                                },
+                                {
+                                    "name": "jo",
+                                    "type": "json",
+                                    "componentType": "jassijs.ui.PropertyEditorTestProperties2"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "jassijs.ui.PropertyEditorTestProperties2": {
+                    "@members": {
+                        "name1": {
+                            "$Property": [
+                                {
+                                    "decription": "name of the dialog"
+                                }
+                            ]
+                        },
+                        "name2": {
+                            "$Property": [
+                                {
+                                    "decription": "name of the dialog"
+                                }
+                            ]
+                        }
+                    }
+                }
             },
             "jassijs/ui/PropertyEditors/LoadingEditor.ts": {
                 "date": 1622985638954
@@ -847,20 +2186,63 @@ define("jassijs/registry", ["require"], function (require) {
                                 "design"
                             ]
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "bind": {
+                            "$Property": [
+                                {
+                                    "type": "databinder"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/SearchExplorer.ts": {
-                "date": 1624293457615,
+                "date": 1627596574453,
                 "jassijs.ui.SearchExplorer": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
-                    ]
+                    ],
+                    "@members": {
+                        "show": {
+                            "$Action": [
+                                {
+                                    "name": "Windows/Development/Search",
+                                    "icon": "mdi mdi-folder-search-outline"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/Select.ts": {
                 "date": 1622985638954,
-                "jassijs.ui.SelectCreateProperties": {},
+                "jassijs.ui.SelectCreateProperties": {
+                    "@members": {
+                        "multiple": {
+                            "$Property": [
+                                {
+                                    "default": false
+                                }
+                            ]
+                        },
+                        "allowDeselect": {
+                            "$Property": [
+                                {
+                                    "default": false
+                                }
+                            ]
+                        },
+                        "placeholder": {
+                            "$Property": [
+                                {
+                                    "default": ""
+                                }
+                            ]
+                        }
+                    }
+                },
                 "jassijs.ui.Select": {
                     "$UIComponent": [
                         {
@@ -874,16 +2256,42 @@ define("jassijs/registry", ["require"], function (require) {
                             "type": "json",
                             "componentType": "jassijs.ui.SelectCreateProperties"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "onchange": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "display": {
+                            "$Property": [
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/SettingsDialog.ts": {
-                "date": 1622998616949,
+                "date": 1627598491608,
                 "jassijs.ui.SettingsObject": {},
                 "jassijs.ui.SettingsDialog": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
-                    ]
+                    ],
+                    "@members": {
+                        "show": {
+                            "$Action": [
+                                {
+                                    "name": "Settings",
+                                    "icon": "mdi mdi-settings-helper"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/Style.ts": {
@@ -894,12 +2302,73 @@ define("jassijs/registry", ["require"], function (require) {
                             "fullPath": "common/Style",
                             "icon": "mdi mdi-virus"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "css": {
+                            "$Property": [
+                                {
+                                    "type": "json",
+                                    "componentType": "jassijs.ui.CSSProperties"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/Table.ts": {
                 "date": 1622984379893,
-                "jassijs.ui.TableEditorProperties": {},
+                "jassijs.ui.TableEditorProperties": {
+                    "@members": {
+                        "paginationSize": {
+                            "$Property": [
+                                {
+                                    "default": "undefined"
+                                }
+                            ]
+                        },
+                        "headerSort": {
+                            "$Property": [
+                                {
+                                    "default": true
+                                }
+                            ]
+                        },
+                        "layout": {
+                            "$Property": [
+                                {
+                                    "default": "fitDataStretch",
+                                    "chooseFrom": [
+                                        "fitData",
+                                        "fitColumns",
+                                        "fitDataFill",
+                                        "fitDataStretch"
+                                    ]
+                                }
+                            ]
+                        },
+                        "dataTreeChildFunction": {
+                            "$Property": [
+                                {
+                                    "default": "undefined"
+                                }
+                            ]
+                        },
+                        "movableColumns": {
+                            "$Property": [
+                                {
+                                    "default": false
+                                }
+                            ]
+                        },
+                        "cellDblClick": {
+                            "$Property": [
+                                {
+                                    "default": "function(event:any,group:any){\n\t\n}"
+                                }
+                            ]
+                        }
+                    }
+                },
                 "jassijs.ui.Table": {
                     "$UIComponent": [
                         {
@@ -913,7 +2382,33 @@ define("jassijs/registry", ["require"], function (require) {
                             "type": "json",
                             "componentType": "jassijs.ui.TableEditorProperties"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "onchange": {
+                            "$Property": [
+                                {
+                                    "default": "function(event?: JQueryEventObject, data?:Tabulator.RowComponent){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "showSearchbox": {
+                            "$Property": []
+                        },
+                        "height": {
+                            "$Property": [
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "bindItems": {
+                            "$Property": [
+                                {
+                                    "type": "databinder"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/Textarea.ts": {
@@ -947,13 +2442,117 @@ define("jassijs/registry", ["require"], function (require) {
                             "name": "new",
                             "type": "string"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "converter": {
+                            "$Property": [
+                                {
+                                    "type": "classselector",
+                                    "service": "$Converter"
+                                }
+                            ]
+                        },
+                        "format": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "chooseFrom": "allFormats"
+                                }
+                            ]
+                        },
+                        "value": {
+                            "$Property": [
+                                {
+                                    "type": "string"
+                                }
+                            ]
+                        },
+                        "onclick": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "onchange": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "onkeydown": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "oninput": {
+                            "$Property": [
+                                {
+                                    "default": "function(event){\n\t\n}"
+                                }
+                            ]
+                        },
+                        "placeholder": {
+                            "$Property": []
+                        }
+                    }
                 }
             },
             "jassijs/ui/Tree.ts": {
                 "date": 1623866476580,
-                "jassijs.ui.TreeEditorPropertiesMulti": {},
-                "jassijs.ui.TreeEditorProperties": {},
+                "jassijs.ui.TreeEditorPropertiesMulti": {
+                    "@members": {
+                        "mode": {
+                            "$Property": [
+                                {
+                                    "default": "",
+                                    "chooseFrom": [
+                                        "",
+                                        "sameParent",
+                                        "sameLevel"
+                                    ],
+                                    "description": "multi selection mode"
+                                }
+                            ]
+                        }
+                    }
+                },
+                "jassijs.ui.TreeEditorProperties": {
+                    "@members": {
+                        "selectMode": {
+                            "$Property": [
+                                {
+                                    "default": 3,
+                                    "chooseFrom": [
+                                        1,
+                                        2,
+                                        3
+                                    ],
+                                    "description": "1=single 2=multi 3=multi_hier"
+                                }
+                            ]
+                        },
+                        "checkbox": {
+                            "$Property": [
+                                {
+                                    "default": false,
+                                    "description": "display a checkbox before the node"
+                                }
+                            ]
+                        },
+                        "multi": {
+                            "$Property": [
+                                {
+                                    "type": "json",
+                                    "componentType": "jassijs.ui.TreeEditorPropertiesMulti"
+                                }
+                            ]
+                        }
+                    }
+                },
                 "jassijs.ui.Tree": {
                     "$UIComponent": [
                         {
@@ -967,7 +2566,32 @@ define("jassijs/registry", ["require"], function (require) {
                             "type": "json",
                             "componentType": "jassijs.ui.TreeEditorProperties"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "propStyle": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "description": "the property called to get the style of the item"
+                                }
+                            ]
+                        },
+                        "propDisplay": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "description": "the property called to get the name of the item"
+                                }
+                            ]
+                        },
+                        "onclick": {
+                            "$Property": [
+                                {
+                                    "default": "function(event?: JQueryEventObject/*, data?:Fancytree.EventData*/){\n\t\n}"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/Upload.ts": {
@@ -978,7 +2602,22 @@ define("jassijs/registry", ["require"], function (require) {
                             "fullPath": "common/Upload",
                             "icon": "mdi mdi-cloud-upload-outline"
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "accept": {
+                            "$Property": []
+                        },
+                        "multiple": {
+                            "$Property": []
+                        },
+                        "onuploaded": {
+                            "$Property": [
+                                {
+                                    "default": "function(data:{[file:string]:string}){\n\t\n}"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/ui/VariablePanel.ts": {
@@ -993,7 +2632,17 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.CSVImport": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
-                    ]
+                    ],
+                    "@members": {
+                        "showDialog": {
+                            "$Action": [
+                                {
+                                    "name": "Administration/Database CSV-Import",
+                                    "icon": "mdi mdi-database-import"
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs/util/DatabaseSchema.ts": {
@@ -1026,7 +2675,7 @@ define("jassijs/base/ActionNode", ["require", "exports", "jassijs/remote/Jassi"]
     exports.ActionNode = ActionNode;
     async function test() {
         var Actions = (await new Promise((resolve_1, reject_1) => { require(["jassijs/base/Actions"], resolve_1, reject_1); })).Actions;
-        var actions = await Actions.getActionsFor([new ActionNode()]); //Class Actions
+        var actions = await Actions.getActionsFor(ActionNode); //Class Actions
         console.log("found " + actions.length + " Actions");
     }
     exports.test = test;
@@ -1064,36 +2713,46 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
     exports.$ActionProvider = $ActionProvider;
     let Actions = class Actions {
         static async getActionsFor(vdata) {
-            var oclass = vdata[0].constructor;
+            //var oclass = vdata[0].constructor;
             var ret = [];
             /*men.text = actions[x].name;
                     men.icon = actions[x].icon;
                     men.onclick(function (evt) {
                         ac.run([node]);
                     });*/
-            var sclass = Classes_1.classes.getClassName(oclass);
+            var sclass = Classes_1.classes.getClassName(vdata);
             var allclasses = (await Registry_1.default.getJSONData("$ActionProvider")).filter(entr => entr.params[0] === sclass);
-            await Registry_1.default.loadAllFilesForEntries(allclasses);
-            let data = Registry_1.default.getData("$ActionProvider");
+            //await registry.loadAllFilesForEntries(allclasses);
+            //let data = registry.getData("$ActionProvider");
             for (let x = 0; x < allclasses.length; x++) {
                 var entr = allclasses[x];
-                var mem = Registry_1.default.getMemberData("$Action")[entr.classname];
+                var mem = Registry_1.default.getJSONMemberData("$Action")[entr.classname];
                 for (let name in mem) {
                     let ac = mem[name][0][0];
-                    if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
-                        continue;
+                    if (ac.isEnabled !== undefined || ac.run !== undefined) { //we musst load the class
+                        await Classes_1.classes.loadClass(entr.classname);
+                        ac = Registry_1.default.getMemberData("$Action")[entr.classname][name][0][0];
+                    }
+                    if (ac.isEnabled !== undefined) {
+                        if ((await ac.isEnabled([vdata])) === false)
+                            continue;
+                    }
+                    let sclassname = entr.classname;
+                    let sname = name;
                     ret.push({
                         name: ac.name,
                         icon: ac.icon,
-                        call: ac.run ? ac.run : Classes_1.classes.getClass(entr.classname)[name]
+                        call: ac.run ? ac.run : async (...param) => {
+                            (await Classes_1.classes.loadClass(sclassname))[sname](...param);
+                        }
                     });
                 }
-                mem = Registry_1.default.getMemberData("$Actions")[entr.classname];
+                mem = Registry_1.default.getJSONMemberData("$Actions")[entr.classname];
                 for (let name in mem) {
-                    let acs = await Classes_1.classes.getClass(entr.classname)[name]();
+                    let acs = await (await Classes_1.classes.loadClass(entr.classname))[name]();
                     for (let x = 0; x < acs.length; x++) {
                         let ac = acs[x];
-                        if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
+                        if (ac.isEnabled !== undefined && ((await ac.isEnabled([vdata])) === false))
                             continue;
                         ret.push({
                             name: ac.name,
@@ -3688,6 +5347,7 @@ define("jassijs/remote/Registry", ["require", "exports", "reflect-metadata"], fu
             this.jsondata = undefined;
             this.data = {};
             this.dataMembers = {};
+            this.jsondataMembers = {};
             this._eventHandler = {};
             this._nextID = 10;
         }
@@ -3780,6 +5440,9 @@ define("jassijs/remote/Registry", ["require", "exports", "reflect-metadata"], fu
         getMemberData(service) {
             return this.dataMembers[service];
         }
+        getJSONMemberData(service) {
+            return this.jsondataMembers[service];
+        }
         /**
          * register an anotation
          * Important: this function should only used from an annotation
@@ -3859,7 +5522,9 @@ define("jassijs/remote/Registry", ["require", "exports", "reflect-metadata"], fu
          * reload the registry
          */
         async reload() {
+            console.log("load json");
             this.jsondata = { $Class: {} };
+            this.jsondataMembers = {};
             var _this = this;
             var modultext = "";
             //@ts-ignore
@@ -3950,16 +5615,34 @@ define("jassijs/remote/Registry", ["require", "exports", "reflect-metadata"], fu
                     };
                     var theclass = vfiles[classname];
                     for (var service in theclass) {
-                        if (this.jsondata[service] === undefined)
-                            this.jsondata[service] = {};
-                        var entr = new JSONDataEntry();
-                        entr.params = theclass[service];
-                        /* if (vfiles.$Class === undefined) {
-                             console.log("@$Class annotation is missing for " + file + " Service " + service);
-                         }*/
-                        entr.classname = classname; //vfiles.$Class === undefined ? undefined : vfiles.$Class[0];
-                        entr.filename = file;
-                        this.jsondata[service][entr.classname] = entr;
+                        if (service === "@members") {
+                            //public jsondataMembers: { [service: string]: { [classname: string]: { [membername: string]: any[] } } } = {};
+                            var mems = theclass[service];
+                            for (let mem in mems) {
+                                let scs = mems[mem];
+                                for (let sc in scs) {
+                                    if (!this.jsondataMembers[sc])
+                                        this.jsondataMembers[sc] = {};
+                                    if (!this.jsondataMembers[sc][classname])
+                                        this.jsondataMembers[sc][classname] = {};
+                                    if (this.jsondataMembers[sc][classname][mem] === undefined)
+                                        this.jsondataMembers[sc][classname][mem] = [];
+                                    this.jsondataMembers[sc][classname][mem].push(scs[sc]);
+                                }
+                            }
+                        }
+                        else {
+                            if (this.jsondata[service] === undefined)
+                                this.jsondata[service] = {};
+                            var entr = new JSONDataEntry();
+                            entr.params = theclass[service];
+                            /* if (vfiles.$Class === undefined) {
+                                 console.log("@$Class annotation is missing for " + file + " Service " + service);
+                             }*/
+                            entr.classname = classname; //vfiles.$Class === undefined ? undefined : vfiles.$Class[0];
+                            entr.filename = file;
+                            this.jsondata[service][entr.classname] = entr;
+                        }
                     }
                 }
             }
@@ -5792,7 +7475,7 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
             this.fillActions();
         }
         async fillActions() {
-            var actions = await Actions_6.Actions.getActionsFor([new ActionNode_1.ActionNode()]); //Class Actions
+            var actions = await Actions_6.Actions.getActionsFor(ActionNode_1.ActionNode); //Class Actions
             actions.sort((a, b) => {
                 return a.name.localeCompare(b.name);
             });
@@ -5805,7 +7488,9 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
                         men["_classaction"] = true;
                         men.text = path[i];
                         men.icon = action.icon;
-                        men.onclick(() => action.call(undefined));
+                        men.onclick(() => {
+                            action.call(undefined);
+                        });
                         parent.add(men);
                     }
                     else {
@@ -7381,7 +9066,7 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", 
             if (this.value === undefined || this.includeClassActions !== true || this.value.length <= 0)
                 actions = actions; //do nothing
             else {
-                var a = await Actions_8.Actions.getActionsFor(this.value); //Class Actions
+                var a = await Actions_8.Actions.getActionsFor(this.value[0].__proto__); //Class Actions
                 for (var x = 0; x < a.length; x++) {
                     actions.push(a[x]);
                 }
@@ -7669,7 +9354,7 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
         /**
          * create Action for all DBObjectView with actionname is defined
          */
-        static async createAcions() {
+        static async createActions() {
             var ret = [];
             var data = await Registry_15.default.getJSONData("$DBObjectView");
             for (var x = 0; x < data.length; x++) {
@@ -7700,7 +9385,7 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
-    ], DBObjectDialog, "createAcions", null);
+    ], DBObjectDialog, "createActions", null);
     DBObjectDialog = DBObjectDialog_1 = __decorate([
         Actions_9.$ActionProvider("jassijs.base.ActionNode"),
         Jassi_45.$Class("jassijs.ui.DBObjectDialog"),
@@ -9312,7 +10997,7 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
     };
     Jassi_53.default.ErrorPanel = ErrorPanel;
 });
-define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs_editor/util/Typescript", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Jassi_54, Tree_2, Panel_10, Textbox_4, Server_3, Router_5, Actions_13, OptionDialog_7, Typescript_3, ContextMenu_2, Windows_7) {
+define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Jassi_54, Tree_2, Panel_10, Textbox_4, Server_3, Router_5, Actions_13, OptionDialog_7, ContextMenu_2, Windows_7) {
     "use strict";
     var FileExplorer_5;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -9462,8 +11147,10 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
                         alert(ret);
                         return;
                     }
-                    if (!all[0].isDirectory())
-                        await (Typescript_3.default === null || Typescript_3.default === void 0 ? void 0 : Typescript_3.default.renameFile(all[0].fullpath, newfile));
+                    if (!all[0].isDirectory()) {
+                        let typescript = (await new Promise((resolve_37, reject_37) => { require(["jassijs_editor/util/Typescript"], resolve_37, reject_37); })).default;
+                        await (typescript === null || typescript === void 0 ? void 0 : typescript.renameFile(all[0].fullpath, newfile));
+                    }
                     await ((_b = FileExplorer.instance) === null || _b === void 0 ? void 0 : _b.refresh());
                     (_c = FileExplorer.instance) === null || _c === void 0 ? void 0 : _c.tree.activateKey(newkey);
                 }
@@ -10589,7 +12276,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     exports.ObjectChooser = ObjectChooser;
     async function test() {
         // kk.o=0;
-        var User = (await new Promise((resolve_37, reject_37) => { require(["jassijs/remote/security/User"], resolve_37, reject_37); })).User;
+        var User = (await new Promise((resolve_38, reject_38) => { require(["jassijs/remote/security/User"], resolve_38, reject_38); })).User;
         var dlg = new ObjectChooser();
         dlg.items = "jassijs.security.User";
         dlg.value = (await User.findOne());
@@ -10601,7 +12288,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     exports.test = test;
     async function test2() {
         // kk.o=0;
-        var Kunde = (await new Promise((resolve_38, reject_38) => { require(["de/remote/Kunde"], resolve_38, reject_38); })).Kunde;
+        var Kunde = (await new Promise((resolve_39, reject_39) => { require(["de/remote/Kunde"], resolve_39, reject_39); })).Kunde;
         var dlg = new ObjectChooser();
         dlg.items = "de.Kunde";
         dlg.value = (await Kunde.find({ id: 1 }))[0];
@@ -10612,11 +12299,11 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditor"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_3, Button_8, Jassi_62, Property_21, Textbox_6, PropertyEditor_1) {
+define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_3, Button_8, Jassi_62, Property_21, Textbox_6) {
     "use strict";
     var OptionDialog_8;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.OptionDialog = void 0;
+    exports.test = exports.OptionDialog = void 0;
     class Me {
     }
     let OptionDialog = OptionDialog_8 = class OptionDialog extends Panel_13.Panel {
@@ -10651,10 +12338,6 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
             me.boxpanel1.height = "calc(100% - 50px)";
             me.inputText = new Textbox_6.Textbox();
             me.boxpanel1.add(me.inputText);
-            me.propertyEditor = new PropertyEditor_1.PropertyEditor(undefined);
-            me.propertyEditor.width = "100%";
-            me.propertyEditor.height = "100%";
-            me.boxpanel1.add(me.propertyEditor);
             for (var x = 0; x < this.options.length; x++) {
                 var button = new Button_8.Button();
                 me.buttons.add(button);
@@ -10701,14 +12384,16 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
                 else {
                     ret.me.inputText.value = inputDefaultText;
                 }
-                if (properties === undefined) {
-                    ret.me.boxpanel1.remove(ret.me.propertyEditor);
-                    ret.me.propertyEditor.destroy();
-                }
-                else {
-                    ret.me.propertyEditor.value = properties;
-                    config.width = "400";
-                    config.height = "400";
+                if (properties !== undefined) {
+                    new Promise((resolve_40, reject_40) => { require(["jassijs/ui/PropertyEditor"], resolve_40, reject_40); }).then((lib) => {
+                        ret.me.propertyEditor = new lib.PropertyEditor(undefined);
+                        ret.me.propertyEditor.width = "100%";
+                        ret.me.propertyEditor.height = "100%";
+                        ret.me.boxpanel1.add(ret.me.propertyEditor);
+                        ret.me.propertyEditor.value = properties;
+                        config.width = "400";
+                        config.height = "400";
+                    });
                 }
                 config.beforeClose = function (event, ui) {
                     resolve({ button: ret.selectedOption, text: ret.me.inputText.value, properties: properties });
@@ -10744,7 +12429,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
     Testprop = __decorate([
         Jassi_62.$Class("jassijs.ui.OptionDialogTestProp")
     ], Testprop);
-    async function test2() {
+    async function test() {
         var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);
         if (tet.button === "yes") {
             var age = await OptionDialog.show("Whats yout age?", ["ok", "cancel"], undefined, false, "18");
@@ -10756,7 +12441,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
         //var ret=new jassijs.ui.Dialog();
         //return ret;
     }
-    exports.test2 = test2;
+    exports.test = test;
     ;
 });
 define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DesignDummy"], function (require, exports, Jassi_63, Container_4, Component_17, Property_22, DesignDummy_3) {
@@ -10965,20 +12650,21 @@ define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Jassi", "ja
     ], Property);
     exports.Property = Property;
 });
-define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs_editor/util/Parser", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/base/PropertyEditorService"], function (require, exports, Jassi_65, Panel_14, Image_2, Parser_2, ComponentDescriptor_4, NameEditor_1, PropertyEditorService_1, Property_23, Component_18) {
+define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/base/PropertyEditorService"], function (require, exports, Jassi_65, Panel_14, Image_2, ComponentDescriptor_4, NameEditor_1, PropertyEditorService_1, Property_23, Component_18) {
     "use strict";
-    var PropertyEditor_2, _a;
+    var PropertyEditor_1, _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.PropertyEditorTestSubProperties = exports.PropertyEditor = void 0;
-    let PropertyEditor = PropertyEditor_2 = class PropertyEditor extends Panel_14.Panel {
+    let PropertyEditor = PropertyEditor_1 = class PropertyEditor extends Panel_14.Panel {
         /**
         * edit object properties
         */
-        constructor(codeEditor) {
+        constructor(codeEditor = undefined, parser = undefined) {
             super();
             this.readPropertyValueFromDesign = false;
             this.codeChanges = {};
             this.table = new Panel_14.Panel();
+            this.parser = parser;
             this.table.init($(`<table style="table-layout: fixed;font-size:11px">
                             <thead>
                                 <tr>
@@ -11005,7 +12691,6 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
              * */
             this.codeEditor = codeEditor;
             /** @member {jassijs.base.Parser} - the code-parser*/
-            this.parser = new Parser_2.Parser();
             /** @member {string} - the name of the variable in code*/
             this.variablename = "";
             /** @member {jassijs.ui.PropertyEditor} - parent propertyeditor*/
@@ -11166,7 +12851,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
             this._multiselectEditors = [];
             if (value !== undefined && value.length > 1) {
                 for (var x = 1; x < value.length; x++) {
-                    var multi = new PropertyEditor_2(this.codeEditor);
+                    var multi = new PropertyEditor_1(this.codeEditor, this.parser);
                     multi.codeEditor = this.codeEditor;
                     multi.parentPropertyEditor = this.parentPropertyEditor;
                     multi.value = value[x];
@@ -11667,9 +13352,9 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
             super.destroy();
         }
     };
-    PropertyEditor = PropertyEditor_2 = __decorate([
+    PropertyEditor = PropertyEditor_1 = __decorate([
         Jassi_65.$Class("jassijs.ui.PropertyEditor"),
-        __metadata("design:paramtypes", [Object])
+        __metadata("design:paramtypes", [Object, Object])
     ], PropertyEditor);
     exports.PropertyEditor = PropertyEditor;
     let PropertyEditorTestSubProperties = class PropertyEditorTestSubProperties {
@@ -11752,7 +13437,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
         Jassi_65.$Class("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     function test() {
-        var ret = new PropertyEditor(undefined);
+        var ret = new PropertyEditor();
         ret.value = new TestProperties();
         return ret;
     }
@@ -11929,7 +13614,7 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
     ], Repeater);
     exports.Repeater = Repeater;
 });
-define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs_editor/util/Typescript", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Jassi_67, Tree_3, Panel_16, Textbox_7, Typescript_4, Router_6, Actions_14, Windows_8) {
+define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Jassi_67, Tree_3, Panel_16, Textbox_7, Router_6, Actions_14, Windows_8) {
     "use strict";
     var SearchExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -11953,17 +13638,18 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi
                 Windows_8.default.addLeft(new SearchExplorer_1(), "Search");
         }
         async doSearch() {
-            var Typescript = (await new Promise((resolve_39, reject_39) => { require(["jassijs_editor/util/Typescript"], resolve_39, reject_39); })).Typescript;
+            //import typescript from "jassijs_editor/util/Typescript";
+            var typescript = (await new Promise((resolve_41, reject_41) => { require(["jassijs_editor/util/Typescript"], resolve_41, reject_41); })).default;
             var all = [];
             var files = []; // [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
             var toFind = this.search.value.toLocaleLowerCase();
             var count = 0;
-            var filenames = Typescript_4.default.getFiles();
+            var filenames = typescript.getFiles();
             for (var f = 0; f < filenames.length; f++) {
                 var file = filenames[f];
                 if (file.indexOf("node_modules") > -1) //no search in node modules
                     continue;
-                var code = Typescript_4.default.getCode(file);
+                var code = typescript.getCode(file);
                 if (code) {
                     var text = code.toLowerCase();
                     var pos = text.indexOf(toFind);
@@ -12001,8 +13687,8 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi
                 if (evt.data !== undefined && evt.data.file !== undefined) {
                     var pos = evt.data.pos;
                     var file = evt.data.file;
-                    new Promise((resolve_40, reject_40) => { require(["jassijs_editor/util/Typescript"], resolve_40, reject_40); }).then(Typescript => {
-                        var text = Typescript_4.default.getCode(file);
+                    new Promise((resolve_42, reject_42) => { require(["jassijs_editor/util/Typescript"], resolve_42, reject_42); }).then(Typescript => {
+                        var text = Typescript.default.getCode(file);
                         var line = text.substring(0, pos).split("\n").length;
                         Router_6.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
                     });
@@ -12324,7 +14010,7 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
     }
     exports.test = test;
 });
-define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_4, Select_3, Jassi_69, Panel_17, PropertyEditor_3, Button_9, Settings_2, ComponentDescriptor_5, Registry_20, Actions_15, Windows_9) {
+define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_4, Select_3, Jassi_69, Panel_17, PropertyEditor_2, Button_9, Settings_2, ComponentDescriptor_5, Registry_20, Actions_15, Windows_9) {
     "use strict";
     var SettingsDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -12387,7 +14073,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
         }
         layout(me) {
             var _this = this;
-            me.propertyeditor = new PropertyEditor_3.PropertyEditor(undefined);
+            me.propertyeditor = new PropertyEditor_2.PropertyEditor();
             me.Save = new Button_9.Button();
             me.Scope = new Select_3.Select();
             me.htmlpanel1 = new HTMLPanel_4.HTMLPanel();
@@ -14059,7 +15745,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
             this.debugpoints = {};
         }
         async createTable() {
-            var Table = (await new Promise((resolve_41, reject_41) => { require(["jassijs/ui/Table"], resolve_41, reject_41); })).Table;
+            var Table = (await new Promise((resolve_43, reject_43) => { require(["jassijs/ui/Table"], resolve_43, reject_43); })).Table;
             this.table = new Table({
                 dataTreeChildFunction: function (obj) {
                     var ret = [];
@@ -14583,7 +16269,7 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
         return t.me.pan;
     };
 });
-define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ext/spectrum"], function (require, exports, PropertyEditor_4, Editor_3, Textbox_11, Jassi_79, Select_5, BoxPanel_7) {
+define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ext/spectrum"], function (require, exports, PropertyEditor_3, Editor_3, Textbox_11, Jassi_79, Select_5, BoxPanel_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test3 = exports.ColorEditor = void 0;
@@ -14698,7 +16384,7 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
     ], ColorEditor);
     exports.ColorEditor = ColorEditor;
     function test3() {
-        var prop = new PropertyEditor_4.PropertyEditor(undefined);
+        var prop = new PropertyEditor_3.PropertyEditor();
         prop.value = new Textbox_11.Textbox();
         return prop;
     }
@@ -15185,7 +16871,7 @@ define("jassijs/ui/PropertyEditors/Editor", ["require", "exports", "jassijs/remo
     ], Editor);
     exports.Editor = Editor;
 });
-define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_5, Editor_8, Textbox_14, Jassi_85, Select_9, CSSProperties_3) {
+define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_4, Editor_8, Textbox_14, Jassi_85, Select_9, CSSProperties_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.FontEditor = void 0;
@@ -15269,7 +16955,7 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
     ], FontEditor);
     exports.FontEditor = FontEditor;
     function test2() {
-        var prop = new PropertyEditor_5.PropertyEditor(undefined);
+        var prop = new PropertyEditor_4.PropertyEditor();
         prop.value = new Textbox_14.Textbox();
         return prop;
     }
@@ -15521,7 +17207,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
                             ic.setAttribute("style", "display:none");
                     }
                 });
-                var file = (await new Promise((resolve_42, reject_42) => { require(["jassijs/modul"], resolve_42, reject_42); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
+                var file = (await new Promise((resolve_44, reject_44) => { require(["jassijs/modul"], resolve_44, reject_44); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
                 var text = await $.ajax({ method: "get", url: file, crossDomain: true, contentType: "text/plain" });
                 var all = text.split("}.");
                 var html = "";
@@ -15575,7 +17261,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
     }
     exports.test = test;
 });
-define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Jassi_89, Editor_12, Button_12, PropertyEditor_6, Tools_3, Classes_29, Property_32) {
+define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Jassi_89, Editor_12, Button_12, PropertyEditor_5, Tools_3, Classes_29, Property_32) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.JsonEditor = void 0;
@@ -15693,7 +17379,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         _onclick(param) {
             var val = this.component.text;
             //if(val!=="function"){//function is still empty
-            var propEditor = new PropertyEditor_6.PropertyEditor(undefined);
+            var propEditor = new PropertyEditor_5.PropertyEditor();
             propEditor.readPropertyValueFromDesign = this.propertyEditor.readPropertyValueFromDesign;
             propEditor.showThisProperties = this.showThisProperties;
             var _this = this;
@@ -15792,7 +17478,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         Jassi_89.$Class("jassijs.ui.PropertyEditorTestProperties2")
     ], TestProperties2);
     function test() {
-        var ret = new PropertyEditor_6.PropertyEditor(undefined);
+        var ret = new PropertyEditor_5.PropertyEditor();
         ret.value = new TestProperties();
         return ret;
     }

@@ -36,8 +36,8 @@ export class DialogKunde extends Panel {
     me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
     value: Kunde;
-    constructor() {
-        super();
+    constructor() {  
+        super(); 
         this.me = {};
         this.layout(this.me);
     }

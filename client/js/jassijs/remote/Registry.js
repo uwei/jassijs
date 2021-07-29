@@ -35,6 +35,7 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
             this.jsondata = undefined;
             this.data = {};
             this.dataMembers = {};
+            this.jsondataMembers = {};
             this._eventHandler = {};
             this._nextID = 10;
         }
@@ -127,6 +128,9 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
         getMemberData(service) {
             return this.dataMembers[service];
         }
+        getJSONMemberData(service) {
+            return this.jsondataMembers[service];
+        }
         /**
          * register an anotation
          * Important: this function should only used from an annotation
@@ -206,7 +210,9 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
          * reload the registry
          */
         async reload() {
+            console.log("load json");
             this.jsondata = { $Class: {} };
+            this.jsondataMembers = {};
             var _this = this;
             var modultext = "";
             //@ts-ignore
@@ -297,16 +303,34 @@ define(["require", "exports", "reflect-metadata"], function (require, exports) {
                     };
                     var theclass = vfiles[classname];
                     for (var service in theclass) {
-                        if (this.jsondata[service] === undefined)
-                            this.jsondata[service] = {};
-                        var entr = new JSONDataEntry();
-                        entr.params = theclass[service];
-                        /* if (vfiles.$Class === undefined) {
-                             console.log("@$Class annotation is missing for " + file + " Service " + service);
-                         }*/
-                        entr.classname = classname; //vfiles.$Class === undefined ? undefined : vfiles.$Class[0];
-                        entr.filename = file;
-                        this.jsondata[service][entr.classname] = entr;
+                        if (service === "@members") {
+                            //public jsondataMembers: { [service: string]: { [classname: string]: { [membername: string]: any[] } } } = {};
+                            var mems = theclass[service];
+                            for (let mem in mems) {
+                                let scs = mems[mem];
+                                for (let sc in scs) {
+                                    if (!this.jsondataMembers[sc])
+                                        this.jsondataMembers[sc] = {};
+                                    if (!this.jsondataMembers[sc][classname])
+                                        this.jsondataMembers[sc][classname] = {};
+                                    if (this.jsondataMembers[sc][classname][mem] === undefined)
+                                        this.jsondataMembers[sc][classname][mem] = [];
+                                    this.jsondataMembers[sc][classname][mem].push(scs[sc]);
+                                }
+                            }
+                        }
+                        else {
+                            if (this.jsondata[service] === undefined)
+                                this.jsondata[service] = {};
+                            var entr = new JSONDataEntry();
+                            entr.params = theclass[service];
+                            /* if (vfiles.$Class === undefined) {
+                                 console.log("@$Class annotation is missing for " + file + " Service " + service);
+                             }*/
+                            entr.classname = classname; //vfiles.$Class === undefined ? undefined : vfiles.$Class[0];
+                            entr.filename = file;
+                            this.jsondata[service][entr.classname] = entr;
+                        }
                     }
                 }
             }

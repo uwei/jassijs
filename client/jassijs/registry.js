@@ -3,11 +3,11 @@ define("jassijs/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs/base/ActionNode.ts": {
-		"date": 1623097148247,
+		"date": 1627587195941,
 		"jassijs.base.ActionNode": {}
 	},
 	"jassijs/base/Actions.ts": {
-		"date": 1622984379898,
+		"date": 1627596979716,
 		"jassijs.base.Actions": {}
 	},
 	"jassijs/base/DatabaseSchema.ts": {
@@ -36,7 +36,16 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
-			]
+			],
+			"@members": {
+				"testNode": {
+					"$Action": [
+						{
+							"name": "Run Tests"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/base/Windows.ts": {
@@ -95,7 +104,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985412199
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1624295873451
+		"date": 1627590048776
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1624295890257,
@@ -112,7 +121,35 @@ define("jassijs/registry",["require"], function(require) {
 				{
 					"name": "jassijs_group"
 				}
-			]
+			],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"name": {
+					"Column": []
+				},
+				"parentRights": {
+					"JoinTable": [],
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				},
+				"rights": {
+					"JoinTable": [],
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				},
+				"users": {
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				}
+			}
 		}
 	},
 	"jassijs/remote/security/ParentRight.ts": {
@@ -122,7 +159,52 @@ define("jassijs/registry",["require"], function(require) {
 				{
 					"name": "jassijs_parentright"
 				}
-			]
+			],
+			"@members": {
+				"id": {
+					"PrimaryGeneratedColumn": []
+				},
+				"name": {
+					"Column": []
+				},
+				"classname": {
+					"Column": []
+				},
+				"i1": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"i2": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"s1": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"s2": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"groups": {
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				}
+			}
 		}
 	},
 	"jassijs/remote/security/Right.ts": {
@@ -132,7 +214,21 @@ define("jassijs/registry",["require"], function(require) {
 				{
 					"name": "jassijs_right"
 				}
-			]
+			],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"name": {
+					"Column": []
+				},
+				"groups": {
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				}
+			}
 		}
 	},
 	"jassijs/remote/security/Rights.ts": {
@@ -146,7 +242,19 @@ define("jassijs/registry",["require"], function(require) {
 				{
 					"name": "jassijs_setting"
 				}
-			]
+			],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"data": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/remote/security/User.ts": {
@@ -156,7 +264,36 @@ define("jassijs/registry",["require"], function(require) {
 				{
 					"name": "jassijs_user"
 				}
-			]
+			],
+			"@members": {
+				"id": {
+					"PrimaryGeneratedColumn": []
+				},
+				"email": {
+					"Column": []
+				},
+				"password": {
+					"Column": [
+						{
+							"select": false
+						}
+					]
+				},
+				"groups": {
+					"JoinTable": [],
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				},
+				"isAdmin": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/remote/Server.ts": {
@@ -182,7 +319,18 @@ define("jassijs/registry",["require"], function(require) {
 				{
 					"classname": "{{dbfullclassname}}"
 				}
-			]
+			],
+			"@members": {
+				"value": {
+					"$Property": [
+						{
+							"isUrlTag": true,
+							"id": true,
+							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/security/UserView.ts": {
@@ -192,25 +340,92 @@ define("jassijs/registry",["require"], function(require) {
 				{
 					"classname": "jassijs.security.User"
 				}
-			]
+			],
+			"@members": {
+				"value": {
+					"$Property": [
+						{
+							"isUrlTag": true,
+							"id": true,
+							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/template/TemplateDBDialog.ts": {
 		"date": 1622984492201,
-		"jassijs.template.TemplateDBDialogProperties": {},
+		"jassijs.template.TemplateDBDialogProperties": {
+			"@members": {
+				"dialogname": {
+					"$Property": [
+						{
+							"decription": "name of the dialog"
+						}
+					]
+				},
+				"dbobject": {
+					"$Property": [
+						{
+							"type": "classselector",
+							"service": "$DBObject"
+						}
+					]
+				}
+			}
+		},
 		"jassijs.ui.TemplateDBDialog": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
-			]
+			],
+			"@members": {
+				"newFile": {
+					"$Action": [
+						{
+							"name": "New/DBDialog",
+							"isEnabled": "function"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/template/TemplateDBObject.ts": {
 		"date": 1622985638953,
-		"jassijs.template.TemplateDBDialogProperties": {},
+		"jassijs.template.TemplateDBDialogProperties": {
+			"@members": {
+				"name": {
+					"$Property": [
+						{
+							"decription": "name of the db class"
+						}
+					]
+				},
+				"autogeneratedid": {
+					"$Property": [
+						{
+							"default": "true",
+							"description": "the primary column alue will be automatically generated with an auto-increment value"
+						}
+					]
+				}
+			}
+		},
 		"jassijs.ui.TemplateDBObject": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
-			]
+			],
+			"@members": {
+				"newFile": {
+					"$Action": [
+						{
+							"name": "New/DBObject",
+							"isEnabled": "function"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/template/TemplateEmptyDialog.ts": {
@@ -218,7 +433,17 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.template.TemplateEmptyDialog": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
-			]
+			],
+			"@members": {
+				"newFile": {
+					"$Action": [
+						{
+							"name": "New/Dialog",
+							"isEnabled": "function"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/template/TemplateRemoteObject.ts": {
@@ -226,11 +451,21 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.template.TemplateRemoteObject": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
-			]
+			],
+			"@members": {
+				"newFile": {
+					"$Action": [
+						{
+							"name": "New/RemoteObject",
+							"isEnabled": "function"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/ActionNodeMenu.ts": {
-		"date": 1626118491026,
+		"date": 1627592863188,
 		"jassijs/ui/ActionNodeMenu": {}
 	},
 	"jassijs/ui/BoxPanel.ts": {
@@ -251,7 +486,24 @@ define("jassijs/registry",["require"], function(require) {
 					"hide": true,
 					"type": "boolean"
 				}
-			]
+			],
+			"@members": {
+				"horizontal": {
+					"$Property": [
+						{
+							"default": true
+						}
+					]
+				},
+				"spliter": {
+					"$Property": [
+						{
+							"type": "number[]",
+							"description": "set the size of splitter e.g. [40,60] the firstcomponent size is 40%"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/Button.ts": {
@@ -265,7 +517,26 @@ define("jassijs/registry",["require"], function(require) {
 						"text": "button"
 					}
 				}
-			]
+			],
+			"@members": {
+				"onclick": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
+				"icon": {
+					"$Property": [
+						{
+							"type": "image"
+						}
+					]
+				},
+				"text": {
+					"$Property": []
+				}
+			}
 		}
 	},
 	"jassijs/ui/Calendar.ts": {
@@ -293,12 +564,104 @@ define("jassijs/registry",["require"], function(require) {
 					"fullPath": "common/Ceckbox",
 					"icon": "mdi mdi-checkbox-marked-outline"
 				}
-			]
+			],
+			"@members": {
+				"value": {
+					"$Property": [
+						{
+							"type": "boolean"
+						}
+					]
+				},
+				"text": {
+					"$Property": []
+				}
+			}
 		}
 	},
 	"jassijs/ui/Component.ts": {
 		"date": 1623176352614,
-		"jassijs.ui.Component": {}
+		"jassijs.ui.Component": {
+			"@members": {
+				"onfocus": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
+				"onblur": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
+				"label": {
+					"$Property": [
+						{
+							"description": "adds a label above the component"
+						}
+					]
+				},
+				"tooltip": {
+					"$Property": [
+						{
+							"description": "tooltip are displayed on mouse over"
+						}
+					]
+				},
+				"x": {
+					"$Property": [
+						{}
+					]
+				},
+				"y": {
+					"$Property": []
+				},
+				"hidden": {
+					"$Property": []
+				},
+				"width": {
+					"$Property": [
+						{
+							"type": "string"
+						}
+					]
+				},
+				"height": {
+					"$Property": [
+						{
+							"type": "string"
+						}
+					]
+				},
+				"css": {
+					"$Property": [
+						{
+							"type": "json",
+							"componentType": "jassijs.ui.CSSProperties"
+						}
+					]
+				},
+				"styles": {
+					"$Property": [
+						{
+							"type": "componentselector",
+							"componentType": "[jassijs.ui.Style]"
+						}
+					]
+				},
+				"contextMenu": {
+					"$Property": [
+						{
+							"type": "componentselector",
+							"componentType": "jassijs.ui.ContextMenu"
+						}
+					]
+				}
+			}
+		}
 	},
 	"jassijs/ui/ComponentDescriptor.ts": {
 		"date": 1622985638953,
@@ -309,7 +672,25 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.ComponentSpy": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
-			]
+			],
+			"@members": {
+				"dummy": {
+					"$Action": [
+						{
+							"name": "Administration",
+							"icon": "mdi mdi-account-cog-outline"
+						}
+					]
+				},
+				"showDialog": {
+					"$Action": [
+						{
+							"name": "Administration/Spy Components",
+							"icon": "mdi mdi-police-badge"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/Container.ts": {
@@ -317,7 +698,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {
-		"date": 1623176398589,
+		"date": 1627587520578,
 		"jassijs.ui.ContextMenu": {
 			"$UIComponent": [
 				{
@@ -327,12 +708,34 @@ define("jassijs/registry",["require"], function(require) {
 						"menu"
 					]
 				}
-			]
+			],
+			"@members": {
+				"includeClassActions": {
+					"$Property": []
+				},
+				"onbeforeshow": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/converters/DefaultConverter.ts": {
 		"date": 1622985638950,
-		"jassijs.ui.converters.DefaultConverterProperties": {},
+		"jassijs.ui.converters.DefaultConverterProperties": {
+			"@members": {
+				"stringToObject": {
+					"$Property": [
+						{
+							"default": "function(ob){}"
+						}
+					]
+				}
+			}
+		},
 		"jassijs.ui.converters.DefaultConverter": {
 			"$Converter": [
 				{
@@ -382,14 +785,473 @@ define("jassijs/registry",["require"], function(require) {
 	},
 	"jassijs/ui/CSSProperties.ts": {
 		"date": 1622985638950,
-		"jassijs.ui.CSSProperties": {}
+		"jassijs.ui.CSSProperties": {
+			"@members": {
+				"background_color": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"background_image": {
+					"$Property": []
+				},
+				"border_color": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"border_style": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"none",
+								"hidden",
+								"dotted",
+								"dashed",
+								"solid",
+								"double",
+								"groove",
+								"ridge",
+								"inset",
+								"outset",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"border_width": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"thin",
+								"medium",
+								"thick",
+								"2px",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"color": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"cursor": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"auto",
+								"default",
+								"none",
+								"context-menu",
+								"help",
+								"pointer",
+								"progress",
+								"wait",
+								"cell",
+								"crosshair",
+								"text",
+								"vertical-text",
+								"alias",
+								"copy",
+								"move",
+								"no-drop",
+								"not-allowed",
+								"grab",
+								"grabbing",
+								"all-scroll",
+								"col-resize",
+								"row-resize",
+								"n-resize",
+								"e-resize",
+								"s-resize",
+								"w-resize",
+								"ne-resize",
+								"nw-resize",
+								"se-resize",
+								"sw-resize",
+								"ew-resize",
+								"ns-resize",
+								"nesw-resize",
+								"nwse-resize",
+								"zoom-in",
+								"zoom-out",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"filter": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"blur(5px)",
+								"brightness(0.4)",
+								"contrast(200%)",
+								"drop-shadow(16px 16px 20px blue)",
+								"grayscale(50%)",
+								"hue-rotate(90deg)",
+								"invert(75%)",
+								"opacity(25%)",
+								"saturate(30%)",
+								"sepia(60%)",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"float": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"left",
+								"right",
+								"none",
+								"inline-start",
+								"inline-end",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"font_family": {
+					"$Property": [
+						{
+							"type": "font"
+						}
+					]
+				},
+				"font_size": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"12px",
+								"xx-small",
+								"x-small",
+								"small",
+								"medium",
+								"large",
+								"x-large",
+								"xx-large",
+								"xxx-large",
+								"larger",
+								"smaller",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"font_variant": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"normal",
+								"small-caps",
+								"small-caps slashed-zero",
+								"common-ligatures tabular-nums",
+								"no-common-ligatures proportional-nums",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"font_weight": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"normal",
+								"bold",
+								"lighter",
+								"bolder",
+								"100",
+								"900",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"letter_spacing": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"normal",
+								"1px"
+							]
+						}
+					]
+				},
+				"line_height": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"normal",
+								"32px"
+							]
+						}
+					]
+				},
+				"margin_bottom": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"3px"
+							]
+						}
+					]
+				},
+				"margin_left": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"3px"
+							]
+						}
+					]
+				},
+				"margin_right": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"3px"
+							]
+						}
+					]
+				},
+				"margin_top": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"3px"
+							]
+						}
+					]
+				},
+				"overflow": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"visible",
+								"hidden",
+								"clip",
+								"scroll",
+								"auto",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"padding_bottom": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"3px"
+							]
+						}
+					]
+				},
+				"padding_left": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"3px"
+							]
+						}
+					]
+				},
+				"padding_right": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"3px"
+							]
+						}
+					]
+				},
+				"padding_top": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"3px"
+							]
+						}
+					]
+				},
+				"position": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"static",
+								"relative",
+								"absolute",
+								"sticky",
+								"fixed",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"text_align": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"start",
+								"end",
+								"left",
+								"right",
+								"center",
+								"justify",
+								"match-parent",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"text_decoration_color": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"text_decoration_line": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"none",
+								"underline",
+								"overline",
+								"line-through",
+								"blink",
+								"spelling-error",
+								"grammar-error",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"text_decoration_style": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"solid",
+								"double",
+								"dotted",
+								"dashed",
+								"wavy",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"text_decoration_thickness": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"3px"
+							]
+						}
+					]
+				},
+				"text_transform": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"none",
+								"capitalize",
+								"uppercase",
+								"lowercase",
+								"full-width",
+								"full-size-kana",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"vertical_align": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"baseline",
+								"sub",
+								"super",
+								"text-top",
+								"text-bottom",
+								"middle",
+								"top",
+								"bottom",
+								"3px",
+								"inherit",
+								"initial",
+								"unset"
+							]
+						}
+					]
+				},
+				"z_index": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"1",
+								"2",
+								"auto"
+							]
+						}
+					]
+				}
+			}
+		}
 	},
 	"jassijs/ui/DatabaseDesigner.ts": {
 		"date": 1624096683489,
 		"jassijs/ui/DatabaseDesigner": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
-			]
+			],
+			"@members": {
+				"showDialog": {
+					"$Action": [
+						{
+							"name": "Administration/Database Designer",
+							"icon": "mdi mdi-database-edit"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/Databinder.ts": {
@@ -405,14 +1267,32 @@ define("jassijs/registry",["require"], function(require) {
 	},
 	"jassijs/ui/DataComponent.ts": {
 		"date": 1622984379896,
-		"jassijs.ui.DataComponent": {}
+		"jassijs.ui.DataComponent": {
+			"@members": {
+				"autocommit": {
+					"$Property": []
+				},
+				"bind": {
+					"$Property": [
+						{
+							"type": "databinder"
+						}
+					]
+				}
+			}
+		}
 	},
 	"jassijs/ui/DBObjectDialog.ts": {
-		"date": 1622984379896,
+		"date": 1627590894445,
 		"jassijs.ui.DBObjectDialog": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
-			]
+			],
+			"@members": {
+				"createActions": {
+					"$Actions": []
+				}
+			}
 		}
 	},
 	"jassijs/ui/DBObjectExplorer.ts": {
@@ -421,21 +1301,73 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DBFileActions": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
-			]
+			],
+			"@members": {
+				"ViewData": {
+					"$Action": [
+						{
+							"name": "View Data",
+							"isEnabled": "function"
+						}
+					]
+				}
+			}
 		},
 		"jassijs.ui.DBObjectActions": {
 			"$ActionProvider": [
 				"jassijs.ui.DBObjectNode"
-			]
+			],
+			"@members": {
+				"ViewData": {
+					"$Action": [
+						{
+							"name": "View Data"
+						}
+					]
+				},
+				"OpenCode": {
+					"$Action": [
+						{
+							"name": "Open Code"
+						}
+					]
+				}
+			}
 		},
 		"jassijs.ui.DBObjectExplorer": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
-			]
+			],
+			"@members": {
+				"dummy": {
+					"$Action": [
+						{
+							"name": "Windows",
+							"icon": "mdi mdi-iframe-array-outline"
+						}
+					]
+				},
+				"dummy2": {
+					"$Action": [
+						{
+							"name": "Windows/Development",
+							"icon": "mdi mdi-dev-to"
+						}
+					]
+				},
+				"show": {
+					"$Action": [
+						{
+							"name": "Windows/Development/DBObjects",
+							"icon": "mdi mdi-database-search"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/DBObjectView.ts": {
-		"date": 1622984492201,
+		"date": 1627590777599,
 		"jassijs/ui/DBObjectView": {
 			"$UIComponent": [
 				{
@@ -448,7 +1380,37 @@ define("jassijs/registry",["require"], function(require) {
 						"me.refresh"
 					]
 				}
-			]
+			],
+			"@members": {
+				"oncreated": {
+					"$Property": [
+						{
+							"default": "function(obj?/*: DBObject*/){\n\t\n}"
+						}
+					]
+				},
+				"onsaved": {
+					"$Property": [
+						{
+							"default": "function(obj?/*: DBObject*/){\n\t\n}"
+						}
+					]
+				},
+				"onrefreshed": {
+					"$Property": [
+						{
+							"default": "function(obj?/*: DBObject*/){\n\t\n}"
+						}
+					]
+				},
+				"ondeleted": {
+					"$Property": [
+						{
+							"default": "function(obj?/*: DBObject*/){\n\t\n}"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/DesignDummy.ts": {
@@ -464,20 +1426,104 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.ErrorPanel": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
-			]
+			],
+			"@members": {
+				"showDialog": {
+					"$Action": [
+						{
+							"name": "Administration/Errors",
+							"icon": "mdi mdi-emoticon-confused-outline"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/FileExplorer.ts": {
-		"date": 1623862680407,
+		"date": 1627593837699,
 		"jassijs.ui.FileActions": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
-			]
+			],
+			"@members": {
+				"newFile": {
+					"$Action": [
+						{
+							"name": "New/File",
+							"icon": "mdi mdi-file",
+							"isEnabled": "function"
+						}
+					]
+				},
+				"download": {
+					"$Action": [
+						{
+							"name": "Download",
+							"isEnabled": "function"
+						}
+					]
+				},
+				"newFolder": {
+					"$Action": [
+						{
+							"name": "New/Folder",
+							"isEnabled": "function"
+						}
+					]
+				},
+				"newModule": {
+					"$Action": [
+						{
+							"name": "New/Module",
+							"isEnabled": "function"
+						}
+					]
+				},
+				"dodelete": {
+					"$Action": [
+						{
+							"name": "Delete"
+						}
+					]
+				},
+				"rename": {
+					"$Action": [
+						{
+							"name": "Rename"
+						}
+					]
+				},
+				"refresh": {
+					"$Action": [
+						{
+							"name": "Refresh"
+						}
+					]
+				},
+				"open": {
+					"$Action": [
+						{
+							"name": "Open",
+							"isEnabled": "function"
+						}
+					]
+				}
+			}
 		},
 		"jassijs.ui.FileExplorer": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
-			]
+			],
+			"@members": {
+				"show": {
+					"$Action": [
+						{
+							"name": "Windows/Development/Files",
+							"icon": "mdi mdi-file-tree"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/HTMLEditorPanel.ts": {
@@ -492,7 +1538,27 @@ define("jassijs/registry",["require"], function(require) {
 					"fullPath": "common/HTMLPanel",
 					"icon": "mdi mdi-cloud-tags"
 				}
-			]
+			],
+			"@members": {
+				"newlineafter": {
+					"$Property": [
+						{
+							"description": "line break after element",
+							"default": false
+						}
+					]
+				},
+				"template": {
+					"$Property": [
+						{
+							"decription": "e.g. component.value=new Person();component.template:\"{{name}}\""
+						}
+					]
+				},
+				"value": {
+					"$Property": []
+				}
+			}
 		}
 	},
 	"jassijs/ui/Image.ts": {
@@ -503,7 +1569,23 @@ define("jassijs/registry",["require"], function(require) {
 					"fullPath": "default/Image",
 					"icon": "mdi mdi-file-image"
 				}
-			]
+			],
+			"@members": {
+				"value": {
+					"$Property": [
+						{
+							"type": "string"
+						}
+					]
+				},
+				"src": {
+					"$Property": [
+						{
+							"type": "image"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/InvisibleComponent.ts": {
@@ -527,7 +1609,18 @@ define("jassijs/registry",["require"], function(require) {
 						"text": "menu"
 					}
 				}
-			]
+			],
+			"@members": {
+				"onclick": {
+					"$Property": [
+						{
+							"name": "onclick",
+							"type": "function",
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/MenuItem.ts": {
@@ -544,7 +1637,22 @@ define("jassijs/registry",["require"], function(require) {
 						"items"
 					]
 				}
-			]
+			],
+			"@members": {
+				"onclick": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
+				"icon": {
+					"$Property": []
+				},
+				"text": {
+					"$Property": []
+				}
+			}
 		}
 	},
 	"jassijs/ui/ObjectChooser.ts": {
@@ -555,17 +1663,83 @@ define("jassijs/registry",["require"], function(require) {
 					"fullPath": "common/ObjectChooser",
 					"icon": "mdi mdi-glasses"
 				}
-			]
+			],
+			"@members": {
+				"dialogHeight": {
+					"$Property": [
+						{
+							"default": 450
+						}
+					]
+				},
+				"dialogWidth": {
+					"$Property": [
+						{
+							"default": 300
+						}
+					]
+				},
+				"items": {
+					"$Property": [
+						{
+							"type": "string",
+							"description": "the classname for to choose"
+						}
+					]
+				},
+				"onchange": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
+				"autocommit": {
+					"$Property": []
+				},
+				"bind": {
+					"$Property": [
+						{
+							"type": "databinder"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/OptionDialog.ts": {
-		"date": 1623174800968,
-		"jassijs.ui.OptionDialog": {},
-		"jassijs.ui.OptionDialogTestProp": {}
+		"date": 1627595112830,
+		"jassijs.ui.OptionDialog": {
+			"@members": {
+				"text": {
+					"$Property": []
+				}
+			}
+		},
+		"jassijs.ui.OptionDialogTestProp": {
+			"@members": {
+				"visible": {
+					"$Property": []
+				},
+				"text": {
+					"$Property": []
+				}
+			}
+		}
 	},
 	"jassijs/ui/Panel.ts": {
 		"date": 1622985638954,
-		"jassijs.ui.PanelCreateProperties": {},
+		"jassijs.ui.PanelCreateProperties": {
+			"@members": {
+				"useSpan": {
+					"$Property": [
+						{
+							"default": false
+						}
+					]
+				}
+			}
+		},
 		"jassijs.ui.Panel": {
 			"$UIComponent": [
 				{
@@ -582,7 +1756,12 @@ define("jassijs/registry",["require"], function(require) {
 					"type": "json",
 					"componentType": "jassijs.ui.PanelCreateProperties"
 				}
-			]
+			],
+			"@members": {
+				"isAbsolute": {
+					"$Property": []
+				}
+			}
 		}
 	},
 	"jassijs/ui/Property.ts": {
@@ -590,10 +1769,105 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1623178512772,
+		"date": 1627596182837,
 		"jassijs.ui.PropertyEditor": {},
-		"jassijs.ui.PropertyEditorTestSubProperties": {},
-		"jassijs.ui.PropertyEditorTestProperties": {}
+		"jassijs.ui.PropertyEditorTestSubProperties": {
+			"@members": {
+				"num": {
+					"$Property": []
+				},
+				"text": {
+					"$Property": []
+				}
+			}
+		},
+		"jassijs.ui.PropertyEditorTestProperties": {
+			"@members": {
+				"dialogname": {
+					"$Property": [
+						{
+							"decription": "name of the dialog"
+						}
+					]
+				},
+				"checked": {
+					"$Property": []
+				},
+				"color": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"component": {
+					"$Property": [
+						{
+							"type": "componentselector",
+							"componentType": "jassi.ui.Component"
+						}
+					]
+				},
+				"databinder": {
+					"$Property": [
+						{
+							"type": "databinder"
+						}
+					]
+				},
+				"dbobject": {
+					"$Property": [
+						{
+							"type": "dbobject",
+							"componentType": "de.Kunde"
+						}
+					]
+				},
+				"num": {
+					"$Property": [
+						{
+							"default": 80
+						}
+					]
+				},
+				"font": {
+					"$Property": [
+						{
+							"type": "font"
+						}
+					]
+				},
+				"func": {
+					"$Property": [
+						{
+							"type": "function"
+						}
+					]
+				},
+				"html": {
+					"$Property": [
+						{
+							"type": "html"
+						}
+					]
+				},
+				"image": {
+					"$Property": [
+						{
+							"type": "image"
+						}
+					]
+				},
+				"json": {
+					"$Property": [
+						{
+							"type": "json",
+							"componentType": "jassijs.ui.PropertyEditorTestSubProperties"
+						}
+					]
+				}
+			}
+		}
 	},
 	"jassijs/ui/PropertyEditors/BooleanEditor.ts": {
 		"date": 1622985638954,
@@ -616,7 +1890,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ColorEditor.ts": {
-		"date": 1623178819014,
+		"date": 1627596203109,
 		"jassijs.ui.PropertyEditors.ColorEditor": {
 			"$PropertyEditor": [
 				[
@@ -672,7 +1946,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.PropertyEditors.Editor": {}
 	},
 	"jassijs/ui/PropertyEditors/FontEditor.ts": {
-		"date": 1623175625777,
+		"date": 1627596209522,
 		"jassijs.ui.PropertyEditors.FontEditor": {
 			"$PropertyEditor": [
 				[
@@ -711,11 +1985,29 @@ define("jassijs/registry",["require"], function(require) {
 				[
 					"image"
 				]
-			]
+			],
+			"@members": {
+				"dummy": {
+					"$Action": [
+						{
+							"name": "Tools",
+							"icon": "mdi mdi-tools"
+						}
+					]
+				},
+				"show": {
+					"$Action": [
+						{
+							"name": "Tools/Icons",
+							"icon": "mdi mdi-image-area"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/PropertyEditors/JsonEditor.ts": {
-		"date": 1622985638954,
+		"date": 1627596234626,
 		"jassijs.ui.PropertyEditors.JsonEditor": {
 			"$PropertyEditor": [
 				[
@@ -723,8 +2015,55 @@ define("jassijs/registry",["require"], function(require) {
 				]
 			]
 		},
-		"jassijs.ui.PropertyEditorTestProperties": {},
-		"jassijs.ui.PropertyEditorTestProperties2": {}
+		"jassijs.ui.PropertyEditorTestProperties": {
+			"@members": {
+				"dialogname": {
+					"$Property": [
+						{
+							"decription": "name of the dialog"
+						}
+					]
+				},
+				"jo": {
+					"$Property": [
+						{
+							"name": "jo/selectMode",
+							"type": "number",
+							"default": 3,
+							"chooseFrom": [
+								1,
+								2,
+								3
+							],
+							"description": "1=single 2=multi 3=multi_hier"
+						},
+						{
+							"name": "jo",
+							"type": "json",
+							"componentType": "jassijs.ui.PropertyEditorTestProperties2"
+						}
+					]
+				}
+			}
+		},
+		"jassijs.ui.PropertyEditorTestProperties2": {
+			"@members": {
+				"name1": {
+					"$Property": [
+						{
+							"decription": "name of the dialog"
+						}
+					]
+				},
+				"name2": {
+					"$Property": [
+						{
+							"decription": "name of the dialog"
+						}
+					]
+				}
+			}
+		}
 	},
 	"jassijs/ui/PropertyEditors/LoadingEditor.ts": {
 		"date": 1622985638954
@@ -760,20 +2099,63 @@ define("jassijs/registry",["require"], function(require) {
 						"design"
 					]
 				}
-			]
+			],
+			"@members": {
+				"bind": {
+					"$Property": [
+						{
+							"type": "databinder"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/SearchExplorer.ts": {
-		"date": 1624293457615,
+		"date": 1627596574453,
 		"jassijs.ui.SearchExplorer": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
-			]
+			],
+			"@members": {
+				"show": {
+					"$Action": [
+						{
+							"name": "Windows/Development/Search",
+							"icon": "mdi mdi-folder-search-outline"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/Select.ts": {
 		"date": 1622985638954,
-		"jassijs.ui.SelectCreateProperties": {},
+		"jassijs.ui.SelectCreateProperties": {
+			"@members": {
+				"multiple": {
+					"$Property": [
+						{
+							"default": false
+						}
+					]
+				},
+				"allowDeselect": {
+					"$Property": [
+						{
+							"default": false
+						}
+					]
+				},
+				"placeholder": {
+					"$Property": [
+						{
+							"default": ""
+						}
+					]
+				}
+			}
+		},
 		"jassijs.ui.Select": {
 			"$UIComponent": [
 				{
@@ -787,16 +2169,42 @@ define("jassijs/registry",["require"], function(require) {
 					"type": "json",
 					"componentType": "jassijs.ui.SelectCreateProperties"
 				}
-			]
+			],
+			"@members": {
+				"onchange": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
+				"display": {
+					"$Property": [
+						{
+							"type": "string"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/SettingsDialog.ts": {
-		"date": 1622998616949,
+		"date": 1627598491608,
 		"jassijs.ui.SettingsObject": {},
 		"jassijs.ui.SettingsDialog": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
-			]
+			],
+			"@members": {
+				"show": {
+					"$Action": [
+						{
+							"name": "Settings",
+							"icon": "mdi mdi-settings-helper"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/Style.ts": {
@@ -807,12 +2215,73 @@ define("jassijs/registry",["require"], function(require) {
 					"fullPath": "common/Style",
 					"icon": "mdi mdi-virus"
 				}
-			]
+			],
+			"@members": {
+				"css": {
+					"$Property": [
+						{
+							"type": "json",
+							"componentType": "jassijs.ui.CSSProperties"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/Table.ts": {
 		"date": 1622984379893,
-		"jassijs.ui.TableEditorProperties": {},
+		"jassijs.ui.TableEditorProperties": {
+			"@members": {
+				"paginationSize": {
+					"$Property": [
+						{
+							"default": "undefined"
+						}
+					]
+				},
+				"headerSort": {
+					"$Property": [
+						{
+							"default": true
+						}
+					]
+				},
+				"layout": {
+					"$Property": [
+						{
+							"default": "fitDataStretch",
+							"chooseFrom": [
+								"fitData",
+								"fitColumns",
+								"fitDataFill",
+								"fitDataStretch"
+							]
+						}
+					]
+				},
+				"dataTreeChildFunction": {
+					"$Property": [
+						{
+							"default": "undefined"
+						}
+					]
+				},
+				"movableColumns": {
+					"$Property": [
+						{
+							"default": false
+						}
+					]
+				},
+				"cellDblClick": {
+					"$Property": [
+						{
+							"default": "function(event:any,group:any){\n\t\n}"
+						}
+					]
+				}
+			}
+		},
 		"jassijs.ui.Table": {
 			"$UIComponent": [
 				{
@@ -826,7 +2295,33 @@ define("jassijs/registry",["require"], function(require) {
 					"type": "json",
 					"componentType": "jassijs.ui.TableEditorProperties"
 				}
-			]
+			],
+			"@members": {
+				"onchange": {
+					"$Property": [
+						{
+							"default": "function(event?: JQueryEventObject, data?:Tabulator.RowComponent){\n\t\n}"
+						}
+					]
+				},
+				"showSearchbox": {
+					"$Property": []
+				},
+				"height": {
+					"$Property": [
+						{
+							"type": "string"
+						}
+					]
+				},
+				"bindItems": {
+					"$Property": [
+						{
+							"type": "databinder"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/Textarea.ts": {
@@ -860,13 +2355,117 @@ define("jassijs/registry",["require"], function(require) {
 					"name": "new",
 					"type": "string"
 				}
-			]
+			],
+			"@members": {
+				"converter": {
+					"$Property": [
+						{
+							"type": "classselector",
+							"service": "$Converter"
+						}
+					]
+				},
+				"format": {
+					"$Property": [
+						{
+							"type": "string",
+							"chooseFrom": "allFormats"
+						}
+					]
+				},
+				"value": {
+					"$Property": [
+						{
+							"type": "string"
+						}
+					]
+				},
+				"onclick": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
+				"onchange": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
+				"onkeydown": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
+				"oninput": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
+				"placeholder": {
+					"$Property": []
+				}
+			}
 		}
 	},
 	"jassijs/ui/Tree.ts": {
 		"date": 1623866476580,
-		"jassijs.ui.TreeEditorPropertiesMulti": {},
-		"jassijs.ui.TreeEditorProperties": {},
+		"jassijs.ui.TreeEditorPropertiesMulti": {
+			"@members": {
+				"mode": {
+					"$Property": [
+						{
+							"default": "",
+							"chooseFrom": [
+								"",
+								"sameParent",
+								"sameLevel"
+							],
+							"description": "multi selection mode"
+						}
+					]
+				}
+			}
+		},
+		"jassijs.ui.TreeEditorProperties": {
+			"@members": {
+				"selectMode": {
+					"$Property": [
+						{
+							"default": 3,
+							"chooseFrom": [
+								1,
+								2,
+								3
+							],
+							"description": "1=single 2=multi 3=multi_hier"
+						}
+					]
+				},
+				"checkbox": {
+					"$Property": [
+						{
+							"default": false,
+							"description": "display a checkbox before the node"
+						}
+					]
+				},
+				"multi": {
+					"$Property": [
+						{
+							"type": "json",
+							"componentType": "jassijs.ui.TreeEditorPropertiesMulti"
+						}
+					]
+				}
+			}
+		},
 		"jassijs.ui.Tree": {
 			"$UIComponent": [
 				{
@@ -880,7 +2479,32 @@ define("jassijs/registry",["require"], function(require) {
 					"type": "json",
 					"componentType": "jassijs.ui.TreeEditorProperties"
 				}
-			]
+			],
+			"@members": {
+				"propStyle": {
+					"$Property": [
+						{
+							"type": "string",
+							"description": "the property called to get the style of the item"
+						}
+					]
+				},
+				"propDisplay": {
+					"$Property": [
+						{
+							"type": "string",
+							"description": "the property called to get the name of the item"
+						}
+					]
+				},
+				"onclick": {
+					"$Property": [
+						{
+							"default": "function(event?: JQueryEventObject/*, data?:Fancytree.EventData*/){\n\t\n}"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/Upload.ts": {
@@ -891,7 +2515,22 @@ define("jassijs/registry",["require"], function(require) {
 					"fullPath": "common/Upload",
 					"icon": "mdi mdi-cloud-upload-outline"
 				}
-			]
+			],
+			"@members": {
+				"accept": {
+					"$Property": []
+				},
+				"multiple": {
+					"$Property": []
+				},
+				"onuploaded": {
+					"$Property": [
+						{
+							"default": "function(data:{[file:string]:string}){\n\t\n}"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/ui/VariablePanel.ts": {
@@ -906,7 +2545,17 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.CSVImport": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
-			]
+			],
+			"@members": {
+				"showDialog": {
+					"$Action": [
+						{
+							"name": "Administration/Database CSV-Import",
+							"icon": "mdi mdi-database-import"
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/util/DatabaseSchema.ts": {

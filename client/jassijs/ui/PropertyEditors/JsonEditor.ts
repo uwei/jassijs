@@ -129,7 +129,7 @@ export class JsonEditor extends Editor {
     _onclick(param) {
         var val = this.component.text;
         //if(val!=="function"){//function is still empty
-        var propEditor = new PropertyEditor(undefined);
+        var propEditor = new PropertyEditor();
         propEditor.readPropertyValueFromDesign=this.propertyEditor.readPropertyValueFromDesign;
         propEditor.showThisProperties = this.showThisProperties;
         var _this = this;
@@ -214,7 +214,7 @@ class TestProperties2 {
     name2: string;
 }
 export function test() {
-    var ret = new PropertyEditor(undefined);
+    var ret = new PropertyEditor();
     ret.value = new TestProperties();
     return ret;
 }

@@ -50,38 +50,50 @@ export interface Action {
 }
 @$Class("jassijs.base.Actions")
 export class Actions {
-	static async getActionsFor(vdata: any[]): Promise<Action[]> {
-		var oclass = vdata[0].constructor;
+	static async getActionsFor(vdata: any): Promise<Action[]> {
+		//var oclass = vdata[0].constructor;
 		var ret: { name: string, icon?: string, call: (objects: any[]) => {} }[] = [];
 		/*men.text = actions[x].name;
 				men.icon = actions[x].icon;
 				men.onclick(function (evt) {
 					ac.run([node]);
 				});*/
-		var sclass = classes.getClassName(oclass);
+		var sclass = classes.getClassName(vdata);
 		var allclasses = (await registry.getJSONData("$ActionProvider")).filter(entr => entr.params[0] === sclass);
-		await registry.loadAllFilesForEntries(allclasses);
+		//await registry.loadAllFilesForEntries(allclasses);
 
-		let data = registry.getData("$ActionProvider");
+		//let data = registry.getData("$ActionProvider");
 		for (let x = 0; x < allclasses.length; x++) {
 			var entr = allclasses[x];
-			var mem = registry.getMemberData("$Action")[entr.classname];
+			var mem = registry.getJSONMemberData("$Action")[entr.classname];
 			for (let name in mem) {
 				let ac: ActionProperties = mem[name][0][0];
-				if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
-					continue;
+				if (ac.isEnabled !== undefined||ac.run!==undefined){//we musst load the class
+					await classes.loadClass(entr.classname);
+					ac= registry.getMemberData("$Action")[entr.classname][name][0][0];
+				}
+				if (ac.isEnabled !== undefined){
+					if((await ac.isEnabled([vdata])) === false)
+						continue;
+				}
+				let sclassname=entr.classname;
+				let sname=name;
 				ret.push({
 					name: ac.name,
 					icon: ac.icon,
-					call: ac.run?ac.run:classes.getClass(entr.classname)[name]
+					call: ac.run?ac.run:async(...param)=>{
+						(await classes.loadClass(sclassname))[sname](...param);
+					}
 				})
 			}
-			mem = registry.getMemberData("$Actions")[entr.classname];
+
+			
+			mem = registry.getJSONMemberData("$Actions")[entr.classname];
 			for (let name in mem) {
-				let acs: ActionProperties[] =await classes.getClass(entr.classname)[name]();
+				let acs: ActionProperties[] =await (await classes.loadClass(entr.classname))[name]();
 				for (let x = 0; x < acs.length; x++) {
 					let ac = acs[x];
-					if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
+					if (ac.isEnabled !== undefined && ((await ac.isEnabled([vdata])) === false))
 						continue;
 					ret.push({
 						name: ac.name,

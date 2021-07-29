@@ -6,14 +6,14 @@ import jassijs, { $Class } from "jassijs/remote/Jassi";
 import {Component} from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import {Textbox} from "jassijs/ui/Textbox";
-import { PropertyEditor } from "jassijs/ui/PropertyEditor";
+
 
 class Me{
     boxpanel1? :BoxPanel;
     htmlpanel1?:HTMLPanel;
     buttons? :BoxPanel;
     inputText?:Textbox;
-    propertyEditor?:PropertyEditor;
+    propertyEditor?:any;
 
 }
 export interface DialogResult{
@@ -65,10 +65,7 @@ export class OptionDialog extends Panel {
         me.boxpanel1.height="calc(100% - 50px)";
         me.inputText=new Textbox();
         me.boxpanel1.add(me.inputText);
-        me.propertyEditor=new PropertyEditor(undefined);
-        me.propertyEditor.width="100%";
-        me.propertyEditor.height="100%";
-        me.boxpanel1.add(me.propertyEditor);
+        
         for (var x = 0; x < this.options.length; x++) {
             var button = new Button();
             me.buttons.add(button);
@@ -121,16 +118,18 @@ export class OptionDialog extends Panel {
             
             	
             }
-            if(properties===undefined){
-            	ret.me.boxpanel1.remove(ret.me.propertyEditor);
-            	ret.me.propertyEditor.destroy();
-            }else{
-            	ret.me.propertyEditor.value=properties;
-            	config.width="400";
-            	config.height="400";
+            if(properties!==undefined){
+                import("jassijs/ui/PropertyEditor").then((lib:any)=>{
+                    ret.me.propertyEditor=new lib.PropertyEditor(undefined);
+                    ret.me.propertyEditor.width="100%";
+                    ret.me.propertyEditor.height="100%";
+                    ret.me.boxpanel1.add(ret.me.propertyEditor);
+                    ret.me.propertyEditor.value=properties;
+                    config.width="400";
+                    config.height="400";
+    
+                });
             }
-            
-
             config.beforeClose = function (event, ui) {
                 resolve({button: ret.selectedOption,text:<string>ret.me.inputText.value,properties:properties});
             }
@@ -153,7 +152,7 @@ class Testprop{
 	text:string;
 	
 }
-export async function test2() {
+export async function test() {
     var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);
     if(tet.button==="yes"){
     	var age = await OptionDialog.show("Whats yout age?", ["ok", "cancel"], undefined, false,"18");

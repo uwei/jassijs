@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs_editor/util/Typescript", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Server_1, Router_1, Actions_1, OptionDialog_1, Typescript_1, ContextMenu_1, Windows_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Server_1, Router_1, Actions_1, OptionDialog_1, ContextMenu_1, Windows_1) {
     "use strict";
     var FileExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -157,8 +157,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                         alert(ret);
                         return;
                     }
-                    if (!all[0].isDirectory())
-                        await (Typescript_1.default === null || Typescript_1.default === void 0 ? void 0 : Typescript_1.default.renameFile(all[0].fullpath, newfile));
+                    if (!all[0].isDirectory()) {
+                        let typescript = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); })).default;
+                        await (typescript === null || typescript === void 0 ? void 0 : typescript.renameFile(all[0].fullpath, newfile));
+                    }
                     await ((_b = FileExplorer.instance) === null || _b === void 0 ? void 0 : _b.refresh());
                     (_c = FileExplorer.instance) === null || _c === void 0 ? void 0 : _c.tree.activateKey(newkey);
                 }

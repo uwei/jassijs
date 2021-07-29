@@ -106,7 +106,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassi
         /**
          * create Action for all DBObjectView with actionname is defined
          */
-        static async createAcions() {
+        static async createActions() {
             var ret = [];
             var data = await Registry_1.default.getJSONData("$DBObjectView");
             for (var x = 0; x < data.length; x++) {
@@ -137,7 +137,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassi
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
-    ], DBObjectDialog, "createAcions", null);
+    ], DBObjectDialog, "createActions", null);
     DBObjectDialog = DBObjectDialog_1 = __decorate([
         Actions_1.$ActionProvider("jassijs.base.ActionNode"),
         Jassi_1.$Class("jassijs.ui.DBObjectDialog"),

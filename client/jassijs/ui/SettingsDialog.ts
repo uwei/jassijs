@@ -68,6 +68,7 @@ export class SettingsDialog extends Panel {
         windows.add(new SettingsDialog(), "Settings");
     }
     private async update() {
+   
         await Settings.load();
         await registry.loadAllFilesForService("$SettingsDescriptor");
         var testob = new SettingsObject();
@@ -98,7 +99,7 @@ export class SettingsDialog extends Panel {
     }
     layout(me: Me) {
         var _this = this;
-        me.propertyeditor = new PropertyEditor(undefined);
+        me.propertyeditor = new PropertyEditor();
         me.Save = new Button();
         me.Scope = new Select();
         me.htmlpanel1 = new HTMLPanel();

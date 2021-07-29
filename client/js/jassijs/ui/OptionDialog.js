@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditor"], function (require, exports, Panel_1, BoxPanel_1, HTMLPanel_1, Button_1, Jassi_1, Property_1, Textbox_1, PropertyEditor_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Panel_1, BoxPanel_1, HTMLPanel_1, Button_1, Jassi_1, Property_1, Textbox_1) {
     "use strict";
     var OptionDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.OptionDialog = void 0;
+    exports.test = exports.OptionDialog = void 0;
     class Me {
     }
     let OptionDialog = OptionDialog_1 = class OptionDialog extends Panel_1.Panel {
@@ -46,10 +46,6 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassij
             me.boxpanel1.height = "calc(100% - 50px)";
             me.inputText = new Textbox_1.Textbox();
             me.boxpanel1.add(me.inputText);
-            me.propertyEditor = new PropertyEditor_1.PropertyEditor(undefined);
-            me.propertyEditor.width = "100%";
-            me.propertyEditor.height = "100%";
-            me.boxpanel1.add(me.propertyEditor);
             for (var x = 0; x < this.options.length; x++) {
                 var button = new Button_1.Button();
                 me.buttons.add(button);
@@ -96,14 +92,16 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassij
                 else {
                     ret.me.inputText.value = inputDefaultText;
                 }
-                if (properties === undefined) {
-                    ret.me.boxpanel1.remove(ret.me.propertyEditor);
-                    ret.me.propertyEditor.destroy();
-                }
-                else {
-                    ret.me.propertyEditor.value = properties;
-                    config.width = "400";
-                    config.height = "400";
+                if (properties !== undefined) {
+                    new Promise((resolve_1, reject_1) => { require(["jassijs/ui/PropertyEditor"], resolve_1, reject_1); }).then((lib) => {
+                        ret.me.propertyEditor = new lib.PropertyEditor(undefined);
+                        ret.me.propertyEditor.width = "100%";
+                        ret.me.propertyEditor.height = "100%";
+                        ret.me.boxpanel1.add(ret.me.propertyEditor);
+                        ret.me.propertyEditor.value = properties;
+                        config.width = "400";
+                        config.height = "400";
+                    });
                 }
                 config.beforeClose = function (event, ui) {
                     resolve({ button: ret.selectedOption, text: ret.me.inputText.value, properties: properties });
@@ -139,7 +137,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassij
     Testprop = __decorate([
         Jassi_1.$Class("jassijs.ui.OptionDialogTestProp")
     ], Testprop);
-    async function test2() {
+    async function test() {
         var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);
         if (tet.button === "yes") {
             var age = await OptionDialog.show("Whats yout age?", ["ok", "cancel"], undefined, false, "18");
@@ -151,7 +149,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassij
         //var ret=new jassijs.ui.Dialog();
         //return ret;
     }
-    exports.test2 = test2;
+    exports.test = test;
     ;
 });
 //# sourceMappingURL=OptionDialog.js.map

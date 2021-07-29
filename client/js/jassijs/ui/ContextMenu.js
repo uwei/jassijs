@@ -77,7 +77,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Menu", "jassij
             if (this.value === undefined || this.includeClassActions !== true || this.value.length <= 0)
                 actions = actions; //do nothing
             else {
-                var a = await Actions_1.Actions.getActionsFor(this.value); //Class Actions
+                var a = await Actions_1.Actions.getActionsFor(this.value[0].__proto__); //Class Actions
                 for (var x = 0; x < a.length; x++) {
                     actions.push(a[x]);
                 }

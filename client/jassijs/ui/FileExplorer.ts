@@ -9,7 +9,7 @@ import { $ActionProvider, $Action, Actions } from "jassijs/base/Actions";
 import { OptionDialog } from "jassijs/ui/OptionDialog";
 import { Menu } from "jassijs/ui/Menu";
 import { MenuItem } from "jassijs/ui/MenuItem";
-import typescript, { Typescript } from "jassijs_editor/util/Typescript";
+
 import { ContextMenu } from "jassijs/ui/ContextMenu";
 import { CSSProperties } from "jassijs/ui/CSSProperties";
 import windows from "jassijs/base/Windows";
@@ -187,8 +187,11 @@ export class FileActions {
                     alert(ret);
                     return;
                 }
-                if (!all[0].isDirectory())
+                if (!all[0].isDirectory()){
+
+                    let typescript = (await import("jassijs_editor/util/Typescript")).default;
                     await typescript?.renameFile(all[0].fullpath, newfile);
+                }
                 await FileExplorer.instance?.refresh();
                 FileExplorer.instance?.tree.activateKey(newkey);
             }

@@ -8,7 +8,7 @@ if (Reflect["_metadataorg"] === undefined) {
     Reflect["_metadataorg"] = Reflect["metadata"];
     if (Reflect["_metadataorg"] === undefined)
         Reflect["_metadataorg"] = null;
-} 
+}
 
 //@ts-ignore
 Reflect["metadata"] = function (o, property, ...args): Function {
@@ -48,6 +48,7 @@ export class Registry {
     public jsondata: { [service: string]: { [classname: string]: JSONDataEntry } } = undefined;
     public data: { [service: string]: { [classname: string]: DataEntry } } = {};
     public dataMembers: { [service: string]: { [classname: string]: { [membername: string]: any[] } } } = {};
+    public jsondataMembers: { [service: string]: { [classname: string]: { [membername: string]: any[] } } } = {};
     private isLoading: any;
     _eventHandler: { [service: string]: any[] } = {};
     constructor() {
@@ -151,6 +152,15 @@ export class Registry {
         return this.dataMembers[service];
 
     }
+    getJSONMemberData(service: string): {
+        [classname: string]: {
+            [membername: string]: any[]
+        }
+    } {
+
+        return this.jsondataMembers[service];
+
+    }
     /** 
      * register an anotation
      * Important: this function should only used from an annotation
@@ -232,8 +242,9 @@ export class Registry {
      * reload the registry
      */
     async reload() {
-
+        console.log("load json");
         this.jsondata = { $Class: {} };
+        this.jsondataMembers = {};
         var _this = this;
 
         var modultext = "";
@@ -242,27 +253,27 @@ export class Registry {
 
             //@ts-ignore
             var fs = await import('fs');
-            
+
             modultext = fs.readFileSync("./jassijs.json", 'utf-8');
             var modules = JSON.parse(modultext).modules;
             for (let modul in modules) {
-                try { 
-                   
-                    try{
-                         //@ts-ignore
-                        delete require.cache[require.resolve(modul + "/registry")];
-                    }catch{
+                try {
+
+                    try {
                         //@ts-ignore
-                        var s=(require.main["path"]+"/"+modul + "/registry").replaceAll("\\","/")+".js";
+                        delete require.cache[require.resolve(modul + "/registry")];
+                    } catch {
+                        //@ts-ignore
+                        var s = (require.main["path"] + "/" + modul + "/registry").replaceAll("\\", "/") + ".js";
                         //@ts-ignore
                         delete require.cache[s];
                         //@ts-ignore
-                        delete require.cache[s.replaceAll("/","\\")];
+                        delete require.cache[s.replaceAll("/", "\\")];
                     }
                     //@ts-ignore
                     var data = (await require.main.require(modul + "/registry")).default;
                     this.initJSONData(data);
-      
+
                 } catch {
                     console.error("failed load registry " + modul + "/registry.js");
                 }
@@ -274,7 +285,7 @@ export class Registry {
             var all = {};
             var mod = JSON.parse(await (this.loadText("jassijs.json")));
             for (let modul in mod.modules) {
-                if (!mod.modules[modul].endsWith(".js")&&mod.modules[modul].indexOf(".js?")===-1)
+                if (!mod.modules[modul].endsWith(".js") && mod.modules[modul].indexOf(".js?") === -1)
                     //@ts-ignore
                     requirejs.undef(modul + "/registry");
                 {
@@ -331,18 +342,33 @@ export class Registry {
                 }
                 var theclass = vfiles[classname];
                 for (var service in theclass) {
-                    if (this.jsondata[service] === undefined)
-                        this.jsondata[service] = {};
-                    var entr = new JSONDataEntry();
-                    entr.params = theclass[service];
-                    /* if (vfiles.$Class === undefined) {
-                         console.log("@$Class annotation is missing for " + file + " Service " + service);
-                     }*/
-                    entr.classname = classname;//vfiles.$Class === undefined ? undefined : vfiles.$Class[0];
-                    entr.filename = file;
-                    this.jsondata[service][entr.classname] = entr;
-
-
+                    if (service === "@members") {
+                         //public jsondataMembers: { [service: string]: { [classname: string]: { [membername: string]: any[] } } } = {};
+                        var mems=theclass[service];
+                        for(let mem in mems){
+                            let scs=mems[mem];
+                            for(let sc in scs){
+                                if(!this.jsondataMembers[sc])
+                                    this.jsondataMembers[sc]={};
+                                if(!this.jsondataMembers[sc][classname])
+                                    this.jsondataMembers[sc][classname]={};
+                                if(this.jsondataMembers[sc][classname][mem]===undefined)
+                                this.jsondataMembers[sc][classname][mem]=[];
+                                this.jsondataMembers[sc][classname][mem].push(scs[sc]);
+                            }
+                        }
+                    } else {
+                        if (this.jsondata[service] === undefined)
+                            this.jsondata[service] = {};
+                        var entr = new JSONDataEntry();
+                        entr.params = theclass[service];
+                        /* if (vfiles.$Class === undefined) {
+                             console.log("@$Class annotation is missing for " + file + " Service " + service);
+                         }*/
+                        entr.classname = classname;//vfiles.$Class === undefined ? undefined : vfiles.$Class[0];
+                        entr.filename = file;
+                        this.jsondata[service][entr.classname] = entr;
+                    }
                 }
             }
         }

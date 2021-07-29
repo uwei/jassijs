@@ -132,6 +132,8 @@ export abstract class Indexer {
             return false;
         } else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
             return Number(arg.text);
+        } else if (arg.kind === ts.SyntaxKind.ArrowFunction||arg.kind === ts.SyntaxKind.FunctionExpression) {
+            return "function";
         }
 
         throw new JassiError("Error typ not found");
@@ -146,7 +148,7 @@ export abstract class Indexer {
                     var decnode = node.decorators[x];
                     var ex: any = decnode.expression;
                     if (ex.expression === undefined) {
-                        dec[ex.text] = [];//Annotaion without parameter
+                        dec[ex.text] = [];//Annotation without parameter
                     } else {
                         if (ex.expression.text === "$Class")
                             sclass = this.convertArgument(ex.arguments[0]);
@@ -162,6 +164,36 @@ export abstract class Indexer {
                 }
                 if (sclass !== undefined)
                     outDecorations[sclass] = dec;
+                //@members.value.$Property=[{name:string}]
+                for (let x = 0; x < node["members"].length; x++) {
+                    var member = node["members"][x];
+                    var membername = node["members"][x].name?.escapedText;
+                    if (member.decorators !== undefined) {
+                        if(!dec["@members"])
+                            dec["@members"]={}
+                       
+                        var decm = {};
+                        dec["@members"][membername]=decm;
+                        for (let x = 0; x < member.decorators.length; x++) {
+                            var decnode = member.decorators[x];
+                            var ex: any = decnode.expression;
+
+                            if (ex.expression === undefined) {
+                                decm[ex.text] = [];//Annotation without parameter
+                            } else {
+
+                                if (decm[ex.expression.text] === undefined) {
+                                    decm[ex.expression.text] = [];
+                                }
+                                for (var a = 0; a < ex.arguments.length; a++) {
+                                    decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                }
+                            }
+                        }
+                    }
+
+                }
+                
             }
         }
         depth++;

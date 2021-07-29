@@ -125,7 +125,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
         _onclick(param) {
             var val = this.component.text;
             //if(val!=="function"){//function is still empty
-            var propEditor = new PropertyEditor_1.PropertyEditor(undefined);
+            var propEditor = new PropertyEditor_1.PropertyEditor();
             propEditor.readPropertyValueFromDesign = this.propertyEditor.readPropertyValueFromDesign;
             propEditor.showThisProperties = this.showThisProperties;
             var _this = this;
@@ -224,7 +224,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
         Jassi_1.$Class("jassijs.ui.PropertyEditorTestProperties2")
     ], TestProperties2);
     function test() {
-        var ret = new PropertyEditor_1.PropertyEditor(undefined);
+        var ret = new PropertyEditor_1.PropertyEditor();
         ret.value = new TestProperties();
         return ret;
     }

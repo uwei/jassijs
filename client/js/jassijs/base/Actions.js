@@ -37,36 +37,46 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi",
     exports.$ActionProvider = $ActionProvider;
     let Actions = class Actions {
         static async getActionsFor(vdata) {
-            var oclass = vdata[0].constructor;
+            //var oclass = vdata[0].constructor;
             var ret = [];
             /*men.text = actions[x].name;
                     men.icon = actions[x].icon;
                     men.onclick(function (evt) {
                         ac.run([node]);
                     });*/
-            var sclass = Classes_1.classes.getClassName(oclass);
+            var sclass = Classes_1.classes.getClassName(vdata);
             var allclasses = (await Registry_1.default.getJSONData("$ActionProvider")).filter(entr => entr.params[0] === sclass);
-            await Registry_1.default.loadAllFilesForEntries(allclasses);
-            let data = Registry_1.default.getData("$ActionProvider");
+            //await registry.loadAllFilesForEntries(allclasses);
+            //let data = registry.getData("$ActionProvider");
             for (let x = 0; x < allclasses.length; x++) {
                 var entr = allclasses[x];
-                var mem = Registry_1.default.getMemberData("$Action")[entr.classname];
+                var mem = Registry_1.default.getJSONMemberData("$Action")[entr.classname];
                 for (let name in mem) {
                     let ac = mem[name][0][0];
-                    if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
-                        continue;
+                    if (ac.isEnabled !== undefined || ac.run !== undefined) { //we musst load the class
+                        await Classes_1.classes.loadClass(entr.classname);
+                        ac = Registry_1.default.getMemberData("$Action")[entr.classname][name][0][0];
+                    }
+                    if (ac.isEnabled !== undefined) {
+                        if ((await ac.isEnabled([vdata])) === false)
+                            continue;
+                    }
+                    let sclassname = entr.classname;
+                    let sname = name;
                     ret.push({
                         name: ac.name,
                         icon: ac.icon,
-                        call: ac.run ? ac.run : Classes_1.classes.getClass(entr.classname)[name]
+                        call: ac.run ? ac.run : async (...param) => {
+                            (await Classes_1.classes.loadClass(sclassname))[sname](...param);
+                        }
                     });
                 }
-                mem = Registry_1.default.getMemberData("$Actions")[entr.classname];
+                mem = Registry_1.default.getJSONMemberData("$Actions")[entr.classname];
                 for (let name in mem) {
-                    let acs = await Classes_1.classes.getClass(entr.classname)[name]();
+                    let acs = await (await Classes_1.classes.loadClass(entr.classname))[name]();
                     for (let x = 0; x < acs.length; x++) {
                         let ac = acs[x];
-                        if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
+                        if (ac.isEnabled !== undefined && ((await ac.isEnabled([vdata])) === false))
                             continue;
                         ret.push({
                             name: ac.name,

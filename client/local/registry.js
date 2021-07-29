@@ -8,7 +8,22 @@ define("local/registry",["require"], function(require) {
 	"local/remote/Book.ts": {
 		"date": 1622985545033,
 		"local.Book": {
-			"$DBObject": []
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"tt": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"t2": {
+					"Column": []
+				}
+			}
 		}
 	}
 }

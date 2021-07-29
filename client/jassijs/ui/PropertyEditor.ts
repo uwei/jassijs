@@ -2,8 +2,9 @@ import jassijs, { $Class } from "jassijs/remote/Jassi";
 import "jassijs/base/PropertyEditorService";
 import { Panel } from "jassijs/ui/Panel";
 import { Button } from "jassijs/ui/Button";
-import { Image } from "jassijs/ui/Image";
 import { Parser } from "jassijs_editor/util/Parser";
+import { Image } from "jassijs/ui/Image";
+
 import { Tools } from "jassijs/util/Tools";
 import registry from "jassijs/remote/Registry";
 import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
@@ -30,9 +31,10 @@ export class PropertyEditor extends Panel {
     /**
     * edit object properties
     */
-    constructor(codeEditor) {
+    constructor(codeEditor=undefined,parser=undefined) {
         super();
         this.table = new Panel();
+        this.parser=parser;
         this.table.init($(`<table style="table-layout: fixed;font-size:11px">
                             <thead>
                                 <tr>
@@ -60,7 +62,7 @@ export class PropertyEditor extends Panel {
          * */
         this.codeEditor = codeEditor;
         /** @member {jassijs.base.Parser} - the code-parser*/
-        this.parser = new Parser();
+  
         /** @member {string} - the name of the variable in code*/
         this.variablename = "";
         /** @member {jassijs.ui.PropertyEditor} - parent propertyeditor*/
@@ -226,7 +228,7 @@ export class PropertyEditor extends Panel {
         this._multiselectEditors = [];
         if (value !== undefined && value.length > 1) {
             for (var x = 1; x < value.length; x++) {
-                var multi = new PropertyEditor(this.codeEditor);
+                var multi = new PropertyEditor(this.codeEditor,this.parser);
                 multi.codeEditor = this.codeEditor;
                 multi.parentPropertyEditor = this.parentPropertyEditor;
                 multi.value = value[x];
@@ -785,7 +787,7 @@ class TestProperties {
     
 }
 export function test() {
-    var ret = new PropertyEditor(undefined);
+    var ret = new PropertyEditor();
     ret.value = new TestProperties();
     return ret;
 }

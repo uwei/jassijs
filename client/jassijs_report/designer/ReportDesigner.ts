@@ -13,6 +13,7 @@ import { PDFReport } from "jassijs_report/PDFReport";
 import { PDFViewer } from "jassijs_report/PDFViewer";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { Tools } from "jassijs/util/Tools";
+import { Parser } from "jassijs_editor/util/Parser";
 
 @$Class("jassijs_report.designer.ReportDesigner")
 export class ReportDesigner extends ComponentDesigner {
@@ -30,8 +31,8 @@ export class ReportDesigner extends ComponentDesigner {
         var _this = this;
         this._codeEditor = value;
         this._variables = this._codeEditor._variables;
-        this._propertyEditor = new PropertyEditor(undefined);
-        this._codeChanger=new PropertyEditor(this._codeEditor);
+        this._propertyEditor = new PropertyEditor();
+        this._codeChanger=new PropertyEditor(this._codeEditor,new Parser());
         this._errors = this._codeEditor._errors;
         this._componentPalette = new ComponentPalette();
         this._componentExplorer = new ComponentExplorer(value, this._propertyEditor);

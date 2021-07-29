@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs_editor/util/Typescript", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Typescript_1, Router_1, Actions_1, Windows_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Jassi_1, Tree_1, Panel_1, Textbox_1, Router_1, Actions_1, Windows_1) {
     "use strict";
     var SearchExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -31,17 +31,18 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                 Windows_1.default.addLeft(new SearchExplorer_1(), "Search");
         }
         async doSearch() {
-            var Typescript = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); })).Typescript;
+            //import typescript from "jassijs_editor/util/Typescript";
+            var typescript = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); })).default;
             var all = [];
             var files = []; // [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
             var toFind = this.search.value.toLocaleLowerCase();
             var count = 0;
-            var filenames = Typescript_1.default.getFiles();
+            var filenames = typescript.getFiles();
             for (var f = 0; f < filenames.length; f++) {
                 var file = filenames[f];
                 if (file.indexOf("node_modules") > -1) //no search in node modules
                     continue;
-                var code = Typescript_1.default.getCode(file);
+                var code = typescript.getCode(file);
                 if (code) {
                     var text = code.toLowerCase();
                     var pos = text.indexOf(toFind);
@@ -80,7 +81,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                     var pos = evt.data.pos;
                     var file = evt.data.file;
                     new Promise((resolve_2, reject_2) => { require(["jassijs_editor/util/Typescript"], resolve_2, reject_2); }).then(Typescript => {
-                        var text = Typescript_1.default.getCode(file);
+                        var text = Typescript.default.getCode(file);
                         var line = text.substring(0, pos).split("\n").length;
                         Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
                     });
