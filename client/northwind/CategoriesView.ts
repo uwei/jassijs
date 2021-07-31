@@ -1,3 +1,4 @@
+import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { Table } from "jassijs/ui/Table";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
@@ -33,7 +34,6 @@ export class CategoriesView extends DBObjectView {
     get title() {
         return this.value === undefined ? "CategoriesView" : "CategoriesView " + this.value.id;
     }
-   
     layout(me: Me) {
         me.Id = new Textbox();
         me.name = new Textbox();
@@ -48,6 +48,7 @@ export class CategoriesView extends DBObjectView {
         me.Id.label = "Id";
         me.Id.bind(me.databinder, "id");
         me.Id.width = 40;
+        me.Id.converter = new NumberConverter();
         me.name.bind(me.databinder, "CategoryName");
         me.name.label = "Name";
         me.name.width = 225;

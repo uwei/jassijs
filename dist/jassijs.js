@@ -189,7 +189,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1627590048776
             },
             "jassijs/remote/RemoteObject.ts": {
-                "date": 1624295890257,
+                "date": 1627600803505,
                 "jassijs.remote.RemoteObject": {}
             },
             "jassijs/remote/RemoteProtocol.ts": {
@@ -2271,7 +2271,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/SettingsDialog.ts": {
-                "date": 1627598491608,
+                "date": 1627598581633,
                 "jassijs.ui.SettingsObject": {},
                 "jassijs.ui.SettingsDialog": {
                     "$ActionProvider": [
