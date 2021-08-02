@@ -29,16 +29,28 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
     platform_1.globals.MonacoEnvironment = {};
 
     function myfunc() {
-        setTimeout(() => {
-            var worker = require(['vs/language/typescript/tsWorker'], function (tsWorker) {
+        
+       /* if(require.defined('vs/language/typescript/tsWorker')){
+            require(['vs/language/typescript/tsWorker'], function (tsWorker) {
                 tsWorker.TypeScriptWorker.prototype.getCompletionsAtPosition = async function (fileName, position, properties) {
 
                     return await this._languageService.getCompletionsAtPosition(fileName, position, properties);
                 }
-
             });
-        }, 1000);//perhaps it must be higher - means autoimport from other modules is ready after 1 second
+        }else{*/
+        //    debugger;
+        if(require.getConfig().baseUrl===""){
+            setTimeout(()=>{                myfunc();},10);
+        }else{
+            require(['vs/language/typescript/tsWorker'], function (tsWorker) {
+                tsWorker.TypeScriptWorker.prototype.getCompletionsAtPosition = async function (fileName, position, properties) {
 
+                    return await this._languageService.getCompletionsAtPosition(fileName, position, properties);
+                }
+            });
+        }
+     //   }
+      
     }
     platform_1.globals.MonacoEnvironment.getWorker = function (workerId, label) {
         //var js="/*editorWorkerService*/self.MonacoEnvironment={baseUrl: '"+monacopath+"/'};importScripts('"+monacopath+"/vs/base/worker/"+workerId+"');/*editorWorkerService*/"+myfunc.toString()+";myfunc();";

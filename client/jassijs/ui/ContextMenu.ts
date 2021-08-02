@@ -99,7 +99,7 @@ export class ContextMenu extends InvisibleComponent {
         if (this.value === undefined || this.includeClassActions !== true || this.value.length <= 0)
             actions = actions;//do nothing
         else {
-            var a = await Actions.getActionsFor(this.value[0].__proto__);//Class Actions
+            var a = await Actions.getActionsFor(this.value);//Class Actions
             for (var x = 0; x < a.length; x++) {
                 actions.push(a[x]);
             }

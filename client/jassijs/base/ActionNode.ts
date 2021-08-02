@@ -7,6 +7,6 @@ export class ActionNode {
 
 export async function test(){
     var Actions=(await import("jassijs/base/Actions")).Actions;
-    var actions = await Actions.getActionsFor(ActionNode);//Class Actions
+    var actions = await Actions.getActionsFor([new ActionNode()]);//Class Actions
     console.log("found "+actions.length+" Actions"); 
 }

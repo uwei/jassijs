@@ -50,7 +50,7 @@ export interface Action {
 }
 @$Class("jassijs.base.Actions")
 export class Actions {
-	static async getActionsFor(vdata: any): Promise<Action[]> {
+	static async getActionsFor(vdata: any[]): Promise<Action[]> {
 		//var oclass = vdata[0].constructor;
 		var ret: { name: string, icon?: string, call: (objects: any[]) => {} }[] = [];
 		/*men.text = actions[x].name;
@@ -58,7 +58,7 @@ export class Actions {
 				men.onclick(function (evt) {
 					ac.run([node]);
 				});*/
-		var sclass = classes.getClassName(vdata);
+		var sclass = classes.getClassName(vdata[0]);
 		var allclasses = (await registry.getJSONData("$ActionProvider")).filter(entr => entr.params[0] === sclass);
 		//await registry.loadAllFilesForEntries(allclasses);
 
@@ -73,7 +73,7 @@ export class Actions {
 					ac= registry.getMemberData("$Action")[entr.classname][name][0][0];
 				}
 				if (ac.isEnabled !== undefined){
-					if((await ac.isEnabled([vdata])) === false)
+					if((await ac.isEnabled(vdata)) === false)
 						continue;
 				}
 				let sclassname=entr.classname;
@@ -93,7 +93,7 @@ export class Actions {
 				let acs: ActionProperties[] =await (await classes.loadClass(entr.classname))[name]();
 				for (let x = 0; x < acs.length; x++) {
 					let ac = acs[x];
-					if (ac.isEnabled !== undefined && ((await ac.isEnabled([vdata])) === false))
+					if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
 						continue;
 					ret.push({
 						name: ac.name,

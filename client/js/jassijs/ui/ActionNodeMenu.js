@@ -24,7 +24,7 @@ define(["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Jassi", "jassij
             this.fillActions();
         }
         async fillActions() {
-            var actions = await Actions_1.Actions.getActionsFor(ActionNode_1.ActionNode); //Class Actions
+            var actions = await Actions_1.Actions.getActionsFor([new ActionNode_1.ActionNode()]); //Class Actions
             actions.sort((a, b) => {
                 return a.name.localeCompare(b.name);
             });

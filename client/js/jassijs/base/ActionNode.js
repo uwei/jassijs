@@ -16,7 +16,7 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
     exports.ActionNode = ActionNode;
     async function test() {
         var Actions = (await new Promise((resolve_1, reject_1) => { require(["jassijs/base/Actions"], resolve_1, reject_1); })).Actions;
-        var actions = await Actions.getActionsFor(ActionNode); //Class Actions
+        var actions = await Actions.getActionsFor([new ActionNode()]); //Class Actions
         console.log("found " + actions.length + " Actions");
     }
     exports.test = test;

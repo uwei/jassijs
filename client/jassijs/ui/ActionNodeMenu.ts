@@ -23,7 +23,7 @@ export class ActionNodeMenu extends Panel {
     }
     async fillActions(){
         
-        var actions = await Actions.getActionsFor(ActionNode);//Class Actions
+        var actions = await Actions.getActionsFor([new ActionNode()]);//Class Actions
         actions.sort((a:Action,b:Action)=>{
 			return a.name.localeCompare(b.name);
 		});

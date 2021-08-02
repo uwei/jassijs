@@ -90,11 +90,11 @@ define("jassijs/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs/base/ActionNode.ts": {
-                "date": 1627587195941,
+                "date": 1627916873233,
                 "jassijs.base.ActionNode": {}
             },
             "jassijs/base/Actions.ts": {
-                "date": 1627596979716,
+                "date": 1627916690613,
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/DatabaseSchema.ts": {
@@ -552,7 +552,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ActionNodeMenu.ts": {
-                "date": 1627592863188,
+                "date": 1627916728223,
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
@@ -785,7 +785,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
-                "date": 1627587520578,
+                "date": 1627916763694,
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -2675,7 +2675,7 @@ define("jassijs/base/ActionNode", ["require", "exports", "jassijs/remote/Jassi"]
     exports.ActionNode = ActionNode;
     async function test() {
         var Actions = (await new Promise((resolve_1, reject_1) => { require(["jassijs/base/Actions"], resolve_1, reject_1); })).Actions;
-        var actions = await Actions.getActionsFor(ActionNode); //Class Actions
+        var actions = await Actions.getActionsFor([new ActionNode()]); //Class Actions
         console.log("found " + actions.length + " Actions");
     }
     exports.test = test;
@@ -2720,7 +2720,7 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
                     men.onclick(function (evt) {
                         ac.run([node]);
                     });*/
-            var sclass = Classes_1.classes.getClassName(vdata);
+            var sclass = Classes_1.classes.getClassName(vdata[0]);
             var allclasses = (await Registry_1.default.getJSONData("$ActionProvider")).filter(entr => entr.params[0] === sclass);
             //await registry.loadAllFilesForEntries(allclasses);
             //let data = registry.getData("$ActionProvider");
@@ -2734,7 +2734,7 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
                         ac = Registry_1.default.getMemberData("$Action")[entr.classname][name][0][0];
                     }
                     if (ac.isEnabled !== undefined) {
-                        if ((await ac.isEnabled([vdata])) === false)
+                        if ((await ac.isEnabled(vdata)) === false)
                             continue;
                     }
                     let sclassname = entr.classname;
@@ -2752,7 +2752,7 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
                     let acs = await (await Classes_1.classes.loadClass(entr.classname))[name]();
                     for (let x = 0; x < acs.length; x++) {
                         let ac = acs[x];
-                        if (ac.isEnabled !== undefined && ((await ac.isEnabled([vdata])) === false))
+                        if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
                             continue;
                         ret.push({
                             name: ac.name,
@@ -7475,7 +7475,7 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
             this.fillActions();
         }
         async fillActions() {
-            var actions = await Actions_6.Actions.getActionsFor(ActionNode_1.ActionNode); //Class Actions
+            var actions = await Actions_6.Actions.getActionsFor([new ActionNode_1.ActionNode()]); //Class Actions
             actions.sort((a, b) => {
                 return a.name.localeCompare(b.name);
             });
@@ -9066,7 +9066,7 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", 
             if (this.value === undefined || this.includeClassActions !== true || this.value.length <= 0)
                 actions = actions; //do nothing
             else {
-                var a = await Actions_8.Actions.getActionsFor(this.value[0].__proto__); //Class Actions
+                var a = await Actions_8.Actions.getActionsFor(this.value); //Class Actions
                 for (var x = 0; x < a.length; x++) {
                     actions.push(a[x]);
                 }

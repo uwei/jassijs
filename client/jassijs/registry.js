@@ -3,11 +3,11 @@ define("jassijs/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs/base/ActionNode.ts": {
-		"date": 1627587195941,
+		"date": 1627916873233,
 		"jassijs.base.ActionNode": {}
 	},
 	"jassijs/base/Actions.ts": {
-		"date": 1627596979716,
+		"date": 1627916690613,
 		"jassijs.base.Actions": {}
 	},
 	"jassijs/base/DatabaseSchema.ts": {
@@ -465,7 +465,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/ActionNodeMenu.ts": {
-		"date": 1627592863188,
+		"date": 1627916728223,
 		"jassijs/ui/ActionNodeMenu": {}
 	},
 	"jassijs/ui/BoxPanel.ts": {
@@ -698,7 +698,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {
-		"date": 1627587520578,
+		"date": 1627916763694,
 		"jassijs.ui.ContextMenu": {
 			"$UIComponent": [
 				{

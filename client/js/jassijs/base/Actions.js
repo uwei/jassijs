@@ -44,7 +44,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi",
                     men.onclick(function (evt) {
                         ac.run([node]);
                     });*/
-            var sclass = Classes_1.classes.getClassName(vdata);
+            var sclass = Classes_1.classes.getClassName(vdata[0]);
             var allclasses = (await Registry_1.default.getJSONData("$ActionProvider")).filter(entr => entr.params[0] === sclass);
             //await registry.loadAllFilesForEntries(allclasses);
             //let data = registry.getData("$ActionProvider");
@@ -58,7 +58,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi",
                         ac = Registry_1.default.getMemberData("$Action")[entr.classname][name][0][0];
                     }
                     if (ac.isEnabled !== undefined) {
-                        if ((await ac.isEnabled([vdata])) === false)
+                        if ((await ac.isEnabled(vdata)) === false)
                             continue;
                     }
                     let sclassname = entr.classname;
@@ -76,7 +76,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi",
                     let acs = await (await Classes_1.classes.loadClass(entr.classname))[name]();
                     for (let x = 0; x < acs.length; x++) {
                         let ac = acs[x];
-                        if (ac.isEnabled !== undefined && ((await ac.isEnabled([vdata])) === false))
+                        if (ac.isEnabled !== undefined && ((await ac.isEnabled(vdata)) === false))
                             continue;
                         ret.push({
                             name: ac.name,
