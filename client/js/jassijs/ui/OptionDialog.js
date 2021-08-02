@@ -11,7 +11,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassij
     "use strict";
     var OptionDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.OptionDialog = void 0;
+    exports.test2 = exports.OptionDialog = void 0;
     class Me {
     }
     let OptionDialog = OptionDialog_1 = class OptionDialog extends Panel_1.Panel {
@@ -137,7 +137,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassij
     Testprop = __decorate([
         Jassi_1.$Class("jassijs.ui.OptionDialogTestProp")
     ], Testprop);
-    async function test() {
+    async function test2() {
         var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);
         if (tet.button === "yes") {
             var age = await OptionDialog.show("Whats yout age?", ["ok", "cancel"], undefined, false, "18");
@@ -149,7 +149,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassij
         //var ret=new jassijs.ui.Dialog();
         //return ret;
     }
-    exports.test = test;
+    exports.test2 = test2;
     ;
 });
 //# sourceMappingURL=OptionDialog.js.map

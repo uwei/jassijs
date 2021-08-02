@@ -152,7 +152,7 @@ class Testprop{
 	text:string;
 	
 }
-export async function test() {
+export async function test2() {
     var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);
     if(tet.button==="yes"){
     	var age = await OptionDialog.show("Whats yout age?", ["ok", "cancel"], undefined, false,"18");

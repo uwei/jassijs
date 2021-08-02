@@ -15,7 +15,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
     let MenuItem = class MenuItem extends Container_1.Container {
         constructor() {
             super();
-            super.init($('<li style="white-space: nowrap"><div><span class="menuitemspan"><img class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
+            super.init($('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
             $(this.dom).addClass("designerNoResizable");
             this._text = "";
             this._icon = "";
@@ -44,8 +44,11 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
             $(this.dom).find(".menuitemicon").attr("src", "");
             if (icon === null || icon === void 0 ? void 0 : icon.startsWith("mdi")) {
                 el1.addClass(icon);
+                $(this.dom).find(".menuitemicon").css("display", "none");
             }
             else {
+                if (icon)
+                    $(this.dom).find(".menuitemicon").css("display", "initial");
                 $(this.dom).find(".menuitemicon").attr("src", icon);
             }
             //if (icon === "")

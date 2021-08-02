@@ -22,7 +22,7 @@ export  class MenuItem extends Container {
     constructor() {
         super();
 
-        super.init($('<li style="white-space: nowrap"><div><span class="menuitemspan"><img class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
+        super.init($('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
         $(this.dom).addClass("designerNoResizable");
         this._text = "";
         this._icon = "";
@@ -55,8 +55,10 @@ export  class MenuItem extends Container {
          $(this.dom).find(".menuitemicon").attr("src", "");
         if (icon?.startsWith("mdi")) {
             el1.addClass(icon);
-
+            $(this.dom).find(".menuitemicon").css("display","none");
         } else {
+            if(icon)
+                $(this.dom).find(".menuitemicon").css("display","initial");
             $(this.dom).find(".menuitemicon").attr("src", icon);
         }
 

@@ -23,7 +23,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
             var _this = this;
             this._codeEditor = value;
             this._variables = this._codeEditor._variables;
-            this._propertyEditor = new PropertyEditor_1.PropertyEditor();
+            this._propertyEditor = new PropertyEditor_1.PropertyEditor(undefined, new Parser_1.Parser());
             this._codeChanger = new PropertyEditor_1.PropertyEditor(this._codeEditor, new Parser_1.Parser());
             this._errors = this._codeEditor._errors;
             this._componentPalette = new ComponentPalette_1.ComponentPalette();

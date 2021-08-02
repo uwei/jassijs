@@ -290,9 +290,6 @@ define("de/registry",["require"], function(require) {
 			}
 		}
 	},
-	"de/T.ts": {
-		"date": 1626210632530
-	},
 	"de/TestExtension.ts": {
 		"date": 1624293154792
 	},

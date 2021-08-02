@@ -17,7 +17,6 @@ class Me {
     IDUpdate? : Button;
     IDClear ?: Button;
     IDTable?:Table;
-    IDTest?:Button;
 }
 @$ActionProvider("jassijs.base.ActionNode")
 @$Class("jassijs.ui.ComponentSpy")
@@ -52,18 +51,17 @@ export class ComponentSpy extends Panel {
         var me:Me = this.me = {};
 
         me.IDText = new  ErrorPanel();//HTMLPanel();
+        this.css({overflow: "scroll"});
         var _this = this;
         me.boxpanel1 = new BoxPanel();
         me.IDUpdate = new Button();
         me.IDClear = new Button();
         me.IDTable = new Table();
-        me.IDTest = new Button();
         this.add(me.boxpanel1);
         this.add(me.IDTable);
         this.add(me.IDText);
         me.boxpanel1.add(me.IDUpdate);
         me.boxpanel1.add(me.IDClear);
-        me.boxpanel1.add(me.IDTest);
         me.boxpanel1.horizontal = false;
         me.IDClear.text = "clear";
         me.IDUpdate.text = "update";
@@ -73,10 +71,7 @@ export class ComponentSpy extends Panel {
         me.IDClear.onclick(function (event) {
             _this.clear();
         });
-        me.IDTest.onclick(function (event) {
-            var sel = new Select();
-            sel.destroy();
-        });
+        me.IDText.height=100;
         me.IDUpdate.text = "Update";
         me.IDTable.width = "100%";
         me.IDTable.height = "400";
@@ -84,6 +79,7 @@ export class ComponentSpy extends Panel {
         me.IDTable.onchange(function (ob) {
             me.IDText.addError({error:ob.data});//.stack.replaceAll("\n", "<br>");
         });
+       
     }
     update() {
         var data = [];

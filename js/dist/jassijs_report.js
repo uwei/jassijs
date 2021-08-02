@@ -2083,7 +2083,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1627596274141,
+                "date": 1627923661712,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/modul.ts": {
@@ -2657,7 +2657,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             var _this = this;
             this._codeEditor = value;
             this._variables = this._codeEditor._variables;
-            this._propertyEditor = new PropertyEditor_1.PropertyEditor();
+            this._propertyEditor = new PropertyEditor_1.PropertyEditor(undefined, new Parser_1.Parser());
             this._codeChanger = new PropertyEditor_1.PropertyEditor(this._codeEditor, new Parser_1.Parser());
             this._errors = this._codeEditor._errors;
             this._componentPalette = new ComponentPalette_1.ComponentPalette();

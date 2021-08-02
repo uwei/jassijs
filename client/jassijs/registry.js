@@ -668,7 +668,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.ComponentDescriptor": {}
 	},
 	"jassijs/ui/ComponentSpy.ts": {
-		"date": 1626118685062,
+		"date": 1627926092324,
 		"jassijs.ui.ComponentSpy": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -1422,7 +1422,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/ErrorPanel.ts": {
-		"date": 1626029485637,
+		"date": 1627925311115,
 		"jassijs.ui.ErrorPanel": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -1624,7 +1624,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/MenuItem.ts": {
-		"date": 1622984379894,
+		"date": 1627924539268,
 		"jassijs.ui.MenuItem": {
 			"$UIComponent": [
 				{
@@ -1708,7 +1708,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/OptionDialog.ts": {
-		"date": 1627595112830,
+		"date": 1627926136842,
 		"jassijs.ui.OptionDialog": {
 			"@members": {
 				"text": {

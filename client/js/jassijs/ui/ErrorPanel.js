@@ -50,7 +50,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                 this.IDToolbar.height = 20;
                 super.add(this.IDToolbar);
             }
-            var value = $('<span><font  size="2"><span class="errorpanel"></span></font></span>')[0];
+            var value = $('<div><font  size="2"><div class="errorpanel"></div></font></div>')[0];
             this.dom.appendChild(value);
             this._container = $(this.dom).find(".errorpanel")[0];
             if (this.withNewErrors)

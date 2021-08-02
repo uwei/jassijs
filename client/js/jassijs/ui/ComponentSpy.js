@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/ui/ErrorPanel"], function (require, exports, Jassi_1, Panel_1, Table_1, Button_1, BoxPanel_1, Select_1, Classes_1, Actions_1, Router_1, ErrorPanel_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/ui/ErrorPanel"], function (require, exports, Jassi_1, Panel_1, Table_1, Button_1, BoxPanel_1, Classes_1, Actions_1, Router_1, ErrorPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSpy = void 0;
@@ -28,18 +28,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         layout() {
             var me = this.me = {};
             me.IDText = new ErrorPanel_1.ErrorPanel(); //HTMLPanel();
+            this.css({ overflow: "scroll" });
             var _this = this;
             me.boxpanel1 = new BoxPanel_1.BoxPanel();
             me.IDUpdate = new Button_1.Button();
             me.IDClear = new Button_1.Button();
             me.IDTable = new Table_1.Table();
-            me.IDTest = new Button_1.Button();
             this.add(me.boxpanel1);
             this.add(me.IDTable);
             this.add(me.IDText);
             me.boxpanel1.add(me.IDUpdate);
             me.boxpanel1.add(me.IDClear);
-            me.boxpanel1.add(me.IDTest);
             me.boxpanel1.horizontal = false;
             me.IDClear.text = "clear";
             me.IDUpdate.text = "update";
@@ -49,10 +48,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             me.IDClear.onclick(function (event) {
                 _this.clear();
             });
-            me.IDTest.onclick(function (event) {
-                var sel = new Select_1.Select();
-                sel.destroy();
-            });
+            me.IDText.height = 100;
             me.IDUpdate.text = "Update";
             me.IDTable.width = "100%";
             me.IDTable.height = "400";

@@ -31,7 +31,7 @@ export class ReportDesigner extends ComponentDesigner {
         var _this = this;
         this._codeEditor = value;
         this._variables = this._codeEditor._variables;
-        this._propertyEditor = new PropertyEditor();
+        this._propertyEditor = new PropertyEditor(undefined,new Parser());
         this._codeChanger=new PropertyEditor(this._codeEditor,new Parser());
         this._errors = this._codeEditor._errors;
         this._componentPalette = new ComponentPalette();
