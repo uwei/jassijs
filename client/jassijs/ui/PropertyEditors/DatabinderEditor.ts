@@ -3,7 +3,7 @@ import { Editor, $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
 import { Databinder } from "jassijs/ui/Databinder";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { Textbox } from "jassijs/ui/Textbox";
-import { Select } from "../Select";
+import { Select } from "jassijs/ui/Select";
 
 
 @$PropertyEditor(["databinder"])
@@ -17,7 +17,7 @@ export class DatabinderEditor extends Editor
     constructor(property, propertyEditor) {
         super(property, propertyEditor);
         /** @member - the renedering component **/
-        this.component = new Select();
+        this.component = new Textbox();//Select();
         this.component.width = "100%";
         var _this = this;
         this.component.onchange(function (param) {

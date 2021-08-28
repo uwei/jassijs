@@ -30,7 +30,7 @@ define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Bo
         }
     };
     Dialog = __decorate([
-        Jassi_1.$Class("demo/Dialog"),
+        (0, Jassi_1.$Class)("demo/Dialog"),
         __metadata("design:paramtypes", [])
     ], Dialog);
     exports.Dialog = Dialog;
@@ -60,7 +60,7 @@ define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/Button", "jassijs/
         }
     };
     EmptyDialog = __decorate([
-        Jassi_2.$Class("demo.EmptyDialog"),
+        (0, Jassi_2.$Class)("demo.EmptyDialog"),
         __metadata("design:paramtypes", [])
     ], EmptyDialog);
     exports.EmptyDialog = EmptyDialog;
@@ -243,7 +243,7 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs_report/ReportDesign
         }
     };
     ReportInvoice = __decorate([
-        Jassi_3.$Class("demo.ReportInvoice"),
+        (0, Jassi_3.$Class)("demo.ReportInvoice"),
         __metadata("design:paramtypes", [])
     ], ReportInvoice);
     exports.ReportInvoice = ReportInvoice;
@@ -283,7 +283,7 @@ define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/u
         }
     };
     StyleDialog = __decorate([
-        Jassi_4.$Class("demo/StyleDialog"),
+        (0, Jassi_4.$Class)("demo/StyleDialog"),
         __metadata("design:paramtypes", [])
     ], StyleDialog);
     exports.StyleDialog = StyleDialog;
@@ -388,8 +388,8 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
         }
     };
     TestComponent = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
-        Jassi_5.$Class("demo.TestComponent"),
+        (0, Component_1.$UIComponent)({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
+        (0, Jassi_5.$Class)("demo.TestComponent"),
         __metadata("design:paramtypes", [])
     ], TestComponent);
     exports.TestComponent = TestComponent;
@@ -412,7 +412,7 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
         }
     };
     TestTree = __decorate([
-        Jassi_6.$Class("demo.TestTree"),
+        (0, Jassi_6.$Class)("demo.TestTree"),
         __metadata("design:paramtypes", [])
     ], TestTree);
     exports.TestTree = TestTree;
@@ -471,7 +471,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
         }
     };
     TestUpload = __decorate([
-        Jassi_7.$Class("demo/TestUpload"),
+        (0, Jassi_7.$Class)("demo/TestUpload"),
         __metadata("design:paramtypes", [])
     ], TestUpload);
     exports.TestUpload = TestUpload;
@@ -528,7 +528,7 @@ define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassi
         }
     };
     Testcontextmenu = __decorate([
-        Jassi_8.$Class("demo.Testcontextmenu"),
+        (0, Jassi_8.$Class)("demo.Testcontextmenu"),
         __metadata("design:paramtypes", [])
     ], Testcontextmenu);
     exports.Testcontextmenu = Testcontextmenu;
@@ -611,7 +611,7 @@ define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/M
         }
     };
     Testmenu = __decorate([
-        Jassi_9.$Class("demo.Testmenu"),
+        (0, Jassi_9.$Class)("demo.Testmenu"),
         __metadata("design:paramtypes", [])
     ], Testmenu);
     exports.Testmenu = Testmenu;
@@ -779,7 +779,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
         }
     };
     TreeTable = __decorate([
-        Jassi_10.$Class("demo.TreeTable"),
+        (0, Jassi_10.$Class)("demo.TreeTable"),
         __metadata("design:paramtypes", [])
     ], TreeTable);
     exports.TreeTable = TreeTable;

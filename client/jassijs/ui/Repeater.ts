@@ -127,7 +127,7 @@ export class Repeater extends Panel {
                 this._copyMeFromParent(this.design.me, this._parent);
                 this._createRepeatingComponent(this.design.me);
                 this.add(this.design);
-                this.add(this.design.databinder);
+                this.design.add(this.design.databinder);
             }
             this.design = sic;
         }

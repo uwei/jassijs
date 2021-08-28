@@ -1992,7 +1992,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-                "date": 1623175483603,
+                "date": 1630148660577,
                 "jassijs.ui.PropertyEditors.DatabinderEditor": {
                     "$PropertyEditor": [
                         [
@@ -2161,7 +2161,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Repeater.ts": {
-                "date": 1622984379894,
+                "date": 1630147965484,
                 "jassijs.ui.RepeaterDesignPanel": {
                     "$UIComponent": [
                         {
@@ -2665,7 +2665,7 @@ define("jassijs/base/ActionNode", ["require", "exports", "jassijs/remote/Jassi"]
     let ActionNode = class ActionNode {
     };
     ActionNode = __decorate([
-        Jassi_2.$Class("jassijs.base.ActionNode")
+        (0, Jassi_2.$Class)("jassijs.base.ActionNode")
     ], ActionNode);
     exports.ActionNode = ActionNode;
     async function test() {
@@ -2761,7 +2761,7 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
         }
     };
     Actions = __decorate([
-        Jassi_3.$Class("jassijs.base.Actions")
+        (0, Jassi_3.$Class)("jassijs.base.Actions")
     ], Actions);
     exports.Actions = Actions;
     async function test() {
@@ -3292,7 +3292,7 @@ define("jassijs/base/DatabaseSchema", ["require", "exports", "jassijs/remote/Jas
     };
     DatabaseSchema.basicdatatypes = ["string", "int", "decimal", "boolean", "Date"];
     DatabaseSchema = DatabaseSchema_1 = __decorate([
-        Jassi_4.$Class("jassijs.base.DatabaseSchema")
+        (0, Jassi_4.$Class)("jassijs.base.DatabaseSchema")
     ], DatabaseSchema);
     exports.DatabaseSchema = DatabaseSchema;
     /*
@@ -3671,7 +3671,7 @@ define("jassijs/base/PropertyEditorService", ["require", "exports", "jassijs/rem
         }
     };
     PropertyEditorService = __decorate([
-        Jassi_6.$Class("jassijs.base.PropertyEditorService"),
+        (0, Jassi_6.$Class)("jassijs.base.PropertyEditorService"),
         __metadata("design:paramtypes", [])
     ], PropertyEditorService);
     exports.PropertyEditorService = PropertyEditorService;
@@ -3776,7 +3776,7 @@ define("jassijs/base/Router", ["require", "exports", "jassijs/remote/Jassi", "ja
         }
     };
     Router = __decorate([
-        Jassi_7.$Class("jassijs.base.Router"),
+        (0, Jassi_7.$Class)("jassijs.base.Router"),
         __metadata("design:paramtypes", [])
     ], Router);
     exports.Router = Router;
@@ -3888,7 +3888,7 @@ define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jas
         }
     };
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Run Tests"
         }),
         __metadata("design:type", Function),
@@ -3896,8 +3896,8 @@ define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jas
         __metadata("design:returntype", Promise)
     ], TestAction, "testNode", null);
     TestAction = TestAction_1 = __decorate([
-        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_8.$Class("jassijs.ui.TestAction")
+        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_8.$Class)("jassijs.ui.TestAction")
     ], TestAction);
     exports.TestAction = TestAction;
     class Tests {
@@ -4238,7 +4238,7 @@ define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassi
         }
     };
     Windows = __decorate([
-        Jassi_9.$Class("jassijs.base.Windows"),
+        (0, Jassi_9.$Class)("jassijs.base.Windows"),
         __metadata("design:paramtypes", [])
     ], Windows);
     exports.Windows = Windows;
@@ -4675,7 +4675,7 @@ define("jassijs/remote/ClientError", ["require", "exports", "jassijs/remote/Jass
         }
     };
     ClientError = __decorate([
-        Jassi_10.$Class("jassijs.remote.ClientError"),
+        (0, Jassi_10.$Class)("jassijs.remote.ClientError"),
         __metadata("design:paramtypes", [String])
     ], ClientError);
     exports.ClientError = ClientError;
@@ -4758,7 +4758,7 @@ define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Jassi", 
         }
     };
     DBArray = __decorate([
-        Jassi_11.$Class("jassijs.remote.DBArray"),
+        (0, Jassi_11.$Class)("jassijs.remote.DBArray"),
         __metadata("design:paramtypes", [Object])
     ], DBArray);
     exports.DBArray = DBArray;
@@ -4777,7 +4777,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Jassi",
             if (!options.name)
                 options.name = classname.toLowerCase().replaceAll(".", "_");
             Registry_7.default.register("$DBObject", pclass, options);
-            DatabaseSchema_2.Entity(options)(pclass, ...params); //pass to orginal Entitiy
+            (0, DatabaseSchema_2.Entity)(options)(pclass, ...params); //pass to orginal Entitiy
         };
     }
     exports.$DBObject = $DBObject;
@@ -4980,7 +4980,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Jassi",
     DBObject.cache = {};
     DBObject._init = DBObject_1._initFunc();
     DBObject = DBObject_1 = __decorate([
-        Jassi_12.$Class("jassijs.remote.DBObject"),
+        (0, Jassi_12.$Class)("jassijs.remote.DBObject"),
         __metadata("design:paramtypes", [])
     ], DBObject);
     exports.DBObject = DBObject;
@@ -5107,7 +5107,7 @@ define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Jassi",
         }
     };
     Database = __decorate([
-        Jassi_13.$Class("jassijs.remote.Database"),
+        (0, Jassi_13.$Class)("jassijs.remote.Database"),
         __metadata("design:paramtypes", [])
     ], Database);
     exports.Database = Database;
@@ -5147,7 +5147,7 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Ja
         }
     };
     DatabaseTools = DatabaseTools_1 = __decorate([
-        Jassi_14.$Class("jassijs.remote.DatabaseTools")
+        (0, Jassi_14.$Class)("jassijs.remote.DatabaseTools")
     ], DatabaseTools);
     exports.DatabaseTools = DatabaseTools;
     async function test() {
@@ -5261,7 +5261,7 @@ define("jassijs/remote/FileNode", ["require", "exports", "jassijs/remote/Jassi"]
         }
     };
     FileNode = __decorate([
-        Jassi_15.$Class("jassijs.remote.FileNode"),
+        (0, Jassi_15.$Class)("jassijs.remote.FileNode"),
         __metadata("design:paramtypes", [String])
     ], FileNode);
     exports.FileNode = FileNode;
@@ -5781,7 +5781,7 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Jas
         }
     };
     RemoteObject = __decorate([
-        Jassi_16.$Class("jassijs.remote.RemoteObject")
+        (0, Jassi_16.$Class)("jassijs.remote.RemoteObject")
     ], RemoteObject);
     exports.RemoteObject = RemoteObject;
 });
@@ -5989,7 +5989,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/J
     };
     RemoteProtocol.counter = 0;
     RemoteProtocol = __decorate([
-        Jassi_17.$Class("jassijs.remote.RemoteProtocol")
+        (0, Jassi_17.$Class)("jassijs.remote.RemoteProtocol")
     ], RemoteProtocol);
     exports.RemoteProtocol = RemoteProtocol;
     class A {
@@ -6384,7 +6384,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
     //files found in js.map of modules in the jassijs.json
     Server.filesInMap = undefined;
     Server = Server_2 = __decorate([
-        Jassi_18.$Class("jassijs.remote.Server"),
+        (0, Jassi_18.$Class)("jassijs.remote.Server"),
         __metadata("design:paramtypes", [])
     ], Server);
     exports.Server = Server;
@@ -6458,7 +6458,7 @@ define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Jassi"], fu
         }
     };
     Test = __decorate([
-        Jassi_19.$Class("jassijs.remote.Test")
+        (0, Jassi_19.$Class)("jassijs.remote.Test")
     ], Test);
     exports.Test = Test;
 });
@@ -6621,7 +6621,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Jassi",
     Settings.userSettings = undefined;
     Settings.allusersSettings = undefined;
     Settings = Settings_1 = __decorate([
-        Jassi_20.$Class("jassijs.remote.Settings")
+        (0, Jassi_20.$Class)("jassijs.remote.Settings")
     ], Settings);
     exports.Settings = Settings;
     var settings = new Settings();
@@ -6798,7 +6798,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Jass
         }
     };
     Transaction = __decorate([
-        Jassi_21.$Class("jassijs.remote.Transaction")
+        (0, Jassi_21.$Class)("jassijs.remote.Transaction")
     ], Transaction);
     exports.Transaction = Transaction;
 });
@@ -6829,30 +6829,30 @@ define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/D
     let Group = class Group extends DBObject_2.DBObject {
     };
     __decorate([
-        DatabaseSchema_3.PrimaryColumn(),
+        (0, DatabaseSchema_3.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Group.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_3.Column(),
+        (0, DatabaseSchema_3.Column)(),
         __metadata("design:type", String)
     ], Group.prototype, "name", void 0);
     __decorate([
-        DatabaseSchema_3.JoinTable(),
-        DatabaseSchema_3.ManyToMany(type => ParentRight_1.ParentRight, ob => ob.groups),
+        (0, DatabaseSchema_3.JoinTable)(),
+        (0, DatabaseSchema_3.ManyToMany)(type => ParentRight_1.ParentRight, ob => ob.groups),
         __metadata("design:type", Array)
     ], Group.prototype, "parentRights", void 0);
     __decorate([
-        DatabaseSchema_3.JoinTable(),
-        DatabaseSchema_3.ManyToMany(type => Right_1.Right, ob => ob.groups),
+        (0, DatabaseSchema_3.JoinTable)(),
+        (0, DatabaseSchema_3.ManyToMany)(type => Right_1.Right, ob => ob.groups),
         __metadata("design:type", Array)
     ], Group.prototype, "rights", void 0);
     __decorate([
-        DatabaseSchema_3.ManyToMany(type => User_1.User, ob => ob.groups),
+        (0, DatabaseSchema_3.ManyToMany)(type => User_1.User, ob => ob.groups),
         __metadata("design:type", Array)
     ], Group.prototype, "users", void 0);
     Group = __decorate([
-        DBObject_2.$DBObject({ name: "jassijs_group" }),
-        Jassi_22.$Class("jassijs.security.Group")
+        (0, DBObject_2.$DBObject)({ name: "jassijs_group" }),
+        (0, Jassi_22.$Class)("jassijs.security.Group")
     ], Group);
     exports.Group = Group;
 });
@@ -6864,40 +6864,40 @@ define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/re
     let ParentRight = class ParentRight extends DBObject_3.DBObject {
     };
     __decorate([
-        DatabaseSchema_4.PrimaryGeneratedColumn(),
+        (0, DatabaseSchema_4.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_4.Column(),
+        (0, DatabaseSchema_4.Column)(),
         __metadata("design:type", String)
     ], ParentRight.prototype, "name", void 0);
     __decorate([
-        DatabaseSchema_4.Column(),
+        (0, DatabaseSchema_4.Column)(),
         __metadata("design:type", String)
     ], ParentRight.prototype, "classname", void 0);
     __decorate([
-        DatabaseSchema_4.Column({ nullable: true }),
+        (0, DatabaseSchema_4.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "i1", void 0);
     __decorate([
-        DatabaseSchema_4.Column({ nullable: true }),
+        (0, DatabaseSchema_4.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], ParentRight.prototype, "i2", void 0);
     __decorate([
-        DatabaseSchema_4.Column({ nullable: true }),
+        (0, DatabaseSchema_4.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], ParentRight.prototype, "s1", void 0);
     __decorate([
-        DatabaseSchema_4.Column({ nullable: true }),
+        (0, DatabaseSchema_4.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], ParentRight.prototype, "s2", void 0);
     __decorate([
-        DatabaseSchema_4.ManyToMany(type => Group_1.Group, ob => ob.parentRights),
+        (0, DatabaseSchema_4.ManyToMany)(type => Group_1.Group, ob => ob.parentRights),
         __metadata("design:type", Array)
     ], ParentRight.prototype, "groups", void 0);
     ParentRight = __decorate([
-        DBObject_3.$DBObject({ name: "jassijs_parentright" }),
-        Jassi_23.$Class("jassijs.security.ParentRight")
+        (0, DBObject_3.$DBObject)({ name: "jassijs_parentright" }),
+        (0, Jassi_23.$Class)("jassijs.security.ParentRight")
     ], ParentRight);
     exports.ParentRight = ParentRight;
 });
@@ -6909,20 +6909,20 @@ define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/D
     let Right = class Right extends DBObject_4.DBObject {
     };
     __decorate([
-        DatabaseSchema_5.PrimaryColumn(),
+        (0, DatabaseSchema_5.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Right.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_5.Column(),
+        (0, DatabaseSchema_5.Column)(),
         __metadata("design:type", String)
     ], Right.prototype, "name", void 0);
     __decorate([
-        DatabaseSchema_5.ManyToMany(type => Group_2.Group, ob => ob.rights),
+        (0, DatabaseSchema_5.ManyToMany)(type => Group_2.Group, ob => ob.rights),
         __metadata("design:type", Array)
     ], Right.prototype, "groups", void 0);
     Right = __decorate([
-        DBObject_4.$DBObject({ name: "jassijs_right" }),
-        Jassi_24.$Class("jassijs.security.Right")
+        (0, DBObject_4.$DBObject)({ name: "jassijs_right" }),
+        (0, Jassi_24.$Class)("jassijs.security.Right")
     ], Right);
     exports.Right = Right;
 });
@@ -6969,7 +6969,7 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
         }
     };
     Rights = __decorate([
-        Jassi_25.$Class("jassijs.security.Rights")
+        (0, Jassi_25.$Class)("jassijs.security.Rights")
     ], Rights);
     exports.Rights = Rights;
     var rights = new Rights();
@@ -7000,16 +7000,16 @@ define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote
         }
     };
     __decorate([
-        DatabaseSchema_6.PrimaryColumn(),
+        (0, DatabaseSchema_6.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Setting.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Setting.prototype, "data", void 0);
     Setting = __decorate([
-        DBObject_5.$DBObject({ name: "jassijs_setting" }),
-        Jassi_26.$Class("jassijs.security.Setting"),
+        (0, DBObject_5.$DBObject)({ name: "jassijs_setting" }),
+        (0, Jassi_26.$Class)("jassijs.security.Setting"),
         __metadata("design:paramtypes", [])
     ], Setting);
     exports.Setting = Setting;
@@ -7039,29 +7039,29 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
         }
     };
     __decorate([
-        DatabaseSchema_7.PrimaryGeneratedColumn(),
+        (0, DatabaseSchema_7.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], User.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_7.Column(),
+        (0, DatabaseSchema_7.Column)(),
         __metadata("design:type", String)
     ], User.prototype, "email", void 0);
     __decorate([
-        DatabaseSchema_7.Column({ select: false }),
+        (0, DatabaseSchema_7.Column)({ select: false }),
         __metadata("design:type", String)
     ], User.prototype, "password", void 0);
     __decorate([
-        DatabaseSchema_7.JoinTable(),
-        DatabaseSchema_7.ManyToMany(type => Group_3.Group, ob => ob.users),
+        (0, DatabaseSchema_7.JoinTable)(),
+        (0, DatabaseSchema_7.ManyToMany)(type => Group_3.Group, ob => ob.users),
         __metadata("design:type", Array)
     ], User.prototype, "groups", void 0);
     __decorate([
-        DatabaseSchema_7.Column({ nullable: true }),
+        (0, DatabaseSchema_7.Column)({ nullable: true }),
         __metadata("design:type", Boolean)
     ], User.prototype, "isAdmin", void 0);
     User = __decorate([
-        DBObject_6.$DBObject({ name: "jassijs_user" }),
-        Jassi_27.$Class("jassijs.security.User")
+        (0, DBObject_6.$DBObject)({ name: "jassijs_user" }),
+        (0, Jassi_27.$Class)("jassijs.security.User")
     ], User);
     exports.User = User;
     async function test() {
@@ -7120,12 +7120,12 @@ define("jassijs/security/GroupView", ["require", "exports", "jassijs/remote/Jass
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Group_4.Group !== "undefined" && Group_4.Group) === "function" ? _a : Object)
     ], GroupView.prototype, "value", void 0);
     GroupView = __decorate([
-        DBObjectView_1.$DBObjectView({ classname: "{{dbfullclassname}}" }),
-        Jassi_28.$Class("jassijs/security/GroupView"),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "{{dbfullclassname}}" }),
+        (0, Jassi_28.$Class)("jassijs/security/GroupView"),
         __metadata("design:paramtypes", [])
     ], GroupView);
     exports.GroupView = GroupView;
@@ -7168,12 +7168,12 @@ define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/converter
         }
     };
     __decorate([
-        Property_2.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_2.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof User_2.User !== "undefined" && User_2.User) === "function" ? _a : Object)
     ], UserView.prototype, "value", void 0);
     UserView = __decorate([
-        DBObjectView_2.$DBObjectView({ classname: "jassijs.security.User" }),
-        Jassi_29.$Class("jassijs/UserView"),
+        (0, DBObjectView_2.$DBObjectView)({ classname: "jassijs.security.User" }),
+        (0, Jassi_29.$Class)("jassijs/UserView"),
         __metadata("design:paramtypes", [])
     ], UserView);
     exports.UserView = UserView;
@@ -7227,15 +7227,15 @@ export async function test(){
     let TemplateDBDialogProperties = class TemplateDBDialogProperties {
     };
     __decorate([
-        Property_3.$Property({ decription: "name of the dialog" }),
+        (0, Property_3.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TemplateDBDialogProperties.prototype, "dialogname", void 0);
     __decorate([
-        Property_3.$Property({ type: "classselector", service: "$DBObject" }),
+        (0, Property_3.$Property)({ type: "classselector", service: "$DBObject" }),
         __metadata("design:type", typeof (_a = typeof DBObject_7.DBObject !== "undefined" && DBObject_7.DBObject) === "function" ? _a : Object)
     ], TemplateDBDialogProperties.prototype, "dbobject", void 0);
     TemplateDBDialogProperties = __decorate([
-        Jassi_30.$Class("jassijs.template.TemplateDBDialogProperties")
+        (0, Jassi_30.$Class)("jassijs.template.TemplateDBDialogProperties")
     ], TemplateDBDialogProperties);
     exports.TemplateDBDialogProperties = TemplateDBDialogProperties;
     let TemplateDBDialog = class TemplateDBDialog {
@@ -7259,7 +7259,7 @@ export async function test(){
     };
     TemplateDBDialog.code = code;
     __decorate([
-        Actions_2.$Action({
+        (0, Actions_2.$Action)({
             name: "New/DBDialog",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -7270,8 +7270,8 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateDBDialog, "newFile", null);
     TemplateDBDialog = __decorate([
-        Actions_2.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_30.$Class("jassijs.ui.TemplateDBDialog")
+        (0, Actions_2.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_30.$Class)("jassijs.ui.TemplateDBDialog")
     ], TemplateDBDialog);
     exports.TemplateDBDialog = TemplateDBDialog;
 });
@@ -7305,15 +7305,15 @@ export async function test() {
     let TemplateDBObjectProperties = class TemplateDBObjectProperties {
     };
     __decorate([
-        Property_4.$Property({ decription: "name of the db class" }),
+        (0, Property_4.$Property)({ decription: "name of the db class" }),
         __metadata("design:type", String)
     ], TemplateDBObjectProperties.prototype, "name", void 0);
     __decorate([
-        Property_4.$Property({ default: "true", description: "the primary column alue will be automatically generated with an auto-increment value" }),
+        (0, Property_4.$Property)({ default: "true", description: "the primary column alue will be automatically generated with an auto-increment value" }),
         __metadata("design:type", String)
     ], TemplateDBObjectProperties.prototype, "autogeneratedid", void 0);
     TemplateDBObjectProperties = __decorate([
-        Jassi_31.$Class("jassijs.template.TemplateDBDialogProperties")
+        (0, Jassi_31.$Class)("jassijs.template.TemplateDBDialogProperties")
     ], TemplateDBObjectProperties);
     exports.TemplateDBObjectProperties = TemplateDBObjectProperties;
     let TemplateDBObject = TemplateDBObject_2 = class TemplateDBObject {
@@ -7333,7 +7333,7 @@ export async function test() {
     };
     TemplateDBObject.code = code;
     __decorate([
-        Actions_3.$Action({
+        (0, Actions_3.$Action)({
             name: "New/DBObject",
             isEnabled: function (all) {
                 return all[0].isDirectory() && all[0].fullpath.startsWith("remote/");
@@ -7344,8 +7344,8 @@ export async function test() {
         __metadata("design:returntype", Promise)
     ], TemplateDBObject, "newFile", null);
     TemplateDBObject = TemplateDBObject_2 = __decorate([
-        Actions_3.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_31.$Class("jassijs.ui.TemplateDBObject")
+        (0, Actions_3.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_31.$Class)("jassijs.ui.TemplateDBObject")
     ], TemplateDBObject);
     exports.TemplateDBObject = TemplateDBObject;
 });
@@ -7387,7 +7387,7 @@ export async function test(){
     };
     TemplateEmptyDialog.code = code;
     __decorate([
-        Actions_4.$Action({
+        (0, Actions_4.$Action)({
             name: "New/Dialog",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -7398,8 +7398,8 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateEmptyDialog, "newFile", null);
     TemplateEmptyDialog = __decorate([
-        Actions_4.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_32.$Class("jassijs.template.TemplateEmptyDialog")
+        (0, Actions_4.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_32.$Class)("jassijs.template.TemplateEmptyDialog")
     ], TemplateEmptyDialog);
     exports.TemplateEmptyDialog = TemplateEmptyDialog;
 });
@@ -7437,7 +7437,7 @@ export async function test(){
     };
     TemplateRemoteObject.code = code;
     __decorate([
-        Actions_5.$Action({
+        (0, Actions_5.$Action)({
             name: "New/RemoteObject",
             isEnabled: function (all) {
                 return all[0].isDirectory() && all[0].fullpath.split("/").length > 1 && all[0].fullpath.split("/")[1] === "remote";
@@ -7448,8 +7448,8 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateRemoteObject, "newFile", null);
     TemplateRemoteObject = __decorate([
-        Actions_5.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_33.$Class("jassijs.template.TemplateRemoteObject")
+        (0, Actions_5.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_33.$Class)("jassijs.template.TemplateRemoteObject")
     ], TemplateRemoteObject);
     exports.TemplateRemoteObject = TemplateRemoteObject;
 });
@@ -7511,7 +7511,7 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
         }
     };
     ActionNodeMenu = __decorate([
-        Jassi_34.$Class("jassijs/ui/ActionNodeMenu"),
+        (0, Jassi_34.$Class)("jassijs/ui/ActionNodeMenu"),
         __metadata("design:paramtypes", [])
     ], ActionNodeMenu);
     exports.ActionNodeMenu = ActionNodeMenu;
@@ -7616,7 +7616,7 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "jassijs/ui/Panel", "jassij
                 $(this._components[x].__dom).css("height", this.horizontal ? "100%" : "calc(100% - 5px)");
                 comp.push(this._components[x].domWrapper);
             }
-            this._splitcomponent = split_1.default(comp, {
+            this._splitcomponent = (0, split_1.default)(comp, {
                 sizes: this._spliter,
                 gutterSize: 8,
                 minSize: [50, 50, 50, 50, 50, 50, 50, 50],
@@ -7625,19 +7625,19 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "jassijs/ui/Panel", "jassij
         }
     };
     __decorate([
-        Property_5.$Property({ default: true }),
+        (0, Property_5.$Property)({ default: true }),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], BoxPanel.prototype, "horizontal", null);
     __decorate([
-        Property_5.$Property({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" }),
+        (0, Property_5.$Property)({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
     ], BoxPanel.prototype, "spliter", null);
     BoxPanel = __decorate([
-        Component_2.$UIComponent({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
-        Jassi_35.$Class("jassijs.ui.BoxPanel"),
-        Property_5.$Property({ name: "isAbsolute", hide: true, type: "boolean" }),
+        (0, Component_2.$UIComponent)({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
+        (0, Jassi_35.$Class)("jassijs.ui.BoxPanel"),
+        (0, Property_5.$Property)({ name: "isAbsolute", hide: true, type: "boolean" }),
         __metadata("design:paramtypes", [Object])
     ], BoxPanel);
     exports.BoxPanel = BoxPanel;
@@ -7738,24 +7738,24 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Jassi", "jass
         }
     };
     __decorate([
-        Property_6.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_6.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Boolean]),
         __metadata("design:returntype", void 0)
     ], Button.prototype, "onclick", null);
     __decorate([
-        Property_6.$Property({ type: "image" }),
+        (0, Property_6.$Property)({ type: "image" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Button.prototype, "icon", null);
     __decorate([
-        Property_6.$Property(),
+        (0, Property_6.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Button.prototype, "text", null);
     Button = __decorate([
-        Component_3.$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } }),
-        Jassi_36.$Class("jassijs.ui.Button"),
+        (0, Component_3.$UIComponent)({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } }),
+        (0, Jassi_36.$Class)("jassijs.ui.Button"),
         __metadata("design:paramtypes", [])
     ], Button);
     exports.Button = Button;
@@ -7807,139 +7807,139 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Jassi"
         }
     };
     __decorate([
-        Property_7.$Property({ type: "color" }),
+        (0, Property_7.$Property)({ type: "color" }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "background_color", void 0);
     __decorate([
-        Property_7.$Property(),
+        (0, Property_7.$Property)(),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "background_image", void 0);
     __decorate([
-        Property_7.$Property({ type: "color" }),
+        (0, Property_7.$Property)({ type: "color" }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "border_color", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["none", "hidden", "dotted", "dashed", "solid", "double", "groove", "ridge", "inset", "outset", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "border_style", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["thin", "medium", "thick", "2px", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["thin", "medium", "thick", "2px", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "border_width", void 0);
     __decorate([
-        Property_7.$Property({ type: "color" }),
+        (0, Property_7.$Property)({ type: "color" }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "color", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["auto", "default", "none", "context-menu", "help", "pointer", "progress", "wait", "cell", "crosshair", "text", "vertical-text", "alias", "copy", "move", "no-drop", "not-allowed", "grab", "grabbing", "all-scroll", "col-resize", "row-resize", "n-resize", "e-resize", "s-resize", "w-resize", "ne-resize", "nw-resize", "se-resize", "sw-resize", "ew-resize", "ns-resize", "nesw-resize", "nwse-resize", "zoom-in", "zoom-out", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["auto", "default", "none", "context-menu", "help", "pointer", "progress", "wait", "cell", "crosshair", "text", "vertical-text", "alias", "copy", "move", "no-drop", "not-allowed", "grab", "grabbing", "all-scroll", "col-resize", "row-resize", "n-resize", "e-resize", "s-resize", "w-resize", "ne-resize", "nw-resize", "se-resize", "sw-resize", "ew-resize", "ns-resize", "nesw-resize", "nwse-resize", "zoom-in", "zoom-out", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "cursor", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["blur(5px)", "brightness(0.4)", "contrast(200%)", "drop-shadow(16px 16px 20px blue)", "grayscale(50%)", "hue-rotate(90deg)", "invert(75%)", "opacity(25%)", "saturate(30%)", "sepia(60%)", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["blur(5px)", "brightness(0.4)", "contrast(200%)", "drop-shadow(16px 16px 20px blue)", "grayscale(50%)", "hue-rotate(90deg)", "invert(75%)", "opacity(25%)", "saturate(30%)", "sepia(60%)", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "filter", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["left", "right", "none", "inline-start", "inline-end", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["left", "right", "none", "inline-start", "inline-end", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "float", void 0);
     __decorate([
-        Property_7.$Property({ type: "font" }),
+        (0, Property_7.$Property)({ type: "font" }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "font_family", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["12px", "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large", "larger", "smaller", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["12px", "xx-small", "x-small", "small", "medium", "large", "x-large", "xx-large", "xxx-large", "larger", "smaller", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "font_size", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["normal", "small-caps", "small-caps slashed-zero", "common-ligatures tabular-nums", "no-common-ligatures proportional-nums", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["normal", "small-caps", "small-caps slashed-zero", "common-ligatures tabular-nums", "no-common-ligatures proportional-nums", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "font_variant", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["normal", "bold", "lighter", "bolder", "100", "900", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["normal", "bold", "lighter", "bolder", "100", "900", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "font_weight", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["normal", "1px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["normal", "1px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "letter_spacing", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["normal", "32px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["normal", "32px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "line_height", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["3px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "margin_bottom", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["3px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "margin_left", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["3px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "margin_right", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["3px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "margin_top", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["visible", "hidden", "clip", "scroll", "auto", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["visible", "hidden", "clip", "scroll", "auto", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "overflow", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["3px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "padding_bottom", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["3px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "padding_left", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["3px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "padding_right", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["3px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "padding_top", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["static", "relative", "absolute", "sticky", "fixed", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["static", "relative", "absolute", "sticky", "fixed", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "position", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["start", "end", "left", "right", "center", "justify", "match-parent", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["start", "end", "left", "right", "center", "justify", "match-parent", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "text_align", void 0);
     __decorate([
-        Property_7.$Property({ type: "color" }),
+        (0, Property_7.$Property)({ type: "color" }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "text_decoration_color", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["none", "underline", "overline", "line-through", "blink", "spelling-error", "grammar-error", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["none", "underline", "overline", "line-through", "blink", "spelling-error", "grammar-error", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "text_decoration_line", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["solid", "double", "dotted", "dashed", "wavy", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["solid", "double", "dotted", "dashed", "wavy", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "text_decoration_style", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["3px"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["3px"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "text_decoration_thickness", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["none", "capitalize", "uppercase", "lowercase", "full-width", "full-size-kana", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["none", "capitalize", "uppercase", "lowercase", "full-width", "full-size-kana", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "text_transform", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["baseline", "sub", "super", "text-top", "text-bottom", "middle", "top", "bottom", "3px", "inherit", "initial", "unset"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["baseline", "sub", "super", "text-top", "text-bottom", "middle", "top", "bottom", "3px", "inherit", "initial", "unset"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "vertical_align", void 0);
     __decorate([
-        Property_7.$Property({ chooseFrom: ["1", "2", "auto"] }),
+        (0, Property_7.$Property)({ chooseFrom: ["1", "2", "auto"] }),
         __metadata("design:type", String)
     ], CSSProperties.prototype, "z_index", void 0);
     CSSProperties = __decorate([
-        Jassi_37.$Class("jassijs.ui.CSSProperties")
+        (0, Jassi_37.$Class)("jassijs.ui.CSSProperties")
     ], CSSProperties);
     exports.CSSProperties = CSSProperties;
 });
@@ -7974,9 +7974,9 @@ define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jass
         }
     };
     Calendar = __decorate([
-        Component_4.$UIComponent({ fullPath: "common/Calendar", icon: "mdi mdi-calendar-month" }),
-        Jassi_38.$Class("jassijs.ui.Calendar"),
-        Property_8.$Property({ name: "new", type: "string" }),
+        (0, Component_4.$UIComponent)({ fullPath: "common/Calendar", icon: "mdi mdi-calendar-month" }),
+        (0, Jassi_38.$Class)("jassijs.ui.Calendar"),
+        (0, Property_8.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [Object])
     ], Calendar);
     exports.Calendar = Calendar;
@@ -8034,18 +8034,18 @@ define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Jassi", "ja
         }
     };
     __decorate([
-        Property_9.$Property({ type: "boolean" }),
+        (0, Property_9.$Property)({ type: "boolean" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Checkbox.prototype, "value", null);
     __decorate([
-        Property_9.$Property(),
+        (0, Property_9.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Checkbox.prototype, "text", null);
     Checkbox = __decorate([
-        Component_5.$UIComponent({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
-        Jassi_39.$Class("jassijs.ui.Checkbox"),
+        (0, Component_5.$UIComponent)({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
+        (0, Jassi_39.$Class)("jassijs.ui.Checkbox"),
         __metadata("design:paramtypes", [])
     ], Checkbox);
     exports.Checkbox = Checkbox;
@@ -8503,70 +8503,70 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
         }
     };
     __decorate([
-        Property_10.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_10.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Component.prototype, "onfocus", null);
     __decorate([
-        Property_10.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_10.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Component.prototype, "onblur", null);
     __decorate([
-        Property_10.$Property({ description: "adds a label above the component" }),
+        (0, Property_10.$Property)({ description: "adds a label above the component" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Component.prototype, "label", null);
     __decorate([
-        Property_10.$Property({ description: "tooltip are displayed on mouse over" }),
+        (0, Property_10.$Property)({ description: "tooltip are displayed on mouse over" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Component.prototype, "tooltip", null);
     __decorate([
-        Property_10.$Property({}),
+        (0, Property_10.$Property)({}),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], Component.prototype, "x", null);
     __decorate([
-        Property_10.$Property(),
+        (0, Property_10.$Property)(),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], Component.prototype, "y", null);
     __decorate([
-        Property_10.$Property(),
+        (0, Property_10.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Component.prototype, "hidden", null);
     __decorate([
-        Property_10.$Property({ type: "string" }),
+        (0, Property_10.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "width", null);
     __decorate([
-        Property_10.$Property({ type: "string" }),
+        (0, Property_10.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "height", null);
     __decorate([
-        Property_10.$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
+        (0, Property_10.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [typeof (_a = typeof CSSProperties_1.CSSProperties !== "undefined" && CSSProperties_1.CSSProperties) === "function" ? _a : Object, Boolean]),
         __metadata("design:returntype", void 0)
     ], Component.prototype, "css", null);
     __decorate([
-        Property_10.$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
+        (0, Property_10.$Property)({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
     ], Component.prototype, "styles", null);
     __decorate([
-        Property_10.$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" }),
+        (0, Property_10.$Property)({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "contextMenu", null);
     Component = __decorate([
-        Jassi_40.$Class("jassijs.ui.Component"),
+        (0, Jassi_40.$Class)("jassijs.ui.Component"),
         __metadata("design:paramtypes", [ComponentCreateProperties])
     ], Component);
     exports.Component = Component;
@@ -8743,7 +8743,7 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
         }
     };
     ComponentDescriptor = ComponentDescriptor_3 = __decorate([
-        Jassi_41.$Class("jassijs.ui.ComponentDescriptor"),
+        (0, Jassi_41.$Class)("jassijs.ui.ComponentDescriptor"),
         __metadata("design:paramtypes", [])
     ], ComponentDescriptor);
     exports.ComponentDescriptor = ComponentDescriptor;
@@ -8844,7 +8844,7 @@ define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi",
         }
     };
     __decorate([
-        Actions_7.$Action({
+        (0, Actions_7.$Action)({
             name: "Administration",
             icon: "mdi mdi-account-cog-outline",
         }),
@@ -8853,7 +8853,7 @@ define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi",
         __metadata("design:returntype", Promise)
     ], ComponentSpy, "dummy", null);
     __decorate([
-        Actions_7.$Action({
+        (0, Actions_7.$Action)({
             name: "Administration/Spy Components",
             icon: "mdi mdi-police-badge",
         }),
@@ -8862,8 +8862,8 @@ define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi",
         __metadata("design:returntype", Promise)
     ], ComponentSpy, "showDialog", null);
     ComponentSpy = __decorate([
-        Actions_7.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_42.$Class("jassijs.ui.ComponentSpy"),
+        (0, Actions_7.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_42.$Class)("jassijs.ui.ComponentSpy"),
         __metadata("design:paramtypes", [])
     ], ComponentSpy);
     exports.ComponentSpy = ComponentSpy;
@@ -8982,7 +8982,7 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Jassi", "j
         }
     };
     Container = __decorate([
-        Jassi_43.$Class("jassijs.ui.Container"),
+        (0, Jassi_43.$Class)("jassijs.ui.Container"),
         __metadata("design:paramtypes", [Object])
     ], Container);
     exports.Container = Container;
@@ -9198,18 +9198,18 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", 
         }
     };
     __decorate([
-        Property_12.$Property(),
+        (0, Property_12.$Property)(),
         __metadata("design:type", Boolean)
     ], ContextMenu.prototype, "includeClassActions", void 0);
     __decorate([
-        Property_12.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_12.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], ContextMenu.prototype, "onbeforeshow", null);
     ContextMenu = __decorate([
-        Component_7.$UIComponent({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
-        Jassi_44.$Class("jassijs.ui.ContextMenu"),
+        (0, Component_7.$UIComponent)({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
+        (0, Jassi_44.$Class)("jassijs.ui.ContextMenu"),
         __metadata("design:paramtypes", [])
     ], ContextMenu);
     exports.ContextMenu = ContextMenu;
@@ -9372,14 +9372,14 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
         }
     };
     __decorate([
-        Actions_9.$Actions(),
+        (0, Actions_9.$Actions)(),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], DBObjectDialog, "createActions", null);
     DBObjectDialog = DBObjectDialog_1 = __decorate([
-        Actions_9.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_45.$Class("jassijs.ui.DBObjectDialog"),
+        (0, Actions_9.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_45.$Class)("jassijs.ui.DBObjectDialog"),
         __metadata("design:paramtypes", [])
     ], DBObjectDialog);
     exports.DBObjectDialog = DBObjectDialog;
@@ -9398,7 +9398,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     let DBObjectNode = class DBObjectNode {
     };
     DBObjectNode = __decorate([
-        Jassi_46.$Class("jassijs.ui.DBObjectNode")
+        (0, Jassi_46.$Class)("jassijs.ui.DBObjectNode")
     ], DBObjectNode);
     exports.DBObjectNode = DBObjectNode;
     let DBFileActions = class DBFileActions {
@@ -9415,7 +9415,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
         }
     };
     __decorate([
-        Actions_10.$Action({
+        (0, Actions_10.$Action)({
             name: "View Data",
             isEnabled: async function (all) {
                 if (all[0].isDirectory())
@@ -9434,8 +9434,8 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
         __metadata("design:returntype", Promise)
     ], DBFileActions, "ViewData", null);
     DBFileActions = __decorate([
-        Actions_10.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_46.$Class("jassijs.ui.DBFileActions")
+        (0, Actions_10.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_46.$Class)("jassijs.ui.DBFileActions")
     ], DBFileActions);
     exports.DBFileActions = DBFileActions;
     let DBObjectActions = class DBObjectActions {
@@ -9450,20 +9450,20 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
         }
     };
     __decorate([
-        Actions_10.$Action({ name: "View Data" }),
+        (0, Actions_10.$Action)({ name: "View Data" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], DBObjectActions, "ViewData", null);
     __decorate([
-        Actions_10.$Action({ name: "Open Code" }),
+        (0, Actions_10.$Action)({ name: "Open Code" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], DBObjectActions, "OpenCode", null);
     DBObjectActions = __decorate([
-        Actions_10.$ActionProvider("jassijs.ui.DBObjectNode"),
-        Jassi_46.$Class("jassijs.ui.DBObjectActions")
+        (0, Actions_10.$ActionProvider)("jassijs.ui.DBObjectNode"),
+        (0, Jassi_46.$Class)("jassijs.ui.DBObjectActions")
     ], DBObjectActions);
     exports.DBObjectActions = DBObjectActions;
     let DBObjectExplorer = DBObjectExplorer_1 = class DBObjectExplorer extends Panel_6.Panel {
@@ -9512,7 +9512,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
         }
     };
     __decorate([
-        Actions_10.$Action({
+        (0, Actions_10.$Action)({
             name: "Windows",
             icon: "mdi mdi-iframe-array-outline",
         }),
@@ -9521,7 +9521,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
         __metadata("design:returntype", Promise)
     ], DBObjectExplorer, "dummy", null);
     __decorate([
-        Actions_10.$Action({
+        (0, Actions_10.$Action)({
             name: "Windows/Development",
             icon: "mdi mdi-dev-to",
         }),
@@ -9530,7 +9530,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
         __metadata("design:returntype", Promise)
     ], DBObjectExplorer, "dummy2", null);
     __decorate([
-        Actions_10.$Action({
+        (0, Actions_10.$Action)({
             name: "Windows/Development/DBObjects",
             icon: "mdi mdi-database-search",
         }),
@@ -9539,8 +9539,8 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
         __metadata("design:returntype", Promise)
     ], DBObjectExplorer, "show", null);
     DBObjectExplorer = DBObjectExplorer_1 = __decorate([
-        Actions_10.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_46.$Class("jassijs.ui.DBObjectExplorer"),
+        (0, Actions_10.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_46.$Class)("jassijs.ui.DBObjectExplorer"),
         __metadata("design:paramtypes", [])
     ], DBObjectExplorer);
     exports.DBObjectExplorer = DBObjectExplorer;
@@ -9693,32 +9693,32 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
         }
     };
     __decorate([
-        Property_13.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+        (0, Property_13.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "oncreated", null);
     __decorate([
-        Property_13.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+        (0, Property_13.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "onsaved", null);
     __decorate([
-        Property_13.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+        (0, Property_13.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "onrefreshed", null);
     __decorate([
-        Property_13.$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
+        (0, Property_13.$Property)({ default: "function(obj?/*: DBObject*/){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "ondeleted", null);
     DBObjectView = DBObjectView_3 = __decorate([
-        Component_8.$UIComponent({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh"] }),
-        Jassi_47.$Class("jassijs/ui/DBObjectView"),
+        (0, Component_8.$UIComponent)({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh"] }),
+        (0, Jassi_47.$Class)("jassijs/ui/DBObjectView"),
         __metadata("design:paramtypes", [])
     ], DBObjectView);
     exports.DBObjectView = DBObjectView;
@@ -9777,18 +9777,18 @@ define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component"
         }
     };
     __decorate([
-        Property_14.$Property(),
+        (0, Property_14.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], DataComponent.prototype, "autocommit", null);
     __decorate([
-        Property_14.$Property({ type: "databinder" }),
+        (0, Property_14.$Property)({ type: "databinder" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], DataComponent.prototype, "bind", null);
     DataComponent = __decorate([
-        Jassi_48.$Class("jassijs.ui.DataComponent"),
+        (0, Jassi_48.$Class)("jassijs.ui.DataComponent"),
         __metadata("design:paramtypes", [Object])
     ], DataComponent);
     exports.DataComponent = DataComponent;
@@ -10007,7 +10007,7 @@ define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPane
         }
     };
     __decorate([
-        Actions_11.$Action({
+        (0, Actions_11.$Action)({
             name: "Administration/Database Designer",
             icon: "mdi mdi-database-edit",
         }),
@@ -10016,8 +10016,8 @@ define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPane
         __metadata("design:returntype", Promise)
     ], DatabaseDesigner, "showDialog", null);
     DatabaseDesigner = __decorate([
-        Actions_11.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_49.$Class("jassijs/ui/DatabaseDesigner"),
+        (0, Actions_11.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_49.$Class)("jassijs/ui/DatabaseDesigner"),
         __metadata("design:paramtypes", [Object])
     ], DatabaseDesigner);
     exports.DatabaseDesigner = DatabaseDesigner;
@@ -10258,8 +10258,8 @@ define("jassijs/ui/Databinder", ["require", "exports", "jassijs/ui/InvisibleComp
         }
     };
     Databinder = __decorate([
-        Component_10.$UIComponent({ fullPath: "common/Databinder", icon: "mdi mdi-connection" }),
-        Jassi_50.$Class("jassijs.ui.Databinder"),
+        (0, Component_10.$UIComponent)({ fullPath: "common/Databinder", icon: "mdi mdi-connection" }),
+        (0, Jassi_50.$Class)("jassijs.ui.Databinder"),
         __metadata("design:paramtypes", [])
     ], Databinder);
     exports.Databinder = Databinder;
@@ -10409,7 +10409,7 @@ define("jassijs/ui/DesignDummy", ["require", "exports", "jassijs/remote/Jassi", 
         }
     };
     DesignDummy = DesignDummy_1 = __decorate([
-        Jassi_51.$Class("jassijs.ui.DesignDummy"),
+        (0, Jassi_51.$Class)("jassijs.ui.DesignDummy"),
         __metadata("design:paramtypes", [])
     ], DesignDummy);
     exports.DesignDummy = DesignDummy;
@@ -10722,7 +10722,7 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
         }
     };
     DockingContainer = __decorate([
-        Jassi_52.$Class("jassijs.ui.DockingContainer"),
+        (0, Jassi_52.$Class)("jassijs.ui.DockingContainer"),
         __metadata("design:paramtypes", [Object])
     ], DockingContainer);
     exports.DockingContainer = DockingContainer;
@@ -10959,7 +10959,7 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
         }
     };
     __decorate([
-        Actions_12.$Action({
+        (0, Actions_12.$Action)({
             name: "Administration/Errors",
             icon: "mdi mdi-emoticon-confused-outline",
         }),
@@ -10968,8 +10968,8 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
         __metadata("design:returntype", Promise)
     ], ErrorPanel, "showDialog", null);
     ErrorPanel = __decorate([
-        Actions_12.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_53.$Class("jassijs.ui.ErrorPanel"),
+        (0, Actions_12.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_53.$Class)("jassijs.ui.ErrorPanel"),
         __metadata("design:paramtypes", [Object, Object, Object])
     ], ErrorPanel);
     exports.ErrorPanel = ErrorPanel;
@@ -11160,7 +11160,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
         }
     };
     __decorate([
-        Actions_13.$Action({
+        (0, Actions_13.$Action)({
             name: "New/File",
             icon: "mdi mdi-file",
             isEnabled: function (all) {
@@ -11172,7 +11172,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
         __metadata("design:returntype", Promise)
     ], FileActions, "newFile", null);
     __decorate([
-        Actions_13.$Action({
+        (0, Actions_13.$Action)({
             name: "Download",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -11183,7 +11183,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
         __metadata("design:returntype", Promise)
     ], FileActions, "download", null);
     __decorate([
-        Actions_13.$Action({
+        (0, Actions_13.$Action)({
             name: "New/Folder",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -11194,7 +11194,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
         __metadata("design:returntype", Promise)
     ], FileActions, "newFolder", null);
     __decorate([
-        Actions_13.$Action({
+        (0, Actions_13.$Action)({
             name: "New/Module",
             isEnabled: function (all) {
                 return all[0].name === "client" && all[0].fullpath === "";
@@ -11205,25 +11205,25 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
         __metadata("design:returntype", Promise)
     ], FileActions, "newModule", null);
     __decorate([
-        Actions_13.$Action({ name: "Delete" }),
+        (0, Actions_13.$Action)({ name: "Delete" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, Object]),
         __metadata("design:returntype", Promise)
     ], FileActions, "dodelete", null);
     __decorate([
-        Actions_13.$Action({ name: "Rename" }),
+        (0, Actions_13.$Action)({ name: "Rename" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, Object]),
         __metadata("design:returntype", Promise)
     ], FileActions, "rename", null);
     __decorate([
-        Actions_13.$Action({ name: "Refresh" }),
+        (0, Actions_13.$Action)({ name: "Refresh" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], FileActions, "refresh", null);
     __decorate([
-        Actions_13.$Action({
+        (0, Actions_13.$Action)({
             name: "Open", isEnabled: function (all) {
                 return !all[0].isDirectory();
             }
@@ -11233,8 +11233,8 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
         __metadata("design:returntype", Promise)
     ], FileActions, "open", null);
     FileActions = __decorate([
-        Actions_13.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_54.$Class("jassijs.ui.FileActions")
+        (0, Actions_13.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_54.$Class)("jassijs.ui.FileActions")
     ], FileActions);
     exports.FileActions = FileActions;
     let FileExplorer = FileExplorer_5 = class FileExplorer extends Panel_10.Panel {
@@ -11319,7 +11319,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
     };
     FileExplorer.instance = undefined;
     __decorate([
-        Actions_13.$Action({
+        (0, Actions_13.$Action)({
             name: "Windows/Development/Files",
             icon: "mdi mdi-file-tree",
         }),
@@ -11328,8 +11328,8 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
         __metadata("design:returntype", Promise)
     ], FileExplorer, "show", null);
     FileExplorer = FileExplorer_5 = __decorate([
-        Actions_13.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_54.$Class("jassijs.ui.FileExplorer"),
+        (0, Actions_13.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_54.$Class)("jassijs.ui.FileExplorer"),
         __metadata("design:paramtypes", [])
     ], FileExplorer);
     exports.FileExplorer = FileExplorer;
@@ -11410,7 +11410,7 @@ define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", 
         }
     };
     HTMLEditorPanel = __decorate([
-        Jassi_55.$Class("jassijs.ui.HTMLEditorPanel"),
+        (0, Jassi_55.$Class)("jassijs.ui.HTMLEditorPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLEditorPanel);
     exports.HTMLEditorPanel = HTMLEditorPanel;
@@ -11623,23 +11623,23 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
         }
     };
     __decorate([
-        Property_15.$Property({ description: "line break after element", default: false }),
+        (0, Property_15.$Property)({ description: "line break after element", default: false }),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel.prototype, "newlineafter", null);
     __decorate([
-        Property_15.$Property({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' }),
+        (0, Property_15.$Property)({ decription: 'e.g. component.value=new Person();component.template:"{{name}}"' }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], HTMLPanel.prototype, "template", null);
     __decorate([
-        Property_15.$Property(),
+        (0, Property_15.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], HTMLPanel.prototype, "value", null);
     HTMLPanel = __decorate([
-        Component_11.$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
-        Jassi_56.$Class("jassijs.ui.HTMLPanel"),
+        (0, Component_11.$UIComponent)({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
+        (0, Jassi_56.$Class)("jassijs.ui.HTMLPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel);
     exports.HTMLPanel = HTMLPanel;
@@ -11723,19 +11723,19 @@ define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassi
         }
     };
     __decorate([
-        Property_16.$Property({ type: "string" }),
+        (0, Property_16.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Image.prototype, "value", null);
     __decorate([
-        Property_16.$Property({ type: "image" }),
+        (0, Property_16.$Property)({ type: "image" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Image.prototype, "src", null);
     Image = __decorate([
-        Component_12.$UIComponent({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
+        (0, Component_12.$UIComponent)({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
         ,
-        Jassi_57.$Class("jassijs.ui.Image"),
+        (0, Jassi_57.$Class)("jassijs.ui.Image"),
         __metadata("design:paramtypes", [])
     ], Image);
     exports.Image = Image;
@@ -11759,7 +11759,7 @@ define("jassijs/ui/InvisibleComponent", ["require", "exports", "jassijs/ui/Compo
         }
     };
     InvisibleComponent = __decorate([
-        Jassi_58.$Class("jassijs.ui.InvisibleComponent")
+        (0, Jassi_58.$Class)("jassijs.ui.InvisibleComponent")
         /*@$Property({name:"label",hide:true})
         @$Property({name:"icon",hide:true})
         @$Property({name:"tooltip",hide:true})
@@ -11772,7 +11772,7 @@ define("jassijs/ui/InvisibleComponent", ["require", "exports", "jassijs/ui/Compo
         @$Property({name:"hidden",hide:true})
         @$Property({name:"styles",hide:true})*/
         ,
-        Property_17.$Property({ hideBaseClassProperties: true }),
+        (0, Property_17.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], InvisibleComponent);
     exports.InvisibleComponent = InvisibleComponent;
@@ -11897,14 +11897,14 @@ define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassij
         }
     };
     __decorate([
-        Property_18.$Property({ name: "onclick", type: "function", default: "function(event){\n\t\n}" }),
+        (0, Property_18.$Property)({ name: "onclick", type: "function", default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Menu.prototype, "onclick", null);
     Menu = __decorate([
-        Component_14.$UIComponent({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
-        Jassi_59.$Class("jassijs.ui.Menu"),
+        (0, Component_14.$UIComponent)({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
+        (0, Jassi_59.$Class)("jassijs.ui.Menu"),
         __metadata("design:paramtypes", [Object])
     ], Menu);
     exports.Menu = Menu;
@@ -12029,24 +12029,24 @@ define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "ja
         }
     };
     __decorate([
-        Property_19.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_19.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], MenuItem.prototype, "onclick", null);
     __decorate([
-        Property_19.$Property(),
+        (0, Property_19.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], MenuItem.prototype, "icon", null);
     __decorate([
-        Property_19.$Property(),
+        (0, Property_19.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], MenuItem.prototype, "text", null);
     MenuItem = __decorate([
-        Component_15.$UIComponent({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] }),
-        Jassi_60.$Class("jassijs.ui.MenuItem"),
+        (0, Component_15.$UIComponent)({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] }),
+        (0, Jassi_60.$Class)("jassijs.ui.MenuItem"),
         __metadata("design:paramtypes", [])
     ], MenuItem);
     exports.MenuItem = MenuItem;
@@ -12233,38 +12233,38 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
         }
     };
     __decorate([
-        Property_20.$Property({ default: 450 }),
+        (0, Property_20.$Property)({ default: 450 }),
         __metadata("design:type", Number)
     ], ObjectChooser.prototype, "dialogHeight", void 0);
     __decorate([
-        Property_20.$Property({ default: 300 }),
+        (0, Property_20.$Property)({ default: 300 }),
         __metadata("design:type", Number)
     ], ObjectChooser.prototype, "dialogWidth", void 0);
     __decorate([
-        Property_20.$Property({ type: "string", description: "the classname for to choose" }),
+        (0, Property_20.$Property)({ type: "string", description: "the classname for to choose" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], ObjectChooser.prototype, "items", null);
     __decorate([
-        Property_20.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_20.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], ObjectChooser.prototype, "onchange", null);
     __decorate([
-        Property_20.$Property(),
+        (0, Property_20.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], ObjectChooser.prototype, "autocommit", null);
     __decorate([
-        Property_20.$Property({ type: "databinder" }),
+        (0, Property_20.$Property)({ type: "databinder" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], ObjectChooser.prototype, "bind", null);
     ObjectChooser = __decorate([
-        Component_16.$UIComponent({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
-        Jassi_61.$Class("jassijs.ui.ObjectChooser"),
+        (0, Component_16.$UIComponent)({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
+        (0, Jassi_61.$Class)("jassijs.ui.ObjectChooser"),
         __metadata("design:paramtypes", [])
     ], ObjectChooser);
     exports.ObjectChooser = ObjectChooser;
@@ -12402,26 +12402,26 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
         }
     };
     __decorate([
-        Property_21.$Property(),
+        (0, Property_21.$Property)(),
         __metadata("design:type", String)
     ], OptionDialog.prototype, "text", void 0);
     OptionDialog = OptionDialog_8 = __decorate([
-        Jassi_62.$Class("jassijs.ui.OptionDialog"),
+        (0, Jassi_62.$Class)("jassijs.ui.OptionDialog"),
         __metadata("design:paramtypes", [Object])
     ], OptionDialog);
     exports.OptionDialog = OptionDialog;
     let Testprop = class Testprop {
     };
     __decorate([
-        Property_21.$Property(),
+        (0, Property_21.$Property)(),
         __metadata("design:type", Boolean)
     ], Testprop.prototype, "visible", void 0);
     __decorate([
-        Property_21.$Property(),
+        (0, Property_21.$Property)(),
         __metadata("design:type", String)
     ], Testprop.prototype, "text", void 0);
     Testprop = __decorate([
-        Jassi_62.$Class("jassijs.ui.OptionDialogTestProp")
+        (0, Jassi_62.$Class)("jassijs.ui.OptionDialogTestProp")
     ], Testprop);
     async function test2() {
         var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);
@@ -12445,11 +12445,11 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassi
     let PanelCreateProperties = class PanelCreateProperties extends Component_17.ComponentCreateProperties {
     };
     __decorate([
-        Property_22.$Property({ default: false }),
+        (0, Property_22.$Property)({ default: false }),
         __metadata("design:type", Boolean)
     ], PanelCreateProperties.prototype, "useSpan", void 0);
     PanelCreateProperties = __decorate([
-        Jassi_63.$Class("jassijs.ui.PanelCreateProperties")
+        (0, Jassi_63.$Class)("jassijs.ui.PanelCreateProperties")
     ], PanelCreateProperties);
     let Panel = 
     //@$Property({ name: "new/useSpan", type: "boolean", default: false })
@@ -12599,14 +12599,14 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassi
         }
     };
     __decorate([
-        Property_22.$Property(),
+        (0, Property_22.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Panel.prototype, "isAbsolute", null);
     Panel = __decorate([
-        Component_17.$UIComponent({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
-        Jassi_63.$Class("jassijs.ui.Panel"),
-        Property_22.$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelCreateProperties" })
+        (0, Component_17.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
+        (0, Jassi_63.$Class)("jassijs.ui.Panel"),
+        (0, Property_22.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelCreateProperties" })
         //@$Property({ name: "new/useSpan", type: "boolean", default: false })
         ,
         __metadata("design:paramtypes", [PanelCreateProperties])
@@ -12639,7 +12639,7 @@ define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Jassi", "ja
         }
     };
     Property = __decorate([
-        Jassi_64.$Class("jassijs.ui.Property"),
+        (0, Jassi_64.$Class)("jassijs.ui.Property"),
         __metadata("design:paramtypes", [Object, Object])
     ], Property);
     exports.Property = Property;
@@ -13347,7 +13347,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
         }
     };
     PropertyEditor = PropertyEditor_1 = __decorate([
-        Jassi_65.$Class("jassijs.ui.PropertyEditor"),
+        (0, Jassi_65.$Class)("jassijs.ui.PropertyEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], PropertyEditor);
     exports.PropertyEditor = PropertyEditor;
@@ -13358,15 +13358,15 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
         }
     };
     __decorate([
-        Property_23.$Property(),
+        (0, Property_23.$Property)(),
         __metadata("design:type", Number)
     ], PropertyEditorTestSubProperties.prototype, "num", void 0);
     __decorate([
-        Property_23.$Property(),
+        (0, Property_23.$Property)(),
         __metadata("design:type", String)
     ], PropertyEditorTestSubProperties.prototype, "text", void 0);
     PropertyEditorTestSubProperties = __decorate([
-        Jassi_65.$Class("jassijs.ui.PropertyEditorTestSubProperties")
+        (0, Jassi_65.$Class)("jassijs.ui.PropertyEditorTestSubProperties")
     ], PropertyEditorTestSubProperties);
     exports.PropertyEditorTestSubProperties = PropertyEditorTestSubProperties;
     let TestProperties = class TestProperties {
@@ -13378,57 +13378,57 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
         ;
     };
     __decorate([
-        Property_23.$Property({ decription: "name of the dialog", }),
+        (0, Property_23.$Property)({ decription: "name of the dialog", }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     __decorate([
-        Property_23.$Property(),
+        (0, Property_23.$Property)(),
         __metadata("design:type", Boolean)
     ], TestProperties.prototype, "checked", void 0);
     __decorate([
-        Property_23.$Property({ type: "color" }),
+        (0, Property_23.$Property)({ type: "color" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "color", void 0);
     __decorate([
-        Property_23.$Property({ type: "componentselector", componentType: "jassi.ui.Component" }),
+        (0, Property_23.$Property)({ type: "componentselector", componentType: "jassi.ui.Component" }),
         __metadata("design:type", typeof (_a = typeof Component_18.Component !== "undefined" && Component_18.Component) === "function" ? _a : Object)
     ], TestProperties.prototype, "component", void 0);
     __decorate([
-        Property_23.$Property({ type: "databinder" }),
+        (0, Property_23.$Property)({ type: "databinder" }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "databinder", void 0);
     __decorate([
-        Property_23.$Property({ type: "dbobject", componentType: "de.Kunde" }),
+        (0, Property_23.$Property)({ type: "dbobject", componentType: "de.Kunde" }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "dbobject", void 0);
     __decorate([
-        Property_23.$Property({ default: 80 }),
+        (0, Property_23.$Property)({ default: 80 }),
         __metadata("design:type", Number)
     ], TestProperties.prototype, "num", void 0);
     __decorate([
-        Property_23.$Property({ type: "font" }),
+        (0, Property_23.$Property)({ type: "font" }),
         __metadata("design:type", Number)
     ], TestProperties.prototype, "font", void 0);
     __decorate([
-        Property_23.$Property({ type: "function" }),
+        (0, Property_23.$Property)({ type: "function" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], TestProperties.prototype, "func", null);
     __decorate([
-        Property_23.$Property({ type: "html" }),
+        (0, Property_23.$Property)({ type: "html" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "html", void 0);
     __decorate([
-        Property_23.$Property({ type: "image" }),
+        (0, Property_23.$Property)({ type: "image" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "image", void 0);
     __decorate([
-        Property_23.$Property({ type: "json", componentType: "jassijs.ui.PropertyEditorTestSubProperties" }),
+        (0, Property_23.$Property)({ type: "json", componentType: "jassijs.ui.PropertyEditorTestSubProperties" }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "json", void 0);
     TestProperties = __decorate([
-        Jassi_65.$Class("jassijs.ui.PropertyEditorTestProperties")
+        (0, Jassi_65.$Class)("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     function test() {
         var ret = new PropertyEditor();
@@ -13444,8 +13444,8 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
     let RepeaterDesignPanel = class RepeaterDesignPanel extends Panel_15.Panel {
     };
     RepeaterDesignPanel = __decorate([
-        Component_19.$UIComponent({ editableChildComponents: ["databinder"] }),
-        Jassi_66.$Class("jassijs.ui.RepeaterDesignPanel")
+        (0, Component_19.$UIComponent)({ editableChildComponents: ["databinder"] }),
+        (0, Jassi_66.$Class)("jassijs.ui.RepeaterDesignPanel")
     ], RepeaterDesignPanel);
     let Repeater = class Repeater extends Panel_15.Panel {
         /**
@@ -13536,7 +13536,7 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
                     this._copyMeFromParent(this.design.me, this._parent);
                     this._createRepeatingComponent(this.design.me);
                     this.add(this.design);
-                    this.add(this.design.databinder);
+                    this.design.add(this.design.databinder);
                 }
                 this.design = sic;
             }
@@ -13596,14 +13596,14 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
         }
     };
     __decorate([
-        Property_24.$Property({ type: "databinder" }),
+        (0, Property_24.$Property)({ type: "databinder" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], Repeater.prototype, "bind", null);
     Repeater = __decorate([
-        Component_19.$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
-        Jassi_66.$Class("jassijs.ui.Repeater"),
+        (0, Component_19.$UIComponent)({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
+        (0, Jassi_66.$Class)("jassijs.ui.Repeater"),
         __metadata("design:paramtypes", [Object])
     ], Repeater);
     exports.Repeater = Repeater;
@@ -13700,7 +13700,7 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi
         }
     };
     __decorate([
-        Actions_14.$Action({
+        (0, Actions_14.$Action)({
             name: "Windows/Development/Search",
             icon: "mdi mdi-folder-search-outline",
         }),
@@ -13709,8 +13709,8 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi
         __metadata("design:returntype", Promise)
     ], SearchExplorer, "show", null);
     SearchExplorer = SearchExplorer_1 = __decorate([
-        Actions_14.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_67.$Class("jassijs.ui.SearchExplorer"),
+        (0, Actions_14.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_67.$Class)("jassijs.ui.SearchExplorer"),
         __metadata("design:paramtypes", [])
     ], SearchExplorer);
     exports.SearchExplorer = SearchExplorer;
@@ -13733,19 +13733,19 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
     let SelectCreateProperties = class SelectCreateProperties extends Component_20.ComponentCreateProperties {
     };
     __decorate([
-        Property_25.$Property({ default: false }),
+        (0, Property_25.$Property)({ default: false }),
         __metadata("design:type", Boolean)
     ], SelectCreateProperties.prototype, "multiple", void 0);
     __decorate([
-        Property_25.$Property({ default: false }),
+        (0, Property_25.$Property)({ default: false }),
         __metadata("design:type", Boolean)
     ], SelectCreateProperties.prototype, "allowDeselect", void 0);
     __decorate([
-        Property_25.$Property({ default: "" }),
+        (0, Property_25.$Property)({ default: "" }),
         __metadata("design:type", String)
     ], SelectCreateProperties.prototype, "placeholder", void 0);
     SelectCreateProperties = __decorate([
-        Jassi_68.$Class("jassijs.ui.SelectCreateProperties")
+        (0, Jassi_68.$Class)("jassijs.ui.SelectCreateProperties")
     ], SelectCreateProperties);
     let Select = class Select extends DataComponent_4.DataComponent {
         constructor(properties = undefined) {
@@ -13951,20 +13951,20 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
         }
     };
     __decorate([
-        Property_25.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_25.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Select.prototype, "onchange", null);
     __decorate([
-        Property_25.$Property({ type: "string" }),
+        (0, Property_25.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Select.prototype, "display", null);
     Select = __decorate([
-        Component_20.$UIComponent({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
-        Jassi_68.$Class("jassijs.ui.Select"),
-        Property_25.$Property({ name: "new", type: "json", componentType: "jassijs.ui.SelectCreateProperties" }),
+        (0, Component_20.$UIComponent)({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
+        (0, Jassi_68.$Class)("jassijs.ui.Select"),
+        (0, Property_25.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.SelectCreateProperties" }),
         __metadata("design:paramtypes", [SelectCreateProperties])
     ], Select);
     exports.Select = Select;
@@ -14025,7 +14025,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
         }
     };
     SettingsObject = __decorate([
-        Jassi_69.$Class("jassijs.ui.SettingsObject")
+        (0, Jassi_69.$Class)("jassijs.ui.SettingsObject")
     ], SettingsObject);
     let SettingsDialog = SettingsDialog_1 = class SettingsDialog extends Panel_17.Panel {
         constructor() {
@@ -14098,7 +14098,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
         }
     };
     __decorate([
-        Actions_15.$Action({
+        (0, Actions_15.$Action)({
             name: "Settings",
             icon: "mdi mdi-settings-helper",
         }),
@@ -14107,8 +14107,8 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
         __metadata("design:returntype", Promise)
     ], SettingsDialog, "show", null);
     SettingsDialog = SettingsDialog_1 = __decorate([
-        Actions_15.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_69.$Class("jassijs.ui.SettingsDialog"),
+        (0, Actions_15.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_69.$Class)("jassijs.ui.SettingsDialog"),
         __metadata("design:paramtypes", [])
     ], SettingsDialog);
     exports.SettingsDialog = SettingsDialog;
@@ -14166,14 +14166,14 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
         }
     };
     __decorate([
-        Property_26.$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
+        (0, Property_26.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [typeof (_a = typeof CSSProperties_2.CSSProperties !== "undefined" && CSSProperties_2.CSSProperties) === "function" ? _a : Object, Boolean]),
         __metadata("design:returntype", void 0)
     ], Style.prototype, "css", null);
     Style = __decorate([
-        Component_21.$UIComponent({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
-        Jassi_70.$Class("jassijs.ui.Style")
+        (0, Component_21.$UIComponent)({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
+        (0, Jassi_70.$Class)("jassijs.ui.Style")
         /**
          * on ore mors Style can be assigned to component
          * the style is appended to the head
@@ -14216,33 +14216,33 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
         cellDblClick() { }
     };
     __decorate([
-        Property_27.$Property({ default: undefined }),
+        (0, Property_27.$Property)({ default: undefined }),
         __metadata("design:type", Number)
     ], TableEditorProperties.prototype, "paginationSize", void 0);
     __decorate([
-        Property_27.$Property({ default: true }),
+        (0, Property_27.$Property)({ default: true }),
         __metadata("design:type", Boolean)
     ], TableEditorProperties.prototype, "headerSort", void 0);
     __decorate([
-        Property_27.$Property({ default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] }),
+        (0, Property_27.$Property)({ default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] }),
         __metadata("design:type", String)
     ], TableEditorProperties.prototype, "layout", void 0);
     __decorate([
-        Property_27.$Property({ default: undefined }),
+        (0, Property_27.$Property)({ default: undefined }),
         __metadata("design:type", Function)
     ], TableEditorProperties.prototype, "dataTreeChildFunction", void 0);
     __decorate([
-        Property_27.$Property({ default: false }),
+        (0, Property_27.$Property)({ default: false }),
         __metadata("design:type", Boolean)
     ], TableEditorProperties.prototype, "movableColumns", void 0);
     __decorate([
-        Property_27.$Property({ default: "function(event:any,group:any){\n\t\n}" }),
+        (0, Property_27.$Property)({ default: "function(event:any,group:any){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], TableEditorProperties.prototype, "cellDblClick", null);
     TableEditorProperties = __decorate([
-        Jassi_71.$Class("jassijs.ui.TableEditorProperties")
+        (0, Jassi_71.$Class)("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
     let Table = 
     /*
@@ -14569,31 +14569,31 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
         }
     };
     __decorate([
-        Property_27.$Property({ default: "function(event?: JQueryEventObject, data?:Tabulator.RowComponent){\n\t\n}" }),
+        (0, Property_27.$Property)({ default: "function(event?: JQueryEventObject, data?:Tabulator.RowComponent){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], Table.prototype, "onchange", null);
     __decorate([
-        Property_27.$Property(),
+        (0, Property_27.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Table.prototype, "showSearchbox", null);
     __decorate([
-        Property_27.$Property({ type: "string" }),
+        (0, Property_27.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Table.prototype, "height", null);
     __decorate([
-        Property_27.$Property({ type: "databinder" }),
+        (0, Property_27.$Property)({ type: "databinder" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], Table.prototype, "bindItems", null);
     Table = __decorate([
-        Component_22.$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
-        Jassi_71.$Class("jassijs.ui.Table"),
-        Property_27.$Property({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
+        (0, Component_22.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
+        (0, Jassi_71.$Class)("jassijs.ui.Table"),
+        (0, Property_27.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
         /*
         @$Property({ name: "new/paginationSize", type: "number", default: undefined })
         @$Property({ name: "new/headerSort", type: "boolean", default: true })
@@ -14638,9 +14638,9 @@ define("jassijs/ui/Textarea", ["require", "exports", "jassijs/ui/Component", "ja
         }
     };
     Textarea = __decorate([
-        Component_23.$UIComponent({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
-        Jassi_72.$Class("jassijs.ui.Textarea"),
-        Property_28.$Property({ name: "new", type: "string" }),
+        (0, Component_23.$UIComponent)({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
+        (0, Jassi_72.$Class)("jassijs.ui.Textarea"),
+        (0, Property_28.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [])
     ], Textarea);
     exports.Textarea = Textarea;
@@ -14870,52 +14870,52 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
         }
     };
     __decorate([
-        Property_29.$Property({ type: "classselector", service: "$Converter" }),
+        (0, Property_29.$Property)({ type: "classselector", service: "$Converter" }),
         __metadata("design:type", typeof (_a = typeof DefaultConverter_1.DefaultConverter !== "undefined" && DefaultConverter_1.DefaultConverter) === "function" ? _a : Object)
     ], Textbox.prototype, "converter", void 0);
     __decorate([
-        Property_29.$Property({ type: "string", chooseFrom: allFormats }),
+        (0, Property_29.$Property)({ type: "string", chooseFrom: allFormats }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Textbox.prototype, "format", null);
     __decorate([
-        Property_29.$Property({ type: "string" }),
+        (0, Property_29.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Textbox.prototype, "value", null);
     __decorate([
-        Property_29.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_29.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "onclick", null);
     __decorate([
-        Property_29.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_29.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "onchange", null);
     __decorate([
-        Property_29.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_29.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "onkeydown", null);
     __decorate([
-        Property_29.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_29.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "oninput", null);
     __decorate([
-        Property_29.$Property(),
+        (0, Property_29.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Textbox.prototype, "placeholder", null);
     Textbox = __decorate([
-        Component_24.$UIComponent({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
-        Jassi_73.$Class("jassijs.ui.Textbox"),
-        Property_29.$Property({ name: "new", type: "string" }),
+        (0, Component_24.$UIComponent)({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
+        (0, Jassi_73.$Class)("jassijs.ui.Textbox"),
+        (0, Property_29.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [Object])
     ], Textbox);
     exports.Textbox = Textbox;
@@ -14939,28 +14939,28 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
     let TreeEditorPropertiesMulti = class TreeEditorPropertiesMulti {
     };
     __decorate([
-        Property_30.$Property({ default: "", chooseFrom: ["", "sameParent", "sameLevel"], description: "multi selection mode" }),
+        (0, Property_30.$Property)({ default: "", chooseFrom: ["", "sameParent", "sameLevel"], description: "multi selection mode" }),
         __metadata("design:type", String)
     ], TreeEditorPropertiesMulti.prototype, "mode", void 0);
     TreeEditorPropertiesMulti = __decorate([
-        Jassi_74.$Class("jassijs.ui.TreeEditorPropertiesMulti")
+        (0, Jassi_74.$Class)("jassijs.ui.TreeEditorPropertiesMulti")
     ], TreeEditorPropertiesMulti);
     let TreeEditorProperties = class TreeEditorProperties {
     };
     __decorate([
-        Property_30.$Property({ default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
+        (0, Property_30.$Property)({ default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
         __metadata("design:type", Number)
     ], TreeEditorProperties.prototype, "selectMode", void 0);
     __decorate([
-        Property_30.$Property({ default: false, description: "display a checkbox before the node" }),
+        (0, Property_30.$Property)({ default: false, description: "display a checkbox before the node" }),
         __metadata("design:type", Boolean)
     ], TreeEditorProperties.prototype, "checkbox", void 0);
     __decorate([
-        Property_30.$Property({ type: "json", componentType: "jassijs.ui.TreeEditorPropertiesMulti" }),
+        (0, Property_30.$Property)({ type: "json", componentType: "jassijs.ui.TreeEditorPropertiesMulti" }),
         __metadata("design:type", TreeEditorPropertiesMulti)
     ], TreeEditorProperties.prototype, "multi", void 0);
     TreeEditorProperties = __decorate([
-        Jassi_74.$Class("jassijs.ui.TreeEditorProperties")
+        (0, Jassi_74.$Class)("jassijs.ui.TreeEditorProperties")
     ], TreeEditorProperties);
     let Tree = 
     /*@$Property({ name: "new/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
@@ -15477,25 +15477,25 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
         }
     };
     __decorate([
-        Property_30.$Property({ type: "string", description: "the property called to get the style of the item" }),
+        (0, Property_30.$Property)({ type: "string", description: "the property called to get the style of the item" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Tree.prototype, "propStyle", null);
     __decorate([
-        Property_30.$Property({ type: "string", description: "the property called to get the name of the item" }),
+        (0, Property_30.$Property)({ type: "string", description: "the property called to get the name of the item" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Tree.prototype, "propDisplay", null);
     __decorate([
-        Property_30.$Property({ default: "function(event?: JQueryEventObject/*, data?:Fancytree.EventData*/){\n\t\n}" }),
+        (0, Property_30.$Property)({ default: "function(event?: JQueryEventObject/*, data?:Fancytree.EventData*/){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], Tree.prototype, "onclick", null);
     Tree = __decorate([
-        Component_25.$UIComponent({ fullPath: "common/Tree", icon: "mdi mdi-file-tree" }),
-        Jassi_74.$Class("jassijs.ui.Tree"),
-        Property_30.$Property({ name: "new", type: "json", componentType: "jassijs.ui.TreeEditorProperties" })
+        (0, Component_25.$UIComponent)({ fullPath: "common/Tree", icon: "mdi mdi-file-tree" }),
+        (0, Jassi_74.$Class)("jassijs.ui.Tree"),
+        (0, Property_30.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TreeEditorProperties" })
         /*@$Property({ name: "new/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
         @$Property({ name: "new/checkbox", type: "boolean", default: false, description: "desplay a checkbos before the node" })
         @$Property({ name: "new/multi", type: "json" })
@@ -15680,24 +15680,24 @@ define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Jassi", "jass
         }
     };
     __decorate([
-        Property_31.$Property(),
+        (0, Property_31.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Upload.prototype, "accept", null);
     __decorate([
-        Property_31.$Property(),
+        (0, Property_31.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Upload.prototype, "multiple", null);
     __decorate([
-        Property_31.$Property({ default: "function(data:{[file:string]:string}){\n\t\n}" }),
+        (0, Property_31.$Property)({ default: "function(data:{[file:string]:string}){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], Upload.prototype, "onuploaded", null);
     Upload = __decorate([
-        Component_26.$UIComponent({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
-        Jassi_75.$Class("jassijs.ui.Upload"),
+        (0, Component_26.$UIComponent)({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
+        (0, Jassi_75.$Class)("jassijs.ui.Upload"),
         __metadata("design:paramtypes", [])
     ], Upload);
     exports.Upload = Upload;
@@ -16044,7 +16044,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
         }
     };
     VariablePanel = __decorate([
-        Jassi_76.$Class("jassijs.ui.VariablePanel"),
+        (0, Jassi_76.$Class)("jassijs.ui.VariablePanel"),
         __metadata("design:paramtypes", [])
     ], VariablePanel);
     exports.VariablePanel = VariablePanel;
@@ -16093,8 +16093,8 @@ define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassi
         }
     };
     BooleanEditor = __decorate([
-        Editor_1.$PropertyEditor(["boolean"]),
-        Jassi_77.$Class("jassijs.ui.PropertyEditors.BooleanEditor"),
+        (0, Editor_1.$PropertyEditor)(["boolean"]),
+        (0, Jassi_77.$Class)("jassijs.ui.PropertyEditors.BooleanEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], BooleanEditor);
     exports.BooleanEditor = BooleanEditor;
@@ -16251,8 +16251,8 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
         }
     };
     ClassSelectorEditor = __decorate([
-        Editor_2.$PropertyEditor(["classselector"]),
-        Jassi_78.$Class("jassijs.ui.PropertyEditors.ClassSelectorEditor"),
+        (0, Editor_2.$PropertyEditor)(["classselector"]),
+        (0, Jassi_78.$Class)("jassijs.ui.PropertyEditors.ClassSelectorEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ClassSelectorEditor);
     exports.ClassSelectorEditor = ClassSelectorEditor;
@@ -16367,8 +16367,8 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
         }
     };
     ColorEditor = __decorate([
-        Editor_3.$PropertyEditor(["color"]),
-        Jassi_79.$Class("jassijs.ui.PropertyEditors.ColorEditor")
+        (0, Editor_3.$PropertyEditor)(["color"]),
+        (0, Jassi_79.$Class)("jassijs.ui.PropertyEditors.ColorEditor")
         /**
         * Editor for color
         * used by PropertyEditor
@@ -16470,8 +16470,8 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
         }
     };
     ComponentSelectorEditor = __decorate([
-        Editor_4.$PropertyEditor(["componentselector"]),
-        Jassi_80.$Class("jassijs.ui.PropertyEditors.ComponentSelectorEditor"),
+        (0, Editor_4.$PropertyEditor)(["componentselector"]),
+        (0, Jassi_80.$Class)("jassijs.ui.PropertyEditors.ComponentSelectorEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ComponentSelectorEditor);
     exports.ComponentSelectorEditor = ComponentSelectorEditor;
@@ -16578,13 +16578,13 @@ define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jass
         }
     };
     DBObjectEditor = __decorate([
-        Editor_5.$PropertyEditor(["dbobject"]),
-        Jassi_81.$Class("jassijs.ui.PropertyEditors.DBObjectEditor"),
+        (0, Editor_5.$PropertyEditor)(["dbobject"]),
+        (0, Jassi_81.$Class)("jassijs.ui.PropertyEditors.DBObjectEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DBObjectEditor);
     exports.DBObjectEditor = DBObjectEditor;
 });
-define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Databinder", "jassijs/remote/Jassi", "jassijs/ui/Select"], function (require, exports, Editor_6, Databinder_4, Jassi_82, Select_6) {
+define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Databinder", "jassijs/remote/Jassi", "jassijs/ui/Textbox"], function (require, exports, Editor_6, Databinder_4, Jassi_82, Textbox_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DatabinderEditor = void 0;
@@ -16592,7 +16592,7 @@ define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "ja
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Select_6.Select();
+            this.component = new Textbox_13.Textbox(); //Select();
             this.component.width = "100%";
             var _this = this;
             this.component.onchange(function (param) {
@@ -16665,13 +16665,13 @@ define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "ja
         }
     };
     DatabinderEditor = __decorate([
-        Editor_6.$PropertyEditor(["databinder"]),
-        Jassi_82.$Class("jassijs.ui.PropertyEditors.DatabinderEditor"),
+        (0, Editor_6.$PropertyEditor)(["databinder"]),
+        (0, Jassi_82.$Class)("jassijs.ui.PropertyEditors.DatabinderEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DatabinderEditor);
     exports.DatabinderEditor = DatabinderEditor;
 });
-define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Select"], function (require, exports, Textbox_13, Editor_7, Jassi_83, Select_7) {
+define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Select"], function (require, exports, Textbox_14, Editor_7, Jassi_83, Select_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     let DefaultEditor = class DefaultEditor extends Editor_7.Editor {
@@ -16679,24 +16679,24 @@ define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassi
             super(property, propertyEditor);
             if (property.chooseFrom !== undefined) {
                 if (typeof (property.chooseFrom) === "function") {
-                    this.component = new Textbox_13.Textbox();
+                    this.component = new Textbox_14.Textbox();
                     this.component.autocompleter = function () {
                         return property.chooseFrom(_this.ob);
                     };
                 }
                 else {
                     if (property.chooseFromStrict) {
-                        this.component = new Select_7.Select();
+                        this.component = new Select_6.Select();
                         this.component.items = property.chooseFrom;
                     }
                     else {
-                        this.component = new Textbox_13.Textbox();
+                        this.component = new Textbox_14.Textbox();
                         this.component.autocompleter = property.chooseFrom;
                     }
                 }
             }
             else {
-                this.component = new Textbox_13.Textbox();
+                this.component = new Textbox_14.Textbox();
             }
             this.component.width = "100%";
             var _this = this;
@@ -16763,8 +16763,8 @@ define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassi
         }
     };
     DefaultEditor = __decorate([
-        Editor_7.$PropertyEditor(["string", "number", "number[]"]),
-        Jassi_83.$Class("jassijs.ui.PropertyEditors.DefaultEditor"),
+        (0, Editor_7.$PropertyEditor)(["string", "number", "number[]"]),
+        (0, Jassi_83.$Class)("jassijs.ui.PropertyEditors.DefaultEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DefaultEditor);
 });
@@ -16860,12 +16860,12 @@ define("jassijs/ui/PropertyEditors/Editor", ["require", "exports", "jassijs/remo
         }
     };
     Editor = __decorate([
-        Jassi_84.$Class("jassijs.ui.PropertyEditors.Editor"),
+        (0, Jassi_84.$Class)("jassijs.ui.PropertyEditors.Editor"),
         __metadata("design:paramtypes", [Object, Object])
     ], Editor);
     exports.Editor = Editor;
 });
-define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_4, Editor_8, Textbox_14, Jassi_85, Select_8, CSSProperties_3) {
+define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_4, Editor_8, Textbox_15, Jassi_85, Select_7, CSSProperties_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.FontEditor = void 0;
@@ -16880,7 +16880,7 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Select_8.Select({
+            this.component = new Select_7.Select({
                 "multiple": false,
                 "placeholder": "select a font",
                 "allowDeselect": false
@@ -16895,7 +16895,7 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
             }
             for (let i = 0; i < googleFonts.length; i++) {
                 all.push(googleFonts[i]);
-                CSSProperties_3.loadFontIfNedded(googleFonts[i]);
+                (0, CSSProperties_3.loadFontIfNedded)(googleFonts[i]);
             }
             this.component.items = all;
             //   this.component.dom=font[0];
@@ -16938,8 +16938,8 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
         }
     };
     FontEditor = __decorate([
-        Editor_8.$PropertyEditor(["font"]),
-        Jassi_85.$Class("jassijs.ui.PropertyEditors.FontEditor")
+        (0, Editor_8.$PropertyEditor)(["font"]),
+        (0, Jassi_85.$Class)("jassijs.ui.PropertyEditors.FontEditor")
         /**
         * Editor for font
         * used by PropertyEditor
@@ -16950,7 +16950,7 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
     exports.FontEditor = FontEditor;
     function test2() {
         var prop = new PropertyEditor_4.PropertyEditor();
-        prop.value = new Textbox_14.Textbox();
+        prop.value = new Textbox_15.Textbox();
         return prop;
     }
     exports.test2 = test2;
@@ -17020,13 +17020,13 @@ define("jassijs/ui/PropertyEditors/FunctionEditor", ["require", "exports", "jass
         }
     };
     FunctionEditor = __decorate([
-        Editor_9.$PropertyEditor(["function"]),
-        Jassi_86.$Class("jassijs.ui.PropertyEditors.FunctionEditor"),
+        (0, Editor_9.$PropertyEditor)(["function"]),
+        (0, Jassi_86.$Class)("jassijs.ui.PropertyEditors.FunctionEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], FunctionEditor);
     exports.FunctionEditor = FunctionEditor;
 });
-define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/ui/Panel"], function (require, exports, Editor_10, Jassi_87, Textbox_15, ObjectChooser_2, Panel_21) {
+define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/ui/Panel"], function (require, exports, Editor_10, Jassi_87, Textbox_16, ObjectChooser_2, Panel_21) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLEditor = void 0;
@@ -17040,7 +17040,7 @@ define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/
             super(property, propertyEditor);
             /** @member - the renedering component **/
             this.component = new Panel_21.Panel( /*{useSpan:true}*/);
-            this._textbox = new Textbox_15.Textbox();
+            this._textbox = new Textbox_16.Textbox();
             this._objectchooser = new ObjectChooser_2.ObjectChooser();
             this._objectchooser.width = 24;
             this._textbox.width = "calc(100% - 28px)";
@@ -17105,13 +17105,13 @@ define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/
         }
     };
     HTMLEditor = __decorate([
-        Editor_10.$PropertyEditor(["html"]),
-        Jassi_87.$Class("jassijs.ui.PropertyEditors.HTMLEditor"),
+        (0, Editor_10.$PropertyEditor)(["html"]),
+        (0, Jassi_87.$Class)("jassijs.ui.PropertyEditors.HTMLEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], HTMLEditor);
     exports.HTMLEditor = HTMLEditor;
 });
-define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions"], function (require, exports, Editor_11, Jassi_88, Panel_22, Textbox_16, Button_11, Actions_16) {
+define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions"], function (require, exports, Editor_11, Jassi_88, Panel_22, Textbox_17, Button_11, Actions_16) {
     "use strict";
     var ImageEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17127,7 +17127,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
             /** @member - the renedering component **/
             this.component = new Panel_22.Panel( /*{useSpan:true}*/);
             this._button = new Button_11.Button();
-            this._textbox = new Textbox_16.Textbox();
+            this._textbox = new Textbox_17.Textbox();
             this._textbox.width = "calc(100% - 34px)";
             this.component.height = 24;
             this._button.icon = "mdi mdi-glasses";
@@ -17186,7 +17186,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
             if (!this.dialog) {
                 var _this = this;
                 this.dialog = new Panel_22.Panel();
-                var suche = new Textbox_16.Textbox();
+                var suche = new Textbox_17.Textbox();
                 var icons = new Panel_22.Panel();
                 this.dialog.add(suche);
                 this.dialog.add(icons);
@@ -17224,7 +17224,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
         }
     };
     __decorate([
-        Actions_16.$Action({
+        (0, Actions_16.$Action)({
             name: "Tools",
             icon: "mdi mdi-tools",
         }),
@@ -17233,7 +17233,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
         __metadata("design:returntype", Promise)
     ], ImageEditor, "dummy", null);
     __decorate([
-        Actions_16.$Action({
+        (0, Actions_16.$Action)({
             name: "Tools/Icons",
             icon: "mdi mdi-image-area",
         }),
@@ -17242,9 +17242,9 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
         __metadata("design:returntype", Promise)
     ], ImageEditor, "show", null);
     ImageEditor = ImageEditor_1 = __decorate([
-        Actions_16.$ActionProvider("jassijs.base.ActionNode"),
-        Editor_11.$PropertyEditor(["image"]),
-        Jassi_88.$Class("jassijs.ui.PropertyEditors.ImageEditor"),
+        (0, Actions_16.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Editor_11.$PropertyEditor)(["image"]),
+        (0, Jassi_88.$Class)("jassijs.ui.PropertyEditors.ImageEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ImageEditor);
     exports.ImageEditor = ImageEditor;
@@ -17439,37 +17439,37 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         }
     };
     JsonEditor = __decorate([
-        Editor_12.$PropertyEditor(["json"]),
-        Jassi_89.$Class("jassijs.ui.PropertyEditors.JsonEditor"),
+        (0, Editor_12.$PropertyEditor)(["json"]),
+        (0, Jassi_89.$Class)("jassijs.ui.PropertyEditors.JsonEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], JsonEditor);
     exports.JsonEditor = JsonEditor;
     let TestProperties = class TestProperties {
     };
     __decorate([
-        Property_32.$Property({ decription: "name of the dialog" }),
+        (0, Property_32.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     __decorate([
-        Property_32.$Property({ name: "jo/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
-        Property_32.$Property({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2" }),
+        (0, Property_32.$Property)({ name: "jo/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
+        (0, Property_32.$Property)({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2" }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "jo", void 0);
     TestProperties = __decorate([
-        Jassi_89.$Class("jassijs.ui.PropertyEditorTestProperties")
+        (0, Jassi_89.$Class)("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     let TestProperties2 = class TestProperties2 {
     };
     __decorate([
-        Property_32.$Property({ decription: "name of the dialog" }),
+        (0, Property_32.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties2.prototype, "name1", void 0);
     __decorate([
-        Property_32.$Property({ decription: "name of the dialog" }),
+        (0, Property_32.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties2.prototype, "name2", void 0);
     TestProperties2 = __decorate([
-        Jassi_89.$Class("jassijs.ui.PropertyEditorTestProperties2")
+        (0, Jassi_89.$Class)("jassijs.ui.PropertyEditorTestProperties2")
     ], TestProperties2);
     function test() {
         var ret = new PropertyEditor_5.PropertyEditor();
@@ -17478,7 +17478,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
     }
     exports.test = test;
 });
-define("jassijs/ui/PropertyEditors/LoadingEditor", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor"], function (require, exports, Textbox_17, Editor_13) {
+define("jassijs/ui/PropertyEditors/LoadingEditor", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor"], function (require, exports, Textbox_18, Editor_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.LoadingEditor = void 0;
@@ -17488,7 +17488,7 @@ define("jassijs/ui/PropertyEditors/LoadingEditor", ["require", "exports", "jassi
             this._property = property;
             this._propertyEditor = propertyEditor;
             /** @member - the renedering component **/
-            this.component = new Textbox_17.Textbox();
+            this.component = new Textbox_18.Textbox();
             let _this = this;
             waitforclass.then((cl) => {
                 _this._editor = new cl(_this.property, _this.propertyEditor);
@@ -17522,7 +17522,7 @@ define("jassijs/ui/PropertyEditors/LoadingEditor", ["require", "exports", "jassi
     }
     exports.LoadingEditor = LoadingEditor;
 });
-define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi"], function (require, exports, Editor_14, Textbox_18, Jassi_90) {
+define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi"], function (require, exports, Editor_14, Textbox_19, Jassi_90) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NameEditor = void 0;
@@ -17530,7 +17530,7 @@ define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
             /** @member - the renedering component **/
-            this.component = new Textbox_18.Textbox();
+            this.component = new Textbox_19.Textbox();
             this.component.width = "100%";
             var _this = this;
             this.component.onchange(function (param) {
@@ -17586,8 +17586,8 @@ define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/
         }
     };
     NameEditor = __decorate([
-        Editor_14.$PropertyEditor(["*name*"]),
-        Jassi_90.$Class("jassijs.ui.PropertyEditors.NameEditor"),
+        (0, Editor_14.$PropertyEditor)(["*name*"]),
+        (0, Jassi_90.$Class)("jassijs.ui.PropertyEditors.NameEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], NameEditor);
     exports.NameEditor = NameEditor;
@@ -17610,13 +17610,13 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
         }
     };
     __decorate([
-        Property_33.$Property({ default: "function(ob){}" }),
+        (0, Property_33.$Property)({ default: "function(ob){}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], DefaultConverterProperties.prototype, "stringToObject", null);
     DefaultConverterProperties = __decorate([
-        Jassi_91.$Class("jassijs.ui.converters.DefaultConverterProperties")
+        (0, Jassi_91.$Class)("jassijs.ui.converters.DefaultConverterProperties")
     ], DefaultConverterProperties);
     let DefaultConverter = 
     //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
@@ -17641,8 +17641,8 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
     };
     DefaultConverter = __decorate([
         $Converter({ name: "custom" }),
-        Jassi_91.$Class("jassijs.ui.converters.DefaultConverter"),
-        Property_33.$Property({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
+        (0, Jassi_91.$Class)("jassijs.ui.converters.DefaultConverter"),
+        (0, Property_33.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
         //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
         ,
         __metadata("design:paramtypes", [])
@@ -17681,9 +17681,9 @@ define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/
         }
     };
     NumberConverter = __decorate([
-        DefaultConverter_2.$Converter({ name: "number" }),
-        Jassi_92.$Class("jassijs.ui.converters.NumberConverter"),
-        Property_34.$Property({ name: "new", type: "json" })
+        (0, DefaultConverter_2.$Converter)({ name: "number" }),
+        (0, Jassi_92.$Class)("jassijs.ui.converters.NumberConverter"),
+        (0, Property_34.$Property)({ name: "new", type: "json" })
         //@$Property({name:"new/min",type:"number",default:undefined})
         //@$Property({name:"new/max",type:"number",default:undefined})
         ,
@@ -17719,9 +17719,9 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
         }
     };
     StringConverter = __decorate([
-        DefaultConverter_3.$Converter({ name: "string" }),
-        Jassi_93.$Class("jassijs.ui.converters.StringConverter"),
-        Property_35.$Property({ name: "new", type: "json" })
+        (0, DefaultConverter_3.$Converter)({ name: "string" }),
+        (0, Jassi_93.$Class)("jassijs.ui.converters.StringConverter"),
+        (0, Property_35.$Property)({ name: "new", type: "json" })
         //@$Property({ name: "new/minChars", type: "number", default: undefined })
         //@$Property({ name: "new/maxChars", type: "number", default: undefined })
         ,
@@ -17729,7 +17729,7 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
     ], StringConverter);
     exports.StringConverter = StringConverter;
 });
-define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_13, NumberConverter_2, Textbox_19, BoxPanel_8, Select_9, Table_5, Jassi_94, Panel_23, papaparse_1, Database_3, Registry_26, Classes_30, DBObject_8, Actions_17, Router_7, Server_4, Transaction_1) {
+define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_13, NumberConverter_2, Textbox_20, BoxPanel_8, Select_8, Table_5, Jassi_94, Panel_23, papaparse_1, Database_3, Registry_26, Classes_30, DBObject_8, Actions_17, Router_7, Server_4, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17815,14 +17815,14 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
         }
         layout(me) {
             me.boxpanel1 = new BoxPanel_8.BoxPanel();
-            me.fromLine = new Textbox_19.Textbox();
+            me.fromLine = new Textbox_20.Textbox();
             me.next = new Button_13.Button();
             me.upload = new Upload_1.Upload();
             var _this = this;
             this.me.table = new Table_5.Table({
                 autoColumns: false
             });
-            me.select = new Select_9.Select();
+            me.select = new Select_8.Select();
             me.table.width = 500;
             me.table.height = "200";
             me.fromLine.value = 2;
@@ -17985,14 +17985,14 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
         }
     };
     __decorate([
-        Actions_17.$Action({ name: "Administration/Database CSV-Import", icon: "mdi mdi-database-import" }),
+        (0, Actions_17.$Action)({ name: "Administration/Database CSV-Import", icon: "mdi mdi-database-import" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], CSVImport, "showDialog", null);
     CSVImport = CSVImport_1 = __decorate([
-        Actions_17.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_94.$Class("jassijs.util.CSVImport"),
+        (0, Actions_17.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_94.$Class)("jassijs.util.CSVImport"),
         __metadata("design:paramtypes", [])
     ], CSVImport);
     exports.CSVImport = CSVImport;
@@ -18340,7 +18340,7 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Ja
         }
     };
     Numberformatter = Numberformatter_3 = __decorate([
-        Jassi_95.$Class("jassijs.util.Numberformatter")
+        (0, Jassi_95.$Class)("jassijs.util.Numberformatter")
     ], Numberformatter);
     exports.Numberformatter = Numberformatter;
     function test() {
@@ -18598,7 +18598,7 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Jassi", "
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_1();
     Reloader = Reloader_1 = __decorate([
-        Jassi_96.$Class("jassijs.util.Reloader"),
+        (0, Jassi_96.$Class)("jassijs.util.Reloader"),
         __metadata("design:paramtypes", [])
     ], Reloader);
     exports.Reloader = Reloader;
@@ -18614,7 +18614,7 @@ define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi", "jas
         static copyObject(src) {
             //var j = Tools.objectToJson(src);
             //return Tools.jsonToObject(j);
-            lodash_1.default();
+            (0, lodash_1.default)();
             //@ts-ignore
             return _.cloneDeep(src);
         }
@@ -18841,7 +18841,7 @@ define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi", "jas
         }
     };
     Tools = Tools_4 = __decorate([
-        Jassi_97.$Class("jassijs.util.Tools"),
+        (0, Jassi_97.$Class)("jassijs.util.Tools"),
         __metadata("design:paramtypes", [])
     ], Tools);
     exports.Tools = Tools;

@@ -1910,7 +1910,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-		"date": 1623175483603,
+		"date": 1630148660577,
 		"jassijs.ui.PropertyEditors.DatabinderEditor": {
 			"$PropertyEditor": [
 				[
@@ -2079,7 +2079,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Repeater.ts": {
-		"date": 1622984379894,
+		"date": 1630147965484,
 		"jassijs.ui.RepeaterDesignPanel": {
 			"$UIComponent": [
 				{
