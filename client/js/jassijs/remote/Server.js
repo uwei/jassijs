@@ -142,7 +142,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
          * @param {string} fileName
          * @returns {string} content of the file
          */
-        async loadFile(fileName, fromServerdirectory = undefined, context = undefined) {
+        async loadFile(fileName, context = undefined) {
+            var fromServerdirectory = fileName.startsWith("$serverside/");
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 await this.fillFilesInMapIfNeeded();
                 if (!fromServerdirectory && Server_1.filesInMap[fileName]) {
@@ -156,13 +157,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                         let mapname = Jassi_1.default.modules[found.modul].split("?")[0] + ".map";
                         if (Jassi_1.default.modules[found.modul].indexOf(".js?") > -1)
                             mapname = mapname + "?" + Jassi_1.default.modules[found.modul].split("?")[1];
-                        var code = await this.loadFile(mapname, fromServerdirectory, context);
+                        var code = await this.loadFile(mapname, context);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;
                     }
                 }
                 if (fromServerdirectory) {
-                    return await this.call(this, this.loadFile, fileName, fromServerdirectory, context);
+                    return await this.call(this, this.loadFile, fileName, context);
                 }
                 else
                     return $.ajax({ url: fileName, dataType: "text" });
@@ -182,7 +183,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
         * @param [{string}] fileNames - the name of the file
         * @param [{string}] contents
         */
-        async saveFiles(fileNames, contents, fromServerdirectory = undefined, context = undefined) {
+        async saveFiles(fileNames, contents, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 var allfileNames = [];
                 var allcontents = [];
@@ -191,7 +192,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                     var _this = this;
                     var fileName = fileNames[f];
                     var content = contents[f];
-                    if (!fromServerdirectory && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
+                    if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                         //@ts-ignore
                         var tss = await new Promise((resolve_5, reject_5) => { require(["jassijs_editor/util/Typescript"], resolve_5, reject_5); });
                         var rets = await tss.default.transpile(fileName, content);
@@ -204,15 +205,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                         allcontents.push(content);
                     }
                 }
-                var res = await this.call(this, this.saveFiles, allfileNames, allcontents, fromServerdirectory, context);
+                var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
                 if (res === "") {
                     //@ts-ignore
                     $.notify(fileName + " saved", "info", { position: "bottom right" });
-                    if (!fromServerdirectory) {
-                        for (var x = 0; x < alltsfiles.length; x++) {
-                            await $.ajax({ url: alltsfiles[x], dataType: "text" });
-                        }
+                    //if (!fromServerdirectory) {
+                    for (var x = 0; x < alltsfiles.length; x++) {
+                        await $.ajax({ url: alltsfiles[x], dataType: "text" });
                     }
+                    // }
                 }
                 else {
                     //@ts-ignore
@@ -226,7 +227,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                     throw new Classes_1.JassiError("only admins can saveFiles");
                 //@ts-ignore
                 var fs = await new Promise((resolve_6, reject_6) => { require(["jassijs/server/Filesystem"], resolve_6, reject_6); });
-                var ret = await new fs.default().saveFiles(fileNames, contents, fromServerdirectory, true);
+                var ret = await new fs.default().saveFiles(fileNames, contents, true);
                 return ret;
             }
         }
@@ -235,14 +236,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
         * @param {string} fileName - the name of the file
         * @param {string} content
         */
-        async saveFile(fileName, content, fromServerdirectory = undefined, context = undefined) {
+        async saveFile(fileName, content, context = undefined) {
             /*await this.fillFilesInMapIfNeeded();
             if (Server.filesInMap[fileName]) {
                 //@ts-ignore
                  $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
                 return;
             }*/
-            return await this.saveFiles([fileName], [content], fromServerdirectory, context);
+            return await this.saveFiles([fileName], [content], context);
             /* if (!jassijs.isServer) {
                  var ret = await this.call(this, "saveFiles", fileNames, contents);
                  //@ts-ignore
@@ -392,7 +393,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
     //files found in js.map of modules in the jassijs.json
     Server.filesInMap = undefined;
     Server = Server_1 = __decorate([
-        Jassi_1.$Class("jassijs.remote.Server"),
+        (0, Jassi_1.$Class)("jassijs.remote.Server"),
         __metadata("design:paramtypes", [])
     ], Server);
     exports.Server = Server;

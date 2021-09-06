@@ -308,7 +308,7 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
         }
     };
     Resizer = __decorate([
-        Jassi_1.$Class("jassijs_editor.util.Resizer"),
+        (0, Jassi_1.$Class)("jassijs_editor.util.Resizer"),
         __metadata("design:paramtypes", [])
     ], Resizer);
     exports.Resizer = Resizer;

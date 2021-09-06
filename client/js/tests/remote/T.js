@@ -21,7 +21,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
         }
     };
     T = __decorate([
-        Jassi_1.$Class("tests.remote.T")
+        (0, Jassi_1.$Class)("tests.remote.T")
     ], T);
     exports.T = T;
     async function test() {

@@ -133,14 +133,14 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassi
         }
     };
     __decorate([
-        Actions_1.$Actions(),
+        (0, Actions_1.$Actions)(),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], DBObjectDialog, "createActions", null);
     DBObjectDialog = DBObjectDialog_1 = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_1.$Class("jassijs.ui.DBObjectDialog"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.DBObjectDialog"),
         __metadata("design:paramtypes", [])
     ], DBObjectDialog);
     exports.DBObjectDialog = DBObjectDialog;

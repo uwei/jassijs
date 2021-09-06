@@ -33,7 +33,7 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/
         }
     };
     StyleDialog = __decorate([
-        Jassi_1.$Class("demo/StyleDialog"),
+        (0, Jassi_1.$Class)("demo/StyleDialog"),
         __metadata("design:paramtypes", [])
     ], StyleDialog);
     exports.StyleDialog = StyleDialog;

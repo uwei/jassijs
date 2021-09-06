@@ -65,7 +65,7 @@ define(["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Jassi", "jassij
         }
     };
     ActionNodeMenu = __decorate([
-        Jassi_1.$Class("jassijs/ui/ActionNodeMenu"),
+        (0, Jassi_1.$Class)("jassijs/ui/ActionNodeMenu"),
         __metadata("design:paramtypes", [])
     ], ActionNodeMenu);
     exports.ActionNodeMenu = ActionNodeMenu;

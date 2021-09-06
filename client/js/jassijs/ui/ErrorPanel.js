@@ -221,7 +221,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
         }
     };
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Administration/Errors",
             icon: "mdi mdi-emoticon-confused-outline",
         }),
@@ -230,8 +230,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
         __metadata("design:returntype", Promise)
     ], ErrorPanel, "showDialog", null);
     ErrorPanel = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_1.$Class("jassijs.ui.ErrorPanel"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.ErrorPanel"),
         __metadata("design:paramtypes", [Object, Object, Object])
     ], ErrorPanel);
     exports.ErrorPanel = ErrorPanel;

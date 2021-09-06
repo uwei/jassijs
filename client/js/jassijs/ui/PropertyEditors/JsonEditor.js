@@ -191,37 +191,37 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
         }
     };
     JsonEditor = __decorate([
-        Editor_1.$PropertyEditor(["json"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.JsonEditor"),
+        (0, Editor_1.$PropertyEditor)(["json"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.JsonEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], JsonEditor);
     exports.JsonEditor = JsonEditor;
     let TestProperties = class TestProperties {
     };
     __decorate([
-        Property_1.$Property({ decription: "name of the dialog" }),
+        (0, Property_1.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     __decorate([
-        Property_1.$Property({ name: "jo/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
-        Property_1.$Property({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2" }),
+        (0, Property_1.$Property)({ name: "jo/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
+        (0, Property_1.$Property)({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2" }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "jo", void 0);
     TestProperties = __decorate([
-        Jassi_1.$Class("jassijs.ui.PropertyEditorTestProperties")
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     let TestProperties2 = class TestProperties2 {
     };
     __decorate([
-        Property_1.$Property({ decription: "name of the dialog" }),
+        (0, Property_1.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties2.prototype, "name1", void 0);
     __decorate([
-        Property_1.$Property({ decription: "name of the dialog" }),
+        (0, Property_1.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties2.prototype, "name2", void 0);
     TestProperties2 = __decorate([
-        Jassi_1.$Class("jassijs.ui.PropertyEditorTestProperties2")
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditorTestProperties2")
     ], TestProperties2);
     function test() {
         var ret = new PropertyEditor_1.PropertyEditor();

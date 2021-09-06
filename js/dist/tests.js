@@ -407,7 +407,7 @@ define("tests/remote/T", ["require", "exports", "jassijs/remote/Jassi", "jassijs
         }
     };
     T = __decorate([
-        Jassi_1.$Class("tests.remote.T")
+        (0, Jassi_1.$Class)("tests.remote.T")
     ], T);
     exports.T = T;
     async function test() {
@@ -429,26 +429,26 @@ define("tests/remote/TestCustomer", ["require", "exports", "tests/remote/TestOrd
         }
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], TestCustomer.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], TestCustomer.prototype, "name", void 0);
     __decorate([
-        DatabaseSchema_1.OneToMany(type => TestOrder_2.TestOrder, order => order.customer),
+        (0, DatabaseSchema_1.OneToMany)(type => TestOrder_2.TestOrder, order => order.customer),
         __metadata("design:type", Array)
     ], TestCustomer.prototype, "orders", void 0);
     TestCustomer = __decorate([
-        Rights_1.$ParentRights([{ name: "TestCustomers", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
+        (0, Rights_1.$ParentRights)([{ name: "TestCustomers", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
                 description: {
                     text: "TestCustomer",
                     i1: "from",
                     i2: "to"
                 } }]),
-        DBObject_3.$DBObject(),
-        Jassi_2.$Class("tests.TestCustomer"),
+        (0, DBObject_3.$DBObject)(),
+        (0, Jassi_2.$Class)("tests.TestCustomer"),
         __metadata("design:paramtypes", [])
     ], TestCustomer);
     exports.TestCustomer = TestCustomer;
@@ -468,21 +468,21 @@ define("tests/remote/TestOrder", ["require", "exports", "tests/remote/TestOrderD
         }
     };
     __decorate([
-        DatabaseSchema_2.PrimaryColumn(),
+        (0, DatabaseSchema_2.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], TestOrder.prototype, "id", void 0);
     __decorate([
-        Rights_2.$CheckParentRight(),
-        DatabaseSchema_2.ManyToOne(type => TestCustomer_2.TestCustomer),
+        (0, Rights_2.$CheckParentRight)(),
+        (0, DatabaseSchema_2.ManyToOne)(type => TestCustomer_2.TestCustomer),
         __metadata("design:type", typeof (_a = typeof TestCustomer_2.TestCustomer !== "undefined" && TestCustomer_2.TestCustomer) === "function" ? _a : Object)
     ], TestOrder.prototype, "customer", void 0);
     __decorate([
-        DatabaseSchema_2.OneToMany(type => TestOrderDetails_2.TestOrderDetails, e => e.Order),
+        (0, DatabaseSchema_2.OneToMany)(type => TestOrderDetails_2.TestOrderDetails, e => e.Order),
         __metadata("design:type", Array)
     ], TestOrder.prototype, "details", void 0);
     TestOrder = __decorate([
-        DBObject_4.$DBObject(),
-        Jassi_3.$Class("tests.TestOrder"),
+        (0, DBObject_4.$DBObject)(),
+        (0, Jassi_3.$Class)("tests.TestOrder"),
         __metadata("design:paramtypes", [])
     ], TestOrder);
     exports.TestOrder = TestOrder;
@@ -502,17 +502,17 @@ define("tests/remote/TestOrderDetails", ["require", "exports", "tests/remote/Tes
         }
     };
     __decorate([
-        DatabaseSchema_3.PrimaryColumn(),
+        (0, DatabaseSchema_3.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], TestOrderDetails.prototype, "id", void 0);
     __decorate([
-        Rights_3.$CheckParentRight(),
-        DatabaseSchema_3.ManyToOne(type => TestOrder_3.TestOrder, e => e.details),
+        (0, Rights_3.$CheckParentRight)(),
+        (0, DatabaseSchema_3.ManyToOne)(type => TestOrder_3.TestOrder, e => e.details),
         __metadata("design:type", typeof (_a = typeof TestOrder_3.TestOrder !== "undefined" && TestOrder_3.TestOrder) === "function" ? _a : Object)
     ], TestOrderDetails.prototype, "Order", void 0);
     TestOrderDetails = __decorate([
-        DBObject_5.$DBObject(),
-        Jassi_4.$Class("tests.TestOrderDetails"),
+        (0, DBObject_5.$DBObject)(),
+        (0, Jassi_4.$Class)("tests.TestOrderDetails"),
         __metadata("design:paramtypes", [])
     ], TestOrderDetails);
     exports.TestOrderDetails = TestOrderDetails;

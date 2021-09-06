@@ -332,7 +332,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     VariablePanel = __decorate([
-        Jassi_1.$Class("jassijs.ui.VariablePanel"),
+        (0, Jassi_1.$Class)("jassijs.ui.VariablePanel"),
         __metadata("design:paramtypes", [])
     ], VariablePanel);
     exports.VariablePanel = VariablePanel;

@@ -21,19 +21,19 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
     let SelectCreateProperties = class SelectCreateProperties extends Component_1.ComponentCreateProperties {
     };
     __decorate([
-        Property_1.$Property({ default: false }),
+        (0, Property_1.$Property)({ default: false }),
         __metadata("design:type", Boolean)
     ], SelectCreateProperties.prototype, "multiple", void 0);
     __decorate([
-        Property_1.$Property({ default: false }),
+        (0, Property_1.$Property)({ default: false }),
         __metadata("design:type", Boolean)
     ], SelectCreateProperties.prototype, "allowDeselect", void 0);
     __decorate([
-        Property_1.$Property({ default: "" }),
+        (0, Property_1.$Property)({ default: "" }),
         __metadata("design:type", String)
     ], SelectCreateProperties.prototype, "placeholder", void 0);
     SelectCreateProperties = __decorate([
-        Jassi_1.$Class("jassijs.ui.SelectCreateProperties")
+        (0, Jassi_1.$Class)("jassijs.ui.SelectCreateProperties")
     ], SelectCreateProperties);
     let Select = class Select extends DataComponent_1.DataComponent {
         constructor(properties = undefined) {
@@ -239,20 +239,20 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         }
     };
     __decorate([
-        Property_1.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Select.prototype, "onchange", null);
     __decorate([
-        Property_1.$Property({ type: "string" }),
+        (0, Property_1.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Select.prototype, "display", null);
     Select = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
-        Jassi_1.$Class("jassijs.ui.Select"),
-        Property_1.$Property({ name: "new", type: "json", componentType: "jassijs.ui.SelectCreateProperties" }),
+        (0, Component_1.$UIComponent)({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
+        (0, Jassi_1.$Class)("jassijs.ui.Select"),
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.SelectCreateProperties" }),
         __metadata("design:paramtypes", [SelectCreateProperties])
     ], Select);
     exports.Select = Select;

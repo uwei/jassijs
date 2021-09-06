@@ -74,7 +74,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Image", "jassi
         }
     };
     DesignDummy = DesignDummy_1 = __decorate([
-        Jassi_1.$Class("jassijs.ui.DesignDummy"),
+        (0, Jassi_1.$Class)("jassijs.ui.DesignDummy"),
         __metadata("design:paramtypes", [])
     ], DesignDummy);
     exports.DesignDummy = DesignDummy;

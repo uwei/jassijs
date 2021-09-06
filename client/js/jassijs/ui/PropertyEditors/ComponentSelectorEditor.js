@@ -78,8 +78,8 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/S
         }
     };
     ComponentSelectorEditor = __decorate([
-        Editor_1.$PropertyEditor(["componentselector"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.ComponentSelectorEditor"),
+        (0, Editor_1.$PropertyEditor)(["componentselector"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.ComponentSelectorEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ComponentSelectorEditor);
     exports.ComponentSelectorEditor = ComponentSelectorEditor;

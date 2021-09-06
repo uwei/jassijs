@@ -4,6 +4,7 @@
 		"northwind": "northwind",
 		"de": "de",
 		"local": "local",
-		"tests": "tests"
+		"tests": "tests",
+		"$serverside": "$serverside"
 	}
 }

@@ -296,7 +296,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
         }
     };
     MonacoPanel = __decorate([
-        Jassi_1.$Class("jassijs_editor.MonacoPanel"),
+        (0, Jassi_1.$Class)("jassijs_editor.MonacoPanel"),
         __metadata("design:paramtypes", [])
     ], MonacoPanel);
     exports.MonacoPanel = MonacoPanel;

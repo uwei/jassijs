@@ -62,7 +62,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ext/pdfmak
         ;
     };
     PDFReport = __decorate([
-        Jassi_1.$Class("jassijs_report.PDFReport"),
+        (0, Jassi_1.$Class)("jassijs_report.PDFReport"),
         __metadata("design:paramtypes", [])
     ], PDFReport);
     exports.PDFReport = PDFReport;

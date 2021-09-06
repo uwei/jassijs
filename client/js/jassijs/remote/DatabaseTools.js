@@ -36,7 +36,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
         }
     };
     DatabaseTools = DatabaseTools_1 = __decorate([
-        Jassi_1.$Class("jassijs.remote.DatabaseTools")
+        (0, Jassi_1.$Class)("jassijs.remote.DatabaseTools")
     ], DatabaseTools);
     exports.DatabaseTools = DatabaseTools;
     async function test() {

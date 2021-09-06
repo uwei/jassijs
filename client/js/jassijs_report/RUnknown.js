@@ -39,7 +39,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportComp
         }
     };
     RUnknown = __decorate([
-        Jassi_1.$Class("jassijs_report.RUnknown"),
+        (0, Jassi_1.$Class)("jassijs_report.RUnknown"),
         __metadata("design:paramtypes", [Object])
     ], RUnknown);
     exports.RUnknown = RUnknown;

@@ -363,10 +363,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
             this.definedImports = {};
             await Typescript_1.default.waitForInited;
             var data = await Registry_1.default.getJSONData("$DBObject");
-            data.forEach((entr) => {
+            for (let x = 0; x < data.length; x++) {
+                var entr = data[x];
                 var parser = new Parser_1.Parser();
                 var file = entr.filename;
                 var code = Typescript_1.default.getCode(file);
+                // if (code === undefined)
+                //     code = await new Server().loadFile(file);
                 if (code !== undefined) {
                     try {
                         parser.parse(code);
@@ -385,11 +388,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
                         }
                     }
                 }
-            });
+            }
         }
         async loadSchemaFromCode() {
             await this.parseFiles();
             //await registry.loadAllFilesForService("$DBObject")
+            await Registry_1.default.reload();
             var data = Registry_1.default.getJSONData("$DBObject");
             this.databaseClasses = [];
             var _this = this;
@@ -528,7 +532,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
     };
     DatabaseSchema.basicdatatypes = ["string", "int", "decimal", "boolean", "Date"];
     DatabaseSchema = DatabaseSchema_1 = __decorate([
-        Jassi_1.$Class("jassijs.base.DatabaseSchema")
+        (0, Jassi_1.$Class)("jassijs.base.DatabaseSchema")
     ], DatabaseSchema);
     exports.DatabaseSchema = DatabaseSchema;
     /*

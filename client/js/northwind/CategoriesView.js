@@ -52,12 +52,12 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Categories_1.Categories)
     ], CategoriesView.prototype, "value", void 0);
     CategoriesView = __decorate([
-        DBObjectView_1.$DBObjectView({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
-        Jassi_1.$Class("northwind.CategoriesView"),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
+        (0, Jassi_1.$Class)("northwind.CategoriesView"),
         __metadata("design:paramtypes", [])
     ], CategoriesView);
     exports.CategoriesView = CategoriesView;

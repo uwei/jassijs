@@ -105,7 +105,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
         }
     };
     Router = __decorate([
-        Jassi_1.$Class("jassijs.base.Router"),
+        (0, Jassi_1.$Class)("jassijs.base.Router"),
         __metadata("design:paramtypes", [])
     ], Router);
     exports.Router = Router;

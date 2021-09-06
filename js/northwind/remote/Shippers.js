@@ -19,20 +19,20 @@ let Shippers = class Shippers extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Shippers.prototype, "id", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Shippers.prototype, "CompanyName", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Shippers.prototype, "Phone", void 0);
 Shippers = __decorate([
-    DBObject_1.$DBObject(),
-    Jassi_1.$Class("northwind.Shippers"),
+    (0, DBObject_1.$DBObject)(),
+    (0, Jassi_1.$Class)("northwind.Shippers"),
     __metadata("design:paramtypes", [])
 ], Shippers);
 exports.Shippers = Shippers;

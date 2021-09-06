@@ -113,7 +113,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component"], f
         }
     };
     Container = __decorate([
-        Jassi_1.$Class("jassijs.ui.Container"),
+        (0, Jassi_1.$Class)("jassijs.ui.Container"),
         __metadata("design:paramtypes", [Object])
     ], Container);
     exports.Container = Container;

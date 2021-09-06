@@ -99,7 +99,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     CodeEditorInvisibleComponents = __decorate([
-        Jassi_1.$Class("jassijs_editor.CodeEditorInvisibleComponents"),
+        (0, Jassi_1.$Class)("jassijs_editor.CodeEditorInvisibleComponents"),
         __metadata("design:paramtypes", [Object])
     ], CodeEditorInvisibleComponents);
     exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;

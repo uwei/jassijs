@@ -97,7 +97,7 @@ define(["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Ser
     };
     RegistryIndexer.version = Math.floor(Math.random() * 100000);
     RegistryIndexer = RegistryIndexer_1 = __decorate([
-        Jassi_1.$Class("jassijs_localserver.RegistryIndexer")
+        (0, Jassi_1.$Class)("jassijs_localserver.RegistryIndexer")
     ], RegistryIndexer);
     exports.RegistryIndexer = RegistryIndexer;
 });

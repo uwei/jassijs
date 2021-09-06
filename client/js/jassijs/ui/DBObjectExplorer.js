@@ -15,7 +15,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
     let DBObjectNode = class DBObjectNode {
     };
     DBObjectNode = __decorate([
-        Jassi_1.$Class("jassijs.ui.DBObjectNode")
+        (0, Jassi_1.$Class)("jassijs.ui.DBObjectNode")
     ], DBObjectNode);
     exports.DBObjectNode = DBObjectNode;
     let DBFileActions = class DBFileActions {
@@ -32,7 +32,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
         }
     };
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "View Data",
             isEnabled: async function (all) {
                 if (all[0].isDirectory())
@@ -51,8 +51,8 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
         __metadata("design:returntype", Promise)
     ], DBFileActions, "ViewData", null);
     DBFileActions = __decorate([
-        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_1.$Class("jassijs.ui.DBFileActions")
+        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.DBFileActions")
     ], DBFileActions);
     exports.DBFileActions = DBFileActions;
     let DBObjectActions = class DBObjectActions {
@@ -67,20 +67,20 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
         }
     };
     __decorate([
-        Actions_1.$Action({ name: "View Data" }),
+        (0, Actions_1.$Action)({ name: "View Data" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], DBObjectActions, "ViewData", null);
     __decorate([
-        Actions_1.$Action({ name: "Open Code" }),
+        (0, Actions_1.$Action)({ name: "Open Code" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], DBObjectActions, "OpenCode", null);
     DBObjectActions = __decorate([
-        Actions_1.$ActionProvider("jassijs.ui.DBObjectNode"),
-        Jassi_1.$Class("jassijs.ui.DBObjectActions")
+        (0, Actions_1.$ActionProvider)("jassijs.ui.DBObjectNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.DBObjectActions")
     ], DBObjectActions);
     exports.DBObjectActions = DBObjectActions;
     let DBObjectExplorer = DBObjectExplorer_1 = class DBObjectExplorer extends Panel_1.Panel {
@@ -129,7 +129,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
         }
     };
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Windows",
             icon: "mdi mdi-iframe-array-outline",
         }),
@@ -138,7 +138,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
         __metadata("design:returntype", Promise)
     ], DBObjectExplorer, "dummy", null);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Windows/Development",
             icon: "mdi mdi-dev-to",
         }),
@@ -147,7 +147,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
         __metadata("design:returntype", Promise)
     ], DBObjectExplorer, "dummy2", null);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Windows/Development/DBObjects",
             icon: "mdi mdi-database-search",
         }),
@@ -156,8 +156,8 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
         __metadata("design:returntype", Promise)
     ], DBObjectExplorer, "show", null);
     DBObjectExplorer = DBObjectExplorer_1 = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_1.$Class("jassijs.ui.DBObjectExplorer"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.DBObjectExplorer"),
         __metadata("design:paramtypes", [])
     ], DBObjectExplorer);
     exports.DBObjectExplorer = DBObjectExplorer;

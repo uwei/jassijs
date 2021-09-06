@@ -99,7 +99,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"]
         }
     };
     Editor = __decorate([
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.Editor"),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.Editor"),
         __metadata("design:paramtypes", [Object, Object])
     ], Editor);
     exports.Editor = Editor;

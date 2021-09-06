@@ -58,29 +58,29 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
         }
     };
     __decorate([
-        DatabaseSchema_1.PrimaryGeneratedColumn(),
+        (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], ARZeile.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], ARZeile.prototype, "text", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", Number)
     ], ARZeile.prototype, "position", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true, type: "decimal" }),
+        (0, DatabaseSchema_1.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], ARZeile.prototype, "preis", void 0);
     __decorate([
-        Rights_1.$CheckParentRight(),
-        DatabaseSchema_1.ManyToOne(type => AR_1.AR, ar => ar.zeilen),
+        (0, Rights_1.$CheckParentRight)(),
+        (0, DatabaseSchema_1.ManyToOne)(type => AR_1.AR, ar => ar.zeilen),
         __metadata("design:type", AR_1.AR)
     ], ARZeile.prototype, "ar", void 0);
     ARZeile = ARZeile_1 = __decorate([
-        DBObject_1.$DBObject(),
-        Jassi_1.$Class("de.ARZeile"),
+        (0, DBObject_1.$DBObject)(),
+        (0, Jassi_1.$Class)("de.ARZeile"),
         __metadata("design:paramtypes", [])
     ], ARZeile);
     exports.ARZeile = ARZeile;

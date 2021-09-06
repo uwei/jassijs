@@ -157,7 +157,7 @@ define(["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jas
         }
     };
     ReportInvoice = __decorate([
-        Jassi_1.$Class("demo.ReportInvoice"),
+        (0, Jassi_1.$Class)("demo.ReportInvoice"),
         __metadata("design:paramtypes", [])
     ], ReportInvoice);
     exports.ReportInvoice = ReportInvoice;

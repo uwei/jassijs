@@ -19,16 +19,16 @@ let TestRCustomer = class TestRCustomer extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], TestRCustomer.prototype, "id", void 0);
 __decorate([
-    DatabaseSchema_1.Column(),
+    (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], TestRCustomer.prototype, "name", void 0);
 TestRCustomer = __decorate([
-    DBObject_1.$DBObject(),
-    Jassi_1.$Class("testrmodul.TestRCustomer"),
+    (0, DBObject_1.$DBObject)(),
+    (0, Jassi_1.$Class)("testrmodul.TestRCustomer"),
     __metadata("design:paramtypes", [])
 ], TestRCustomer);
 exports.TestRCustomer = TestRCustomer;

@@ -17,20 +17,20 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
         }
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Book.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Book.prototype, "tt", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Book.prototype, "t2", void 0);
     Book = __decorate([
-        DBObject_1.$DBObject(),
-        Jassi_1.$Class("local.Book"),
+        (0, DBObject_1.$DBObject)(),
+        (0, Jassi_1.$Class)("local.Book"),
         __metadata("design:paramtypes", [])
     ], Book);
     exports.Book = Book;

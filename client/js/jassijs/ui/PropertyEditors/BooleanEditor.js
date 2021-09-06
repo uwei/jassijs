@@ -51,8 +51,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Checkbox", "ja
         }
     };
     BooleanEditor = __decorate([
-        Editor_1.$PropertyEditor(["boolean"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.BooleanEditor"),
+        (0, Editor_1.$PropertyEditor)(["boolean"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.BooleanEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], BooleanEditor);
     exports.BooleanEditor = BooleanEditor;

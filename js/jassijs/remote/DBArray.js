@@ -86,7 +86,7 @@ let DBArray = class DBArray
     }
 };
 DBArray = __decorate([
-    Jassi_1.$Class("jassijs.remote.DBArray"),
+    (0, Jassi_1.$Class)("jassijs.remote.DBArray"),
     __metadata("design:paramtypes", [Object])
 ], DBArray);
 exports.DBArray = DBArray;

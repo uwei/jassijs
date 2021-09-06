@@ -24,12 +24,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Group_1.Group)
     ], GroupView.prototype, "value", void 0);
     GroupView = __decorate([
-        DBObjectView_1.$DBObjectView({ classname: "{{dbfullclassname}}" }),
-        Jassi_1.$Class("jassijs/security/GroupView"),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "{{dbfullclassname}}" }),
+        (0, Jassi_1.$Class)("jassijs/security/GroupView"),
         __metadata("design:paramtypes", [])
     ], GroupView);
     exports.GroupView = GroupView;

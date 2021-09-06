@@ -57,8 +57,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/
         }
     };
     TestComponent = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
-        Jassi_1.$Class("demo.TestComponent"),
+        (0, Component_1.$UIComponent)({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
+        (0, Jassi_1.$Class)("demo.TestComponent"),
         __metadata("design:paramtypes", [])
     ], TestComponent);
     exports.TestComponent = TestComponent;

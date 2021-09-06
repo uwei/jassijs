@@ -131,7 +131,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     ComponentExplorer = __decorate([
-        Jassi_1.$Class("jassijs_editor.ComponentExplorer"),
+        (0, Jassi_1.$Class)("jassijs_editor.ComponentExplorer"),
         __metadata("design:paramtypes", [CodeEditor_1.CodeEditor, PropertyEditor_1.PropertyEditor])
     ], ComponentExplorer);
     exports.ComponentExplorer = ComponentExplorer;

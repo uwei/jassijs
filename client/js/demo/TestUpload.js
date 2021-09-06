@@ -36,7 +36,7 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jass
         }
     };
     TestUpload = __decorate([
-        Jassi_1.$Class("demo/TestUpload"),
+        (0, Jassi_1.$Class)("demo/TestUpload"),
         __metadata("design:paramtypes", [])
     ], TestUpload);
     exports.TestUpload = TestUpload;

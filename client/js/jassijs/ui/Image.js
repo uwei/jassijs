@@ -80,19 +80,19 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
         }
     };
     __decorate([
-        Property_1.$Property({ type: "string" }),
+        (0, Property_1.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Image.prototype, "value", null);
     __decorate([
-        Property_1.$Property({ type: "image" }),
+        (0, Property_1.$Property)({ type: "image" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Image.prototype, "src", null);
     Image = __decorate([
-        Component_1.$UIComponent({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
+        (0, Component_1.$UIComponent)({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
         ,
-        Jassi_1.$Class("jassijs.ui.Image"),
+        (0, Jassi_1.$Class)("jassijs.ui.Image"),
         __metadata("design:paramtypes", [])
     ], Image);
     exports.Image = Image;

@@ -38,7 +38,7 @@ let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1
     }
 };
 DatabaseTools = DatabaseTools_1 = __decorate([
-    Jassi_1.$Class("jassijs.remote.DatabaseTools")
+    (0, Jassi_1.$Class)("jassijs.remote.DatabaseTools")
 ], DatabaseTools);
 exports.DatabaseTools = DatabaseTools;
 async function test() {

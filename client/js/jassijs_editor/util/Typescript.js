@@ -406,7 +406,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Server", "
         experimentalDecorators: true,
     };
     Typescript = Typescript_1 = __decorate([
-        Jassi_1.$Class("jassijs_editor.util.Typescript"),
+        (0, Jassi_1.$Class)("jassijs_editor.util.Typescript"),
         __metadata("design:paramtypes", [])
     ], Typescript);
     exports.Typescript = Typescript;

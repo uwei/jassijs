@@ -526,7 +526,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     ComponentDesigner = __decorate([
-        Jassi_1.$Class("jassijs_editor.ComponentDesigner"),
+        (0, Jassi_1.$Class)("jassijs_editor.ComponentDesigner"),
         __metadata("design:paramtypes", [])
     ], ComponentDesigner);
     exports.ComponentDesigner = ComponentDesigner;

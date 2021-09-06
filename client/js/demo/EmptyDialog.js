@@ -27,7 +27,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassi
         }
     };
     EmptyDialog = __decorate([
-        Jassi_1.$Class("demo.EmptyDialog"),
+        (0, Jassi_1.$Class)("demo.EmptyDialog"),
         __metadata("design:paramtypes", [])
     ], EmptyDialog);
     exports.EmptyDialog = EmptyDialog;

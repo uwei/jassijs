@@ -28,7 +28,7 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jass
         }
     };
     SettingsObject = __decorate([
-        Jassi_1.$Class("jassijs.ui.SettingsObject")
+        (0, Jassi_1.$Class)("jassijs.ui.SettingsObject")
     ], SettingsObject);
     let SettingsDialog = SettingsDialog_1 = class SettingsDialog extends Panel_1.Panel {
         constructor() {
@@ -101,7 +101,7 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jass
         }
     };
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Settings",
             icon: "mdi mdi-settings-helper",
         }),
@@ -110,8 +110,8 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jass
         __metadata("design:returntype", Promise)
     ], SettingsDialog, "show", null);
     SettingsDialog = SettingsDialog_1 = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_1.$Class("jassijs.ui.SettingsDialog"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.SettingsDialog"),
         __metadata("design:paramtypes", [])
     ], SettingsDialog);
     exports.SettingsDialog = SettingsDialog;

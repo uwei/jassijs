@@ -61,24 +61,24 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         }
     };
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Upload.prototype, "accept", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Upload.prototype, "multiple", null);
     __decorate([
-        Property_1.$Property({ default: "function(data:{[file:string]:string}){\n\t\n}" }),
+        (0, Property_1.$Property)({ default: "function(data:{[file:string]:string}){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], Upload.prototype, "onuploaded", null);
     Upload = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
-        Jassi_1.$Class("jassijs.ui.Upload"),
+        (0, Component_1.$UIComponent)({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
+        (0, Jassi_1.$Class)("jassijs.ui.Upload"),
         __metadata("design:paramtypes", [])
     ], Upload);
     exports.Upload = Upload;

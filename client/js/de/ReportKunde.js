@@ -27,11 +27,11 @@ define(["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jas
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Kunde_1.Kunde)
     ], ReportKunde.prototype, "value", void 0);
     ReportKunde = __decorate([
-        Jassi_1.$Class("de.ReportKunde"),
+        (0, Jassi_1.$Class)("de.ReportKunde"),
         __metadata("design:paramtypes", [])
     ], ReportKunde);
     exports.ReportKunde = ReportKunde;

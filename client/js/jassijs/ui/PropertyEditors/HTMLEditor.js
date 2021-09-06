@@ -86,8 +86,8 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
         }
     };
     HTMLEditor = __decorate([
-        Editor_1.$PropertyEditor(["html"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.HTMLEditor"),
+        (0, Editor_1.$PropertyEditor)(["html"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.HTMLEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], HTMLEditor);
     exports.HTMLEditor = HTMLEditor;

@@ -85,7 +85,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"],
         }
     };
     DBArray = __decorate([
-        Jassi_1.$Class("jassijs.remote.DBArray"),
+        (0, Jassi_1.$Class)("jassijs.remote.DBArray"),
         __metadata("design:paramtypes", [Object])
     ], DBArray);
     exports.DBArray = DBArray;

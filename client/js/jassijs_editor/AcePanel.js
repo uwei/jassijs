@@ -481,7 +481,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
         }
     };
     AcePanel = AcePanel_1 = __decorate([
-        Jassi_1.$Class("jassijs.ui.AcePanel"),
+        (0, Jassi_1.$Class)("jassijs.ui.AcePanel"),
         __metadata("design:paramtypes", [])
     ], AcePanel);
     exports.AcePanel = AcePanel;

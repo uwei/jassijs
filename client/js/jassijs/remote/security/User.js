@@ -28,29 +28,29 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
         }
     };
     __decorate([
-        DatabaseSchema_1.PrimaryGeneratedColumn(),
+        (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], User.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], User.prototype, "email", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ select: false }),
+        (0, DatabaseSchema_1.Column)({ select: false }),
         __metadata("design:type", String)
     ], User.prototype, "password", void 0);
     __decorate([
-        DatabaseSchema_1.JoinTable(),
-        DatabaseSchema_1.ManyToMany(type => Group_1.Group, ob => ob.users),
+        (0, DatabaseSchema_1.JoinTable)(),
+        (0, DatabaseSchema_1.ManyToMany)(type => Group_1.Group, ob => ob.users),
         __metadata("design:type", Array)
     ], User.prototype, "groups", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Boolean)
     ], User.prototype, "isAdmin", void 0);
     User = __decorate([
-        DBObject_1.$DBObject({ name: "jassijs_user" }),
-        Jassi_1.$Class("jassijs.security.User")
+        (0, DBObject_1.$DBObject)({ name: "jassijs_user" }),
+        (0, Jassi_1.$Class)("jassijs.security.User")
     ], User);
     exports.User = User;
     async function test() {

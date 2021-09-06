@@ -106,8 +106,8 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
         }
     };
     DBObjectEditor = __decorate([
-        Editor_1.$PropertyEditor(["dbobject"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.DBObjectEditor"),
+        (0, Editor_1.$PropertyEditor)(["dbobject"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.DBObjectEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DBObjectEditor);
     exports.DBObjectEditor = DBObjectEditor;

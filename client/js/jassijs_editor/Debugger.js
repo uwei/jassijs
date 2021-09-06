@@ -144,7 +144,7 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
         }
     };
     Debugger = __decorate([
-        Jassi_1.$Class("jassijs_editor.Debugger"),
+        (0, Jassi_1.$Class)("jassijs_editor.Debugger"),
         __metadata("design:paramtypes", [])
     ], Debugger);
     exports.Debugger = Debugger;

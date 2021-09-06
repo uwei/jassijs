@@ -79,7 +79,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui
         }
     };
     Testmenu = __decorate([
-        Jassi_1.$Class("demo.Testmenu"),
+        (0, Jassi_1.$Class)("demo.Testmenu"),
         __metadata("design:paramtypes", [])
     ], Testmenu);
     exports.Testmenu = Testmenu;

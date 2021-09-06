@@ -50,18 +50,18 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         }
     };
     __decorate([
-        Property_1.$Property({ type: "boolean" }),
+        (0, Property_1.$Property)({ type: "boolean" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Checkbox.prototype, "value", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Checkbox.prototype, "text", null);
     Checkbox = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
-        Jassi_1.$Class("jassijs.ui.Checkbox"),
+        (0, Component_1.$UIComponent)({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
+        (0, Jassi_1.$Class)("jassijs.ui.Checkbox"),
         __metadata("design:paramtypes", [])
     ], Checkbox);
     exports.Checkbox = Checkbox;

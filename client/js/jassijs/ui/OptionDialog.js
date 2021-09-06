@@ -116,26 +116,26 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassij
         }
     };
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", String)
     ], OptionDialog.prototype, "text", void 0);
     OptionDialog = OptionDialog_1 = __decorate([
-        Jassi_1.$Class("jassijs.ui.OptionDialog"),
+        (0, Jassi_1.$Class)("jassijs.ui.OptionDialog"),
         __metadata("design:paramtypes", [Object])
     ], OptionDialog);
     exports.OptionDialog = OptionDialog;
     let Testprop = class Testprop {
     };
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean)
     ], Testprop.prototype, "visible", void 0);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", String)
     ], Testprop.prototype, "text", void 0);
     Testprop = __decorate([
-        Jassi_1.$Class("jassijs.ui.OptionDialogTestProp")
+        (0, Jassi_1.$Class)("jassijs.ui.OptionDialogTestProp")
     ], Testprop);
     async function test2() {
         var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);

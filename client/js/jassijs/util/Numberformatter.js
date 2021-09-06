@@ -171,7 +171,7 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
         }
     };
     Numberformatter = Numberformatter_1 = __decorate([
-        Jassi_1.$Class("jassijs.util.Numberformatter")
+        (0, Jassi_1.$Class)("jassijs.util.Numberformatter")
     ], Numberformatter);
     exports.Numberformatter = Numberformatter;
     function test() {

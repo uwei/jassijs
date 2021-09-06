@@ -111,8 +111,8 @@ define(["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyE
         }
     };
     ColorEditor = __decorate([
-        Editor_1.$PropertyEditor(["color"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.ColorEditor")
+        (0, Editor_1.$PropertyEditor)(["color"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.ColorEditor")
         /**
         * Editor for color
         * used by PropertyEditor

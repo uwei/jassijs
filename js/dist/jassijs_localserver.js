@@ -80,18 +80,18 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         static async get() {
             if (_instance === undefined) {
                 _instance = new DBManager_1();
-                var test = typeorm_1.getMetadataArgsStorage();
+                var test = (0, typeorm_1.getMetadataArgsStorage)();
                 try {
                     var opts = await DBManager_1.getConOpts();
                     Object.freeze(DBManager_1);
-                    _initrunning = typeorm_1.createConnection(opts);
+                    _initrunning = (0, typeorm_1.createConnection)(opts);
                     await _initrunning;
                 }
                 catch (err1) {
                     try {
                         _initrunning = undefined;
                         opts["ssl"] = true; //heroku need this
-                        _initrunning = typeorm_1.createConnection(opts);
+                        _initrunning = (0, typeorm_1.createConnection)(opts);
                         await _initrunning;
                     }
                     catch (err) {
@@ -140,7 +140,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         async hasLoaded() {
         }
         async mySync() {
-            var con = typeorm_1.getConnection();
+            var con = (0, typeorm_1.getConnection)();
             //@ts-ignore
             var schem = await new Promise((resolve_2, reject_2) => { require(["typeorm/schema-builder/RdbmsSchemaBuilder"], resolve_2, reject_2); });
             var org = schem.RdbmsSchemaBuilder.prototype["executeSchemaSyncOperationsInProperOrder"];
@@ -167,33 +167,33 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             //con.driver.
         }
         static async clearMetadata() {
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().checks);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().columns);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().discriminatorValues);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().embeddeds);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entityListeners);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entityRepositories);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().entitySubscribers);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().exclusions);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().tables);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().generations);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().indices);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().inheritances);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().joinColumns);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().joinTables);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().namingStrategies);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relationCounts);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relationIds);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().relations);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().tables);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().transactionEntityManagers);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().transactionRepositories);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().trees);
-            DBManager_1.clearArray(typeorm_1.getMetadataArgsStorage().uniques);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().checks);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().columns);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().discriminatorValues);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().embeddeds);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().entityListeners);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().entityRepositories);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().entitySubscribers);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().exclusions);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().tables);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().generations);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().indices);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().inheritances);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().joinColumns);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().joinTables);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().namingStrategies);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().relationCounts);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().relationIds);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().relations);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().tables);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().transactionEntityManagers);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().transactionRepositories);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().trees);
+            DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().uniques);
         }
         static async destroyConnection() {
             if (_instance !== undefined)
-                await typeorm_1.getConnection().close();
+                await (0, typeorm_1.getConnection)().close();
             _instance = undefined;
             DBManager_1.clearMetadata();
         }
@@ -206,7 +206,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             Object.freeze(_instance);
         }
         connection() {
-            return typeorm_1.getConnection();
+            return (0, typeorm_1.getConnection)();
         }
         async runSQL(context, sql, parameters = undefined) {
             var ret = await (await DBManager_1.get()).connection().query(sql, parameters);
@@ -402,7 +402,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
                 return ret;
             for (let r = 0; r < relation.length; r++) {
                 if (relation[r] === "*") {
-                    var vdata = typeorm_1.getConnection().getMetadata(Classes_1.classes.getClass(classname));
+                    var vdata = (0, typeorm_1.getConnection)().getMetadata(Classes_1.classes.getClass(classname));
                     for (var re = 0; re < vdata.relations.length; re++) {
                         var s = vdata.relations[re].propertyName;
                         if (ret.indexOf(s) === -1)
@@ -416,7 +416,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         }
         async createUser(context, username, password) {
             //var hh=getConnection().manager.findOne(User,{ email: username });
-            if (await typeorm_1.getConnection().manager.findOne(User_1.User, { email: username }) !== undefined) {
+            if (await (0, typeorm_1.getConnection)().manager.findOne(User_1.User, { email: username }) !== undefined) {
                 throw new Error("User already exists");
             }
             const user = new User_1.User();
@@ -494,7 +494,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         }
     };
     DBManager = DBManager_1 = __decorate([
-        Jassi_1.$Class("jassi_localserver.DBManager"),
+        (0, Jassi_1.$Class)("jassi_localserver.DBManager"),
         __metadata("design:paramtypes", [])
     ], DBManager);
     exports.DBManager = DBManager;
@@ -1214,7 +1214,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
         }
     };
     Filessystem = Filessystem_1 = __decorate([
-        Jassi_2.$Class("jassijs_localserver.Filessystem")
+        (0, Jassi_2.$Class)("jassijs_localserver.Filessystem")
     ], Filessystem);
     exports.default = Filessystem;
     async function test2() {
@@ -1777,7 +1777,7 @@ define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_lo
     };
     RegistryIndexer.version = Math.floor(Math.random() * 100000);
     RegistryIndexer = RegistryIndexer_1 = __decorate([
-        Jassi_3.$Class("jassijs_localserver.RegistryIndexer")
+        (0, Jassi_3.$Class)("jassijs_localserver.RegistryIndexer")
     ], RegistryIndexer);
     exports.RegistryIndexer = RegistryIndexer;
 });
@@ -1788,20 +1788,20 @@ define("jassijs_localserver/Testuser", ["require", "exports", "jassijs/util/Data
     let Testuser = class Testuser {
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Testuser.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Testuser.prototype, "firstname", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Testuser.prototype, "lastname", void 0);
     Testuser = __decorate([
-        DBObject_1.$DBObject(),
-        Jassi_4.$Class("Testuser")
+        (0, DBObject_1.$DBObject)(),
+        (0, Jassi_4.$Class)("Testuser")
     ], Testuser);
     exports.Testuser = Testuser;
 });
@@ -1920,8 +1920,8 @@ define("jassijs_localserver/TypeORMListener", ["require", "exports", "jassijs/re
         }
     };
     TypeORMListener = __decorate([
-        typeorm_3.EventSubscriber(),
-        Jassi_5.$Class("jassijs_localserver.TypeORMListener")
+        (0, typeorm_3.EventSubscriber)(),
+        (0, Jassi_5.$Class)("jassijs_localserver.TypeORMListener")
     ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
 });

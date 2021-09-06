@@ -52,14 +52,14 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
         }
     };
     __decorate([
-        Property_1.$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
+        (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [CSSProperties_1.CSSProperties, Boolean]),
         __metadata("design:returntype", void 0)
     ], Style.prototype, "css", null);
     Style = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
-        Jassi_1.$Class("jassijs.ui.Style")
+        (0, Component_1.$UIComponent)({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
+        (0, Jassi_1.$Class)("jassijs.ui.Style")
         /**
          * on ore mors Style can be assigned to component
          * the style is appended to the head

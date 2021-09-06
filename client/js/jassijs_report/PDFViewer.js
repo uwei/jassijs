@@ -156,7 +156,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
         }
     };
     PDFViewer = __decorate([
-        Jassi_1.$Class("jassijs_report.PDFViewer"),
+        (0, Jassi_1.$Class)("jassijs_report.PDFViewer"),
         __metadata("design:paramtypes", [])
     ], PDFViewer);
     exports.PDFViewer = PDFViewer;

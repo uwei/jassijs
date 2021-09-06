@@ -49,8 +49,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesi
         }
     };
     RStack = __decorate([
-        ReportComponent_1.$ReportComponent({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassijs_report.RStack")
+        (0, ReportComponent_1.$ReportComponent)({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
+        (0, Jassi_1.$Class)("jassijs_report.RStack")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])

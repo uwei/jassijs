@@ -141,7 +141,8 @@ export class Server extends RemoteObject {
      * @param {string} fileName
      * @returns {string} content of the file
      */
-    async loadFile(fileName: string, fromServerdirectory: boolean = undefined, context: Context = undefined): Promise<string> {
+    async loadFile(fileName: string, context: Context = undefined): Promise<string> {
+        var fromServerdirectory=fileName.startsWith("$serverside/");
         if (!context?.isServer) {
             await this.fillFilesInMapIfNeeded();
             if (!fromServerdirectory && Server.filesInMap[fileName]) {
@@ -154,7 +155,7 @@ export class Server extends RemoteObject {
                     let mapname = jassijs.modules[found.modul].split("?")[0] + ".map";
                     if (jassijs.modules[found.modul].indexOf(".js?") > -1)
                         mapname = mapname + "?" + jassijs.modules[found.modul].split("?")[1];
-                    var code = await this.loadFile(mapname, fromServerdirectory, context);
+                    var code = await this.loadFile(mapname, context);
                     var data = JSON.parse(code).sourcesContent[found.id];
                     return data;
                 }
@@ -162,7 +163,7 @@ export class Server extends RemoteObject {
             }
             if (fromServerdirectory) {
 
-                return await this.call(this, this.loadFile, fileName, fromServerdirectory, context);
+                return await this.call(this, this.loadFile, fileName, context);
             } else
                 return $.ajax({ url: fileName, dataType: "text" });
             //return await this.call(this,"loadFile", fileName);
@@ -182,8 +183,7 @@ export class Server extends RemoteObject {
     * @param [{string}] fileNames - the name of the file
     * @param [{string}] contents
     */
-    async saveFiles(fileNames: string[], contents: string[], fromServerdirectory: boolean = undefined, context: Context = undefined): Promise<string> {
-
+    async saveFiles(fileNames: string[], contents: string[], context: Context = undefined): Promise<string> {
         if (!context?.isServer) {
             var allfileNames: string[] = [];
             var allcontents: string[] = [];
@@ -193,7 +193,7 @@ export class Server extends RemoteObject {
 
                 var fileName = fileNames[f];
                 var content = contents[f];
-                if (!fromServerdirectory && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
+                if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                     //@ts-ignore
                     var tss = await import("jassijs_editor/util/Typescript");
                     var rets = await tss.default.transpile(fileName, content);
@@ -205,16 +205,16 @@ export class Server extends RemoteObject {
                     allcontents.push(content);
                 }
             }
-            var res = await this.call(this, this.saveFiles, allfileNames, allcontents, fromServerdirectory, context);
+            var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
 
             if (res === "") {
                 //@ts-ignore
                 $.notify(fileName + " saved", "info", { position: "bottom right" });
-                if (!fromServerdirectory) {
+                //if (!fromServerdirectory) {
                     for (var x = 0; x < alltsfiles.length; x++) {
                         await $.ajax({ url: alltsfiles[x], dataType: "text" });
                     }
-                }
+               // }
             } else {
                 //@ts-ignore
                 $.notify(fileName + " not saved", "error", { position: "bottom right" });
@@ -226,7 +226,7 @@ export class Server extends RemoteObject {
                 throw new JassiError("only admins can saveFiles");
             //@ts-ignore
             var fs: any = await import("jassijs/server/Filesystem");
-            var ret = await new fs.default().saveFiles(fileNames, contents,fromServerdirectory, true);
+            var ret = await new fs.default().saveFiles(fileNames, contents, true);
             return ret;
         }
     }
@@ -235,14 +235,14 @@ export class Server extends RemoteObject {
     * @param {string} fileName - the name of the file
     * @param {string} content
     */
-    async saveFile(fileName: string, content: string,fromServerdirectory: boolean = undefined, context: Context = undefined): Promise<string> {
+    async saveFile(fileName: string, content: string, context: Context = undefined): Promise<string> {
         /*await this.fillFilesInMapIfNeeded();
         if (Server.filesInMap[fileName]) {
             //@ts-ignore
              $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
             return;
         }*/
-        return await this.saveFiles([fileName], [content], fromServerdirectory,context);
+        return await this.saveFiles([fileName], [content], context);
         /* if (!jassijs.isServer) {
              var ret = await this.call(this, "saveFiles", fileNames, contents);
              //@ts-ignore

@@ -263,14 +263,14 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
         }
     };
     __decorate([
-        Actions_1.$Action({ name: "Administration/Database CSV-Import", icon: "mdi mdi-database-import" }),
+        (0, Actions_1.$Action)({ name: "Administration/Database CSV-Import", icon: "mdi mdi-database-import" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], CSVImport, "showDialog", null);
     CSVImport = CSVImport_1 = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_1.$Class("jassijs.util.CSVImport"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_1.$Class)("jassijs.util.CSVImport"),
         __metadata("design:paramtypes", [])
     ], CSVImport);
     exports.CSVImport = CSVImport;

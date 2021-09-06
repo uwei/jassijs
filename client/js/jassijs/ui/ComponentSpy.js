@@ -103,7 +103,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Administration",
             icon: "mdi mdi-account-cog-outline",
         }),
@@ -112,7 +112,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         __metadata("design:returntype", Promise)
     ], ComponentSpy, "dummy", null);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Administration/Spy Components",
             icon: "mdi mdi-police-badge",
         }),
@@ -121,8 +121,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         __metadata("design:returntype", Promise)
     ], ComponentSpy, "showDialog", null);
     ComponentSpy = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_1.$Class("jassijs.ui.ComponentSpy"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.ComponentSpy"),
         __metadata("design:paramtypes", [])
     ], ComponentSpy);
     exports.ComponentSpy = ComponentSpy;

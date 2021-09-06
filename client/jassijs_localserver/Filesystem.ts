@@ -144,9 +144,9 @@ export default class Filessystem {
     async saveFile(filename, content) {
         return await this.saveFiles([filename], [content]);
     }
-    async saveFiles(fileNames: string[], contents: any[], fromServerdirectory: boolean = undefined, rollbackonerror: boolean = true) {
+    async saveFiles(fileNames: string[], contents: any[],  rollbackonerror: boolean = true) {
         //serverside compile
-        if (fromServerdirectory) {
+        if (fileNames[0].startsWith("$serverside/")) {
             var allfileNames: string[] = [];
             var allcontents: string[] = [];
             for (var f = 0; f < fileNames.length; f++) {
@@ -216,7 +216,7 @@ export default class Filessystem {
                 if (dbschemaHasChanged) {
                     await DBManager.destroyConnection();
                 }
-                var restore = await this.saveFiles(fileNames, rollbackcontents, fromServerdirectory, false);
+                var restore = await this.saveFiles(fileNames, rollbackcontents, false);
                 if (dbschemaHasChanged) {
                     await DBManager.get();
                 }
@@ -303,7 +303,7 @@ export default class Filessystem {
         return "";
 
     }
-    async loadFile(fileName: string, fromServerdirectory: boolean = undefined) {
+    async loadFile(fileName: string) {
         var r = await this.loadFileEntry(fileName);
         return (r ? r.data : undefined);
     }

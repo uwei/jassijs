@@ -192,12 +192,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
         }
     };
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", String)
     ], RDatatable.prototype, "dataforeach", void 0);
     RDatatable = __decorate([
-        ReportComponent_1.$ReportComponent({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
-        Jassi_1.$Class("jassijs_report.RDatatable"),
+        (0, ReportComponent_1.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
+        (0, Jassi_1.$Class)("jassijs_report.RDatatable"),
         __metadata("design:paramtypes", [Object])
     ], RDatatable);
     exports.RDatatable = RDatatable;

@@ -166,7 +166,7 @@ Settings.browserSettings = undefined;
 Settings.userSettings = undefined;
 Settings.allusersSettings = undefined;
 Settings = Settings_1 = __decorate([
-    Jassi_1.$Class("jassijs.remote.Settings")
+    (0, Jassi_1.$Class)("jassijs.remote.Settings")
 ], Settings);
 exports.Settings = Settings;
 var settings = new Settings();

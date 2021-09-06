@@ -101,7 +101,7 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
         }
     };
     TSSourceMap = __decorate([
-        Jassi_1.$Class("jassijs_editor.util.TSSourceMap")
+        (0, Jassi_1.$Class)("jassijs_editor.util.TSSourceMap")
     ], TSSourceMap);
     exports.TSSourceMap = TSSourceMap;
 });

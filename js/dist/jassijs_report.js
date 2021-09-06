@@ -67,7 +67,7 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
         ;
     };
     PDFReport = __decorate([
-        Jassi_1.$Class("jassijs_report.PDFReport"),
+        (0, Jassi_1.$Class)("jassijs_report.PDFReport"),
         __metadata("design:paramtypes", [])
     ], PDFReport);
     exports.PDFReport = PDFReport;
@@ -543,7 +543,7 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
         }
     };
     PDFViewer = __decorate([
-        Jassi_2.$Class("jassijs_report.PDFViewer"),
+        (0, Jassi_2.$Class)("jassijs_report.PDFViewer"),
         __metadata("design:paramtypes", [])
     ], PDFViewer);
     exports.PDFViewer = PDFViewer;
@@ -632,9 +632,9 @@ define("jassijs_report/RColumns", ["require", "exports", "jassijs/remote/Jassi",
         }
     };
     RColumns = __decorate([
-        ReportComponent_1.$ReportComponent({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] }),
-        Jassi_3.$Class("jassijs_report.RColumns"),
-        Property_1.$Property({ hideBaseClassProperties: true }),
+        (0, ReportComponent_1.$ReportComponent)({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] }),
+        (0, Jassi_3.$Class)("jassijs_report.RColumns"),
+        (0, Property_1.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], RColumns);
     exports.RColumns = RColumns;
@@ -825,12 +825,12 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi
         }
     };
     __decorate([
-        Property_2.$Property(),
+        (0, Property_2.$Property)(),
         __metadata("design:type", String)
     ], RDatatable.prototype, "dataforeach", void 0);
     RDatatable = __decorate([
-        ReportComponent_2.$ReportComponent({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
-        Jassi_4.$Class("jassijs_report.RDatatable"),
+        (0, ReportComponent_2.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
+        (0, Jassi_4.$Class)("jassijs_report.RDatatable"),
         __metadata("design:paramtypes", [Object])
     ], RDatatable);
     exports.RDatatable = RDatatable;
@@ -880,8 +880,8 @@ define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Jassi", "
         }
     };
     RStack = __decorate([
-        ReportComponent_3.$ReportComponent({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
-        Jassi_5.$Class("jassijs_report.RStack")
+        (0, ReportComponent_3.$ReportComponent)({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
+        (0, Jassi_5.$Class)("jassijs_report.RStack")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
@@ -998,8 +998,8 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
         }
     };
     RTablerow = __decorate([
-        ReportComponent_4.$ReportComponent({ editableChildComponents: ["this"] }),
-        Jassi_6.$Class("jassijs_report.RTablerow")
+        (0, ReportComponent_4.$ReportComponent)({ editableChildComponents: ["this"] }),
+        (0, Jassi_6.$Class)("jassijs_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
@@ -1396,7 +1396,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
         }
     };
     __decorate([
-        Property_3.$Property({
+        (0, Property_3.$Property)({
             chooseFrom: function (component) {
                 return ReportDesign_4.ReportDesign.getVariables(component);
             }
@@ -1405,66 +1405,66 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "value", null);
     __decorate([
-        Property_3.$Property(),
+        (0, Property_3.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], RText.prototype, "bold", null);
     __decorate([
-        Property_3.$Property(),
+        (0, Property_3.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], RText.prototype, "italics", null);
     __decorate([
-        Property_3.$Property({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
+        (0, Property_3.$Property)({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "font", null);
     __decorate([
-        Property_3.$Property(),
+        (0, Property_3.$Property)(),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RText.prototype, "fontSize", null);
     __decorate([
-        Property_3.$Property({ type: "color" }),
+        (0, Property_3.$Property)({ type: "color" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "background", null);
     __decorate([
-        Property_3.$Property({ type: "color" }),
+        (0, Property_3.$Property)({ type: "color" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "color", null);
     __decorate([
-        Property_3.$Property({ chooseFrom: ["left", "center", "right"] }),
+        (0, Property_3.$Property)({ chooseFrom: ["left", "center", "right"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "alignment", null);
     __decorate([
-        Property_3.$Property({ chooseFrom: ["underline", "lineThrough", "overline"] }),
+        (0, Property_3.$Property)({ chooseFrom: ["underline", "lineThrough", "overline"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "decoration", null);
     __decorate([
-        Property_3.$Property({ type: "color" }),
+        (0, Property_3.$Property)({ type: "color" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "decorationColor", null);
     __decorate([
-        Property_3.$Property({ chooseFrom: ["dashed", "dotted", "double", "wavy"] }),
+        (0, Property_3.$Property)({ chooseFrom: ["dashed", "dotted", "double", "wavy"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "decorationStyle", null);
     __decorate([
-        Property_3.$Property({ default: 1 }),
+        (0, Property_3.$Property)({ default: 1 }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RText.prototype, "lineHeight", null);
     RText = __decorate([
-        ReportComponent_5.$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
-        Jassi_7.$Class("jassijs_report.RText")
+        (0, ReportComponent_5.$ReportComponent)({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
+        (0, Jassi_7.$Class)("jassijs_report.RText")
         //@$Property({hideBaseClassProperties:true})
         ,
-        Property_3.$Property({ name: "value", type: "string", description: "text" }),
+        (0, Property_3.$Property)({ name: "value", type: "string", description: "text" }),
         __metadata("design:paramtypes", [Object])
     ], RText);
     exports.RText = RText;
@@ -1508,7 +1508,7 @@ define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Jassi",
         }
     };
     RUnknown = __decorate([
-        Jassi_8.$Class("jassijs_report.RUnknown"),
+        (0, Jassi_8.$Class)("jassijs_report.RUnknown"),
         __metadata("design:paramtypes", [Object])
     ], RUnknown);
     exports.RUnknown = RUnknown;
@@ -1592,11 +1592,11 @@ define("jassijs_report/ReportComponent", ["require", "exports", "jassijs/ui/Comp
         }
     };
     __decorate([
-        Property_4.$Property(),
+        (0, Property_4.$Property)(),
         __metadata("design:type", String)
     ], ReportComponent.prototype, "foreach", void 0);
     __decorate([
-        Property_4.$Property({
+        (0, Property_4.$Property)({
             type: "string", isVisible: (component) => {
                 var _a;
                 //only in table and column width is posible
@@ -1607,7 +1607,7 @@ define("jassijs_report/ReportComponent", ["require", "exports", "jassijs/ui/Comp
         __metadata("design:paramtypes", [Number])
     ], ReportComponent.prototype, "colSpan", null);
     __decorate([
-        Property_4.$Property({ type: "string", isVisible: (component) => {
+        (0, Property_4.$Property)({ type: "string", isVisible: (component) => {
                 var _a, _b;
                 //only in table and column width is posible
                 return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns";
@@ -1616,8 +1616,8 @@ define("jassijs_report/ReportComponent", ["require", "exports", "jassijs/ui/Comp
         __metadata("design:paramtypes", [Object])
     ], ReportComponent.prototype, "width", null);
     ReportComponent = __decorate([
-        Jassi_9.$Class("jassijs_report.ReportComponent"),
-        Property_4.$Property({ hideBaseClassProperties: true })
+        (0, Jassi_9.$Class)("jassijs_report.ReportComponent"),
+        (0, Property_4.$Property)({ hideBaseClassProperties: true })
     ], ReportComponent);
     exports.ReportComponent = ReportComponent;
 });
@@ -1629,31 +1629,31 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     let InfoProperties = class InfoProperties {
     };
     __decorate([
-        Property_5.$Property({ description: "the title of the document" }),
+        (0, Property_5.$Property)({ description: "the title of the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "title", void 0);
     __decorate([
-        Property_5.$Property({ description: "the name of the author" }),
+        (0, Property_5.$Property)({ description: "the name of the author" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "author", void 0);
     __decorate([
-        Property_5.$Property({ description: "the subject of the document" }),
+        (0, Property_5.$Property)({ description: "the subject of the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "subject", void 0);
     __decorate([
-        Property_5.$Property({ description: "keywords associated with the document" }),
+        (0, Property_5.$Property)({ description: "keywords associated with the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "keywords", void 0);
     __decorate([
-        Property_5.$Property({ description: "the creator of the document (default is ‘pdfmake’)" }),
+        (0, Property_5.$Property)({ description: "the creator of the document (default is ‘pdfmake’)" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "creator", void 0);
     __decorate([
-        Property_5.$Property({ description: "the producer of the document" }),
+        (0, Property_5.$Property)({ description: "the producer of the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "producer", void 0);
     InfoProperties = __decorate([
-        Jassi_10.$Class("jassijs_report.InfoProperties")
+        (0, Jassi_10.$Class)("jassijs_report.InfoProperties")
     ], InfoProperties);
     let PermissionProperties = class PermissionProperties {
         constructor() {
@@ -1666,35 +1666,35 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         }
     };
     __decorate([
-        Property_5.$Property({ chooseFrom: ["lowResolution", "highResolution"], description: 'whether printing is allowed. Specify "lowResolution" to allow degraded printing, or "highResolution" to allow printing with high resolution' }),
+        (0, Property_5.$Property)({ chooseFrom: ["lowResolution", "highResolution"], description: 'whether printing is allowed. Specify "lowResolution" to allow degraded printing, or "highResolution" to allow printing with high resolution' }),
         __metadata("design:type", String)
     ], PermissionProperties.prototype, "printing", void 0);
     __decorate([
-        Property_5.$Property({ description: "whether modifying the file is allowed. Specify true to allow modifying document content" }),
+        (0, Property_5.$Property)({ description: "whether modifying the file is allowed. Specify true to allow modifying document content" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "modifying", void 0);
     __decorate([
-        Property_5.$Property({ description: "whether copying text or graphics is allowed. Specify true to allow copying" }),
+        (0, Property_5.$Property)({ description: "whether copying text or graphics is allowed. Specify true to allow copying" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "copying", void 0);
     __decorate([
-        Property_5.$Property({ description: "whether annotating, form filling is allowed. Specify true to allow annotating and form filling" }),
+        (0, Property_5.$Property)({ description: "whether annotating, form filling is allowed. Specify true to allow annotating and form filling" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "annotating", void 0);
     __decorate([
-        Property_5.$Property({ description: "whether form filling and signing is allowed. Specify true to allow filling in form fields and signing" }),
+        (0, Property_5.$Property)({ description: "whether form filling and signing is allowed. Specify true to allow filling in form fields and signing" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "fillingForms", void 0);
     __decorate([
-        Property_5.$Property({ description: "whether copying text for accessibility is allowed. Specify true to allow copying for accessibility" }),
+        (0, Property_5.$Property)({ description: "whether copying text for accessibility is allowed. Specify true to allow copying for accessibility" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "contentAccessibility", void 0);
     __decorate([
-        Property_5.$Property({ description: "whether assembling document is allowed. Specify true to allow document assembly" }),
+        (0, Property_5.$Property)({ description: "whether assembling document is allowed. Specify true to allow document assembly" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "documentAssembly", void 0);
     PermissionProperties = __decorate([
-        Jassi_10.$Class("jassijs_report.PermissionProperties")
+        (0, Jassi_10.$Class)("jassijs_report.PermissionProperties")
     ], PermissionProperties);
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
@@ -2010,43 +2010,43 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         }
     };
     __decorate([
-        Property_5.$Property(),
+        (0, Property_5.$Property)(),
         __metadata("design:type", Boolean)
     ], ReportDesign.prototype, "compress", void 0);
     __decorate([
-        Property_5.$Property({ description: "To enable encryption set user password in userPassword (string value). The PDF file will be encrypted when a user password is provided, and users will be prompted to enter the password to decrypt the file when opening it." }),
+        (0, Property_5.$Property)({ description: "To enable encryption set user password in userPassword (string value). The PDF file will be encrypted when a user password is provided, and users will be prompted to enter the password to decrypt the file when opening it." }),
         __metadata("design:type", String)
     ], ReportDesign.prototype, "userPassword", void 0);
     __decorate([
-        Property_5.$Property({ description: "To set access privileges for the PDF file, you need to provide an owner password in ownerPassword (string value) and object permissions with permissions. By default, all operations are disallowed. You need to explicitly allow certain operations." }),
+        (0, Property_5.$Property)({ description: "To set access privileges for the PDF file, you need to provide an owner password in ownerPassword (string value) and object permissions with permissions. By default, all operations are disallowed. You need to explicitly allow certain operations." }),
         __metadata("design:type", String)
     ], ReportDesign.prototype, "ownerPassword", void 0);
     __decorate([
-        Property_5.$Property({ type: "json", componentType: "jassijs_report.InfoProperties" }),
+        (0, Property_5.$Property)({ type: "json", componentType: "jassijs_report.InfoProperties" }),
         __metadata("design:type", InfoProperties)
     ], ReportDesign.prototype, "info", void 0);
     __decorate([
-        Property_5.$Property({ type: "json", componentType: "jassijs_report.PermissionProperties" }),
+        (0, Property_5.$Property)({ type: "json", componentType: "jassijs_report.PermissionProperties" }),
         __metadata("design:type", PermissionProperties)
     ], ReportDesign.prototype, "permissions", void 0);
     __decorate([
-        Property_5.$Property({ type: "number[]", default: [40, 40, 40, 40], description: "margin of the page: left, top, right, bottom" }),
+        (0, Property_5.$Property)({ type: "number[]", default: [40, 40, 40, 40], description: "margin of the page: left, top, right, bottom" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
     ], ReportDesign.prototype, "pageMargins", null);
     __decorate([
-        Property_5.$Property({ description: "the size of the page", default: "A4", chooseFrom: ['4A0', '2A0', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'RA0', 'RA1', 'RA2', 'RA3', 'RA4', 'SRA0', 'SRA1', 'SRA2', 'SRA3', 'SRA4', 'EXECUTIVE', 'FOLIO', 'LEGAL', 'LETTER', 'TABLOID'] }),
+        (0, Property_5.$Property)({ description: "the size of the page", default: "A4", chooseFrom: ['4A0', '2A0', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'RA0', 'RA1', 'RA2', 'RA3', 'RA4', 'SRA0', 'SRA1', 'SRA2', 'SRA3', 'SRA4', 'EXECUTIVE', 'FOLIO', 'LEGAL', 'LETTER', 'TABLOID'] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], ReportDesign.prototype, "pageSize", null);
     __decorate([
-        Property_5.$Property({ chooseFrom: ['landscape', 'portrait'], default: "portrait", description: "the orientation of the page landscape or portrait" }),
+        (0, Property_5.$Property)({ chooseFrom: ['landscape', 'portrait'], default: "portrait", description: "the orientation of the page landscape or portrait" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], ReportDesign.prototype, "pageOrientation", null);
     ReportDesign = ReportDesign_5 = __decorate([
-        ReportComponent_7.$ReportComponent({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
-        Jassi_10.$Class("jassijs_report.ReportDesign"),
+        (0, ReportComponent_7.$ReportComponent)({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
+        (0, Jassi_10.$Class)("jassijs_report.ReportDesign"),
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);
     exports.ReportDesign = ReportDesign;
@@ -2631,7 +2631,7 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
         }
     };
     Report = __decorate([
-        Jassi_11.$Class("jassijs_report.Report")
+        (0, Jassi_11.$Class)("jassijs_report.Report")
         //@$UIComponent({editableChildComponents:["this"]})
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -2794,7 +2794,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         }
     };
     ReportDesigner = __decorate([
-        Jassi_12.$Class("jassijs_report.designer.ReportDesigner"),
+        (0, Jassi_12.$Class)("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;

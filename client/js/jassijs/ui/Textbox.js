@@ -231,52 +231,52 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         }
     };
     __decorate([
-        Property_1.$Property({ type: "classselector", service: "$Converter" }),
+        (0, Property_1.$Property)({ type: "classselector", service: "$Converter" }),
         __metadata("design:type", DefaultConverter_1.DefaultConverter)
     ], Textbox.prototype, "converter", void 0);
     __decorate([
-        Property_1.$Property({ type: "string", chooseFrom: allFormats }),
+        (0, Property_1.$Property)({ type: "string", chooseFrom: allFormats }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Textbox.prototype, "format", null);
     __decorate([
-        Property_1.$Property({ type: "string" }),
+        (0, Property_1.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Textbox.prototype, "value", null);
     __decorate([
-        Property_1.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "onclick", null);
     __decorate([
-        Property_1.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "onchange", null);
     __decorate([
-        Property_1.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "onkeydown", null);
     __decorate([
-        Property_1.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Textbox.prototype, "oninput", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Textbox.prototype, "placeholder", null);
     Textbox = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
-        Jassi_1.$Class("jassijs.ui.Textbox"),
-        Property_1.$Property({ name: "new", type: "string" }),
+        (0, Component_1.$UIComponent)({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
+        (0, Jassi_1.$Class)("jassijs.ui.Textbox"),
+        (0, Property_1.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [Object])
     ], Textbox);
     exports.Textbox = Textbox;

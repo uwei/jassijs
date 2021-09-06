@@ -15,20 +15,20 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
     let Right = class Right extends DBObject_1.DBObject {
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Right.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Right.prototype, "name", void 0);
     __decorate([
-        DatabaseSchema_1.ManyToMany(type => Group_1.Group, ob => ob.rights),
+        (0, DatabaseSchema_1.ManyToMany)(type => Group_1.Group, ob => ob.rights),
         __metadata("design:type", Array)
     ], Right.prototype, "groups", void 0);
     Right = __decorate([
-        DBObject_1.$DBObject({ name: "jassijs_right" }),
-        Jassi_1.$Class("jassijs.security.Right")
+        (0, DBObject_1.$DBObject)({ name: "jassijs_right" }),
+        (0, Jassi_1.$Class)("jassijs.security.Right")
     ], Right);
     exports.Right = Right;
 });

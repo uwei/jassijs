@@ -57,7 +57,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
         }
     };
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", String)
     ], SampleServerReport.prototype, "name", void 0);
     SampleServerReport = __decorate([
@@ -100,7 +100,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
         }
     };
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", String)
     ], SampleClientReport.prototype, "name", void 0);
     SampleClientReport = __decorate([

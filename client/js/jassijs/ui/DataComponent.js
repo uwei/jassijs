@@ -56,18 +56,18 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
         }
     };
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], DataComponent.prototype, "autocommit", null);
     __decorate([
-        Property_1.$Property({ type: "databinder" }),
+        (0, Property_1.$Property)({ type: "databinder" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], DataComponent.prototype, "bind", null);
     DataComponent = __decorate([
-        Jassi_1.$Class("jassijs.ui.DataComponent"),
+        (0, Jassi_1.$Class)("jassijs.ui.DataComponent"),
         __metadata("design:paramtypes", [Object])
     ], DataComponent);
     exports.DataComponent = DataComponent;

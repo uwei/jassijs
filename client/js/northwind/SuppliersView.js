@@ -111,12 +111,12 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Suppliers_1.Suppliers)
     ], SuppliersView.prototype, "value", void 0);
     SuppliersView = __decorate([
-        DBObjectView_1.$DBObjectView({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" }),
-        Jassi_1.$Class("northwind.SuppliersView"),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" }),
+        (0, Jassi_1.$Class)("northwind.SuppliersView"),
         __metadata("design:paramtypes", [])
     ], SuppliersView);
     exports.SuppliersView = SuppliersView;

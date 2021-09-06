@@ -710,7 +710,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     PropertyEditor = PropertyEditor_1 = __decorate([
-        Jassi_1.$Class("jassijs.ui.PropertyEditor"),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], PropertyEditor);
     exports.PropertyEditor = PropertyEditor;
@@ -721,15 +721,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Number)
     ], PropertyEditorTestSubProperties.prototype, "num", void 0);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", String)
     ], PropertyEditorTestSubProperties.prototype, "text", void 0);
     PropertyEditorTestSubProperties = __decorate([
-        Jassi_1.$Class("jassijs.ui.PropertyEditorTestSubProperties")
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditorTestSubProperties")
     ], PropertyEditorTestSubProperties);
     exports.PropertyEditorTestSubProperties = PropertyEditorTestSubProperties;
     let TestProperties = class TestProperties {
@@ -741,57 +741,57 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         ;
     };
     __decorate([
-        Property_1.$Property({ decription: "name of the dialog", }),
+        (0, Property_1.$Property)({ decription: "name of the dialog", }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean)
     ], TestProperties.prototype, "checked", void 0);
     __decorate([
-        Property_1.$Property({ type: "color" }),
+        (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "color", void 0);
     __decorate([
-        Property_1.$Property({ type: "componentselector", componentType: "jassi.ui.Component" }),
+        (0, Property_1.$Property)({ type: "componentselector", componentType: "jassi.ui.Component" }),
         __metadata("design:type", Component_1.Component)
     ], TestProperties.prototype, "component", void 0);
     __decorate([
-        Property_1.$Property({ type: "databinder" }),
+        (0, Property_1.$Property)({ type: "databinder" }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "databinder", void 0);
     __decorate([
-        Property_1.$Property({ type: "dbobject", componentType: "de.Kunde" }),
+        (0, Property_1.$Property)({ type: "dbobject", componentType: "de.Kunde" }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "dbobject", void 0);
     __decorate([
-        Property_1.$Property({ default: 80 }),
+        (0, Property_1.$Property)({ default: 80 }),
         __metadata("design:type", Number)
     ], TestProperties.prototype, "num", void 0);
     __decorate([
-        Property_1.$Property({ type: "font" }),
+        (0, Property_1.$Property)({ type: "font" }),
         __metadata("design:type", Number)
     ], TestProperties.prototype, "font", void 0);
     __decorate([
-        Property_1.$Property({ type: "function" }),
+        (0, Property_1.$Property)({ type: "function" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], TestProperties.prototype, "func", null);
     __decorate([
-        Property_1.$Property({ type: "html" }),
+        (0, Property_1.$Property)({ type: "html" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "html", void 0);
     __decorate([
-        Property_1.$Property({ type: "image" }),
+        (0, Property_1.$Property)({ type: "image" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "image", void 0);
     __decorate([
-        Property_1.$Property({ type: "json", componentType: "jassijs.ui.PropertyEditorTestSubProperties" }),
+        (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.PropertyEditorTestSubProperties" }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "json", void 0);
     TestProperties = __decorate([
-        Jassi_1.$Class("jassijs.ui.PropertyEditorTestProperties")
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     function test() {
         var ret = new PropertyEditor();

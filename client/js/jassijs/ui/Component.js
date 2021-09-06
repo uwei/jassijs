@@ -452,70 +452,70 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         }
     };
     __decorate([
-        Property_1.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Component.prototype, "onfocus", null);
     __decorate([
-        Property_1.$Property({ default: "function(event){\n\t\n}" }),
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Component.prototype, "onblur", null);
     __decorate([
-        Property_1.$Property({ description: "adds a label above the component" }),
+        (0, Property_1.$Property)({ description: "adds a label above the component" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Component.prototype, "label", null);
     __decorate([
-        Property_1.$Property({ description: "tooltip are displayed on mouse over" }),
+        (0, Property_1.$Property)({ description: "tooltip are displayed on mouse over" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], Component.prototype, "tooltip", null);
     __decorate([
-        Property_1.$Property({}),
+        (0, Property_1.$Property)({}),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], Component.prototype, "x", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], Component.prototype, "y", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Component.prototype, "hidden", null);
     __decorate([
-        Property_1.$Property({ type: "string" }),
+        (0, Property_1.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "width", null);
     __decorate([
-        Property_1.$Property({ type: "string" }),
+        (0, Property_1.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "height", null);
     __decorate([
-        Property_1.$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
+        (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [CSSProperties_1.CSSProperties, Boolean]),
         __metadata("design:returntype", void 0)
     ], Component.prototype, "css", null);
     __decorate([
-        Property_1.$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
+        (0, Property_1.$Property)({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
     ], Component.prototype, "styles", null);
     __decorate([
-        Property_1.$Property({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" }),
+        (0, Property_1.$Property)({ type: "componentselector", componentType: "jassijs.ui.ContextMenu" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "contextMenu", null);
     Component = __decorate([
-        Jassi_1.$Class("jassijs.ui.Component"),
+        (0, Jassi_1.$Class)("jassijs.ui.Component"),
         __metadata("design:paramtypes", [ComponentCreateProperties])
     ], Component);
     exports.Component = Component;

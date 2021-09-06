@@ -18,7 +18,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ext/lodash"], fun
         static copyObject(src) {
             //var j = Tools.objectToJson(src);
             //return Tools.jsonToObject(j);
-            lodash_1.default();
+            (0, lodash_1.default)();
             //@ts-ignore
             return _.cloneDeep(src);
         }
@@ -245,7 +245,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ext/lodash"], fun
         }
     };
     Tools = Tools_1 = __decorate([
-        Jassi_1.$Class("jassijs.util.Tools"),
+        (0, Jassi_1.$Class)("jassijs.util.Tools"),
         __metadata("design:paramtypes", [])
     ], Tools);
     exports.Tools = Tools;

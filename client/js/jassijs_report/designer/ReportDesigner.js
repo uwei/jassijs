@@ -160,7 +160,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
         }
     };
     ReportDesigner = __decorate([
-        Jassi_1.$Class("jassijs_report.designer.ReportDesigner"),
+        (0, Jassi_1.$Class)("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;

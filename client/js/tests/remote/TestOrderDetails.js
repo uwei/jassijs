@@ -17,17 +17,17 @@ define(["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject
         }
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], TestOrderDetails.prototype, "id", void 0);
     __decorate([
-        Rights_1.$CheckParentRight(),
-        DatabaseSchema_1.ManyToOne(type => TestOrder_1.TestOrder, e => e.details),
+        (0, Rights_1.$CheckParentRight)(),
+        (0, DatabaseSchema_1.ManyToOne)(type => TestOrder_1.TestOrder, e => e.details),
         __metadata("design:type", TestOrder_1.TestOrder)
     ], TestOrderDetails.prototype, "Order", void 0);
     TestOrderDetails = __decorate([
-        DBObject_1.$DBObject(),
-        Jassi_1.$Class("tests.TestOrderDetails"),
+        (0, DBObject_1.$DBObject)(),
+        (0, Jassi_1.$Class)("tests.TestOrderDetails"),
         __metadata("design:paramtypes", [])
     ], TestOrderDetails);
     exports.TestOrderDetails = TestOrderDetails;

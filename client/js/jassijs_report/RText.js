@@ -396,7 +396,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportComp
         }
     };
     __decorate([
-        Property_1.$Property({
+        (0, Property_1.$Property)({
             chooseFrom: function (component) {
                 return ReportDesign_1.ReportDesign.getVariables(component);
             }
@@ -405,66 +405,66 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportComp
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "value", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], RText.prototype, "bold", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], RText.prototype, "italics", null);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
+        (0, Property_1.$Property)({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "font", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RText.prototype, "fontSize", null);
     __decorate([
-        Property_1.$Property({ type: "color" }),
+        (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "background", null);
     __decorate([
-        Property_1.$Property({ type: "color" }),
+        (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "color", null);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["left", "center", "right"] }),
+        (0, Property_1.$Property)({ chooseFrom: ["left", "center", "right"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "alignment", null);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["underline", "lineThrough", "overline"] }),
+        (0, Property_1.$Property)({ chooseFrom: ["underline", "lineThrough", "overline"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "decoration", null);
     __decorate([
-        Property_1.$Property({ type: "color" }),
+        (0, Property_1.$Property)({ type: "color" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "decorationColor", null);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["dashed", "dotted", "double", "wavy"] }),
+        (0, Property_1.$Property)({ chooseFrom: ["dashed", "dotted", "double", "wavy"] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "decorationStyle", null);
     __decorate([
-        Property_1.$Property({ default: 1 }),
+        (0, Property_1.$Property)({ default: 1 }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RText.prototype, "lineHeight", null);
     RText = __decorate([
-        ReportComponent_1.$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
-        Jassi_1.$Class("jassijs_report.RText")
+        (0, ReportComponent_1.$ReportComponent)({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
+        (0, Jassi_1.$Class)("jassijs_report.RText")
         //@$Property({hideBaseClassProperties:true})
         ,
-        Property_1.$Property({ name: "value", type: "string", description: "text" }),
+        (0, Property_1.$Property)({ name: "value", type: "string", description: "text" }),
         __metadata("design:paramtypes", [Object])
     ], RText);
     exports.RText = RText;

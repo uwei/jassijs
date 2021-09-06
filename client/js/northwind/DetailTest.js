@@ -27,12 +27,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "no
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", OrderDetails_1.OrderDetails)
     ], DetailTest.prototype, "value", void 0);
     DetailTest = __decorate([
-        DBObjectView_1.$DBObjectView({ classname: "northwind.OrderDetails" }),
-        Jassi_1.$Class("northwind.DetailTest"),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.OrderDetails" }),
+        (0, Jassi_1.$Class)("northwind.DetailTest"),
         __metadata("design:paramtypes", [])
     ], DetailTest);
     exports.DetailTest = DetailTest;

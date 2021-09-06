@@ -80,7 +80,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "./Classes"], function (re
         }
     };
     Database = __decorate([
-        Jassi_1.$Class("jassijs.remote.Database"),
+        (0, Jassi_1.$Class)("jassijs.remote.Database"),
         __metadata("design:paramtypes", [])
     ], Database);
     exports.Database = Database;

@@ -77,7 +77,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassi
         }
     };
     HTMLEditorPanel = __decorate([
-        Jassi_1.$Class("jassijs.ui.HTMLEditorPanel"),
+        (0, Jassi_1.$Class)("jassijs.ui.HTMLEditorPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLEditorPanel);
     exports.HTMLEditorPanel = HTMLEditorPanel;

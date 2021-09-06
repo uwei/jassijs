@@ -254,7 +254,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"]
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_1();
     Reloader = Reloader_1 = __decorate([
-        Jassi_1.$Class("jassijs.util.Reloader"),
+        (0, Jassi_1.$Class)("jassijs.util.Reloader"),
         __metadata("design:paramtypes", [])
     ], Reloader);
     exports.Reloader = Reloader;

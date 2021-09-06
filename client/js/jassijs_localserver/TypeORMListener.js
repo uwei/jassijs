@@ -119,8 +119,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "typeorm", "jassijs_locals
         }
     };
     TypeORMListener = __decorate([
-        typeorm_1.EventSubscriber(),
-        Jassi_1.$Class("jassijs_localserver.TypeORMListener")
+        (0, typeorm_1.EventSubscriber)(),
+        (0, Jassi_1.$Class)("jassijs_localserver.TypeORMListener")
     ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
 });

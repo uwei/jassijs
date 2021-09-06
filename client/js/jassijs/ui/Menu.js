@@ -127,14 +127,14 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
         }
     };
     __decorate([
-        Property_1.$Property({ name: "onclick", type: "function", default: "function(event){\n\t\n}" }),
+        (0, Property_1.$Property)({ name: "onclick", type: "function", default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object]),
         __metadata("design:returntype", void 0)
     ], Menu.prototype, "onclick", null);
     Menu = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
-        Jassi_1.$Class("jassijs.ui.Menu"),
+        (0, Component_1.$UIComponent)({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
+        (0, Jassi_1.$Class)("jassijs.ui.Menu"),
         __metadata("design:paramtypes", [Object])
     ], Menu);
     exports.Menu = Menu;

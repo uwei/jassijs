@@ -1,3 +1,4 @@
+import { Style } from "jassijs/ui/Style";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { Repeater } from "jassijs/ui/Repeater";
@@ -44,6 +45,7 @@ type Me = {
     boxpanel2?: BoxPanel;
     htmlpanel1?: HTMLPanel;
     htmlpanel2?: HTMLPanel;
+    style1?: Style;
 } & DBObjectViewMe;
 @$DBObjectView({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text" })
 @$Class("northwind.OrdersView")
@@ -85,15 +87,20 @@ export class OrdersView extends DBObjectView {
         me.boxpanel2 = new BoxPanel();
         me.htmlpanel1 = new HTMLPanel();
         me.htmlpanel2 = new HTMLPanel();
+        me.style1 = new Style();
         me.main.add(me.boxpanel1);
         me.main.add(me.boxpanel2);
         me.main.add(me.repeater1);
+        me.main.add(me.style1);
         me.id.x = 5;
         me.id.y = 5;
         me.id.converter = new NumberConverter();
         me.id.bind(me.databinder, "id");
         me.id.label = "Order ID";
         me.id.width = 70;
+        me.id.css({
+            text_align: "right"
+        });
         me.customername.x = 10;
         me.customername.y = 5;
         me.customername.width = 265;
@@ -102,6 +109,7 @@ export class OrdersView extends DBObjectView {
         me.customername.value = "VINET Vins et alcools Chevalier";
         me.customername.label = "Customer";
         me.customername.height = 15;
+        me.customername.styles = [me.style1];
         me.employeename.x = 10;
         me.employeename.y = 90;
         me.employeename.bind(me.databinder, "Employee");
@@ -109,6 +117,7 @@ export class OrdersView extends DBObjectView {
         me.employeename.width = 265;
         me.employeename.value = "5 Steven Buchanan";
         me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
+        me.employeename.styles = [me.style1];
         me.chooseEmployee.x = 275;
         me.chooseEmployee.y = 105;
         me.chooseEmployee.bind(me.databinder, "Employee");
@@ -149,6 +158,8 @@ export class OrdersView extends DBObjectView {
         me.shipVia.label = "Ship via";
         me.shipVia.value = "3 Federal Shipping";
         me.shipVia.width = 260;
+        me.shipVia.height = 20;
+        me.shipVia.styles = [me.style1];
         me.shipviaChooser.x = 275;
         me.shipviaChooser.y = 60;
         me.shipviaChooser.bind(me.databinder, "ShipVia");
@@ -195,7 +206,7 @@ export class OrdersView extends DBObjectView {
         me.shipRegion.label = "Ship Region";
         me.shipRegion.width = 120;
         me.repeater1.bind(me.databinder, "Details");
-        me.repeater1.width = 420;
+        me.repeater1.width = 675;
         me.repeater1.createRepeatingComponent(function (me: Me) {
             me.detailsQuantity = new Textbox();
             me.detailsProduct = new HTMLPanel();
@@ -205,15 +216,16 @@ export class OrdersView extends DBObjectView {
             this.design.add(me.objectchooser1);
             me.detailsQuantity.bind(me.repeater1.design.databinder, "Quantity");
             me.detailsQuantity.width = 60;
-            me.detailsProduct.width = "100";
+            me.detailsProduct.width = 530;
             me.detailsProduct.bind(me.repeater1.design.databinder, "Product");
             me.detailsProduct.template = "{{ProductName}}";
             me.objectchooser1.bind(me.repeater1.design.databinder, "Product");
             me.objectchooser1.items = "northwind.Products";
             me.detailsProduct.css({
-                overflow: "hidden"
+                overflow: "hidden",
+                margin_top: "5px"
             });
-            me.detailsProduct.height = "18";
+            me.detailsProduct.styles = [me.style1];
         });
         me.panel1.isAbsolute = true;
         me.panel1.height = 185;
@@ -251,8 +263,12 @@ export class OrdersView extends DBObjectView {
         me.boxpanel2.horizontal = true;
         me.htmlpanel1.value = "Quantity<br>";
         me.htmlpanel1.width = 65;
+        me.htmlpanel1.styles = [];
         me.htmlpanel2.value = "Text<br>";
         me.htmlpanel2.width = 100;
+        me.style1.css({
+          
+        });
     }
 }
 export async function test() {

@@ -166,7 +166,8 @@ export class DatabaseDesigner extends Panel {
             }
         }
         catch (err) {
-            return err.message;
+           
+            return err.message+"\r\n"+err.stack;
         }
         return "";
     }

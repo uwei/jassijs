@@ -14,25 +14,25 @@ define(["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBO
     let MyUser = class MyUser {
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], MyUser.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], MyUser.prototype, "firstName", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], MyUser.prototype, "lastName", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", Number)
     ], MyUser.prototype, "age", void 0);
     MyUser = __decorate([
-        DBObject_1.$DBObject(),
-        DatabaseSchema_1.Entity(),
-        Jassi_1.$Class("de.MyUser")
+        (0, DBObject_1.$DBObject)(),
+        (0, DatabaseSchema_1.Entity)(),
+        (0, Jassi_1.$Class)("de.MyUser")
     ], MyUser);
     exports.MyUser = MyUser;
 });

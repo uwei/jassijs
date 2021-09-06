@@ -5,5 +5,5 @@ const JassiServer_1 = require("./jassijs/server/JassiServer");
 import { Employees } from "northwind/remote/Employees";
 import { getManager } from "typeorm";*/
 console.log(require('path').dirname(require.main.filename).replaceAll("\\", "/"));
-JassiServer_1.default();
+(0, JassiServer_1.default)();
 //# sourceMappingURL=main.js.map

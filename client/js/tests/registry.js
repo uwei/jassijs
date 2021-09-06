@@ -94,7 +94,7 @@ define("tests/registry",["require"], function(require) {
 		"date": 1624999036922
 	},
 	"tests/RemoteModulTests.ts": {
-		"date": 1625513478377
+		"date": 1630958861386
 	},
 	"tests/TestReport.ts": {
 		"date": 1623864072454

@@ -139,10 +139,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
         async saveFile(filename, content) {
             return await this.saveFiles([filename], [content]);
         }
-        async saveFiles(fileNames, contents, fromServerdirectory = undefined, rollbackonerror = true) {
+        async saveFiles(fileNames, contents, rollbackonerror = true) {
             var _a;
             //serverside compile
-            if (fromServerdirectory) {
+            if (fileNames[0].startsWith("$serverside/")) {
                 var allfileNames = [];
                 var allcontents = [];
                 for (var f = 0; f < fileNames.length; f++) {
@@ -211,7 +211,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
                     if (dbschemaHasChanged) {
                         await DBManager_1.DBManager.destroyConnection();
                     }
-                    var restore = await this.saveFiles(fileNames, rollbackcontents, fromServerdirectory, false);
+                    var restore = await this.saveFiles(fileNames, rollbackcontents, false);
                     if (dbschemaHasChanged) {
                         await DBManager_1.DBManager.get();
                     }
@@ -293,7 +293,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
             }
             return "";
         }
-        async loadFile(fileName, fromServerdirectory = undefined) {
+        async loadFile(fileName) {
             var r = await this.loadFileEntry(fileName);
             return (r ? r.data : undefined);
         }
@@ -371,7 +371,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
         }
     };
     Filessystem = Filessystem_1 = __decorate([
-        Jassi_1.$Class("jassijs_localserver.Filessystem")
+        (0, Jassi_1.$Class)("jassijs_localserver.Filessystem")
     ], Filessystem);
     exports.default = Filessystem;
     async function test2() {

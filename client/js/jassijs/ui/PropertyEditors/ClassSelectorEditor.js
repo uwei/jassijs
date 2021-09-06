@@ -159,8 +159,8 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/E
         }
     };
     ClassSelectorEditor = __decorate([
-        Editor_1.$PropertyEditor(["classselector"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.ClassSelectorEditor"),
+        (0, Editor_1.$PropertyEditor)(["classselector"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.ClassSelectorEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ClassSelectorEditor);
     exports.ClassSelectorEditor = ClassSelectorEditor;

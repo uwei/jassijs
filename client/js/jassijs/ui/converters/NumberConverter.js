@@ -39,9 +39,9 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
         }
     };
     NumberConverter = __decorate([
-        DefaultConverter_1.$Converter({ name: "number" }),
-        Jassi_1.$Class("jassijs.ui.converters.NumberConverter"),
-        Property_1.$Property({ name: "new", type: "json" })
+        (0, DefaultConverter_1.$Converter)({ name: "number" }),
+        (0, Jassi_1.$Class)("jassijs.ui.converters.NumberConverter"),
+        (0, Property_1.$Property)({ name: "new", type: "json" })
         //@$Property({name:"new/min",type:"number",default:undefined})
         //@$Property({name:"new/max",type:"number",default:undefined})
         ,

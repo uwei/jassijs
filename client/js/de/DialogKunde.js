@@ -188,11 +188,11 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Kunde_1.Kunde)
     ], DialogKunde.prototype, "value", void 0);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Demo",
             icon: "mdi mdi-television-play"
         }),
@@ -201,7 +201,7 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
         __metadata("design:returntype", Promise)
     ], DialogKunde, "dummy", null);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Demo/Kunden",
             icon: "mdi mdi-account"
         }),
@@ -210,8 +210,8 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
         __metadata("design:returntype", Promise)
     ], DialogKunde, "showDialog", null);
     DialogKunde = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_1.$Class("de.DialogKunde"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_1.$Class)("de.DialogKunde"),
         __metadata("design:paramtypes", [])
     ], DialogKunde);
     exports.DialogKunde = DialogKunde;

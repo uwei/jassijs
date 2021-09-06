@@ -102,16 +102,16 @@ define(["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jas
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Customer_1.Customer)
     ], CustomerView.prototype, "value", void 0);
     CustomerView = __decorate([
-        DBObjectView_1.$DBObjectView({
+        (0, DBObjectView_1.$DBObjectView)({
             classname: "northwind.Customer",
             actionname: "Northwind/Customers",
             icon: "mdi mdi-nature-people"
         }),
-        Jassi_1.$Class("northwind/CustomerView"),
+        (0, Jassi_1.$Class)("northwind/CustomerView"),
         __metadata("design:paramtypes", [])
     ], CustomerView);
     exports.CustomerView = CustomerView;

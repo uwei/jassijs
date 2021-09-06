@@ -16,33 +16,33 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
         cellDblClick() { }
     };
     __decorate([
-        Property_1.$Property({ default: undefined }),
+        (0, Property_1.$Property)({ default: undefined }),
         __metadata("design:type", Number)
     ], TableEditorProperties.prototype, "paginationSize", void 0);
     __decorate([
-        Property_1.$Property({ default: true }),
+        (0, Property_1.$Property)({ default: true }),
         __metadata("design:type", Boolean)
     ], TableEditorProperties.prototype, "headerSort", void 0);
     __decorate([
-        Property_1.$Property({ default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] }),
+        (0, Property_1.$Property)({ default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] }),
         __metadata("design:type", String)
     ], TableEditorProperties.prototype, "layout", void 0);
     __decorate([
-        Property_1.$Property({ default: undefined }),
+        (0, Property_1.$Property)({ default: undefined }),
         __metadata("design:type", Function)
     ], TableEditorProperties.prototype, "dataTreeChildFunction", void 0);
     __decorate([
-        Property_1.$Property({ default: false }),
+        (0, Property_1.$Property)({ default: false }),
         __metadata("design:type", Boolean)
     ], TableEditorProperties.prototype, "movableColumns", void 0);
     __decorate([
-        Property_1.$Property({ default: "function(event:any,group:any){\n\t\n}" }),
+        (0, Property_1.$Property)({ default: "function(event:any,group:any){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], TableEditorProperties.prototype, "cellDblClick", null);
     TableEditorProperties = __decorate([
-        Jassi_1.$Class("jassijs.ui.TableEditorProperties")
+        (0, Jassi_1.$Class)("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
     let Table = 
     /*
@@ -369,31 +369,31 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
         }
     };
     __decorate([
-        Property_1.$Property({ default: "function(event?: JQueryEventObject, data?:Tabulator.RowComponent){\n\t\n}" }),
+        (0, Property_1.$Property)({ default: "function(event?: JQueryEventObject, data?:Tabulator.RowComponent){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
         __metadata("design:returntype", void 0)
     ], Table.prototype, "onchange", null);
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Table.prototype, "showSearchbox", null);
     __decorate([
-        Property_1.$Property({ type: "string" }),
+        (0, Property_1.$Property)({ type: "string" }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Table.prototype, "height", null);
     __decorate([
-        Property_1.$Property({ type: "databinder" }),
+        (0, Property_1.$Property)({ type: "databinder" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], Table.prototype, "bindItems", null);
     Table = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
-        Jassi_1.$Class("jassijs.ui.Table"),
-        Property_1.$Property({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
+        (0, Component_1.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
+        (0, Jassi_1.$Class)("jassijs.ui.Table"),
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
         /*
         @$Property({ name: "new/paginationSize", type: "number", default: undefined })
         @$Property({ name: "new/headerSort", type: "boolean", default: true })

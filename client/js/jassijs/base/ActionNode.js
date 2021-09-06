@@ -11,7 +11,7 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
     let ActionNode = class ActionNode {
     };
     ActionNode = __decorate([
-        Jassi_1.$Class("jassijs.base.ActionNode")
+        (0, Jassi_1.$Class)("jassijs.base.ActionNode")
     ], ActionNode);
     exports.ActionNode = ActionNode;
     async function test() {

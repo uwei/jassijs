@@ -17,28 +17,28 @@ define(["require", "exports", "northwind/remote/Products", "jassijs/remote/DBObj
         }
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Categories.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Categories.prototype, "CategoryName", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Categories.prototype, "Description", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Categories.prototype, "Picture", void 0);
     __decorate([
-        DatabaseSchema_1.OneToMany(type => Products_1.Products, e => e.Category),
+        (0, DatabaseSchema_1.OneToMany)(type => Products_1.Products, e => e.Category),
         __metadata("design:type", Products_1.Products)
     ], Categories.prototype, "Products", void 0);
     Categories = __decorate([
-        DBObject_1.$DBObject(),
-        Jassi_1.$Class("northwind.Categories"),
+        (0, DBObject_1.$DBObject)(),
+        (0, Jassi_1.$Class)("northwind.Categories"),
         __metadata("design:paramtypes", [])
     ], Categories);
     exports.Categories = Categories;

@@ -21,7 +21,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
             if (!options.name)
                 options.name = classname.toLowerCase().replaceAll(".", "_");
             Registry_1.default.register("$DBObject", pclass, options);
-            DatabaseSchema_1.Entity(options)(pclass, ...params); //pass to orginal Entitiy
+            (0, DatabaseSchema_1.Entity)(options)(pclass, ...params); //pass to orginal Entitiy
         };
     }
     exports.$DBObject = $DBObject;
@@ -224,7 +224,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
     DBObject.cache = {};
     DBObject._init = DBObject_1._initFunc();
     DBObject = DBObject_1 = __decorate([
-        Jassi_1.$Class("jassijs.remote.DBObject"),
+        (0, Jassi_1.$Class)("jassijs.remote.DBObject"),
         __metadata("design:paramtypes", [])
     ], DBObject);
     exports.DBObject = DBObject;

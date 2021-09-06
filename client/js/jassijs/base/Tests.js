@@ -108,7 +108,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
         }
     };
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Run Tests"
         }),
         __metadata("design:type", Function),
@@ -116,8 +116,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
         __metadata("design:returntype", Promise)
     ], TestAction, "testNode", null);
     TestAction = TestAction_1 = __decorate([
-        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_1.$Class("jassijs.ui.TestAction")
+        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.TestAction")
     ], TestAction);
     exports.TestAction = TestAction;
     class Tests {

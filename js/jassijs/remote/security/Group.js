@@ -20,30 +20,30 @@ const Right_1 = require("jassijs/remote/security/Right");
 let Group = class Group extends DBObject_1.DBObject {
 };
 __decorate([
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Group.prototype, "id", void 0);
 __decorate([
-    DatabaseSchema_1.Column(),
+    (0, DatabaseSchema_1.Column)(),
     __metadata("design:type", String)
 ], Group.prototype, "name", void 0);
 __decorate([
-    DatabaseSchema_1.JoinTable(),
-    DatabaseSchema_1.ManyToMany(type => ParentRight_1.ParentRight, ob => ob.groups),
+    (0, DatabaseSchema_1.JoinTable)(),
+    (0, DatabaseSchema_1.ManyToMany)(type => ParentRight_1.ParentRight, ob => ob.groups),
     __metadata("design:type", Array)
 ], Group.prototype, "parentRights", void 0);
 __decorate([
-    DatabaseSchema_1.JoinTable(),
-    DatabaseSchema_1.ManyToMany(type => Right_1.Right, ob => ob.groups),
+    (0, DatabaseSchema_1.JoinTable)(),
+    (0, DatabaseSchema_1.ManyToMany)(type => Right_1.Right, ob => ob.groups),
     __metadata("design:type", Array)
 ], Group.prototype, "rights", void 0);
 __decorate([
-    DatabaseSchema_1.ManyToMany(type => User_1.User, ob => ob.groups),
+    (0, DatabaseSchema_1.ManyToMany)(type => User_1.User, ob => ob.groups),
     __metadata("design:type", Array)
 ], Group.prototype, "users", void 0);
 Group = __decorate([
-    DBObject_1.$DBObject({ name: "jassijs_group" }),
-    Jassi_1.$Class("jassijs.security.Group")
+    (0, DBObject_1.$DBObject)({ name: "jassijs_group" }),
+    (0, Jassi_1.$Class)("jassijs.security.Group")
 ], Group);
 exports.Group = Group;
 //# sourceMappingURL=Group.js.map

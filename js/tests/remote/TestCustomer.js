@@ -21,26 +21,26 @@ let TestCustomer = class TestCustomer extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], TestCustomer.prototype, "id", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], TestCustomer.prototype, "name", void 0);
 __decorate([
-    DatabaseSchema_1.OneToMany(type => TestOrder_1.TestOrder, order => order.customer),
+    (0, DatabaseSchema_1.OneToMany)(type => TestOrder_1.TestOrder, order => order.customer),
     __metadata("design:type", Array)
 ], TestCustomer.prototype, "orders", void 0);
 TestCustomer = __decorate([
-    Rights_1.$ParentRights([{ name: "TestCustomers", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
+    (0, Rights_1.$ParentRights)([{ name: "TestCustomers", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
             description: {
                 text: "TestCustomer",
                 i1: "from",
                 i2: "to"
             } }]),
-    DBObject_1.$DBObject(),
-    Jassi_1.$Class("tests.TestCustomer"),
+    (0, DBObject_1.$DBObject)(),
+    (0, Jassi_1.$Class)("tests.TestCustomer"),
     __metadata("design:paramtypes", [])
 ], TestCustomer);
 exports.TestCustomer = TestCustomer;

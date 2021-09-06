@@ -146,7 +146,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
                 }
             }
             catch (err) {
-                return err.message;
+                return err.message + "\r\n" + err.stack;
             }
             return "";
         }
@@ -221,7 +221,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
         }
     };
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Administration/Database Designer",
             icon: "mdi mdi-database-edit",
         }),
@@ -230,8 +230,8 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
         __metadata("design:returntype", Promise)
     ], DatabaseDesigner, "showDialog", null);
     DatabaseDesigner = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_1.$Class("jassijs/ui/DatabaseDesigner"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_1.$Class)("jassijs/ui/DatabaseDesigner"),
         __metadata("design:paramtypes", [Object])
     ], DatabaseDesigner);
     exports.DatabaseDesigner = DatabaseDesigner;

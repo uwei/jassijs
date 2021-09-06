@@ -18,9 +18,9 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
         }
     };
     Textarea = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
-        Jassi_1.$Class("jassijs.ui.Textarea"),
-        Property_1.$Property({ name: "new", type: "string" }),
+        (0, Component_1.$UIComponent)({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
+        (0, Jassi_1.$Class)("jassijs.ui.Textarea"),
+        (0, Property_1.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [])
     ], Textarea);
     exports.Textarea = Textarea;

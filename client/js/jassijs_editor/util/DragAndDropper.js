@@ -218,7 +218,7 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
         }
     };
     DragAndDropper = __decorate([
-        Jassi_1.$Class("jassijs_editor.util.DragAndDropper"),
+        (0, Jassi_1.$Class)("jassijs_editor.util.DragAndDropper"),
         __metadata("design:paramtypes", [])
     ], DragAndDropper);
     exports.DragAndDropper = DragAndDropper;

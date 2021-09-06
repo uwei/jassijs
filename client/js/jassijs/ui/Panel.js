@@ -14,11 +14,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Container", "j
     let PanelCreateProperties = class PanelCreateProperties extends Component_1.ComponentCreateProperties {
     };
     __decorate([
-        Property_1.$Property({ default: false }),
+        (0, Property_1.$Property)({ default: false }),
         __metadata("design:type", Boolean)
     ], PanelCreateProperties.prototype, "useSpan", void 0);
     PanelCreateProperties = __decorate([
-        Jassi_1.$Class("jassijs.ui.PanelCreateProperties")
+        (0, Jassi_1.$Class)("jassijs.ui.PanelCreateProperties")
     ], PanelCreateProperties);
     let Panel = 
     //@$Property({ name: "new/useSpan", type: "boolean", default: false })
@@ -168,14 +168,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Container", "j
         }
     };
     __decorate([
-        Property_1.$Property(),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Panel.prototype, "isAbsolute", null);
     Panel = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassijs.ui.Panel"),
-        Property_1.$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelCreateProperties" })
+        (0, Component_1.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
+        (0, Jassi_1.$Class)("jassijs.ui.Panel"),
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelCreateProperties" })
         //@$Property({ name: "new/useSpan", type: "boolean", default: false })
         ,
         __metadata("design:paramtypes", [PanelCreateProperties])

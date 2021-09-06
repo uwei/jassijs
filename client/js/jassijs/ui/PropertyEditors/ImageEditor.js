@@ -120,7 +120,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
         }
     };
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Tools",
             icon: "mdi mdi-tools",
         }),
@@ -129,7 +129,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
         __metadata("design:returntype", Promise)
     ], ImageEditor, "dummy", null);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Tools/Icons",
             icon: "mdi mdi-image-area",
         }),
@@ -138,9 +138,9 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
         __metadata("design:returntype", Promise)
     ], ImageEditor, "show", null);
     ImageEditor = ImageEditor_1 = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Editor_1.$PropertyEditor(["image"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.ImageEditor"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Editor_1.$PropertyEditor)(["image"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.ImageEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ImageEditor);
     exports.ImageEditor = ImageEditor;

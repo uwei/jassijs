@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/Extensions"], function (require, exports, Jassi_1, DatabaseSchema_1, Extensions_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    Extensions_1.extensions.annotateMember("de.Kunde", "extField", String, DatabaseSchema_1.Column({ nullable: true }));
+    Extensions_1.extensions.annotateMember("de.Kunde", "extField", String, (0, DatabaseSchema_1.Column)({ nullable: true }));
     //  de.Kunde.prototype.extFunc=function(){return 6;}
     let KundeExt = class KundeExt {
         get hello2() {
@@ -32,8 +32,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/DatabaseSche
         }
     };
     KundeExt = __decorate([
-        Extensions_1.$Extension("de.Kunde"),
-        Jassi_1.$Class("de.KundeExt")
+        (0, Extensions_1.$Extension)("de.Kunde"),
+        (0, Jassi_1.$Class)("de.KundeExt")
     ], KundeExt);
     //Hack for tabulator.js
     KundeExt.prototype.extFunc["match"] = function () { return false; };

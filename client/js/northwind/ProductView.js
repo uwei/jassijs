@@ -135,12 +135,12 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "j
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Products_1.Products)
     ], ProductView.prototype, "value", void 0);
     ProductView = __decorate([
-        DBObjectView_1.$DBObjectView({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" }),
-        Jassi_1.$Class("northwind.ProductView"),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" }),
+        (0, Jassi_1.$Class)("northwind.ProductView"),
         __metadata("design:paramtypes", [])
     ], ProductView);
     exports.ProductView = ProductView;

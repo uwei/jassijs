@@ -70,7 +70,7 @@ define(["require", "exports", "./Jassi"], function (require, exports, Jassi_1) {
         }
     };
     Test = __decorate([
-        Jassi_1.$Class("jassijs.remote.Test")
+        (0, Jassi_1.$Class)("jassijs.remote.Test")
     ], Test);
     exports.Test = Test;
 });

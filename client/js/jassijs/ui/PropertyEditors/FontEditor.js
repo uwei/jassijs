@@ -37,7 +37,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyE
             }
             for (let i = 0; i < googleFonts.length; i++) {
                 all.push(googleFonts[i]);
-                CSSProperties_1.loadFontIfNedded(googleFonts[i]);
+                (0, CSSProperties_1.loadFontIfNedded)(googleFonts[i]);
             }
             this.component.items = all;
             //   this.component.dom=font[0];
@@ -80,8 +80,8 @@ define(["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyE
         }
     };
     FontEditor = __decorate([
-        Editor_1.$PropertyEditor(["font"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.FontEditor")
+        (0, Editor_1.$PropertyEditor)(["font"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.FontEditor")
         /**
         * Editor for font
         * used by PropertyEditor

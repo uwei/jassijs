@@ -32,16 +32,16 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
         }
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Setting.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Setting.prototype, "data", void 0);
     Setting = __decorate([
-        DBObject_1.$DBObject({ name: "jassijs_setting" }),
-        Jassi_1.$Class("jassijs.security.Setting"),
+        (0, DBObject_1.$DBObject)({ name: "jassijs_setting" }),
+        (0, Jassi_1.$Class)("jassijs.security.Setting"),
         __metadata("design:paramtypes", [])
     ], Setting);
     exports.Setting = Setting;

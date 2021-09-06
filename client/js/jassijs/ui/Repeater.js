@@ -14,8 +14,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
     let RepeaterDesignPanel = class RepeaterDesignPanel extends Panel_1.Panel {
     };
     RepeaterDesignPanel = __decorate([
-        Component_1.$UIComponent({ editableChildComponents: ["databinder"] }),
-        Jassi_1.$Class("jassijs.ui.RepeaterDesignPanel")
+        (0, Component_1.$UIComponent)({ editableChildComponents: ["databinder"] }),
+        (0, Jassi_1.$Class)("jassijs.ui.RepeaterDesignPanel")
     ], RepeaterDesignPanel);
     let Repeater = class Repeater extends Panel_1.Panel {
         /**
@@ -166,14 +166,14 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
         }
     };
     __decorate([
-        Property_1.$Property({ type: "databinder" }),
+        (0, Property_1.$Property)({ type: "databinder" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Object, Object]),
         __metadata("design:returntype", void 0)
     ], Repeater.prototype, "bind", null);
     Repeater = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
-        Jassi_1.$Class("jassijs.ui.Repeater"),
+        (0, Component_1.$UIComponent)({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
+        (0, Jassi_1.$Class)("jassijs.ui.Repeater"),
         __metadata("design:paramtypes", [Object])
     ], Repeater);
     exports.Repeater = Repeater;

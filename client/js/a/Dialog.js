@@ -55,7 +55,7 @@ define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Checkbox", "jas
         }
     };
     Dialog = __decorate([
-        Jassi_1.$Class("$/Dialog"),
+        (0, Jassi_1.$Class)("$/Dialog"),
         __metadata("design:paramtypes", [])
     ], Dialog);
     exports.Dialog = Dialog;

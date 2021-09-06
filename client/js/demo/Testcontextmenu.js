@@ -53,7 +53,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jas
         }
     };
     Testcontextmenu = __decorate([
-        Jassi_1.$Class("demo.Testcontextmenu"),
+        (0, Jassi_1.$Class)("demo.Testcontextmenu"),
         __metadata("design:paramtypes", [])
     ], Testcontextmenu);
     exports.Testcontextmenu = Testcontextmenu;

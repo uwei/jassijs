@@ -617,7 +617,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         }
     };
     Parser = __decorate([
-        Jassi_1.$Class("jassijs_editor.base.Parser"),
+        (0, Jassi_1.$Class)("jassijs_editor.base.Parser"),
         __metadata("design:paramtypes", [])
     ], Parser);
     exports.Parser = Parser;

@@ -70,9 +70,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         }
     };
     RColumns = __decorate([
-        ReportComponent_1.$ReportComponent({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassijs_report.RColumns"),
-        Property_1.$Property({ hideBaseClassProperties: true }),
+        (0, ReportComponent_1.$ReportComponent)({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] }),
+        (0, Jassi_1.$Class)("jassijs_report.RColumns"),
+        (0, Property_1.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], RColumns);
     exports.RColumns = RColumns;

@@ -82,7 +82,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
         }
     };
     PropertyEditorService = __decorate([
-        Jassi_1.$Class("jassijs.base.PropertyEditorService"),
+        (0, Jassi_1.$Class)("jassijs.base.PropertyEditorService"),
         __metadata("design:paramtypes", [])
     ], PropertyEditorService);
     exports.PropertyEditorService = PropertyEditorService;

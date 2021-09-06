@@ -199,7 +199,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/Debugger",
     };
     ChromeDebugger.mid = 0;
     ChromeDebugger = ChromeDebugger_1 = __decorate([
-        Jassi_1.$Class("jassijs_editor.ChromeDebugger"),
+        (0, Jassi_1.$Class)("jassijs_editor.ChromeDebugger"),
         __metadata("design:paramtypes", [])
     ], ChromeDebugger);
     exports.ChromeDebugger = ChromeDebugger;

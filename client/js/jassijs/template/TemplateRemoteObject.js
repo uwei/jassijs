@@ -41,7 +41,7 @@ export async function test(){
     };
     TemplateRemoteObject.code = code;
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "New/RemoteObject",
             isEnabled: function (all) {
                 return all[0].isDirectory() && all[0].fullpath.split("/").length > 1 && all[0].fullpath.split("/")[1] === "remote";
@@ -52,8 +52,8 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateRemoteObject, "newFile", null);
     TemplateRemoteObject = __decorate([
-        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_1.$Class("jassijs.template.TemplateRemoteObject")
+        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_1.$Class)("jassijs.template.TemplateRemoteObject")
     ], TemplateRemoteObject);
     exports.TemplateRemoteObject = TemplateRemoteObject;
 });

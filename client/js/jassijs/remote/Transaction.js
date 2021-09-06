@@ -134,7 +134,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
         }
     };
     Transaction = __decorate([
-        Jassi_1.$Class("jassijs.remote.Transaction")
+        (0, Jassi_1.$Class)("jassijs.remote.Transaction")
     ], Transaction);
     exports.Transaction = Transaction;
 });

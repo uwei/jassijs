@@ -116,8 +116,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         }
     };
     RTablerow = __decorate([
-        ReportComponent_1.$ReportComponent({ editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassijs_report.RTablerow")
+        (0, ReportComponent_1.$ReportComponent)({ editableChildComponents: ["this"] }),
+        (0, Jassi_1.$Class)("jassijs_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])

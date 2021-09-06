@@ -45,7 +45,7 @@ export async function test(){
     };
     TemplateEmptyDialog.code = code;
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "New/Dialog",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -56,8 +56,8 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateEmptyDialog, "newFile", null);
     TemplateEmptyDialog = __decorate([
-        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_1.$Class("jassijs.template.TemplateEmptyDialog")
+        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_1.$Class)("jassijs.template.TemplateEmptyDialog")
     ], TemplateEmptyDialog);
     exports.TemplateEmptyDialog = TemplateEmptyDialog;
 });

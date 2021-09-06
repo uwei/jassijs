@@ -38,12 +38,12 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", User_1.User)
     ], UserView.prototype, "value", void 0);
     UserView = __decorate([
-        DBObjectView_1.$DBObjectView({ classname: "jassijs.security.User" }),
-        Jassi_1.$Class("jassijs/UserView"),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "jassijs.security.User" }),
+        (0, Jassi_1.$Class)("jassijs/UserView"),
         __metadata("design:paramtypes", [])
     ], UserView);
     exports.UserView = UserView;

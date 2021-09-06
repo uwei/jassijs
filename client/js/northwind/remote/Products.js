@@ -17,48 +17,48 @@ define(["require", "exports", "northwind/remote/Categories", "northwind/remote/S
         }
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Products.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Products.prototype, "ProductName", void 0);
     __decorate([
-        DatabaseSchema_1.ManyToOne(type => Suppliers_1.Suppliers),
+        (0, DatabaseSchema_1.ManyToOne)(type => Suppliers_1.Suppliers),
         __metadata("design:type", Suppliers_1.Suppliers)
     ], Products.prototype, "Supplier", void 0);
     __decorate([
-        DatabaseSchema_1.ManyToOne(type => Categories_1.Categories, e => e.Products),
+        (0, DatabaseSchema_1.ManyToOne)(type => Categories_1.Categories, e => e.Products),
         __metadata("design:type", Categories_1.Categories)
     ], Products.prototype, "Category", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Products.prototype, "QuantityPerUnit", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true, type: "decimal" }),
+        (0, DatabaseSchema_1.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitPrice", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitsInStock", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitsOnOrder", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "ReorderLevel", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", Boolean)
     ], Products.prototype, "Discontinued", void 0);
     Products = __decorate([
-        DBObject_1.$DBObject(),
-        Jassi_1.$Class("northwind.Products"),
+        (0, DBObject_1.$DBObject)(),
+        (0, Jassi_1.$Class)("northwind.Products"),
         __metadata("design:paramtypes", [])
     ], Products);
     exports.Products = Products;

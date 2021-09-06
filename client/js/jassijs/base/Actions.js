@@ -90,7 +90,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi",
         }
     };
     Actions = __decorate([
-        Jassi_1.$Class("jassijs.base.Actions")
+        (0, Jassi_1.$Class)("jassijs.base.Actions")
     ], Actions);
     exports.Actions = Actions;
     async function test() {

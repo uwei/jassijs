@@ -387,11 +387,14 @@ export class DatabaseSchema {
         this.definedImports = {};
         await typescript.waitForInited;
         var data = await registry.getJSONData("$DBObject");
-        data.forEach((entr) => {
+        for (let x = 0; x < data.length; x++) {
+            var entr = data[x];
             var parser = new Parser();
             var file = entr.filename;
             var code = typescript.getCode(file);
-            if (code !== undefined) {
+           // if (code === undefined)
+           //     code = await new Server().loadFile(file);
+         if (code !== undefined) {
                 try {
                     parser.parse(code);
                 } catch (err) {
@@ -408,11 +411,12 @@ export class DatabaseSchema {
                     }
                 }
             }
-        });
+        }
     }
     async loadSchemaFromCode() {
         await this.parseFiles();
         //await registry.loadAllFilesForService("$DBObject")
+        await registry.reload();
         var data = registry.getJSONData("$DBObject");
         this.databaseClasses = [];
         var _this = this;

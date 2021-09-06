@@ -35,9 +35,9 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
         }
     };
     StringConverter = __decorate([
-        DefaultConverter_1.$Converter({ name: "string" }),
-        Jassi_1.$Class("jassijs.ui.converters.StringConverter"),
-        Property_1.$Property({ name: "new", type: "json" })
+        (0, DefaultConverter_1.$Converter)({ name: "string" }),
+        (0, Jassi_1.$Class)("jassijs.ui.converters.StringConverter"),
+        (0, Property_1.$Property)({ name: "new", type: "json" })
         //@$Property({ name: "new/minChars", type: "number", default: undefined })
         //@$Property({ name: "new/maxChars", type: "number", default: undefined })
         ,

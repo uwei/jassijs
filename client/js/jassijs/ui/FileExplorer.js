@@ -179,7 +179,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
         }
     };
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "New/File",
             icon: "mdi mdi-file",
             isEnabled: function (all) {
@@ -191,7 +191,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
         __metadata("design:returntype", Promise)
     ], FileActions, "newFile", null);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Download",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -202,7 +202,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
         __metadata("design:returntype", Promise)
     ], FileActions, "download", null);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "New/Folder",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -213,7 +213,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
         __metadata("design:returntype", Promise)
     ], FileActions, "newFolder", null);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "New/Module",
             isEnabled: function (all) {
                 return all[0].name === "client" && all[0].fullpath === "";
@@ -224,25 +224,25 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
         __metadata("design:returntype", Promise)
     ], FileActions, "newModule", null);
     __decorate([
-        Actions_1.$Action({ name: "Delete" }),
+        (0, Actions_1.$Action)({ name: "Delete" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, Object]),
         __metadata("design:returntype", Promise)
     ], FileActions, "dodelete", null);
     __decorate([
-        Actions_1.$Action({ name: "Rename" }),
+        (0, Actions_1.$Action)({ name: "Rename" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array, Object]),
         __metadata("design:returntype", Promise)
     ], FileActions, "rename", null);
     __decorate([
-        Actions_1.$Action({ name: "Refresh" }),
+        (0, Actions_1.$Action)({ name: "Refresh" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Array]),
         __metadata("design:returntype", Promise)
     ], FileActions, "refresh", null);
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Open", isEnabled: function (all) {
                 return !all[0].isDirectory();
             }
@@ -252,8 +252,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
         __metadata("design:returntype", Promise)
     ], FileActions, "open", null);
     FileActions = __decorate([
-        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_1.$Class("jassijs.ui.FileActions")
+        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.FileActions")
     ], FileActions);
     exports.FileActions = FileActions;
     let FileExplorer = FileExplorer_1 = class FileExplorer extends Panel_1.Panel {
@@ -338,7 +338,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
     };
     FileExplorer.instance = undefined;
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "Windows/Development/Files",
             icon: "mdi mdi-file-tree",
         }),
@@ -347,8 +347,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
         __metadata("design:returntype", Promise)
     ], FileExplorer, "show", null);
     FileExplorer = FileExplorer_1 = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_1.$Class("jassijs.ui.FileExplorer"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.FileExplorer"),
         __metadata("design:paramtypes", [])
     ], FileExplorer);
     exports.FileExplorer = FileExplorer;

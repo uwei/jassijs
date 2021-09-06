@@ -110,7 +110,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassi
         }
     };
     TreeTable = __decorate([
-        Jassi_1.$Class("demo.TreeTable"),
+        (0, Jassi_1.$Class)("demo.TreeTable"),
         __metadata("design:paramtypes", [])
     ], TreeTable);
     exports.TreeTable = TreeTable;

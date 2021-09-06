@@ -332,7 +332,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassi
         }
     };
     Windows = __decorate([
-        Jassi_1.$Class("jassijs.base.Windows"),
+        (0, Jassi_1.$Class)("jassijs.base.Windows"),
         __metadata("design:paramtypes", [])
     ], Windows);
     exports.Windows = Windows;

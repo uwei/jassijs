@@ -31,7 +31,7 @@ function JassiServer(properties = {}, expressApp = undefined) {
     if (properties.updeateRegistryOnStart !== false)
         new RegistryIndexer_1.ServerIndexer().updateRegistry();
     if (properties.syncRemoteFiles !== false) {
-        Filesystem_1.syncRemoteFiles();
+        (0, Filesystem_1.syncRemoteFiles)();
     }
     app.use(Filesystem_1.staticfiles);
     app.use(RawBody_1.rawbody);

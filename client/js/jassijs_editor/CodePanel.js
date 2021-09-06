@@ -135,7 +135,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     CodePanel = CodePanel_1 = __decorate([
-        Jassi_1.$Class("jassijs_editor.CodePanel")
+        (0, Jassi_1.$Class)("jassijs_editor.CodePanel")
     ], CodePanel);
     exports.CodePanel = CodePanel;
 });

@@ -22,21 +22,21 @@ let TestOrder = class TestOrder extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], TestOrder.prototype, "id", void 0);
 __decorate([
-    Rights_1.$CheckParentRight(),
-    DatabaseSchema_1.ManyToOne(type => TestCustomer_1.TestCustomer),
+    (0, Rights_1.$CheckParentRight)(),
+    (0, DatabaseSchema_1.ManyToOne)(type => TestCustomer_1.TestCustomer),
     __metadata("design:type", TestCustomer_1.TestCustomer)
 ], TestOrder.prototype, "customer", void 0);
 __decorate([
-    DatabaseSchema_1.OneToMany(type => TestOrderDetails_1.TestOrderDetails, e => e.Order),
+    (0, DatabaseSchema_1.OneToMany)(type => TestOrderDetails_1.TestOrderDetails, e => e.Order),
     __metadata("design:type", Array)
 ], TestOrder.prototype, "details", void 0);
 TestOrder = __decorate([
-    DBObject_1.$DBObject(),
-    Jassi_1.$Class("tests.TestOrder"),
+    (0, DBObject_1.$DBObject)(),
+    (0, Jassi_1.$Class)("tests.TestOrder"),
     __metadata("design:paramtypes", [])
 ], TestOrder);
 exports.TestOrder = TestOrder;

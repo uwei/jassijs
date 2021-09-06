@@ -17,7 +17,7 @@ define(["require", "exports", "./Jassi"], function (require, exports, Jassi_1) {
         }
     };
     ClientError = __decorate([
-        Jassi_1.$Class("jassijs.remote.ClientError"),
+        (0, Jassi_1.$Class)("jassijs.remote.ClientError"),
         __metadata("design:paramtypes", [String])
     ], ClientError);
     exports.ClientError = ClientError;

@@ -102,7 +102,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassi
                 $(this._components[x].__dom).css("height", this.horizontal ? "100%" : "calc(100% - 5px)");
                 comp.push(this._components[x].domWrapper);
             }
-            this._splitcomponent = split_1.default(comp, {
+            this._splitcomponent = (0, split_1.default)(comp, {
                 sizes: this._spliter,
                 gutterSize: 8,
                 minSize: [50, 50, 50, 50, 50, 50, 50, 50],
@@ -111,19 +111,19 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassi
         }
     };
     __decorate([
-        Property_1.$Property({ default: true }),
+        (0, Property_1.$Property)({ default: true }),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], BoxPanel.prototype, "horizontal", null);
     __decorate([
-        Property_1.$Property({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" }),
+        (0, Property_1.$Property)({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
     ], BoxPanel.prototype, "spliter", null);
     BoxPanel = __decorate([
-        Component_1.$UIComponent({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
-        Jassi_1.$Class("jassijs.ui.BoxPanel"),
-        Property_1.$Property({ name: "isAbsolute", hide: true, type: "boolean" }),
+        (0, Component_1.$UIComponent)({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
+        (0, Jassi_1.$Class)("jassijs.ui.BoxPanel"),
+        (0, Property_1.$Property)({ name: "isAbsolute", hide: true, type: "boolean" }),
         __metadata("design:paramtypes", [Object])
     ], BoxPanel);
     exports.BoxPanel = BoxPanel;

@@ -67,8 +67,8 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/B
         }
     };
     FunctionEditor = __decorate([
-        Editor_1.$PropertyEditor(["function"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.FunctionEditor"),
+        (0, Editor_1.$PropertyEditor)(["function"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.FunctionEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], FunctionEditor);
     exports.FunctionEditor = FunctionEditor;

@@ -19,56 +19,56 @@ let Suppliers = class Suppliers extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    DatabaseSchema_1.PrimaryColumn(),
+    (0, DatabaseSchema_1.PrimaryColumn)(),
     __metadata("design:type", Number)
 ], Suppliers.prototype, "id", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "CompanyName", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "ContactName", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "ContactTitle", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Address", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "City", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Region", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "PostalCode", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Country", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Phone", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "Fax", void 0);
 __decorate([
-    DatabaseSchema_1.Column({ nullable: true }),
+    (0, DatabaseSchema_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], Suppliers.prototype, "HomePage", void 0);
 Suppliers = __decorate([
-    DBObject_1.$DBObject(),
-    Jassi_1.$Class("northwind.Suppliers"),
+    (0, DBObject_1.$DBObject)(),
+    (0, Jassi_1.$Class)("northwind.Suppliers"),
     __metadata("design:paramtypes", [])
 ], Suppliers);
 exports.Suppliers = Suppliers;

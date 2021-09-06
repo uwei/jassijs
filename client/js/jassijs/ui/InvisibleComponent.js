@@ -20,7 +20,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
         }
     };
     InvisibleComponent = __decorate([
-        Jassi_1.$Class("jassijs.ui.InvisibleComponent")
+        (0, Jassi_1.$Class)("jassijs.ui.InvisibleComponent")
         /*@$Property({name:"label",hide:true})
         @$Property({name:"icon",hide:true})
         @$Property({name:"tooltip",hide:true})
@@ -33,7 +33,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
         @$Property({name:"hidden",hide:true})
         @$Property({name:"styles",hide:true})*/
         ,
-        Property_1.$Property({ hideBaseClassProperties: true }),
+        (0, Property_1.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], InvisibleComponent);
     exports.InvisibleComponent = InvisibleComponent;

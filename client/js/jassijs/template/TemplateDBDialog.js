@@ -49,15 +49,15 @@ export async function test(){
     let TemplateDBDialogProperties = class TemplateDBDialogProperties {
     };
     __decorate([
-        Property_1.$Property({ decription: "name of the dialog" }),
+        (0, Property_1.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TemplateDBDialogProperties.prototype, "dialogname", void 0);
     __decorate([
-        Property_1.$Property({ type: "classselector", service: "$DBObject" }),
+        (0, Property_1.$Property)({ type: "classselector", service: "$DBObject" }),
         __metadata("design:type", DBObject_1.DBObject)
     ], TemplateDBDialogProperties.prototype, "dbobject", void 0);
     TemplateDBDialogProperties = __decorate([
-        Jassi_1.$Class("jassijs.template.TemplateDBDialogProperties")
+        (0, Jassi_1.$Class)("jassijs.template.TemplateDBDialogProperties")
     ], TemplateDBDialogProperties);
     exports.TemplateDBDialogProperties = TemplateDBDialogProperties;
     let TemplateDBDialog = class TemplateDBDialog {
@@ -81,7 +81,7 @@ export async function test(){
     };
     TemplateDBDialog.code = code;
     __decorate([
-        Actions_1.$Action({
+        (0, Actions_1.$Action)({
             name: "New/DBDialog",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -92,8 +92,8 @@ export async function test(){
         __metadata("design:returntype", Promise)
     ], TemplateDBDialog, "newFile", null);
     TemplateDBDialog = __decorate([
-        Actions_1.$ActionProvider("jassijs.remote.FileNode"),
-        Jassi_1.$Class("jassijs.ui.TemplateDBDialog")
+        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Jassi_1.$Class)("jassijs.ui.TemplateDBDialog")
     ], TemplateDBDialog);
     exports.TemplateDBDialog = TemplateDBDialog;
 });

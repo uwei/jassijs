@@ -33,7 +33,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
         }
     };
     Property = __decorate([
-        Jassi_1.$Class("jassijs.ui.Property"),
+        (0, Jassi_1.$Class)("jassijs.ui.Property"),
         __metadata("design:paramtypes", [Object, Object])
     ], Property);
     exports.Property = Property;

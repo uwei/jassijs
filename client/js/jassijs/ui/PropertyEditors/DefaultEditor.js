@@ -99,8 +99,8 @@ define(["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/
         }
     };
     DefaultEditor = __decorate([
-        Editor_1.$PropertyEditor(["string", "number", "number[]"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.DefaultEditor"),
+        (0, Editor_1.$PropertyEditor)(["string", "number", "number[]"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.DefaultEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DefaultEditor);
 });

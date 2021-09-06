@@ -27,8 +27,8 @@ define(["require", "exports", "jassijs/remote/Extensions", "jassijs/remote/Jassi
         }
     };
     KundeExt2 = __decorate([
-        Extensions_1.$Extension("de.Kunde"),
-        Jassi_1.$Class("de.KundeExt2"),
+        (0, Extensions_1.$Extension)("de.Kunde"),
+        (0, Jassi_1.$Class)("de.KundeExt2"),
         __metadata("design:paramtypes", [])
     ], KundeExt2);
 });

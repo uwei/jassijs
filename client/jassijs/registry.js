@@ -11,7 +11,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Actions": {}
 	},
 	"jassijs/base/DatabaseSchema.ts": {
-		"date": 1625398849039,
+		"date": 1630961317973,
 		"jassijs.base.DatabaseSchema": {}
 	},
 	"jassijs/base/Errors.ts": {
@@ -297,7 +297,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1625515074672,
+		"date": 1630961487173,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {
@@ -305,7 +305,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.Settings": {}
 	},
 	"jassijs/remote/Test.ts": {
-		"date": 1624296336207,
+		"date": 1630957816667,
 		"jassijs.remote.Test": {}
 	},
 	"jassijs/remote/Transaction.ts": {
@@ -1237,7 +1237,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DatabaseDesigner.ts": {
-		"date": 1624096683489,
+		"date": 1630958367558,
 		"jassijs/ui/DatabaseDesigner": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"

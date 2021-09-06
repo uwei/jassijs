@@ -25,13 +25,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
         }
     };
     __decorate([
-        Property_1.$Property({ default: "function(ob){}" }),
+        (0, Property_1.$Property)({ default: "function(ob){}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], DefaultConverterProperties.prototype, "stringToObject", null);
     DefaultConverterProperties = __decorate([
-        Jassi_1.$Class("jassijs.ui.converters.DefaultConverterProperties")
+        (0, Jassi_1.$Class)("jassijs.ui.converters.DefaultConverterProperties")
     ], DefaultConverterProperties);
     let DefaultConverter = 
     //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
@@ -56,8 +56,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
     };
     DefaultConverter = __decorate([
         $Converter({ name: "custom" }),
-        Jassi_1.$Class("jassijs.ui.converters.DefaultConverter"),
-        Property_1.$Property({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
+        (0, Jassi_1.$Class)("jassijs.ui.converters.DefaultConverter"),
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
         //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
         ,
         __metadata("design:paramtypes", [])

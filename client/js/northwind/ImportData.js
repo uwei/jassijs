@@ -64,20 +64,20 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jass
         }
     };
     __decorate([
-        Actions_1.$Action({ name: "Northwind", icon: "mdi mdi-warehouse" }),
+        (0, Actions_1.$Action)({ name: "Northwind", icon: "mdi mdi-warehouse" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], ImportData, "dummy", null);
     __decorate([
-        Actions_1.$Action({ name: "Northwind/Import sample data", icon: "mdi mdi-database-import" }),
+        (0, Actions_1.$Action)({ name: "Northwind/Import sample data", icon: "mdi mdi-database-import" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], ImportData, "showDialog", null);
     ImportData = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_1.$Class("northwind.ImportData"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_1.$Class)("northwind.ImportData"),
         __metadata("design:paramtypes", [])
     ], ImportData);
     exports.ImportData = ImportData;

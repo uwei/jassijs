@@ -20,7 +20,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/re
         }
     };
     TestTree = __decorate([
-        Jassi_1.$Class("demo.TestTree"),
+        (0, Jassi_1.$Class)("demo.TestTree"),
         __metadata("design:paramtypes", [])
     ], TestTree);
     exports.TestTree = TestTree;

@@ -161,12 +161,12 @@ define(["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel"
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Employees_1.Employees)
     ], EmployeesView.prototype, "value", void 0);
     EmployeesView = __decorate([
-        DBObjectView_1.$DBObjectView({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" }),
-        Jassi_1.$Class("northwind.EmployeesView"),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" }),
+        (0, Jassi_1.$Class)("northwind.EmployeesView"),
         __metadata("design:paramtypes", [])
     ], EmployeesView);
     exports.EmployeesView = EmployeesView;

@@ -179,7 +179,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         }
     };
     ComponentDescriptor = ComponentDescriptor_1 = __decorate([
-        Jassi_1.$Class("jassijs.ui.ComponentDescriptor"),
+        (0, Jassi_1.$Class)("jassijs.ui.ComponentDescriptor"),
         __metadata("design:paramtypes", [])
     ], ComponentDescriptor);
     exports.ComponentDescriptor = ComponentDescriptor;

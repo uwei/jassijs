@@ -112,7 +112,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     ComponentPalette = __decorate([
-        Jassi_1.$Class("jassijs_editor.ComponentPalette"),
+        (0, Jassi_1.$Class)("jassijs_editor.ComponentPalette"),
         __metadata("design:paramtypes", [])
     ], ComponentPalette);
     exports.ComponentPalette = ComponentPalette;

@@ -58,12 +58,12 @@ define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Categories_1.Categories !== "undefined" && Categories_1.Categories) === "function" ? _a : Object)
     ], CategoriesView.prototype, "value", void 0);
     CategoriesView = __decorate([
-        DBObjectView_1.$DBObjectView({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
-        Jassi_1.$Class("northwind.CategoriesView"),
+        (0, DBObjectView_1.$DBObjectView)({ classname: "northwind.Categories", actionname: "Northwind/Categories", icon: "mdi mdi-cube" }),
+        (0, Jassi_1.$Class)("northwind.CategoriesView"),
         __metadata("design:paramtypes", [])
     ], CategoriesView);
     exports.CategoriesView = CategoriesView;
@@ -170,16 +170,16 @@ define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "j
         }
     };
     __decorate([
-        Property_2.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_2.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Customer_1.Customer !== "undefined" && Customer_1.Customer) === "function" ? _a : Object)
     ], CustomerView.prototype, "value", void 0);
     CustomerView = __decorate([
-        DBObjectView_2.$DBObjectView({
+        (0, DBObjectView_2.$DBObjectView)({
             classname: "northwind.Customer",
             actionname: "Northwind/Customers",
             icon: "mdi mdi-nature-people"
         }),
-        Jassi_2.$Class("northwind/CustomerView"),
+        (0, Jassi_2.$Class)("northwind/CustomerView"),
         __metadata("design:paramtypes", [])
     ], CustomerView);
     exports.CustomerView = CustomerView;
@@ -211,12 +211,12 @@ define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Jassi", "j
         }
     };
     __decorate([
-        Property_3.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_3.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof OrderDetails_1.OrderDetails !== "undefined" && OrderDetails_1.OrderDetails) === "function" ? _a : Object)
     ], DetailTest.prototype, "value", void 0);
     DetailTest = __decorate([
-        DBObjectView_3.$DBObjectView({ classname: "northwind.OrderDetails" }),
-        Jassi_3.$Class("northwind.DetailTest"),
+        (0, DBObjectView_3.$DBObjectView)({ classname: "northwind.OrderDetails" }),
+        (0, Jassi_3.$Class)("northwind.DetailTest"),
         __metadata("design:paramtypes", [])
     ], DetailTest);
     exports.DetailTest = DetailTest;
@@ -383,12 +383,12 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
         }
     };
     __decorate([
-        Property_4.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_4.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Employees_1.Employees !== "undefined" && Employees_1.Employees) === "function" ? _a : Object)
     ], EmployeesView.prototype, "value", void 0);
     EmployeesView = __decorate([
-        DBObjectView_4.$DBObjectView({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" }),
-        Jassi_4.$Class("northwind.EmployeesView"),
+        (0, DBObjectView_4.$DBObjectView)({ classname: "northwind.Employees", actionname: "Northwind/Employees", icon: "mdi mdi-account-tie" }),
+        (0, Jassi_4.$Class)("northwind.EmployeesView"),
         __metadata("design:paramtypes", [])
     ], EmployeesView);
     exports.EmployeesView = EmployeesView;
@@ -457,20 +457,20 @@ define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jass
         }
     };
     __decorate([
-        Actions_1.$Action({ name: "Northwind", icon: "mdi mdi-warehouse" }),
+        (0, Actions_1.$Action)({ name: "Northwind", icon: "mdi mdi-warehouse" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], ImportData, "dummy", null);
     __decorate([
-        Actions_1.$Action({ name: "Northwind/Import sample data", icon: "mdi mdi-database-import" }),
+        (0, Actions_1.$Action)({ name: "Northwind/Import sample data", icon: "mdi mdi-database-import" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", Promise)
     ], ImportData, "showDialog", null);
     ImportData = __decorate([
-        Actions_1.$ActionProvider("jassijs.base.ActionNode"),
-        Jassi_5.$Class("northwind.ImportData"),
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Jassi_5.$Class)("northwind.ImportData"),
         __metadata("design:paramtypes", [])
     ], ImportData);
     exports.ImportData = ImportData;
@@ -691,12 +691,12 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "ja
         }
     };
     __decorate([
-        Property_5.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_5.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Orders_1.Orders !== "undefined" && Orders_1.Orders) === "function" ? _a : Object)
     ], OrdersView.prototype, "value", void 0);
     OrdersView = __decorate([
-        DBObjectView_5.$DBObjectView({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text" }),
-        Jassi_6.$Class("northwind.OrdersView"),
+        (0, DBObjectView_5.$DBObjectView)({ classname: "northwind.Orders", actionname: "Northwind/Orders", icon: "mdi mdi-script-text" }),
+        (0, Jassi_6.$Class)("northwind.OrdersView"),
         __metadata("design:paramtypes", [])
     ], OrdersView);
     exports.OrdersView = OrdersView;
@@ -836,12 +836,12 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
         }
     };
     __decorate([
-        Property_6.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_6.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Products_1.Products !== "undefined" && Products_1.Products) === "function" ? _a : Object)
     ], ProductView.prototype, "value", void 0);
     ProductView = __decorate([
-        DBObjectView_6.$DBObjectView({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" }),
-        Jassi_7.$Class("northwind.ProductView"),
+        (0, DBObjectView_6.$DBObjectView)({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" }),
+        (0, Jassi_7.$Class)("northwind.ProductView"),
         __metadata("design:paramtypes", [])
     ], ProductView);
     exports.ProductView = ProductView;
@@ -903,7 +903,7 @@ define("northwind/SampleServerReport", ["require", "exports", "jassijs/remote/Re
         }
     };
     __decorate([
-        Property_7.$Property(),
+        (0, Property_7.$Property)(),
         __metadata("design:type", String)
     ], SampleServerReport.prototype, "name", void 0);
     SampleServerReport = __decorate([
@@ -946,7 +946,7 @@ define("northwind/SampleServerReport", ["require", "exports", "jassijs/remote/Re
         }
     };
     __decorate([
-        Property_7.$Property(),
+        (0, Property_7.$Property)(),
         __metadata("design:type", String)
     ], SampleClientReport.prototype, "name", void 0);
     SampleClientReport = __decorate([
@@ -1011,12 +1011,12 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
         }
     };
     __decorate([
-        Property_8.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_8.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Shippers_1.Shippers !== "undefined" && Shippers_1.Shippers) === "function" ? _a : Object)
     ], ShippersView.prototype, "value", void 0);
     ShippersView = __decorate([
-        DBObjectView_7.$DBObjectView({ classname: "northwind.Shippers", actionname: "Northwind/Shippers", icon: "mdi mdi-truck-delivery" }),
-        Jassi_8.$Class("northwind.ShippersView"),
+        (0, DBObjectView_7.$DBObjectView)({ classname: "northwind.Shippers", actionname: "Northwind/Shippers", icon: "mdi mdi-truck-delivery" }),
+        (0, Jassi_8.$Class)("northwind.ShippersView"),
         __metadata("design:paramtypes", [])
     ], ShippersView);
     exports.ShippersView = ShippersView;
@@ -1132,12 +1132,12 @@ define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/
         }
     };
     __decorate([
-        Property_9.$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
+        (0, Property_9.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", typeof (_a = typeof Suppliers_1.Suppliers !== "undefined" && Suppliers_1.Suppliers) === "function" ? _a : Object)
     ], SuppliersView.prototype, "value", void 0);
     SuppliersView = __decorate([
-        DBObjectView_8.$DBObjectView({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" }),
-        Jassi_9.$Class("northwind.SuppliersView"),
+        (0, DBObjectView_8.$DBObjectView)({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" }),
+        (0, Jassi_9.$Class)("northwind.SuppliersView"),
         __metadata("design:paramtypes", [])
     ], SuppliersView);
     exports.SuppliersView = SuppliersView;
@@ -1279,7 +1279,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551043267
             },
             "northwind/OrdersView.ts": {
-                "date": 1622984379867,
+                "date": 1630149321374,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1940,28 +1940,28 @@ define("northwind/remote/Categories", ["require", "exports", "northwind/remote/P
         }
     };
     __decorate([
-        DatabaseSchema_1.PrimaryColumn(),
+        (0, DatabaseSchema_1.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Categories.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Categories.prototype, "CategoryName", void 0);
     __decorate([
-        DatabaseSchema_1.Column({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Categories.prototype, "Description", void 0);
     __decorate([
-        DatabaseSchema_1.Column(),
+        (0, DatabaseSchema_1.Column)(),
         __metadata("design:type", String)
     ], Categories.prototype, "Picture", void 0);
     __decorate([
-        DatabaseSchema_1.OneToMany(type => Products_2.Products, e => e.Category),
+        (0, DatabaseSchema_1.OneToMany)(type => Products_2.Products, e => e.Category),
         __metadata("design:type", typeof (_a = typeof Products_2.Products !== "undefined" && Products_2.Products) === "function" ? _a : Object)
     ], Categories.prototype, "Products", void 0);
     Categories = __decorate([
-        DBObject_1.$DBObject(),
-        Jassi_10.$Class("northwind.Categories"),
+        (0, DBObject_1.$DBObject)(),
+        (0, Jassi_10.$Class)("northwind.Categories"),
         __metadata("design:paramtypes", [])
     ], Categories);
     exports.Categories = Categories;
@@ -1992,52 +1992,52 @@ define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObj
         }
     };
     __decorate([
-        DatabaseSchema_2.PrimaryColumn(),
+        (0, DatabaseSchema_2.PrimaryColumn)(),
         __metadata("design:type", String)
     ], Customer.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_2.Column(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "CompanyName", void 0);
     __decorate([
-        DatabaseSchema_2.Column(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "ContactName", void 0);
     __decorate([
-        DatabaseSchema_2.Column(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "ContactTitle", void 0);
     __decorate([
-        DatabaseSchema_2.Column(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "Address", void 0);
     __decorate([
-        DatabaseSchema_2.Column(),
+        (0, DatabaseSchema_2.Column)(),
         __metadata("design:type", String)
     ], Customer.prototype, "City", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Region", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "PostalCode", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Country", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Phone", void 0);
     __decorate([
-        DatabaseSchema_2.Column({ nullable: true }),
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Customer.prototype, "Fax", void 0);
     Customer = __decorate([
-        DBObject_2.$DBObject(),
-        Jassi_11.$Class("northwind.Customer"),
+        (0, DBObject_2.$DBObject)(),
+        (0, Jassi_11.$Class)("northwind.Customer"),
         __metadata("design:paramtypes", [])
     ], Customer);
     exports.Customer = Customer;
@@ -2085,81 +2085,81 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
         }
     };
     __decorate([
-        DatabaseSchema_3.PrimaryColumn(),
+        (0, DatabaseSchema_3.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Employees.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "LastName", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "FirstName", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Title", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "TitleOfCourtesy", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Address", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "City", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Region", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "PostalCode", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Country", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "HomePhone", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Extension", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Photo", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "Notes", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Employees.prototype, "PhotoPath", void 0);
     __decorate([
-        DatabaseSchema_3.JoinColumn(),
-        DatabaseSchema_3.ManyToOne(type => Employees_2),
+        (0, DatabaseSchema_3.JoinColumn)(),
+        (0, DatabaseSchema_3.ManyToOne)(type => Employees_2),
         __metadata("design:type", Employees)
     ], Employees.prototype, "ReportsTo", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Employees.prototype, "BirthDate", void 0);
     __decorate([
-        DatabaseSchema_3.Column({ nullable: true }),
+        (0, DatabaseSchema_3.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Employees.prototype, "HireDate", void 0);
     Employees = Employees_2 = __decorate([
-        DBObject_3.$DBObject(),
-        Jassi_12.$Class("northwind.Employees"),
+        (0, DBObject_3.$DBObject)(),
+        (0, Jassi_12.$Class)("northwind.Employees"),
         __metadata("design:paramtypes", [])
     ], Employees);
     exports.Employees = Employees;
@@ -2204,32 +2204,32 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
         }
     };
     __decorate([
-        DatabaseSchema_4.PrimaryGeneratedColumn(),
+        (0, DatabaseSchema_4.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_4.ManyToOne(type => Orders_2.Orders, e => e.Details),
+        (0, DatabaseSchema_4.ManyToOne)(type => Orders_2.Orders, e => e.Details),
         __metadata("design:type", typeof (_a = typeof Orders_2.Orders !== "undefined" && Orders_2.Orders) === "function" ? _a : Object)
     ], OrderDetails.prototype, "Order", void 0);
     __decorate([
-        DatabaseSchema_4.ManyToOne(type => Products_3.Products),
+        (0, DatabaseSchema_4.ManyToOne)(type => Products_3.Products),
         __metadata("design:type", typeof (_b = typeof Products_3.Products !== "undefined" && Products_3.Products) === "function" ? _b : Object)
     ], OrderDetails.prototype, "Product", void 0);
     __decorate([
-        DatabaseSchema_4.Column({ nullable: false, type: "decimal" }),
+        (0, DatabaseSchema_4.Column)({ nullable: false, type: "decimal" }),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "UnitPrice", void 0);
     __decorate([
-        DatabaseSchema_4.Column(),
+        (0, DatabaseSchema_4.Column)(),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "Quantity", void 0);
     __decorate([
-        DatabaseSchema_4.Column({ nullable: true, type: "decimal" }),
+        (0, DatabaseSchema_4.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], OrderDetails.prototype, "Discount", void 0);
     OrderDetails = __decorate([
-        DBObject_4.$DBObject(),
-        Jassi_13.$Class("northwind.OrderDetails"),
+        (0, DBObject_4.$DBObject)(),
+        (0, Jassi_13.$Class)("northwind.OrderDetails"),
         __metadata("design:paramtypes", [])
     ], OrderDetails);
     exports.OrderDetails = OrderDetails;
@@ -2249,68 +2249,68 @@ define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Order
         }
     };
     __decorate([
-        DatabaseSchema_5.PrimaryColumn(),
+        (0, DatabaseSchema_5.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Orders.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_5.ManyToOne(type => Customer_2.Customer),
+        (0, DatabaseSchema_5.ManyToOne)(type => Customer_2.Customer),
         __metadata("design:type", typeof (_a = typeof Customer_2.Customer !== "undefined" && Customer_2.Customer) === "function" ? _a : Object)
     ], Orders.prototype, "Customer", void 0);
     __decorate([
-        DatabaseSchema_5.ManyToOne(type => Employees_3.Employees),
+        (0, DatabaseSchema_5.ManyToOne)(type => Employees_3.Employees),
         __metadata("design:type", typeof (_b = typeof Employees_3.Employees !== "undefined" && Employees_3.Employees) === "function" ? _b : Object)
     ], Orders.prototype, "Employee", void 0);
     __decorate([
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Orders.prototype, "OrderDate", void 0);
     __decorate([
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Orders.prototype, "RequiredDate", void 0);
     __decorate([
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", Date)
     ], Orders.prototype, "ShippedDate", void 0);
     __decorate([
-        DatabaseSchema_5.ManyToOne(type => Shippers_2.Shippers),
+        (0, DatabaseSchema_5.ManyToOne)(type => Shippers_2.Shippers),
         __metadata("design:type", typeof (_c = typeof Shippers_2.Shippers !== "undefined" && Shippers_2.Shippers) === "function" ? _c : Object)
     ], Orders.prototype, "ShipVia", void 0);
     __decorate([
-        DatabaseSchema_5.Column({ nullable: true, type: "decimal" }),
+        (0, DatabaseSchema_5.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], Orders.prototype, "Freight", void 0);
     __decorate([
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipName", void 0);
     __decorate([
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipAddress", void 0);
     __decorate([
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCity", void 0);
     __decorate([
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipRegion", void 0);
     __decorate([
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipPostalCode", void 0);
     __decorate([
-        DatabaseSchema_5.Column({ nullable: true }),
+        (0, DatabaseSchema_5.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCountry", void 0);
     __decorate([
-        DatabaseSchema_5.OneToMany(type => OrderDetails_2.OrderDetails, e => e.Order),
+        (0, DatabaseSchema_5.OneToMany)(type => OrderDetails_2.OrderDetails, e => e.Order),
         __metadata("design:type", Array)
     ], Orders.prototype, "Details", void 0);
     Orders = __decorate([
-        DBObject_5.$DBObject(),
-        Jassi_14.$Class("northwind.Orders"),
+        (0, DBObject_5.$DBObject)(),
+        (0, Jassi_14.$Class)("northwind.Orders"),
         __metadata("design:paramtypes", [])
     ], Orders);
     exports.Orders = Orders;
@@ -2330,48 +2330,48 @@ define("northwind/remote/Products", ["require", "exports", "northwind/remote/Cat
         }
     };
     __decorate([
-        DatabaseSchema_6.PrimaryColumn(),
+        (0, DatabaseSchema_6.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Products.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Products.prototype, "ProductName", void 0);
     __decorate([
-        DatabaseSchema_6.ManyToOne(type => Suppliers_2.Suppliers),
+        (0, DatabaseSchema_6.ManyToOne)(type => Suppliers_2.Suppliers),
         __metadata("design:type", typeof (_a = typeof Suppliers_2.Suppliers !== "undefined" && Suppliers_2.Suppliers) === "function" ? _a : Object)
     ], Products.prototype, "Supplier", void 0);
     __decorate([
-        DatabaseSchema_6.ManyToOne(type => Categories_2.Categories, e => e.Products),
+        (0, DatabaseSchema_6.ManyToOne)(type => Categories_2.Categories, e => e.Products),
         __metadata("design:type", typeof (_b = typeof Categories_2.Categories !== "undefined" && Categories_2.Categories) === "function" ? _b : Object)
     ], Products.prototype, "Category", void 0);
     __decorate([
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Products.prototype, "QuantityPerUnit", void 0);
     __decorate([
-        DatabaseSchema_6.Column({ nullable: true, type: "decimal" }),
+        (0, DatabaseSchema_6.Column)({ nullable: true, type: "decimal" }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitPrice", void 0);
     __decorate([
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitsInStock", void 0);
     __decorate([
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "UnitsOnOrder", void 0);
     __decorate([
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Number)
     ], Products.prototype, "ReorderLevel", void 0);
     __decorate([
-        DatabaseSchema_6.Column({ nullable: true }),
+        (0, DatabaseSchema_6.Column)({ nullable: true }),
         __metadata("design:type", Boolean)
     ], Products.prototype, "Discontinued", void 0);
     Products = __decorate([
-        DBObject_6.$DBObject(),
-        Jassi_15.$Class("northwind.Products"),
+        (0, DBObject_6.$DBObject)(),
+        (0, Jassi_15.$Class)("northwind.Products"),
         __metadata("design:paramtypes", [])
     ], Products);
     exports.Products = Products;
@@ -2391,20 +2391,20 @@ define("northwind/remote/Shippers", ["require", "exports", "jassijs/remote/DBObj
         }
     };
     __decorate([
-        DatabaseSchema_7.PrimaryColumn(),
+        (0, DatabaseSchema_7.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Shippers.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_7.Column({ nullable: true }),
+        (0, DatabaseSchema_7.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Shippers.prototype, "CompanyName", void 0);
     __decorate([
-        DatabaseSchema_7.Column({ nullable: true }),
+        (0, DatabaseSchema_7.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Shippers.prototype, "Phone", void 0);
     Shippers = __decorate([
-        DBObject_7.$DBObject(),
-        Jassi_16.$Class("northwind.Shippers"),
+        (0, DBObject_7.$DBObject)(),
+        (0, Jassi_16.$Class)("northwind.Shippers"),
         __metadata("design:paramtypes", [])
     ], Shippers);
     exports.Shippers = Shippers;
@@ -2423,56 +2423,56 @@ define("northwind/remote/Suppliers", ["require", "exports", "jassijs/remote/DBOb
         }
     };
     __decorate([
-        DatabaseSchema_8.PrimaryColumn(),
+        (0, DatabaseSchema_8.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], Suppliers.prototype, "id", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "CompanyName", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "ContactName", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "ContactTitle", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Address", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "City", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Region", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "PostalCode", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Country", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Phone", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "Fax", void 0);
     __decorate([
-        DatabaseSchema_8.Column({ nullable: true }),
+        (0, DatabaseSchema_8.Column)({ nullable: true }),
         __metadata("design:type", String)
     ], Suppliers.prototype, "HomePage", void 0);
     Suppliers = __decorate([
-        DBObject_8.$DBObject(),
-        Jassi_17.$Class("northwind.Suppliers"),
+        (0, DBObject_8.$DBObject)(),
+        (0, Jassi_17.$Class)("northwind.Suppliers"),
         __metadata("design:paramtypes", [])
     ], Suppliers);
     exports.Suppliers = Suppliers;

@@ -26,6 +26,9 @@ export class TestRModul extends RemoteObject{
             await ret.addClass("testrmodul.TestRCustomer");
             await ret.addField("string", "name");
             var sr = await ret.saveAll(false);
+            if (sr !== "") {
+                throw new Error(sr);
+            }
             teste.expectEqual(sr === "");
             ret.destroy();
             await Registry_1.default.reload();

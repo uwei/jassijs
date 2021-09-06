@@ -15,16 +15,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
     let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
     };
     __decorate([
-        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser", chooseFromStrict: true }),
+        (0, Property_1.$Property)({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser", chooseFromStrict: true }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_DefaultEditor", void 0);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light", chooseFromStrict: true }),
+        (0, Property_1.$Property)({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light", chooseFromStrict: true }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_MoanacoEditorTheme", void 0);
     CodeEditorSettingsDescriptor = __decorate([
-        Settings_1.$SettingsDescriptor(),
-        Jassi_1.$Class("jassijs_editor.CodeEditorSettingsDescriptor")
+        (0, Settings_1.$SettingsDescriptor)(),
+        (0, Jassi_1.$Class)("jassijs_editor.CodeEditorSettingsDescriptor")
     ], CodeEditorSettingsDescriptor);
     /**
      * Panel for editing sources
@@ -576,17 +576,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], CodeEditor.prototype, "file", null);
     __decorate([
-        Property_1.$Property({ isUrlTag: true }),
+        (0, Property_1.$Property)({ isUrlTag: true }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], CodeEditor.prototype, "line", null);
     CodeEditor = CodeEditor_1 = __decorate([
-        Jassi_1.$Class("jassijs_editor.CodeEditor"),
+        (0, Jassi_1.$Class)("jassijs_editor.CodeEditor"),
         __metadata("design:paramtypes", [])
     ], CodeEditor);
     exports.CodeEditor = CodeEditor;

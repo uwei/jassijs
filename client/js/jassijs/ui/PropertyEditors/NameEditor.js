@@ -71,8 +71,8 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/T
         }
     };
     NameEditor = __decorate([
-        Editor_1.$PropertyEditor(["*name*"]),
-        Jassi_1.$Class("jassijs.ui.PropertyEditors.NameEditor"),
+        (0, Editor_1.$PropertyEditor)(["*name*"]),
+        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.NameEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], NameEditor);
     exports.NameEditor = NameEditor;

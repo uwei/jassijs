@@ -27,7 +27,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/BoxPanel"], fu
         }
     };
     Report = __decorate([
-        Jassi_1.$Class("jassijs_report.Report")
+        (0, Jassi_1.$Class)("jassijs_report.Report")
         //@$UIComponent({editableChildComponents:["this"]})
         //@$Property({name:"horizontal",hide:true})
         ,
