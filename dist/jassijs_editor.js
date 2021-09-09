@@ -481,7 +481,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
         }
     };
     AcePanel = AcePanel_1 = __decorate([
-        Jassi_1.$Class("jassijs.ui.AcePanel"),
+        (0, Jassi_1.$Class)("jassijs.ui.AcePanel"),
         __metadata("design:paramtypes", [])
     ], AcePanel);
     exports.AcePanel = AcePanel;
@@ -723,7 +723,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/J
     };
     ChromeDebugger.mid = 0;
     ChromeDebugger = ChromeDebugger_1 = __decorate([
-        Jassi_2.$Class("jassijs_editor.ChromeDebugger"),
+        (0, Jassi_2.$Class)("jassijs_editor.ChromeDebugger"),
         __metadata("design:paramtypes", [])
     ], ChromeDebugger);
     exports.ChromeDebugger = ChromeDebugger;
@@ -739,16 +739,16 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
     let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
     };
     __decorate([
-        Property_1.$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser", chooseFromStrict: true }),
+        (0, Property_1.$Property)({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser", chooseFromStrict: true }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_DefaultEditor", void 0);
     __decorate([
-        Property_1.$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light", chooseFromStrict: true }),
+        (0, Property_1.$Property)({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light", chooseFromStrict: true }),
         __metadata("design:type", String)
     ], CodeEditorSettingsDescriptor.prototype, "Development_MoanacoEditorTheme", void 0);
     CodeEditorSettingsDescriptor = __decorate([
-        Settings_1.$SettingsDescriptor(),
-        Jassi_3.$Class("jassijs_editor.CodeEditorSettingsDescriptor")
+        (0, Settings_1.$SettingsDescriptor)(),
+        (0, Jassi_3.$Class)("jassijs_editor.CodeEditorSettingsDescriptor")
     ], CodeEditorSettingsDescriptor);
     /**
      * Panel for editing sources
@@ -1052,15 +1052,20 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                             _this._design["designedComponent"] = ret;
                         });
                     }
-                    else if (ret["reporttype"] !== undefined) {
-                        require(["jassijs_report/designer/ReportDesigner"], function () {
+                    else if (ret["reportdesign"] !== undefined) {
+                        require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign"], function () {
                             var ReportDesigner = Classes_1.classes.getClass("jassijs_report.designer.ReportDesigner");
+                            var ReportDesign = Classes_1.classes.getClass("jassijs_report.ReportDesign");
                             if (!((_this._design) instanceof ReportDesigner)) {
                                 _this._design = new ReportDesigner();
                                 _this._main.add(_this._design, "Design", "design");
                                 _this._design["codeEditor"] = _this;
                             }
-                            _this._design["designedComponent"] = ret;
+                            var rep = new ReportDesign();
+                            rep.design = Object.assign({}, ret.reportdesign);
+                            rep.design.data = ret.value;
+                            rep.design.parameter = ret.parameter;
+                            _this._design["designedComponent"] = rep;
                             /*   require(["jassijs_report/ReportDesign"], function() {
                                    var rd = classes.getClass("jassijs_report.ReportDesign");
                                    let rep = rd["fromJSON"](ret);
@@ -1068,7 +1073,19 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                                    _this._design["designedComponent"] = rep;
                                });*/
                         });
-                    }
+                    } /*else if (ret["reporttype"] !== undefined) {
+                        require(["jassijs_report/designer/ReportDesigner"], function () {
+                            var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
+                            if (!((_this._design) instanceof ReportDesigner)) {
+                                _this._design = new ReportDesigner();
+                                _this._main.add(_this._design, "Design", "design");
+                                _this._design["codeEditor"] = _this;
+                            }
+                            _this._design["designedComponent"] = ret;
+    
+                 
+                        });
+                    }*/
                 }
                 //  });
             }
@@ -1300,17 +1317,17 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
         }
     };
     __decorate([
-        Property_1.$Property({ isUrlTag: true, id: true }),
+        (0, Property_1.$Property)({ isUrlTag: true, id: true }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], CodeEditor.prototype, "file", null);
     __decorate([
-        Property_1.$Property({ isUrlTag: true }),
+        (0, Property_1.$Property)({ isUrlTag: true }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], CodeEditor.prototype, "line", null);
     CodeEditor = CodeEditor_1 = __decorate([
-        Jassi_3.$Class("jassijs_editor.CodeEditor"),
+        (0, Jassi_3.$Class)("jassijs_editor.CodeEditor"),
         __metadata("design:paramtypes", [])
     ], CodeEditor);
     exports.CodeEditor = CodeEditor;
@@ -1443,7 +1460,7 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
         }
     };
     CodeEditorInvisibleComponents = __decorate([
-        Jassi_4.$Class("jassijs_editor.CodeEditorInvisibleComponents"),
+        (0, Jassi_4.$Class)("jassijs_editor.CodeEditorInvisibleComponents"),
         __metadata("design:paramtypes", [Object])
     ], CodeEditorInvisibleComponents);
     exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;
@@ -1579,7 +1596,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Jassi"
         }
     };
     CodePanel = CodePanel_2 = __decorate([
-        Jassi_5.$Class("jassijs_editor.CodePanel")
+        (0, Jassi_5.$Class)("jassijs_editor.CodePanel")
     ], CodePanel);
     exports.CodePanel = CodePanel;
 });
@@ -1616,6 +1633,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
             this.classes = {};
             this.imports = {};
             this.functions = {};
+            this.variables = {};
             this.data = {};
             /** {[string]} - all code lines*/
         }
@@ -1844,6 +1862,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         }
         visitNode(node) {
             var _this = this;
+            if (node.kind === ts.SyntaxKind.VariableDeclaration) {
+                this.variables[node["name"].text] = node;
+            }
             if (node.kind === ts.SyntaxKind.ImportDeclaration) {
                 var nd = node;
                 var file = nd.moduleSpecifier.text;
@@ -2193,7 +2214,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         }
     };
     Parser = __decorate([
-        Jassi_6.$Class("jassijs_editor.base.Parser"),
+        (0, Jassi_6.$Class)("jassijs_editor.base.Parser"),
         __metadata("design:paramtypes", [])
     ], Parser);
     exports.Parser = Parser;
@@ -2728,7 +2749,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
         }
     };
     ComponentDesigner = __decorate([
-        Jassi_7.$Class("jassijs_editor.ComponentDesigner"),
+        (0, Jassi_7.$Class)("jassijs_editor.ComponentDesigner"),
         __metadata("design:paramtypes", [])
     ], ComponentDesigner);
     exports.ComponentDesigner = ComponentDesigner;
@@ -2863,7 +2884,7 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
         }
     };
     ComponentExplorer = __decorate([
-        Jassi_8.$Class("jassijs_editor.ComponentExplorer"),
+        (0, Jassi_8.$Class)("jassijs_editor.ComponentExplorer"),
         __metadata("design:paramtypes", [typeof (_a = typeof CodeEditor_2.CodeEditor !== "undefined" && CodeEditor_2.CodeEditor) === "function" ? _a : Object, typeof (_b = typeof PropertyEditor_2.PropertyEditor !== "undefined" && PropertyEditor_2.PropertyEditor) === "function" ? _b : Object])
     ], ComponentExplorer);
     exports.ComponentExplorer = ComponentExplorer;
@@ -2982,7 +3003,7 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
         }
     };
     ComponentPalette = __decorate([
-        Jassi_9.$Class("jassijs_editor.ComponentPalette"),
+        (0, Jassi_9.$Class)("jassijs_editor.ComponentPalette"),
         __metadata("design:paramtypes", [])
     ], ComponentPalette);
     exports.ComponentPalette = ComponentPalette;
@@ -3130,7 +3151,7 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Jassi"]
         }
     };
     Debugger = __decorate([
-        Jassi_10.$Class("jassijs_editor.Debugger"),
+        (0, Jassi_10.$Class)("jassijs_editor.Debugger"),
         __metadata("design:paramtypes", [])
     ], Debugger);
     exports.Debugger = Debugger;
@@ -3427,7 +3448,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
         }
     };
     MonacoPanel = __decorate([
-        Jassi_11.$Class("jassijs_editor.MonacoPanel"),
+        (0, Jassi_11.$Class)("jassijs_editor.MonacoPanel"),
         __metadata("design:paramtypes", [])
     ], MonacoPanel);
     exports.MonacoPanel = MonacoPanel;
@@ -3511,7 +3532,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1624296590297,
+                "date": 1631051132191,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3602,7 +3623,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1623862933088,
+                "date": 1631040835383,
                 "jassijs_editor.base.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -3974,7 +3995,7 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
         }
     };
     DragAndDropper = __decorate([
-        Jassi_12.$Class("jassijs_editor.util.DragAndDropper"),
+        (0, Jassi_12.$Class)("jassijs_editor.util.DragAndDropper"),
         __metadata("design:paramtypes", [])
     ], DragAndDropper);
     exports.DragAndDropper = DragAndDropper;
@@ -4280,7 +4301,7 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
         }
     };
     Resizer = __decorate([
-        Jassi_13.$Class("jassijs_editor.util.Resizer"),
+        (0, Jassi_13.$Class)("jassijs_editor.util.Resizer"),
         __metadata("design:paramtypes", [])
     ], Resizer);
     exports.Resizer = Resizer;
@@ -4382,7 +4403,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
         }
     };
     TSSourceMap = __decorate([
-        Jassi_14.$Class("jassijs_editor.util.TSSourceMap")
+        (0, Jassi_14.$Class)("jassijs_editor.util.TSSourceMap")
     ], TSSourceMap);
     exports.TSSourceMap = TSSourceMap;
 });
@@ -4785,7 +4806,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
         experimentalDecorators: true,
     };
     Typescript = Typescript_6 = __decorate([
-        Jassi_15.$Class("jassijs_editor.util.Typescript"),
+        (0, Jassi_15.$Class)("jassijs_editor.util.Typescript"),
         __metadata("design:paramtypes", [])
     ], Typescript);
     exports.Typescript = Typescript;

@@ -328,15 +328,20 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                             _this._design["designedComponent"] = ret;
                         });
                     }
-                    else if (ret["reporttype"] !== undefined) {
-                        require(["jassijs_report/designer/ReportDesigner"], function () {
+                    else if (ret["reportdesign"] !== undefined) {
+                        require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign"], function () {
                             var ReportDesigner = Classes_1.classes.getClass("jassijs_report.designer.ReportDesigner");
+                            var ReportDesign = Classes_1.classes.getClass("jassijs_report.ReportDesign");
                             if (!((_this._design) instanceof ReportDesigner)) {
                                 _this._design = new ReportDesigner();
                                 _this._main.add(_this._design, "Design", "design");
                                 _this._design["codeEditor"] = _this;
                             }
-                            _this._design["designedComponent"] = ret;
+                            var rep = new ReportDesign();
+                            rep.design = Object.assign({}, ret.reportdesign);
+                            rep.design.data = ret.value;
+                            rep.design.parameter = ret.parameter;
+                            _this._design["designedComponent"] = rep;
                             /*   require(["jassijs_report/ReportDesign"], function() {
                                    var rd = classes.getClass("jassijs_report.ReportDesign");
                                    let rep = rd["fromJSON"](ret);
@@ -344,7 +349,19 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                                    _this._design["designedComponent"] = rep;
                                });*/
                         });
-                    }
+                    } /*else if (ret["reporttype"] !== undefined) {
+                        require(["jassijs_report/designer/ReportDesigner"], function () {
+                            var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
+                            if (!((_this._design) instanceof ReportDesigner)) {
+                                _this._design = new ReportDesigner();
+                                _this._main.add(_this._design, "Design", "design");
+                                _this._design["codeEditor"] = _this;
+                            }
+                            _this._design["designedComponent"] = ret;
+    
+                 
+                        });
+                    }*/
                 }
                 //  });
             }

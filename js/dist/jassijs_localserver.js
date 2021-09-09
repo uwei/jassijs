@@ -982,10 +982,10 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
         async saveFile(filename, content) {
             return await this.saveFiles([filename], [content]);
         }
-        async saveFiles(fileNames, contents, fromServerdirectory = undefined, rollbackonerror = true) {
+        async saveFiles(fileNames, contents, rollbackonerror = true) {
             var _a;
             //serverside compile
-            if (fromServerdirectory) {
+            if (fileNames[0].startsWith("$serverside/")) {
                 var allfileNames = [];
                 var allcontents = [];
                 for (var f = 0; f < fileNames.length; f++) {
@@ -1054,7 +1054,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                     if (dbschemaHasChanged) {
                         await DBManager_2.DBManager.destroyConnection();
                     }
-                    var restore = await this.saveFiles(fileNames, rollbackcontents, fromServerdirectory, false);
+                    var restore = await this.saveFiles(fileNames, rollbackcontents, false);
                     if (dbschemaHasChanged) {
                         await DBManager_2.DBManager.get();
                     }
@@ -1136,7 +1136,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             }
             return "";
         }
-        async loadFile(fileName, fromServerdirectory = undefined) {
+        async loadFile(fileName) {
             var r = await this.loadFileEntry(fileName);
             return (r ? r.data : undefined);
         }

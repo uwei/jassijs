@@ -392,6 +392,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportComp
                 ret.alignment = this.alignment;
             if (this.background !== undefined)
                 ret.background = this.background;
+            var test = 0;
+            for (var key in ret) {
+                test++;
+            }
+            if (test === 1)
+                ret = ret.text; //short version
             return ret;
         }
     };

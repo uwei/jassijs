@@ -98,7 +98,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/DatabaseSchema.ts": {
-                "date": 1625398849039,
+                "date": 1630961317973,
                 "jassijs.base.DatabaseSchema": {}
             },
             "jassijs/base/Errors.ts": {
@@ -384,7 +384,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1625515074672,
+                "date": 1630961487173,
                 "jassijs.remote.Server": {}
             },
             "jassijs/remote/Settings.ts": {
@@ -392,7 +392,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.Settings": {}
             },
             "jassijs/remote/Test.ts": {
-                "date": 1624296336207,
+                "date": 1630957816667,
                 "jassijs.remote.Test": {}
             },
             "jassijs/remote/Transaction.ts": {
@@ -1324,7 +1324,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DatabaseDesigner.ts": {
-                "date": 1624096683489,
+                "date": 1630958367558,
                 "jassijs/ui/DatabaseDesigner": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -3132,10 +3132,13 @@ define("jassijs/base/DatabaseSchema", ["require", "exports", "jassijs/remote/Jas
             this.definedImports = {};
             await Typescript_1.default.waitForInited;
             var data = await Registry_2.default.getJSONData("$DBObject");
-            data.forEach((entr) => {
+            for (let x = 0; x < data.length; x++) {
+                var entr = data[x];
                 var parser = new Parser_1.Parser();
                 var file = entr.filename;
                 var code = Typescript_1.default.getCode(file);
+                // if (code === undefined)
+                //     code = await new Server().loadFile(file);
                 if (code !== undefined) {
                     try {
                         parser.parse(code);
@@ -3154,11 +3157,12 @@ define("jassijs/base/DatabaseSchema", ["require", "exports", "jassijs/remote/Jas
                         }
                     }
                 }
-            });
+            }
         }
         async loadSchemaFromCode() {
             await this.parseFiles();
             //await registry.loadAllFilesForService("$DBObject")
+            await Registry_2.default.reload();
             var data = Registry_2.default.getJSONData("$DBObject");
             this.databaseClasses = [];
             var _this = this;
@@ -6139,7 +6143,8 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
          * @param {string} fileName
          * @returns {string} content of the file
          */
-        async loadFile(fileName, fromServerdirectory = undefined, context = undefined) {
+        async loadFile(fileName, context = undefined) {
+            var fromServerdirectory = fileName.startsWith("$serverside/");
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 await this.fillFilesInMapIfNeeded();
                 if (!fromServerdirectory && Server_2.filesInMap[fileName]) {
@@ -6153,13 +6158,13 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
                         let mapname = Jassi_18.default.modules[found.modul].split("?")[0] + ".map";
                         if (Jassi_18.default.modules[found.modul].indexOf(".js?") > -1)
                             mapname = mapname + "?" + Jassi_18.default.modules[found.modul].split("?")[1];
-                        var code = await this.loadFile(mapname, fromServerdirectory, context);
+                        var code = await this.loadFile(mapname, context);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;
                     }
                 }
                 if (fromServerdirectory) {
-                    return await this.call(this, this.loadFile, fileName, fromServerdirectory, context);
+                    return await this.call(this, this.loadFile, fileName, context);
                 }
                 else
                     return $.ajax({ url: fileName, dataType: "text" });
@@ -6179,7 +6184,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
         * @param [{string}] fileNames - the name of the file
         * @param [{string}] contents
         */
-        async saveFiles(fileNames, contents, fromServerdirectory = undefined, context = undefined) {
+        async saveFiles(fileNames, contents, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 var allfileNames = [];
                 var allcontents = [];
@@ -6188,7 +6193,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
                     var _this = this;
                     var fileName = fileNames[f];
                     var content = contents[f];
-                    if (!fromServerdirectory && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
+                    if (!fileName.startsWith("$serverside/") && (fileName.endsWith(".ts") || fileName.endsWith(".js"))) {
                         //@ts-ignore
                         var tss = await new Promise((resolve_21, reject_21) => { require(["jassijs_editor/util/Typescript"], resolve_21, reject_21); });
                         var rets = await tss.default.transpile(fileName, content);
@@ -6201,15 +6206,15 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
                         allcontents.push(content);
                     }
                 }
-                var res = await this.call(this, this.saveFiles, allfileNames, allcontents, fromServerdirectory, context);
+                var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
                 if (res === "") {
                     //@ts-ignore
                     $.notify(fileName + " saved", "info", { position: "bottom right" });
-                    if (!fromServerdirectory) {
-                        for (var x = 0; x < alltsfiles.length; x++) {
-                            await $.ajax({ url: alltsfiles[x], dataType: "text" });
-                        }
+                    //if (!fromServerdirectory) {
+                    for (var x = 0; x < alltsfiles.length; x++) {
+                        await $.ajax({ url: alltsfiles[x], dataType: "text" });
                     }
+                    // }
                 }
                 else {
                     //@ts-ignore
@@ -6223,7 +6228,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
                     throw new Classes_13.JassiError("only admins can saveFiles");
                 //@ts-ignore
                 var fs = await new Promise((resolve_22, reject_22) => { require(["jassijs/server/Filesystem"], resolve_22, reject_22); });
-                var ret = await new fs.default().saveFiles(fileNames, contents, fromServerdirectory, true);
+                var ret = await new fs.default().saveFiles(fileNames, contents, true);
                 return ret;
             }
         }
@@ -6232,14 +6237,14 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
         * @param {string} fileName - the name of the file
         * @param {string} content
         */
-        async saveFile(fileName, content, fromServerdirectory = undefined, context = undefined) {
+        async saveFile(fileName, content, context = undefined) {
             /*await this.fillFilesInMapIfNeeded();
             if (Server.filesInMap[fileName]) {
                 //@ts-ignore
                  $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
                 return;
             }*/
-            return await this.saveFiles([fileName], [content], fromServerdirectory, context);
+            return await this.saveFiles([fileName], [content], context);
             /* if (!jassijs.isServer) {
                  var ret = await this.call(this, "saveFiles", fileNames, contents);
                  //@ts-ignore
@@ -9937,7 +9942,7 @@ define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPane
                 }
             }
             catch (err) {
-                return err.message;
+                return err.message + "\r\n" + err.stack;
             }
             return "";
         }

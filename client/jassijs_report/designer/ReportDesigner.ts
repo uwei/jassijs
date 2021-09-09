@@ -63,7 +63,8 @@ export class ReportDesigner extends ComponentDesigner {
     		var rep=new PDFReport();
     		//rep.content=this.designedComponent["design];
     		var data=(<ReportDesign> this._codeChanger.value).toJSON();
-			rep.value =Tools.copyObject(data);// designedComponent["design"];
+			rep.value =data;//Tools.copyObject(data);// designedComponent["design"];
+            rep.fill();
 			//viewer.value = await rep.getBase64();
 			rep.getBase64().then((data)=>{
 				this.pdfviewer.report=rep;
@@ -88,8 +89,19 @@ export class ReportDesigner extends ComponentDesigner {
 		if(this._codeChanger.parser.sourceFile===undefined)
 		    this._codeChanger.updateParser();
 		//@ts-ignore
-		let ob=Tools.objectToJson(this.designedComponent.toJSON(),undefined,false);
-		this._codeChanger.setPropertyInCode("design",ob);
+        let job=this.designedComponent.toJSON();
+        delete job.parameter;
+        delete job.data;
+		let ob=Tools.objectToJson(job,undefined,false);
+        if(this._codeChanger.parser.variables["reportdesign"]){
+            var s=this._codeChanger.parser.code.substring(0,this._codeChanger.parser.variables["reportdesign"].pos)+
+                " reportdesign = "+ob+this._codeChanger.parser.code.substring(this._codeChanger.parser.variables["reportdesign"].end);
+                this.codeEditor.value = s;
+            this._codeChanger.updateParser(); 
+            this._codeChanger.callEvent("codeChanged", {});
+        //this.callEvent("codeChanged", {});
+        }else
+		    this._codeChanger.setPropertyInCode("reportdesign",ob);
 	}
     createComponent(type, component, top, left, newParent, beforeComponent) {
         //this._variables.updateCache();

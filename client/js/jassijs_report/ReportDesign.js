@@ -273,10 +273,14 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
                     ret = new ReportDesign_1();
                 ret.create(ob);
             }
+            else if (typeof ob === 'string' || ob instanceof String) {
+                ret = new RText_1.RText();
+                ret.value = ob;
+            }
             else if (ob.text !== undefined) {
                 ret = new RText_1.RText().fromJSON(ob);
             }
-            else if (ob.stack !== undefined) {
+            else if (ob.stack !== undefined || Array.isArray(ob)) {
                 ret = new RStack_1.RStack().fromJSON(ob);
             }
             else if (ob.columns !== undefined) {
@@ -359,6 +363,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
                 this.permissions = ob.permissions;
                 delete ob.permissions;
             }
+            //delete ob.data;//should not be to json
             this.otherProperties = ob;
         }
         toJSON() {
@@ -392,6 +397,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
             if (this.permissions)
                 r.permissions = this.permissions;
             Object.assign(r, this["otherProperties"]);
+            //delete r.data;
             return r;
         }
     };

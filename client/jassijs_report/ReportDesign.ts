@@ -198,9 +198,12 @@ export class ReportDesign extends BoxPanel {
             if (ret === undefined)
                 ret = new ReportDesign();
             ret.create(ob);
+        }else if (typeof ob === 'string' || ob instanceof String){
+            ret=new RText();
+            ret.value=ob;
         } else if (ob.text !== undefined) {
             ret = new RText().fromJSON(ob);
-        } else if (ob.stack !== undefined) {
+        } else if (ob.stack !== undefined||Array.isArray(ob)) {
             ret = new RStack().fromJSON(ob);
         } else if (ob.columns !== undefined) {
             ret = new RColumns().fromJSON(ob);
@@ -283,7 +286,7 @@ export class ReportDesign extends BoxPanel {
             delete ob.permissions;
         }
 
-
+        //delete ob.data;//should not be to json
 
 
         this.otherProperties = ob;
@@ -324,7 +327,7 @@ export class ReportDesign extends BoxPanel {
         if (this.permissions)
             r.permissions = this.permissions;
         Object.assign(r, this["otherProperties"]);
-
+        //delete r.data;
         return r;
     }
     /**

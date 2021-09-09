@@ -93,153 +93,72 @@ define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassi
     }
     exports.MemoryTest = MemoryTest;
 });
-define("demo/ReportInvoice", ["require", "exports", "jassijs_report/ReportDesign", "jassijs/remote/Jassi"], function (require, exports, ReportDesign_1, Jassi_3) {
+define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
-    let ReportInvoice = class ReportInvoice extends ReportDesign_1.ReportDesign {
+    var reportdesign = {
+        content: [
+            {
+                columns: [
+                    [
+                        "{{invoice.customer.firstname}} {{invoice.customer.lastname}}",
+                        "{{invoice.customer.street}}",
+                        "{{invoice.customer.place}}"
+                    ],
+                    [
+                        {
+                            text: "Invoice.",
+                            fontSize: 18
+                        },
+                        "\n",
+                        "Date: {{date}}",
+                        {
+                            text: "Number: {{invoice.number}}",
+                            bold: true
+                        }
+                    ]
+                ]
+            },
+            {
+                table: {
+                    body: [
+                        [
+                            "Item",
+                            "Price"
+                        ],
+                        {
+                            foreach: "line in invoice.lines",
+                            do: [
+                                "{{line.text}}",
+                                "{{line.price}}"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "\n",
+            {
+                foreach: "sum in invoice.summary",
+                do: {
+                    columns: [
+                        {
+                            text: "{{sum.text}}"
+                        },
+                        {
+                            text: "{{sum.value}}"
+                        }
+                    ]
+                }
+            }
+        ]
+    };
+    let ReportInvoice = class ReportInvoice {
         constructor() {
-            super();
-            this.me = {};
-            this.layout(this.me);
-        }
-        async setdata() {
+            this.reportdesign = reportdesign;
         }
         get title() {
             return "Invoicreport";
-        }
-        layout(me) {
-            this.design = {
-                content: {
-                    stack: [
-                        {
-                            columns: [
-                                {
-                                    stack: [
-                                        {
-                                            text: "{{invoice.customer.firstname}} {{invoice.customer.lastname}}"
-                                        },
-                                        {
-                                            text: "{{invoice.customer.street}}"
-                                        },
-                                        {
-                                            text: "{{invoice.customer.place}}"
-                                        }
-                                    ]
-                                },
-                                {
-                                    stack: [
-                                        {
-                                            text: "Invoice",
-                                            fontSize: 18
-                                        },
-                                        {
-                                            text: "\n"
-                                        },
-                                        {
-                                            text: "Date: {{invoice.date}}"
-                                        },
-                                        {
-                                            text: "Number: {{invoice.number}}",
-                                            bold: true
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            table: {
-                                body: [
-                                    [
-                                        "Item",
-                                        "Price"
-                                    ],
-                                    {
-                                        foreach: "line in invoice.lines",
-                                        do: [
-                                            "{{line.text}}",
-                                            "{{line.price}}"
-                                        ]
-                                    }
-                                ]
-                            }
-                        },
-                        {
-                            text: "\n"
-                        },
-                        {
-                            foreach: "sum in invoice.summary",
-                            do: {
-                                columns: [
-                                    {
-                                        text: "{{sum.text}}"
-                                    },
-                                    {
-                                        text: "{{sum.value}}"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                },
-                data: {
-                    invoice: {
-                        number: 1000,
-                        date: "20.07.2018",
-                        customer: {
-                            firstname: "Henry",
-                            lastname: "Klaus",
-                            street: "Hauptstr. 157",
-                            place: "chemnitz"
-                        },
-                        lines: [
-                            {
-                                pos: 1,
-                                text: "this is the first position, lksjdflgsd er we wer wre er er er re wekfgjslkdfjjdk sgfsdg",
-                                price: 10,
-                                amount: 50,
-                                variante: [
-                                    {
-                                        m: 1
-                                    },
-                                    {
-                                        m: 2
-                                    }
-                                ]
-                            },
-                            {
-                                pos: 2,
-                                text: "this is the next position",
-                                price: 20.5
-                            },
-                            {
-                                pos: 3,
-                                text: "this is an other position",
-                                price: 19.5
-                            },
-                            {
-                                pos: 4,
-                                text: "this is the last position",
-                                price: 50
-                            }
-                        ],
-                        summary: [
-                            {
-                                text: "Subtotal",
-                                value: 100
-                            },
-                            {
-                                text: "Tax",
-                                value: 19
-                            },
-                            {
-                                text: "Subtotal",
-                                value: 119
-                            }
-                        ]
-                    }
-                }
-            };
         }
     };
     ReportInvoice = __decorate([
@@ -250,6 +169,64 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs_report/ReportDesign
     async function test() {
         // kk.o=0;
         var dlg = new ReportInvoice();
+        dlg.parameter = { date: "21.05.2022" };
+        dlg.value = {
+            invoice: {
+                number: 1000,
+                date: "20.07.2018",
+                customer: {
+                    firstname: "Henry",
+                    lastname: "Klaus",
+                    street: "Hauptstr. 157",
+                    place: "chemnitz"
+                },
+                lines: [
+                    {
+                        pos: 1,
+                        text: "this is the first position, lksjdflgsd er we wer wre er er er re wekfgjslkdfjjdk sgfsdg",
+                        price: 10,
+                        amount: 50,
+                        variante: [
+                            {
+                                m: 1
+                            },
+                            {
+                                m: 2
+                            }
+                        ]
+                    },
+                    {
+                        pos: 2,
+                        text: "this is the next position",
+                        price: 20.5
+                    },
+                    {
+                        pos: 3,
+                        text: "this is an other position",
+                        price: 19.5
+                    },
+                    {
+                        pos: 4,
+                        text: "this is the last position",
+                        price: 50
+                    }
+                ],
+                summary: [
+                    {
+                        text: "Subtotal",
+                        value: 100
+                    },
+                    {
+                        text: "Tax",
+                        value: 19
+                    },
+                    {
+                        text: "Subtotal",
+                        value: 119
+                    }
+                ]
+            }
+        };
         //  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};
         //	dlg.value=jassijs.db.load("de.Kunde",9);	
         //console.log(JSON.stringify(dlg.toJSON()));
@@ -257,7 +234,58 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs_report/ReportDesign
     }
     exports.test = test;
 });
-define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Style_1, Button_3, Jassi_4, Panel_3) {
+define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.ReportKunden = void 0;
+    var reportdesign = {
+        content: [
+            "{{parameter.Datum}}",
+            {
+                table: {
+                    body: [
+                        [
+                            "Name",
+                            "Nachname"
+                        ],
+                        {
+                            foreach: "kunde",
+                            do: [
+                                "{{kunde.name}}",
+                                "{{kunde.nachname}}"
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    };
+    let ReportKunden = class ReportKunden {
+        constructor() {
+            this.reportdesign = reportdesign;
+        }
+    };
+    ReportKunden = __decorate([
+        (0, Jassi_4.$Class)("demo.ReportKunden"),
+        __metadata("design:paramtypes", [])
+    ], ReportKunden);
+    exports.ReportKunden = ReportKunden;
+    async function test() {
+        // kk.o=0;
+        var dlg = new ReportKunden();
+        dlg.parameter = {
+            "Datum": "18.03.2021"
+        };
+        dlg.value = [{ name: "Klaus", nachname: "Meier" },
+            { name: "Heinz", nachname: "Melzer" }];
+        //  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};
+        //	dlg.value=jassijs.db.load("de.Kunde",9);	
+        //console.log(JSON.stringify(dlg.toJSON()));
+        return dlg;
+    }
+    exports.test = test;
+});
+define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Style_1, Button_3, Jassi_5, Panel_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.StyleDialog = void 0;
@@ -283,7 +311,7 @@ define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/u
         }
     };
     StyleDialog = __decorate([
-        (0, Jassi_4.$Class)("demo/StyleDialog"),
+        (0, Jassi_5.$Class)("demo/StyleDialog"),
         __metadata("design:paramtypes", [])
     ], StyleDialog);
     exports.StyleDialog = StyleDialog;
@@ -338,7 +366,7 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
     }
     exports.test = test;
 });
-define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_4, Button_4, HTMLPanel_1, Jassi_5, Component_1) {
+define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_4, Button_4, HTMLPanel_1, Jassi_6, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestComponent = void 0;
@@ -389,7 +417,7 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
     };
     TestComponent = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
-        (0, Jassi_5.$Class)("demo.TestComponent"),
+        (0, Jassi_6.$Class)("demo.TestComponent"),
         __metadata("design:paramtypes", [])
     ], TestComponent);
     exports.TestComponent = TestComponent;
@@ -399,7 +427,7 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
     }
     exports.test = test;
 });
-define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Jassi"], function (require, exports, Panel_5, Tree_1, Jassi_6) {
+define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Jassi"], function (require, exports, Panel_5, Tree_1, Jassi_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestTree = void 0;
@@ -412,7 +440,7 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
         }
     };
     TestTree = __decorate([
-        (0, Jassi_6.$Class)("demo.TestTree"),
+        (0, Jassi_7.$Class)("demo.TestTree"),
         __metadata("design:paramtypes", [])
     ], TestTree);
     exports.TestTree = TestTree;
@@ -442,7 +470,7 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
     }
     exports.test = test;
 });
-define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_2, Upload_1, Jassi_7, Panel_6, papaparse_1) {
+define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_2, Upload_1, Jassi_8, Panel_6, papaparse_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestUpload = void 0;
@@ -471,7 +499,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
         }
     };
     TestUpload = __decorate([
-        (0, Jassi_7.$Class)("demo/TestUpload"),
+        (0, Jassi_8.$Class)("demo/TestUpload"),
         __metadata("design:paramtypes", [])
     ], TestUpload);
     exports.TestUpload = TestUpload;
@@ -482,7 +510,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
     }
     exports.test = test;
 });
-define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_7, ContextMenu_2, MenuItem_2, Button_5, Jassi_8) {
+define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_7, ContextMenu_2, MenuItem_2, Button_5, Jassi_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Testcontextmenu = void 0;
@@ -528,7 +556,7 @@ define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassi
         }
     };
     Testcontextmenu = __decorate([
-        (0, Jassi_8.$Class)("demo.Testcontextmenu"),
+        (0, Jassi_9.$Class)("demo.Testcontextmenu"),
         __metadata("design:paramtypes", [])
     ], Testcontextmenu);
     exports.Testcontextmenu = Testcontextmenu;
@@ -539,7 +567,7 @@ define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassi
     }
     exports.test = test;
 });
-define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_8, Menu_1, MenuItem_3, Button_6, Jassi_9) {
+define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_8, Menu_1, MenuItem_3, Button_6, Jassi_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testmenu = void 0;
@@ -611,7 +639,7 @@ define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/M
         }
     };
     Testmenu = __decorate([
-        (0, Jassi_9.$Class)("demo.Testmenu"),
+        (0, Jassi_10.$Class)("demo.Testmenu"),
         __metadata("design:paramtypes", [])
     ], Testmenu);
     exports.Testmenu = Testmenu;
@@ -676,7 +704,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassij
     }
     exports.test = test;
 });
-define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Table"], function (require, exports, Panel_10, Jassi_10, Table_2) {
+define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Table"], function (require, exports, Panel_10, Jassi_11, Table_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
@@ -779,7 +807,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
         }
     };
     TreeTable = __decorate([
-        (0, Jassi_10.$Class)("demo.TreeTable"),
+        (0, Jassi_11.$Class)("demo.TreeTable"),
         __metadata("design:paramtypes", [])
     ], TreeTable);
     exports.TreeTable = TreeTable;
@@ -816,7 +844,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1612818333557
             },
             "demo/ReportInvoice.ts": {
-                "date": 1625398305568,
+                "date": 1631222146247,
                 "demo.ReportInvoice": {}
             },
             "demo/StyleDialog.ts": {
@@ -862,6 +890,10 @@ define("demo/registry", ["require"], function (require) {
             "demo/TreeTable.ts": {
                 "date": 1622984213677,
                 "demo.TreeTable": {}
+            },
+            "demo/ReportKunden.ts": {
+                "date": 1631221228504,
+                "demo.ReportKunden": {}
             }
         }
     };

@@ -11,6 +11,22 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.PDFReport = void 0;
+    function clone(obj) {
+        if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
+            return obj;
+        if (obj instanceof Date || typeof obj === "object")
+            var temp = new obj.constructor(); //or new Date(obj);
+        else
+            var temp = obj.constructor();
+        for (var key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                obj['isActiveClone'] = null;
+                temp[key] = clone(obj[key]);
+                delete obj['isActiveClone'];
+            }
+        }
+        return temp;
+    }
     let PDFReport = class PDFReport {
         constructor() {
             // @member {object} - the generated report
@@ -19,28 +35,10 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
         layout() {
             //var me = this.me = {};
         }
-        /**
-         * @member {object} - report definition
-         */
-        set value(value) {
-            this._definition = value;
-            var data = {};
-            Object.assign(data, value);
-            data.content = replaceTemplates(this._definition.content, this._definition.data);
-            if (data.background)
-                data.background = replaceTemplates(this._definition.background, this._definition.data);
-            if (data.header)
-                data.header = replaceTemplates(this._definition.header, this._definition.data);
-            if (data.footer)
-                data.footer = replaceTemplates(this._definition.footer, this._definition.data);
-            data.content = replaceTemplates(this._definition.content, this._definition.data);
-            replacePageInformation(data);
-            delete data.data;
-            registerFonts(data);
-            this.report = pdfmake_1.default.createPdf(data);
-        }
-        get value() {
-            return this._definition;
+        fill() {
+            var def = createReportDefinition(this.value, this.data, this.parameter);
+            registerFonts(this.value);
+            this.report = pdfmake_1.default.createPdf(def);
         }
         open() {
             this.report.open();
@@ -66,6 +64,43 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
         __metadata("design:paramtypes", [])
     ], PDFReport);
     exports.PDFReport = PDFReport;
+    function createReportDefinition(definition, data, parameter) {
+        definition = clone(definition); //this would be modified
+        if (data !== undefined)
+            data = clone(data); //this would be modified
+        if (data === undefined && definition.data !== undefined) {
+            data = definition.data;
+        }
+        //parameter could be in data
+        if (data !== undefined && data.parameter !== undefined && parameter !== undefined) {
+            throw new Error("parameter would override data.parameter");
+        }
+        if (Array.isArray(data)) {
+            data = { items: data }; //so we can do data.parameter
+        }
+        if (parameter !== undefined) {
+            data.parameter = parameter;
+        }
+        //parameter could be in definition
+        if (data !== undefined && data.parameter !== undefined && definition.parameter !== undefined) {
+            throw new Error("definition.parameter would override data.parameter");
+        }
+        if (definition.parameter !== undefined) {
+            data.parameter = definition.parameter;
+        }
+        definition.content = replaceTemplates(definition.content, data);
+        if (definition.background)
+            definition.background = replaceTemplates(definition.background, data);
+        if (definition.header)
+            definition.header = replaceTemplates(definition.header, data);
+        if (definition.footer)
+            definition.footer = replaceTemplates(definition.footer, data);
+        //definition.content = replaceTemplates(definition.content, data);
+        replacePageInformation(definition);
+        delete definition.data;
+        return definition;
+        // delete definition.parameter;
+    }
     //var available = ["Alegreya",    "AlegreyaSans",    "AlegreyaSansSC",    "AlegreyaSC",    "AlmendraSC",    "Amaranth",    "Andada",    "AndadaSC",    "AnonymousPro",    "ArchivoNarrow",    "Arvo",    "Asap",    "AveriaLibre",    "AveriaSansLibre",    "AveriaSerifLibre",    "Cambay",    "Caudex",    "CrimsonText",    "Cuprum",    "Economica",    "Exo2",    "Exo",    "ExpletusSans",    "FiraSans",    "JosefinSans",    "JosefinSlab",    "Karla",    "Lato",    "LobsterTwo",    "Lora",    "Marvel",    "Merriweather",    "MerriweatherSans",    "Nobile",    "NoticiaText",    "Overlock",    "Philosopher",    "PlayfairDisplay",    "PlayfairDisplaySC",    "PT_Serif-Web",    "Puritan",    "Quantico",    "QuattrocentoSans",    "Quicksand",    "Rambla",    "Rosario",    "Sansation",    "Sarabun",    "Scada",    "Share",    "Sitara",    "SourceSansPro",    "TitilliumWeb",    "Volkhov",    "Vollkorn"];
     function registerFonts(data) {
         var fonts = [];
@@ -196,7 +231,13 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
             }
             var variable = def.foreach.split(" in ")[0];
             var sarr = def.foreach.split(" in ")[1];
-            var arr = getVar(data, sarr);
+            var arr;
+            if (sarr === undefined) {
+                arr = data.items; //we get the main array
+            }
+            else {
+                arr = getVar(data, sarr);
+            }
             var pos = parentArray.indexOf(def);
             parentArray.splice(pos, 1);
             for (let x = 0; x < arr.length; x++) {
@@ -295,49 +336,49 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
     }
     async function test() {
         var rep = new PDFReport();
-        var def = {
-            data: {
-                invoice: {
-                    number: 1000,
-                    date: "20.07.2018",
-                    customer: {
-                        firstname: "Henry",
-                        lastname: "Klaus",
-                        street: "Hauptstr. 157",
-                        place: "chemnitz",
-                    },
-                    lines: [
-                        { pos: 1, text: "this is the first position, lksjdflgsd er we wer wre er er er re wekfgjslkdfjjdk sgfsdg", price: 10.00, amount: 50, variante: [{ m: 1 }, { m: 2 }] },
-                        { pos: 2, text: "this is the next position", price: 20.50, },
-                        { pos: 3, text: "this is an other position", price: 19.50 },
-                        { pos: 4, text: "this is the last position", price: 50.00 },
-                    ],
-                    summary: [
-                        { text: "Subtotal", value: 100.00 },
-                        { text: "Tax", value: 19.00 },
-                        { text: "Subtotal", value: 119.00 },
-                    ]
-                }
-            },
+        rep.data = {
+            invoice: {
+                number: 1000,
+                date: "20.07.2018",
+                customer: {
+                    firstname: "Henry",
+                    lastname: "Klaus",
+                    street: "Hauptstr. 157",
+                    place: "chemnitz",
+                },
+                lines: [
+                    { pos: 1, text: "this is the first position, lksjdflgsd er we wer wre er er er re wekfgjslkdfjjdk sgfsdg", price: 10.00, amount: 50, variante: [{ m: 1 }, { m: 2 }] },
+                    { pos: 2, text: "this is the next position", price: 20.50, },
+                    { pos: 3, text: "this is an other position", price: 19.50 },
+                    { pos: 4, text: "this is the last position", price: 50.00 },
+                ],
+                summary: [
+                    { text: "Subtotal", value: 100.00 },
+                    { text: "Tax", value: 19.00 },
+                    { text: "Subtotal", value: 119.00 },
+                ]
+            }
+        };
+        rep.value = {
             content: {
                 stack: [{
                         //font: "ExpletusSans",
                         columns: [
                             {
                                 stack: [
-                                    { text: '{{invoice.customer.firstname}} {{invoice.customer.lastname}}' },
-                                    { text: '{{invoice.customer.street}}' },
-                                    { text: '{{invoice.customer.place}}' }
+                                    '{{invoice.customer.firstname}} {{invoice.customer.lastname}}',
+                                    '{{invoice.customer.street}}',
+                                    '{{invoice.customer.place}}'
                                 ]
                             },
                             {
                                 stack: [
                                     { text: 'Invoice', fontSize: 18 },
-                                    { text: " " },
-                                    { text: "Date: {{invoice.date}}" },
+                                    " ",
+                                    "Date: {{invoice.date}}",
                                     { text: "Number: {{invoice.number}}", bold: true },
-                                    { text: " " },
-                                    { text: " " },
+                                    " ",
+                                    " ",
                                 ]
                             }
                         ]
@@ -359,7 +400,7 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
                             header: [{ text: "Item" }, { text: "Price" }],
                             dataforeach: "line in invoice.lines",
                             //footer:[{ text:"Total"},{ text:""}],
-                            body: [{ text: '{{line.text}}' }, { text: '{{line.price}}' }],
+                            body: ['{{line.text}}', '{{line.price}}'],
                             groups: [
                                 {
                                     field: "line",
@@ -369,19 +410,18 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
                             ]
                         }
                     },
-                    { text: " " },
+                    " ",
                     {
                         foreach: "sum in invoice.summary",
                         columns: [
-                            { text: "{{sum.text}}" },
-                            { text: "{{sum.value}}" },
+                            "{{sum.text}}",
+                            "{{sum.value}}",
                         ]
                     },
                 ]
             }
         };
-        def.content = replaceTemplates(def.content, def.data);
-        rep.value = def;
+        rep.fill();
         var viewer = new PDFViewer_1.PDFViewer();
         viewer.value = await rep.getBase64();
         viewer.height = 300;
@@ -862,12 +902,21 @@ define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Jassi", "
                 //@ts-ignore
                 ret.stack.push(this._components[x].toJSON());
             }
+            var test = 0;
+            for (var key in ret) {
+                test++;
+            }
+            if (test === 1)
+                ret = ret.stack; //short version
             return ret;
         }
         fromJSON(ob) {
             var ret = this;
-            for (let x = 0; x < ob.stack.length; x++) {
-                ret.add(ReportDesign_2.ReportDesign.fromJSON(ob.stack[x]));
+            var arr = ob;
+            if (ob.stack)
+                arr = ob.stack;
+            for (let x = 0; x < arr.length; x++) {
+                ret.add(ReportDesign_2.ReportDesign.fromJSON(arr[x]));
             }
             delete ob.stack;
             super.fromJSON(ob);
@@ -1387,6 +1436,12 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
                 ret.alignment = this.alignment;
             if (this.background !== undefined)
                 ret.background = this.background;
+            var test = 0;
+            for (var key in ret) {
+                test++;
+            }
+            if (test === 1)
+                ret = ret.text; //short version
             return ret;
         }
     };
@@ -1882,10 +1937,14 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
                     ret = new ReportDesign_5();
                 ret.create(ob);
             }
+            else if (typeof ob === 'string' || ob instanceof String) {
+                ret = new RText_2.RText();
+                ret.value = ob;
+            }
             else if (ob.text !== undefined) {
                 ret = new RText_2.RText().fromJSON(ob);
             }
-            else if (ob.stack !== undefined) {
+            else if (ob.stack !== undefined || Array.isArray(ob)) {
                 ret = new RStack_1.RStack().fromJSON(ob);
             }
             else if (ob.columns !== undefined) {
@@ -1968,6 +2027,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
                 this.permissions = ob.permissions;
                 delete ob.permissions;
             }
+            //delete ob.data;//should not be to json
             this.otherProperties = ob;
         }
         toJSON() {
@@ -2001,6 +2061,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             if (this.permissions)
                 r.permissions = this.permissions;
             Object.assign(r, this["otherProperties"]);
+            //delete r.data;
             return r;
         }
     };
@@ -2078,14 +2139,14 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1627923661712,
+                "date": 1631218677585,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/modul.ts": {
                 "date": 1624207660636
             },
             "jassijs_report/PDFReport.ts": {
-                "date": 1623864507761,
+                "date": 1631221826718,
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
@@ -2171,7 +2232,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1611935804327
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1622998616890,
+                "date": 1631221945648,
                 "jassijs_report.InfoProperties": {
                     "@members": {
                         "title": {
@@ -2413,7 +2474,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-                "date": 1622998616843,
+                "date": 1631222015922,
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -2439,7 +2500,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1622998616890,
+                "date": 1631220740868,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -2681,7 +2742,8 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                 var rep = new PDFReport_1.PDFReport();
                 //rep.content=this.designedComponent["design];
                 var data = this._codeChanger.value.toJSON();
-                rep.value = Tools_1.Tools.copyObject(data); // designedComponent["design"];
+                rep.value = data; //Tools.copyObject(data);// designedComponent["design"];
+                rep.fill();
                 //viewer.value = await rep.getBase64();
                 rep.getBase64().then((data) => {
                     this.pdfviewer.report = rep;
@@ -2707,8 +2769,20 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             if (this._codeChanger.parser.sourceFile === undefined)
                 this._codeChanger.updateParser();
             //@ts-ignore
-            let ob = Tools_1.Tools.objectToJson(this.designedComponent.toJSON(), undefined, false);
-            this._codeChanger.setPropertyInCode("design", ob);
+            let job = this.designedComponent.toJSON();
+            delete job.parameter;
+            delete job.data;
+            let ob = Tools_1.Tools.objectToJson(job, undefined, false);
+            if (this._codeChanger.parser.variables["reportdesign"]) {
+                var s = this._codeChanger.parser.code.substring(0, this._codeChanger.parser.variables["reportdesign"].pos) +
+                    " reportdesign = " + ob + this._codeChanger.parser.code.substring(this._codeChanger.parser.variables["reportdesign"].end);
+                this.codeEditor.value = s;
+                this._codeChanger.updateParser();
+                this._codeChanger.callEvent("codeChanged", {});
+                //this.callEvent("codeChanged", {});
+            }
+            else
+                this._codeChanger.setPropertyInCode("reportdesign", ob);
         }
         createComponent(type, component, top, left, newParent, beforeComponent) {
             //this._variables.updateCache();
@@ -2922,4 +2996,6 @@ define("jassijs_report/ext/pdfmake", ['pdfMake', "vfs_fonts"], function (ttt, vf
         default: pdfMake
     };
 });
+function createReportDefinition() {
+}
 //# sourceMappingURL=jassijs_report.js.map

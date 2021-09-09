@@ -1,37 +1,31 @@
-define(["require", "exports", "jassijs_report/ReportDesign"], function (require, exports, ReportDesign_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Rep = void 0;
-    class Rep extends ReportDesign_1.ReportDesign {
-        constructor() {
-            super();
-            this.me = {};
-            this.layout(this.me);
-        }
-        async setdata() {
-        }
-        layout(me) {
-            this.design = {
-                content: {
-                    stack: [
+    var reportdesign = {
+        content: {
+            stack: [
+                {
+                    text: "Das ist der Titel",
+                    bold: true
+                },
+                {
+                    text: [
                         {
-                            text: "Das ist der Titel",
-                            bold: true
-                        },
-                        {
-                            text: [
-                                {
-                                    text: " "
-                                }
-                            ],
-                            editTogether: true
-                        },
-                        {
-                            text: "Hallo"
+                            text: " "
                         }
-                    ]
+                    ],
+                    editTogether: true
+                },
+                {
+                    text: "Hallo"
                 }
-            };
+            ]
+        }
+    };
+    class Rep {
+        constructor() {
+            this.reportdesign = reportdesign;
         }
     }
     exports.Rep = Rep;

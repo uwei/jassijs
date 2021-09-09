@@ -480,7 +480,7 @@ define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jass
     }
     exports.test = test;
 });
-define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/Calendar", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, BoxPanel_2, Repeater_1, Calendar_2, ObjectChooser_2, HTMLPanel_3, NumberConverter_3, Textbox_5, Jassi_6, Panel_3, Property_5, Orders_1, DBObjectView_5) {
+define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/Calendar", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, Style_1, BoxPanel_2, Repeater_1, Calendar_2, ObjectChooser_2, HTMLPanel_3, NumberConverter_3, Textbox_5, Jassi_6, Panel_3, Property_5, Orders_1, DBObjectView_5) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -520,15 +520,20 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "ja
             me.boxpanel2 = new BoxPanel_2.BoxPanel();
             me.htmlpanel1 = new HTMLPanel_3.HTMLPanel();
             me.htmlpanel2 = new HTMLPanel_3.HTMLPanel();
+            me.style1 = new Style_1.Style();
             me.main.add(me.boxpanel1);
             me.main.add(me.boxpanel2);
             me.main.add(me.repeater1);
+            me.main.add(me.style1);
             me.id.x = 5;
             me.id.y = 5;
             me.id.converter = new NumberConverter_3.NumberConverter();
             me.id.bind(me.databinder, "id");
             me.id.label = "Order ID";
             me.id.width = 70;
+            me.id.css({
+                text_align: "right"
+            });
             me.customername.x = 10;
             me.customername.y = 5;
             me.customername.width = 265;
@@ -537,6 +542,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "ja
             me.customername.value = "VINET Vins et alcools Chevalier";
             me.customername.label = "Customer";
             me.customername.height = 15;
+            me.customername.styles = [me.style1];
             me.employeename.x = 10;
             me.employeename.y = 90;
             me.employeename.bind(me.databinder, "Employee");
@@ -544,6 +550,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "ja
             me.employeename.width = 265;
             me.employeename.value = "5 Steven Buchanan";
             me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
+            me.employeename.styles = [me.style1];
             me.chooseEmployee.x = 275;
             me.chooseEmployee.y = 105;
             me.chooseEmployee.bind(me.databinder, "Employee");
@@ -584,6 +591,8 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "ja
             me.shipVia.label = "Ship via";
             me.shipVia.value = "3 Federal Shipping";
             me.shipVia.width = 260;
+            me.shipVia.height = 20;
+            me.shipVia.styles = [me.style1];
             me.shipviaChooser.x = 275;
             me.shipviaChooser.y = 60;
             me.shipviaChooser.bind(me.databinder, "ShipVia");
@@ -630,7 +639,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "ja
             me.shipRegion.label = "Ship Region";
             me.shipRegion.width = 120;
             me.repeater1.bind(me.databinder, "Details");
-            me.repeater1.width = 420;
+            me.repeater1.width = 675;
             me.repeater1.createRepeatingComponent(function (me) {
                 me.detailsQuantity = new Textbox_5.Textbox();
                 me.detailsProduct = new HTMLPanel_3.HTMLPanel();
@@ -640,15 +649,16 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "ja
                 this.design.add(me.objectchooser1);
                 me.detailsQuantity.bind(me.repeater1.design.databinder, "Quantity");
                 me.detailsQuantity.width = 60;
-                me.detailsProduct.width = "100";
+                me.detailsProduct.width = 530;
                 me.detailsProduct.bind(me.repeater1.design.databinder, "Product");
                 me.detailsProduct.template = "{{ProductName}}";
                 me.objectchooser1.bind(me.repeater1.design.databinder, "Product");
                 me.objectchooser1.items = "northwind.Products";
                 me.detailsProduct.css({
-                    overflow: "hidden"
+                    overflow: "hidden",
+                    margin_top: "5px"
                 });
-                me.detailsProduct.height = "18";
+                me.detailsProduct.styles = [me.style1];
             });
             me.panel1.isAbsolute = true;
             me.panel1.height = 185;
@@ -686,8 +696,10 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "ja
             me.boxpanel2.horizontal = true;
             me.htmlpanel1.value = "Quantity<br>";
             me.htmlpanel1.width = 65;
+            me.htmlpanel1.styles = [];
             me.htmlpanel2.value = "Text<br>";
             me.htmlpanel2.width = 100;
+            me.style1.css({});
         }
     };
     __decorate([
@@ -707,7 +719,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/BoxPanel", "ja
     }
     exports.test = test;
 });
-define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Products", "jassijs/ui/DBObjectView"], function (require, exports, Style_1, ObjectChooser_3, HTMLPanel_4, Checkbox_1, NumberConverter_4, Textbox_6, Jassi_7, Property_6, Products_1, DBObjectView_6) {
+define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Products", "jassijs/ui/DBObjectView"], function (require, exports, Style_2, ObjectChooser_3, HTMLPanel_4, Checkbox_1, NumberConverter_4, Textbox_6, Jassi_7, Property_6, Products_1, DBObjectView_6) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -734,7 +746,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
             me.categoryChooser = new ObjectChooser_3.ObjectChooser();
             me.supplier = new HTMLPanel_4.HTMLPanel();
             me.supplierchooser = new ObjectChooser_3.ObjectChooser();
-            me.styleNumber = new Style_1.Style();
+            me.styleNumber = new Style_2.Style();
             me.main.add(me.id);
             me.main.isAbsolute = true;
             me.main.add(me.styleNumber);
@@ -1279,7 +1291,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551043267
             },
             "northwind/OrdersView.ts": {
-                "date": 1630149321374,
+                "date": 1630615562089,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {

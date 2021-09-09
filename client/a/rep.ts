@@ -5,16 +5,7 @@ import { $Property } from "jassijs/ui/Property";
 import { $UIComponent } from "jassijs/ui/Component";
 import { Kunde } from "de/remote/Kunde";
 import { RText } from "jassijs_report/RText";
-export class Rep extends ReportDesign {
-    me = {};
-    constructor() {
-        super();
-        this.layout(this.me);
-    }
-    async setdata() {
-    }
-    layout(me) {
-        this.design = {
+var reportdesign= {
             content: {
                 stack: [
                     {
@@ -35,7 +26,9 @@ export class Rep extends ReportDesign {
                 ]
             }
         };
-    }
+export class Rep  {
+   reportdesign=reportdesign;
+   
 }
 export async function test() {
     // kk.o=0;

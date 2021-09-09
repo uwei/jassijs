@@ -40,6 +40,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
             this.classes = {};
             this.imports = {};
             this.functions = {};
+            this.variables = {};
             this.data = {};
             /** {[string]} - all code lines*/
         }
@@ -268,6 +269,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         }
         visitNode(node) {
             var _this = this;
+            if (node.kind === ts.SyntaxKind.VariableDeclaration) {
+                this.variables[node["name"].text] = node;
+            }
             if (node.kind === ts.SyntaxKind.ImportDeclaration) {
                 var nd = node;
                 var file = nd.moduleSpecifier.text;

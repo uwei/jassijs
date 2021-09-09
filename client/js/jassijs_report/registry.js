@@ -7,14 +7,14 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.Report": {}
 	},
 	"jassijs_report/designer/ReportDesigner.ts": {
-		"date": 1627923661712,
+		"date": 1631218677585,
 		"jassijs_report.designer.ReportDesigner": {}
 	},
 	"jassijs_report/modul.ts": {
 		"date": 1624207660636
 	},
 	"jassijs_report/PDFReport.ts": {
-		"date": 1623864507761,
+		"date": 1631221826718,
 		"jassijs_report.PDFReport": {}
 	},
 	"jassijs_report/PDFViewer.ts": {
@@ -100,7 +100,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1611935804327
 	},
 	"jassijs_report/ReportDesign.ts": {
-		"date": 1622998616890,
+		"date": 1631221945648,
 		"jassijs_report.InfoProperties": {
 			"@members": {
 				"title": {
@@ -342,7 +342,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RStack.ts": {
-		"date": 1622998616843,
+		"date": 1631222015922,
 		"jassijs_report.RStack": {
 			"$ReportComponent": [
 				{
@@ -368,7 +368,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RText.ts": {
-		"date": 1622998616890,
+		"date": 1631220740868,
 		"jassijs_report.RText": {
 			"$ReportComponent": [
 				{

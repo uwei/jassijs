@@ -274,8 +274,14 @@ define("de/registry",["require"], function(require) {
 			}
 		}
 	},
+	"de/TestExtension.ts": {
+		"date": 1624293154792
+	},
+	"de/remote/Kunde.ext.ts": {
+		"date": 1622985482440
+	},
 	"de/ReportKunde.ts": {
-		"date": 1624208090062,
+		"date": 1631221897156,
 		"de.ReportKunde": {
 			"@members": {
 				"value": {
@@ -289,12 +295,6 @@ define("de/registry",["require"], function(require) {
 				}
 			}
 		}
-	},
-	"de/TestExtension.ts": {
-		"date": 1624293154792
-	},
-	"de/remote/Kunde.ext.ts": {
-		"date": 1622985482440
 	}
 }
  }

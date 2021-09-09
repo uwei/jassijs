@@ -248,6 +248,9 @@ export class TestRModul extends RemoteObject{
             await ret.addClass("testrmodul.TestRCustomer");
             await ret.addField("string", "name");
             var sr = await ret.saveAll(false);
+            if (sr !== "") {
+                throw new Error(sr);
+            }
             teste.expectEqual(sr === "");
             ret.destroy();
             await Registry_1.default.reload();
@@ -382,7 +385,7 @@ define("tests/registry", ["require"], function (require) {
                 "date": 1624999036922
             },
             "tests/RemoteModulTests.ts": {
-                "date": 1625513478377
+                "date": 1630958861386
             },
             "tests/TestReport.ts": {
                 "date": 1623864072454

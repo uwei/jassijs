@@ -41,7 +41,7 @@ export class Parser {
     classes: { [name: string]: ParsedClass } = {};
     imports: { [name: string]: string } = {};
     functions: { [name: string]: ts.Node } = {};
-
+    variables: { [name: string]: ts.Node } = {};
     collectProperties: { classname: string, methodname: string }[];
     code: string;
     /**
@@ -289,6 +289,9 @@ export class Parser {
     }
     private visitNode(node: ts.Node) {
         var _this = this;
+        if (node.kind === ts.SyntaxKind.VariableDeclaration) {
+            this.variables[node["name"].text] = node;
+        }
         if (node.kind === ts.SyntaxKind.ImportDeclaration) {
             var nd: any = node;
             var file = nd.moduleSpecifier.text;

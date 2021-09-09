@@ -35,14 +35,22 @@ export class RStack extends ReportComponent {
             //@ts-ignore
             ret.stack.push(this._components[x].toJSON());
         }
-        
+        var test=0;
+        for(var key in ret){
+            test++;
+        }
+        if(test===1)
+            ret=ret.stack;//short version
 
         return ret;
     }
     fromJSON(ob: any):RStack{
         var ret= this;
-        for (let x = 0;x < ob.stack.length;x++) {
-            ret.add(ReportDesign.fromJSON(ob.stack[x]));
+        var arr=ob;
+        if(ob.stack)
+            arr=ob.stack;
+        for (let x = 0;x < arr.length;x++) {
+            ret.add(ReportDesign.fromJSON(arr[x]));
         }
         delete ob.stack;
         super.fromJSON(ob);

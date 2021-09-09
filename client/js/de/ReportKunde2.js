@@ -10,29 +10,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, Jassi_1, Property_1, Kunde_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ReportKunde = exports.reportdesign = void 0;
+    exports.test = exports.ReportKunde2 = exports.reportdesign = void 0;
     var reportdesign = {
-        content: [
-            {
-                text: "Hallo Herr {{nachname}}"
-            },
-            {
-                text: "ok"
-            },
-            {
-                columns: [
-                    {
-                        text: "text"
-                    },
-                    {
-                        text: "text"
-                    }
-                ]
-            }
-        ]
+        content: {
+            stack: [
+                {
+                    text: "Hallo Herr {{nachname}}"
+                },
+                {
+                    text: "ok"
+                },
+                {
+                    columns: [
+                        {
+                            text: "text"
+                        },
+                        {
+                            text: "text"
+                        }
+                    ]
+                }
+            ]
+        }
     };
     exports.reportdesign = reportdesign;
-    let ReportKunde = class ReportKunde {
+    let ReportKunde2 = class ReportKunde2 {
         constructor() {
             this.me = {};
             this.reportdesign = reportdesign;
@@ -46,17 +48,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de
     __decorate([
         (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" }),
         __metadata("design:type", Kunde_1.Kunde)
-    ], ReportKunde.prototype, "value", void 0);
-    ReportKunde = __decorate([
-        (0, Jassi_1.$Class)("de.ReportKunde")
-    ], ReportKunde);
-    exports.ReportKunde = ReportKunde;
+    ], ReportKunde2.prototype, "value", void 0);
+    ReportKunde2 = __decorate([
+        (0, Jassi_1.$Class)("de.ReportKunde2")
+    ], ReportKunde2);
+    exports.ReportKunde2 = ReportKunde2;
     async function test() {
-        var dlg = new ReportKunde();
+        var dlg = new ReportKunde2();
         dlg.value = new Kunde_1.Kunde();
         dlg.value.nachname = "Klaus";
         return dlg;
     }
     exports.test = test;
 });
-//# sourceMappingURL=ReportKunde.js.map
+//# sourceMappingURL=ReportKunde2.js.map
