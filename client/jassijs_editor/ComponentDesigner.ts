@@ -38,7 +38,7 @@ declare global {
 export class ComponentDesigner extends Panel{
         _codeEditor;
         editMode:boolean;
-        _variables:VariablePanel;
+        variables:VariablePanel;
         _propertyEditor:PropertyEditor;
         _errors:ErrorPanel;
         _componentPalette:ComponentPalette;
@@ -60,7 +60,7 @@ export class ComponentDesigner extends Panel{
         set codeEditor(value){
         	var _this=this;
         	this._codeEditor=value;
-        	this._variables=this._codeEditor._variables; 
+        	this.variables=this._codeEditor.variables; 
             this._propertyEditor=new PropertyEditor(value,new Parser());
          //   this._propertyEditor=new PropertyEditor(undefined);
             this._errors=this._codeEditor._errors;
@@ -301,7 +301,7 @@ export class ComponentDesigner extends Panel{
             //if(component["setDesignMode"]!==undefined){
             //        component["setDesignMode"](enable,this);
             //    }
-            this._variables.updateCache();//variables can be added with Repeater.setDesignMode
+            this.variables.updateCache();//variables can be added with Repeater.setDesignMode
             if(this._resizer!==undefined){
                 this._resizer.uninstall();console.log("uninstall");
             }
@@ -311,14 +311,14 @@ export class ComponentDesigner extends Panel{
            
             if(enable===true){
             	 var _this=this;
-            	 var allcomponents=this._variables.getEditableComponents(component);
+            	 var allcomponents=this.variables.getEditableComponents(component);
             	 if(this._propertyEditor.codeEditor===undefined){
             	 	var ret=[];
             	 	
             	 	this.getComponentIDsInDesign(component,ret);
             	 	allcomponents=ret.join(",");
             	 }else
-                	allcomponents=this._variables.getEditableComponents(component);
+                	allcomponents=this.variables.getEditableComponents(component);
                 //this._installTinyEditor();
                 this._draganddropper=new DragAndDropper();
                 this._resizer=new Resizer();
@@ -346,7 +346,7 @@ export class ComponentDesigner extends Panel{
                     _this._propertyEditor.value=_this._propertyEditor.value;
                 };
 				this._resizer.install(component,allcomponents);
-                allcomponents=this._variables.getEditableComponents(component,true);
+                allcomponents=this.variables.getEditableComponents(component,true);
                 this._draganddropper.install(component,allcomponents); 
                 this._draganddropper.onpropertychanged=function(component,top,left,oldParent,newParent,beforeComponent){
                 	_this.moveComponent(component,top,left,oldParent,newParent,beforeComponent);
@@ -419,7 +419,7 @@ export class ComponentDesigner extends Panel{
 	                    	newParent.add(dummy);//._components[newParent._components.length-1]=tmp;
 	                    }
                     }*/
-                    _this._variables.updateCache();
+                    _this.variables.updateCache();
                     _this._propertyEditor.value=_this._propertyEditor.value;
                     _this._componentExplorer.value=_this._componentExplorer.value;
         }
@@ -452,14 +452,14 @@ export class ComponentDesigner extends Panel{
                     		repeater.createRepeatingComponent(function(me){
                     			if(this._designMode!==true)
                     				return;
-                    			//_this._variables.addVariable(vardatabinder,databinder);
-                    			_this._variables.updateCache();
+                    			//_this.variables.addVariable(vardatabinder,databinder);
+                    			_this.variables.updateCache();
                     		});
                     		/*var db=new jassijs.ui.Databinder();
                     		if(repeater.value!==undefined&&repeater.value.length>0)
                     			db.value=repeater.value[0];
-                    		_this._variables.add(vardatabinder,db);
-                    		_this._variables.updateCache();*/
+                    		_this.variables.add(vardatabinder,db);
+                    		_this.variables.updateCache();*/
 			        	}
                     }
                     var varvalue=new (classes.getClass(type));
@@ -473,7 +473,7 @@ export class ComponentDesigner extends Panel{
 	                        var th= _this._codeEditor.getObjectFromVariable("this");
 	                        th[varname.substring(5)]=varvalue;
 	                    }else
-	                        _this._variables.addVariable(varname,varvalue);
+	                        _this.variables.addVariable(varname,varvalue);
 	                    var newName=_this._codeEditor.getVariableFromObject(newParent);
 	                    var before;
 	                    if(beforeComponent!==undefined&&beforeComponent.type!=="atEnd"){//Designdummy atEnd
@@ -498,7 +498,7 @@ export class ComponentDesigner extends Panel{
 	                    	newParent.dom.append(newParent._designDummy.domWrapper)
 	                    }
                     }*/
-                    _this._variables.updateCache();
+                    _this.variables.updateCache();
                     
                     //set initial properties for the new component
                     if(component.createFromParam!==undefined){

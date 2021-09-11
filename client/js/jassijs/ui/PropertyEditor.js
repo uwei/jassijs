@@ -565,7 +565,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 //  this.value=this.codeEditor.getObjectFromVariable(this.variablename);
                 return;
             }
-            //var ob = this.codeEditor._variables.evalExpression(value);
             if (typeof (this._value[property]) === "function")
                 this._value[property](value);
             else

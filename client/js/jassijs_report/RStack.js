@@ -53,7 +53,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesi
                 ret.add(ReportDesign_1.ReportDesign.fromJSON(arr[x]));
             }
             delete ob.stack;
-            super.fromJSON(ob);
+            if (!Array.isArray(ob))
+                super.fromJSON(ob);
             return ret;
         }
     };

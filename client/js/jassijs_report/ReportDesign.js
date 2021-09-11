@@ -180,6 +180,10 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
             //this.pageSize = "A4";
             //this.pageMargins = [40, 40, 40, 40];
         }
+        update(design) {
+            this.design = design;
+            ReportDesign_1.fromJSON(this.design, this);
+        }
         get pageMargins() {
             return this._pageMargins;
         }
@@ -297,6 +301,14 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
         create(ob) {
             var _this = this;
             // this.removeAll();
+            this._pageSize = undefined;
+            this._pageOrientation = undefined;
+            this._pageMargins = undefined;
+            this.compress = undefined;
+            this.userPassword = undefined;
+            this.ownerPassword = undefined;
+            this.info = undefined;
+            this.permissions = undefined;
             this.backgroundPanel.removeAll();
             this.headerPanel.removeAll();
             this.contentPanel.removeAll();

@@ -81,7 +81,7 @@ export class ReportDesign extends BoxPanel {
 	*/
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        //	this.backgroundPanel.width="500px";
+          //	this.backgroundPanel.width="500px";
         //$(this.backgroundPanel.dom).css("min-width","200px");
         $(this.backgroundPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Background</text></svg>" + '")');
         $(this.footerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Footer</text></svg>" + '")');
@@ -98,7 +98,11 @@ export class ReportDesign extends BoxPanel {
         //this.pageSize = "A4";
         //this.pageMargins = [40, 40, 40, 40];
     }
-
+   
+    update(design){
+        this.design=design;
+        ReportDesign.fromJSON(this.design, this);
+    }
     @$Property({ type: "number[]", default: [40, 40, 40, 40], description: "margin of the page: left, top, right, bottom" })
     get pageMargins(): number[] {
         return this._pageMargins;
@@ -191,7 +195,8 @@ export class ReportDesign extends BoxPanel {
         var ret: string[] = [];
         ReportDesign.addVariablenames("", data, ret);
         return ret;
-    } static fromJSON(ob: any, target: ReportDesign = undefined): any {
+    }
+    static fromJSON(ob: any, target: ReportDesign = undefined): any {
         var ret = undefined;
         if (ob.content !== undefined) {
             ret = target;
@@ -219,6 +224,16 @@ export class ReportDesign extends BoxPanel {
     private create(ob: any) {
         var _this = this;
         // this.removeAll();
+        
+ 
+    this._pageSize = undefined;
+    this._pageOrientation=undefined;
+    this._pageMargins=undefined;
+    this.compress=undefined;
+    this.userPassword=undefined;
+    this.ownerPassword=undefined;
+    this.info=undefined;
+    this.permissions=undefined;
         this.backgroundPanel.removeAll();
         this.headerPanel.removeAll();
         this.contentPanel.removeAll();

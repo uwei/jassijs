@@ -17,7 +17,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1612818333557
 	},
 	"demo/ReportInvoice.ts": {
-		"date": 1631222146247,
+		"date": 1631377745852,
 		"demo.ReportInvoice": {}
 	},
 	"demo/StyleDialog.ts": {
@@ -65,8 +65,20 @@ define("demo/registry",["require"], function(require) {
 		"demo.TreeTable": {}
 	},
 	"demo/ReportKunden.ts": {
-		"date": 1631221228504,
-		"demo.ReportKunden": {}
+		"date": 1631377109066,
+		"de.ReportKunde": {
+			"@members": {
+				"value": {
+					"$Property": [
+						{
+							"isUrlTag": true,
+							"id": true,
+							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
+						}
+					]
+				}
+			}
+		}
 	}
 }
  }

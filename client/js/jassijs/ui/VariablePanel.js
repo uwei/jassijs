@@ -22,6 +22,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
     let VariablePanel = class VariablePanel extends Panel_1.Panel {
         constructor() {
             super();
+            this._items = [];
             /**cache**/
             /**@member {Object.<number, boolean>} **/
             this.debugpoints = {};

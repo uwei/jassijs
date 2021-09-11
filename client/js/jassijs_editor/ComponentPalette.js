@@ -104,6 +104,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         destroy() {
             for (var x = 0; x < this._components.length; x++) {
                 var comp = this._components[x];
+                $(comp.dom).draggable({});
                 $(comp.dom).draggable("destroy");
                 if (comp["_helper"] !== undefined)
                     comp["_helper"].destroy();

@@ -7,14 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_editor/util/Parser"], function (require, exports, Jassi_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1, Parser_1) {
+define(["require", "exports", "jassijs_report/ReportDesign", "jassijs/ui/DockingContainer", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs/util/Tools", "jassijs_editor/util/Parser", "jassijs/ui/VariablePanel", "jassijs/ui/Panel"], function (require, exports, ReportDesign_1, DockingContainer_1, Jassi_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, Tools_1, Parser_1, VariablePanel_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.test2 = exports.ReportDesigner = void 0;
-    let ReportDesigner = class ReportDesigner extends ComponentDesigner_1.ComponentDesigner {
+    exports.test = exports.SimpleReportDesigner = void 0;
+    let SimpleReportDesigner = class SimpleReportDesigner extends ComponentDesigner_1.ComponentDesigner {
         constructor() {
             super();
-            this.propertyIsChanging = false;
             this.pdfviewer = new PDFViewer_1.PDFViewer();
             this.lastView = undefined;
             this._codeChanger = undefined;
@@ -33,9 +32,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
             this.add(this._invisibleComponents);
             this._initComponentExplorer();
             this._installView();
-            this._codeEditor._codePanel.onblur(function (evt) {
-                _this._propertyEditor.updateParser();
-            });
             this._propertyEditor.readPropertyValueFromDesign = true;
             this._propertyEditor.addEvent("propertyChanged", function () {
                 _this.propertyChanged();
@@ -52,21 +48,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
                 super.editDialog(enable);
                 var rep = new PDFReport_1.PDFReport();
                 //rep.content=this.designedComponent["design];
-                var data;
-                try {
-                    data = this._codeChanger.value.toJSON();
-                    rep.value = data; //Tools.copyObject(data);// designedComponent["design"];
-                    rep.fill();
-                    rep.getBase64().then((data) => {
-                        this.pdfviewer.report = rep;
-                        //make a copy because the data would be modified 
-                        this.pdfviewer.value = data;
-                    });
-                }
-                catch (err) {
-                    console.error(err);
-                    //viewer.value = await rep.getBase64();
-                }
+                var data = this._codeChanger.value.toJSON();
+                rep.value = data; //Tools.copyObject(data);// designedComponent["design"];
+                rep.fill();
+                //viewer.value = await rep.getBase64();
+                rep.getBase64().then((data) => {
+                    this.pdfviewer.report = rep;
+                    //make a copy because the data would be modified 
+                    this.pdfviewer.value = data;
+                });
                 this.lastView = this._designPlaceholder._components[0];
                 if (this._designPlaceholder._components.length > 0)
                     this._designPlaceholder.remove(this._designPlaceholder._components[0], false);
@@ -83,7 +73,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
                 super.editDialog(enable);
         }
         propertyChanged() {
-            this.propertyIsChanging = true;
             if (this._codeChanger.parser.sourceFile === undefined)
                 this._codeChanger.updateParser();
             //@ts-ignore
@@ -101,7 +90,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
             }
             else
                 this._codeChanger.setPropertyInCode("reportdesign", ob);
-            this.propertyIsChanging = false;
         }
         createComponent(type, component, top, left, newParent, beforeComponent) {
             //this.variables.updateCache();
@@ -118,15 +106,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
                 this.nextComponentvariable[name] = 0;
             }
             this.nextComponentvariable[name]++;
-            this._codeEditor.variables.addVariable(name + this.nextComponentvariable[name], component, false);
+            this._codeEditor.variables.addVariable(name + this.nextComponentvariable[name], component);
             this.allComponents[name + this.nextComponentvariable[name]] = component;
             if (component["_components"]) {
                 for (let x = 0; x < component["_components"].length; x++) {
                     this.addVariables(component["_components"][x]);
                 }
             }
-            if (component === this)
-                this._codeEditor.variables.update();
         }
         /**
           * @member {jassijs.ui.Component} - the designed component
@@ -146,13 +132,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
             //@ts.ignore
             this._codeChanger.value = component;
         }
-        /**
-           * undo action
-           */
-        undo() {
-            this._codeEditor.undo();
-            this._codeEditor.evalCode();
-        }
         get designedComponent() {
             return super.designedComponent;
         }
@@ -166,8 +145,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
             this._codeEditor._main.add(this._propertyEditor, "Properties", "properties");
             this._codeEditor._main.add(this._componentExplorer, "Components", "components");
             this._codeEditor._main.add(this._componentPalette, "Palette", "componentPalette");
-            if (this.mainLayout)
-                this._codeEditor._main.layout = this.mainLayout;
+            // if(this.mainLayout)
+            //   this._codeEditor._main.layout = this.mainLayout;
         }
         destroy() {
             //	this._codeChanger.destroy();
@@ -190,94 +169,66 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
             };
         }
     };
-    ReportDesigner = __decorate([
+    SimpleReportDesigner = __decorate([
         (0, Jassi_1.$Class)("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
-    ], ReportDesigner);
-    exports.ReportDesigner = ReportDesigner;
-    async function test2() {
-        var rep = new PDFReport_1.PDFReport();
-        var def = {
-            content: {
-                stack: [{
-                        columns: [
-                            {
-                                stack: [
-                                    { text: '{{invoice.customer.firstname}} {{invoice.customer.lastname}}' },
-                                    { text: '{{invoice.customer.street}}' },
-                                    { text: '{{invoice.customer.place}}' }
-                                ]
-                            },
-                            {
-                                stack: [
-                                    { text: 'Invoice', fontSize: 18 },
-                                    { text: " " },
-                                    { text: "Date: {{invoice.date}}" },
-                                    { text: "Number: {{invoice.number}}", bold: true },
-                                    { text: " " },
-                                    { text: " " },
-                                ]
-                            }
-                        ]
-                    }
-                ]
-            },
-            data: {
-                invoice: {
-                    number: 1000,
-                    date: "20.07.2018",
-                    customer: {
-                        firstname: "Henry",
-                        lastname: "Klaus",
-                        street: "Hauptstr. 157",
-                        place: "chemnitz"
-                    }
+    ], SimpleReportDesigner);
+    exports.SimpleReportDesigner = SimpleReportDesigner;
+    class Main extends Panel_1.Panel {
+        constructor() {
+            super();
+            this._main = new DockingContainer_1.DockingContainer();
+            this.variables = new VariablePanel_1.VariablePanel();
+            this.add(this._main);
+            this._main.width = "calc(100% - 1px)";
+            this._main.height = "99%";
+        }
+        getVariablesForType() {
+            return [];
+        }
+        ;
+        getVariableFromObject(ob) {
+            return this.variables.getVariableFromObject(ob);
+        }
+        destroy() {
+            this._main.destroy();
+            super.destroy();
+        }
+    }
+    function test() {
+        var rep = new ReportDesign_1.ReportDesign();
+        var designer = new SimpleReportDesigner();
+        designer["codeEditor"] = new Main();
+        designer["codeEditor"]._main.add(designer, "Design", "design");
+        rep.design = {
+            content: [
+                {
+                    text: "Hallo Herr {{nachname}}"
+                },
+                {
+                    text: "ok"
+                },
+                {
+                    columns: [
+                        {
+                            text: "text"
+                        },
+                        {
+                            text: "text"
+                        }
+                    ]
                 }
-            }
+            ]
         };
-        //	def.content=replaceTemplates(def.content,def.data);
-        rep.value = def;
-        var viewer = new PDFViewer_1.PDFViewer();
-        viewer.value = await rep.getBase64();
-        viewer.height = "200";
-        return viewer;
-    }
-    exports.test2 = test2;
-    ;
-    async function test() {
-        var CodeEditor = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/CodeEditor"], resolve_1, reject_1); })).CodeEditor;
-        var editor = new CodeEditor();
-        //var url = "jassijs_editor/AcePanel.ts";
-        editor.height = 300;
-        editor.width = "100%";
-        //await editor.openFile(url);
-        editor.value = `import { ReportDesign } from "jassijs_report/ReportDesign";
-
-import { $Class } from "jassijs/remote/Jassi";
-import { $Property } from "jassijs/ui/Property";
-
-export class SampleReport extends ReportDesign {
-    me = {};
-    constructor() {
-        super();
-        this.layout(this.me);
-    }
-    async setdata() {
-    }
-    layout(me) {
-        this.design = { "content": { "stack": [{ "text": "Hallo" }, { "text": "ok" }, { "columns": [{ "text": "text" }, { "text": "text" }] }] } };
-    }
-}
-export async function test() {
-    var dlg = new SampleReport();
-    return dlg;
-}
-
-`;
-        editor.evalCode();
-        return editor;
+        designer["designedComponent"] = rep;
+        //this.width = 871;
+        //this.height = 10;
+        designer._installView();
+        designer.codeEditor._main.width = "100%";
+        designer.codeEditor._main.height = "400";
+        // designer["designedComponent"]=rep;
+        return designer["codeEditor"];
     }
     exports.test = test;
-    ;
 });
-//# sourceMappingURL=ReportDesigner.js.map
+//# sourceMappingURL=SimpleReportDesigner.js.map

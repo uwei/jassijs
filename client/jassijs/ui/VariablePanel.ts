@@ -17,7 +17,7 @@ export class VariablePanel extends Panel {
     table: any;//Table is hidden in default
     debugpoints: { [n: number]: boolean };
     [_cache: string]: any;
-    _items: any[];
+    _items: any[]=[];
     constructor() {
         super();
 

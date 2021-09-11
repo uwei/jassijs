@@ -294,8 +294,12 @@ export class DockingContainer extends Container {
         for (var x = 0; x < this._components.length; x++) {
             var component = this._components[x];
             var container = component.dom["_container"];
-            if (container.getElement()[0].children.length > 0)
+            try{
+            if (container&&container.getElement()[0].children.length > 0)
                 container.getElement()[0].removeChild(container.getElement()[0].firstChild);
+            }catch{
+                var h=9;
+            }
         }
         /* var fc = this.dom.firstChild;
 
@@ -330,9 +334,11 @@ export class DockingContainer extends Container {
         //  $(this.dom.parent).off("resize",this._parentResizer);
         this._windowResizer = undefined;
         // this._parentResizer=undefined;
-        this._intersectionObserver.unobserve(this.dom);
+        this._intersectionObserver?.unobserve(this.dom);
         this._intersectionObserver = undefined;
+       
         this._myLayout.destroy();
+       
         this._myLayout = undefined;
         this._registeredcomponents = {};
         super.destroy();

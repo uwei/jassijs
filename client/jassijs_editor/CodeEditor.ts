@@ -21,17 +21,17 @@ import { Test } from "jassijs/remote/Test";
 
 declare global {
     export interface KnownSettings {
-        Development_DefaultEditor: "ace" | "monaco"|"aceOnBrowser";
-        Development_MoanacoEditorTheme:"vs-dark"|"vs-light"|"hc-black";
+        Development_DefaultEditor: "ace" | "monaco" | "aceOnBrowser";
+        Development_MoanacoEditorTheme: "vs-dark" | "vs-light" | "hc-black";
     }
 }
 @$SettingsDescriptor()
 @$Class("jassijs_editor.CodeEditorSettingsDescriptor")
 class CodeEditorSettingsDescriptor {
-    @$Property({ chooseFrom: ["ace", "monaco","aceOnBrowser"],default:"aceOnBrowser",chooseFromStrict:true })
+    @$Property({ chooseFrom: ["ace", "monaco", "aceOnBrowser"], default: "aceOnBrowser", chooseFromStrict: true })
     Development_DefaultEditor: string;
-    @$Property({ chooseFrom: ["vs-dark","vs-light","hc-black"],default:"vs-light",chooseFromStrict:true })
-    Development_MoanacoEditorTheme:string;
+    @$Property({ chooseFrom: ["vs-dark", "vs-light", "hc-black"], default: "vs-light", chooseFromStrict: true })
+    Development_MoanacoEditorTheme: string;
 }
 
 
@@ -47,14 +47,14 @@ export class CodeEditor extends Panel {
     _codePanel: CodePanel;
     _errors: ErrorPanel;
     _file: string;
-    _variables: VariablePanel;
+    variables: VariablePanel;
     _design: Panel;
     editMode: boolean;
     __evalToCursorReached: boolean;
-   
-   
+
+
     private _line: number;
-    constructor() {
+    constructor(properties: { codePanel?: CodePanel, hideToolbar?: boolean } = undefined) {
         super();
         this.maximize();
         this._main = new DockingContainer();
@@ -62,95 +62,91 @@ export class CodeEditor extends Panel {
         this._codeToolbar = new Panel();
         //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-        let sett=Settings.gets(Settings.keys.Development_DefaultEditor);
-        if (sett==="ace"||(mobil&&(sett==="aceOnBrowser"||sett===undefined))){
-            this._codePanel = new AcePanel();
+        let sett = Settings.gets(Settings.keys.Development_DefaultEditor);
+        if (properties?.codePanel) {
+            this._codePanel = properties.codePanel;
         } else {
-            this._codePanel = new MonacoPanel();
-            // this._codePanel = new AcePanel(); 
+            if (sett === "ace" || (mobil && (sett === "aceOnBrowser" || sett === undefined))) {
+                this._codePanel = new AcePanel();
+            } else {
+                this._codePanel = new MonacoPanel();
+                // this._codePanel = new AcePanel(); 
+
+            }
 
         }
         this._errors = new ErrorPanel();
         this._file = "";
-        this._variables = new VariablePanel();
+        this.variables = new VariablePanel();
         this._design = new Panel();
-        this._init();
-		
+        this._init(properties?.hideToolbar);
+
         this.editMode = true;
     }
     private _initCodePanel() {
         this._codePanel.width = "100%";
         this._codePanel.mode = "typescript";
         this._codePanel.height = "calc(100% - 31px)";
-        let _this=this;
-		this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
+        let _this = this;
+        this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
             jassijs.debugger.breakpointChanged(_this._file, line, column, enable, type);
         });
     }
 
-    private _init() {
+    private _init(hideToolbar: boolean) {
         var _this = this;
         this._initCodePanel();
-
-        /*  this._codePanel.getDocTooltip = function (item) {
-              return _this.getDocTooltip(item);
-          }*/
-        this._codeToolbar["horizontal"] = true;
-        this._codeToolbar.height = "30";
         this._codeView["horizontal"] = true;
-        this._codeView.add(this._codeToolbar);
+
+        if (hideToolbar !== true) {
+            this._codeView.add(this._codeToolbar);
+            this._codeToolbar["horizontal"] = true;
+            this._codeToolbar.height = "30";
+            var save = new Button();
+            save.tooltip = "Save(Ctrl+S)";
+            save.icon = "mdi mdi-content-save mdi-18px";
+            save.onclick(function () {
+                _this.save();
+            });
+            this._codeToolbar.add(save);
+
+            var run = new Button();
+            run.icon = "mdi mdi-car-hatchback mdi-18px";
+            run.tooltip = "Run(F4)";
+            run.onclick(function () {
+                _this.evalCode();
+            });
+            this._codeToolbar.add(run);
+
+            var undo = new Button();
+            undo.icon = "mdi mdi-undo mdi-18px";
+            undo.tooltip = "Undo (Strg+Z)";
+            undo.onclick(function () {
+                _this._codePanel.undo();
+            });
+            this._codeToolbar.add(undo);
+
+            var goto = new Button();
+            goto.icon = "mdi mdi-ray-start-arrow mdi-18px";
+            goto.tooltip = "Goto";
+            goto.onclick(function () {
+                _this.gotoDeclaration();
+            });
+            jassijs["$CodeEditor"] = CodeEditor;
+            $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
+            $(goto.dom).attr("ondragover", "event.preventDefault();");
+            this._codeToolbar.add(goto);
+        }
         this._codeView.add(this._codePanel);
+
         this._main.width = "calc(100% - 1px)";
         this._main.height = "99%";
-        var lasttop = (<HTMLElement>this._main.dom).offsetTop;
-        var lasttop2 = 0;
         this._main.onresize = function () {
             setTimeout(function () {
                 _this._codePanel.resize();
 
             }, 1000);
-            /*     if(_this._main.dom.offsetTop!==lasttop){//resize to height
-                    lasttop=_this._main.dom.offsetTop;
-                    var i="calc(100% - "+(lasttop+1)+"px)";
-                    _this._main.height=i;
-                }*/
-            //TODO _this._designView.resize();
         }
-        var save = new Button();
-        save.tooltip = "Save(Ctrl+S)";
-        save.icon = "mdi mdi-content-save mdi-18px";
-        save.onclick(function () {
-            _this.save();
-        });
-        this._codeToolbar.add(save);
-
-        var run = new Button();
-        run.icon = "mdi mdi-car-hatchback mdi-18px";
-        run.tooltip = "Run(F4)";
-        run.onclick(function () {
-            _this.evalCode();
-        });
-        this._codeToolbar.add(run);
-
-        var undo = new Button();
-        undo.icon = "mdi mdi-undo mdi-18px";
-        undo.tooltip = "Undo (Strg+Z)";
-        undo.onclick(function () {
-            _this._codePanel.undo();
-        });
-        this._codeToolbar.add(undo);
-
-        var goto = new Button();
-        goto.icon = "mdi mdi-ray-start-arrow mdi-18px";
-        goto.tooltip = "Goto";
-        goto.onclick(function () {
-            _this.gotoDeclaration();
-        });
-        jassijs["$CodeEditor"] = CodeEditor;
-        $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
-        $(goto.dom).attr("ondragover", "event.preventDefault();");
-        this._codeToolbar.add(goto);
-
         /*var test = new Button();
         test.icon = "mdi mdi-bug mdi-18px";
         test.tooltip = "Test";
@@ -164,24 +160,24 @@ export class CodeEditor extends Panel {
 
         this._installView();
         this.registerKeys();
-       
-        this._variables.createTable();
+
+        this.variables.createTable();
         //   this._codePanel.setCompleter(this);
-        setTimeout(()=>{
+        setTimeout(() => {
             //_this.editorProvider="ace";
-        },100);
+        }, 100);
     }
 
     _installView() {
         this._main.add(this._codeView, "Code..", "code");
-        this._main.add(this._variables, "Variables", "variables");
+        this._main.add(this.variables, "Variables", "variables");
         this._main.add(this._design, "Design", "design");
         this._main.add(this._errors, "Errors", "errors");
         this._main.layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":100,"content":[{"type":"stack","width":33.333333333333336,"height":80.34682080924856,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":19.653179190751445,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":50,"content":[{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":50,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}'
 
     }
 
-	/*set editorProvider(value: "ace" | "monaco") {
+    /*set editorProvider(value: "ace" | "monaco") {
         if (value !== this.editorProvider) {
             //switch to new provider
             let pos = this.cursorPosition;
@@ -337,7 +333,7 @@ export class CodeEditor extends Panel {
      * @param Object<string,object> variables ["name"]=value
      */
     addVariables(variables) {
-        this._variables.addAll(variables);
+        this.variables.addAll(variables);
     }
     private async _evalCodeOnLoad(data) {
 
@@ -388,7 +384,7 @@ export class CodeEditor extends Panel {
                         _this._design["designedComponent"] = ret;
                     });
                 } else if (ret["reportdesign"] !== undefined) {
-                    require(["jassijs_report/designer/ReportDesigner","jassijs_report/ReportDesign"], function () {
+                    require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign"], function () {
                         var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
                         var ReportDesign = classes.getClass("jassijs_report.ReportDesign");
                         if (!((_this._design) instanceof ReportDesigner)) {
@@ -396,10 +392,10 @@ export class CodeEditor extends Panel {
                             _this._main.add(_this._design, "Design", "design");
                             _this._design["codeEditor"] = _this;
                         }
-                        var rep=new ReportDesign();
-                        rep.design=Object.assign({},ret.reportdesign) ;
-                        rep.design.data=ret.value;
-                        rep.design.parameter=ret.parameter;
+                        var rep = new ReportDesign();
+                        rep.design = Object.assign({}, ret.reportdesign);
+                        rep.design.data = ret.value;
+                        rep.design.parameter = ret.parameter;
                         _this._design["designedComponent"] = rep;
 
                         /*   require(["jassijs_report/ReportDesign"], function() {
@@ -483,8 +479,7 @@ export class CodeEditor extends Panel {
      */
     async evalCode(toCursor = undefined) {
         this.__evalToCursorReached = false;
-        this._variables.clear();
-        //this._variables.add("this",this);
+        this.variables.clear();
 
         var code = this._codePanel.value;
         var lines = code.split("\n");
@@ -540,14 +535,14 @@ export class CodeEditor extends Panel {
     * @returns {[string]}
     */
     getVariablesForType(type) {
-        return this._variables.getVariablesForType(type);
+        return this.variables.getVariablesForType(type);
     }
     /**
      * gets the name of the variabel that holds the object
      * @param {object} ob - the
      */
     getVariableFromObject(ob) {
-        return this._variables.getVariableFromObject(ob);
+        return this.variables.getVariableFromObject(ob);
     }
 
     /**
@@ -555,7 +550,7 @@ export class CodeEditor extends Panel {
      * @param {string} ob - the name of the variable
      */
     getObjectFromVariable(varname) {
-        return this._variables.getObjectFromVariable(varname);
+        return this.variables.getObjectFromVariable(varname);
     }
 
     /**
@@ -564,21 +559,13 @@ export class CodeEditor extends Panel {
       * @param {string} newName
       */
     renameVariable(oldName, newName) {
-        this._variables.renameVariable(oldName, newName);
+        this.variables.renameVariable(oldName, newName);
         if (this._design !== undefined && this._design["_componentExplorer"] !== undefined)
             this._design["_componentExplorer"].update();
     }
 
 
-    /**
-     * @member { jassijs_editor.VariablePanel} - the variable
-     */
-    set variables(value) {
-        this._variables = value;
-    }
-    get variables() {
-        return this._variables;
-    }
+
     /**
      * @member {string} - the code
      */
@@ -659,7 +646,7 @@ export class CodeEditor extends Panel {
         this._codeToolbar.destroy();
         this._codePanel.destroy();
         this._errors.destroy();
-        this._variables.destroy();
+        this.variables.destroy();
         this._design.destroy();
         //this._main.destroy();
         super.destroy();
@@ -677,9 +664,9 @@ export async function test() {
     var editor = new CodeEditor();
     //var url = "jassijs_editor/AcePanel.ts";
     editor.height = 300;
-    editor.width="100%";
+    editor.width = "100%";
     //await editor.openFile(url);
-    editor.value=`import { Button } from "jassijs/ui/Button";
+    editor.value = `import { Button } from "jassijs/ui/Button";
 import { Repeater } from "jassijs/ui/Repeater";
 import { $Class } from "jassijs/remote/Jassi";
 import { Panel } from "jassijs/ui/Panel";

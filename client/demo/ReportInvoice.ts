@@ -17,7 +17,7 @@ var reportdesign = {
 				],
 				[
 					{
-						text: "Invoice.",
+						text: "Invoice",
 						fontSize: 18
 					},
 					"\n",

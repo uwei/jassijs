@@ -271,8 +271,13 @@ define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Jassi"
             for (var x = 0; x < this._components.length; x++) {
                 var component = this._components[x];
                 var container = component.dom["_container"];
-                if (container.getElement()[0].children.length > 0)
-                    container.getElement()[0].removeChild(container.getElement()[0].firstChild);
+                try {
+                    if (container && container.getElement()[0].children.length > 0)
+                        container.getElement()[0].removeChild(container.getElement()[0].firstChild);
+                }
+                catch (_a) {
+                    var h = 9;
+                }
             }
             /* var fc = this.dom.firstChild;
     
@@ -302,11 +307,12 @@ define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Jassi"
             }
         }
         destroy() {
+            var _a;
             $(window).off("resize", this._windowResizer);
             //  $(this.dom.parent).off("resize",this._parentResizer);
             this._windowResizer = undefined;
             // this._parentResizer=undefined;
-            this._intersectionObserver.unobserve(this.dom);
+            (_a = this._intersectionObserver) === null || _a === void 0 ? void 0 : _a.unobserve(this.dom);
             this._intersectionObserver = undefined;
             this._myLayout.destroy();
             this._myLayout = undefined;

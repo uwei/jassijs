@@ -21,7 +21,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         set codeEditor(value) {
             var _this = this;
             this._codeEditor = value;
-            this._variables = this._codeEditor._variables;
+            this.variables = this._codeEditor.variables;
             this._propertyEditor = new PropertyEditor_1.PropertyEditor(value, new Parser_1.Parser());
             //   this._propertyEditor=new PropertyEditor(undefined);
             this._errors = this._codeEditor._errors;
@@ -242,7 +242,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             //if(component["setDesignMode"]!==undefined){
             //        component["setDesignMode"](enable,this);
             //    }
-            this._variables.updateCache(); //variables can be added with Repeater.setDesignMode
+            this.variables.updateCache(); //variables can be added with Repeater.setDesignMode
             if (this._resizer !== undefined) {
                 this._resizer.uninstall();
                 console.log("uninstall");
@@ -252,14 +252,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             }
             if (enable === true) {
                 var _this = this;
-                var allcomponents = this._variables.getEditableComponents(component);
+                var allcomponents = this.variables.getEditableComponents(component);
                 if (this._propertyEditor.codeEditor === undefined) {
                     var ret = [];
                     this.getComponentIDsInDesign(component, ret);
                     allcomponents = ret.join(",");
                 }
                 else
-                    allcomponents = this._variables.getEditableComponents(component);
+                    allcomponents = this.variables.getEditableComponents(component);
                 //this._installTinyEditor();
                 this._draganddropper = new DragAndDropper_1.DragAndDropper();
                 this._resizer = new Resizer_1.Resizer();
@@ -285,7 +285,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                     _this._propertyEditor.value = _this._propertyEditor.value;
                 };
                 this._resizer.install(component, allcomponents);
-                allcomponents = this._variables.getEditableComponents(component, true);
+                allcomponents = this.variables.getEditableComponents(component, true);
                 this._draganddropper.install(component, allcomponents);
                 this._draganddropper.onpropertychanged = function (component, top, left, oldParent, newParent, beforeComponent) {
                     _this.moveComponent(component, top, left, oldParent, newParent, beforeComponent);
@@ -355,7 +355,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                      newParent.add(dummy);//._components[newParent._components.length-1]=tmp;
                  }
              }*/
-            _this._variables.updateCache();
+            _this.variables.updateCache();
             _this._propertyEditor.value = _this._propertyEditor.value;
             _this._componentExplorer.value = _this._componentExplorer.value;
         }
@@ -388,14 +388,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                     repeater.createRepeatingComponent(function (me) {
                         if (this._designMode !== true)
                             return;
-                        //_this._variables.addVariable(vardatabinder,databinder);
-                        _this._variables.updateCache();
+                        //_this.variables.addVariable(vardatabinder,databinder);
+                        _this.variables.updateCache();
                     });
                     /*var db=new jassijs.ui.Databinder();
                     if(repeater.value!==undefined&&repeater.value.length>0)
                         db.value=repeater.value[0];
-                    _this._variables.add(vardatabinder,db);
-                    _this._variables.updateCache();*/
+                    _this.variables.add(vardatabinder,db);
+                    _this.variables.updateCache();*/
                 }
             }
             var varvalue = new (Classes_1.classes.getClass(type));
@@ -410,7 +410,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                     th[varname.substring(5)] = varvalue;
                 }
                 else
-                    _this._variables.addVariable(varname, varvalue);
+                    _this.variables.addVariable(varname, varvalue);
                 var newName = _this._codeEditor.getVariableFromObject(newParent);
                 var before;
                 if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //Designdummy atEnd
@@ -435,7 +435,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                      newParent.dom.append(newParent._designDummy.domWrapper)
                  }
              }*/
-            _this._variables.updateCache();
+            _this.variables.updateCache();
             //set initial properties for the new component
             if (component.createFromParam !== undefined) {
                 for (var key in component.createFromParam) {

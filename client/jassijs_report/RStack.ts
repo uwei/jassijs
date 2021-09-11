@@ -52,8 +52,10 @@ export class RStack extends ReportComponent {
         for (let x = 0;x < arr.length;x++) {
             ret.add(ReportDesign.fromJSON(arr[x]));
         }
+
         delete ob.stack;
-        super.fromJSON(ob);
+        if(!Array.isArray(ob))
+             super.fromJSON(ob);
         return ret;
     }
 }

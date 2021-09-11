@@ -11,7 +11,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1631051132191,
+		"date": 1631380965301,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {
@@ -72,7 +72,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1627596252446,
+		"date": 1631287390906,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
@@ -80,7 +80,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ComponentExplorer": {}
 	},
 	"jassijs_editor/ComponentPalette.ts": {
-		"date": 1623099899741,
+		"date": 1631290327725,
 		"jassijs_editor.ComponentPalette": {}
 	},
 	"jassijs_editor/Debugger.ts": {
@@ -116,6 +116,10 @@ define("jassijs_editor/registry",["require"], function(require) {
 	"jassijs_editor/util/Typescript.ts": {
 		"date": 1623951966985,
 		"jassijs_editor.util.Typescript": {}
+	},
+	"jassijs_editor/AcePanelSimple.ts": {
+		"date": 1631388456854,
+		"jassijs.ui.AcePanelSimple": {}
 	}
 }
  }

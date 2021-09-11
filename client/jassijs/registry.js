@@ -1418,7 +1418,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DesignDummy": {}
 	},
 	"jassijs/ui/DockingContainer.ts": {
-		"date": 1623176773333,
+		"date": 1631381871208,
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/ErrorPanel.ts": {
@@ -1769,7 +1769,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1627596182837,
+		"date": 1631286229621,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {
@@ -2534,7 +2534,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/VariablePanel.ts": {
-		"date": 1622985638953,
+		"date": 1631286861827,
 		"jassijs.ui.VariablePanel": {}
 	},
 	"jassijs/util/Cookies.ts": {

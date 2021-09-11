@@ -22,7 +22,7 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
                     ],
                     [
                         {
-                            text: "Invoice.",
+                            text: "Invoice",
                             fontSize: 18
                         },
                         "\n",
