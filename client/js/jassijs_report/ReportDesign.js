@@ -454,6 +454,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);
     exports.ReportDesign = ReportDesign;
+    //jassijs.myRequire(modul.css["jassijs_report.css"]);
     async function test() {
     }
     exports.test = test;

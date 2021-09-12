@@ -311,8 +311,11 @@ export class Server extends RemoteObject {
     /**
     * is the nodes server running 
     **/
-    private static async isOnline(context: Context = undefined): Promise<boolean> {
+    public static async isOnline(context: Context = undefined): Promise<boolean> {
         if (!context?.isServer) {
+             //no serviceworker no serverside implementation
+            if(navigator.serviceWorker.controller===null)
+                return false;
             try {
                 if (this.isonline === undefined)
                     Server.isonline = await this.call(this.isOnline, context);

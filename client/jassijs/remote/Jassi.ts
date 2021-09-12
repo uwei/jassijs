@@ -1,15 +1,16 @@
 
-import registry from "jassijs/remote/Registry"; 
+
+import registry from "jassijs/remote/Registry";
 import { JassiError } from "./Classes";
 
 
 
 declare global {
     export class ExtensionAction {
-       /* sample?: {
-            name: string,
-            param1: string;
-        };*/
+        /* sample?: {
+             name: string,
+             param1: string;
+         };*/
     }
 }
 
@@ -43,7 +44,7 @@ declare global {
     }
 }
 //@ts-ignore
-String.prototype.replaceAll = function (search:string, replacement:string):string {
+String.prototype.replaceAll = function (search: string, replacement: string): string {
     var target = this;
     return target.split(search).join(replacement);
 }
@@ -59,47 +60,54 @@ export class Jassi {
     //  public classes:Classes=undefined;
     [key: string]: any;
     base: { [k: string]: any };
-    public modules:{[key: string]: string};
+    public modules: { [key: string]: string };
     isServer: boolean = false;
     constructor() {
         //@ts-ignore
         this.isServer = window.document === undefined;
         if (!this.isServer) {
-          //  this.myRequire("jassi/jassijs.css");
-          //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
-          //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
+            //@ts-ignore 
+            /*import("jassijs/modul").then((modul)=>{
+                jassijs.myRequire(modul.default.css["jassijs.css"]);
+                jassijs.myRequire(modul.default.css["jquery-ui.css"]);
+                jassijs.myRequire(modul.default.css["materialdesignicons.min.css"]);
+    
+            });*/
+            //  this.myRequire("jassi/jassijs.css");
+            //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
+            //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
         }
     }
-	/**
-	 * include a global stylesheet
-	 * @id - the given id - important for update
-	 * @data - the css data to insert
-	 **/
-	includeCSS(id: string, data: { [cssselector: string]: any/*CSSProperties*/ }) {
+    /**
+     * include a global stylesheet
+     * @id - the given id - important for update
+     * @data - the css data to insert
+     **/
+    includeCSS(id: string, data: { [cssselector: string]: any/*CSSProperties*/ }) {
         //@ts-ignore
         var style: HTMLElement = document.getElementById(id);
         //@ts-ignore
         if (!document.getElementById(id)) {
-	        style = $('<style id=' + id + '></style>')[0];
+            style = $('<style id=' + id + '></style>')[0];
             //@ts-ignore
             document.head.appendChild(style);
-	    }
-	    var sstyle="";
-	    for(var selector in data){
-		    var sstyle = sstyle+"\n\t" + selector + "{\n";
-		    var properties=data[selector];
-	        var prop = {};
-		    for (let key in properties) {
-		    	if(key==="_classname")
-		    		continue;
-		        var newKey = key.replaceAll("_", "-");
-		        prop[newKey] = (<string>properties[key]);
-		        sstyle = sstyle + "\t\t" + newKey + ":" + (<string>properties[key]) + ";\n";
-		    }
-			sstyle = sstyle + "\t}\n";
-	    }
-	    style.innerHTML = sstyle;
-	}
+        }
+        var sstyle = "";
+        for (var selector in data) {
+            var sstyle = sstyle + "\n\t" + selector + "{\n";
+            var properties = data[selector];
+            var prop = {};
+            for (let key in properties) {
+                if (key === "_classname")
+                    continue;
+                var newKey = key.replaceAll("_", "-");
+                prop[newKey] = (<string>properties[key]);
+                sstyle = sstyle + "\t\t" + newKey + ":" + (<string>properties[key]) + ";\n";
+            }
+            sstyle = sstyle + "\t}\n";
+        }
+        style.innerHTML = sstyle;
+    }
     /**
     * include a js or a css file
     * @param {string|string[]} href - url(s) of the js or css file(s)
@@ -107,7 +115,7 @@ export class Jassi {
     */
     myRequire(href, event = undefined, param = undefined) {
         if (this.isServer)
-            throw new JassiError("jass.Require is only available on client");
+            throw new JassiError("jassi.Require is only available on client");
         if ((typeof href) === "string") {
             href = [href];
         }
@@ -153,20 +161,21 @@ export class Jassi {
             link.id = "-->" + url;
             var _this = this;
             //@ts-ignore 
-            link.onload = function (data1:GlobalEventHandlers,data2:Event):any {
+            link.onload = function (data1: GlobalEventHandlers, data2: Event): any {
                 _this.myRequire(href, event);
             };
             head.appendChild(link);
         }
     }
 };
-var jassijs: Jassi = new Jassi(); 
+var jassijs: Jassi = new Jassi();
 //@ts-ignore
-if (window["jassijs"] === undefined){//reloading this file -> no destroy namespace
-     //@ts-ignore
+if (window["jassijs"] === undefined) {//reloading this file -> no destroy namespace
+    //@ts-ignore
     window["jassijs"] = jassijs;
 }
 
- 
+
 
 export default jassijs;
+

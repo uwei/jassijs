@@ -7,26 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ext/pdfmake", "jassijs_report/PDFViewer"], function (require, exports, Jassi_1, pdfmake_1, PDFViewer_1) {
+define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ext/pdfmake", "jassijs_report/PDFViewer", "jassijs_report/remote/pdfmakejassi"], function (require, exports, Jassi_1, pdfmake_1, PDFViewer_1, pdfmakejassi_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.PDFReport = void 0;
-    function clone(obj) {
-        if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
-            return obj;
-        if (obj instanceof Date || typeof obj === "object")
-            var temp = new obj.constructor(); //or new Date(obj);
-        else
-            var temp = obj.constructor();
-        for (var key in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                obj['isActiveClone'] = null;
-                temp[key] = clone(obj[key]);
-                delete obj['isActiveClone'];
-            }
-        }
-        return temp;
-    }
     let PDFReport = class PDFReport {
         constructor() {
             // @member {object} - the generated report
@@ -36,7 +20,7 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
             //var me = this.me = {};
         }
         fill() {
-            var def = createReportDefinition(this.value, this.data, this.parameter);
+            var def = (0, pdfmakejassi_1.createReportDefinition)(this.value, this.data, this.parameter);
             registerFonts(this.value);
             this.report = pdfmake_1.default.createPdf(def);
         }
@@ -64,43 +48,6 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
         __metadata("design:paramtypes", [])
     ], PDFReport);
     exports.PDFReport = PDFReport;
-    function createReportDefinition(definition, data, parameter) {
-        definition = clone(definition); //this would be modified
-        if (data !== undefined)
-            data = clone(data); //this would be modified
-        if (data === undefined && definition.data !== undefined) {
-            data = definition.data;
-        }
-        //parameter could be in data
-        if (data !== undefined && data.parameter !== undefined && parameter !== undefined) {
-            throw new Error("parameter would override data.parameter");
-        }
-        if (Array.isArray(data)) {
-            data = { items: data }; //so we can do data.parameter
-        }
-        if (parameter !== undefined) {
-            data.parameter = parameter;
-        }
-        //parameter could be in definition
-        if (data !== undefined && data.parameter !== undefined && definition.parameter !== undefined) {
-            throw new Error("definition.parameter would override data.parameter");
-        }
-        if (definition.parameter !== undefined) {
-            data.parameter = definition.parameter;
-        }
-        definition.content = replaceTemplates(definition.content, data);
-        if (definition.background)
-            definition.background = replaceTemplates(definition.background, data);
-        if (definition.header)
-            definition.header = replaceTemplates(definition.header, data);
-        if (definition.footer)
-            definition.footer = replaceTemplates(definition.footer, data);
-        //definition.content = replaceTemplates(definition.content, data);
-        replacePageInformation(definition);
-        delete definition.data;
-        return definition;
-        // delete definition.parameter;
-    }
     //var available = ["Alegreya",    "AlegreyaSans",    "AlegreyaSansSC",    "AlegreyaSC",    "AlmendraSC",    "Amaranth",    "Andada",    "AndadaSC",    "AnonymousPro",    "ArchivoNarrow",    "Arvo",    "Asap",    "AveriaLibre",    "AveriaSansLibre",    "AveriaSerifLibre",    "Cambay",    "Caudex",    "CrimsonText",    "Cuprum",    "Economica",    "Exo2",    "Exo",    "ExpletusSans",    "FiraSans",    "JosefinSans",    "JosefinSlab",    "Karla",    "Lato",    "LobsterTwo",    "Lora",    "Marvel",    "Merriweather",    "MerriweatherSans",    "Nobile",    "NoticiaText",    "Overlock",    "Philosopher",    "PlayfairDisplay",    "PlayfairDisplaySC",    "PT_Serif-Web",    "Puritan",    "Quantico",    "QuattrocentoSans",    "Quicksand",    "Rambla",    "Rosario",    "Sansation",    "Sarabun",    "Scada",    "Share",    "Sitara",    "SourceSansPro",    "TitilliumWeb",    "Volkhov",    "Vollkorn"];
     function registerFonts(data) {
         var fonts = [];
@@ -130,209 +77,6 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
                 pdfmake_1.default.fonts[font].bolditalics = base + "/" + font.toLowerCase() + "/" + font + "-BoldItalic.ttf";
             }
         });
-    }
-    function replace(str, data, member) {
-        var ob = getVar(data, member);
-        return str.split("{{" + member + "}}").join(ob);
-    }
-    function getVar(data, member) {
-        var names = member.split(".");
-        var ob = data[names[0]];
-        for (let x = 1; x < names.length; x++) {
-            if (ob === undefined)
-                return undefined;
-            ob = ob[names[x]];
-        }
-        return ob;
-    }
-    //replace {{currentPage}} {{pageWidth}} {{pageHeight}} {{pageCount}} in header,footer, background
-    function replacePageInformation(def) {
-        if (def.background && typeof def.background !== "function") {
-            let d = JSON.stringify(def.background);
-            def.background = function (currentPage, pageSize) {
-                let sret = d.replaceAll("{{currentPage}}", currentPage);
-                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
-                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
-                return JSON.parse(sret);
-            };
-        }
-        if (def.header && typeof def.header !== "function") {
-            let d = JSON.stringify(def.header);
-            def.header = function (currentPage, pageCount) {
-                let sret = d.replaceAll("{{currentPage}}", currentPage);
-                sret = sret.replaceAll("{{pageCount}}", pageCount);
-                return JSON.parse(sret);
-            };
-        }
-        if (def.footer && typeof def.footer !== "function") {
-            let d = JSON.stringify(def.footer);
-            def.footer = function (currentPage, pageCount, pageSize) {
-                let sret = d.replaceAll("{{currentPage}}", currentPage);
-                sret = sret.replaceAll("{{pageCount}}", pageCount);
-                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
-                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
-                return JSON.parse(sret);
-            };
-        }
-    }
-    function replaceDatatable(def, data) {
-        var header = def.datatable.header;
-        var footer = def.datatable.footer;
-        var dataexpr = def.datatable.foreach;
-        var groups = def.datatable.groups;
-        var body = def.datatable.body;
-        def.table = {
-            body: []
-        };
-        if (header)
-            def.table.body.push(header);
-        def.table.body.push({
-            foreach: def.datatable.dataforeach,
-            do: body
-        });
-        delete def.datatable.dataforeach;
-        /*var variable = dataexpr.split(" in ")[0];
-        var sarr = dataexpr.split(" in ")[1];
-        var arr = getVar(data, sarr);
-    
-        for (let x = 0;x < arr.length;x++) {
-            data[variable] = arr[x];
-            var copy = JSON.parse(JSON.stringify(body));//deep copy
-            copy = replaceTemplates(copy, data);
-            def.table.body.push(copy);
-        }*/
-        if (footer)
-            def.table.body.push(footer);
-        //delete data[variable];
-        delete def.datatable.header;
-        delete def.datatable.footer;
-        delete def.datatable.foreach;
-        delete def.datatable.groups;
-        delete def.datatable.body;
-        for (var key in def.datatable) {
-            def.table[key] = def.datatable[key];
-        }
-        delete def.datatable;
-        /*header:[{ text:"Item"},{ text:"Price"}],
-                        data:"line in invoice.lines",
-                        //footer:[{ text:"Total"},{ text:""}],
-                        body:[{ text:"Text"},{ text:"price"}],
-                        groups:*/
-    }
-    function replaceTemplates(def, data, parentArray = undefined) {
-        if (def.datatable !== undefined) {
-            replaceDatatable(def, data);
-        }
-        if (def.foreach !== undefined) {
-            //resolve foreach
-            //	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
-            if (parentArray === undefined) {
-                throw "foreach is not surounded by an Array";
-            }
-            var variable = def.foreach.split(" in ")[0];
-            var sarr = def.foreach.split(" in ")[1];
-            var arr;
-            if (sarr === undefined) {
-                arr = data.items; //we get the main array
-            }
-            else {
-                arr = getVar(data, sarr);
-            }
-            var pos = parentArray.indexOf(def);
-            parentArray.splice(pos, 1);
-            for (let x = 0; x < arr.length; x++) {
-                data[variable] = arr[x];
-                delete def.foreach;
-                var copy;
-                if (def.do)
-                    copy = JSON.parse(JSON.stringify(def.do));
-                else
-                    copy = JSON.parse(JSON.stringify(def));
-                copy = replaceTemplates(copy, data);
-                parentArray.splice(pos++, 0, copy);
-            }
-            delete data[variable];
-            return undefined;
-        }
-        else if (Array.isArray(def)) {
-            for (var a = 0; a < def.length; a++) {
-                if (def[a].foreach !== undefined) {
-                    replaceTemplates(def[a], data, def);
-                    a--;
-                }
-                else
-                    def[a] = replaceTemplates(def[a], data, def);
-            }
-            return def;
-        }
-        else if (typeof def === "string") {
-            var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
-            if (ergebnis !== null) {
-                for (var e = 0; e < ergebnis.length; e++) {
-                    def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
-                }
-            }
-            return def;
-        }
-        else { //object	
-            for (var key in def) {
-                def[key] = replaceTemplates(def[key], data);
-            }
-            delete def.editTogether; //RText
-        }
-        return def;
-    }
-    function replaceTemplatesOld(def, data, parentArray = undefined) {
-        if (def.datatable !== undefined) {
-            replaceDatatable(def, data);
-        }
-        else if (def.foreach !== undefined) {
-            //resolve foreach
-            //	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
-            if (parentArray === undefined) {
-                throw "foreach is not surounded by an Array";
-            }
-            var variable = def.foreach.split(" in ")[0];
-            var sarr = def.foreach.split(" in ")[1];
-            var arr = getVar(data, sarr);
-            var pos = parentArray.indexOf(def);
-            parentArray.splice(pos, 1);
-            for (let x = 0; x < arr.length; x++) {
-                data[variable] = arr[x];
-                var copy = JSON.parse(JSON.stringify(def.do)); //deep copy
-                copy = replaceTemplates(copy, data);
-                parentArray.splice(pos++, 0, copy);
-            }
-            delete data[variable];
-            return undefined;
-        }
-        else if (Array.isArray(def)) {
-            for (var a = 0; a < def.length; a++) {
-                if (def[a].foreach !== undefined) {
-                    replaceTemplates(def[a], data, def);
-                    a--;
-                }
-                else
-                    def[a] = replaceTemplates(def[a], data, def);
-            }
-            return def;
-        }
-        else if (typeof def === "string") {
-            var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
-            if (ergebnis !== null) {
-                for (var e = 0; e < ergebnis.length; e++) {
-                    def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
-                }
-            }
-            return def;
-        }
-        else { //object	
-            for (var key in def) {
-                def[key] = replaceTemplates(def[key], data);
-            }
-            delete def.editTogether; //RText
-        }
-        return def;
     }
     async function test() {
         var rep = new PDFReport();
@@ -919,7 +663,8 @@ define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Jassi", "
                 ret.add(ReportDesign_2.ReportDesign.fromJSON(arr[x]));
             }
             delete ob.stack;
-            super.fromJSON(ob);
+            if (!Array.isArray(ob))
+                super.fromJSON(ob);
             return ret;
         }
     };
@@ -1671,6 +1416,26 @@ define("jassijs_report/ReportComponent", ["require", "exports", "jassijs/ui/Comp
     ], ReportComponent);
     exports.ReportComponent = ReportComponent;
 });
+define("jassijs_report/modul", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.default = {
+        "css": { "jassijs_report.css": "jassijs_report.css" },
+        "require": {
+            paths: {
+                'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
+                'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
+                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts',
+                'pdfMake': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake' //'../../lib/pdfmake'
+            },
+            shim: {
+                'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
+                "vfs_fonts": ["pdfMake"]
+                //"pdfMake":["vfs_fonts"]
+            },
+        }
+    };
+});
 define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs_report/ReportComponent", "jassijs_report/RDatatable", "jassijs/ui/Property"], function (require, exports, BoxPanel_2, Jassi_10, RStack_1, RText_2, RColumns_1, RUnknown_1, ReportComponent_7, RDatatable_1, Property_5) {
     "use strict";
     var ReportDesign_5;
@@ -1844,6 +1609,10 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             //this.pageSize = "A4";
             //this.pageMargins = [40, 40, 40, 40];
         }
+        update(design) {
+            this.design = design;
+            ReportDesign_5.fromJSON(this.design, this);
+        }
         get pageMargins() {
             return this._pageMargins;
         }
@@ -1961,6 +1730,14 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         create(ob) {
             var _this = this;
             // this.removeAll();
+            this._pageSize = undefined;
+            this._pageOrientation = undefined;
+            this._pageMargins = undefined;
+            this.compress = undefined;
+            this.userPassword = undefined;
+            this.ownerPassword = undefined;
+            this.info = undefined;
+            this.permissions = undefined;
             this.backgroundPanel.removeAll();
             this.headerPanel.removeAll();
             this.contentPanel.removeAll();
@@ -2106,29 +1883,99 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);
     exports.ReportDesign = ReportDesign;
+    //jassijs.myRequire(modul.css["jassijs_report.css"]);
     async function test() {
     }
     exports.test = test;
 });
-define("jassijs_report/modul", ["require", "exports"], function (require, exports) {
+define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/CodeEditor", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows"], function (require, exports, Jassi_11, Runlater_1, SimpleReportDesigner_1, CodeEditor_1, AcePanelSimple_1, ReportDesign_6, Panel_3, Windows_1) {
     "use strict";
+    var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.default = {
-        "css": { "jassijs_report.css": "jassijs_report.css" },
-        "require": {
-            paths: {
-                'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
-                'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts',
-                'pdfMake': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake' //'../../lib/pdfmake'
-            },
-            shim: {
-                'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
-                "vfs_fonts": ["pdfMake"]
-                //"pdfMake":["vfs_fonts"]
-            },
+    exports.test = exports.SimpleReportEditor = void 0;
+    let SimpleReportEditor = class SimpleReportEditor extends Panel_3.Panel {
+        constructor(properties) {
+            super(properties);
+            var _this = this;
+            this.acePanel = new AcePanelSimple_1.AcePanelSimple();
+            this.codeEditor = new CodeEditor_1.CodeEditor({ codePanel: this.acePanel, hideToolbar: true });
+            this.add(this.codeEditor);
+            this.codeEditor.width = "100%";
+            this.codeEditor.height = "100%";
+            this.reportPanel = new ReportDesign_6.ReportDesign();
+            this.reportDesigner = new SimpleReportDesigner_1.SimpleReportDesigner();
+            var compileTask = undefined;
+            this.codeEditor.variables.addVariable("this", this.reportPanel);
+            this.codeEditor.evalCode = async function () {
+                if (compileTask === undefined) {
+                    compileTask = new Runlater_1.Runlater(() => {
+                        var code = this.acePanel.value;
+                        var func = new Function("", "return " + code.substring(code.indexOf("=") + 1));
+                        var ob = func();
+                        _this.reportDesign = ob;
+                    }, 800);
+                }
+                else
+                    compileTask.runlater();
+            };
+            this.acePanel.onchange((obj, editor) => {
+                if (!this.reportDesigner.propertyIsChanging)
+                    _this.codeEditor.evalCode();
+            });
+            //designer["codeEditor"]._main.add(designer, "Design", "design");
+            this.reportPanel.design = { content: [] };
+            this.codeEditor._design = this.reportDesigner;
+            this.codeEditor._main.add(this.codeEditor._design, "Design", "design");
+            this.reportDesigner.codeEditor = this.codeEditor;
+            this.reportDesigner.designedComponent = this.reportPanel;
+        }
+        get reportDesign() {
+            var _a;
+            return (_a = this.reportPanel) === null || _a === void 0 ? void 0 : _a.design;
+        }
+        set reportDesign(design) {
+            this.reportPanel = new ReportDesign_6.ReportDesign();
+            this.reportPanel.design = design;
+            this.reportDesigner.designedComponent = this.reportPanel;
         }
     };
+    SimpleReportEditor = __decorate([
+        (0, Jassi_11.$Class)("jassi_report.SimpleReportEditor"),
+        __metadata("design:paramtypes", [typeof (_a = typeof Panel_3.PanelCreateProperties !== "undefined" && Panel_3.PanelCreateProperties) === "function" ? _a : Object])
+    ], SimpleReportEditor);
+    exports.SimpleReportEditor = SimpleReportEditor;
+    function test() {
+        var reportdesign = {
+            content: [
+                {
+                    text: "Hallo Herr {{nachname}}"
+                },
+                {
+                    text: "ok"
+                },
+                {
+                    columns: [
+                        {
+                            text: "text"
+                        },
+                        {
+                            text: "text"
+                        }
+                    ]
+                }
+            ],
+            data: {
+                nachname: "Meier"
+            }
+        };
+        var editor = new SimpleReportEditor();
+        editor.reportDesign = reportdesign;
+        editor.width = "100%";
+        editor.height = "100%";
+        Windows_1.default.add(editor, "Testtt");
+        return editor;
+    }
+    exports.test = test;
 });
 //this file is autogenerated don't modify
 define("jassijs_report/registry", ["require"], function (require) {
@@ -2139,14 +1986,14 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1631218677585,
+                "date": 1631393717821,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/modul.ts": {
-                "date": 1624207660636
+                "date": 1631469504879
             },
             "jassijs_report/PDFReport.ts": {
-                "date": 1631221826718,
+                "date": 1631275437830,
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
@@ -2232,7 +2079,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1611935804327
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1631221945648,
+                "date": 1631474149665,
                 "jassijs_report.InfoProperties": {
                     "@members": {
                         "title": {
@@ -2474,7 +2321,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-                "date": 1631222015922,
+                "date": 1631377716976,
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -2663,11 +2510,19 @@ define("jassijs_report/registry", ["require"], function (require) {
             "jassijs_report/RUnknown.ts": {
                 "date": 1622998616843,
                 "jassijs_report.RUnknown": {}
+            },
+            "jassijs_report/designer/SimpleReportDesigner.ts": {
+                "date": 1631455811738,
+                "jassijs_report.designer.SimpleReportDesigner": {}
+            },
+            "jassijs_report/SimpleReportEditor.ts": {
+                "date": 1631455897225,
+                "jassi_report.SimpleReportEditor": {}
             }
         }
     };
 });
-define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/BoxPanel"], function (require, exports, Jassi_11, BoxPanel_3) {
+define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/BoxPanel"], function (require, exports, Jassi_12, BoxPanel_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Report = void 0;
@@ -2687,7 +2542,7 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
         }
     };
     Report = __decorate([
-        (0, Jassi_11.$Class)("jassijs_report.Report")
+        (0, Jassi_12.$Class)("jassijs_report.Report")
         //@$UIComponent({editableChildComponents:["this"]})
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -2697,13 +2552,14 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
 });
 //jassijs.register("reportcomponent", "jassijs_report.Report", "report/Report", "res/report.ico");
 // return CodeEditor.constructor;
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_editor/util/Parser"], function (require, exports, Jassi_12, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_2, ReportDesign_6, Tools_1, Parser_1) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_editor/util/Parser"], function (require, exports, Jassi_13, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_2, ReportDesign_7, Tools_1, Parser_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
     let ReportDesigner = class ReportDesigner extends ComponentDesigner_1.ComponentDesigner {
         constructor() {
             super();
+            this.propertyIsChanging = false;
             this.pdfviewer = new PDFViewer_2.PDFViewer();
             this.lastView = undefined;
             this._codeChanger = undefined;
@@ -2712,7 +2568,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         set codeEditor(value) {
             var _this = this;
             this._codeEditor = value;
-            this._variables = this._codeEditor._variables;
+            this.variables = this._codeEditor.variables;
             this._propertyEditor = new PropertyEditor_1.PropertyEditor(undefined, new Parser_1.Parser());
             this._codeChanger = new PropertyEditor_1.PropertyEditor(this._codeEditor, new Parser_1.Parser());
             this._errors = this._codeEditor._errors;
@@ -2741,15 +2597,21 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                 super.editDialog(enable);
                 var rep = new PDFReport_1.PDFReport();
                 //rep.content=this.designedComponent["design];
-                var data = this._codeChanger.value.toJSON();
-                rep.value = data; //Tools.copyObject(data);// designedComponent["design"];
-                rep.fill();
-                //viewer.value = await rep.getBase64();
-                rep.getBase64().then((data) => {
-                    this.pdfviewer.report = rep;
-                    //make a copy because the data would be modified 
-                    this.pdfviewer.value = data;
-                });
+                var data;
+                try {
+                    data = this._codeChanger.value.toJSON();
+                    rep.value = data; //Tools.copyObject(data);// designedComponent["design"];
+                    rep.fill();
+                    rep.getBase64().then((data) => {
+                        this.pdfviewer.report = rep;
+                        //make a copy because the data would be modified 
+                        this.pdfviewer.value = data;
+                    });
+                }
+                catch (err) {
+                    console.error(err);
+                    //viewer.value = await rep.getBase64();
+                }
                 this.lastView = this._designPlaceholder._components[0];
                 if (this._designPlaceholder._components.length > 0)
                     this._designPlaceholder.remove(this._designPlaceholder._components[0], false);
@@ -2766,6 +2628,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                 super.editDialog(enable);
         }
         propertyChanged() {
+            this.propertyIsChanging = true;
             if (this._codeChanger.parser.sourceFile === undefined)
                 this._codeChanger.updateParser();
             //@ts-ignore
@@ -2783,9 +2646,10 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             }
             else
                 this._codeChanger.setPropertyInCode("reportdesign", ob);
+            this.propertyIsChanging = false;
         }
         createComponent(type, component, top, left, newParent, beforeComponent) {
-            //this._variables.updateCache();
+            //this.variables.updateCache();
             //this._componentExplorer.update();
             var ret = super.createComponent(type, component, top, left, newParent, beforeComponent);
             this.addVariables(ret);
@@ -2799,20 +2663,22 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                 this.nextComponentvariable[name] = 0;
             }
             this.nextComponentvariable[name]++;
-            this._codeEditor.variables.addVariable(name + this.nextComponentvariable[name], component);
+            this._codeEditor.variables.addVariable(name + this.nextComponentvariable[name], component, false);
             this.allComponents[name + this.nextComponentvariable[name]] = component;
             if (component["_components"]) {
                 for (let x = 0; x < component["_components"].length; x++) {
                     this.addVariables(component["_components"][x]);
                 }
             }
+            if (component === this)
+                this._codeEditor.variables.update();
         }
         /**
           * @member {jassijs.ui.Component} - the designed component
           */
         set designedComponent(component) {
             //create _children
-            ReportDesign_6.ReportDesign.fromJSON(component["design"], component);
+            ReportDesign_7.ReportDesign.fromJSON(component["design"], component);
             //populate Variables
             this.allComponents = {};
             this.nextComponentvariable = {};
@@ -2824,6 +2690,13 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             super.designedComponent = component;
             //@ts.ignore
             this._codeChanger.value = component;
+        }
+        /**
+           * undo action
+           */
+        undo() {
+            this._codeEditor.undo();
+            this._codeEditor.evalCode();
         }
         get designedComponent() {
             return super.designedComponent;
@@ -2863,7 +2736,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         }
     };
     ReportDesigner = __decorate([
-        (0, Jassi_12.$Class)("jassijs_report.designer.ReportDesigner"),
+        (0, Jassi_13.$Class)("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;
@@ -2873,13 +2746,15 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             content: {
                 stack: [{
                         columns: [
-                            { stack: [
+                            {
+                                stack: [
                                     { text: '{{invoice.customer.firstname}} {{invoice.customer.lastname}}' },
                                     { text: '{{invoice.customer.street}}' },
                                     { text: '{{invoice.customer.place}}' }
                                 ]
                             },
-                            { stack: [
+                            {
+                                stack: [
                                     { text: 'Invoice', fontSize: 18 },
                                     { text: " " },
                                     { text: "Date: {{invoice.date}}" },
@@ -2950,6 +2825,185 @@ export async function test() {
     exports.test = test;
     ;
 });
+define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/ReportDesigner"], function (require, exports, Jassi_14, ReportDesigner_1) {
+    "use strict";
+    var SimpleReportDesigner_2;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.SimpleReportDesigner = void 0;
+    let SimpleReportDesigner = SimpleReportDesigner_2 = class SimpleReportDesigner extends ReportDesigner_1.ReportDesigner {
+        constructor() {
+            super();
+            this.codePrefix = "var ttt=";
+            this.mainLayout = JSON.stringify({
+                "settings": { "hasHeaders": true, "constrainDragToContainer": true, "reorderEnabled": true, "selectionEnabled": false, "popoutWholeStack": false, "blockedPopoutsThrowError": true, "closePopoutsOnUnload": true, "showPopoutIcon": false, "showMaximiseIcon": true, "showCloseIcon": true, "responsiveMode": "onload" }, "dimensions": { "borderWidth": 5, "minItemHeight": 10, "minItemWidth": 10, "headerHeight": 20, "dragProxyWidth": 300, "dragProxyHeight": 200 }, "labels": { "close": "close", "maximise": "maximise", "minimise": "minimise", "popout": "open in new window", "popin": "pop in", "tabDropdown": "additional tabs" }, "content": [{
+                        "type": "column", "isClosable": true, "reorderEnabled": true, "title": "", "content": [{
+                                "type": "row", "isClosable": true, "reorderEnabled": true, "title": "", "height": 81.04294066258988,
+                                "content": [{
+                                        "type": "stack", "width": 80.57491289198606, "height": 71.23503465658476, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0,
+                                        "content": [
+                                            { "title": "Code..", "type": "component", "componentName": "code", "componentState": { "title": "Code..", "name": "code" }, "isClosable": true, "reorderEnabled": true },
+                                            { "title": "Design", "type": "component", "componentName": "design", "componentState": { "title": "Design", "name": "design" }, "isClosable": true, "reorderEnabled": true }
+                                        ]
+                                    },
+                                    {
+                                        "type": "column", "isClosable": true, "reorderEnabled": true, "title": "", "width": 19.42508710801394,
+                                        "content": [
+                                            {
+                                                "type": "stack", "header": {}, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0, "height": 19.844357976653697,
+                                                "content": [{ "title": "Palette", "type": "component", "componentName": "componentPalette", "componentState": { "title": "Palette", "name": "componentPalette" }, "isClosable": true, "reorderEnabled": true }]
+                                            },
+                                            {
+                                                "type": "stack", "header": {}, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0, "height": 80.1556420233463,
+                                                "content": [{ "title": "Properties", "type": "component", "componentName": "properties", "componentState": { "title": "Properties", "name": "properties" }, "isClosable": true, "reorderEnabled": true }]
+                                            },
+                                            {
+                                                "type": "stack", "header": {}, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0, "height": 19.844357976653697,
+                                                "content": [{ "title": "Components", "type": "component", "componentName": "components", "componentState": { "title": "Components", "name": "components" }, "isClosable": true, "reorderEnabled": true }]
+                                            }
+                                        ]
+                                    }]
+                            }
+                        ]
+                    }], "isClosable": true, "reorderEnabled": true, "title": "", "openPopouts": [], "maximisedItemId": null
+            });
+            //'{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload","tabOverlapAllowance":0,"reorderOnTabMenuClick":true,"tabControlOffset":10},"dimensions":{"borderWidth":5,"borderGrabWidth":15,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":100,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":1,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true},{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":19.42508710801394,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';        //'{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload","tabOverlapAllowance":0,"reorderOnTabMenuClick":true,"tabControlOffset":10},"dimensions":{"borderWidth":5,"borderGrabWidth":15,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":100,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":1,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":9.78603688012232,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":61.55066380085299,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":28.663299319024677,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+        }
+        static replaceQuotes(value) {
+            if (Array.isArray(value)) {
+                for (var x = 0; x < value.length; x++) {
+                    if (typeof (value[x]) === "object") {
+                        value[x] = this.replaceQuotes(value[x]);
+                    }
+                }
+                return value;
+            }
+            //if (typeof (value) === "object") {
+            var ret = {};
+            for (var key in value) {
+                var newkey = "$%)" + key + "$%)";
+                ret[newkey] = value[key];
+                if (typeof value[key] === "object") {
+                    ret[newkey] = this.replaceQuotes(ret[newkey]);
+                }
+            }
+            return ret;
+            //}
+        }
+        static clone(obj) {
+            if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
+                return obj;
+            if (obj instanceof Date || typeof obj === "object")
+                var temp = new obj.constructor(); //or new Date(obj);
+            else
+                var temp = obj.constructor();
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                    obj['isActiveClone'] = null;
+                    temp[key] = SimpleReportDesigner_2.clone(obj[key]);
+                    delete obj['isActiveClone'];
+                }
+            }
+            return temp;
+        }
+        /**
+       * converts a string to a object
+       * @param value - the object to stringify
+       * @param space - the space before the property
+       * @param nameWithQuotes - if true "key":value else key:value
+       */
+        static objectToJson(value, space = undefined, nameWithQuotes = true) {
+            var ovalue = value;
+            if (nameWithQuotes === false)
+                ovalue = SimpleReportDesigner_2.replaceQuotes(SimpleReportDesigner_2.clone(ovalue));
+            var ret = JSON.stringify(ovalue, function (key, value) {
+                if (typeof (value) === "function") {
+                    let r = value.toString();
+                    r = r.replaceAll("\r" + space, "\r");
+                    r = r.replaceAll("\n" + space, "\n");
+                    r = r.replaceAll("\r", "$§&\r");
+                    r = r.replaceAll("\n", "$§&\n");
+                    r = r.replaceAll("\t", "$§&\t");
+                    r = r.replaceAll('\"', '$§&\"');
+                    //  ret=ret.replace("\t\t","");
+                    return "$%&" + r + "$%&";
+                }
+                return value;
+            }, "\t");
+            if (ret !== undefined) {
+                ret = ret.replaceAll("\"$%&", "");
+                ret = ret.replaceAll("$%&\"", "");
+                //  ret = ret.replaceAll("\\r", "\r");
+                //  ret = ret.replaceAll("\\n", "\n");
+                //  ret = ret.replaceAll("\\t", "\t");
+                //  ret = ret.replaceAll('\\"', '\"');
+            }
+            if (nameWithQuotes === false) {
+                ret = ret.replaceAll("\"$%)", "");
+                ret = ret.replaceAll("$%)\"", "");
+            }
+            ret = ret.replaceAll("$§&\\n", "\n");
+            ret = ret.replaceAll("$§&\\r", "\t");
+            ret = ret.replaceAll("$§&\\t", "\t");
+            ret = ret.replaceAll('$§&\\"', '\"');
+            //one to much
+            //  ret=ret.substring(0,ret.length-2)+ret.substring(ret.length-1);
+            return ret;
+        }
+        propertyChanged() {
+            this.propertyIsChanging = true;
+            let job = this.designedComponent.toJSON();
+            delete job.parameter;
+            delete job.data;
+            let ob = SimpleReportDesigner_2.objectToJson(job, undefined, false);
+            this._codeEditor._codePanel.value = this.codePrefix + ob + ";";
+            this.propertyIsChanging = false;
+            /*  let job=this.designedComponent.toJSON();
+              delete job.parameter;
+              delete job.data;
+              let ob=Tools.objectToJson(job,undefined,false);
+              if(this._codeChanger.parser.variables["reportdesign"]){
+                  var s=this._codeChanger.parser.code.substring(0,this._codeChanger.parser.variables["reportdesign"].pos)+
+                      " reportdesign = "+ob+this._codeChanger.parser.code.substring(this._codeChanger.parser.variables["reportdesign"].end);
+                      this.codeEditor.value = s;
+                  this._codeChanger.updateParser();
+                  this._codeChanger.callEvent("codeChanged", {});
+              //this.callEvent("codeChanged", {});
+              }else
+                  this._codeChanger.setPropertyInCode("reportdesign",ob);*/
+        }
+    };
+    SimpleReportDesigner = SimpleReportDesigner_2 = __decorate([
+        (0, Jassi_14.$Class)("jassijs_report.designer.SimpleReportDesigner"),
+        __metadata("design:paramtypes", [])
+    ], SimpleReportDesigner);
+    exports.SimpleReportDesigner = SimpleReportDesigner;
+    function test() {
+        var reportdesign = {
+            content: [
+                {
+                    text: "Hallo Herr {{nachname}}"
+                },
+                {
+                    text: "ok"
+                },
+                {
+                    columns: [
+                        {
+                            text: "text"
+                        },
+                        {
+                            text: "text"
+                        }
+                    ]
+                }
+            ],
+            data: {
+                nachname: "Meier"
+            }
+        };
+    }
+    exports.test = test;
+});
 /*require.config(
     {
        // 'pdfjs-dist/build/pdf': 'myfolder/pdf.min',
@@ -2996,6 +3050,217 @@ define("jassijs_report/ext/pdfmake", ['pdfMake', "vfs_fonts"], function (ttt, vf
         default: pdfMake
     };
 });
-function createReportDefinition() {
-}
+define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.createReportDefinition = void 0;
+    function clone(obj) {
+        if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
+            return obj;
+        if (obj instanceof Date || typeof obj === "object")
+            var temp = new obj.constructor(); //or new Date(obj);
+        else
+            var temp = obj.constructor();
+        for (var key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                obj['isActiveClone'] = null;
+                temp[key] = clone(obj[key]);
+                delete obj['isActiveClone'];
+            }
+        }
+        return temp;
+    }
+    function replace(str, data, member) {
+        var ob = getVar(data, member);
+        return str.split("{{" + member + "}}").join(ob);
+    }
+    function getVar(data, member) {
+        var names = member.split(".");
+        var ob = data[names[0]];
+        for (let x = 1; x < names.length; x++) {
+            if (ob === undefined)
+                return undefined;
+            ob = ob[names[x]];
+        }
+        return ob;
+    }
+    //replace {{currentPage}} {{pageWidth}} {{pageHeight}} {{pageCount}} in header,footer, background
+    function replacePageInformation(def) {
+        if (def.background && typeof def.background !== "function") {
+            let d = JSON.stringify(def.background);
+            def.background = function (currentPage, pageSize) {
+                let sret = d.replaceAll("{{currentPage}}", currentPage);
+                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
+                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
+                return JSON.parse(sret);
+            };
+        }
+        if (def.header && typeof def.header !== "function") {
+            let d = JSON.stringify(def.header);
+            def.header = function (currentPage, pageCount) {
+                let sret = d.replaceAll("{{currentPage}}", currentPage);
+                sret = sret.replaceAll("{{pageCount}}", pageCount);
+                return JSON.parse(sret);
+            };
+        }
+        if (def.footer && typeof def.footer !== "function") {
+            let d = JSON.stringify(def.footer);
+            def.footer = function (currentPage, pageCount, pageSize) {
+                let sret = d.replaceAll("{{currentPage}}", currentPage);
+                sret = sret.replaceAll("{{pageCount}}", pageCount);
+                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
+                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
+                return JSON.parse(sret);
+            };
+        }
+    }
+    function replaceDatatable(def, data) {
+        var header = def.datatable.header;
+        var footer = def.datatable.footer;
+        var dataexpr = def.datatable.foreach;
+        var groups = def.datatable.groups;
+        var body = def.datatable.body;
+        def.table = {
+            body: []
+        };
+        if (header)
+            def.table.body.push(header);
+        def.table.body.push({
+            foreach: def.datatable.dataforeach,
+            do: body
+        });
+        delete def.datatable.dataforeach;
+        /*var variable = dataexpr.split(" in ")[0];
+        var sarr = dataexpr.split(" in ")[1];
+        var arr = getVar(data, sarr);
+        
+        for (let x = 0;x < arr.length;x++) {
+            data[variable] = arr[x];
+            var copy = JSON.parse(JSON.stringify(body));//deep copy
+            copy = replaceTemplates(copy, data);
+            def.table.body.push(copy);
+        }*/
+        if (footer)
+            def.table.body.push(footer);
+        //delete data[variable];
+        delete def.datatable.header;
+        delete def.datatable.footer;
+        delete def.datatable.foreach;
+        delete def.datatable.groups;
+        delete def.datatable.body;
+        for (var key in def.datatable) {
+            def.table[key] = def.datatable[key];
+        }
+        delete def.datatable;
+        /*header:[{ text:"Item"},{ text:"Price"}],
+                        data:"line in invoice.lines",
+                        //footer:[{ text:"Total"},{ text:""}],
+                        body:[{ text:"Text"},{ text:"price"}],
+                        groups:*/
+    }
+    function replaceTemplates(def, data, parentArray = undefined) {
+        if (def === undefined)
+            return;
+        if (def.datatable !== undefined) {
+            replaceDatatable(def, data);
+        }
+        if (def.foreach !== undefined) {
+            //resolve foreach
+            //	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
+            if (parentArray === undefined) {
+                throw "foreach is not surounded by an Array";
+            }
+            var variable = def.foreach.split(" in ")[0];
+            var sarr = def.foreach.split(" in ")[1];
+            var arr;
+            if (sarr === undefined) {
+                debugger;
+                arr = data === null || data === void 0 ? void 0 : data.items; //we get the main array
+            }
+            else {
+                arr = getVar(data, sarr);
+            }
+            var pos = parentArray.indexOf(def);
+            parentArray.splice(pos, 1);
+            for (let x = 0; x < arr.length; x++) {
+                data[variable] = arr[x];
+                delete def.foreach;
+                var copy;
+                if (def.do)
+                    copy = JSON.parse(JSON.stringify(def.do));
+                else
+                    copy = JSON.parse(JSON.stringify(def));
+                copy = replaceTemplates(copy, data);
+                parentArray.splice(pos++, 0, copy);
+            }
+            delete data[variable];
+            return undefined;
+        }
+        else if (Array.isArray(def)) {
+            for (var a = 0; a < def.length; a++) {
+                if (def[a].foreach !== undefined) {
+                    replaceTemplates(def[a], data, def);
+                    a--;
+                }
+                else
+                    def[a] = replaceTemplates(def[a], data, def);
+            }
+            return def;
+        }
+        else if (typeof def === "string") {
+            var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
+            if (ergebnis !== null) {
+                for (var e = 0; e < ergebnis.length; e++) {
+                    def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
+                }
+            }
+            return def;
+        }
+        else { //object	
+            for (var key in def) {
+                def[key] = replaceTemplates(def[key], data);
+            }
+            delete def.editTogether; //RText
+        }
+        return def;
+    }
+    function createReportDefinition(definition, data, parameter) {
+        definition = clone(definition); //this would be modified
+        if (data !== undefined)
+            data = clone(data); //this would be modified
+        if (data === undefined && definition.data !== undefined) {
+            data = definition.data;
+        }
+        //parameter could be in data
+        if (data !== undefined && data.parameter !== undefined && parameter !== undefined) {
+            throw new Error("parameter would override data.parameter");
+        }
+        if (Array.isArray(data)) {
+            data = { items: data }; //so we can do data.parameter
+        }
+        if (parameter !== undefined) {
+            data.parameter = parameter;
+        }
+        //parameter could be in definition
+        if (data !== undefined && data.parameter !== undefined && definition.parameter !== undefined) {
+            throw new Error("definition.parameter would override data.parameter");
+        }
+        if (definition.parameter !== undefined) {
+            data.parameter = definition.parameter;
+        }
+        definition.content = replaceTemplates(definition.content, data);
+        if (definition.background)
+            definition.background = replaceTemplates(definition.background, data);
+        if (definition.header)
+            definition.header = replaceTemplates(definition.header, data);
+        if (definition.footer)
+            definition.footer = replaceTemplates(definition.footer, data);
+        //definition.content = replaceTemplates(definition.content, data);
+        replacePageInformation(definition);
+        delete definition.data;
+        return definition;
+        // delete definition.parameter;
+    }
+    exports.createReportDefinition = createReportDefinition;
+});
 //# sourceMappingURL=jassijs_report.js.map

@@ -1,13 +1,26 @@
-if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('service-worker.js');
-    navigator.serviceWorker.addEventListener("message", (evt) => {
-        if (evt.data === "wait for login") {
-            new Promise((resolve_1, reject_1) => { require(["jassijs/base/LoginDialog"], resolve_1, reject_1); }).then((data) => {
-                data.login();
-                //          navigator.serviceWorker.controller.postMessage("logindialog closed");
-            });
-        }
-    });
+let runScript = document.currentScript.getAttribute("data-run");
+let configFile = document.currentScript.getAttribute("data-config");
+let runFunction = document.currentScript.getAttribute("data-run-function");
+function registerServiceWorker() {
+
+    var http = new XMLHttpRequest();
+    http.open('HEAD', 'service-worker.js', false);
+    http.send();
+    if (http.status === 401 || http.status === 404) {
+        return;
+    }
+
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js');
+        navigator.serviceWorker.addEventListener("message", (evt) => {
+            if (evt.data === "wait for login") {
+                new Promise((resolve_1, reject_1) => { require(["jassijs/base/LoginDialog"], resolve_1, reject_1); }).then((data) => {
+                    data.login();
+                    //          navigator.serviceWorker.controller.postMessage("logindialog closed");
+                });
+            }
+        });
+    }
 }
 async function loadText(url) {
     return new Promise((resolve) => {
@@ -35,8 +48,7 @@ async function loadScript(url) {
         window.document.head.appendChild(js);
     });
 }
-let runScript = document.currentScript.getAttribute("data-run");
-let configFile = document.currentScript.getAttribute("data-config");
+
 let cssFiles = [];
 async function run() {
     var smodules = await loadText(configFile);
@@ -63,7 +75,7 @@ async function run() {
         let allmodules = {};
         let dowait = [];
         for (let modul in modules) {
-            if (modules[modul].endsWith(".js")||modules[modul].indexOf(".js?")>-1) {
+            if (modules[modul].endsWith(".js") || modules[modul].indexOf(".js?") > -1) {
                 dowait.push(loadScript(modules[modul]));
             }
             /*let modulpath = "./" + modul + "/jassijs.json";
@@ -99,7 +111,7 @@ async function run() {
                     let f = res[x].default.css[key];
                     if (f.indexOf(":") > -1) //https://cdn
                         cssFiles.push(f);
-                    else if (modpath.endsWith(".js")||modpath.indexOf(".js?")>-1) {
+                    else if (modpath.endsWith(".js") || modpath.indexOf(".js?") > -1) {
                         var m = modpath.substring(0, modpath.lastIndexOf("/"));
                         cssFiles.push(m + "/" + f);
                     }
@@ -137,7 +149,7 @@ async function run() {
             for (var x = 0; x < beforestartlib.length; x++) {
                 await new Promise((resolve) => {
                     require([beforestartlib[x]], function (beforestart) {
-                        if (beforestart&&beforestart.autostart) {
+                        if (beforestart && beforestart.autostart) {
                             beforestart.autostart().then(() => {
                                 resolve(undefined);
                             })
@@ -146,13 +158,13 @@ async function run() {
                         }
                     });
                 })
-                if(beforestartlib[x]==="jassijs/jassi"){
+                if (beforestartlib[x] === "jassijs/jassi") {
                     cssFiles.forEach((css) => {
-                        jassijs.myRequire(css);//needed for Login Dialog
+                        //    jassijs.myRequire(css);//needed for Login Dialog
                     });
                 }
             }
-            
+
         }
         loadBeforestart().then(() => {
             require(startlib, function (jassijs, ...others) {
@@ -161,17 +173,26 @@ async function run() {
                 });
                 //this.myRequire("jassijs/jassijs.css");
                 jassijs.default.modules = modules;
+                if (runFunction&& window[runFunction]) {
+                    window[runFunction]();
+                }
                 if (runScript) {
                     require([runScript], function () {
                     });
                 }
+
+
             });
         });
 
     });
 }
-;
+
+
+registerServiceWorker();
 run();
+
+
 /*
  window.onerror =function(errorMsg, url, lineNumber, column, errorObj) {
     var stack=(errorObj===null||errorObj===undefined)?"":errorObj.stack;

@@ -49,6 +49,13 @@ let Jassi = class Jassi {
         //@ts-ignore
         this.isServer = window.document === undefined;
         if (!this.isServer) {
+            //@ts-ignore 
+            /*import("jassijs/modul").then((modul)=>{
+                jassijs.myRequire(modul.default.css["jassijs.css"]);
+                jassijs.myRequire(modul.default.css["jquery-ui.css"]);
+                jassijs.myRequire(modul.default.css["materialdesignicons.min.css"]);
+    
+            });*/
             //  this.myRequire("jassi/jassijs.css");
             //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
             //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
@@ -91,7 +98,7 @@ let Jassi = class Jassi {
     */
     myRequire(href, event = undefined, param = undefined) {
         if (this.isServer)
-            throw new Classes_1.JassiError("jass.Require is only available on client");
+            throw new Classes_1.JassiError("jassi.Require is only available on client");
         if ((typeof href) === "string") {
             href = [href];
         }

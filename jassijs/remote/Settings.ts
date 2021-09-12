@@ -1,8 +1,10 @@
+
 import { $Class } from "jassijs/remote/Jassi";
 import registry from "jassijs/remote/Registry";
 
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { Setting } from "jassijs/remote/security/Setting";
+import { Server } from "./Server";
 import { Test } from "./Test";
  
 
@@ -30,18 +32,20 @@ export class Settings extends RemoteObject {
     static async load(context: Context = undefined) {
 
         if (!context?.isServer) {
+            
             //browser
             let entr = window.localStorage.getItem("jassijs.settings");
             if (entr) {
                 Settings.browserSettings = JSON.parse(entr);
             } else
                 Settings.browserSettings = {};
-            var all = await this.call(this.load, context);
-            if (all.user) {
+           
+            var all =(await Server.isOnline()===false) ?undefined: await this.call(this.load, context);
+            if (all?.user) {
                 Settings.userSettings = JSON.parse(all.user.data);
             } else
                 Settings.userSettings = {};
-            if (all.allusers) {
+            if (all?.allusers) {
                 Settings.allusersSettings = JSON.parse(all.allusers.data);
             } else
                 Settings.allusersSettings = {};

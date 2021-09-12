@@ -3,7 +3,7 @@ define("jassijs_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_editor/AcePanel.ts": {
-		"date": 1623100103030,
+		"date": 1631453602891,
 		"jassijs.ui.AcePanel": {}
 	},
 	"jassijs_editor/ChromeDebugger.ts": {
@@ -11,7 +11,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1631380965301,
+		"date": 1631474124234,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {
@@ -88,7 +88,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.Debugger": {}
 	},
 	"jassijs_editor/modul.ts": {
-		"date": 1627320631266
+		"date": 1631469421689
 	},
 	"jassijs_editor/MonacoPanel.ts": {
 		"date": 1624143090748,

@@ -630,4 +630,5 @@ export async function test() {
     exports.test = test;
     ;
 });
+//jassijs.myRequire(modul.css["jassijs_editor.css"]);
 //# sourceMappingURL=CodeEditor.js.map

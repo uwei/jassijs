@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/ReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_editor/CodeEditor", "jassijs_report/ReportDesign", "jassijs/base/Windows"], function (require, exports, Jassi_1, ReportDesigner_1, AcePanelSimple_1, CodeEditor_1, ReportDesign_1, Windows_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/ReportDesigner"], function (require, exports, Jassi_1, ReportDesigner_1) {
     "use strict";
     var SimpleReportDesigner_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -15,22 +15,39 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/R
     let SimpleReportDesigner = SimpleReportDesigner_1 = class SimpleReportDesigner extends ReportDesigner_1.ReportDesigner {
         constructor() {
             super();
-            this.mainLayout = JSON.stringify({ "settings": { "hasHeaders": true, "constrainDragToContainer": true, "reorderEnabled": true, "selectionEnabled": false, "popoutWholeStack": false, "blockedPopoutsThrowError": true, "closePopoutsOnUnload": true, "showPopoutIcon": false, "showMaximiseIcon": true, "showCloseIcon": true, "responsiveMode": "onload" }, "dimensions": { "borderWidth": 5, "minItemHeight": 10, "minItemWidth": 10, "headerHeight": 20, "dragProxyWidth": 300, "dragProxyHeight": 200 }, "labels": { "close": "close", "maximise": "maximise", "minimise": "minimise", "popout": "open in new window", "popin": "pop in", "tabDropdown": "additional tabs" }, "content": [{ "type": "column", "isClosable": true, "reorderEnabled": true, "title": "", "content": [{ "type": "row", "isClosable": true, "reorderEnabled": true, "title": "", "height": 81.04294066258988,
-                                "content": [{ "type": "stack", "width": 80.57491289198606, "height": 71.23503465658476, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0,
+            this.codePrefix = "var ttt=";
+            this.mainLayout = JSON.stringify({
+                "settings": { "hasHeaders": true, "constrainDragToContainer": true, "reorderEnabled": true, "selectionEnabled": false, "popoutWholeStack": false, "blockedPopoutsThrowError": true, "closePopoutsOnUnload": true, "showPopoutIcon": false, "showMaximiseIcon": true, "showCloseIcon": true, "responsiveMode": "onload" }, "dimensions": { "borderWidth": 5, "minItemHeight": 10, "minItemWidth": 10, "headerHeight": 20, "dragProxyWidth": 300, "dragProxyHeight": 200 }, "labels": { "close": "close", "maximise": "maximise", "minimise": "minimise", "popout": "open in new window", "popin": "pop in", "tabDropdown": "additional tabs" }, "content": [{
+                        "type": "column", "isClosable": true, "reorderEnabled": true, "title": "", "content": [{
+                                "type": "row", "isClosable": true, "reorderEnabled": true, "title": "", "height": 81.04294066258988,
+                                "content": [{
+                                        "type": "stack", "width": 80.57491289198606, "height": 71.23503465658476, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0,
                                         "content": [
                                             { "title": "Code..", "type": "component", "componentName": "code", "componentState": { "title": "Code..", "name": "code" }, "isClosable": true, "reorderEnabled": true },
                                             { "title": "Design", "type": "component", "componentName": "design", "componentState": { "title": "Design", "name": "design" }, "isClosable": true, "reorderEnabled": true }
-                                        ] },
-                                    { "type": "column", "isClosable": true, "reorderEnabled": true, "title": "", "width": 19.42508710801394,
+                                        ]
+                                    },
+                                    {
+                                        "type": "column", "isClosable": true, "reorderEnabled": true, "title": "", "width": 19.42508710801394,
                                         "content": [
-                                            { "type": "stack", "header": {}, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0, "height": 19.844357976653697,
-                                                "content": [{ "title": "Palette", "type": "component", "componentName": "componentPalette", "componentState": { "title": "Palette", "name": "componentPalette" }, "isClosable": true, "reorderEnabled": true }] },
-                                            { "type": "stack", "header": {}, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0, "height": 80.1556420233463,
-                                                "content": [{ "title": "Properties", "type": "component", "componentName": "properties", "componentState": { "title": "Properties", "name": "properties" }, "isClosable": true, "reorderEnabled": true }] },
-                                            { "type": "stack", "header": {}, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0, "height": 19.844357976653697,
-                                                "content": [{ "title": "Components", "type": "component", "componentName": "components", "componentState": { "title": "Components", "name": "components" }, "isClosable": true, "reorderEnabled": true }] }
-                                        ] }] }
-                        ] }], "isClosable": true, "reorderEnabled": true, "title": "", "openPopouts": [], "maximisedItemId": null });
+                                            {
+                                                "type": "stack", "header": {}, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0, "height": 19.844357976653697,
+                                                "content": [{ "title": "Palette", "type": "component", "componentName": "componentPalette", "componentState": { "title": "Palette", "name": "componentPalette" }, "isClosable": true, "reorderEnabled": true }]
+                                            },
+                                            {
+                                                "type": "stack", "header": {}, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0, "height": 80.1556420233463,
+                                                "content": [{ "title": "Properties", "type": "component", "componentName": "properties", "componentState": { "title": "Properties", "name": "properties" }, "isClosable": true, "reorderEnabled": true }]
+                                            },
+                                            {
+                                                "type": "stack", "header": {}, "isClosable": true, "reorderEnabled": true, "title": "", "activeItemIndex": 0, "height": 19.844357976653697,
+                                                "content": [{ "title": "Components", "type": "component", "componentName": "components", "componentState": { "title": "Components", "name": "components" }, "isClosable": true, "reorderEnabled": true }]
+                                            }
+                                        ]
+                                    }]
+                            }
+                        ]
+                    }], "isClosable": true, "reorderEnabled": true, "title": "", "openPopouts": [], "maximisedItemId": null
+            });
             //'{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload","tabOverlapAllowance":0,"reorderOnTabMenuClick":true,"tabControlOffset":10},"dimensions":{"borderWidth":5,"borderGrabWidth":15,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":100,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":1,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true},{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":19.42508710801394,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';        //'{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload","tabOverlapAllowance":0,"reorderOnTabMenuClick":true,"tabControlOffset":10},"dimensions":{"borderWidth":5,"borderGrabWidth":15,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":100,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":1,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":9.78603688012232,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":61.55066380085299,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":28.663299319024677,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
         }
         static replaceQuotes(value) {
@@ -120,7 +137,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/R
             delete job.parameter;
             delete job.data;
             let ob = SimpleReportDesigner_1.objectToJson(job, undefined, false);
-            this._codeEditor._codePanel.value = "var ttt=" + ob + ";";
+            this._codeEditor._codePanel.value = this.codePrefix + ob + ";";
             this.propertyIsChanging = false;
             /*  let job=this.designedComponent.toJSON();
               delete job.parameter;
@@ -138,32 +155,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/R
         }
     };
     SimpleReportDesigner = SimpleReportDesigner_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs_report.designer.ReportDesigner"),
+        (0, Jassi_1.$Class)("jassijs_report.designer.SimpleReportDesigner"),
         __metadata("design:paramtypes", [])
     ], SimpleReportDesigner);
     exports.SimpleReportDesigner = SimpleReportDesigner;
     function test() {
-        var ace = new AcePanelSimple_1.AcePanelSimple();
-        var codeEditor = new CodeEditor_1.CodeEditor({ codePanel: ace, hideToolbar: true });
-        var rep = new ReportDesign_1.ReportDesign();
-        var designer = new SimpleReportDesigner();
-        codeEditor.variables.addVariable("this", rep);
-        codeEditor.evalCode = async function () {
-            var code = ace.value;
-            var func = new Function("", "return " + code.substring(code.indexOf("=") + 1));
-            var ob = func();
-            rep = new ReportDesign_1.ReportDesign();
-            rep.design = ob;
-            designer.designedComponent = rep;
-            //rep = new ReportDesign();
-            //ReportDesign.fromJSON( ob, rep);
-        };
-        ace.onchange((obj, editor) => {
-            if (!designer.propertyIsChanging)
-                codeEditor.evalCode();
-        });
-        //designer["codeEditor"]._main.add(designer, "Design", "design");
-        rep.design = {
+        var reportdesign = {
             content: [
                 {
                     text: "Hallo Herr {{nachname}}"
@@ -186,13 +183,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/R
                 nachname: "Meier"
             }
         };
-        codeEditor._design = designer;
-        codeEditor._main.add(codeEditor._design, "Design", "design");
-        designer["codeEditor"] = codeEditor;
-        designer.designedComponent = rep;
-        codeEditor.width = "100%";
-        codeEditor.height = "100%";
-        Windows_1.default.add(codeEditor, "Testtt");
     }
     exports.test = test;
 });

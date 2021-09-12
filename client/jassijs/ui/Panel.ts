@@ -6,7 +6,7 @@ import { Image } from "jassijs/ui/Image";
 import { DesignDummy } from "jassijs/ui/DesignDummy";
 
 @$Class("jassijs.ui.PanelCreateProperties")
-class PanelCreateProperties extends ComponentCreateProperties {
+export class PanelCreateProperties extends ComponentCreateProperties {
     @$Property({ default: false })
     useSpan?: boolean;
 }

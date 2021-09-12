@@ -71,8 +71,8 @@ class Filesystem {
     loadFile(fileName) {
         var fromServerdirectory = fileName.startsWith("$serverside/");
         let file = this._pathForFile(fileName, fromServerdirectory);
-        //if (fromServerdirectory)
-        //    file = "./" + fileName;
+        if (fromServerdirectory)
+            file = "./" + fileName;
         return fs.readFileSync(file, { encoding: 'utf-8' });
     }
     loadFiles(fileNames) {

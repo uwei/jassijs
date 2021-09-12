@@ -318,6 +318,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     **/
     static async isOnline(context = undefined) {
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+            //no serviceworker no serverside implementation
+            if (navigator.serviceWorker.controller === null)
+                return false;
             try {
                 if (this.isonline === undefined)
                     Server_1.isonline = await this.call(this.isOnline, context);

@@ -1,22 +1,7 @@
-(function (factory) {
-    var registeredInModuleLoader;
-    if (typeof define === 'function' && define.amd) {
-        define(factory);
-        registeredInModuleLoader = true;
-    }
-    if (typeof exports === 'object') {
-        module.exports = factory();
-        registeredInModuleLoader = true;
-    }
-    if (!registeredInModuleLoader) {
-        var Oldpdfmakejassi = window.pdfmakejassi;
-        var api = window.pdfmakejassi = factory();
-        api.noConflict = function () {
-            window.Cookies = Oldpdfmakejassi;
-            return api;
-        };
-    }
-}(function () {
+define(["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.createReportDefinition = void 0;
     function clone(obj) {
         if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
             return obj;
@@ -96,7 +81,7 @@
         /*var variable = dataexpr.split(" in ")[0];
         var sarr = dataexpr.split(" in ")[1];
         var arr = getVar(data, sarr);
-    
+        
         for (let x = 0;x < arr.length;x++) {
             data[variable] = arr[x];
             var copy = JSON.parse(JSON.stringify(body));//deep copy
@@ -187,44 +172,43 @@
         }
         return def;
     }
-    return {
-        createReportDefinition(definition, data, parameter) {
-            definition = clone(definition); //this would be modified
-            if (data !== undefined)
-                data = clone(data); //this would be modified
-            if (data === undefined && definition.data !== undefined) {
-                data = definition.data;
-            }
-            //parameter could be in data
-            if (data !== undefined && data.parameter !== undefined && parameter !== undefined) {
-                throw new Error("parameter would override data.parameter");
-            }
-            if (Array.isArray(data)) {
-                data = { items: data }; //so we can do data.parameter
-            }
-            if (parameter !== undefined) {
-                data.parameter = parameter;
-            }
-            //parameter could be in definition
-            if (data !== undefined && data.parameter !== undefined && definition.parameter !== undefined) {
-                throw new Error("definition.parameter would override data.parameter");
-            }
-            if (definition.parameter !== undefined) {
-                data.parameter = definition.parameter;
-            }
-            definition.content = replaceTemplates(definition.content, data);
-            if (definition.background)
-                definition.background = replaceTemplates(definition.background, data);
-            if (definition.header)
-                definition.header = replaceTemplates(definition.header, data);
-            if (definition.footer)
-                definition.footer = replaceTemplates(definition.footer, data);
-            //definition.content = replaceTemplates(definition.content, data);
-            replacePageInformation(definition);
-            delete definition.data;
-            return definition;
-            // delete definition.parameter;
+    function createReportDefinition(definition, data, parameter) {
+        definition = clone(definition); //this would be modified
+        if (data !== undefined)
+            data = clone(data); //this would be modified
+        if (data === undefined && definition.data !== undefined) {
+            data = definition.data;
         }
-    };
-}));
+        //parameter could be in data
+        if (data !== undefined && data.parameter !== undefined && parameter !== undefined) {
+            throw new Error("parameter would override data.parameter");
+        }
+        if (Array.isArray(data)) {
+            data = { items: data }; //so we can do data.parameter
+        }
+        if (parameter !== undefined) {
+            data.parameter = parameter;
+        }
+        //parameter could be in definition
+        if (data !== undefined && data.parameter !== undefined && definition.parameter !== undefined) {
+            throw new Error("definition.parameter would override data.parameter");
+        }
+        if (definition.parameter !== undefined) {
+            data.parameter = definition.parameter;
+        }
+        definition.content = replaceTemplates(definition.content, data);
+        if (definition.background)
+            definition.background = replaceTemplates(definition.background, data);
+        if (definition.header)
+            definition.header = replaceTemplates(definition.header, data);
+        if (definition.footer)
+            definition.footer = replaceTemplates(definition.footer, data);
+        //definition.content = replaceTemplates(definition.content, data);
+        replacePageInformation(definition);
+        delete definition.data;
+        return definition;
+        // delete definition.parameter;
+    }
+    exports.createReportDefinition = createReportDefinition;
+});
 //# sourceMappingURL=pdfmakejassi.js.map

@@ -2,7 +2,7 @@
 var jquery_language='https://cdn.jsdelivr.net/gh/jquery/jquery-ui@main/ui/i18n/datepicker-'+navigator.language.split("-")[0];
 export default {
     "css": {
-        "jassijs.css":"jassijs.css",
+        "jassijs.css":"jassijs/jassijs.css",
         "materialdesignicons.min.css":"https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css",
         "jquery-ui.css":"https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"
     },
@@ -37,7 +37,7 @@ export default {
             'jquery.ui.touch': '//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min',
             'jquery.doubletap': '//cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/2.0.3/jquery.mobile-events.min',
             'jquery.notify': '//cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min',
-            'jquery.language':jquery_language,
+            'jquery.language':jquery_language, 
             'js-cookie': '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
             'lodash': '//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min',
             'papaparse': '//cdnjs.cloudflare.com/ajax/libs/PapaParse/4.6.3/papaparse.min',

@@ -14,6 +14,7 @@ import { $ReportComponent, ReportComponent } from "jassijs_report/ReportComponen
 import { RDatatable } from "jassijs_report/RDatatable";
 import { Component } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
+import modul from "./modul";
 
 @$Class("jassijs_report.InfoProperties")
 class InfoProperties {
@@ -409,7 +410,7 @@ export class ReportDesign extends BoxPanel {
         TABLOID: [792.00, 1224.00]
     };
 }
-
+//jassijs.myRequire(modul.css["jassijs_report.css"]);
 
 
 export async function test() {

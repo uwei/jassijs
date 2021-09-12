@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs_editor/Debugger"], function (require, exports, acelib_1, Typescript_1, Jassi_1, Registry_1, CodePanel_1) {
+define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs_editor/Debugger"], function (require, exports, acelib_1, Typescript_1, Jassi_1, Registry_1, CodePanel_1, Runlater_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -25,7 +25,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
             $(this.domWrapper).css("display", "");
             this._editor = acelib_1.default.edit(this._id);
             this.file = "";
-            this.checkErrorTask = new Runlater(function () {
+            this.checkErrorTask = new Runlater_1.Runlater(function () {
                 _this._checkCode();
             }, 900);
             this._editor.setOptions({
@@ -485,38 +485,6 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
         __metadata("design:paramtypes", [])
     ], AcePanel);
     exports.AcePanel = AcePanel;
-    class Runlater {
-        constructor(func, timeout) {
-            this.isRunning = false;
-            this.func = func;
-            this.timeout = timeout;
-        }
-        _checkRun() {
-            var _this = this;
-            if (Date.now() > this.timeout + this.lastRun) {
-                this.isRunning = false;
-                this.func();
-            }
-            else {
-                setTimeout(function () {
-                    _this._checkRun();
-                }, this.timeout);
-            }
-        }
-        runlater() {
-            var _this = this;
-            this.lastRun = Date.now();
-            if (this.isRunning) {
-                return;
-            }
-            else {
-                this.isRunning = true;
-                setTimeout(function () {
-                    _this._checkRun();
-                }, this.timeout);
-            }
-        }
-    }
     async function test() {
         var dlg = new AcePanel();
         dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";

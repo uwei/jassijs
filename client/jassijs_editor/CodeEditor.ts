@@ -18,6 +18,7 @@ import { Typescript } from "jassijs_editor/util/Typescript";
 import { MonacoPanel } from "jassijs_editor/MonacoPanel";
 import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
 import { Test } from "jassijs/remote/Test";
+import modul from "./modul";
 
 declare global {
     export interface KnownSettings {
@@ -695,3 +696,4 @@ export async function test() {
     return editor;
 
 };
+//jassijs.myRequire(modul.css["jassijs_editor.css"]);

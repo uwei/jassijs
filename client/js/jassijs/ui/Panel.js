@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DesignDummy"], function (require, exports, Jassi_1, Container_1, Component_1, Property_1, DesignDummy_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Panel = void 0;
+    exports.Panel = exports.PanelCreateProperties = void 0;
     let PanelCreateProperties = class PanelCreateProperties extends Component_1.ComponentCreateProperties {
     };
     __decorate([
@@ -20,6 +20,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Container", "j
     PanelCreateProperties = __decorate([
         (0, Jassi_1.$Class)("jassijs.ui.PanelCreateProperties")
     ], PanelCreateProperties);
+    exports.PanelCreateProperties = PanelCreateProperties;
     let Panel = 
     //@$Property({ name: "new/useSpan", type: "boolean", default: false })
     class Panel extends Container_1.Container {

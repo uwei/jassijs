@@ -24,7 +24,7 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
     var jquery_language = 'https://cdn.jsdelivr.net/gh/jquery/jquery-ui@main/ui/i18n/datepicker-' + navigator.language.split("-")[0];
     exports.default = {
         "css": {
-            "jassijs.css": "jassijs.css",
+            "jassijs.css": "jassijs/jassijs.css",
             "materialdesignicons.min.css": "https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css",
             "jquery-ui.css": "https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"
         },
@@ -143,7 +143,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985800636
             },
             "jassijs/modul.ts": {
-                "date": 1624300442620
+                "date": 1631471879414
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1624296519695,
@@ -184,7 +184,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985408207
             },
             "jassijs/remote/Jassi.ts": {
-                "date": 1624295844684,
+                "date": 1631474062117,
                 "jassijs.remote.Jassi": {}
             },
             "jassijs/remote/ObjectTransaction.ts": {
@@ -1505,7 +1505,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DesignDummy": {}
             },
             "jassijs/ui/DockingContainer.ts": {
-                "date": 1623176773333,
+                "date": 1631381871208,
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/ErrorPanel.ts": {
@@ -1856,7 +1856,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1627596182837,
+                "date": 1631286229621,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {
@@ -2621,7 +2621,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/VariablePanel.ts": {
-                "date": 1622985638953,
+                "date": 1631286861827,
                 "jassijs.ui.VariablePanel": {}
             },
             "jassijs/util/Cookies.ts": {
@@ -2659,6 +2659,10 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/util/Tools.ts": {
                 "date": 1624207512293,
                 "jassijs.util.Tools": {}
+            },
+            "jassijs/util/Runlater.ts": {
+                "date": 1631453553787,
+                "jassi.util.Runlater": {}
             }
         }
     };
@@ -4564,6 +4568,13 @@ define("jassijs/remote/Jassi", ["require", "exports", "jassijs/remote/Registry",
             //@ts-ignore
             this.isServer = window.document === undefined;
             if (!this.isServer) {
+                //@ts-ignore 
+                /*import("jassijs/modul").then((modul)=>{
+                    jassijs.myRequire(modul.default.css["jassijs.css"]);
+                    jassijs.myRequire(modul.default.css["jquery-ui.css"]);
+                    jassijs.myRequire(modul.default.css["materialdesignicons.min.css"]);
+        
+                });*/
                 //  this.myRequire("jassi/jassijs.css");
                 //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
                 //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
@@ -4606,7 +4617,7 @@ define("jassijs/remote/Jassi", ["require", "exports", "jassijs/remote/Registry",
         */
         myRequire(href, event = undefined, param = undefined) {
             if (this.isServer)
-                throw new Classes_5.JassiError("jass.Require is only available on client");
+                throw new Classes_5.JassiError("jassi.Require is only available on client");
             if ((typeof href) === "string") {
                 href = [href];
             }
@@ -6316,6 +6327,9 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
         **/
         static async isOnline(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                //no serviceworker no serverside implementation
+                if (navigator.serviceWorker.controller === null)
+                    return false;
                 try {
                     if (this.isonline === undefined)
                         Server_2.isonline = await this.call(this.isOnline, context);
@@ -6472,7 +6486,7 @@ define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Jassi"], fu
     ], Test);
     exports.Test = Test;
 });
-define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting"], function (require, exports, Jassi_20, Registry_10, RemoteObject_4, Setting_1) {
+define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "jassijs/remote/Server"], function (require, exports, Jassi_20, Registry_10, RemoteObject_4, Setting_1, Server_3) {
     "use strict";
     var Settings_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6495,13 +6509,13 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Jassi",
                 }
                 else
                     Settings_1.browserSettings = {};
-                var all = await this.call(this.load, context);
-                if (all.user) {
+                var all = (await Server_3.Server.isOnline() === false) ? undefined : await this.call(this.load, context);
+                if (all === null || all === void 0 ? void 0 : all.user) {
                     Settings_1.userSettings = JSON.parse(all.user.data);
                 }
                 else
                     Settings_1.userSettings = {};
-                if (all.allusers) {
+                if (all === null || all === void 0 ? void 0 : all.allusers) {
                     Settings_1.allusersSettings = JSON.parse(all.allusers.data);
                 }
                 else
@@ -10688,8 +10702,13 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
             for (var x = 0; x < this._components.length; x++) {
                 var component = this._components[x];
                 var container = component.dom["_container"];
-                if (container.getElement()[0].children.length > 0)
-                    container.getElement()[0].removeChild(container.getElement()[0].firstChild);
+                try {
+                    if (container && container.getElement()[0].children.length > 0)
+                        container.getElement()[0].removeChild(container.getElement()[0].firstChild);
+                }
+                catch (_a) {
+                    var h = 9;
+                }
             }
             /* var fc = this.dom.firstChild;
     
@@ -10719,11 +10738,12 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
             }
         }
         destroy() {
+            var _a;
             $(window).off("resize", this._windowResizer);
             //  $(this.dom.parent).off("resize",this._parentResizer);
             this._windowResizer = undefined;
             // this._parentResizer=undefined;
-            this._intersectionObserver.unobserve(this.dom);
+            (_a = this._intersectionObserver) === null || _a === void 0 ? void 0 : _a.unobserve(this.dom);
             this._intersectionObserver = undefined;
             this._myLayout.destroy();
             this._myLayout = undefined;
@@ -10998,7 +11018,7 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
     };
     Jassi_53.default.ErrorPanel = ErrorPanel;
 });
-define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Jassi_54, Tree_2, Panel_10, Textbox_4, Server_3, Router_5, Actions_13, OptionDialog_7, ContextMenu_2, Windows_7) {
+define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Jassi_54, Tree_2, Panel_10, Textbox_4, Server_4, Router_5, Actions_13, OptionDialog_7, ContextMenu_2, Windows_7) {
     "use strict";
     var FileExplorer_5;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -11021,7 +11041,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
             //console.log("create " + fileName);
             var key = (_b = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree) === null || _b === void 0 ? void 0 : _b.getKeyFromItem(all[0]);
             var newfile = path + "/" + fileName;
-            var ret = await new Server_3.Server().createFile(newfile, code);
+            var ret = await new Server_4.Server().createFile(newfile, code);
             var newkey = path + "|" + fileName;
             if (ret !== "") {
                 alert(ret);
@@ -11039,7 +11059,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
         }
         static async download(all) {
             var path = all[0].fullpath;
-            var byteCharacters = atob(await new Server_3.Server().zip(path));
+            var byteCharacters = atob(await new Server_4.Server().zip(path));
             const byteNumbers = new Array(byteCharacters.length);
             for (let i = 0; i < byteCharacters.length; i++) {
                 byteNumbers[i] = byteCharacters.charCodeAt(i);
@@ -11069,7 +11089,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
                 // console.log("create Folder" + res.text);
                 var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0]);
                 var newfile = path + "/" + res.text;
-                var ret = await new Server_3.Server().createFolder(newfile);
+                var ret = await new Server_4.Server().createFolder(newfile);
                 var newkey = path + "|" + res.text;
                 if (ret !== "") {
                     alert(ret);
@@ -11092,7 +11112,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
                 }
                 console.log("create Module" + smodule);
                 var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
-                var ret = await new Server_3.Server().createModule(smodule);
+                var ret = await new Server_4.Server().createModule(smodule);
                 var newkey = path + "|" + smodule;
                 if (ret !== "") {
                     alert(ret);
@@ -11116,7 +11136,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
                 res = await OptionDialog_7.OptionDialog.show("Delete this?<br/>" + s, ["ok", "cancel"], undefined, true);
             }
             if (!withwarning || (res.button === "ok" && res.text !== all[0].name)) {
-                var ret = await new Server_3.Server().delete(all[0].fullpath);
+                var ret = await new Server_4.Server().delete(all[0].fullpath);
                 if (ret !== "") {
                     alert(ret);
                     return;
@@ -11142,7 +11162,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
                     var key = (_a = FileExplorer.instance) === null || _a === void 0 ? void 0 : _a.tree.getKeyFromItem(all[0]);
                     var path = all[0].parent !== undefined ? all[0].parent.fullpath : "";
                     var newfile = path + "/" + res.text;
-                    var ret = await new Server_3.Server().rename(all[0].fullpath, newfile);
+                    var ret = await new Server_4.Server().rename(all[0].fullpath, newfile);
                     var newkey = key === null || key === void 0 ? void 0 : key.replace(all[0].name, res.text);
                     if (ret !== "") {
                         alert(ret);
@@ -11282,7 +11302,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
         }
         async refresh() {
             var _a;
-            let root = (await new Server_3.Server().dir());
+            let root = (await new Server_4.Server().dir());
             root.fullpath = "";
             root.name = "client";
             //flag modules
@@ -12451,7 +12471,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
 define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DesignDummy"], function (require, exports, Jassi_63, Container_4, Component_17, Property_22, DesignDummy_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Panel = void 0;
+    exports.Panel = exports.PanelCreateProperties = void 0;
     let PanelCreateProperties = class PanelCreateProperties extends Component_17.ComponentCreateProperties {
     };
     __decorate([
@@ -12461,6 +12481,7 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassi
     PanelCreateProperties = __decorate([
         (0, Jassi_63.$Class)("jassijs.ui.PanelCreateProperties")
     ], PanelCreateProperties);
+    exports.PanelCreateProperties = PanelCreateProperties;
     let Panel = 
     //@$Property({ name: "new/useSpan", type: "boolean", default: false })
     class Panel extends Container_4.Container {
@@ -13212,7 +13233,6 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
                 //  this.value=this.codeEditor.getObjectFromVariable(this.variablename);
                 return;
             }
-            //var ob = this.codeEditor._variables.evalExpression(value);
             if (typeof (this._value[property]) === "function")
                 this._value[property](value);
             else
@@ -15744,6 +15764,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
     let VariablePanel = class VariablePanel extends Panel_18.Panel {
         constructor() {
             super();
+            this._items = [];
             /**cache**/
             /**@member {Object.<number, boolean>} **/
             this.debugpoints = {};
@@ -17739,7 +17760,7 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
     ], StringConverter);
     exports.StringConverter = StringConverter;
 });
-define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_13, NumberConverter_2, Textbox_20, BoxPanel_8, Select_8, Table_5, Jassi_94, Panel_23, papaparse_1, Database_3, Registry_26, Classes_30, DBObject_8, Actions_17, Router_7, Server_4, Transaction_1) {
+define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_13, NumberConverter_2, Textbox_20, BoxPanel_8, Select_8, Table_5, Jassi_94, Panel_23, papaparse_1, Database_3, Registry_26, Classes_30, DBObject_8, Actions_17, Router_7, Server_5, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17879,7 +17900,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
             var _a;
             var imp = new CSVImport_1();
             var mapping = {};
-            let ret = await new Server_4.Server().loadFile(urlcsv);
+            let ret = await new Server_5.Server().loadFile(urlcsv);
             if (replace) {
                 for (let key in replace) {
                     ret = ret.replaceAll(key, replace[key]);
@@ -18613,7 +18634,49 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Jassi", "
     ], Reloader);
     exports.Reloader = Reloader;
 });
-define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ext/lodash"], function (require, exports, Jassi_97, lodash_1) {
+define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_97) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Runlater = void 0;
+    let Runlater = class Runlater {
+        constructor(func, timeout) {
+            this.isRunning = false;
+            this.func = func;
+            this.timeout = timeout;
+        }
+        _checkRun() {
+            var _this = this;
+            if (Date.now() > this.timeout + this.lastRun) {
+                this.isRunning = false;
+                this.func();
+            }
+            else {
+                setTimeout(function () {
+                    _this._checkRun();
+                }, this.timeout);
+            }
+        }
+        runlater() {
+            var _this = this;
+            this.lastRun = Date.now();
+            if (this.isRunning) {
+                return;
+            }
+            else {
+                this.isRunning = true;
+                setTimeout(function () {
+                    _this._checkRun();
+                }, this.timeout);
+            }
+        }
+    };
+    Runlater = __decorate([
+        (0, Jassi_97.$Class)("jassi.util.Runlater"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], Runlater);
+    exports.Runlater = Runlater;
+});
+define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ext/lodash"], function (require, exports, Jassi_98, lodash_1) {
     "use strict";
     var Tools_4;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -18851,7 +18914,7 @@ define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi", "jas
         }
     };
     Tools = Tools_4 = __decorate([
-        (0, Jassi_97.$Class)("jassijs.util.Tools"),
+        (0, Jassi_98.$Class)("jassijs.util.Tools"),
         __metadata("design:paramtypes", [])
     ], Tools);
     exports.Tools = Tools;

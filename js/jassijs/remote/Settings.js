@@ -12,6 +12,7 @@ const Jassi_1 = require("jassijs/remote/Jassi");
 const Registry_1 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Setting_1 = require("jassijs/remote/security/Setting");
+const Server_1 = require("./Server");
 const proxyhandler = {
     get: function (target, prop, receiver) {
         return prop;
@@ -30,13 +31,13 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
             }
             else
                 Settings_1.browserSettings = {};
-            var all = await this.call(this.load, context);
-            if (all.user) {
+            var all = (await Server_1.Server.isOnline() === false) ? undefined : await this.call(this.load, context);
+            if (all === null || all === void 0 ? void 0 : all.user) {
                 Settings_1.userSettings = JSON.parse(all.user.data);
             }
             else
                 Settings_1.userSettings = {};
-            if (all.allusers) {
+            if (all === null || all === void 0 ? void 0 : all.allusers) {
                 Settings_1.allusersSettings = JSON.parse(all.allusers.data);
             }
             else

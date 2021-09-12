@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting"], function (require, exports, Jassi_1, Registry_1, RemoteObject_1, Setting_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server"], function (require, exports, Jassi_1, Registry_1, RemoteObject_1, Setting_1, Server_1) {
     "use strict";
     var Settings_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -27,13 +27,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
                 }
                 else
                     Settings_1.browserSettings = {};
-                var all = await this.call(this.load, context);
-                if (all.user) {
+                var all = (await Server_1.Server.isOnline() === false) ? undefined : await this.call(this.load, context);
+                if (all === null || all === void 0 ? void 0 : all.user) {
                     Settings_1.userSettings = JSON.parse(all.user.data);
                 }
                 else
                     Settings_1.userSettings = {};
-                if (all.allusers) {
+                if (all === null || all === void 0 ? void 0 : all.allusers) {
                     Settings_1.allusersSettings = JSON.parse(all.allusers.data);
                 }
                 else
