@@ -394,7 +394,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
          * @returns {object}
          */
         getPropertyValue(property, noDefaultValue = undefined) {
-            var _a;
+            var _a, _b;
             if (this.readPropertyValueFromDesign) {
                 let ret = this._value[property.name];
                 if (ret === undefined && !noDefaultValue)
@@ -427,7 +427,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                     ret = undefined;
             }
             else {
-                ret = this.parser.getPropertyValue(this.variablename, property.name);
+                ret = (_b = this.parser) === null || _b === void 0 ? void 0 : _b.getPropertyValue(this.variablename, property.name);
                 if (this.codeEditor === undefined && ret === undefined && this._value !== undefined) {
                     ret = this._value[property.name];
                     if (typeof (ret) === "function") {

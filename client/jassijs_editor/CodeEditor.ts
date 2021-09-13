@@ -375,23 +375,31 @@ export class CodeEditor extends Panel {
 
                 _this.variables.updateCache();
                 if (ret instanceof Component && ret["reporttype"] === undefined) {
-                    require(["jassijs_editor/ComponentDesigner"], function () {
+                    require(["jassijs_editor/ComponentDesigner","jassijs_editor/util/Parser"], function () {
                         var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
+                        var Parser = classes.getClass("jassijs_editor.base.Parser");
                         if (!((_this._design) instanceof ComponentDesigner)) {
                             _this._design = new ComponentDesigner();
+                            
                             _this._main.add(_this._design, "Design", "design");
                             _this._design["codeEditor"] = _this;
+                            //@ts-ignore
+                            _this._design.connectParser(new Parser() );
                         }
                         _this._design["designedComponent"] = ret;
                     });
                 } else if (ret["reportdesign"] !== undefined) {
-                    require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign"], function () {
+                    require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign","jassijs_editor/util/Parser"], function () {
                         var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
                         var ReportDesign = classes.getClass("jassijs_report.ReportDesign");
+                        var Parser = classes.getClass("jassijs_editor.base.Parser");
                         if (!((_this._design) instanceof ReportDesigner)) {
                             _this._design = new ReportDesigner();
                             _this._main.add(_this._design, "Design", "design");
                             _this._design["codeEditor"] = _this;
+                             //@ts-ignore
+                             _this._design.connectParser(new Parser() );
+                            
                         }
                         var rep = new ReportDesign();
                         rep.design = Object.assign({}, ret.reportdesign);
@@ -429,6 +437,7 @@ export class CodeEditor extends Panel {
 
         //@ts-ignore 
         var tss = await import("jassijs_editor/util/Typescript");
+        //@ts-ignore 
         var settings = Typescript.compilerSettings;
         settings["inlineSourceMap"] = true;
         settings["inlineSources"] = true;

@@ -15,7 +15,6 @@ import { PDFReport } from "jassijs_report/PDFReport";
 import { PDFViewer } from "jassijs_report/PDFViewer";
 import { Tools } from "jassijs/util/Tools";
 import { Parser } from "jassijs_editor/util/Parser";
-import { CodeEditor } from "jassijs_editor/CodeEditor";
 import { VariablePanel } from "jassijs/ui/VariablePanel";
 import { Panel } from "jassijs/ui/Panel";
 @$Class("jassijs_report.designer.ReportDesigner")

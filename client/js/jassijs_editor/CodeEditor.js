@@ -314,24 +314,30 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                     _this.variables.addVariable("me", ret.me);
                     _this.variables.updateCache();
                     if (ret instanceof Component_1.Component && ret["reporttype"] === undefined) {
-                        require(["jassijs_editor/ComponentDesigner"], function () {
+                        require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
                             var ComponentDesigner = Classes_1.classes.getClass("jassijs_editor.ComponentDesigner");
+                            var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
                             if (!((_this._design) instanceof ComponentDesigner)) {
                                 _this._design = new ComponentDesigner();
                                 _this._main.add(_this._design, "Design", "design");
                                 _this._design["codeEditor"] = _this;
+                                //@ts-ignore
+                                _this._design.connectParser(new Parser());
                             }
                             _this._design["designedComponent"] = ret;
                         });
                     }
                     else if (ret["reportdesign"] !== undefined) {
-                        require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign"], function () {
+                        require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign", "jassijs_editor/util/Parser"], function () {
                             var ReportDesigner = Classes_1.classes.getClass("jassijs_report.designer.ReportDesigner");
                             var ReportDesign = Classes_1.classes.getClass("jassijs_report.ReportDesign");
+                            var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
                             if (!((_this._design) instanceof ReportDesigner)) {
                                 _this._design = new ReportDesigner();
                                 _this._main.add(_this._design, "Design", "design");
                                 _this._design["codeEditor"] = _this;
+                                //@ts-ignore
+                                _this._design.connectParser(new Parser());
                             }
                             var rep = new ReportDesign();
                             rep.design = Object.assign({}, ret.reportdesign);
@@ -365,6 +371,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         async saveTempFile(file, code) {
             //@ts-ignore 
             var tss = await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); });
+            //@ts-ignore 
             var settings = Typescript_1.Typescript.compilerSettings;
             settings["inlineSourceMap"] = true;
             settings["inlineSources"] = true;

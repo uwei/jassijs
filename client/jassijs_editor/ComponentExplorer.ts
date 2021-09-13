@@ -5,7 +5,7 @@ import {ComponentDescriptor} from "jassijs/ui/ComponentDescriptor";
 import { ContextMenu } from "jassijs/ui/ContextMenu";
 import { Action, Actions } from "jassijs/base/Actions";
 import { Container } from "jassijs/ui/Container";
-import { CodeEditor } from "jassijs_editor/CodeEditor";
+//import { CodeEditor } from "jassijs_editor/CodeEditor";
 import { ComponentDesigner } from "jassijs_editor/ComponentDesigner";
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { propertyeditor } from "jassijs/base/PropertyEditorService";
@@ -13,7 +13,7 @@ import { classes } from "jassijs/remote/Classes";
 
 @$Class("jassijs_editor.ComponentExplorer")
 export class ComponentExplorer extends Panel {
-    codeEditor:CodeEditor;
+    codeEditor;//:CodeEditor;
     propertyEditor:PropertyEditor;
     tree:Tree;
     //contextMenu:ContextMenu;
@@ -21,7 +21,7 @@ export class ComponentExplorer extends Panel {
     /**
     * edit object properties
     */
-    constructor(codeEditor:CodeEditor,propertyEditor:PropertyEditor) {
+    constructor(codeEditor,propertyEditor:PropertyEditor) {
         super();
         /** @member {jassijs_editor.CodeEditor} - the parent CodeEditor */
         this.codeEditor = codeEditor;

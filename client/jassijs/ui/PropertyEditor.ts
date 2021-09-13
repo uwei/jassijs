@@ -454,7 +454,7 @@ export class PropertyEditor extends Panel {
                 ret = undefined;
 
         } else {
-            ret = this.parser.getPropertyValue(this.variablename, property.name);
+            ret = this.parser?.getPropertyValue(this.variablename, property.name);
             if (this.codeEditor === undefined && ret === undefined && this._value !== undefined) {
                 ret = this._value[property.name];
                 if (typeof (ret) === "function") {

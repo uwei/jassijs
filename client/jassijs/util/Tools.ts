@@ -1,21 +1,36 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 
 //@ts-ignore
-import lodash from "jassijs/ext/lodash";
+//import lodash from "jassijs/ext/lodash";
 @$Class("jassijs.util.Tools")
 export class Tools {
 
     constructor() {
     }
+    private static copyObject(obj) {
+        if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
+            return obj;
 
-    static copyObject(src) {
-        //var j = Tools.objectToJson(src);
-        //return Tools.jsonToObject(j);
-        lodash();
+        if (obj instanceof Date || typeof obj === "object")
+            var temp = new obj.constructor(); //or new Date(obj);
+        else
+            var temp = obj.constructor();
+
+        for (var key in obj) {
+            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                obj['isActiveClone'] = null;
+                temp[key] = Tools.copyObject(obj[key]);
+                delete obj['isActiveClone'];
+            }
+        }
+        return temp;
+    }
+ /*   static copyObject(src) {
+       lodash();
         //@ts-ignore
         return _.cloneDeep(src);
 
-    }
+    }*/
     /**
            * converts a json string to a object
            * @param {string} value - the code

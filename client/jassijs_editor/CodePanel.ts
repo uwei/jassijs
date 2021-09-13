@@ -1,6 +1,6 @@
 import { $Class } from "jassijs/remote/Jassi";
 import { Panel } from "jassijs/ui/Panel";
-import typescript from "jassijs_editor/util/Typescript";
+//import typescript from "jassijs_editor/util/Typescript";
 import { router } from "jassijs/base/Router";
 
 @$Class("jassijs_editor.CodePanel")

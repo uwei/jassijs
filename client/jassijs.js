@@ -70,7 +70,11 @@ async function run() {
             await loadScript(path);
         }
         requirejs.onResourceLoad = function (context, map, depArray, o) {
-            ;
+            for(var x=0;x<depArray.length;x++){
+                if(depArray[x].name.indexOf("util/Parser")>-1){
+                   x=x;
+                }
+            }
         };
         let allmodules = {};
         let dowait = [];

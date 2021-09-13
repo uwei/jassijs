@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/util/Typescript", "jassijs/base/Router"], function (require, exports, Jassi_1, Panel_1, Typescript_1, Router_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/base/Router"], function (require, exports, Jassi_1, Panel_1, Router_1) {
     "use strict";
     var CodePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -38,16 +38,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
         static numberToPosition(file, pos, code) {
             if (code !== undefined)
-                Typescript_1.default.setCode(file, code);
-            var ret = Typescript_1.default.getLineAndCharacterOfPosition(file, pos);
+                typescript.setCode(file, code);
+            var ret = typescript.getLineAndCharacterOfPosition(file, pos);
             return {
                 row: ret.line,
                 column: ret.character
             };
         }
         positionToNumber(pos) {
-            Typescript_1.default.setCode(this.file, this.value);
-            var ret = Typescript_1.default.getPositionOfLineAndCharacter(this.file, {
+            typescript.setCode(this.file, this.value);
+            var ret = typescript.getPositionOfLineAndCharacter(this.file, {
                 line: pos.row,
                 character: pos.column
             });
@@ -56,7 +56,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         static async getAutoimport(lpos, file, code) {
             //var lpos = this.positionToNumber(this.cursorPosition);
             //@ts-ignore
-            var change = await Typescript_1.default.getCodeFixesAtPosition(file, code, lpos, lpos, [2304]);
+            var change = await typescript.getCodeFixesAtPosition(file, code, lpos, lpos, [2304]);
             if (change === undefined)
                 return;
             for (let x = 0; x < change.length; x++) {
@@ -117,11 +117,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         gotoDeclaration() {
             var pos = this.positionToNumber(this.cursorPosition);
             var test = this.numberToPosition(pos);
-            if (!Typescript_1.default.isInited(this.file)) {
+            if (!typescript.isInited(this.file)) {
                 $.notify("please try later ... loading in progress", "info", { position: "bottom right" });
                 return;
             }
-            Typescript_1.default.getDefinitionAtPosition(this.file, pos).then((def) => {
+            typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
                 var _a;
                 if (def !== undefined && def.length > 0) {
                     var entr = def[0];

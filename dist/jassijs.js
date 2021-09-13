@@ -13057,7 +13057,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
          * @returns {object}
          */
         getPropertyValue(property, noDefaultValue = undefined) {
-            var _a;
+            var _a, _b;
             if (this.readPropertyValueFromDesign) {
                 let ret = this._value[property.name];
                 if (ret === undefined && !noDefaultValue)
@@ -13090,7 +13090,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
                     ret = undefined;
             }
             else {
-                ret = this.parser.getPropertyValue(this.variablename, property.name);
+                ret = (_b = this.parser) === null || _b === void 0 ? void 0 : _b.getPropertyValue(this.variablename, property.name);
                 if (this.codeEditor === undefined && ret === undefined && this._value !== undefined) {
                     ret = this._value[property.name];
                     if (typeof (ret) === "function") {
@@ -18671,21 +18671,38 @@ define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Jassi"], 
     ], Runlater);
     exports.Runlater = Runlater;
 });
-define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ext/lodash"], function (require, exports, Jassi_98, lodash_1) {
+define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_98) {
     "use strict";
     var Tools_4;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Tools = void 0;
+    //@ts-ignore
+    //import lodash from "jassijs/ext/lodash";
     let Tools = Tools_4 = class Tools {
         constructor() {
         }
-        static copyObject(src) {
-            //var j = Tools.objectToJson(src);
-            //return Tools.jsonToObject(j);
-            (0, lodash_1.default)();
-            //@ts-ignore
-            return _.cloneDeep(src);
+        static copyObject(obj) {
+            if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
+                return obj;
+            if (obj instanceof Date || typeof obj === "object")
+                var temp = new obj.constructor(); //or new Date(obj);
+            else
+                var temp = obj.constructor();
+            for (var key in obj) {
+                if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                    obj['isActiveClone'] = null;
+                    temp[key] = Tools_4.copyObject(obj[key]);
+                    delete obj['isActiveClone'];
+                }
+            }
+            return temp;
         }
+        /*   static copyObject(src) {
+              lodash();
+               //@ts-ignore
+               return _.cloneDeep(src);
+       
+           }*/
         /**
                * converts a json string to a object
                * @param {string} value - the code

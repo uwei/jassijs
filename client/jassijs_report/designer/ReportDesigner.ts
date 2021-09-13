@@ -13,7 +13,7 @@ import { PDFReport } from "jassijs_report/PDFReport";
 import { PDFViewer } from "jassijs_report/PDFViewer";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { Tools } from "jassijs/util/Tools";
-import { Parser } from "jassijs_editor/util/Parser";
+
 
 @$Class("jassijs_report.designer.ReportDesigner")
 export class ReportDesigner extends ComponentDesigner {
@@ -32,8 +32,8 @@ export class ReportDesigner extends ComponentDesigner {
         var _this = this;
         this._codeEditor = value;
         this.variables = this._codeEditor.variables;
-        this._propertyEditor = new PropertyEditor(undefined, new Parser());
-        this._codeChanger = new PropertyEditor(this._codeEditor, new Parser());
+        this._propertyEditor = new PropertyEditor(undefined, undefined);
+        this._codeChanger = new PropertyEditor(this._codeEditor, undefined);
         this._errors = this._codeEditor._errors;
         this._componentPalette = new ComponentPalette();
         this._componentExplorer = new ComponentExplorer(value, this._propertyEditor);
@@ -56,6 +56,11 @@ export class ReportDesigner extends ComponentDesigner {
         $(this.dom).css("overflow", "scroll");
         $(this.dom).css("width", "");
 
+    }
+    connectParser(parser){
+        this._propertyEditor.parser=parser;
+        var Parser = classes.getClass("jassijs_editor.base.Parser");
+        this._codeChanger.parser=new Parser();
     }
     editDialog(enable) {
 

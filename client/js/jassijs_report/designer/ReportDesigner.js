@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_editor/util/Parser"], function (require, exports, Jassi_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1, Parser_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_1, PDFReport_1, PDFViewer_1, ReportDesign_1, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
@@ -24,8 +24,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
             var _this = this;
             this._codeEditor = value;
             this.variables = this._codeEditor.variables;
-            this._propertyEditor = new PropertyEditor_1.PropertyEditor(undefined, new Parser_1.Parser());
-            this._codeChanger = new PropertyEditor_1.PropertyEditor(this._codeEditor, new Parser_1.Parser());
+            this._propertyEditor = new PropertyEditor_1.PropertyEditor(undefined, undefined);
+            this._codeChanger = new PropertyEditor_1.PropertyEditor(this._codeEditor, undefined);
             this._errors = this._codeEditor._errors;
             this._componentPalette = new ComponentPalette_1.ComponentPalette();
             this._componentExplorer = new ComponentExplorer_1.ComponentExplorer(value, this._propertyEditor);
@@ -46,6 +46,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
             $(this.__dom).addClass("ReportDesigner");
             $(this.dom).css("overflow", "scroll");
             $(this.dom).css("width", "");
+        }
+        connectParser(parser) {
+            this._propertyEditor.parser = parser;
+            var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
+            this._codeChanger.parser = new Parser();
         }
         editDialog(enable) {
             if (enable === false) {
