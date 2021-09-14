@@ -11,7 +11,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1631474124234,
+		"date": 1631569441047,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {
@@ -64,19 +64,19 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/CodeEditorInvisibleComponents.ts": {
-		"date": 1622998616949,
+		"date": 1631566274025,
 		"jassijs_editor.CodeEditorInvisibleComponents": {}
 	},
 	"jassijs_editor/CodePanel.ts": {
-		"date": 1623097926572,
+		"date": 1631565429998,
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1631287390906,
+		"date": 1631568967794,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
-		"date": 1623100288249,
+		"date": 1631566305792,
 		"jassijs_editor.ComponentExplorer": {}
 	},
 	"jassijs_editor/ComponentPalette.ts": {
@@ -114,7 +114,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-		"date": 1623951966985,
+		"date": 1631566733736,
 		"jassijs_editor.util.Typescript": {}
 	},
 	"jassijs_editor/AcePanelSimple.ts": {

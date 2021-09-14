@@ -248,7 +248,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
             this.codeEditor.evalCode = async function () {
                 if (compileTask === undefined) {
                     compileTask = new Runlater_1.Runlater(() => {
-                        var code = this.acePanel.value;
+                        var code = _this.acePanel.value;
                         var func = new Function("", "return " + code.substring(code.indexOf("=") + 1));
                         var ob = func();
                         _this.reportDesign = ob;
@@ -258,7 +258,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
                     compileTask.runlater();
             };
             this.acePanel.onchange((obj, editor) => {
-                if (!this.reportDesigner.propertyIsChanging)
+                if (!_this.reportDesigner.propertyIsChanging)
                     _this.codeEditor.evalCode();
             });
             //designer["codeEditor"]._main.add(designer, "Design", "design");

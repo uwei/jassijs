@@ -21,6 +21,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
             super();
             this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
             super.init($('<div class="HTMLPanel"><div class="HTMLPanelContent"> </div></div>')[0]);
+            //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
             var el = this.dom.children[0];
             this._designMode = false;

@@ -283,7 +283,7 @@ export class SimpleReportEditor extends Panel {
         this.codeEditor.evalCode = async function () {//refresh only if 800ms nothing is typed
             if (compileTask === undefined) {
                 compileTask = new Runlater(() => {
-                    var code = this.acePanel.value;
+                    var code = _this.acePanel.value;
                     var func = new Function("", "return " + code.substring(code.indexOf("=") + 1));
                     var ob = func();
                     _this.reportDesign = ob;
@@ -293,7 +293,7 @@ export class SimpleReportEditor extends Panel {
                 compileTask.runlater();
         }
         this.acePanel.onchange((obj, editor) => {
-            if (!this.reportDesigner.propertyIsChanging)
+            if (!_this.reportDesigner.propertyIsChanging)
                 _this.codeEditor.evalCode();
         });
 

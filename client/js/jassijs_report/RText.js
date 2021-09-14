@@ -26,8 +26,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportComp
             this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
             this.reporttype = "text";
             super.init($('<div class="RText jdisableaddcomponents" ><div  class="HTMLPanelContent"></div></div>')[0]);
+            $(this.domWrapper).removeClass("jcontainer");
             $(this.__dom).css("text-overflow", "ellipsis");
             $(this.__dom).css("overflow", "hidden");
+            $(this.__dom).addClass("designerNoResizable");
             //  super.init($('<div class="RText"></div>')[0]);
             var el = this.dom.children[0];
             this._designMode = false;

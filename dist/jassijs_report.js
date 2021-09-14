@@ -815,8 +815,10 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
             this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
             this.reporttype = "text";
             super.init($('<div class="RText jdisableaddcomponents" ><div  class="HTMLPanelContent"></div></div>')[0]);
+            $(this.domWrapper).removeClass("jcontainer");
             $(this.__dom).css("text-overflow", "ellipsis");
             $(this.__dom).css("overflow", "hidden");
+            $(this.__dom).addClass("designerNoResizable");
             //  super.init($('<div class="RText"></div>')[0]);
             var el = this.dom.children[0];
             this._designMode = false;
@@ -2130,7 +2132,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
             this.codeEditor.evalCode = async function () {
                 if (compileTask === undefined) {
                     compileTask = new Runlater_1.Runlater(() => {
-                        var code = this.acePanel.value;
+                        var code = _this.acePanel.value;
                         var func = new Function("", "return " + code.substring(code.indexOf("=") + 1));
                         var ob = func();
                         _this.reportDesign = ob;
@@ -2140,7 +2142,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
                     compileTask.runlater();
             };
             this.acePanel.onchange((obj, editor) => {
-                if (!this.reportDesigner.propertyIsChanging)
+                if (!_this.reportDesigner.propertyIsChanging)
                     _this.codeEditor.evalCode();
             });
             //designer["codeEditor"]._main.add(designer, "Design", "design");
@@ -2207,7 +2209,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1631393717821,
+                "date": 1631569760490,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/modul.ts": {
@@ -2568,7 +2570,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1631220740868,
+                "date": 1631649282218,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -2733,11 +2735,11 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.RUnknown": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
-                "date": 1631455811738,
+                "date": 1631565969842,
                 "jassijs_report.designer.SimpleReportDesigner": {}
             },
             "jassijs_report/SimpleReportEditor.ts": {
-                "date": 1631455897225,
+                "date": 1631647115208,
                 "jassi_report.SimpleReportEditor": {}
             }
         }

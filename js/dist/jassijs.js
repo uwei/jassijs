@@ -24,7 +24,7 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
     var jquery_language = 'https://cdn.jsdelivr.net/gh/jquery/jquery-ui@main/ui/i18n/datepicker-' + navigator.language.split("-")[0];
     exports.default = {
         "css": {
-            "jassijs.css": "jassijs/jassijs.css",
+            "jassijs.css": "jassijs.css",
             "materialdesignicons.min.css": "https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css",
             "jquery-ui.css": "https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"
         },
@@ -143,7 +143,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985800636
             },
             "jassijs/modul.ts": {
-                "date": 1631471879414
+                "date": 1631646807936
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1624296519695,
@@ -384,11 +384,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1630961487173,
+                "date": 1631479245897,
                 "jassijs.remote.Server": {}
             },
             "jassijs/remote/Settings.ts": {
-                "date": 1624297039992,
+                "date": 1631479360753,
                 "jassijs.remote.Settings": {}
             },
             "jassijs/remote/Test.ts": {
@@ -1815,7 +1815,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1622985638954,
+                "date": 1631480194948,
                 "jassijs.ui.PanelCreateProperties": {
                     "@members": {
                         "useSpan": {
@@ -1856,7 +1856,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1631286229621,
+                "date": 1631569885709,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {
@@ -2657,11 +2657,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Tools.ts": {
-                "date": 1624207512293,
+                "date": 1631563604952,
                 "jassijs.util.Tools": {}
             },
             "jassijs/util/Runlater.ts": {
-                "date": 1631453553787,
+                "date": 1631479652097,
                 "jassi.util.Runlater": {}
             }
         }

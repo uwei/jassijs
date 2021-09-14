@@ -25,6 +25,7 @@ export class HTMLPanel extends DataComponent {
     constructor(id = undefined) {//id connect to existing(not reqired)
         super();
         super.init($('<div class="HTMLPanel"><div class="HTMLPanelContent"> </div></div>')[0]);
+        //$(this.domWrapper).removeClass("jcontainer");
         //  super.init($('<div class="HTMLPanel"></div>')[0]);
         var el = this.dom.children[0];
         this._designMode = false;

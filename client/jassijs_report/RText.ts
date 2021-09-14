@@ -47,8 +47,11 @@ export class RText extends ReportComponent {
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
         super.init($('<div class="RText jdisableaddcomponents" ><div  class="HTMLPanelContent"></div></div>')[0]);
+        $(this.domWrapper).removeClass("jcontainer");
         $(this.__dom).css("text-overflow", "ellipsis");
         $(this.__dom).css("overflow", "hidden");
+        $(this.__dom).addClass("designerNoResizable");
+    
         //  super.init($('<div class="RText"></div>')[0]);
         var el = this.dom.children[0];
         this._designMode = false;
