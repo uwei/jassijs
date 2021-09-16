@@ -115,7 +115,7 @@ function replaceDatatable(def, data) {
 
 
 }
-function replaceTemplates(def, data, parentArray = undefined) {
+function replaceTemplates(def, data, param = undefined) {
 	if (def === undefined)
 		return;
 	if (def.datatable !== undefined) {
@@ -125,7 +125,7 @@ function replaceTemplates(def, data, parentArray = undefined) {
 	if (def.foreach !== undefined) {
 		//resolve foreach
 		//	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
-		if (parentArray === undefined) {
+		if (param?.parentArray === undefined) {
 			throw "foreach is not surounded by an Array";
 		}
 		var variable = def.foreach.split(" in ")[0];
@@ -138,30 +138,46 @@ function replaceTemplates(def, data, parentArray = undefined) {
 			arr = getVar(data, sarr);
 		}
 
-		var pos = parentArray.indexOf(def);
-		parentArray.splice(pos, 1);
+		if (param?.parentArrayPos === undefined) {
+			param.parentArrayPos = param?.parentArray.indexOf(def);
+			param?.parentArray.splice(param.parentArrayPos, 1);
+		}
 
 		for (let x = 0; x < arr.length; x++) {
 			data[variable] = arr[x];
 			delete def.foreach;
 			var copy;
+			if (def.dofirst&&x===0) {//render only forfirst
+				copy = clone(def.dofirst);
+				copy = replaceTemplates(copy, data, param);
+				if (copy !== undefined)
+					param.parentArray.splice(param.parentArrayPos++, 0, copy);
+			}
 			if (def.do)
-				copy = JSON.parse(JSON.stringify(def.do));
+				copy = clone(def.do);
 			else
-				copy = JSON.parse(JSON.stringify(def));
+				copy = clone(def);
 
-			copy = replaceTemplates(copy, data);
-			parentArray.splice(pos++, 0, copy);
+			copy = replaceTemplates(copy, data, param);
+			if (copy !== undefined)
+				param.parentArray.splice(param.parentArrayPos++, 0, copy);
+			
+			if (def.dolast&&x===arr.length-1) {//render only forlast
+				copy = clone(def.dolast);
+				copy = replaceTemplates(copy, data, param);
+				if (copy !== undefined)
+					param.parentArray.splice(param.parentArrayPos++, 0, copy);
+			}
 		}
 		delete data[variable];
 		return undefined;
 	} else if (Array.isArray(def)) {
 		for (var a = 0; a < def.length; a++) {
 			if (def[a].foreach !== undefined) {
-				replaceTemplates(def[a], data, def);
+				replaceTemplates(def[a], data, { parentArray: def });
 				a--;
 			} else
-				def[a] = replaceTemplates(def[a], data, def);
+				def[a] = replaceTemplates(def[a], data, { parentArray: def });
 		}
 		return def;
 	} else if (typeof def === "string") {

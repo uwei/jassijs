@@ -10,7 +10,6 @@ import { DockingContainer } from "jassijs/ui/DockingContainer";
 import { CodePanel } from "jassijs_editor/CodePanel";
 import { VariablePanel } from "jassijs/ui/VariablePanel";
 import { $Property } from "jassijs/ui/Property";
-
 class SimpleCodeEditor extends Panel {
     _main: DockingContainer;
     _codeView: Panel;
@@ -21,23 +20,19 @@ class SimpleCodeEditor extends Panel {
     _design: Panel;
     editMode: boolean;
     __evalToCursorReached: boolean;
-
-
     private _line: number;
-    constructor(codePanel:CodePanel) {
+    constructor(codePanel: CodePanel) {
         super();
         this.maximize();
         this._main = new DockingContainer();
         this._codeView = new Panel();
         this._codeToolbar = new Panel();
         //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-
         this._codePanel = codePanel;
         this._file = "";
         this.variables = new VariablePanel();
         this._design = new Panel();
         this._init();
-
         this.editMode = true;
     }
     private _initCodePanel() {
@@ -45,7 +40,6 @@ class SimpleCodeEditor extends Panel {
         this._codePanel.mode = "typescript";
         this._codePanel.height = "calc(100% - 31px)";
     }
-
     private _init() {
         var _this = this;
         this._initCodePanel();
@@ -56,25 +50,19 @@ class SimpleCodeEditor extends Panel {
         this._main.onresize = function () {
             setTimeout(function () {
                 _this._codePanel.resize();
-
             }, 1000);
-        }
+        };
         super.add(this._main);
         this._installView();
         //this.variables.createTable();
     }
-
     _installView() {
         this._main.add(this._codeView, "Code..", "code");
         this._main.add(this.variables, "Variables", "variables");
         this._main.add(this._design, "Design", "design");
         //this._main.layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":100,"content":[{"type":"stack","width":33.333333333333336,"height":80.34682080924856,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":19.653179190751445,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":50,"content":[{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":50,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}'
-
     }
-
-    
     private async _save(code) {
-    
     }
     /**
     * save the code to server
@@ -84,14 +72,11 @@ class SimpleCodeEditor extends Panel {
         var _this = this;
         this._save(code);
     }
-
-
     /**
      * goto to the declariation on cursor
      */
     async gotoDeclaration() {
     }
-
     /**
      * search text in classes at the given text
      * @param {string} text - the text to search
@@ -100,8 +85,6 @@ class SimpleCodeEditor extends Panel {
     static async search(text) {
         return undefined;
     }
-
-
     /**
      * extract lines from code
      * @param {string} code - the code
@@ -117,8 +100,6 @@ class SimpleCodeEditor extends Panel {
         }
         return lines;
     }
-
-
     /**
      * add variables to variabelpanel
      * @param Object<string,object> variables ["name"]=value
@@ -128,11 +109,10 @@ class SimpleCodeEditor extends Panel {
     }
     /**
      * execute the current code
-     * @param {boolean} toCursor -  if true the variables were inspected on cursor position, 
+     * @param {boolean} toCursor -  if true the variables were inspected on cursor position,
      *                              if false at the end of the layout() function or at the end of the code
      */
     async evalCode(toCursor = undefined) {
-
     }
     /**
      * switch view
@@ -141,7 +121,6 @@ class SimpleCodeEditor extends Panel {
     set viewmode(view) {
         this._main.show(view);
     }
-
     /**
     * get all known instances for type
     * @param {type} type - the type we are interested
@@ -157,7 +136,6 @@ class SimpleCodeEditor extends Panel {
     getVariableFromObject(ob) {
         return this.variables.getVariableFromObject(ob);
     }
-
     /**
      * gets the name object of the given variabel
      * @param {string} ob - the name of the variable
@@ -165,7 +143,6 @@ class SimpleCodeEditor extends Panel {
     getObjectFromVariable(varname) {
         return this.variables.getObjectFromVariable(varname);
     }
-
     /**
       * renames a variable in design
       * @param {string} oldName
@@ -176,9 +153,6 @@ class SimpleCodeEditor extends Panel {
         if (this._design !== undefined && this._design["_componentExplorer"] !== undefined)
             this._design["_componentExplorer"].update();
     }
-
-
-
     /**
      * @member {string} - the code
      */
@@ -195,13 +169,15 @@ class SimpleCodeEditor extends Panel {
     /**
     * @param {object} position - the current cursor position {row= ,column=}
     */
-    set cursorPosition(cursor: { row: number, column: number }) {
+    set cursorPosition(cursor: {
+        row: number;
+        column: number;
+    }) {
         this._codePanel.cursorPosition = cursor;
     }
     get cursorPosition() {
         return this._codePanel.cursorPosition;
     }
-
     /**
      * @member {string} - title of the component
      */
@@ -212,7 +188,7 @@ class SimpleCodeEditor extends Panel {
     /**
     * @member {string} - the url to edit
     */
-    set file(value: string) { //the Code
+    set file(value: string) {
         this._file = value;
         this.openFile(value);
     }
@@ -221,8 +197,8 @@ class SimpleCodeEditor extends Panel {
         return this._file;
     }
     /**
-    * goes to the line number 
-    * @param {object} value - the line number 
+    * goes to the line number
+    * @param {object} value - the line number
     */
     set line(value: number) {
         this._line = Number(value);
@@ -259,16 +235,14 @@ class SimpleCodeEditor extends Panel {
     undo() {
         this._codePanel.undo();
     }
-
 }
-
 @$Class("jassi_report.SimpleReportEditor")
 export class SimpleReportEditor extends Panel {
     codeEditor: SimpleCodeEditor;
     acePanel: AcePanelSimple;
     reportPanel: ReportDesign;
     reportDesigner: ReportDesigner;
-    constructor(properties?:PanelCreateProperties) {
+    constructor(properties?: PanelCreateProperties) {
         super(properties);
         var _this = this;
         this.acePanel = new AcePanelSimple();
@@ -280,23 +254,22 @@ export class SimpleReportEditor extends Panel {
         this.reportDesigner = new SimpleReportDesigner();
         var compileTask: Runlater = undefined;
         this.codeEditor.variables.addVariable("this", this.reportPanel);
-        this.codeEditor.evalCode = async function () {//refresh only if 800ms nothing is typed
+        this.codeEditor.evalCode = async function () {
             if (compileTask === undefined) {
                 compileTask = new Runlater(() => {
                     var code = _this.acePanel.value;
                     var func = new Function("", "return " + code.substring(code.indexOf("=") + 1));
                     var ob = func();
                     _this.reportDesign = ob;
-
                 }, 800);
-            } else
+            }
+            else
                 compileTask.runlater();
-        }
+        };
         this.acePanel.onchange((obj, editor) => {
             if (!_this.reportDesigner.propertyIsChanging)
                 _this.codeEditor.evalCode();
         });
-
         //designer["codeEditor"]._main.add(designer, "Design", "design");
         this.reportPanel.design = { content: [] };
         this.codeEditor._design = this.reportDesigner;
@@ -314,33 +287,34 @@ export class SimpleReportEditor extends Panel {
     }
 }
 export function test() {
-    var reportdesign={
-            content: [
-                {
-                    text: "Hallo Herr {{nachname}}"
-                },
-                {
-                    text: "ok"
-                },
-                {
-                    columns: [
-                        {
-                            text: "text"
-                        },
-                        {
-                            text: "text"
-                        }
-                    ]
-                }
-            ],
-            data: {
-                nachname: "Meier"
+    var reportdesign = {
+        content: [
+            {
+                text: "Hallo Herr {{nachname}}"
+            },
+            {
+                text: "ok"
+            },
+            {
+                columns: [
+                    {
+                        text: "text"
+                    },
+                    {
+                        text: "text"
+                    }
+                ]
             }
-        };
-    var editor=new SimpleReportEditor();
-    editor.reportDesign=reportdesign;
-     editor.width = "100%";
+        ],
+        data: {
+            nachname: "Meier"
+        }
+    };
+    var editor = new SimpleReportEditor();
+    editor.reportDesign = reportdesign;
+    editor.width = "100%";
     editor.height = "100%";
+    editor.value = "aHallo Herr {{nachname}}";
     windows.add(editor, "Testtt");
-    return editor;
+    //return editor;
 }

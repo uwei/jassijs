@@ -1618,7 +1618,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1623177067371,
+                "date": 1631649614506,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -2621,7 +2621,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/VariablePanel.ts": {
-                "date": 1631286861827,
+                "date": 1631803915542,
                 "jassijs.ui.VariablePanel": {}
             },
             "jassijs/util/Cookies.ts": {
@@ -11467,6 +11467,7 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             super();
             this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
             super.init($('<div class="HTMLPanel"><div class="HTMLPanelContent"> </div></div>')[0]);
+            //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
             var el = this.dom.children[0];
             this._designMode = false;
@@ -16070,7 +16071,8 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
         destroy() {
             this.clear();
             this.debugpoints = [];
-            this.table.items = [];
+            if (this.table)
+                this.table.items = [];
             super.destroy();
         }
     };

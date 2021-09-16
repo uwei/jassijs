@@ -368,7 +368,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RText.ts": {
-		"date": 1631649282218,
+		"date": 1631805280836,
 		"jassijs_report.RText": {
 			"$ReportComponent": [
 				{
@@ -533,12 +533,15 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.RUnknown": {}
 	},
 	"jassijs_report/designer/SimpleReportDesigner.ts": {
-		"date": 1631565969842,
+		"date": 1631804579466,
 		"jassijs_report.designer.SimpleReportDesigner": {}
 	},
 	"jassijs_report/SimpleReportEditor.ts": {
-		"date": 1631647115208,
+		"date": 1631804101649,
 		"jassi_report.SimpleReportEditor": {}
+	},
+	"jassijs_report/remote/pdfmakejassi.ts": {
+		"date": 1631826746176
 	}
 }
  }

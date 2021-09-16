@@ -328,7 +328,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         destroy() {
             this.clear();
             this.debugpoints = [];
-            this.table.items = [];
+            if (this.table)
+                this.table.items = [];
             super.destroy();
         }
     };

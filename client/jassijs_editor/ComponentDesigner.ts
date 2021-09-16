@@ -48,7 +48,12 @@ export class ComponentDesigner extends Panel{
         _designPlaceholder:Panel;
         _resizer:Resizer;
         _draganddropper:DragAndDropper;
-
+        saveButton:Button;
+        runButton:Button;
+        lassoButton:Button;
+        undoButton:Button;
+        editButton:Button;
+        removeButton:Button;
        
         constructor(){
             super();
@@ -87,29 +92,29 @@ export class ComponentDesigner extends Panel{
         	var _this=this;
             this._designToolbar=new Panel();
             this._designPlaceholder=new Panel();
-            var save=new Button();
-            save.tooltip="Save(Ctrl+S)";
-            save.icon="mdi mdi-content-save mdi-18px";
-            save.onclick(function(){
+            this.saveButton=new Button();
+            this.saveButton.tooltip="Save(Ctrl+S)";
+            this.saveButton.icon="mdi mdi-content-save mdi-18px";
+            this.saveButton.onclick(function(){
                  _this.save(); 
             });
-            this._designToolbar.add(save);
+            this._designToolbar.add(this.saveButton);
     		
-    		var run=new Button();
-            run.icon="mdi mdi-car-hatchback mdi-18px";
-            run.tooltip="Run(F4)";
-            run.onclick(function(){
+    		this.runButton=new Button();
+            this.runButton.icon="mdi mdi-car-hatchback mdi-18px";
+            this.runButton.tooltip="Run(F4)";
+            this.runButton.onclick(function(){
                _this.evalCode(); 
             });
-            this._designToolbar.add(run);
+            this._designToolbar.add(this.runButton);
            
-            var undo=new Button();
-            undo.icon="mdi mdi-undo mdi-18px";
-            undo.tooltip="Undo (Strg+Z)";
-            undo.onclick(function(){
+            this.undoButton=new Button();
+            this.undoButton.icon="mdi mdi-undo mdi-18px";
+            this.undoButton.tooltip="Undo (Strg+Z)";
+            this.undoButton.onclick(function(){
                _this.undo(); 
             });
-            this._designToolbar.add(undo);
+            this._designToolbar.add(this.undoButton);
             
            /*  var test=new Button();
             test.icon="mdi mdi-bug mdi-18px";
@@ -120,34 +125,34 @@ export class ComponentDesigner extends Panel{
             this._designToolbar.add(test);*/
             
            
-            var edit=new Button();
-            edit.icon="mdi mdi-run mdi-18px";
-            edit.tooltip="Test Dialog";
-            edit.onclick(function(){
+            this.editButton=new Button();
+            this.editButton.icon="mdi mdi-run mdi-18px";
+            this.editButton.tooltip="Test Dialog";
+            this.editButton.onclick(function(){
             	_this.editDialog(!_this.editMode); 
-            	edit.toggle(!_this.editMode);
+            	_this.editButton.toggle(!_this.editMode);
                
             });
-            this._designToolbar.add(edit);
+            this._designToolbar.add(this.editButton);
            
-            var lasso=new Button();
-            lasso.icon="mdi mdi-lasso mdi-18px";
-            lasso.tooltip="Select rubberband";
-            lasso.onclick(function(){
-                var val=lasso.toggle();
+            this.lassoButton=new Button();
+            this.lassoButton.icon="mdi mdi-lasso mdi-18px";
+            this.lassoButton.tooltip="Select rubberband";
+            this.lassoButton.onclick(function(){
+                var val=this.lassoButton.toggle();
                 _this._resizer.setLassoMode(val);
                 _this._draganddropper.enableDraggable(!val);
 				//_this._draganddropper.activateDragging(!val);
             });
-            this._designToolbar.add(lasso);
+            this._designToolbar.add(this.lassoButton);
            
-            var remove=new Button();
-            remove.icon="mdi mdi-delete-forever-outline mdi-18px";
-            remove.tooltip="Delete selected Control (ENTF)";
-            remove.onclick(function(){
+            this.removeButton=new Button();
+            this.removeButton.icon="mdi mdi-delete-forever-outline mdi-18px";
+            this.removeButton.tooltip="Delete selected Control (ENTF)";
+            this.removeButton.onclick(function(){
                _this.removeComponent(); 
             });
-            this._designToolbar.add(remove);
+            this._designToolbar.add(this.removeButton);
             this.add(this._designToolbar);
 			$(this._designPlaceholder.domWrapper).css("position","relative");
             this.add(this._designPlaceholder);

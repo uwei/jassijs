@@ -311,8 +311,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
         editor.reportDesign = reportdesign;
         editor.width = "100%";
         editor.height = "100%";
+        editor.value = "aHallo Herr {{nachname}}";
         Windows_1.default.add(editor, "Testtt");
-        return editor;
+        //return editor;
     }
     exports.test = test;
 });

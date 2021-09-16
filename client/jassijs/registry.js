@@ -2534,7 +2534,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/VariablePanel.ts": {
-		"date": 1631286861827,
+		"date": 1631803915542,
 		"jassijs.ui.VariablePanel": {}
 	},
 	"jassijs/util/Cookies.ts": {

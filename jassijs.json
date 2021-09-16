@@ -5,6 +5,7 @@
 		"de": "de",
 		"local": "local",
 		"tests": "tests",
-		"$serverside": "$serverside"
+		"$serverside": "$serverside",
+		"jassijs_report": "jassijs_report"
 	}
 }

@@ -349,7 +349,8 @@ export class VariablePanel extends Panel {
     destroy() {
         this.clear();
         this.debugpoints = [];
-        this.table.items = [];
+        if(this.table)
+            this.table.items = [];
         super.destroy();
     }
 }

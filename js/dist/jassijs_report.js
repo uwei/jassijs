@@ -823,7 +823,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
             $(this.domWrapper).removeClass("jcontainer");
             $(this.__dom).css("text-overflow", "ellipsis");
             $(this.__dom).css("overflow", "hidden");
-            $(this.__dom).addClass("designerNoResizable");
+            //$(this.__dom).addClass("designerNoResizable");
             //  super.init($('<div class="RText"></div>')[0]);
             var el = this.dom.children[0];
             this._designMode = false;
@@ -2200,8 +2200,9 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         editor.reportDesign = reportdesign;
         editor.width = "100%";
         editor.height = "100%";
+        editor.value = "aHallo Herr {{nachname}}";
         Windows_1.default.add(editor, "Testtt");
-        return editor;
+        //return editor;
     }
     exports.test = test;
 });
@@ -2575,7 +2576,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1631649282218,
+                "date": 1631805280836,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -2740,12 +2741,15 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.RUnknown": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
-                "date": 1631565969842,
+                "date": 1631804579466,
                 "jassijs_report.designer.SimpleReportDesigner": {}
             },
             "jassijs_report/SimpleReportEditor.ts": {
-                "date": 1631647115208,
+                "date": 1631804101649,
                 "jassi_report.SimpleReportEditor": {}
+            },
+            "jassijs_report/remote/pdfmakejassi.ts": {
+                "date": 1631826746176
             }
         }
     };
@@ -3098,6 +3102,10 @@ define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "j
                         ]
                     }], "isClosable": true, "reorderEnabled": true, "title": "", "openPopouts": [], "maximisedItemId": null
             });
+            this._designToolbar.remove(this.saveButton);
+            this._designToolbar.remove(this.runButton);
+            this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
+            //        this._designToolbar.remove(this.);
             //'{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload","tabOverlapAllowance":0,"reorderOnTabMenuClick":true,"tabControlOffset":10},"dimensions":{"borderWidth":5,"borderGrabWidth":15,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":100,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":1,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true},{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"width":19.42508710801394,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';        //'{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload","tabOverlapAllowance":0,"reorderOnTabMenuClick":true,"tabControlOffset":10},"dimensions":{"borderWidth":5,"borderGrabWidth":15,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":100,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":1,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":9.78603688012232,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":61.55066380085299,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":28.663299319024677,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
         }
         propertyChanged() {
@@ -3309,7 +3317,7 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
                         body:[{ text:"Text"},{ text:"price"}],
                         groups:*/
     }
-    function replaceTemplates(def, data, parentArray = undefined) {
+    function replaceTemplates(def, data, param = undefined) {
         if (def === undefined)
             return;
         if (def.datatable !== undefined) {
@@ -3318,7 +3326,7 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
         if (def.foreach !== undefined) {
             //resolve foreach
             //	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
-            if (parentArray === undefined) {
+            if ((param === null || param === void 0 ? void 0 : param.parentArray) === undefined) {
                 throw "foreach is not surounded by an Array";
             }
             var variable = def.foreach.split(" in ")[0];
@@ -3331,18 +3339,33 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
             else {
                 arr = getVar(data, sarr);
             }
-            var pos = parentArray.indexOf(def);
-            parentArray.splice(pos, 1);
+            if ((param === null || param === void 0 ? void 0 : param.parentArrayPos) === undefined) {
+                param.parentArrayPos = param === null || param === void 0 ? void 0 : param.parentArray.indexOf(def);
+                param === null || param === void 0 ? void 0 : param.parentArray.splice(param.parentArrayPos, 1);
+            }
             for (let x = 0; x < arr.length; x++) {
                 data[variable] = arr[x];
                 delete def.foreach;
                 var copy;
+                if (def.dofirst && x === 0) { //render only forfirst
+                    copy = clone(def.dofirst);
+                    copy = replaceTemplates(copy, data, param);
+                    if (copy !== undefined)
+                        param.parentArray.splice(param.parentArrayPos++, 0, copy);
+                }
                 if (def.do)
-                    copy = JSON.parse(JSON.stringify(def.do));
+                    copy = clone(def.do);
                 else
-                    copy = JSON.parse(JSON.stringify(def));
-                copy = replaceTemplates(copy, data);
-                parentArray.splice(pos++, 0, copy);
+                    copy = clone(def);
+                copy = replaceTemplates(copy, data, param);
+                if (copy !== undefined)
+                    param.parentArray.splice(param.parentArrayPos++, 0, copy);
+                if (def.dolast && x === arr.length - 1) { //render only forlast
+                    copy = clone(def.dolast);
+                    copy = replaceTemplates(copy, data, param);
+                    if (copy !== undefined)
+                        param.parentArray.splice(param.parentArrayPos++, 0, copy);
+                }
             }
             delete data[variable];
             return undefined;
@@ -3350,11 +3373,11 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
         else if (Array.isArray(def)) {
             for (var a = 0; a < def.length; a++) {
                 if (def[a].foreach !== undefined) {
-                    replaceTemplates(def[a], data, def);
+                    replaceTemplates(def[a], data, { parentArray: def });
                     a--;
                 }
                 else
-                    def[a] = replaceTemplates(def[a], data, def);
+                    def[a] = replaceTemplates(def[a], data, { parentArray: def });
             }
             return def;
         }

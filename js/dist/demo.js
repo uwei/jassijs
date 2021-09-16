@@ -239,7 +239,108 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
     }
     exports.test = test;
 });
-define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, Jassi_4, Property_1, Kunde_1) {
+define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_4) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.ReportInvoice = void 0;
+    var reportdesign = {
+        content: {
+            stack: [{
+                    //font: "ExpletusSans",
+                    columns: [
+                        {
+                            stack: [
+                                '{{invoice.customer.firstname}} {{invoice.customer.lastname}}',
+                                '{{invoice.customer.street}}',
+                                '{{invoice.customer.place}}'
+                            ]
+                        },
+                        {
+                            stack: [
+                                { text: 'Invoice', fontSize: 18 },
+                                " ",
+                                "Date: {{invoice.date}}",
+                                { text: "Number: {{invoice.number}}", bold: true },
+                                " ",
+                                " ",
+                            ]
+                        }
+                    ]
+                },
+                {
+                    datatable: {
+                        header: [{ text: "Item" }, { text: "Price" }],
+                        dataforeach: "line in invoice.lines",
+                        //footer:[{ text:"Total"},{ text:""}],
+                        body: ['{{line.text}}', '{{line.price}}'],
+                        groups: [
+                            {
+                                field: "line",
+                                header: [],
+                                footer: []
+                            }
+                        ]
+                    }
+                },
+                " ",
+                {
+                    foreach: "sum in invoice.summary",
+                    columns: [
+                        "{{sum.text}}",
+                        "{{sum.value}}",
+                    ]
+                },
+            ]
+        }
+    };
+    let ReportInvoice = class ReportInvoice {
+        constructor() {
+            this.reportdesign = reportdesign;
+        }
+        get title() {
+            return "Invoicreport";
+        }
+    };
+    ReportInvoice = __decorate([
+        (0, Jassi_4.$Class)("demo.ReportInvoice"),
+        __metadata("design:paramtypes", [])
+    ], ReportInvoice);
+    exports.ReportInvoice = ReportInvoice;
+    async function test() {
+        // kk.o=0;
+        var dlg = new ReportInvoice();
+        dlg.parameter = { date: "21.05.2022" };
+        dlg.value = {
+            invoice: {
+                number: 1000,
+                date: "20.07.2018",
+                customer: {
+                    firstname: "Henry",
+                    lastname: "Klaus",
+                    street: "Hauptstr. 157",
+                    place: "chemnitz",
+                },
+                lines: [
+                    { pos: 1, text: "this is the first position, lksjdflgsd er we wer wre er er er re wekfgjslkdfjjdk sgfsdg", price: 10.00, amount: 50, variante: [{ m: 1 }, { m: 2 }] },
+                    { pos: 2, text: "this is the next position", price: 20.50, },
+                    { pos: 3, text: "this is an other position", price: 19.50 },
+                    { pos: 4, text: "this is the last position", price: 50.00 },
+                ],
+                summary: [
+                    { text: "Subtotal", value: 100.00 },
+                    { text: "Tax", value: 19.00 },
+                    { text: "Subtotal", value: 119.00 },
+                ]
+            }
+        };
+        //  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};
+        //	dlg.value=jassijs.db.load("de.Kunde",9);	
+        //console.log(JSON.stringify(dlg.toJSON()));
+        return dlg;
+    }
+    exports.test = test;
+});
+define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, Jassi_5, Property_1, Kunde_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -273,7 +374,7 @@ define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jass
         __metadata("design:type", typeof (_a = typeof Kunde_1.Kunde !== "undefined" && Kunde_1.Kunde) === "function" ? _a : Object)
     ], ReportKunde.prototype, "value", void 0);
     ReportKunde = __decorate([
-        (0, Jassi_4.$Class)("de.ReportKunde")
+        (0, Jassi_5.$Class)("de.ReportKunde")
     ], ReportKunde);
     exports.ReportKunde = ReportKunde;
     async function test() {
@@ -284,7 +385,7 @@ define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jass
     }
     exports.test = test;
 });
-define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Style_1, Button_3, Jassi_5, Panel_3) {
+define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Style_1, Button_3, Jassi_6, Panel_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.StyleDialog = void 0;
@@ -310,7 +411,7 @@ define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/u
         }
     };
     StyleDialog = __decorate([
-        (0, Jassi_5.$Class)("demo/StyleDialog"),
+        (0, Jassi_6.$Class)("demo/StyleDialog"),
         __metadata("design:paramtypes", [])
     ], StyleDialog);
     exports.StyleDialog = StyleDialog;
@@ -365,7 +466,7 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
     }
     exports.test = test;
 });
-define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_4, Button_4, HTMLPanel_1, Jassi_6, Component_1) {
+define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_4, Button_4, HTMLPanel_1, Jassi_7, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestComponent = void 0;
@@ -416,7 +517,7 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
     };
     TestComponent = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
-        (0, Jassi_6.$Class)("demo.TestComponent"),
+        (0, Jassi_7.$Class)("demo.TestComponent"),
         __metadata("design:paramtypes", [])
     ], TestComponent);
     exports.TestComponent = TestComponent;
@@ -426,7 +527,7 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
     }
     exports.test = test;
 });
-define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Jassi"], function (require, exports, Panel_5, Tree_1, Jassi_7) {
+define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Jassi"], function (require, exports, Panel_5, Tree_1, Jassi_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestTree = void 0;
@@ -439,7 +540,7 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
         }
     };
     TestTree = __decorate([
-        (0, Jassi_7.$Class)("demo.TestTree"),
+        (0, Jassi_8.$Class)("demo.TestTree"),
         __metadata("design:paramtypes", [])
     ], TestTree);
     exports.TestTree = TestTree;
@@ -469,7 +570,7 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
     }
     exports.test = test;
 });
-define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_2, Upload_1, Jassi_8, Panel_6, papaparse_1) {
+define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_2, Upload_1, Jassi_9, Panel_6, papaparse_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestUpload = void 0;
@@ -498,7 +599,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
         }
     };
     TestUpload = __decorate([
-        (0, Jassi_8.$Class)("demo/TestUpload"),
+        (0, Jassi_9.$Class)("demo/TestUpload"),
         __metadata("design:paramtypes", [])
     ], TestUpload);
     exports.TestUpload = TestUpload;
@@ -509,7 +610,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
     }
     exports.test = test;
 });
-define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_7, ContextMenu_2, MenuItem_2, Button_5, Jassi_9) {
+define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_7, ContextMenu_2, MenuItem_2, Button_5, Jassi_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Testcontextmenu = void 0;
@@ -555,7 +656,7 @@ define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassi
         }
     };
     Testcontextmenu = __decorate([
-        (0, Jassi_9.$Class)("demo.Testcontextmenu"),
+        (0, Jassi_10.$Class)("demo.Testcontextmenu"),
         __metadata("design:paramtypes", [])
     ], Testcontextmenu);
     exports.Testcontextmenu = Testcontextmenu;
@@ -566,7 +667,103 @@ define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassi
     }
     exports.test = test;
 });
-define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_8, Menu_1, MenuItem_3, Button_6, Jassi_10) {
+define("demo/Testdatatable", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var reportdesign = {
+        content: [
+            {
+                table: {
+                    body: [
+                        [{ text: "vor" }, "vor"],
+                        {
+                            foreach: "line in invoice.lines",
+                            do: {
+                                foreach: "uline2 in line.ulines",
+                                dofirst: [{ text: "groupheader", colSpan: 2 }, "dd"],
+                                do: [
+                                    "a{{uline2.text}}",
+                                    "a{{uline2.price}}"
+                                ],
+                                dolast: ["groupfooter", "footer"],
+                            }
+                        },
+                        ["nach", "nach"]
+                    ]
+                }
+            },
+        ]
+    };
+    async function test() {
+        // kk.o=0;
+        var dlg = { reportdesign };
+        dlg.value = {
+            invoice: {
+                name: "hh",
+                lines: [
+                    {
+                        text: "text1",
+                        price: 10,
+                        ulines: [{ text: "a1", price: 1 },
+                            { text: "a2", price: 2 }]
+                    },
+                    {
+                        text: "test2",
+                        ulines: [{ text: "a3", price: 3 }]
+                    }, /*
+                    {
+                        text: "this is an other position",
+                        price: 19.5
+                    },
+                    {
+                        text: "this is the last position",
+                        price: 50
+                    }*/
+                ]
+            }
+        };
+        return dlg;
+    }
+    exports.test = test;
+});
+/*
+String.prototype.interpolate = function(params) {
+const names = Object.keys(params);
+const vals = Object.values(params);
+return new Function(...names, `return \`${this}\`;`)(...vals);
+}
+
+var s=`${dlg.value.invoice.lines.map((item, i) => `
+  T: ${item.text}.
+        ${item.ulines.map((item2) => `
+            UT: ${item2.text}.
+   
+        `).join('')}
+    
+`).join('')}
+`;
+s=`${dlg.value.invoice.lines.map((item, i) => `T: ${item.text}`).join('')}`;
+//   console.log(s);
+
+String.prototype.interpolate = function(params) {
+const names = Object.keys(params);
+const vals = Object.values(params);
+return new Function(...names, `return \`${this}\`;`)(...vals);
+}
+
+let template = 'Example text: ${dlg.value.invoice.name}';
+template="${dlg.value.invoice.lines.map((item, i) => `T: ${item.text}`).join('')}";
+template="${dlg.value.invoice.lines.map((item, i) => ` T: ${item.text}.            ${item.ulines.map((item2) => `                UT: ${item2.text}.                   `).join('')}          `).join('')}";
+const result = template.interpolate({
+dlg: dlg
+});
+console.log(result);*/
+//  this.design = {"content":{"stack":[{"text":"Halloso"},{"text":"sdsfsdf"}]}};
+//	dlg.value=jassijs.db.load("de.Kunde",9);	
+//console.log(JSON.stringify(dlg.toJSON()));
+//   return dlg;
+define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_8, Menu_1, MenuItem_3, Button_6, Jassi_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testmenu = void 0;
@@ -638,7 +835,7 @@ define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/M
         }
     };
     Testmenu = __decorate([
-        (0, Jassi_10.$Class)("demo.Testmenu"),
+        (0, Jassi_11.$Class)("demo.Testmenu"),
         __metadata("design:paramtypes", [])
     ], Testmenu);
     exports.Testmenu = Testmenu;
@@ -703,7 +900,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassij
     }
     exports.test = test;
 });
-define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Table"], function (require, exports, Panel_10, Jassi_11, Table_2) {
+define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Table"], function (require, exports, Panel_10, Jassi_12, Table_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
@@ -806,7 +1003,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
         }
     };
     TreeTable = __decorate([
-        (0, Jassi_11.$Class)("demo.TreeTable"),
+        (0, Jassi_12.$Class)("demo.TreeTable"),
         __metadata("design:paramtypes", [])
     ], TreeTable);
     exports.TreeTable = TreeTable;
@@ -905,6 +1102,13 @@ define("demo/registry", ["require"], function (require) {
                         }
                     }
                 }
+            },
+            "demo/ReportInvoice2.ts": {
+                "date": 1631805098680,
+                "demo.ReportInvoice": {}
+            },
+            "demo/Testdatatable.ts": {
+                "date": 1631827371705
             }
         }
     };
