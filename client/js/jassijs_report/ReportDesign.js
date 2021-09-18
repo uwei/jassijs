@@ -246,7 +246,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
                     ReportDesign_1.addVariablenames(path + (path === "" ? "" : ".") + key, val, names);
                 }
                 else {
-                    names.push("{{" + path + (path === "" ? "" : ".") + key + "}}");
+                    names.push("${" + path + (path === "" ? "" : ".") + key + "}");
                 }
             }
         }

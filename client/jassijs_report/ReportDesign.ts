@@ -174,7 +174,7 @@ export class ReportDesign extends BoxPanel {
             } else if (typeof (val) === "object") {
                 ReportDesign.addVariablenames(path + (path === "" ? "" : ".") + key, val, names);
             } else {
-                names.push("{{" + path + (path === "" ? "" : ".") + key + "}}");
+                names.push("${" + path + (path === "" ? "" : ".") + key + "}");
             }
         }
     }

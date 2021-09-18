@@ -5,7 +5,7 @@ import { Kunde } from "de/remote/Kunde";
 var reportdesign = {
 	content: [
 			{
-				text: "Hallo Herr {{nachname}}"
+				text: "Hallo Herr ${nachname}"
 			},
 			{
 				text: "ok"

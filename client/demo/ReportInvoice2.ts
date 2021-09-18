@@ -7,58 +7,65 @@ import { Kunde } from "de/remote/Kunde";
 import { RText } from "jassijs_report/RText";
 
 var reportdesign = {
-        content: {
-            stack: [{
-                //font: "ExpletusSans",
-                columns: [
-                    {
-
-                        stack: [
-                            '{{invoice.customer.firstname}} {{invoice.customer.lastname}}' ,
-                            '{{invoice.customer.street}}',
-                            '{{invoice.customer.place}}' 
-                        ]
-                    },
-                    {
-                        stack: [
-                            { text: 'Invoice', fontSize: 18 },
-                             " " ,
-                            "Date: {{invoice.date}}",
-                            { text: "Number: {{invoice.number}}", bold: true },
-                            " " ,
-                            " " ,
-                        ]
-                    }
-                ]
-            },
-            {
-                datatable: {
-                    header: [{ text: "Item" }, { text: "Price" }],
-                    dataforeach: "line in invoice.lines",
-                    //footer:[{ text:"Total"},{ text:""}],
-                    body: ['{{line.text}}', '{{line.price}}'],
-                    groups: [
-                        {
-                            field: "line",
-                            header: [],
-                            footer: []
-                        }
-                    ]
-
-                }
-            },
-             " " ,
-            {
-                foreach: "sum in invoice.summary",
-                columns: [
-                     "{{sum.text}}" ,
-                    "{{sum.value}}" ,
-                ]
-
-            },
-            ]
-        }
-    };
+	content: [
+		{
+			columns: [
+				[
+					"${invoice.customer.firstname} ${invoice.customer.lastname}",
+					"${invoice.customer.street}",
+					"${invoice.customer.place}"
+				],
+				[
+					{
+						text: [
+							{
+								text: "    Invoice"
+							}
+						],
+						editTogether: true,
+						fontSize: 18
+					},
+					"\n",
+					"Date: ${invoice.date}",
+					{
+						text: "Number: ${invoice.number}",
+						bold: true
+					},
+					"\n",
+					"\n"
+				]
+			]
+		},
+		{
+			groups: [
+				{
+					field: "line",
+					header: [],
+					footer: []
+				}
+			],
+			datatable: {
+				header: [
+					"Item",
+					"Price"
+				],
+				dataforeach: "line in invoice.lines",
+				body: [
+					"${line.text}",
+					"${line.price}"
+				]
+			}
+		},
+		"\n",
+		{
+			foreach: "sum in invoice.summary",
+			columns: [
+				"${sum.text}",
+				"${sum.value}"
+			]
+		}
+	]
+};
 
 
 @$Class("demo.ReportInvoice")

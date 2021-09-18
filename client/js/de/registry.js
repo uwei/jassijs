@@ -281,7 +281,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1622985482440
 	},
 	"de/ReportKunde.ts": {
-		"date": 1631221897156,
+		"date": 1631970005744,
 		"de.ReportKunde": {
 			"@members": {
 				"value": {

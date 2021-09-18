@@ -14,7 +14,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de
     var reportdesign = {
         content: [
             {
-                text: "Hallo Herr {{nachname}}"
+                text: "Hallo Herr ${nachname}"
             },
             {
                 text: "ok"

@@ -14,8 +14,8 @@ define(["require", "exports"], function (require, exports) {
                                 foreach: "uline2 in line.ulines",
                                 dofirst: [{ text: "groupheader", colSpan: 2 }, "dd"],
                                 do: [
-                                    "a{{uline2.text}}",
-                                    "a{{uline2.price}}"
+                                    "${uline2.text}",
+                                    "${uline2.price}"
                                 ],
                                 dolast: ["groupfooter", "footer"],
                             }

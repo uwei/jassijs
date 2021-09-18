@@ -13,7 +13,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de
     exports.test = exports.ReportKunde = exports.reportdesign = void 0;
     var reportdesign = {
         content: [
-            "aHallo Herr {{nachname}}",
+            "aHallo Herr ${nachname}",
             "ok",
             {
                 columns: [

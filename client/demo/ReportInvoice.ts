@@ -11,9 +11,9 @@ var reportdesign = {
 		{
 			columns: [
 				[
-					"{{invoice.customer.firstname}} {{invoice.customer.lastname}}",
-					"{{invoice.customer.street}}",
-					"{{invoice.customer.place}}"
+					"${invoice.customer.firstname} ${invoice.customer.lastname}",
+					"${invoice.customer.street}",
+					"${invoice.customer.place}"
 				],
 				[
 					{
@@ -21,9 +21,9 @@ var reportdesign = {
 						fontSize: 18
 					},
 					"\n",
-					"Date: {{date}}",
+					"Date: ${parameter.date}",
 					{
-						text: "Number: {{invoice.number}}",
+						text: "Number: ${invoice.number}",
 						bold: true
 					}
 				]
@@ -39,8 +39,8 @@ var reportdesign = {
 					{
 						foreach: "line in invoice.lines",
 						do: [
-							"{{line.text}}",
-							"{{line.price}}"
+							"${line.text}",
+							"${line.price}"
 						]
 					}
 				]
@@ -52,10 +52,10 @@ var reportdesign = {
 			do: {
 				columns: [
 					{
-						text: "{{sum.text}}"
+						text: "${sum.text}"
 					},
 					{
-						text: "{{sum.value}}"
+						text: "${sum.value}"
 					}
 				]
 			}

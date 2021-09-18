@@ -12,54 +12,64 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
     var reportdesign = {
-        content: {
-            stack: [{
-                    //font: "ExpletusSans",
-                    columns: [
+        content: [
+            {
+                columns: [
+                    [
+                        "${invoice.customer.firstname} ${invoice.customer.lastname}",
+                        "${invoice.customer.street}",
+                        "${invoice.customer.place}"
+                    ],
+                    [
                         {
-                            stack: [
-                                '{{invoice.customer.firstname}} {{invoice.customer.lastname}}',
-                                '{{invoice.customer.street}}',
-                                '{{invoice.customer.place}}'
-                            ]
+                            text: [
+                                {
+                                    text: "    Invoice"
+                                }
+                            ],
+                            editTogether: true,
+                            fontSize: 18
                         },
+                        "\n",
+                        "Date: ${invoice.date}",
                         {
-                            stack: [
-                                { text: 'Invoice', fontSize: 18 },
-                                " ",
-                                "Date: {{invoice.date}}",
-                                { text: "Number: {{invoice.number}}", bold: true },
-                                " ",
-                                " ",
-                            ]
-                        }
+                            text: "Number: ${invoice.number}",
+                            bold: true
+                        },
+                        "\n",
+                        "\n"
                     ]
-                },
-                {
-                    datatable: {
-                        header: [{ text: "Item" }, { text: "Price" }],
-                        dataforeach: "line in invoice.lines",
-                        //footer:[{ text:"Total"},{ text:""}],
-                        body: ['{{line.text}}', '{{line.price}}'],
-                        groups: [
-                            {
-                                field: "line",
-                                header: [],
-                                footer: []
-                            }
-                        ]
+                ]
+            },
+            {
+                groups: [
+                    {
+                        field: "line",
+                        header: [],
+                        footer: []
                     }
-                },
-                " ",
-                {
-                    foreach: "sum in invoice.summary",
-                    columns: [
-                        "{{sum.text}}",
-                        "{{sum.value}}",
+                ],
+                datatable: {
+                    header: [
+                        "Item",
+                        "Price"
+                    ],
+                    dataforeach: "line in invoice.lines",
+                    body: [
+                        "${line.text}",
+                        "${line.price}"
                     ]
-                },
-            ]
-        }
+                }
+            },
+            "\n",
+            {
+                foreach: "sum in invoice.summary",
+                columns: [
+                    "${sum.text}",
+                    "${sum.value}"
+                ]
+            }
+        ]
     };
     let ReportInvoice = class ReportInvoice {
         constructor() {

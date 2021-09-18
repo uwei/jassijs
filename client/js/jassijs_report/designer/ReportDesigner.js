@@ -208,17 +208,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
                         columns: [
                             {
                                 stack: [
-                                    { text: '{{invoice.customer.firstname}} {{invoice.customer.lastname}}' },
-                                    { text: '{{invoice.customer.street}}' },
-                                    { text: '{{invoice.customer.place}}' }
+                                    { text: '${invoice.customer.firstname} ${invoice.customer.lastname}' },
+                                    { text: '${invoice.customer.street}' },
+                                    { text: '${invoice.customer.place}' }
                                 ]
                             },
                             {
                                 stack: [
                                     { text: 'Invoice', fontSize: 18 },
                                     { text: " " },
-                                    { text: "Date: {{invoice.date}}" },
-                                    { text: "Number: {{invoice.number}}", bold: true },
+                                    { text: "Date: ${invoice.date}" },
+                                    { text: "Number: ${invoice.number}", bold: true },
                                     { text: " " },
                                     { text: " " },
                                 ]

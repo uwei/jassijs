@@ -102,9 +102,9 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
             {
                 columns: [
                     [
-                        "{{invoice.customer.firstname}} {{invoice.customer.lastname}}",
-                        "{{invoice.customer.street}}",
-                        "{{invoice.customer.place}}"
+                        "${invoice.customer.firstname} ${invoice.customer.lastname}",
+                        "${invoice.customer.street}",
+                        "${invoice.customer.place}"
                     ],
                     [
                         {
@@ -112,9 +112,9 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
                             fontSize: 18
                         },
                         "\n",
-                        "Date: {{date}}",
+                        "Date: ${parameter.date}",
                         {
-                            text: "Number: {{invoice.number}}",
+                            text: "Number: ${invoice.number}",
                             bold: true
                         }
                     ]
@@ -130,8 +130,8 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
                         {
                             foreach: "line in invoice.lines",
                             do: [
-                                "{{line.text}}",
-                                "{{line.price}}"
+                                "${line.text}",
+                                "${line.price}"
                             ]
                         }
                     ]
@@ -143,10 +143,10 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
                 do: {
                     columns: [
                         {
-                            text: "{{sum.text}}"
+                            text: "${sum.text}"
                         },
                         {
-                            text: "{{sum.value}}"
+                            text: "${sum.value}"
                         }
                     ]
                 }
@@ -239,54 +239,64 @@ define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], fu
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
     var reportdesign = {
-        content: {
-            stack: [{
-                    //font: "ExpletusSans",
-                    columns: [
+        content: [
+            {
+                columns: [
+                    [
+                        "${invoice.customer.firstname} ${invoice.customer.lastname}",
+                        "${invoice.customer.street}",
+                        "${invoice.customer.place}"
+                    ],
+                    [
                         {
-                            stack: [
-                                '{{invoice.customer.firstname}} {{invoice.customer.lastname}}',
-                                '{{invoice.customer.street}}',
-                                '{{invoice.customer.place}}'
-                            ]
+                            text: [
+                                {
+                                    text: "    Invoice"
+                                }
+                            ],
+                            editTogether: true,
+                            fontSize: 18
                         },
+                        "\n",
+                        "Date: ${invoice.date}",
                         {
-                            stack: [
-                                { text: 'Invoice', fontSize: 18 },
-                                " ",
-                                "Date: {{invoice.date}}",
-                                { text: "Number: {{invoice.number}}", bold: true },
-                                " ",
-                                " ",
-                            ]
-                        }
+                            text: "Number: ${invoice.number}",
+                            bold: true
+                        },
+                        "\n",
+                        "\n"
                     ]
-                },
-                {
-                    datatable: {
-                        header: [{ text: "Item" }, { text: "Price" }],
-                        dataforeach: "line in invoice.lines",
-                        //footer:[{ text:"Total"},{ text:""}],
-                        body: ['{{line.text}}', '{{line.price}}'],
-                        groups: [
-                            {
-                                field: "line",
-                                header: [],
-                                footer: []
-                            }
-                        ]
+                ]
+            },
+            {
+                groups: [
+                    {
+                        field: "line",
+                        header: [],
+                        footer: []
                     }
-                },
-                " ",
-                {
-                    foreach: "sum in invoice.summary",
-                    columns: [
-                        "{{sum.text}}",
-                        "{{sum.value}}",
+                ],
+                datatable: {
+                    header: [
+                        "Item",
+                        "Price"
+                    ],
+                    dataforeach: "line in invoice.lines",
+                    body: [
+                        "${line.text}",
+                        "${line.price}"
                     ]
-                },
-            ]
-        }
+                }
+            },
+            "\n",
+            {
+                foreach: "sum in invoice.summary",
+                columns: [
+                    "${sum.text}",
+                    "${sum.value}"
+                ]
+            }
+        ]
     };
     let ReportInvoice = class ReportInvoice {
         constructor() {
@@ -342,7 +352,7 @@ define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jass
     exports.test = exports.ReportKunde = exports.reportdesign = void 0;
     var reportdesign = {
         content: [
-            "aHallo Herr {{nachname}}",
+            "aHallo Herr ${nachname}",
             "ok",
             {
                 columns: [
@@ -678,8 +688,8 @@ define("demo/Testdatatable", ["require", "exports"], function (require, exports)
                                 foreach: "uline2 in line.ulines",
                                 dofirst: [{ text: "groupheader", colSpan: 2 }, "dd"],
                                 do: [
-                                    "a{{uline2.text}}",
-                                    "a{{uline2.price}}"
+                                    "${uline2.text}",
+                                    "${uline2.price}"
                                 ],
                                 dolast: ["groupfooter", "footer"],
                             }
@@ -758,6 +768,101 @@ console.log(result);*/
 //	dlg.value=jassijs.db.load("de.Kunde",9);	
 //console.log(JSON.stringify(dlg.toJSON()));
 //   return dlg;
+define("demo/Testdatatable2", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var reportdesign = {
+        content: [
+            {
+                table: {
+                    body: [
+                        [{ text: "cvor" }, "vor"],
+                        {
+                            foreach: "group1 in entries",
+                            do: {
+                                foreach: "group2 in group1.entries",
+                                dofirst: [{ bold: true, text: "${group1.groupname}", colSpan: 2 }, "dd"],
+                                do: {
+                                    foreach: "ar in group2.entries",
+                                    dofirst: [{ text: "${group2.groupname}", colSpan: 2 }, "dd"],
+                                    do: [
+                                        "${ar.id}",
+                                        "${ar.customer} from ${ar.city}"
+                                    ],
+                                    dolast: ["    Summe", "${group2.groupname}"],
+                                },
+                                dolast: ["group1footer", "footer"],
+                            }
+                        },
+                        ["nach", "nach"]
+                    ]
+                }
+            },
+        ]
+    };
+    var sampleData = [
+        { id: 1, customer: "Fred", city: "Frankfurt" },
+        { id: 8, customer: "Alma", city: "Dresden" },
+        { id: 3, customer: "Heinz", city: "Frankfurt" },
+        { id: 2, customer: "Fred", city: "Frankfurt" },
+        { id: 6, customer: "Max", city: "Dresden" },
+        { id: 4, customer: "Heinz", city: "Frankfurt" },
+        { id: 5, customer: "Max", city: "Dresden" },
+        { id: 7, customer: "Alma", city: "Dresden" },
+        { id: 9, customer: "Otto", city: "Berlin" }
+    ];
+    function groupsort(group, groupname, groupfields, groupid = 0) {
+        var ret = { entries: [], groupname: groupname };
+        if (groupid > 0)
+            ret["groupfield"] = groupfields[groupid - 1];
+        if (Array.isArray(group)) {
+            group.forEach((neu) => ret.entries.push(neu));
+        }
+        else {
+            for (var key in group) {
+                var neu = group[key];
+                ret.entries.push(groupsort(neu, key, groupfields, groupid + 1));
+            }
+            ret.entries = ret.entries.sort((a, b) => {
+                return a.groupname.localeCompare(b.groupname);
+            });
+        }
+        return ret;
+    }
+    function dogroup(entries, groupfields) {
+        var ret = {};
+        for (var e = 0; e < entries.length; e++) {
+            var entry = entries[e];
+            let parent = ret;
+            for (var x = 0; x < groupfields.length; x++) {
+                var groupname = entry[groupfields[x]];
+                if (x < groupfields.length - 1) { //undergroups does exists
+                    if (!parent[groupname])
+                        parent[groupname] = {};
+                }
+                else { //last group contaons the data
+                    if (!parent[groupname])
+                        parent[groupname] = [];
+                    parent[groupname].push(entry);
+                }
+                parent = parent[groupname];
+            }
+        }
+        //sort
+        var sorted = groupsort(ret, "main", groupfields);
+        return sorted;
+    }
+    async function test() {
+        var test = dogroup(sampleData, ["city", "customer"]);
+        console.log(JSON.stringify(test));
+        // kk.o=0;
+        var dlg = { reportdesign };
+        dlg.value = test;
+        return dlg;
+    }
+    exports.test = test;
+});
 define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_8, Menu_1, MenuItem_3, Button_6, Jassi_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1035,7 +1140,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1612818333557
             },
             "demo/ReportInvoice.ts": {
-                "date": 1631377745852,
+                "date": 1631970652205,
                 "demo.ReportInvoice": {}
             },
             "demo/StyleDialog.ts": {
@@ -1083,7 +1188,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo.TreeTable": {}
             },
             "demo/ReportKunden.ts": {
-                "date": 1631377109066,
+                "date": 1631970821633,
                 "de.ReportKunde": {
                     "@members": {
                         "value": {
@@ -1099,11 +1204,14 @@ define("demo/registry", ["require"], function (require) {
                 }
             },
             "demo/ReportInvoice2.ts": {
-                "date": 1631805098680,
+                "date": 1631970724965,
                 "demo.ReportInvoice": {}
             },
             "demo/Testdatatable.ts": {
-                "date": 1631827371705
+                "date": 1631970783946
+            },
+            "demo/Testdatatable2.ts": {
+                "date": 1631970492389
             }
         }
     };

@@ -212,7 +212,7 @@ export function test() {
     rep.design = {
         content: [
             {
-                text: "Hallo Herr {{nachname}}"
+                text: "Hallo Herr ${nachname}"
             },
             {
                 text: "ok"

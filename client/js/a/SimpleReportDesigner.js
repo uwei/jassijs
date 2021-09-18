@@ -203,7 +203,7 @@ define(["require", "exports", "jassijs_report/ReportDesign", "jassijs/ui/Docking
         rep.design = {
             content: [
                 {
-                    text: "Hallo Herr {{nachname}}"
+                    text: "Hallo Herr ${nachname}"
                 },
                 {
                     text: "ok"

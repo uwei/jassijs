@@ -110,17 +110,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ext/pdfmak
                         columns: [
                             {
                                 stack: [
-                                    '{{invoice.customer.firstname}} {{invoice.customer.lastname}}',
-                                    '{{invoice.customer.street}}',
-                                    '{{invoice.customer.place}}'
+                                    '${invoice.customer.firstname} ${invoice.customer.lastname}',
+                                    '${invoice.customer.street}',
+                                    '${invoice.customer.place}'
                                 ]
                             },
                             {
                                 stack: [
                                     { text: 'Invoice', fontSize: 18 },
                                     " ",
-                                    "Date: {{invoice.date}}",
-                                    { text: "Number: {{invoice.number}}", bold: true },
+                                    "Date: ${invoice.date}",
+                                    { text: "Number: ${invoice.number}", bold: true },
                                     " ",
                                     " ",
                                 ]
@@ -133,7 +133,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ext/pdfmak
                                 {
                                     foreach: "line in invoice.lines",
                                     do: [
-                                        '{{line.text}}', '{{line.price}}'
+                                        '${line.text}', '${line.price}'
                                     ]
                                 }
                             ]
@@ -144,7 +144,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ext/pdfmak
                             header: [{ text: "Item" }, { text: "Price" }],
                             dataforeach: "line in invoice.lines",
                             //footer:[{ text:"Total"},{ text:""}],
-                            body: ['{{line.text}}', '{{line.price}}'],
+                            body: ['${line.text}', '${line.price}'],
                             groups: [
                                 {
                                     field: "line",
@@ -158,8 +158,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ext/pdfmak
                     {
                         foreach: "sum in invoice.summary",
                         columns: [
-                            "{{sum.text}}",
-                            "{{sum.value}}",
+                            "${sum.text}",
+                            "${sum.value}",
                         ]
                     },
                 ]

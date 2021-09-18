@@ -16,9 +16,9 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
             {
                 columns: [
                     [
-                        "{{invoice.customer.firstname}} {{invoice.customer.lastname}}",
-                        "{{invoice.customer.street}}",
-                        "{{invoice.customer.place}}"
+                        "${invoice.customer.firstname} ${invoice.customer.lastname}",
+                        "${invoice.customer.street}",
+                        "${invoice.customer.place}"
                     ],
                     [
                         {
@@ -26,9 +26,9 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
                             fontSize: 18
                         },
                         "\n",
-                        "Date: {{date}}",
+                        "Date: ${parameter.date}",
                         {
-                            text: "Number: {{invoice.number}}",
+                            text: "Number: ${invoice.number}",
                             bold: true
                         }
                     ]
@@ -44,8 +44,8 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
                         {
                             foreach: "line in invoice.lines",
                             do: [
-                                "{{line.text}}",
-                                "{{line.price}}"
+                                "${line.text}",
+                                "${line.price}"
                             ]
                         }
                     ]
@@ -57,10 +57,10 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
                 do: {
                     columns: [
                         {
-                            text: "{{sum.text}}"
+                            text: "${sum.text}"
                         },
                         {
-                            text: "{{sum.value}}"
+                            text: "${sum.value}"
                         }
                     ]
                 }

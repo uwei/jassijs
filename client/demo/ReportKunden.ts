@@ -4,7 +4,7 @@ import { $Property } from "jassijs/ui/Property";
 import { Kunde } from "de/remote/Kunde";
 var reportdesign = {
 	content: [
-		"aHallo Herr {{nachname}}",
+		"aHallo Herr ${nachname}",
 		"ok",
 		{
 			columns: [

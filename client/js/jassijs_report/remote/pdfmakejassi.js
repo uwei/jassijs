@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.createReportDefinition = void 0;
+    exports.test = exports.createReportDefinition = void 0;
     function clone(obj) {
         if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
             return obj;
@@ -18,18 +18,47 @@ define(["require", "exports"], function (require, exports) {
         }
         return temp;
     }
-    function replace(str, data, member) {
+    //@ts-ignore
+    String.prototype.replaceTemplate = function (params, returnValues) {
+        const names = Object.keys(params);
+        const vals = Object.values(params);
+        for (let x = 0; x < vals.length; x++) {
+            if (typeof vals[x] === "function") {
+                vals[x] = vals[x].bind(params);
+            }
+        }
+        let stag = "";
+        if (returnValues) {
+            names.push("tag");
+            stag = "tag";
+            vals.push(function tag(strings, values) {
+                return values;
+            });
+        }
+        var func = funccache[names.join(",") + this];
+        if (func === undefined) { //create functions is slow so cache
+            func = new Function(...names, `return ${stag}\`${this}\`;`);
+            funccache[names.join(",") + this] = func;
+        }
+        return func(...vals);
+    };
+    /*function replace(str, data, member) {
         var ob = getVar(data, member);
         return str.split("{{" + member + "}}").join(ob);
-    }
+    }*/
     function getVar(data, member) {
-        var names = member.split(".");
-        var ob = data[names[0]];
-        for (let x = 1; x < names.length; x++) {
-            if (ob === undefined)
-                return undefined;
-            ob = ob[names[x]];
-        }
+        var ergebnis = member.toString().match(/\$\{(\w||\.)*\}/g);
+        if (!ergebnis)
+            member = "${" + member + "}";
+        var ob = member.replaceTemplate(data, true);
+        /*	var names = member.split(".");
+            var ob = data[names[0]];
+            for (let x = 1; x < names.length; x++) {
+        
+                if (ob === undefined)
+                    return undefined;
+                ob = ob[names[x]];
+            }*/
         return ob;
     }
     //replace {{currentPage}} {{pageWidth}} {{pageHeight}} {{pageCount}} in header,footer, background
@@ -171,11 +200,12 @@ define(["require", "exports"], function (require, exports) {
             return def;
         }
         else if (typeof def === "string") {
-            var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
+            var ergebnis = def.toString().match(/\$\{(\w||\.)*\}/g);
             if (ergebnis !== null) {
-                for (var e = 0; e < ergebnis.length; e++) {
-                    def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
-                }
+                def = def.replaceTemplate(data);
+                //	for (var e = 0; e < ergebnis.length; e++) {
+                //		def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
+                //	}
             }
             return def;
         }
@@ -225,5 +255,20 @@ define(["require", "exports"], function (require, exports) {
         // delete definition.parameter;
     }
     exports.createReportDefinition = createReportDefinition;
+    var funccache = {};
+    function test() {
+        var h = {
+            k: 5,
+            ho() {
+                return this.k + 1;
+            }
+        };
+        //@ts-ignore
+        var s = "${ho()}".replaceTemplate(h, true);
+        h.k = 60;
+        s = "${ho()}".replaceTemplate(h, true);
+        console.log(s + 2);
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=pdfmakejassi.js.map
