@@ -166,6 +166,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             var r = {};
             var ret = super.toJSON();
             ret.datatable = r;
+            //TODO hack
+            r.groups = ret.groups;
+            delete ret.groups;
             //var _this = this;
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;

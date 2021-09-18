@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.createReportDefinition = void 0;
+    exports.test = exports.createReportDefinition = exports.doGroup = void 0;
     function clone(obj) {
         if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
             return obj;
@@ -91,21 +91,98 @@ define(["require", "exports"], function (require, exports) {
             };
         }
     }
+    function groupSort(group, name, groupfields, groupid = 0) {
+        var ret = { entries: [], name: name };
+        if (groupid > 0)
+            ret["groupfield"] = groupfields[groupid - 1];
+        if (Array.isArray(group)) {
+            group.forEach((neu) => ret.entries.push(neu));
+        }
+        else {
+            for (var key in group) {
+                var neu = group[key];
+                ret.entries.push(groupSort(neu, key, groupfields, groupid + 1));
+            }
+            ret.entries = ret.entries.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            });
+        }
+        return ret;
+    }
+    function doGroup(entries, groupfields) {
+        var ret = {};
+        for (var e = 0; e < entries.length; e++) {
+            var entry = entries[e];
+            let parent = ret;
+            for (var x = 0; x < groupfields.length; x++) {
+                var groupname = entry[groupfields[x]];
+                if (x < groupfields.length - 1) { //undergroups does exists
+                    if (!parent[groupname])
+                        parent[groupname] = {};
+                }
+                else { //last group contaons the data
+                    if (!parent[groupname])
+                        parent[groupname] = [];
+                    parent[groupname].push(entry);
+                }
+                parent = parent[groupname];
+            }
+        }
+        //sort
+        var sorted = groupSort(ret, "main", groupfields);
+        return sorted;
+    }
+    exports.doGroup = doGroup;
     function replaceDatatable(def, data) {
         var header = def.datatable.header;
         var footer = def.datatable.footer;
-        var dataexpr = def.datatable.foreach;
+        var dataexpr = def.datatable.dataforeach;
         var groups = def.datatable.groups;
         var body = def.datatable.body;
+        var groupexpr = [];
         def.table = {
             body: []
         };
         if (header)
             def.table.body.push(header);
-        def.table.body.push({
-            foreach: def.datatable.dataforeach,
-            do: body
-        });
+        if (groups === undefined || groups.length === 0) {
+            def.table.body.push({
+                foreach: dataexpr,
+                do: body
+            });
+        }
+        else {
+            var parent = {};
+            var toadd = {
+                foreach: "group1 in datatablegroups.entries",
+                do: parent
+            };
+            def.table.body.push(toadd);
+            for (var x = 0; x < groups.length; x++) {
+                groupexpr.push(groups[x].expression);
+                if (x < groups.length - 1) {
+                    parent.foreach = "group" + (x + 2).toString() + " in group" + (x + 1).toString() + ".entries";
+                }
+                else {
+                    parent.foreach = dataexpr.split(" ")[0] + " in group" + (x + 1).toString() + ".entries";
+                }
+                if (groups[x].header && groups[x].header.length > 0) {
+                    parent.dofirst = groups[x].header;
+                }
+                if (groups[x].footer && groups[x].footer.length > 0) {
+                    parent.dolast = groups[x].footer;
+                }
+                if (x < groups.length - 1) {
+                    parent.do = {};
+                    parent = parent.do;
+                }
+                else {
+                    parent.do = body;
+                }
+            }
+            var arr = getArrayFromForEach(def.datatable.dataforeach, data);
+            data.datatablegroups = doGroup(arr, groupexpr);
+        }
         delete def.datatable.dataforeach;
         /*var variable = dataexpr.split(" in ")[0];
         var sarr = dataexpr.split(" in ")[1];
@@ -135,6 +212,17 @@ define(["require", "exports"], function (require, exports) {
                         body:[{ text:"Text"},{ text:"price"}],
                         groups:*/
     }
+    function getArrayFromForEach(foreach, data) {
+        var sarr = foreach.split(" in ")[1];
+        var arr;
+        if (sarr === undefined) {
+            arr = data === null || data === void 0 ? void 0 : data.items; //we get the main array
+        }
+        else {
+            arr = getVar(data, sarr);
+        }
+        return arr;
+    }
     function replaceTemplates(def, data, param = undefined) {
         if (def === undefined)
             return;
@@ -148,15 +236,7 @@ define(["require", "exports"], function (require, exports) {
                 throw "foreach is not surounded by an Array";
             }
             var variable = def.foreach.split(" in ")[0];
-            var sarr = def.foreach.split(" in ")[1];
-            var arr;
-            if (sarr === undefined) {
-                debugger;
-                arr = data === null || data === void 0 ? void 0 : data.items; //we get the main array
-            }
-            else {
-                arr = getVar(data, sarr);
-            }
+            var arr = getArrayFromForEach(def.foreach, data);
             if ((param === null || param === void 0 ? void 0 : param.parentArrayPos) === undefined) {
                 param.parentArrayPos = param === null || param === void 0 ? void 0 : param.parentArray.indexOf(def);
                 param === null || param === void 0 ? void 0 : param.parentArray.splice(param.parentArrayPos, 1);

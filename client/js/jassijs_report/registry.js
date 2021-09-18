@@ -44,7 +44,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1611935803813
             },
             "jassijs_report/RDatatable.ts": {
-                "date": 1622998616843,
+                "date": 1631998137602,
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
@@ -541,7 +541,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassi_report.SimpleReportEditor": {}
             },
             "jassijs_report/remote/pdfmakejassi.ts": {
-                "date": 1631970301705
+                "date": 1631999034767
             },
             "jassijs_report/remote/pdfmakejassi - Kopie.ts": {
                 "date": 1631826746176

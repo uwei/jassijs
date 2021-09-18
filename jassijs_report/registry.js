@@ -3,6 +3,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"jassijs_report/remote/pdfmakejassi.ts": {
-		"date": 1631970301705
+		"date": 1631999034767
+	},
+	"jassijs_report/remote/pdfmakejassi - Kopie.ts": {
+		"date": 1631826746176
 	}
 }
