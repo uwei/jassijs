@@ -14,7 +14,7 @@ import { ReportDesign } from "jassijs_report/ReportDesign";
 import { $Property } from "jassijs/ui/Property";
 
 import { AcePanel } from "jassijs_editor/AcePanel";
-import { Typescript } from "jassijs_editor/util/Typescript";
+import typescript, { Typescript } from "jassijs_editor/util/Typescript";
 import { MonacoPanel } from "jassijs_editor/MonacoPanel";
 import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
 import { Test } from "jassijs/remote/Test";
@@ -52,7 +52,7 @@ export class CodeEditor extends Panel {
     _design: Panel;
     editMode: boolean;
     __evalToCursorReached: boolean;
-
+ 
 
     private _line: number;
     constructor(properties: { codePanel?: CodePanel, hideToolbar?: boolean } = undefined) {
@@ -67,8 +67,10 @@ export class CodeEditor extends Panel {
         if (properties?.codePanel) {
             this._codePanel = properties.codePanel;
         } else {
+            CodePanel.typescript=typescript;
             if (sett === "ace" || (mobil && (sett === "aceOnBrowser" || sett === undefined))) {
                 this._codePanel = new AcePanel();
+                
             } else {
                 this._codePanel = new MonacoPanel();
                 // this._codePanel = new AcePanel(); 

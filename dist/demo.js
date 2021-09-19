@@ -768,7 +768,7 @@ console.log(result);*/
 //	dlg.value=jassijs.db.load("de.Kunde",9);	
 //console.log(JSON.stringify(dlg.toJSON()));
 //   return dlg;
-define("demo/Testdatatable2", ["require", "exports"], function (require, exports) {
+define("demo/Testdatatable2", ["require", "exports", "jassijs_report/remote/pdfmakejassi"], function (require, exports, pdfmakejassi_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -782,15 +782,15 @@ define("demo/Testdatatable2", ["require", "exports"], function (require, exports
                             foreach: "group1 in entries",
                             do: {
                                 foreach: "group2 in group1.entries",
-                                dofirst: [{ bold: true, text: "${group1.groupname}", colSpan: 2 }, "dd"],
+                                dofirst: [{ bold: true, text: "${group1.name}", colSpan: 2 }, "dd"],
                                 do: {
                                     foreach: "ar in group2.entries",
-                                    dofirst: [{ text: "${group2.groupname}", colSpan: 2 }, "dd"],
+                                    dofirst: [{ text: "${group2.name}", colSpan: 2 }, "dd"],
                                     do: [
                                         "${ar.id}",
                                         "${ar.customer} from ${ar.city}"
                                     ],
-                                    dolast: ["    Summe", "${group2.groupname}"],
+                                    dolast: ["    Summe", "${group2.name}"],
                                 },
                                 dolast: ["group1footer", "footer"],
                             }
@@ -799,6 +799,61 @@ define("demo/Testdatatable2", ["require", "exports"], function (require, exports
                     ]
                 }
             },
+        ]
+    };
+    var sampleData = [
+        { id: 1, customer: "Fred", city: "Frankfurt" },
+        { id: 8, customer: "Alma", city: "Dresden" },
+        { id: 3, customer: "Heinz", city: "Frankfurt" },
+        { id: 2, customer: "Fred", city: "Frankfurt" },
+        { id: 6, customer: "Max", city: "Dresden" },
+        { id: 4, customer: "Heinz", city: "Frankfurt" },
+        { id: 5, customer: "Max", city: "Dresden" },
+        { id: 7, customer: "Alma", city: "Dresden" },
+        { id: 9, customer: "Otto", city: "Berlin" }
+    ];
+    async function test() {
+        var test = (0, pdfmakejassi_1.doGroup)(sampleData, ["city", "customer"]);
+        console.log(JSON.stringify(test));
+        // kk.o=0;
+        var dlg = { reportdesign };
+        dlg.value = test;
+        return dlg;
+    }
+    exports.test = test;
+});
+define("demo/Testdatatable3", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var reportdesign = {
+        content: [
+            {
+                datatable: {
+                    header: [
+                        "id",
+                        "customer",
+                        "city"
+                    ],
+                    dataforeach: "cust",
+                    body: [
+                        "${cust.id}",
+                        "${cust.customer}",
+                        "${cust.city}"
+                    ],
+                    groups: [
+                        {
+                            expression: "city",
+                            header: ["${group1.name}", "", ""],
+                            footer: ["", "", ""]
+                        }, {
+                            expression: "customer",
+                            header: ["${group2.name}", "", ""],
+                            footer: ["custfooter", "", ""]
+                        }
+                    ]
+                },
+            }
         ]
     };
     var sampleData = [
@@ -858,7 +913,7 @@ define("demo/Testdatatable2", ["require", "exports"], function (require, exports
         console.log(JSON.stringify(test));
         // kk.o=0;
         var dlg = { reportdesign };
-        dlg.value = test;
+        dlg.value = sampleData;
         return dlg;
     }
     exports.test = test;
@@ -1211,7 +1266,10 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1631970783946
             },
             "demo/Testdatatable2.ts": {
-                "date": 1631970492389
+                "date": 1631998782450
+            },
+            "demo/Testdatatable3.ts": {
+                "date": 1631998582079
             }
         }
     };

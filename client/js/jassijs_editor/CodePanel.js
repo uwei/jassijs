@@ -38,16 +38,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
         static numberToPosition(file, pos, code) {
             if (code !== undefined)
-                typescript.setCode(file, code);
-            var ret = typescript.getLineAndCharacterOfPosition(file, pos);
+                CodePanel_1.typescript.setCode(file, code);
+            var ret = CodePanel_1.typescript.getLineAndCharacterOfPosition(file, pos);
             return {
                 row: ret.line,
                 column: ret.character
             };
         }
         positionToNumber(pos) {
-            typescript.setCode(this.file, this.value);
-            var ret = typescript.getPositionOfLineAndCharacter(this.file, {
+            CodePanel_1.typescript.setCode(this.file, this.value);
+            var ret = CodePanel_1.typescript.getPositionOfLineAndCharacter(this.file, {
                 line: pos.row,
                 character: pos.column
             });
@@ -56,7 +56,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         static async getAutoimport(lpos, file, code) {
             //var lpos = this.positionToNumber(this.cursorPosition);
             //@ts-ignore
-            var change = await typescript.getCodeFixesAtPosition(file, code, lpos, lpos, [2304]);
+            var change = await CodePanel_1.typescript.getCodeFixesAtPosition(file, code, lpos, lpos, [2304]);
             if (change === undefined)
                 return;
             for (let x = 0; x < change.length; x++) {
@@ -117,11 +117,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         gotoDeclaration() {
             var pos = this.positionToNumber(this.cursorPosition);
             var test = this.numberToPosition(pos);
-            if (!typescript.isInited(this.file)) {
+            if (!CodePanel_1.typescript.isInited(this.file)) {
                 $.notify("please try later ... loading in progress", "info", { position: "bottom right" });
                 return;
             }
-            typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
+            CodePanel_1.typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
                 var _a;
                 if (def !== undefined && def.length > 0) {
                     var entr = def[0];

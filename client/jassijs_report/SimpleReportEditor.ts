@@ -242,6 +242,7 @@ export class SimpleReportEditor extends Panel {
     acePanel: AcePanelSimple;
     reportPanel: ReportDesign;
     reportDesigner: ReportDesigner;
+    value:string;
     constructor(properties?: PanelCreateProperties) {
         super(properties);
         var _this = this;
@@ -314,6 +315,7 @@ export function test() {
     editor.reportDesign = reportdesign;
     editor.width = "100%";
     editor.height = "100%";
+
     editor.value = "aHallo Herr {{nachname}}";
     windows.add(editor, "Testtt");
     //return editor;

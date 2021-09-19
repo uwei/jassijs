@@ -5,6 +5,7 @@ import { router } from "jassijs/base/Router";
 
 @$Class("jassijs_editor.CodePanel")
 export abstract class CodePanel extends Panel {
+    static typescript:any;
     file: string;
 
 
@@ -43,16 +44,16 @@ export abstract class CodePanel extends Panel {
     }
     public static numberToPosition(file:string,pos: number,code:string): { row: number, column: number } {
 		if(code!==undefined)
-    		typescript.setCode(file,code);
-        var ret = typescript.getLineAndCharacterOfPosition(file, pos);
+        CodePanel.typescript.setCode(file,code);
+        var ret = CodePanel.typescript.getLineAndCharacterOfPosition(file, pos);
         return {
             row: ret.line,
             column: ret.character
         };
     }
     public positionToNumber(pos: { row: number, column: number }): number {
-    	typescript.setCode(this.file,this.value);
-        var ret = typescript.getPositionOfLineAndCharacter(this.file, {
+    	CodePanel.typescript.setCode(this.file,this.value);
+        var ret = CodePanel.typescript.getPositionOfLineAndCharacter(this.file, {
             line: pos.row,
             character: pos.column
         });
@@ -62,7 +63,7 @@ export abstract class CodePanel extends Panel {
        
         //var lpos = this.positionToNumber(this.cursorPosition);
         //@ts-ignore
-        var change=await typescript.getCodeFixesAtPosition(file, code, lpos, lpos, [2304]);
+        var change=await CodePanel.typescript.getCodeFixesAtPosition(file, code, lpos, lpos, [2304]);
             if (change === undefined)
                 return;
             for (let x = 0;x < change.length;x++) {
@@ -133,11 +134,11 @@ export abstract class CodePanel extends Panel {
     gotoDeclaration() {
         var pos = this.positionToNumber(this.cursorPosition)
         var test = this.numberToPosition(pos);
-        if (!typescript.isInited(this.file)) {
+        if (!CodePanel.typescript.isInited(this.file)) {
             $.notify("please try later ... loading in progress", "info", { position: "bottom right" });
             return;
         }
-        typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
+        CodePanel.typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
             if (def !== undefined && def.length > 0) {
                 var entr = def[0];
                 var file = entr.fileName?.replace("file:///", "");

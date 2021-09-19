@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/ReportComponent", "jassijs_report/RTablerow", "jassijs/ui/Property"], function (require, exports, Jassi_1, RText_1, ReportComponent_1, RTablerow_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/ReportComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Jassi_1, RText_1, ReportComponent_1, RTablerow_1, Property_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RDatatable = void 0;
@@ -25,7 +25,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             super(properties);
             this.reporttype = "datatable";
             this.headerPanel = new RTablerow_1.RTablerow();
+            this.groupHeaderPanel = [];
             this.bodyPanel = new RTablerow_1.RTablerow();
+            this.groupFooterPanel = [];
             this.footerPanel = new RTablerow_1.RTablerow();
             this.widths = [];
             super.init($("<table style='nin-width:50px;table-layout: fixed'></table>")[0]);
@@ -110,6 +112,50 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
         }
         create(ob) {
         }
+        extensionCalled(action) {
+            if (action.componentDesignerSetDesignMode) {
+                this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
+            }
+            super.extensionCalled(action);
+        }
+        set groupCount(value) {
+            if (value < 0 || value > 5) {
+                throw new Classes_1.JassiError("groupCount must be a value between 0 and 5");
+            }
+            if (this.groupHeaderPanel.length === value)
+                return;
+            //remove unused
+            while (this.groupHeaderPanel.length > value) {
+                this.remove(this.groupHeaderPanel[this.groupHeaderPanel.length - 1], true);
+                this.groupHeaderPanel.splice(this.groupHeaderPanel.length - 1, 1);
+            }
+            while (this.groupFooterPanel.length > value) {
+                this.remove(this.groupFooterPanel[this.groupFooterPanel.length - 1], true);
+                this.groupFooterPanel.splice(this.groupFooterPanel.length - 1, 1);
+            }
+            //add new
+            while (this.groupHeaderPanel.length < value) {
+                var tr = new RTablerow_1.RTablerow();
+                var id = this.groupHeaderPanel.length + 1;
+                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "header</text></svg>" + '")');
+                this.addBefore(tr, this.bodyPanel);
+                this.groupHeaderPanel.push(tr);
+            }
+            while (this.groupFooterPanel.length < value) {
+                var tr = new RTablerow_1.RTablerow();
+                var id = this.groupFooterPanel.length + 1;
+                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "footer</text></svg>" + '")');
+                var prev = this.footerPanel;
+                if (this.groupFooterPanel.length > 0)
+                    prev = this.groupFooterPanel[this.groupFooterPanel.length - 1];
+                this.addBefore(tr, prev);
+                this.groupFooterPanel.push(tr);
+            }
+            this._componentDesigner.editDialog(this._componentDesigner.editMode);
+        }
+        get croupCount() {
+            return this.groupHeaderPanel.length;
+        }
         fromJSON(obj, target = undefined) {
             var ob = obj.datatable;
             var ret = this;
@@ -128,6 +174,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 all.forEach((obp) => { ret.headerPanel.add(obp); });
                 delete ob.header;
                 obb.destroy();
+            }
+            if (ob.groups) {
             }
             if (ob.body) {
                 let obb = new RTablerow_1.RTablerow().fromJSON(ob.body);
@@ -198,6 +246,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
         (0, Property_1.$Property)(),
         __metadata("design:type", String)
     ], RDatatable.prototype, "dataforeach", void 0);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], RDatatable.prototype, "groupCount", null);
     RDatatable = __decorate([
         (0, ReportComponent_1.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
         (0, Jassi_1.$Class)("jassijs_report.RDatatable"),

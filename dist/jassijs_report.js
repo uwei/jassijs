@@ -419,7 +419,7 @@ define("jassijs_report/RColumns", ["require", "exports", "jassijs/remote/Jassi",
     exports.RColumns = RColumns;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/ReportComponent", "jassijs_report/RTablerow", "jassijs/ui/Property"], function (require, exports, Jassi_4, RText_1, ReportComponent_2, RTablerow_1, Property_2) {
+define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/ReportComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Jassi_4, RText_1, ReportComponent_2, RTablerow_1, Property_2, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RDatatable = void 0;
@@ -437,7 +437,9 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi
             super(properties);
             this.reporttype = "datatable";
             this.headerPanel = new RTablerow_1.RTablerow();
+            this.groupHeaderPanel = [];
             this.bodyPanel = new RTablerow_1.RTablerow();
+            this.groupFooterPanel = [];
             this.footerPanel = new RTablerow_1.RTablerow();
             this.widths = [];
             super.init($("<table style='nin-width:50px;table-layout: fixed'></table>")[0]);
@@ -522,6 +524,50 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi
         }
         create(ob) {
         }
+        extensionCalled(action) {
+            if (action.componentDesignerSetDesignMode) {
+                this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
+            }
+            super.extensionCalled(action);
+        }
+        set groupCount(value) {
+            if (value < 0 || value > 5) {
+                throw new Classes_1.JassiError("groupCount must be a value between 0 and 5");
+            }
+            if (this.groupHeaderPanel.length === value)
+                return;
+            //remove unused
+            while (this.groupHeaderPanel.length > value) {
+                this.remove(this.groupHeaderPanel[this.groupHeaderPanel.length - 1], true);
+                this.groupHeaderPanel.splice(this.groupHeaderPanel.length - 1, 1);
+            }
+            while (this.groupFooterPanel.length > value) {
+                this.remove(this.groupFooterPanel[this.groupFooterPanel.length - 1], true);
+                this.groupFooterPanel.splice(this.groupFooterPanel.length - 1, 1);
+            }
+            //add new
+            while (this.groupHeaderPanel.length < value) {
+                var tr = new RTablerow_1.RTablerow();
+                var id = this.groupHeaderPanel.length + 1;
+                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "header</text></svg>" + '")');
+                this.addBefore(tr, this.bodyPanel);
+                this.groupHeaderPanel.push(tr);
+            }
+            while (this.groupFooterPanel.length < value) {
+                var tr = new RTablerow_1.RTablerow();
+                var id = this.groupFooterPanel.length + 1;
+                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "footer</text></svg>" + '")');
+                var prev = this.footerPanel;
+                if (this.groupFooterPanel.length > 0)
+                    prev = this.groupFooterPanel[this.groupFooterPanel.length - 1];
+                this.addBefore(tr, prev);
+                this.groupFooterPanel.push(tr);
+            }
+            this._componentDesigner.editDialog(this._componentDesigner.editMode);
+        }
+        get croupCount() {
+            return this.groupHeaderPanel.length;
+        }
         fromJSON(obj, target = undefined) {
             var ob = obj.datatable;
             var ret = this;
@@ -540,6 +586,8 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi
                 all.forEach((obp) => { ret.headerPanel.add(obp); });
                 delete ob.header;
                 obb.destroy();
+            }
+            if (ob.groups) {
             }
             if (ob.body) {
                 let obb = new RTablerow_1.RTablerow().fromJSON(ob.body);
@@ -578,6 +626,9 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi
             var r = {};
             var ret = super.toJSON();
             ret.datatable = r;
+            //TODO hack
+            r.groups = ret.groups;
+            delete ret.groups;
             //var _this = this;
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;
@@ -607,6 +658,11 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi
         (0, Property_2.$Property)(),
         __metadata("design:type", String)
     ], RDatatable.prototype, "dataforeach", void 0);
+    __decorate([
+        (0, Property_2.$Property)(),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], RDatatable.prototype, "groupCount", null);
     RDatatable = __decorate([
         (0, ReportComponent_2.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
         (0, Jassi_4.$Class)("jassijs_report.RDatatable"),
@@ -2247,7 +2303,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1611935803813
             },
             "jassijs_report/RDatatable.ts": {
-                "date": 1622998616843,
+                "date": 1632079050108,
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
@@ -2263,6 +2319,9 @@ define("jassijs_report/registry", ["require"], function (require) {
                     ],
                     "@members": {
                         "dataforeach": {
+                            "$Property": []
+                        },
+                        "groupCount": {
                             "$Property": []
                         }
                     }
@@ -2571,7 +2630,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1631805280836,
+                "date": 1632076623484,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -2740,14 +2799,11 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.designer.SimpleReportDesigner": {}
             },
             "jassijs_report/SimpleReportEditor.ts": {
-                "date": 1631804101649,
+                "date": 1632076291190,
                 "jassi_report.SimpleReportEditor": {}
             },
             "jassijs_report/remote/pdfmakejassi.ts": {
-                "date": 1631970301705
-            },
-            "jassijs_report/remote/pdfmakejassi - Kopie.ts": {
-                "date": 1631826746176
+                "date": 1631999034767
             }
         }
     };
@@ -2782,7 +2838,7 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
 });
 //jassijs.register("reportcomponent", "jassijs_report.Report", "report/Report", "res/report.ico");
 // return CodeEditor.constructor;
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_13, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_1, PDFReport_1, PDFViewer_2, ReportDesign_7, Tools_1) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_13, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_2, PDFReport_1, PDFViewer_2, ReportDesign_7, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
@@ -2824,7 +2880,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         }
         connectParser(parser) {
             this._propertyEditor.parser = parser;
-            var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
+            var Parser = Classes_2.classes.getClass("jassijs_editor.base.Parser");
             this._codeChanger.parser = new Parser();
         }
         editDialog(enable) {
@@ -3207,238 +3263,10 @@ define("jassijs_report/ext/pdfmake", ['pdfMake', "vfs_fonts"], function (ttt, vf
         default: pdfMake
     };
 });
-define("jassijs_report/remote/pdfmakejassi - Kopie", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.createReportDefinition = void 0;
-    function clone(obj) {
-        if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
-            return obj;
-        if (obj instanceof Date || typeof obj === "object")
-            var temp = new obj.constructor(); //or new Date(obj);
-        else
-            var temp = obj.constructor();
-        for (var key in obj) {
-            if (Object.prototype.hasOwnProperty.call(obj, key)) {
-                obj['isActiveClone'] = null;
-                temp[key] = clone(obj[key]);
-                delete obj['isActiveClone'];
-            }
-        }
-        return temp;
-    }
-    function replace(str, data, member) {
-        var ob = getVar(data, member);
-        return str.split("{{" + member + "}}").join(ob);
-    }
-    function getVar(data, member) {
-        var names = member.split(".");
-        var ob = data[names[0]];
-        for (let x = 1; x < names.length; x++) {
-            if (ob === undefined)
-                return undefined;
-            ob = ob[names[x]];
-        }
-        return ob;
-    }
-    //replace {{currentPage}} {{pageWidth}} {{pageHeight}} {{pageCount}} in header,footer, background
-    function replacePageInformation(def) {
-        if (def.background && typeof def.background !== "function") {
-            let d = JSON.stringify(def.background);
-            def.background = function (currentPage, pageSize) {
-                let sret = d.replaceAll("{{currentPage}}", currentPage);
-                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
-                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
-                return JSON.parse(sret);
-            };
-        }
-        if (def.header && typeof def.header !== "function") {
-            let d = JSON.stringify(def.header);
-            def.header = function (currentPage, pageCount) {
-                let sret = d.replaceAll("{{currentPage}}", currentPage);
-                sret = sret.replaceAll("{{pageCount}}", pageCount);
-                return JSON.parse(sret);
-            };
-        }
-        if (def.footer && typeof def.footer !== "function") {
-            let d = JSON.stringify(def.footer);
-            def.footer = function (currentPage, pageCount, pageSize) {
-                let sret = d.replaceAll("{{currentPage}}", currentPage);
-                sret = sret.replaceAll("{{pageCount}}", pageCount);
-                sret = sret.replaceAll("{{pageWidth}}", pageSize.width);
-                sret = sret.replaceAll("{{pageHeight}}", pageSize.height);
-                return JSON.parse(sret);
-            };
-        }
-    }
-    function replaceDatatable(def, data) {
-        var header = def.datatable.header;
-        var footer = def.datatable.footer;
-        var dataexpr = def.datatable.foreach;
-        var groups = def.datatable.groups;
-        var body = def.datatable.body;
-        def.table = {
-            body: []
-        };
-        if (header)
-            def.table.body.push(header);
-        def.table.body.push({
-            foreach: def.datatable.dataforeach,
-            do: body
-        });
-        delete def.datatable.dataforeach;
-        /*var variable = dataexpr.split(" in ")[0];
-        var sarr = dataexpr.split(" in ")[1];
-        var arr = getVar(data, sarr);
-        
-        for (let x = 0;x < arr.length;x++) {
-            data[variable] = arr[x];
-            var copy = JSON.parse(JSON.stringify(body));//deep copy
-            copy = replaceTemplates(copy, data);
-            def.table.body.push(copy);
-        }*/
-        if (footer)
-            def.table.body.push(footer);
-        //delete data[variable];
-        delete def.datatable.header;
-        delete def.datatable.footer;
-        delete def.datatable.foreach;
-        delete def.datatable.groups;
-        delete def.datatable.body;
-        for (var key in def.datatable) {
-            def.table[key] = def.datatable[key];
-        }
-        delete def.datatable;
-        /*header:[{ text:"Item"},{ text:"Price"}],
-                        data:"line in invoice.lines",
-                        //footer:[{ text:"Total"},{ text:""}],
-                        body:[{ text:"Text"},{ text:"price"}],
-                        groups:*/
-    }
-    function replaceTemplates(def, data, param = undefined) {
-        if (def === undefined)
-            return;
-        if (def.datatable !== undefined) {
-            replaceDatatable(def, data);
-        }
-        if (def.foreach !== undefined) {
-            //resolve foreach
-            //	{ foreach: "line in invoice.lines", do: ['{{line.text}}', '{{line.price}}', 'OK?']	
-            if ((param === null || param === void 0 ? void 0 : param.parentArray) === undefined) {
-                throw "foreach is not surounded by an Array";
-            }
-            var variable = def.foreach.split(" in ")[0];
-            var sarr = def.foreach.split(" in ")[1];
-            var arr;
-            if (sarr === undefined) {
-                debugger;
-                arr = data === null || data === void 0 ? void 0 : data.items; //we get the main array
-            }
-            else {
-                arr = getVar(data, sarr);
-            }
-            if ((param === null || param === void 0 ? void 0 : param.parentArrayPos) === undefined) {
-                param.parentArrayPos = param === null || param === void 0 ? void 0 : param.parentArray.indexOf(def);
-                param === null || param === void 0 ? void 0 : param.parentArray.splice(param.parentArrayPos, 1);
-            }
-            for (let x = 0; x < arr.length; x++) {
-                data[variable] = arr[x];
-                delete def.foreach;
-                var copy;
-                if (def.dofirst && x === 0) { //render only forfirst
-                    copy = clone(def.dofirst);
-                    copy = replaceTemplates(copy, data, param);
-                    if (copy !== undefined)
-                        param.parentArray.splice(param.parentArrayPos++, 0, copy);
-                }
-                if (def.do)
-                    copy = clone(def.do);
-                else
-                    copy = clone(def);
-                copy = replaceTemplates(copy, data, param);
-                if (copy !== undefined)
-                    param.parentArray.splice(param.parentArrayPos++, 0, copy);
-                if (def.dolast && x === arr.length - 1) { //render only forlast
-                    copy = clone(def.dolast);
-                    copy = replaceTemplates(copy, data, param);
-                    if (copy !== undefined)
-                        param.parentArray.splice(param.parentArrayPos++, 0, copy);
-                }
-            }
-            delete data[variable];
-            return undefined;
-        }
-        else if (Array.isArray(def)) {
-            for (var a = 0; a < def.length; a++) {
-                if (def[a].foreach !== undefined) {
-                    replaceTemplates(def[a], data, { parentArray: def });
-                    a--;
-                }
-                else
-                    def[a] = replaceTemplates(def[a], data, { parentArray: def });
-            }
-            return def;
-        }
-        else if (typeof def === "string") {
-            var ergebnis = def.toString().match(/\{\{(\w||\.)*\}\}/g);
-            if (ergebnis !== null) {
-                for (var e = 0; e < ergebnis.length; e++) {
-                    def = replace(def, data, ergebnis[e].substring(2, ergebnis[e].length - 2));
-                }
-            }
-            return def;
-        }
-        else { //object	
-            for (var key in def) {
-                def[key] = replaceTemplates(def[key], data);
-            }
-            delete def.editTogether; //RText
-        }
-        return def;
-    }
-    function createReportDefinition(definition, data, parameter) {
-        definition = clone(definition); //this would be modified
-        if (data !== undefined)
-            data = clone(data); //this would be modified
-        if (data === undefined && definition.data !== undefined) {
-            data = definition.data;
-        }
-        //parameter could be in data
-        if (data !== undefined && data.parameter !== undefined && parameter !== undefined) {
-            throw new Error("parameter would override data.parameter");
-        }
-        if (Array.isArray(data)) {
-            data = { items: data }; //so we can do data.parameter
-        }
-        if (parameter !== undefined) {
-            data.parameter = parameter;
-        }
-        //parameter could be in definition
-        if (data !== undefined && data.parameter !== undefined && definition.parameter !== undefined) {
-            throw new Error("definition.parameter would override data.parameter");
-        }
-        if (definition.parameter !== undefined) {
-            data.parameter = definition.parameter;
-        }
-        definition.content = replaceTemplates(definition.content, data);
-        if (definition.background)
-            definition.background = replaceTemplates(definition.background, data);
-        if (definition.header)
-            definition.header = replaceTemplates(definition.header, data);
-        if (definition.footer)
-            definition.footer = replaceTemplates(definition.footer, data);
-        //definition.content = replaceTemplates(definition.content, data);
-        replacePageInformation(definition);
-        delete definition.data;
-        return definition;
-        // delete definition.parameter;
-    }
-    exports.createReportDefinition = createReportDefinition;
-});
 define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.createReportDefinition = void 0;
+    exports.test = exports.createReportDefinition = exports.doGroup = void 0;
     function clone(obj) {
         if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
             return obj;
@@ -3528,21 +3356,98 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
             };
         }
     }
+    function groupSort(group, name, groupfields, groupid = 0) {
+        var ret = { entries: [], name: name };
+        if (groupid > 0)
+            ret["groupfield"] = groupfields[groupid - 1];
+        if (Array.isArray(group)) {
+            group.forEach((neu) => ret.entries.push(neu));
+        }
+        else {
+            for (var key in group) {
+                var neu = group[key];
+                ret.entries.push(groupSort(neu, key, groupfields, groupid + 1));
+            }
+            ret.entries = ret.entries.sort((a, b) => {
+                return a.name.localeCompare(b.name);
+            });
+        }
+        return ret;
+    }
+    function doGroup(entries, groupfields) {
+        var ret = {};
+        for (var e = 0; e < entries.length; e++) {
+            var entry = entries[e];
+            let parent = ret;
+            for (var x = 0; x < groupfields.length; x++) {
+                var groupname = entry[groupfields[x]];
+                if (x < groupfields.length - 1) { //undergroups does exists
+                    if (!parent[groupname])
+                        parent[groupname] = {};
+                }
+                else { //last group contaons the data
+                    if (!parent[groupname])
+                        parent[groupname] = [];
+                    parent[groupname].push(entry);
+                }
+                parent = parent[groupname];
+            }
+        }
+        //sort
+        var sorted = groupSort(ret, "main", groupfields);
+        return sorted;
+    }
+    exports.doGroup = doGroup;
     function replaceDatatable(def, data) {
         var header = def.datatable.header;
         var footer = def.datatable.footer;
-        var dataexpr = def.datatable.foreach;
+        var dataexpr = def.datatable.dataforeach;
         var groups = def.datatable.groups;
         var body = def.datatable.body;
+        var groupexpr = [];
         def.table = {
             body: []
         };
         if (header)
             def.table.body.push(header);
-        def.table.body.push({
-            foreach: def.datatable.dataforeach,
-            do: body
-        });
+        if (groups === undefined || groups.length === 0) {
+            def.table.body.push({
+                foreach: dataexpr,
+                do: body
+            });
+        }
+        else {
+            var parent = {};
+            var toadd = {
+                foreach: "group1 in datatablegroups.entries",
+                do: parent
+            };
+            def.table.body.push(toadd);
+            for (var x = 0; x < groups.length; x++) {
+                groupexpr.push(groups[x].expression);
+                if (x < groups.length - 1) {
+                    parent.foreach = "group" + (x + 2).toString() + " in group" + (x + 1).toString() + ".entries";
+                }
+                else {
+                    parent.foreach = dataexpr.split(" ")[0] + " in group" + (x + 1).toString() + ".entries";
+                }
+                if (groups[x].header && groups[x].header.length > 0) {
+                    parent.dofirst = groups[x].header;
+                }
+                if (groups[x].footer && groups[x].footer.length > 0) {
+                    parent.dolast = groups[x].footer;
+                }
+                if (x < groups.length - 1) {
+                    parent.do = {};
+                    parent = parent.do;
+                }
+                else {
+                    parent.do = body;
+                }
+            }
+            var arr = getArrayFromForEach(def.datatable.dataforeach, data);
+            data.datatablegroups = doGroup(arr, groupexpr);
+        }
         delete def.datatable.dataforeach;
         /*var variable = dataexpr.split(" in ")[0];
         var sarr = dataexpr.split(" in ")[1];
@@ -3572,6 +3477,17 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
                         body:[{ text:"Text"},{ text:"price"}],
                         groups:*/
     }
+    function getArrayFromForEach(foreach, data) {
+        var sarr = foreach.split(" in ")[1];
+        var arr;
+        if (sarr === undefined) {
+            arr = data === null || data === void 0 ? void 0 : data.items; //we get the main array
+        }
+        else {
+            arr = getVar(data, sarr);
+        }
+        return arr;
+    }
     function replaceTemplates(def, data, param = undefined) {
         if (def === undefined)
             return;
@@ -3585,15 +3501,7 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
                 throw "foreach is not surounded by an Array";
             }
             var variable = def.foreach.split(" in ")[0];
-            var sarr = def.foreach.split(" in ")[1];
-            var arr;
-            if (sarr === undefined) {
-                debugger;
-                arr = data === null || data === void 0 ? void 0 : data.items; //we get the main array
-            }
-            else {
-                arr = getVar(data, sarr);
-            }
+            var arr = getArrayFromForEach(def.foreach, data);
             if ((param === null || param === void 0 ? void 0 : param.parentArrayPos) === undefined) {
                 param.parentArrayPos = param === null || param === void 0 ? void 0 : param.parentArray.indexOf(def);
                 param === null || param === void 0 ? void 0 : param.parentArray.splice(param.parentArrayPos, 1);

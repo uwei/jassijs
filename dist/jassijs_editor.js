@@ -878,7 +878,7 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
         }
     };
 });
-define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test"], function (require, exports, Jassi_4, Panel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_2, Server_2, Reloader_2, Classes_1, Component_1, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1) {
+define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test"], function (require, exports, Jassi_4, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_2, Server_2, Reloader_2, Classes_1, Component_1, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -915,6 +915,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                 this._codePanel = properties.codePanel;
             }
             else {
+                CodePanel_3.CodePanel.typescript = Typescript_2.default;
                 if (sett === "ace" || (mobil && (sett === "aceOnBrowser" || sett === undefined))) {
                     this._codePanel = new AcePanel_2.AcePanel();
                 }
@@ -1608,10 +1609,10 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
 });
 define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/base/Router"], function (require, exports, Jassi_6, Panel_3, Router_1) {
     "use strict";
-    var CodePanel_3;
+    var CodePanel_4;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodePanel = void 0;
-    let CodePanel = CodePanel_3 = class CodePanel extends Panel_3.Panel {
+    let CodePanel = CodePanel_4 = class CodePanel extends Panel_3.Panel {
         resize() {
         }
         undo() {
@@ -1631,7 +1632,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Jassi"
             return undefined;
         }
         numberToPosition(pos) {
-            return CodePanel_3.numberToPosition(this.file, pos, this.value);
+            return CodePanel_4.numberToPosition(this.file, pos, this.value);
             /*var ret = typescript.getLineAndCharacterOfPosition(this.file, pos);
             return {
                 row: ret.line,
@@ -1640,16 +1641,16 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Jassi"
         }
         static numberToPosition(file, pos, code) {
             if (code !== undefined)
-                typescript.setCode(file, code);
-            var ret = typescript.getLineAndCharacterOfPosition(file, pos);
+                CodePanel_4.typescript.setCode(file, code);
+            var ret = CodePanel_4.typescript.getLineAndCharacterOfPosition(file, pos);
             return {
                 row: ret.line,
                 column: ret.character
             };
         }
         positionToNumber(pos) {
-            typescript.setCode(this.file, this.value);
-            var ret = typescript.getPositionOfLineAndCharacter(this.file, {
+            CodePanel_4.typescript.setCode(this.file, this.value);
+            var ret = CodePanel_4.typescript.getPositionOfLineAndCharacter(this.file, {
                 line: pos.row,
                 character: pos.column
             });
@@ -1658,7 +1659,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Jassi"
         static async getAutoimport(lpos, file, code) {
             //var lpos = this.positionToNumber(this.cursorPosition);
             //@ts-ignore
-            var change = await typescript.getCodeFixesAtPosition(file, code, lpos, lpos, [2304]);
+            var change = await CodePanel_4.typescript.getCodeFixesAtPosition(file, code, lpos, lpos, [2304]);
             if (change === undefined)
                 return;
             for (let x = 0; x < change.length; x++) {
@@ -1668,7 +1669,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Jassi"
             }
             if (change.length > 0) {
                 var entr = change[0].changes[0].textChanges[0];
-                let insertPos = CodePanel_3.numberToPosition(file, entr.span.start, code);
+                let insertPos = CodePanel_4.numberToPosition(file, entr.span.start, code);
                 insertPos.row = insertPos.row - 1;
                 //Bug duplicate insert {Kunde,Kunde}
                 if (entr.newText.indexOf(",") > -1) {
@@ -1719,24 +1720,24 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Jassi"
         gotoDeclaration() {
             var pos = this.positionToNumber(this.cursorPosition);
             var test = this.numberToPosition(pos);
-            if (!typescript.isInited(this.file)) {
+            if (!CodePanel_4.typescript.isInited(this.file)) {
                 $.notify("please try later ... loading in progress", "info", { position: "bottom right" });
                 return;
             }
-            typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
+            CodePanel_4.typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
                 var _a;
                 if (def !== undefined && def.length > 0) {
                     var entr = def[0];
                     var file = (_a = entr.fileName) === null || _a === void 0 ? void 0 : _a.replace("file:///", "");
                     var p = entr.textSpan.start;
-                    var newPos = CodePanel_3.numberToPosition(file, p, undefined);
+                    var newPos = CodePanel_4.numberToPosition(file, p, undefined);
                     var line = newPos.row;
                     Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
                 }
             });
         }
     };
-    CodePanel = CodePanel_3 = __decorate([
+    CodePanel = CodePanel_4 = __decorate([
         (0, Jassi_6.$Class)("jassijs_editor.CodePanel")
     ], CodePanel);
     exports.CodePanel = CodePanel;
@@ -2674,7 +2675,7 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Jassi"]
         Jassi_10.default.debugger = new Debugger();
     require(["jassijs_editor/ChromeDebugger"]);
 });
-define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_11, Router_2, Typescript_3, CodePanel_4, Settings_2) {
+define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_11, Router_2, Typescript_3, CodePanel_5, Settings_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -2693,7 +2694,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
             });
             const oldpos = model["lastEditor"].getPosition();
             setTimeout(() => {
-                CodePanel_4.CodePanel.getAutoimport(p, file, code).then((data) => {
+                CodePanel_5.CodePanel.getAutoimport(p, file, code).then((data) => {
                     if (data !== undefined) {
                         model.pushEditOperations([], [{
                                 range: monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row + 1 }),
@@ -2763,7 +2764,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
     * wrapper for the Ace-Code editor with Typescript-Code-Completion an other features
     * @class jassijs.ui.CodePanel
     */
-    let MonacoPanel = class MonacoPanel extends CodePanel_4.CodePanel {
+    let MonacoPanel = class MonacoPanel extends CodePanel_5.CodePanel {
         constructor() {
             super();
             var _this = this;
@@ -3026,7 +3027,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1631569441047,
+                "date": 1632076449140,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3083,7 +3084,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
-                "date": 1631565429998,
+                "date": 1632076557166,
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {

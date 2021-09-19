@@ -15,6 +15,8 @@ import { RTablerow } from "jassijs_report/RTablerow";
 import { Component } from "jassijs/ui/Component";
 import { Container } from "jassijs/ui/Container";
 import { $Property } from "jassijs/ui/Property";
+import { JassiError } from "jassijs/remote/Classes";
+import { ComponentDesigner } from "jassijs_editor/ComponentDesigner";
 
 
 
@@ -27,11 +29,15 @@ import { $Property } from "jassijs/ui/Property";
 @$Class("jassijs_report.RDatatable")
 
 export class RDatatable extends ReportComponent {
+    _componentDesigner:ComponentDesigner;
     reporttype: string = "datatable";
     design: any;
     headerPanel: RTablerow = new RTablerow();
+    groupHeaderPanel: RTablerow[] = [];
     bodyPanel: RTablerow = new RTablerow();
+    groupFooterPanel: RTablerow[] = [];
     footerPanel: RTablerow = new RTablerow();
+    
     @$Property()
     dataforeach: string;
     widths: any[] = [];
@@ -132,6 +138,51 @@ export class RDatatable extends ReportComponent {
     private create(ob: any) {
 
     }
+    extensionCalled(action: ExtensionAction) {
+        if (action.componentDesignerSetDesignMode) {
+            this._componentDesigner=action.componentDesignerSetDesignMode.componentDesigner;
+        }
+        super.extensionCalled(action);
+    }
+    @$Property()
+    set groupCount(value:number){
+        if(value<0||value>5){
+            throw new JassiError("groupCount must be a value between 0 and 5");
+        }
+        if(this.groupHeaderPanel.length===value)
+            return;
+        //remove unused
+        while(this.groupHeaderPanel.length>value){
+            this.remove(this.groupHeaderPanel[this.groupHeaderPanel.length-1],true);
+            this.groupHeaderPanel.splice(this.groupHeaderPanel.length-1,1);
+        }
+        while(this.groupFooterPanel.length>value){
+            this.remove(this.groupFooterPanel[this.groupFooterPanel.length-1],true);
+            this.groupFooterPanel.splice(this.groupFooterPanel.length-1,1);
+        }
+        //add new
+        while(this.groupHeaderPanel.length<value){
+            var tr=new RTablerow();
+            var id=this.groupHeaderPanel.length+1;
+            $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group"+id+"header</text></svg>" + '")');
+            this.addBefore(tr,this.bodyPanel);
+            this.groupHeaderPanel.push(tr);
+        }
+        while(this.groupFooterPanel.length<value){
+            var tr=new RTablerow();
+            var id=this.groupFooterPanel.length+1;
+            $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group"+id+"footer</text></svg>" + '")');
+            var prev=this.footerPanel;
+            if(this.groupFooterPanel.length>0)
+                prev=this.groupFooterPanel[this.groupFooterPanel.length-1];
+            this.addBefore(tr,prev);
+            this.groupFooterPanel.push(tr);
+        }
+        this._componentDesigner.editDialog(this._componentDesigner.editMode);
+    }
+    get croupCount():number{
+        return this.groupHeaderPanel.length;
+    }
     fromJSON(obj: any, target: ReportDesign = undefined): any {
         var ob = obj.datatable;
         var ret = this;
@@ -152,7 +203,9 @@ export class RDatatable extends ReportComponent {
             delete ob.header;
             obb.destroy();
         }
+        if(ob.groups){
 
+        }
         if (ob.body) {
             let obb = new RTablerow().fromJSON(ob.body);
             let all = [];
