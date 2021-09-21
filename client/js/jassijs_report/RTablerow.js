@@ -55,6 +55,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             return (_a = this._parent) === null || _a === void 0 ? void 0 : _a.getChildWidth(component);
         }
         wrapComponent(component) {
+            var _a;
+            if (((_a = component.domWrapper) === null || _a === void 0 ? void 0 : _a.tagName) === "TD")
+                return; //allready wrapped
             var colspan = $(component.domWrapper).attr("colspan"); //save colspan
             Component_1.Component.replaceWrapper(component, document.createElement("td"));
             $(component.domWrapper).attr("colspan", colspan);
@@ -90,6 +93,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             this.callEvent("componentAdded", component, this);
             if (this._parent)
                 this._parent.addEmptyCellsIfNeeded(this);
+            if (component.designDummyFor) {
+                $(component.domWrapper).attr("colspan", "100");
+                if ($(this.dom).width() < 200) {
+                    component.width = 200 - $(this.dom).width();
+                }
+            }
         }
         /**
       * adds a component to the container before an other component

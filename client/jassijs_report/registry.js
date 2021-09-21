@@ -44,7 +44,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1611935803813
 	},
 	"jassijs_report/RDatatable.ts": {
-		"date": 1632079050108,
+		"date": 1632254565346,
 		"jassijs_report.RDatatable": {
 			"$ReportComponent": [
 				{
@@ -359,7 +359,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTablerow.ts": {
-		"date": 1622998616890,
+		"date": 1632253080481,
 		"jassijs_report.RTablerow": {
 			"$ReportComponent": [
 				{

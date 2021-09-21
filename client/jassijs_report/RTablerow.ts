@@ -13,7 +13,6 @@ import { RText } from "jassijs_report/RText";
 @$Class("jassijs_report.RTablerow")
 //@$Property({name:"horizontal",hide:true})
 export class RTablerow extends ReportComponent {
-    otherProperties: any;
     reporttype: string = "tablerow";
     /**
     * 
@@ -55,6 +54,8 @@ export class RTablerow extends ReportComponent {
         return this._parent?.getChildWidth(component);
     }
     private wrapComponent(component:Component){
+    	if(component.domWrapper?.tagName==="TD")
+    	    return;//allready wrapped
     	var colspan=	$(component.domWrapper).attr("colspan");//save colspan
     	Component.replaceWrapper(component,document.createElement("td"));
     	$(component.domWrapper).attr("colspan",colspan);
@@ -90,6 +91,12 @@ export class RTablerow extends ReportComponent {
         this.callEvent("componentAdded", component, this);
         if (this._parent)
             this._parent.addEmptyCellsIfNeeded(this);
+        if(component.designDummyFor){
+        	$(component.domWrapper).attr("colspan","100");
+        	if($(this.dom).width()<200){
+        		component.width=200-$(this.dom).width();
+        	}
+        }
     }
     /**
   * adds a component to the container before an other component

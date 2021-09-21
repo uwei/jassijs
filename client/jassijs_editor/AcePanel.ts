@@ -285,6 +285,7 @@ export class AcePanel extends CodePanel{
      */
     private _installLangTools() {
         var aceLangTools = ace.require("ace/ext/language_tools");
+        var _this=this;
         if (aceLangTools.jassi === undefined) {
             aceLangTools.jassi = {
                 constructor: {
@@ -296,7 +297,7 @@ export class AcePanel extends CodePanel{
                     //     return item.jassijs.getDocTooltip(item);
                 },
                 getCompletions: function (editor, session, pos, prefix, callback) {
-                    return editor.jassijs.getCompletions(editor, session, pos, prefix, callback);
+                    return _this.getCompletions(editor, session, pos, prefix, callback);
                 }
             }
 

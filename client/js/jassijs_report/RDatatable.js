@@ -15,12 +15,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
     //@$Property({name:"horizontal",hide:true})
     let RDatatable = class RDatatable extends ReportComponent_1.ReportComponent {
         /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
+    *
+    * @param {object} properties - properties to init
+    * @param {string} [properties.id] -  connect to existing id (not reqired)
+    * @param {boolean} [properties.useSpan] -  use span not div
+    *
+    */
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "datatable";
@@ -28,6 +28,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             this.groupHeaderPanel = [];
             this.bodyPanel = new RTablerow_1.RTablerow();
             this.groupFooterPanel = [];
+            this.groupExpression = [];
             this.footerPanel = new RTablerow_1.RTablerow();
             this.widths = [];
             super.init($("<table style='nin-width:50px;table-layout: fixed'></table>")[0]);
@@ -119,6 +120,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             super.extensionCalled(action);
         }
         set groupCount(value) {
+            var _a;
             if (value < 0 || value > 5) {
                 throw new Classes_1.JassiError("groupCount must be a value between 0 and 5");
             }
@@ -133,27 +135,33 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 this.remove(this.groupFooterPanel[this.groupFooterPanel.length - 1], true);
                 this.groupFooterPanel.splice(this.groupFooterPanel.length - 1, 1);
             }
+            while (this.groupExpression.length > value) {
+                this.groupExpression.splice(this.groupExpression.length - 1, 1);
+            }
             //add new
             while (this.groupHeaderPanel.length < value) {
                 var tr = new RTablerow_1.RTablerow();
                 var id = this.groupHeaderPanel.length + 1;
-                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "header</text></svg>" + '")');
+                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Header</text></svg>" + '")');
                 this.addBefore(tr, this.bodyPanel);
                 this.groupHeaderPanel.push(tr);
             }
             while (this.groupFooterPanel.length < value) {
                 var tr = new RTablerow_1.RTablerow();
                 var id = this.groupFooterPanel.length + 1;
-                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "footer</text></svg>" + '")');
+                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Footer</text></svg>" + '")');
                 var prev = this.footerPanel;
                 if (this.groupFooterPanel.length > 0)
                     prev = this.groupFooterPanel[this.groupFooterPanel.length - 1];
                 this.addBefore(tr, prev);
                 this.groupFooterPanel.push(tr);
             }
-            this._componentDesigner.editDialog(this._componentDesigner.editMode);
+            while (this.groupExpression.length < value) {
+                this.groupExpression.push("");
+            }
+            (_a = this._componentDesigner) === null || _a === void 0 ? void 0 : _a.editDialog(this._componentDesigner.editMode);
         }
-        get croupCount() {
+        get groupCount() {
             return this.groupHeaderPanel.length;
         }
         fromJSON(obj, target = undefined) {
@@ -176,7 +184,26 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 obb.destroy();
             }
             if (ob.groups) {
+                this.groupCount = ob.groups.length; //create Panels
+                for (var x = 0; x < ob.groups.length; x++) {
+                    this.groupExpression[x] = ob.groups[x].expression;
+                    if (ob.groups[x].header) {
+                        let obb = new RTablerow_1.RTablerow().fromJSON(ob.groups[x].header);
+                        let all = [];
+                        obb._components.forEach((obp) => all.push(obp));
+                        all.forEach((obp) => { ret.groupHeaderPanel[x].add(obp); });
+                        obb.destroy();
+                    }
+                    if (ob.groups[x].footer) {
+                        let obb = new RTablerow_1.RTablerow().fromJSON(ob.groups[x].footer);
+                        let all = [];
+                        obb._components.forEach((obp) => all.push(obp));
+                        all.forEach((obp) => { ret.groupFooterPanel[x].add(obp); });
+                        obb.destroy();
+                    }
+                }
             }
+            delete ob.groups;
             if (ob.body) {
                 let obb = new RTablerow_1.RTablerow().fromJSON(ob.body);
                 let all = [];
@@ -229,6 +256,24 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 //remove width
                 while (r.widths.length > len) {
                     r.widths.pop();
+                }
+            }
+            if (this.groupHeaderPanel.length > 0) {
+                r.groups = [];
+                for (var x = 0; x < this.groupHeaderPanel.length; x++) {
+                    var gheader = undefined;
+                    var gfooter = undefined;
+                    if (!(this.groupHeaderPanel[x]._components.length === 0 || (this.groupHeaderPanel[x]._designMode && this.groupHeaderPanel[x]._components.length === 1))) {
+                        gheader = this.groupHeaderPanel[x].toJSON();
+                    }
+                    if (!(this.groupFooterPanel[x]._components.length === 0 || (this.groupFooterPanel[x]._designMode && this.groupFooterPanel[x]._components.length === 1))) {
+                        gfooter = this.groupFooterPanel[x].toJSON();
+                    }
+                    r.groups.push({
+                        header: gheader,
+                        expression: this.groupExpression[x],
+                        footer: gfooter
+                    });
                 }
             }
             if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {

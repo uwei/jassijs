@@ -29,32 +29,33 @@ import { ComponentDesigner } from "jassijs_editor/ComponentDesigner";
 @$Class("jassijs_report.RDatatable")
 
 export class RDatatable extends ReportComponent {
-    _componentDesigner:ComponentDesigner;
+    _componentDesigner: ComponentDesigner;
     reporttype: string = "datatable";
     design: any;
     headerPanel: RTablerow = new RTablerow();
     groupHeaderPanel: RTablerow[] = [];
     bodyPanel: RTablerow = new RTablerow();
     groupFooterPanel: RTablerow[] = [];
+    groupExpression:string[]=[];
     footerPanel: RTablerow = new RTablerow();
-    
+
     @$Property()
     dataforeach: string;
     widths: any[] = [];
-  	/**
-	* 
-	* @param {object} properties - properties to init
-	* @param {string} [properties.id] -  connect to existing id (not reqired)
-	* @param {boolean} [properties.useSpan] -  use span not div
-	* 
-	*/
+    /**
+* 
+* @param {object} properties - properties to init
+* @param {string} [properties.id] -  connect to existing id (not reqired)
+* @param {boolean} [properties.useSpan] -  use span not div
+* 
+*/
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
         super.init($("<table style='nin-width:50px;table-layout: fixed'></table>")[0]);
         //	this.backgroundPanel.width="500px";
         //$(this.backgroundPanel.dom).css("min-width","200px");
         //$(this.dom).css("display", "table");
-       // $(this.dom).css("min-width", "50px");
+        // $(this.dom).css("min-width", "50px");
         $(this.footerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tablefooter</text></svg>" + '")');
         $(this.headerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tableheader</text></svg>" + '")');
         this.add(this.headerPanel);
@@ -64,19 +65,19 @@ export class RDatatable extends ReportComponent {
     protected _setDesignMode(enable) {
         //do nothing - no add button
     }
-   
-   
+
+
     /*	get design():any{
             return this.toJSON();
         };
         set design(value:any){
             ReportDesign.fromJSON(value,this);
         }*/
-  
+
     private fillTableRow(row: RTablerow, count: number) {
         if (!row._designMode || count - row._components.length !== 1)
             return;
-        for (var x = row._components.length;x < count;x++) {
+        for (var x = row._components.length; x < count; x++) {
             var rr = new RText();
             row.addBefore(rr, row._components[row._components.length - 1]);//after addbutton
         }
@@ -96,8 +97,8 @@ export class RDatatable extends ReportComponent {
     setChildWidth(component: Component, width: any) {
         var max = 0;
         var found = -1;
-        for (var x = 0;x < this._components.length;x++) {
-            for (var i = 0;i < (<Container>this._components[x])._components.length;i++) {
+        for (var x = 0; x < this._components.length; x++) {
+            for (var i = 0; i < (<Container>this._components[x])._components.length; i++) {
                 if (i > max)
                     max = i;
                 var row = (<Container>this._components[x])._components[i];
@@ -105,12 +106,12 @@ export class RDatatable extends ReportComponent {
                     found = i;
             }
         }
-        for (var t = this.widths.length;t < max;t++) {
+        for (var t = this.widths.length; t < max; t++) {
             this.widths.push("auto");
         }
         if (found !== -1) {
             this.widths[found] = width;
-            var test=this.headerPanel._components[found].domWrapper;
+            var test = this.headerPanel._components[found].domWrapper;
             $((<Container>this._components[0])._components[found].domWrapper).attr("width", width);
         }
         //this._parent.setChildWidth(component,value);
@@ -121,9 +122,9 @@ export class RDatatable extends ReportComponent {
      **/
     getChildWidth(component: Component): any {
         var found = -1;
-        for (var x = 0;x < this._components.length;x++) {
+        for (var x = 0; x < this._components.length; x++) {
             if ((<Container>this._components[x])._components) {
-                for (var i = 0;i < (<Container>this._components[x])._components.length;i++) {
+                for (var i = 0; i < (<Container>this._components[x])._components.length; i++) {
                     var row = (<Container>this._components[x])._components[i];
                     if (row === component)
                         found = i;
@@ -140,47 +141,54 @@ export class RDatatable extends ReportComponent {
     }
     extensionCalled(action: ExtensionAction) {
         if (action.componentDesignerSetDesignMode) {
-            this._componentDesigner=action.componentDesignerSetDesignMode.componentDesigner;
+            this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
         }
         super.extensionCalled(action);
     }
     @$Property()
-    set groupCount(value:number){
-        if(value<0||value>5){
+    set groupCount(value: number) {
+        if (value < 0 || value > 5) {
             throw new JassiError("groupCount must be a value between 0 and 5");
         }
-        if(this.groupHeaderPanel.length===value)
+        if (this.groupHeaderPanel.length === value)
             return;
         //remove unused
-        while(this.groupHeaderPanel.length>value){
-            this.remove(this.groupHeaderPanel[this.groupHeaderPanel.length-1],true);
-            this.groupHeaderPanel.splice(this.groupHeaderPanel.length-1,1);
+        while (this.groupHeaderPanel.length > value) {
+            this.remove(this.groupHeaderPanel[this.groupHeaderPanel.length - 1], true);
+            this.groupHeaderPanel.splice(this.groupHeaderPanel.length - 1, 1);
+            
         }
-        while(this.groupFooterPanel.length>value){
-            this.remove(this.groupFooterPanel[this.groupFooterPanel.length-1],true);
-            this.groupFooterPanel.splice(this.groupFooterPanel.length-1,1);
+        while (this.groupFooterPanel.length > value) {
+            this.remove(this.groupFooterPanel[this.groupFooterPanel.length - 1], true);
+            this.groupFooterPanel.splice(this.groupFooterPanel.length - 1, 1);
+        }
+        while (this.groupExpression.length > value) {
+             this.groupExpression.splice(this.groupExpression.length - 1, 1);
         }
         //add new
-        while(this.groupHeaderPanel.length<value){
-            var tr=new RTablerow();
-            var id=this.groupHeaderPanel.length+1;
-            $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group"+id+"header</text></svg>" + '")');
-            this.addBefore(tr,this.bodyPanel);
+        while (this.groupHeaderPanel.length < value) {
+            var tr = new RTablerow();
+            var id = this.groupHeaderPanel.length + 1;
+            $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Header</text></svg>" + '")');
+            this.addBefore(tr, this.bodyPanel);
             this.groupHeaderPanel.push(tr);
         }
-        while(this.groupFooterPanel.length<value){
-            var tr=new RTablerow();
-            var id=this.groupFooterPanel.length+1;
-            $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group"+id+"footer</text></svg>" + '")');
-            var prev=this.footerPanel;
-            if(this.groupFooterPanel.length>0)
-                prev=this.groupFooterPanel[this.groupFooterPanel.length-1];
-            this.addBefore(tr,prev);
+        while (this.groupFooterPanel.length < value) {
+            var tr = new RTablerow();
+            var id = this.groupFooterPanel.length + 1;
+            $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Footer</text></svg>" + '")');
+            var prev = this.footerPanel;
+            if (this.groupFooterPanel.length > 0)
+                prev = this.groupFooterPanel[this.groupFooterPanel.length - 1];
+            this.addBefore(tr, prev);
             this.groupFooterPanel.push(tr);
         }
-        this._componentDesigner.editDialog(this._componentDesigner.editMode);
+        while (this.groupExpression.length < value) {
+            this.groupExpression.push("");
+        }
+        this._componentDesigner?.editDialog(this._componentDesigner.editMode);
     }
-    get croupCount():number{
+    get groupCount(): number {
         return this.groupHeaderPanel.length;
     }
     fromJSON(obj: any, target: ReportDesign = undefined): any {
@@ -203,9 +211,28 @@ export class RDatatable extends ReportComponent {
             delete ob.header;
             obb.destroy();
         }
-        if(ob.groups){
+        if (ob.groups) {
+            this.groupCount = ob.groups.length;//create Panels
 
+            for (var x = 0; x < ob.groups.length; x++) {
+                this.groupExpression[x]=ob.groups[x].expression;
+                if (ob.groups[x].header) {
+                    let obb = new RTablerow().fromJSON(ob.groups[x].header);
+                    let all = [];
+                    obb._components.forEach((obp) => all.push(obp));
+                    all.forEach((obp) => { ret.groupHeaderPanel[x].add(obp) });
+                    obb.destroy();
+                }
+                 if (ob.groups[x].footer) {
+                    let obb = new RTablerow().fromJSON(ob.groups[x].footer);
+                    let all = [];
+                    obb._components.forEach((obp) => all.push(obp));
+                    all.forEach((obp) => { ret.groupFooterPanel[x].add(obp) });
+                    obb.destroy();
+                }
+            }
         }
+        delete ob.groups;
         if (ob.body) {
             let obb = new RTablerow().fromJSON(ob.body);
             let all = [];
@@ -227,31 +254,31 @@ export class RDatatable extends ReportComponent {
             delete ob.widths;
 
         }
-        var tr=(<RTablerow> this._components[0]);
-        for (var x = 0;x < tr._components.length;x++) {
-            
+        var tr = (<RTablerow>this._components[0]);
+        for (var x = 0; x < tr._components.length; x++) {
+
             $(tr._components[x].domWrapper).attr("width", this.widths[x]);
         }
-    
+
         ret.dataforeach = ob.dataforeach;
         delete ob.dataforeach;
         delete ob.datatable;
         super.fromJSON(ob);
-        for(var x=0;x<ret._components.length;x++){
-        	(<RTablerow>ret._components[x]).correctHideAfterSpan();
-        
+        for (var x = 0; x < ret._components.length; x++) {
+            (<RTablerow>ret._components[x]).correctHideAfterSpan();
+
         }
         return ret;
     }
-    
-      toJSON(): any {
+
+    toJSON(): any {
         var r: any = {
 
         };
-         var ret:any = super.toJSON();
-        ret.datatable= r;
+        var ret: any = super.toJSON();
+        ret.datatable = r;
         //TODO hack
-        r.groups=ret.groups;
+        r.groups = ret.groups;
         delete ret.groups;
         //var _this = this;
         if (this.widths && this.widths.length > 0) {
@@ -259,7 +286,7 @@ export class RDatatable extends ReportComponent {
             var len = this.headerPanel._components.length;
             if (this.headerPanel._designMode)
                 len--;
-            for (var t = r.widths.length;t < len;t++) {
+            for (var t = r.widths.length; t < len; t++) {
                 r.widths.push("auto");
             }
             //remove width
@@ -267,7 +294,24 @@ export class RDatatable extends ReportComponent {
                 r.widths.pop();
             }
         }
-
+        if(this.groupHeaderPanel.length>0){
+            r.groups=[];
+            for(var x=0;x<this.groupHeaderPanel.length;x++){
+                var gheader=undefined;
+                var gfooter=undefined;
+                if (!(this.groupHeaderPanel[x]._components.length === 0 || (this.groupHeaderPanel[x]._designMode && this.groupHeaderPanel[x]._components.length === 1))) {
+                    gheader = this.groupHeaderPanel[x].toJSON();
+                }
+                  if (!(this.groupFooterPanel[x]._components.length === 0 || (this.groupFooterPanel[x]._designMode && this.groupFooterPanel[x]._components.length === 1))) {
+                    gfooter = this.groupFooterPanel[x].toJSON();
+                }
+                r.groups.push({
+                    header:gheader,
+                    expression:this.groupExpression[x],
+                    footer:gfooter
+                });
+            }
+        }
         if (!(this.headerPanel._components.length === 0 || (this.headerPanel._designMode && this.headerPanel._components.length === 1))) {
             r.header = this.headerPanel.toJSON();
         }
@@ -276,10 +320,10 @@ export class RDatatable extends ReportComponent {
         }
         r.dataforeach = this.dataforeach;
         r.body = this.bodyPanel.toJSON();
-	
+
         return ret;
     }
-   
+
 }
 
 

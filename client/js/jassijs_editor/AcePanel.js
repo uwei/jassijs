@@ -265,6 +265,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
          */
         _installLangTools() {
             var aceLangTools = acelib_1.default.require("ace/ext/language_tools");
+            var _this = this;
             if (aceLangTools.jassi === undefined) {
                 aceLangTools.jassi = {
                     constructor: {},
@@ -274,7 +275,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
                         //     return item.jassijs.getDocTooltip(item);
                     },
                     getCompletions: function (editor, session, pos, prefix, callback) {
-                        return editor.jassijs.getCompletions(editor, session, pos, prefix, callback);
+                        return _this.getCompletions(editor, session, pos, prefix, callback);
                     }
                 };
             }

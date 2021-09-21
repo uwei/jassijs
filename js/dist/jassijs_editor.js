@@ -270,6 +270,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
          */
         _installLangTools() {
             var aceLangTools = acelib_1.default.require("ace/ext/language_tools");
+            var _this = this;
             if (aceLangTools.jassi === undefined) {
                 aceLangTools.jassi = {
                     constructor: {},
@@ -279,7 +280,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
                         //     return item.jassijs.getDocTooltip(item);
                     },
                     getCompletions: function (editor, session, pos, prefix, callback) {
-                        return editor.jassijs.getCompletions(editor, session, pos, prefix, callback);
+                        return _this.getCompletions(editor, session, pos, prefix, callback);
                     }
                 };
             }
@@ -3024,7 +3025,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1631453602891,
+                "date": 1632251059247,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {

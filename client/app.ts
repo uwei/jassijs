@@ -33,7 +33,7 @@ async function test() {
         windows._desktop.add(am);
     });
     windows._desktop.add(am);
-
+	
     
  /*   var bts = new Button();
     bts.text = "Spy";
