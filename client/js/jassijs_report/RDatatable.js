@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/ReportComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Jassi_1, RText_1, ReportComponent_1, RTablerow_1, Property_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/ReportComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs_report/RGroupTablerow"], function (require, exports, Jassi_1, RText_1, ReportComponent_1, RTablerow_1, Property_1, Classes_1, RGroupTablerow_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RDatatable = void 0;
@@ -141,14 +141,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             }
             //add new
             while (this.groupHeaderPanel.length < value) {
-                var tr = new RTablerow_1.RTablerow();
+                let tr = new RGroupTablerow_1.RGroupTablerow();
+                tr.parent = this;
                 var id = this.groupHeaderPanel.length + 1;
                 $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Header</text></svg>" + '")');
                 this.addBefore(tr, this.bodyPanel);
                 this.groupHeaderPanel.push(tr);
             }
             while (this.groupFooterPanel.length < value) {
-                var tr = new RTablerow_1.RTablerow();
+                let tr = new RGroupTablerow_1.RGroupTablerow();
+                tr.parent = this;
                 var id = this.groupFooterPanel.length + 1;
                 $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Footer</text></svg>" + '")');
                 var prev = this.footerPanel;
@@ -189,14 +191,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 for (var x = 0; x < ob.groups.length; x++) {
                     this.groupExpression[x] = ob.groups[x].expression;
                     if (ob.groups[x].header) {
-                        let obb = new RTablerow_1.RTablerow().fromJSON(ob.groups[x].header);
+                        let obb = new RGroupTablerow_1.RGroupTablerow().fromJSON(ob.groups[x].header);
+                        obb.parent = ret;
                         let all = [];
                         obb._components.forEach((obp) => all.push(obp));
                         all.forEach((obp) => { ret.groupHeaderPanel[x].add(obp); });
                         obb.destroy();
                     }
                     if (ob.groups[x].footer) {
-                        let obb = new RTablerow_1.RTablerow().fromJSON(ob.groups[x].footer);
+                        let obb = new RGroupTablerow_1.RGroupTablerow().fromJSON(ob.groups[x].footer);
+                        obb.parent = ret;
                         let all = [];
                         obb._components.forEach((obp) => all.push(obp));
                         all.forEach((obp) => { ret.groupFooterPanel[x].add(obp); });

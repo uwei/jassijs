@@ -17,6 +17,7 @@ import { Container } from "jassijs/ui/Container";
 import { $Property } from "jassijs/ui/Property";
 import { JassiError } from "jassijs/remote/Classes";
 import { ComponentDesigner } from "jassijs_editor/ComponentDesigner";
+import { RGroupTablerow } from "jassijs_report/RGroupTablerow";
 
 
 
@@ -169,14 +170,16 @@ export class RDatatable extends ReportComponent {
         }
         //add new
         while (this.groupHeaderPanel.length < value) {
-            var tr = new RTablerow();
+            let tr = new RGroupTablerow();
+            tr.parent=this;
             var id = this.groupHeaderPanel.length + 1;
             $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Header</text></svg>" + '")');
             this.addBefore(tr, this.bodyPanel);
             this.groupHeaderPanel.push(tr);
         }
         while (this.groupFooterPanel.length < value) {
-            var tr = new RTablerow();
+            let tr = new RGroupTablerow();
+            tr.parent=this;
             var id = this.groupFooterPanel.length + 1;
             $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Footer</text></svg>" + '")');
             var prev = this.footerPanel;
@@ -219,14 +222,16 @@ export class RDatatable extends ReportComponent {
             for (var x = 0; x < ob.groups.length; x++) {
                 this.groupExpression[x]=ob.groups[x].expression;
                 if (ob.groups[x].header) {
-                    let obb = new RTablerow().fromJSON(ob.groups[x].header);
+                    let obb =<RGroupTablerow> new RGroupTablerow().fromJSON(ob.groups[x].header);
+                    obb.parent=ret;
                     let all = [];
                     obb._components.forEach((obp) => all.push(obp));
                     all.forEach((obp) => { ret.groupHeaderPanel[x].add(obp) });
                     obb.destroy();
                 }
                  if (ob.groups[x].footer) {
-                    let obb = new RTablerow().fromJSON(ob.groups[x].footer);
+                    let obb =<RGroupTablerow> new RGroupTablerow().fromJSON(ob.groups[x].footer);
+                    obb.parent=ret;
                     let all = [];
                     obb._components.forEach((obp) => all.push(obp));
                     all.forEach((obp) => { ret.groupFooterPanel[x].add(obp) });

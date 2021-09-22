@@ -16,6 +16,18 @@ var tinyMCEPreInit = {
 
 
 define("jassijs/ext/tinymce", ["tinymcelib"], function (require) {
+    // if (!bugtinymce) {//https://stackoverflow.com/questions/20008384/tinymce-how-do-i-prevent-br-data-mce-bogus-1-text-in-editor
+                    const tinymceBind = window["tinymce"].DOM.bind;
+                    window["tinymce"].DOM.bind = (target, name, func, scope) => {
+                        // TODO This is only necessary until https://github.com/tinymce/tinymce/issues/4355 is fixed
+                        if (name === 'mouseup' && func.toString().includes('throttle()')) {
+                            return func;
+                        } else {
+                            return tinymceBind(target, name, func, scope);
+                        }
+                    };
+
+         //       }
     return {
 
         default: tinymce

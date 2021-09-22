@@ -6,29 +6,30 @@ define(["require", "exports"], function (require, exports) {
         content: [
             {
                 datatable: {
-                    header: [
-                        "id",
-                        "customer",
-                        "city"
-                    ],
-                    dataforeach: "cust",
-                    body: [
-                        "${cust.id}",
-                        "${cust.customer}",
-                        "${cust.city}"
-                    ],
                     groups: [
                         {
-                            expression: "city",
                             header: ["${group1.name}", "", ""],
+                            expression: "city",
                             footer: ["", "", ""]
-                        }, {
+                        },
+                        {
+                            header: [
+                                "${group2.name}",
+                                "",
+                                { text: [], editTogether: true }
+                            ],
                             expression: "customer",
-                            header: ["${group2.name}", "", ""],
-                            footer: ["custfooter", "", ""]
+                            footer: [
+                                "custfooter",
+                                "",
+                                { text: [], editTogether: true }
+                            ]
                         }
-                    ]
-                },
+                    ],
+                    header: ["id", "customer", "city"],
+                    dataforeach: "cust",
+                    body: ["${cust.id}", "${cust.customer}", "${cust.city}"]
+                }
             }
         ]
     };

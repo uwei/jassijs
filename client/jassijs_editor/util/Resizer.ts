@@ -203,7 +203,7 @@ export class Resizer {
             var curevent = e;
             var x = curevent.clientX;
             var y = curevent.clientY;
-            console.log(noresizex+":"+noresizey);
+           // console.log(noresizex+":"+noresizey);
             //window.status = topLeftX +"--"+topLeftY+"--"+bottomRightX+"--"+bottomRightY+"--"+x+"--"+y+"--"+isMouseDown;
 
             //change the cursor style when it is on the border or even at a distance of 8 pixels around the border

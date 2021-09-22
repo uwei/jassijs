@@ -7,37 +7,35 @@ import { Kunde } from "de/remote/Kunde";
 import { RText } from "jassijs_report/RText";
 
 var reportdesign = {
-    content: [
-        {
-
-            datatable: {
-                header: [
-                    "id",
-                    "customer",
-                    "city"
-                ],
-                dataforeach: "cust",
-                body: [
-                    "${cust.id}",
-                    "${cust.customer}",
-                    "${cust.city}"
-                ],
-                groups: [
-                    {
-                        expression: "city",
-                        header: ["${group1.name}", "", ""],
-                        footer: ["", "", ""]
-                    }, {
-                        expression: "customer",
-                        header: ["${group2.name}", "", ""],
-                        footer: ["custfooter", "", ""]
-                    }
-                ]
-            },
-
-
-        }
-    ]
+	content: [
+		{
+			datatable: {
+				groups: [
+					{
+						header: ["${group1.name}","",""],
+						expression: "city",
+						footer: ["","",""]
+					},
+					{
+						header: [
+							"${group2.name}",
+							"",
+							{text: [],editTogether: true}
+						],
+						expression: "customer",
+						footer: [
+							"custfooter",
+							"",
+							{text: [],editTogether: true}
+						]
+					}
+				],
+				header: ["id","customer","city"],
+				dataforeach: "cust",
+				body: ["${cust.id}","${cust.customer}","${cust.city}"]
+			}
+		}
+	]
 };
 
 var sampleData = [

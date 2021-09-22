@@ -1501,7 +1501,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DesignDummy.ts": {
-                "date": 1622984379895,
+                "date": 1632323324945,
                 "jassijs.ui.DesignDummy": {}
             },
             "jassijs/ui/DockingContainer.ts": {
@@ -1618,7 +1618,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1631649614506,
+                "date": 1632346464877,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -2657,7 +2657,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Tools.ts": {
-                "date": 1631563604952,
+                "date": 1632320201966,
                 "jassijs.util.Tools": {}
             },
             "jassijs/util/Runlater.ts": {
@@ -4399,6 +4399,18 @@ var tinyMCEPreInit = {
     query: ''
 };
 define("jassijs/ext/tinymce", ["tinymcelib"], function (require) {
+    // if (!bugtinymce) {//https://stackoverflow.com/questions/20008384/tinymce-how-do-i-prevent-br-data-mce-bogus-1-text-in-editor
+    const tinymceBind = window["tinymce"].DOM.bind;
+    window["tinymce"].DOM.bind = (target, name, func, scope) => {
+        // TODO This is only necessary until https://github.com/tinymce/tinymce/issues/4355 is fixed
+        if (name === 'mouseup' && func.toString().includes('throttle()')) {
+            return func;
+        }
+        else {
+            return tinymceBind(target, name, func, scope);
+        }
+    };
+    //       }
     return {
         default: tinymce
     };
@@ -10410,6 +10422,7 @@ define("jassijs/ui/DesignDummy", ["require", "exports", "jassijs/remote/Jassi", 
             if (!designDummyFor["designDummies"])
                 designDummyFor["designDummies"] = [];
             designDummyFor["designDummies"].push(designDummy);
+            $(designDummy.dom).addClass("designerNoResizable");
             return designDummy;
             //
         }
@@ -11466,7 +11479,8 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
         constructor(id = undefined) {
             super();
             this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
-            super.init($('<div class="HTMLPanel"><div class="HTMLPanelContent"> </div></div>')[0]);
+            this.inited = false;
+            super.init($('<div class="HTMLPanel mce-content-body"><div class="HTMLPanelContent"> </div></div>')[0]);
             //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
             var el = this.dom.children[0];
@@ -11582,20 +11596,8 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             var _this = this;
             this._designMode = enable;
             if (enable) {
-                console.log("activate tiny");
+                // console.log("activate tiny");
                 requirejs(["jassijs/ext/tinymce"], function (tinymcelib) {
-                    if (!bugtinymce) { //https://stackoverflow.com/questions/20008384/tinymce-how-do-i-prevent-br-data-mce-bogus-1-text-in-editor
-                        const tinymceBind = window["tinymce"].DOM.bind;
-                        window["tinymce"].DOM.bind = (target, name, func, scope) => {
-                            // TODO This is only necessary until https://github.com/tinymce/tinymce/issues/4355 is fixed
-                            if (name === 'mouseup' && func.toString().includes('throttle()')) {
-                                return func;
-                            }
-                            else {
-                                return tinymceBind(target, name, func, scope);
-                            }
-                        };
-                    }
                     var tinymce = window["tinymce"]; //oder tinymcelib.default
                     var config = {
                         //	                valid_elements: 'strong,em,span[style],a[href],ul,ol,li',
@@ -11627,12 +11629,21 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                     };
                     if (_this["toolbar"])
                         config["toolbar"] = _this["toolbar"];
-                    var sic = _this.value;
-                    _this._tcm = tinymce.init(config); //changes the text to <br> if empty - why?
-                    if (sic === "" && _this.value !== sic)
-                        _this.value = "";
+                    /*    setTimeout(()=>{//activate tiny async
+                            var sic = _this.value;
+                            _this._tcm = tinymce.init(config);//changes the text to <br> if empty - why?
+                            if (sic === "" && _this.value !== sic)
+                                _this.value = "";
+                        },1);*/
                     //_this.value=sic;
                     $(_this.dom).doubletap(function (e) {
+                        if (!this.inited) {
+                            let sic = _this.value;
+                            _this._tcm = tinymce.init(config); //changes the text to <br> if empty - why?
+                            if (sic === "" && _this.value !== sic)
+                                _this.value = "";
+                            this.inited = true;
+                        }
                         if (_this._designMode === false)
                             return;
                         var sic = editor._draganddropper.draggableComponents;
@@ -18748,7 +18759,7 @@ define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi"], fun
        * @param space - the space before the property
        * @param nameWithQuotes - if true "key":value else key:value
        */
-        static objectToJson(value, space = undefined, nameWithQuotes = true) {
+        static objectToJson(value, space = undefined, nameWithQuotes = true, lengthForLinebreak = undefined) {
             var ovalue = value;
             if (nameWithQuotes === false)
                 ovalue = Tools_4.replaceQuotes(Tools_4.copyObject(ovalue));
@@ -18782,6 +18793,52 @@ define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi"], fun
             ret = ret.replaceAll("$§&\\r", "\t");
             ret = ret.replaceAll("$§&\\t", "\t");
             ret = ret.replaceAll('$§&\\"', '\"');
+            //stick linebreak together
+            /* {
+                  a:1,
+                  b:2
+               }
+               wird
+               { a:1, b:2}
+            }*/
+            if (lengthForLinebreak) {
+                let pos = 0;
+                var sret = "";
+                var startBlock = undefined;
+                var startBlock2 = undefined;
+                for (var x = 0; x < ret.length; x++) {
+                    if (ret[x] === "{") {
+                        startBlock = x;
+                    }
+                    if (ret[x] === "[") {
+                        startBlock2 = x;
+                    }
+                    if (ret[x] === "}" && startBlock !== undefined) {
+                        var test = ret.substring(startBlock, x);
+                        if (test.length < lengthForLinebreak) {
+                            var neu = ret.substring(0, startBlock);
+                            var rep = test.replaceAll("\r", "").replaceAll("\n", "").replaceAll("\t", "");
+                            neu += rep;
+                            neu += ret.substring(x);
+                            ret = neu;
+                            x = startBlock + rep.length + 1;
+                            startBlock = undefined;
+                        }
+                    }
+                    if (ret[x] === "]" && startBlock2 !== undefined) {
+                        var test = ret.substring(startBlock2, x);
+                        if (test.length < lengthForLinebreak) {
+                            var neu = ret.substring(0, startBlock2);
+                            var rep = test.replaceAll("\r", "").replaceAll("\n", "").replaceAll("\t", "");
+                            neu += rep;
+                            neu += ret.substring(x);
+                            ret = neu;
+                            x = startBlock2 + rep.length + 1;
+                            startBlock2 = undefined;
+                        }
+                    }
+                }
+            }
             //one to much
             //  ret=ret.substring(0,ret.length-2)+ret.substring(ret.length-1);
             return ret;
@@ -18939,10 +18996,12 @@ define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi"], fun
     exports.Tools = Tools;
     async function test() {
         var k = Tools.objectToJson({
+            g: { k: 9, p: 2 },
             a: "h\no", b: 1, c: function () {
                 var ad = "\n";
             }
-        });
+        }, undefined, false, 60);
+        console.log(k);
         var k2 = Tools.jsonToObject(k);
         var code = `{ 
 	g:function(){

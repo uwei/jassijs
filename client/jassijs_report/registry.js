@@ -41,7 +41,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RDatatable.ts": {
-		"date": 1632324246365,
+		"date": 1632336718150,
 		"jassijs_report.RDatatable": {
 			"$ReportComponent": [
 				{
@@ -356,7 +356,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTablerow.ts": {
-		"date": 1632325099555,
+		"date": 1632335999123,
 		"jassijs_report.RTablerow": {
 			"$ReportComponent": [
 				{
@@ -368,7 +368,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RText.ts": {
-		"date": 1632324231709,
+		"date": 1632338889570,
 		"jassijs_report.RText": {
 			"$ReportComponent": [
 				{
@@ -542,6 +542,23 @@ define("jassijs_report/registry",["require"], function(require) {
 	},
 	"jassijs_report/remote/pdfmakejassi.ts": {
 		"date": 1631999034767
+	},
+	"jassijs_report/RGroupTablerow.ts": {
+		"date": 1632336775099,
+		"jassijs_report.RTablerow": {
+			"$ReportComponent": [
+				{
+					"editableChildComponents": [
+						"this"
+					]
+				}
+			],
+			"@members": {
+				"expression": {
+					"$Property": []
+				}
+			}
+		}
 	}
 }
  }

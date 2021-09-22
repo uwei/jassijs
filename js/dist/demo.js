@@ -835,29 +835,30 @@ define("demo/Testdatatable3", ["require", "exports"], function (require, exports
         content: [
             {
                 datatable: {
-                    header: [
-                        "id",
-                        "customer",
-                        "city"
-                    ],
-                    dataforeach: "cust",
-                    body: [
-                        "${cust.id}",
-                        "${cust.customer}",
-                        "${cust.city}"
-                    ],
                     groups: [
                         {
-                            expression: "city",
                             header: ["${group1.name}", "", ""],
+                            expression: "city",
                             footer: ["", "", ""]
-                        }, {
+                        },
+                        {
+                            header: [
+                                "${group2.name}",
+                                "",
+                                { text: [], editTogether: true }
+                            ],
                             expression: "customer",
-                            header: ["${group2.name}", "", ""],
-                            footer: ["custfooter", "", ""]
+                            footer: [
+                                "custfooter",
+                                "",
+                                { text: [], editTogether: true }
+                            ]
                         }
-                    ]
-                },
+                    ],
+                    header: ["id", "customer", "city"],
+                    dataforeach: "cust",
+                    body: ["${cust.id}", "${cust.customer}", "${cust.city}"]
+                }
             }
         ]
     };
@@ -1274,7 +1275,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1631998782450
             },
             "demo/Testdatatable3.ts": {
-                "date": 1631998582079
+                "date": 1632339223841
             }
         }
     };

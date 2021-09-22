@@ -3123,7 +3123,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.base.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1622998616949,
+                "date": 1632339040369,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/TSSourceMap.ts": {
@@ -4274,6 +4274,8 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
             var els = $(this.parentPanel.dom).find(this.elements);
             for (var i = 0; i < els.length; i++) {
                 var element = els[i];
+                var noresizex = $(element).hasClass("designerNoResizableX");
+                var noresizey = $(element).hasClass("designerNoResizableY");
                 if ($(element).hasClass("designerNoResizable")) {
                     continue;
                 }
@@ -4286,6 +4288,7 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
                 var curevent = e;
                 var x = curevent.clientX;
                 var y = curevent.clientY;
+                // console.log(noresizex+":"+noresizey);
                 //window.status = topLeftX +"--"+topLeftY+"--"+bottomRightX+"--"+bottomRightY+"--"+x+"--"+y+"--"+isMouseDown;
                 //change the cursor style when it is on the border or even at a distance of 8 pixels around the border
                 if (x >= bottomRightX - borderSize && x <= bottomRightX + borderSize) {
@@ -4293,15 +4296,19 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
                               this.isCursorOnBorder = true;
                               this.cursorType = "se-resize";
                       }*/
-                    if (y > topLeftY - borderSize && y < bottomRightY + borderSize) {
-                        this.isCursorOnBorder = true;
-                        this.cursorType = "e-resize";
+                    if ((y > topLeftY - borderSize && y < bottomRightY + borderSize)) {
+                        if (!noresizex) {
+                            this.isCursorOnBorder = true;
+                            this.cursorType = "e-resize";
+                        }
                     }
                 }
-                else if (x > topLeftX - borderSize && x < bottomRightX + borderSize) {
-                    if (y >= bottomRightY - borderSize && y <= bottomRightY + borderSize) {
-                        this.isCursorOnBorder = true;
-                        this.cursorType = "s-resize";
+                else if ((x > topLeftX - borderSize && x < bottomRightX + borderSize)) {
+                    if (!noresizey && (y >= bottomRightY - borderSize && y <= bottomRightY + borderSize)) {
+                        if (!noresizey) {
+                            this.isCursorOnBorder = true;
+                            this.cursorType = "s-resize";
+                        }
                     }
                 }
                 if (this.cursorType === "e-resize" || this.cursorType === "s-resize") {

@@ -20,7 +20,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
         constructor(id = undefined) {
             super();
             this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
-            super.init($('<div class="HTMLPanel"><div class="HTMLPanelContent"> </div></div>')[0]);
+            this.inited = false;
+            super.init($('<div class="HTMLPanel mce-content-body"><div class="HTMLPanelContent"> </div></div>')[0]);
             //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
             var el = this.dom.children[0];
@@ -136,20 +137,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
             var _this = this;
             this._designMode = enable;
             if (enable) {
-                console.log("activate tiny");
+                // console.log("activate tiny");
                 requirejs(["jassijs/ext/tinymce"], function (tinymcelib) {
-                    if (!bugtinymce) { //https://stackoverflow.com/questions/20008384/tinymce-how-do-i-prevent-br-data-mce-bogus-1-text-in-editor
-                        const tinymceBind = window["tinymce"].DOM.bind;
-                        window["tinymce"].DOM.bind = (target, name, func, scope) => {
-                            // TODO This is only necessary until https://github.com/tinymce/tinymce/issues/4355 is fixed
-                            if (name === 'mouseup' && func.toString().includes('throttle()')) {
-                                return func;
-                            }
-                            else {
-                                return tinymceBind(target, name, func, scope);
-                            }
-                        };
-                    }
                     var tinymce = window["tinymce"]; //oder tinymcelib.default
                     var config = {
                         //	                valid_elements: 'strong,em,span[style],a[href],ul,ol,li',
@@ -181,12 +170,21 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
                     };
                     if (_this["toolbar"])
                         config["toolbar"] = _this["toolbar"];
-                    var sic = _this.value;
-                    _this._tcm = tinymce.init(config); //changes the text to <br> if empty - why?
-                    if (sic === "" && _this.value !== sic)
-                        _this.value = "";
+                    /*    setTimeout(()=>{//activate tiny async
+                            var sic = _this.value;
+                            _this._tcm = tinymce.init(config);//changes the text to <br> if empty - why?
+                            if (sic === "" && _this.value !== sic)
+                                _this.value = "";
+                        },1);*/
                     //_this.value=sic;
                     $(_this.dom).doubletap(function (e) {
+                        if (!this.inited) {
+                            let sic = _this.value;
+                            _this._tcm = tinymce.init(config); //changes the text to <br> if empty - why?
+                            if (sic === "" && _this.value !== sic)
+                                _this.value = "";
+                            this.inited = true;
+                        }
                         if (_this._designMode === false)
                             return;
                         var sic = editor._draganddropper.draggableComponents;
