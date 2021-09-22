@@ -21,8 +21,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
     }
     exports.$ReportComponent = $ReportComponent;
     let ReportComponent = class ReportComponent extends Panel_1.Panel {
-        constructor() {
-            super(...arguments);
+        constructor(properties = undefined) {
+            super(properties);
             this.reporttype = "nothing";
         }
         get colSpan() {
@@ -111,7 +111,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
     ], ReportComponent.prototype, "width", null);
     ReportComponent = __decorate([
         (0, Jassi_1.$Class)("jassijs_report.ReportComponent"),
-        (0, Property_1.$Property)({ hideBaseClassProperties: true })
+        (0, Property_1.$Property)({ hideBaseClassProperties: true }),
+        __metadata("design:paramtypes", [Object])
     ], ReportComponent);
     exports.ReportComponent = ReportComponent;
 });

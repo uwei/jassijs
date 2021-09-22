@@ -26,6 +26,7 @@ export class RTablerow extends ReportComponent {
         properties = undefined === properties ? {} : properties;
         properties.noWrapper = true;
         super.init($("<tr></tr>")[0], properties);
+        $(this.dom).addClass("designerNoResizable");
     }
 
     toJSON() {
@@ -93,10 +94,13 @@ export class RTablerow extends ReportComponent {
             this._parent.addEmptyCellsIfNeeded(this);
         if(component.designDummyFor){
         	$(component.domWrapper).attr("colspan","100");
-        	if($(this.dom).width()<200){
-        		component.width=200-$(this.dom).width();
+        	if($(this.dom).width()<140){
+        		component.width=140-$(this.dom).width();
         	}
         }
+         $(component.dom).removeClass("designerNoResizable");
+         $(component.dom).addClass("designerNoResizableY");
+         
     }
     /**
   * adds a component to the container before an other component

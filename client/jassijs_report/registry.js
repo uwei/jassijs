@@ -7,7 +7,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.Report": {}
 	},
 	"jassijs_report/designer/ReportDesigner.ts": {
-		"date": 1631970892847,
+		"date": 1632315751988,
 		"jassijs_report.designer.ReportDesigner": {}
 	},
 	"jassijs_report/modul.ts": {
@@ -22,7 +22,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.PDFViewer": {}
 	},
 	"jassijs_report/RColumns.ts": {
-		"date": 1622998616949,
+		"date": 1632324706304,
 		"jassijs_report.RColumns": {
 			"$ReportComponent": [
 				{
@@ -40,11 +40,8 @@ define("jassijs_report/registry",["require"], function(require) {
 			]
 		}
 	},
-	"jassijs_report/RComponent.ts": {
-		"date": 1611935803813
-	},
 	"jassijs_report/RDatatable.ts": {
-		"date": 1632254565346,
+		"date": 1632324246365,
 		"jassijs_report.RDatatable": {
 			"$ReportComponent": [
 				{
@@ -69,7 +66,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/ReportComponent.ts": {
-		"date": 1622998616890,
+		"date": 1632324314682,
 		"jassijs_report.ReportComponent": {
 			"$Property": [
 				{
@@ -345,7 +342,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RStack.ts": {
-		"date": 1631377716976,
+		"date": 1632324340979,
 		"jassijs_report.RStack": {
 			"$ReportComponent": [
 				{
@@ -359,7 +356,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTablerow.ts": {
-		"date": 1632253080481,
+		"date": 1632325099555,
 		"jassijs_report.RTablerow": {
 			"$ReportComponent": [
 				{
@@ -371,7 +368,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RText.ts": {
-		"date": 1632076623484,
+		"date": 1632324231709,
 		"jassijs_report.RText": {
 			"$ReportComponent": [
 				{
@@ -536,7 +533,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.RUnknown": {}
 	},
 	"jassijs_report/designer/SimpleReportDesigner.ts": {
-		"date": 1631804579466,
+		"date": 1632315583768,
 		"jassijs_report.designer.SimpleReportDesigner": {}
 	},
 	"jassijs_report/SimpleReportEditor.ts": {

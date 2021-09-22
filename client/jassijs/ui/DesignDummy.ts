@@ -11,7 +11,7 @@ export class DesignDummy extends Image {
     designDummyFor: Component;
     constructor() {
         super();
-       
+        
 	
     }
     static createIfNeeded(designDummyFor: Component, type: "beforeComponent" | "atEnd", editorselectthis: Component=undefined,oclass:any=undefined): DesignDummy {
@@ -38,6 +38,7 @@ export class DesignDummy extends Image {
         $(designDummy.domWrapper).removeClass("jcomponent");
         $(designDummy.domWrapper).addClass("jdesigndummy");
         $(designDummy.domWrapper).css("width", "16px");
+       
         if(oclass===MenuItem){
     		designDummy.icon = icon;	
         }else
@@ -49,7 +50,8 @@ export class DesignDummy extends Image {
         if(!designDummyFor["designDummies"])
         	designDummyFor["designDummies"]=[];
         designDummyFor["designDummies"].push(designDummy);
-
+        
+        $(designDummy.dom).addClass("designerNoResizable");
         return designDummy;
         //
     }

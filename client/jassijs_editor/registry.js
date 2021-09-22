@@ -106,7 +106,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.base.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {
-		"date": 1622998616949,
+		"date": 1632324494534,
 		"jassijs_editor.util.Resizer": {}
 	},
 	"jassijs_editor/util/TSSourceMap.ts": {

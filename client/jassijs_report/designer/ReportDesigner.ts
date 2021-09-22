@@ -105,7 +105,7 @@ export class ReportDesigner extends ComponentDesigner {
         let job = this.designedComponent.toJSON();
         delete job.parameter;
         delete job.data;
-        let ob = Tools.objectToJson(job, undefined, false);
+        let ob = Tools.objectToJson(job, undefined, false,80);
         if (this._codeChanger.parser.variables["reportdesign"]) {
             var s = this._codeChanger.parser.code.substring(0, this._codeChanger.parser.variables["reportdesign"].pos) +
                 " reportdesign = " + ob + this._codeChanger.parser.code.substring(this._codeChanger.parser.variables["reportdesign"].end);

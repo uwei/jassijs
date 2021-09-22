@@ -189,6 +189,8 @@ export class Resizer {
         var els = $(this.parentPanel.dom).find(this.elements);
         for (var i = 0; i < els.length; i++) {
             var element: HTMLElement = <HTMLElement>els[i];
+            var noresizex=$(element).hasClass("designerNoResizableX");
+            var noresizey=$(element).hasClass("designerNoResizableY");
             if ($(element).hasClass("designerNoResizable")) {
                 continue;
             }
@@ -201,6 +203,7 @@ export class Resizer {
             var curevent = e;
             var x = curevent.clientX;
             var y = curevent.clientY;
+            console.log(noresizex+":"+noresizey);
             //window.status = topLeftX +"--"+topLeftY+"--"+bottomRightX+"--"+bottomRightY+"--"+x+"--"+y+"--"+isMouseDown;
 
             //change the cursor style when it is on the border or even at a distance of 8 pixels around the border
@@ -209,15 +212,19 @@ export class Resizer {
                           this.isCursorOnBorder = true;
                           this.cursorType = "se-resize";
                   }*/
-                if (y > topLeftY - borderSize && y < bottomRightY + borderSize) {
-                    this.isCursorOnBorder = true;
-                    this.cursorType = "e-resize";
+                if (( y > topLeftY - borderSize && y < bottomRightY + borderSize)) {
+                    if(!noresizex){
+                        this.isCursorOnBorder = true;
+                        this.cursorType = "e-resize";
+                    }
                 }
             }
-            else if (x > topLeftX - borderSize && x < bottomRightX + borderSize) {
-                if (y >= bottomRightY - borderSize && y <= bottomRightY + borderSize) {
-                    this.isCursorOnBorder = true;
-                    this.cursorType = "s-resize";
+            else if (( x > topLeftX - borderSize && x < bottomRightX + borderSize)) {
+                if (!noresizey&&(y >= bottomRightY - borderSize && y <= bottomRightY + borderSize)) {
+                    if(!noresizey){
+                        this.isCursorOnBorder = true;
+                        this.cursorType = "s-resize";
+                    }
                 }
             }
             if (this.cursorType === "e-resize" || this.cursorType === "s-resize") {

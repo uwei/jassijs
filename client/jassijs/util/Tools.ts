@@ -70,7 +70,7 @@ export class Tools {
    * @param space - the space before the property
    * @param nameWithQuotes - if true "key":value else key:value
    */
-    static objectToJson(value, space = undefined, nameWithQuotes: boolean = true) {
+    static objectToJson(value, space = undefined, nameWithQuotes: boolean = true,lengthForLinebreak:number=undefined) {
         var ovalue = value;
         if (nameWithQuotes === false)
             ovalue = Tools.replaceQuotes(Tools.copyObject( ovalue));
@@ -104,6 +104,52 @@ export class Tools {
         ret=ret.replaceAll("$§&\\r","\t");
         ret=ret.replaceAll("$§&\\t","\t");
         ret=ret.replaceAll('$§&\\"','\"');
+        //stick linebreak together
+        /* {
+              a:1,
+              b:2
+           }
+           wird 
+           { a:1, b:2}
+        }*/
+        if(lengthForLinebreak){
+            let pos=0;
+            var sret="";
+            var startBlock=undefined;
+            var startBlock2=undefined;
+            for(var x=0;x<ret.length;x++){
+                if(ret[x]==="{"){
+                    startBlock=x;
+                }
+                if(ret[x]==="["){
+                    startBlock2=x;
+                }
+                if(ret[x]==="}"&&startBlock!==undefined){
+                    var test=ret.substring(startBlock,x);
+                    if(test.length<lengthForLinebreak){
+                        var neu=ret.substring(0,startBlock);
+                        var rep=test.replaceAll("\r","").replaceAll("\n","").replaceAll("\t","");
+                        neu+=rep;
+                        neu+=ret.substring(x);
+                        ret=neu;
+                        x=startBlock+rep.length+1;
+                        startBlock=undefined;
+                    }
+                }
+                 if(ret[x]==="]"&&startBlock2!==undefined){
+                    var test=ret.substring(startBlock2,x);
+                    if(test.length<lengthForLinebreak){
+                        var neu=ret.substring(0,startBlock2);
+                        var rep=test.replaceAll("\r","").replaceAll("\n","").replaceAll("\t","");
+                        neu+=rep;
+                        neu+=ret.substring(x);
+                        ret=neu;
+                        x=startBlock2+rep.length+1;
+                        startBlock2=undefined;
+                    }
+                }
+            }
+        }
         //one to much
         //  ret=ret.substring(0,ret.length-2)+ret.substring(ret.length-1);
         return ret;
@@ -251,11 +297,13 @@ export class Tools {
 }
 
 export async function test() {
-    var k = Tools.objectToJson({        
+    var k = Tools.objectToJson({  
+        g:{k:9,p:2}     ,
 a: "h\no", b: 1, c:function() {
             var ad = "\n";
         }    
-});
+},undefined,false,60);
+    console.log(k);
     var k2 = Tools.jsonToObject(k);
     var code = `{ 
 	g:function(){

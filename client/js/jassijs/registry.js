@@ -1414,7 +1414,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DesignDummy.ts": {
-		"date": 1622984379895,
+		"date": 1632323324945,
 		"jassijs.ui.DesignDummy": {}
 	},
 	"jassijs/ui/DockingContainer.ts": {
@@ -2570,7 +2570,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Reloader": {}
 	},
 	"jassijs/util/Tools.ts": {
-		"date": 1631563604952,
+		"date": 1632320201966,
 		"jassijs.util.Tools": {}
 	},
 	"jassijs/util/Runlater.ts": {

@@ -25,6 +25,7 @@ export class RColumns extends ReportComponent {
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
         $(this.domWrapper).addClass('BoxPanel').removeClass('Panel');
+       $(this.dom).addClass("designerNoResizable");
         $(this.dom).css("display", "table");
         $(this.dom).css("min-width", "50px");
         // this.width="300px"
@@ -41,6 +42,8 @@ export class RColumns extends ReportComponent {
         }
         super.addBefore(component, before);
         $(component.domWrapper).css("display", "table-cell");
+         $(component.dom).removeClass("designerNoResizable");
+         $(component.dom).addClass("designerNoResizableY");
 
     }
     /**
@@ -51,6 +54,8 @@ export class RColumns extends ReportComponent {
 
         super.add(component);
         $(component.domWrapper).css("display", "table-cell");
+         $(component.dom).removeClass("designerNoResizable");
+         $(component.dom).addClass("designerNoResizableY");
 
     }
     toJSON() {

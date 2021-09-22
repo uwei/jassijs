@@ -26,6 +26,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesi
             super(properties);
             this.reporttype = "stack";
             $(this.dom).css("flex-direction", "column");
+            $(this.dom).addClass("designerNoResizable");
         }
         toJSON() {
             var ret = super.toJSON();

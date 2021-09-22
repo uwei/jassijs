@@ -51,6 +51,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Image", "jassi
             if (!designDummyFor["designDummies"])
                 designDummyFor["designDummies"] = [];
             designDummyFor["designDummies"].push(designDummy);
+            $(designDummy.dom).addClass("designerNoResizable");
             return designDummy;
             //
         }

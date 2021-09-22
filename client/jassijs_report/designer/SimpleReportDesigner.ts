@@ -54,7 +54,7 @@ export class SimpleReportDesigner extends ReportDesigner {
         let job = this.designedComponent.toJSON();
         delete job.parameter;
         delete job.data;
-        let ob = Tools.objectToJson(job, undefined, false);
+        let ob = Tools.objectToJson(job, undefined, false,80);
         this._codeEditor._codePanel.value = this.codePrefix + ob + ";";
         this.propertyIsChanging = false;
 

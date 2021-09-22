@@ -24,6 +24,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
             super(properties);
             this.reporttype = "columns";
             $(this.domWrapper).addClass('BoxPanel').removeClass('Panel');
+            $(this.dom).addClass("designerNoResizable");
             $(this.dom).css("display", "table");
             $(this.dom).css("min-width", "50px");
             // this.width="300px"
@@ -39,6 +40,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
             }
             super.addBefore(component, before);
             $(component.domWrapper).css("display", "table-cell");
+            $(component.dom).removeClass("designerNoResizable");
+            $(component.dom).addClass("designerNoResizableY");
         }
         /**
       * adds a component to the container
@@ -47,6 +50,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         add(component) {
             super.add(component);
             $(component.domWrapper).css("display", "table-cell");
+            $(component.dom).removeClass("designerNoResizable");
+            $(component.dom).addClass("designerNoResizableY");
         }
         toJSON() {
             var ret = super.toJSON();

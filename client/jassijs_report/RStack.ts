@@ -24,6 +24,7 @@ export class RStack extends ReportComponent {
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
         $(this.dom).css("flex-direction", "column");
+        $(this.dom).addClass("designerNoResizable");
     }
    
     toJSON() {

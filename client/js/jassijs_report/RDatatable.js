@@ -41,6 +41,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             this.add(this.headerPanel);
             this.add(this.bodyPanel);
             this.add(this.footerPanel);
+            $(this.dom).addClass("designerNoResizable");
         }
         _setDesignMode(enable) {
             //do nothing - no add button

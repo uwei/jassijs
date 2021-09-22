@@ -24,6 +24,10 @@ export class ReportComponent extends Panel {
 	private _width: any;
     reporttype: string = "nothing";
 	otherProperties:any;
+    constructor(properties=undefined){
+        super(properties);
+         
+    }
     @$Property({
         type: "string", isVisible: (component) => {
             //only in table and column width is posible

@@ -51,7 +51,8 @@ export class RText extends ReportComponent {
         $(this.domWrapper).removeClass("jcontainer");
         $(this.__dom).css("text-overflow", "ellipsis");
         $(this.__dom).css("overflow", "hidden");
-        //$(this.__dom).addClass("designerNoResizable");
+        $(this.dom).addClass("designerNoResizable");
+       
     
         //  super.init($('<div class="RText"></div>')[0]);
         var el = this.dom.children[0];
