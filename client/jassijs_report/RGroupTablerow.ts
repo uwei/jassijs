@@ -10,7 +10,7 @@ import { $Property } from "jassijs/ui/Property";
 @$Class("jassijs_report.RTablerow")
 //@$Property({name:"horizontal",hide:true})
 export class RGroupTablerow extends RTablerow {
-    parent:RDatatable;
+   
     get expression():string{
         var pos=this.parent?.groupFooterPanel.indexOf(this);
         if(pos===-1)

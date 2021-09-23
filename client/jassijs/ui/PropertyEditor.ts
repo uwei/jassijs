@@ -96,6 +96,7 @@ export class PropertyEditor extends Panel {
         $(row.children[0]).prepend(deletebutton.dom);
         //$(component.dom).css("font-size", "11px");
         this.table.dom.children[1].appendChild(row);
+        row["propertyName"]=name;
         row["_components"] = [editor, deletebutton];
         /* $(component.dom).css({
              "width":"100%",
@@ -326,6 +327,7 @@ export class PropertyEditor extends Panel {
             if (props[x].name.indexOf("/") > -1) {
             } else {
                 _this.properties[props[x].name] = { isVisible: props[x].isVisible, name: props[x].name, component: undefined, description: props[x].description };
+               
                 var editor = propertyeditor.createFor(props[x], _this);
                 if (editor === undefined) {
                     console.log("Editor not found for " + _this.variablename);
@@ -387,10 +389,18 @@ export class PropertyEditor extends Panel {
             if (prop.editor["__destroyed"] !== true) {
                 if (prop.isVisible) {
                     var isVisible = prop.isVisible(this.value);
+                    var label=undefined;
+                    for(let r=0;r<this.table.dom.children[1].children.length;r++ ){
+                        var row=this.table.dom.children[1].children[r];
+                        if(row["propertyName"]===prop.name)
+                            label=row;
+                    }
                     if (isVisible) {
                         $(prop.editor.component.dom.parentNode).css('display', '');
+                        $(label).css('display', '');
                     } else {
                         $(prop.editor.component.dom.parentNode).css('display', 'none');
+                        $(label).css('display', 'none');
                     }
 
                 }

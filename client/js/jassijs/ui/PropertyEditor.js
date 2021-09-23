@@ -78,6 +78,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             $(row.children[0]).prepend(deletebutton.dom);
             //$(component.dom).css("font-size", "11px");
             this.table.dom.children[1].appendChild(row);
+            row["propertyName"] = name;
             row["_components"] = [editor, deletebutton];
             /* $(component.dom).css({
                  "width":"100%",
@@ -361,11 +362,19 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 if (prop.editor["__destroyed"] !== true) {
                     if (prop.isVisible) {
                         var isVisible = prop.isVisible(this.value);
+                        var label = undefined;
+                        for (let r = 0; r < this.table.dom.children[1].children.length; r++) {
+                            var row = this.table.dom.children[1].children[r];
+                            if (row["propertyName"] === prop.name)
+                                label = row;
+                        }
                         if (isVisible) {
                             $(prop.editor.component.dom.parentNode).css('display', '');
+                            $(label).css('display', '');
                         }
                         else {
                             $(prop.editor.component.dom.parentNode).css('display', 'none');
+                            $(label).css('display', 'none');
                         }
                     }
                     let deletebutton = prop.editor.component.dom.parentNode.parentNode.children[0].children[0];

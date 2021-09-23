@@ -17,6 +17,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
     let InvisibleComponent = class InvisibleComponent extends Component_1.Component {
         constructor(properties = undefined) {
             super(properties);
+            this.$isInivisibleComponent = true;
         }
     };
     InvisibleComponent = __decorate([

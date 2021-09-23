@@ -64,7 +64,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/CodeEditorInvisibleComponents.ts": {
-		"date": 1631566274025,
+		"date": 1632424975980,
 		"jassijs_editor.CodeEditorInvisibleComponents": {}
 	},
 	"jassijs_editor/CodePanel.ts": {

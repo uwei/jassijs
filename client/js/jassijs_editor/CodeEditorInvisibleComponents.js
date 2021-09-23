@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/InvisibleComponent", "jassijs/ui/Button", "jassijs/remote/Classes", "jassijs/ui/Image"], function (require, exports, Jassi_1, Panel_1, Registry_1, InvisibleComponent_1, Button_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/remote/Classes", "jassijs/ui/Image"], function (require, exports, Jassi_1, Panel_1, Registry_1, Button_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodeEditorInvisibleComponents = void 0;
@@ -29,7 +29,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             while (_this._components.length > 0) {
                 _this.remove(_this._components[0]);
             }
-            var elements = _this.codeeditor.getVariablesForType(InvisibleComponent_1.InvisibleComponent);
+            var elements = _this.codeeditor.getVariablesForType("$isInivisibleComponent"); //InvisibleComponent);
             for (var x = 0; x < elements.length; x++) {
                 var img = new Button_1.Button();
                 var name = elements[x];

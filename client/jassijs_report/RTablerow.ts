@@ -6,6 +6,7 @@ import { ReportDesign } from "jassijs_report/ReportDesign";
 import { $ReportComponent, ReportComponent } from "jassijs_report/ReportComponent";
 import { Panel } from "jassijs/ui/Panel";
 import { RText } from "jassijs_report/RText";
+import { RDatatable } from "jassijs_report/RDatatable";
 
 
 //@$UIComponent({editableChildComponents:["this"]})
@@ -14,6 +15,8 @@ import { RText } from "jassijs_report/RText";
 //@$Property({name:"horizontal",hide:true})
 export class RTablerow extends ReportComponent {
     reporttype: string = "tablerow";
+    parent:RDatatable;
+
     /**
     * 
     * @param {object} properties - properties to init

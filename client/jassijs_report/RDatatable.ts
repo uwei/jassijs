@@ -63,6 +63,9 @@ export class RDatatable extends ReportComponent {
         this.add(this.bodyPanel);
         this.add(this.footerPanel);
         $(this.dom).addClass("designerNoResizable");
+        this.headerPanel.parent=this;
+        this.footerPanel.parent=this;
+        this.bodyPanel.parent=this;
         
     }
     protected _setDesignMode(enable) {

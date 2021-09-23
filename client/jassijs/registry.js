@@ -1589,7 +1589,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/InvisibleComponent.ts": {
-		"date": 1622984379894,
+		"date": 1632424876909,
 		"jassijs.ui.InvisibleComponent": {
 			"$Property": [
 				{
@@ -1769,7 +1769,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1631569885709,
+		"date": 1632434198407,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {
@@ -2534,7 +2534,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/VariablePanel.ts": {
-		"date": 1631803915542,
+		"date": 1632424797538,
 		"jassijs.ui.VariablePanel": {}
 	},
 	"jassijs/util/Cookies.ts": {

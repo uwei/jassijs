@@ -21,8 +21,10 @@ import { $Property, Property } from "jassijs/ui/Property";
 @$Property({hideBaseClassProperties:true})
 export class InvisibleComponent extends Component
 {
+	$isInivisibleComponent:boolean;
 	constructor(properties=undefined){
     	super(properties);
+		this.$isInivisibleComponent=true;
     }
     
         

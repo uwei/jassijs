@@ -167,9 +167,18 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             }
             return ret;
         }
+        isTypeOf(value, type) {
+            if (value === undefined)
+                return false;
+            if (typeof type === "function") {
+                return value instanceof type;
+            }
+            else
+                return (value[type] !== undefined);
+        }
         /**
         * get all known instances for type
-        * @param {type} type - the type we are interested
+        * @param {type|string} type - the type we are interested or the member which is implemented
         * @returns {[string]}
         */
         getVariablesForType(type) {
@@ -180,26 +189,26 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             for (var x = 0; x < vars.length; x++) {
                 var val = vars[x].value;
                 var name = vars[x].name;
-                if (val !== undefined && (val instanceof type))
+                if (this.isTypeOf(val, type))
                     ret.push(name);
             }
             //seach in this
             vars = this._cache["this"];
             for (let y in vars) {
-                if (vars[y] instanceof type)
+                if (this.isTypeOf(vars[y], type))
                     ret.push("this." + y);
             }
             //seach in me
             vars = this._cache["me"];
             if (vars !== undefined) {
                 for (let z in vars) {
-                    if (vars[z] instanceof type)
+                    if (this.isTypeOf(vars[z], type))
                         ret.push("me." + z);
                 }
             }
             //search in cache (published by updateCache)
             for (let key in this._cache) {
-                if (!key.startsWith("this.") && this._cache[key] instanceof type && ret.indexOf(key) === -1)
+                if (!key.startsWith("this.") && this.isTypeOf(this._cache[key], type) && ret.indexOf(key) === -1)
                     ret.push(key);
             }
             return ret;

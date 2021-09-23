@@ -19,6 +19,7 @@ declare global {
 }
 @$Class("jassijs_editor.CodeEditorInvisibleComponents")
 export class CodeEditorInvisibleComponents extends Panel {
+
     codeeditor;
     constructor(codeeditor) {
         super();
@@ -39,7 +40,7 @@ export class CodeEditorInvisibleComponents extends Panel {
         while (_this._components.length > 0) {
             _this.remove(_this._components[0]);
         }
-        var elements = _this.codeeditor.getVariablesForType(InvisibleComponent);
+        var elements = _this.codeeditor.getVariablesForType("$isInivisibleComponent");//InvisibleComponent);
         for (var x = 0; x < elements.length; x++) {
             var img = new Button();
             var name = elements[x];
