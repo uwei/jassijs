@@ -7,13 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/ReportComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs_report/RGroupTablerow"], function (require, exports, Jassi_1, RText_1, ReportComponent_1, RTablerow_1, Property_1, Classes_1, RGroupTablerow_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs_report/RGroupTablerow"], function (require, exports, Jassi_1, RText_1, RComponent_1, RTablerow_1, Property_1, Classes_1, RGroupTablerow_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RDatatable = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
-    let RDatatable = class RDatatable extends ReportComponent_1.ReportComponent {
+    let RDatatable = class RDatatable extends RComponent_1.RComponent {
         /**
     *
     * @param {object} properties - properties to init
@@ -305,7 +305,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
         __metadata("design:paramtypes", [Number])
     ], RDatatable.prototype, "groupCount", null);
     RDatatable = __decorate([
-        (0, ReportComponent_1.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
+        (0, RComponent_1.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
         (0, Jassi_1.$Class)("jassijs_report.RDatatable"),
         __metadata("design:paramtypes", [Object])
     ], RDatatable);

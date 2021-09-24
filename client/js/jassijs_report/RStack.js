@@ -7,14 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesign", "jassijs_report/ReportComponent"], function (require, exports, Jassi_1, ReportDesign_1, ReportComponent_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Jassi_1, ReportDesign_1, RComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RStack = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
     let RStack = 
     //@$Property({name:"horizontal",hide:true})
-    class RStack extends ReportComponent_1.ReportComponent {
+    class RStack extends RComponent_1.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -27,6 +27,25 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesi
             this.reporttype = "stack";
             $(this.dom).css("flex-direction", "column");
             $(this.dom).addClass("designerNoResizable");
+        }
+        /**
+          * adds a component to the container before an other component
+          * @param {jassijs.ui.Component} component - the component to add
+          * @param {jassijs.ui.Component} before - the component before then component to add
+          */
+        addBefore(component, before) {
+            if (component.addToParent)
+                return component.addToParent(this);
+            super.addBefore(component, before);
+        }
+        /**
+      * adds a component to the container
+      * @param {jassijs.ui.Component} component - the component to add
+      */
+        add(component) {
+            if (component.addToParent)
+                return component.addToParent(this);
+            super.add(component);
         }
         toJSON() {
             var ret = super.toJSON();
@@ -60,7 +79,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesi
         }
     };
     RStack = __decorate([
-        (0, ReportComponent_1.$ReportComponent)({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
+        (0, RComponent_1.$ReportComponent)({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
         (0, Jassi_1.$Class)("jassijs_report.RStack")
         //@$Property({name:"horizontal",hide:true})
         ,

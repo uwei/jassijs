@@ -12,6 +12,7 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
     var reportdesign = {
+        footer: [{}, {}, {}],
         content: [
             {
                 columns: [
@@ -21,36 +22,27 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
                         "${invoice.customer.place}"
                     ],
                     [
-                        {
-                            text: "Invoice",
-                            fontSize: 18
-                        },
+                        { fontSize: 18, text: "Invoice" },
                         "\n",
                         "Date: ${parameter.date}",
-                        {
-                            text: "Number: ${invoice.number}",
-                            bold: true
-                        }
-                    ]
+                        "Number: ${invoice.number}"
+                    ],
+                    {}
                 ]
             },
             {
                 table: {
                     body: [
-                        [
-                            "Item",
-                            "Price"
-                        ],
+                        ["Item", "Price"],
                         {
                             foreach: "line in invoice.lines",
-                            do: [
-                                "${line.text}",
-                                "${line.price}"
-                            ]
+                            do: ["${line.text}", "${line.price}"]
                         }
                     ]
                 }
             },
+            {},
+            {},
             "\n",
             {
                 foreach: "sum in invoice.summary",

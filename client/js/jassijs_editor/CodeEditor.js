@@ -282,6 +282,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             this.variables.addAll(variables);
         }
         async _evalCodeOnLoad(data) {
+            this.variables.clear();
             var code = this._codePanel.value;
             var lines = code.split("\n");
             var _this = this;

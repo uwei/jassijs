@@ -9,7 +9,7 @@ import { RColumns } from "jassijs_report/RColumns";
 import { RUnknown } from "jassijs_report/RUnknown";
 import { Panel } from "jassijs/ui/Panel";
 import { Tools } from "jassijs/util/Tools";
-import { $ReportComponent, ReportComponent } from "jassijs_report/ReportComponent";
+import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { RTablerow } from "jassijs_report/RTablerow";
 import { Component } from "jassijs/ui/Component";
@@ -29,7 +29,7 @@ import { RGroupTablerow } from "jassijs_report/RGroupTablerow";
 @$ReportComponent({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] })
 @$Class("jassijs_report.RDatatable")
 
-export class RDatatable extends ReportComponent {
+export class RDatatable extends RComponent {
     _componentDesigner: ComponentDesigner;
     reporttype: string = "datatable";
     design: any;
@@ -37,7 +37,7 @@ export class RDatatable extends ReportComponent {
     groupHeaderPanel: RTablerow[] = [];
     bodyPanel: RTablerow = new RTablerow();
     groupFooterPanel: RTablerow[] = [];
-    groupExpression:string[]=[];
+    groupExpression: string[] = [];
     footerPanel: RTablerow = new RTablerow();
 
     @$Property()
@@ -63,16 +63,16 @@ export class RDatatable extends ReportComponent {
         this.add(this.bodyPanel);
         this.add(this.footerPanel);
         $(this.dom).addClass("designerNoResizable");
-        this.headerPanel.parent=this;
-        this.footerPanel.parent=this;
-        this.bodyPanel.parent=this;
-        
+        this.headerPanel.parent = this;
+        this.footerPanel.parent = this;
+        this.bodyPanel.parent = this;
+
     }
     protected _setDesignMode(enable) {
         //do nothing - no add button
     }
 
-
+   
     /*	get design():any{
             return this.toJSON();
         };
@@ -162,19 +162,19 @@ export class RDatatable extends ReportComponent {
         while (this.groupHeaderPanel.length > value) {
             this.remove(this.groupHeaderPanel[this.groupHeaderPanel.length - 1], true);
             this.groupHeaderPanel.splice(this.groupHeaderPanel.length - 1, 1);
-            
+
         }
         while (this.groupFooterPanel.length > value) {
             this.remove(this.groupFooterPanel[this.groupFooterPanel.length - 1], true);
             this.groupFooterPanel.splice(this.groupFooterPanel.length - 1, 1);
         }
         while (this.groupExpression.length > value) {
-             this.groupExpression.splice(this.groupExpression.length - 1, 1);
+            this.groupExpression.splice(this.groupExpression.length - 1, 1);
         }
         //add new
         while (this.groupHeaderPanel.length < value) {
             let tr = new RGroupTablerow();
-            tr.parent=this;
+            tr.parent = this;
             var id = this.groupHeaderPanel.length + 1;
             $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Header</text></svg>" + '")');
             this.addBefore(tr, this.bodyPanel);
@@ -182,7 +182,7 @@ export class RDatatable extends ReportComponent {
         }
         while (this.groupFooterPanel.length < value) {
             let tr = new RGroupTablerow();
-            tr.parent=this;
+            tr.parent = this;
             var id = this.groupFooterPanel.length + 1;
             $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Footer</text></svg>" + '")');
             var prev = this.footerPanel;
@@ -223,18 +223,18 @@ export class RDatatable extends ReportComponent {
             this.groupCount = ob.groups.length;//create Panels
 
             for (var x = 0; x < ob.groups.length; x++) {
-                this.groupExpression[x]=ob.groups[x].expression;
+                this.groupExpression[x] = ob.groups[x].expression;
                 if (ob.groups[x].header) {
-                    let obb =<RGroupTablerow> new RGroupTablerow().fromJSON(ob.groups[x].header);
-                    obb.parent=ret;
+                    let obb = <RGroupTablerow>new RGroupTablerow().fromJSON(ob.groups[x].header);
+                    obb.parent = ret;
                     let all = [];
                     obb._components.forEach((obp) => all.push(obp));
                     all.forEach((obp) => { ret.groupHeaderPanel[x].add(obp) });
                     obb.destroy();
                 }
-                 if (ob.groups[x].footer) {
-                    let obb =<RGroupTablerow> new RGroupTablerow().fromJSON(ob.groups[x].footer);
-                    obb.parent=ret;
+                if (ob.groups[x].footer) {
+                    let obb = <RGroupTablerow>new RGroupTablerow().fromJSON(ob.groups[x].footer);
+                    obb.parent = ret;
                     let all = [];
                     obb._components.forEach((obp) => all.push(obp));
                     all.forEach((obp) => { ret.groupFooterPanel[x].add(obp) });
@@ -304,21 +304,21 @@ export class RDatatable extends ReportComponent {
                 r.widths.pop();
             }
         }
-        if(this.groupHeaderPanel.length>0){
-            r.groups=[];
-            for(var x=0;x<this.groupHeaderPanel.length;x++){
-                var gheader=undefined;
-                var gfooter=undefined;
+        if (this.groupHeaderPanel.length > 0) {
+            r.groups = [];
+            for (var x = 0; x < this.groupHeaderPanel.length; x++) {
+                var gheader = undefined;
+                var gfooter = undefined;
                 if (!(this.groupHeaderPanel[x]._components.length === 0 || (this.groupHeaderPanel[x]._designMode && this.groupHeaderPanel[x]._components.length === 1))) {
                     gheader = this.groupHeaderPanel[x].toJSON();
                 }
-                  if (!(this.groupFooterPanel[x]._components.length === 0 || (this.groupFooterPanel[x]._designMode && this.groupFooterPanel[x]._components.length === 1))) {
+                if (!(this.groupFooterPanel[x]._components.length === 0 || (this.groupFooterPanel[x]._designMode && this.groupFooterPanel[x]._components.length === 1))) {
                     gfooter = this.groupFooterPanel[x].toJSON();
                 }
                 r.groups.push({
-                    header:gheader,
-                    expression:this.groupExpression[x],
-                    footer:gfooter
+                    header: gheader,
+                    expression: this.groupExpression[x],
+                    footer: gfooter
                 });
             }
         }

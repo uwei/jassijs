@@ -248,6 +248,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
             this.codeEditor.evalCode = async function () {
                 if (compileTask === undefined) {
                     compileTask = new Runlater_1.Runlater(() => {
+                        _this.codeEditor.variables.clear();
                         var code = _this.acePanel.value;
                         var func = new Function("", "return " + code.substring(code.indexOf("=") + 1));
                         var ob = func();

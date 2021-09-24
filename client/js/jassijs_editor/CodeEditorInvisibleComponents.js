@@ -24,7 +24,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         layout() {
             this.update();
         }
-        async update() {
+        update() {
             var _this = this;
             while (_this._components.length > 0) {
                 _this.remove(_this._components[0]);
@@ -48,11 +48,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 });
                 var cn = Classes_1.classes.getClassName(ob);
                 //search icon
-                var regdata = await Registry_1.default.getJSONData("$UIComponent");
-                regdata.forEach(function (val) {
-                    if (val.classname === cn) {
-                        img.icon = val.params[0].icon;
-                    }
+                Registry_1.default.getJSONData("$UIComponent").then((regdata) => {
+                    regdata.forEach(function (val) {
+                        if (val.classname === cn) {
+                            img.icon = val.params[0].icon;
+                        }
+                    });
                 });
                 _this.add(img);
             }

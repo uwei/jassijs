@@ -3,7 +3,7 @@ import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { $UIComponent, Component } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import { ReportDesign } from "jassijs_report/ReportDesign";
-import { $ReportComponent, ReportComponent } from "jassijs_report/ReportComponent";
+import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
 import { Panel } from "jassijs/ui/Panel";
 import { RText } from "jassijs_report/RText";
 import { RDatatable } from "jassijs_report/RDatatable";
@@ -13,7 +13,7 @@ import { RDatatable } from "jassijs_report/RDatatable";
 @$ReportComponent({ editableChildComponents: ["this"] })
 @$Class("jassijs_report.RTablerow")
 //@$Property({name:"horizontal",hide:true})
-export class RTablerow extends ReportComponent {
+export class RTablerow extends RComponent {
     reporttype: string = "tablerow";
     parent:RDatatable;
 
@@ -87,7 +87,8 @@ export class RTablerow extends ReportComponent {
     * @param {jassijs.ui.Component} component - the component to add
     */
     add(component) {
-
+        if (component.addToParent)
+            return component.addToParent(this);
 		this.wrapComponent(component);
 		
         super.add(component);
@@ -111,6 +112,8 @@ export class RTablerow extends ReportComponent {
   * @param {jassijs.ui.Component} before - the component before then component to add
   */
     addBefore(component, before) {
+        if (component.addToParent)
+            return component.addToParent(this);
     	this.wrapComponent(component)
         
         if (component["reporttype"] === "text") {

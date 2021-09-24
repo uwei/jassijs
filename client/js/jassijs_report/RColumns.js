@@ -7,12 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/ReportComponent"], function (require, exports, Jassi_1, Property_1, ReportDesign_1, ReportComponent_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Jassi_1, ReportDesign_1, RComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RColumns = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
-    let RColumns = class RColumns extends ReportComponent_1.ReportComponent {
+    let RColumns = 
+    //@$Property({ hideBaseClassProperties: true })
+    class RColumns extends RComponent_1.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -35,6 +37,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
        * @param {jassijs.ui.Component} before - the component before then component to add
        */
         addBefore(component, before) {
+            if (component.addToParent)
+                return component.addToParent(this);
             if (component["reporttype"] === "text") {
                 //(<RText>component).newlineafter=true;
             }
@@ -48,6 +52,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
       * @param {jassijs.ui.Component} component - the component to add
       */
         add(component) {
+            if (component.addToParent)
+                return component.addToParent(this);
             super.add(component);
             $(component.domWrapper).css("display", "table-cell");
             $(component.dom).removeClass("designerNoResizable");
@@ -75,9 +81,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         }
     };
     RColumns = __decorate([
-        (0, ReportComponent_1.$ReportComponent)({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] }),
-        (0, Jassi_1.$Class)("jassijs_report.RColumns"),
-        (0, Property_1.$Property)({ hideBaseClassProperties: true }),
+        (0, RComponent_1.$ReportComponent)({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] }),
+        (0, Jassi_1.$Class)("jassijs_report.RColumns")
+        //@$Property({ hideBaseClassProperties: true })
+        ,
         __metadata("design:paramtypes", [Object])
     ], RColumns);
     exports.RColumns = RColumns;

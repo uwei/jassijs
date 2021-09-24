@@ -3,7 +3,7 @@ import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { $UIComponent } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import { ReportDesign } from "jassijs_report/ReportDesign";
-import { $ReportComponent, ReportComponent } from "jassijs_report/ReportComponent";
+import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
 import { Panel } from "jassijs/ui/Panel";
 import { RText } from "jassijs_report/RText";
 
@@ -12,8 +12,8 @@ import { RText } from "jassijs_report/RText";
 @$ReportComponent({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] })
 @$Class("jassijs_report.RColumns")
 
-@$Property({ hideBaseClassProperties: true })
-export class RColumns extends ReportComponent {
+//@$Property({ hideBaseClassProperties: true })
+export class RColumns extends RComponent {
     reporttype: string = "columns";
     /**
     * 
@@ -37,6 +37,8 @@ export class RColumns extends ReportComponent {
    * @param {jassijs.ui.Component} before - the component before then component to add
    */
     addBefore(component, before) {
+        if(component.addToParent)
+            return component.addToParent(this);
         if (component["reporttype"] === "text") {
             //(<RText>component).newlineafter=true;
         }
@@ -51,7 +53,8 @@ export class RColumns extends ReportComponent {
   * @param {jassijs.ui.Component} component - the component to add
   */
     add(component) {
-
+        if(component.addToParent)
+            return component.addToParent(this);
         super.add(component);
         $(component.domWrapper).css("display", "table-cell");
          $(component.dom).removeClass("designerNoResizable");

@@ -101,11 +101,13 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [Number])
     ], ReportComponent.prototype, "colSpan", null);
     __decorate([
-        (0, Property_1.$Property)({ type: "string", isVisible: (component) => {
+        (0, Property_1.$Property)({
+            type: "string", isVisible: (component) => {
                 var _a, _b;
                 //only in table and column width is posible
                 return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns";
-            } }),
+            }
+        }),
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], ReportComponent.prototype, "width", null);

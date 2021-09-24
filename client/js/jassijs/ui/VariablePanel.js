@@ -189,20 +189,20 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             for (var x = 0; x < vars.length; x++) {
                 var val = vars[x].value;
                 var name = vars[x].name;
-                if (this.isTypeOf(val, type))
+                if (this.isTypeOf(val, type) && ret.indexOf(name) === -1)
                     ret.push(name);
             }
             //seach in this
             vars = this._cache["this"];
             for (let y in vars) {
-                if (this.isTypeOf(vars[y], type))
+                if (this.isTypeOf(vars[y], type) && ret.indexOf("this." + y) === -1)
                     ret.push("this." + y);
             }
             //seach in me
             vars = this._cache["me"];
             if (vars !== undefined) {
                 for (let z in vars) {
-                    if (this.isTypeOf(vars[z], type))
+                    if (this.isTypeOf(vars[z], type) && ret.indexOf("me." + z) === -1)
                         ret.push("me." + z);
                 }
             }

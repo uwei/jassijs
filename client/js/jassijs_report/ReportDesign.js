@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs_report/ReportComponent", "jassijs_report/RDatatable", "jassijs/ui/Property"], function (require, exports, BoxPanel_1, Jassi_1, RStack_1, RText_1, RColumns_1, RUnknown_1, ReportComponent_1, RDatatable_1, Property_1) {
+define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle"], function (require, exports, BoxPanel_1, Jassi_1, RStack_1, RText_1, RColumns_1, RUnknown_1, Panel_1, RComponent_1, RDatatable_1, Property_1, RStyle_1) {
     "use strict";
     var ReportDesign_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -82,6 +82,19 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
     PermissionProperties = __decorate([
         (0, Jassi_1.$Class)("jassijs_report.PermissionProperties")
     ], PermissionProperties);
+    let StyleContainer = class StyleContainer extends Panel_1.Panel {
+        constructor(props) {
+            super(props);
+            $(this.dom).removeClass("Panel").removeClass("jinlinecomponent");
+            $(this.domWrapper).removeClass("jcomponent").removeClass("jcontainer");
+            $(this.dom).hide();
+        }
+    };
+    StyleContainer = __decorate([
+        (0, Jassi_1.$Class)("jassijs_report.StyleContainer"),
+        (0, Property_1.$Property)({ hideBaseClassProperties: true }),
+        __metadata("design:paramtypes", [Object])
+    ], StyleContainer);
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
     let ReportDesign = ReportDesign_1 = class ReportDesign extends BoxPanel_1.BoxPanel {
@@ -94,6 +107,8 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
         */
         constructor(properties = undefined) {
             super(properties);
+            this.styleContainer = new StyleContainer(undefined);
+            this.defaultStyle = new RStyle_1.RStyle();
             this.reporttype = "report";
             this.backgroundPanel = new RStack_1.RStack();
             this.headerPanel = new RStack_1.RStack();
@@ -177,6 +192,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
             this.add(this.headerPanel);
             this.add(this.contentPanel);
             this.add(this.footerPanel);
+            this.add(this.styleContainer);
             //this.pageSize = "A4";
             //this.pageMargins = [40, 40, 40, 40];
         }
@@ -301,6 +317,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
         create(ob) {
             var _this = this;
             // this.removeAll();
+            this.defaultStyle = new RStyle_1.RStyle();
             this._pageSize = undefined;
             this._pageOrientation = undefined;
             this._pageMargins = undefined;
@@ -313,6 +330,20 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
             this.headerPanel.removeAll();
             this.contentPanel.removeAll();
             this.footerPanel.removeAll();
+            if (ob.defaultStyle) {
+                this.defaultStyle = new RStyle_1.RStyle().fromJSON(ob.defaultStyle);
+                this.defaultStyle.name = "defaultStyle";
+                $(this.dom).addClass(this.defaultStyle.styleid);
+                delete ob.defaultStyle;
+            }
+            if (ob.styles) {
+                for (var st in ob.styles) {
+                    var rs = new RStyle_1.RStyle().fromJSON(ob.styles[st]);
+                    rs.name = st;
+                    this.styleContainer.add(rs);
+                }
+                delete ob.styles;
+            }
             if (ob.background) {
                 let obb = ReportDesign_1.fromJSON(ob.background);
                 let all = [];
@@ -380,6 +411,15 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
         }
         toJSON() {
             var r = {};
+            if (JSON.stringify(this.defaultStyle) !== "{}") {
+                r.defaultStyle = this.defaultStyle.toJSON();
+            }
+            if (this.styleContainer._components.length > 0) {
+                r.styles = {};
+                for (var x = 0; x < this.styleContainer._components.length; x++) {
+                    r.styles[this.styleContainer._components[x]["name"]] = this.styleContainer._components[x].toJSON();
+                }
+            }
             //var _this = this;
             if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
                 r.background = this.backgroundPanel.toJSON();
@@ -449,8 +489,9 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
         __metadata("design:paramtypes", [String])
     ], ReportDesign.prototype, "pageOrientation", null);
     ReportDesign = ReportDesign_1 = __decorate([
-        (0, ReportComponent_1.$ReportComponent)({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
+        (0, RComponent_1.$ReportComponent)({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
         (0, Jassi_1.$Class)("jassijs_report.ReportDesign"),
+        (0, Property_1.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);
     exports.ReportDesign = ReportDesign;

@@ -112,25 +112,33 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
             //this.variables.updateCache();
             //this._componentExplorer.update();
             var ret = super.createComponent(type, component, top, left, newParent, beforeComponent);
-            this.addVariables(ret);
+            this.addVariables(ret, true);
             this._componentExplorer.update();
             this.propertyChanged();
+            this._updateInvisibleComponents();
             return ret;
         }
-        addVariables(component) {
+        addVariables(component, doupdate = false) {
             var name = component["reporttype"];
             if (this.nextComponentvariable[name] === undefined) {
                 this.nextComponentvariable[name] = 0;
             }
             this.nextComponentvariable[name]++;
-            this._codeEditor.variables.addVariable(name + this.nextComponentvariable[name], component, false);
+            var sname = component["name"];
+            if (sname === undefined) {
+                sname = name + this.nextComponentvariable[name];
+                if (Object.getOwnPropertyDescriptor(component["__proto__"], "name")) { //write back the name
+                    component["name"] = sname;
+                }
+            }
+            this._codeEditor.variables.addVariable(sname, component, false);
             this.allComponents[name + this.nextComponentvariable[name]] = component;
             if (component["_components"]) {
                 for (let x = 0; x < component["_components"].length; x++) {
                     this.addVariables(component["_components"][x]);
                 }
             }
-            if (component === this)
+            if (component === this || doupdate)
                 this._codeEditor.variables.update();
         }
         /**

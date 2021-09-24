@@ -3,7 +3,7 @@ import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { $UIComponent } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import { ReportDesign } from "jassijs_report/ReportDesign";
-import { $ReportComponent, ReportComponent } from "jassijs_report/ReportComponent";
+import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
 import { Panel } from "jassijs/ui/Panel";
 
 
@@ -12,7 +12,7 @@ import { Panel } from "jassijs/ui/Panel";
 @$Class("jassijs_report.RStack")
 //@$Property({name:"horizontal",hide:true})
 
-export class RStack extends ReportComponent {
+export class RStack extends RComponent {
     reporttype: string = "stack";
     /**
     * 
@@ -26,7 +26,25 @@ export class RStack extends ReportComponent {
         $(this.dom).css("flex-direction", "column");
         $(this.dom).addClass("designerNoResizable");
     }
-   
+    /**
+      * adds a component to the container before an other component
+      * @param {jassijs.ui.Component} component - the component to add
+      * @param {jassijs.ui.Component} before - the component before then component to add
+      */
+    addBefore(component, before) {
+        if (component.addToParent)
+            return component.addToParent(this);
+        super.addBefore(component, before);
+    }
+    /**
+  * adds a component to the container
+  * @param {jassijs.ui.Component} component - the component to add
+  */
+    add(component) {
+        if (component.addToParent)
+            return component.addToParent(this);
+        super.add(component);
+    }
     toJSON() {
     	 var ret = super.toJSON();
         ret.stack= [];

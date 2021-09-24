@@ -7,6 +7,7 @@ import { Kunde } from "de/remote/Kunde";
 import { RText } from "jassijs_report/RText";
 
 var reportdesign = {
+	footer: [{},{},{}],
 	content: [
 		{
 			columns: [
@@ -16,36 +17,27 @@ var reportdesign = {
 					"${invoice.customer.place}"
 				],
 				[
-					{
-						text: "Invoice",
-						fontSize: 18
-					},
+					{fontSize: 18,text: "Invoice"},
 					"\n",
 					"Date: ${parameter.date}",
-					{
-						text: "Number: ${invoice.number}",
-						bold: true
-					}
-				]
+					"Number: ${invoice.number}"
+				],
+				{}
 			]
 		},
 		{
 			table: {
 				body: [
-					[
-						"Item",
-						"Price"
-					],
+					["Item","Price"],
 					{
 						foreach: "line in invoice.lines",
-						do: [
-							"${line.text}",
-							"${line.price}"
-						]
+						do: ["${line.text}","${line.price}"]
 					}
 				]
 			}
 		},
+		{},
+		{},
 		"\n",
 		{
 			foreach: "sum in invoice.summary",

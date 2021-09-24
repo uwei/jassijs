@@ -1,12 +1,12 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import { $ReportComponent, ReportComponent } from "jassijs_report/ReportComponent";
+import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
 import { Panel } from "jassijs/ui/Panel";
 
 //@$ReportComponent({fullPath:"report/Text",icon:"res/textbox.ico",initialize:{value:"text"}})
 @$Class("jassijs_report.RUnknown")
-export class RUnknown extends ReportComponent{
+export class RUnknown extends RComponent{
     horizonzal: boolean;
     reporttype:string="unkown";
     /**

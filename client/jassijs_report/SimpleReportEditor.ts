@@ -258,6 +258,7 @@ export class SimpleReportEditor extends Panel {
         this.codeEditor.evalCode = async function () {
             if (compileTask === undefined) {
                 compileTask = new Runlater(() => {
+                    _this.codeEditor.variables.clear();
                     var code = _this.acePanel.value;
                     var func = new Function("", "return " + code.substring(code.indexOf("=") + 1));
                     var ob = func();

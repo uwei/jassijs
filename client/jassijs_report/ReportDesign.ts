@@ -1,20 +1,21 @@
 import { BoxPanel } from "jassijs/ui/BoxPanel";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 import { RStack } from "jassijs_report/RStack";
 import { RText } from "jassijs_report/RText";
 
-import registry from "jassijs/remote/Registry";
-import { ReportDesigner } from "jassijs_report/designer/ReportDesigner";
+
 import { RColumns } from "jassijs_report/RColumns";
 import { RUnknown } from "jassijs_report/RUnknown";
 import { Panel } from "jassijs/ui/Panel";
-import { Tools } from "jassijs/util/Tools";
-import { $ReportComponent, ReportComponent } from "jassijs_report/ReportComponent";
+
+import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
 
 import { RDatatable } from "jassijs_report/RDatatable";
-import { Component } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
-import modul from "./modul";
+
+import { RStyle } from "jassijs_report/RStyle";
+import { Container } from "jassijs/ui/Container";
+
 
 @$Class("jassijs_report.InfoProperties")
 class InfoProperties {
@@ -36,23 +37,40 @@ class PermissionProperties {
     @$Property({ chooseFrom: ["lowResolution", "highResolution"], description: 'whether printing is allowed. Specify "lowResolution" to allow degraded printing, or "highResolution" to allow printing with high resolution' })
     printing: string;
     @$Property({ description: "whether modifying the file is allowed. Specify true to allow modifying document content" })
-    modifying: boolean=true;
+    modifying: boolean = true;
     @$Property({ description: "whether copying text or graphics is allowed. Specify true to allow copying" })
-    copying: boolean=true;
+    copying: boolean = true;
     @$Property({ description: "whether annotating, form filling is allowed. Specify true to allow annotating and form filling" })
-    annotating: boolean=true;
+    annotating: boolean = true;
     @$Property({ description: "whether form filling and signing is allowed. Specify true to allow filling in form fields and signing" })
-    fillingForms: boolean=true;
+    fillingForms: boolean = true;
     @$Property({ description: "whether copying text for accessibility is allowed. Specify true to allow copying for accessibility" })
-    contentAccessibility: boolean=true;
+    contentAccessibility: boolean = true;
     @$Property({ description: "whether assembling document is allowed. Specify true to allow document assembly" })
-    documentAssembly: boolean=true;
+    documentAssembly: boolean = true;
+}
+
+
+@$Class("jassijs_report.StyleContainer")
+@$Property({ hideBaseClassProperties: true })
+class StyleContainer extends Panel{
+    constructor(props){
+        super(props);
+        $(this.dom).removeClass("Panel").removeClass("jinlinecomponent");
+        $(this.domWrapper).removeClass("jcomponent").removeClass("jcontainer");
+        
+        
+        $(this.dom).hide();
+    }
 }
 //@$UIComponent({editableChildComponents:["this"]})
 //@$Property({name:"horizontal",hide:true})
 @$ReportComponent({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] })
 @$Class("jassijs_report.ReportDesign")
+@$Property({ hideBaseClassProperties: true })
 export class ReportDesign extends BoxPanel {
+    styleContainer:StyleContainer=new StyleContainer(undefined);
+    defaultStyle:RStyle=new RStyle();
     reporttype: string = "report";
     design: any;
     otherProperties: any;
@@ -73,16 +91,16 @@ export class ReportDesign extends BoxPanel {
     info: InfoProperties;
     @$Property({ type: "json", componentType: "jassijs_report.PermissionProperties" })
     permissions: PermissionProperties;
-	/**
-	* 
-	* @param {object} properties - properties to init
-	* @param {string} [properties.id] -  connect to existing id (not reqired)
-	* @param {boolean} [properties.useSpan] -  use span not div
-	* 
-	*/
+    /**
+    * 
+    * @param {object} properties - properties to init
+    * @param {string} [properties.id] -  connect to existing id (not reqired)
+    * @param {boolean} [properties.useSpan] -  use span not div
+    * 
+    */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-          //	this.backgroundPanel.width="500px";
+        //	this.backgroundPanel.width="500px";
         //$(this.backgroundPanel.dom).css("min-width","200px");
         $(this.backgroundPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Background</text></svg>" + '")');
         $(this.footerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Footer</text></svg>" + '")');
@@ -96,12 +114,13 @@ export class ReportDesign extends BoxPanel {
         this.add(this.headerPanel);
         this.add(this.contentPanel);
         this.add(this.footerPanel);
+         this.add(this.styleContainer);
         //this.pageSize = "A4";
         //this.pageMargins = [40, 40, 40, 40];
     }
-   
-    update(design){
-        this.design=design;
+
+    update(design) {
+        this.design = design;
         ReportDesign.fromJSON(this.design, this);
     }
     @$Property({ type: "number[]", default: [40, 40, 40, 40], description: "margin of the page: left, top, right, bottom" })
@@ -145,7 +164,7 @@ export class ReportDesign extends BoxPanel {
     }
 
 
-    private static collectForEach(component: ReportComponent, allforeach: string[]): ReportDesign {
+    private static collectForEach(component: RComponent, allforeach: string[]): ReportDesign {
         if (component.foreach)
             allforeach.unshift(component.foreach);
         if (component["dataforeach"])
@@ -159,7 +178,7 @@ export class ReportDesign extends BoxPanel {
     private static getVariable(path: string, data: any) {
         var mems = path.split(".");
         var curdata = data;
-        for (var x = 0;x < mems.length;x++) {
+        for (var x = 0; x < mems.length; x++) {
             curdata = curdata[mems[x]];
             if (curdata === undefined)
                 return undefined;
@@ -179,12 +198,12 @@ export class ReportDesign extends BoxPanel {
         }
     }
     //get all possible variabelnames
-    public static getVariables(component: ReportComponent) {
+    public static getVariables(component: RComponent) {
         var allforeach: string[] = [];
         var report = ReportDesign.collectForEach(component, allforeach);
         var data = {};
         Object.assign(data, report.otherProperties.data);
-        for (var x = 0;x < allforeach.length;x++) {
+        for (var x = 0; x < allforeach.length; x++) {
             var fe = allforeach[x].split(" in ");
             if (fe.length !== 2)
                 continue;
@@ -204,12 +223,12 @@ export class ReportDesign extends BoxPanel {
             if (ret === undefined)
                 ret = new ReportDesign();
             ret.create(ob);
-        }else if (typeof ob === 'string' || ob instanceof String){
-            ret=new RText();
-            ret.value=ob;
+        } else if (typeof ob === 'string' || ob instanceof String) {
+            ret = new RText();
+            ret.value = ob;
         } else if (ob.text !== undefined) {
             ret = new RText().fromJSON(ob);
-        } else if (ob.stack !== undefined||Array.isArray(ob)) {
+        } else if (ob.stack !== undefined || Array.isArray(ob)) {
             ret = new RStack().fromJSON(ob);
         } else if (ob.columns !== undefined) {
             ret = new RColumns().fromJSON(ob);
@@ -225,20 +244,33 @@ export class ReportDesign extends BoxPanel {
     private create(ob: any) {
         var _this = this;
         // this.removeAll();
-        
- 
-    this._pageSize = undefined;
-    this._pageOrientation=undefined;
-    this._pageMargins=undefined;
-    this.compress=undefined;
-    this.userPassword=undefined;
-    this.ownerPassword=undefined;
-    this.info=undefined;
-    this.permissions=undefined;
+        this.defaultStyle=new RStyle();
+        this._pageSize = undefined;
+        this._pageOrientation = undefined;
+        this._pageMargins = undefined;
+        this.compress = undefined;
+        this.userPassword = undefined;
+        this.ownerPassword = undefined;
+        this.info = undefined;
+        this.permissions = undefined;
         this.backgroundPanel.removeAll();
         this.headerPanel.removeAll();
         this.contentPanel.removeAll();
         this.footerPanel.removeAll();
+        if(ob.defaultStyle){
+            this.defaultStyle=new RStyle().fromJSON(ob.defaultStyle);
+            this.defaultStyle.name="defaultStyle";
+            $(this.dom).addClass(this.defaultStyle.styleid);
+            delete ob.defaultStyle;
+        }
+        if(ob.styles){
+            for(var st in ob.styles){
+                var rs=new RStyle().fromJSON(ob.styles[st]);
+                rs.name=st;
+                this.styleContainer.add(rs);
+            }
+            delete ob.styles;
+        }
         if (ob.background) {
             let obb: RStack = ReportDesign.fromJSON(ob.background);
             let all = [];
@@ -313,6 +345,15 @@ export class ReportDesign extends BoxPanel {
         var r: any = {
 
         };
+        if(JSON.stringify(this.defaultStyle)!=="{}"){
+            r.defaultStyle=this.defaultStyle.toJSON();
+        }
+        if(this.styleContainer._components.length>0){
+            r.styles={};
+            for(var x=0;x<this.styleContainer._components.length;x++){
+                r.styles[this.styleContainer._components[x]["name"]]=(<RStyle>this.styleContainer._components[x]).toJSON();
+            }
+        }
         //var _this = this;
         if (!(this.backgroundPanel._components.length === 0 || (this.backgroundPanel._designMode && this.backgroundPanel._components.length === 1))) {
             r.background = this.backgroundPanel.toJSON();

@@ -13,6 +13,7 @@ import { CSSProperties } from "jassijs/ui/CSSProperties";
  * the style is appended to the head
  **/
 export class Style extends InvisibleComponent {
+    
     constructor() {//id connect to existing(not reqired)
         super();
         super.init($('<span class="InvisibleComponent"></span>')[0]);

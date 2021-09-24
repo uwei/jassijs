@@ -7,14 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs_report/ReportDesign", "jassijs_report/ReportComponent"], function (require, exports, Jassi_1, Component_1, ReportDesign_1, ReportComponent_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Jassi_1, Component_1, ReportDesign_1, RComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTablerow = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
     let RTablerow = 
     //@$Property({name:"horizontal",hide:true})
-    class RTablerow extends ReportComponent_1.ReportComponent {
+    class RTablerow extends RComponent_1.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -88,6 +88,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         * @param {jassijs.ui.Component} component - the component to add
         */
         add(component) {
+            if (component.addToParent)
+                return component.addToParent(this);
             this.wrapComponent(component);
             super.add(component);
             // $(component.domWrapper).css("display", "table-cell");
@@ -109,6 +111,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
       * @param {jassijs.ui.Component} before - the component before then component to add
       */
         addBefore(component, before) {
+            if (component.addToParent)
+                return component.addToParent(this);
             this.wrapComponent(component);
             if (component["reporttype"] === "text") {
                 //(<RText>component).newlineafter = true;
@@ -128,7 +132,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         }
     };
     RTablerow = __decorate([
-        (0, ReportComponent_1.$ReportComponent)({ editableChildComponents: ["this"] }),
+        (0, RComponent_1.$ReportComponent)({ editableChildComponents: ["this"] }),
         (0, Jassi_1.$Class)("jassijs_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
         ,

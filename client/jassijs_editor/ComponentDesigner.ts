@@ -210,11 +210,7 @@ export class ComponentDesigner extends Panel{
         
        _updateInvisibleComponents(){
             var _this=this;
-            this._invisibleComponents.update().then(function(){
-               /* var h=_this._invisibleComponents.dom.offsetHeight;
-                h=h+6+31;
-                _this._designPlaceholder.height="calc(100% - "+h+"px)";*/
-            });
+            this._invisibleComponents.update();
          }
        
          _initComponentExplorer(){

@@ -339,7 +339,7 @@ export class CodeEditor extends Panel {
         this.variables.addAll(variables);
     }
     private async _evalCodeOnLoad(data) {
-
+        this.variables.clear();
         var code = this._codePanel.value;
         var lines = code.split("\n");
         var _this = this;

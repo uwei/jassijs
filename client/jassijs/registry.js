@@ -1946,7 +1946,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.PropertyEditors.Editor": {}
 	},
 	"jassijs/ui/PropertyEditors/FontEditor.ts": {
-		"date": 1627596209522,
+		"date": 1632505074825,
 		"jassijs.ui.PropertyEditors.FontEditor": {
 			"$PropertyEditor": [
 				[
@@ -2208,7 +2208,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Style.ts": {
-		"date": 1622985638953,
+		"date": 1632513242229,
 		"jassijs.ui.Style": {
 			"$UIComponent": [
 				{
@@ -2534,7 +2534,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/VariablePanel.ts": {
-		"date": 1632424797538,
+		"date": 1632522088717,
 		"jassijs.ui.VariablePanel": {}
 	},
 	"jassijs/util/Cookies.ts": {

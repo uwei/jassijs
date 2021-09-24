@@ -1,19 +1,19 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import {Panel} from "jassijs/ui/Panel";
-import {HTMLPanel} from "jassijs/ui/HTMLPanel";
+import { Panel } from "jassijs/ui/Panel";
+import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import "jassijs/ui/Image";
 import registry from "jassijs/remote/Registry";
-import {InvisibleComponent} from "jassijs/ui/InvisibleComponent";
-import {Button} from "jassijs/ui/Button";
+import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
+import { Button } from "jassijs/ui/Button";
 import { classes } from "jassijs/remote/Classes";
-import {Component,  $UIComponent, UIComponentProperties } from "jassijs/ui/Component";
+import { Component, $UIComponent, UIComponentProperties } from "jassijs/ui/Component";
 //import {CodeEditor} from "jassijs_editor/CodeEditor";//could be removed
 
 declare global {
     export interface ExtensionAction {
-        componentDesignerInvisibleComponentClicked?:{
+        componentDesignerInvisibleComponentClicked?: {
             codeEditor,//:CodeEditor,
-            designButton:Button
+            designButton: Button
         }
     }
 }
@@ -34,7 +34,7 @@ export class CodeEditorInvisibleComponents extends Panel {
     layout() {
         this.update();
     }
-    async update() {
+    update() {
 
         var _this = this;
         while (_this._components.length > 0) {
@@ -54,17 +54,19 @@ export class CodeEditorInvisibleComponents extends Panel {
                 _this.codeeditor._design._propertyEditor.value = evt.currentTarget.ob;
                 var ac = evt.currentTarget.ob.extensionCalled;
                 if (ac !== undefined) {
-                    evt.currentTarget.ob.extensionCalled({componentDesignerInvisibleComponentClicked:{ codeEditor:_this.codeeditor,designButton:img}});
+                    evt.currentTarget.ob.extensionCalled({ componentDesignerInvisibleComponentClicked: { codeEditor: _this.codeeditor, designButton: img } });
                 }
             });
             var cn = classes.getClassName(ob);
             //search icon
-            var regdata=await registry.getJSONData("$UIComponent");
-            regdata.forEach(function(val){
-                if(val.classname===cn){
-                    img.icon=val.params[0].icon;
-                }
+            registry.getJSONData("$UIComponent").then((regdata) => {
+                regdata.forEach(function (val) {
+                    if (val.classname === cn) {
+                        img.icon = val.params[0].icon;
+                    }
+                });
             });
+
             _this.add(img);
         }
         /* if(entries===undefined)
