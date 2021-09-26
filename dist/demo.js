@@ -98,6 +98,7 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
     var reportdesign = {
+        footer: [{}, {}, {}],
         content: [
             {
                 columns: [
@@ -107,36 +108,27 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
                         "${invoice.customer.place}"
                     ],
                     [
-                        {
-                            text: "Invoice",
-                            fontSize: 18
-                        },
+                        { fontSize: 18, text: "Invoice" },
                         "\n",
                         "Date: ${parameter.date}",
-                        {
-                            text: "Number: ${invoice.number}",
-                            bold: true
-                        }
-                    ]
+                        "Number: ${invoice.number}"
+                    ],
+                    {}
                 ]
             },
             {
                 table: {
                     body: [
-                        [
-                            "Item",
-                            "Price"
-                        ],
+                        ["Item", "Price"],
                         {
                             foreach: "line in invoice.lines",
-                            do: [
-                                "${line.text}",
-                                "${line.price}"
-                            ]
+                            do: ["${line.text}", "${line.price}"]
                         }
                     ]
                 }
             },
+            {},
+            {},
             "\n",
             {
                 foreach: "sum in invoice.summary",
@@ -387,6 +379,46 @@ define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jass
         dlg.value = new Kunde_1.Kunde();
         dlg.value.nachname = "Klaus";
         return dlg;
+    }
+    exports.test = test;
+});
+define("demo/ReportStyle", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var reportdesign = {
+        defaultStyle: { italics: true },
+        styles: {
+            header: { bold: true, fontSize: 22 },
+            underline: { decoration: "underline" }
+        },
+        content: [
+            { style: "header", text: "The Header" },
+            {
+                columns: [
+                    { width: 215, stack: ["firstname lastname", "street", "place"] },
+                    {
+                        width: 245,
+                        style: "underline",
+                        stack: [
+                            { fontSize: 18, text: "Invoice" },
+                            "\n",
+                            "Date: ",
+                            "Number: "
+                        ]
+                    }
+                ]
+            },
+            {
+                table: { body: [["Item", "Price"], ["hh", "999"]] }
+            }
+        ]
+    };
+    async function test() {
+        // kk.o=0;
+        return {
+            reportdesign: reportdesign
+        };
     }
     exports.test = test;
 });
@@ -1196,7 +1228,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1612818333557
             },
             "demo/ReportInvoice.ts": {
-                "date": 1631970652205,
+                "date": 1632512315481,
                 "demo.ReportInvoice": {}
             },
             "demo/StyleDialog.ts": {
@@ -1271,6 +1303,9 @@ define("demo/registry", ["require"], function (require) {
             },
             "demo/Testdatatable3.ts": {
                 "date": 1632339223841
+            },
+            "demo/ReportStyle.ts": {
+                "date": 1632525413937
             }
         }
     };

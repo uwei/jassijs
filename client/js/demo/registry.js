@@ -95,6 +95,9 @@ define("demo/registry",["require"], function(require) {
 	},
 	"demo/ReportStyle.ts": {
 		"date": 1632525413937
+	},
+	"demo/Testtable.ts": {
+		"date": 1632684452552
 	}
 }
  }

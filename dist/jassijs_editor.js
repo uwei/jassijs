@@ -1154,6 +1154,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
             this.variables.addAll(variables);
         }
         async _evalCodeOnLoad(data) {
+            this.variables.clear();
             var code = this._codePanel.value;
             var lines = code.split("\n");
             var _this = this;
@@ -1511,7 +1512,7 @@ export async function test() {
     ;
 });
 //jassijs.myRequire(modul.css["jassijs_editor.css"]);
-define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/InvisibleComponent", "jassijs/ui/Button", "jassijs/remote/Classes", "jassijs/ui/Image"], function (require, exports, Jassi_5, Panel_2, Registry_3, InvisibleComponent_1, Button_2, Classes_2) {
+define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/remote/Classes", "jassijs/ui/Image"], function (require, exports, Jassi_5, Panel_2, Registry_3, Button_2, Classes_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodeEditorInvisibleComponents = void 0;
@@ -1528,12 +1529,12 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
         layout() {
             this.update();
         }
-        async update() {
+        update() {
             var _this = this;
             while (_this._components.length > 0) {
                 _this.remove(_this._components[0]);
             }
-            var elements = _this.codeeditor.getVariablesForType(InvisibleComponent_1.InvisibleComponent);
+            var elements = _this.codeeditor.getVariablesForType("$isInivisibleComponent"); //InvisibleComponent);
             for (var x = 0; x < elements.length; x++) {
                 var img = new Button_2.Button();
                 var name = elements[x];
@@ -1552,11 +1553,12 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
                 });
                 var cn = Classes_2.classes.getClassName(ob);
                 //search icon
-                var regdata = await Registry_3.default.getJSONData("$UIComponent");
-                regdata.forEach(function (val) {
-                    if (val.classname === cn) {
-                        img.icon = val.params[0].icon;
-                    }
+                Registry_3.default.getJSONData("$UIComponent").then((regdata) => {
+                    regdata.forEach(function (val) {
+                        if (val.classname === cn) {
+                            img.icon = val.params[0].icon;
+                        }
+                    });
                 });
                 _this.add(img);
             }
@@ -1889,11 +1891,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
         }
         _updateInvisibleComponents() {
             var _this = this;
-            this._invisibleComponents.update().then(function () {
-                /* var h=_this._invisibleComponents.dom.offsetHeight;
-                 h=h+6+31;
-                 _this._designPlaceholder.height="calc(100% - "+h+"px)";*/
-            });
+            this._invisibleComponents.update();
         }
         _initComponentExplorer() {
             var _this = this;
@@ -3028,7 +3026,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1632076449140,
+                "date": 1632521249417,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3081,7 +3079,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-                "date": 1631566274025,
+                "date": 1632524313473,
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
@@ -3089,7 +3087,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1631808911926,
+                "date": 1632524377658,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {

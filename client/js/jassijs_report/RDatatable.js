@@ -305,7 +305,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
         __metadata("design:paramtypes", [Number])
     ], RDatatable.prototype, "groupCount", null);
     RDatatable = __decorate([
-        (0, RComponent_1.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
+        (0, RComponent_1.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-table-cog", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
         (0, Jassi_1.$Class)("jassijs_report.RDatatable"),
         __metadata("design:paramtypes", [Object])
     ], RDatatable);

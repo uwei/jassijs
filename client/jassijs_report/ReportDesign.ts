@@ -1,5 +1,5 @@
 import { BoxPanel } from "jassijs/ui/BoxPanel";
-import  { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { RStack } from "jassijs_report/RStack";
 import { RText } from "jassijs_report/RText";
 
@@ -15,7 +15,10 @@ import { $Property } from "jassijs/ui/Property";
 
 import { RStyle } from "jassijs_report/RStyle";
 import { Container } from "jassijs/ui/Container";
+import { RTextGroup } from "jassijs_report/RTextGroup";
+import { RTable } from "jassijs_report/RTable";
 
+  
 
 @$Class("jassijs_report.InfoProperties")
 class InfoProperties {
@@ -53,13 +56,13 @@ class PermissionProperties {
 
 @$Class("jassijs_report.StyleContainer")
 @$Property({ hideBaseClassProperties: true })
-class StyleContainer extends Panel{
-    constructor(props){
+class StyleContainer extends Panel {
+    constructor(props) {
         super(props);
         $(this.dom).removeClass("Panel").removeClass("jinlinecomponent");
         $(this.domWrapper).removeClass("jcomponent").removeClass("jcontainer");
-        
-        
+
+
         $(this.dom).hide();
     }
 }
@@ -69,8 +72,8 @@ class StyleContainer extends Panel{
 @$Class("jassijs_report.ReportDesign")
 @$Property({ hideBaseClassProperties: true })
 export class ReportDesign extends BoxPanel {
-    styleContainer:StyleContainer=new StyleContainer(undefined);
-    defaultStyle:RStyle=new RStyle();
+    styleContainer: StyleContainer = new StyleContainer(undefined);
+    defaultStyle: RStyle = new RStyle();
     reporttype: string = "report";
     design: any;
     otherProperties: any;
@@ -114,7 +117,7 @@ export class ReportDesign extends BoxPanel {
         this.add(this.headerPanel);
         this.add(this.contentPanel);
         this.add(this.footerPanel);
-         this.add(this.styleContainer);
+        this.add(this.styleContainer);
         //this.pageSize = "A4";
         //this.pageMargins = [40, 40, 40, 40];
     }
@@ -226,14 +229,18 @@ export class ReportDesign extends BoxPanel {
         } else if (typeof ob === 'string' || ob instanceof String) {
             ret = new RText();
             ret.value = ob;
-        } else if (ob.text !== undefined) {
+        } else if (ob.text !== undefined && !Array.isArray(ob.text)) {
             ret = new RText().fromJSON(ob);
+        } else if (ob.text !== undefined && Array.isArray(ob.text)) {
+            ret = new RTextGroup().fromJSON(ob);
         } else if (ob.stack !== undefined || Array.isArray(ob)) {
             ret = new RStack().fromJSON(ob);
         } else if (ob.columns !== undefined) {
             ret = new RColumns().fromJSON(ob);
         } else if (ob.datatable !== undefined) {
             ret = new RDatatable().fromJSON(ob);
+        } else if (ob.table !== undefined) {
+            ret = new RTable().fromJSON(ob);
         } else {
             ret = new RUnknown().fromJSON(ob);
         }
@@ -244,7 +251,7 @@ export class ReportDesign extends BoxPanel {
     private create(ob: any) {
         var _this = this;
         // this.removeAll();
-        this.defaultStyle=new RStyle();
+        this.defaultStyle = new RStyle();
         this._pageSize = undefined;
         this._pageOrientation = undefined;
         this._pageMargins = undefined;
@@ -257,16 +264,16 @@ export class ReportDesign extends BoxPanel {
         this.headerPanel.removeAll();
         this.contentPanel.removeAll();
         this.footerPanel.removeAll();
-        if(ob.defaultStyle){
-            this.defaultStyle=new RStyle().fromJSON(ob.defaultStyle);
-            this.defaultStyle.name="defaultStyle";
+        if (ob.defaultStyle) {
+            this.defaultStyle = new RStyle().fromJSON(ob.defaultStyle);
+            this.defaultStyle.name = "defaultStyle";
             $(this.dom).addClass(this.defaultStyle.styleid);
             delete ob.defaultStyle;
         }
-        if(ob.styles){
-            for(var st in ob.styles){
-                var rs=new RStyle().fromJSON(ob.styles[st]);
-                rs.name=st;
+        if (ob.styles) {
+            for (var st in ob.styles) {
+                var rs = new RStyle().fromJSON(ob.styles[st]);
+                rs.name = st;
                 this.styleContainer.add(rs);
             }
             delete ob.styles;
@@ -338,20 +345,31 @@ export class ReportDesign extends BoxPanel {
 
 
         this.otherProperties = ob;
+        ReportDesign.linkStyles(this);
     }
-
+    private static linkStyles(parent: Container) {
+        for (var x = 0; x < parent._components.length; x++) {
+            var comp = parent._components[x];
+            if (comp["style"]) {
+                comp["style"] = comp["style"]
+            }
+            if (comp["_components"]) {
+                ReportDesign.linkStyles(<Container>comp);
+            }
+        }
+    }
     toJSON(): any {
 
         var r: any = {
 
         };
-        if(JSON.stringify(this.defaultStyle)!=="{}"){
-            r.defaultStyle=this.defaultStyle.toJSON();
+        if (JSON.stringify(this.defaultStyle) !== "{}") {
+            r.defaultStyle = this.defaultStyle.toJSON();
         }
-        if(this.styleContainer._components.length>0){
-            r.styles={};
-            for(var x=0;x<this.styleContainer._components.length;x++){
-                r.styles[this.styleContainer._components[x]["name"]]=(<RStyle>this.styleContainer._components[x]).toJSON();
+        if (this.styleContainer._components.length > 0) {
+            r.styles = {};
+            for (var x = 0; x < this.styleContainer._components.length; x++) {
+                r.styles[this.styleContainer._components[x]["name"]] = (<RStyle>this.styleContainer._components[x]).toJSON();
             }
         }
         //var _this = this;

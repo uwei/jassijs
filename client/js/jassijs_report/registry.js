@@ -14,7 +14,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1631469504879
             },
             "jassijs_report/PDFReport.ts": {
-                "date": 1631970396665,
+                "date": 1632679267836,
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
@@ -36,12 +36,12 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RDatatable.ts": {
-                "date": 1632518425342,
+                "date": 1632682324077,
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
                             "fullPath": "report/Datatable",
-                            "icon": "mdi mdi-file-table-box-multiple-outline",
+                            "icon": "mdi mdi-table-cog",
                             "editableChildComponents": [
                                 "this",
                                 "this.headerPanel",
@@ -61,7 +61,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1632519872185,
+                "date": 1632684255114,
                 "jassijs_report.InfoProperties": {
                     "@members": {
                         "title": {
@@ -341,7 +341,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1632527728625,
+                "date": 1632681829067,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -584,6 +584,37 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "$Property": []
                         }
                     }
+                }
+            },
+            "jassijs_report/RTextGroup.ts": {
+                "date": 1632681423053,
+                "jassijs_report.RTextGroup": {
+                    "$ReportComponent": [
+                        {
+                            "fullPath": "report/TextGroup",
+                            "icon": "mdi mdi-text-box-multiple-outline",
+                            "editableChildComponents": [
+                                "this"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "jassijs_report/RTable.ts": {
+                "date": 1632685848809,
+                "jassijs_report.RTable": {
+                    "$ReportComponent": [
+                        {
+                            "fullPath": "report/Table",
+                            "icon": "mdi mdi-table-large",
+                            "editableChildComponents": [
+                                "this",
+                                "this.headerPanel",
+                                "this.bodyPanel",
+                                "this.footerPanel"
+                            ]
+                        }
+                    ]
                 }
             }
         }

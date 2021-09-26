@@ -32,8 +32,8 @@ export class RText extends RComponent {
     * @param {boolean} [properties.useSpan] -  use span not div
     * 
     */
-    constructor(parent:RComponent, properties = undefined) {//id connect to existing(not reqired)
-        super(parent,properties);
+    constructor(properties = undefined) {//id connect to existing(not reqired)
+        super(properties);
         super.init($('<div class="RText mce-content-body jdisableaddcomponents" ><div  class="HTMLPanelContent"></div></div>')[0]);
         $(this.domWrapper).removeClass("jcontainer");
         $(this.__dom).css("text-overflow", "ellipsis");
@@ -80,7 +80,7 @@ export class RText extends RComponent {
             delete ob.editTogether;
             ret.convertToHTML(ob.text);
         } else
-            ret.value = <string>ob.text;
+            ret.value = <string>ob.text.replaceAll("\n","<br/>");
         delete ob.text;
        
         super.fromJSON(ob);

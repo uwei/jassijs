@@ -26,7 +26,7 @@ import { RGroupTablerow } from "jassijs_report/RGroupTablerow";
 
 //@$UIComponent({editableChildComponents:["this"]})
 //@$Property({name:"horizontal",hide:true})
-@$ReportComponent({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] })
+@$ReportComponent({ fullPath: "report/Datatable", icon: "mdi mdi-table-cog", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] })
 @$Class("jassijs_report.RDatatable")
 
 export class RDatatable extends RComponent {

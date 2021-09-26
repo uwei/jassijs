@@ -21,8 +21,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(parent, properties = undefined) {
-            super(parent, properties);
+        constructor(properties = undefined) {
+            super(properties);
             this.reporttype = "text";
             super.init($('<div class="RText mce-content-body jdisableaddcomponents" ><div  class="HTMLPanelContent"></div></div>')[0]);
             $(this.domWrapper).removeClass("jcontainer");
@@ -62,7 +62,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent
                 ret.convertToHTML(ob.text);
             }
             else
-                ret.value = ob.text;
+                ret.value = ob.text.replaceAll("\n", "<br/>");
             delete ob.text;
             super.fromJSON(ob);
             // ret.otherProperties = ob;
@@ -223,7 +223,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent
         //@$Property({hideBaseClassProperties:true})
         ,
         (0, Property_1.$Property)({ name: "value", type: "string", description: "text" }),
-        __metadata("design:paramtypes", [RComponent_1.RComponent, Object])
+        __metadata("design:paramtypes", [Object])
     ], RText);
     exports.RText = RText;
     function test() {
