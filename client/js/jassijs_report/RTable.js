@@ -26,7 +26,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             this.reporttype = "table";
             // bodyPanel: RTablerow[] = [new RTablerow()];
             this.widths = [];
-            super.init($("<table style='nin-width:50px;table-layout: fixed'></table>")[0]);
+            super.init($("<table  style='nin-width:50px;table-layout: fixed'></table>")[0]);
             //	this.backgroundPanel.width="500px";
             //$(this.backgroundPanel.dom).css("min-width","200px");
             //$(this.dom).css("display", "table");

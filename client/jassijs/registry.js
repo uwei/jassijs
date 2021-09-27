@@ -56,7 +56,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985800636
 	},
 	"jassijs/modul.ts": {
-		"date": 1631646807936
+		"date": 1632774647245
 	},
 	"jassijs/remote/Classes.ts": {
 		"date": 1624296519695,
@@ -1531,7 +1531,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1632346464877,
+		"date": 1632776034063,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{

@@ -18,14 +18,14 @@ export class HTMLPanel extends DataComponent {
     toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
     private _template: string;
     private _value;
-    private inited=false;
+    private inited = false;
     /*[
         'undo redo | bold italic underline | fontsizeselect', //fontselect 
         'forecolor backcolor | numlist bullist outdent indent'
     ];*/
     constructor(id = undefined) {//id connect to existing(not reqired)
         super();
-        super.init($('<div class="HTMLPanel mce-content-body"><div class="HTMLPanelContent"> </div></div>')[0]);
+        super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1"><div class="HTMLPanelContent"> </div></div>')[0]);//tabindex for key-event
         //$(this.domWrapper).removeClass("jcontainer");
         //  super.init($('<div class="HTMLPanel"></div>')[0]);
         var el = this.dom.children[0];
@@ -136,7 +136,19 @@ export class HTMLPanel extends DataComponent {
         }
         super.extensionCalled(action);
     }
-   
+    initIfNeeded(tinymce,config) {
+        let _this=this;
+        if (!this.inited) {
+            let sic = _this.value;
+            _this._tcm = tinymce.init(config);//changes the text to <br> if empty - why?
+            if (sic === "" && _this.value !== sic)
+                _this.value = "";
+            this.inited = true;
+            let edi=tinymce.editors[_this._id];
+           // edi.show();
+           // edi.hide();
+        }
+    }
     /**
      * activates or deactivates designmode
      * @param {boolean} enable - true if activate designMode
@@ -146,9 +158,9 @@ export class HTMLPanel extends DataComponent {
         var _this = this;
         this._designMode = enable;
         if (enable) {
-           // console.log("activate tiny");
+            // console.log("activate tiny");
             requirejs(["jassijs/ext/tinymce"], function (tinymcelib) {
-               
+
                 var tinymce = window["tinymce"];//oder tinymcelib.default
                 var config = {
                     //	                valid_elements: 'strong,em,span[style],a[href],ul,ol,li',
@@ -181,38 +193,48 @@ export class HTMLPanel extends DataComponent {
                 }
                 if (_this["toolbar"])
                     config["toolbar"] = _this["toolbar"];
-            /*    setTimeout(()=>{//activate tiny async
-                    var sic = _this.value;
-                    _this._tcm = tinymce.init(config);//changes the text to <br> if empty - why?
-                    if (sic === "" && _this.value !== sic)
-                        _this.value = "";
-                },1);*/
-               
+
+
                 //_this.value=sic;
                 $(_this.dom).doubletap(function (e) { //Editor Menu
-                    if(!this.inited){
-                         let sic = _this.value;
-                        _this._tcm = tinymce.init(config);//changes the text to <br> if empty - why?
-                        if (sic === "" && _this.value !== sic)
-                            _this.value = "";
-                        this.inited=true;
-                    }
+
                     if (_this._designMode === false)
                         return;
-                    var sic = editor._draganddropper.draggableComponents;
+                    _this.initIfNeeded(tinymce,config);
                     editor._draganddropper.enableDraggable(false);
+                });
+                $(_this.dom).on('blur', function () {
+                    
+                    let edi=tinymce.editors[_this._id];
+                    $(edi?.container).css("display","none");
+                    //not work edi.getElement().blur();
+                 //  edi.getElement().focus();
+                  //  edi.getElement().blur();
+                   // edi.getElement().hidden=true;
+                   // if($(_this.dom).is(":focus"))
+                      //  $(_this.dom).trigger("focus");
+                  // $(_this.dom).trigger("blur");
+                   // $(_this.dom).blur();
+                  
+                });
+                $(_this.dom).on('focus', function () {
+                    _this.initIfNeeded(tinymce,config);
+                    setTimeout(()=>{
+                    let edi=tinymce.editors[_this._id];
+                    edi.selection.select(edi.getBody(), true);
 
-
-                    //	editor._draganddropper.uninstall();
-                    //editor._resizer.uninstall();
-
-                    /*   var sel = _this._id;
-                       if (tinymce !== undefined && tinymce.editors[sel] !== undefined) {
-                           //$(e.currentTarget.parentNode._this.domWrapper).draggable('disable');
-                           tinymce.editors[sel].fire('focus');
-                       }*/
+                    },10);
+                });
+                $(_this.dom).keydown((evt)=>{
+                 /*   _this.initIfNeeded(tinymce,config);
+                    if(evt.key.length===1){
+                      //  _this.value=evt.key;
+                        let edi=tinymce.editors[_this._id];
+                         edi.selection?.setCursorLocation(edi.getBody(), edi.getBody().childElementCount);
+                    }*/
                 });
             });
+
         }//else
         //	tinymce.editors[_this._id].destroy();
     }
@@ -222,8 +244,8 @@ export class HTMLPanel extends DataComponent {
     }
 }
 
-export function test(){
-    var ret=new HTMLPanel();
-    ret.value="Sample <b>Text</b>";
+export function test() {
+    var ret = new HTMLPanel();
+    ret.value = "Sample <b>Text</b>";
     return ret;
 }

@@ -21,7 +21,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
             super();
             this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
             this.inited = false;
-            super.init($('<div class="HTMLPanel mce-content-body"><div class="HTMLPanelContent"> </div></div>')[0]);
+            super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1"><div class="HTMLPanelContent"> </div></div>')[0]); //tabindex for key-event
             //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
             var el = this.dom.children[0];
@@ -128,6 +128,19 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
             }
             super.extensionCalled(action);
         }
+        initIfNeeded(tinymce, config) {
+            let _this = this;
+            if (!this.inited) {
+                let sic = _this.value;
+                _this._tcm = tinymce.init(config); //changes the text to <br> if empty - why?
+                if (sic === "" && _this.value !== sic)
+                    _this.value = "";
+                this.inited = true;
+                let edi = tinymce.editors[_this._id];
+                // edi.show();
+                // edi.hide();
+            }
+        }
         /**
          * activates or deactivates designmode
          * @param {boolean} enable - true if activate designMode
@@ -170,31 +183,38 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
                     };
                     if (_this["toolbar"])
                         config["toolbar"] = _this["toolbar"];
-                    /*    setTimeout(()=>{//activate tiny async
-                            var sic = _this.value;
-                            _this._tcm = tinymce.init(config);//changes the text to <br> if empty - why?
-                            if (sic === "" && _this.value !== sic)
-                                _this.value = "";
-                        },1);*/
                     //_this.value=sic;
                     $(_this.dom).doubletap(function (e) {
-                        if (!this.inited) {
-                            let sic = _this.value;
-                            _this._tcm = tinymce.init(config); //changes the text to <br> if empty - why?
-                            if (sic === "" && _this.value !== sic)
-                                _this.value = "";
-                            this.inited = true;
-                        }
                         if (_this._designMode === false)
                             return;
-                        var sic = editor._draganddropper.draggableComponents;
+                        _this.initIfNeeded(tinymce, config);
                         editor._draganddropper.enableDraggable(false);
-                        //	editor._draganddropper.uninstall();
-                        //editor._resizer.uninstall();
-                        /*   var sel = _this._id;
-                           if (tinymce !== undefined && tinymce.editors[sel] !== undefined) {
-                               //$(e.currentTarget.parentNode._this.domWrapper).draggable('disable');
-                               tinymce.editors[sel].fire('focus');
+                    });
+                    $(_this.dom).on('blur', function () {
+                        let edi = tinymce.editors[_this._id];
+                        $(edi === null || edi === void 0 ? void 0 : edi.container).css("display", "none");
+                        //not work edi.getElement().blur();
+                        //  edi.getElement().focus();
+                        //  edi.getElement().blur();
+                        // edi.getElement().hidden=true;
+                        // if($(_this.dom).is(":focus"))
+                        //  $(_this.dom).trigger("focus");
+                        // $(_this.dom).trigger("blur");
+                        // $(_this.dom).blur();
+                    });
+                    $(_this.dom).on('focus', function () {
+                        _this.initIfNeeded(tinymce, config);
+                        setTimeout(() => {
+                            let edi = tinymce.editors[_this._id];
+                            edi.selection.select(edi.getBody(), true);
+                        }, 10);
+                    });
+                    $(_this.dom).keydown((evt) => {
+                        /*   _this.initIfNeeded(tinymce,config);
+                           if(evt.key.length===1){
+                             //  _this.value=evt.key;
+                               let edi=tinymce.editors[_this._id];
+                                edi.selection?.setCursorLocation(edi.getBody(), edi.getBody().childElementCount);
                            }*/
                     });
                 });

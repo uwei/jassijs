@@ -24,7 +24,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "text";
-            super.init($('<div class="RText mce-content-body jdisableaddcomponents" ><div  class="HTMLPanelContent"></div></div>')[0]);
+            super.init($('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>')[0]); //tabindex for key-event
             $(this.domWrapper).removeClass("jcontainer");
             $(this.__dom).css("text-overflow", "ellipsis");
             $(this.__dom).css("overflow", "hidden");
@@ -38,6 +38,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent
             //   $(this.dom.children[0]).css("display","inline-block");
             this.extensionCalled = HTMLPanel_1.HTMLPanel.prototype.extensionCalled.bind(this);
             this._setDesignMode = HTMLPanel_1.HTMLPanel.prototype._setDesignMode.bind(this);
+            this.initIfNeeded = HTMLPanel_1.HTMLPanel.prototype.initIfNeeded.bind(this);
         }
         get value() {
             var el = this.dom.children[0];

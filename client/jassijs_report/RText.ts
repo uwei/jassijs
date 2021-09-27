@@ -24,7 +24,7 @@ class InlineStyling {
 
 export class RText extends RComponent {
     reporttype: string = "text";
-    
+    initIfNeeded;
     /**
     * 
     * @param {object} properties - properties to init
@@ -34,7 +34,7 @@ export class RText extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        super.init($('<div class="RText mce-content-body jdisableaddcomponents" ><div  class="HTMLPanelContent"></div></div>')[0]);
+        super.init($('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>')[0]);//tabindex for key-event
         $(this.domWrapper).removeClass("jcontainer");
         $(this.__dom).css("text-overflow", "ellipsis");
         $(this.__dom).css("overflow", "hidden");
@@ -49,6 +49,7 @@ export class RText extends RComponent {
         //   $(this.dom.children[0]).css("display","inline-block");
         this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
         this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
+        this.initIfNeeded=HTMLPanel.prototype.initIfNeeded.bind(this);
     }
 
     @$Property({
