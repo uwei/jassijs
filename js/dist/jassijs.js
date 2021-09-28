@@ -67,7 +67,7 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
                 'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
                 'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
                 'tabulatorlib': '//unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator',
-                'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.8.1/tinymce.min' //also define in tinymce.js
+                'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.2/tinymce.min' //also define in tinymce.js
             },
             "shim": {
                 'goldenlayout': ["jquery"],
@@ -143,7 +143,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985800636
             },
             "jassijs/modul.ts": {
-                "date": 1631646807936
+                "date": 1632774647245
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1624296519695,
@@ -785,7 +785,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
-                "date": 1627916763694,
+                "date": 1632849003336,
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -1618,7 +1618,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1632346464877,
+                "date": 1632776034063,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -2621,7 +2621,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/VariablePanel.ts": {
-                "date": 1632522088717,
+                "date": 1632853975157,
                 "jassijs.ui.VariablePanel": {}
             },
             "jassijs/util/Cookies.ts": {
@@ -4395,7 +4395,7 @@ define("jassijs/ext/tabulator", ['tabulatorlib'], function (Tabulator) {
 //var path="//cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min";
 var tinyMCEPreInit = {
     suffix: '.min',
-    base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/5.8.1",
+    base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.2",
     query: ''
 };
 define("jassijs/ext/tinymce", ["tinymcelib"], function (require) {
@@ -9147,6 +9147,7 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", 
         async _callContextmenu(evt) {
             if (evt.preventDefault !== undefined)
                 evt.preventDefault();
+            this.target = evt.target;
             var cancel = this.callEvent("beforeshow", evt);
             if (cancel !== undefined) {
                 for (var x = 0; x < cancel.length; x++) {
@@ -11480,7 +11481,7 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             super();
             this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
             this.inited = false;
-            super.init($('<div class="HTMLPanel mce-content-body"><div class="HTMLPanelContent"> </div></div>')[0]);
+            super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1"><div class="HTMLPanelContent"> </div></div>')[0]); //tabindex for key-event
             //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
             var el = this.dom.children[0];
@@ -11587,6 +11588,19 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             }
             super.extensionCalled(action);
         }
+        initIfNeeded(tinymce, config) {
+            let _this = this;
+            if (!this.inited) {
+                let sic = _this.value;
+                _this._tcm = tinymce.init(config); //changes the text to <br> if empty - why?
+                if (sic === "" && _this.value !== sic)
+                    _this.value = "";
+                this.inited = true;
+                let edi = tinymce.editors[_this._id];
+                // edi.show();
+                // edi.hide();
+            }
+        }
         /**
          * activates or deactivates designmode
          * @param {boolean} enable - true if activate designMode
@@ -11629,31 +11643,38 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                     };
                     if (_this["toolbar"])
                         config["toolbar"] = _this["toolbar"];
-                    /*    setTimeout(()=>{//activate tiny async
-                            var sic = _this.value;
-                            _this._tcm = tinymce.init(config);//changes the text to <br> if empty - why?
-                            if (sic === "" && _this.value !== sic)
-                                _this.value = "";
-                        },1);*/
                     //_this.value=sic;
                     $(_this.dom).doubletap(function (e) {
-                        if (!this.inited) {
-                            let sic = _this.value;
-                            _this._tcm = tinymce.init(config); //changes the text to <br> if empty - why?
-                            if (sic === "" && _this.value !== sic)
-                                _this.value = "";
-                            this.inited = true;
-                        }
                         if (_this._designMode === false)
                             return;
-                        var sic = editor._draganddropper.draggableComponents;
+                        _this.initIfNeeded(tinymce, config);
                         editor._draganddropper.enableDraggable(false);
-                        //	editor._draganddropper.uninstall();
-                        //editor._resizer.uninstall();
-                        /*   var sel = _this._id;
-                           if (tinymce !== undefined && tinymce.editors[sel] !== undefined) {
-                               //$(e.currentTarget.parentNode._this.domWrapper).draggable('disable');
-                               tinymce.editors[sel].fire('focus');
+                    });
+                    $(_this.dom).on('blur', function () {
+                        let edi = tinymce.editors[_this._id];
+                        $(edi === null || edi === void 0 ? void 0 : edi.container).css("display", "none");
+                        //not work edi.getElement().blur();
+                        //  edi.getElement().focus();
+                        //  edi.getElement().blur();
+                        // edi.getElement().hidden=true;
+                        // if($(_this.dom).is(":focus"))
+                        //  $(_this.dom).trigger("focus");
+                        // $(_this.dom).trigger("blur");
+                        // $(_this.dom).blur();
+                    });
+                    $(_this.dom).on('focus', function () {
+                        _this.initIfNeeded(tinymce, config);
+                        setTimeout(() => {
+                            let edi = tinymce.editors[_this._id];
+                            edi.selection.select(edi.getBody(), true);
+                        }, 10);
+                    });
+                    $(_this.dom).keydown((evt) => {
+                        /*   _this.initIfNeeded(tinymce,config);
+                           if(evt.key.length===1){
+                             //  _this.value=evt.key;
+                               let edi=tinymce.editors[_this._id];
+                                edi.selection?.setCursorLocation(edi.getBody(), edi.getBody().childElementCount);
                            }*/
                     });
                 });
@@ -15919,6 +15940,8 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
          **/
         getEditableComponents(component, idFromLabel = undefined) {
             var ret = "";
+            if (component._isNotEditableInDesigner === true)
+                return ret;
             if (this.getVariableFromObject(component) !== undefined)
                 ret = "#" + ((idFromLabel === true) ? component.domWrapper._id : component._id);
             if (component._components !== undefined) {

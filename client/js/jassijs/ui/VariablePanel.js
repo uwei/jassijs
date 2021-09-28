@@ -155,6 +155,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
          **/
         getEditableComponents(component, idFromLabel = undefined) {
             var ret = "";
+            if (component._isNotEditableInDesigner === true)
+                return ret;
             if (this.getVariableFromObject(component) !== undefined)
                 ret = "#" + ((idFromLabel === true) ? component.domWrapper._id : component._id);
             if (component._components !== undefined) {

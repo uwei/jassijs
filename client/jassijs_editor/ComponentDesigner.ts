@@ -268,6 +268,7 @@ export class ComponentDesigner extends Panel{
             this._codeEditor.undo();
         }
         private getComponentIDsInDesign(component:Component,collect:string[]){
+        	
         	collect.push("#"+component._id);
         	var childs=component["_components"];
         	if(childs!==undefined){

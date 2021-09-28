@@ -1028,6 +1028,30 @@ define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/M
     ], Testmenu);
     exports.Testmenu = Testmenu;
 });
+define("demo/Testtable", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var reportdesign = {
+        content: [
+            {
+                table: {
+                    widths: [110, "auto", "auto"],
+                    body: [
+                        ["www", "rrrr", "Column 3"],
+                        ["One value goes here", "Another one here", "OK?"]
+                    ]
+                }
+            }
+        ]
+    };
+    async function test() {
+        // kk.o=0;
+        var dlg = { reportdesign };
+        return dlg;
+    }
+    exports.test = test;
+});
 define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Panel", "jassijs/ui/Button"], function (require, exports, Tree_2, ContextMenu_3, MenuItem_4, Panel_9, Button_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1306,6 +1330,9 @@ define("demo/registry", ["require"], function (require) {
             },
             "demo/ReportStyle.ts": {
                 "date": 1632525413937
+            },
+            "demo/Testtable.ts": {
+                "date": 1632862956354
             }
         }
     };

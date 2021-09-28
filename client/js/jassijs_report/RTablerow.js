@@ -91,6 +91,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             if (component.addToParent)
                 return component.addToParent(this);
             this.wrapComponent(component);
+            component.parent = this;
             super.add(component);
             // $(component.domWrapper).css("display", "table-cell");
             this.callEvent("componentAdded", component, this);
@@ -114,6 +115,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             if (component.addToParent)
                 return component.addToParent(this);
             this.wrapComponent(component);
+            component.parent = this;
             if (component["reporttype"] === "text") {
                 //(<RText>component).newlineafter = true;
             }

@@ -7,18 +7,17 @@ import { Kunde } from "de/remote/Kunde";
 import { RText } from "jassijs_report/RText";
 
 var reportdesign = {
-    content: [
-
-       {
+	content: [
+		{
 			table: {
+				widths: [110,"auto","auto"],
 				body: [
-					['Column 1', 'Column 2', 'Column 3'],
-					['One value goes here', 'Another one here', 'OK?']
+					["www","rrrr","Column 3"],
+					["One value goes here","Another one here","OK?"]
 				]
 			}
-		},
-
-    ]
+		}
+	]
 };
 
 

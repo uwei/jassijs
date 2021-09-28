@@ -3087,7 +3087,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1632524377658,
+                "date": 1632855098879,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {

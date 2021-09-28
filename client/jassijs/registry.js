@@ -698,7 +698,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {
-		"date": 1627916763694,
+		"date": 1632849003336,
 		"jassijs.ui.ContextMenu": {
 			"$UIComponent": [
 				{
@@ -2534,7 +2534,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/VariablePanel.ts": {
-		"date": 1632522088717,
+		"date": 1632853975157,
 		"jassijs.ui.VariablePanel": {}
 	},
 	"jassijs/util/Cookies.ts": {

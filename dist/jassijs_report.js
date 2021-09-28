@@ -1129,7 +1129,7 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi
         __metadata("design:paramtypes", [Number])
     ], RDatatable.prototype, "groupCount", null);
     RDatatable = __decorate([
-        (0, RComponent_3.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-file-table-box-multiple-outline", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
+        (0, RComponent_3.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-table-cog", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
         (0, Jassi_5.$Class)("jassijs_report.RDatatable"),
         __metadata("design:paramtypes", [Object])
     ], RDatatable);
@@ -1361,14 +1361,342 @@ define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponen
     }
     exports.test = test;
 });
-define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Jassi_9, Component_3, ReportDesign_3, RComponent_7) {
+define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button"], function (require, exports, Jassi_9, RText_2, RComponent_7, RTablerow_3, ContextMenu_1, MenuItem_1, Button_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.RTable = void 0;
+    //@$UIComponent({editableChildComponents:["this"]})
+    //@$Property({name:"horizontal",hide:true})
+    let RTable = class RTable extends RComponent_7.RComponent {
+        /**
+    *
+    * @param {object} properties - properties to init
+    * @param {string} [properties.id] -  connect to existing id (not reqired)
+    * @param {boolean} [properties.useSpan] -  use span not div
+    *
+    */
+        constructor(properties = undefined) {
+            super(properties);
+            this.reporttype = "table";
+            // bodyPanel: RTablerow[] = [new RTablerow()];
+            this.insertEmptyCells = true;
+            this.widths = [];
+            super.init($("<table  style='nin-width:50px;table-layout: fixed'></table>")[0]);
+            //	this.backgroundPanel.width="500px";
+            //$(this.backgroundPanel.dom).css("min-width","200px");
+            //$(this.dom).css("display", "table");
+            // $(this.dom).css("min-width", "50px");
+            this.add(new RTablerow_3.RTablerow());
+            $(this.dom).addClass("designerNoResizable");
+            this.initContextMenu();
+        }
+        getInfoFromEvent(evt) {
+            var ret = {};
+            ret.cell = this.contextMenu.target.parentNode._this;
+            ret.tableRow = ret.cell.parent;
+            ret.column = ret.tableRow._components.indexOf(ret.cell);
+            ret.row = this._components.indexOf(ret.tableRow);
+            return ret;
+        }
+        initContextMenu() {
+            var _this = this;
+            this.contextMenu = new ContextMenu_1.ContextMenu();
+            this.contextMenu._isNotEditableInDesigner = true;
+            $(this.contextMenu.menu.dom).css("font-family", "Roboto");
+            $(this.contextMenu.menu.dom).css("font-size", "12px");
+            this.contextMenu.menu._setDesignMode = (nothing) => { }; //should net be editable in designer
+            var insertRowBefore = new MenuItem_1.MenuItem();
+            //@ts-ignore
+            insertRowBefore._setDesignMode = (nothing) => { }; //should net be editable in designer
+            //@ts-ignore
+            insertRowBefore.items._setDesignMode = (nothing) => { };
+            insertRowBefore.text = "insert row before";
+            insertRowBefore.onclick((evt) => {
+                var info = _this.getInfoFromEvent(evt);
+                var newRow = new RTablerow_3.RTablerow();
+                newRow.parent = _this;
+                _this.addBefore(newRow, _this._components[info.row]);
+                newRow.add(new RText_2.RText());
+                //@ts-ignore
+                newRow._setDesignMode(true);
+                _this.fillTableRow(newRow, info.tableRow._components.length);
+                _this._componentDesigner.editDialog(true);
+                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+            });
+            this.contextMenu.menu.add(insertRowBefore);
+            var insertRowAfter = new MenuItem_1.MenuItem();
+            //@ts-ignore
+            insertRowAfter._setDesignMode = (nothing) => { }; //should net be editable in designer
+            //@ts-ignore
+            insertRowAfter.items._setDesignMode = (nothing) => { };
+            insertRowAfter.text = "insert row after";
+            insertRowAfter.onclick((evt) => {
+                var info = _this.getInfoFromEvent(evt);
+                var newRow = new RTablerow_3.RTablerow();
+                newRow.parent = _this;
+                if (_this._components.length === info.row + 1)
+                    _this.add(newRow);
+                else
+                    _this.addBefore(newRow, _this._components[info.row + 1]);
+                newRow.add(new RText_2.RText());
+                //@ts-ignore
+                newRow._setDesignMode(true);
+                _this.fillTableRow(newRow, info.tableRow._components.length);
+                _this._componentDesigner.editDialog(true);
+                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+            });
+            this.contextMenu.menu.add(insertRowAfter);
+            var insertColumnBefore = new MenuItem_1.MenuItem();
+            //@ts-ignore
+            insertColumnBefore._setDesignMode = (nothing) => { }; //should net be editable in designer
+            //@ts-ignore
+            insertColumnBefore.items._setDesignMode = (nothing) => { };
+            insertColumnBefore.text = "insert column before";
+            insertColumnBefore.onclick((evt) => {
+                var info = _this.getInfoFromEvent(evt);
+                var newCell = new RText_2.RText();
+                if (_this.widths)
+                    _this.widths.splice(info.column, 0, "auto");
+                _this.insertEmptyCells = false;
+                for (var x = 0; x < _this._components.length; x++) {
+                    _this._components[x].addBefore(new RText_2.RText(), _this._components[x]._components[info.column]);
+                }
+                _this.insertEmptyCells = true;
+                _this._componentDesigner.editDialog(true);
+                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+            });
+            this.contextMenu.menu.add(insertColumnBefore);
+            var insertColumnAfter = new MenuItem_1.MenuItem();
+            //@ts-ignore
+            insertColumnAfter._setDesignMode = (nothing) => { }; //should net be editable in designer
+            //@ts-ignore
+            insertColumnAfter.items._setDesignMode = (nothing) => { };
+            insertColumnAfter.text = "insert column after";
+            insertColumnAfter.onclick((evt) => {
+                var info = _this.getInfoFromEvent(evt);
+                var newCell = new RText_2.RText();
+                if (_this.widths)
+                    _this.widths.splice(info.column + 1, 0, "auto");
+                _this.insertEmptyCells = false;
+                for (var x = 0; x < _this._components.length; x++) {
+                    _this._components[x].addBefore(new RText_2.RText(), _this._components[x]._components[info.column + 1]);
+                }
+                _this.insertEmptyCells = true;
+                _this._componentDesigner.editDialog(true);
+                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+            });
+            this.contextMenu.menu.add(insertColumnAfter);
+            var removeColumn = new MenuItem_1.MenuItem();
+            //@ts-ignore
+            removeColumn._setDesignMode = (nothing) => { }; //should net be editable in designer
+            //@ts-ignore
+            removeColumn.items._setDesignMode = (nothing) => { };
+            removeColumn.text = "delete column";
+            removeColumn.onclick((evt) => {
+                var info = _this.getInfoFromEvent(evt);
+                if (_this.widths)
+                    _this.widths.slice(info.column, 0);
+                for (var x = 0; x < _this._components.length; x++) {
+                    _this._components[x].remove(_this._components[x]._components[info.column], true);
+                }
+                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+            });
+            this.contextMenu.menu.add(removeColumn);
+            var removeRow = new MenuItem_1.MenuItem();
+            //@ts-ignore
+            removeRow._setDesignMode = (nothing) => { }; //should net be editable in designer
+            //@ts-ignore
+            removeRow.items._setDesignMode = (nothing) => { };
+            removeRow.text = "delete row";
+            removeRow.onclick((evt) => {
+                var info = _this.getInfoFromEvent(evt);
+                _this.remove(_this._components[info.row]);
+                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+            });
+            this.contextMenu.menu.add(removeRow);
+            var copyMenu = new Button_2.Button();
+            $(copyMenu.dom).css("font-family", "Roboto");
+            $(copyMenu.dom).css("font-size", "12px");
+            copyMenu.text = "copy";
+            copyMenu.width = "100%";
+            $(copyMenu.dom).removeClass("jinlinecomponent");
+            let func = function (evt) {
+                var info = _this.getInfoFromEvent(evt);
+                //@ts-ignore
+                var edi = tinymce.editors[info.cell._id];
+                navigator.clipboard.writeText(edi.selection.getContent());
+                _this.contextMenu.close();
+            };
+            copyMenu.onclick(func);
+            this.contextMenu.menu.add(copyMenu);
+            var pasteMenu = new Button_2.Button();
+            $(pasteMenu.dom).css("font-family", "Roboto");
+            $(pasteMenu.dom).css("font-size", "12px");
+            pasteMenu.text = "paste";
+            pasteMenu.width = "100%";
+            $(pasteMenu.dom).removeClass("jinlinecomponent");
+            let func2 = function (evt) {
+                var info = _this.getInfoFromEvent(evt);
+                //@ts-ignore
+                var edi = tinymce.editors[info.cell._id];
+                navigator.clipboard.readText().then((data) => {
+                    edi.selection.setContent(data);
+                });
+            };
+            pasteMenu.onclick(func2);
+            this.contextMenu.menu.add(pasteMenu);
+        }
+        _setDesignMode(enable) {
+            this._designMode = enable;
+            //do nothing - no add button
+        }
+        /*	get design():any{
+                return this.toJSON();
+            };
+            set design(value:any){
+                ReportDesign.fromJSON(value,this);
+            }*/
+        fillTableRow(row, count) {
+            if (!row._designMode || count - row._components.length < 1)
+                return;
+            for (var x = row._components.length; x < count; x++) {
+                var rr = new RText_2.RText();
+                row.addBefore(rr, row._components[row._components.length - 1]); //after addbutton
+            }
+        }
+        addEmptyCellsIfNeeded(row) {
+            if (this.insertEmptyCells === false)
+                return;
+            var count = row._components.length;
+            var _this = this;
+            this._components.forEach((tr) => {
+                _this.fillTableRow(tr, count);
+            });
+        }
+        /**
+        * sets the width of a table cell
+        * @param component - the table cell
+        * @param width - the new width
+        **/
+        setChildWidth(component, width) {
+            var max = 0;
+            var found = -1;
+            for (var x = 0; x < this._components.length; x++) {
+                for (var i = 0; i < this._components[x]._components.length; i++) {
+                    if (i > max)
+                        max = i;
+                    var row = this._components[x]._components[i];
+                    if (row === component)
+                        found = i;
+                }
+            }
+            for (var t = this.widths.length; t < max; t++) {
+                this.widths.push("auto");
+            }
+            if (found !== -1) {
+                this.widths[found] = width;
+                $(this._components[0]._components[found].domWrapper).attr("width", width);
+            }
+            //this._parent.setChildWidth(component,value);
+        }
+        /**
+         * gets the width of a table cell
+         * @param component - the table cell
+         **/
+        getChildWidth(component) {
+            var found = -1;
+            for (var x = 0; x < this._components.length; x++) {
+                if (this._components[x]._components) {
+                    for (var i = 0; i < this._components[x]._components.length; i++) {
+                        var row = this._components[x]._components[i];
+                        if (row === component)
+                            found = i;
+                    }
+                }
+            }
+            if (found !== -1)
+                return this.widths[found];
+            //this._parent.setChildWidth(component,value);
+        }
+        create(ob) {
+        }
+        extensionCalled(action) {
+            if (action.componentDesignerSetDesignMode) {
+                this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
+            }
+            super.extensionCalled(action);
+        }
+        fromJSON(obj) {
+            var ob = obj.table;
+            var ret = this;
+            ret.removeAll();
+            if (ob.body) {
+                for (var x = 0; x < ob.body.length; x++) {
+                    let obb = new RTablerow_3.RTablerow().fromJSON(ob.body[x]);
+                    ret.add(obb);
+                    /*   let all = [];
+                       obb._components.forEach((obp) => all.push(obp));
+                       all.forEach((obp) => { obb.add(obp) });
+                       obb.destroy();*/
+                }
+                delete ob.body;
+            }
+            if (ob.widths) {
+                ret.widths = ob.widths;
+                delete ob.widths;
+            }
+            var tr = this._components[0];
+            for (var x = 0; x < tr._components.length; x++) {
+                $(tr._components[x].domWrapper).attr("width", this.widths[x]);
+            }
+            super.fromJSON(ob);
+            for (var x = 0; x < ret._components.length; x++) {
+                ret._components[x].correctHideAfterSpan();
+            }
+            return ret;
+        }
+        toJSON() {
+            var r = {};
+            var ret = super.toJSON();
+            ret.table = r;
+            if (this.widths && this.widths.length > 0) {
+                r.widths = this.widths;
+                var len = this._components[0]._components.length;
+                if (this._designMode)
+                    len--;
+                for (var t = r.widths.length; t < len; t++) {
+                    r.widths.push("auto");
+                }
+                //remove width
+                while (r.widths.length > len) {
+                    r.widths.pop();
+                }
+            }
+            r.body = [];
+            for (var x = 0; x < this._components.length; x++) {
+                r.body.push(this._components[x].toJSON());
+            }
+            return ret;
+        }
+    };
+    RTable = __decorate([
+        (0, RComponent_7.$ReportComponent)({ fullPath: "report/Table", icon: "mdi mdi-table-large", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
+        (0, Jassi_9.$Class)("jassijs_report.RTable"),
+        __metadata("design:paramtypes", [Object])
+    ], RTable);
+    exports.RTable = RTable;
+    async function test() {
+    }
+    exports.test = test;
+});
+define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Jassi_10, Component_3, ReportDesign_3, RComponent_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTablerow = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
     let RTablerow = 
     //@$Property({name:"horizontal",hide:true})
-    class RTablerow extends RComponent_7.RComponent {
+    class RTablerow extends RComponent_8.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -1445,6 +1773,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
             if (component.addToParent)
                 return component.addToParent(this);
             this.wrapComponent(component);
+            component.parent = this;
             super.add(component);
             // $(component.domWrapper).css("display", "table-cell");
             this.callEvent("componentAdded", component, this);
@@ -1468,6 +1797,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
             if (component.addToParent)
                 return component.addToParent(this);
             this.wrapComponent(component);
+            component.parent = this;
             if (component["reporttype"] === "text") {
                 //(<RText>component).newlineafter = true;
             }
@@ -1486,8 +1816,8 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
         }
     };
     RTablerow = __decorate([
-        (0, RComponent_7.$ReportComponent)({ editableChildComponents: ["this"] }),
-        (0, Jassi_9.$Class)("jassijs_report.RTablerow")
+        (0, RComponent_8.$ReportComponent)({ editableChildComponents: ["this"] }),
+        (0, Jassi_10.$Class)("jassijs_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
@@ -1495,13 +1825,13 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
     exports.RTablerow = RTablerow;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties"], function (require, exports, Jassi_10, RComponent_8, HTMLPanel_1, Property_5, ReportDesign_4, CSSProperties_1) {
+define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties"], function (require, exports, Jassi_11, RComponent_9, HTMLPanel_1, Property_5, ReportDesign_4, CSSProperties_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RText = void 0;
     class InlineStyling {
     }
-    let RText = class RText extends RComponent_8.RComponent {
+    let RText = class RText extends RComponent_9.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -1512,7 +1842,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "text";
-            super.init($('<div class="RText mce-content-body jdisableaddcomponents" ><div  class="HTMLPanelContent"></div></div>')[0]);
+            super.init($('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>')[0]); //tabindex for key-event
             $(this.domWrapper).removeClass("jcontainer");
             $(this.__dom).css("text-overflow", "ellipsis");
             $(this.__dom).css("overflow", "hidden");
@@ -1526,6 +1856,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
             //   $(this.dom.children[0]).css("display","inline-block");
             this.extensionCalled = HTMLPanel_1.HTMLPanel.prototype.extensionCalled.bind(this);
             this._setDesignMode = HTMLPanel_1.HTMLPanel.prototype._setDesignMode.bind(this);
+            this.initIfNeeded = HTMLPanel_1.HTMLPanel.prototype.initIfNeeded.bind(this);
         }
         get value() {
             var el = this.dom.children[0];
@@ -1706,8 +2037,8 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
         __metadata("design:paramtypes", [String])
     ], RText.prototype, "value", null);
     RText = __decorate([
-        (0, RComponent_8.$ReportComponent)({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
-        (0, Jassi_10.$Class)("jassijs_report.RText")
+        (0, RComponent_9.$ReportComponent)({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" }),
+        (0, Jassi_11.$Class)("jassijs_report.RText")
         //@$Property({hideBaseClassProperties:true})
         ,
         (0, Property_5.$Property)({ name: "value", type: "string", description: "text" }),
@@ -1722,14 +2053,14 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
     }
     exports.test = test;
 });
-define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesign", "jassijs_report/RComponent", "jassijs/remote/Classes"], function (require, exports, Jassi_11, ReportDesign_5, RComponent_9, Classes_3) {
+define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesign", "jassijs_report/RComponent", "jassijs/remote/Classes"], function (require, exports, Jassi_12, ReportDesign_5, RComponent_10, Classes_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTextGroup = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
     let RTextGroup = 
     //@$Property({name:"horizontal",hide:true})
-    class RTextGroup extends RComponent_9.RComponent {
+    class RTextGroup extends RComponent_10.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -1795,8 +2126,8 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Jassi
         }
     };
     RTextGroup = __decorate([
-        (0, RComponent_9.$ReportComponent)({ fullPath: "report/TextGroup", icon: "mdi mdi-text-box-multiple-outline", editableChildComponents: ["this"] }),
-        (0, Jassi_11.$Class)("jassijs_report.RTextGroup")
+        (0, RComponent_10.$ReportComponent)({ fullPath: "report/TextGroup", icon: "mdi mdi-text-box-multiple-outline", editableChildComponents: ["this"] }),
+        (0, Jassi_12.$Class)("jassijs_report.RTextGroup")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])
@@ -1804,12 +2135,12 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Jassi
     exports.RTextGroup = RTextGroup;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent"], function (require, exports, Jassi_12, RComponent_10) {
+define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent"], function (require, exports, Jassi_13, RComponent_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RUnknown = void 0;
     //@$ReportComponent({fullPath:"report/Text",icon:"res/textbox.ico",initialize:{value:"text"}})
-    let RUnknown = class RUnknown extends RComponent_10.RComponent {
+    let RUnknown = class RUnknown extends RComponent_11.RComponent {
         /**
         *
         * @param {object} properties - properties to init
@@ -1836,12 +2167,12 @@ define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Jassi",
         }
     };
     RUnknown = __decorate([
-        (0, Jassi_12.$Class)("jassijs_report.RUnknown"),
+        (0, Jassi_13.$Class)("jassijs_report.RUnknown"),
         __metadata("design:paramtypes", [Object])
     ], RUnknown);
     exports.RUnknown = RUnknown;
 });
-define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup"], function (require, exports, BoxPanel_2, Jassi_13, RStack_1, RText_2, RColumns_1, RUnknown_1, Panel_3, RComponent_11, RDatatable_1, Property_6, RStyle_1, RTextGroup_1) {
+define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable"], function (require, exports, BoxPanel_2, Jassi_14, RStack_1, RText_3, RColumns_1, RUnknown_1, Panel_3, RComponent_12, RDatatable_1, Property_6, RStyle_1, RTextGroup_1, RTable_1) {
     "use strict";
     var ReportDesign_6;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1873,7 +2204,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         __metadata("design:type", String)
     ], InfoProperties.prototype, "producer", void 0);
     InfoProperties = __decorate([
-        (0, Jassi_13.$Class)("jassijs_report.InfoProperties")
+        (0, Jassi_14.$Class)("jassijs_report.InfoProperties")
     ], InfoProperties);
     let PermissionProperties = class PermissionProperties {
         constructor() {
@@ -1914,7 +2245,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "documentAssembly", void 0);
     PermissionProperties = __decorate([
-        (0, Jassi_13.$Class)("jassijs_report.PermissionProperties")
+        (0, Jassi_14.$Class)("jassijs_report.PermissionProperties")
     ], PermissionProperties);
     let StyleContainer = class StyleContainer extends Panel_3.Panel {
         constructor(props) {
@@ -1925,7 +2256,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         }
     };
     StyleContainer = __decorate([
-        (0, Jassi_13.$Class)("jassijs_report.StyleContainer"),
+        (0, Jassi_14.$Class)("jassijs_report.StyleContainer"),
         (0, Property_6.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], StyleContainer);
@@ -2128,11 +2459,11 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
                 ret.create(ob);
             }
             else if (typeof ob === 'string' || ob instanceof String) {
-                ret = new RText_2.RText();
+                ret = new RText_3.RText();
                 ret.value = ob;
             }
             else if (ob.text !== undefined && !Array.isArray(ob.text)) {
-                ret = new RText_2.RText().fromJSON(ob);
+                ret = new RText_3.RText().fromJSON(ob);
             }
             else if (ob.text !== undefined && Array.isArray(ob.text)) {
                 ret = new RTextGroup_1.RTextGroup().fromJSON(ob);
@@ -2145,6 +2476,9 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             }
             else if (ob.datatable !== undefined) {
                 ret = new RDatatable_1.RDatatable().fromJSON(ob);
+            }
+            else if (ob.table !== undefined) {
+                ret = new RTable_1.RTable().fromJSON(ob);
             }
             else {
                 ret = new RUnknown_1.RUnknown().fromJSON(ob);
@@ -2338,8 +2672,8 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         __metadata("design:paramtypes", [String])
     ], ReportDesign.prototype, "pageOrientation", null);
     ReportDesign = ReportDesign_6 = __decorate([
-        (0, RComponent_11.$ReportComponent)({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
-        (0, Jassi_13.$Class)("jassijs_report.ReportDesign"),
+        (0, RComponent_12.$ReportComponent)({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
+        (0, Jassi_14.$Class)("jassijs_report.ReportDesign"),
         (0, Property_6.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);
@@ -2349,7 +2683,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     }
     exports.test = test;
 });
-define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Jassi_14, Runlater_1, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_7, Panel_4, Windows_1, DockingContainer_1, VariablePanel_1, Property_7) {
+define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Jassi_15, Runlater_1, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_7, Panel_4, Windows_1, DockingContainer_1, VariablePanel_1, Property_7) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2623,7 +2957,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         }
     };
     SimpleReportEditor = __decorate([
-        (0, Jassi_14.$Class)("jassi_report.SimpleReportEditor"),
+        (0, Jassi_15.$Class)("jassi_report.SimpleReportEditor"),
         __metadata("design:paramtypes", [typeof (_a = typeof Panel_4.PanelCreateProperties !== "undefined" && Panel_4.PanelCreateProperties) === "function" ? _a : Object])
     ], SimpleReportEditor);
     exports.SimpleReportEditor = SimpleReportEditor;
@@ -2719,12 +3053,12 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RDatatable.ts": {
-                "date": 1632518425342,
+                "date": 1632682324077,
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
                             "fullPath": "report/Datatable",
-                            "icon": "mdi mdi-file-table-box-multiple-outline",
+                            "icon": "mdi mdi-table-cog",
                             "editableChildComponents": [
                                 "this",
                                 "this.headerPanel",
@@ -2744,7 +3078,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1632679895637,
+                "date": 1632684255114,
                 "jassijs_report.InfoProperties": {
                     "@members": {
                         "title": {
@@ -3012,7 +3346,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1632518474110,
+                "date": 1632850116110,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -3024,7 +3358,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1632681829067,
+                "date": 1632774767099,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -3282,11 +3616,28 @@ define("jassijs_report/registry", ["require"], function (require) {
                         }
                     ]
                 }
+            },
+            "jassijs_report/RTable.ts": {
+                "date": 1632864636962,
+                "jassijs_report.RTable": {
+                    "$ReportComponent": [
+                        {
+                            "fullPath": "report/Table",
+                            "icon": "mdi mdi-table-large",
+                            "editableChildComponents": [
+                                "this",
+                                "this.headerPanel",
+                                "this.bodyPanel",
+                                "this.footerPanel"
+                            ]
+                        }
+                    ]
+                }
             }
         }
     };
 });
-define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/BoxPanel"], function (require, exports, Jassi_15, BoxPanel_3) {
+define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/BoxPanel"], function (require, exports, Jassi_16, BoxPanel_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Report = void 0;
@@ -3306,7 +3657,7 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
         }
     };
     Report = __decorate([
-        (0, Jassi_15.$Class)("jassijs_report.Report")
+        (0, Jassi_16.$Class)("jassijs_report.Report")
         //@$UIComponent({editableChildComponents:["this"]})
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -3316,7 +3667,7 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
 });
 //jassijs.register("reportcomponent", "jassijs_report.Report", "report/Report", "res/report.ico");
 // return CodeEditor.constructor;
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_16, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_4, PDFReport_1, PDFViewer_2, ReportDesign_8, Tools_1) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_17, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_4, PDFReport_1, PDFViewer_2, ReportDesign_8, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
@@ -3513,7 +3864,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         }
     };
     ReportDesigner = __decorate([
-        (0, Jassi_16.$Class)("jassijs_report.designer.ReportDesigner"),
+        (0, Jassi_17.$Class)("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;
@@ -3602,7 +3953,7 @@ export async function test() {
     exports.test = test;
     ;
 });
-define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Jassi_17, ReportDesigner_1, Tools_2) {
+define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Jassi_18, ReportDesigner_1, Tools_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SimpleReportDesigner = void 0;
@@ -3672,7 +4023,7 @@ define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "j
         }
     };
     SimpleReportDesigner = __decorate([
-        (0, Jassi_17.$Class)("jassijs_report.designer.SimpleReportDesigner"),
+        (0, Jassi_18.$Class)("jassijs_report.designer.SimpleReportDesigner"),
         __metadata("design:paramtypes", [])
     ], SimpleReportDesigner);
     exports.SimpleReportDesigner = SimpleReportDesigner;

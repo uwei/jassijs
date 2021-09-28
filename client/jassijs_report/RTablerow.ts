@@ -7,6 +7,7 @@ import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
 import { Panel } from "jassijs/ui/Panel";
 import { RText } from "jassijs_report/RText";
 import { RDatatable } from "jassijs_report/RDatatable";
+import { RTable } from "jassijs_report/RTable";
 
 
 //@$UIComponent({editableChildComponents:["this"]})
@@ -15,7 +16,7 @@ import { RDatatable } from "jassijs_report/RDatatable";
 //@$Property({name:"horizontal",hide:true})
 export class RTablerow extends RComponent {
     reporttype: string = "tablerow";
-    parent:RDatatable;
+    parent:RTable;
 
     /**
     * 
@@ -90,7 +91,7 @@ export class RTablerow extends RComponent {
         if (component.addToParent)
             return component.addToParent(this);
 		this.wrapComponent(component);
-		
+		component.parent=this;
         super.add(component);
        // $(component.domWrapper).css("display", "table-cell");
         this.callEvent("componentAdded", component, this);
@@ -115,7 +116,7 @@ export class RTablerow extends RComponent {
         if (component.addToParent)
             return component.addToParent(this);
     	this.wrapComponent(component)
-        
+        component.parent=this;
         if (component["reporttype"] === "text") {
             //(<RText>component).newlineafter = true;
         }

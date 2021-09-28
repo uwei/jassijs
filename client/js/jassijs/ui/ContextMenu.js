@@ -131,6 +131,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Menu", "jassij
         async _callContextmenu(evt) {
             if (evt.preventDefault !== undefined)
                 evt.preventDefault();
+            this.target = evt.target;
             var cancel = this.callEvent("beforeshow", evt);
             if (cancel !== undefined) {
                 for (var x = 0; x < cancel.length; x++) {
