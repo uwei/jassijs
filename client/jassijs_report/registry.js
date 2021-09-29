@@ -7,7 +7,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.Report": {}
 	},
 	"jassijs_report/designer/ReportDesigner.ts": {
-		"date": 1632525377915,
+		"date": 1632950800680,
 		"jassijs_report.designer.ReportDesigner": {}
 	},
 	"jassijs_report/modul.ts": {
@@ -601,7 +601,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTable.ts": {
-		"date": 1632864636962,
+		"date": 1632923723328,
 		"jassijs_report.RTable": {
 			"$ReportComponent": [
 				{

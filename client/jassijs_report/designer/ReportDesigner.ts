@@ -121,14 +121,15 @@ export class ReportDesigner extends ComponentDesigner {
         //this.variables.updateCache();
         //this._componentExplorer.update();
         var ret = super.createComponent(type, component, top, left, newParent, beforeComponent);
-        this.addVariables(ret,true);
+        //this.addVariables(ret,true);
         
         this._componentExplorer.update();
         this.propertyChanged();
         this._updateInvisibleComponents();
         return ret;
     }
-    private addVariables(component: Component,doupdate=false) {
+    //createVariable(type, scope, varvalue) {
+    createVariable(type, scope,component: Component):string {
         var name = component["reporttype"];
         if (this.nextComponentvariable[name] === undefined) {
             this.nextComponentvariable[name] = 0;
@@ -145,11 +146,11 @@ export class ReportDesigner extends ComponentDesigner {
         this.allComponents[name + this.nextComponentvariable[name]] = component;
         if (component["_components"]) {
             for (let x = 0; x < component["_components"].length; x++) {
-                this.addVariables(component["_components"][x]);
+                this.createVariable(undefined,undefined,component["_components"][x]);
             }
         }
-        if (component === this||doupdate)
-            this._codeEditor.variables.update();
+        return sname;
+            
     }
     /**
       * @member {jassijs.ui.Component} - the designed component
@@ -162,7 +163,7 @@ export class ReportDesigner extends ComponentDesigner {
         this.nextComponentvariable = {};
         this.allComponents["this"] = component;
         this._codeEditor.variables.addVariable("this", component);
-        this.addVariables(<Container>component);
+        this.createVariable(undefined,undefined,<Container>component);
         this._propertyEditor.value = component;
         this._codeChanger.parser = this._propertyEditor.parser;
         super.designedComponent = component;

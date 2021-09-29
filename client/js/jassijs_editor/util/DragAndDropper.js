@@ -138,8 +138,18 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
                 this.parentPanel = parentPanel;
             if (allIDs !== undefined)
                 this.allIDs = allIDs;
-            // this.draggableComponents = $(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
-            this.draggableComponents = $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
+            var dcs = [];
+            this.allIDs.split(",").forEach((str) => {
+                let el = document.getElementById(str.substring(1));
+                if (el) {
+                    var classes = el.classList;
+                    if (classes.contains("jcomponent") && !classes.contains("jdesigncontainer") && !classes.contains("designerNoDraggable"))
+                        dcs.push(document.getElementById(str.substring(1)));
+                }
+            });
+            //slow
+            // this.draggableComponents = $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
+            this.draggableComponents = $(dcs); //.find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
             this.draggableComponents.draggable({
                 cancel: "false",
                 revert: "invalid",
@@ -159,8 +169,10 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
                 //appendTo: "body"
                 helper: "clone",
             });
-            $(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('disable');
-            $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('enable');
+            //$(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('disable');
+            //$(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('enable');
+            this.draggableComponents.draggable('disable');
+            this.draggableComponents.draggable('enable');
             var _this = this;
             //all jcompoenents are proptargets                                         also jdesignummy     but no jcomponents in absolute Layout  no jcomponens that contains a jdesigndummy  absolutelayout container
             this.droppableComponents = $(this.parentPanel.dom).parent().parent().find(".jdesigndummy,.jcomponent:not(.jabsolutelayout>.jcomponent, :has(.jdesigndummy)),                      .jcontainer>.jabsolutelayout");

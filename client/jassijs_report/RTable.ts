@@ -39,6 +39,7 @@ export class RTable extends RComponent {
     // bodyPanel: RTablerow[] = [new RTablerow()];
     private insertEmptyCells = true;
     widths: any[] = [];
+    layout:any;
     /**
 * 
 * @param {object} properties - properties to init
@@ -66,7 +67,7 @@ export class RTable extends RComponent {
         ret.row = this._components.indexOf(ret.tableRow);
         return ret;
     }
-    initContextMenu() {
+    async initContextMenu() {//should not block creation
         var _this = this;
         this.contextMenu = new ContextMenu();
         this.contextMenu._isNotEditableInDesigner = true;
@@ -168,7 +169,10 @@ export class RTable extends RComponent {
                 _this.widths.slice(info.column, 0);
 
             for (var x = 0; x < _this._components.length; x++) {
-                (<RTablerow>_this._components[x]).remove((<RTablerow>_this._components[x])._components[info.column], true);
+                var tr=(<RTablerow>_this._components[x]);
+                 //@ts-ignore
+            if(tr._components[info.column]?.designDummyFor===undefined)
+                tr.remove(tr._components[info.column], true);
             }
             _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
 
@@ -183,7 +187,8 @@ export class RTable extends RComponent {
         removeRow.text = "delete row";
         removeRow.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
-            _this.remove(_this._components[info.row]);
+           
+             _this.remove(_this._components[info.row]);
             _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
 
         });
@@ -331,6 +336,11 @@ export class RTable extends RComponent {
             delete ob.widths;
 
         }
+        if (ob.layout) {
+            ret.layout = ob.layout;
+            delete ob.layout;
+
+        }
         var tr = (<RTablerow>this._components[0]);
         for (var x = 0; x < tr._components.length; x++) {
 
@@ -351,6 +361,9 @@ export class RTable extends RComponent {
         };
         var ret: any = super.toJSON();
         ret.table = r;
+        if (this.layout ){
+            r.layout=this.layout;
+        }
         if (this.widths && this.widths.length > 0) {
             r.widths = this.widths;
             var len = (<RTablerow>this._components[0])._components.length;

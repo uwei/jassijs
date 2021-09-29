@@ -44,7 +44,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             ret.row = this._components.indexOf(ret.tableRow);
             return ret;
         }
-        initContextMenu() {
+        async initContextMenu() {
             var _this = this;
             this.contextMenu = new ContextMenu_1.ContextMenu();
             this.contextMenu._isNotEditableInDesigner = true;
@@ -139,11 +139,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             removeColumn.items._setDesignMode = (nothing) => { };
             removeColumn.text = "delete column";
             removeColumn.onclick((evt) => {
+                var _a;
                 var info = _this.getInfoFromEvent(evt);
                 if (_this.widths)
                     _this.widths.slice(info.column, 0);
                 for (var x = 0; x < _this._components.length; x++) {
-                    _this._components[x].remove(_this._components[x]._components[info.column], true);
+                    var tr = _this._components[x];
+                    //@ts-ignore
+                    if (((_a = tr._components[info.column]) === null || _a === void 0 ? void 0 : _a.designDummyFor) === undefined)
+                        tr.remove(tr._components[info.column], true);
                 }
                 _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
             });
@@ -291,6 +295,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 ret.widths = ob.widths;
                 delete ob.widths;
             }
+            if (ob.layout) {
+                ret.layout = ob.layout;
+                delete ob.layout;
+            }
             var tr = this._components[0];
             for (var x = 0; x < tr._components.length; x++) {
                 $(tr._components[x].domWrapper).attr("width", this.widths[x]);
@@ -305,6 +313,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             var r = {};
             var ret = super.toJSON();
             ret.table = r;
+            if (this.layout) {
+                r.layout = this.layout;
+            }
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;
                 var len = this._components[0]._components.length;

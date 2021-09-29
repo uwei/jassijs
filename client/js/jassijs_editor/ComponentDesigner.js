@@ -398,18 +398,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 }
             }
             var varvalue = new (Classes_1.classes.getClass(type));
+            var varname = _this.createVariable(type, scope, varvalue);
             if (this._propertyEditor.codeEditor !== undefined) {
-                var varname = _this._propertyEditor.addVariableInCode(type, scope);
-                if (varname.startsWith("me.")) {
-                    var me = _this._codeEditor.getObjectFromVariable("me");
-                    me[varname.substring(3)] = varvalue;
-                }
-                else if (varname.startsWith("this.")) {
-                    var th = _this._codeEditor.getObjectFromVariable("this");
-                    th[varname.substring(5)] = varvalue;
-                }
-                else
-                    _this.variables.addVariable(varname, varvalue);
                 var newName = _this._codeEditor.getVariableFromObject(newParent);
                 var before;
                 if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //Designdummy atEnd
@@ -456,17 +446,35 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             //notify componentdescriptor 
             var ac = varvalue.extensionCalled;
             if (ac !== undefined) {
-                varvalue.extensionCalled({ componentDesignerComponentCreated: {
+                varvalue.extensionCalled({
+                    componentDesignerComponentCreated: {
                         newParent: newParent
-                    } });
+                    }
+                });
             }
+            _this._propertyEditor.value = varvalue;
             //include the new element
             _this.editDialog(true);
-            _this._propertyEditor.value = varvalue;
             _this._componentExplorer.update();
             //var test=_this._invisibleComponents;
             _this._updateInvisibleComponents();
             return varvalue;
+        }
+        createVariable(type, scope, varvalue) {
+            if (this._propertyEditor.codeEditor === undefined)
+                return;
+            var varname = this._propertyEditor.addVariableInCode(type, scope);
+            if (varname.startsWith("me.")) {
+                var me = this._codeEditor.getObjectFromVariable("me");
+                me[varname.substring(3)] = varvalue;
+            }
+            else if (varname.startsWith("this.")) {
+                var th = this._codeEditor.getObjectFromVariable("this");
+                th[varname.substring(5)] = varvalue;
+            }
+            else
+                this.variables.addVariable(varname, varvalue);
+            return varname;
         }
         /**
          * is there a parent that acts a repeating container?

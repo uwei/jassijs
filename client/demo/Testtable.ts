@@ -10,22 +10,26 @@ var reportdesign = {
 	content: [
 		{
 			table: {
-				widths: [110,"auto","auto"],
 				body: [
-					["www","rrrr","Column 3"],
-					["One value goes here","Another one here","OK?"]
+					["www"],
+					
 				]
 			}
 		}
-	]
+	],
+	layout: {
+		fillColor: function (rowIndex, node, columnIndex) {	
+                return (rowIndex % 2 === 0) ? '#CCCCCC' : null;	
+            }
+	}
 };
 
 
 
 
 export async function test() {
-    // kk.o=0;
-    var dlg: any = { reportdesign };
- 
-    return dlg;
+	// kk.o=0;
+	var dlg: any = { reportdesign };
+
+	return dlg;
 }

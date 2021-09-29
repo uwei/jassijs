@@ -148,9 +148,22 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
         _changeCursor(e) {
             var borderSize = 4;
             this.cursorType = "default";
-            var els = $(this.parentPanel.dom).find(this.elements);
+            //slow
+            //var els = $(this.parentPanel.dom).find(this.elements);
+            var dcs = [];
+            this.elements.split(",").forEach((str) => {
+                let el = document.getElementById(str.substring(1));
+                if (el) {
+                    var classes = el.classList;
+                    if (!classes.contains("designerNoResizable"))
+                        dcs.push(document.getElementById(str.substring(1)));
+                }
+            });
+            var els = $(dcs);
             for (var i = 0; i < els.length; i++) {
                 var element = els[i];
+                if (element === null)
+                    continue;
                 var noresizex = $(element).hasClass("designerNoResizableX");
                 var noresizey = $(element).hasClass("designerNoResizableY");
                 if ($(element).hasClass("designerNoResizable")) {
