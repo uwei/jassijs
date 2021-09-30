@@ -27,7 +27,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             // bodyPanel: RTablerow[] = [new RTablerow()];
             this.insertEmptyCells = true;
             this.widths = [];
-            super.init($("<table  style='nin-width:50px;table-layout: fixed'></table>")[0]);
+            super.init($("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>")[0]);
             //	this.backgroundPanel.width="500px";
             //$(this.backgroundPanel.dom).css("min-width","200px");
             //$(this.dom).css("display", "table");
@@ -196,6 +196,108 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             pasteMenu.onclick(func2);
             this.contextMenu.menu.add(pasteMenu);
         }
+        add(component) {
+            super.add(component);
+            this.doTableLayout();
+        }
+        doTableLayout() {
+            if (this.layout === undefined)
+                return;
+            var tab = this.toJSON();
+            if (tab.table.widths === undefined) {
+                tab.table.widths = [];
+                let tr = this._components[0];
+                for (var x = 0; x < tr._components.length; x++) {
+                    tab.table.widths.push("auto");
+                }
+            }
+            for (var r = 0; r < this._components.length; r++) {
+                var row = this._components[r];
+                for (var c = 0; c < row._components.length; c++) {
+                    var cssid = ["RColumn"];
+                    var css = {};
+                    var cell = row._components[c];
+                    var v = null;
+                    if (this.layout.fillColor) {
+                        v = this.layout.fillColor(r, tab, c);
+                    }
+                    if (v === null)
+                        v = "white";
+                    css.background_color = v;
+                    cssid.push(v.replace("#", ""));
+                    v = 1;
+                    if (this.layout.hLineWidth) {
+                        v = this.layout.hLineWidth(r, tab, c);
+                    }
+                    css.border_top_width = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if (this.layout.hLineWidth) {
+                        v = this.layout.hLineWidth(r + 1, tab, c);
+                    }
+                    css.border_bottom_width = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if (this.layout.vLineWidth) {
+                        v = this.layout.vLineWidth(c, tab, r);
+                    }
+                    css.border_left_width = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if (this.layout.vLineWidth) {
+                        v = this.layout.vLineWidth(c + 1, tab, r);
+                    }
+                    css.border_right_width = v + "px";
+                    cssid.push(v);
+                    v = "black";
+                    css.border_top_style = "solid";
+                    css.border_bottom_style = "solid";
+                    css.border_left_style = "solid";
+                    css.border_right_style = "solid";
+                    if (this.layout.hLineColor) {
+                        v = this.layout.hLineColor(r, tab, c);
+                    }
+                    css.border_top_color = v;
+                    cssid.push(v.replace("#", ""));
+                    v = "black";
+                    if (this.layout.hLineColor) {
+                        v = this.layout.hLineColor(r + 1, tab, c);
+                    }
+                    css.border_bottom_color = v;
+                    cssid.push(v.replace("#", ""));
+                    v = "black";
+                    if (this.layout.vLineColor) {
+                        v = this.layout.vLineColor(c, tab, r);
+                    }
+                    css.border_left_color = v;
+                    cssid.push(v.replace("#", ""));
+                    v = "black";
+                    if (this.layout.vLineColor) {
+                        v = this.layout.vLineColor(c + 1, tab, r);
+                    }
+                    css.border_right_color = v;
+                    cssid.push(v.replace("#", ""));
+                    var scssid = cssid.join("-");
+                    var found = false;
+                    cell.domWrapper.classList.forEach((cl) => {
+                        if (cl.startsWith("RColumn")) {
+                            if (cl === scssid)
+                                found = true;
+                            else
+                                cell.domWrapper.classList.remove(cl);
+                        }
+                    });
+                    if (!found) {
+                        cell.domWrapper.classList.add(scssid);
+                    }
+                    if (document.getElementById(scssid) === null) {
+                        var sc = {};
+                        sc["." + scssid] = css;
+                        Jassi_1.default.includeCSS(scssid, sc);
+                    }
+                }
+            }
+        }
         _setDesignMode(enable) {
             this._designMode = enable;
             //do nothing - no add button
@@ -295,9 +397,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 ret.widths = ob.widths;
                 delete ob.widths;
             }
-            if (ob.layout) {
-                ret.layout = ob.layout;
-                delete ob.layout;
+            if (obj.layout) {
+                ret.layout = obj.layout;
+                delete obj.layout;
             }
             var tr = this._components[0];
             for (var x = 0; x < tr._components.length; x++) {
@@ -307,6 +409,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             for (var x = 0; x < ret._components.length; x++) {
                 ret._components[x].correctHideAfterSpan();
             }
+            this.doTableLayout();
             return ret;
         }
         toJSON() {
@@ -314,7 +417,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             var ret = super.toJSON();
             ret.table = r;
             if (this.layout) {
-                r.layout = this.layout;
+                ret.layout = this.layout;
             }
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;

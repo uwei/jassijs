@@ -62,6 +62,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             var colspan = $(component.domWrapper).attr("colspan"); //save colspan
             Component_1.Component.replaceWrapper(component, document.createElement("td"));
             $(component.domWrapper).attr("colspan", colspan);
+            $(component.dom).css("background-color", "inherit");
             $(component.domWrapper).css("word-break", "break-all");
             $(component.domWrapper).css("display", "");
         }

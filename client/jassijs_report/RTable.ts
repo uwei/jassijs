@@ -39,7 +39,7 @@ export class RTable extends RComponent {
     // bodyPanel: RTablerow[] = [new RTablerow()];
     private insertEmptyCells = true;
     widths: any[] = [];
-    layout:any;
+    layout: any;
     /**
 * 
 * @param {object} properties - properties to init
@@ -49,7 +49,7 @@ export class RTable extends RComponent {
 */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        super.init($("<table  style='nin-width:50px;table-layout: fixed'></table>")[0]);
+        super.init($("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>")[0]);
         //	this.backgroundPanel.width="500px";
         //$(this.backgroundPanel.dom).css("min-width","200px");
         //$(this.dom).css("display", "table");
@@ -71,8 +71,8 @@ export class RTable extends RComponent {
         var _this = this;
         this.contextMenu = new ContextMenu();
         this.contextMenu._isNotEditableInDesigner = true;
-        $(this.contextMenu.menu.dom).css("font-family","Roboto");
-        $(this.contextMenu.menu.dom).css("font-size","12px");
+        $(this.contextMenu.menu.dom).css("font-family", "Roboto");
+        $(this.contextMenu.menu.dom).css("font-size", "12px");
         this.contextMenu.menu._setDesignMode = (nothing) => { };//should net be editable in designer
         var insertRowBefore = new MenuItem();
         //@ts-ignore
@@ -169,17 +169,17 @@ export class RTable extends RComponent {
                 _this.widths.slice(info.column, 0);
 
             for (var x = 0; x < _this._components.length; x++) {
-                var tr=(<RTablerow>_this._components[x]);
-                 //@ts-ignore
-            if(tr._components[info.column]?.designDummyFor===undefined)
-                tr.remove(tr._components[info.column], true);
+                var tr = (<RTablerow>_this._components[x]);
+                //@ts-ignore
+                if (tr._components[info.column]?.designDummyFor === undefined)
+                    tr.remove(tr._components[info.column], true);
             }
             _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
 
         });
         (<ContextMenu>this.contextMenu).menu.add(removeColumn);
 
-         var removeRow = new MenuItem();
+        var removeRow = new MenuItem();
         //@ts-ignore
         removeRow._setDesignMode = (nothing) => { };//should net be editable in designer
         //@ts-ignore
@@ -187,46 +187,161 @@ export class RTable extends RComponent {
         removeRow.text = "delete row";
         removeRow.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
-           
-             _this.remove(_this._components[info.row]);
+
+            _this.remove(_this._components[info.row]);
             _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
 
         });
         (<ContextMenu>this.contextMenu).menu.add(removeRow);
 
-        var copyMenu=new Button();
-          $(copyMenu.dom).css("font-family","Roboto");
-        $(copyMenu.dom).css("font-size","12px");
-        copyMenu.text="copy";
-        copyMenu.width="100%";
+        var copyMenu = new Button();
+        $(copyMenu.dom).css("font-family", "Roboto");
+        $(copyMenu.dom).css("font-size", "12px");
+        copyMenu.text = "copy";
+        copyMenu.width = "100%";
         $(copyMenu.dom).removeClass("jinlinecomponent");
-        let func=function(evt){
+        let func = function (evt) {
             var info = _this.getInfoFromEvent(evt);
             //@ts-ignore
-            var edi=tinymce.editors[info.cell._id];
+            var edi = tinymce.editors[info.cell._id];
             navigator.clipboard.writeText(edi.selection.getContent());
             (<ContextMenu>_this.contextMenu).close();
         }
         copyMenu.onclick(func);
         (<ContextMenu>this.contextMenu).menu.add(copyMenu);
 
-         var pasteMenu=new Button();
-          $(pasteMenu.dom).css("font-family","Roboto");
-        $(pasteMenu.dom).css("font-size","12px");
-        pasteMenu.text="paste";
-        pasteMenu.width="100%";
+        var pasteMenu = new Button();
+        $(pasteMenu.dom).css("font-family", "Roboto");
+        $(pasteMenu.dom).css("font-size", "12px");
+        pasteMenu.text = "paste";
+        pasteMenu.width = "100%";
         $(pasteMenu.dom).removeClass("jinlinecomponent");
-        let func2=function(evt){
+        let func2 = function (evt) {
             var info = _this.getInfoFromEvent(evt);
             //@ts-ignore
-            var edi=tinymce.editors[info.cell._id];
-            navigator.clipboard.readText().then((data)=>{
+            var edi = tinymce.editors[info.cell._id];
+            navigator.clipboard.readText().then((data) => {
                 edi.selection.setContent(data);
             })
-            
+
         }
         pasteMenu.onclick(func2);
         (<ContextMenu>this.contextMenu).menu.add(pasteMenu);
+
+    }
+    add(component) {
+        super.add(component);
+        this.doTableLayout();
+    }
+    doTableLayout() {
+        if (this.layout === undefined)
+            return;
+        var tab = this.toJSON();
+        if (tab.table.widths === undefined) {
+            tab.table.widths = [];
+            let tr = <RTablerow>this._components[0];
+            for (var x = 0; x < tr._components.length; x++) {
+                tab.table.widths.push("auto");
+            }
+        }
+
+        for (var r = 0; r < this._components.length; r++) {
+            var row = <RTablerow>this._components[r];
+            for (var c = 0; c < row._components.length; c++) {
+                var cssid = ["RColumn"];
+                var css: any = {};
+                var cell = <RText>row._components[c];
+                var v:any = null;
+                if (this.layout.fillColor) {
+                    v = this.layout.fillColor(r, tab, c);
+                }
+                if(v===null)
+                    v="white";
+                css.background_color = v;
+                cssid.push(v.replace("#", ""));
+
+                v = 1;
+                if (this.layout.hLineWidth) {
+                    v = this.layout.hLineWidth(r, tab, c);
+                }
+                css.border_top_width = v + "px";
+                cssid.push(v);
+
+                v = 1;
+                if (this.layout.hLineWidth) {
+                    v = this.layout.hLineWidth(r + 1, tab, c);
+                }
+                css.border_bottom_width = v + "px";
+                cssid.push(v);
+
+                v = 1;
+                if (this.layout.vLineWidth) {
+                    v = this.layout.vLineWidth(c, tab, r);
+                }
+                css.border_left_width = v + "px";
+                cssid.push(v);
+
+                v = 1;
+                if (this.layout.vLineWidth) {
+                    v = this.layout.vLineWidth(c + 1, tab, r);
+                }
+                css.border_right_width = v + "px";
+                cssid.push(v);
+
+                v = "black";
+                css.border_top_style = "solid";
+                css.border_bottom_style = "solid";
+                css.border_left_style = "solid";
+                css.border_right_style = "solid";
+
+                if (this.layout.hLineColor) {
+                    v = this.layout.hLineColor(r, tab, c);
+                }
+                css.border_top_color = v;
+                cssid.push(v.replace("#", ""));
+
+                v = "black";
+                if (this.layout.hLineColor) {
+                    v = this.layout.hLineColor(r + 1, tab, c);
+                }
+                css.border_bottom_color = v;
+                cssid.push(v.replace("#", ""));
+
+                v = "black";
+                if (this.layout.vLineColor) {
+                    v = this.layout.vLineColor(c, tab, r);
+                }
+                css.border_left_color = v;
+                cssid.push(v.replace("#", ""));
+
+                v = "black";
+                if (this.layout.vLineColor) {
+                    v = this.layout.vLineColor(c + 1, tab, r);
+                }
+                css.border_right_color = v;
+                cssid.push(v.replace("#", ""));
+
+                var scssid = cssid.join("-")
+                var found = false;
+                cell.domWrapper.classList.forEach((cl) => {
+                    if (cl.startsWith("RColumn")) {
+                        if (cl === scssid)
+                            found = true;
+                        else
+                            cell.domWrapper.classList.remove(cl);
+                    }
+                });
+                if (!found) {
+                    cell.domWrapper.classList.add(scssid);
+                }
+                if (document.getElementById(scssid) === null) {
+                    var sc = {};
+                    sc["." + scssid] = css;
+                    jassijs.includeCSS(scssid, sc);
+                }
+            }
+
+        }
 
     }
     protected _setDesignMode(enable) {
@@ -336,9 +451,9 @@ export class RTable extends RComponent {
             delete ob.widths;
 
         }
-        if (ob.layout) {
-            ret.layout = ob.layout;
-            delete ob.layout;
+        if (obj.layout) {
+            ret.layout = obj.layout;
+            delete obj.layout;
 
         }
         var tr = (<RTablerow>this._components[0]);
@@ -352,6 +467,7 @@ export class RTable extends RComponent {
             (<RTablerow>ret._components[x]).correctHideAfterSpan();
 
         }
+        this.doTableLayout();
         return ret;
     }
 
@@ -361,8 +477,8 @@ export class RTable extends RComponent {
         };
         var ret: any = super.toJSON();
         ret.table = r;
-        if (this.layout ){
-            r.layout=this.layout;
+        if (this.layout) {
+            ret.layout = this.layout;
         }
         if (this.widths && this.widths.length > 0) {
             r.widths = this.widths;

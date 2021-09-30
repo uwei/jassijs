@@ -52,7 +52,7 @@ export class RDatatable extends RComponent {
 */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        super.init($("<table style='nin-width:50px;table-layout: fixed'></table>")[0]);
+        super.init($("<table style='min-width:50px;table-layout: fixed'></table>")[0]);
         //	this.backgroundPanel.width="500px";
         //$(this.backgroundPanel.dom).css("min-width","200px");
         //$(this.dom).css("display", "table");

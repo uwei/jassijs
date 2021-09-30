@@ -36,7 +36,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RDatatable.ts": {
-		"date": 1632682324077,
+		"date": 1633030016582,
 		"jassijs_report.RDatatable": {
 			"$ReportComponent": [
 				{
@@ -329,7 +329,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTablerow.ts": {
-		"date": 1632850116110,
+		"date": 1633034296183,
 		"jassijs_report.RTablerow": {
 			"$ReportComponent": [
 				{
@@ -601,7 +601,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTable.ts": {
-		"date": 1632923723328,
+		"date": 1633033894817,
 		"jassijs_report.RTable": {
 			"$ReportComponent": [
 				{

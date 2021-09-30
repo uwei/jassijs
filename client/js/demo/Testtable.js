@@ -6,17 +6,33 @@ define(["require", "exports"], function (require, exports) {
         content: [
             {
                 table: {
+                    widths: ["auto", 50, "auto", "auto"],
                     body: [
-                        ["www"],
+                        ["d", "\n", "", ""],
+                        ["3", "", "", ""],
+                        ["3", "", "", ""],
+                        ["", "", "", ""]
                     ]
+                },
+                layout: {
+                    fillColor: function (rowIndex, node, columnIndex) {
+                        return (rowIndex % 2 === 0) ? 'yellow' : null;
+                    },
+                    hLineWidth: function (i, node) {
+                        return (i === 0 || i === node.table.body.length) ? 4 : 1;
+                    },
+                    vLineWidth: function (i, node) {
+                        return (i === 0 || i === node.table.widths.length) ? 4 : 1;
+                    },
+                    hLineColor: function (i, node) {
+                        return (i === 0 || i === node.table.body.length) ? 'black' : 'red';
+                    },
+                    vLineColor: function (i, node) {
+                        return (i === 0 || i === node.table.widths.length) ? 'blue' : 'green';
+                    }
                 }
             }
-        ],
-        layout: {
-            fillColor: function (rowIndex, node, columnIndex) {
-                return (rowIndex % 2 === 0) ? '#CCCCCC' : null;
-            }
-        }
+        ]
     };
     async function test() {
         // kk.o=0;
