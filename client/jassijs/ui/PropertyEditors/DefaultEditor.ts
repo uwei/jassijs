@@ -3,7 +3,7 @@ import { Editor, $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { Select } from "jassijs/ui/Select";
 
-@$PropertyEditor(["string", "number", "number[]"])
+@$PropertyEditor(["string", "number", "number[]","boolean[]"])
 @$Class("jassijs.ui.PropertyEditors.DefaultEditor")
 class DefaultEditor extends Editor
     /**
@@ -47,14 +47,13 @@ class DefaultEditor extends Editor
         var value = this.propertyEditor.getPropertyValue(this.property);
         if (value !== undefined && this.property.type === "string" && typeof value === 'string' && value.startsWith("\"") && value.endsWith("\"")) {
             value = value.substring(1, value.length - 1);
-        } else if (value !== undefined && this.property.type === "number[]") {
+        } else if (value !== undefined && (this.property.type === "number[]"||this.property.type === "boolean[]")) {
             if (typeof (value) === "string")
                 value = value.replaceAll("[", "").replaceAll("]", "");
             else {
                 value = value.join(",");
             }
-
-        }
+        } 
         this.component.value = value;
     }
     get ob() {
@@ -76,7 +75,7 @@ class DefaultEditor extends Editor
         var val = this.component.value;
         if (this.property.type === "string")
             val = "\"" + val + "\"";
-        if (this.property.type === "number[]")
+        if (this.property.type === "number[]"||this.property.type === "boolean[]")
             val = (val === "" ? "undefined" : "[" + val + "]");
         this.propertyEditor.setPropertyInCode(this.property.name, val);
         var oval = this.component.value;
@@ -91,6 +90,17 @@ class DefaultEditor extends Editor
                 oval = [];
                 for (var x = 0; x < all.length; x++) {
                     oval.push(Number(all[x].trim()));
+                }
+            }
+        }
+        if (this.property.type === "boolean[]") {
+            if (oval === "")
+                oval = undefined;
+            else {
+                var all = oval.split(",");
+                oval = [];
+                for (var x = 0; x < all.length; x++) {
+                    oval.push(all[x].trim()==="true");
                 }
             }
         }

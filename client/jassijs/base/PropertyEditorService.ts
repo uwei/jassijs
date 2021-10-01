@@ -30,9 +30,10 @@ export class PropertyEditorService {
     	 if (this.data[type] === undefined){
                 var dat=await registry.getJSONData("$PropertyEditor");
                 for(var x=0;x<dat.length;x++){
-                    if(dat[x].params[0].indexOf(type)!==-1){
-                        await classes.loadClass(dat[x].classname);
-                    }
+                		if(dat[x].params[0].indexOf(type)!==-1){
+							await classes.loadClass(dat[x].classname);
+						}
+                	
                 }
                 if (this.data[type] === undefined)
                     throw "PropertyEditor not found for type:" + type;

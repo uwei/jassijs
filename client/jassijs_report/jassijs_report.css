@@ -11,3 +11,6 @@
 .invisibleAfterSpan{
 	display:none;
 }
+td > .RText{
+    background-color:inherit
+}

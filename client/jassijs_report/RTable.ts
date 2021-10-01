@@ -317,7 +317,7 @@ export class RTable extends RComponent {
                 css.border_bottom_width = v + "px";
                 cssid.push(v);
 
-                v = 1;
+                v =1;
                 if (this.layout?.vLineWidth) {
                     v = this.layout?.vLineWidth(c, tab, r);
                 }
@@ -332,11 +332,14 @@ export class RTable extends RComponent {
                 cssid.push(v);
 
                 v = "black";
-                css.border_top_style = "solid";
-                css.border_bottom_style = "solid";
-                css.border_left_style = "solid";
-                css.border_right_style = "solid";
-
+                css.border_top_style = (this.layout==="noBorders"||this.layout?.defaultBorder===false)?"none":"solid";
+                css.border_bottom_style =  (this.layout==="noBorders"||this.layout?.defaultBorder===false)?"none":"solid";
+                css.border_left_style = (this.layout==="noBorders"||this.layout?.defaultBorder===false)?"none":"solid";
+                css.border_right_style =  (this.layout==="noBorders"||this.layout?.defaultBorder===false)?"none":"solid";
+                cssid.push(css.border_top_style);
+                cssid.push(css.border_bottom_style);
+                cssid.push(css.border_left_style);
+                cssid.push(css.border_right_style);
                 if (this.layout?.hLineColor) {
                     v = this.layout?.hLineColor(r, tab, c);
                 }

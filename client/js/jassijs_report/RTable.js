@@ -244,7 +244,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             }
         }
         doTableLayout() {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5;
             this.correctHideAfterSpan();
             var tab = this.toJSON();
             if (tab.table.widths === undefined)
@@ -291,54 +291,58 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                     css.border_right_width = v + "px";
                     cssid.push(v);
                     v = "black";
-                    css.border_top_style = "solid";
-                    css.border_bottom_style = "solid";
-                    css.border_left_style = "solid";
-                    css.border_right_style = "solid";
-                    if ((_l = this.layout) === null || _l === void 0 ? void 0 : _l.hLineColor) {
-                        v = (_m = this.layout) === null || _m === void 0 ? void 0 : _m.hLineColor(r, tab, c);
+                    css.border_top_style = (this.layout === "noBorders" || ((_l = this.layout) === null || _l === void 0 ? void 0 : _l.defaultBorder) === false) ? "none" : "solid";
+                    css.border_bottom_style = (this.layout === "noBorders" || ((_m = this.layout) === null || _m === void 0 ? void 0 : _m.defaultBorder) === false) ? "none" : "solid";
+                    css.border_left_style = (this.layout === "noBorders" || ((_o = this.layout) === null || _o === void 0 ? void 0 : _o.defaultBorder) === false) ? "none" : "solid";
+                    css.border_right_style = (this.layout === "noBorders" || ((_p = this.layout) === null || _p === void 0 ? void 0 : _p.defaultBorder) === false) ? "none" : "solid";
+                    cssid.push(css.border_top_style);
+                    cssid.push(css.border_bottom_style);
+                    cssid.push(css.border_left_style);
+                    cssid.push(css.border_right_style);
+                    if ((_q = this.layout) === null || _q === void 0 ? void 0 : _q.hLineColor) {
+                        v = (_r = this.layout) === null || _r === void 0 ? void 0 : _r.hLineColor(r, tab, c);
                     }
                     css.border_top_color = v;
                     cssid.push(v.replace("#", ""));
                     v = "black";
-                    if ((_o = this.layout) === null || _o === void 0 ? void 0 : _o.hLineColor) {
-                        v = (_p = this.layout) === null || _p === void 0 ? void 0 : _p.hLineColor(r + 1, tab, c);
+                    if ((_s = this.layout) === null || _s === void 0 ? void 0 : _s.hLineColor) {
+                        v = (_t = this.layout) === null || _t === void 0 ? void 0 : _t.hLineColor(r + 1, tab, c);
                     }
                     css.border_bottom_color = v;
                     cssid.push(v.replace("#", ""));
                     v = "black";
-                    if ((_q = this.layout) === null || _q === void 0 ? void 0 : _q.vLineColor) {
-                        v = (_r = this.layout) === null || _r === void 0 ? void 0 : _r.vLineColor(c, tab, r);
+                    if ((_u = this.layout) === null || _u === void 0 ? void 0 : _u.vLineColor) {
+                        v = (_v = this.layout) === null || _v === void 0 ? void 0 : _v.vLineColor(c, tab, r);
                     }
                     css.border_left_color = v;
                     cssid.push(v.replace("#", ""));
                     v = "black";
-                    if ((_s = this.layout) === null || _s === void 0 ? void 0 : _s.vLineColor) {
-                        v = (_t = this.layout) === null || _t === void 0 ? void 0 : _t.vLineColor(c + 1, tab, r);
+                    if ((_w = this.layout) === null || _w === void 0 ? void 0 : _w.vLineColor) {
+                        v = (_x = this.layout) === null || _x === void 0 ? void 0 : _x.vLineColor(c + 1, tab, r);
                     }
                     css.border_right_color = v;
                     cssid.push(v.replace("#", ""));
                     v = 1;
-                    if ((_u = this.layout) === null || _u === void 0 ? void 0 : _u.paddingLeft) {
-                        v = (_v = this.layout) === null || _v === void 0 ? void 0 : _v.paddingLeft(c + 1, tab, r);
+                    if ((_y = this.layout) === null || _y === void 0 ? void 0 : _y.paddingLeft) {
+                        v = (_z = this.layout) === null || _z === void 0 ? void 0 : _z.paddingLeft(c + 1, tab, r);
                     }
                     css.padding_left = v + "px";
                     cssid.push(v);
                     v = 1;
-                    if ((_w = this.layout) === null || _w === void 0 ? void 0 : _w.paddingRight) {
-                        v = (_x = this.layout) === null || _x === void 0 ? void 0 : _x.paddingRight(c + 1, tab, r);
+                    if ((_0 = this.layout) === null || _0 === void 0 ? void 0 : _0.paddingRight) {
+                        v = (_1 = this.layout) === null || _1 === void 0 ? void 0 : _1.paddingRight(c + 1, tab, r);
                     }
                     css.padding_right = v + "px";
                     cssid.push(v);
                     v = 1;
-                    if ((_y = this.layout) === null || _y === void 0 ? void 0 : _y.paddingTop) {
-                        v = (_z = this.layout) === null || _z === void 0 ? void 0 : _z.paddingTop(r + 1, tab, c);
+                    if ((_2 = this.layout) === null || _2 === void 0 ? void 0 : _2.paddingTop) {
+                        v = (_3 = this.layout) === null || _3 === void 0 ? void 0 : _3.paddingTop(r + 1, tab, c);
                     }
                     css.padding_top = v + "px";
                     cssid.push(v);
                     v = 1;
-                    if ((_0 = this.layout) === null || _0 === void 0 ? void 0 : _0.paddingBottom) {
-                        v = (_1 = this.layout) === null || _1 === void 0 ? void 0 : _1.paddingBottom(r + 1, tab, c);
+                    if ((_4 = this.layout) === null || _4 === void 0 ? void 0 : _4.paddingBottom) {
+                        v = (_5 = this.layout) === null || _5 === void 0 ? void 0 : _5.paddingBottom(r + 1, tab, c);
                     }
                     css.padding_bottom = v + "px";
                     cssid.push(v);

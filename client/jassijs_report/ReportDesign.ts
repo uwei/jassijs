@@ -229,7 +229,7 @@ export class ReportDesign extends BoxPanel {
         } else if (typeof ob === 'string' || ob instanceof String) {
             ret = new RText();
             ret.value = ob;
-        } else if (ob.text !== undefined && !Array.isArray(ob.text)) {
+        } else if (ob.text !== undefined && (ob.editTogether||!Array.isArray(ob.text))) {
             ret = new RText().fromJSON(ob);
         } else if (ob.text !== undefined && Array.isArray(ob.text)) {
             ret = new RTextGroup().fromJSON(ob);

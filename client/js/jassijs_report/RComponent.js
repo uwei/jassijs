@@ -29,6 +29,13 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         onstylechanged(func) {
             this.addEvent("stylechanged", func);
         }
+        get fillColor() {
+            return this._fillColor;
+        }
+        set fillColor(value) {
+            this._fillColor = value;
+            $(this.dom).css("background-color", value);
+        }
         get colSpan() {
             return this._colSpan;
         }
@@ -48,6 +55,18 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             this._rowSpan = value;
             if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
                 (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
+        }
+        get border() {
+            return this._border;
+        }
+        set border(value) {
+            this._border = value;
+            if (value === undefined)
+                value = [false, false, false, false];
+            $(this.domWrapper).css("border-left-style", value[0] ? "solid" : "none");
+            $(this.domWrapper).css("border-top-style", value[1] ? "solid" : "none");
+            $(this.domWrapper).css("border-right-style", value[2] ? "solid" : "none");
+            $(this.domWrapper).css("border-bottom-style", value[3] ? "solid" : "none");
         }
         get width() {
             var _a;
@@ -278,6 +297,14 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.style = ob.style;
                 delete ob.style;
             }
+            if (ob.fillColor) {
+                ret.fillColor = ob.fillColor;
+                delete ob.fillColor;
+            }
+            if (ob.border) {
+                ret.border = ob.border;
+                delete ob.border;
+            }
             ret.otherProperties = ob;
             return ret;
         }
@@ -316,6 +343,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.background = this.background;
             if (this.style !== undefined)
                 ret.style = this.style;
+            if (this.fillColor !== undefined)
+                ret.fillColor = this.fillColor;
+            if (this.border !== undefined)
+                ret.border = this.border;
             Object.assign(ret, this["otherProperties"]);
             return ret;
         }
@@ -324,6 +355,17 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         (0, Property_1.$Property)(),
         __metadata("design:type", String)
     ], RComponent.prototype, "foreach", void 0);
+    __decorate([
+        (0, Property_1.$Property)({
+            type: "color", isVisible: (component) => {
+                var _a;
+                //only in table and column width is posible
+                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "tablerow";
+            }
+        }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], RComponent.prototype, "fillColor", null);
     __decorate([
         (0, Property_1.$Property)({
             type: "string", isVisible: (component) => {
@@ -346,6 +388,20 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RComponent.prototype, "rowSpan", null);
+    __decorate([
+        (0, Property_1.$Property)({
+            type: "boolean[]",
+            default: [false, false, false, false],
+            isVisible: (component) => {
+                var _a, _b;
+                //only in table and column width is posible
+                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns";
+            },
+            description: "border of the tablecell: left, top, right, bottom"
+        }),
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
+    ], RComponent.prototype, "border", null);
     __decorate([
         (0, Property_1.$Property)({
             type: "string", isVisible: (component) => {

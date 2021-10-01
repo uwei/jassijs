@@ -5,19 +5,49 @@ import { $Property } from "jassijs/ui/Property";
 import { $UIComponent } from "jassijs/ui/Component";
 import { Kunde } from "de/remote/Kunde";
 import { RText } from "jassijs_report/RText";
+//Defning row heights
+//heaercount
+//headerLineOnly
 
 var reportdesign = {
 	content: [
 		{
 			table: {
-				widths: [15,"auto",75,"auto"],
+				widths: [10,"auto",75,"auto","auto"],
 				body: [
-					["d","qwr","ewr","\n"],
-					["3","qwer","eee","\n"],
-					["3","er","\n",""],
-					["","wqe","",""]
+					[
+						{
+							fillColor: "yellow",
+							border: [true,true,true,true],
+							text: "d"
+						},
+						{background: "yellow",text: "qwr"},
+						"ewr",
+						"\n",
+						""
+					],
+					[
+						"3",
+						"qwer",
+						{border: [true,true,false,false],text: "eee"},
+						"\n",
+						""
+					],
+					[
+						"3",
+						{border: [true,true,false,false],text: "er"},
+						{
+							bold: true,
+							border: [true,false,false,false],
+							text: "eee"
+						},
+						"",
+						""
+					],
+					["","wqe","","",""]
 				]
-			}
+			},
+			layout: {defaultBorder: false}
 		}
 	]
 };

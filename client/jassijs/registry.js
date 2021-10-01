@@ -24,7 +24,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1623093221162
 	},
 	"jassijs/base/PropertyEditorService.ts": {
-		"date": 1622998316409,
+		"date": 1633125784194,
 		"jassijs.base.PropertyEditorService": {}
 	},
 	"jassijs/base/Router.ts": {
@@ -1531,7 +1531,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1632776034063,
+		"date": 1633131688135,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
@@ -1930,13 +1930,14 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DefaultEditor.ts": {
-		"date": 1622985638954,
+		"date": 1633126371593,
 		"jassijs.ui.PropertyEditors.DefaultEditor": {
 			"$PropertyEditor": [
 				[
 					"string",
 					"number",
-					"number[]"
+					"number[]",
+					"boolean[]"
 				]
 			]
 		}

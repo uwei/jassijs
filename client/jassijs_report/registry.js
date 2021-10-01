@@ -61,7 +61,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/ReportDesign.ts": {
-		"date": 1632684255114,
+		"date": 1633131279255,
 		"jassijs_report.InfoProperties": {
 			"@members": {
 				"title": {
@@ -329,7 +329,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTablerow.ts": {
-		"date": 1633102284157,
+		"date": 1633127890177,
 		"jassijs_report.RTablerow": {
 			"$ReportComponent": [
 				{
@@ -341,7 +341,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RText.ts": {
-		"date": 1632774767099,
+		"date": 1633130823249,
 		"jassijs_report.RText": {
 			"$ReportComponent": [
 				{
@@ -400,7 +400,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RComponent.ts": {
-		"date": 1633102113839,
+		"date": 1633127861424,
 		"jassijs_report.ReportComponent": {
 			"$Property": [
 				{
@@ -410,6 +410,14 @@ define("jassijs_report/registry",["require"], function(require) {
 			"@members": {
 				"foreach": {
 					"$Property": []
+				},
+				"fillColor": {
+					"$Property": [
+						{
+							"type": "color",
+							"isVisible": "function"
+						}
+					]
 				},
 				"colSpan": {
 					"$Property": [
@@ -424,6 +432,21 @@ define("jassijs_report/registry",["require"], function(require) {
 						{
 							"type": "string",
 							"isVisible": "function"
+						}
+					]
+				},
+				"border": {
+					"$Property": [
+						{
+							"type": "boolean[]",
+							"default": [
+								false,
+								false,
+								false,
+								false
+							],
+							"isVisible": "function",
+							"description": "border of the tablecell: left, top, right, bottom"
 						}
 					]
 				},
@@ -609,7 +632,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTable.ts": {
-		"date": 1633114350231,
+		"date": 1633129521144,
 		"jassijs_report.RTable": {
 			"$ReportComponent": [
 				{

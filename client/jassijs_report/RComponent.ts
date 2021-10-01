@@ -37,7 +37,8 @@ export class RComponent extends Panel {
     private _background: string;
     private _font: string;
     private _style: string;
-
+    private _fillColor: string;
+    private _border: boolean[];
     reporttype: string = "nothing";
     otherProperties: any;
     constructor(properties = undefined) {
@@ -47,6 +48,23 @@ export class RComponent extends Panel {
     onstylechanged(func) {
         this.addEvent("stylechanged", func);
     }
+
+    @$Property({
+        type: "color", isVisible: (component) => {
+            //only in table and column width is posible
+            return component._parent?.reporttype === "tablerow";
+        }
+    })
+    get fillColor(): string {
+        return this._fillColor;
+    }
+
+    set fillColor(value: string) {
+        this._fillColor = value;
+        $(this.dom).css("background-color", value);
+
+    }
+
     @$Property({
         type: "string", isVisible: (component) => {
             //only in table and column width is posible
@@ -79,13 +97,36 @@ export class RComponent extends Panel {
         if (this._parent?._parent?.updateLayout)
             this._parent?._parent?.updateLayout(true);
     }
+    @$Property({
+        type: "boolean[]",
+        default: [false, false, false, false],
+        isVisible: (component) => {
+            //only in table and column width is posible
+            return component._parent?.setChildWidth || component._parent?.reporttype === "columns";
+        },
+        description: "border of the tablecell: left, top, right, bottom"
+    })
+    get border(): boolean[] {
+        return this._border;
+    }
+    set border(value: boolean[]) {
+        this._border = value;
+        if (value === undefined)
+            value = [false, false, false, false];
+          
 
+        $(this.domWrapper).css("border-left-style", value[0] ? "solid" : "none");
+        $(this.domWrapper).css("border-top-style", value[1] ? "solid" : "none");
+        $(this.domWrapper).css("border-right-style", value[2] ? "solid" : "none");
+        $(this.domWrapper).css("border-bottom-style", value[3] ? "solid" : "none");
+    }
     @$Property({
         type: "string", isVisible: (component) => {
             //only in table and column width is posible
             return component._parent?.setChildWidth || component._parent?.reporttype === "columns";
         }
     })
+
     get width(): any {
         if (this._parent?.setChildWidth !== undefined)
             return this._parent.getChildWidth(this);
@@ -334,6 +375,14 @@ export class RComponent extends Panel {
             ret.style = ob.style;
             delete ob.style;
         }
+        if (ob.fillColor) {
+            ret.fillColor = ob.fillColor;
+            delete ob.fillColor;
+        }
+        if (ob.border) {
+            ret.border = ob.border;
+            delete ob.border;
+        }
         ret.otherProperties = ob;
         return ret;
     }
@@ -371,6 +420,10 @@ export class RComponent extends Panel {
             ret.background = this.background;
         if (this.style !== undefined)
             ret.style = this.style;
+        if (this.fillColor !== undefined)
+            ret.fillColor = this.fillColor;
+        if (this.border !== undefined)
+            ret.border = this.border;
         Object.assign(ret, this["otherProperties"]);
         return ret;
     }

@@ -297,7 +297,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
                 ret = new RText_1.RText();
                 ret.value = ob;
             }
-            else if (ob.text !== undefined && !Array.isArray(ob.text)) {
+            else if (ob.text !== undefined && (ob.editTogether || !Array.isArray(ob.text))) {
                 ret = new RText_1.RText().fromJSON(ob);
             }
             else if (ob.text !== undefined && Array.isArray(ob.text)) {

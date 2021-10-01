@@ -161,6 +161,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
                         menubar: false,
                         //statusbar: false,
                         selector: '#' + _this._id,
+                        fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
                         inline: true,
                         setup: function (ed) {
                             ed.on('change', function (e) {
@@ -191,8 +192,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
                         editor._draganddropper.enableDraggable(false);
                     });
                     $(_this.dom).on('blur', function () {
-                        let edi = tinymce.editors[_this._id];
-                        $(edi === null || edi === void 0 ? void 0 : edi.container).css("display", "none");
+                        setTimeout(() => {
+                            let edi = tinymce.editors[_this._id];
+                            $(edi === null || edi === void 0 ? void 0 : edi.container).css("display", "none");
+                        }, 500);
                         //not work edi.getElement().blur();
                         //  edi.getElement().focus();
                         //  edi.getElement().blur();
@@ -248,7 +251,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
     exports.HTMLPanel = HTMLPanel;
     function test() {
         var ret = new HTMLPanel();
-        ret.value = "Sample <b>Text</b>";
+        ret.value = "<span style='font-size: 13.3333px;'>dsfg<strong>sdfgsd</strong>fgsdfg</span><br>";
         return ret;
     }
     exports.test = test;

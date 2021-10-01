@@ -25,6 +25,8 @@ class InlineStyling {
 export class RText extends RComponent {
     reporttype: string = "text";
     initIfNeeded;
+    toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
+   
     /**
     * 
     * @param {object} properties - properties to init

@@ -59,10 +59,19 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             var _a;
             if (((_a = component.domWrapper) === null || _a === void 0 ? void 0 : _a.tagName) === "TD")
                 return; //allready wrapped
-            var colspan = $(component.domWrapper).attr("colspan"); //save colspan
             Component_1.Component.replaceWrapper(component, document.createElement("td"));
-            $(component.domWrapper).attr("colspan", colspan);
-            $(component.dom).css("background-color", "inherit");
+            var border = component["border"];
+            if (border !== undefined) {
+                $(component.domWrapper).css("border-left-style", border[0] ? "solid" : "none");
+                $(component.domWrapper).css("border-top-style", border[1] ? "solid" : "none");
+                $(component.domWrapper).css("border-right-style", border[2] ? "solid" : "none");
+                $(component.domWrapper).css("border-bottom-style", border[3] ? "solid" : "none");
+            }
+            if (component.colSpan)
+                $(component.domWrapper).attr("colspan", component.colSpan);
+            if (component.rowSpan)
+                $(component.domWrapper).attr("rowspan", component.rowSpan);
+            //$(component.dom).css("background-color","inherit");
             $(component.domWrapper).css("word-break", "break-all");
             $(component.domWrapper).css("display", "");
         }
