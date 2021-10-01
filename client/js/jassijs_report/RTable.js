@@ -7,10 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button"], function (require, exports, Jassi_1, RText_1, RComponent_1, RTablerow_1, ContextMenu_1, MenuItem_1, Button_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs/util/Tools", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/util/Runlater", "jassijs_report/RTableLayouts"], function (require, exports, Jassi_1, RText_1, Tools_1, RComponent_1, RTablerow_1, Property_1, ContextMenu_1, MenuItem_1, Button_1, Runlater_1, RTableLayouts_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RTable = void 0;
+    var allLayouts = Object.keys(RTableLayouts_1.tableLayouts);
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
     let RTable = class RTable extends RComponent_1.RComponent {
@@ -32,9 +33,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             //$(this.backgroundPanel.dom).css("min-width","200px");
             //$(this.dom).css("display", "table");
             // $(this.dom).css("min-width", "50px");
-            this.add(new RTablerow_1.RTablerow());
+            this.updater = new Runlater_1.Runlater(() => {
+                _this.updateLayout(false);
+            }, 100);
+            let tr = new RTablerow_1.RTablerow();
+            tr.parent = this;
+            this.add(tr);
             $(this.dom).addClass("designerNoResizable");
             this.initContextMenu();
+            var _this = this;
         }
         getInfoFromEvent(evt) {
             var ret = {};
@@ -198,18 +205,52 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
         }
         add(component) {
             super.add(component);
+            this.updateLayout(true);
+        }
+        updateLayout(doitlater = false) {
+            if (doitlater) {
+                this.updater.runlater();
+                return;
+            }
             this.doTableLayout();
         }
-        doTableLayout() {
-            if (this.layout === undefined)
-                return;
-            var tab = this.toJSON();
-            if (tab.table.widths === undefined) {
-                tab.table.widths = [];
-                let tr = this._components[0];
-                for (var x = 0; x < tr._components.length; x++) {
-                    tab.table.widths.push("auto");
+        correctHideAfterSpan() {
+            //rowspan
+            var span;
+            var hiddenCells = {};
+            for (var r = 0; r < this._components.length; r++) {
+                var row = this._components[r];
+                for (var c = 0; c < row._components.length; c++) {
+                    var cell = row._components[c];
+                    if (cell["colSpan"]) {
+                        span = Number.parseInt(cell["colSpan"]);
+                        for (var x = c + 1; x < c + span; x++) {
+                            hiddenCells[r + ":" + x] = true;
+                        }
+                    }
+                    if (cell["rowSpan"]) {
+                        span = Number.parseInt(cell["rowSpan"]);
+                        for (var x = r + 1; x < r + span; x++) {
+                            hiddenCells[x + ":" + c] = true;
+                        }
+                    }
+                    if (hiddenCells[r + ":" + c] === true) {
+                        $(cell.domWrapper).addClass("invisibleAfterSpan");
+                    }
+                    else {
+                        $(cell.domWrapper).removeClass("invisibleAfterSpan");
+                    }
                 }
+            }
+        }
+        doTableLayout() {
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1;
+            this.correctHideAfterSpan();
+            var tab = this.toJSON();
+            if (tab.table.widths === undefined)
+                tab.table.widths = [];
+            while (this._components[0]._components.length > tab.table.widths.length) {
+                tab.table.widths.push("auto"); //designer dummy
             }
             for (var r = 0; r < this._components.length; r++) {
                 var row = this._components[r];
@@ -218,34 +259,34 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                     var css = {};
                     var cell = row._components[c];
                     var v = null;
-                    if (this.layout.fillColor) {
-                        v = this.layout.fillColor(r, tab, c);
+                    if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.fillColor) {
+                        v = (_b = this.layout) === null || _b === void 0 ? void 0 : _b.fillColor(r, tab, c);
                     }
                     if (v === null)
                         v = "white";
                     css.background_color = v;
                     cssid.push(v.replace("#", ""));
                     v = 1;
-                    if (this.layout.hLineWidth) {
-                        v = this.layout.hLineWidth(r, tab, c);
+                    if ((_c = this.layout) === null || _c === void 0 ? void 0 : _c.hLineWidth) {
+                        v = (_d = this.layout) === null || _d === void 0 ? void 0 : _d.hLineWidth(r, tab, c);
                     }
                     css.border_top_width = v + "px";
                     cssid.push(v);
                     v = 1;
-                    if (this.layout.hLineWidth) {
-                        v = this.layout.hLineWidth(r + 1, tab, c);
+                    if ((_e = this.layout) === null || _e === void 0 ? void 0 : _e.hLineWidth) {
+                        v = (_f = this.layout) === null || _f === void 0 ? void 0 : _f.hLineWidth(r + 1, tab, c);
                     }
                     css.border_bottom_width = v + "px";
                     cssid.push(v);
                     v = 1;
-                    if (this.layout.vLineWidth) {
-                        v = this.layout.vLineWidth(c, tab, r);
+                    if ((_g = this.layout) === null || _g === void 0 ? void 0 : _g.vLineWidth) {
+                        v = (_h = this.layout) === null || _h === void 0 ? void 0 : _h.vLineWidth(c, tab, r);
                     }
                     css.border_left_width = v + "px";
                     cssid.push(v);
                     v = 1;
-                    if (this.layout.vLineWidth) {
-                        v = this.layout.vLineWidth(c + 1, tab, r);
+                    if ((_j = this.layout) === null || _j === void 0 ? void 0 : _j.vLineWidth) {
+                        v = (_k = this.layout) === null || _k === void 0 ? void 0 : _k.vLineWidth(c + 1, tab, r);
                     }
                     css.border_right_width = v + "px";
                     cssid.push(v);
@@ -254,29 +295,53 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                     css.border_bottom_style = "solid";
                     css.border_left_style = "solid";
                     css.border_right_style = "solid";
-                    if (this.layout.hLineColor) {
-                        v = this.layout.hLineColor(r, tab, c);
+                    if ((_l = this.layout) === null || _l === void 0 ? void 0 : _l.hLineColor) {
+                        v = (_m = this.layout) === null || _m === void 0 ? void 0 : _m.hLineColor(r, tab, c);
                     }
                     css.border_top_color = v;
                     cssid.push(v.replace("#", ""));
                     v = "black";
-                    if (this.layout.hLineColor) {
-                        v = this.layout.hLineColor(r + 1, tab, c);
+                    if ((_o = this.layout) === null || _o === void 0 ? void 0 : _o.hLineColor) {
+                        v = (_p = this.layout) === null || _p === void 0 ? void 0 : _p.hLineColor(r + 1, tab, c);
                     }
                     css.border_bottom_color = v;
                     cssid.push(v.replace("#", ""));
                     v = "black";
-                    if (this.layout.vLineColor) {
-                        v = this.layout.vLineColor(c, tab, r);
+                    if ((_q = this.layout) === null || _q === void 0 ? void 0 : _q.vLineColor) {
+                        v = (_r = this.layout) === null || _r === void 0 ? void 0 : _r.vLineColor(c, tab, r);
                     }
                     css.border_left_color = v;
                     cssid.push(v.replace("#", ""));
                     v = "black";
-                    if (this.layout.vLineColor) {
-                        v = this.layout.vLineColor(c + 1, tab, r);
+                    if ((_s = this.layout) === null || _s === void 0 ? void 0 : _s.vLineColor) {
+                        v = (_t = this.layout) === null || _t === void 0 ? void 0 : _t.vLineColor(c + 1, tab, r);
                     }
                     css.border_right_color = v;
                     cssid.push(v.replace("#", ""));
+                    v = 1;
+                    if ((_u = this.layout) === null || _u === void 0 ? void 0 : _u.paddingLeft) {
+                        v = (_v = this.layout) === null || _v === void 0 ? void 0 : _v.paddingLeft(c + 1, tab, r);
+                    }
+                    css.padding_left = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if ((_w = this.layout) === null || _w === void 0 ? void 0 : _w.paddingRight) {
+                        v = (_x = this.layout) === null || _x === void 0 ? void 0 : _x.paddingRight(c + 1, tab, r);
+                    }
+                    css.padding_right = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if ((_y = this.layout) === null || _y === void 0 ? void 0 : _y.paddingTop) {
+                        v = (_z = this.layout) === null || _z === void 0 ? void 0 : _z.paddingTop(r + 1, tab, c);
+                    }
+                    css.padding_top = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if ((_0 = this.layout) === null || _0 === void 0 ? void 0 : _0.paddingBottom) {
+                        v = (_1 = this.layout) === null || _1 === void 0 ? void 0 : _1.paddingBottom(r + 1, tab, c);
+                    }
+                    css.padding_bottom = v + "px";
+                    cssid.push(v);
                     var scssid = cssid.join("-");
                     var found = false;
                     cell.domWrapper.classList.forEach((cl) => {
@@ -372,19 +437,44 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
         }
         create(ob) {
         }
+        set layoutName(value) {
+            var _a;
+            var old = this.layoutName;
+            if (value === "custom" && old === undefined && this.layout !== undefined)
+                return; //if user has changed the layout then do not modify
+            this.layout = (_a = RTableLayouts_1.tableLayouts[value]) === null || _a === void 0 ? void 0 : _a.layout;
+            this.updateLayout(true);
+        }
+        get layoutName() {
+            var ret = this.findTableLayout(this.layout);
+            if (ret === undefined)
+                ret = this.layout === undefined ? "" : "custom";
+            return ret;
+        }
         extensionCalled(action) {
             if (action.componentDesignerSetDesignMode) {
                 this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
             }
             super.extensionCalled(action);
         }
+        findTableLayout(func) {
+            var sfind = Tools_1.Tools.objectToJson(func, undefined, false).replaceAll(" ", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll("\n", "");
+            for (var key in RTableLayouts_1.tableLayouts) {
+                var test = Tools_1.Tools.objectToJson(RTableLayouts_1.tableLayouts[key].layout, undefined, false).replaceAll(" ", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll("\n", "");
+                if (sfind === test)
+                    return key;
+            }
+            return undefined;
+        }
         fromJSON(obj) {
+            var _a;
             var ob = obj.table;
             var ret = this;
             ret.removeAll();
             if (ob.body) {
                 for (var x = 0; x < ob.body.length; x++) {
                     let obb = new RTablerow_1.RTablerow().fromJSON(ob.body[x]);
+                    obb.parent = this;
                     ret.add(obb);
                     /*   let all = [];
                        obb._components.forEach((obp) => all.push(obp));
@@ -398,7 +488,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 delete ob.widths;
             }
             if (obj.layout) {
-                ret.layout = obj.layout;
+                if (typeof (obj.layout) === "string") {
+                    if (((_a = RTableLayouts_1.tableLayouts[obj.layout]) === null || _a === void 0 ? void 0 : _a.isSystem) === true) {
+                        ret.layout = RTableLayouts_1.tableLayouts[obj.layout].layout;
+                    }
+                }
+                else
+                    ret.layout = obj.layout;
                 delete obj.layout;
             }
             var tr = this._components[0];
@@ -406,18 +502,20 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 $(tr._components[x].domWrapper).attr("width", this.widths[x]);
             }
             super.fromJSON(ob);
-            for (var x = 0; x < ret._components.length; x++) {
-                ret._components[x].correctHideAfterSpan();
-            }
-            this.doTableLayout();
+            this.updateLayout(false);
             return ret;
         }
         toJSON() {
+            var _a;
             var r = {};
             var ret = super.toJSON();
             ret.table = r;
             if (this.layout) {
-                ret.layout = this.layout;
+                var test = this.findTableLayout(this.layout);
+                if ((_a = RTableLayouts_1.tableLayouts[test]) === null || _a === void 0 ? void 0 : _a.isSystem)
+                    ret.layout = test;
+                else
+                    ret.layout = this.layout;
             }
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;
@@ -439,6 +537,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             return ret;
         }
     };
+    __decorate([
+        (0, Property_1.$Property)({ chooseFrom: allLayouts, chooseFromStrict: true }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], RTable.prototype, "layoutName", null);
     RTable = __decorate([
         (0, RComponent_1.$ReportComponent)({ fullPath: "report/Table", icon: "mdi mdi-table-large", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
         (0, Jassi_1.$Class)("jassijs_report.RTable"),

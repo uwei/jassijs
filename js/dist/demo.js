@@ -1041,10 +1041,12 @@ define("demo/Testtable", ["require", "exports"], function (require, exports) {
         content: [
             {
                 table: {
-                    widths: [110, "auto", "auto"],
+                    widths: [15, "auto", 75, "auto"],
                     body: [
-                        ["www", "rrrr", "Column 3"],
-                        ["One value goes here", "Another one here", "OK?"]
+                        ["d", "qwr", "ewr", "\n"],
+                        ["3", "qwer", "eee", "\n"],
+                        ["3", "er", "\n", ""],
+                        ["", "wqe", "", ""]
                     ]
                 }
             }
@@ -1337,7 +1339,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1632525413937
             },
             "demo/Testtable.ts": {
-                "date": 1632862956354
+                "date": 1633114458564
             }
         }
     };

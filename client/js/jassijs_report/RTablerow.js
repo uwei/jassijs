@@ -66,29 +66,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             $(component.domWrapper).css("word-break", "break-all");
             $(component.domWrapper).css("display", "");
         }
-        correctHideAfterSpan() {
-            //rowspan
-            var span;
-            for (var x = 0; x < this._components.length; x++) {
-                if (this._components[x]["colSpan"]) {
-                    span = this._components[x]["colSpan"];
-                }
-                else {
-                    span--;
-                    if (span > 0) {
-                        $(this._components[x].domWrapper).addClass("invisibleAfterColspan");
-                    }
-                    else {
-                        $(this._components[x].domWrapper).removeClass("invisibleAfterColspan");
-                    }
-                }
-            }
-        }
         /**
         * adds a component to the container
         * @param {jassijs.ui.Component} component - the component to add
         */
         add(component) {
+            var _a;
             if (component.addToParent)
                 return component.addToParent(this);
             this.wrapComponent(component);
@@ -106,6 +89,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             }
             $(component.dom).removeClass("designerNoResizable");
             $(component.dom).addClass("designerNoResizableY");
+            (_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout(true);
         }
         /**
       * adds a component to the container before an other component
@@ -113,6 +97,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
       * @param {jassijs.ui.Component} before - the component before then component to add
       */
         addBefore(component, before) {
+            var _a;
             if (component.addToParent)
                 return component.addToParent(this);
             this.wrapComponent(component);
@@ -125,6 +110,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             this.callEvent("componentAdded", component, this);
             if (this._parent)
                 this._parent.addEmptyCellsIfNeeded(this);
+            (_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout(true);
         }
         fromJSON(columns) {
             var ret = this;

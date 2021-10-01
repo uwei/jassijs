@@ -30,24 +30,24 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             this.addEvent("stylechanged", func);
         }
         get colSpan() {
-            /*if(this._parent?.setChildWidth!==undefined)
-                return this._parent.getChildWidth(this);
-            else
-                return this._width;*/
             return this._colSpan;
         }
         set colSpan(value) {
+            var _a, _b, _c, _d;
             $(this.domWrapper).attr("colspan", value === undefined ? "" : value);
-            /*	if(this._parent?.setChildWidth!==undefined)
-                    this._parent.setChildWidth(this,value);
-                else{
-                    this._width = value;
-                    console.log(value);
-                    super.width = value;
-                }*/
             this._colSpan = value;
-            if (this._parent)
-                this._parent.correctHideAfterSpan();
+            if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
+                (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
+        }
+        get rowSpan() {
+            return this._rowSpan;
+        }
+        set rowSpan(value) {
+            var _a, _b, _c, _d;
+            $(this.domWrapper).attr("rowspan", value === undefined ? "" : value);
+            this._rowSpan = value;
+            if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
+                (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
         }
         get width() {
             var _a;
@@ -222,6 +222,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.colSpan = ob.colSpan;
                 delete ob.colSpan;
             }
+            if (ob.rowSpan) {
+                ret.rowSpan = ob.rowSpan;
+                delete ob.rowSpan;
+            }
             if (ob.width) {
                 ret.width = ob.width;
                 delete ob.width;
@@ -282,6 +286,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             var ret = {};
             if (this.colSpan !== undefined)
                 ret.colSpan = this.colSpan;
+            if (this.rowSpan !== undefined)
+                ret.rowSpan = this.rowSpan;
             if (this.foreach !== undefined)
                 ret.foreach = this.foreach;
             if (this.width !== undefined && !((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth))
@@ -329,6 +335,17 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RComponent.prototype, "colSpan", null);
+    __decorate([
+        (0, Property_1.$Property)({
+            type: "string", isVisible: (component) => {
+                var _a;
+                //only in table and column width is posible
+                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "tablerow";
+            }
+        }),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], RComponent.prototype, "rowSpan", null);
     __decorate([
         (0, Property_1.$Property)({
             type: "string", isVisible: (component) => {

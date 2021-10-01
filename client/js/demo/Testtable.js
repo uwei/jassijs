@@ -6,30 +6,13 @@ define(["require", "exports"], function (require, exports) {
         content: [
             {
                 table: {
-                    widths: ["auto", 50, "auto", "auto"],
+                    widths: [15, "auto", 75, "auto"],
                     body: [
-                        ["d", "\n", "", ""],
-                        ["3", "", "", ""],
-                        ["3", "", "", ""],
-                        ["", "", "", ""]
+                        ["d", "qwr", "ewr", "\n"],
+                        ["3", "qwer", "eee", "\n"],
+                        ["3", "er", "\n", ""],
+                        ["", "wqe", "", ""]
                     ]
-                },
-                layout: {
-                    fillColor: function (rowIndex, node, columnIndex) {
-                        return (rowIndex % 2 === 0) ? 'yellow' : null;
-                    },
-                    hLineWidth: function (i, node) {
-                        return (i === 0 || i === node.table.body.length) ? 4 : 1;
-                    },
-                    vLineWidth: function (i, node) {
-                        return (i === 0 || i === node.table.widths.length) ? 4 : 1;
-                    },
-                    hLineColor: function (i, node) {
-                        return (i === 0 || i === node.table.body.length) ? 'black' : 'red';
-                    },
-                    vLineColor: function (i, node) {
-                        return (i === 0 || i === node.table.widths.length) ? 'blue' : 'green';
-                    }
                 }
             }
         ]

@@ -459,24 +459,24 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
             this.addEvent("stylechanged", func);
         }
         get colSpan() {
-            /*if(this._parent?.setChildWidth!==undefined)
-                return this._parent.getChildWidth(this);
-            else
-                return this._width;*/
             return this._colSpan;
         }
         set colSpan(value) {
+            var _a, _b, _c, _d;
             $(this.domWrapper).attr("colspan", value === undefined ? "" : value);
-            /*	if(this._parent?.setChildWidth!==undefined)
-                    this._parent.setChildWidth(this,value);
-                else{
-                    this._width = value;
-                    console.log(value);
-                    super.width = value;
-                }*/
             this._colSpan = value;
-            if (this._parent)
-                this._parent.correctHideAfterSpan();
+            if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
+                (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
+        }
+        get rowSpan() {
+            return this._rowSpan;
+        }
+        set rowSpan(value) {
+            var _a, _b, _c, _d;
+            $(this.domWrapper).attr("rowspan", value === undefined ? "" : value);
+            this._rowSpan = value;
+            if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
+                (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
         }
         get width() {
             var _a;
@@ -651,6 +651,10 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
                 ret.colSpan = ob.colSpan;
                 delete ob.colSpan;
             }
+            if (ob.rowSpan) {
+                ret.rowSpan = ob.rowSpan;
+                delete ob.rowSpan;
+            }
             if (ob.width) {
                 ret.width = ob.width;
                 delete ob.width;
@@ -711,6 +715,8 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
             var ret = {};
             if (this.colSpan !== undefined)
                 ret.colSpan = this.colSpan;
+            if (this.rowSpan !== undefined)
+                ret.rowSpan = this.rowSpan;
             if (this.foreach !== undefined)
                 ret.foreach = this.foreach;
             if (this.width !== undefined && !((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth))
@@ -758,6 +764,17 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RComponent.prototype, "colSpan", null);
+    __decorate([
+        (0, Property_1.$Property)({
+            type: "string", isVisible: (component) => {
+                var _a;
+                //only in table and column width is posible
+                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "tablerow";
+            }
+        }),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], RComponent.prototype, "rowSpan", null);
     __decorate([
         (0, Property_1.$Property)({
             type: "string", isVisible: (component) => {
@@ -860,7 +877,7 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi
             this.groupExpression = [];
             this.footerPanel = new RTablerow_1.RTablerow();
             this.widths = [];
-            super.init($("<table style='nin-width:50px;table-layout: fixed'></table>")[0]);
+            super.init($("<table style='min-width:50px;table-layout: fixed'></table>")[0]);
             //	this.backgroundPanel.width="500px";
             //$(this.backgroundPanel.dom).css("min-width","200px");
             //$(this.dom).css("display", "table");
@@ -1366,10 +1383,11 @@ define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponen
     }
     exports.test = test;
 });
-define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button"], function (require, exports, Jassi_9, RText_2, RComponent_7, RTablerow_3, ContextMenu_1, MenuItem_1, Button_2) {
+define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs/util/Tools", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/util/Runlater", "jassijs_report/RTableLayouts"], function (require, exports, Jassi_9, RText_2, Tools_1, RComponent_7, RTablerow_3, Property_5, ContextMenu_1, MenuItem_1, Button_2, Runlater_1, RTableLayouts_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RTable = void 0;
+    var allLayouts = Object.keys(RTableLayouts_1.tableLayouts);
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
     let RTable = class RTable extends RComponent_7.RComponent {
@@ -1386,14 +1404,20 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "
             // bodyPanel: RTablerow[] = [new RTablerow()];
             this.insertEmptyCells = true;
             this.widths = [];
-            super.init($("<table  style='nin-width:50px;table-layout: fixed'></table>")[0]);
+            super.init($("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>")[0]);
             //	this.backgroundPanel.width="500px";
             //$(this.backgroundPanel.dom).css("min-width","200px");
             //$(this.dom).css("display", "table");
             // $(this.dom).css("min-width", "50px");
-            this.add(new RTablerow_3.RTablerow());
+            this.updater = new Runlater_1.Runlater(() => {
+                _this.updateLayout(false);
+            }, 100);
+            let tr = new RTablerow_3.RTablerow();
+            tr.parent = this;
+            this.add(tr);
             $(this.dom).addClass("designerNoResizable");
             this.initContextMenu();
+            var _this = this;
         }
         getInfoFromEvent(evt) {
             var ret = {};
@@ -1403,7 +1427,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "
             ret.row = this._components.indexOf(ret.tableRow);
             return ret;
         }
-        initContextMenu() {
+        async initContextMenu() {
             var _this = this;
             this.contextMenu = new ContextMenu_1.ContextMenu();
             this.contextMenu._isNotEditableInDesigner = true;
@@ -1498,11 +1522,15 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "
             removeColumn.items._setDesignMode = (nothing) => { };
             removeColumn.text = "delete column";
             removeColumn.onclick((evt) => {
+                var _a;
                 var info = _this.getInfoFromEvent(evt);
                 if (_this.widths)
                     _this.widths.slice(info.column, 0);
                 for (var x = 0; x < _this._components.length; x++) {
-                    _this._components[x].remove(_this._components[x]._components[info.column], true);
+                    var tr = _this._components[x];
+                    //@ts-ignore
+                    if (((_a = tr._components[info.column]) === null || _a === void 0 ? void 0 : _a.designDummyFor) === undefined)
+                        tr.remove(tr._components[info.column], true);
                 }
                 _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
             });
@@ -1550,6 +1578,166 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "
             };
             pasteMenu.onclick(func2);
             this.contextMenu.menu.add(pasteMenu);
+        }
+        add(component) {
+            super.add(component);
+            this.updateLayout(true);
+        }
+        updateLayout(doitlater = false) {
+            if (doitlater) {
+                this.updater.runlater();
+                return;
+            }
+            this.doTableLayout();
+        }
+        correctHideAfterSpan() {
+            //rowspan
+            var span;
+            var hiddenCells = {};
+            for (var r = 0; r < this._components.length; r++) {
+                var row = this._components[r];
+                for (var c = 0; c < row._components.length; c++) {
+                    var cell = row._components[c];
+                    if (cell["colSpan"]) {
+                        span = Number.parseInt(cell["colSpan"]);
+                        for (var x = c + 1; x < c + span; x++) {
+                            hiddenCells[r + ":" + x] = true;
+                        }
+                    }
+                    if (cell["rowSpan"]) {
+                        span = Number.parseInt(cell["rowSpan"]);
+                        for (var x = r + 1; x < r + span; x++) {
+                            hiddenCells[x + ":" + c] = true;
+                        }
+                    }
+                    if (hiddenCells[r + ":" + c] === true) {
+                        $(cell.domWrapper).addClass("invisibleAfterSpan");
+                    }
+                    else {
+                        $(cell.domWrapper).removeClass("invisibleAfterSpan");
+                    }
+                }
+            }
+        }
+        doTableLayout() {
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1;
+            this.correctHideAfterSpan();
+            var tab = this.toJSON();
+            if (tab.table.widths === undefined)
+                tab.table.widths = [];
+            while (this._components[0]._components.length > tab.table.widths.length) {
+                tab.table.widths.push("auto"); //designer dummy
+            }
+            for (var r = 0; r < this._components.length; r++) {
+                var row = this._components[r];
+                for (var c = 0; c < row._components.length; c++) {
+                    var cssid = ["RColumn"];
+                    var css = {};
+                    var cell = row._components[c];
+                    var v = null;
+                    if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.fillColor) {
+                        v = (_b = this.layout) === null || _b === void 0 ? void 0 : _b.fillColor(r, tab, c);
+                    }
+                    if (v === null)
+                        v = "white";
+                    css.background_color = v;
+                    cssid.push(v.replace("#", ""));
+                    v = 1;
+                    if ((_c = this.layout) === null || _c === void 0 ? void 0 : _c.hLineWidth) {
+                        v = (_d = this.layout) === null || _d === void 0 ? void 0 : _d.hLineWidth(r, tab, c);
+                    }
+                    css.border_top_width = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if ((_e = this.layout) === null || _e === void 0 ? void 0 : _e.hLineWidth) {
+                        v = (_f = this.layout) === null || _f === void 0 ? void 0 : _f.hLineWidth(r + 1, tab, c);
+                    }
+                    css.border_bottom_width = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if ((_g = this.layout) === null || _g === void 0 ? void 0 : _g.vLineWidth) {
+                        v = (_h = this.layout) === null || _h === void 0 ? void 0 : _h.vLineWidth(c, tab, r);
+                    }
+                    css.border_left_width = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if ((_j = this.layout) === null || _j === void 0 ? void 0 : _j.vLineWidth) {
+                        v = (_k = this.layout) === null || _k === void 0 ? void 0 : _k.vLineWidth(c + 1, tab, r);
+                    }
+                    css.border_right_width = v + "px";
+                    cssid.push(v);
+                    v = "black";
+                    css.border_top_style = "solid";
+                    css.border_bottom_style = "solid";
+                    css.border_left_style = "solid";
+                    css.border_right_style = "solid";
+                    if ((_l = this.layout) === null || _l === void 0 ? void 0 : _l.hLineColor) {
+                        v = (_m = this.layout) === null || _m === void 0 ? void 0 : _m.hLineColor(r, tab, c);
+                    }
+                    css.border_top_color = v;
+                    cssid.push(v.replace("#", ""));
+                    v = "black";
+                    if ((_o = this.layout) === null || _o === void 0 ? void 0 : _o.hLineColor) {
+                        v = (_p = this.layout) === null || _p === void 0 ? void 0 : _p.hLineColor(r + 1, tab, c);
+                    }
+                    css.border_bottom_color = v;
+                    cssid.push(v.replace("#", ""));
+                    v = "black";
+                    if ((_q = this.layout) === null || _q === void 0 ? void 0 : _q.vLineColor) {
+                        v = (_r = this.layout) === null || _r === void 0 ? void 0 : _r.vLineColor(c, tab, r);
+                    }
+                    css.border_left_color = v;
+                    cssid.push(v.replace("#", ""));
+                    v = "black";
+                    if ((_s = this.layout) === null || _s === void 0 ? void 0 : _s.vLineColor) {
+                        v = (_t = this.layout) === null || _t === void 0 ? void 0 : _t.vLineColor(c + 1, tab, r);
+                    }
+                    css.border_right_color = v;
+                    cssid.push(v.replace("#", ""));
+                    v = 1;
+                    if ((_u = this.layout) === null || _u === void 0 ? void 0 : _u.paddingLeft) {
+                        v = (_v = this.layout) === null || _v === void 0 ? void 0 : _v.paddingLeft(c + 1, tab, r);
+                    }
+                    css.padding_left = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if ((_w = this.layout) === null || _w === void 0 ? void 0 : _w.paddingRight) {
+                        v = (_x = this.layout) === null || _x === void 0 ? void 0 : _x.paddingRight(c + 1, tab, r);
+                    }
+                    css.padding_right = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if ((_y = this.layout) === null || _y === void 0 ? void 0 : _y.paddingTop) {
+                        v = (_z = this.layout) === null || _z === void 0 ? void 0 : _z.paddingTop(r + 1, tab, c);
+                    }
+                    css.padding_top = v + "px";
+                    cssid.push(v);
+                    v = 1;
+                    if ((_0 = this.layout) === null || _0 === void 0 ? void 0 : _0.paddingBottom) {
+                        v = (_1 = this.layout) === null || _1 === void 0 ? void 0 : _1.paddingBottom(r + 1, tab, c);
+                    }
+                    css.padding_bottom = v + "px";
+                    cssid.push(v);
+                    var scssid = cssid.join("-");
+                    var found = false;
+                    cell.domWrapper.classList.forEach((cl) => {
+                        if (cl.startsWith("RColumn")) {
+                            if (cl === scssid)
+                                found = true;
+                            else
+                                cell.domWrapper.classList.remove(cl);
+                        }
+                    });
+                    if (!found) {
+                        cell.domWrapper.classList.add(scssid);
+                    }
+                    if (document.getElementById(scssid) === null) {
+                        var sc = {};
+                        sc["." + scssid] = css;
+                        Jassi_9.default.includeCSS(scssid, sc);
+                    }
+                }
+            }
         }
         _setDesignMode(enable) {
             this._designMode = enable;
@@ -1625,19 +1813,44 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "
         }
         create(ob) {
         }
+        set layoutName(value) {
+            var _a;
+            var old = this.layoutName;
+            if (value === "custom" && old === undefined && this.layout !== undefined)
+                return; //if user has changed the layout then do not modify
+            this.layout = (_a = RTableLayouts_1.tableLayouts[value]) === null || _a === void 0 ? void 0 : _a.layout;
+            this.updateLayout(true);
+        }
+        get layoutName() {
+            var ret = this.findTableLayout(this.layout);
+            if (ret === undefined)
+                ret = this.layout === undefined ? "" : "custom";
+            return ret;
+        }
         extensionCalled(action) {
             if (action.componentDesignerSetDesignMode) {
                 this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
             }
             super.extensionCalled(action);
         }
+        findTableLayout(func) {
+            var sfind = Tools_1.Tools.objectToJson(func, undefined, false).replaceAll(" ", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll("\n", "");
+            for (var key in RTableLayouts_1.tableLayouts) {
+                var test = Tools_1.Tools.objectToJson(RTableLayouts_1.tableLayouts[key].layout, undefined, false).replaceAll(" ", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll("\n", "");
+                if (sfind === test)
+                    return key;
+            }
+            return undefined;
+        }
         fromJSON(obj) {
+            var _a;
             var ob = obj.table;
             var ret = this;
             ret.removeAll();
             if (ob.body) {
                 for (var x = 0; x < ob.body.length; x++) {
                     let obb = new RTablerow_3.RTablerow().fromJSON(ob.body[x]);
+                    obb.parent = this;
                     ret.add(obb);
                     /*   let all = [];
                        obb._components.forEach((obp) => all.push(obp));
@@ -1650,20 +1863,36 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "
                 ret.widths = ob.widths;
                 delete ob.widths;
             }
+            if (obj.layout) {
+                if (typeof (obj.layout) === "string") {
+                    if (((_a = RTableLayouts_1.tableLayouts[obj.layout]) === null || _a === void 0 ? void 0 : _a.isSystem) === true) {
+                        ret.layout = RTableLayouts_1.tableLayouts[obj.layout].layout;
+                    }
+                }
+                else
+                    ret.layout = obj.layout;
+                delete obj.layout;
+            }
             var tr = this._components[0];
             for (var x = 0; x < tr._components.length; x++) {
                 $(tr._components[x].domWrapper).attr("width", this.widths[x]);
             }
             super.fromJSON(ob);
-            for (var x = 0; x < ret._components.length; x++) {
-                ret._components[x].correctHideAfterSpan();
-            }
+            this.updateLayout(false);
             return ret;
         }
         toJSON() {
+            var _a;
             var r = {};
             var ret = super.toJSON();
             ret.table = r;
+            if (this.layout) {
+                var test = this.findTableLayout(this.layout);
+                if ((_a = RTableLayouts_1.tableLayouts[test]) === null || _a === void 0 ? void 0 : _a.isSystem)
+                    ret.layout = test;
+                else
+                    ret.layout = this.layout;
+            }
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;
                 var len = this._components[0]._components.length;
@@ -1684,6 +1913,11 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "
             return ret;
         }
     };
+    __decorate([
+        (0, Property_5.$Property)({ chooseFrom: allLayouts, chooseFromStrict: true }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], RTable.prototype, "layoutName", null);
     RTable = __decorate([
         (0, RComponent_7.$ReportComponent)({ fullPath: "report/Table", icon: "mdi mdi-table-large", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
         (0, Jassi_9.$Class)("jassijs_report.RTable"),
@@ -1693,6 +1927,111 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Jassi", "
     async function test() {
     }
     exports.test = test;
+});
+define("jassijs_report/RTableLayouts", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.tableLayouts = void 0;
+    var tableLayouts = {
+        zebra: {
+            isSystem: false,
+            layout: {
+                fillColor: function (rowIndex, node, columnIndex) {
+                    return (rowIndex % 2 === 0) ? '#CCCCCC' : null;
+                }
+            }
+        },
+        noBorders: {
+            isSystem: true,
+            layout: {
+                hLineWidth: function (i, node) {
+                    return 0; //(i === 0 || i === node.table.body.length) ? 4 : 1;
+                },
+                vLineWidth: function (i, node) {
+                    return 0; //(i === 0 || i === node.table.widths.length) ? 4 : 1;
+                }
+            }
+        },
+        headerLineOnly: {
+            isSystem: false,
+            layout: {
+                hLineWidth: function (i, node) {
+                    return (i === 1 ? 2 : 0); //(i === 0 || i === node.table.body.length) ? 4 : 1;
+                },
+                vLineWidth: function (i, node) {
+                    return 0; //(i === 0 || i === node.table.widths.length) ? 4 : 1;
+                }
+            }
+        },
+        lightHorizontalLines: {
+            isSystem: true,
+            layout: {
+                hLineWidth: function (i, node) {
+                    if (i === 1)
+                        return 2;
+                    if (i === 0 || i === node.table.body.length)
+                        return 0;
+                    return 1; //(i === 0 || i === node.table.body.length) ? 4 : 1;
+                },
+                vLineWidth: function (i, node) {
+                    return 0; //(i === 0 || i === node.table.widths.length) ? 4 : 1;
+                }
+            }
+        },
+        frameWithLines: {
+            isSystem: false,
+            layout: {
+                hLineWidth: function (i, node) {
+                    return (i === 0 || i === node.table.body.length) ? 2 : 1;
+                },
+                vLineWidth: function (i, node) {
+                    return (i === 0 || i === node.table.widths.length) ? 2 : 1;
+                },
+                hLineColor: function (i, node) {
+                    return (i === 0 || i === node.table.body.length) ? 'black' : 'gray';
+                },
+                vLineColor: function (i, node) {
+                    return (i === 0 || i === node.table.widths.length) ? 'black' : 'gray';
+                }
+            }
+        },
+        frame: {
+            isSystem: false,
+            layout: {
+                hLineWidth: function (i, node) {
+                    return (i === 0 || i === node.table.body.length) ? 2 : 0;
+                },
+                vLineWidth: function (i, node) {
+                    return (i === 0 || i === node.table.widths.length) ? 2 : 0;
+                }
+            }
+        },
+        custom: {
+            isSystem: false,
+            layout: {
+                fillColor: function (rowIndex, node, columnIndex) {
+                    return null;
+                },
+                hLineWidth: function (i, node) {
+                    return (i === 0 || i === node.table.body.length) ? 4 : 1;
+                },
+                vLineWidth: function (i, node) {
+                    return (i === 0 || i === node.table.widths.length) ? 4 : 1;
+                },
+                hLineColor: function (i, node) {
+                    return (i === 0 || i === node.table.body.length) ? 'black' : 'red';
+                },
+                vLineColor: function (i, node) {
+                    return (i === 0 || i === node.table.widths.length) ? 'blue' : 'green';
+                },
+                paddingLeft: function (i, node) { return 1; },
+                paddingRight: function (i, node) { return 1; },
+                paddingTop: function (i, node) { return 1; },
+                paddingBottom: function (i, node) { return 1; }
+            }
+        }
+    };
+    exports.tableLayouts = tableLayouts;
 });
 define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Jassi_10, Component_3, ReportDesign_3, RComponent_8) {
     "use strict";
@@ -1749,32 +2088,16 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
             var colspan = $(component.domWrapper).attr("colspan"); //save colspan
             Component_3.Component.replaceWrapper(component, document.createElement("td"));
             $(component.domWrapper).attr("colspan", colspan);
+            $(component.dom).css("background-color", "inherit");
             $(component.domWrapper).css("word-break", "break-all");
             $(component.domWrapper).css("display", "");
-        }
-        correctHideAfterSpan() {
-            //rowspan
-            var span;
-            for (var x = 0; x < this._components.length; x++) {
-                if (this._components[x]["colSpan"]) {
-                    span = this._components[x]["colSpan"];
-                }
-                else {
-                    span--;
-                    if (span > 0) {
-                        $(this._components[x].domWrapper).addClass("invisibleAfterColspan");
-                    }
-                    else {
-                        $(this._components[x].domWrapper).removeClass("invisibleAfterColspan");
-                    }
-                }
-            }
         }
         /**
         * adds a component to the container
         * @param {jassijs.ui.Component} component - the component to add
         */
         add(component) {
+            var _a;
             if (component.addToParent)
                 return component.addToParent(this);
             this.wrapComponent(component);
@@ -1792,6 +2115,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
             }
             $(component.dom).removeClass("designerNoResizable");
             $(component.dom).addClass("designerNoResizableY");
+            (_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout(true);
         }
         /**
       * adds a component to the container before an other component
@@ -1799,6 +2123,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
       * @param {jassijs.ui.Component} before - the component before then component to add
       */
         addBefore(component, before) {
+            var _a;
             if (component.addToParent)
                 return component.addToParent(this);
             this.wrapComponent(component);
@@ -1811,6 +2136,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
             this.callEvent("componentAdded", component, this);
             if (this._parent)
                 this._parent.addEmptyCellsIfNeeded(this);
+            (_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout(true);
         }
         fromJSON(columns) {
             var ret = this;
@@ -1830,7 +2156,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
     exports.RTablerow = RTablerow;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties"], function (require, exports, Jassi_11, RComponent_9, HTMLPanel_1, Property_5, ReportDesign_4, CSSProperties_1) {
+define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties"], function (require, exports, Jassi_11, RComponent_9, HTMLPanel_1, Property_6, ReportDesign_4, CSSProperties_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RText = void 0;
@@ -2033,7 +2359,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
         }
     };
     __decorate([
-        (0, Property_5.$Property)({
+        (0, Property_6.$Property)({
             chooseFrom: function (component) {
                 return ReportDesign_4.ReportDesign.getVariables(component);
             }
@@ -2046,7 +2372,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
         (0, Jassi_11.$Class)("jassijs_report.RText")
         //@$Property({hideBaseClassProperties:true})
         ,
-        (0, Property_5.$Property)({ name: "value", type: "string", description: "text" }),
+        (0, Property_6.$Property)({ name: "value", type: "string", description: "text" }),
         __metadata("design:paramtypes", [Object])
     ], RText);
     exports.RText = RText;
@@ -2177,7 +2503,7 @@ define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Jassi",
     ], RUnknown);
     exports.RUnknown = RUnknown;
 });
-define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable"], function (require, exports, BoxPanel_2, Jassi_14, RStack_1, RText_3, RColumns_1, RUnknown_1, Panel_3, RComponent_12, RDatatable_1, Property_6, RStyle_1, RTextGroup_1, RTable_1) {
+define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable"], function (require, exports, BoxPanel_2, Jassi_14, RStack_1, RText_3, RColumns_1, RUnknown_1, Panel_3, RComponent_12, RDatatable_1, Property_7, RStyle_1, RTextGroup_1, RTable_1) {
     "use strict";
     var ReportDesign_6;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2185,27 +2511,27 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     let InfoProperties = class InfoProperties {
     };
     __decorate([
-        (0, Property_6.$Property)({ description: "the title of the document" }),
+        (0, Property_7.$Property)({ description: "the title of the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "title", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "the name of the author" }),
+        (0, Property_7.$Property)({ description: "the name of the author" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "author", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "the subject of the document" }),
+        (0, Property_7.$Property)({ description: "the subject of the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "subject", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "keywords associated with the document" }),
+        (0, Property_7.$Property)({ description: "keywords associated with the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "keywords", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "the creator of the document (default is ‘pdfmake’)" }),
+        (0, Property_7.$Property)({ description: "the creator of the document (default is ‘pdfmake’)" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "creator", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "the producer of the document" }),
+        (0, Property_7.$Property)({ description: "the producer of the document" }),
         __metadata("design:type", String)
     ], InfoProperties.prototype, "producer", void 0);
     InfoProperties = __decorate([
@@ -2222,31 +2548,31 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         }
     };
     __decorate([
-        (0, Property_6.$Property)({ chooseFrom: ["lowResolution", "highResolution"], description: 'whether printing is allowed. Specify "lowResolution" to allow degraded printing, or "highResolution" to allow printing with high resolution' }),
+        (0, Property_7.$Property)({ chooseFrom: ["lowResolution", "highResolution"], description: 'whether printing is allowed. Specify "lowResolution" to allow degraded printing, or "highResolution" to allow printing with high resolution' }),
         __metadata("design:type", String)
     ], PermissionProperties.prototype, "printing", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "whether modifying the file is allowed. Specify true to allow modifying document content" }),
+        (0, Property_7.$Property)({ description: "whether modifying the file is allowed. Specify true to allow modifying document content" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "modifying", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "whether copying text or graphics is allowed. Specify true to allow copying" }),
+        (0, Property_7.$Property)({ description: "whether copying text or graphics is allowed. Specify true to allow copying" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "copying", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "whether annotating, form filling is allowed. Specify true to allow annotating and form filling" }),
+        (0, Property_7.$Property)({ description: "whether annotating, form filling is allowed. Specify true to allow annotating and form filling" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "annotating", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "whether form filling and signing is allowed. Specify true to allow filling in form fields and signing" }),
+        (0, Property_7.$Property)({ description: "whether form filling and signing is allowed. Specify true to allow filling in form fields and signing" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "fillingForms", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "whether copying text for accessibility is allowed. Specify true to allow copying for accessibility" }),
+        (0, Property_7.$Property)({ description: "whether copying text for accessibility is allowed. Specify true to allow copying for accessibility" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "contentAccessibility", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "whether assembling document is allowed. Specify true to allow document assembly" }),
+        (0, Property_7.$Property)({ description: "whether assembling document is allowed. Specify true to allow document assembly" }),
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "documentAssembly", void 0);
     PermissionProperties = __decorate([
@@ -2262,7 +2588,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     };
     StyleContainer = __decorate([
         (0, Jassi_14.$Class)("jassijs_report.StyleContainer"),
-        (0, Property_6.$Property)({ hideBaseClassProperties: true }),
+        (0, Property_7.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], StyleContainer);
     //@$UIComponent({editableChildComponents:["this"]})
@@ -2642,44 +2968,44 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         }
     };
     __decorate([
-        (0, Property_6.$Property)(),
+        (0, Property_7.$Property)(),
         __metadata("design:type", Boolean)
     ], ReportDesign.prototype, "compress", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "To enable encryption set user password in userPassword (string value). The PDF file will be encrypted when a user password is provided, and users will be prompted to enter the password to decrypt the file when opening it." }),
+        (0, Property_7.$Property)({ description: "To enable encryption set user password in userPassword (string value). The PDF file will be encrypted when a user password is provided, and users will be prompted to enter the password to decrypt the file when opening it." }),
         __metadata("design:type", String)
     ], ReportDesign.prototype, "userPassword", void 0);
     __decorate([
-        (0, Property_6.$Property)({ description: "To set access privileges for the PDF file, you need to provide an owner password in ownerPassword (string value) and object permissions with permissions. By default, all operations are disallowed. You need to explicitly allow certain operations." }),
+        (0, Property_7.$Property)({ description: "To set access privileges for the PDF file, you need to provide an owner password in ownerPassword (string value) and object permissions with permissions. By default, all operations are disallowed. You need to explicitly allow certain operations." }),
         __metadata("design:type", String)
     ], ReportDesign.prototype, "ownerPassword", void 0);
     __decorate([
-        (0, Property_6.$Property)({ type: "json", componentType: "jassijs_report.InfoProperties" }),
+        (0, Property_7.$Property)({ type: "json", componentType: "jassijs_report.InfoProperties" }),
         __metadata("design:type", InfoProperties)
     ], ReportDesign.prototype, "info", void 0);
     __decorate([
-        (0, Property_6.$Property)({ type: "json", componentType: "jassijs_report.PermissionProperties" }),
+        (0, Property_7.$Property)({ type: "json", componentType: "jassijs_report.PermissionProperties" }),
         __metadata("design:type", PermissionProperties)
     ], ReportDesign.prototype, "permissions", void 0);
     __decorate([
-        (0, Property_6.$Property)({ type: "number[]", default: [40, 40, 40, 40], description: "margin of the page: left, top, right, bottom" }),
+        (0, Property_7.$Property)({ type: "number[]", default: [40, 40, 40, 40], description: "margin of the page: left, top, right, bottom" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
     ], ReportDesign.prototype, "pageMargins", null);
     __decorate([
-        (0, Property_6.$Property)({ description: "the size of the page", default: "A4", chooseFrom: ['4A0', '2A0', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'RA0', 'RA1', 'RA2', 'RA3', 'RA4', 'SRA0', 'SRA1', 'SRA2', 'SRA3', 'SRA4', 'EXECUTIVE', 'FOLIO', 'LEGAL', 'LETTER', 'TABLOID'] }),
+        (0, Property_7.$Property)({ description: "the size of the page", default: "A4", chooseFrom: ['4A0', '2A0', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'RA0', 'RA1', 'RA2', 'RA3', 'RA4', 'SRA0', 'SRA1', 'SRA2', 'SRA3', 'SRA4', 'EXECUTIVE', 'FOLIO', 'LEGAL', 'LETTER', 'TABLOID'] }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], ReportDesign.prototype, "pageSize", null);
     __decorate([
-        (0, Property_6.$Property)({ chooseFrom: ['landscape', 'portrait'], default: "portrait", description: "the orientation of the page landscape or portrait" }),
+        (0, Property_7.$Property)({ chooseFrom: ['landscape', 'portrait'], default: "portrait", description: "the orientation of the page landscape or portrait" }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], ReportDesign.prototype, "pageOrientation", null);
     ReportDesign = ReportDesign_6 = __decorate([
         (0, RComponent_12.$ReportComponent)({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
         (0, Jassi_14.$Class)("jassijs_report.ReportDesign"),
-        (0, Property_6.$Property)({ hideBaseClassProperties: true }),
+        (0, Property_7.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);
     exports.ReportDesign = ReportDesign;
@@ -2688,7 +3014,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     }
     exports.test = test;
 });
-define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Jassi_15, Runlater_1, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_7, Panel_4, Windows_1, DockingContainer_1, VariablePanel_1, Property_7) {
+define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Jassi_15, Runlater_2, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_7, Panel_4, Windows_1, DockingContainer_1, VariablePanel_1, Property_8) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2905,12 +3231,12 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         }
     }
     __decorate([
-        (0, Property_7.$Property)({ isUrlTag: true, id: true }),
+        (0, Property_8.$Property)({ isUrlTag: true, id: true }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], SimpleCodeEditor.prototype, "file", null);
     __decorate([
-        (0, Property_7.$Property)({ isUrlTag: true }),
+        (0, Property_8.$Property)({ isUrlTag: true }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], SimpleCodeEditor.prototype, "line", null);
@@ -2929,7 +3255,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
             this.codeEditor.variables.addVariable("this", this.reportPanel);
             this.codeEditor.evalCode = async function () {
                 if (compileTask === undefined) {
-                    compileTask = new Runlater_1.Runlater(() => {
+                    compileTask = new Runlater_2.Runlater(() => {
                         _this.codeEditor.variables.clear();
                         var code = _this.acePanel.value;
                         var func = new Function("", "return " + code.substring(code.indexOf("=") + 1));
@@ -3009,8 +3335,8 @@ define("jassijs_report/modul", ["require", "exports"], function (require, export
             paths: {
                 'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
                 'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/vfs_fonts',
-                'pdfMake': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.70/pdfmake' //'../../lib/pdfmake'
+                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts',
+                'pdfMake': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake' //'../../lib/pdfmake'
             },
             shim: {
                 'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
@@ -3029,11 +3355,11 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1632525377915,
+                "date": 1632950800680,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/modul.ts": {
-                "date": 1631469504879
+                "date": 1633111115088
             },
             "jassijs_report/PDFReport.ts": {
                 "date": 1632679267836,
@@ -3058,7 +3384,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RDatatable.ts": {
-                "date": 1632682324077,
+                "date": 1633030016582,
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
@@ -3351,7 +3677,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1632850116110,
+                "date": 1633102284157,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -3422,7 +3748,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RComponent.ts": {
-                "date": 1632527768355,
+                "date": 1633102113839,
                 "jassijs_report.ReportComponent": {
                     "$Property": [
                         {
@@ -3434,6 +3760,14 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "$Property": []
                         },
                         "colSpan": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "rowSpan": {
                             "$Property": [
                                 {
                                     "type": "string",
@@ -3623,7 +3957,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-                "date": 1632864636962,
+                "date": 1633114350231,
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -3636,8 +3970,21 @@ define("jassijs_report/registry", ["require"], function (require) {
                                 "this.footerPanel"
                             ]
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "layoutName": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": "allLayouts",
+                                    "chooseFromStrict": true
+                                }
+                            ]
+                        }
+                    }
                 }
+            },
+            "jassijs_report/RTableLayouts.ts": {
+                "date": 1633113318723
             }
         }
     };
@@ -3672,7 +4019,7 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
 });
 //jassijs.register("reportcomponent", "jassijs_report.Report", "report/Report", "res/report.ico");
 // return CodeEditor.constructor;
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_17, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_4, PDFReport_1, PDFViewer_2, ReportDesign_8, Tools_1) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_17, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_4, PDFReport_1, PDFViewer_2, ReportDesign_8, Tools_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
@@ -3760,7 +4107,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             let job = this.designedComponent.toJSON();
             delete job.parameter;
             delete job.data;
-            let ob = Tools_1.Tools.objectToJson(job, undefined, false, 80);
+            let ob = Tools_2.Tools.objectToJson(job, undefined, false, 80);
             if (this._codeChanger.parser.variables["reportdesign"]) {
                 var s = this._codeChanger.parser.code.substring(0, this._codeChanger.parser.variables["reportdesign"].pos) +
                     " reportdesign = " + ob + this._codeChanger.parser.code.substring(this._codeChanger.parser.variables["reportdesign"].end);
@@ -3777,13 +4124,14 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             //this.variables.updateCache();
             //this._componentExplorer.update();
             var ret = super.createComponent(type, component, top, left, newParent, beforeComponent);
-            this.addVariables(ret, true);
+            //this.addVariables(ret,true);
             this._componentExplorer.update();
             this.propertyChanged();
             this._updateInvisibleComponents();
             return ret;
         }
-        addVariables(component, doupdate = false) {
+        //createVariable(type, scope, varvalue) {
+        createVariable(type, scope, component) {
             var name = component["reporttype"];
             if (this.nextComponentvariable[name] === undefined) {
                 this.nextComponentvariable[name] = 0;
@@ -3800,11 +4148,10 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             this.allComponents[name + this.nextComponentvariable[name]] = component;
             if (component["_components"]) {
                 for (let x = 0; x < component["_components"].length; x++) {
-                    this.addVariables(component["_components"][x]);
+                    this.createVariable(undefined, undefined, component["_components"][x]);
                 }
             }
-            if (component === this || doupdate)
-                this._codeEditor.variables.update();
+            return sname;
         }
         /**
           * @member {jassijs.ui.Component} - the designed component
@@ -3817,7 +4164,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             this.nextComponentvariable = {};
             this.allComponents["this"] = component;
             this._codeEditor.variables.addVariable("this", component);
-            this.addVariables(component);
+            this.createVariable(undefined, undefined, component);
             this._propertyEditor.value = component;
             this._codeChanger.parser = this._propertyEditor.parser;
             super.designedComponent = component;
@@ -3958,7 +4305,7 @@ export async function test() {
     exports.test = test;
     ;
 });
-define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Jassi_18, ReportDesigner_1, Tools_2) {
+define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Jassi_18, ReportDesigner_1, Tools_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SimpleReportDesigner = void 0;
@@ -4009,7 +4356,7 @@ define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "j
             let job = this.designedComponent.toJSON();
             delete job.parameter;
             delete job.data;
-            let ob = Tools_2.Tools.objectToJson(job, undefined, false, 80);
+            let ob = Tools_3.Tools.objectToJson(job, undefined, false, 80);
             this._codeEditor._codePanel.value = this.codePrefix + ob + ";";
             this.propertyIsChanging = false;
             /*  let job=this.designedComponent.toJSON();

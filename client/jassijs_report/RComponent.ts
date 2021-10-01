@@ -21,6 +21,7 @@ export function $ReportComponent(properties: ReportComponentProperties): Functio
 @$Property({ hideBaseClassProperties: true })
 export class RComponent extends Panel {
     private _colSpan: number;
+    private _rowSpan: number;
     @$Property()
     foreach: string;
     private _width: any;
@@ -35,16 +36,16 @@ export class RComponent extends Panel {
     private _alignment: string;
     private _background: string;
     private _font: string;
-    private _style:string;
-    
+    private _style: string;
+
     reporttype: string = "nothing";
     otherProperties: any;
     constructor(properties = undefined) {
         super(properties);
 
     }
-    onstylechanged(func){
-        this.addEvent("stylechanged",func);
+    onstylechanged(func) {
+        this.addEvent("stylechanged", func);
     }
     @$Property({
         type: "string", isVisible: (component) => {
@@ -53,28 +54,32 @@ export class RComponent extends Panel {
         }
     })
     get colSpan(): number {
-        /*if(this._parent?.setChildWidth!==undefined)
-            return this._parent.getChildWidth(this);
-        else 
-            return this._width;*/
-
         return this._colSpan;
     }
 
     set colSpan(value: number) {
         $(this.domWrapper).attr("colspan", value === undefined ? "" : value);
-
-        /*	if(this._parent?.setChildWidth!==undefined)
-                this._parent.setChildWidth(this,value);
-            else{
-                this._width = value;
-                console.log(value);
-                super.width = value;
-            }*/
         this._colSpan = value;
-        if (this._parent)
-            this._parent.correctHideAfterSpan();
+        if (this._parent?._parent?.updateLayout)
+            this._parent?._parent?.updateLayout(true);
     }
+    @$Property({
+        type: "string", isVisible: (component) => {
+            //only in table and column width is posible
+            return component._parent?.reporttype === "tablerow";
+        }
+    })
+    get rowSpan(): number {
+        return this._rowSpan;
+    }
+
+    set rowSpan(value: number) {
+        $(this.domWrapper).attr("rowspan", value === undefined ? "" : value);
+        this._rowSpan = value;
+        if (this._parent?._parent?.updateLayout)
+            this._parent?._parent?.updateLayout(true);
+    }
+
     @$Property({
         type: "string", isVisible: (component) => {
             //only in table and column width is posible
@@ -103,7 +108,7 @@ export class RComponent extends Panel {
     set bold(value: boolean) {
         this._bold = value;
         $(this.dom).css("font-weight", value ? "bold" : "normal");
-        this.callEvent("stylechanged","font-weight",value);
+        this.callEvent("stylechanged", "font-weight", value);
     }
     @$Property()
     get italics(): boolean {
@@ -112,7 +117,7 @@ export class RComponent extends Panel {
     set italics(value: boolean) {
         this._italics = value;
         $(this.dom).css("font-style", value ? "italic" : "normal");
-        this.callEvent("stylechanged","font-style",value);
+        this.callEvent("stylechanged", "font-style", value);
     }
     @$Property({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] })
     get font(): string {
@@ -131,7 +136,7 @@ export class RComponent extends Panel {
             $(this.dom).css("font_family", "");
         else
             $(this.dom).css("font_family", value);
-        this.callEvent("stylechanged","font",value);
+        this.callEvent("stylechanged", "font", value);
     }
     @$Property()
     get fontSize(): number {
@@ -143,7 +148,7 @@ export class RComponent extends Panel {
             $(this.dom).css("font-size", "");
         else
             $(this.dom).css("font-size", value + "px");
-        this.callEvent("stylechanged","fontSize",value);
+        this.callEvent("stylechanged", "fontSize", value);
     }
     @$Property({ type: "color" })
     get background(): string {
@@ -152,7 +157,7 @@ export class RComponent extends Panel {
     set background(value: string) {
         this._background = value;
         $(this.dom).css("background-color", value);
-        this.callEvent("stylechanged","background",value);
+        this.callEvent("stylechanged", "background", value);
     }
     @$Property({ type: "color" })
     get color(): string {
@@ -161,7 +166,7 @@ export class RComponent extends Panel {
     set color(value: string) {
         this._color = value;
         $(this.dom).css("color", value);
-        this.callEvent("stylechanged","color",value);
+        this.callEvent("stylechanged", "color", value);
     }
     @$Property({ chooseFrom: ["left", "center", "right"] })
     get alignment(): string {
@@ -170,7 +175,7 @@ export class RComponent extends Panel {
     set alignment(value: string) {
         this._alignment = value;
         $(this.dom).css("text-align", value);
-         this.callEvent("stylechanged","alignment",value);
+        this.callEvent("stylechanged", "alignment", value);
     }
     @$Property({ chooseFrom: ["underline", "lineThrough", "overline"] })
     get decoration(): string {
@@ -186,7 +191,7 @@ export class RComponent extends Panel {
         if (value === "overline")
             val = "overline";
         $(this.dom).css("text-decoration", val);
-        this.callEvent("stylechanged","decoration",value);
+        this.callEvent("stylechanged", "decoration", value);
     }
 
 
@@ -197,7 +202,7 @@ export class RComponent extends Panel {
     set decorationColor(value: string) {
         this._decorationColor = value;
         $(this.dom).css("textDecorationColor", value);
-        this.callEvent("stylechanged","textDecorationColor",value);
+        this.callEvent("stylechanged", "textDecorationColor", value);
     }
     @$Property({ chooseFrom: ["dashed", "dotted", "double", "wavy"] })
     get decorationStyle(): string {
@@ -215,12 +220,12 @@ export class RComponent extends Panel {
         if (value === "wavy")
             val = "wavy";
         $(this.dom).css("textDecorationStyle", val);
-        this.callEvent("stylechanged","decorationStyle",value);
+        this.callEvent("stylechanged", "decorationStyle", value);
     }
-    static findReport(parent):ReportDesign{
-        if(parent===undefined)
+    static findReport(parent): ReportDesign {
+        if (parent === undefined)
             return undefined;
-        if(parent?.reporttype=== "report")
+        if (parent?.reporttype === "report")
             return parent;
         else
             return RComponent.findReport(parent._parent);
@@ -231,23 +236,23 @@ export class RComponent extends Panel {
     }
 
     set style(value: string) {
-        var old=this._style ;
+        var old = this._style;
         this._style = value;
-        var report=RComponent.findReport(this);
-        if(report){
-            report.styleContainer._components.forEach((comp:RStyle)=>{
-                if(comp.name===old){
+        var report = RComponent.findReport(this);
+        if (report) {
+            report.styleContainer._components.forEach((comp: RStyle) => {
+                if (comp.name === old) {
                     $(this.dom).removeClass(comp.styleid);
                 }
             });
-            report.styleContainer._components.forEach((comp:RStyle)=>{
-                if(comp.name===value){
+            report.styleContainer._components.forEach((comp: RStyle) => {
+                if (comp.name === value) {
                     $(this.dom).addClass(comp.styleid);
                 }
             });
-            
+
         }
-        
+
         //  super.width = value;
     }
 
@@ -258,7 +263,7 @@ export class RComponent extends Panel {
     set lineHeight(value: number) {
         this._lineHeight = value;
         $(this.dom).css("line-height", value);
-        this.callEvent("stylechanged","lineHeight",value);
+        this.callEvent("stylechanged", "lineHeight", value);
         //  super.width = value;
     }
 
@@ -272,6 +277,10 @@ export class RComponent extends Panel {
         if (ob.colSpan) {
             ret.colSpan = ob.colSpan;
             delete ob.colSpan;
+        }
+        if (ob.rowSpan) {
+            ret.rowSpan = ob.rowSpan;
+            delete ob.rowSpan;
         }
         if (ob.width) {
             ret.width = ob.width;
@@ -332,6 +341,8 @@ export class RComponent extends Panel {
         var ret: any = {}
         if (this.colSpan !== undefined)
             ret.colSpan = this.colSpan;
+        if (this.rowSpan !== undefined)
+            ret.rowSpan = this.rowSpan;
         if (this.foreach !== undefined)
             ret.foreach = this.foreach;
         if (this.width !== undefined && !this._parent?.setChildWidth)

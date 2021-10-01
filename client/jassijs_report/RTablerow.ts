@@ -68,22 +68,7 @@ export class RTablerow extends RComponent {
     	$(component.domWrapper).css("word-break","break-all");
     	$(component.domWrapper).css("display","");
     }
-     correctHideAfterSpan(){
-        //rowspan
-    	var span:number;
-    	for(var x=0;x<this._components.length;x++){
-    		if(this._components[x]["colSpan"]){
-    			span=this._components[x]["colSpan"];
-    		}else{
-    			span--;
-    			if(span>0){
-    				$(this._components[x].domWrapper).addClass("invisibleAfterColspan");
-    			}else{
-    				$(this._components[x].domWrapper).removeClass("invisibleAfterColspan");
-    			}
-    		}
-    	}
-    }
+    
     /**
     * adds a component to the container
     * @param {jassijs.ui.Component} component - the component to add
@@ -106,7 +91,7 @@ export class RTablerow extends RComponent {
         }
          $(component.dom).removeClass("designerNoResizable");
          $(component.dom).addClass("designerNoResizableY");
-         
+         this.parent?.updateLayout(true);
     }
     /**
   * adds a component to the container before an other component
@@ -126,6 +111,7 @@ export class RTablerow extends RComponent {
         this.callEvent("componentAdded", component, this);
         if (this._parent)
             this._parent.addEmptyCellsIfNeeded(this);
+        this.parent?.updateLayout(true);
     }
     fromJSON(columns: any[]): RTablerow {
         var ret = this;

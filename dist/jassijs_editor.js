@@ -2136,18 +2136,8 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 }
             }
             var varvalue = new (Classes_3.classes.getClass(type));
+            var varname = _this.createVariable(type, scope, varvalue);
             if (this._propertyEditor.codeEditor !== undefined) {
-                var varname = _this._propertyEditor.addVariableInCode(type, scope);
-                if (varname.startsWith("me.")) {
-                    var me = _this._codeEditor.getObjectFromVariable("me");
-                    me[varname.substring(3)] = varvalue;
-                }
-                else if (varname.startsWith("this.")) {
-                    var th = _this._codeEditor.getObjectFromVariable("this");
-                    th[varname.substring(5)] = varvalue;
-                }
-                else
-                    _this.variables.addVariable(varname, varvalue);
                 var newName = _this._codeEditor.getVariableFromObject(newParent);
                 var before;
                 if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //Designdummy atEnd
@@ -2194,17 +2184,35 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             //notify componentdescriptor 
             var ac = varvalue.extensionCalled;
             if (ac !== undefined) {
-                varvalue.extensionCalled({ componentDesignerComponentCreated: {
+                varvalue.extensionCalled({
+                    componentDesignerComponentCreated: {
                         newParent: newParent
-                    } });
+                    }
+                });
             }
+            _this._propertyEditor.value = varvalue;
             //include the new element
             _this.editDialog(true);
-            _this._propertyEditor.value = varvalue;
             _this._componentExplorer.update();
             //var test=_this._invisibleComponents;
             _this._updateInvisibleComponents();
             return varvalue;
+        }
+        createVariable(type, scope, varvalue) {
+            if (this._propertyEditor.codeEditor === undefined)
+                return;
+            var varname = this._propertyEditor.addVariableInCode(type, scope);
+            if (varname.startsWith("me.")) {
+                var me = this._codeEditor.getObjectFromVariable("me");
+                me[varname.substring(3)] = varvalue;
+            }
+            else if (varname.startsWith("this.")) {
+                var th = this._codeEditor.getObjectFromVariable("this");
+                th[varname.substring(5)] = varvalue;
+            }
+            else
+                this.variables.addVariable(varname, varvalue);
+            return varname;
         }
         /**
          * is there a parent that acts a repeating container?
@@ -3087,7 +3095,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1632855098879,
+                "date": 1632951060140,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -3113,7 +3121,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1623098599960
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1622998616949,
+                "date": 1632950831743,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
@@ -3121,7 +3129,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.base.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1632339040369,
+                "date": 1632925438111,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/TSSourceMap.ts": {
@@ -3413,8 +3421,18 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
                 this.parentPanel = parentPanel;
             if (allIDs !== undefined)
                 this.allIDs = allIDs;
-            // this.draggableComponents = $(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
-            this.draggableComponents = $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
+            var dcs = [];
+            this.allIDs.split(",").forEach((str) => {
+                let el = document.getElementById(str.substring(1));
+                if (el) {
+                    var classes = el.classList;
+                    if (classes.contains("jcomponent") && !classes.contains("jdesigncontainer") && !classes.contains("designerNoDraggable"))
+                        dcs.push(document.getElementById(str.substring(1)));
+                }
+            });
+            //slow
+            // this.draggableComponents = $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
+            this.draggableComponents = $(dcs); //.find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable");
             this.draggableComponents.draggable({
                 cancel: "false",
                 revert: "invalid",
@@ -3434,8 +3452,10 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
                 //appendTo: "body"
                 helper: "clone",
             });
-            $(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('disable');
-            $(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('enable');
+            //$(this.parentPanel.dom).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('disable');
+            //$(this.allIDs).find(".jcomponent").not(".jdesigncontainer").not(".designerNoDraggable").draggable('enable');
+            this.draggableComponents.draggable('disable');
+            this.draggableComponents.draggable('enable');
             var _this = this;
             //all jcompoenents are proptargets                                         also jdesignummy     but no jcomponents in absolute Layout  no jcomponens that contains a jdesigndummy  absolutelayout container
             this.droppableComponents = $(this.parentPanel.dom).parent().parent().find(".jdesigndummy,.jcomponent:not(.jabsolutelayout>.jcomponent, :has(.jdesigndummy)),                      .jcontainer>.jabsolutelayout");
@@ -4269,9 +4289,22 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
         _changeCursor(e) {
             var borderSize = 4;
             this.cursorType = "default";
-            var els = $(this.parentPanel.dom).find(this.elements);
+            //slow
+            //var els = $(this.parentPanel.dom).find(this.elements);
+            var dcs = [];
+            this.elements.split(",").forEach((str) => {
+                let el = document.getElementById(str.substring(1));
+                if (el) {
+                    var classes = el.classList;
+                    if (!classes.contains("designerNoResizable"))
+                        dcs.push(document.getElementById(str.substring(1)));
+                }
+            });
+            var els = $(dcs);
             for (var i = 0; i < els.length; i++) {
                 var element = els[i];
+                if (element === null)
+                    continue;
                 var noresizex = $(element).hasClass("designerNoResizableX");
                 var noresizey = $(element).hasClass("designerNoResizableY");
                 if ($(element).hasClass("designerNoResizable")) {
