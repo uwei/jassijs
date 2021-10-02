@@ -1531,7 +1531,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1633131688135,
+		"date": 1633194231259,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{

@@ -26,7 +26,12 @@ export class RText extends RComponent {
     reporttype: string = "text";
     initIfNeeded;
     toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
-   
+    customToolbarButtons: {
+        [name: string]: {
+            title: string,
+            action: any;
+        }
+    } = {};
     /**
     * 
     * @param {object} properties - properties to init
@@ -41,7 +46,7 @@ export class RText extends RComponent {
         $(this.__dom).css("text-overflow", "ellipsis");
         $(this.__dom).css("overflow", "hidden");
         $(this.dom).addClass("designerNoResizable");
-       
+
         loadFontIfNedded("Roboto");
         //  super.init($('<div class="RText"></div>')[0]);
         var el = this.dom.children[0];
@@ -51,7 +56,9 @@ export class RText extends RComponent {
         //   $(this.dom.children[0]).css("display","inline-block");
         this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
         this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
-        this.initIfNeeded=HTMLPanel.prototype.initIfNeeded.bind(this);
+        this.initIfNeeded = HTMLPanel.prototype.initIfNeeded.bind(this);
+        //@ts-ignore
+        this._initTinymce= HTMLPanel.prototype._initTinymce.bind(this);
     }
 
     @$Property({
@@ -75,7 +82,7 @@ export class RText extends RComponent {
             $(el).html(code);
     }
 
-    
+
 
     fromJSON(ob: any): RText {
         var ret = this;
@@ -83,9 +90,9 @@ export class RText extends RComponent {
             delete ob.editTogether;
             ret.convertToHTML(ob.text);
         } else
-            ret.value = <string>ob.text.replaceAll("\n","<br/>");
+            ret.value = <string>ob.text.replaceAll("\n", "<br/>");
         delete ob.text;
-       
+
         super.fromJSON(ob);
         // ret.otherProperties = ob;
         return this;
@@ -216,20 +223,20 @@ export class RText extends RComponent {
 
         var ret = super.toJSON();
         this.convertFromHTML(ret);
-        
 
-        var test=0;
-        for(var key in ret){
+
+        var test = 0;
+        for (var key in ret) {
             test++;
         }
-        if(test===1)
-            ret=ret.text;//short version
+        if (test === 1)
+            ret = ret.text;//short version
 
         return ret;
     }
 }
 export function test() {
-    var t = new RText();   
+    var t = new RText();
     t.value = "a<em>b<strong>cd</strong>e</em><span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>fg<span style='background-color: rgb(186, 55, 42);' data-mce-style='background-color: #ba372a;'>h</span></span><span style='background-color: rgb(186, 55, 42);' data-mce-style='background-color: #ba372a;'>ij<span style='font-size: 14pt;' data-mce-style='font-size: 14pt;'>k</span></span><span style='font-size: 14pt;' data-mce-style='font-size: 14pt;'>l<span style='text-decoration: underline;' data-mce-style='text-decoration: underline;'>m</span></span><span style='text-decoration: underline;' data-mce-style='text-decoration: underline;'>no</span>";
 
     var obb: RText = t.toJSON();

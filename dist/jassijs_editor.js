@@ -3121,7 +3121,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1623098599960
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1632950831743,
+                "date": 1633193466220,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
@@ -3322,11 +3322,17 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
         enableDraggable(enable) {
             //  this.onpropertychanged = undefined;
             // this.onpropertyadded = undefined;
-            if (this.draggableComponents !== undefined) {
-                if (!enable)
-                    this.draggableComponents.draggable('disable');
-                else
-                    this.draggableComponents.draggable('enable');
+            try {
+                if (this.draggableComponents !== undefined) {
+                    if (!enable)
+                        this.draggableComponents.draggable('disable');
+                    else
+                        this.draggableComponents.draggable('enable');
+                }
+            }
+            catch (_a) {
+                console.log("fetched error");
+                ;
             }
         }
         _drop(target, event, ui) {

@@ -5,49 +5,32 @@ import { $Property } from "jassijs/ui/Property";
 import { $UIComponent } from "jassijs/ui/Component";
 import { Kunde } from "de/remote/Kunde";
 import { RText } from "jassijs_report/RText";
-//Defning row heights
-//heaercount
-//headerLineOnly
+//height=50 -> gilt für alle und height=function()
 
 var reportdesign = {
 	content: [
 		{
 			table: {
-				widths: [10,"auto",75,"auto","auto"],
+				heights: function(r){
+					if(r==0)
+						return 50;
+					else
+						return 20;
+				},
 				body: [
-					[
-						{
-							fillColor: "yellow",
-							border: [true,true,true,true],
-							text: "d"
-						},
-						{background: "yellow",text: "qwr"},
-						"ewr",
-						"\n",
-						""
-					],
-					[
-						"3",
-						"qwer",
-						{border: [true,true,false,false],text: "eee"},
-						"\n",
-						""
-					],
-					[
-						"3",
-						{border: [true,true,false,false],text: "er"},
-						{
-							bold: true,
-							border: [true,false,false,false],
-							text: "eee"
-						},
-						"",
-						""
-					],
-					["","wqe","","",""]
+					["d","qwr","ewr","\n","\n"],
+					["3","qwer","reee","\n","\n"],
+					["sdfsdf","df","sdf","",""]
 				]
 			},
-			layout: {defaultBorder: false}
+			layout: {
+				hLineWidth: function (i, node) {	
+                    return (i === 1 ? 2 : 0); //(i === 0 || i === node.table.body.length) ? 4 : 1;	
+                },
+				vLineWidth: function (i, node) {	
+                    return 0; //(i === 0 || i === node.table.widths.length) ? 4 : 1;	
+                }
+			}
 		}
 	]
 };

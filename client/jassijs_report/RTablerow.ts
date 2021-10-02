@@ -58,7 +58,14 @@ export class RTablerow extends RComponent {
     getChildWidth(component: Component): any {
         return this._parent?.getChildWidth(component);
     }
+     setChildHeight(component: Component, value: any) {
+        this._parent?.setChildHeight(component, value);
+    }
+    getChildHeight(component: Component): any {
+        return this._parent?.getChildHeight(component);
+    }
     private wrapComponent(component: RComponent) {
+        var _this=this;
         if (component.domWrapper?.tagName === "TD")
             return;//allready wrapped
 
@@ -78,6 +85,18 @@ export class RTablerow extends RComponent {
         //$(component.dom).css("background-color","inherit");
         $(component.domWrapper).css("word-break", "break-all");
         $(component.domWrapper).css("display", "");
+        if(component.reporttype==="text"){
+            var rt=(<RText>component);
+            rt.customToolbarButtons["Table"]={
+                title:"Table",
+                action:(evt)=>{
+                    _this.parent.contextMenu.target=(<RText>component).dom.children[0];
+                    _this.parent.contextMenu.show(evt);
+                }
+            }
+            
+        }
+        
     }
 
     /**
@@ -101,7 +120,7 @@ export class RTablerow extends RComponent {
             }
         }
         $(component.dom).removeClass("designerNoResizable");
-        $(component.dom).addClass("designerNoResizableY");
+        //$(component.dom).addClass("designerNoResizableY");
         this.parent?.updateLayout(true);
     }
     /**

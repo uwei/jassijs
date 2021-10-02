@@ -25,6 +25,7 @@ export class RComponent extends Panel {
     @$Property()
     foreach: string;
     private _width: any;
+     private _height: any;
     private _bold: boolean;
     private _decoration: string;
     private _decorationStyle: string;
@@ -140,6 +141,28 @@ export class RComponent extends Panel {
             this._width = value;
             console.log(value);
             super.width = value;
+        }
+    }
+     @$Property({
+        type: "string", isVisible: (component) => {
+            //only in table and column width is posible
+            return component._parent?.setChildHeight || component._parent?.reporttype === "columns";
+        }
+    })
+
+    get height(): any {
+        if (this._parent?.setChildHeight !== undefined)
+            return this._parent.getChildHeight(this);
+        else
+            return this._height;
+    }
+    set height(value: any) {
+        if (this._parent?.setChildHeight !== undefined)
+            this._parent.setChildHeight(this, value);
+        else {
+            this._height= value;
+            console.log(value);
+            super.height = value;
         }
     }
     @$Property()

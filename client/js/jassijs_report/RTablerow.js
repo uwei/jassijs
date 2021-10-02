@@ -55,8 +55,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             var _a;
             return (_a = this._parent) === null || _a === void 0 ? void 0 : _a.getChildWidth(component);
         }
+        setChildHeight(component, value) {
+            var _a;
+            (_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildHeight(component, value);
+        }
+        getChildHeight(component) {
+            var _a;
+            return (_a = this._parent) === null || _a === void 0 ? void 0 : _a.getChildHeight(component);
+        }
         wrapComponent(component) {
             var _a;
+            var _this = this;
             if (((_a = component.domWrapper) === null || _a === void 0 ? void 0 : _a.tagName) === "TD")
                 return; //allready wrapped
             Component_1.Component.replaceWrapper(component, document.createElement("td"));
@@ -74,6 +83,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             //$(component.dom).css("background-color","inherit");
             $(component.domWrapper).css("word-break", "break-all");
             $(component.domWrapper).css("display", "");
+            if (component.reporttype === "text") {
+                var rt = component;
+                rt.customToolbarButtons["Table"] = {
+                    title: "Table",
+                    action: (evt) => {
+                        _this.parent.contextMenu.target = component.dom.children[0];
+                        _this.parent.contextMenu.show(evt);
+                    }
+                };
+            }
         }
         /**
         * adds a component to the container
@@ -97,7 +116,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
                 }
             }
             $(component.dom).removeClass("designerNoResizable");
-            $(component.dom).addClass("designerNoResizableY");
+            //$(component.dom).addClass("designerNoResizableY");
             (_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout(true);
         }
         /**

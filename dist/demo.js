@@ -1032,17 +1032,24 @@ define("demo/Testtable", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
+    //height=50 -> gilt für alle und height=function()
     var reportdesign = {
         content: [
             {
                 table: {
-                    widths: [15, "auto", 75, "auto"],
                     body: [
-                        ["d", "qwr", "ewr", "\n"],
-                        ["3", "qwer", "eee", "\n"],
-                        ["3", "er", "\n", ""],
-                        ["", "wqe", "", ""]
+                        ["d", "qwr", "ewr", "\n", "\n"],
+                        ["3", "qwer", "reee", "\n", "\n"],
+                        ["sdfsdf", "df", "sdf", "", ""]
                     ]
+                },
+                layout: {
+                    hLineWidth: function (i, node) {
+                        return (i === 1 ? 2 : 0); //(i === 0 || i === node.table.body.length) ? 4 : 1;	
+                    },
+                    vLineWidth: function (i, node) {
+                        return 0; //(i === 0 || i === node.table.widths.length) ? 4 : 1;	
+                    }
                 }
             }
         ]
@@ -1334,7 +1341,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1632525413937
             },
             "demo/Testtable.ts": {
-                "date": 1633114458564
+                "date": 1633202796985
             }
         }
     };

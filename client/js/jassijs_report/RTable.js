@@ -28,6 +28,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             // bodyPanel: RTablerow[] = [new RTablerow()];
             this.insertEmptyCells = true;
             this.widths = [];
+            this.heights = [];
             super.init($("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>")[0]);
             //	this.backgroundPanel.width="500px";
             //$(this.backgroundPanel.dom).css("min-width","200px");
@@ -42,6 +43,34 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             $(this.dom).addClass("designerNoResizable");
             this.initContextMenu();
             var _this = this;
+            this.initKeys();
+        }
+        initKeys() {
+            var _this = this;
+            this.on("keydown", (evt) => {
+                var _a, _b, _c;
+                if (evt.key === "Tab") { //Tabelle erweitern?
+                    if (((_b = (_a = evt.target) === null || _a === void 0 ? void 0 : _a._this) === null || _b === void 0 ? void 0 : _b.reporttype) === "text") {
+                        var rt = (_c = evt.target) === null || _c === void 0 ? void 0 : _c._this;
+                        if (rt._parent._components.indexOf(rt) === rt._parent._components.length - 2) { //last row
+                            if (rt._parent.parent._components.indexOf(rt._parent) + 1 === rt._parent.parent._components.length) { //lastline
+                                var row = new RTablerow_1.RTablerow();
+                                row.parent = this;
+                                _this.add(row);
+                                var cell = new RText_1.RText();
+                                row.add(cell);
+                                _this._componentDesigner.editDialog(true);
+                                _this.addEmptyCellsIfNeeded(_this._components[0]);
+                                _this._componentDesigner.editDialog(true);
+                                evt.preventDefault();
+                                setTimeout(() => {
+                                    cell.dom.focus();
+                                }, 100);
+                            }
+                        }
+                    }
+                }
+            });
         }
         getInfoFromEvent(evt) {
             var ret = {};
@@ -67,6 +96,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             insertRowBefore.onclick((evt) => {
                 var info = _this.getInfoFromEvent(evt);
                 var newRow = new RTablerow_1.RTablerow();
+                if (_this.heights)
+                    _this.heights.splice(info.row, 0, "auto");
                 newRow.parent = _this;
                 _this.addBefore(newRow, _this._components[info.row]);
                 newRow.add(new RText_1.RText());
@@ -86,6 +117,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             insertRowAfter.onclick((evt) => {
                 var info = _this.getInfoFromEvent(evt);
                 var newRow = new RTablerow_1.RTablerow();
+                if (_this.heights)
+                    _this.heights.splice(info.row + 1, 0, "auto");
                 newRow.parent = _this;
                 if (_this._components.length === info.row + 1)
                     _this.add(newRow);
@@ -167,6 +200,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             removeRow.text = "delete row";
             removeRow.onclick((evt) => {
                 var info = _this.getInfoFromEvent(evt);
+                if (_this.heights)
+                    _this.heights.slice(info.row, 0);
                 _this.remove(_this._components[info.row]);
                 _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
             });
@@ -250,6 +285,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             if (tab.table.widths === undefined)
                 tab.table.widths = [];
             while (this._components[0]._components.length > tab.table.widths.length) {
+                tab.table.widths.push("auto"); //designer dummy
+            }
+            if (tab.table.heights === undefined)
+                tab.table.heights = [];
+            while (this._components.length - 1 > tab.table.widths.length) {
                 tab.table.widths.push("auto"); //designer dummy
             }
             for (var r = 0; r < this._components.length; r++) {
@@ -395,6 +435,47 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             });
         }
         /**
+       * sets the height of a table cell
+       * @param component - the table cell
+       * @param height - the new height
+       **/
+        setChildHeight(component, height) {
+            if (Number.isInteger(this.heights) || typeof (this.heights) === "function") {
+                this.heights = [];
+            }
+            var found = -1;
+            var tr = component._parent;
+            var max = tr._components.length - 1;
+            var test = Number(height);
+            for (var x = 0; x < tr._components.length; x++) {
+                $(tr._components[x].dom).css("height", (test === NaN) ? height : (test + "px"));
+            }
+            for (var t = this.heights.length; t < max; t++) {
+                this.heights.push("auto");
+            }
+            this.heights[this._components.indexOf(tr)] = (test === NaN) ? height : test;
+        }
+        /**
+        * gets the width of a table cell
+        * @param component - the table cell
+        **/
+        getChildHeight(component) {
+            var pos = this._components.indexOf(component._parent);
+            if (Number.isInteger(this.heights)) {
+                return this.heights;
+            }
+            else if (typeof (this.heights) === "function") {
+                //@ts-ignore
+                val = this.heights(pos);
+            }
+            else { //Array
+                if (pos === -1)
+                    return undefined;
+                return this.heights[pos];
+            }
+            //this._parent.setChildWidth(component,value);
+        }
+        /**
         * sets the width of a table cell
         * @param component - the table cell
         * @param width - the new width
@@ -415,7 +496,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 this.widths.push("auto");
             }
             if (found !== -1) {
-                this.widths[found] = width;
+                this.widths[found] = Number(width);
+                if (this.widths[found] === NaN)
+                    this.widths[found] = width;
                 $(this._components[0]._components[found].domWrapper).attr("width", width);
             }
             //this._parent.setChildWidth(component,value);
@@ -487,9 +570,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 }
                 delete ob.body;
             }
+            if (ob.headerRows) {
+                ret.headerRows = ob.headerRows;
+                delete ob.headerRows;
+            }
             if (ob.widths) {
                 ret.widths = ob.widths;
                 delete ob.widths;
+            }
+            if (ob.heights) {
+                ret.heights = ob.heights;
+                delete ob.heights;
             }
             if (obj.layout) {
                 if (typeof (obj.layout) === "string") {
@@ -504,6 +595,24 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             var tr = this._components[0];
             for (var x = 0; x < tr._components.length; x++) {
                 $(tr._components[x].domWrapper).attr("width", this.widths[x]);
+            }
+            if (this.heights) {
+                for (var r = 0; r < this._components.length; r++) {
+                    var row = this._components[r];
+                    for (var c = 0; c < row._components.length; c++) {
+                        var val;
+                        if (Number.isInteger(this.heights)) {
+                            val = this.heights;
+                        }
+                        else if (typeof (this.heights) === "function") {
+                            //@ts-ignore
+                            val = this.heights(r);
+                        }
+                        else
+                            val = this.heights[r];
+                        $(row._components[c].dom).css("height", Number.isInteger(val) ? val + "px" : val);
+                    }
+                }
             }
             super.fromJSON(ob);
             this.updateLayout(false);
@@ -521,17 +630,33 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 else
                     ret.layout = this.layout;
             }
+            if (this.headerRows) {
+                r.headerRows = this.headerRows;
+            }
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;
                 var len = this._components[0]._components.length;
-                if (this._designMode)
-                    len--;
                 for (var t = r.widths.length; t < len; t++) {
                     r.widths.push("auto");
                 }
                 //remove width
                 while (r.widths.length > len) {
                     r.widths.pop();
+                }
+            }
+            //TODO height=50 -> gilt für alle und height=function() not supported
+            if (Number.isInteger(this.heights) || typeof (this.heights) === "function") {
+                r.heights = this.heights;
+            }
+            else if (this.heights && this.heights.length > 0) {
+                r.heights = this.heights;
+                var len = this._components.length;
+                for (var t = r.heights.length; t < len; t++) {
+                    r.heights.push("auto");
+                }
+                //remove heights
+                while (r.heights.length > len) {
+                    r.heights.pop();
                 }
             }
             r.body = [];
@@ -541,6 +666,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             return ret;
         }
     };
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Number)
+    ], RTable.prototype, "headerRows", void 0);
     __decorate([
         (0, Property_1.$Property)({ chooseFrom: allLayouts, chooseFromStrict: true }),
         __metadata("design:type", String),

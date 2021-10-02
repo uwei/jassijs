@@ -111,7 +111,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1623093221162
             },
             "jassijs/base/PropertyEditorService.ts": {
-                "date": 1622998316409,
+                "date": 1633125784194,
                 "jassijs.base.PropertyEditorService": {}
             },
             "jassijs/base/Router.ts": {
@@ -1618,7 +1618,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1632776034063,
+                "date": 1633194231259,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -2017,13 +2017,14 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/DefaultEditor.ts": {
-                "date": 1622985638954,
+                "date": 1633126371593,
                 "jassijs.ui.PropertyEditors.DefaultEditor": {
                     "$PropertyEditor": [
                         [
                             "string",
                             "number",
-                            "number[]"
+                            "number[]",
+                            "boolean[]"
                         ]
                     ]
                 }
@@ -11479,8 +11480,9 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
         ];*/
         constructor(id = undefined) {
             super();
-            this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
+            this.toolbar = ['undo redo | bold italic underline | forecolor ', 'backcolor fontsizeselect'];
             this.inited = false;
+            this.customToolbarButtons = {};
             super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1"><div class="HTMLPanelContent"> </div></div>')[0]); //tabindex for key-event
             //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
@@ -11547,41 +11549,6 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             return ret;*/
             return this._value;
         }
-        /**
-         * @member {boolean} - the component could be edited
-         */
-        set editAllowed(value) {
-            /*	this._editAllowed=value;
-                if(enable){
-                    requirejs(["tinymce"],function(){
-                        _this._tcm=tinymce.init({
-                            
-                                //menubar: false,
-                                //statusbar: false,
-                                //toolbar: false,
-                                selector: '#'+_this._id,//'.HTMLPanel',
-                                inline: true,
-                                setup:function(ed) {
-                                    
-                                   ed.on('blur', function(e) {
-                                                if($("#"+ed.id)[0]===undefined)
-                                                    return;
-                                       var html=$("#"+ed.id)[0]._this;
-                                       var text= ed.getContent();
-                                       text='"'+text.substring(31,text.length-7).replaceAll("\"","\\\"")+'"';
-                                       _this.value=text;
-                                   });
-                               }
-                            });
-                        });
-                }else{
-                    console.log("dest");
-                    tinymce.editors[_this._id].destroy();
-                }*/
-        }
-        get editAllowed() {
-            return this._editAllowed;
-        }
         extensionCalled(action) {
             if (action.componentDesignerSetDesignMode) {
                 return this._setDesignMode(action.componentDesignerSetDesignMode.enable, action.componentDesignerSetDesignMode.componentDesigner);
@@ -11596,10 +11563,77 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                 if (sic === "" && _this.value !== sic)
                     _this.value = "";
                 this.inited = true;
-                let edi = tinymce.editors[_this._id];
                 // edi.show();
                 // edi.hide();
             }
+        }
+        _initTinymce(editor) {
+            var _this = this;
+            var tinymce = window["tinymce"]; //oder tinymcelib.default
+            var config = {
+                //	                valid_elements: 'strong,em,span[style],a[href],ul,ol,li',
+                //  valid_styles: {
+                //    '*': 'font-size,font-family,color,text-decoration,text-align'
+                //  },
+                menubar: false,
+                //statusbar: false,
+                selector: '#' + _this._id,
+                fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
+                inline: true,
+                setup: function (ed) {
+                    ed.on('change', function (e) {
+                        var text = _this.dom.firstElementChild.innerHTML;
+                        console.log(text);
+                        if (text === '<br data-mce-bogus="1">')
+                            text = "";
+                        editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);
+                    });
+                    ed.on('blur', function (e) {
+                        if (_this._designMode === false)
+                            return;
+                        //editor.editDialog(false);
+                        if ($("#" + ed.id)[0] === undefined)
+                            return;
+                        editor._draganddropper.enableDraggable(true);
+                        //editor.editDialog(true);
+                    });
+                    for (var name in _this.customToolbarButtons) {
+                        var bt = _this.customToolbarButtons[name];
+                        ed.ui.registry.addButton(name, {
+                            text: bt.title,
+                            onAction: function (e) {
+                                bt.action(e);
+                            }
+                        });
+                    }
+                }
+            };
+            if (_this["toolbar"])
+                config["toolbar"] = _this["toolbar"];
+            for (var name in _this.customToolbarButtons) {
+                config["toolbar"][config["toolbar"].length - 1] =
+                    config["toolbar"][config["toolbar"].length - 1] + " | " + name;
+            }
+            //_this.value=sic;
+            $(_this.dom).doubletap(function (e) {
+                if (_this._designMode === false)
+                    return;
+                _this.initIfNeeded(tinymce, config);
+                editor._draganddropper.enableDraggable(false);
+            });
+            $(_this.dom).on('blur', function () {
+                setTimeout(() => {
+                    let edi = tinymce.editors[_this._id];
+                    $(edi === null || edi === void 0 ? void 0 : edi.container).css("display", "none");
+                }, 500);
+            });
+            $(_this.dom).on('focus', function () {
+                _this.initIfNeeded(tinymce, config);
+                setTimeout(() => {
+                    //let edi = tinymce.editors[_this._id];
+                    //edi.selection.select(edi.getBody(), true);
+                }, 10);
+            });
         }
         /**
          * activates or deactivates designmode
@@ -11612,74 +11646,9 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             if (enable) {
                 // console.log("activate tiny");
                 requirejs(["jassijs/ext/tinymce"], function (tinymcelib) {
-                    var tinymce = window["tinymce"]; //oder tinymcelib.default
-                    var config = {
-                        //	                valid_elements: 'strong,em,span[style],a[href],ul,ol,li',
-                        //  valid_styles: {
-                        //    '*': 'font-size,font-family,color,text-decoration,text-align'
-                        //  },
-                        menubar: false,
-                        //statusbar: false,
-                        selector: '#' + _this._id,
-                        inline: true,
-                        setup: function (ed) {
-                            ed.on('change', function (e) {
-                                var text = _this.dom.firstElementChild.innerHTML;
-                                console.log(text);
-                                if (text === '<br data-mce-bogus="1">')
-                                    text = "";
-                                editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);
-                            });
-                            ed.on('blur', function (e) {
-                                if (_this._designMode === false)
-                                    return;
-                                //editor.editDialog(false);
-                                if ($("#" + ed.id)[0] === undefined)
-                                    return;
-                                editor._draganddropper.enableDraggable(true);
-                                //editor.editDialog(true);
-                            });
-                        }
-                    };
-                    if (_this["toolbar"])
-                        config["toolbar"] = _this["toolbar"];
-                    //_this.value=sic;
-                    $(_this.dom).doubletap(function (e) {
-                        if (_this._designMode === false)
-                            return;
-                        _this.initIfNeeded(tinymce, config);
-                        editor._draganddropper.enableDraggable(false);
-                    });
-                    $(_this.dom).on('blur', function () {
-                        let edi = tinymce.editors[_this._id];
-                        $(edi === null || edi === void 0 ? void 0 : edi.container).css("display", "none");
-                        //not work edi.getElement().blur();
-                        //  edi.getElement().focus();
-                        //  edi.getElement().blur();
-                        // edi.getElement().hidden=true;
-                        // if($(_this.dom).is(":focus"))
-                        //  $(_this.dom).trigger("focus");
-                        // $(_this.dom).trigger("blur");
-                        // $(_this.dom).blur();
-                    });
-                    $(_this.dom).on('focus', function () {
-                        _this.initIfNeeded(tinymce, config);
-                        setTimeout(() => {
-                            let edi = tinymce.editors[_this._id];
-                            edi.selection.select(edi.getBody(), true);
-                        }, 10);
-                    });
-                    $(_this.dom).keydown((evt) => {
-                        /*   _this.initIfNeeded(tinymce,config);
-                           if(evt.key.length===1){
-                             //  _this.value=evt.key;
-                               let edi=tinymce.editors[_this._id];
-                                edi.selection?.setCursorLocation(edi.getBody(), edi.getBody().childElementCount);
-                           }*/
-                    });
+                    _this._initTinymce(editor);
                 });
-            } //else
-            //	tinymce.editors[_this._id].destroy();
+            }
         }
         destroy() {
             super.destroy();
@@ -11708,7 +11677,11 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
     exports.HTMLPanel = HTMLPanel;
     function test() {
         var ret = new HTMLPanel();
-        ret.value = "Sample <b>Text</b>";
+        ret.customToolbarButtons.Table = {
+            title: "Table",
+            action: () => { alert(8); }
+        };
+        ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsfg<strong>sdfgsd</strong>fgsdfg</span><br>";
         return ret;
     }
     exports.test = test;
@@ -16799,7 +16772,7 @@ define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassi
             if (value !== undefined && this.property.type === "string" && typeof value === 'string' && value.startsWith("\"") && value.endsWith("\"")) {
                 value = value.substring(1, value.length - 1);
             }
-            else if (value !== undefined && this.property.type === "number[]") {
+            else if (value !== undefined && (this.property.type === "number[]" || this.property.type === "boolean[]")) {
                 if (typeof (value) === "string")
                     value = value.replaceAll("[", "").replaceAll("]", "");
                 else {
@@ -16826,7 +16799,7 @@ define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassi
             var val = this.component.value;
             if (this.property.type === "string")
                 val = "\"" + val + "\"";
-            if (this.property.type === "number[]")
+            if (this.property.type === "number[]" || this.property.type === "boolean[]")
                 val = (val === "" ? "undefined" : "[" + val + "]");
             this.propertyEditor.setPropertyInCode(this.property.name, val);
             var oval = this.component.value;
@@ -16844,12 +16817,23 @@ define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassi
                     }
                 }
             }
+            if (this.property.type === "boolean[]") {
+                if (oval === "")
+                    oval = undefined;
+                else {
+                    var all = oval.split(",");
+                    oval = [];
+                    for (var x = 0; x < all.length; x++) {
+                        oval.push(all[x].trim() === "true");
+                    }
+                }
+            }
             this.propertyEditor.setPropertyInDesign(this.property.name, oval);
             super.callEvent("edit", param);
         }
     };
     DefaultEditor = __decorate([
-        (0, Editor_7.$PropertyEditor)(["string", "number", "number[]"]),
+        (0, Editor_7.$PropertyEditor)(["string", "number", "number[]", "boolean[]"]),
         (0, Jassi_83.$Class)("jassijs.ui.PropertyEditors.DefaultEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DefaultEditor);

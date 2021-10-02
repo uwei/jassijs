@@ -25,6 +25,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent
             super(properties);
             this.reporttype = "text";
             this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
+            this.customToolbarButtons = {};
             super.init($('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>')[0]); //tabindex for key-event
             $(this.domWrapper).removeClass("jcontainer");
             $(this.__dom).css("text-overflow", "ellipsis");
@@ -40,6 +41,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent
             this.extensionCalled = HTMLPanel_1.HTMLPanel.prototype.extensionCalled.bind(this);
             this._setDesignMode = HTMLPanel_1.HTMLPanel.prototype._setDesignMode.bind(this);
             this.initIfNeeded = HTMLPanel_1.HTMLPanel.prototype.initIfNeeded.bind(this);
+            //@ts-ignore
+            this._initTinymce = HTMLPanel_1.HTMLPanel.prototype._initTinymce.bind(this);
         }
         get value() {
             var el = this.dom.children[0];

@@ -85,6 +85,23 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 super.width = value;
             }
         }
+        get height() {
+            var _a;
+            if (((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildHeight) !== undefined)
+                return this._parent.getChildHeight(this);
+            else
+                return this._height;
+        }
+        set height(value) {
+            var _a;
+            if (((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildHeight) !== undefined)
+                this._parent.setChildHeight(this, value);
+            else {
+                this._height = value;
+                console.log(value);
+                super.height = value;
+            }
+        }
         get bold() {
             return this._bold;
         }
@@ -413,6 +430,17 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], RComponent.prototype, "width", null);
+    __decorate([
+        (0, Property_1.$Property)({
+            type: "string", isVisible: (component) => {
+                var _a, _b;
+                //only in table and column width is posible
+                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildHeight) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns";
+            }
+        }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], RComponent.prototype, "height", null);
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),

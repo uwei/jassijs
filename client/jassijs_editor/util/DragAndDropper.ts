@@ -45,11 +45,16 @@ export class DragAndDropper {
     public enableDraggable(enable: boolean) {
         //  this.onpropertychanged = undefined;
         // this.onpropertyadded = undefined;
-        if (this.draggableComponents !== undefined) {
-            if (!enable)
-                this.draggableComponents.draggable('disable');
-            else
-                this.draggableComponents.draggable('enable');
+
+        try{
+            if (this.draggableComponents !== undefined) {
+                if (!enable)
+                    this.draggableComponents.draggable('disable');
+                else
+                    this.draggableComponents.draggable('enable');
+            }
+        }catch{
+            console.log("fetched error");;
         }
 
     }

@@ -26,7 +26,7 @@ import { tableLayouts } from "jassijs_report/RTableLayouts";
 
 
 
-var allLayouts=Object.keys(tableLayouts);
+var allLayouts = Object.keys(tableLayouts);
 
 
 
@@ -42,8 +42,11 @@ export class RTable extends RComponent {
     // bodyPanel: RTablerow[] = [new RTablerow()];
     private insertEmptyCells = true;
     widths: any[] = [];
+    heights: any = [];
     layout: any;
     updater: Runlater;
+    @$Property()
+    headerRows: number;
     /**
 * 
 * @param {object} properties - properties to init
@@ -67,7 +70,35 @@ export class RTable extends RComponent {
         $(this.dom).addClass("designerNoResizable");
         this.initContextMenu();
         var _this = this;
+        this.initKeys();
 
+    }
+    private initKeys() {
+        var _this = this;
+        this.on("keydown", (evt) => {
+            if (evt.key === "Tab") {//Tabelle erweitern?
+                if (evt.target?._this?.reporttype === "text") {
+                    var rt: RText = evt.target?._this;
+                    if (rt._parent._components.indexOf(rt) === rt._parent._components.length - 2) {//last row
+                        if (rt._parent.parent._components.indexOf(rt._parent) + 1 === rt._parent.parent._components.length) {//lastline
+                            var row = new RTablerow();
+                            row.parent = this;
+                            _this.add(row);
+                            var cell = new RText();
+                            row.add(cell);
+                            _this._componentDesigner.editDialog(true);
+                            _this.addEmptyCellsIfNeeded(<RTablerow>_this._components[0]);
+                            _this._componentDesigner.editDialog(true);
+                            evt.preventDefault();
+
+                            setTimeout(() => {
+                                (<HTMLElement>cell.dom).focus();
+                            }, 100);
+                        }
+                    }
+                }
+            }
+        })
     }
     private getInfoFromEvent(evt): { column: number, row: number, cell: RComponent, tableRow: RTablerow } {
         var ret: any = {};
@@ -93,6 +124,8 @@ export class RTable extends RComponent {
         insertRowBefore.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
             var newRow = new RTablerow();
+            if (_this.heights)
+                _this.heights.splice(info.row, 0, "auto");
             newRow.parent = _this;
             _this.addBefore(newRow, _this._components[info.row]);
             newRow.add(new RText());
@@ -112,6 +145,8 @@ export class RTable extends RComponent {
         insertRowAfter.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
             var newRow = new RTablerow();
+            if (_this.heights)
+                _this.heights.splice(info.row + 1, 0, "auto");
             newRow.parent = _this;
             if (_this._components.length === info.row + 1)
                 _this.add(newRow);
@@ -197,7 +232,8 @@ export class RTable extends RComponent {
         removeRow.text = "delete row";
         removeRow.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
-
+            if (_this.heights)
+                _this.heights.slice(info.row, 0);
             _this.remove(_this._components[info.row]);
             _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
 
@@ -257,7 +293,7 @@ export class RTable extends RComponent {
         for (var r = 0; r < this._components.length; r++) {
             var row = <RTablerow>this._components[r];
             for (var c = 0; c < row._components.length; c++) {
-                var cell=row._components[c];
+                var cell = row._components[c];
                 if (cell["colSpan"]) {
                     span = Number.parseInt(cell["colSpan"]);
                     for (var x = c + 1; x < c + span; x++) {
@@ -280,14 +316,18 @@ export class RTable extends RComponent {
     }
     doTableLayout() {
         this.correctHideAfterSpan();
-        
+
         var tab = this.toJSON();
         if (tab.table.widths === undefined)
             tab.table.widths = [];
         while ((<RTablerow>this._components[0])._components.length > tab.table.widths.length) {
             tab.table.widths.push("auto");//designer dummy
         }
-
+        if (tab.table.heights === undefined)
+            tab.table.heights = [];
+        while (this._components.length - 1 > tab.table.widths.length) {
+            tab.table.widths.push("auto");//designer dummy
+        }
         for (var r = 0; r < this._components.length; r++) {
             var row = <RTablerow>this._components[r];
             for (var c = 0; c < row._components.length; c++) {
@@ -317,7 +357,7 @@ export class RTable extends RComponent {
                 css.border_bottom_width = v + "px";
                 cssid.push(v);
 
-                v =1;
+                v = 1;
                 if (this.layout?.vLineWidth) {
                     v = this.layout?.vLineWidth(c, tab, r);
                 }
@@ -332,10 +372,10 @@ export class RTable extends RComponent {
                 cssid.push(v);
 
                 v = "black";
-                css.border_top_style = (this.layout==="noBorders"||this.layout?.defaultBorder===false)?"none":"solid";
-                css.border_bottom_style =  (this.layout==="noBorders"||this.layout?.defaultBorder===false)?"none":"solid";
-                css.border_left_style = (this.layout==="noBorders"||this.layout?.defaultBorder===false)?"none":"solid";
-                css.border_right_style =  (this.layout==="noBorders"||this.layout?.defaultBorder===false)?"none":"solid";
+                css.border_top_style = (this.layout === "noBorders" || this.layout?.defaultBorder === false) ? "none" : "solid";
+                css.border_bottom_style = (this.layout === "noBorders" || this.layout?.defaultBorder === false) ? "none" : "solid";
+                css.border_left_style = (this.layout === "noBorders" || this.layout?.defaultBorder === false) ? "none" : "solid";
+                css.border_right_style = (this.layout === "noBorders" || this.layout?.defaultBorder === false) ? "none" : "solid";
                 cssid.push(css.border_top_style);
                 cssid.push(css.border_bottom_style);
                 cssid.push(css.border_left_style);
@@ -371,28 +411,28 @@ export class RTable extends RComponent {
                 if (this.layout?.paddingLeft) {
                     v = this.layout?.paddingLeft(c + 1, tab, r);
                 }
-                css.padding_left = v+"px";
+                css.padding_left = v + "px";
                 cssid.push(v);
 
                 v = 1;
                 if (this.layout?.paddingRight) {
                     v = this.layout?.paddingRight(c + 1, tab, r);
                 }
-                css.padding_right =v+"px";
+                css.padding_right = v + "px";
                 cssid.push(v);
 
                 v = 1;
                 if (this.layout?.paddingTop) {
                     v = this.layout?.paddingTop(r + 1, tab, c);
                 }
-                css.padding_top =v+"px";
+                css.padding_top = v + "px";
                 cssid.push(v);
 
                 v = 1;
                 if (this.layout?.paddingBottom) {
                     v = this.layout?.paddingBottom(r + 1, tab, c);
                 }
-                css.padding_bottom = v+"px";
+                css.padding_bottom = v + "px";
                 cssid.push(v);
 
                 var scssid = cssid.join("-")
@@ -420,6 +460,7 @@ export class RTable extends RComponent {
     }
     protected _setDesignMode(enable) {
         this._designMode = enable;
+
         //do nothing - no add button
     }
 
@@ -450,6 +491,46 @@ export class RTable extends RComponent {
 
     }
     /**
+   * sets the height of a table cell
+   * @param component - the table cell
+   * @param height - the new height
+   **/
+    setChildHeight(component: Component, height: any) {
+        if (Number.isInteger(this.heights) || typeof (this.heights) === "function") {
+            this.heights = [];
+        }
+        var found = -1;
+        var tr = <RTablerow>component._parent;
+        var max = tr._components.length - 1;
+        var test = Number(height);
+        for (var x = 0; x < tr._components.length; x++) {
+            $(tr._components[x].dom).css("height", (test === NaN) ? height : (test + "px"));
+        }
+        for (var t = this.heights.length; t < max; t++) {
+            this.heights.push("auto");
+        }
+        this.heights[this._components.indexOf(tr)] = (test === NaN) ? height : test;
+    }
+    /**
+    * gets the width of a table cell
+    * @param component - the table cell
+    **/
+    getChildHeight(component: Component): any {
+
+        var pos = this._components.indexOf(component._parent);
+        if (Number.isInteger(this.heights)) {
+            return this.heights;
+        } else if (typeof (this.heights) === "function") {
+            //@ts-ignore
+            val = this.heights(pos);
+        } else {//Array
+            if (pos === -1)
+                return undefined;
+            return this.heights[pos];
+        }
+        //this._parent.setChildWidth(component,value);
+    }
+    /**
     * sets the width of a table cell
     * @param component - the table cell
     * @param width - the new width
@@ -470,7 +551,9 @@ export class RTable extends RComponent {
             this.widths.push("auto");
         }
         if (found !== -1) {
-            this.widths[found] = width;
+            this.widths[found] = Number(width);
+            if (this.widths[found] === NaN)
+                this.widths[found] = width;
             $((<Container>this._components[0])._components[found].domWrapper).attr("width", width);
         }
         //this._parent.setChildWidth(component,value);
@@ -498,19 +581,19 @@ export class RTable extends RComponent {
     private create(ob: any) {
 
     }
-    @$Property({chooseFrom:allLayouts,chooseFromStrict:true})
-    set layoutName(value:string){
-        var old=this.layoutName;
-        if(value==="custom"&&old===undefined&&this.layout!==undefined)
+    @$Property({ chooseFrom: allLayouts, chooseFromStrict: true })
+    set layoutName(value: string) {
+        var old = this.layoutName;
+        if (value === "custom" && old === undefined && this.layout !== undefined)
             return;//if user has changed the layout then do not modify
-        
-        this.layout=tableLayouts[value]?.layout;
+
+        this.layout = tableLayouts[value]?.layout;
         this.updateLayout(true);
     }
-    get layoutName():string{
-        var ret=this.findTableLayout(this.layout);
-        if(ret===undefined)
-            ret=this.layout===undefined?"":"custom";
+    get layoutName(): string {
+        var ret = this.findTableLayout(this.layout);
+        if (ret === undefined)
+            ret = this.layout === undefined ? "" : "custom";
         return ret;
     }
     extensionCalled(action: ExtensionAction) {
@@ -519,11 +602,11 @@ export class RTable extends RComponent {
         }
         super.extensionCalled(action);
     }
-    private findTableLayout(func):string{
-        var sfind= Tools.objectToJson(func,undefined,false).replaceAll(" ","").replaceAll("\t","").replaceAll("\r","").replaceAll("\n","")
-        for(var key in tableLayouts){
-            var test=Tools.objectToJson(tableLayouts[key].layout,undefined,false).replaceAll(" ","").replaceAll("\t","").replaceAll("\r","").replaceAll("\n","");
-            if(sfind===test)
+    private findTableLayout(func): string {
+        var sfind = Tools.objectToJson(func, undefined, false).replaceAll(" ", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll("\n", "")
+        for (var key in tableLayouts) {
+            var test = Tools.objectToJson(tableLayouts[key].layout, undefined, false).replaceAll(" ", "").replaceAll("\t", "").replaceAll("\r", "").replaceAll("\n", "");
+            if (sfind === test)
                 return key;
         }
         return undefined;
@@ -545,27 +628,50 @@ export class RTable extends RComponent {
             delete ob.body;
 
         }
+        if (ob.headerRows) {
+            ret.headerRows = ob.headerRows;
+            delete ob.headerRows;
+        }
         if (ob.widths) {
             ret.widths = ob.widths;
             delete ob.widths;
-
+        }
+        if (ob.heights) {
+            ret.heights = ob.heights;
+            delete ob.heights;
         }
         if (obj.layout) {
-            if(typeof(obj.layout)==="string"){
-                if(tableLayouts[obj.layout]?.isSystem===true){
+            if (typeof (obj.layout) === "string") {
+                if (tableLayouts[obj.layout]?.isSystem === true) {
                     ret.layout = tableLayouts[obj.layout].layout;
                 }
 
-            }else
+            } else
                 ret.layout = obj.layout;
-            
+
             delete obj.layout;
 
         }
         var tr = (<RTablerow>this._components[0]);
         for (var x = 0; x < tr._components.length; x++) {
-
             $(tr._components[x].domWrapper).attr("width", this.widths[x]);
+        }
+        if (this.heights) {
+            for (var r = 0; r < this._components.length; r++) {
+                var row = <RTablerow>this._components[r];
+                for (var c = 0; c < row._components.length; c++) {
+                    var val;
+                    if (Number.isInteger(this.heights)) {
+                        val = this.heights;
+                    } else if (typeof (this.heights) === "function") {
+                        //@ts-ignore
+                        val = this.heights(r);
+                    } else
+                        val = this.heights[r];
+                    $(row._components[c].dom).css("height", Number.isInteger(val) ? val + "px" : val);
+
+                }
+            }
         }
 
         super.fromJSON(ob);
@@ -573,7 +679,7 @@ export class RTable extends RComponent {
         this.updateLayout(false);
         return ret;
     }
-   
+
     toJSON(): any {
         var r: any = {
 
@@ -581,23 +687,40 @@ export class RTable extends RComponent {
         var ret: any = super.toJSON();
         ret.table = r;
         if (this.layout) {
-            var test=this.findTableLayout(this.layout);
-            if(tableLayouts[test]?.isSystem)
-                ret.layout =test;
+            var test = this.findTableLayout(this.layout);
+            if (tableLayouts[test]?.isSystem)
+                ret.layout = test;
             else
                 ret.layout = this.layout;
+        }
+        if (this.headerRows) {
+            r.headerRows = this.headerRows;
         }
         if (this.widths && this.widths.length > 0) {
             r.widths = this.widths;
             var len = (<RTablerow>this._components[0])._components.length;
-            if (this._designMode)
-                len--;
+
             for (var t = r.widths.length; t < len; t++) {
                 r.widths.push("auto");
             }
             //remove width
             while (r.widths.length > len) {
                 r.widths.pop();
+            }
+        }
+        //TODO height=50 -> gilt für alle und height=function() not supported
+        if (Number.isInteger(this.heights) || typeof (this.heights) === "function") {
+            r.heights = this.heights
+        } else if (this.heights && this.heights.length > 0) {
+            r.heights = this.heights;
+            var len = this._components.length;
+
+            for (var t = r.heights.length; t < len; t++) {
+                r.heights.push("auto");
+            }
+            //remove heights
+            while (r.heights.length > len) {
+                r.heights.pop();
             }
         }
         r.body = [];
