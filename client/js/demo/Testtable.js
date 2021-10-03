@@ -7,12 +7,7 @@ define(["require", "exports"], function (require, exports) {
         content: [
             {
                 table: {
-                    heights: function (r) {
-                        if (r == 0)
-                            return 50;
-                        else
-                            return 20;
-                    },
+                    heights: 50,
                     body: [
                         ["d", "qwr", "ewr", "\n", "\n"],
                         ["3", "qwer", "reee", "\n", "\n"],

@@ -124,7 +124,7 @@ export class RTable extends RComponent {
         insertRowBefore.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
             var newRow = new RTablerow();
-            if (_this.heights)
+            if (_this.heights && Array.isArray(_this.heights))
                 _this.heights.splice(info.row, 0, "auto");
             newRow.parent = _this;
             _this.addBefore(newRow, _this._components[info.row]);
@@ -145,7 +145,7 @@ export class RTable extends RComponent {
         insertRowAfter.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
             var newRow = new RTablerow();
-            if (_this.heights)
+            if (_this.heights && Array.isArray(_this.heights))
                 _this.heights.splice(info.row + 1, 0, "auto");
             newRow.parent = _this;
             if (_this._components.length === info.row + 1)
@@ -232,7 +232,7 @@ export class RTable extends RComponent {
         removeRow.text = "delete row";
         removeRow.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
-            if (_this.heights)
+            if (_this.heights && Array.isArray(_this.heights))
                 _this.heights.slice(info.row, 0);
             _this.remove(_this._components[info.row]);
             _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
@@ -328,12 +328,27 @@ export class RTable extends RComponent {
         while (this._components.length - 1 > tab.table.widths.length) {
             tab.table.widths.push("auto");//designer dummy
         }
+
+       
         for (var r = 0; r < this._components.length; r++) {
             var row = <RTablerow>this._components[r];
             for (var c = 0; c < row._components.length; c++) {
                 var cssid = ["RColumn"];
                 var css: any = {};
                 var cell = <RText>row._components[c];
+                if (this.heights) {
+                    var val;
+                    if (Number.isInteger(this.heights)) {
+                        val = this.heights;
+                    } else if (typeof (this.heights) === "function") {
+                        //@ts-ignore
+                        val = this.heights(r);
+                    } else
+                        val = this.heights[r];
+                    $(row._components[c].dom).css("height", Number.isInteger(val) ? val + "px" : val);
+                }
+
+
                 var v: any = null;
                 if (this.layout?.fillColor) {
                     v = this.layout?.fillColor(r, tab, c);
@@ -496,7 +511,15 @@ export class RTable extends RComponent {
    * @param height - the new height
    **/
     setChildHeight(component: Component, height: any) {
-        if (Number.isInteger(this.heights) || typeof (this.heights) === "function") {
+        if (Number.isInteger(this.heights)) {
+            this.heights = height;
+            var test = Number(height);
+            for (var x = 0; x < tr._components.length; x++) {
+                $(tr._components[x].dom).css("height", (test === NaN) ? height : (test + "px"));
+            }
+            return;
+        }
+        if (typeof (this.heights) === "function") {
             this.heights = [];
         }
         var found = -1;
@@ -522,7 +545,7 @@ export class RTable extends RComponent {
             return this.heights;
         } else if (typeof (this.heights) === "function") {
             //@ts-ignore
-            val = this.heights(pos);
+            return this.heights(pos);
         } else {//Array
             if (pos === -1)
                 return undefined;

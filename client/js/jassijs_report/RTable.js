@@ -96,7 +96,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             insertRowBefore.onclick((evt) => {
                 var info = _this.getInfoFromEvent(evt);
                 var newRow = new RTablerow_1.RTablerow();
-                if (_this.heights)
+                if (_this.heights && Array.isArray(_this.heights))
                     _this.heights.splice(info.row, 0, "auto");
                 newRow.parent = _this;
                 _this.addBefore(newRow, _this._components[info.row]);
@@ -117,7 +117,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             insertRowAfter.onclick((evt) => {
                 var info = _this.getInfoFromEvent(evt);
                 var newRow = new RTablerow_1.RTablerow();
-                if (_this.heights)
+                if (_this.heights && Array.isArray(_this.heights))
                     _this.heights.splice(info.row + 1, 0, "auto");
                 newRow.parent = _this;
                 if (_this._components.length === info.row + 1)
@@ -200,7 +200,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             removeRow.text = "delete row";
             removeRow.onclick((evt) => {
                 var info = _this.getInfoFromEvent(evt);
-                if (_this.heights)
+                if (_this.heights && Array.isArray(_this.heights))
                     _this.heights.slice(info.row, 0);
                 _this.remove(_this._components[info.row]);
                 _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
@@ -298,6 +298,19 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                     var cssid = ["RColumn"];
                     var css = {};
                     var cell = row._components[c];
+                    if (this.heights) {
+                        var val;
+                        if (Number.isInteger(this.heights)) {
+                            val = this.heights;
+                        }
+                        else if (typeof (this.heights) === "function") {
+                            //@ts-ignore
+                            val = this.heights(r);
+                        }
+                        else
+                            val = this.heights[r];
+                        $(row._components[c].dom).css("height", Number.isInteger(val) ? val + "px" : val);
+                    }
                     var v = null;
                     if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.fillColor) {
                         v = (_b = this.layout) === null || _b === void 0 ? void 0 : _b.fillColor(r, tab, c);
@@ -440,7 +453,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
        * @param height - the new height
        **/
         setChildHeight(component, height) {
-            if (Number.isInteger(this.heights) || typeof (this.heights) === "function") {
+            if (Number.isInteger(this.heights)) {
+                this.heights = height;
+                var test = Number(height);
+                for (var x = 0; x < tr._components.length; x++) {
+                    $(tr._components[x].dom).css("height", (test === NaN) ? height : (test + "px"));
+                }
+                return;
+            }
+            if (typeof (this.heights) === "function") {
                 this.heights = [];
             }
             var found = -1;
@@ -466,7 +487,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             }
             else if (typeof (this.heights) === "function") {
                 //@ts-ignore
-                val = this.heights(pos);
+                return this.heights(pos);
             }
             else { //Array
                 if (pos === -1)

@@ -118,6 +118,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             $(component.dom).removeClass("designerNoResizable");
             //$(component.dom).addClass("designerNoResizableY");
             (_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout(true);
+            /*  var test=component.height;
+              if(test)
+                  component.height=test;*/
         }
         /**
       * adds a component to the container before an other component
@@ -139,6 +142,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             if (this._parent)
                 this._parent.addEmptyCellsIfNeeded(this);
             (_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout(true);
+            /*var test=component.height;
+            if(test)
+                component.height=test;*/
         }
         fromJSON(columns) {
             var ret = this;

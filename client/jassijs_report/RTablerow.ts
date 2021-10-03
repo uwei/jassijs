@@ -122,6 +122,10 @@ export class RTablerow extends RComponent {
         $(component.dom).removeClass("designerNoResizable");
         //$(component.dom).addClass("designerNoResizableY");
         this.parent?.updateLayout(true);
+          /*  var test=component.height;
+            if(test)
+                component.height=test;*/
+
     }
     /**
   * adds a component to the container before an other component
@@ -142,6 +146,9 @@ export class RTablerow extends RComponent {
         if (this._parent)
             this._parent.addEmptyCellsIfNeeded(this);
         this.parent?.updateLayout(true);
+        /*var test=component.height;
+        if(test)
+            component.height=test;*/
     }
     fromJSON(columns: any[]): RTablerow {
         var ret = this;
