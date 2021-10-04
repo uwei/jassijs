@@ -16,6 +16,7 @@ import { DragAndDropper } from "jassijs_editor/util/DragAndDropper";
 import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import { classes } from "jassijs/remote/Classes";
 import { Container } from "jassijs/ui/Container";
+import { BoxPanel } from "jassijs/ui/BoxPanel";
 //import { Parser } from "./util/Parser";
 
 declare global {
@@ -54,6 +55,7 @@ export class ComponentDesigner extends Panel {
     undoButton: Button;
     editButton: Button;
     removeButton: Button;
+inlineEditorPanel:Panel;
 
     constructor() {
         super();
@@ -91,7 +93,7 @@ export class ComponentDesigner extends Panel {
     _initDesign() {
         var _this = this;
         this._designToolbar = new Panel();
-        this._designPlaceholder = new Panel();
+       this._designPlaceholder = new Panel();
         this.saveButton = new Button();
         this.saveButton.tooltip = "Save(Ctrl+S)";
         this.saveButton.icon = "mdi mdi-content-save mdi-18px";
@@ -153,10 +155,29 @@ export class ComponentDesigner extends Panel {
             _this.removeComponent();
         });
         this._designToolbar.add(this.removeButton);
-        this.add(this._designToolbar);
+        var box=new BoxPanel();
+        box.horizontal=true;
+
+        this.inlineEditorPanel=new Panel();
+        this.inlineEditorPanel._id="i"+this.inlineEditorPanel._id;
+        this.inlineEditorPanel.dom.setAttribute("id",this.inlineEditorPanel._id);
+        $(this.inlineEditorPanel.dom).css("display","inline");
+        $(this.inlineEditorPanel.domWrapper).css("display","inline");
+        $(this.inlineEditorPanel.dom).addClass("InlineEditorPanel");
+
+        /*this.inlineEditorPanel=new Panel();
+        this.inlineEditorPanel.sid="i"+this.inlineEditorPanel._id;
+        this.inlineEditorPanel.dom.innerHTML='<table style="display:inline"><tr><td id='+this.inlineEditorPanel.sid+"><td></tr></table>";
+        $(this.inlineEditorPanel.dom).css("display","inline");
+        $(this.inlineEditorPanel.domWrapper).css("display","inline");
+*/
+       
+        box.height=40;
+        box.add(this._designToolbar);
+        box.add(this.inlineEditorPanel);
+        this.add(box);
         $(this._designPlaceholder.domWrapper).css("position", "relative");
         this.add(this._designPlaceholder);
-
 
     }
     /**
@@ -282,6 +303,7 @@ export class ComponentDesigner extends Panel {
      * @param {boolean} enable - if true allow resizing and drag and drop 
      */
     editDialog(enable) {
+
         var _this = this;
         this.editMode = enable;
         var component = this._designPlaceholder._components[0];

@@ -150,6 +150,7 @@ export class DragAndDropper {
     * @returns {unresolved}
     */
     public install(parentPanel: Component, allIDs: string) {
+       
         //$(this.parentPainer");
         var _this = this;
         if (parentPanel !== undefined)

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/remote/Classes", "jassijs/ui/Databinder"], function (require, exports, Jassi_1, Panel_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_1, DragAndDropper_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Jassi_1, Panel_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_1, DragAndDropper_1, Classes_1, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentDesigner = void 0;
@@ -100,7 +100,24 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 _this.removeComponent();
             });
             this._designToolbar.add(this.removeButton);
-            this.add(this._designToolbar);
+            var box = new BoxPanel_1.BoxPanel();
+            box.horizontal = true;
+            this.inlineEditorPanel = new Panel_1.Panel();
+            this.inlineEditorPanel._id = "i" + this.inlineEditorPanel._id;
+            this.inlineEditorPanel.dom.setAttribute("id", this.inlineEditorPanel._id);
+            $(this.inlineEditorPanel.dom).css("display", "inline");
+            $(this.inlineEditorPanel.domWrapper).css("display", "inline");
+            $(this.inlineEditorPanel.dom).addClass("InlineEditorPanel");
+            /*this.inlineEditorPanel=new Panel();
+            this.inlineEditorPanel.sid="i"+this.inlineEditorPanel._id;
+            this.inlineEditorPanel.dom.innerHTML='<table style="display:inline"><tr><td id='+this.inlineEditorPanel.sid+"><td></tr></table>";
+            $(this.inlineEditorPanel.dom).css("display","inline");
+            $(this.inlineEditorPanel.domWrapper).css("display","inline");
+    */
+            box.height = 40;
+            box.add(this._designToolbar);
+            box.add(this.inlineEditorPanel);
+            this.add(box);
             $(this._designPlaceholder.domWrapper).css("position", "relative");
             this.add(this._designPlaceholder);
         }

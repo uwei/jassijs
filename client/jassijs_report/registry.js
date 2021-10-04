@@ -341,7 +341,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RText.ts": {
-		"date": 1633187480114,
+		"date": 1633376915651,
 		"jassijs_report.RText": {
 			"$ReportComponent": [
 				{

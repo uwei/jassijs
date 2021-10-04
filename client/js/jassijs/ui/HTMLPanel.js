@@ -9,20 +9,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_1, Jassi_1, Property_1, DataComponent_1) {
     "use strict";
+    var HTMLPanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.HTMLPanel = void 0;
     var bugtinymce = undefined;
-    let HTMLPanel = class HTMLPanel extends DataComponent_1.DataComponent {
+    let HTMLPanel = HTMLPanel_1 = class HTMLPanel extends DataComponent_1.DataComponent {
         /*[
             'undo redo | bold italic underline | fontsizeselect', //fontselect
             'forecolor backcolor | numlist bullist outdent indent'
         ];*/
         constructor(id = undefined) {
             super();
-            this.toolbar = ['undo redo | bold italic underline | forecolor ', 'backcolor fontsizeselect'];
+            this.toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
             this.inited = false;
             this.customToolbarButtons = {};
-            super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1"><div class="HTMLPanelContent"> </div></div>')[0]); //tabindex for key-event
+            super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1" ><div class="HTMLPanelContent"> </div></div>')[0]); //tabindex for key-event
             //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
             var el = this.dom.children[0];
@@ -109,6 +110,36 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
         _initTinymce(editor) {
             var _this = this;
             var tinymce = window["tinymce"]; //oder tinymcelib.default
+            //styles
+            /*jassi.includeCSS("tinyhtmlpanel", {
+                ".InlineEditorPanel div": {
+                    "display": "inline"
+                },
+                ".InlineEditorPanel .tox .tox-editor-container": {
+                    display: "inline"
+                },
+                ".InlineEditorPanel .tox-tinymce-inline": {
+                    display: "inline"
+                },
+                ".InlineEditorPanel .tox-editor-header": {
+                    display: "inline"
+                },
+                ".InlineEditorPanel .tox .tox-toolbar": {
+                    display: "inline"
+                },
+                ".InlineEditorPanel .tox .tox-toolbar__group": {
+                    display: "inline"
+                },
+                ".InlineEditorPanel .tox .tox-tbtn": {
+                    display: "inline"
+                },
+                ".InlineEditorPanel .tox .tox-split-button": {
+                    display: "inline"
+                },
+                ".InlineEditorPanel .tox .tox-tbtn svg": {
+                    display: "inline"
+                }
+            });*/
             var config = {
                 //	                valid_elements: 'strong,em,span[style],a[href],ul,ol,li',
                 //  valid_styles: {
@@ -119,6 +150,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
                 selector: '#' + _this._id,
                 fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
                 inline: true,
+                fixed_toolbar_container: '#' + this.editor.inlineEditorPanel._id,
                 setup: function (ed) {
                     ed.on('change', function (e) {
                         var text = _this.dom.firstElementChild.innerHTML;
@@ -126,6 +158,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
                         if (text === '<br data-mce-bogus="1">')
                             text = "";
                         editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);
+                    });
+                    ed.on('focus', function (e) {
+                        //   $(ed.getContainer()).css("display", "inline");
+                        //   debugger;
                     });
                     ed.on('blur', function (e) {
                         if (_this._designMode === false)
@@ -135,6 +171,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
                             return;
                         editor._draganddropper.enableDraggable(true);
                         //editor.editDialog(true);
+                    });
+                    ed.on('NodeChange', function (e) {
+                        // $(ed.getContainer()).find("svg").attr("width", "16").attr("height", "16").attr("viewbox", "0 0 24 24");
+                        //$(ed.getContainer()).css("white-space","nowrap");
                     });
                     for (var name in _this.customToolbarButtons) {
                         var bt = _this.customToolbarButtons[name];
@@ -153,25 +193,34 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
                 config["toolbar"][config["toolbar"].length - 1] =
                     config["toolbar"][config["toolbar"].length - 1] + " | " + name;
             }
-            //_this.value=sic;
-            $(_this.dom).doubletap(function (e) {
+            $(this.dom).on("mouseup", (e) => {
                 if (_this._designMode === false)
                     return;
-                _this.initIfNeeded(tinymce, config);
                 editor._draganddropper.enableDraggable(false);
+                let edi = tinymce.editors[_this._id];
+                $(edi.getContainer()).css("display", "flex");
+                //$(this.domWrapper).draggable('disable');
             });
+            //_this.value=sic;
+            /*    $(_this.dom).doubletap(function (e) {
+                    if (_this._designMode === false)
+                        return;
+                    _this.initIfNeeded(tinymce, config);
+                    editor._draganddropper.enableDraggable(false);
+                });*/
             $(_this.dom).on('blur', function () {
+                HTMLPanel_1.oldeditor = tinymce.editors[_this._id];
+                editor._draganddropper.enableDraggable(true);
                 setTimeout(() => {
                     let edi = tinymce.editors[_this._id];
-                    $(edi === null || edi === void 0 ? void 0 : edi.container).css("display", "none");
-                }, 500);
+                    //  $(edi?.getContainer()).css("display", "none");
+                }, 100);
             });
             $(_this.dom).on('focus', function () {
                 _this.initIfNeeded(tinymce, config);
-                setTimeout(() => {
-                    //let edi = tinymce.editors[_this._id];
-                    //edi.selection.select(edi.getBody(), true);
-                }, 10);
+                if (HTMLPanel_1.oldeditor) {
+                    $(HTMLPanel_1.oldeditor.getContainer()).css("display", "none");
+                }
             });
         }
         /**
@@ -180,6 +229,19 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
          * @param {jassijs.ui.ComponentDesigner} editor - editor instance
          */
         _setDesignMode(enable, editor) {
+            this.editor = editor;
+            /* if (enable) {
+                 $(this.dom).on("mouseup", (e) => {
+                     editor._draganddropper.enableDraggable(false);
+                     //$(this.domWrapper).draggable('disable');
+     
+                 });
+                 $(this.dom).on("blur", (e) => {
+                     editor._draganddropper.enableDraggable(true);
+     
+                 });
+             }
+             return;*/
             var _this = this;
             this._designMode = enable;
             if (enable) {
@@ -208,7 +270,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], HTMLPanel.prototype, "value", null);
-    HTMLPanel = __decorate([
+    HTMLPanel = HTMLPanel_1 = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
         (0, Jassi_1.$Class)("jassijs.ui.HTMLPanel"),
         __metadata("design:paramtypes", [Object])
@@ -220,7 +282,23 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
             title: "Table",
             action: () => { alert(8); }
         };
-        ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsfg<strong>sdfgsd</strong>fgsdfg</span><br>";
+        /*$(ret.dom).on("mouseup", (e) => {
+            $(ret.domWrapper).draggable('disable');
+            
+        });*/
+        $(ret.dom).on("blur", (e) => {
+            $(ret.domWrapper).draggable('enable');
+        });
+        $(ret.dom).doubletap(function (e) {
+            // if (_this._designMode === false)
+            //      return;
+            // _this.initIfNeeded(tinymce, config);
+            var h = 9;
+            //   ret.editor._draganddropper.enableDraggable(false);
+        });
+        ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsfg<strong>sdfgsd</strong>fgsdfg</span><br><strong>sdfgsdgsdfgfdsg</strong>";
+        ret.height = 15;
+        ret.width = 107;
         return ret;
     }
     exports.test = test;

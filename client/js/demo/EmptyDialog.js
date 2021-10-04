@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Button_1, Repeater_1, Jassi_1, Panel_1) {
+define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, HTMLPanel_1, Button_1, Jassi_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmptyDialog = void 0;
@@ -18,12 +18,25 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassi
             this.layout(this.me);
         }
         layout(me) {
-            me.repeater1 = new Repeater_1.Repeater();
-            this.add(me.repeater1);
-            me.repeater1.createRepeatingComponent(function (databinder1) {
-                me.button1 = new Button_1.Button();
-                me.repeater1.design.add(me.button1);
+            me.button1 = new Button_1.Button();
+            me.htmlpanel1 = new HTMLPanel_1.HTMLPanel();
+            me.button2 = new Button_1.Button();
+            me.htmlpanel3 = new HTMLPanel_1.HTMLPanel();
+            me.htmlpanel1.value = "lkjlkj";
+            me.htmlpanel1.width = 65;
+            me.htmlpanel2 = new HTMLPanel_1.HTMLPanel();
+            me.htmlpanel2.value = "lkjlkjadfsasa";
+            this.add(me.button1);
+            this.add(me.htmlpanel2);
+            this.add(me.htmlpanel1);
+            this.add(me.htmlpanel3);
+            this.add(me.button2);
+            me.button2.text = "button";
+            me.button2.onclick(function (event) {
+                debugger;
+                // alert(document.activeElement.innerHTML);
             });
+            me.htmlpanel3.value = "sssssssss<br>";
         }
     };
     EmptyDialog = __decorate([

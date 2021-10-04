@@ -24,7 +24,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "text";
-            this.toolbar = ['undo redo | bold italic underline', 'forecolor backcolor | fontsizeselect  '];
+            this.toolbar = ['undo redo | bold italic underline forecolor backcolor | fontsizeselect  '];
             this.customToolbarButtons = {};
             super.init($('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>')[0]); //tabindex for key-event
             $(this.domWrapper).removeClass("jcontainer");

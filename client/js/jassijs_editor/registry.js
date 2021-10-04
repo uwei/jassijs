@@ -72,7 +72,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1632951060140,
+		"date": 1633375694060,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
@@ -98,7 +98,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"date": 1623098599960
 	},
 	"jassijs_editor/util/DragAndDropper.ts": {
-		"date": 1633193466220,
+		"date": 1633290081668,
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {

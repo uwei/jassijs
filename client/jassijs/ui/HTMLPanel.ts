@@ -12,16 +12,18 @@ declare global {
 @$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ })
 @$Class("jassijs.ui.HTMLPanel")
 export class HTMLPanel extends DataComponent {
+    static oldeditor;
     private _tcm;
-    toolbar = ['undo redo | bold italic underline | forecolor ', 'backcolor fontsizeselect'];
+    toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
     private _template: string;
     private _value;
     private inited = false;
+    editor;
     customToolbarButtons: {
         [name: string]: {
-            title: string,
+            title: string;
             action: any;
-        }
+        };
     } = {};
     /*[
         'undo redo | bold italic underline | fontsizeselect', //fontselect
@@ -29,7 +31,7 @@ export class HTMLPanel extends DataComponent {
     ];*/
     constructor(id = undefined) {
         super();
-        super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1"><div class="HTMLPanelContent"> </div></div>')[0]); //tabindex for key-event
+        super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1" ><div class="HTMLPanelContent"> </div></div>')[0]); //tabindex for key-event
         //$(this.domWrapper).removeClass("jcontainer");
         //  super.init($('<div class="HTMLPanel"></div>')[0]);
         var el = this.dom.children[0];
@@ -37,7 +39,6 @@ export class HTMLPanel extends DataComponent {
         this.newlineafter = false;
         // $(this.__dom).css("min-width", "10px");
     }
-
     @$Property({ description: "line break after element", default: false })
     get newlineafter(): boolean {
         return $(this.dom).css("display") === "inline-block";
@@ -113,7 +114,6 @@ export class HTMLPanel extends DataComponent {
             if (sic === "" && _this.value !== sic)
                 _this.value = "";
             this.inited = true;
-
             // edi.show();
             // edi.hide();
         }
@@ -121,6 +121,36 @@ export class HTMLPanel extends DataComponent {
     private _initTinymce(editor) {
         var _this = this;
         var tinymce = window["tinymce"]; //oder tinymcelib.default
+        //styles
+        /*jassi.includeCSS("tinyhtmlpanel", {
+            ".InlineEditorPanel div": {
+                "display": "inline"
+            },
+            ".InlineEditorPanel .tox .tox-editor-container": {
+                display: "inline"
+            },
+            ".InlineEditorPanel .tox-tinymce-inline": {
+                display: "inline"
+            },
+            ".InlineEditorPanel .tox-editor-header": {
+                display: "inline"
+            },
+            ".InlineEditorPanel .tox .tox-toolbar": {
+                display: "inline"
+            },
+            ".InlineEditorPanel .tox .tox-toolbar__group": {
+                display: "inline"
+            },
+            ".InlineEditorPanel .tox .tox-tbtn": {
+                display: "inline"
+            },
+            ".InlineEditorPanel .tox .tox-split-button": {
+                display: "inline"
+            },
+            ".InlineEditorPanel .tox .tox-tbtn svg": {
+                display: "inline"
+            }
+        });*/
         var config = {
             //	                valid_elements: 'strong,em,span[style],a[href],ul,ol,li',
             //  valid_styles: {
@@ -131,6 +161,7 @@ export class HTMLPanel extends DataComponent {
             selector: '#' + _this._id,
             fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
             inline: true,
+            fixed_toolbar_container: '#' + this.editor.inlineEditorPanel._id,
             setup: function (ed) {
                 ed.on('change', function (e) {
                     var text = _this.dom.firstElementChild.innerHTML;
@@ -138,6 +169,10 @@ export class HTMLPanel extends DataComponent {
                     if (text === '<br data-mce-bogus="1">')
                         text = "";
                     editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);
+                });
+                ed.on('focus', function (e) {
+                    //   $(ed.getContainer()).css("display", "inline");
+                    //   debugger;
                 });
                 ed.on('blur', function (e) {
                     if (_this._designMode === false)
@@ -147,6 +182,10 @@ export class HTMLPanel extends DataComponent {
                         return;
                     editor._draganddropper.enableDraggable(true);
                     //editor.editDialog(true);
+                });
+                ed.on('NodeChange', function (e) {
+                    // $(ed.getContainer()).find("svg").attr("width", "16").attr("height", "16").attr("viewbox", "0 0 24 24");
+                    //$(ed.getContainer()).css("white-space","nowrap");
                 });
                 for (var name in _this.customToolbarButtons) {
                     var bt = _this.customToolbarButtons[name];
@@ -165,25 +204,36 @@ export class HTMLPanel extends DataComponent {
             config["toolbar"][config["toolbar"].length - 1] =
                 config["toolbar"][config["toolbar"].length - 1] + " | " + name;
         }
-        //_this.value=sic;
-        $(_this.dom).doubletap(function (e) {
+        $(this.dom).on("mouseup", (e) => {
             if (_this._designMode === false)
                 return;
-            _this.initIfNeeded(tinymce, config);
             editor._draganddropper.enableDraggable(false);
+            let edi = tinymce.editors[_this._id];
+            $(edi.getContainer()).css("display", "flex");
+            //$(this.domWrapper).draggable('disable');
         });
+        //_this.value=sic;
+        /*    $(_this.dom).doubletap(function (e) {
+                if (_this._designMode === false)
+                    return;
+                _this.initIfNeeded(tinymce, config);
+                editor._draganddropper.enableDraggable(false);
+            });*/
         $(_this.dom).on('blur', function () {
+            HTMLPanel.oldeditor=tinymce.editors[_this._id];
+            editor._draganddropper.enableDraggable(true);
             setTimeout(() => {
                 let edi = tinymce.editors[_this._id];
-                $(edi?.container).css("display", "none");
-            }, 500);
+              //  $(edi?.getContainer()).css("display", "none");
+            }, 100);
         });
         $(_this.dom).on('focus', function () {
             _this.initIfNeeded(tinymce, config);
-            setTimeout(() => {
-                //let edi = tinymce.editors[_this._id];
-                //edi.selection.select(edi.getBody(), true);
-            }, 10);
+            
+               if(HTMLPanel.oldeditor){
+                $(HTMLPanel.oldeditor.getContainer()).css("display", "none");
+            
+               }
         });
     }
     /**
@@ -192,6 +242,19 @@ export class HTMLPanel extends DataComponent {
      * @param {jassijs.ui.ComponentDesigner} editor - editor instance
      */
     _setDesignMode(enable, editor) {
+        this.editor = editor;
+        /* if (enable) {
+             $(this.dom).on("mouseup", (e) => {
+                 editor._draganddropper.enableDraggable(false);
+                 //$(this.domWrapper).draggable('disable');
+ 
+             });
+             $(this.dom).on("blur", (e) => {
+                 editor._draganddropper.enableDraggable(true);
+ 
+             });
+         }
+         return;*/
         var _this = this;
         this._designMode = enable;
         if (enable) {
@@ -207,10 +270,26 @@ export class HTMLPanel extends DataComponent {
 }
 export function test() {
     var ret = new HTMLPanel();
-    ret.customToolbarButtons.Table={
+    ret.customToolbarButtons.Table = {
         title: "Table",
         action: () => { alert(8); }
     };
-    ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsfg<strong>sdfgsd</strong>fgsdfg</span><br>";
+    /*$(ret.dom).on("mouseup", (e) => {
+        $(ret.domWrapper).draggable('disable');
+        
+    });*/
+    $(ret.dom).on("blur", (e) => {
+        $(ret.domWrapper).draggable('enable');
+    });
+    $(ret.dom).doubletap(function (e) {
+        // if (_this._designMode === false)
+        //      return;
+        // _this.initIfNeeded(tinymce, config);
+        var h = 9;
+        //   ret.editor._draganddropper.enableDraggable(false);
+    });
+    ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsfg<strong>sdfgsd</strong>fgsdfg</span><br><strong>sdfgsdgsdfgfdsg</strong>";
+    ret.height = 15;
+    ret.width = 107;
     return ret;
 }
