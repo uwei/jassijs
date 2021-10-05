@@ -14,6 +14,7 @@ import { Panel } from "jassijs/ui/Panel";
 export class ROList extends RComponent {
     reporttype: string = "ol";
     _reversed:boolean;
+    _start:number;
     /**
     * 
     * @param {object} properties - properties to init
@@ -36,6 +37,16 @@ export class ROList extends RComponent {
     }
     get reversed():boolean{
         return this._reversed;
+    }
+      @$Property({default:1})
+    set start(value:number){
+        this._start=value;
+        if(this._start)
+            $(this.__dom).attr("start",value);
+        
+    }
+    get start():number{
+        return this._start;
     }
      /**
       * adds a component to the container before an other component
@@ -64,6 +75,8 @@ export class ROList extends RComponent {
         ret.ol= [];
         if(this.reversed)
             ret.reversed=true;
+        if(this.start)
+            ret.start=this.start;
         for (let x = 0;x < this._components.length;x++) {
             if (this._components[x]["designDummyFor"])
                 continue;
@@ -82,6 +95,9 @@ export class ROList extends RComponent {
         if(ob.reversed)
             ret.reversed=ob.reversed;
         delete ob.reversed;
+        if(ob.start)
+            ret.start=ob.start;
+        delete ob.start;
         return ret;
     }
 }

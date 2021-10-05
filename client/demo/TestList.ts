@@ -34,6 +34,6 @@ var reportdesign = {
 export async function test() {
 	// kk.o=0;
 	var dlg: any = { reportdesign };
-	dlg.data=[{name:"Max"},{name:"Moritz"}]
+	dlg.reportdesign.data=[{name:"Max"},{name:"Moritz"}]
 	return dlg;
 }

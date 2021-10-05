@@ -343,8 +343,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                             }
                             var rep = new ReportDesign();
                             rep.design = Object.assign({}, ret.reportdesign);
-                            rep.design.data = ret.value;
-                            rep.design.parameter = ret.parameter;
+                            if (ret.value)
+                                rep.design.data = ret.value;
+                            if (ret.parameter)
+                                rep.design.parameter = ret.parameter;
                             _this._design["designedComponent"] = rep;
                             /*   require(["jassijs_report/ReportDesign"], function() {
                                    var rd = classes.getClass("jassijs_report.ReportDesign");

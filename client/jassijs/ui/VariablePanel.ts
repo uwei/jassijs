@@ -176,7 +176,7 @@ export class VariablePanel extends Panel {
         return ret;
     }
     private isTypeOf(value,type):boolean{
-        if(value===undefined)
+        if(value===undefined||value===null)
             return false;
         if(typeof type ==="function"){
             return value instanceof type;

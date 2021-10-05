@@ -36,6 +36,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         get reversed() {
             return this._reversed;
         }
+        set start(value) {
+            this._start = value;
+            if (this._start)
+                $(this.__dom).attr("start", value);
+        }
+        get start() {
+            return this._start;
+        }
         /**
          * adds a component to the container before an other component
          * @param {jassijs.ui.Component} component - the component to add
@@ -62,6 +70,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             ret.ol = [];
             if (this.reversed)
                 ret.reversed = true;
+            if (this.start)
+                ret.start = this.start;
             for (let x = 0; x < this._components.length; x++) {
                 if (this._components[x]["designDummyFor"])
                     continue;
@@ -80,6 +90,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             if (ob.reversed)
                 ret.reversed = ob.reversed;
             delete ob.reversed;
+            if (ob.start)
+                ret.start = ob.start;
+            delete ob.start;
             return ret;
         }
     };
@@ -88,6 +101,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], ROList.prototype, "reversed", null);
+    __decorate([
+        (0, Property_1.$Property)({ default: 1 }),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], ROList.prototype, "start", null);
     ROList = __decorate([
         (0, RComponent_1.$ReportComponent)({ fullPath: "report/Ordered List", icon: "mdi mdi-format-list-numbered", editableChildComponents: ["this"] }),
         (0, Jassi_1.$Class)("jassijs_report.ROList")

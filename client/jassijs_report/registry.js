@@ -687,7 +687,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/ROList.ts": {
-		"date": 1633463095726,
+		"date": 1633467487328,
 		"jassijs_report.ROList": {
 			"$ReportComponent": [
 				{
@@ -703,6 +703,13 @@ define("jassijs_report/registry",["require"], function(require) {
 					"$Property": [
 						{
 							"default": false
+						}
+					]
+				},
+				"start": {
+					"$Property": [
+						{
+							"default": 1
 						}
 					]
 				}
