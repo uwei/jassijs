@@ -88,10 +88,10 @@ export class RTablerow extends RComponent {
         if(component.reporttype==="text"){
             var rt=(<RText>component);
             rt.customToolbarButtons["Table"]={
-                title:"Table",
-                action:(evt)=>{
+                title:"<span class='mdi mdi-grid'><span>",
+                action:()=>{
                     _this.parent.contextMenu.target=(<RText>component).dom.children[0];
-                    _this.parent.contextMenu.show(evt);
+                    _this.parent.contextMenu.show();
                 }
             }
             

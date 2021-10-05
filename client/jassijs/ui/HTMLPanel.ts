@@ -121,36 +121,7 @@ export class HTMLPanel extends DataComponent {
     private _initTinymce(editor) {
         var _this = this;
         var tinymce = window["tinymce"]; //oder tinymcelib.default
-        //styles
-        /*jassi.includeCSS("tinyhtmlpanel", {
-            ".InlineEditorPanel div": {
-                "display": "inline"
-            },
-            ".InlineEditorPanel .tox .tox-editor-container": {
-                display: "inline"
-            },
-            ".InlineEditorPanel .tox-tinymce-inline": {
-                display: "inline"
-            },
-            ".InlineEditorPanel .tox-editor-header": {
-                display: "inline"
-            },
-            ".InlineEditorPanel .tox .tox-toolbar": {
-                display: "inline"
-            },
-            ".InlineEditorPanel .tox .tox-toolbar__group": {
-                display: "inline"
-            },
-            ".InlineEditorPanel .tox .tox-tbtn": {
-                display: "inline"
-            },
-            ".InlineEditorPanel .tox .tox-split-button": {
-                display: "inline"
-            },
-            ".InlineEditorPanel .tox .tox-tbtn svg": {
-                display: "inline"
-            }
-        });*/
+       
         var config = {
             //	                valid_elements: 'strong,em,span[style],a[href],ul,ol,li',
             //  valid_styles: {
@@ -187,17 +158,27 @@ export class HTMLPanel extends DataComponent {
                     // $(ed.getContainer()).find("svg").attr("width", "16").attr("height", "16").attr("viewbox", "0 0 24 24");
                     //$(ed.getContainer()).css("white-space","nowrap");
                 });
+                
                 for (var name in _this.customToolbarButtons) {
-                    var bt = _this.customToolbarButtons[name];
-                    ed.ui.registry.addButton(name, {
+                     var bt= _this.customToolbarButtons[name];
+                    var button;
+                    var test=ed.ui.registry.addButton(name, {
                         text: bt.title,
-                        onAction: function (e) {
+                        onAction: function (e,f) {
+                            var bt2 = this;
                             bt.action(e);
+                        },
+                        onpostrender: function() {
+                            button = this;
                         }
                     });
                 }
             }
         };
+        var mytoolbarwidth=240;
+        if(Number(_this.editor.inlineEditorPanel._parent.width.replace("px",""))-Number(_this.editor.inlineEditorPanel._parent._components[0].width.replace("px",""))<mytoolbarwidth){
+            delete config.fixed_toolbar_container;
+        }
         if (_this["toolbar"])
             config["toolbar"] = _this["toolbar"];
         for (var name in _this.customToolbarButtons) {
@@ -220,20 +201,18 @@ export class HTMLPanel extends DataComponent {
                 editor._draganddropper.enableDraggable(false);
             });*/
         $(_this.dom).on('blur', function () {
-            HTMLPanel.oldeditor=tinymce.editors[_this._id];
+            HTMLPanel.oldeditor = tinymce.editors[_this._id];
             editor._draganddropper.enableDraggable(true);
             setTimeout(() => {
                 let edi = tinymce.editors[_this._id];
-              //  $(edi?.getContainer()).css("display", "none");
+                //  $(edi?.getContainer()).css("display", "none");
             }, 100);
         });
         $(_this.dom).on('focus', function () {
             _this.initIfNeeded(tinymce, config);
-            
-               if(HTMLPanel.oldeditor){
+            if (HTMLPanel.oldeditor) {
                 $(HTMLPanel.oldeditor.getContainer()).css("display", "none");
-            
-               }
+            }
         });
     }
     /**
@@ -288,8 +267,8 @@ export function test() {
         var h = 9;
         //   ret.editor._draganddropper.enableDraggable(false);
     });
-    ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsfg<strong>sdfgsd</strong>fgsdfg</span><br><strong>sdfgsdgsdfgfdsg</strong>";
-    ret.height = 15;
+    ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsf<span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>g<strong>sdfgsd</strong>fgsdfg</span></span><br><strong><span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>sdfgsdgsdf</span>gfdsg</strong>";
+    ret.height = 25;
     ret.width = 107;
     return ret;
 }

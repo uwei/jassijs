@@ -211,13 +211,17 @@ export class ContextMenu extends InvisibleComponent {
             $(_this.menu.dom).menu("destroy");
             $(_this.menu.dom).contextMenu("menu", "#" + _this.menu._id, { triggerOn: 'dummyevent' });
             //correct pos menu not visible
-
-
-            if (event.top + $(_this.menu.dom).height() > window.innerHeight) {
-                event.top = window.innerHeight - $(_this.menu.dom).height();
-            }
-            if (event.left + $(_this.menu.dom).width() > window.innerWidth) {
-                event.left = window.innerWidth - $(_this.menu.dom).width();
+            
+            if(!event){
+                event=$(':hover').last().offset()
+            }else{
+    
+                if (event.top + $(_this.menu.dom).height() > window.innerHeight) {
+                    event.top = window.innerHeight - $(_this.menu.dom).height();
+                }
+                if (event.left + $(_this.menu.dom).width() > window.innerWidth) {
+                    event.left = window.innerWidth - $(_this.menu.dom).width();
+                }
             }
 
 

@@ -17,8 +17,10 @@ import { RStyle } from "jassijs_report/RStyle";
 import { Container } from "jassijs/ui/Container";
 import { RTextGroup } from "jassijs_report/RTextGroup";
 import { RTable } from "jassijs_report/RTable";
+import { RUList } from "jassijs_report/RUList";
+import { ROList } from "jassijs_report/ROList";
 
-  
+
 
 @$Class("jassijs_report.InfoProperties")
 class InfoProperties {
@@ -229,7 +231,7 @@ export class ReportDesign extends BoxPanel {
         } else if (typeof ob === 'string' || ob instanceof String) {
             ret = new RText();
             ret.value = ob;
-        } else if (ob.text !== undefined && (ob.editTogether||!Array.isArray(ob.text))) {
+        } else if (ob.text !== undefined && (ob.editTogether || !Array.isArray(ob.text))) {
             ret = new RText().fromJSON(ob);
         } else if (ob.text !== undefined && Array.isArray(ob.text)) {
             ret = new RTextGroup().fromJSON(ob);
@@ -241,6 +243,10 @@ export class ReportDesign extends BoxPanel {
             ret = new RDatatable().fromJSON(ob);
         } else if (ob.table !== undefined) {
             ret = new RTable().fromJSON(ob);
+        } else if (ob.ul !== undefined) {
+            ret = new RUList().fromJSON(ob);
+        } else if (ob.ol !== undefined) {
+            ret = new ROList().fromJSON(ob);
         } else {
             ret = new RUnknown().fromJSON(ob);
         }

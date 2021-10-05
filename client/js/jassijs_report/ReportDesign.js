@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable"], function (require, exports, BoxPanel_1, Jassi_1, RStack_1, RText_1, RColumns_1, RUnknown_1, Panel_1, RComponent_1, RDatatable_1, Property_1, RStyle_1, RTextGroup_1, RTable_1) {
+define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable", "jassijs_report/RUList", "jassijs_report/ROList"], function (require, exports, BoxPanel_1, Jassi_1, RStack_1, RText_1, RColumns_1, RUnknown_1, Panel_1, RComponent_1, RDatatable_1, Property_1, RStyle_1, RTextGroup_1, RTable_1, RUList_1, ROList_1) {
     "use strict";
     var ReportDesign_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -314,6 +314,12 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
             }
             else if (ob.table !== undefined) {
                 ret = new RTable_1.RTable().fromJSON(ob);
+            }
+            else if (ob.ul !== undefined) {
+                ret = new RUList_1.RUList().fromJSON(ob);
+            }
+            else if (ob.ol !== undefined) {
+                ret = new ROList_1.ROList().fromJSON(ob);
             }
             else {
                 ret = new RUnknown_1.RUnknown().fromJSON(ob);

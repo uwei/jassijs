@@ -25,7 +25,7 @@ class InlineStyling {
 export class RText extends RComponent {
     reporttype: string = "text";
     initIfNeeded;
-    toolbar = ['undo redo | bold italic underline forecolor backcolor | fontsizeselect  '];
+    toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
     customToolbarButtons: {
         [name: string]: {
             title: string,

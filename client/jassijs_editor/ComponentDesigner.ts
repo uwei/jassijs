@@ -165,13 +165,6 @@ inlineEditorPanel:Panel;
         $(this.inlineEditorPanel.domWrapper).css("display","inline");
         $(this.inlineEditorPanel.dom).addClass("InlineEditorPanel");
 
-        /*this.inlineEditorPanel=new Panel();
-        this.inlineEditorPanel.sid="i"+this.inlineEditorPanel._id;
-        this.inlineEditorPanel.dom.innerHTML='<table style="display:inline"><tr><td id='+this.inlineEditorPanel.sid+"><td></tr></table>";
-        $(this.inlineEditorPanel.dom).css("display","inline");
-        $(this.inlineEditorPanel.domWrapper).css("display","inline");
-*/
-       
         box.height=40;
         box.add(this._designToolbar);
         box.add(this.inlineEditorPanel);

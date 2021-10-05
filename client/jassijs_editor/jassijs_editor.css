@@ -1,12 +1,12 @@
 .jbreackpoint {
-    /* border: 5px solid black; */
-    border-radius: 50%;
-    background: red;
-  }
+  /* border: 5px solid black; */
+  border-radius: 50%;
+  background: red;
+}
 
 
 .ui-draggable-dragging{
-	opacity:0.4;
+opacity:0.4;
 }
 #selectable .ui-selecting { background: #FECA40; }
 #selectable .ui-selected { background: #F39814; color: white; }
@@ -14,12 +14,12 @@
 /* Ace Editor */
 .ace_annotationicon~.ace_completion-meta
 {
-  color: black;
-  background-color:rgb(117, 106, 146);
+color: black;
+background-color:rgb(117, 106, 146);
 }
 .ace_gutter-cell.ace_breakpoint{ 
-  border-radius: 20px 0px 0px 20px; 
-  box-shadow: 0px 0px 1px 1px red inset; 
+border-radius: 20px 0px 0px 20px; 
+box-shadow: 0px 0px 1px 1px red inset; 
 }
 /*
 .ace_functionicon~.ace_completion-meta:before
@@ -41,22 +41,49 @@ content:url('/res/member.ico');
 /* Ace Editor Completion Color */
 .ace_functionicon~.ace_completion-meta
 {
-    background-color: aqua; 
-    color: black;
+  background-color: aqua; 
+  color: black;
 }
 
 .ace_variableicon~.ace_completion-meta
 {
-    background-color:#FECA40; 
-    color: black;
+  background-color:#FECA40; 
+  color: black;
 }
 .ace_membericon~.ace_completion-meta
 {
-    color: red;
-    background-color: chartreuse;
+  color: red;
+  background-color: chartreuse;
 }
 .ace_classicon~.ace_completion-meta
 {
-    color: black;
-    background-color:lightpink;
+  color: black;
+  background-color:lightpink;
 }
+
+
+.tox .tox-tbtn {
+    transform: scale(0.7) !important; /* you can set the scale that you want */
+    height: unset !important;
+    width: unset !important;
+}
+.tox .tox-tbtn--bespoke .tox-tbtn__select-label {
+    width: unset !important;
+}
+ .tox .tox-toolbar, .tox .tox-toolbar__overflow, .tox .tox-toolbar__primary {
+  /* change the background y-positionning to : bottom 0*/
+  background: url("data:image/svg+xml;charset=utf8,%3Csvg height='39px' viewBox='0 0 40 39px' width='40' xmlns='http://www.w3.org/2000/svg'%3E%3Crect x='0' y='38px' width='100' height='1' fill='%23cccccc'/%3E%3C/svg%3E") left 0 bottom 0 #fff !important;
+}
+.InlineEditorPanel .tox .tox-toolbar__group{
+    margin: 0px 0 0px 0;
+    padding: 0 0px 0 0px;
+    height: 25px;
+}
+.InlineEditorPanel .tox .tox-split-button {
+    margin: 0px 0 0px 0;
+}
+.InlineEditorPanel .tox .tox-tbtn--select {
+    margin: 0px 0 0px 0;
+    padding: 0 0px;
+}
+
