@@ -11,6 +11,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ROList = void 0;
+    //not implemented: separator,markerColor, counter is counting also the next elements
     let ROList = 
     //@$Property({name:"horizontal",hide:true})
     class ROList extends RComponent_1.RComponent {
@@ -26,6 +27,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             this.reporttype = "ol";
             this.init($("<ol></ol>")[0]);
         }
+        set type(value) {
+            this._type = value;
+            if (value === undefined)
+                $(this.dom).css("list-style-type", "");
+            else
+                $(this.dom).css("list-style-type", value);
+        }
+        get type() {
+            return this._type;
+        }
         set reversed(value) {
             this._reversed = value;
             if (this._reversed)
@@ -38,8 +49,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         }
         set start(value) {
             this._start = value;
-            if (this._start)
-                $(this.__dom).attr("start", value);
+            $(this.__dom).attr("start", value);
         }
         get start() {
             return this._start;
@@ -53,6 +63,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             if (component.addToParent)
                 return component.addToParent(this);
             Component_1.Component.replaceWrapper(component, document.createElement("li"));
+            if (component._counter)
+                component.counter = component._counter;
             super.addBefore(component, before);
         }
         /**
@@ -63,6 +75,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             if (component.addToParent)
                 return component.addToParent(this);
             Component_1.Component.replaceWrapper(component, document.createElement("li"));
+            if (component._counter)
+                component.counter = component._counter;
             super.add(component);
         }
         toJSON() {
@@ -96,6 +110,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             return ret;
         }
     };
+    __decorate([
+        (0, Property_1.$Property)({ chooseFrom: ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"] }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], ROList.prototype, "type", null);
     __decorate([
         (0, Property_1.$Property)({ default: false }),
         __metadata("design:type", Boolean),

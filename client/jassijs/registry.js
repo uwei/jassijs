@@ -698,7 +698,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {
-		"date": 1633460148305,
+		"date": 1633538389272,
 		"jassijs.ui.ContextMenu": {
 			"$UIComponent": [
 				{
@@ -1890,7 +1890,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ColorEditor.ts": {
-		"date": 1627596203109,
+		"date": 1633539861680,
 		"jassijs.ui.PropertyEditors.ColorEditor": {
 			"$PropertyEditor": [
 				[

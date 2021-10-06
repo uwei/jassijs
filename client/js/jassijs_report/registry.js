@@ -400,7 +400,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RComponent.ts": {
-                "date": 1633198627402,
+                "date": 1633540010111,
                 "jassijs_report.ReportComponent": {
                     "$Property": [
                         {
@@ -410,6 +410,13 @@ define("jassijs_report/registry", ["require"], function (require) {
                     "@members": {
                         "foreach": {
                             "$Property": []
+                        },
+                        "counter": {
+                            "$Property": [
+                                {
+                                    "default": "undefined"
+                                }
+                            ]
                         },
                         "fillColor": {
                             "$Property": [
@@ -673,7 +680,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113318723
             },
             "jassijs_report/RUList.ts": {
-                "date": 1633462158887,
+                "date": 1633541208640,
                 "jassijs_report.RUList": {
                     "$ReportComponent": [
                         {
@@ -683,11 +690,24 @@ define("jassijs_report/registry", ["require"], function (require) {
                                 "this"
                             ]
                         }
-                    ]
+                    ],
+                    "@members": {
+                        "type": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "square",
+                                        "circle",
+                                        "none"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
                 }
             },
             "jassijs_report/ROList.ts": {
-                "date": 1633467487328,
+                "date": 1633541524836,
                 "jassijs_report.ROList": {
                     "$ReportComponent": [
                         {
@@ -699,6 +719,19 @@ define("jassijs_report/registry", ["require"], function (require) {
                         }
                     ],
                     "@members": {
+                        "type": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "lower-alpha",
+                                        "upper-alpha",
+                                        "lower-roman",
+                                        "upper-roman",
+                                        "none"
+                                    ]
+                                }
+                            ]
+                        },
                         "reversed": {
                             "$Property": [
                                 {

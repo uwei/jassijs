@@ -70,7 +70,7 @@ export class ColorEditor extends Editor{
     set ob(ob) {
         super.ob = ob;
         var value = this.propertyEditor.getPropertyValue(this.property);
-        if(!value||value==="")
+        if(value===null||value===undefined||value==="")
         	value="";
         else
             value = value.substring(1, value.length - 1);

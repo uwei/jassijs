@@ -29,6 +29,16 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         onstylechanged(func) {
             this.addEvent("stylechanged", func);
         }
+        set counter(value) {
+            this._counter = value;
+            if (value === undefined)
+                $(this.domWrapper).removeAttr("value");
+            else
+                $(this.domWrapper).attr("value", value);
+        }
+        get counter() {
+            return this._counter;
+        }
         get fillColor() {
             return this._fillColor;
         }
@@ -322,6 +332,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.border = ob.border;
                 delete ob.border;
             }
+            if (ob.counter) {
+                ret.counter = ob.counter;
+                delete ob.counter;
+            }
             ret.otherProperties = ob;
             return ret;
         }
@@ -364,6 +378,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.fillColor = this.fillColor;
             if (this.border !== undefined)
                 ret.border = this.border;
+            if (this.counter)
+                ret.counter = this.counter;
             Object.assign(ret, this["otherProperties"]);
             return ret;
         }
@@ -372,6 +388,11 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         (0, Property_1.$Property)(),
         __metadata("design:type", String)
     ], RComponent.prototype, "foreach", void 0);
+    __decorate([
+        (0, Property_1.$Property)({ default: undefined }),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], RComponent.prototype, "counter", null);
     __decorate([
         (0, Property_1.$Property)({
             type: "color", isVisible: (component) => {

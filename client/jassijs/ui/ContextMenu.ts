@@ -22,7 +22,7 @@ export class ContextMenu extends InvisibleComponent {
     menu: Menu;
     contextComponents;
     _components: Component[];
-    target:any;
+    target: any;
     @$Property()
     /**
      * @member - includes Actions from @ActionProvider for the objects in value
@@ -153,7 +153,7 @@ export class ContextMenu extends InvisibleComponent {
     async _callContextmenu(evt) {
         if (evt.preventDefault !== undefined)
             evt.preventDefault();
-        this.target=evt.target;
+        this.target = evt.target;
         var cancel = this.callEvent("beforeshow", evt);
         if (cancel !== undefined) {
             for (var x = 0; x < cancel.length; x++) {
@@ -211,20 +211,16 @@ export class ContextMenu extends InvisibleComponent {
             $(_this.menu.dom).menu("destroy");
             $(_this.menu.dom).contextMenu("menu", "#" + _this.menu._id, { triggerOn: 'dummyevent' });
             //correct pos menu not visible
-            
-            if(!event){
-                event=$(':hover').last().offset()
-            }else{
-    
-                if (event.top + $(_this.menu.dom).height() > window.innerHeight) {
-                    event.top = window.innerHeight - $(_this.menu.dom).height();
-                }
-                if (event.left + $(_this.menu.dom).width() > window.innerWidth) {
-                    event.left = window.innerWidth - $(_this.menu.dom).width();
-                }
+
+            if (!event) {
+                event = $(':hover').last().offset();
             }
-
-
+            if (event.top + $(_this.menu.dom).height() > window.innerHeight) {
+                event.top = window.innerHeight - $(_this.menu.dom).height();
+            }
+            if (event.left + $(_this.menu.dom).width() > window.innerWidth) {
+                event.left = window.innerWidth - $(_this.menu.dom).width();
+            }
             $(_this.menu.dom).contextMenu('open', event);
         }, 10);
     }

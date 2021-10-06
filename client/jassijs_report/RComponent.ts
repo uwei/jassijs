@@ -25,7 +25,7 @@ export class RComponent extends Panel {
     @$Property()
     foreach: string;
     private _width: any;
-     private _height: any;
+    private _height: any;
     private _bold: boolean;
     private _decoration: string;
     private _decorationStyle: string;
@@ -40,6 +40,7 @@ export class RComponent extends Panel {
     private _style: string;
     private _fillColor: string;
     private _border: boolean[];
+    private _counter: number;
     reporttype: string = "nothing";
     otherProperties: any;
     constructor(properties = undefined) {
@@ -48,6 +49,17 @@ export class RComponent extends Panel {
     }
     onstylechanged(func) {
         this.addEvent("stylechanged", func);
+    }
+    @$Property({ default: undefined })
+    set counter(value: number) {
+        this._counter = value;
+        if(value===undefined)
+            $(this.domWrapper).removeAttr("value");
+        else           
+            $(this.domWrapper).attr("value", value);
+    }
+    get counter(): number {
+        return this._counter;
     }
 
     @$Property({
@@ -65,7 +77,6 @@ export class RComponent extends Panel {
         $(this.dom).css("background-color", value);
 
     }
-
     @$Property({
         type: "string", isVisible: (component) => {
             //only in table and column width is posible
@@ -114,7 +125,7 @@ export class RComponent extends Panel {
         this._border = value;
         if (value === undefined)
             value = [false, false, false, false];
-          
+
 
         $(this.domWrapper).css("border-left-style", value[0] ? "solid" : "none");
         $(this.domWrapper).css("border-top-style", value[1] ? "solid" : "none");
@@ -143,7 +154,7 @@ export class RComponent extends Panel {
             super.width = value;
         }
     }
-     @$Property({
+    @$Property({
         type: "string", isVisible: (component) => {
             //only in table and column width is posible
             return component._parent?.setChildHeight || component._parent?.reporttype === "columns";
@@ -160,11 +171,12 @@ export class RComponent extends Panel {
         if (this._parent?.setChildHeight !== undefined)
             this._parent.setChildHeight(this, value);
         else {
-            this._height= value;
+            this._height = value;
             console.log(value);
             super.height = value;
         }
     }
+
     @$Property()
     get bold(): boolean {
         return this._bold;
@@ -330,6 +342,7 @@ export class RComponent extends Panel {
         this.callEvent("stylechanged", "lineHeight", value);
         //  super.width = value;
     }
+   
 
     fromJSON(ob: any): RComponent {
         var ret = this;
@@ -406,6 +419,10 @@ export class RComponent extends Panel {
             ret.border = ob.border;
             delete ob.border;
         }
+        if (ob.counter) {
+            ret.counter = ob.counter;
+            delete ob.counter;
+        }
         ret.otherProperties = ob;
         return ret;
     }
@@ -447,6 +464,8 @@ export class RComponent extends Panel {
             ret.fillColor = this.fillColor;
         if (this.border !== undefined)
             ret.border = this.border;
+        if (this.counter)
+            ret.counter = this.counter;
         Object.assign(ret, this["otherProperties"]);
         return ret;
     }

@@ -6,15 +6,17 @@ import { ReportDesign } from "jassijs_report/ReportDesign";
 import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
 import { Panel } from "jassijs/ui/Panel";
 
+//not implemented: separator,markerColor, counter is counting also the next elements
 
 @$ReportComponent({ fullPath: "report/Ordered List", icon: "mdi mdi-format-list-numbered", editableChildComponents: ["this"] })
 @$Class("jassijs_report.ROList")
 //@$Property({name:"horizontal",hide:true})
-
 export class ROList extends RComponent {
     reporttype: string = "ol";
-    _reversed:boolean;
-    _start:number;
+
+    _reversed: boolean;
+    _start: number;
+    _type:string;
     /**
     * 
     * @param {object} properties - properties to init
@@ -25,38 +27,53 @@ export class ROList extends RComponent {
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
         this.init($("<ol></ol>")[0]);
-       
+
     }
-    @$Property({default:false})
-    set reversed(value:boolean){
-        this._reversed=value;
-        if(this._reversed)
-            $(this.__dom).attr("reversed","");
+
+    @$Property({chooseFrom:["lower-alpha","upper-alpha","lower-roman","upper-roman","none"]})
+    set type(value:string){
+        this._type=value;
+        if(value===undefined)
+            $(this.dom).css("list-style-type","");
+        else
+            $(this.dom).css("list-style-type",value);
+    }
+    get type():string{
+        return this._type;
+    } 
+
+    @$Property({ default: false })
+    set reversed(value: boolean) {
+        this._reversed = value;
+        if (this._reversed)
+            $(this.__dom).attr("reversed", "");
         else
             $(this.__dom).removeAttr("reversed");
     }
-    get reversed():boolean{
+    get reversed(): boolean {
         return this._reversed;
     }
-      @$Property({default:1})
-    set start(value:number){
-        this._start=value;
-        if(this._start)
-            $(this.__dom).attr("start",value);
-        
+    @$Property({ default: 1 })
+    set start(value: number) {
+        this._start = value;
+        $(this.__dom).attr("start", value);
+
     }
-    get start():number{
+    get start(): number {
         return this._start;
     }
-     /**
-      * adds a component to the container before an other component
-      * @param {jassijs.ui.Component} component - the component to add
-      * @param {jassijs.ui.Component} before - the component before then component to add
-      */
+   
+    /**
+     * adds a component to the container before an other component
+     * @param {jassijs.ui.Component} component - the component to add
+     * @param {jassijs.ui.Component} before - the component before then component to add
+     */
     addBefore(component, before) {
         if (component.addToParent)
             return component.addToParent(this);
         Component.replaceWrapper(component, document.createElement("li"));
+         if(component._counter)
+            component.counter=component._counter;
         super.addBefore(component, before);
     }
     /**
@@ -67,17 +84,20 @@ export class ROList extends RComponent {
         if (component.addToParent)
             return component.addToParent(this);
         Component.replaceWrapper(component, document.createElement("li"));
+        if(component._counter)
+            component.counter=component._counter;
         super.add(component);
     }
-   
+
     toJSON() {
-    	 var ret = super.toJSON();
-        ret.ol= [];
-        if(this.reversed)
-            ret.reversed=true;
-        if(this.start)
-            ret.start=this.start;
-        for (let x = 0;x < this._components.length;x++) {
+        var ret = super.toJSON();
+        ret.ol = [];
+        if (this.reversed)
+            ret.reversed = true;
+        if (this.start)
+            ret.start = this.start;
+        
+        for (let x = 0; x < this._components.length; x++) {
             if (this._components[x]["designDummyFor"])
                 continue;
             //@ts-ignore
@@ -85,18 +105,18 @@ export class ROList extends RComponent {
         }
         return ret;
     }
-    fromJSON(ob: any):ROList{
-        var ret= this;
-        var arr=ob.ol;
-        for (let x = 0;x < arr.length;x++) {
+    fromJSON(ob: any): ROList {
+        var ret = this;
+        var arr = ob.ol;
+        for (let x = 0; x < arr.length; x++) {
             ret.add(ReportDesign.fromJSON(arr[x]));
         }
         delete ob.ol;
-        if(ob.reversed)
-            ret.reversed=ob.reversed;
+        if (ob.reversed)
+            ret.reversed = ob.reversed;
         delete ob.reversed;
-        if(ob.start)
-            ret.start=ob.start;
+        if (ob.start)
+            ret.start = ob.start;
         delete ob.start;
         return ret;
     }

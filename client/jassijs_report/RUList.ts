@@ -13,6 +13,7 @@ import { Panel } from "jassijs/ui/Panel";
 
 export class RUList extends RComponent {
     reporttype: string = "ul";
+    _type:string;
     /**
     * 
     * @param {object} properties - properties to init
@@ -46,7 +47,17 @@ export class RUList extends RComponent {
         Component.replaceWrapper(component, document.createElement("li"));
         super.add(component);
     }
-   
+    @$Property({chooseFrom:["square","circle","none"]})
+    set type(value:string){
+        this._type=value;
+        if(value===undefined)
+            $(this.dom).css("list-style-type","");
+        else
+            $(this.dom).css("list-style-type",value);
+    }
+    get type():string{
+        return this._type;
+    } 
     toJSON() {
     	 var ret = super.toJSON();
         ret.ul= [];
