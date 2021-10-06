@@ -3,6 +3,8 @@ import { $ReportComponent } from "jassijs_report/RComponent";
 import { $Class } from "jassijs/remote/Jassi";
 import { RDatatable } from "jassijs_report/RDatatable";
 import { $Property } from "jassijs/ui/Property";
+import { Table } from "typeorm";
+import { RTable } from "./RTable";
 
 
 
@@ -12,21 +14,21 @@ import { $Property } from "jassijs/ui/Property";
 export class RGroupTablerow extends RTablerow {
    
     get expression():string{
-        var pos=this.parent?.groupFooterPanel.indexOf(this);
+        var pos=(<any>this.parent)?.groupFooterPanel.indexOf(this);
         if(pos===-1)
-            pos=this.parent?.groupHeaderPanel.indexOf(this);
+            pos=(<any>this.parent)?.groupHeaderPanel.indexOf(this);
         if(pos===-1)
             return undefined;
-        return this.parent?.groupExpression[pos];
+        return (<any>this.parent)?.groupExpression[pos];
     }
     @$Property()
     set expression(value:string){
-        var pos=this.parent?.groupFooterPanel.indexOf(this);
+        var pos=(<any>this.parent)?.groupFooterPanel.indexOf(this);
         if(pos===-1)
-            pos=this.parent?.groupHeaderPanel.indexOf(this);
+            pos=(<any>this.parent)?.groupHeaderPanel.indexOf(this);
         if(pos===-1)
             return;
-        this.parent.groupExpression[pos] =value;
+            (<any>this.parent).groupExpression[pos] =value;
     }
     get _editorselectthis(){
 		return this;

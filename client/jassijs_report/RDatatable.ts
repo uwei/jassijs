@@ -275,7 +275,7 @@ export class RDatatable extends RComponent {
         delete ob.datatable;
         super.fromJSON(ob);
         for (var x = 0; x < ret._components.length; x++) {
-            (<RTablerow>ret._components[x]).correctHideAfterSpan();
+            (<RTablerow>ret._components[x]).parent.correctHideAfterSpan();
 
         }
         return ret;

@@ -41,6 +41,7 @@ export class RComponent extends Panel {
     private _fillColor: string;
     private _border: boolean[];
     private _counter: number;
+    private _listType: string;
     reporttype: string = "nothing";
     otherProperties: any;
     constructor(properties = undefined) {
@@ -50,16 +51,47 @@ export class RComponent extends Panel {
     onstylechanged(func) {
         this.addEvent("stylechanged", func);
     }
-    @$Property({ default: undefined })
+    @$Property({
+        default: undefined,
+        isVisible: (component) => {
+            return component._parent?.reporttype === "ol";
+        }
+    })
     set counter(value: number) {
         this._counter = value;
-        if(value===undefined)
+        if (value === undefined)
             $(this.domWrapper).removeAttr("value");
-        else           
+        else
             $(this.domWrapper).attr("value", value);
     }
     get counter(): number {
         return this._counter;
+    }
+
+
+
+    @$Property({
+        name: "listType",
+        default: undefined,
+        isVisible: (component) => {
+            return component._parent?.reporttype === "ul" || component._parent?.reporttype === "ol";
+        },
+        chooseFrom: function (it) {
+            if (it._parent.reporttype === "ol")
+                return ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"];
+            else
+                return ["square", "circle", "none"];
+        }
+    })
+    set listType(value: string) {
+        this._listType = value;
+        if (value === undefined)
+            $(this.domWrapper).css("list-style-type", "");
+        else
+            $(this.domWrapper).css("list-style-type", value);
+    }
+    get listType(): string {
+        return this._listType;
     }
 
     @$Property({
@@ -342,7 +374,7 @@ export class RComponent extends Panel {
         this.callEvent("stylechanged", "lineHeight", value);
         //  super.width = value;
     }
-   
+
 
     fromJSON(ob: any): RComponent {
         var ret = this;
@@ -423,6 +455,10 @@ export class RComponent extends Panel {
             ret.counter = ob.counter;
             delete ob.counter;
         }
+        if (ob.listType) {
+            ret.listType = ob.listType;
+            delete ob.listType;
+        }
         ret.otherProperties = ob;
         return ret;
     }
@@ -466,6 +502,8 @@ export class RComponent extends Panel {
             ret.border = this.border;
         if (this.counter)
             ret.counter = this.counter;
+        if (this.listType)
+            ret.listType = this.listType;
         Object.assign(ret, this["otherProperties"]);
         return ret;
     }

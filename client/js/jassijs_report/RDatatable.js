@@ -241,7 +241,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             delete ob.datatable;
             super.fromJSON(ob);
             for (var x = 0; x < ret._components.length; x++) {
-                ret._components[x].correctHideAfterSpan();
+                ret._components[x].parent.correctHideAfterSpan();
             }
             return ret;
         }

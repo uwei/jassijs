@@ -22,10 +22,7 @@ export class RTextGroup extends RComponent {
     * @param {boolean} [properties.useSpan] -  use span not div
     * 
     */
-    constructor(properties = undefined) {//id connect to existing(not reqired)
-        if (!properties)
-            properties = {};
-        properties.useSpan = true;
+    constructor(properties = {useSpan :true}) {//id connect to existing(not reqired)
         super(properties);
         // $(this.dom).css("flex-direction", "column");
         //$(this.dom).addClass("designerNoResizable");

@@ -35,6 +35,8 @@ export class RUList extends RComponent {
         if (component.addToParent)
             return component.addToParent(this);
         Component.replaceWrapper(component, document.createElement("li"));
+         if(component._listType!==undefined)
+            component.listType=component._listType;
         super.addBefore(component, before);
     }
     /**
@@ -45,6 +47,8 @@ export class RUList extends RComponent {
         if (component.addToParent)
             return component.addToParent(this);
         Component.replaceWrapper(component, document.createElement("li"));
+         if(component.listType!==undefined)
+            component.listType=component._listType;
         super.add(component);
     }
     @$Property({chooseFrom:["square","circle","none"]})
@@ -67,6 +71,8 @@ export class RUList extends RComponent {
             //@ts-ignore
             ret.ul.push(this._components[x].toJSON());
         }
+        if (this.type)
+            ret.type = this.type;
         return ret;
     }
     fromJSON(ob: any):RUList{
@@ -76,6 +82,10 @@ export class RUList extends RComponent {
             ret.add(ReportDesign.fromJSON(arr[x]));
         }
         delete ob.ul;
+        if (ob.type)
+            ret.type = ob.type;
+        delete ob.type;
+        super.fromJSON(ob);
         return ret;
     }
 }

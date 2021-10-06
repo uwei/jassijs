@@ -65,6 +65,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             Component_1.Component.replaceWrapper(component, document.createElement("li"));
             if (component._counter)
                 component.counter = component._counter;
+            if (component.listType !== undefined)
+                component.listType = component._listType;
             super.addBefore(component, before);
         }
         /**
@@ -75,6 +77,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             if (component.addToParent)
                 return component.addToParent(this);
             Component_1.Component.replaceWrapper(component, document.createElement("li"));
+            if (component.listType !== undefined)
+                component.listType = component._listType;
             if (component._counter)
                 component.counter = component._counter;
             super.add(component);
@@ -86,6 +90,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
                 ret.reversed = true;
             if (this.start)
                 ret.start = this.start;
+            if (this.type)
+                ret.type = this.type;
             for (let x = 0; x < this._components.length; x++) {
                 if (this._components[x]["designDummyFor"])
                     continue;
@@ -107,6 +113,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             if (ob.start)
                 ret.start = ob.start;
             delete ob.start;
+            if (ob.type)
+                ret.type = ob.type;
+            delete ob.type;
+            super.fromJSON(ob);
             return ret;
         }
     };

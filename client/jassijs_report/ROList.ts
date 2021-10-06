@@ -16,7 +16,7 @@ export class ROList extends RComponent {
 
     _reversed: boolean;
     _start: number;
-    _type:string;
+    _type: string;
     /**
     * 
     * @param {object} properties - properties to init
@@ -30,17 +30,17 @@ export class ROList extends RComponent {
 
     }
 
-    @$Property({chooseFrom:["lower-alpha","upper-alpha","lower-roman","upper-roman","none"]})
-    set type(value:string){
-        this._type=value;
-        if(value===undefined)
-            $(this.dom).css("list-style-type","");
+    @$Property({ chooseFrom: ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"] })
+    set type(value: string) {
+        this._type = value;
+        if (value === undefined)
+            $(this.dom).css("list-style-type", "");
         else
-            $(this.dom).css("list-style-type",value);
+            $(this.dom).css("list-style-type", value);
     }
-    get type():string{
+    get type(): string {
         return this._type;
-    } 
+    }
 
     @$Property({ default: false })
     set reversed(value: boolean) {
@@ -62,7 +62,7 @@ export class ROList extends RComponent {
     get start(): number {
         return this._start;
     }
-   
+
     /**
      * adds a component to the container before an other component
      * @param {jassijs.ui.Component} component - the component to add
@@ -72,8 +72,10 @@ export class ROList extends RComponent {
         if (component.addToParent)
             return component.addToParent(this);
         Component.replaceWrapper(component, document.createElement("li"));
-         if(component._counter)
-            component.counter=component._counter;
+        if (component._counter)
+            component.counter = component._counter;
+        if (component.listType !== undefined)
+            component.listType = component._listType;
         super.addBefore(component, before);
     }
     /**
@@ -84,8 +86,10 @@ export class ROList extends RComponent {
         if (component.addToParent)
             return component.addToParent(this);
         Component.replaceWrapper(component, document.createElement("li"));
-        if(component._counter)
-            component.counter=component._counter;
+        if (component.listType !== undefined)
+            component.listType = component._listType;
+        if (component._counter)
+            component.counter = component._counter;
         super.add(component);
     }
 
@@ -96,7 +100,9 @@ export class ROList extends RComponent {
             ret.reversed = true;
         if (this.start)
             ret.start = this.start;
-        
+        if (this.type)
+            ret.type = this.type;
+
         for (let x = 0; x < this._components.length; x++) {
             if (this._components[x]["designDummyFor"])
                 continue;
@@ -118,6 +124,10 @@ export class ROList extends RComponent {
         if (ob.start)
             ret.start = ob.start;
         delete ob.start;
+        if (ob.type)
+            ret.type = ob.type;
+        delete ob.type;
+        super.fromJSON(ob);
         return ret;
     }
 }

@@ -22,10 +22,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesi
         * @param {boolean} [properties.useSpan] -  use span not div
         *
         */
-        constructor(properties = undefined) {
-            if (!properties)
-                properties = {};
-            properties.useSpan = true;
+        constructor(properties = { useSpan: true }) {
             super(properties);
             this.reporttype = "textgroup";
             // $(this.dom).css("flex-direction", "column");

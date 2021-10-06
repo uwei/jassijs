@@ -39,6 +39,16 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         get counter() {
             return this._counter;
         }
+        set listType(value) {
+            this._listType = value;
+            if (value === undefined)
+                $(this.domWrapper).css("list-style-type", "");
+            else
+                $(this.domWrapper).css("list-style-type", value);
+        }
+        get listType() {
+            return this._listType;
+        }
         get fillColor() {
             return this._fillColor;
         }
@@ -336,6 +346,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.counter = ob.counter;
                 delete ob.counter;
             }
+            if (ob.listType) {
+                ret.listType = ob.listType;
+                delete ob.listType;
+            }
             ret.otherProperties = ob;
             return ret;
         }
@@ -380,6 +394,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.border = this.border;
             if (this.counter)
                 ret.counter = this.counter;
+            if (this.listType)
+                ret.listType = this.listType;
             Object.assign(ret, this["otherProperties"]);
             return ret;
         }
@@ -389,10 +405,34 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:type", String)
     ], RComponent.prototype, "foreach", void 0);
     __decorate([
-        (0, Property_1.$Property)({ default: undefined }),
+        (0, Property_1.$Property)({
+            default: undefined,
+            isVisible: (component) => {
+                var _a;
+                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "ol";
+            }
+        }),
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RComponent.prototype, "counter", null);
+    __decorate([
+        (0, Property_1.$Property)({
+            name: "listType",
+            default: undefined,
+            isVisible: (component) => {
+                var _a, _b;
+                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "ul" || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "ol";
+            },
+            chooseFrom: function (it) {
+                if (it._parent.reporttype === "ol")
+                    return ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"];
+                else
+                    return ["square", "circle", "none"];
+            }
+        }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], RComponent.prototype, "listType", null);
     __decorate([
         (0, Property_1.$Property)({
             type: "color", isVisible: (component) => {
