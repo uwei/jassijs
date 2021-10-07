@@ -1220,8 +1220,10 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                             }
                             var rep = new ReportDesign();
                             rep.design = Object.assign({}, ret.reportdesign);
-                            rep.design.data = ret.value;
-                            rep.design.parameter = ret.parameter;
+                            if (ret.value)
+                                rep.design.data = ret.value;
+                            if (ret.parameter)
+                                rep.design.parameter = ret.parameter;
                             _this._design["designedComponent"] = rep;
                             /*   require(["jassijs_report/ReportDesign"], function() {
                                    var rd = classes.getClass("jassijs_report.ReportDesign");
@@ -1750,7 +1752,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Jassi"
     ], CodePanel);
     exports.CodePanel = CodePanel;
 });
-define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/remote/Classes", "jassijs/ui/Databinder"], function (require, exports, Jassi_7, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, Classes_3) {
+define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Jassi_7, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, Classes_3, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentDesigner = void 0;
@@ -1843,7 +1845,18 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 _this.removeComponent();
             });
             this._designToolbar.add(this.removeButton);
-            this.add(this._designToolbar);
+            var box = new BoxPanel_1.BoxPanel();
+            box.horizontal = true;
+            this.inlineEditorPanel = new Panel_4.Panel();
+            this.inlineEditorPanel._id = "i" + this.inlineEditorPanel._id;
+            this.inlineEditorPanel.dom.setAttribute("id", this.inlineEditorPanel._id);
+            $(this.inlineEditorPanel.dom).css("display", "inline");
+            $(this.inlineEditorPanel.domWrapper).css("display", "inline");
+            $(this.inlineEditorPanel.dom).addClass("InlineEditorPanel");
+            box.height = 40;
+            box.add(this._designToolbar);
+            box.add(this.inlineEditorPanel);
+            this.add(box);
             $(this._designPlaceholder.domWrapper).css("position", "relative");
             this.add(this._designPlaceholder);
         }
@@ -3039,7 +3052,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1632521249417,
+                "date": 1633467231679,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3100,7 +3113,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1632951060140,
+                "date": 1633461097524,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -3126,7 +3139,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1623098599960
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1633193466220,
+                "date": 1633290081668,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {

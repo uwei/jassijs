@@ -353,6 +353,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
                     var rs = new RStyle_1.RStyle().fromJSON(ob.styles[st]);
                     rs.name = st;
                     this.styleContainer.add(rs);
+                    rs.update();
                 }
                 delete ob.styles;
             }

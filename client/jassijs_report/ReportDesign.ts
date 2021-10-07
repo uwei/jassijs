@@ -281,6 +281,7 @@ export class ReportDesign extends BoxPanel {
                 var rs = new RStyle().fromJSON(ob.styles[st]);
                 rs.name = st;
                 this.styleContainer.add(rs);
+                rs.update();
             }
             delete ob.styles;
         }

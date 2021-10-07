@@ -268,6 +268,26 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             this.callEvent("stylechanged", "lineHeight", value);
             //  super.width = value;
         }
+        get margin() {
+            return this._margin;
+        }
+        set margin(value) {
+            if (value === undefined) {
+                this._margin = value;
+                $(this.dom).css("margin", "");
+            }
+            else {
+                if (Number.isInteger(value)) {
+                    //@ts-ignore
+                    value = [value, value, value, value];
+                }
+                if (value.length === 2) {
+                    value = [value[0], value[1], value[0], value[1]];
+                }
+                this._margin = value;
+                $(this.dom).css("margin", value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ");
+            }
+        }
         fromJSON(ob) {
             var ret = this;
             if (ob.foreach) {
@@ -350,6 +370,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.listType = ob.listType;
                 delete ob.listType;
             }
+            if (ob.margin) {
+                ret.margin = ob.margin;
+                delete ob.margin;
+            }
             ret.otherProperties = ob;
             return ret;
         }
@@ -396,6 +420,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.counter = this.counter;
             if (this.listType)
                 ret.listType = this.listType;
+            if (this.margin)
+                ret.margin = this.margin;
             Object.assign(ret, this["otherProperties"]);
             return ret;
         }
@@ -562,6 +588,11 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], RComponent.prototype, "lineHeight", null);
+    __decorate([
+        (0, Property_1.$Property)({ type: "number[]", description: "margin left, top, right, bottom" }),
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
+    ], RComponent.prototype, "margin", null);
     RComponent = RComponent_1 = __decorate([
         (0, Jassi_1.$Class)("jassijs_report.ReportComponent"),
         (0, Property_1.$Property)({ hideBaseClassProperties: true }),

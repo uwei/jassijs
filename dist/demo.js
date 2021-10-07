@@ -40,7 +40,7 @@ define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Bo
     }
     exports.test = test;
 });
-define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Button_2, Repeater_1, Jassi_2, Panel_2) {
+define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, HTMLPanel_1, Button_2, Jassi_2, Panel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmptyDialog = void 0;
@@ -51,12 +51,25 @@ define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/Button", "jassijs/
             this.layout(this.me);
         }
         layout(me) {
-            me.repeater1 = new Repeater_1.Repeater();
-            this.add(me.repeater1);
-            me.repeater1.createRepeatingComponent(function (databinder1) {
-                me.button1 = new Button_2.Button();
-                me.repeater1.design.add(me.button1);
+            me.button1 = new Button_2.Button();
+            me.htmlpanel1 = new HTMLPanel_1.HTMLPanel();
+            me.button2 = new Button_2.Button();
+            me.htmlpanel3 = new HTMLPanel_1.HTMLPanel();
+            me.htmlpanel1.value = "lkjlkj";
+            me.htmlpanel1.width = 65;
+            me.htmlpanel2 = new HTMLPanel_1.HTMLPanel();
+            me.htmlpanel2.value = "lkjlkjadfsasa";
+            this.add(me.button1);
+            this.add(me.htmlpanel2);
+            this.add(me.htmlpanel1);
+            this.add(me.htmlpanel3);
+            this.add(me.button2);
+            me.button2.text = "button";
+            me.button2.onclick(function (event) {
+                debugger;
+                // alert(document.activeElement.innerHTML);
             });
+            me.htmlpanel3.value = "sssssssss<br>";
         }
     };
     EmptyDialog = __decorate([
@@ -503,7 +516,7 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
     }
     exports.test = test;
 });
-define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_4, Button_4, HTMLPanel_1, Jassi_7, Component_1) {
+define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_4, Button_4, HTMLPanel_2, Jassi_7, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestComponent = void 0;
@@ -520,9 +533,9 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
         }
         layout(me) {
             me.button1 = new Button_4.Button();
-            me.htmlpanel1 = new HTMLPanel_1.HTMLPanel();
+            me.htmlpanel1 = new HTMLPanel_2.HTMLPanel();
             me.button2 = new Button_4.Button();
-            me.htmlpanel2 = new HTMLPanel_1.HTMLPanel();
+            me.htmlpanel2 = new HTMLPanel_2.HTMLPanel();
             me.panel2 = new Panel_4.Panel();
             me.button3 = new Button_4.Button();
             me.button4 = new Button_4.Button();
@@ -560,6 +573,31 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
     exports.TestComponent = TestComponent;
     async function test() {
         var dlg = new TestComponent();
+        return dlg;
+    }
+    exports.test = test;
+});
+define("demo/TestList", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var reportdesign = {
+        content: [
+            {
+                text: [{ text: "werqwreqwreqwreq  ewq we rqw eqw rqw qw qw eqw" }],
+                editTogether: true
+            },
+            { ol: [{ text: "kkkk", listType: 'upper-roman' }, "hhhh", "item 3"] },
+            {
+                color: "blue",
+                ul: [{ foreach: "person", text: "${person.name}" }]
+            }
+        ]
+    };
+    async function test() {
+        // kk.o=0;
+        var dlg = { reportdesign };
+        dlg.reportdesign.data = [{ name: "Max" }, { name: "Moritz" }];
         return dlg;
     }
     exports.test = test;
@@ -607,7 +645,7 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
     }
     exports.test = test;
 });
-define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_2, Upload_1, Jassi_9, Panel_6, papaparse_1) {
+define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_3, Upload_1, Jassi_9, Panel_6, papaparse_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestUpload = void 0;
@@ -619,7 +657,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
         }
         layout(me) {
             me.upload1 = new Upload_1.Upload();
-            me.htmlpanel1 = new HTMLPanel_2.HTMLPanel();
+            me.htmlpanel1 = new HTMLPanel_3.HTMLPanel();
             this.add(me.upload1);
             this.add(me.htmlpanel1);
             me.upload1.multiple = true;
@@ -1037,18 +1075,20 @@ define("demo/Testtable", ["require", "exports"], function (require, exports) {
         content: [
             {
                 table: {
+                    heights: 50,
                     body: [
-                        ["d", "qwr", "ewr", "\n", "\n"],
+                        ["sssd", "ssqwr", "ewr", "\n", "\n"],
+                        ["", "", "", "", ""],
                         ["3", "qwer", "reee", "\n", "\n"],
                         ["sdfsdf", "df", "sdf", "", ""]
                     ]
                 },
                 layout: {
                     hLineWidth: function (i, node) {
-                        return (i === 1 ? 2 : 0); //(i === 0 || i === node.table.body.length) ? 4 : 1;	
+                        return (i === 1 ? 2 : 0); //(i === 0 || i === node.table.body.length) ? 4 : 1;		
                     },
                     vLineWidth: function (i, node) {
-                        return 0; //(i === 0 || i === node.table.widths.length) ? 4 : 1;	
+                        return 0; //(i === 0 || i === node.table.widths.length) ? 4 : 1;		
                     }
                 }
             }
@@ -1251,7 +1291,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo/Dialog": {}
             },
             "demo/EmptyDialog.ts": {
-                "date": 1622984213677,
+                "date": 1633376768366,
                 "demo.EmptyDialog": {}
             },
             "demo/MemoryTest.ts": {
@@ -1341,7 +1381,10 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1632525413937
             },
             "demo/Testtable.ts": {
-                "date": 1633202796985
+                "date": 1633456734618
+            },
+            "demo/TestList.ts": {
+                "date": 1633550554873
             }
         }
     };

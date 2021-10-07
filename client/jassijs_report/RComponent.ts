@@ -42,6 +42,7 @@ export class RComponent extends Panel {
     private _border: boolean[];
     private _counter: number;
     private _listType: string;
+    private _margin: number[];
     reporttype: string = "nothing";
     otherProperties: any;
     constructor(properties = undefined) {
@@ -375,6 +376,27 @@ export class RComponent extends Panel {
         //  super.width = value;
     }
 
+    @$Property({ type: "number[]", description: "margin left, top, right, bottom" })
+    get margin(): number[] {
+        return this._margin;
+    }
+    set margin(value: number[]) {
+        if (value === undefined) {
+            this._margin = value;
+            $(this.dom).css("margin", "");
+        } else {
+            if (Number.isInteger(value)) {
+                //@ts-ignore
+                value = [value, value, value, value];
+            }
+            if (value.length === 2) {
+                value = [value[0], value[1], value[0], value[1]];
+            }
+            this._margin = value;
+
+            $(this.dom).css("margin", value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ");
+        }
+    }
 
     fromJSON(ob: any): RComponent {
         var ret = this;
@@ -459,6 +481,10 @@ export class RComponent extends Panel {
             ret.listType = ob.listType;
             delete ob.listType;
         }
+        if (ob.margin) {
+            ret.margin = ob.margin;
+            delete ob.margin;
+        }
         ret.otherProperties = ob;
         return ret;
     }
@@ -504,6 +530,8 @@ export class RComponent extends Panel {
             ret.counter = this.counter;
         if (this.listType)
             ret.listType = this.listType;
+        if (this.margin)
+            ret.margin = this.margin;
         Object.assign(ret, this["otherProperties"]);
         return ret;
     }

@@ -143,7 +143,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985800636
             },
             "jassijs/modul.ts": {
-                "date": 1632774647245
+                "date": 1633373363775
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1624296519695,
@@ -785,7 +785,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
-                "date": 1632849003336,
+                "date": 1633538389272,
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -1618,7 +1618,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1633194231259,
+                "date": 1633460703445,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -1977,7 +1977,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/ColorEditor.ts": {
-                "date": 1627596203109,
+                "date": 1633539861680,
                 "jassijs.ui.PropertyEditors.ColorEditor": {
                     "$PropertyEditor": [
                         [
@@ -2622,7 +2622,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/VariablePanel.ts": {
-                "date": 1632853975157,
+                "date": 1633466098540,
                 "jassijs.ui.VariablePanel": {}
             },
             "jassijs/util/Cookies.ts": {
@@ -9201,6 +9201,9 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", 
                 $(_this.menu.dom).menu("destroy");
                 $(_this.menu.dom).contextMenu("menu", "#" + _this.menu._id, { triggerOn: 'dummyevent' });
                 //correct pos menu not visible
+                if (!event) {
+                    event = $(':hover').last().offset();
+                }
                 if (event.top + $(_this.menu.dom).height() > window.innerHeight) {
                     event.top = window.innerHeight - $(_this.menu.dom).height();
                 }
@@ -11470,20 +11473,21 @@ define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", 
 // return CodeEditor.constructor;
 define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_11, Jassi_56, Property_15, DataComponent_2) {
     "use strict";
+    var HTMLPanel_3;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.HTMLPanel = void 0;
     var bugtinymce = undefined;
-    let HTMLPanel = class HTMLPanel extends DataComponent_2.DataComponent {
+    let HTMLPanel = HTMLPanel_3 = class HTMLPanel extends DataComponent_2.DataComponent {
         /*[
             'undo redo | bold italic underline | fontsizeselect', //fontselect
             'forecolor backcolor | numlist bullist outdent indent'
         ];*/
         constructor(id = undefined) {
             super();
-            this.toolbar = ['undo redo | bold italic underline | forecolor ', 'backcolor fontsizeselect'];
+            this.toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
             this.inited = false;
             this.customToolbarButtons = {};
-            super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1"><div class="HTMLPanelContent"> </div></div>')[0]); //tabindex for key-event
+            super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1" ><div class="HTMLPanelContent"> </div></div>')[0]); //tabindex for key-event
             //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
             var el = this.dom.children[0];
@@ -11580,6 +11584,7 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                 selector: '#' + _this._id,
                 fontsize_formats: "8px 10px 12px 14px 18px 24px 36px",
                 inline: true,
+                fixed_toolbar_container: '#' + this.editor.inlineEditorPanel._id,
                 setup: function (ed) {
                     ed.on('change', function (e) {
                         var text = _this.dom.firstElementChild.innerHTML;
@@ -11587,6 +11592,10 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                         if (text === '<br data-mce-bogus="1">')
                             text = "";
                         editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);
+                    });
+                    ed.on('focus', function (e) {
+                        //   $(ed.getContainer()).css("display", "inline");
+                        //   debugger;
                     });
                     ed.on('blur', function (e) {
                         if (_this._designMode === false)
@@ -11597,42 +11606,64 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                         editor._draganddropper.enableDraggable(true);
                         //editor.editDialog(true);
                     });
+                    ed.on('NodeChange', function (e) {
+                        // $(ed.getContainer()).find("svg").attr("width", "16").attr("height", "16").attr("viewbox", "0 0 24 24");
+                        //$(ed.getContainer()).css("white-space","nowrap");
+                    });
                     for (var name in _this.customToolbarButtons) {
                         var bt = _this.customToolbarButtons[name];
-                        ed.ui.registry.addButton(name, {
+                        var button;
+                        var test = ed.ui.registry.addButton(name, {
                             text: bt.title,
-                            onAction: function (e) {
+                            onAction: function (e, f) {
+                                var bt2 = this;
                                 bt.action(e);
+                            },
+                            onpostrender: function () {
+                                button = this;
                             }
                         });
                     }
                 }
             };
+            var mytoolbarwidth = 240;
+            if (Number(_this.editor.inlineEditorPanel._parent.width.replace("px", "")) - Number(_this.editor.inlineEditorPanel._parent._components[0].width.replace("px", "")) < mytoolbarwidth) {
+                delete config.fixed_toolbar_container;
+            }
             if (_this["toolbar"])
                 config["toolbar"] = _this["toolbar"];
             for (var name in _this.customToolbarButtons) {
                 config["toolbar"][config["toolbar"].length - 1] =
                     config["toolbar"][config["toolbar"].length - 1] + " | " + name;
             }
-            //_this.value=sic;
-            $(_this.dom).doubletap(function (e) {
+            $(this.dom).on("mouseup", (e) => {
                 if (_this._designMode === false)
                     return;
-                _this.initIfNeeded(tinymce, config);
                 editor._draganddropper.enableDraggable(false);
+                let edi = tinymce.editors[_this._id];
+                $(edi.getContainer()).css("display", "flex");
+                //$(this.domWrapper).draggable('disable');
             });
+            //_this.value=sic;
+            /*    $(_this.dom).doubletap(function (e) {
+                    if (_this._designMode === false)
+                        return;
+                    _this.initIfNeeded(tinymce, config);
+                    editor._draganddropper.enableDraggable(false);
+                });*/
             $(_this.dom).on('blur', function () {
+                HTMLPanel_3.oldeditor = tinymce.editors[_this._id];
+                editor._draganddropper.enableDraggable(true);
                 setTimeout(() => {
                     let edi = tinymce.editors[_this._id];
-                    $(edi === null || edi === void 0 ? void 0 : edi.container).css("display", "none");
-                }, 500);
+                    //  $(edi?.getContainer()).css("display", "none");
+                }, 100);
             });
             $(_this.dom).on('focus', function () {
                 _this.initIfNeeded(tinymce, config);
-                setTimeout(() => {
-                    //let edi = tinymce.editors[_this._id];
-                    //edi.selection.select(edi.getBody(), true);
-                }, 10);
+                if (HTMLPanel_3.oldeditor) {
+                    $(HTMLPanel_3.oldeditor.getContainer()).css("display", "none");
+                }
             });
         }
         /**
@@ -11641,6 +11672,19 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
          * @param {jassijs.ui.ComponentDesigner} editor - editor instance
          */
         _setDesignMode(enable, editor) {
+            this.editor = editor;
+            /* if (enable) {
+                 $(this.dom).on("mouseup", (e) => {
+                     editor._draganddropper.enableDraggable(false);
+                     //$(this.domWrapper).draggable('disable');
+     
+                 });
+                 $(this.dom).on("blur", (e) => {
+                     editor._draganddropper.enableDraggable(true);
+     
+                 });
+             }
+             return;*/
             var _this = this;
             this._designMode = enable;
             if (enable) {
@@ -11669,7 +11713,7 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], HTMLPanel.prototype, "value", null);
-    HTMLPanel = __decorate([
+    HTMLPanel = HTMLPanel_3 = __decorate([
         (0, Component_11.$UIComponent)({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
         (0, Jassi_56.$Class)("jassijs.ui.HTMLPanel"),
         __metadata("design:paramtypes", [Object])
@@ -11681,7 +11725,23 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             title: "Table",
             action: () => { alert(8); }
         };
-        ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsfg<strong>sdfgsd</strong>fgsdfg</span><br>";
+        /*$(ret.dom).on("mouseup", (e) => {
+            $(ret.domWrapper).draggable('disable');
+            
+        });*/
+        $(ret.dom).on("blur", (e) => {
+            $(ret.domWrapper).draggable('enable');
+        });
+        $(ret.dom).doubletap(function (e) {
+            // if (_this._designMode === false)
+            //      return;
+            // _this.initIfNeeded(tinymce, config);
+            var h = 9;
+            //   ret.editor._draganddropper.enableDraggable(false);
+        });
+        ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsf<span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>g<strong>sdfgsd</strong>fgsdfg</span></span><br><strong><span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>sdfgsdgsdf</span>gfdsg</strong>";
+        ret.height = 25;
+        ret.width = 107;
         return ret;
     }
     exports.test = test;
@@ -12330,7 +12390,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_3, Button_8, Jassi_62, Property_21, Textbox_6) {
+define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_4, Button_8, Jassi_62, Property_21, Textbox_6) {
     "use strict";
     var OptionDialog_8;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -12357,7 +12417,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
             var me = this.me = {};
             var _this = this;
             me.boxpanel1 = new BoxPanel_6.BoxPanel();
-            me.htmlpanel1 = new HTMLPanel_3.HTMLPanel();
+            me.htmlpanel1 = new HTMLPanel_4.HTMLPanel();
             me.buttons = new BoxPanel_6.BoxPanel();
             me.buttons.horizontal = true;
             me.htmlpanel1.value = this.text;
@@ -14050,7 +14110,7 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
     }
     exports.test = test;
 });
-define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_4, Select_2, Jassi_69, Panel_17, PropertyEditor_2, Button_9, Settings_2, ComponentDescriptor_5, Registry_20, Actions_15, Windows_9) {
+define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_5, Select_2, Jassi_69, Panel_17, PropertyEditor_2, Button_9, Settings_2, ComponentDescriptor_5, Registry_20, Actions_15, Windows_9) {
     "use strict";
     var SettingsDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -14116,7 +14176,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
             me.propertyeditor = new PropertyEditor_2.PropertyEditor();
             me.Save = new Button_9.Button();
             me.Scope = new Select_2.Select();
-            me.htmlpanel1 = new HTMLPanel_4.HTMLPanel();
+            me.htmlpanel1 = new HTMLPanel_5.HTMLPanel();
             me.Scope.items = ["this browser", "current user", "all users"];
             me.Scope.value = "current user";
             this.add(me.htmlpanel1);
@@ -15928,7 +15988,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
             return ret;
         }
         isTypeOf(value, type) {
-            if (value === undefined)
+            if (value === undefined || value === null)
                 return false;
             if (typeof type === "function") {
                 return value instanceof type;
@@ -16383,7 +16443,7 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
         set ob(ob) {
             super.ob = ob;
             var value = this.propertyEditor.getPropertyValue(this.property);
-            if (!value || value === "")
+            if (value === null || value === undefined || value === "")
                 value = "";
             else
                 value = value.substring(1, value.length - 1);
