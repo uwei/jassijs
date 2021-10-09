@@ -1255,7 +1255,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Databinder.ts": {
-		"date": 1622984379896,
+		"date": 1633770206168,
 		"jassijs.ui.Databinder": {
 			"$UIComponent": [
 				{
@@ -1562,7 +1562,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Image.ts": {
-		"date": 1622985638953,
+		"date": 1633773477990,
 		"jassijs.ui.Image": {
 			"$UIComponent": [
 				{
@@ -1571,6 +1571,13 @@ define("jassijs/registry",["require"], function(require) {
 				}
 			],
 			"@members": {
+				"onclick": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
 				"value": {
 					"$Property": [
 						{
@@ -1977,7 +1984,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ImageEditor.ts": {
-		"date": 1626118889580,
+		"date": 1633779677253,
 		"jassijs.ui.PropertyEditors.ImageEditor": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -2509,7 +2516,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Upload.ts": {
-		"date": 1622985845674,
+		"date": 1633773136839,
 		"jassijs.ui.Upload": {
 			"$UIComponent": [
 				{
@@ -2518,6 +2525,19 @@ define("jassijs/registry",["require"], function(require) {
 				}
 			],
 			"@members": {
+				"readAs": {
+					"$Property": [
+						{
+							"chooseFromStrict": true,
+							"chooseFrom": [
+								"Text",
+								"DataUrl",
+								"ArrayBuffer",
+								"BinaryString"
+							]
+						}
+					]
+				},
 				"accept": {
 					"$Property": []
 				},

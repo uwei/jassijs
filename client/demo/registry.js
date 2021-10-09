@@ -101,6 +101,9 @@ define("demo/registry",["require"], function(require) {
 	},
 	"demo/TestList.ts": {
 		"date": 1633550554873
+	},
+	"demo/TestImage.ts": {
+		"date": 1633780413825
 	}
 }
  }

@@ -16,6 +16,9 @@ export class Upload extends Component{
             	_this.readUpload(<any>evt);
             });
         }
+        @$Property({chooseFromStrict:true,chooseFrom:["Text","DataUrl","ArrayBuffer","BinaryString"]})
+        readAs:"Text"|"DataUrl"|"ArrayBuffer"|"BinaryString";
+
         get accept():string{
         	return $(this.dom).prop("accept");
         }
@@ -38,15 +41,32 @@ export class Upload extends Component{
         }
 		private async readUpload(evt:JQuery.TriggeredEvent<any,any,any,any>){
 			var files:FileList = evt.target["files"];
-			var data:{[file:string]:string}={};
-			
+            var _this=this;
+			var data:{[file:string]:string|ArrayBuffer}={};
+			var downloaded=0;
 			for (var i = 0; i<files.length; i++) {
 				var file=files[i];
 				var reader = new FileReader();
-   			     reader.readAsText(file);
-   			     data[file.name]=await file.text(); 
+                reader.addEventListener("load", function () {
+                    data[file.name] = reader.result;
+                    downloaded++;
+                    if(downloaded==files.length){
+                        _this.callEvent("uploaded",data,files,evt);
+                    }
+                }, false);
+                if(this.readAs==="DataUrl"){
+                    reader.readAsDataURL(file);
+                   // data[file.name]=reader.result;
+                }else if(this.readAs==="ArrayBuffer"){
+                    reader.readAsArrayBuffer(file);
+                   // data[file.name]=reader.result;
+                }else if(this.readAs==="BinaryString"){
+                    reader.readAsBinaryString(file);
+                }else{
+       			     reader.readAsText(file);
+   			    }
 			}
-			this.callEvent("uploaded",data,files,evt);
+			
 	    };
         /**
          * register handler to get the uploaded data
@@ -67,7 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 export function test(){
 	var upload=new Upload();
-	
+	upload.readAs="DataUrl";
 	upload.multiple=true;
 	upload.onuploaded(function(data:{[file:string]:string}){
 		debugger;

@@ -117,6 +117,9 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
                 if (!onlytest)
                     $(this.dialog.__dom).dialog({ height: "400", width: "400" });
             }
+            else {
+                $(this.dialog.__dom).dialog("open");
+            }
         }
     };
     __decorate([

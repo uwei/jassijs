@@ -308,14 +308,16 @@ export class Databinder extends InvisibleComponent {
                 let path=property.split(".");
                 let currenttype=this.userObject.constructor;
                 var def = db.getMetadata(currenttype);
-                let propertypath="";
-                for(let x=0;x<path.length;x++){
-                    propertypath+=(propertypath===""?"":".")+path[x];
-                    this.testRelation(def,path[x],propertypath,path.length-1===x?setter:undefined,comp);
-                    currenttype=def.getRelation(path[x])?.oclass;
-                    if(currenttype===undefined)
-                        break;
-                     def = db.getMetadata(currenttype);
+                if(def!==undefined){
+                    let propertypath="";
+                    for(let x=0;x<path.length;x++){
+                        propertypath+=(propertypath===""?"":".")+path[x];
+                        this.testRelation(def,path[x],propertypath,path.length-1===x?setter:undefined,comp);
+                        currenttype=def.getRelation(path[x])?.oclass;
+                        if(currenttype===undefined)
+                            break;
+                         def = db.getMetadata(currenttype);
+                    }
                 }
 
             }

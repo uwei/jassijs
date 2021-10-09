@@ -250,8 +250,10 @@ export class Parser {
     parseProperties(node: ts.Node) {
         if (ts.isVariableDeclaration(node)) {
             var name = node.name.getText();
-            var value = node.initializer.getText();
-            this.add(name, "_new_", value, node.parent.parent);
+            if(node.initializer!==undefined){
+                var value = node.initializer.getText();
+                this.add(name, "_new_", value, node.parent.parent);
+            }
         }
         if ((ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) ||
             ts.isCallExpression(node)) {

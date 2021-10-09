@@ -43,14 +43,34 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         }
         async readUpload(evt) {
             var files = evt.target["files"];
+            var _this = this;
             var data = {};
+            var downloaded = 0;
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 var reader = new FileReader();
-                reader.readAsText(file);
-                data[file.name] = await file.text();
+                reader.addEventListener("load", function () {
+                    data[file.name] = reader.result;
+                    downloaded++;
+                    if (downloaded == files.length) {
+                        _this.callEvent("uploaded", data, files, evt);
+                    }
+                }, false);
+                if (this.readAs === "DataUrl") {
+                    reader.readAsDataURL(file);
+                    // data[file.name]=reader.result;
+                }
+                else if (this.readAs === "ArrayBuffer") {
+                    reader.readAsArrayBuffer(file);
+                    // data[file.name]=reader.result;
+                }
+                else if (this.readAs === "BinaryString") {
+                    reader.readAsBinaryString(file);
+                }
+                else {
+                    reader.readAsText(file);
+                }
             }
-            this.callEvent("uploaded", data, files, evt);
         }
         ;
         /**
@@ -60,6 +80,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             this.addEvent("uploaded", handler);
         }
     };
+    __decorate([
+        (0, Property_1.$Property)({ chooseFromStrict: true, chooseFrom: ["Text", "DataUrl", "ArrayBuffer", "BinaryString"] }),
+        __metadata("design:type", String)
+    ], Upload.prototype, "readAs", void 0);
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", String),
@@ -91,6 +115,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
     });*/
     function test() {
         var upload = new Upload();
+        upload.readAs = "DataUrl";
         upload.multiple = true;
         upload.onuploaded(function (data) {
             debugger;

@@ -61,7 +61,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/ReportDesign.ts": {
-		"date": 1633637905817,
+		"date": 1633777019318,
 		"jassijs_report.InfoProperties": {
 			"@members": {
 				"title": {
@@ -400,7 +400,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RComponent.ts": {
-		"date": 1633638156160,
+		"date": 1633780363403,
 		"jassijs_report.ReportComponent": {
 			"$Property": [
 				{
@@ -766,6 +766,37 @@ define("jassijs_report/registry",["require"], function(require) {
 					]
 				}
 			}
+		}
+	},
+	"jassijs_report/RImage.ts": {
+		"date": 1633777731067,
+		"jassijs_report.RImage": {
+			"$ReportComponent": [
+				{
+					"fullPath": "report/Image",
+					"icon": "mdi mdi-image-frame"
+				}
+			],
+			"@members": {
+				"image": {
+					"$Property": [
+						{
+							"type": "rimage",
+							"chooseFrom": "function"
+						}
+					]
+				}
+			}
+		}
+	},
+	"jassijs_report/RImageEditor.ts": {
+		"date": 1633780176533,
+		"jassi_report/RImagePropertyEditor": {
+			"$PropertyEditor": [
+				[
+					"rimage"
+				]
+			]
 		}
 	}
 }

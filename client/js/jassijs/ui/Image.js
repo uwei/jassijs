@@ -21,6 +21,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             //super.init($('<img vspace="0" hspace="0"  border="0"  src="" alt="">')[0]);
             super.init($('<div style="display: inline-block;white-space: nowrap;"><img  vspace="0" hspace="0"  border="0"  src="" alt=""></div>')[0]);
         }
+        /**
+        * register an event if the image is clicked
+        * @param {function} handler - the function that is called on change
+        */
         onclick(handler) {
             $("#" + this._id).click(function () {
                 handler();
@@ -79,6 +83,12 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             //            return $(this.dom).attr("src");
         }
     };
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], Image.prototype, "onclick", null);
     __decorate([
         (0, Property_1.$Property)({ type: "string" }),
         __metadata("design:type", Object),

@@ -19,6 +19,7 @@ import { RTextGroup } from "jassijs_report/RTextGroup";
 import { RTable } from "jassijs_report/RTable";
 import { RUList } from "jassijs_report/RUList";
 import { ROList } from "jassijs_report/ROList";
+import { RImage } from "jassijs_report/RImage";
 
 
 
@@ -96,6 +97,8 @@ export class ReportDesign extends BoxPanel {
     info: InfoProperties;
     @$Property({ type: "json", componentType: "jassijs_report.PermissionProperties" })
     permissions: PermissionProperties;
+
+    images;
     /**
     * 
     * @param {object} properties - properties to init
@@ -247,6 +250,8 @@ export class ReportDesign extends BoxPanel {
             ret = new RUList().fromJSON(ob);
         } else if (ob.ol !== undefined) {
             ret = new ROList().fromJSON(ob);
+        } else if (ob.image !== undefined) {
+            ret = new RImage().fromJSON(ob);
         } else {
             ret = new RUnknown().fromJSON(ob);
         }
@@ -347,6 +352,10 @@ export class ReportDesign extends BoxPanel {
             this.permissions = ob.permissions;
             delete ob.permissions;
         }
+        if(ob.images){
+            this.images=ob.images;
+            delete ob.images;
+        }
 
         //delete ob.data;//should not be to json
 
@@ -408,6 +417,9 @@ export class ReportDesign extends BoxPanel {
             r.ownerPassword = this.ownerPassword;
         if (this.permissions)
             r.permissions = this.permissions;
+        if(this.images){
+            r.images=this.images;
+        }
         Object.assign(r, this["otherProperties"]);
         //delete r.data;
         return r;

@@ -168,7 +168,7 @@ export class RComponent extends Panel {
     @$Property({
         type: "string", isVisible: (component) => {
             //only in table and column width is posible
-            return component._parent?.setChildWidth || component._parent?.reporttype === "columns";
+            return component._parent?.setChildWidth || component._parent?.reporttype === "columns"|| component.reporttype === "image";
         }
     })
 
@@ -190,7 +190,7 @@ export class RComponent extends Panel {
     @$Property({
         type: "string", isVisible: (component) => {
             //only in table and column width is posible
-            return component._parent?.setChildHeight || component._parent?.reporttype === "columns";
+            return component._parent?.setChildHeight || component._parent?.reporttype === "columns"|| component.reporttype === "image";
         }
     })
 

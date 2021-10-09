@@ -511,7 +511,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             type: "string", isVisible: (component) => {
                 var _a, _b;
                 //only in table and column width is posible
-                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns";
+                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns" || component.reporttype === "image";
             }
         }),
         __metadata("design:type", Object),
@@ -522,7 +522,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             type: "string", isVisible: (component) => {
                 var _a, _b;
                 //only in table and column width is posible
-                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildHeight) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns";
+                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildHeight) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns" || component.reporttype === "image";
             }
         }),
         __metadata("design:type", Object),

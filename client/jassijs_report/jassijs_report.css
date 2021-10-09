@@ -40,4 +40,8 @@ td > .RText{
     margin: 0px 0 0px 0;
     padding: 0 0px;
 }
-
+.RImage {
+    min-width:16px;
+    min-height:16px;
+    
+}
