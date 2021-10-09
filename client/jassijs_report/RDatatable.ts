@@ -18,6 +18,8 @@ import { $Property } from "jassijs/ui/Property";
 import { JassiError } from "jassijs/remote/Classes";
 import { ComponentDesigner } from "jassijs_editor/ComponentDesigner";
 import { RGroupTablerow } from "jassijs_report/RGroupTablerow";
+import { Runlater } from "jassijs/util/Runlater";
+import { RTable } from "jassijs_report/RTable";
 
 
 
@@ -29,20 +31,17 @@ import { RGroupTablerow } from "jassijs_report/RGroupTablerow";
 @$ReportComponent({ fullPath: "report/Datatable", icon: "mdi mdi-table-cog", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] })
 @$Class("jassijs_report.RDatatable")
 
-export class RDatatable extends RComponent {
-    _componentDesigner: ComponentDesigner;
+export class RDatatable extends RTable {
     reporttype: string = "datatable";
-    design: any;
     headerPanel: RTablerow = new RTablerow();
     groupHeaderPanel: RTablerow[] = [];
     bodyPanel: RTablerow = new RTablerow();
     groupFooterPanel: RTablerow[] = [];
     groupExpression: string[] = [];
     footerPanel: RTablerow = new RTablerow();
-
     @$Property()
     dataforeach: string;
-    widths: any[] = [];
+   
     /**
 * 
 * @param {object} properties - properties to init
@@ -50,44 +49,41 @@ export class RDatatable extends RComponent {
 * @param {boolean} [properties.useSpan] -  use span not div
 * 
 */
-    constructor(properties = undefined) {//id connect to existing(not reqired)
+    constructor(properties:any ={}) {//id connect to existing(not reqired)
+        properties.isdatatable=true;
         super(properties);
-        super.init($("<table style='min-width:50px;table-layout: fixed'></table>")[0]);
+       // super.init($("<table style='min-width:50px;table-layout: fixed'></table>")[0]);
+        var _this;
         //	this.backgroundPanel.width="500px";
         //$(this.backgroundPanel.dom).css("min-width","200px");
         //$(this.dom).css("display", "table");
         // $(this.dom).css("min-width", "50px");
         $(this.footerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tablefooter</text></svg>" + '")');
         $(this.headerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tableheader</text></svg>" + '")');
+        this.removeAll();//from Table Constructor
         this.add(this.headerPanel);
         this.add(this.bodyPanel);
         this.add(this.footerPanel);
-        $(this.dom).addClass("designerNoResizable");
+       // $(this.dom).addClass("designerNoResizable");
         this.headerPanel.parent = this;
         this.footerPanel.parent = this;
         this.bodyPanel.parent = this;
+        
 
     }
     protected _setDesignMode(enable) {
         //do nothing - no add button
     }
 
-   
-    /*	get design():any{
-            return this.toJSON();
-        };
-        set design(value:any){
-            ReportDesign.fromJSON(value,this);
-        }*/
-
-    private fillTableRow(row: RTablerow, count: number) {
+  
+    /*private fillTableRow(row: RTablerow, count: number) {
         if (!row._designMode || count - row._components.length !== 1)
             return;
         for (var x = row._components.length; x < count; x++) {
             var rr = new RText();
             row.addBefore(rr, row._components[row._components.length - 1]);//after addbutton
         }
-    }
+    }*/
     addEmptyCellsIfNeeded(row: RTablerow) {
         var count = row._components.length;
         this.fillTableRow(this.headerPanel, count);
@@ -95,11 +91,7 @@ export class RDatatable extends RComponent {
         this.fillTableRow(this.footerPanel, count);
 
     }
-    /**
-    * sets the width of a table cell
-    * @param component - the table cell
-    * @param width - the new width
-    **/
+   /*
     setChildWidth(component: Component, width: any) {
         var max = 0;
         var found = -1;
@@ -122,10 +114,7 @@ export class RDatatable extends RComponent {
         }
         //this._parent.setChildWidth(component,value);
     }
-    /**
-     * gets the width of a table cell
-     * @param component - the table cell
-     **/
+   
     getChildWidth(component: Component): any {
         var found = -1;
         for (var x = 0; x < this._components.length; x++) {
@@ -142,9 +131,7 @@ export class RDatatable extends RComponent {
             return this.widths[found];
         //this._parent.setChildWidth(component,value);
     }
-    private create(ob: any) {
-
-    }
+    */
     extensionCalled(action: ExtensionAction) {
         if (action.componentDesignerSetDesignMode) {
             this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
@@ -259,7 +246,15 @@ export class RDatatable extends RComponent {
             delete ob.footer;
             obb.destroy();
         }
-        if (ob.widths) {
+         if (ob?.widths) {
+            ret.widths = ob.widths;
+            delete ob.widths;
+        }
+        if (ob?.heights) {
+            ret.heights = ob.heights;
+            delete ob.heights;
+        }
+       /* if (ob.widths) {
             ret.widths = ob.widths;
             delete ob.widths;
 
@@ -269,29 +264,26 @@ export class RDatatable extends RComponent {
 
             $(tr._components[x].domWrapper).attr("width", this.widths[x]);
         }
-
+        */
         ret.dataforeach = ob.dataforeach;
         delete ob.dataforeach;
-        delete ob.datatable;
-        super.fromJSON(ob);
-        for (var x = 0; x < ret._components.length; x++) {
-            (<RTablerow>ret._components[x]).parent.correctHideAfterSpan();
-
-        }
+        delete obj.datatable;
+        super.fromJSON(obj,ob);
+       
         return ret;
     }
 
     toJSON(): any {
-        var r: any = {
-
-        };
-        var ret: any = super.toJSON();
-        ret.datatable = r;
+       
+        var ret: any = super.toJSON(true);
+        ret.datatable = ret.table;
+        delete ret.table;
+        var r=ret.datatable;
         //TODO hack
         r.groups = ret.groups;
         delete ret.groups;
         //var _this = this;
-        if (this.widths && this.widths.length > 0) {
+        /*if (this.widths && this.widths.length > 0) {
             r.widths = this.widths;
             var len = this.headerPanel._components.length;
             if (this.headerPanel._designMode)
@@ -303,7 +295,7 @@ export class RDatatable extends RComponent {
             while (r.widths.length > len) {
                 r.widths.pop();
             }
-        }
+        }*/
         if (this.groupHeaderPanel.length > 0) {
             r.groups = [];
             for (var x = 0; x < this.groupHeaderPanel.length; x++) {

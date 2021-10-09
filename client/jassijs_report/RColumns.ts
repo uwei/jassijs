@@ -7,8 +7,8 @@ import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
 import { Panel } from "jassijs/ui/Panel";
 import { RText } from "jassijs_report/RText";
 
+//Limitations: columnGap not implemented defaultStyle: {columnGap: 20}
 
-//@$UIComponent({editableChildComponents:["this"]})
 @$ReportComponent({ fullPath: "report/Columns", icon: "mdi mdi-view-parallel-outline", editableChildComponents: ["this"] })
 @$Class("jassijs_report.RColumns")
 

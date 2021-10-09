@@ -6,7 +6,7 @@ import { ReportDesign } from "jassijs_report/ReportDesign";
 import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
 import { Panel } from "jassijs/ui/Panel";
 
-//not implemented: separator,markerColor, counter is counting also the next elements
+//Limitations not implemented: separator,markerColor, counter is counting also the next elements
 
 @$ReportComponent({ fullPath: "report/Ordered List", icon: "mdi mdi-format-list-numbered", editableChildComponents: ["this"] })
 @$Class("jassijs_report.ROList")

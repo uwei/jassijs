@@ -601,11 +601,13 @@ inlineEditorPanel:Panel;
         this._componentExplorer.value = component;
 
         $(this.dom).focus();
-
+ 
 
         this._updateInvisibleComponents();
-
-
+        while (this.inlineEditorPanel.dom.firstChild) {
+           this.inlineEditorPanel.dom.firstChild.remove();
+        }
+     
         //var parser=new jassijs.ui.PropertyEditor.Parser();
         //parser.parse(_this.value);
     }

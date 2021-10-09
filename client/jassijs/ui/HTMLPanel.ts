@@ -190,7 +190,8 @@ export class HTMLPanel extends DataComponent {
                 return;
             editor._draganddropper.enableDraggable(false);
             let edi = tinymce.editors[_this._id];
-            $(edi.getContainer()).css("display", "flex");
+            if(edi)
+                $(edi.getContainer()).css("display", "flex");
             //$(this.domWrapper).draggable('disable');
         });
         //_this.value=sic;
@@ -210,6 +211,7 @@ export class HTMLPanel extends DataComponent {
         });
         $(_this.dom).on('focus', function () {
             _this.initIfNeeded(tinymce, config);
+            $('#' + _this.editor.inlineEditorPanel._id).find(".tox-tinymce-inline").css("display", "none");
             if (HTMLPanel.oldeditor) {
                 $(HTMLPanel.oldeditor.getContainer()).css("display", "none");
             }

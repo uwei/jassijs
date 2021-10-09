@@ -150,9 +150,13 @@ function replaceDatatable(def, data) {
 	var groups = def.datatable.groups;
 	var body = def.datatable.body;
 	var groupexpr: string[] = [];
-	def.table = {
-		body: []
-	};
+	def.table =clone(def.datatable);
+	def.table.body= []
+	delete def.table.header;
+	delete def.table.footer;
+	delete def.table.dataforeach;
+	delete def.table.groups;
+	
 	if (header)
 		def.table.body.push(header);
 	if (groups === undefined || groups.length === 0) {

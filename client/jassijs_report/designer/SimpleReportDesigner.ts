@@ -42,6 +42,7 @@ export class SimpleReportDesigner extends ReportDesigner {
         });
         this._designToolbar.remove(this.saveButton);
         this._designToolbar.remove(this.runButton);
+        this.editButton.tooltip="pdf preview";
         this.editButton.icon="mdi mdi-18px mdi-file-pdf-outline";
 //        this._designToolbar.remove(this.);
         

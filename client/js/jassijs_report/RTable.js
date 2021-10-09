@@ -41,7 +41,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             tr.parent = this;
             this.add(tr);
             $(this.dom).addClass("designerNoResizable");
-            this.initContextMenu();
+            this.initContextMenu(properties === null || properties === void 0 ? void 0 : properties.isdatatable);
             var _this = this;
             this.initKeys();
         }
@@ -50,7 +50,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             this.on("keydown", (evt) => {
                 var _a, _b, _c;
                 if (evt.key === "Tab") { //Tabelle erweitern?
-                    if (((_b = (_a = evt.target) === null || _a === void 0 ? void 0 : _a._this) === null || _b === void 0 ? void 0 : _b.reporttype) === "text") {
+                    if (((_b = (_a = evt.target) === null || _a === void 0 ? void 0 : _a._this) === null || _b === void 0 ? void 0 : _b.reporttype) === "text" && this.reporttype === "table") {
                         var rt = (_c = evt.target) === null || _c === void 0 ? void 0 : _c._this;
                         if (rt._parent._components.indexOf(rt) === rt._parent._components.length - 2) { //last row
                             if (rt._parent.parent._components.indexOf(rt._parent) + 1 === rt._parent.parent._components.length) { //lastline
@@ -80,58 +80,60 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             ret.row = this._components.indexOf(ret.tableRow);
             return ret;
         }
-        async initContextMenu() {
+        async initContextMenu(isDatatable) {
             var _this = this;
             this.contextMenu = new ContextMenu_1.ContextMenu();
             this.contextMenu._isNotEditableInDesigner = true;
             $(this.contextMenu.menu.dom).css("font-family", "Roboto");
             $(this.contextMenu.menu.dom).css("font-size", "12px");
             this.contextMenu.menu._setDesignMode = (nothing) => { }; //should net be editable in designer
-            var insertRowBefore = new MenuItem_1.MenuItem();
-            //@ts-ignore
-            insertRowBefore._setDesignMode = (nothing) => { }; //should net be editable in designer
-            //@ts-ignore
-            insertRowBefore.items._setDesignMode = (nothing) => { };
-            insertRowBefore.text = "insert row before";
-            insertRowBefore.onclick((evt) => {
-                var info = _this.getInfoFromEvent(evt);
-                var newRow = new RTablerow_1.RTablerow();
-                if (_this.heights && Array.isArray(_this.heights))
-                    _this.heights.splice(info.row, 0, "auto");
-                newRow.parent = _this;
-                _this.addBefore(newRow, _this._components[info.row]);
-                newRow.add(new RText_1.RText());
+            if (isDatatable !== true) {
+                var insertRowBefore = new MenuItem_1.MenuItem();
                 //@ts-ignore
-                newRow._setDesignMode(true);
-                _this.fillTableRow(newRow, info.tableRow._components.length);
-                _this._componentDesigner.editDialog(true);
-                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
-            });
-            this.contextMenu.menu.add(insertRowBefore);
-            var insertRowAfter = new MenuItem_1.MenuItem();
-            //@ts-ignore
-            insertRowAfter._setDesignMode = (nothing) => { }; //should net be editable in designer
-            //@ts-ignore
-            insertRowAfter.items._setDesignMode = (nothing) => { };
-            insertRowAfter.text = "insert row after";
-            insertRowAfter.onclick((evt) => {
-                var info = _this.getInfoFromEvent(evt);
-                var newRow = new RTablerow_1.RTablerow();
-                if (_this.heights && Array.isArray(_this.heights))
-                    _this.heights.splice(info.row + 1, 0, "auto");
-                newRow.parent = _this;
-                if (_this._components.length === info.row + 1)
-                    _this.add(newRow);
-                else
-                    _this.addBefore(newRow, _this._components[info.row + 1]);
-                newRow.add(new RText_1.RText());
+                insertRowBefore._setDesignMode = (nothing) => { }; //should net be editable in designer
                 //@ts-ignore
-                newRow._setDesignMode(true);
-                _this.fillTableRow(newRow, info.tableRow._components.length);
-                _this._componentDesigner.editDialog(true);
-                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
-            });
-            this.contextMenu.menu.add(insertRowAfter);
+                insertRowBefore.items._setDesignMode = (nothing) => { };
+                insertRowBefore.text = "insert row before";
+                insertRowBefore.onclick((evt) => {
+                    var info = _this.getInfoFromEvent(evt);
+                    var newRow = new RTablerow_1.RTablerow();
+                    if (_this.heights && Array.isArray(_this.heights))
+                        _this.heights.splice(info.row, 0, "auto");
+                    newRow.parent = _this;
+                    _this.addBefore(newRow, _this._components[info.row]);
+                    newRow.add(new RText_1.RText());
+                    //@ts-ignore
+                    newRow._setDesignMode(true);
+                    _this.fillTableRow(newRow, info.tableRow._components.length);
+                    _this._componentDesigner.editDialog(true);
+                    _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+                });
+                this.contextMenu.menu.add(insertRowBefore);
+                var insertRowAfter = new MenuItem_1.MenuItem();
+                //@ts-ignore
+                insertRowAfter._setDesignMode = (nothing) => { }; //should net be editable in designer
+                //@ts-ignore
+                insertRowAfter.items._setDesignMode = (nothing) => { };
+                insertRowAfter.text = "insert row after";
+                insertRowAfter.onclick((evt) => {
+                    var info = _this.getInfoFromEvent(evt);
+                    var newRow = new RTablerow_1.RTablerow();
+                    if (_this.heights && Array.isArray(_this.heights))
+                        _this.heights.splice(info.row + 1, 0, "auto");
+                    newRow.parent = _this;
+                    if (_this._components.length === info.row + 1)
+                        _this.add(newRow);
+                    else
+                        _this.addBefore(newRow, _this._components[info.row + 1]);
+                    newRow.add(new RText_1.RText());
+                    //@ts-ignore
+                    newRow._setDesignMode(true);
+                    _this.fillTableRow(newRow, info.tableRow._components.length);
+                    _this._componentDesigner.editDialog(true);
+                    _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+                });
+                this.contextMenu.menu.add(insertRowAfter);
+            }
             var insertColumnBefore = new MenuItem_1.MenuItem();
             //@ts-ignore
             insertColumnBefore._setDesignMode = (nothing) => { }; //should net be editable in designer
@@ -141,11 +143,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             insertColumnBefore.onclick((evt) => {
                 var info = _this.getInfoFromEvent(evt);
                 var newCell = new RText_1.RText();
-                if (_this.widths)
+                if (_this.widths && _this.widths.length > 0)
                     _this.widths.splice(info.column, 0, "auto");
                 _this.insertEmptyCells = false;
                 for (var x = 0; x < _this._components.length; x++) {
-                    _this._components[x].addBefore(new RText_1.RText(), _this._components[x]._components[info.column]);
+                    if (_this._components[x]._components.length > 1)
+                        _this._components[x].addBefore(new RText_1.RText(), _this._components[x]._components[info.column]);
                 }
                 _this.insertEmptyCells = true;
                 _this._componentDesigner.editDialog(true);
@@ -161,11 +164,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             insertColumnAfter.onclick((evt) => {
                 var info = _this.getInfoFromEvent(evt);
                 var newCell = new RText_1.RText();
-                if (_this.widths)
+                if (_this.widths && _this.widths.length > 0)
                     _this.widths.splice(info.column + 1, 0, "auto");
                 _this.insertEmptyCells = false;
                 for (var x = 0; x < _this._components.length; x++) {
-                    _this._components[x].addBefore(new RText_1.RText(), _this._components[x]._components[info.column + 1]);
+                    if (_this._components[x]._components.length > 1)
+                        _this._components[x].addBefore(new RText_1.RText(), _this._components[x]._components[info.column + 1]);
                 }
                 _this.insertEmptyCells = true;
                 _this._componentDesigner.editDialog(true);
@@ -181,31 +185,35 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             removeColumn.onclick((evt) => {
                 var _a;
                 var info = _this.getInfoFromEvent(evt);
-                if (_this.widths)
+                if (_this.widths && _this.widths.length > 0)
                     _this.widths.slice(info.column, 0);
                 for (var x = 0; x < _this._components.length; x++) {
                     var tr = _this._components[x];
                     //@ts-ignore
-                    if (((_a = tr._components[info.column]) === null || _a === void 0 ? void 0 : _a.designDummyFor) === undefined)
-                        tr.remove(tr._components[info.column], true);
+                    if (((_a = tr._components[info.column]) === null || _a === void 0 ? void 0 : _a.designDummyFor) === undefined) {
+                        if (tr._components.length > 1)
+                            tr.remove(tr._components[info.column], true);
+                    }
                 }
                 _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
             });
             this.contextMenu.menu.add(removeColumn);
-            var removeRow = new MenuItem_1.MenuItem();
-            //@ts-ignore
-            removeRow._setDesignMode = (nothing) => { }; //should net be editable in designer
-            //@ts-ignore
-            removeRow.items._setDesignMode = (nothing) => { };
-            removeRow.text = "delete row";
-            removeRow.onclick((evt) => {
-                var info = _this.getInfoFromEvent(evt);
-                if (_this.heights && Array.isArray(_this.heights))
-                    _this.heights.slice(info.row, 0);
-                _this.remove(_this._components[info.row]);
-                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
-            });
-            this.contextMenu.menu.add(removeRow);
+            if (isDatatable !== true) {
+                var removeRow = new MenuItem_1.MenuItem();
+                //@ts-ignore
+                removeRow._setDesignMode = (nothing) => { }; //should net be editable in designer
+                //@ts-ignore
+                removeRow.items._setDesignMode = (nothing) => { };
+                removeRow.text = "delete row";
+                removeRow.onclick((evt) => {
+                    var info = _this.getInfoFromEvent(evt);
+                    if (_this.heights && Array.isArray(_this.heights))
+                        _this.heights.slice(info.row, 0);
+                    _this.remove(_this._components[info.row]);
+                    _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+                });
+                this.contextMenu.menu.add(removeRow);
+            }
             var copyMenu = new Button_1.Button();
             $(copyMenu.dom).css("font-family", "Roboto");
             $(copyMenu.dom).css("font-size", "12px");
@@ -282,6 +290,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5;
             this.correctHideAfterSpan();
             var tab = this.toJSON();
+            if (tab.table === undefined)
+                tab.table = tab.datatable;
             if (tab.table.widths === undefined)
                 tab.table.widths = [];
             while (this._components[0]._components.length > tab.table.widths.length) {
@@ -316,7 +326,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                         v = (_b = this.layout) === null || _b === void 0 ? void 0 : _b.fillColor(r, tab, c);
                     }
                     if (v === null)
-                        v = "white";
+                        v = "initial";
                     css.background_color = v;
                     cssid.push(v.replace("#", ""));
                     v = 1;
@@ -574,12 +584,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             }
             return undefined;
         }
-        fromJSON(obj) {
+        fromJSON(obj, callingFromTable = undefined) {
             var _a;
             var ob = obj.table;
             var ret = this;
-            ret.removeAll();
-            if (ob.body) {
+            if (ob)
+                ret.removeAll();
+            if (callingFromTable)
+                ob = callingFromTable;
+            if (ob === null || ob === void 0 ? void 0 : ob.body) {
                 for (var x = 0; x < ob.body.length; x++) {
                     let obb = new RTablerow_1.RTablerow().fromJSON(ob.body[x]);
                     obb.parent = this;
@@ -591,15 +604,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                 }
                 delete ob.body;
             }
-            if (ob.headerRows) {
+            if (ob === null || ob === void 0 ? void 0 : ob.headerRows) {
                 ret.headerRows = ob.headerRows;
                 delete ob.headerRows;
             }
-            if (ob.widths) {
+            if (ob === null || ob === void 0 ? void 0 : ob.widths) {
                 ret.widths = ob.widths;
                 delete ob.widths;
             }
-            if (ob.heights) {
+            if (ob === null || ob === void 0 ? void 0 : ob.heights) {
                 ret.heights = ob.heights;
                 delete ob.heights;
             }
@@ -639,7 +652,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             this.updateLayout(false);
             return ret;
         }
-        toJSON() {
+        toJSON(datatable = undefined) {
             var _a;
             var r = {};
             var ret = super.toJSON();
@@ -657,6 +670,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;
                 var len = this._components[0]._components.length;
+                if (this._components[0]._components[len - 1].designDummyFor !== undefined)
+                    len--;
                 for (var t = r.widths.length; t < len; t++) {
                     r.widths.push("auto");
                 }
@@ -680,9 +695,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                     r.heights.pop();
                 }
             }
-            r.body = [];
-            for (var x = 0; x < this._components.length; x++) {
-                r.body.push(this._components[x].toJSON());
+            if (datatable === true) {
+            }
+            else {
+                r.body = [];
+                for (var x = 0; x < this._components.length; x++) {
+                    r.body.push(this._components[x].toJSON());
+                }
             }
             return ret;
         }

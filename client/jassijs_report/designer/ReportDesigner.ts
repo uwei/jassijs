@@ -19,6 +19,9 @@ import { Tools } from "jassijs/util/Tools";
 export class ReportDesigner extends ComponentDesigner {
     constructor() {
         super();
+       
+        this.editButton.tooltip = "pdf preview";
+        this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
 
     }
     propertyIsChanging = false;
@@ -57,10 +60,10 @@ export class ReportDesigner extends ComponentDesigner {
         $(this.dom).css("width", "");
 
     }
-    connectParser(parser){
-        this._propertyEditor.parser=parser;
+    connectParser(parser) {
+        this._propertyEditor.parser = parser;
         var Parser = classes.getClass("jassijs_editor.base.Parser");
-        this._codeChanger.parser=new Parser();
+        this._codeChanger.parser = new Parser();
     }
     editDialog(enable) {
 
@@ -73,7 +76,7 @@ export class ReportDesigner extends ComponentDesigner {
                 data = (<ReportDesign>this._codeChanger.value).toJSON();
                 rep.value = data;//Tools.copyObject(data);// designedComponent["design"];
                 rep.fill();
-                  rep.getBase64().then((data) => {
+                rep.getBase64().then((data) => {
                     this.pdfviewer.report = rep;
                     //make a copy because the data would be modified 
                     this.pdfviewer.value = data;
@@ -81,7 +84,7 @@ export class ReportDesigner extends ComponentDesigner {
             } catch (err) {
                 console.error(err);
                 //viewer.value = await rep.getBase64();
-              
+
             }
 
             this.lastView = this._designPlaceholder._components[0];
@@ -105,7 +108,7 @@ export class ReportDesigner extends ComponentDesigner {
         let job = this.designedComponent.toJSON();
         delete job.parameter;
         delete job.data;
-        let ob = Tools.objectToJson(job, undefined, false,80);
+        let ob = Tools.objectToJson(job, undefined, false, 80);
         if (this._codeChanger.parser.variables["reportdesign"]) {
             var s = this._codeChanger.parser.code.substring(0, this._codeChanger.parser.variables["reportdesign"].pos) +
                 " reportdesign = " + ob + this._codeChanger.parser.code.substring(this._codeChanger.parser.variables["reportdesign"].end);
@@ -122,35 +125,35 @@ export class ReportDesigner extends ComponentDesigner {
         //this._componentExplorer.update();
         var ret = super.createComponent(type, component, top, left, newParent, beforeComponent);
         //this.addVariables(ret,true);
-        
+
         this._componentExplorer.update();
         this.propertyChanged();
         this._updateInvisibleComponents();
         return ret;
     }
     //createVariable(type, scope, varvalue) {
-    createVariable(type, scope,component: Component):string {
+    createVariable(type, scope, component: Component): string {
         var name = component["reporttype"];
         if (this.nextComponentvariable[name] === undefined) {
             this.nextComponentvariable[name] = 0;
         }
         this.nextComponentvariable[name]++;
-        var sname=component["name"];
-        if(sname===undefined){
-            sname=name + this.nextComponentvariable[name];
-            if(Object.getOwnPropertyDescriptor(component["__proto__"],"name")){//write back the name
-                component["name"]=sname;
+        var sname = component["name"];
+        if (sname === undefined) {
+            sname = name + this.nextComponentvariable[name];
+            if (Object.getOwnPropertyDescriptor(component["__proto__"], "name")) {//write back the name
+                component["name"] = sname;
             }
         }
         this._codeEditor.variables.addVariable(sname, component, false);
         this.allComponents[name + this.nextComponentvariable[name]] = component;
         if (component["_components"]) {
             for (let x = 0; x < component["_components"].length; x++) {
-                this.createVariable(undefined,undefined,component["_components"][x]);
+                this.createVariable(undefined, undefined, component["_components"][x]);
             }
         }
         return sname;
-            
+
     }
     /**
       * @member {jassijs.ui.Component} - the designed component
@@ -163,7 +166,7 @@ export class ReportDesigner extends ComponentDesigner {
         this.nextComponentvariable = {};
         this.allComponents["this"] = component;
         this._codeEditor.variables.addVariable("this", component);
-        this.createVariable(undefined,undefined,<Container>component);
+        this.createVariable(undefined, undefined, <Container>component);
         this._propertyEditor.value = component;
         this._codeChanger.parser = this._propertyEditor.parser;
         super.designedComponent = component;

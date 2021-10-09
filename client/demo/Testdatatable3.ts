@@ -9,28 +9,22 @@ import { RText } from "jassijs_report/RText";
 var reportdesign = {
 	content: [
 		{
+			//table: {widths: ["auto",50,"auto","auto"]},
 			datatable: {
 				groups: [
 					{
-						header: ["${group1.name}","",""],
+						header: ["${group1.name}","\n",""],
 						expression: "city",
 						footer: ["","",""]
 					},
 					{
-						header: [
-							"${group2.name}",
-							"",
-							{text: [],editTogether: true}
-						],
+						header: ["${group2.name}","",""],
 						expression: "customer",
-						footer: [
-							"custfooter",
-							"",
-							{text: [],editTogether: true}
-						]
+						footer: ["custfooter","",""]
 					}
 				],
 				header: ["id","customer","city"],
+				footer: ["","",""],
 				dataforeach: "cust",
 				body: ["${cust.id}","${cust.customer}","${cust.city}"]
 			}

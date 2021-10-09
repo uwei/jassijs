@@ -11,7 +11,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ROList = void 0;
-    //not implemented: separator,markerColor, counter is counting also the next elements
+    //Limitations not implemented: separator,markerColor, counter is counting also the next elements
     let ROList = 
     //@$Property({name:"horizontal",hide:true})
     class ROList extends RComponent_1.RComponent {

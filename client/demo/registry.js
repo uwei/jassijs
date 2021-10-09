@@ -85,13 +85,13 @@ define("demo/registry",["require"], function(require) {
 		"demo.ReportInvoice": {}
 	},
 	"demo/Testdatatable.ts": {
-		"date": 1631970783946
+		"date": 1633811081159
 	},
 	"demo/Testdatatable2.ts": {
 		"date": 1631998782450
 	},
 	"demo/Testdatatable3.ts": {
-		"date": 1632339223841
+		"date": 1633811173829
 	},
 	"demo/ReportStyle.ts": {
 		"date": 1632525413937
@@ -103,7 +103,10 @@ define("demo/registry",["require"], function(require) {
 		"date": 1633550554873
 	},
 	"demo/TestImage.ts": {
-		"date": 1633780413825
+		"date": 1633792452228
+	},
+	"demo/Testdatatable1.ts": {
+		"date": 1633803357422
 	}
 }
  }

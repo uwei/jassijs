@@ -177,7 +177,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
                     return;
                 editor._draganddropper.enableDraggable(false);
                 let edi = tinymce.editors[_this._id];
-                $(edi.getContainer()).css("display", "flex");
+                if (edi)
+                    $(edi.getContainer()).css("display", "flex");
                 //$(this.domWrapper).draggable('disable');
             });
             //_this.value=sic;
@@ -197,6 +198,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
             });
             $(_this.dom).on('focus', function () {
                 _this.initIfNeeded(tinymce, config);
+                $('#' + _this.editor.inlineEditorPanel._id).find(".tox-tinymce-inline").css("display", "none");
                 if (HTMLPanel_1.oldeditor) {
                     $(HTMLPanel_1.oldeditor.getContainer()).css("display", "none");
                 }

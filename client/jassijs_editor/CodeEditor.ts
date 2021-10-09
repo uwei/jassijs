@@ -405,9 +405,12 @@ export class CodeEditor extends Panel {
                         }
                         var rep = new ReportDesign();
                         rep.design = Object.assign({}, ret.reportdesign);
-                        if(ret.value)
+                        if(ret.value&&rep.design.data===undefined)
                             rep.design.data = ret.value;
-                        if(ret.parameter)
+                         else if (ret.data&&rep.design.data===undefined)
+                             rep.design.data = ret.data;
+                            
+                        if(ret.parameter&&rep.design.parameter===undefined)
                             rep.design.parameter = ret.parameter;
                         _this._design["designedComponent"] = rep;
 

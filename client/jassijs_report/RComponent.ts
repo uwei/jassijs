@@ -5,6 +5,7 @@ import { Panel } from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { RStyle } from "jassijs_report/RStyle";
+//Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
 
 export class ReportComponentProperties extends UIComponentProperties {
 
@@ -413,6 +414,10 @@ export class RComponent extends Panel {
             ret.rowSpan = ob.rowSpan;
             delete ob.rowSpan;
         }
+        if (ob.height) {
+            ret.height = ob.height;
+            delete ob.height;
+        }
         if (ob.width) {
             ret.width = ob.width;
             delete ob.width;
@@ -498,6 +503,9 @@ export class RComponent extends Panel {
             ret.foreach = this.foreach;
         if (this.width !== undefined && !this._parent?.setChildWidth)
             ret.width = this.width;
+        if (this.height !== undefined && !this._parent?.setChildHeight)
+            ret.height = this.height;
+            
         if (this.bold !== undefined)
             ret.bold = this.bold;
         if (this.italics !== undefined)

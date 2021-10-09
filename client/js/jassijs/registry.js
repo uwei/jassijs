@@ -355,26 +355,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/template/TemplateDBDialog.ts": {
-		"date": 1622984492201,
-		"jassijs.template.TemplateDBDialogProperties": {
-			"@members": {
-				"dialogname": {
-					"$Property": [
-						{
-							"decription": "name of the dialog"
-						}
-					]
-				},
-				"dbobject": {
-					"$Property": [
-						{
-							"type": "classselector",
-							"service": "$DBObject"
-						}
-					]
-				}
-			}
-		},
+		"date": 1633815996831,
 		"jassijs.ui.TemplateDBDialog": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -383,7 +364,7 @@ define("jassijs/registry",["require"], function(require) {
 				"newFile": {
 					"$Action": [
 						{
-							"name": "New/DBDialog",
+							"name": "New/Report",
 							"isEnabled": "function"
 						}
 					]
@@ -1531,7 +1512,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1633460703445,
+		"date": 1633814248379,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{

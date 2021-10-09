@@ -12,6 +12,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
     var RComponent_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RComponent = exports.$ReportComponent = exports.ReportComponentProperties = void 0;
+    //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
     class ReportComponentProperties extends Component_1.UIComponentProperties {
     }
     exports.ReportComponentProperties = ReportComponentProperties;
@@ -302,6 +303,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.rowSpan = ob.rowSpan;
                 delete ob.rowSpan;
             }
+            if (ob.height) {
+                ret.height = ob.height;
+                delete ob.height;
+            }
             if (ob.width) {
                 ret.width = ob.width;
                 delete ob.width;
@@ -378,7 +383,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             return ret;
         }
         toJSON() {
-            var _a;
+            var _a, _b;
             var ret = {};
             if (this.colSpan !== undefined)
                 ret.colSpan = this.colSpan;
@@ -388,6 +393,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 ret.foreach = this.foreach;
             if (this.width !== undefined && !((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth))
                 ret.width = this.width;
+            if (this.height !== undefined && !((_b = this._parent) === null || _b === void 0 ? void 0 : _b.setChildHeight))
+                ret.height = this.height;
             if (this.bold !== undefined)
                 ret.bold = this.bold;
             if (this.italics !== undefined)

@@ -11,7 +11,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/ReportDesi
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RColumns = void 0;
-    //@$UIComponent({editableChildComponents:["this"]})
+    //Limitations: columnGap not implemented defaultStyle: {columnGap: 20}
     let RColumns = 
     //@$Property({ hideBaseClassProperties: true })
     class RColumns extends RComponent_1.RComponent {

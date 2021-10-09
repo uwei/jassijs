@@ -7,34 +7,27 @@ import { Kunde } from "de/remote/Kunde";
 import { RText } from "jassijs_report/RText";
 
 var reportdesign = {
-    content: [
-
-        {
-            table: {
-                body: [
-                    [{text:"vor"},"vor"],
-                    {
-                        foreach: "line in invoice.lines",
-                        do: 
-                             {
-                                foreach: "uline2 in line.ulines",
-                                dofirst:[{text:"groupheader",colSpan:2},"dd"],
-                                do: [
-                                    "${uline2.text}",
-                                    "${uline2.price}"
-                                ],
-                                dolast:["groupfooter","footer"],
-                            }
-                       
-                    },
-                    ["nach","nach"]
-                ]
-            }
-        },
-
-    ]
+	content: [
+		{
+			table: {
+				widths: ["auto","auto"],
+				body: [
+					["vor","vor"],
+					{
+						foreach: "line in invoice.lines",
+						do: {
+							foreach: "uline2 in line.ulines",
+							dofirst: [{text: "groupheader",colSpan: 2},"dd"],
+							do: ["${uline2.text}","${uline2.price}"],
+							dolast: ["groupfooter","footer"]
+						}
+					},
+					["nach","nach"]
+				]
+			}
+		}
+	]
 };
-
 
 
 

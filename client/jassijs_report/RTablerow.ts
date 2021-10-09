@@ -17,7 +17,8 @@ import { RTable } from "jassijs_report/RTable";
 export class RTablerow extends RComponent {
     reporttype: string = "tablerow";
     parent: RTable;
-
+    //foreach is defined
+    forEachDummy;
     /**
     * 
     * @param {object} properties - properties to init
@@ -33,19 +34,7 @@ export class RTablerow extends RComponent {
         $(this.dom).addClass("designerNoResizable");
     }
 
-    toJSON() {
-        var columns = [];
 
-        for (let x = 0; x < this._components.length; x++) {
-            if (this._components[x]["designDummyFor"])
-                continue;
-            //@ts-ignore
-            columns.push(this._components[x].toJSON());
-        }
-        //Object.assign(ret, this["otherProperties"]);
-
-        return columns;
-    }
     oncomponentAdded(callback) {
         this.addEvent("componentAdded", callback);
     }
@@ -58,14 +47,14 @@ export class RTablerow extends RComponent {
     getChildWidth(component: Component): any {
         return this._parent?.getChildWidth(component);
     }
-     setChildHeight(component: Component, value: any) {
+    setChildHeight(component: Component, value: any) {
         this._parent?.setChildHeight(component, value);
     }
     getChildHeight(component: Component): any {
         return this._parent?.getChildHeight(component);
     }
     private wrapComponent(component: RComponent) {
-        var _this=this;
+        var _this = this;
         if (component.domWrapper?.tagName === "TD")
             return;//allready wrapped
 
@@ -85,18 +74,22 @@ export class RTablerow extends RComponent {
         //$(component.dom).css("background-color","inherit");
         $(component.domWrapper).css("word-break", "break-all");
         $(component.domWrapper).css("display", "");
-        if(component.reporttype==="text"){
-            var rt=(<RText>component);
-            rt.customToolbarButtons["Table"]={
-                title:"<span class='mdi mdi-grid'><span>",
-                action:()=>{
-                    _this.parent.contextMenu.target=(<RText>component).dom.children[0];
-                    _this.parent.contextMenu.show();
+        if (component.reporttype === "text") {
+            var rt = (<RText>component);
+            rt.customToolbarButtons["Table"] = {
+                title: "<span class='mdi mdi-grid'><span>",
+                action: () => {
+                    var test=rt;
+                    rt.parent.parent.contextMenu.target = (<RText>component).dom.children[0];
+                    rt.parent.parent.contextMenu.show();
                 }
             }
-            
+
         }
+        $(component.dom).removeClass("designerNoResizable");
+        $(component.dom).addClass("designerNoResizableY");
         
+
     }
 
     /**
@@ -106,6 +99,8 @@ export class RTablerow extends RComponent {
     add(component) {
         if (component.addToParent)
             return component.addToParent(this);
+        if (this.forEachDummy)
+            return;
         this.wrapComponent(component);
         component.parent = this;
         super.add(component);
@@ -119,12 +114,11 @@ export class RTablerow extends RComponent {
                 component.width = 140 - $(this.dom).width();
             }
         }
-        $(component.dom).removeClass("designerNoResizable");
-        //$(component.dom).addClass("designerNoResizableY");
-        this.parent?.updateLayout(true);
-          /*  var test=component.height;
-            if(test)
-                component.height=test;*/
+        if (this.parent?.updateLayout)
+            this.parent?.updateLayout(true);
+        /*  var test=component.height;
+          if(test)
+              component.height=test;*/
 
     }
     /**
@@ -135,6 +129,8 @@ export class RTablerow extends RComponent {
     addBefore(component, before) {
         if (component.addToParent)
             return component.addToParent(this);
+        if (this.forEachDummy)
+            return;
         this.wrapComponent(component)
         component.parent = this;
         if (component["reporttype"] === "text") {
@@ -143,19 +139,44 @@ export class RTablerow extends RComponent {
         super.addBefore(component, before);
         // $(component.domWrapper).css("display", "table-cell");
         this.callEvent("componentAdded", component, this);
-        if (this._parent)
-            this._parent.addEmptyCellsIfNeeded(this);
-        this.parent?.updateLayout(true);
+        //if (this._parent)
+        //  this._parent.addEmptyCellsIfNeeded(this);
+        if (this.parent?.updateLayout)
+            this.parent?.updateLayout(true);
         /*var test=component.height;
         if(test)
             component.height=test;*/
     }
     fromJSON(columns: any[]): RTablerow {
         var ret = this;
+        if (columns["foreach"]) {
+            var dummy = new RText();
+            dummy.value = "foreach";
+            dummy.colSpan = 200;
+            this.add(dummy);
+            //this.domWrapper.appendChild($('<td colspan=500>foreach</td>')[0]);
+            ret.forEachDummy = columns;
+
+            return ret;
+        }
         for (let x = 0; x < columns.length; x++) {
             ret.add(ReportDesign.fromJSON(columns[x]));
         }
         return ret;
+    }
+    toJSON() {
+        var columns = [];
+        if (this.forEachDummy)
+            return this.forEachDummy;
+        for (let x = 0; x < this._components.length; x++) {
+            if (this._components[x]["designDummyFor"])
+                continue;
+            //@ts-ignore
+            columns.push(this._components[x].toJSON());
+        }
+        //Object.assign(ret, this["otherProperties"]);
+
+        return columns;
     }
 }
 

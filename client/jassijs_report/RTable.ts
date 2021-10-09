@@ -68,7 +68,7 @@ export class RTable extends RComponent {
         tr.parent = this;
         this.add(tr);
         $(this.dom).addClass("designerNoResizable");
-        this.initContextMenu();
+        this.initContextMenu(properties?.isdatatable);
         var _this = this;
         this.initKeys();
 
@@ -77,7 +77,7 @@ export class RTable extends RComponent {
         var _this = this;
         this.on("keydown", (evt) => {
             if (evt.key === "Tab") {//Tabelle erweitern?
-                if (evt.target?._this?.reporttype === "text") {
+                if (evt.target?._this?.reporttype === "text"&&this.reporttype==="table") {
                     var rt: RText = evt.target?._this;
                     if (rt._parent._components.indexOf(rt) === rt._parent._components.length - 2) {//last row
                         if (rt._parent.parent._components.indexOf(rt._parent) + 1 === rt._parent.parent._components.length) {//lastline
@@ -108,58 +108,60 @@ export class RTable extends RComponent {
         ret.row = this._components.indexOf(ret.tableRow);
         return ret;
     }
-    async initContextMenu() {//should not block creation
+    async initContextMenu(isDatatable) {//should not block creation
         var _this = this;
         this.contextMenu = new ContextMenu();
         this.contextMenu._isNotEditableInDesigner = true;
         $(this.contextMenu.menu.dom).css("font-family", "Roboto");
         $(this.contextMenu.menu.dom).css("font-size", "12px");
         this.contextMenu.menu._setDesignMode = (nothing) => { };//should net be editable in designer
-        var insertRowBefore = new MenuItem();
-        //@ts-ignore
-        insertRowBefore._setDesignMode = (nothing) => { };//should net be editable in designer
-        //@ts-ignore
-        insertRowBefore.items._setDesignMode = (nothing) => { };
-        insertRowBefore.text = "insert row before";
-        insertRowBefore.onclick((evt) => {
-            var info = _this.getInfoFromEvent(evt);
-            var newRow = new RTablerow();
-            if (_this.heights && Array.isArray(_this.heights))
-                _this.heights.splice(info.row, 0, "auto");
-            newRow.parent = _this;
-            _this.addBefore(newRow, _this._components[info.row]);
-            newRow.add(new RText());
+        if (isDatatable !== true) {
+            var insertRowBefore = new MenuItem();
             //@ts-ignore
-            newRow._setDesignMode(true);
-            _this.fillTableRow(newRow, info.tableRow._components.length);
-            _this._componentDesigner.editDialog(true);
-            _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
-        });
-        (<ContextMenu>this.contextMenu).menu.add(insertRowBefore);
-        var insertRowAfter = new MenuItem();
-        //@ts-ignore
-        insertRowAfter._setDesignMode = (nothing) => { };//should net be editable in designer
-        //@ts-ignore
-        insertRowAfter.items._setDesignMode = (nothing) => { };
-        insertRowAfter.text = "insert row after";
-        insertRowAfter.onclick((evt) => {
-            var info = _this.getInfoFromEvent(evt);
-            var newRow = new RTablerow();
-            if (_this.heights && Array.isArray(_this.heights))
-                _this.heights.splice(info.row + 1, 0, "auto");
-            newRow.parent = _this;
-            if (_this._components.length === info.row + 1)
-                _this.add(newRow);
-            else
-                _this.addBefore(newRow, _this._components[info.row + 1]);
-            newRow.add(new RText());
+            insertRowBefore._setDesignMode = (nothing) => { };//should net be editable in designer
             //@ts-ignore
-            newRow._setDesignMode(true);
-            _this.fillTableRow(newRow, info.tableRow._components.length);
-            _this._componentDesigner.editDialog(true);
-            _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
-        });
-        (<ContextMenu>this.contextMenu).menu.add(insertRowAfter);
+            insertRowBefore.items._setDesignMode = (nothing) => { };
+            insertRowBefore.text = "insert row before";
+            insertRowBefore.onclick((evt) => {
+                var info = _this.getInfoFromEvent(evt);
+                var newRow = new RTablerow();
+                if (_this.heights && Array.isArray(_this.heights))
+                    _this.heights.splice(info.row, 0, "auto");
+                newRow.parent = _this;
+                _this.addBefore(newRow, _this._components[info.row]);
+                newRow.add(new RText());
+                //@ts-ignore
+                newRow._setDesignMode(true);
+                _this.fillTableRow(newRow, info.tableRow._components.length);
+                _this._componentDesigner.editDialog(true);
+                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+            });
+            (<ContextMenu>this.contextMenu).menu.add(insertRowBefore);
+            var insertRowAfter = new MenuItem();
+            //@ts-ignore
+            insertRowAfter._setDesignMode = (nothing) => { };//should net be editable in designer
+            //@ts-ignore
+            insertRowAfter.items._setDesignMode = (nothing) => { };
+            insertRowAfter.text = "insert row after";
+            insertRowAfter.onclick((evt) => {
+                var info = _this.getInfoFromEvent(evt);
+                var newRow = new RTablerow();
+                if (_this.heights && Array.isArray(_this.heights))
+                    _this.heights.splice(info.row + 1, 0, "auto");
+                newRow.parent = _this;
+                if (_this._components.length === info.row + 1)
+                    _this.add(newRow);
+                else
+                    _this.addBefore(newRow, _this._components[info.row + 1]);
+                newRow.add(new RText());
+                //@ts-ignore
+                newRow._setDesignMode(true);
+                _this.fillTableRow(newRow, info.tableRow._components.length);
+                _this._componentDesigner.editDialog(true);
+                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+            });
+            (<ContextMenu>this.contextMenu).menu.add(insertRowAfter);
+        }
         var insertColumnBefore = new MenuItem();
         //@ts-ignore
         insertColumnBefore._setDesignMode = (nothing) => { };//should net be editable in designer
@@ -169,11 +171,12 @@ export class RTable extends RComponent {
         insertColumnBefore.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
             var newCell = new RText();
-            if (_this.widths)
+            if (_this.widths&&_this.widths.length>0)
                 _this.widths.splice(info.column, 0, "auto");
             _this.insertEmptyCells = false;
             for (var x = 0; x < _this._components.length; x++) {
-                (<RTablerow>_this._components[x]).addBefore(new RText(), (<RTablerow>_this._components[x])._components[info.column]);
+                if((<RTablerow>_this._components[x])._components.length>1)
+                    (<RTablerow>_this._components[x]).addBefore(new RText(), (<RTablerow>_this._components[x])._components[info.column]);
             }
             _this.insertEmptyCells = true;
             _this._componentDesigner.editDialog(true);
@@ -190,11 +193,12 @@ export class RTable extends RComponent {
         insertColumnAfter.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
             var newCell = new RText();
-            if (_this.widths)
+           if (_this.widths&&_this.widths.length>0)
                 _this.widths.splice(info.column + 1, 0, "auto");
             _this.insertEmptyCells = false;
             for (var x = 0; x < _this._components.length; x++) {
-                (<RTablerow>_this._components[x]).addBefore(new RText(), (<RTablerow>_this._components[x])._components[info.column + 1]);
+                 if((<RTablerow>_this._components[x])._components.length>1)
+                    (<RTablerow>_this._components[x]).addBefore(new RText(), (<RTablerow>_this._components[x])._components[info.column + 1]);
             }
             _this.insertEmptyCells = true;
             _this._componentDesigner.editDialog(true);
@@ -210,36 +214,39 @@ export class RTable extends RComponent {
         removeColumn.text = "delete column";
         removeColumn.onclick((evt) => {
             var info = _this.getInfoFromEvent(evt);
-            if (_this.widths)
+            if (_this.widths&&_this.widths.length>0)
                 _this.widths.slice(info.column, 0);
 
             for (var x = 0; x < _this._components.length; x++) {
                 var tr = (<RTablerow>_this._components[x]);
                 //@ts-ignore
-                if (tr._components[info.column]?.designDummyFor === undefined)
-                    tr.remove(tr._components[info.column], true);
+                if (tr._components[info.column]?.designDummyFor === undefined){
+                    if(tr._components.length>1)
+                        tr.remove(tr._components[info.column], true);
+                }
             }
             _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
 
         });
         (<ContextMenu>this.contextMenu).menu.add(removeColumn);
 
-        var removeRow = new MenuItem();
-        //@ts-ignore
-        removeRow._setDesignMode = (nothing) => { };//should net be editable in designer
-        //@ts-ignore
-        removeRow.items._setDesignMode = (nothing) => { };
-        removeRow.text = "delete row";
-        removeRow.onclick((evt) => {
-            var info = _this.getInfoFromEvent(evt);
-            if (_this.heights && Array.isArray(_this.heights))
-                _this.heights.slice(info.row, 0);
-            _this.remove(_this._components[info.row]);
-            _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
+        if (isDatatable !== true) {
+            var removeRow = new MenuItem();
+            //@ts-ignore
+            removeRow._setDesignMode = (nothing) => { };//should net be editable in designer
+            //@ts-ignore
+            removeRow.items._setDesignMode = (nothing) => { };
+            removeRow.text = "delete row";
+            removeRow.onclick((evt) => {
+                var info = _this.getInfoFromEvent(evt);
+                if (_this.heights && Array.isArray(_this.heights))
+                    _this.heights.slice(info.row, 0);
+                _this.remove(_this._components[info.row]);
+                _this._componentDesigner._propertyEditor.callEvent("propertyChanged", {});
 
-        });
-        (<ContextMenu>this.contextMenu).menu.add(removeRow);
-
+            });
+            (<ContextMenu>this.contextMenu).menu.add(removeRow);
+        }
         var copyMenu = new Button();
         $(copyMenu.dom).css("font-family", "Roboto");
         $(copyMenu.dom).css("font-size", "12px");
@@ -318,6 +325,8 @@ export class RTable extends RComponent {
         this.correctHideAfterSpan();
 
         var tab = this.toJSON();
+        if(tab.table===undefined)
+            tab.table=tab.datatable;
         if (tab.table.widths === undefined)
             tab.table.widths = [];
         while ((<RTablerow>this._components[0])._components.length > tab.table.widths.length) {
@@ -329,7 +338,7 @@ export class RTable extends RComponent {
             tab.table.widths.push("auto");//designer dummy
         }
 
-       
+
         for (var r = 0; r < this._components.length; r++) {
             var row = <RTablerow>this._components[r];
             for (var c = 0; c < row._components.length; c++) {
@@ -354,7 +363,7 @@ export class RTable extends RComponent {
                     v = this.layout?.fillColor(r, tab, c);
                 }
                 if (v === null)
-                    v = "white";
+                    v = "initial";
                 css.background_color = v;
                 cssid.push(v.replace("#", ""));
 
@@ -487,7 +496,7 @@ export class RTable extends RComponent {
             ReportDesign.fromJSON(value,this);
         }*/
 
-    private fillTableRow(row: RTablerow, count: number) {
+    protected fillTableRow(row: RTablerow, count: number) {
         if (!row._designMode || count - row._components.length < 1)
             return;
         for (var x = row._components.length; x < count; x++) {
@@ -634,11 +643,14 @@ export class RTable extends RComponent {
         }
         return undefined;
     }
-    fromJSON(obj: any): any {
+    fromJSON(obj: any, callingFromTable = undefined): any {
         var ob = obj.table;
         var ret = this;
-        ret.removeAll();
-        if (ob.body) {
+        if (ob)
+            ret.removeAll();
+        if (callingFromTable)
+            ob = callingFromTable;
+        if (ob?.body) {
             for (var x = 0; x < ob.body.length; x++) {
                 let obb = new RTablerow().fromJSON(ob.body[x]);
                 obb.parent = this;
@@ -651,15 +663,15 @@ export class RTable extends RComponent {
             delete ob.body;
 
         }
-        if (ob.headerRows) {
+        if (ob?.headerRows) {
             ret.headerRows = ob.headerRows;
             delete ob.headerRows;
         }
-        if (ob.widths) {
+        if (ob?.widths) {
             ret.widths = ob.widths;
             delete ob.widths;
         }
-        if (ob.heights) {
+        if (ob?.heights) {
             ret.heights = ob.heights;
             delete ob.heights;
         }
@@ -703,7 +715,7 @@ export class RTable extends RComponent {
         return ret;
     }
 
-    toJSON(): any {
+    toJSON(datatable = undefined): any {
         var r: any = {
 
         };
@@ -722,7 +734,8 @@ export class RTable extends RComponent {
         if (this.widths && this.widths.length > 0) {
             r.widths = this.widths;
             var len = (<RTablerow>this._components[0])._components.length;
-
+            if((<RTablerow>this._components[0])._components[len-1].designDummyFor!==undefined)
+                len--;
             for (var t = r.widths.length; t < len; t++) {
                 r.widths.push("auto");
             }
@@ -746,9 +759,13 @@ export class RTable extends RComponent {
                 r.heights.pop();
             }
         }
-        r.body = [];
-        for (var x = 0; x < this._components.length; x++) {
-            r.body.push((<RTablerow>this._components[x]).toJSON());
+        if (datatable === true) {
+
+        } else {
+            r.body = [];
+            for (var x = 0; x < this._components.length; x++) {
+                r.body.push((<RTablerow>this._components[x]).toJSON());
+            }
         }
 
         return ret;

@@ -7,82 +7,34 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/base/Actions", "jassijs/remote/Jassi", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer", "jassijs/ui/Property", "jassijs/remote/DBObject", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Actions_1, Jassi_1, OptionDialog_1, FileExplorer_1, Property_1, DBObject_1, Classes_1, Registry_1) {
+define(["require", "exports", "jassijs/base/Actions", "jassijs/remote/Jassi", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_1, Jassi_1, OptionDialog_1, FileExplorer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.TemplateDBDialog = exports.TemplateDBDialogProperties = void 0;
-    const code = `import { $Class } from "jassijs/remote/Jassi";
-import {Panel} from "jassijs/ui/Panel";
-import { $Property } from "jassijs/ui/Property";
-import { {{dbclassname}} } from "{{dbfilename}}";
-import { Databinder } from "jassijs/ui/Databinder";
-import { DBObjectView,  $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
-import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
+    exports.TemplateDBDialog = void 0;
+    const code = `var reportdesign = {
+	content: [
+    ]
+};
 
-type Me = {
-}&DBObjectViewMe
-
-@$DBObjectView({classname:"{{fulldbclassname}}"})
-@$Class("{{fullclassname}}")
-export class {{dialogname}} extends DBObjectView {
-    me: Me;
-    @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    value: {{dbclassname}};
-    constructor() {
-        super();
-        //this.me = {}; this is called in objectdialog
-        this.layout(this.me);
-    }
-    get title() {
-        return this.value === undefined ? "{{dialogname}}" : "{{dialogname}} " + this.value.id;
-    }
-    layout(me: Me) {
-    }
-}
-
-export async function test(){
-	var ret=new {{dialogname}};
-	
-	ret["value"]=<{{dbclassname}}>await {{dbclassname}}.findOne({ relations: ["*"] });
-	return ret;
-}`;
-    let TemplateDBDialogProperties = class TemplateDBDialogProperties {
+export function test() {
+    return { 
+        reportdesign,
+        //data:{},         //data
+       // parameter:{}      //parameter
     };
-    __decorate([
-        (0, Property_1.$Property)({ decription: "name of the dialog" }),
-        __metadata("design:type", String)
-    ], TemplateDBDialogProperties.prototype, "dialogname", void 0);
-    __decorate([
-        (0, Property_1.$Property)({ type: "classselector", service: "$DBObject" }),
-        __metadata("design:type", DBObject_1.DBObject)
-    ], TemplateDBDialogProperties.prototype, "dbobject", void 0);
-    TemplateDBDialogProperties = __decorate([
-        (0, Jassi_1.$Class)("jassijs.template.TemplateDBDialogProperties")
-    ], TemplateDBDialogProperties);
-    exports.TemplateDBDialogProperties = TemplateDBDialogProperties;
+}`;
     let TemplateDBDialog = class TemplateDBDialog {
         static async newFile(all) {
-            var props = new TemplateDBDialogProperties();
-            var res = await OptionDialog_1.OptionDialog.askProperties("Create new DBDialog:", props, ["ok", "cancel"], undefined, false);
+            var res = await OptionDialog_1.OptionDialog.show("Create new Report:", ["ok", "cancel"], undefined, false, "Report1");
             if (res.button === "ok") {
-                var scode = code.replaceAll("{{dialogname}}", props.dialogname);
-                var fulldbclassname = Classes_1.classes.getClassName(props.dbobject);
-                var shortdbclassname = fulldbclassname.split(".")[fulldbclassname.split(".").length - 1];
-                var cl = await Registry_1.default.getJSONData("$Class", fulldbclassname);
-                var dbfilename = cl[0].filename;
-                dbfilename = dbfilename.substring(0, dbfilename.length - 3);
-                scode = scode.replaceAll("{{fullclassname}}", (all[0].fullpath + "/" + props.dialogname).replaceAll("/", "."));
-                scode = scode.replaceAll("{{dbclassname}}", shortdbclassname);
-                scode = scode.replaceAll("{{fulldbclassname}}", fulldbclassname);
-                scode = scode.replaceAll("{{dbfilename}}", dbfilename);
-                FileExplorer_1.FileActions.newFile(all, props.dialogname + ".ts", scode, true);
+                FileExplorer_1.FileActions.newFile(all, res.text + ".ts", code, true);
             }
         }
     };
     TemplateDBDialog.code = code;
     __decorate([
         (0, Actions_1.$Action)({
-            name: "New/DBDialog",
+            name: "New/Report",
             isEnabled: function (all) {
                 return all[0].isDirectory();
             }

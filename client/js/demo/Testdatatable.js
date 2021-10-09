@@ -6,24 +6,22 @@ define(["require", "exports"], function (require, exports) {
         content: [
             {
                 table: {
+                    widths: ["auto", "auto"],
                     body: [
-                        [{ text: "vor" }, "vor"],
+                        ["vor", "vor"],
                         {
                             foreach: "line in invoice.lines",
                             do: {
                                 foreach: "uline2 in line.ulines",
                                 dofirst: [{ text: "groupheader", colSpan: 2 }, "dd"],
-                                do: [
-                                    "${uline2.text}",
-                                    "${uline2.price}"
-                                ],
-                                dolast: ["groupfooter", "footer"],
+                                do: ["${uline2.text}", "${uline2.price}"],
+                                dolast: ["groupfooter", "footer"]
                             }
                         },
                         ["nach", "nach"]
                     ]
                 }
-            },
+            }
         ]
     };
     async function test() {

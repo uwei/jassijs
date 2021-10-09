@@ -11,7 +11,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1633467231679,
+		"date": 1633818818816,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {
@@ -72,7 +72,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1633461097524,
+		"date": 1633814712029,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
