@@ -670,6 +670,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
             if (this.widths && this.widths.length > 0) {
                 r.widths = this.widths;
                 var len = this._components[0]._components.length;
+                //@ts-ignore
                 if (this._components[0]._components[len - 1].designDummyFor !== undefined)
                     len--;
                 for (var t = r.widths.length; t < len; t++) {

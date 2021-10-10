@@ -734,6 +734,7 @@ export class RTable extends RComponent {
         if (this.widths && this.widths.length > 0) {
             r.widths = this.widths;
             var len = (<RTablerow>this._components[0])._components.length;
+            //@ts-ignore
             if((<RTablerow>this._components[0])._components[len-1].designDummyFor!==undefined)
                 len--;
             for (var t = r.widths.length; t < len; t++) {

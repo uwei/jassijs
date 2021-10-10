@@ -1215,9 +1215,11 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                             }
                             var rep = new ReportDesign();
                             rep.design = Object.assign({}, ret.reportdesign);
-                            if (ret.value)
+                            if (ret.value && rep.design.data === undefined)
                                 rep.design.data = ret.value;
-                            if (ret.parameter)
+                            else if (ret.data && rep.design.data === undefined)
+                                rep.design.data = ret.data;
+                            if (ret.parameter && rep.design.parameter === undefined)
                                 rep.design.parameter = ret.parameter;
                             _this._design["designedComponent"] = rep;
                             /*   require(["jassijs_report/ReportDesign"], function() {
@@ -2261,6 +2263,9 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this._componentExplorer.value = component;
             $(this.dom).focus();
             this._updateInvisibleComponents();
+            while (this.inlineEditorPanel.dom.firstChild) {
+                this.inlineEditorPanel.dom.firstChild.remove();
+            }
             //var parser=new jassijs.ui.PropertyEditor.Parser();
             //parser.parse(_this.value);
         }
@@ -3047,7 +3052,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1633467231679,
+                "date": 1633818818816,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3108,7 +3113,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1633461097524,
+                "date": 1633814712029,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -3138,7 +3143,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1631040835383,
+                "date": 1633771925245,
                 "jassijs_editor.base.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -3761,8 +3766,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         parseProperties(node) {
             if (ts.isVariableDeclaration(node)) {
                 var name = node.name.getText();
-                var value = node.initializer.getText();
-                this.add(name, "_new_", value, node.parent.parent);
+                if (node.initializer !== undefined) {
+                    var value = node.initializer.getText();
+                    this.add(name, "_new_", value, node.parent.parent);
+                }
             }
             if ((ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) ||
                 ts.isCallExpression(node)) {
