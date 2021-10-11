@@ -61,6 +61,7 @@ export class Jassi {
     [key: string]: any;
     base: { [k: string]: any };
     public modules: { [key: string]: string };
+    public options:any;
     isServer: boolean = false;
     constructor() {
         //@ts-ignore

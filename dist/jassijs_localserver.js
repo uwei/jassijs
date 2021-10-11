@@ -872,11 +872,16 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             return test.length > 0;
         }
         async dirFiles(dir, extensions, ignore = []) {
+            var _a, _b;
             var ret = [];
             var all = await this.dirEntry(dir);
             for (let x = 0; x < all.length; x++) {
                 let fname = all[x].id;
                 var include = true;
+                if (((_b = (_a = Jassi_2.default === null || Jassi_2.default === void 0 ? void 0 : Jassi_2.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
+                    if (fname.endsWith("/__default.db"))
+                        continue;
+                }
                 if (extensions) {
                     include = false;
                     extensions.forEach((ent) => {

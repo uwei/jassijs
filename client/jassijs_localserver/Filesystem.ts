@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import jassijs,{ $Class } from "jassijs/remote/Jassi";
 import { Context } from "jassijs/remote/RemoteObject";
 import { Reloader } from "jassijs/util/Reloader";
 //@ts-ignore force load this class
@@ -44,6 +44,10 @@ export default class Filessystem {
         for (let x = 0; x < all.length; x++) {
             let fname = all[x].id;
             var include = true;
+            if(jassijs?.options?.Server?.filterSytemfilesInFilemap===true){
+                if(fname.endsWith("/__default.db"))
+                    continue;
+            }
             if (extensions) {
                 include = false;
                 extensions.forEach((ent) => {

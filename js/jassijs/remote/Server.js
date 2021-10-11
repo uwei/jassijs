@@ -33,10 +33,15 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         return ret;
     }
     async fillFilesInMapIfNeeded() {
+        var _a, _b, _c, _d, _e, _f;
         if (Server_1.filesInMap)
             return;
         var ret = {};
         for (var mod in Jassi_1.default.modules) {
+            if ((_b = (_a = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
+                if (((_d = (_c = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
+                    continue;
+            }
             if (Jassi_1.default.modules[mod].endsWith(".js") || Jassi_1.default.modules[mod].indexOf(".js?") > -1) {
                 let mapname = Jassi_1.default.modules[mod].split("?")[0] + ".map";
                 if (Jassi_1.default.modules[mod].indexOf(".js?") > -1)
@@ -46,10 +51,15 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                 var files = data.sources;
                 for (let x = 0; x < files.length; x++) {
                     let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                    ret[fname] = {
-                        id: x,
-                        modul: mod
-                    };
+                    if (((_f = (_e = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _e === void 0 ? void 0 : _e.Server) === null || _f === void 0 ? void 0 : _f.filterSytemfilesInFilemap) === true) {
+                        if (fname.endsWith("/modul.js") || fname.endsWith("/registry.js"))
+                            continue;
+                    }
+                    if (fname.endsWith)
+                        ret[fname] = {
+                            id: x,
+                            modul: mod
+                        };
                 }
             }
         }

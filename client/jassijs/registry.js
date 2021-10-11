@@ -97,7 +97,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985408207
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1631474062117,
+		"date": 1633970503544,
 		"jassijs.remote.Jassi": {}
 	},
 	"jassijs/remote/ObjectTransaction.ts": {
@@ -297,7 +297,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1631479245897,
+		"date": 1633977676461,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {

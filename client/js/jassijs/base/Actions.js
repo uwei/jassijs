@@ -37,6 +37,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi",
     exports.$ActionProvider = $ActionProvider;
     let Actions = class Actions {
         static async getActionsFor(vdata) {
+            var _a, _b, _c, _d;
             //var oclass = vdata[0].constructor;
             var ret = [];
             /*men.text = actions[x].name;
@@ -84,6 +85,18 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi",
                             call: ac.run
                         });
                     }
+                }
+            }
+            if ((_b = (_a = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterActions) {
+                var test = (_d = (_c = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterActions[sclass];
+                var filterd = [];
+                if (test) {
+                    for (var x = 0; x < ret.length; x++) {
+                        if (test.indexOf(ret[x].name) !== -1) {
+                            filterd.push(ret[x]);
+                        }
+                    }
+                    ret = filterd;
                 }
             }
             return ret;

@@ -13,7 +13,8 @@
 		"northwind": "northwind",
 		"de": "de",
 		"tests": "tests",
-		"jassijs_report": "jassijs_report"
+		"jassijs_report": "jassijs_report",
+		"demoreports": "demoreports"
 	},
 	"require": {
 		"paths": {

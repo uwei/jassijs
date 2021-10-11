@@ -1,5 +1,5 @@
 import registry from "jassijs/remote/Registry";
-import { $Class } from "jassijs/remote/Jassi";
+import jassijs,{ $Class } from "jassijs/remote/Jassi";
 import { FileNode } from "jassijs/remote/FileNode";
 import { classes } from "jassijs/remote/Classes";
 
@@ -101,6 +101,18 @@ export class Actions {
 						call: ac.run
 					})
 				}
+			}
+		}
+		if(jassijs?.options?.Server?.filterActions){
+			var test=jassijs?.options?.Server?.filterActions[sclass];
+			var filterd=[];
+			if(test){
+				for(var x=0;x<ret.length;x++){
+					if(test.indexOf(ret[x].name)!==-1){
+						filterd.push(ret[x]);
+					}
+				}
+				ret=filterd;
 			}
 		}
 		return ret;

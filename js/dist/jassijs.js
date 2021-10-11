@@ -184,7 +184,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985408207
             },
             "jassijs/remote/Jassi.ts": {
-                "date": 1631474062117,
+                "date": 1633970503544,
                 "jassijs.remote.Jassi": {}
             },
             "jassijs/remote/ObjectTransaction.ts": {
@@ -384,7 +384,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1631479245897,
+                "date": 1633977676461,
                 "jassijs.remote.Server": {}
             },
             "jassijs/remote/Settings.ts": {
@@ -2719,6 +2719,7 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
     exports.$ActionProvider = $ActionProvider;
     let Actions = class Actions {
         static async getActionsFor(vdata) {
+            var _a, _b, _c, _d;
             //var oclass = vdata[0].constructor;
             var ret = [];
             /*men.text = actions[x].name;
@@ -2766,6 +2767,18 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
                             call: ac.run
                         });
                     }
+                }
+            }
+            if ((_b = (_a = Jassi_3.default === null || Jassi_3.default === void 0 ? void 0 : Jassi_3.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterActions) {
+                var test = (_d = (_c = Jassi_3.default === null || Jassi_3.default === void 0 ? void 0 : Jassi_3.default.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterActions[sclass];
+                var filterd = [];
+                if (test) {
+                    for (var x = 0; x < ret.length; x++) {
+                        if (test.indexOf(ret[x].name) !== -1) {
+                            filterd.push(ret[x]);
+                        }
+                    }
+                    ret = filterd;
                 }
             }
             return ret;
@@ -6056,10 +6069,15 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
             return ret;
         }
         async fillFilesInMapIfNeeded() {
+            var _a, _b, _c, _d, _e, _f;
             if (Server_2.filesInMap)
                 return;
             var ret = {};
             for (var mod in Jassi_18.default.modules) {
+                if ((_b = (_a = Jassi_18.default === null || Jassi_18.default === void 0 ? void 0 : Jassi_18.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
+                    if (((_d = (_c = Jassi_18.default === null || Jassi_18.default === void 0 ? void 0 : Jassi_18.default.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
+                        continue;
+                }
                 if (Jassi_18.default.modules[mod].endsWith(".js") || Jassi_18.default.modules[mod].indexOf(".js?") > -1) {
                     let mapname = Jassi_18.default.modules[mod].split("?")[0] + ".map";
                     if (Jassi_18.default.modules[mod].indexOf(".js?") > -1)
@@ -6069,10 +6087,15 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
                     var files = data.sources;
                     for (let x = 0; x < files.length; x++) {
                         let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                        ret[fname] = {
-                            id: x,
-                            modul: mod
-                        };
+                        if (((_f = (_e = Jassi_18.default === null || Jassi_18.default === void 0 ? void 0 : Jassi_18.default.options) === null || _e === void 0 ? void 0 : _e.Server) === null || _f === void 0 ? void 0 : _f.filterSytemfilesInFilemap) === true) {
+                            if (fname.endsWith("/modul.js") || fname.endsWith("/registry.js"))
+                                continue;
+                        }
+                        if (fname.endsWith)
+                            ret[fname] = {
+                                id: x,
+                                modul: mod
+                            };
                     }
                 }
             }

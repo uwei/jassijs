@@ -33,6 +33,10 @@ export class Server extends RemoteObject {
             return;
         var ret = {};
         for (var mod in jassijs.modules) {
+            if(jassijs?.options?.Server?.filterModulInFilemap){
+                if(jassijs?.options?.Server?.filterModulInFilemap.indexOf(mod)===-1)
+                    continue;
+            }
             if (jassijs.modules[mod].endsWith(".js") || jassijs.modules[mod].indexOf(".js?") > -1) {
                 let mapname = jassijs.modules[mod].split("?")[0] + ".map";
                 if (jassijs.modules[mod].indexOf(".js?") > -1)
@@ -42,6 +46,11 @@ export class Server extends RemoteObject {
                 var files = data.sources;
                 for (let x = 0; x < files.length; x++) {
                     let fname = files[x].substring(files[x].indexOf(mod + "/"));
+                    if(jassijs?.options?.Server?.filterSytemfilesInFilemap===true){
+                        if(fname.endsWith("/modul.js")||fname.endsWith("/registry.js"))
+                            continue;
+                    }
+                    if(fname.endsWith)
                     ret[fname] = {
                         id: x,
                         modul: mod

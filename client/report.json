@@ -1,0 +1,31 @@
+{"demoreport": "jassijs_report",
+	"modules": {
+		"jassijs": "jassijs",
+		"jassijs_editor": "jassijs_editor",
+		"local": "local",
+		
+		"jassijs_report": "jassijs_report",
+		"demoreports": "http://localhost/jassijs/dist/demo.js?version=newest"
+	},
+	"require": {
+		"paths": {
+			"require.js": "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js"
+		}
+	},
+	"options":{
+		"Server":{
+			"filterModulInFilemap":["demoreports"],
+			"filterSytemfilesInFilemap":true,
+			"filterActions":{
+				"jassijs.remote.FileNode":[
+					"New/Report",
+					"New/Folder",
+					"Delete",
+					"Rename",
+					"Refresh",
+					"Download"
+				]
+			}
+		}
+	}
+}

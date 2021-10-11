@@ -20,6 +20,6 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
-  "include":["./jassijs_report","./demoreports"],
+  "include":["./jassijs_report"],
   
 }

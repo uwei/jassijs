@@ -1,0 +1,25 @@
+{
+  "compilerOptions": { 
+    "baseUrl": "./jassijs_report",
+    "allowJs": true,
+    //"checkJs":false,
+    "target": "es2017",
+    "module": "amd",
+    "moduleResolution": "node",
+    "lib": [
+      "es2016", 
+      "dom",
+      "es5"
+    ],
+    "inlineSources": true,
+    "outFile": ".././dist/demoreports.js",
+    "rootDir": "./",
+
+     "sourceMap": true,
+
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+  },
+  "include":["./demoreports"],
+  
+}

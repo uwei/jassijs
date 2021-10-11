@@ -2,14 +2,12 @@ let runScript = document.currentScript.getAttribute("data-run");
 let configFile = document.currentScript.getAttribute("data-config");
 let runFunction = document.currentScript.getAttribute("data-run-function");
 function registerServiceWorker() {
-
     var http = new XMLHttpRequest();
     http.open('HEAD', 'service-worker.js', false);
     http.send();
     if (http.status === 401 || http.status === 404) {
         return;
     }
-
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js');
         navigator.serviceWorker.addEventListener("message", (evt) => {
@@ -48,17 +46,19 @@ async function loadScript(url) {
         window.document.head.appendChild(js);
     });
 }
-
 let cssFiles = [];
 async function run() {
+    debugger;
     var smodules = await loadText(configFile);
     var requireconfig = {};
     let modules;
+    let options;
     if (smodules) {
         let data = JSON.parse(smodules);
         if (data.require)
             requireconfig = data.require;
         modules = data.modules;
+        options = data.options;
         //load requirejs
         if (!window.requirejs) {
             let path;
@@ -70,9 +70,9 @@ async function run() {
             await loadScript(path);
         }
         requirejs.onResourceLoad = function (context, map, depArray, o) {
-            for(var x=0;x<depArray.length;x++){
-                if(depArray[x].name.indexOf("util/Parser")>-1){
-                   x=x;
+            for (var x = 0; x < depArray.length; x++) {
+                if (depArray[x].name.indexOf("util/Parser") > -1) {
+                    x = x;
                 }
             }
         };
@@ -156,19 +156,19 @@ async function run() {
                         if (beforestart && beforestart.autostart) {
                             beforestart.autostart().then(() => {
                                 resolve(undefined);
-                            })
-                        } else {
+                            });
+                        }
+                        else {
                             resolve(undefined);
                         }
                     });
-                })
+                });
                 if (beforestartlib[x] === "jassijs/jassi") {
                     cssFiles.forEach((css) => {
                         //    jassijs.myRequire(css);//needed for Login Dialog
                     });
                 }
             }
-
         }
         loadBeforestart().then(() => {
             require(startlib, function (jassijs, ...others) {
@@ -177,26 +177,20 @@ async function run() {
                 });
                 //this.myRequire("jassijs/jassijs.css");
                 jassijs.default.modules = modules;
-                if (runFunction&& window[runFunction]) {
+                jassijs.default.options = options;
+                if (runFunction && window[runFunction]) {
                     window[runFunction]();
                 }
                 if (runScript) {
                     require([runScript], function () {
                     });
                 }
-
-
             });
         });
-
     });
 }
-
-
 registerServiceWorker();
 run();
-
-
 /*
  window.onerror =function(errorMsg, url, lineNumber, column, errorObj) {
     var stack=(errorObj===null||errorObj===undefined)?"":errorObj.stack;
@@ -211,3 +205,4 @@ run();
     return true;
 }*/
 //# sourceMappingURL=jassijs.js.map
+//# sourceMappingURL=jassi.js.map
