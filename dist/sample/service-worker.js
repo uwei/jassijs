@@ -1,24 +1,10 @@
-var RUNTIME = 'runtime54';
+var RUNTIME = 'runtime55';
 
-var PRECACHE = 'precache-v1';
+
 var tempFiles = {};
 // A list of local resources we always want to be cached.
-var PRECACHE_URLS = [
-  /*'index.html',
-  './', // Alias for index.html
-  'styles.css',
-  '../../styles/main.css',
-  'demo.js'*/
-];
 
-// The install handler takes care of precaching the resources we always need.
-self.addEventListener('install', event => {
-  event.waitUntil(
-    cache.open(PRECACHE)
-      .then(cache => cache.addAll(PRECACHE_URLS))
-      .then(self.skipWaiting())
-  );
-});
+
 var db;
 async function getDB() {
 
@@ -143,23 +129,29 @@ async function handleEvent(event) {
       if (event.request.url.indexOf("?") > 0) {
         s = event.request.url + "&lastcachedate=" + dat;
       }
-     // if (dat !== undefined&&dat !== null) {
-        let networkResponse = await fetch(s, { cache: "no-store" });
-        //networkResponse = await refetchIfNeeded(s, event, networkResponse);
-        if (networkResponse.headers.get("X-Custom-UpToDate") === "true") {
-          return response;//server says the cache is upToDate
-        } else {
-          //server has new data
-          cache.put(event.request, networkResponse.clone());
-          return networkResponse;
-        }
+      // if (dat !== undefined&&dat !== null) {
+      let networkResponse = await fetch(s, { cache: "no-store" });
+      //networkResponse = await refetchIfNeeded(s, event, networkResponse);
+      if (networkResponse.headers.get("X-Custom-UpToDate") === "true") {
+        return response;//server says the cache is upToDate
+      } else {
+        //server has new data
+        cache.put(event.request, networkResponse.clone());
+        return networkResponse;
+      }
 
-     // } else
-       // return response;
+      // } else
+      // return response;
     }
-    //external sites
-    if (response)
-      return response;
+    if (response) {
+      //external sites
+      if (event.request.url.endsWith("?version=newest")) {//here we deliver the cache only if filesize in cache is the same
+        let test = await fetch(event.request, { cache: "no-store",method:"HEAD" });
+        if(test.headers.get("content-length")===response.headers.get("content-length"))
+          return response;
+      } else
+          return response;
+    }
     //not in cache so cache now
     let networkResponse = await fetch(event.request, { cache: "no-store" });
     if (networkResponse.status === 401) {//now we display an Logindialog and pause the request
@@ -184,6 +176,6 @@ self.addEventListener('fetch', event => {
   var pr = handleEvent(event);
 
   event.respondWith(pr);
-//  event.waitUntil(pr);
+  //  event.waitUntil(pr);
 });//self.addEventListener('fetch'
 
