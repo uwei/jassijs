@@ -666,7 +666,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RTable.ts": {
-		"date": 1633813845210,
+		"date": 1633821987257,
 		"jassijs_report.RTable": {
 			"$ReportComponent": [
 				{
@@ -805,7 +805,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RImageEditor.ts": {
-		"date": 1633780176533,
+		"date": 1633966720817,
 		"jassi_report/RImagePropertyEditor": {
 			"$PropertyEditor": [
 				[

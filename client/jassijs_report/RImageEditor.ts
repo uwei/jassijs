@@ -94,6 +94,7 @@ export class RImageEditor extends Editor {
             var report = RComponent.findReport(image);
             if (report?.images)
                 this.dialog.items = report.images;
+            
             $(this.dialog.__dom).dialog({ height: "400", width: "400",
                 close: () => {
                     if (report)
@@ -172,6 +173,11 @@ export class RImageChooser extends Panel {
             me.remove.text = "";
             me.remove.icon = "mdi mdi-delete-forever-outline";
             me.itile.bind(me.repeater1.design.databinder, "name");
+            me.itile.onchange(function(event){
+                var ob = me.itile._databinder.value;
+                ob.name=me.itile.value;
+                _this.items = _this.items;
+            });
             me.image1.bind(me.repeater1.design.databinder, "data");
             me.remove.onclick(function (event) {
                 var ob = me.itile._databinder.value;
