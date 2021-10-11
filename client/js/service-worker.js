@@ -38,7 +38,7 @@ function getMimeType(filename) {
 }
 // The activate handler takes care of cleaning up old caches.
 self.addEventListener('activate', event => {
-    const currentCaches = [PRECACHE, RUNTIME];
+    const currentCaches = [RUNTIME];
     event.waitUntil(caches.keys().then(cacheNames => {
         return cacheNames.filter(cacheName => !currentCaches.includes(cacheName));
     }).then(cachesToDelete => {
