@@ -20,7 +20,6 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
     let PDFViewer = class PDFViewer extends Panel_1.Panel {
         constructor() {
             super();
-            this._page = 1;
             //super.init(undefined);//$('<canvas type="pdfviewer"></canvas>')[0]);
             this.pdfjsLib = pdfjs_1.default;
             this.pdfDoc = null;
@@ -36,7 +35,8 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
                 overflow: "auto"
             });
             me.toolbar = new BoxPanel_1.BoxPanel();
-            me.canavasPanel = new Canavas();
+            $(me.toolbar.dom).css("position", "fixed");
+            me.mainpanel = new Panel_1.Panel();
             me.plus = new Button_1.Button();
             me.minus = new Button_1.Button();
             var _this = this;
@@ -44,86 +44,70 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
             //me.canavasPanel.height="90%";
             //	me.canavasPanel.width="90%";
             //	var cn=$('<canvas type="pdfviewer"></canvas>')[0]
-            this.canvas = me.canavasPanel.dom;
             //this.dom.appendChild(cn);
             //this.canvas = cn;
-            this.ctx = this.canvas.getContext('2d');
+            // this.ctx = this.canvas.getContext('2d');
             this.add(me.toolbar);
-            this.add(me.canavasPanel);
+            var placeholder = new Panel_1.Panel();
+            placeholder.height = 20;
+            this.add(placeholder);
+            this.add(me.mainpanel);
             me.toolbar.add(me.plus);
             me.toolbar.horizontal = true;
             me.toolbar.add(me.download);
             me.toolbar.add(me.minus);
             me.plus.text = "+";
             me.plus.onclick(function (event) {
-                _this.scale = _this.scale * 1.4;
-                _this.renderPage(_this._page);
+                _this.scale = _this.scale * 1.25;
+                _this.updatePages();
+                //_this.renderPage(_this._page);
             });
+            me.plus.width = 25;
             me.minus.text = "-";
             me.minus.onclick(function (event) {
-                _this.scale = _this.scale / 1.4;
-                _this.renderPage(_this._page);
+                _this.value = _this.value;
+                return;
+                _this.scale = _this.scale / 1.25;
+                _this.updatePages();
             });
-            me.download.text = "download";
+            me.download.icon = "mdi mdi-folder-open-outline";
+            // me.download.text = "download";
             me.download.onclick(function (event) {
                 _this.report.open();
             });
+            // me.download.width = 75;
         }
-        renderPage(num) {
+        renderPages(num) {
             // The workerSrc property shall be specified.
             this.pageRendering = true;
             // Using promise to fetch the page
             var _this = this;
             this.pdfDoc.getPage(num).then(function (page) {
                 var viewport = page.getViewport({ scale: _this.scale });
-                _this.canvas.height = viewport.height;
-                _this.canvas.width = viewport.width;
-                //   _this.width=viewport.width;
-                //   _this.height=viewport.height;
+                var can = _this.canavasPanels[page._pageIndex].dom;
+                can.height = viewport.height;
+                can.width = viewport.width;
                 // Render PDF page into canvas context
                 var renderContext = {
-                    canvasContext: _this.ctx,
+                    canvasContext: can.getContext('2d'),
                     viewport: viewport
                 };
                 var renderTask = page.render(renderContext);
                 // Wait for rendering to finish
-                renderTask.promise.then(function () {
-                    _this.pageRendering = false;
-                    if (_this.pageNumPending !== null) {
-                        // New page rendering is pending
-                        _this.renderPage(_this.pageNumPending);
-                        _this.pageNumPending = null;
-                    }
-                });
+                /*  renderTask.promise.then(function () {
+                      _this.pageRendering = false;
+                      if (_this.pageNumPending !== null) {
+                          // New page rendering is pending
+                          _this.renderPage(_this.pageNumPending);
+                          _this.pageNumPending = null;
+                      }
+                  });*/
             });
         }
-        queueRenderPage(num) {
-            if (this.pageRendering) {
-                this.pageNumPending = num;
+        updatePages() {
+            for (var x = 0; x < this.me.mainpanel._components.length; x++) {
+                this.renderPages(x + 1);
             }
-            else {
-                this.renderPage(num);
-            }
-        }
-        /**
-         * Displays previous page.
-         */
-        onPrevPage() {
-            if (this.pageNum <= 1) {
-                return;
-            }
-            this.pageNum--;
-            this.queueRenderPage(this.pageNum);
-        }
-        /**
-         * Displays next page.
-         */
-        onNextPage() {
-            if (this.pageNum >= this.pdfDoc.numPages) {
-                return;
-            }
-            this.pageNum++;
-            this.queueRenderPage(this.pageNum);
         }
         /**
          * @member {data} - the caption of the button
@@ -135,23 +119,22 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
             var _this = this;
             loadingTask.promise.then(function (pdf) {
                 _this.pdfDoc = pdf;
-                _this.queueRenderPage(_this._page);
+                //_this.queueRenderPage(_this._page);
+                _this.me.mainpanel.removeAll();
+                _this.canavasPanels = []; //:Canavas[];
+                for (var x = 0; x < pdf.numPages; x++) {
+                    var cp = new Canavas();
+                    _this.me.mainpanel.add(cp);
+                    _this.canavasPanels.push(cp);
+                    // _this.renderPages(x + 1);
+                }
+                _this.updatePages();
             }, function (e) {
                 var g = e;
             });
         }
         get value() {
             return this._data;
-            //return  $(this.checkbox).prop("checked");
-        }
-        /**
-         * @member {number} - the current page number
-         */
-        set page(value) {
-            this._page = value;
-        }
-        get page() {
-            return this._page;
             //return  $(this.checkbox).prop("checked");
         }
     };

@@ -1850,7 +1850,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             $(this.inlineEditorPanel.dom).css("display", "inline");
             $(this.inlineEditorPanel.domWrapper).css("display", "inline");
             $(this.inlineEditorPanel.dom).addClass("InlineEditorPanel");
-            box.height = 40;
+            //   box.height=40;
             box.add(this._designToolbar);
             box.add(this.inlineEditorPanel);
             this.add(box);
@@ -3113,7 +3113,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1633814712029,
+                "date": 1634056870783,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {

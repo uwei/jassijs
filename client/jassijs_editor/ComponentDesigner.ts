@@ -165,7 +165,7 @@ inlineEditorPanel:Panel;
         $(this.inlineEditorPanel.domWrapper).css("display","inline");
         $(this.inlineEditorPanel.dom).addClass("InlineEditorPanel");
 
-        box.height=40;
+     //   box.height=40;
         box.add(this._designToolbar);
         box.add(this.inlineEditorPanel);
         this.add(box);

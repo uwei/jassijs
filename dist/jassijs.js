@@ -89,7 +89,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.ActionNode": {}
             },
             "jassijs/base/Actions.ts": {
-                "date": 1627916690613,
+                "date": 1633978961677,
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/DatabaseSchema.ts": {
@@ -379,7 +379,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1633977676461,
+                "date": 1633979242522,
                 "jassijs.remote.Server": {}
             },
             "jassijs/remote/Settings.ts": {

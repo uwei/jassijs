@@ -18,7 +18,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.PDFReport": {}
 	},
 	"jassijs_report/PDFViewer.ts": {
-		"date": 1623863773400,
+		"date": 1634057193736,
 		"jassijs_report.PDFViewer": {}
 	},
 	"jassijs_report/RColumns.ts": {
@@ -805,7 +805,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RImageEditor.ts": {
-		"date": 1633966720817,
+		"date": 1634053391301,
 		"jassi_report/RImagePropertyEditor": {
 			"$PropertyEditor": [
 				[

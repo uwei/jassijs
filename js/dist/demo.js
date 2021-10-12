@@ -88,6 +88,59 @@ define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassi
     }
     exports.test = test;
 });
+define("demo/LargeReport", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var reportdesign = {
+        content: [
+            { text: " 1dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 2dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 3dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 4dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 5dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 6dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 7dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 8dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 9dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 1dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 2dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 3dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 4dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 5dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 6dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 7dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 8dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 9dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 0dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 1dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 2dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 3dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 4dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 5dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 6dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 7dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 8dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 9dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " 0dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' },
+            { text: " dasf asdfa sdf as df as df as df asd f asd f asd f asd f asd f asf", pageBreak: 'after' }
+        ]
+    };
+    function test() {
+        return {
+            reportdesign,
+            //data:{},         //data
+            // parameter:{}      //parameter
+        };
+    }
+    exports.test = test;
+});
 define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Registry"], function (require, exports, Server_1, Reloader_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1478,6 +1531,9 @@ define("demo/registry", ["require"], function (require) {
             },
             "demo/Testdatatable1.ts": {
                 "date": 1633803357422
+            },
+            "demo/LargeReport.ts": {
+                "date": 1634056141590
             }
         }
     };

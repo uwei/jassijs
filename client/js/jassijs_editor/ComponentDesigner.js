@@ -108,7 +108,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             $(this.inlineEditorPanel.dom).css("display", "inline");
             $(this.inlineEditorPanel.domWrapper).css("display", "inline");
             $(this.inlineEditorPanel.dom).addClass("InlineEditorPanel");
-            box.height = 40;
+            //   box.height=40;
             box.add(this._designToolbar);
             box.add(this.inlineEditorPanel);
             this.add(box);
