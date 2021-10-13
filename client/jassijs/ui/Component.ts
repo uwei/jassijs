@@ -315,7 +315,8 @@ export class Component {
         return $(this.__dom).is(":hidden");
     }
     set hidden(value: boolean) {
-        if (value) {
+         $(this.__dom).css('visibility', value?"hidden":"visible");
+        /*if (value) {
             this["old_display"] = $(this.__dom).css('display');
             $(this.__dom).css('display', 'none');
         } else if ($(this.__dom).css('display') === "none") {
@@ -323,7 +324,7 @@ export class Component {
                 $(this.__dom).css('display', this["old_display"]);
             else
                 $(this.__dom).removeAttr('display');
-        }
+        }*/
     }
 
     /**

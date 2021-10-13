@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Jassi_1, Runlater_1, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_1, Panel_1, Windows_1, DockingContainer_1, VariablePanel_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.SimpleReportEditor = void 0;
+    exports.test = exports.SimpleReportEditor = exports.SimpleReportEditorProperties = void 0;
     class SimpleCodeEditor extends Panel_1.Panel {
         constructor(codePanel) {
             super();
@@ -232,7 +232,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], SimpleCodeEditor.prototype, "line", null);
+    class SimpleReportEditorProperties extends Panel_1.PanelCreateProperties {
+    }
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Boolean)
+    ], SimpleReportEditorProperties.prototype, "startUpWithPdfView", void 0);
+    exports.SimpleReportEditorProperties = SimpleReportEditorProperties;
     let SimpleReportEditor = class SimpleReportEditor extends Panel_1.Panel {
+        //value:string;
         constructor(properties) {
             super(properties);
             var _this = this;
@@ -242,7 +250,22 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
             this.codeEditor.width = "100%";
             this.codeEditor.height = "100%";
             this.reportPanel = new ReportDesign_1.ReportDesign();
-            this.reportDesigner = new SimpleReportDesigner_1.SimpleReportDesigner();
+            var layout = undefined;
+            if ((properties === null || properties === void 0 ? void 0 : properties.view) === "horizontal") {
+                layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload","tabOverlapAllowance":0,"reorderOnTabMenuClick":true,"tabControlOffset":10},"dimensions":{"borderWidth":5,"borderGrabWidth":15,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":100,"content":[{"type":"stack","width":40.28745644599303,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":40.28745644599303,"content":[{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":16.558441558441558,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":66.88311688311688,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":16.558441558441558,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+            }
+            else if ((properties === null || properties === void 0 ? void 0 : properties.view) === "vertical") {
+                layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload","tabOverlapAllowance":0,"reorderOnTabMenuClick":true,"tabControlOffset":10},"dimensions":{"borderWidth":5,"borderGrabWidth":15,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":100,"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":80.57491289198606,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":50,"content":[{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","width":80.57491289198606,"height":50,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true}]}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":16.558441558441558,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":66.88311688311688,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":16.558441558441558,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+            }
+            else if ((properties === null || properties === void 0 ? void 0 : properties.view) === "withoutcode") {
+                layout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload","tabOverlapAllowance":0,"reorderOnTabMenuClick":true,"tabControlOffset":10},"dimensions":{"borderWidth":5,"borderGrabWidth":15,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":100,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":100,"width":80.57491289198606,"content":[{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":16.558441558441558,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":66.88311688311688,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":16.558441558441558,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
+            }
+            else {
+                layout = properties === null || properties === void 0 ? void 0 : properties.view;
+            }
+            this.reportDesigner = new SimpleReportDesigner_1.SimpleReportDesigner(layout);
+            if (properties === null || properties === void 0 ? void 0 : properties.oncodechange)
+                this.reportDesigner.oncodechanged(properties === null || properties === void 0 ? void 0 : properties.oncodechange);
             var compileTask = undefined;
             this.codeEditor.variables.addVariable("this", this.reportPanel);
             this.codeEditor.evalCode = async function () {
@@ -268,6 +291,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
             this.codeEditor._main.add(this.codeEditor._design, "Design", "design");
             this.reportDesigner.codeEditor = this.codeEditor;
             this.reportDesigner.designedComponent = this.reportPanel;
+            if (properties === null || properties === void 0 ? void 0 : properties.startUpWithPdfView) {
+                this.reportDesigner.editDialog(false);
+            }
         }
         get reportDesign() {
             var _a;
@@ -277,11 +303,23 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
             this.reportPanel = new ReportDesign_1.ReportDesign();
             this.reportPanel.design = design;
             this.reportDesigner.designedComponent = this.reportPanel;
+            this.reportDesigner.propertyChanged(); //get Code back
+        }
+        /**
+       * @member {string} - the code
+       */
+        set value(value) {
+            this.acePanel.value = value;
+            //@ts-ignore
+            this.codeEditor.evalCode();
+        }
+        get value() {
+            return this.acePanel.value;
         }
     };
     SimpleReportEditor = __decorate([
         (0, Jassi_1.$Class)("jassi_report.SimpleReportEditor"),
-        __metadata("design:paramtypes", [Panel_1.PanelCreateProperties])
+        __metadata("design:paramtypes", [SimpleReportEditorProperties])
     ], SimpleReportEditor);
     exports.SimpleReportEditor = SimpleReportEditor;
     function test() {
@@ -308,12 +346,20 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
                 nachname: "Meier"
             }
         };
-        var editor = new SimpleReportEditor();
-        editor.reportDesign = reportdesign;
+        var editor = new SimpleReportEditor({
+            startUpWithPdfView: false,
+            view: "horizontal",
+            oncodechange: (text) => {
+                console.log("code changed" + text);
+            }
+        });
+        //  editor.reportDesign = reportdesign;
         editor.width = "100%";
         editor.height = "100%";
-        editor.value = "aHallo Herr {{nachname}}";
-        Windows_1.default.add(editor, "Testtt");
+        editor.value = JSON.stringify(reportdesign);
+        setTimeout(() => {
+            Windows_1.default.add(editor, "Testtt");
+        }, 10);
         //return editor;
     }
     exports.test = test;

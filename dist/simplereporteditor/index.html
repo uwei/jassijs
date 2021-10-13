@@ -54,12 +54,18 @@ and open the template in the editor.
                 nachname: "Meier"
             }
         };
-    var editor=new SimpleReportEditor({ id:"editor" });
+    var editor=new SimpleReportEditor({ 
+		id:"editor",
+		view:"horizontal"
+        //startUpWithPdfView:false,
+        //oncodechange:(text)=>{
+        //    console.log("code changed"+text);
+        //}
+		
+	});
     editor.reportDesign=reportdesign;
     
-    //windows.default.add(editor, "Testtt");
-    //editor.width = "100%";
-    //editor.height = "100%";
+
         });
     }
 </script>

@@ -263,16 +263,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
             return $(this.__dom).is(":hidden");
         }
         set hidden(value) {
-            if (value) {
+            $(this.__dom).css('visibility', value ? "hidden" : "visible");
+            /*if (value) {
                 this["old_display"] = $(this.__dom).css('display');
                 $(this.__dom).css('display', 'none');
-            }
-            else if ($(this.__dom).css('display') === "none") {
+            } else if ($(this.__dom).css('display') === "none") {
                 if (this["old_display"] !== undefined)
                     $(this.__dom).css('display', this["old_display"]);
                 else
                     $(this.__dom).removeAttr('display');
-            }
+            }*/
         }
         /**
          * @member {string|number} - the height of the component

@@ -488,7 +488,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Button.ts": {
-		"date": 1624301518140,
+		"date": 1634154790470,
 		"jassijs.ui.Button": {
 			"$UIComponent": [
 				{
@@ -561,7 +561,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1623176352614,
+		"date": 1634165143900,
 		"jassijs.ui.Component": {
 			"@members": {
 				"onfocus": {

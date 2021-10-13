@@ -77,13 +77,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 this._codeView.add(this._codeToolbar);
                 this._codeToolbar["horizontal"] = true;
                 this._codeToolbar.height = "30";
-                var save = new Button_1.Button();
-                save.tooltip = "Save(Ctrl+S)";
-                save.icon = "mdi mdi-content-save mdi-18px";
-                save.onclick(function () {
-                    _this.save();
-                });
-                this._codeToolbar.add(save);
                 var run = new Button_1.Button();
                 run.icon = "mdi mdi-car-hatchback mdi-18px";
                 run.tooltip = "Run(F4)";
@@ -91,6 +84,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                     _this.evalCode();
                 });
                 this._codeToolbar.add(run);
+                var save = new Button_1.Button();
+                save.tooltip = "Save(Ctrl+S)";
+                save.icon = "mdi mdi-content-save mdi-18px";
+                save.onclick(function () {
+                    _this.save();
+                });
+                this._codeToolbar.add(save);
                 var undo = new Button_1.Button();
                 undo.icon = "mdi mdi-undo mdi-18px";
                 undo.tooltip = "Undo (Strg+Z)";

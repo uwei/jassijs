@@ -55,7 +55,7 @@ export class ComponentDesigner extends Panel {
     undoButton: Button;
     editButton: Button;
     removeButton: Button;
-inlineEditorPanel:Panel;
+    inlineEditorPanel: Panel;
 
     constructor() {
         super();
@@ -93,7 +93,16 @@ inlineEditorPanel:Panel;
     _initDesign() {
         var _this = this;
         this._designToolbar = new Panel();
-       this._designPlaceholder = new Panel();
+        this._designPlaceholder = new Panel();
+        this.editButton = new Button();
+        this.editButton.icon = "mdi mdi-run mdi-18px";
+        this.editButton.tooltip = "Test Dialog";
+        this.editButton.onclick(function () {
+            _this.editDialog(!_this.editMode);
+
+        });
+        this._designToolbar.add(this.editButton);
+
         this.saveButton = new Button();
         this.saveButton.tooltip = "Save(Ctrl+S)";
         this.saveButton.icon = "mdi mdi-content-save mdi-18px";
@@ -102,13 +111,13 @@ inlineEditorPanel:Panel;
         });
         this._designToolbar.add(this.saveButton);
 
-        this.runButton = new Button();
-        this.runButton.icon = "mdi mdi-car-hatchback mdi-18px";
-        this.runButton.tooltip = "Run(F4)";
-        this.runButton.onclick(function () {
-            _this.evalCode();
-        });
-        this._designToolbar.add(this.runButton);
+        /*  this.runButton = new Button();
+          this.runButton.icon = "mdi mdi-car-hatchback mdi-18px";
+          this.runButton.tooltip = "Run(F4)";
+          this.runButton.onclick(function () {
+              _this.evalCode();
+          });
+          this._designToolbar.add(this.runButton);*/
 
         this.undoButton = new Button();
         this.undoButton.icon = "mdi mdi-undo mdi-18px";
@@ -127,15 +136,7 @@ inlineEditorPanel:Panel;
          this._designToolbar.add(test);*/
 
 
-        this.editButton = new Button();
-        this.editButton.icon = "mdi mdi-run mdi-18px";
-        this.editButton.tooltip = "Test Dialog";
-        this.editButton.onclick(function () {
-            _this.editDialog(!_this.editMode);
-            _this.editButton.toggle(!_this.editMode);
 
-        });
-        this._designToolbar.add(this.editButton);
 
         this.lassoButton = new Button();
         this.lassoButton.icon = "mdi mdi-lasso mdi-18px";
@@ -155,17 +156,17 @@ inlineEditorPanel:Panel;
             _this.removeComponent();
         });
         this._designToolbar.add(this.removeButton);
-        var box=new BoxPanel();
-        box.horizontal=true;
+        var box = new BoxPanel();
+        box.horizontal = true;
 
-        this.inlineEditorPanel=new Panel();
-        this.inlineEditorPanel._id="i"+this.inlineEditorPanel._id;
-        this.inlineEditorPanel.dom.setAttribute("id",this.inlineEditorPanel._id);
-        $(this.inlineEditorPanel.dom).css("display","inline");
-        $(this.inlineEditorPanel.domWrapper).css("display","inline");
+        this.inlineEditorPanel = new Panel();
+        this.inlineEditorPanel._id = "i" + this.inlineEditorPanel._id;
+        this.inlineEditorPanel.dom.setAttribute("id", this.inlineEditorPanel._id);
+        $(this.inlineEditorPanel.dom).css("display", "inline");
+        $(this.inlineEditorPanel.domWrapper).css("display", "inline");
         $(this.inlineEditorPanel.dom).addClass("InlineEditorPanel");
 
-     //   box.height=40;
+        //   box.height=40;
         box.add(this._designToolbar);
         box.add(this.inlineEditorPanel);
         this.add(box);
@@ -297,8 +298,13 @@ inlineEditorPanel:Panel;
      */
     editDialog(enable) {
 
+
         var _this = this;
         this.editMode = enable;
+        this.editButton.toggle(!this.editMode);
+        this.undoButton.hidden = !enable;
+        this.lassoButton.hidden=!enable;
+        this.removeButton.hidden=!enable;
         var component = this._designPlaceholder._components[0];
         //switch designmode
         var comps = $(component.dom).find(".jcomponent");
@@ -485,7 +491,7 @@ inlineEditorPanel:Panel;
         var varvalue = new (classes.getClass(type));
         var varname = _this.createVariable(type, scope, varvalue);
         if (this._propertyEditor.codeEditor !== undefined) {
-            
+
             var newName = _this._codeEditor.getVariableFromObject(newParent);
             var before;
             if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") {//Designdummy atEnd
@@ -551,7 +557,7 @@ inlineEditorPanel:Panel;
         return varvalue;
     }
     createVariable(type, scope, varvalue) {
-        if(this._propertyEditor.codeEditor===undefined)
+        if (this._propertyEditor.codeEditor === undefined)
             return;
         var varname = this._propertyEditor.addVariableInCode(type, scope);
 
@@ -596,18 +602,18 @@ inlineEditorPanel:Panel;
         this._designPlaceholder.add(component);
         // 
         this._propertyEditor.updateParser();
-        this.editDialog(true);
+        this.editDialog(this.editMode === undefined ? true : this.editMode);
 
         this._componentExplorer.value = component;
 
         $(this.dom).focus();
- 
+
 
         this._updateInvisibleComponents();
         while (this.inlineEditorPanel.dom.firstChild) {
-           this.inlineEditorPanel.dom.firstChild.remove();
+            this.inlineEditorPanel.dom.firstChild.remove();
         }
-     
+
         //var parser=new jassijs.ui.PropertyEditor.Parser();
         //parser.parse(_this.value);
     }

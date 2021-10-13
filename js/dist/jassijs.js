@@ -575,7 +575,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Button.ts": {
-                "date": 1624301518140,
+                "date": 1634154790470,
                 "jassijs.ui.Button": {
                     "$UIComponent": [
                         {
@@ -648,7 +648,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1623176352614,
+                "date": 1634165143900,
                 "jassijs.ui.Component": {
                     "@members": {
                         "onfocus": {
@@ -7679,9 +7679,6 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Jassi", "jass
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Button = void 0;
     let Button = class Button extends Component_3.Component {
-        /* get dom(){
-             return this.dom;
-         }*/
         constructor() {
             super();
             super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
@@ -7776,6 +7773,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Jassi", "jass
         var pan = new Panel();
         var but = new Button();
         but.text = "Hallo";
+        but.styleToggle = true;
         but.icon = "mdi mdi-car"; //"mdi mdi-car";//"res/red.jpg";
         but.onclick(() => alert(1));
         //alert(but.icon);
@@ -8326,16 +8324,16 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
             return $(this.__dom).is(":hidden");
         }
         set hidden(value) {
-            if (value) {
+            $(this.__dom).css('visibility', value ? "hidden" : "visible");
+            /*if (value) {
                 this["old_display"] = $(this.__dom).css('display');
                 $(this.__dom).css('display', 'none');
-            }
-            else if ($(this.__dom).css('display') === "none") {
+            } else if ($(this.__dom).css('display') === "none") {
                 if (this["old_display"] !== undefined)
                     $(this.__dom).css('display', this["old_display"]);
                 else
                     $(this.__dom).removeAttr('display');
-            }
+            }*/
         }
         /**
          * @member {string|number} - the height of the component

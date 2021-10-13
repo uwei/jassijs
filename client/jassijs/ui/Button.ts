@@ -7,21 +7,19 @@ import { Property, $Property } from "jassijs/ui/Property";
 @$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } })
 @$Class("jassijs.ui.Button")
 export class Button extends Component {
-    /* get dom(){
-         return this.dom;
-     }*/
+   
     constructor() {
         super();
         super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
     }
-
-
+  
     /**
     * register an event if the button is clicked
     * @param {function} handler - the function that is called on change
     */
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler, removeOldHandler: boolean = true) {
+       
         if(removeOldHandler){
             this.off("click");
         }
@@ -87,6 +85,7 @@ export async function test() {
     var pan = new Panel();
     var but = new Button();
     but.text = "Hallo";
+    but.styleToggle=true;
     but.icon ="mdi mdi-car"; //"mdi mdi-car";//"res/red.jpg";
     but.onclick(()=>alert(1));
     //alert(but.icon);

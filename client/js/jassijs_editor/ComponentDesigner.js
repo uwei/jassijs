@@ -47,6 +47,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             var _this = this;
             this._designToolbar = new Panel_1.Panel();
             this._designPlaceholder = new Panel_1.Panel();
+            this.editButton = new Button_1.Button();
+            this.editButton.icon = "mdi mdi-run mdi-18px";
+            this.editButton.tooltip = "Test Dialog";
+            this.editButton.onclick(function () {
+                _this.editDialog(!_this.editMode);
+            });
+            this._designToolbar.add(this.editButton);
             this.saveButton = new Button_1.Button();
             this.saveButton.tooltip = "Save(Ctrl+S)";
             this.saveButton.icon = "mdi mdi-content-save mdi-18px";
@@ -54,13 +61,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 _this.save();
             });
             this._designToolbar.add(this.saveButton);
-            this.runButton = new Button_1.Button();
-            this.runButton.icon = "mdi mdi-car-hatchback mdi-18px";
-            this.runButton.tooltip = "Run(F4)";
-            this.runButton.onclick(function () {
-                _this.evalCode();
-            });
-            this._designToolbar.add(this.runButton);
+            /*  this.runButton = new Button();
+              this.runButton.icon = "mdi mdi-car-hatchback mdi-18px";
+              this.runButton.tooltip = "Run(F4)";
+              this.runButton.onclick(function () {
+                  _this.evalCode();
+              });
+              this._designToolbar.add(this.runButton);*/
             this.undoButton = new Button_1.Button();
             this.undoButton.icon = "mdi mdi-undo mdi-18px";
             this.undoButton.tooltip = "Undo (Strg+Z)";
@@ -75,14 +82,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                          //var kk=_this._codeView.layout;
              });
              this._designToolbar.add(test);*/
-            this.editButton = new Button_1.Button();
-            this.editButton.icon = "mdi mdi-run mdi-18px";
-            this.editButton.tooltip = "Test Dialog";
-            this.editButton.onclick(function () {
-                _this.editDialog(!_this.editMode);
-                _this.editButton.toggle(!_this.editMode);
-            });
-            this._designToolbar.add(this.editButton);
             this.lassoButton = new Button_1.Button();
             this.lassoButton.icon = "mdi mdi-lasso mdi-18px";
             this.lassoButton.tooltip = "Select rubberband";
@@ -232,6 +231,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         editDialog(enable) {
             var _this = this;
             this.editMode = enable;
+            this.editButton.toggle(!this.editMode);
+            this.undoButton.hidden = !enable;
+            this.lassoButton.hidden = !enable;
+            this.removeButton.hidden = !enable;
             var component = this._designPlaceholder._components[0];
             //switch designmode
             var comps = $(component.dom).find(".jcomponent");
@@ -517,7 +520,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             this._designPlaceholder.add(component);
             // 
             this._propertyEditor.updateParser();
-            this.editDialog(true);
+            this.editDialog(this.editMode === undefined ? true : this.editMode);
             this._componentExplorer.value = component;
             $(this.dom).focus();
             this._updateInvisibleComponents();

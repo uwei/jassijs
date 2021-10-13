@@ -949,13 +949,6 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                 this._codeView.add(this._codeToolbar);
                 this._codeToolbar["horizontal"] = true;
                 this._codeToolbar.height = "30";
-                var save = new Button_1.Button();
-                save.tooltip = "Save(Ctrl+S)";
-                save.icon = "mdi mdi-content-save mdi-18px";
-                save.onclick(function () {
-                    _this.save();
-                });
-                this._codeToolbar.add(save);
                 var run = new Button_1.Button();
                 run.icon = "mdi mdi-car-hatchback mdi-18px";
                 run.tooltip = "Run(F4)";
@@ -963,6 +956,13 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                     _this.evalCode();
                 });
                 this._codeToolbar.add(run);
+                var save = new Button_1.Button();
+                save.tooltip = "Save(Ctrl+S)";
+                save.icon = "mdi mdi-content-save mdi-18px";
+                save.onclick(function () {
+                    _this.save();
+                });
+                this._codeToolbar.add(save);
                 var undo = new Button_1.Button();
                 undo.icon = "mdi mdi-undo mdi-18px";
                 undo.tooltip = "Undo (Strg+Z)";
@@ -1789,6 +1789,13 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             var _this = this;
             this._designToolbar = new Panel_4.Panel();
             this._designPlaceholder = new Panel_4.Panel();
+            this.editButton = new Button_3.Button();
+            this.editButton.icon = "mdi mdi-run mdi-18px";
+            this.editButton.tooltip = "Test Dialog";
+            this.editButton.onclick(function () {
+                _this.editDialog(!_this.editMode);
+            });
+            this._designToolbar.add(this.editButton);
             this.saveButton = new Button_3.Button();
             this.saveButton.tooltip = "Save(Ctrl+S)";
             this.saveButton.icon = "mdi mdi-content-save mdi-18px";
@@ -1796,13 +1803,13 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 _this.save();
             });
             this._designToolbar.add(this.saveButton);
-            this.runButton = new Button_3.Button();
-            this.runButton.icon = "mdi mdi-car-hatchback mdi-18px";
-            this.runButton.tooltip = "Run(F4)";
-            this.runButton.onclick(function () {
-                _this.evalCode();
-            });
-            this._designToolbar.add(this.runButton);
+            /*  this.runButton = new Button();
+              this.runButton.icon = "mdi mdi-car-hatchback mdi-18px";
+              this.runButton.tooltip = "Run(F4)";
+              this.runButton.onclick(function () {
+                  _this.evalCode();
+              });
+              this._designToolbar.add(this.runButton);*/
             this.undoButton = new Button_3.Button();
             this.undoButton.icon = "mdi mdi-undo mdi-18px";
             this.undoButton.tooltip = "Undo (Strg+Z)";
@@ -1817,14 +1824,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                          //var kk=_this._codeView.layout;
              });
              this._designToolbar.add(test);*/
-            this.editButton = new Button_3.Button();
-            this.editButton.icon = "mdi mdi-run mdi-18px";
-            this.editButton.tooltip = "Test Dialog";
-            this.editButton.onclick(function () {
-                _this.editDialog(!_this.editMode);
-                _this.editButton.toggle(!_this.editMode);
-            });
-            this._designToolbar.add(this.editButton);
             this.lassoButton = new Button_3.Button();
             this.lassoButton.icon = "mdi mdi-lasso mdi-18px";
             this.lassoButton.tooltip = "Select rubberband";
@@ -1974,6 +1973,10 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
         editDialog(enable) {
             var _this = this;
             this.editMode = enable;
+            this.editButton.toggle(!this.editMode);
+            this.undoButton.hidden = !enable;
+            this.lassoButton.hidden = !enable;
+            this.removeButton.hidden = !enable;
             var component = this._designPlaceholder._components[0];
             //switch designmode
             var comps = $(component.dom).find(".jcomponent");
@@ -2259,7 +2262,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this._designPlaceholder.add(component);
             // 
             this._propertyEditor.updateParser();
-            this.editDialog(true);
+            this.editDialog(this.editMode === undefined ? true : this.editMode);
             this._componentExplorer.value = component;
             $(this.dom).focus();
             this._updateInvisibleComponents();
@@ -3052,7 +3055,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1633818818816,
+                "date": 1634160357652,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3113,7 +3116,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1634056870783,
+                "date": 1634161401376,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {

@@ -52,7 +52,7 @@ export class CodeEditor extends Panel {
     _design: Panel;
     editMode: boolean;
     __evalToCursorReached: boolean;
- 
+
 
     private _line: number;
     constructor(properties: { codePanel?: CodePanel, hideToolbar?: boolean } = undefined) {
@@ -67,10 +67,10 @@ export class CodeEditor extends Panel {
         if (properties?.codePanel) {
             this._codePanel = properties.codePanel;
         } else {
-            CodePanel.typescript=typescript;
+            CodePanel.typescript = typescript;
             if (sett === "ace" || (mobil && (sett === "aceOnBrowser" || sett === undefined))) {
                 this._codePanel = new AcePanel();
-                
+
             } else {
                 this._codePanel = new MonacoPanel();
                 // this._codePanel = new AcePanel(); 
@@ -105,13 +105,6 @@ export class CodeEditor extends Panel {
             this._codeView.add(this._codeToolbar);
             this._codeToolbar["horizontal"] = true;
             this._codeToolbar.height = "30";
-            var save = new Button();
-            save.tooltip = "Save(Ctrl+S)";
-            save.icon = "mdi mdi-content-save mdi-18px";
-            save.onclick(function () {
-                _this.save();
-            });
-            this._codeToolbar.add(save);
 
             var run = new Button();
             run.icon = "mdi mdi-car-hatchback mdi-18px";
@@ -120,6 +113,16 @@ export class CodeEditor extends Panel {
                 _this.evalCode();
             });
             this._codeToolbar.add(run);
+
+
+            var save = new Button();
+            save.tooltip = "Save(Ctrl+S)";
+            save.icon = "mdi mdi-content-save mdi-18px";
+            save.onclick(function () {
+                _this.save();
+            });
+            this._codeToolbar.add(save);
+
 
             var undo = new Button();
             undo.icon = "mdi mdi-undo mdi-18px";
@@ -377,21 +380,21 @@ export class CodeEditor extends Panel {
 
                 _this.variables.updateCache();
                 if (ret instanceof Component && ret["reporttype"] === undefined) {
-                    require(["jassijs_editor/ComponentDesigner","jassijs_editor/util/Parser"], function () {
+                    require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
                         var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
                         var Parser = classes.getClass("jassijs_editor.base.Parser");
                         if (!((_this._design) instanceof ComponentDesigner)) {
                             _this._design = new ComponentDesigner();
-                            
+
                             _this._main.add(_this._design, "Design", "design");
                             _this._design["codeEditor"] = _this;
                             //@ts-ignore
-                            _this._design.connectParser(new Parser() );
+                            _this._design.connectParser(new Parser());
                         }
                         _this._design["designedComponent"] = ret;
                     });
                 } else if (ret["reportdesign"] !== undefined) {
-                    require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign","jassijs_editor/util/Parser"], function () {
+                    require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign", "jassijs_editor/util/Parser"], function () {
                         var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
                         var ReportDesign = classes.getClass("jassijs_report.ReportDesign");
                         var Parser = classes.getClass("jassijs_editor.base.Parser");
@@ -399,18 +402,18 @@ export class CodeEditor extends Panel {
                             _this._design = new ReportDesigner();
                             _this._main.add(_this._design, "Design", "design");
                             _this._design["codeEditor"] = _this;
-                             //@ts-ignore
-                             _this._design.connectParser(new Parser() );
-                            
+                            //@ts-ignore
+                            _this._design.connectParser(new Parser());
+
                         }
                         var rep = new ReportDesign();
                         rep.design = Object.assign({}, ret.reportdesign);
-                        if(ret.value&&rep.design.data===undefined)
+                        if (ret.value && rep.design.data === undefined)
                             rep.design.data = ret.value;
-                         else if (ret.data&&rep.design.data===undefined)
-                             rep.design.data = ret.data;
-                            
-                        if(ret.parameter&&rep.design.parameter===undefined)
+                        else if (ret.data && rep.design.data === undefined)
+                            rep.design.data = ret.data;
+
+                        if (ret.parameter && rep.design.parameter === undefined)
                             rep.design.parameter = ret.parameter;
                         _this._design["designedComponent"] = rep;
 
@@ -589,6 +592,7 @@ export class CodeEditor extends Panel {
     set value(value) {
         this._codePanel.file = this._file;
         this._codePanel.value = value;
+
     }
     get value() {
         return this._codePanel.value;
