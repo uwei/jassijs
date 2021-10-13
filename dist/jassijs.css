@@ -21,9 +21,6 @@ body .lm_content{
 	border:1px solid #ccc;
 } 
 
-.invisibleAfterColspan{
-	display:none;
-}
 
 br[data-mce-bogus="1"] {
   display:none;
@@ -134,3 +131,4 @@ https://stackoverflow.com/questions/12539006/tooltips-for-mobile-browsers
   }
 
 }*/
+
