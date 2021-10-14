@@ -55,6 +55,7 @@ export default function JassiServer(properties: JassiConnectionProperties={}, ex
     }
     app.use(staticfiles);
     app.use(rawbody);
+    app.set('etag', 'strong');  
    // app.use(installGetRequest);
     app.use(passport.initialize());
      

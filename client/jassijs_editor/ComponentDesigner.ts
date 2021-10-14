@@ -142,7 +142,7 @@ export class ComponentDesigner extends Panel {
         this.lassoButton.icon = "mdi mdi-lasso mdi-18px";
         this.lassoButton.tooltip = "Select rubberband";
         this.lassoButton.onclick(function () {
-            var val = this.lassoButton.toggle();
+            var val = _this.lassoButton.toggle();
             _this._resizer.setLassoMode(val);
             _this._draganddropper.enableDraggable(!val);
             //_this._draganddropper.activateDragging(!val);

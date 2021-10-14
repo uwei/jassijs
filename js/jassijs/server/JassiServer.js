@@ -35,6 +35,7 @@ function JassiServer(properties = {}, expressApp = undefined) {
     }
     app.use(Filesystem_1.staticfiles);
     app.use(RawBody_1.rawbody);
+    app.set('etag', 'strong');
     // app.use(installGetRequest);
     app.use(passport.initialize());
     app.use(cookieParser());

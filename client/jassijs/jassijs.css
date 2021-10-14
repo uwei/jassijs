@@ -65,6 +65,10 @@ br[data-mce-bogus="1"] {
             padding:initial;
             font-size:11px;
 }
+
+.propertyeditorheader {border: 1px solid black}
+.propertyeditorrow {border: 1px solid black}
+
 .input{
   color:red;
 }

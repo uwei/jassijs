@@ -611,7 +611,10 @@ export function staticfiles(req, res, next) {
             res.send("");
         } else {
             res.sendFile(resolve(sfile), {
-                headers: { 'X-Custom-Date': dat.toString() }
+                
+                headers: { 'X-Custom-Date': dat.toString(),
+                    'Last-Modified': fs.statSync(sfile).mtime.toUTCString()
+                }
             });
         }
     } else {
