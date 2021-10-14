@@ -1833,7 +1833,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.lassoButton.icon = "mdi mdi-lasso mdi-18px";
             this.lassoButton.tooltip = "Select rubberband";
             this.lassoButton.onclick(function () {
-                var val = this.lassoButton.toggle();
+                var val = _this.lassoButton.toggle();
                 _this._resizer.setLassoMode(val);
                 _this._draganddropper.enableDraggable(!val);
                 //_this._draganddropper.activateDragging(!val);
@@ -3121,7 +3121,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1634161401376,
+                "date": 1634240147068,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {

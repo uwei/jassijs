@@ -1,4 +1,4 @@
-var RUNTIME = 'runtime55';
+var RUNTIME = 'runtime56';
 
 
 var tempFiles = {};
@@ -100,7 +100,7 @@ async function handleEvent(event) {
     }
     return res;
   }
-  let cache = await caches.open(RUNTIME)
+  //let cache = await caches.open(RUNTIME)
   var filename = event.request.url;
   if (tempFiles[filename]) {//we deliver tempFiles
     console.log("deliver " + filename + tempFiles[filename].substring(0, 50));
@@ -114,7 +114,7 @@ async function handleEvent(event) {
     return new Response(content, {
       headers: { "Content-Type": getMimeType(filename) }
     });
-  } else {
+  } /*else {
     let response = await cache.match(event.request);
     var fromCache = event.request.headers.get("X-Custom-FromCache");
     //we needn't ask the server if a newer version exists 
@@ -151,20 +151,20 @@ async function handleEvent(event) {
           return response;
       } else
           return response;
-    }
-    //not in cache so cache now
-    let networkResponse = await fetch(event.request, { cache: "no-store" });
-    if (networkResponse.status === 401) {//now we display an Logindialog and pause the request
-      self.clients.get(event.clientId).then((client) => {
-        client.postMessage(`wait for login`);
-        console.log("wait for login");
-      });
-    }
-
-    cache.put(event.request, networkResponse.clone());
-    //console.log("cache+ " + event.request.url);
-    return networkResponse;
+    }*/
+  //not in cache so cache now
+  let networkResponse = await fetch(event.request);
+  if (networkResponse.status === 401) {//now we display an Logindialog and pause the request
+    self.clients.get(event.clientId).then((client) => {
+      client.postMessage(`wait for login`);
+      console.log("wait for login");
+    });
   }
+
+  //cache.put(event.request, networkResponse.clone());
+  //console.log("cache+ " + event.request.url);
+  return networkResponse;
+
 }
 // The fetch handler serves responses for same-origin resources from a cache.
 // If no response is found, it populates the runtime cache with the response

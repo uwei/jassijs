@@ -1,4 +1,4 @@
-var RUNTIME = 'runtime55';
+var RUNTIME = 'runtime56';
 var tempFiles = {};
 // A list of local resources we always want to be cached.
 var db;
@@ -87,7 +87,7 @@ async function handleEvent(event) {
         }
         return res;
     }
-    let cache = await caches.open(RUNTIME);
+    //let cache = await caches.open(RUNTIME)
     var filename = event.request.url;
     if (tempFiles[filename]) { //we deliver tempFiles
         console.log("deliver " + filename + tempFiles[filename].substring(0, 50));
@@ -101,58 +101,55 @@ async function handleEvent(event) {
         return new Response(content, {
             headers: { "Content-Type": getMimeType(filename) }
         });
-    }
-    else {
-        let response = await cache.match(event.request);
-        var fromCache = event.request.headers.get("X-Custom-FromCache");
-        //we needn't ask the server if a newer version exists 
-        if (response && fromCache !== undefined && fromCache !== null &&
-            fromCache === response.headers.get("X-Custom-Date")) {
+    } /*else {
+      let response = await cache.match(event.request);
+      var fromCache = event.request.headers.get("X-Custom-FromCache");
+      //we needn't ask the server if a newer version exists
+      if (response && fromCache !== undefined && fromCache !== null &&
+        fromCache === response.headers.get("X-Custom-Date")) {
+        return response;
+      }
+      if (event.request.url.startsWith(self.location.origin) && response) {
+        //we check if the cache is still current
+        var dat = response.headers.get("X-Custom-Date");
+        var s = event.request.url + "?lastcachedate=" + dat;
+        if (event.request.url.indexOf("?") > 0) {
+          s = event.request.url + "&lastcachedate=" + dat;
+        }
+        // if (dat !== undefined&&dat !== null) {
+        let networkResponse = await fetch(s, { cache: "no-store" });
+        //networkResponse = await refetchIfNeeded(s, event, networkResponse);
+        if (networkResponse.headers.get("X-Custom-UpToDate") === "true") {
+          return response;//server says the cache is upToDate
+        } else {
+          //server has new data
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        }
+  
+        // } else
+        // return response;
+      }
+      if (response) {
+        //external sites
+        if (event.request.url.endsWith("?version=newest")) {//here we deliver the cache only if filesize in cache is the same
+          let test = await fetch(event.request, { cache: "no-store",method:"HEAD" });
+          if(test.headers.get("content-length")===response.headers.get("content-length"))
             return response;
-        }
-        if (event.request.url.startsWith(self.location.origin) && response) {
-            //we check if the cache is still current
-            var dat = response.headers.get("X-Custom-Date");
-            var s = event.request.url + "?lastcachedate=" + dat;
-            if (event.request.url.indexOf("?") > 0) {
-                s = event.request.url + "&lastcachedate=" + dat;
-            }
-            // if (dat !== undefined&&dat !== null) {
-            let networkResponse = await fetch(s, { cache: "no-store" });
-            //networkResponse = await refetchIfNeeded(s, event, networkResponse);
-            if (networkResponse.headers.get("X-Custom-UpToDate") === "true") {
-                return response; //server says the cache is upToDate
-            }
-            else {
-                //server has new data
-                cache.put(event.request, networkResponse.clone());
-                return networkResponse;
-            }
-            // } else
-            // return response;
-        }
-        if (response) {
-            //external sites
-            if (event.request.url.endsWith("?version=newest")) { //here we deliver the cache only if filesize in cache is the same
-                let test = await fetch(event.request, { cache: "no-store", method: "HEAD" });
-                if (test.headers.get("content-length") === response.headers.get("content-length"))
-                    return response;
-            }
-            else
-                return response;
-        }
-        //not in cache so cache now
-        let networkResponse = await fetch(event.request, { cache: "no-store" });
-        if (networkResponse.status === 401) { //now we display an Logindialog and pause the request
-            self.clients.get(event.clientId).then((client) => {
-                client.postMessage(`wait for login`);
-                console.log("wait for login");
-            });
-        }
-        cache.put(event.request, networkResponse.clone());
-        //console.log("cache+ " + event.request.url);
-        return networkResponse;
+        } else
+            return response;
+      }*/
+    //not in cache so cache now
+    let networkResponse = await fetch(event.request);
+    if (networkResponse.status === 401) { //now we display an Logindialog and pause the request
+        self.clients.get(event.clientId).then((client) => {
+            client.postMessage(`wait for login`);
+            console.log("wait for login");
+        });
     }
+    //cache.put(event.request, networkResponse.clone());
+    //console.log("cache+ " + event.request.url);
+    return networkResponse;
 }
 // The fetch handler serves responses for same-origin resources from a cache.
 // If no response is found, it populates the runtime cache with the response
