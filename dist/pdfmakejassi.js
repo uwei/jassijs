@@ -1,4 +1,4 @@
-(function (factory) {var registeredInModuleLoader;if (typeof define === function && define.amd) {define(factory);registeredInModuleLoader = true;}if (typeof exports === object) {module.exports = factory();registeredInModuleLoader = true;}if (!registeredInModuleLoader) {var Oldpdfmakejassi = window.pdfmakejassi;var api = window.pdfmakejassi = factory();api.noConflict = function () {window.pdfmakejassi = Oldpdfmakejassi;return api;};}}(function () {
+(function (factory) {var registeredInModuleLoader;if (typeof define === `function` && define.amd) {define(factory);registeredInModuleLoader = true;}if (typeof exports === `object`) {module.exports = factory();registeredInModuleLoader = true;}if (!registeredInModuleLoader) {var Oldpdfmakejassi = window.pdfmakejassi;var api = window.pdfmakejassi = factory();api.noConflict = function () {window.pdfmakejassi = Oldpdfmakejassi;return api;};}}(function () {let exports={};
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.createReportDefinition = exports.doGroup = void 0;
@@ -353,5 +353,5 @@
         console.log(s + 2);
     }
     exports.test = test;
-});
-//# sourceMappingURL=pdfmakejassi.js.map
+return exports;}));
+
