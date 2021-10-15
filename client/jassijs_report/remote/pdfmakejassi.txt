@@ -13,7 +13,7 @@
 		var Oldpdfmakejassi = window.pdfmakejassi;
 		var api = window.pdfmakejassi = factory();
 		api.noConflict = function () {
-			window.Cookies = Oldpdfmakejassi;
+			window.pdfmakejassi = Oldpdfmakejassi;
 			return api;
 		};
 	}
