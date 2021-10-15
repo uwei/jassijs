@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"jassijs_report/remote/pdfmakejassi.ts": {
-		"date": 1634318749329
+		"date": 1634325879172
 	},
 	"jassijs_report/remote/RComponent.ts": {
 		"date": 1634318543906,

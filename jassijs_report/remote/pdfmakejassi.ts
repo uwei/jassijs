@@ -1,4 +1,7 @@
+//templating is slow so we chache
+var funccache: any = {};
 
+//clone the obj depp
 function clone(obj) {
 	if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
 		return obj;
@@ -24,11 +27,13 @@ declare global {
 		replaceTemplate: any;
 	}
 }
+//replace the params in the string
+//@param {boolean} returnValues - if true the templatevalues would be returned not the replaces string
 //@ts-ignore
 String.prototype.replaceTemplate = function (params, returnValues) {
 	const names = Object.keys(params);
 	const vals = Object.values(params);
-	addGroupFuncions(names,vals);
+	addGroupFuncions(names, vals);
 	for (let x = 0; x < vals.length; x++) {
 		if (typeof vals[x] === "function") {
 			vals[x] = (<any>vals[x]).bind(params);
@@ -49,23 +54,12 @@ String.prototype.replaceTemplate = function (params, returnValues) {
 	}
 	return func(...vals);
 }
-/*function replace(str, data, member) {
-	var ob = getVar(data, member);
-	return str.split("{{" + member + "}}").join(ob);
-}*/
+//get the member of the data
 function getVar(data, member: string) {
 	var ergebnis = member.toString().match(/\$\{(\w||\.)*\}/g);
 	if (!ergebnis)
 		member = "${" + member + "}";
 	var ob = member.replaceTemplate(data, true);
-	/*	var names = member.split(".");
-		var ob = data[names[0]];
-		for (let x = 1; x < names.length; x++) {
-	
-			if (ob === undefined)
-				return undefined;
-			ob = ob[names[x]];
-		}*/
 	return ob;
 }
 //replace {{currentPage}} {{pageWidth}} {{pageHeight}} {{pageCount}} in header,footer, background
@@ -100,6 +94,7 @@ function replacePageInformation(def) {
 		}
 	}
 }
+//sort the group with groupfields
 function groupSort(group, name, groupfields, groupid = 0) {
 	var ret = { entries: [], name: name };
 	if (groupid > 0)
@@ -119,6 +114,11 @@ function groupSort(group, name, groupfields, groupid = 0) {
 	}
 	return ret;
 }
+/**
+ * groups and sort the entries
+ * @param {any[]} entries - the entries to group
+ * @param {string[]} groupfields - the fields where the entries are grouped  
+ */
 export function doGroup(entries, groupfields: string[]) {
 	var ret: any = {};
 	for (var e = 0; e < entries.length; e++) {
@@ -142,21 +142,21 @@ export function doGroup(entries, groupfields: string[]) {
 
 	return sorted;
 }
+//replace the datatable {datable:...} to table:{}
 function replaceDatatable(def, data) {
-
 	var header = def.datatable.header;
 	var footer = def.datatable.footer;
 	var dataexpr = def.datatable.dataforeach;
 	var groups = def.datatable.groups;
 	var body = def.datatable.body;
 	var groupexpr: string[] = [];
-	def.table =clone(def.datatable);
-	def.table.body= []
+	def.table = clone(def.datatable);
+	def.table.body = []
 	delete def.table.header;
 	delete def.table.footer;
 	delete def.table.dataforeach;
 	delete def.table.groups;
-	
+
 	if (header)
 		def.table.body.push(header);
 	if (groups === undefined || groups.length === 0) {
@@ -175,7 +175,7 @@ function replaceDatatable(def, data) {
 			groupexpr.push(groups[x].expression);
 			if (x < groups.length - 1) {
 				parent.foreach = "group" + (x + 2).toString() + " in group" + (x + 1).toString() + ".entries";
-			}else{
+			} else {
 				parent.foreach = dataexpr.split(" ")[0] + " in group" + (x + 1).toString() + ".entries";
 			}
 			if (groups[x].header && groups[x].header.length > 0) {
@@ -185,10 +185,10 @@ function replaceDatatable(def, data) {
 				parent.dolast = groups[x].footer;
 			}
 			if (x < groups.length - 1) {
-				parent.do={};
-				parent=parent.do;
-			}else{
-				parent.do=body;
+				parent.do = {};
+				parent = parent.do;
+			} else {
+				parent.do = body;
 			}
 		}
 		var arr = getArrayFromForEach(def.datatable.dataforeach, data);
@@ -197,16 +197,6 @@ function replaceDatatable(def, data) {
 
 	delete def.datatable.dataforeach;
 
-	/*var variable = dataexpr.split(" in ")[0];
-	var sarr = dataexpr.split(" in ")[1];
-	var arr = getVar(data, sarr);
-	
-	for (let x = 0;x < arr.length;x++) {
-		data[variable] = arr[x];
-		var copy = JSON.parse(JSON.stringify(body));//deep copy
-		copy = replaceTemplates(copy, data);
-		def.table.body.push(copy);
-	}*/
 	if (footer)
 		def.table.body.push(footer);
 	//delete data[variable];
@@ -220,14 +210,9 @@ function replaceDatatable(def, data) {
 		def.table[key] = def.datatable[key];
 	}
 	delete def.datatable;
-	/*header:[{ text:"Item"},{ text:"Price"}],
-					data:"line in invoice.lines",
-					//footer:[{ text:"Total"},{ text:""}],
-					body:[{ text:"Text"},{ text:"price"}],
-					groups:*/
-
-
 }
+
+//get the array for the foreach statement in the data
 function getArrayFromForEach(foreach, data) {
 	var sarr = foreach.split(" in ")[1];
 	var arr;
@@ -238,6 +223,7 @@ function getArrayFromForEach(foreach, data) {
 	}
 	return arr;
 }
+//replace templates e.g. ${name} with the data
 function replaceTemplates(def, data, param = undefined) {
 	if (def === undefined)
 		return;
@@ -297,7 +283,7 @@ function replaceTemplates(def, data, param = undefined) {
 		}
 		return def;
 	} else if (typeof def === "string") {
-		var ergebnis = def.toString().match(/\$\{(\w||\.)*\}/g);
+		var ergebnis = def.toString().match(/\$\{/g);
 		if (ergebnis !== null) {
 			def = def.replaceTemplate(data);
 			//	for (var e = 0; e < ergebnis.length; e++) {
@@ -310,12 +296,17 @@ function replaceTemplates(def, data, param = undefined) {
 			def[key] = replaceTemplates(def[key], data);
 
 		}
-		delete def.editTogether;//RText
+		delete def.editTogether;//RText is only used for editing report
 	}
 	return def;
 }
 
-
+/**
+ * create an pdfmake-definition from an jassijs-report-definition, fills data and parameter in the report
+ * @param {string} definition - the jassijs-report definition
+ * @param {any} [data] - the data which are filled in the report (optional)
+ * @param {any} [parameter] - the parameter which are filled in the report (otional)
+ */
 export function createReportDefinition(definition, data, parameter) {
 	definition = clone(definition);//this would be modified
 	if (data !== undefined)
@@ -342,9 +333,6 @@ export function createReportDefinition(definition, data, parameter) {
 	if (definition.parameter !== undefined) {
 		data.parameter = definition.parameter;
 	}
-
-
-
 	definition.content = replaceTemplates(definition.content, data);
 	if (definition.background)
 		definition.background = replaceTemplates(definition.background, data);
@@ -353,30 +341,122 @@ export function createReportDefinition(definition, data, parameter) {
 	if (definition.footer)
 		definition.footer = replaceTemplates(definition.footer, data);
 
-	//definition.content = replaceTemplates(definition.content, data);
 	replacePageInformation(definition);
 	delete definition.data;
 	return definition;
 	// delete definition.parameter;
 }
-var funccache: any = {};
-function addGroupFuncions(names,values){
+
+//add aggregate functions for grouping
+function addGroupFuncions(names, values) {
 	names.push("sum");
 	values.push(sum);
+	names.push("count");
+	values.push(count);
+	names.push("max");
+	values.push(max);
+	names.push("min");
+	values.push(min);
+	names.push("avg");
+	values.push(avg);
 }
-function sum(group,field){
-	return group+field;
+function aggr(group, field,data) {
+	var ret = 0;
+	if (!Array.isArray(group) && group.entries === undefined)
+		throw new Error("sum is valid only in arrays and groups");
+	var sfield: string = field;
+	if (field.indexOf("${") === -1) {
+		sfield = "${" + sfield + "}";
+	}
+	if(Array.isArray(group)){
+		for (var x = 0; x < group.length; x++) {
+			var ob = group[x];
+			if(ob.entries!==undefined)
+				aggr(ob.entries,field,data);
+			else{
+				var val = sfield.replaceTemplate(ob, true);
+				data.func(data,val===undefined?0: Number.parseFloat(val));
+			}
+		}
+	}else{
+		aggr(group.entries,field,data);//group
+	} 
+	return data;
 }
+
+//sum the field in the group
+function sum(group, field) {
+	return aggr(group,field,{
+		ret:0,
+		func:(data,num)=>{
+			data.ret=data.ret+num;
+		}
+	}).ret;
+}
+//count the field in the group
+function count(group, field) {
+	return aggr(group,field,{
+		ret:0,
+		func:(data,num)=>{
+			data.ret=data.ret+1;
+		}
+	}).ret;
+}
+//get the maximum of the field in the group
+function max(group, field) {
+	return aggr(group,field,{
+		ret:Number.MIN_VALUE,
+		func:(data,num)=>{
+			if(num>data.ret)
+				data.ret=num;
+		}
+	}).ret;
+}
+//get the minimum of the field in the group
+function min(group, field) {
+	return aggr(group,field,{
+		ret:Number.MAX_VALUE,
+		func:(data,num)=>{
+			if(num<data.ret)
+				data.ret=num;
+		}
+	}).ret;
+}
+//get the minimum of the field in the group
+function avg(group, field) {
+	var ret= aggr(group,field,{
+		ret:0,
+		count:0,
+		func:(data,num)=>{
+			data.ret=data.ret+num;
+			data.count++;
+
+		}
+	});
+	return ret.ret/ret.count;
+}
+var sampleData = [
+	{ id: 1, customer: "Fred", city: "Frankfurt", age: 51 },
+	{ id: 8, customer: "Alma", city: "Dresden", age: 70 },
+	{ id: 3, customer: "Heinz", city: "Frankfurt", age: 33 },
+	{ id: 2, customer: "Fred", city: "Frankfurt", age: 88 },
+	{ id: 6, customer: "Max", city: "Dresden", age: 3 },
+	{ id: 4, customer: "Heinz", city: "Frankfurt", age: 64 },
+	{ id: 5, customer: "Max", city: "Dresden", age: 54 },
+	{ id: 7, customer: "Alma", city: "Dresden", age: 33 },
+	{ id: 9, customer: "Otto", city: "Berlin", age: 21 }
+];
+
 export function test() {
 	var h = {
+		all: doGroup(sampleData, ["city","customer"]),
 		k: 5,
 		ho() {
 			return this.k + 1;
 		}
 	}
 	//@ts-ignore
-	var s = "${sum(8,10)}".replaceTemplate(h, true);
-	h.k = 60;
-	s = "${ho()}".replaceTemplate(h, true);
-	console.log(s + 2);
+	var s = "${Math.round(avg(all,'age'),2)}".replaceTemplate(h, true);
+	console.log(s);
+	
 }

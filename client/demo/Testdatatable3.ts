@@ -13,9 +13,9 @@ var reportdesign = {
 				widths: [140,"auto","auto"],
 				groups: [
 					{
-						header: ["${group1.name}","\n",""],
+						header: ["${group1.name}","","${count(group1,'age')}"],
 						expression: "city",
-						footer: ["${sum(group1,'name')}","${group1.name}",""]
+						footer: ["","${group1.name}",""]
 },
 					{
 						header: ["${group2.name}","",""],
@@ -33,16 +33,17 @@ var reportdesign = {
 };
 
 var sampleData = [
-    { id: 1, customer: "Fred", city: "Frankfurt" },
-    { id: 8, customer: "Alma", city: "Dresden" },
-    { id: 3, customer: "Heinz", city: "Frankfurt" },
-    { id: 2, customer: "Fred", city: "Frankfurt" },
-    { id: 6, customer: "Max", city: "Dresden" },
-    { id: 4, customer: "Heinz", city: "Frankfurt" },
-    { id: 5, customer: "Max", city: "Dresden" },
-    { id: 7, customer: "Alma", city: "Dresden" },
-    { id: 9, customer: "Otto", city: "Berlin" }
+	{ id: 1, customer: "Fred", city: "Frankfurt", age: 51 },
+	{ id: 8, customer: "Alma", city: "Dresden", age: 70 },
+	{ id: 3, customer: "Heinz", city: "Frankfurt", age: 33 },
+	{ id: 2, customer: "Fred", city: "Frankfurt", age: 88 },
+	{ id: 6, customer: "Max", city: "Dresden", age: 3 },
+	{ id: 4, customer: "Heinz", city: "Frankfurt", age: 64 },
+	{ id: 5, customer: "Max", city: "Dresden", age: 54 },
+	{ id: 7, customer: "Alma", city: "Dresden", age: 33 },
+	{ id: 9, customer: "Otto", city: "Berlin", age: 21 }
 ];
+
 
 
 

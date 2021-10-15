@@ -1,4 +1,4 @@
-var RUNTIME = 'runtime56';
+var RUNTIME = 'runtime57';
 
 
 var tempFiles = {};
@@ -7,7 +7,7 @@ var tempFiles = {};
 
 var db;
 async function getDB() {
-
+ 
   var req = indexedDB.open("jassi", 1);
   req.onupgradeneeded = function (ev) {
     var db = ev.target["result"];
