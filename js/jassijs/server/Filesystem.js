@@ -592,7 +592,7 @@ function staticfiles(req, res, next) {
         else {
             res.sendFile(resolve(sfile), {
                 headers: { 'X-Custom-Date': dat.toString(),
-                    'Cache-Control': 'max-age=2592000000',
+                    'Cache-Control': 'max-age=1',
                     'Last-Modified': fs.statSync(sfile).mtime.toUTCString()
                 }
             });

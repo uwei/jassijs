@@ -3,7 +3,240 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = {
     "jassijs_report/remote/pdfmakejassi.ts": {
-        "date": 1634311563600
+        "date": 1634318749329
+    },
+    "jassijs_report/remote/RComponent.ts": {
+        "date": 1634318543906,
+        "jassijs_report.ReportComponent": {
+            "$Property": [
+                {
+                    "hideBaseClassProperties": true
+                }
+            ],
+            "@members": {
+                "foreach": {
+                    "$Property": []
+                },
+                "counter": {
+                    "$Property": [
+                        {
+                            "default": "undefined",
+                            "isVisible": "function"
+                        }
+                    ]
+                },
+                "listType": {
+                    "$Property": [
+                        {
+                            "name": "listType",
+                            "default": "undefined",
+                            "isVisible": "function",
+                            "chooseFrom": "function"
+                        }
+                    ]
+                },
+                "fillColor": {
+                    "$Property": [
+                        {
+                            "type": "color",
+                            "isVisible": "function"
+                        }
+                    ]
+                },
+                "colSpan": {
+                    "$Property": [
+                        {
+                            "type": "string",
+                            "isVisible": "function"
+                        }
+                    ]
+                },
+                "rowSpan": {
+                    "$Property": [
+                        {
+                            "type": "string",
+                            "isVisible": "function"
+                        }
+                    ]
+                },
+                "border": {
+                    "$Property": [
+                        {
+                            "type": "boolean[]",
+                            "default": [
+                                false,
+                                false,
+                                false,
+                                false
+                            ],
+                            "isVisible": "function",
+                            "description": "border of the tablecell: left, top, right, bottom"
+                        }
+                    ]
+                },
+                "width": {
+                    "$Property": [
+                        {
+                            "type": "string",
+                            "isVisible": "function"
+                        }
+                    ]
+                },
+                "height": {
+                    "$Property": [
+                        {
+                            "type": "string",
+                            "isVisible": "function"
+                        }
+                    ]
+                },
+                "bold": {
+                    "$Property": []
+                },
+                "italics": {
+                    "$Property": []
+                },
+                "font": {
+                    "$Property": [
+                        {
+                            "chooseFrom": [
+                                "Alegreya",
+                                "AlegreyaSans",
+                                "AlegreyaSansSC",
+                                "AlegreyaSC",
+                                "AlmendraSC",
+                                "Amaranth",
+                                "Andada",
+                                "AndadaSC",
+                                "AnonymousPro",
+                                "ArchivoNarrow",
+                                "Arvo",
+                                "Asap",
+                                "AveriaLibre",
+                                "AveriaSansLibre",
+                                "AveriaSerifLibre",
+                                "Cambay",
+                                "Caudex",
+                                "CrimsonText",
+                                "Cuprum",
+                                "Economica",
+                                "Exo2",
+                                "Exo",
+                                "ExpletusSans",
+                                "FiraSans",
+                                "JosefinSans",
+                                "JosefinSlab",
+                                "Karla",
+                                "Lato",
+                                "LobsterTwo",
+                                "Lora",
+                                "Marvel",
+                                "Merriweather",
+                                "MerriweatherSans",
+                                "Nobile",
+                                "NoticiaText",
+                                "Overlock",
+                                "Philosopher",
+                                "PlayfairDisplay",
+                                "PlayfairDisplaySC",
+                                "PT_Serif-Web",
+                                "Puritan",
+                                "Quantico",
+                                "QuattrocentoSans",
+                                "Quicksand",
+                                "Rambla",
+                                "Rosario",
+                                "Sansation",
+                                "Sarabun",
+                                "Scada",
+                                "Share",
+                                "Sitara",
+                                "SourceSansPro",
+                                "TitilliumWeb",
+                                "Volkhov",
+                                "Vollkorn"
+                            ]
+                        }
+                    ]
+                },
+                "fontSize": {
+                    "$Property": []
+                },
+                "background": {
+                    "$Property": [
+                        {
+                            "type": "color"
+                        }
+                    ]
+                },
+                "color": {
+                    "$Property": [
+                        {
+                            "type": "color"
+                        }
+                    ]
+                },
+                "alignment": {
+                    "$Property": [
+                        {
+                            "chooseFrom": [
+                                "left",
+                                "center",
+                                "right"
+                            ]
+                        }
+                    ]
+                },
+                "decoration": {
+                    "$Property": [
+                        {
+                            "chooseFrom": [
+                                "underline",
+                                "lineThrough",
+                                "overline"
+                            ]
+                        }
+                    ]
+                },
+                "decorationColor": {
+                    "$Property": [
+                        {
+                            "type": "color"
+                        }
+                    ]
+                },
+                "decorationStyle": {
+                    "$Property": [
+                        {
+                            "chooseFrom": [
+                                "dashed",
+                                "dotted",
+                                "double",
+                                "wavy"
+                            ]
+                        }
+                    ]
+                },
+                "style": {
+                    "$Property": []
+                },
+                "lineHeight": {
+                    "$Property": [
+                        {
+                            "default": 1
+                        }
+                    ]
+                },
+                "margin": {
+                    "$Property": [
+                        {
+                            "type": "number[]",
+                            "description": "margin left, top, right, bottom"
+                        }
+                    ]
+                }
+            }
+        }
     }
 };
 //# sourceMappingURL=registry.js.map

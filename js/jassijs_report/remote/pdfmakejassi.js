@@ -21,6 +21,7 @@ function clone(obj) {
 String.prototype.replaceTemplate = function (params, returnValues) {
     const names = Object.keys(params);
     const vals = Object.values(params);
+    addGroupFuncions(names, vals);
     for (let x = 0; x < vals.length; x++) {
         if (typeof vals[x] === "function") {
             vals[x] = vals[x].bind(params);
@@ -338,6 +339,13 @@ function createReportDefinition(definition, data, parameter) {
 }
 exports.createReportDefinition = createReportDefinition;
 var funccache = {};
+function addGroupFuncions(names, values) {
+    names.push("sum");
+    values.push(sum);
+}
+function sum(group, field) {
+    return group + field;
+}
 function test() {
     var h = {
         k: 5,
@@ -346,7 +354,7 @@ function test() {
         }
     };
     //@ts-ignore
-    var s = "${ho()}".replaceTemplate(h, true);
+    var s = "${sum(8,10)}".replaceTemplate(h, true);
     h.k = 60;
     s = "${ho()}".replaceTemplate(h, true);
     console.log(s + 2);

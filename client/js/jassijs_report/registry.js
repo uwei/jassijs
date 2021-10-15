@@ -380,7 +380,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassi_report.SimpleReportEditor": {}
 	},
 	"jassijs_report/remote/pdfmakejassi.ts": {
-		"date": 1634311563600
+		"date": 1634318749329
 	},
 	"jassijs_report/RGroupTablerow.ts": {
 		"date": 1633548166674,
@@ -400,7 +400,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RComponent.ts": {
-		"date": 1633816494280,
+		"date": 1634318558680,
 		"jassijs_report.ReportComponent": {
 			"$Property": [
 				{
