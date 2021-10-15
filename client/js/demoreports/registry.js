@@ -5,21 +5,6 @@ define("demoreports/registry",["require"], function(require) {
 	"demoreports/01-Simpledata.ts": {
 		"date": 1633970828481
 	},
-	"demoreports/02-Foreach.ts": {
-		"date": 1633970828548
-	},
-	"demoreports/03-Foreach.ts": {
-		"date": 1633970828614
-	},
-	"demoreports/04-Foreach.ts": {
-		"date": 1633970828674
-	},
-	"demoreports/05-Datatable.ts": {
-		"date": 1633970828728
-	},
-	"demoreports/06-Datatable.ts": {
-		"date": 1633970828792
-	},
 	"demoreports/Empty.ts": {
 		"date": 1633970828871
 	},
@@ -49,6 +34,30 @@ define("demoreports/registry",["require"], function(require) {
 	},
 	"demoreports/pdfmake-playground/Tables.ts": {
 		"date": 1633816847871
+	},
+	"demoreports/10-Foreach.ts": {
+		"date": 1634336966560
+	},
+	"demoreports/11-Foreach.ts": {
+		"date": 1634336971678
+	},
+	"demoreports/12-Foreach.ts": {
+		"date": 1634336975904
+	},
+	"demoreports/21-Datatable.ts": {
+		"date": 1634336980991
+	},
+	"demoreports/22-Datatable.ts": {
+		"date": 1634336984553
+	},
+	"demoreports/23-Datatable.ts": {
+		"date": 1634337875587
+	},
+	"demoreports/30-Format.ts": {
+		"date": 1634338772059
+	},
+	"demoreports/Invoice.ts": {
+		"date": 1634341954517
 	}
 }
  }

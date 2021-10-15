@@ -13,6 +13,161 @@
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.createReportDefinition = exports.doGroup = void 0;
+    //templating is slow so we chache
+    var funccache = {};
+    //https://github.com/Mottie/javascript-number-formatter/blob/master/src/format.js
+    //license https://github.com/Mottie/javascript-number-formatter/blob/master/LICENSE
+    const maskRegex = /[0-9\-+#]/;
+    const notMaskRegex = /[^\d\-+#]/g;
+    function getIndex(mask) {
+        return mask.search(maskRegex);
+    }
+    function processMask(mask = "#.##") {
+        const maskObj = {};
+        const len = mask.length;
+        const start = getIndex(mask);
+        maskObj.prefix = start > 0 ? mask.substring(0, start) : "";
+        // Reverse string: not an ideal method if there are surrogate pairs
+        const end = getIndex(mask.split("").reverse().join(""));
+        const offset = len - end;
+        const substr = mask.substring(offset, offset + 1);
+        // Add 1 to offset if mask has a trailing decimal/comma
+        const indx = offset + ((substr === "." || (substr === ",")) ? 1 : 0);
+        maskObj.suffix = end > 0 ? mask.substring(indx, len) : "";
+        maskObj.mask = mask.substring(start, indx);
+        maskObj.maskHasNegativeSign = maskObj.mask.charAt(0) === "-";
+        maskObj.maskHasPositiveSign = maskObj.mask.charAt(0) === "+";
+        // Search for group separator & decimal; anything not digit,
+        // not +/- sign, and not #
+        let result = maskObj.mask.match(notMaskRegex);
+        // Treat the right most symbol as decimal
+        maskObj.decimal = (result && result[result.length - 1]) || ".";
+        // Treat the left most symbol as group separator
+        maskObj.separator = (result && result[1] && result[0]) || ",";
+        // Split the decimal for the format string if any
+        result = maskObj.mask.split(maskObj.decimal);
+        maskObj.integer = result[0];
+        maskObj.fraction = result[1];
+        return maskObj;
+    }
+    function processValue(value, maskObj, options) {
+        let isNegative = false;
+        const valObj = {
+            value
+        };
+        if (value < 0) {
+            isNegative = true;
+            // Process only abs(), and turn on flag.
+            valObj.value = -valObj.value;
+        }
+        valObj.sign = isNegative ? "-" : "";
+        // Fix the decimal first, toFixed will auto fill trailing zero.
+        valObj.value = Number(valObj.value).toFixed(maskObj.fraction && maskObj.fraction.length);
+        // Convert number to string to trim off *all* trailing decimal zero(es)
+        valObj.value = Number(valObj.value).toString();
+        // Fill back any trailing zero according to format
+        // look for last zero in format
+        const posTrailZero = maskObj.fraction && maskObj.fraction.lastIndexOf("0");
+        let [valInteger = "0", valFraction = ""] = valObj.value.split(".");
+        if (!valFraction || (valFraction && valFraction.length <= posTrailZero)) {
+            valFraction = posTrailZero < 0
+                ? ""
+                : (Number("0." + valFraction).toFixed(posTrailZero + 1)).replace("0.", "");
+        }
+        valObj.integer = valInteger;
+        valObj.fraction = valFraction;
+        addSeparators(valObj, maskObj);
+        // Remove negative sign if result is zero
+        if (valObj.result === "0" || valObj.result === "") {
+            // Remove negative sign if result is zero
+            isNegative = false;
+            valObj.sign = "";
+        }
+        if (!isNegative && maskObj.maskHasPositiveSign) {
+            valObj.sign = "+";
+        }
+        else if (isNegative && maskObj.maskHasPositiveSign) {
+            valObj.sign = "-";
+        }
+        else if (isNegative) {
+            valObj.sign = options && options.enforceMaskSign && !maskObj.maskHasNegativeSign
+                ? ""
+                : "-";
+        }
+        return valObj;
+    }
+    function addSeparators(valObj, maskObj) {
+        valObj.result = "";
+        // Look for separator
+        const szSep = maskObj.integer.split(maskObj.separator);
+        // Join back without separator for counting the pos of any leading 0
+        const maskInteger = szSep.join("");
+        const posLeadZero = maskInteger && maskInteger.indexOf("0");
+        if (posLeadZero > -1) {
+            while (valObj.integer.length < (maskInteger.length - posLeadZero)) {
+                valObj.integer = "0" + valObj.integer;
+            }
+        }
+        else if (Number(valObj.integer) === 0) {
+            valObj.integer = "";
+        }
+        // Process the first group separator from decimal (.) only, the rest ignore.
+        // get the length of the last slice of split result.
+        const posSeparator = (szSep[1] && szSep[szSep.length - 1].length);
+        if (posSeparator) {
+            const len = valObj.integer.length;
+            const offset = len % posSeparator;
+            for (let indx = 0; indx < len; indx++) {
+                valObj.result += valObj.integer.charAt(indx);
+                // -posSeparator so that won't trail separator on full length
+                if (!((indx - offset + 1) % posSeparator) && indx < len - posSeparator) {
+                    valObj.result += maskObj.separator;
+                }
+            }
+        }
+        else {
+            valObj.result = valObj.integer;
+        }
+        valObj.result += (maskObj.fraction && valObj.fraction)
+            ? maskObj.decimal + valObj.fraction
+            : "";
+        return valObj;
+    }
+    function _format(mask, value, options = {}) {
+        if (!mask || isNaN(Number(value))) {
+            // Invalid inputs
+            return value;
+        }
+        const maskObj = processMask(mask);
+        const valObj = processValue(value, maskObj, options);
+        return maskObj.prefix + valObj.sign + valObj.result + maskObj.suffix;
+    }
+    ;
+    ///////////////////////////////////END https://github.com/Mottie/javascript-number-formatter/blob/master/src/format.js
+    //add 0 before
+    function v(str, num) {
+        str = str.toString();
+        while (str.length < num) {
+            str = "0" + str;
+        }
+        return str;
+    }
+    //simple dateformat perhaps we should use moments
+    //now we do something basics
+    function formatDate(format, date) {
+        return format.
+            replace("DD", v(date.getDate(), 2)).
+            replace("D", date.getDate().toString()).
+            replace("MM", v(date.getMonth(), 2)).
+            replace("YYYY", date.getFullYear().toString()).
+            replace("YY", (date.getFullYear() % 100).toString()).
+            replace("A", date.getHours() > 12 ? "PM" : "AM").
+            replace("hh", v(date.getHours(), 2)).
+            replace("h", (date.getHours() % 12).toString()).
+            replace("mm", v(date.getMinutes(), 2)).
+            replace("ss", v(date.getSeconds(), 2));
+    }
+    //clone the obj depp
     function clone(obj) {
         if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
             return obj;
@@ -29,6 +184,8 @@
         }
         return temp;
     }
+    //replace the params in the string
+    //@param {boolean} returnValues - if true the templatevalues would be returned not the replaces string
     //@ts-ignore
     String.prototype.replaceTemplate = function (params, returnValues) {
         const names = Object.keys(params);
@@ -54,23 +211,12 @@
         }
         return func(...vals);
     };
-    /*function replace(str, data, member) {
-        var ob = getVar(data, member);
-        return str.split("{{" + member + "}}").join(ob);
-    }*/
+    //get the member of the data
     function getVar(data, member) {
         var ergebnis = member.toString().match(/\$\{(\w||\.)*\}/g);
         if (!ergebnis)
             member = "${" + member + "}";
         var ob = member.replaceTemplate(data, true);
-        /*	var names = member.split(".");
-            var ob = data[names[0]];
-            for (let x = 1; x < names.length; x++) {
-        
-                if (ob === undefined)
-                    return undefined;
-                ob = ob[names[x]];
-            }*/
         return ob;
     }
     //replace {{currentPage}} {{pageWidth}} {{pageHeight}} {{pageCount}} in header,footer, background
@@ -103,6 +249,7 @@
             };
         }
     }
+    //sort the group with groupfields
     function groupSort(group, name, groupfields, groupid = 0) {
         var ret = { entries: [], name: name };
         if (groupid > 0)
@@ -121,6 +268,11 @@
         }
         return ret;
     }
+    /**
+     * groups and sort the entries
+     * @param {any[]} entries - the entries to group
+     * @param {string[]} groupfields - the fields where the entries are grouped
+     */
     function doGroup(entries, groupfields) {
         var ret = {};
         for (var e = 0; e < entries.length; e++) {
@@ -145,6 +297,7 @@
         return sorted;
     }
     exports.doGroup = doGroup;
+    //replace the datatable {datable:...} to table:{}
     function replaceDatatable(def, data) {
         var header = def.datatable.header;
         var footer = def.datatable.footer;
@@ -199,16 +352,6 @@
             data.datatablegroups = doGroup(arr, groupexpr);
         }
         delete def.datatable.dataforeach;
-        /*var variable = dataexpr.split(" in ")[0];
-        var sarr = dataexpr.split(" in ")[1];
-        var arr = getVar(data, sarr);
-        
-        for (let x = 0;x < arr.length;x++) {
-            data[variable] = arr[x];
-            var copy = JSON.parse(JSON.stringify(body));//deep copy
-            copy = replaceTemplates(copy, data);
-            def.table.body.push(copy);
-        }*/
         if (footer)
             def.table.body.push(footer);
         //delete data[variable];
@@ -221,12 +364,8 @@
             def.table[key] = def.datatable[key];
         }
         delete def.datatable;
-        /*header:[{ text:"Item"},{ text:"Price"}],
-                        data:"line in invoice.lines",
-                        //footer:[{ text:"Total"},{ text:""}],
-                        body:[{ text:"Text"},{ text:"price"}],
-                        groups:*/
     }
+    //get the array for the foreach statement in the data
     function getArrayFromForEach(foreach, data) {
         var sarr = foreach.split(" in ")[1];
         var arr;
@@ -238,11 +377,24 @@
         }
         return arr;
     }
+    //replace templates e.g. ${name} with the data
     function replaceTemplates(def, data, param = undefined) {
         if (def === undefined)
             return;
         if (def.datatable !== undefined) {
             replaceDatatable(def, data);
+        }
+        if (def.format) {
+            var val = def.text.replaceTemplate(data, true);
+            if (val === undefined)
+                return "";
+            else if (typeof val == 'number') {
+                def.text = _format(def.format, val, {});
+            }
+            else if (val.getMonth) {
+                def.text = formatDate(def.format, val);
+            }
+            delete def.format;
         }
         if (def.foreach !== undefined) {
             //resolve foreach
@@ -295,7 +447,7 @@
             return def;
         }
         else if (typeof def === "string") {
-            var ergebnis = def.toString().match(/\$\{(\w||\.)*\}/g);
+            var ergebnis = def.toString().match(/\$\{/g);
             if (ergebnis !== null) {
                 def = def.replaceTemplate(data);
                 //	for (var e = 0; e < ergebnis.length; e++) {
@@ -308,10 +460,16 @@
             for (var key in def) {
                 def[key] = replaceTemplates(def[key], data);
             }
-            delete def.editTogether; //RText
+            delete def.editTogether; //RText is only used for editing report
         }
         return def;
     }
+    /**
+     * create an pdfmake-definition from an jassijs-report-definition, fills data and parameter in the report
+     * @param {string} definition - the jassijs-report definition
+     * @param {any} [data] - the data which are filled in the report (optional)
+     * @param {any} [parameter] - the parameter which are filled in the report (otional)
+     */
     function createReportDefinition(definition, data, parameter) {
         definition = clone(definition); //this would be modified
         if (data !== undefined)
@@ -343,33 +501,125 @@
             definition.header = replaceTemplates(definition.header, data);
         if (definition.footer)
             definition.footer = replaceTemplates(definition.footer, data);
-        //definition.content = replaceTemplates(definition.content, data);
         replacePageInformation(definition);
         delete definition.data;
         return definition;
         // delete definition.parameter;
     }
     exports.createReportDefinition = createReportDefinition;
-    var funccache = {};
+    //add aggregate functions for grouping
     function addGroupFuncions(names, values) {
         names.push("sum");
         values.push(sum);
+        names.push("count");
+        values.push(count);
+        names.push("max");
+        values.push(max);
+        names.push("min");
+        values.push(min);
+        names.push("avg");
+        values.push(avg);
     }
+    function aggr(group, field, data) {
+        var ret = 0;
+        if (!Array.isArray(group) && group.entries === undefined)
+            throw new Error("sum is valid only in arrays and groups");
+        var sfield = field;
+        if (field.indexOf("${") === -1) {
+            sfield = "${" + sfield + "}";
+        }
+        if (Array.isArray(group)) {
+            for (var x = 0; x < group.length; x++) {
+                var ob = group[x];
+                if (ob.entries !== undefined)
+                    aggr(ob.entries, field, data);
+                else {
+                    var val = sfield.replaceTemplate(ob, true);
+                    data.func(data, val === undefined ? 0 : Number.parseFloat(val));
+                }
+            }
+        }
+        else {
+            aggr(group.entries, field, data); //group
+        }
+        return data;
+    }
+    //sum the field in the group
     function sum(group, field) {
-        return group + field;
+        return aggr(group, field, {
+            ret: 0,
+            func: (data, num) => {
+                data.ret = data.ret + num;
+            }
+        }).ret;
+    }
+    //count the field in the group
+    function count(group, field) {
+        return aggr(group, field, {
+            ret: 0,
+            func: (data, num) => {
+                data.ret = data.ret + 1;
+            }
+        }).ret;
+    }
+    //get the maximum of the field in the group
+    function max(group, field) {
+        return aggr(group, field, {
+            ret: Number.MIN_VALUE,
+            func: (data, num) => {
+                if (num > data.ret)
+                    data.ret = num;
+            }
+        }).ret;
+    }
+    //get the minimum of the field in the group
+    function min(group, field) {
+        return aggr(group, field, {
+            ret: Number.MAX_VALUE,
+            func: (data, num) => {
+                if (num < data.ret)
+                    data.ret = num;
+            }
+        }).ret;
+    }
+    //get the minimum of the field in the group
+    function avg(group, field) {
+        var ret = aggr(group, field, {
+            ret: 0,
+            count: 0,
+            func: (data, num) => {
+                data.ret = data.ret + num;
+                data.count++;
+            }
+        });
+        return ret.ret / ret.count;
     }
     function test() {
+        var ff = _format("####,##", 50.22, {});
+        var hh = formatDate("DD.MM.YYYY hh:mm:ss", new Date());
+        var hh = formatDate("YY-MM-DD h:mm:ss A", new Date());
+        var sampleData = [
+            { id: 1, customer: "Fred", city: "Frankfurt", age: 51 },
+            { id: 8, customer: "Alma", city: "Dresden", age: 70 },
+            { id: 3, customer: "Heinz", city: "Frankfurt", age: 33 },
+            { id: 2, customer: "Fred", city: "Frankfurt", age: 88 },
+            { id: 6, customer: "Max", city: "Dresden", age: 3 },
+            { id: 4, customer: "Heinz", city: "Frankfurt", age: 64 },
+            { id: 5, customer: "Max", city: "Dresden", age: 54 },
+            { id: 7, customer: "Alma", city: "Dresden", age: 33 },
+            { id: 9, customer: "Otto", city: "Berlin", age: 21 }
+        ];
         var h = {
+            all: doGroup(sampleData, ["city", "customer"]),
             k: 5,
             ho() {
                 return this.k + 1;
             }
         };
         //@ts-ignore
-        var s = "${sum(8,9)}".replaceTemplate(h, true);
-        h.k = 60;
+        var s = "${Math.round(avg(all,'age'),2)}".replaceTemplate(h, true);
+        s = "${k}".replaceTemplate(h, true);
         s = "${ho()}".replaceTemplate(h, true);
-        console.log(s + 2);
     }
     exports.test = test;
     return exports;

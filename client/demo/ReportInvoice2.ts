@@ -16,53 +16,48 @@ var reportdesign = {
 					"${invoice.customer.place}"
 				],
 				[
-					{
-						text: [
-							{
-								text: "    Invoice"
-							}
-						],
-						editTogether: true,
-						fontSize: 18
-					},
+					{fontSize: 18,text: "Invoice"},
 					"\n",
-					"Date: ${invoice.date}",
 					{
-						text: "Number: ${invoice.number}",
-						bold: true
+						table: {
+							widths: ["auto",100],
+							body: [
+								[
+									"Date:",
+									{
+										text: "${invoice.date}",
+										format: "YYYY-MM-DD"
+									}
+								],
+								["Number:","${invoice.number}"]
+							]
+						},
+						layout: "noBorders"
 					},
-					"\n",
+					"",
+					"",
 					"\n"
 				]
 			]
 		},
 		{
-			groups: [
-				{
-					field: "line",
-					header: [],
-					footer: []
-				}
-			],
 			datatable: {
-				header: [
-					"Item",
-					"Price"
-				],
+				header: ["Item","Price"],
 				dataforeach: "line in invoice.lines",
 				body: [
 					"${line.text}",
-					"${line.price}"
+					{
+						bold: false,
+						text: "${line.price}",
+						format: "#.##0,00"
+					}
 				]
 			}
 		},
 		"\n",
 		{
-			foreach: "sum in invoice.summary",
-			columns: [
-				"${sum.text}",
-				"${sum.value}"
-			]
+			foreach: "summ in invoice.summary",
+			columns: ["${summ.text}","${summ.value}"]
 		}
 	]
 };
@@ -88,7 +83,7 @@ export async function test() {
     dlg.value = {
         invoice: {
             number: 1000,
-            date: "20.07.2018",
+            date: new Date(),
             customer: {
                 firstname: "Henry",
                 lastname: "Klaus",

@@ -17,6 +17,39 @@ class InlineStyling {
     font: string;
 }
 
+
+//calc the default Formats
+let allFormats=(()=>{
+    var ret=[];
+    const format = new Intl.NumberFormat();
+    
+    var decimal=format.format(1.1).substring(1,2);
+    var group=format.format(1234).substring(1,2);
+	/*	const parts = format.formatToParts(1234.6);
+  		var decimal = ".";
+        var group=",";
+		parts.forEach(p => {
+			if (p.type === "decimal")
+				decimal = p.value;
+            if (p.type === "group")
+				group = p.value;
+		});*/
+    ret.push("#"+group+"##0"+decimal+"00");
+    ret.push("#"+group+"##0"+decimal+"00 €");
+    ret.push("#"+group+"##0"+decimal+"00 $");
+    ret.push("$#,###.00");
+    ret.push("0");
+    ret.push("0"+decimal+"00");
+    ret.push("MM/DD/YYYY");
+    ret.push("DD.MM.YYYY");
+    ret.push("DD/MM/YYYY hh:mm:ss");
+    ret.push("DD.MM.YYYY hh:mm:ss");
+    ret.push("hh:mm:ss");
+    ret.push("h:mm:ss A");
+    return ret;
+})();
+
+
 @$ReportComponent({ fullPath: "report/Text", icon: "mdi mdi-format-color-text" })
 @$Class("jassijs_report.RText")
 //@$Property({hideBaseClassProperties:true})
@@ -32,6 +65,7 @@ export class RText extends RComponent {
             action: any;
         }
     } = {};
+    _format:string;
     /**
     * 
     * @param {object} properties - properties to init
@@ -81,7 +115,13 @@ export class RText extends RComponent {
         } else
             $(el).html(code);
     }
-
+    @$Property({ type: "string" ,chooseFrom:allFormats})
+    set format(value:string){
+        this._format=value;
+    }
+    get format():string{
+        return this._format;
+    }
 
 
     fromJSON(ob: any): RText {
@@ -92,7 +132,10 @@ export class RText extends RComponent {
         } else
             ret.value = <string>ob.text.replaceAll("\n", "<br/>");
         delete ob.text;
-
+        if(ob.format){
+            this.format=ob.format;
+            delete ob.format;
+        }
         super.fromJSON(ob);
         // ret.otherProperties = ob;
         return this;
@@ -214,8 +257,12 @@ export class RText extends RComponent {
             var style = new InlineStyling();
             var list: any[] = [];
             this.convertFromHTMLNode(node[0], list, style);
-            ret.editTogether = true;
-            ret.text = list;
+          //  if(list.length>1){
+                ret.editTogether = true;
+                ret.text = list;
+            //}else{
+              //  ret=list[0];
+           // }
         }
         return ret;
     }
@@ -223,12 +270,15 @@ export class RText extends RComponent {
 
         var ret = super.toJSON();
         this.convertFromHTML(ret);
-
+        if(this.format){
+            ret.format=this.format;
+        }
 
         var test = 0;
         for (var key in ret) {
             test++;
         }
+
         if (test === 1)
             ret = ret.text;//short version
 

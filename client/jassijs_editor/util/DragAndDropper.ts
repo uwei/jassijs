@@ -249,7 +249,11 @@ export class DragAndDropper {
         if (this.draggableComponents !== undefined) {
 
             this.draggableComponents.draggable();
+            try{
             this.draggableComponents.draggable('destroy');
+            }catch{
+                console.log("unable to destroy draganddrop");
+            }
             delete $.ui["ddmanager"].current;//memory leak https://bugs.jqueryui.com/ticket/10667
             this.draggableComponents = undefined;
         }

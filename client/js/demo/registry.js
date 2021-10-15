@@ -81,7 +81,7 @@ define("demo/registry",["require"], function(require) {
 		}
 	},
 	"demo/ReportInvoice2.ts": {
-		"date": 1631970724965,
+		"date": 1634336859536,
 		"demo.ReportInvoice": {}
 	},
 	"demo/Testdatatable.ts": {

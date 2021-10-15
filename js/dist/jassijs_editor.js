@@ -3147,7 +3147,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1623098599960
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1633290081668,
+                "date": 1634340709090,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
@@ -3534,7 +3534,12 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
             // var components=$(this.allIDs);
             if (this.draggableComponents !== undefined) {
                 this.draggableComponents.draggable();
-                this.draggableComponents.draggable('destroy');
+                try {
+                    this.draggableComponents.draggable('destroy');
+                }
+                catch (_a) {
+                    console.log("unable to destroy draganddrop");
+                }
                 delete $.ui["ddmanager"].current; //memory leak https://bugs.jqueryui.com/ticket/10667
                 this.draggableComponents = undefined;
             }

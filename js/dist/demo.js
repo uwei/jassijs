@@ -311,53 +311,48 @@ define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], fu
                         "${invoice.customer.place}"
                     ],
                     [
-                        {
-                            text: [
-                                {
-                                    text: "    Invoice"
-                                }
-                            ],
-                            editTogether: true,
-                            fontSize: 18
-                        },
+                        { fontSize: 18, text: "Invoice" },
                         "\n",
-                        "Date: ${invoice.date}",
                         {
-                            text: "Number: ${invoice.number}",
-                            bold: true
+                            table: {
+                                widths: ["auto", 100],
+                                body: [
+                                    [
+                                        "Date:",
+                                        {
+                                            text: "${invoice.date}",
+                                            format: "YYYY-MM-DD"
+                                        }
+                                    ],
+                                    ["Number:", "${invoice.number}"]
+                                ]
+                            },
+                            layout: "noBorders"
                         },
-                        "\n",
+                        "",
+                        "",
                         "\n"
                     ]
                 ]
             },
             {
-                groups: [
-                    {
-                        field: "line",
-                        header: [],
-                        footer: []
-                    }
-                ],
                 datatable: {
-                    header: [
-                        "Item",
-                        "Price"
-                    ],
+                    header: ["Item", "Price"],
                     dataforeach: "line in invoice.lines",
                     body: [
                         "${line.text}",
-                        "${line.price}"
+                        {
+                            bold: false,
+                            text: "${line.price}",
+                            format: "#.##0,00"
+                        }
                     ]
                 }
             },
             "\n",
             {
-                foreach: "sum in invoice.summary",
-                columns: [
-                    "${sum.text}",
-                    "${sum.value}"
-                ]
+                foreach: "summ in invoice.summary",
+                columns: ["${summ.text}", "${summ.value}"]
             }
         ]
     };
@@ -381,7 +376,7 @@ define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], fu
         dlg.value = {
             invoice: {
                 number: 1000,
-                date: "20.07.2018",
+                date: new Date(),
                 customer: {
                     firstname: "Henry",
                     lastname: "Klaus",
@@ -1049,9 +1044,9 @@ define("demo/Testdatatable3", ["require", "exports"], function (require, exports
                     widths: [140, "auto", "auto"],
                     groups: [
                         {
-                            header: ["${group1.name}", "\n", ""],
+                            header: ["${group1.name}", "", "${count(group1,'age')}"],
                             expression: "city",
-                            footer: ["${sum(group1,'name')}", "${group1.name}", ""]
+                            footer: ["", "${group1.name}", ""]
                         },
                         {
                             header: ["${group2.name}", "", ""],
@@ -1068,15 +1063,15 @@ define("demo/Testdatatable3", ["require", "exports"], function (require, exports
         ]
     };
     var sampleData = [
-        { id: 1, customer: "Fred", city: "Frankfurt" },
-        { id: 8, customer: "Alma", city: "Dresden" },
-        { id: 3, customer: "Heinz", city: "Frankfurt" },
-        { id: 2, customer: "Fred", city: "Frankfurt" },
-        { id: 6, customer: "Max", city: "Dresden" },
-        { id: 4, customer: "Heinz", city: "Frankfurt" },
-        { id: 5, customer: "Max", city: "Dresden" },
-        { id: 7, customer: "Alma", city: "Dresden" },
-        { id: 9, customer: "Otto", city: "Berlin" }
+        { id: 1, customer: "Fred", city: "Frankfurt", age: 51 },
+        { id: 8, customer: "Alma", city: "Dresden", age: 70 },
+        { id: 3, customer: "Heinz", city: "Frankfurt", age: 33 },
+        { id: 2, customer: "Fred", city: "Frankfurt", age: 88 },
+        { id: 6, customer: "Max", city: "Dresden", age: 3 },
+        { id: 4, customer: "Heinz", city: "Frankfurt", age: 64 },
+        { id: 5, customer: "Max", city: "Dresden", age: 54 },
+        { id: 7, customer: "Alma", city: "Dresden", age: 33 },
+        { id: 9, customer: "Otto", city: "Berlin", age: 21 }
     ];
     async function test() {
         // kk.o=0;
@@ -1462,7 +1457,7 @@ define("demo/registry", ["require"], function (require) {
                 }
             },
             "demo/ReportInvoice2.ts": {
-                "date": 1631970724965,
+                "date": 1634336859536,
                 "demo.ReportInvoice": {}
             },
             "demo/Testdatatable.ts": {
@@ -1472,7 +1467,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1631998782450
             },
             "demo/Testdatatable3.ts": {
-                "date": 1634317436644
+                "date": 1634325998828
             },
             "demo/ReportStyle.ts": {
                 "date": 1632525413937
