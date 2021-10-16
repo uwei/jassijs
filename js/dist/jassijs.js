@@ -4591,9 +4591,14 @@ define("jassijs/remote/Jassi", ["require", "exports", "jassijs/remote/Registry",
     */
     let Jassi = class Jassi {
         constructor() {
+            var _a, _b;
             this.isServer = false;
             //@ts-ignore
             this.isServer = window.document === undefined;
+            //@ts-ignore
+            this.modules = (_a = window === null || window === void 0 ? void 0 : window.__jassijsconfig__) === null || _a === void 0 ? void 0 : _a.modules;
+            //@ts-ignore
+            this.options = (_b = window === null || window === void 0 ? void 0 : window.__jassijsconfig__) === null || _b === void 0 ? void 0 : _b.options;
             if (!this.isServer) {
                 //@ts-ignore 
                 /*import("jassijs/modul").then((modul)=>{

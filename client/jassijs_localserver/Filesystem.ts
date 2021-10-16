@@ -45,8 +45,8 @@ export default class Filessystem {
             let fname = all[x].id;
             var include = true;
             if(jassijs?.options?.Server?.filterSytemfilesInFilemap===true){
-                if(fname.endsWith("/__default.db"))
-                    continue;
+                if(fname==="__default.db")
+                    include = false;
             }
             if (extensions) {
                 include = false;
@@ -102,6 +102,10 @@ export default class Filessystem {
         for (let x = 0; x < all.length; x++) {
             var entr = all[x];
             var paths = entr.id.split("/");
+            if(jassijs?.options?.Server?.filterSytemfilesInFilemap===true){
+                if(entr.id==="__default.db")
+                    continue;
+            }
             var parent = root;
             var currentpath = [];
             for (let p = 0; p < paths.length; p++) {

@@ -884,7 +884,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 let fname = all[x].id;
                 var include = true;
                 if (((_b = (_a = Jassi_2.default === null || Jassi_2.default === void 0 ? void 0 : Jassi_2.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
-                    if (fname.endsWith("/__default.db"))
+                    if (fname === "__default.db")
                         continue;
                 }
                 if (extensions) {

@@ -2005,7 +2005,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.variables.updateCache(); //variables can be added with Repeater.setDesignMode
             if (this._resizer !== undefined) {
                 this._resizer.uninstall();
-                console.log("uninstall");
             }
             if (this._draganddropper !== undefined) {
                 this._draganddropper.uninstall();
@@ -2024,7 +2023,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 this._draganddropper = new DragAndDropper_1.DragAndDropper();
                 this._resizer = new Resizer_1.Resizer();
                 this._resizer.draganddropper = this._draganddropper;
-                console.log("onselect");
                 this._resizer.onelementselected = function (elementIDs, e) {
                     var ret = [];
                     for (var x = 0; x < elementIDs.length; x++) {
@@ -2038,7 +2036,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     }
                 };
                 this._resizer.onpropertychanged = function (comp, prop, value) {
-                    console.log("prop change " + comp._id);
                     if (_this._propertyEditor.value !== comp)
                         _this._propertyEditor.value = comp;
                     _this._propertyEditor.setPropertyInCode(prop, value + "", true);
@@ -2925,12 +2922,20 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
                     this._editor.setValue(value);
                 }
                 else {
+                    const fullRange = this._editor.getModel().getFullModelRange();
+                    // Apply the text over the range
+                    this._editor.executeEdits(null, [{
+                            text: value,
+                            range: fullRange
+                        }]);
+                    /* alternative
                     this._editor.getModel().pushEditOperations([], [{
-                            range: this._editor.getModel().getFullModelRange(),
-                            text: value
-                        }], (a) => {
-                        return null;
-                    });
+                        range: this._editor.getModel().getFullModelRange(),// monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row }),
+                        text: value
+                    }], (a) => {
+                        return null
+                    });*/
+                    this._editor.pushUndoStop();
                 }
                 if (this._editor.getModel()) {
                     this._editor.getModel()["lastEditor"] = _this._editor;
@@ -3121,7 +3126,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1634240147068,
+                "date": 1634378928779,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -3140,7 +3145,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1631469421689
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1624143090748,
+                "date": 1634386456732,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {
@@ -3155,7 +3160,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.base.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1632925438111,
+                "date": 1634384528225,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/TSSourceMap.ts": {
@@ -4254,7 +4259,6 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
         }
         //not every event should be fired - only the last with delay
         firePropertyChange(...param) {
-            console.log("fire " + param[0]._id);
             var _this = this;
             if (this.propertyChangetimer) {
                 clearTimeout(this.propertyChangetimer);
@@ -4287,6 +4291,8 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
                     this._changeCursor(e);
                     return;
                 }
+                if (this.lastSelected && this.lastSelected.length > 0 && this.lastSelected[0] !== element.id)
+                    return;
                 //top left positions of the div element
                 var topLeftX = $(element._this.dom).offset().left; //element.offsetLeft;
                 var topLeftY = $(element._this.dom).offset().top; //element.offsetTop;
@@ -4458,7 +4464,6 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
                         if (_this.onpropertychanged !== undefined) {
                             evt.target._this.width = w;
                             evt.target._this.height = h;
-                            console.log("cha" + evt.target._this._id);
                             _this.onpropertychanged(evt.target._this, "width", w);
                             _this.onpropertychanged(evt.target._this, "height", h);
                             $(evt.target._this.domWrapper).css("width", w + "px");

@@ -54,13 +54,14 @@ async function run() {
     var smodules = await loadText(configFile);
     var requireconfig = {};
     let modules;
-    let options;
+    
     if (smodules) {
         let data = JSON.parse(smodules);
         if (data.require)
             requireconfig = data.require;
         modules = data.modules;
-        options = data.options;
+        
+        window.__jassijsconfig__=data;
         //load requirejs
         if (!window.requirejs) {
             let path;
@@ -178,8 +179,8 @@ async function run() {
                     jassijs.default.myRequire(css);
                 });
                 //this.myRequire("jassijs/jassijs.css");
-                jassijs.default.modules = modules;
-                jassijs.default.options = options; 
+               // jassijs.default.modules = modules;
+               // jassijs.default.options = options; 
                 if (runFunction&& window[runFunction]) {
                     window[runFunction]();
                 }

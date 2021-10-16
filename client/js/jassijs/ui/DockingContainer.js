@@ -321,7 +321,7 @@ define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Jassi"
         }
     };
     DockingContainer = __decorate([
-        Jassi_1.$Class("jassijs.ui.DockingContainer"),
+        (0, Jassi_1.$Class)("jassijs.ui.DockingContainer"),
         __metadata("design:paramtypes", [Object])
     ], DockingContainer);
     exports.DockingContainer = DockingContainer;

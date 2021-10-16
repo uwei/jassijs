@@ -61,11 +61,15 @@ export class Jassi {
     [key: string]: any;
     base: { [k: string]: any };
     public modules: { [key: string]: string };
-    public options:any;
+    public options: any;
     isServer: boolean = false;
     constructor() {
         //@ts-ignore
         this.isServer = window.document === undefined;
+        //@ts-ignore
+        this.modules = window?.__jassijsconfig__?.modules;
+        //@ts-ignore
+        this.options = window?.__jassijsconfig__?.options;
         if (!this.isServer) {
             //@ts-ignore 
             /*import("jassijs/modul").then((modul)=>{
