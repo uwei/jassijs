@@ -210,7 +210,6 @@ class Registry {
      * reload the registry
      */
     async reload() {
-        console.log("load json");
         this.jsondata = { $Class: {} };
         this.jsondataMembers = {};
         var _this = this;
@@ -324,9 +323,6 @@ class Registry {
                             this.jsondata[service] = {};
                         var entr = new JSONDataEntry();
                         entr.params = theclass[service];
-                        /* if (vfiles.$Class === undefined) {
-                             console.log("@$Class annotation is missing for " + file + " Service " + service);
-                         }*/
                         entr.classname = classname; //vfiles.$Class === undefined ? undefined : vfiles.$Class[0];
                         entr.filename = file;
                         this.jsondata[service][entr.classname] = entr;

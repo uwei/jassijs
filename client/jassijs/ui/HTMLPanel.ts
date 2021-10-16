@@ -136,7 +136,6 @@ export class HTMLPanel extends DataComponent {
             setup: function (ed) {
                 ed.on('change', function (e) {
                     var text = _this.dom.firstElementChild.innerHTML;
-                    console.log(text);
                     if (text === '<br data-mce-bogus="1">')
                         text = "";
                     editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);

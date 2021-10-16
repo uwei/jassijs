@@ -57,7 +57,7 @@ define("demoreports/registry",["require"], function(require) {
 		"date": 1634338772059
 	},
 	"demoreports/Invoice.ts": {
-		"date": 1634341954517
+		"date": 1634384560011
 	}
 }
  }

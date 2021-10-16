@@ -28,7 +28,7 @@ exports.default={
 		"date": 1622985482440
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1626122987760,
+		"date": 1634384659871,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -43,7 +43,63 @@ exports.default={
 					}
 				]
 			],
-			"$DBObject": []
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"vorname": {
+					"Column": []
+				},
+				"nachname": {
+					"Column": []
+				},
+				"strasse": {
+					"Column": []
+				},
+				"PLZ": {
+					"Column": []
+				},
+				"ort": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"hausnummer": {
+					"Column": []
+				},
+				"rechnungen": {
+					"OneToMany": [
+						"function",
+						"function"
+					]
+				},
+				"alleKundenNachNachname": {
+					"$DBObjectQuery": [
+						{
+							"name": "Alle nach Namen",
+							"description": "Kundenliste nach Namen"
+						}
+					]
+				},
+				"alleKundenNachNummer": {
+					"$DBObjectQuery": [
+						{
+							"name": "Alle nach Nummer",
+							"description": "Kundenliste nach Nummer"
+						}
+					]
+				},
+				"land": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				}
+			}
 		}
 	},
 	"de/remote/KundeExt.ts": {

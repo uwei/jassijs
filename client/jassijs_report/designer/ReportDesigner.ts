@@ -76,7 +76,6 @@ export class ReportDesigner extends ComponentDesigner {
             var data;
             try {
                 data = (<ReportDesign>this._codeChanger.value).toJSON();
-                console.log(data);
                 rep.value = data;//Tools.copyObject(data);// designedComponent["design"];
                 rep.fill();
                 rep.getBase64().then((data) => {

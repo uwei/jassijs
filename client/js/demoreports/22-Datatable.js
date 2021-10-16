@@ -4,9 +4,21 @@ define(["require", "exports"], function (require, exports) {
     exports.test = void 0;
     var reportdesign = {
         content: [
-            "A Simple datatable",
+            "A datatable with 2 groups",
             {
                 datatable: {
+                    groups: [
+                        {
+                            header: ["${group1.name}", "", ""],
+                            expression: "city",
+                            footer: ["", "", ""]
+                        },
+                        {
+                            header: ["${group2.name}", "", ""],
+                            expression: "customer",
+                            footer: ["custfooter", "", ""]
+                        }
+                    ],
                     header: ["id", "customer", "city"],
                     footer: ["", "", ""],
                     dataforeach: "cust",
@@ -35,4 +47,4 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-//# sourceMappingURL=05-Datatable.js.map
+//# sourceMappingURL=22-Datatable.js.map

@@ -144,9 +144,6 @@ async function test() {
     let test = new Kunde();
     var g = test.extFunc2();
     var h = test.extFunc();
-    for (var key in test) {
-        console.log(key);
-    }
     //await Kunde.sample();
     var k = await Kunde.findOne({ id: 1 });
     k.vorname = "Ella";

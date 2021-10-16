@@ -35,4 +35,4 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-//# sourceMappingURL=05-Datatable.js.map
+//# sourceMappingURL=21-Datatable.js.map

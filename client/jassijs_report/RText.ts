@@ -4,6 +4,7 @@ import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { $Property } from "jassijs/ui/Property";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { loadFontIfNedded } from "jassijs/ui/CSSProperties";
+import { Tools } from "jassijs/util/Tools";
 
 
 
@@ -19,27 +20,27 @@ class InlineStyling {
 
 
 //calc the default Formats
-let allFormats=(()=>{
-    var ret=[];
+let allFormats = (() => {
+    var ret = [];
     const format = new Intl.NumberFormat();
-    
-    var decimal=format.format(1.1).substring(1,2);
-    var group=format.format(1234).substring(1,2);
-	/*	const parts = format.formatToParts(1234.6);
-  		var decimal = ".";
+
+    var decimal = format.format(1.1).substring(1, 2);
+    var group = format.format(1234).substring(1, 2);
+    /*	const parts = format.formatToParts(1234.6);
+            var decimal = ".";
         var group=",";
-		parts.forEach(p => {
-			if (p.type === "decimal")
-				decimal = p.value;
+        parts.forEach(p => {
+            if (p.type === "decimal")
+                decimal = p.value;
             if (p.type === "group")
-				group = p.value;
-		});*/
-    ret.push("#"+group+"##0"+decimal+"00");
-    ret.push("#"+group+"##0"+decimal+"00 €");
-    ret.push("#"+group+"##0"+decimal+"00 $");
+                group = p.value;
+        });*/
+    ret.push("#" + group + "##0" + decimal + "00");
+    ret.push("#" + group + "##0" + decimal + "00 €");
+    ret.push("#" + group + "##0" + decimal + "00 $");
     ret.push("$#,###.00");
     ret.push("0");
-    ret.push("0"+decimal+"00");
+    ret.push("0" + decimal + "00");
     ret.push("MM/DD/YYYY");
     ret.push("DD.MM.YYYY");
     ret.push("DD/MM/YYYY hh:mm:ss");
@@ -65,7 +66,7 @@ export class RText extends RComponent {
             action: any;
         }
     } = {};
-    _format:string;
+    _format: string;
     /**
     * 
     * @param {object} properties - properties to init
@@ -92,7 +93,7 @@ export class RText extends RComponent {
         this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
         this.initIfNeeded = HTMLPanel.prototype.initIfNeeded.bind(this);
         //@ts-ignore
-        this._initTinymce= HTMLPanel.prototype._initTinymce.bind(this);
+        this._initTinymce = HTMLPanel.prototype._initTinymce.bind(this);
     }
 
     @$Property({
@@ -115,11 +116,11 @@ export class RText extends RComponent {
         } else
             $(el).html(code);
     }
-    @$Property({ type: "string" ,chooseFrom:allFormats})
-    set format(value:string){
-        this._format=value;
+    @$Property({ type: "string", chooseFrom: allFormats })
+    set format(value: string) {
+        this._format = value;
     }
-    get format():string{
+    get format(): string {
         return this._format;
     }
 
@@ -132,8 +133,8 @@ export class RText extends RComponent {
         } else
             ret.value = <string>ob.text.replaceAll("\n", "<br/>");
         delete ob.text;
-        if(ob.format){
-            this.format=ob.format;
+        if (ob.format) {
+            this.format = ob.format;
             delete ob.format;
         }
         super.fromJSON(ob);
@@ -179,7 +180,7 @@ export class RText extends RComponent {
                 this.convertFromHTMLNode(child, list, style);
                 delete style.background;
             } else if (child.nodeName === "SPAN" && child["style"]["font-size"] !== "") {
-                style.fontsize = Number(child["style"]["font-size"].replace("pt", ""));
+                style.fontsize = Number(child["style"]["font-size"].replace("px", ""));
                 this.convertFromHTMLNode(child, list, style);
                 delete style.fontsize;
             } else if (child.nodeName === "SPAN" && child["style"]["text-decoration"] !== "") {
@@ -257,21 +258,24 @@ export class RText extends RComponent {
             var style = new InlineStyling();
             var list: any[] = [];
             this.convertFromHTMLNode(node[0], list, style);
-          //  if(list.length>1){
+            if (list.length > 1) {
                 ret.editTogether = true;
                 ret.text = list;
-            //}else{
-              //  ret=list[0];
-           // }
+            } else { //only one text found so we transfer the html 
+                ret = list[0];
+                ret.text = node[0].innerText;
+
+                this.fromJSON(Tools.copyObject(ret));
+            }
         }
         return ret;
     }
     toJSON() {
 
         var ret = super.toJSON();
-        this.convertFromHTML(ret);
-        if(this.format){
-            ret.format=this.format;
+        ret = this.convertFromHTML(ret);
+        if (this.format) {
+            ret.format = this.format;
         }
 
         var test = 0;

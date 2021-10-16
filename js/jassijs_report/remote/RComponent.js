@@ -102,6 +102,7 @@ let RComponent = RComponent_1 = class RComponent extends Panel_1.Panel {
     }
     set width(value) {
         var _a;
+        console.log("setw" + value);
         if (((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) !== undefined)
             this._parent.setChildWidth(this, value);
         else {

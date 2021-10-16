@@ -102,7 +102,6 @@ export class Resizer {
     }
     //not every event should be fired - only the last with delay
     private firePropertyChange(...param: any[]) {
-        console.log("fire " + param[0]._id);
         var _this = this;
         if (this.propertyChangetimer) {
             clearTimeout(this.propertyChangetimer);
@@ -139,6 +138,8 @@ export class Resizer {
                 this._changeCursor(e);
                 return;
             }
+            if(this.lastSelected&&this.lastSelected.length>0&&this.lastSelected[0]!==element.id)
+                return;
             //top left positions of the div element
             var topLeftX = $(element._this.dom).offset().left;//element.offsetLeft;
             var topLeftY = $(element._this.dom).offset().top;//element.offsetTop;
@@ -318,7 +319,6 @@ export class Resizer {
                     if (_this.onpropertychanged !== undefined) {
                         evt.target._this.width = w;
                         evt.target._this.height = h;
-                        console.log("cha" + evt.target._this._id);
                         _this.onpropertychanged(evt.target._this, "width", w);
                         _this.onpropertychanged(evt.target._this, "height", h);
                         $(evt.target._this.domWrapper).css("width", w + "px");

@@ -2,11 +2,7 @@
 
 var reportdesign = {
 	footer: [
-		{
-			alignment: "center",
-			text: [{text: "IBAN: 5000550020"}],
-			editTogether: true
-		},
+		{alignment: "center",text: "IBAN: 5000550020"},
 		{alignment: "center",text: "BIC DGGFFJ"}
 	],
 	content: [
@@ -28,17 +24,10 @@ var reportdesign = {
 				{
 					width: 170,
 					stack: [
-						{
-							fontSize: 18,
-							text: [{text: "B & M Consulting"}],
-							editTogether: true
-						},
+						"B & M Consulting",
 						"Rastplatz 7",
 						"09116 Chemnitz",
-						{
-							text: [{text: " "}],
-							editTogether: true
-						},
+						"\n",
 						{
 							table: {
 								widths: ["auto",100],
@@ -70,7 +59,7 @@ var reportdesign = {
 		},
 		{
 			datatable: {
-				widths: [365,110],
+				widths: [360,110],
 				header: ["Item",{alignment: "right",text: "Price"}],
 				dataforeach: "line in invoice.lines",
 				body: [
@@ -88,7 +77,7 @@ var reportdesign = {
 		{
 			foreach: "summ in invoice.summary",
 			columns: [
-				{width: 175,text: "\n"},
+				{width: 245,text: "\n"},
 				{
 					width: 150,
 					text: "${summ.text}"

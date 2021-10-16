@@ -169,7 +169,7 @@ define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Jassi"
             var container = component.dom._container;
             //   container.getElement()[0].removeChild(component.dom);
             //            this.dom.removeChild(component.domWrapper);
-            console.warn("TODO call close tab?");
+            //console.warn("TODO call close tab?")
         }
         _init() {
             var config = {
@@ -299,7 +299,7 @@ define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Jassi"
         addSelectionEvent(element) {
             if (element.contentItems !== undefined) {
                 element.on("activeContentItemChanged", function (evt) {
-                    console.log(evt.componentName);
+                    //console.log(evt.componentName);
                 });
                 for (let x = 0; x < element.contentItems.length; x++) {
                     this.addSelectionEvent(element.contentItems[x]);
@@ -321,7 +321,7 @@ define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Jassi"
         }
     };
     DockingContainer = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.DockingContainer"),
+        Jassi_1.$Class("jassijs.ui.DockingContainer"),
         __metadata("design:paramtypes", [Object])
     ], DockingContainer);
     exports.DockingContainer = DockingContainer;

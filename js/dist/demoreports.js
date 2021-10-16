@@ -473,6 +473,10 @@ define("demoreports/Invoice", ["require", "exports"], function (require, exports
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     var reportdesign = {
+        footer: [
+            { alignment: "center", text: "IBAN: 5000550020" },
+            { alignment: "center", text: "BIC DGGFFJ" }
+        ],
         content: [
             {
                 columns: [{ width: 325, fontSize: 20, text: "Invoice\n" }, { image: "logo" }]
@@ -492,13 +496,10 @@ define("demoreports/Invoice", ["require", "exports"], function (require, exports
                     {
                         width: 170,
                         stack: [
-                            {
-                                fontSize: 18,
-                                text: [{ text: "B & M Consulting" }],
-                                editTogether: true
-                            },
+                            "B & M Consulting",
                             "Rastplatz 7",
                             "09116 Chemnitz",
+                            "\n",
                             {
                                 table: {
                                     widths: ["auto", 100],
@@ -530,7 +531,7 @@ define("demoreports/Invoice", ["require", "exports"], function (require, exports
             },
             {
                 datatable: {
-                    widths: [365, 110],
+                    widths: [360, 110],
                     header: ["Item", { alignment: "right", text: "Price" }],
                     dataforeach: "line in invoice.lines",
                     body: [
@@ -548,7 +549,7 @@ define("demoreports/Invoice", ["require", "exports"], function (require, exports
             {
                 foreach: "summ in invoice.summary",
                 columns: [
-                    { width: 175, text: "\n" },
+                    { width: 245, text: "\n" },
                     {
                         width: 150,
                         text: "${summ.text}"
@@ -584,15 +585,15 @@ define("demoreports/Invoice", ["require", "exports"], function (require, exports
                         place: "9430 Drebach",
                     },
                     lines: [
-                        { pos: 1, text: "this is the first position, lksjdflgsd er we wer wre er er er re wekfgjslkdfjjdk sgfsdg", price: 10.00 },
+                        { pos: 1, text: "this is the first position, lksjdflgsd er we wer wre er er er re wekfgjslkdfjjdk sgfsdg", price: 10.00, amount: 50, variante: [{ m: 1 }, { m: 2 }] },
                         { pos: 2, text: "this is the next position", price: 20.50, },
                         { pos: 3, text: "this is an other position", price: 19.50 },
-                        { pos: 4, text: "this is the last position", price: 1050.00 },
+                        { pos: 4, text: "this is the last position", price: 50.00 },
                     ],
                     summary: [
-                        { text: "Net", value: 924.36 },
+                        { text: "Subtotal", value: 100.00 },
                         { text: "Tax", value: 19.00 },
-                        { text: "Subtotal", value: 1100.00 },
+                        { text: "Subtotal", value: 119.00 },
                     ]
                 }
             }
@@ -664,7 +665,7 @@ define("demoreports/registry", ["require"], function (require) {
                 "date": 1634338772059
             },
             "demoreports/Invoice.ts": {
-                "date": 1634341543292
+                "date": 1634384560011
             }
         }
     };

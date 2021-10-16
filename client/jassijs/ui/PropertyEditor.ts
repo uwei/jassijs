@@ -322,7 +322,6 @@ export class PropertyEditor extends Panel {
                 //nameEditor.ob = _this._value;
             }
         }
-        console.log(props.length);
         for (var x = 0; x < props.length; x++) {
             if (props[x].name.indexOf("/") > -1) {
             } else {

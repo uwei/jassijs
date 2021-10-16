@@ -58,7 +58,7 @@ define("demo/registry",["require"], function(require) {
 		"demo/TestUpload": {}
 	},
 	"demo/TreeContextmenu.ts": {
-		"date": 1622984213677
+		"date": 1634384687647
 	},
 	"demo/TreeTable.ts": {
 		"date": 1622984213677,

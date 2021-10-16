@@ -28,14 +28,14 @@ function __init(editor: monaco.editor.IStandaloneCodeEditor) {
             CodePanel.getAutoimport(p, file, code).then((data) => {
 
                 if (data !== undefined) {
-                    
+
                     model.pushEditOperations([], [{
                         range: monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row + 1 }),
                         text: data.text
-                    }], (a) =>{
+                    }], (a) => {
                         return null;
-                    } );
-                    oldpos.lineNumber=oldpos.lineNumber+(data.text.indexOf("\r")?1:0);
+                    });
+                    oldpos.lineNumber = oldpos.lineNumber + (data.text.indexOf("\r") ? 1 : 0);
                     model["lastEditor"].setPosition(oldpos);
                 }
             });
@@ -226,7 +226,7 @@ export class MonacoPanel extends CodePanel {
      */
     set value(value: string) { //the Code
         var lastcursor = this.cursorPosition;
-        var _this=this;
+        var _this = this;
         if (this.file) {
             var ffile = monaco.Uri.from({ path: "/" + this.file, scheme: 'file' });
             var mod = monaco.editor.getModel(ffile);
@@ -239,16 +239,27 @@ export class MonacoPanel extends CodePanel {
                 this._editor.setModel(mod);
                 this._editor.setValue(value);
             } else {
+                const fullRange = this._editor.getModel().getFullModelRange();
+
+                // Apply the text over the range
+                this._editor.executeEdits(null, [{
+                    text: value,
+                    range: fullRange
+                    
+                }]);
+                
+                /* alternative
                 this._editor.getModel().pushEditOperations([], [{
                     range: this._editor.getModel().getFullModelRange(),// monaco.Range.fromPositions({ column: data.pos.column, lineNumber: data.pos.row }),
                     text: value
                 }], (a) => {
                     return null
-                });
+                });*/
+                this._editor.pushUndoStop();
             }
-            if(this._editor.getModel()){
-                this._editor.getModel()["lastEditor"]=_this._editor;
-                
+            if (this._editor.getModel()) {
+                this._editor.getModel()["lastEditor"] = _this._editor;
+
             }
         } else
 
@@ -281,7 +292,7 @@ export class MonacoPanel extends CodePanel {
     destroy() {
         //this._editor.destroy();
         super.destroy();
-         delete this._editor.getModel()["lastEditor"];
+        delete this._editor.getModel()["lastEditor"];
     }
 
     /**

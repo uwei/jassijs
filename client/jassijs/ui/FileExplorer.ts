@@ -129,7 +129,6 @@ export class FileActions {
                 alert("modul allready exists");
                 return;
             }
-            console.log("create Module" + smodule);
             var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
 
             var ret = await new Server().createModule(smodule);

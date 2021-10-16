@@ -1224,9 +1224,6 @@ define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassij
         };
         me.tree.width = "100%";
         me.tree.height = 175;
-        /*  me.tree.onclick(function (data) {
-              console.log("select " + data.item.name);
-          });*/
         var contextmenu = new ContextMenu_3.ContextMenu();
         me.tree.contextMenu = contextmenu;
         var menu = new MenuItem_4.MenuItem();
@@ -1434,7 +1431,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo/TestUpload": {}
             },
             "demo/TreeContextmenu.ts": {
-                "date": 1622984213677
+                "date": 1634384687647
             },
             "demo/TreeTable.ts": {
                 "date": 1622984213677,

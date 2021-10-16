@@ -329,7 +329,7 @@ export class ComponentDesigner extends Panel {
         //    }
         this.variables.updateCache();//variables can be added with Repeater.setDesignMode
         if (this._resizer !== undefined) {
-            this._resizer.uninstall(); console.log("uninstall");
+            this._resizer.uninstall(); 
         }
         if (this._draganddropper !== undefined) {
             this._draganddropper.uninstall();
@@ -350,7 +350,6 @@ export class ComponentDesigner extends Panel {
             this._resizer = new Resizer();
             this._resizer.draganddropper = this._draganddropper;
 
-            console.log("onselect");
             this._resizer.onelementselected = function (elementIDs, e) {
                 var ret = [];
                 for (var x = 0; x < elementIDs.length; x++) {
@@ -365,7 +364,6 @@ export class ComponentDesigner extends Panel {
             };
 
             this._resizer.onpropertychanged = function (comp: Component, prop: string, value: any) {
-                console.log("prop change " + comp._id);
                 if (_this._propertyEditor.value !== comp)
                     _this._propertyEditor.value = comp;
                 _this._propertyEditor.setPropertyInCode(prop, value + "", true);

@@ -185,7 +185,7 @@ export class DockingContainer extends Container {
         //   container.getElement()[0].removeChild(component.dom);
 
         //            this.dom.removeChild(component.domWrapper);
-        console.warn("TODO call close tab?")
+        //console.warn("TODO call close tab?")
     }
     _init() {
         var config = {
@@ -322,7 +322,7 @@ export class DockingContainer extends Container {
     private addSelectionEvent(element){
     	if(element.contentItems!==undefined){
     		element.on("activeContentItemChanged",function(evt){
-        		console.log(evt.componentName);
+        		//console.log(evt.componentName);
         	});
         	for(let x=0;x<element.contentItems.length;x++){
         		this.addSelectionEvent(element.contentItems[x]);

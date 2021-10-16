@@ -505,11 +505,13 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         }
         set width(value) {
             var _a;
+            if (value && Number.parseInt(value).toString() === value) {
+                value = Number.parseInt(value);
+            }
             if (((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) !== undefined)
                 this._parent.setChildWidth(this, value);
             else {
                 this._width = value;
-                console.log(value);
                 super.width = value;
             }
         }
@@ -786,6 +788,10 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
                 ret.margin = ob.margin;
                 delete ob.margin;
             }
+            if (ob.width) {
+                ret.width = ob.width;
+                delete ob.width;
+            }
             ret.otherProperties = ob;
             return ret;
         }
@@ -836,6 +842,8 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
                 ret.listType = this.listType;
             if (this.margin)
                 ret.margin = this.margin;
+            if (this.width && (this === null || this === void 0 ? void 0 : this._parent.reporttype) === "column")
+                ret.width = this.width;
             Object.assign(ret, this["otherProperties"]);
             return ret;
         }
@@ -3013,7 +3021,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
     exports.RTablerow = RTablerow;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties"], function (require, exports, Jassi_14, RComponent_12, HTMLPanel_1, Property_8, ReportDesign_5, CSSProperties_1) {
+define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties", "jassijs/util/Tools"], function (require, exports, Jassi_14, RComponent_12, HTMLPanel_1, Property_8, ReportDesign_5, CSSProperties_1, Tools_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RText = void 0;
@@ -3026,7 +3034,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
         var decimal = format.format(1.1).substring(1, 2);
         var group = format.format(1234).substring(1, 2);
         /*	const parts = format.formatToParts(1234.6);
-            var decimal = ".";
+                var decimal = ".";
             var group=",";
             parts.forEach(p => {
                 if (p.type === "decimal")
@@ -3161,7 +3169,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
                     delete style.background;
                 }
                 else if (child.nodeName === "SPAN" && child["style"]["font-size"] !== "") {
-                    style.fontsize = Number(child["style"]["font-size"].replace("pt", ""));
+                    style.fontsize = Number(child["style"]["font-size"].replace("px", ""));
                     this.convertFromHTMLNode(child, list, style);
                     delete style.fontsize;
                 }
@@ -3241,18 +3249,21 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Jassi", "j
                 var style = new InlineStyling();
                 var list = [];
                 this.convertFromHTMLNode(node[0], list, style);
-                //  if(list.length>1){
-                ret.editTogether = true;
-                ret.text = list;
-                //}else{
-                //  ret=list[0];
-                // }
+                if (list.length > 1) {
+                    ret.editTogether = true;
+                    ret.text = list;
+                }
+                else { //only one text found so we transfer the html 
+                    ret = list[0];
+                    ret.text = node[0].innerText;
+                    this.fromJSON(Tools_2.Tools.copyObject(ret));
+                }
             }
             return ret;
         }
         toJSON() {
             var ret = super.toJSON();
-            this.convertFromHTML(ret);
+            ret = this.convertFromHTML(ret);
             if (this.format) {
                 ret.format = this.format;
             }
@@ -4439,7 +4450,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1634164963306,
+                "date": 1634384912619,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/modul.ts": {
@@ -4773,7 +4784,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1634338741473,
+                "date": 1634384337004,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -4840,7 +4851,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RComponent.ts": {
-                "date": 1634318558680,
+                "date": 1634385287193,
                 "jassijs_report.ReportComponent": {
                     "$Property": [
                         {
@@ -5259,239 +5270,6 @@ define("jassijs_report/registry", ["require"], function (require) {
             },
             "jassijs_report/StartReporteditor.ts": {
                 "date": 1633970382677
-            },
-            "jassijs_report/remote/RComponent.ts": {
-                "date": 1634318543906,
-                "jassijs_report.ReportComponent": {
-                    "$Property": [
-                        {
-                            "hideBaseClassProperties": true
-                        }
-                    ],
-                    "@members": {
-                        "foreach": {
-                            "$Property": []
-                        },
-                        "counter": {
-                            "$Property": [
-                                {
-                                    "default": "undefined",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "listType": {
-                            "$Property": [
-                                {
-                                    "name": "listType",
-                                    "default": "undefined",
-                                    "isVisible": "function",
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "fillColor": {
-                            "$Property": [
-                                {
-                                    "type": "color",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "colSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "rowSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "border": {
-                            "$Property": [
-                                {
-                                    "type": "boolean[]",
-                                    "default": [
-                                        false,
-                                        false,
-                                        false,
-                                        false
-                                    ],
-                                    "isVisible": "function",
-                                    "description": "border of the tablecell: left, top, right, bottom"
-                                }
-                            ]
-                        },
-                        "width": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "height": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "bold": {
-                            "$Property": []
-                        },
-                        "italics": {
-                            "$Property": []
-                        },
-                        "font": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "Alegreya",
-                                        "AlegreyaSans",
-                                        "AlegreyaSansSC",
-                                        "AlegreyaSC",
-                                        "AlmendraSC",
-                                        "Amaranth",
-                                        "Andada",
-                                        "AndadaSC",
-                                        "AnonymousPro",
-                                        "ArchivoNarrow",
-                                        "Arvo",
-                                        "Asap",
-                                        "AveriaLibre",
-                                        "AveriaSansLibre",
-                                        "AveriaSerifLibre",
-                                        "Cambay",
-                                        "Caudex",
-                                        "CrimsonText",
-                                        "Cuprum",
-                                        "Economica",
-                                        "Exo2",
-                                        "Exo",
-                                        "ExpletusSans",
-                                        "FiraSans",
-                                        "JosefinSans",
-                                        "JosefinSlab",
-                                        "Karla",
-                                        "Lato",
-                                        "LobsterTwo",
-                                        "Lora",
-                                        "Marvel",
-                                        "Merriweather",
-                                        "MerriweatherSans",
-                                        "Nobile",
-                                        "NoticiaText",
-                                        "Overlock",
-                                        "Philosopher",
-                                        "PlayfairDisplay",
-                                        "PlayfairDisplaySC",
-                                        "PT_Serif-Web",
-                                        "Puritan",
-                                        "Quantico",
-                                        "QuattrocentoSans",
-                                        "Quicksand",
-                                        "Rambla",
-                                        "Rosario",
-                                        "Sansation",
-                                        "Sarabun",
-                                        "Scada",
-                                        "Share",
-                                        "Sitara",
-                                        "SourceSansPro",
-                                        "TitilliumWeb",
-                                        "Volkhov",
-                                        "Vollkorn"
-                                    ]
-                                }
-                            ]
-                        },
-                        "fontSize": {
-                            "$Property": []
-                        },
-                        "background": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "color": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "alignment": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "left",
-                                        "center",
-                                        "right"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decoration": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "underline",
-                                        "lineThrough",
-                                        "overline"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decorationColor": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "decorationStyle": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "dashed",
-                                        "dotted",
-                                        "double",
-                                        "wavy"
-                                    ]
-                                }
-                            ]
-                        },
-                        "style": {
-                            "$Property": []
-                        },
-                        "lineHeight": {
-                            "$Property": [
-                                {
-                                    "default": 1
-                                }
-                            ]
-                        },
-                        "margin": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "description": "margin left, top, right, bottom"
-                                }
-                            ]
-                        }
-                    }
-                }
             }
         }
     };
@@ -5526,7 +5304,7 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
 });
 //jassijs.register("reportcomponent", "jassijs_report.Report", "report/Report", "res/report.ico");
 // return CodeEditor.constructor;
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_21, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_4, PDFReport_1, PDFViewer_2, ReportDesign_10, Tools_2) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Jassi_21, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_4, PDFReport_1, PDFViewer_2, ReportDesign_10, Tools_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
@@ -5580,7 +5358,6 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                 var data;
                 try {
                     data = this._codeChanger.value.toJSON();
-                    console.log(data);
                     rep.value = data; //Tools.copyObject(data);// designedComponent["design"];
                     rep.fill();
                     rep.getBase64().then((data) => {
@@ -5612,7 +5389,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             let job = this.designedComponent.toJSON();
             delete job.parameter;
             delete job.data;
-            let ob = Tools_2.Tools.objectToJson(job, undefined, false, 80);
+            let ob = Tools_3.Tools.objectToJson(job, undefined, false, 80);
             if (this._codeChanger.parser.variables["reportdesign"]) {
                 var s = this._codeChanger.parser.code.substring(0, this._codeChanger.parser.variables["reportdesign"].pos) +
                     " reportdesign = " + ob + this._codeChanger.parser.code.substring(this._codeChanger.parser.variables["reportdesign"].end);
@@ -5815,7 +5592,7 @@ export async function test() {
     exports.test = test;
     ;
 });
-define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Jassi_22, ReportDesigner_1, Tools_3) {
+define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Jassi_22, ReportDesigner_1, Tools_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SimpleReportDesigner = void 0;
@@ -5873,7 +5650,7 @@ define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "j
                 let job = this.designedComponent.toJSON();
                 delete job.parameter;
                 delete job.data;
-                let ob = Tools_3.Tools.objectToJson(job, undefined, false, 80);
+                let ob = Tools_4.Tools.objectToJson(job, undefined, false, 80);
                 this._codeEditor._codePanel.value = this.codePrefix + ob + ";";
                 this.callEvent("codechanged", this.codePrefix + ob + ";");
             }
@@ -5970,606 +5747,6 @@ define("jassijs_report/ext/pdfmake", ['pdfMake', "vfs_fonts"], function (ttt, vf
     return {
         default: pdfMake
     };
-});
-define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Property"], function (require, exports, Component_6, Registry_2, Jassi_23, Panel_7, Property_12) {
-    "use strict";
-    var RComponent_17;
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.RComponent = exports.$ReportComponent = exports.ReportComponentProperties = void 0;
-    //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
-    class ReportComponentProperties extends Component_6.UIComponentProperties {
-    }
-    exports.ReportComponentProperties = ReportComponentProperties;
-    function $ReportComponent(properties) {
-        return function (pclass) {
-            Registry_2.default.register("$ReportComponent", pclass, properties);
-        };
-    }
-    exports.$ReportComponent = $ReportComponent;
-    let RComponent = RComponent_17 = class RComponent extends Panel_7.Panel {
-        constructor(properties = undefined) {
-            super(properties);
-            this.reporttype = "nothing";
-        }
-        onstylechanged(func) {
-            this.addEvent("stylechanged", func);
-        }
-        set counter(value) {
-            this._counter = value;
-            if (value === undefined)
-                $(this.domWrapper).removeAttr("value");
-            else
-                $(this.domWrapper).attr("value", value);
-        }
-        get counter() {
-            return this._counter;
-        }
-        set listType(value) {
-            this._listType = value;
-            if (value === undefined)
-                $(this.domWrapper).css("list-style-type", "");
-            else
-                $(this.domWrapper).css("list-style-type", value);
-        }
-        get listType() {
-            return this._listType;
-        }
-        get fillColor() {
-            return this._fillColor;
-        }
-        set fillColor(value) {
-            this._fillColor = value;
-            $(this.dom).css("background-color", value);
-        }
-        get colSpan() {
-            return this._colSpan;
-        }
-        set colSpan(value) {
-            var _a, _b, _c, _d;
-            $(this.domWrapper).attr("colspan", value === undefined ? "" : value);
-            this._colSpan = value;
-            if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
-                (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
-        }
-        get rowSpan() {
-            return this._rowSpan;
-        }
-        set rowSpan(value) {
-            var _a, _b, _c, _d;
-            $(this.domWrapper).attr("rowspan", value === undefined ? "" : value);
-            this._rowSpan = value;
-            if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
-                (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
-        }
-        get border() {
-            return this._border;
-        }
-        set border(value) {
-            this._border = value;
-            if (value === undefined)
-                value = [false, false, false, false];
-            $(this.domWrapper).css("border-left-style", value[0] ? "solid" : "none");
-            $(this.domWrapper).css("border-top-style", value[1] ? "solid" : "none");
-            $(this.domWrapper).css("border-right-style", value[2] ? "solid" : "none");
-            $(this.domWrapper).css("border-bottom-style", value[3] ? "solid" : "none");
-        }
-        get width() {
-            var _a;
-            if (((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) !== undefined)
-                return this._parent.getChildWidth(this);
-            else
-                return this._width;
-        }
-        set width(value) {
-            var _a;
-            if (((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) !== undefined)
-                this._parent.setChildWidth(this, value);
-            else {
-                this._width = value;
-                console.log(value);
-                super.width = value;
-            }
-        }
-        get height() {
-            var _a;
-            if (((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildHeight) !== undefined)
-                return this._parent.getChildHeight(this);
-            else
-                return this._height;
-        }
-        set height(value) {
-            var _a;
-            if (((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildHeight) !== undefined)
-                this._parent.setChildHeight(this, value);
-            else {
-                this._height = value;
-                console.log(value);
-                super.height = value;
-            }
-        }
-        get bold() {
-            return this._bold;
-        }
-        set bold(value) {
-            this._bold = value;
-            $(this.dom).css("font-weight", value ? "bold" : "normal");
-            this.callEvent("stylechanged", "font-weight", value);
-        }
-        get italics() {
-            return this._italics;
-        }
-        set italics(value) {
-            this._italics = value;
-            $(this.dom).css("font-style", value ? "italic" : "normal");
-            this.callEvent("stylechanged", "font-style", value);
-        }
-        get font() {
-            return this._font;
-        }
-        set font(value) {
-            this._font = value;
-            //copy from CSSProperties
-            var api = 'https://fonts.googleapis.com/css?family=';
-            var sfont = value.replaceAll(" ", "+");
-            if (!document.getElementById("-->" + api + sfont)) { //"-->https://fonts.googleapis.com/css?family=Aclonica">
-                Jassi_23.default.myRequire(api + sfont);
-            }
-            if (value === undefined)
-                $(this.dom).css("font_family", "");
-            else
-                $(this.dom).css("font_family", value);
-            this.callEvent("stylechanged", "font", value);
-        }
-        get fontSize() {
-            return this._fontSize;
-        }
-        set fontSize(value) {
-            this._fontSize = value;
-            if (value === undefined)
-                $(this.dom).css("font-size", "");
-            else
-                $(this.dom).css("font-size", value + "px");
-            this.callEvent("stylechanged", "fontSize", value);
-        }
-        get background() {
-            return this._background;
-        }
-        set background(value) {
-            this._background = value;
-            $(this.dom).css("background-color", value);
-            this.callEvent("stylechanged", "background", value);
-        }
-        get color() {
-            return this._color;
-        }
-        set color(value) {
-            this._color = value;
-            $(this.dom).css("color", value);
-            this.callEvent("stylechanged", "color", value);
-        }
-        get alignment() {
-            return this._alignment;
-        }
-        set alignment(value) {
-            this._alignment = value;
-            $(this.dom).css("text-align", value);
-            this.callEvent("stylechanged", "alignment", value);
-        }
-        get decoration() {
-            return this._decoration;
-        }
-        set decoration(value) {
-            this._decoration = value;
-            var val = "none";
-            if (value === "underline")
-                val = "underline";
-            if (value === "lineThrough")
-                val = "line-through";
-            if (value === "overline")
-                val = "overline";
-            $(this.dom).css("text-decoration", val);
-            this.callEvent("stylechanged", "decoration", value);
-        }
-        get decorationColor() {
-            return this._decorationColor;
-        }
-        set decorationColor(value) {
-            this._decorationColor = value;
-            $(this.dom).css("textDecorationColor", value);
-            this.callEvent("stylechanged", "textDecorationColor", value);
-        }
-        get decorationStyle() {
-            return this._decorationStyle;
-        }
-        set decorationStyle(value) {
-            this._decorationStyle = value;
-            var val = "solid";
-            if (value === "dashed")
-                val = "dashed";
-            if (value === "dotted")
-                val = "dotted";
-            if (value === "double")
-                val = "double";
-            if (value === "wavy")
-                val = "wavy";
-            $(this.dom).css("textDecorationStyle", val);
-            this.callEvent("stylechanged", "decorationStyle", value);
-        }
-        static findReport(parent) {
-            if (parent === undefined)
-                return undefined;
-            if ((parent === null || parent === void 0 ? void 0 : parent.reporttype) === "report")
-                return parent;
-            else
-                return RComponent_17.findReport(parent._parent);
-        }
-        get style() {
-            return this._style;
-        }
-        set style(value) {
-            var old = this._style;
-            this._style = value;
-            var report = RComponent_17.findReport(this);
-            if (report) {
-                report.styleContainer._components.forEach((comp) => {
-                    if (comp.name === old) {
-                        $(this.dom).removeClass(comp.styleid);
-                    }
-                });
-                report.styleContainer._components.forEach((comp) => {
-                    if (comp.name === value) {
-                        $(this.dom).addClass(comp.styleid);
-                    }
-                });
-            }
-            //  super.width = value;
-        }
-        get lineHeight() {
-            return this._lineHeight;
-        }
-        set lineHeight(value) {
-            this._lineHeight = value;
-            $(this.dom).css("line-height", value);
-            this.callEvent("stylechanged", "lineHeight", value);
-            //  super.width = value;
-        }
-        get margin() {
-            return this._margin;
-        }
-        set margin(value) {
-            if (value === undefined) {
-                this._margin = value;
-                $(this.dom).css("margin", "");
-            }
-            else {
-                if (Number.isInteger(value)) {
-                    //@ts-ignore
-                    value = [value, value, value, value];
-                }
-                if (value.length === 2) {
-                    value = [value[0], value[1], value[0], value[1]];
-                }
-                this._margin = value;
-                $(this.dom).css("margin", value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ");
-            }
-        }
-        fromJSON(ob) {
-            var ret = this;
-            if (ob.foreach) {
-                ret.foreach = ob.foreach;
-                delete ob.foreach;
-            }
-            if (ob.colSpan) {
-                ret.colSpan = ob.colSpan;
-                delete ob.colSpan;
-            }
-            if (ob.rowSpan) {
-                ret.rowSpan = ob.rowSpan;
-                delete ob.rowSpan;
-            }
-            if (ob.height) {
-                ret.height = ob.height;
-                delete ob.height;
-            }
-            if (ob.width) {
-                ret.width = ob.width;
-                delete ob.width;
-            }
-            if (ob.bold) {
-                ret.bold = ob.bold;
-                delete ob.bold;
-            }
-            if (ob.italics) {
-                ret.italics = ob.italics;
-                delete ob.italics;
-            }
-            if (ob.color) {
-                ret.color = ob.color;
-                delete ob.color;
-            }
-            if (ob.decoration) {
-                ret.decoration = ob.decoration;
-                delete ob.decoration;
-            }
-            if (ob.decorationStyle) {
-                ret.decorationStyle = ob.decorationStyle;
-                delete ob.decorationStyle;
-            }
-            if (ob.decorationColor) {
-                ret.decorationColor = ob.decorationColor;
-                delete ob.decorationColor;
-            }
-            if (ob.fontSize) {
-                ret.fontSize = ob.fontSize;
-                delete ob.fontSize;
-            }
-            if (ob.font) {
-                ret.font = ob.font;
-                delete ob.font;
-            }
-            if (ob.lineHeight) {
-                ret.lineHeight = ob.lineHeight;
-                delete ob.lineHeight;
-            }
-            if (ob.alignment) {
-                ret.alignment = ob.alignment;
-                delete ob.alignment;
-            }
-            if (ob.background) {
-                ret.background = ob.background;
-                delete ob.background;
-            }
-            if (ob.style) {
-                ret.style = ob.style;
-                delete ob.style;
-            }
-            if (ob.fillColor) {
-                ret.fillColor = ob.fillColor;
-                delete ob.fillColor;
-            }
-            if (ob.border) {
-                ret.border = ob.border;
-                delete ob.border;
-            }
-            if (ob.counter) {
-                ret.counter = ob.counter;
-                delete ob.counter;
-            }
-            if (ob.listType) {
-                ret.listType = ob.listType;
-                delete ob.listType;
-            }
-            if (ob.margin) {
-                ret.margin = ob.margin;
-                delete ob.margin;
-            }
-            ret.otherProperties = ob;
-            return ret;
-        }
-        toJSON() {
-            var _a, _b;
-            var ret = {};
-            if (this.colSpan !== undefined)
-                ret.colSpan = this.colSpan;
-            if (this.rowSpan !== undefined)
-                ret.rowSpan = this.rowSpan;
-            if (this.foreach !== undefined)
-                ret.foreach = this.foreach;
-            if (this.width !== undefined && !((_a = this._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth))
-                ret.width = this.width;
-            if (this.height !== undefined && !((_b = this._parent) === null || _b === void 0 ? void 0 : _b.setChildHeight))
-                ret.height = this.height;
-            if (this.bold !== undefined)
-                ret.bold = this.bold;
-            if (this.italics !== undefined)
-                ret.italics = this.italics;
-            if (this.color !== undefined)
-                ret.color = this.color;
-            if (this.decoration !== undefined)
-                ret.decoration = this.decoration;
-            if (this.decorationStyle !== undefined)
-                ret.decorationStyle = this.decorationStyle;
-            if (this.decorationColor !== undefined)
-                ret.decorationColor = this.decorationColor;
-            if (this.font !== undefined)
-                ret.font = this.font;
-            if (this.fontSize !== undefined)
-                ret.fontSize = this.fontSize;
-            if (this.lineHeight !== undefined)
-                ret.lineHeight = this.lineHeight;
-            if (this.alignment !== undefined)
-                ret.alignment = this.alignment;
-            if (this.background !== undefined)
-                ret.background = this.background;
-            if (this.style !== undefined)
-                ret.style = this.style;
-            if (this.fillColor !== undefined)
-                ret.fillColor = this.fillColor;
-            if (this.border !== undefined)
-                ret.border = this.border;
-            if (this.counter)
-                ret.counter = this.counter;
-            if (this.listType)
-                ret.listType = this.listType;
-            if (this.margin)
-                ret.margin = this.margin;
-            Object.assign(ret, this["otherProperties"]);
-            return ret;
-        }
-    };
-    __decorate([
-        (0, Property_12.$Property)(),
-        __metadata("design:type", String)
-    ], RComponent.prototype, "foreach", void 0);
-    __decorate([
-        (0, Property_12.$Property)({
-            default: undefined,
-            isVisible: (component) => {
-                var _a;
-                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "ol";
-            }
-        }),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], RComponent.prototype, "counter", null);
-    __decorate([
-        (0, Property_12.$Property)({
-            name: "listType",
-            default: undefined,
-            isVisible: (component) => {
-                var _a, _b;
-                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "ul" || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "ol";
-            },
-            chooseFrom: function (it) {
-                if (it._parent.reporttype === "ol")
-                    return ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"];
-                else
-                    return ["square", "circle", "none"];
-            }
-        }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RComponent.prototype, "listType", null);
-    __decorate([
-        (0, Property_12.$Property)({
-            type: "color", isVisible: (component) => {
-                var _a;
-                //only in table and column width is posible
-                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "tablerow";
-            }
-        }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RComponent.prototype, "fillColor", null);
-    __decorate([
-        (0, Property_12.$Property)({
-            type: "string", isVisible: (component) => {
-                var _a;
-                //only in table and column width is posible
-                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "tablerow";
-            }
-        }),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], RComponent.prototype, "colSpan", null);
-    __decorate([
-        (0, Property_12.$Property)({
-            type: "string", isVisible: (component) => {
-                var _a;
-                //only in table and column width is posible
-                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.reporttype) === "tablerow";
-            }
-        }),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], RComponent.prototype, "rowSpan", null);
-    __decorate([
-        (0, Property_12.$Property)({
-            type: "boolean[]",
-            default: [false, false, false, false],
-            isVisible: (component) => {
-                var _a, _b;
-                //only in table and column width is posible
-                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns";
-            },
-            description: "border of the tablecell: left, top, right, bottom"
-        }),
-        __metadata("design:type", Array),
-        __metadata("design:paramtypes", [Array])
-    ], RComponent.prototype, "border", null);
-    __decorate([
-        (0, Property_12.$Property)({
-            type: "string", isVisible: (component) => {
-                var _a, _b;
-                //only in table and column width is posible
-                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildWidth) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns" || component.reporttype === "image";
-            }
-        }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], RComponent.prototype, "width", null);
-    __decorate([
-        (0, Property_12.$Property)({
-            type: "string", isVisible: (component) => {
-                var _a, _b;
-                //only in table and column width is posible
-                return ((_a = component._parent) === null || _a === void 0 ? void 0 : _a.setChildHeight) || ((_b = component._parent) === null || _b === void 0 ? void 0 : _b.reporttype) === "columns" || component.reporttype === "image";
-            }
-        }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], RComponent.prototype, "height", null);
-    __decorate([
-        (0, Property_12.$Property)(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], RComponent.prototype, "bold", null);
-    __decorate([
-        (0, Property_12.$Property)(),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], RComponent.prototype, "italics", null);
-    __decorate([
-        (0, Property_12.$Property)({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RComponent.prototype, "font", null);
-    __decorate([
-        (0, Property_12.$Property)(),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], RComponent.prototype, "fontSize", null);
-    __decorate([
-        (0, Property_12.$Property)({ type: "color" }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RComponent.prototype, "background", null);
-    __decorate([
-        (0, Property_12.$Property)({ type: "color" }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RComponent.prototype, "color", null);
-    __decorate([
-        (0, Property_12.$Property)({ chooseFrom: ["left", "center", "right"] }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RComponent.prototype, "alignment", null);
-    __decorate([
-        (0, Property_12.$Property)({ chooseFrom: ["underline", "lineThrough", "overline"] }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RComponent.prototype, "decoration", null);
-    __decorate([
-        (0, Property_12.$Property)({ type: "color" }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RComponent.prototype, "decorationColor", null);
-    __decorate([
-        (0, Property_12.$Property)({ chooseFrom: ["dashed", "dotted", "double", "wavy"] }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RComponent.prototype, "decorationStyle", null);
-    __decorate([
-        (0, Property_12.$Property)(),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RComponent.prototype, "style", null);
-    __decorate([
-        (0, Property_12.$Property)({ default: 1 }),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], RComponent.prototype, "lineHeight", null);
-    __decorate([
-        (0, Property_12.$Property)({ type: "number[]", description: "margin left, top, right, bottom" }),
-        __metadata("design:type", Array),
-        __metadata("design:paramtypes", [Array])
-    ], RComponent.prototype, "margin", null);
-    RComponent = RComponent_17 = __decorate([
-        (0, Jassi_23.$Class)("jassijs_report.ReportComponent"),
-        (0, Property_12.$Property)({ hideBaseClassProperties: true }),
-        __metadata("design:paramtypes", [Object])
-    ], RComponent);
-    exports.RComponent = RComponent;
 });
 define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (require, exports) {
     "use strict";

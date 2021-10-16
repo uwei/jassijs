@@ -145,7 +145,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1626122987760,
+		"date": 1634384659871,
 		"de.Kunde": {
 			"$ParentRights": [
 				[

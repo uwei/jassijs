@@ -7,7 +7,7 @@ export class Tools {
 
     constructor() {
     }
-    private static copyObject(obj) {
+    public static copyObject(obj) {
         if (obj === null || typeof (obj) !== 'object' || 'isActiveClone' in obj)
             return obj;
 

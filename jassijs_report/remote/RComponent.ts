@@ -180,6 +180,7 @@ export class RComponent extends Panel {
             return this._width;
     }
     set width(value: any) {
+        console.log("setw"+value);
         if (this._parent?.setChildWidth !== undefined)
             this._parent.setChildWidth(this, value);
         else {

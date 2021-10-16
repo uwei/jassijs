@@ -36,9 +36,7 @@ export async function test() {
 
     me.tree.width = "100%";
     me.tree.height=175;
-  /*  me.tree.onclick(function (data) {
-        console.log("select " + data.item.name);
-    });*/
+
     var contextmenu=new ContextMenu();
     me.tree.contextMenu=contextmenu;
     var menu=new MenuItem();

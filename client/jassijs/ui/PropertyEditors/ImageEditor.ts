@@ -121,8 +121,6 @@ export class ImageEditor extends Editor {
                 _this._textbox.value="mdi "+data;
                 suche.value=data;
                 _this._onchange();
-                console.log(data);
-
             }
             var len=onlytest?20:all.length;
             for (var x = 1; x < len; x++) {

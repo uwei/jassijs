@@ -124,7 +124,7 @@ export class Select extends DataComponent {
         this.options = { undefined: undefined };
         if (this.domSelect === undefined)
             return;
-        console.log("dekt.memoryleak");
+        //TODO console.log("dekt.memoryleak");
         /* slow
         while (this.domSelect.firstChild) {
             $(this.domSelect.firstChild).remove();

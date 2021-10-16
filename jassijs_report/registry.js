@@ -6,7 +6,7 @@ exports.default={
 		"date": 1634336643584
 	},
 	"jassijs_report/remote/RComponent.ts": {
-		"date": 1634318543906,
+		"date": 1634381448958,
 		"jassijs_report.ReportComponent": {
 			"$Property": [
 				{

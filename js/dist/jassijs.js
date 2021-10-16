@@ -191,7 +191,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985412199
             },
             "jassijs/remote/Registry.ts": {
-                "date": 1627590048776
+                "date": 1634384711047
             },
             "jassijs/remote/RemoteObject.ts": {
                 "date": 1627600803505,
@@ -1486,7 +1486,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DesignDummy": {}
             },
             "jassijs/ui/DockingContainer.ts": {
-                "date": 1631381871208,
+                "date": 1634384979945,
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/ErrorPanel.ts": {
@@ -1508,7 +1508,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/FileExplorer.ts": {
-                "date": 1627593837699,
+                "date": 1634384744793,
                 "jassijs.ui.FileActions": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -1599,7 +1599,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1633814248379,
+                "date": 1634379940687,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -1844,7 +1844,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1632434198407,
+                "date": 1634384789481,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {
@@ -2052,7 +2052,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/ImageEditor.ts": {
-                "date": 1633779677253,
+                "date": 1634384830078,
                 "jassijs.ui.PropertyEditors.ImageEditor": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2206,7 +2206,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Select.ts": {
-                "date": 1622985638954,
+                "date": 1634385217231,
                 "jassijs.ui.SelectCreateProperties": {
                     "@members": {
                         "multiple": {
@@ -2659,7 +2659,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Tools.ts": {
-                "date": 1632320201966,
+                "date": 1634384135855,
                 "jassijs.util.Tools": {}
             },
             "jassijs/util/Runlater.ts": {
@@ -5564,7 +5564,6 @@ define("jassijs/remote/Registry", ["require", "exports", "reflect-metadata"], fu
          * reload the registry
          */
         async reload() {
-            console.log("load json");
             this.jsondata = { $Class: {} };
             this.jsondataMembers = {};
             var _this = this;
@@ -5678,9 +5677,6 @@ define("jassijs/remote/Registry", ["require", "exports", "reflect-metadata"], fu
                                 this.jsondata[service] = {};
                             var entr = new JSONDataEntry();
                             entr.params = theclass[service];
-                            /* if (vfiles.$Class === undefined) {
-                                 console.log("@$Class annotation is missing for " + file + " Service " + service);
-                             }*/
                             entr.classname = classname; //vfiles.$Class === undefined ? undefined : vfiles.$Class[0];
                             entr.filename = file;
                             this.jsondata[service][entr.classname] = entr;
@@ -10593,7 +10589,7 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
             var container = component.dom._container;
             //   container.getElement()[0].removeChild(component.dom);
             //            this.dom.removeChild(component.domWrapper);
-            console.warn("TODO call close tab?");
+            //console.warn("TODO call close tab?")
         }
         _init() {
             var config = {
@@ -10723,7 +10719,7 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
         addSelectionEvent(element) {
             if (element.contentItems !== undefined) {
                 element.on("activeContentItemChanged", function (evt) {
-                    console.log(evt.componentName);
+                    //console.log(evt.componentName);
                 });
                 for (let x = 0; x < element.contentItems.length; x++) {
                     this.addSelectionEvent(element.contentItems[x]);
@@ -11103,7 +11099,6 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
                     alert("modul allready exists");
                     return;
                 }
-                console.log("create Module" + smodule);
                 var key = FileExplorer.instance.tree.getKeyFromItem(all[0]);
                 var ret = await new Server_4.Server().createModule(smodule);
                 var newkey = path + "|" + smodule;
@@ -11563,7 +11558,6 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                 setup: function (ed) {
                     ed.on('change', function (e) {
                         var text = _this.dom.firstElementChild.innerHTML;
-                        console.log(text);
                         if (text === '<br data-mce-bogus="1">')
                             text = "";
                         editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);
@@ -13020,7 +13014,6 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
                     //nameEditor.ob = _this._value;
                 }
             }
-            console.log(props.length);
             for (var x = 0; x < props.length; x++) {
                 if (props[x].name.indexOf("/") > -1) {
                 }
@@ -13916,7 +13909,7 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
             this.options = { undefined: undefined };
             if (this.domSelect === undefined)
                 return;
-            console.log("dekt.memoryleak");
+            //TODO console.log("dekt.memoryleak");
             /* slow
             while (this.domSelect.firstChild) {
                 $(this.domSelect.firstChild).remove();
@@ -17351,7 +17344,6 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
                     _this._textbox.value = "mdi " + data;
                     suche.value = data;
                     _this._onchange();
-                    console.log(data);
                 };
                 var len = onlytest ? 20 : all.length;
                 for (var x = 1; x < len; x++) {

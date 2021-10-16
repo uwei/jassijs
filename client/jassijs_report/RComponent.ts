@@ -169,7 +169,7 @@ export class RComponent extends Panel {
     @$Property({
         type: "string", isVisible: (component) => {
             //only in table and column width is posible
-            return component._parent?.setChildWidth || component._parent?.reporttype === "columns"|| component.reporttype === "image";
+            return component._parent?.setChildWidth || component._parent?.reporttype === "columns" || component.reporttype === "image";
         }
     })
 
@@ -180,18 +180,20 @@ export class RComponent extends Panel {
             return this._width;
     }
     set width(value: any) {
+        if (value && Number.parseInt(value).toString() === value) {
+            value = Number.parseInt(value);
+        }
         if (this._parent?.setChildWidth !== undefined)
             this._parent.setChildWidth(this, value);
         else {
             this._width = value;
-            console.log(value);
             super.width = value;
         }
     }
     @$Property({
         type: "string", isVisible: (component) => {
             //only in table and column width is posible
-            return component._parent?.setChildHeight || component._parent?.reporttype === "columns"|| component.reporttype === "image";
+            return component._parent?.setChildHeight || component._parent?.reporttype === "columns" || component.reporttype === "image";
         }
     })
 
@@ -490,6 +492,10 @@ export class RComponent extends Panel {
             ret.margin = ob.margin;
             delete ob.margin;
         }
+        if (ob.width) {
+            ret.width = ob.width;
+            delete ob.width;
+        }
         ret.otherProperties = ob;
         return ret;
     }
@@ -505,7 +511,7 @@ export class RComponent extends Panel {
             ret.width = this.width;
         if (this.height !== undefined && !this._parent?.setChildHeight)
             ret.height = this.height;
-            
+
         if (this.bold !== undefined)
             ret.bold = this.bold;
         if (this.italics !== undefined)
@@ -540,6 +546,8 @@ export class RComponent extends Panel {
             ret.listType = this.listType;
         if (this.margin)
             ret.margin = this.margin;
+        if (this.width&&this?._parent.reporttype==="column")
+            ret.width = this.width;
         Object.assign(ret, this["otherProperties"]);
         return ret;
     }

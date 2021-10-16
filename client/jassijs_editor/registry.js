@@ -72,7 +72,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1634240147068,
+		"date": 1634378928779,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
@@ -91,7 +91,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"date": 1631469421689
 	},
 	"jassijs_editor/MonacoPanel.ts": {
-		"date": 1624143090748,
+		"date": 1634386456732,
 		"jassijs_editor.MonacoPanel": {}
 	},
 	"jassijs_editor/StartEditor.ts": {
@@ -106,7 +106,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.base.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {
-		"date": 1632925438111,
+		"date": 1634384528225,
 		"jassijs_editor.util.Resizer": {}
 	},
 	"jassijs_editor/util/TSSourceMap.ts": {

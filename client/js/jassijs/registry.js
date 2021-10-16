@@ -104,7 +104,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985412199
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1627590048776
+		"date": 1634384711047
 	},
 	"jassijs/remote/RemoteObject.ts": {
 		"date": 1627600803505,
@@ -1399,7 +1399,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DesignDummy": {}
 	},
 	"jassijs/ui/DockingContainer.ts": {
-		"date": 1631381871208,
+		"date": 1634384979945,
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/ErrorPanel.ts": {
@@ -1421,7 +1421,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/FileExplorer.ts": {
-		"date": 1627593837699,
+		"date": 1634384744793,
 		"jassijs.ui.FileActions": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -1512,7 +1512,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1633814248379,
+		"date": 1634379940687,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
@@ -1757,7 +1757,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1632434198407,
+		"date": 1634384789481,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {
@@ -1965,7 +1965,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ImageEditor.ts": {
-		"date": 1633779677253,
+		"date": 1634384830078,
 		"jassijs.ui.PropertyEditors.ImageEditor": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -2119,7 +2119,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Select.ts": {
-		"date": 1622985638954,
+		"date": 1634385217231,
 		"jassijs.ui.SelectCreateProperties": {
 			"@members": {
 				"multiple": {
@@ -2572,7 +2572,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.util.Reloader": {}
 	},
 	"jassijs/util/Tools.ts": {
-		"date": 1632320201966,
+		"date": 1634384135855,
 		"jassijs.util.Tools": {}
 	},
 	"jassijs/util/Runlater.ts": {
