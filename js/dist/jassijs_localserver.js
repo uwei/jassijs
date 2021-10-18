@@ -885,7 +885,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 var include = true;
                 if (((_b = (_a = Jassi_2.default === null || Jassi_2.default === void 0 ? void 0 : Jassi_2.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
                     if (fname === "__default.db")
-                        continue;
+                        include = false;
                 }
                 if (extensions) {
                     include = false;
@@ -932,6 +932,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
          * @returns  [{name:"hallo",date:1566554},{name:"demo",files:[]}]
          */
         async dir(curdir = "", appendDate = false) {
+            var _a, _b;
             var root = { name: "", files: [] };
             var all = await this.dirEntry(curdir);
             var keys = {
@@ -940,6 +941,10 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             for (let x = 0; x < all.length; x++) {
                 var entr = all[x];
                 var paths = entr.id.split("/");
+                if (((_b = (_a = Jassi_2.default === null || Jassi_2.default === void 0 ? void 0 : Jassi_2.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
+                    if (entr.id === "__default.db")
+                        continue;
+                }
                 var parent = root;
                 var currentpath = [];
                 for (let p = 0; p < paths.length; p++) {

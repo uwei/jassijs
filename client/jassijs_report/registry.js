@@ -826,7 +826,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"date": 1633815615937
 	},
 	"jassijs_report/StartReporteditor.ts": {
-		"date": 1633970382677
+		"date": 1634592393955
 	},
 	"jassijs_report/remote/RComponent.ts": {
 		"date": 1634381448958,
