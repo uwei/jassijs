@@ -143,7 +143,7 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
          * @param replace - replace text e.g. {"für":"fuer"}
          * returns the message if succeeded
          */
-        static async startImport(urlcsv, dbclass, fieldmapping = undefined, replace = undefined) {
+        static async startImport(urlcsv, dbclass, fieldmapping = undefined, replace = undefined, beforeSave = undefined) {
             var _a;
             var imp = new CSVImport_1();
             var mapping = {};
@@ -188,7 +188,9 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
                         html = html + '<option value="' + key.toLowerCase() + '">' + key.toLowerCase() + '</option>';
                         lkeys.push(key.toLowerCase());
                     }*/
-            return await imp._doimport(imp.data, dbclass, 2, mapping);
+            //	if(beforeSave)
+            //	await beforeSave(imp.data, dbclass,mapping);
+            return await imp._doimport(imp.data, dbclass, 2, mapping, beforeSave);
         }
         async doimport() {
             //read userchoices
@@ -198,9 +200,9 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
                 if (value !== "")
                     assignedfields[value] = x;
             }
-            return await this._doimport(this.data, this.me.select.value, this.me.fromLine.value, assignedfields);
+            return await this._doimport(this.data, this.me.select.value, this.me.fromLine.value, assignedfields, undefined);
         }
-        async _doimport(data, dbclass, fromLine, assignedfields) {
+        async _doimport(data, dbclass, fromLine, assignedfields, beforeSave) {
             var _a;
             var Type = Classes_1.classes.getClass(dbclass);
             //read objects so we can read from cache
@@ -241,6 +243,8 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
                 else
                     allObjects.push(ob);
             }
+            if (beforeSave)
+                await beforeSave(allObjects);
             var ret = [];
             var trans = new Transaction_1.Transaction();
             for (var x = 0; x < allObjects.length; x++) {

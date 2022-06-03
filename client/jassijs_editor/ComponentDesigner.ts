@@ -559,7 +559,7 @@ export class ComponentDesigner extends Panel {
             return;
         var varname = this._propertyEditor.addVariableInCode(type, scope);
 
-        if (varname.startsWith("me.")) {
+       if (varname.startsWith("me.")&&this._codeEditor.getObjectFromVariable("me")!==undefined) {
             var me = this._codeEditor.getObjectFromVariable("me");
             me[varname.substring(3)] = varvalue;
         } else if (varname.startsWith("this.")) {
@@ -583,10 +583,41 @@ export class ComponentDesigner extends Panel {
         return this._hasRepeatingContainer(component._parent);
     }
 
+    private fillVariables(root:Component,component:Component,cache:{[componentid: string]: {line:number,column:number}}){
+        if(cache[component._id]===undefined&&component["__stack"]!==undefined){
+            var lines=component["__stack"]?.split("\n");
+            for(var x=0;x<lines.length;x++){
+                var sline:string=lines[x];
+                if(sline.indexOf("$temp.js")>0){
+                    var spl=sline.split(":");
+                    var entr={
+                        
+                    }
+                    cache[component._id]={
+                        line:Number(spl[spl.length-2]),
+                        column:Number(spl[spl.length-1].replace(")",""))
+                    }
+                    break;
+                }
+            }
+             if(component["_components"]){
+            for(var x=0;x<component["_components"].length;x++){
+                this.fillVariables(root,component["_components"][x],cache);
+            }
+        }
+            if(component===root){
+                //fertig
+                var hh=0;        
+            }
+        }
+       
+    }
+
     /**
      * @member {jassijs.ui.Component} - the designed component
      */
     set designedComponent(component) {
+        this.fillVariables(component,component,{});
         var com = component;
         if (com["isAbsolute"] !== true && com.width === "0" && com.height === "0") {
             component.width = "calc(100% - 1px)";

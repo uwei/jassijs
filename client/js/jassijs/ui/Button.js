@@ -106,7 +106,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         var pan = new Panel();
         var but = new Button();
         but.text = "Hallo";
-        but.styleToggle = true;
         but.icon = "mdi mdi-car"; //"mdi mdi-car";//"res/red.jpg";
         but.onclick(() => alert(1));
         //alert(but.icon);

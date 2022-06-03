@@ -53,7 +53,7 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
             me.idvorname.x = 5;
             me.idvorname.y = 35;
             me.idvorname.bind(me.binder, "vorname");
-            me.idvorname.width = 95;
+            me.idvorname.width = 145;
             me.idvorname.autocommit = false;
             me.idvorname.label = "Vorname";
             me.idvorname.value = "<strong>formatierter</strong><br />HTML Text";
@@ -75,8 +75,7 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
                 cellDblClick: function (event, group) {
                     alert(8);
                 },
-                movableColumns: false,
-                dataTreeChildField: ""
+                movableColumns: false
             });
             /**/
             me.idtable.width = 275;
@@ -183,7 +182,7 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
             me.repeater1.label = "Repeater";
             me.textbox1.bind(me.binder, "nachname");
             me.textbox1.height = 15;
-            me.testcomponent1.me.button4.text = "kk";
+            me.testcomponent1.me.button4.text = "kk2";
             this.setdata();
         }
     };

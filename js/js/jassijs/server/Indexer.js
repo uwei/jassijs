@@ -22,7 +22,13 @@ class Indexer {
                 text = text.substring(text.indexOf("default=") + 8);
             }
         }
-        var index = JSON.parse(text);
+        try {
+            var index = JSON.parse(text);
+        }
+        catch (_b) {
+            console.log("error ");
+            index = {};
+        }
         //remove deleted files
         for (var key in index) {
             if (!(await this.fileExists(root + (root === "" ? "" : "/") + key))) {

@@ -21,8 +21,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent
     * @param {boolean} [properties.useSpan] -  use span not div
     *
     */
-        constructor(properties = {}) {
-            properties.isdatatable = true;
+        constructor(properties = { isdatatable: true }) {
             super(properties);
             this.reporttype = "datatable";
             this.headerPanel = new RTablerow_1.RTablerow();

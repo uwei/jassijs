@@ -25,7 +25,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
     ], T);
     exports.T = T;
     async function test() {
-        await new Server_1.Server().saveFile("Hallo.ts", "export class Hallo{};export function test(){return 2 };", true);
+        await new Server_1.Server().saveFile("Hallo.ts", "export class Hallo{};export function test(){return 2 };");
         console.log(await new T().sayHello("Kurt"));
     }
     exports.test = test;

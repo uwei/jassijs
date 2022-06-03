@@ -18,6 +18,8 @@
     "outDir": "./js", 
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    //"jsx": "preserve",
+    //"jsxImportSource": "solid-js"
   },
  // "include":["./"],
   "exclude": [

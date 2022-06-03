@@ -3,15 +3,15 @@ define("jassijs_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_editor/AcePanel.ts": {
-		"date": 1632251059247,
+		"date": 1632251060000,
 		"jassijs.ui.AcePanel": {}
 	},
 	"jassijs_editor/ChromeDebugger.ts": {
-		"date": 1622998653413,
+		"date": 1622998654000,
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1634160357652,
+		"date": 1654169313604,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {
@@ -64,61 +64,61 @@ define("jassijs_editor/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_editor/CodeEditorInvisibleComponents.ts": {
-		"date": 1632524313473,
+		"date": 1632524314000,
 		"jassijs_editor.CodeEditorInvisibleComponents": {}
 	},
 	"jassijs_editor/CodePanel.ts": {
-		"date": 1632076557166,
+		"date": 1632076558000,
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {
-		"date": 1634378928779,
+		"date": 1654164249900,
 		"jassijs_editor.ComponentDesigner": {}
 	},
 	"jassijs_editor/ComponentExplorer.ts": {
-		"date": 1631566305792,
+		"date": 1631566306000,
 		"jassijs_editor.ComponentExplorer": {}
 	},
 	"jassijs_editor/ComponentPalette.ts": {
-		"date": 1631290327725,
+		"date": 1631290328000,
 		"jassijs_editor.ComponentPalette": {}
 	},
 	"jassijs_editor/Debugger.ts": {
-		"date": 1622998616949,
+		"date": 1622998618000,
 		"jassijs_editor.Debugger": {}
 	},
 	"jassijs_editor/modul.ts": {
-		"date": 1631469421689
+		"date": 1654273312166
 	},
 	"jassijs_editor/MonacoPanel.ts": {
-		"date": 1634386456732,
+		"date": 1654011054229,
 		"jassijs_editor.MonacoPanel": {}
 	},
 	"jassijs_editor/StartEditor.ts": {
-		"date": 1623098599960
+		"date": 1623098600000
 	},
 	"jassijs_editor/util/DragAndDropper.ts": {
-		"date": 1634340709090,
+		"date": 1634340710000,
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1633771925245,
+		"date": 1654275473444,
 		"jassijs_editor.base.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {
-		"date": 1634384528225,
+		"date": 1634384530000,
 		"jassijs_editor.util.Resizer": {}
 	},
 	"jassijs_editor/util/TSSourceMap.ts": {
-		"date": 1625511336878,
+		"date": 1654114048820,
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-		"date": 1631566733736,
+		"date": 1631566734000,
 		"jassijs_editor.util.Typescript": {}
 	},
 	"jassijs_editor/AcePanelSimple.ts": {
-		"date": 1631388456854,
+		"date": 1631388458000,
 		"jassijs.ui.AcePanelSimple": {}
 	}
 }

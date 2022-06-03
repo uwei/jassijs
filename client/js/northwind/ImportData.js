@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router"], function (require, exports, Button_1, HTMLPanel_1, Jassi_1, Panel_1, CSVImport_1, Actions_1, Router_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router", "northwind/remote/OrderDetails", "jassijs/remote/Transaction"], function (require, exports, Button_1, HTMLPanel_1, Jassi_1, Panel_1, CSVImport_1, Actions_1, Router_1, OrderDetails_1, Transaction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ImportData = void 0;
@@ -38,9 +38,25 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jass
             this.me.IDProtokoll.value += "<br>Suppliers " + s;
             s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid", "supplier": "supplierid", "category": "categoryid" });
             this.me.IDProtokoll.value += "<br>Products " + s;
-            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid", "customer": "customerid", "employee": "employeeid" });
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid", "customer": "customerid", "employee": "employeeid" }, undefined, async function (data) {
+                //before save remove old OrderDetails
+                //   debugger;
+                var ids = [];
+                data.forEach((o) => { ids.push(o.id); });
+                var all2 = await OrderDetails_1.OrderDetails.find({ where: "Order.id in (:...ids)", whereParams: { ids: ids } });
+                if (all2.length > 0) {
+                    var trans = new Transaction_1.Transaction();
+                    for (var x = 0; x < all2.length; x++) {
+                        trans.add(all2[x], all2[x].remove);
+                    }
+                    await trans.execute();
+                }
+            });
             this.me.IDProtokoll.value += "<br>Orders " + s;
-            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/order_details.csv", "northwind.OrderDetails", { "order": "orderid", "product": "productid" });
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/order_details.csv", "northwind.OrderDetails", { "order": "orderid", "product": "productid" }, undefined, (data) => {
+                debugger;
+                data.forEach((o) => { delete o.id; }); //remove id is autoid
+            });
             this.me.IDProtokoll.value += "<br>OrderDetails " + s;
             this.me.IDProtokoll.value += "<br>Fertig";
         }

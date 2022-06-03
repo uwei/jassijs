@@ -499,7 +499,8 @@ export class PropertyEditor extends Panel {
             var text = this.codeEditor.value;
             var val = this.codeEditor.getObjectFromVariable("this");
             if (text)
-                this.parser.parse(text, [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
+                this.parser.parse(text);
+               // this.parser.parse(text, [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
         }
     }
 
@@ -528,9 +529,10 @@ export class PropertyEditor extends Panel {
      */
     addVariableInCode(type: string, scopename: { variablename: string, methodname: string }): string {
         var val = this.codeEditor.getObjectFromVariable("this");
-        var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
+        var ret = this.parser.addVariableInCode(type, undefined, scopename);
+       /* var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
         { classname: undefined, methodname: "test" }], scopename);
-        this.codeEditor.value = this.parser.getModifiedCode();
+        */this.codeEditor.value = this.parser.getModifiedCode();
         this.updateParser();
         this.callEvent("codeChanged", {});
         return ret;
@@ -576,7 +578,7 @@ export class PropertyEditor extends Panel {
         var isFunction = (typeof (prop) === "function");
         var val = this.codeEditor.getObjectFromVariable("this");
         this.parser.setPropertyInCode(variableName, property, value,
-            [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }],
+            /*[{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]*/undefined,
             isFunction, replace, before, scopename);
         //correct spaces
         if (value && value.indexOf("\n") > -1) {
@@ -674,11 +676,13 @@ export class PropertyEditor extends Panel {
     */
     removeVariableInDesign(varname: string) {
         //TODO this und var?
-        if (varname.startsWith("me.")) {
+        if (varname.startsWith("me.")&&this.codeEditor.getObjectFromVariable("me")) {
             var vname = varname.substring(3);
             var me = this.codeEditor.getObjectFromVariable("me");
             delete me[vname];
         }
+        this.codeEditor.removeVariableInDesign(varname);
+        
     }
     /**
      * removes the variable from code

@@ -57,7 +57,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
          * @param {string} value  - code - the value
          * @param node - the node of the statement
          */
-        add(variable, property, value, node) {
+        add(variable, property, value, node, isFunction = false) {
             if (value === undefined || value === null)
                 return;
             value = value.trim();
@@ -71,7 +71,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
             if (Array.isArray(this.data[variable][property])) {
                 this.data[variable][property].push({
                     value: value,
-                    node: node
+                    node: node,
+                    isFunction
                 });
             }
         }
@@ -106,7 +107,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         }
         addImportIfNeeded(name, file) {
             if (this.imports[name] === undefined) {
-                var imp = ts.createNamedImports([ts.createImportSpecifier(undefined, ts.createIdentifier(name))]);
+                var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
                 const importNode = ts.createImportDeclaration(undefined, undefined, ts.createImportClause(undefined, imp), ts.createLiteral(file));
                 this.sourceFile = ts.updateSourceFileNode(this.sourceFile, [importNode, ...this.sourceFile.statements]);
             }
@@ -217,12 +218,37 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                         }
                     }
                 }
-                if (this.collectProperties) {
-                    for (let x = 0; x < this.collectProperties.length; x++) {
-                        var col = this.collectProperties[x];
+                if (this.classScope) {
+                    for (let x = 0; x < this.classScope.length; x++) {
+                        var col = this.classScope[x];
                         if (col.classname === parsedClass.name && parsedClass.members[col.methodname]) {
                             var nd = parsedClass.members[col.methodname].node;
                             this.parseProperties(nd);
+                        }
+                    }
+                }
+            }
+        }
+        parseConfig(node) {
+            if (node.arguments.length > 0) {
+                var left = node.expression.getText();
+                var lastpos = left.lastIndexOf(".");
+                var variable = left;
+                var prop = "";
+                if (lastpos !== -1) {
+                    variable = left.substring(0, lastpos);
+                    prop = left.substring(lastpos + 1);
+                    //@ts-ignore
+                    var props = node.arguments[0].properties;
+                    if (props !== undefined) {
+                        for (var p = 0; p < props.length; p++) {
+                            var name = props[p].name.text;
+                            // var value = this.convertArgument(props[p].initializer);
+                            var code = props[p].initializer ? props[p].initializer.getText() : "";
+                            if ((code === null || code === void 0 ? void 0 : code.indexOf(".config")) > -1) {
+                                this.parseProperties(props[p].initializer);
+                            }
+                            this.add(variable, name, code, props[p], false);
                         }
                     }
                 }
@@ -242,6 +268,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                 var node2;
                 var left;
                 var value;
+                var isFunction = false;
                 if (ts.isBinaryExpression(node)) {
                     node1 = node.left;
                     node2 = node.right;
@@ -253,9 +280,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                 if (ts.isCallExpression(node)) {
                     node1 = node.expression;
                     node2 = node.arguments;
+                    isFunction = true;
                     left = node1.getText(); // this.code.substring(node1.pos, node1.end).trim();
                     var params = [];
                     node.arguments.forEach((arg) => { params.push(arg.getText()); });
+                    if (left.endsWith(".config")) {
+                        this.parseConfig(node);
+                    }
                     value = params.join(", "); //this.code.substring(node2.pos, node2.end).trim();//
                 }
                 var lastpos = left.lastIndexOf(".");
@@ -265,9 +296,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                     variable = left.substring(0, lastpos);
                     prop = left.substring(lastpos + 1);
                 }
-                this.add(variable, prop, value, node.parent);
+                this.add(variable, prop, value, node.parent, isFunction);
             }
-            node.getChildren().forEach(c => this.parseProperties(c));
+            else
+                node.getChildren().forEach(c => this.parseProperties(c));
         }
         visitNode(node) {
             var _this = this;
@@ -292,13 +324,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
             }
             else if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
                 this.functions[node["name"].text] = node;
-                if (this.collectProperties) {
-                    for (let x = 0; x < this.collectProperties.length; x++) {
-                        var col = this.collectProperties[x];
+                if (this.classScope) {
+                    for (let x = 0; x < this.classScope.length; x++) {
+                        var col = this.classScope[x];
                         if (col.classname === undefined && node["name"].text === col.methodname)
                             this.parseProperties(node);
                     }
                 }
+                else
+                    this.parseProperties(node);
             }
             else
                 node.getChildren().forEach(c => this.visitNode(c));
@@ -307,15 +341,51 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                 this.add(node["name"].text, "", "", undefined);
             }
         }
+        searchClassnode(node, pos) {
+            if (ts.isMethodDeclaration(node)) {
+                return {
+                    classname: node.parent["name"]["text"],
+                    methodname: node.name["text"]
+                };
+            }
+            if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
+                var funcname = node["name"].text;
+                return {
+                    classname: undefined,
+                    methodname: funcname
+                };
+            }
+            var childs = node.getChildren();
+            for (var x = 0; x < childs.length; x++) {
+                var c = childs[x];
+                if (pos >= c.pos && pos <= c.end) {
+                    var test = this.searchClassnode(c, pos);
+                    if (test)
+                        return test;
+                }
+            }
+            ;
+            return undefined;
+        }
+        getClassScopeFromPosition(code, pos) {
+            this.data = {};
+            this.code = code;
+            this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
+            return this.searchClassnode(this.sourceFile, pos);
+            //return this.parseold(code,onlyfunction);
+        }
         /**
         * parse the code
         * @param {string} code - the code
         * @param {string} onlyfunction - only the code in the function is parsed, e.g. "layout()"
         */
-        parse(code, collectProperties = undefined) {
+        parse(code, classScope = undefined) {
             this.data = {};
             this.code = code;
-            this.collectProperties = collectProperties;
+            if (classScope !== undefined)
+                this.classScope = classScope;
+            else
+                classScope = this.classScope;
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
             this.visitNode(this.sourceFile);
             //return this.parseold(code,onlyfunction);
@@ -498,6 +568,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         * @param [variablescope] - if this scope is defined - the new property would be insert in this variable
         */
         setPropertyInCode(variableName, property, value, classscope, isFunction = false, replace = undefined, before = undefined, variablescope = undefined) {
+            if (classscope === undefined)
+                classscope = this.classScope;
             var scope = this.getNodeFromScope(classscope, variablescope);
             var newExpression = undefined;
             var statements = scope["body"].statements;
@@ -604,11 +676,21 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         * @returns  the name of the object
         */
         addVariableInCode(fulltype, classscope, variablescope = undefined) {
+            var _a;
+            if (classscope === undefined)
+                classscope = this.classScope;
             let type = fulltype.split(".")[fulltype.split(".").length - 1];
             var varname = this.getNextVariableNameForType(type);
+            var useMe = false;
+            if (this.data["me"] !== undefined)
+                useMe = true;
             //var if(scopename)
-            var prefix = "me.";
             var node = this.getNodeFromScope(classscope, variablescope);
+            //@ts-ignore
+            if (((_a = node === null || node === void 0 ? void 0 : node.parameters) === null || _a === void 0 ? void 0 : _a.length) > 0 && node.parameters[0].name.text == "me") {
+                useMe = true;
+            }
+            var prefix = useMe ? "me." : "var ";
             var statements = node["body"].statements;
             if (node === undefined)
                 throw Error("no scope to insert a variable could be found");
@@ -618,8 +700,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
             }
             var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
             statements.splice(x, 0, ts.createStatement(ass));
-            this.addTypeMe(varname, type);
-            return "me." + varname;
+            if (useMe)
+                this.addTypeMe(varname, type);
+            return (useMe ? "me." : "") + varname;
         }
     };
     Parser = __decorate([
@@ -631,7 +714,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         await Typescript_1.default.waitForInited;
         var code = Typescript_1.default.getCode("jassijs_editor/util/Parser.ts");
         var parser = new Parser();
+        //code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
+        // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
+        code = 'import { Button as  } from "jassijs/ui/Button";import { Button } from "jassijs/remote/Jassi";';
         parser.parse(code, undefined);
+        parser.addImportIfNeeded("Panel", "kk/l");
+        console.log(parser.getModifiedCode());
+        debugger;
         /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
           const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
           const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);

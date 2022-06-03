@@ -269,7 +269,7 @@ export class SimpleReportEditor extends Panel {
             layout=properties?.view;
          }
         this.reportDesigner = new SimpleReportDesigner(layout);
-        if(properties?.oncodechange)
+        if(properties?.oncodechange) //@ts-ignore
             this.reportDesigner.oncodechanged(properties?.oncodechange);
         var compileTask: Runlater = undefined;
         this.codeEditor.variables.addVariable("this", this.reportPanel);

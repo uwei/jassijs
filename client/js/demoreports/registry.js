@@ -3,61 +3,61 @@ define("demoreports/registry",["require"], function(require) {
  return {
   default: {
 	"demoreports/01-Simpledata.ts": {
-		"date": 1633970828481
-	},
-	"demoreports/Empty.ts": {
-		"date": 1633970828871
-	},
-	"demoreports/pdfmake-playground/Basics.ts": {
-		"date": 1633816150510
-	},
-	"demoreports/pdfmake-playground/Columns.ts": {
-		"date": 1633816717414
-	},
-	"demoreports/pdfmake-playground/Images.ts": {
-		"date": 1633967389473
-	},
-	"demoreports/pdfmake-playground/Lists.ts": {
-		"date": 1633816881318
-	},
-	"demoreports/pdfmake-playground/Margin.ts": {
-		"date": 1633816964731
-	},
-	"demoreports/pdfmake-playground/Styles1.ts": {
-		"date": 1633816234591
-	},
-	"demoreports/pdfmake-playground/Styles2.ts": {
-		"date": 1633816560188
-	},
-	"demoreports/pdfmake-playground/Styles3.ts": {
-		"date": 1633816591425
-	},
-	"demoreports/pdfmake-playground/Tables.ts": {
-		"date": 1633816847871
+		"date": 1633970830000
 	},
 	"demoreports/10-Foreach.ts": {
-		"date": 1634336966560
+		"date": 1634336968000
 	},
 	"demoreports/11-Foreach.ts": {
-		"date": 1634336971678
+		"date": 1634336972000
 	},
 	"demoreports/12-Foreach.ts": {
-		"date": 1634336975904
+		"date": 1634336976000
 	},
 	"demoreports/21-Datatable.ts": {
-		"date": 1634336980991
+		"date": 1634336982000
 	},
 	"demoreports/22-Datatable.ts": {
-		"date": 1634336984553
+		"date": 1634336986000
 	},
 	"demoreports/23-Datatable.ts": {
-		"date": 1634337875587
+		"date": 1634337876000
 	},
 	"demoreports/30-Format.ts": {
-		"date": 1634338772059
+		"date": 1634338774000
+	},
+	"demoreports/Empty.ts": {
+		"date": 1633970830000
 	},
 	"demoreports/Invoice.ts": {
-		"date": 1634384560011
+		"date": 1634384562000
+	},
+	"demoreports/pdfmake-playground/Basics.ts": {
+		"date": 1633816152000
+	},
+	"demoreports/pdfmake-playground/Columns.ts": {
+		"date": 1633816718000
+	},
+	"demoreports/pdfmake-playground/Images.ts": {
+		"date": 1633967390000
+	},
+	"demoreports/pdfmake-playground/Lists.ts": {
+		"date": 1633816882000
+	},
+	"demoreports/pdfmake-playground/Margin.ts": {
+		"date": 1633816966000
+	},
+	"demoreports/pdfmake-playground/Styles1.ts": {
+		"date": 1633816236000
+	},
+	"demoreports/pdfmake-playground/Styles2.ts": {
+		"date": 1633816562000
+	},
+	"demoreports/pdfmake-playground/Styles3.ts": {
+		"date": 1633816592000
+	},
+	"demoreports/pdfmake-playground/Tables.ts": {
+		"date": 1633816848000
 	}
 }
  }

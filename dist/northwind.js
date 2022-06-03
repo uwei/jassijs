@@ -395,7 +395,7 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
     }
     exports.test = test;
 });
-define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router"], function (require, exports, Button_2, HTMLPanel_2, Jassi_5, Panel_2, CSVImport_1, Actions_1, Router_1) {
+define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router", "northwind/remote/OrderDetails", "jassijs/remote/Transaction"], function (require, exports, Button_2, HTMLPanel_2, Jassi_5, Panel_2, CSVImport_1, Actions_1, Router_1, OrderDetails_2, Transaction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ImportData = void 0;
@@ -426,9 +426,25 @@ define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jass
             this.me.IDProtokoll.value += "<br>Suppliers " + s;
             s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid", "supplier": "supplierid", "category": "categoryid" });
             this.me.IDProtokoll.value += "<br>Products " + s;
-            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid", "customer": "customerid", "employee": "employeeid" });
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid", "customer": "customerid", "employee": "employeeid" }, undefined, async function (data) {
+                //before save remove old OrderDetails
+                //   debugger;
+                var ids = [];
+                data.forEach((o) => { ids.push(o.id); });
+                var all2 = await OrderDetails_2.OrderDetails.find({ where: "Order.id in (:...ids)", whereParams: { ids: ids } });
+                if (all2.length > 0) {
+                    var trans = new Transaction_1.Transaction();
+                    for (var x = 0; x < all2.length; x++) {
+                        trans.add(all2[x], all2[x].remove);
+                    }
+                    await trans.execute();
+                }
+            });
             this.me.IDProtokoll.value += "<br>Orders " + s;
-            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/order_details.csv", "northwind.OrderDetails", { "order": "orderid", "product": "productid" });
+            s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/order_details.csv", "northwind.OrderDetails", { "order": "orderid", "product": "productid" }, undefined, (data) => {
+                debugger;
+                data.forEach((o) => { delete o.id; }); //remove id is autoid
+            });
             this.me.IDProtokoll.value += "<br>OrderDetails " + s;
             this.me.IDProtokoll.value += "<br>Fertig";
         }
@@ -1167,7 +1183,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1627601185313,
+                "date": 1627601186000,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -1190,7 +1206,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
-                "date": 1622984379867,
+                "date": 1622984380000,
                 "northwind/CustomerView": {
                     "$DBObjectView": [
                         {
@@ -1213,7 +1229,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/DetailTest.ts": {
-                "date": 1622984379867,
+                "date": 1622984380000,
                 "northwind.DetailTest": {
                     "$DBObjectView": [
                         {
@@ -1234,7 +1250,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1622984379867,
+                "date": 1622984380000,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -1257,7 +1273,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ImportData.ts": {
-                "date": 1626121456721,
+                "date": 1635898120000,
                 "northwind.ImportData": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -1283,10 +1299,10 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/modul.ts": {
-                "date": 1613551043267
+                "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1630615562089,
+                "date": 1630615564000,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1309,7 +1325,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1623092962878,
+                "date": 1623092964000,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -1332,7 +1348,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Categories.ts": {
-                "date": 1623093051242,
+                "date": 1623093052000,
                 "northwind.Categories": {
                     "$DBObject": [],
                     "@members": {
@@ -1366,7 +1382,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Customer.ts": {
-                "date": 1622985441740,
+                "date": 1622985442000,
                 "northwind.Customer": {
                     "$DBObject": [],
                     "@members": {
@@ -1427,7 +1443,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1623093098474,
+                "date": 1623093100000,
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
@@ -1556,7 +1572,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/OrderDetails.ts": {
-                "date": 1622985444817,
+                "date": 1622985446000,
                 "northwind.OrderDetails": {
                     "$DBObject": [],
                     "@members": {
@@ -1597,7 +1613,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
-                "date": 1623442707275,
+                "date": 1635891936000,
                 "northwind.Orders": {
                     "$DBObject": [],
                     "@members": {
@@ -1700,7 +1716,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Products.ts": {
-                "date": 1623093056588,
+                "date": 1623093058000,
                 "northwind.Products": {
                     "$DBObject": [],
                     "@members": {
@@ -1772,7 +1788,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Shippers.ts": {
-                "date": 1622985453719,
+                "date": 1622985454000,
                 "northwind.Shippers": {
                     "$DBObject": [],
                     "@members": {
@@ -1797,7 +1813,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Suppliers.ts": {
-                "date": 1622985455688,
+                "date": 1622985456000,
                 "northwind.Suppliers": {
                     "$DBObject": [],
                     "@members": {
@@ -1885,10 +1901,10 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/SampleServerReport.ts": {
-                "date": 1625946848694
+                "date": 1625946850000
             },
             "northwind/ShippersView.ts": {
-                "date": 1622984379867,
+                "date": 1622984380000,
                 "northwind.ShippersView": {
                     "$DBObjectView": [
                         {
@@ -1911,7 +1927,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/SuppliersView.ts": {
-                "date": 1622984379867,
+                "date": 1622984380000,
                 "northwind.SuppliersView": {
                     "$DBObjectView": [
                         {
@@ -2059,7 +2075,7 @@ define("northwind/remote/Customer", ["require", "exports", "jassijs/remote/DBObj
     exports.test = test;
     ;
 });
-define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction"], function (require, exports, DBObject_3, Jassi_12, DatabaseSchema_3, Transaction_1) {
+define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction"], function (require, exports, DBObject_3, Jassi_12, DatabaseSchema_3, Transaction_2) {
     "use strict";
     var Employees_2;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2182,7 +2198,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
         em.id = getRandomInt(100000);
         var em2 = new Employees();
         em2.id = getRandomInt(100000);
-        var trans = new Transaction_1.Transaction();
+        var trans = new Transaction_2.Transaction();
         console.log(em.id + " " + em2.id);
         trans.add(em, em.save);
         trans.add(em2, em2.save);
@@ -2245,7 +2261,7 @@ define("northwind/remote/OrderDetails", ["require", "exports", "northwind/remote
     exports.test = test;
     ;
 });
-define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_2, Employees_3, Customer_2, DBObject_5, Jassi_14, DatabaseSchema_5, Shippers_2) {
+define("northwind/remote/Orders", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_3, Employees_3, Customer_2, DBObject_5, Jassi_14, DatabaseSchema_5, Shippers_2) {
     "use strict";
     var _a, _b, _c;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2312,7 +2328,7 @@ define("northwind/remote/Orders", ["require", "exports", "northwind/remote/Order
         __metadata("design:type", String)
     ], Orders.prototype, "ShipCountry", void 0);
     __decorate([
-        (0, DatabaseSchema_5.OneToMany)(type => OrderDetails_2.OrderDetails, e => e.Order),
+        (0, DatabaseSchema_5.OneToMany)(type => OrderDetails_3.OrderDetails, e => e.Order),
         __metadata("design:type", Array)
     ], Orders.prototype, "Details", void 0);
     Orders = __decorate([

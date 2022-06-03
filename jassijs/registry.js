@@ -3,169 +3,297 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"jassijs/remote/Classes.ts": {
-		"date": 1624296519695,
+		"date": 1624296520000,
 		"jassijs.remote.JassiError": {},
 		"jassijs.remote.Classes": {}
 	},
 	"jassijs/remote/ClientError.ts": {
-		"date": 1624295333733,
+		"date": 1624295334000,
 		"jassijs.remote.ClientError": {}
 	},
 	"jassijs/remote/Database.ts": {
-		"date": 1622985395292,
+		"date": 1622985396000,
 		"jassijs.remote.Database": {}
 	},
 	"jassijs/remote/DatabaseTools.ts": {
-		"date": 1624296507755,
+		"date": 1624296508000,
 		"jassijs.remote.DatabaseTools": {}
 	},
 	"jassijs/remote/DBArray.ts": {
-		"date": 1624295775441,
+		"date": 1624295776000,
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1624295824039,
+		"date": 1624295826000,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
-		"date": 1623876712108
+		"date": 1623876714000
 	},
 	"jassijs/remote/Extensions.ts": {
-		"date": 1626209335323
+		"date": 1626209336000
 	},
 	"jassijs/remote/FileNode.ts": {
-		"date": 1623779781658,
+		"date": 1623779782000,
 		"jassijs.remote.FileNode": {}
 	},
 	"jassijs/remote/hallo.ts": {
-		"date": 1622985408207
+		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1634389644730,
+		"date": 1634389646000,
 		"jassijs.remote.Jassi": {}
 	},
 	"jassijs/remote/ObjectTransaction.ts": {
-		"date": 1622985412199
+		"date": 1622985414000
 	},
 	"jassijs/remote/Registry.ts": {
-		"date": 1634384711047
+		"date": 1634384712000
 	},
 	"jassijs/remote/RemoteObject.ts": {
-		"date": 1627600803505,
+		"date": 1627600804000,
 		"jassijs.remote.RemoteObject": {}
 	},
 	"jassijs/remote/RemoteProtocol.ts": {
-		"date": 1624295908903,
+		"date": 1624295910000,
 		"jassijs.remote.RemoteProtocol": {}
 	},
 	"jassijs/remote/security/Group.ts": {
-		"date": 1622999222021,
+		"date": 1622999224000,
 		"jassijs.security.Group": {
 			"$DBObject": [
 				{
 					"name": "jassijs_group"
 				}
-			]
+			],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"name": {
+					"Column": []
+				},
+				"parentRights": {
+					"JoinTable": [],
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				},
+				"rights": {
+					"JoinTable": [],
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				},
+				"users": {
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				}
+			}
 		}
 	},
 	"jassijs/remote/security/ParentRight.ts": {
-		"date": 1622999217852,
+		"date": 1622999218000,
 		"jassijs.security.ParentRight": {
 			"$DBObject": [
 				{
 					"name": "jassijs_parentright"
 				}
-			]
+			],
+			"@members": {
+				"id": {
+					"PrimaryGeneratedColumn": []
+				},
+				"name": {
+					"Column": []
+				},
+				"classname": {
+					"Column": []
+				},
+				"i1": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"i2": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"s1": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"s2": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"groups": {
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				}
+			}
 		}
 	},
 	"jassijs/remote/security/Right.ts": {
-		"date": 1622998616949,
+		"date": 1622998618000,
 		"jassijs.security.Right": {
 			"$DBObject": [
 				{
 					"name": "jassijs_right"
 				}
-			]
+			],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"name": {
+					"Column": []
+				},
+				"groups": {
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				}
+			}
 		}
 	},
 	"jassijs/remote/security/Rights.ts": {
-		"date": 1622985522637,
+		"date": 1622985524000,
 		"jassijs.security.Rights": {}
 	},
 	"jassijs/remote/security/Setting.ts": {
-		"date": 1624296035777,
+		"date": 1624296036000,
 		"jassijs.security.Setting": {
 			"$DBObject": [
 				{
 					"name": "jassijs_setting"
 				}
-			]
+			],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"data": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/remote/security/User.ts": {
-		"date": 1623528369317,
+		"date": 1623528370000,
 		"jassijs.security.User": {
 			"$DBObject": [
 				{
 					"name": "jassijs_user"
 				}
-			]
+			],
+			"@members": {
+				"id": {
+					"PrimaryGeneratedColumn": []
+				},
+				"email": {
+					"Column": []
+				},
+				"password": {
+					"Column": [
+						{
+							"select": false
+						}
+					]
+				},
+				"groups": {
+					"JoinTable": [],
+					"ManyToMany": [
+						"function",
+						"function"
+					]
+				},
+				"isAdmin": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				}
+			}
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1633979242522,
+		"date": 1633979244000,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {
-		"date": 1631479360753,
+		"date": 1631479362000,
 		"jassijs.remote.Settings": {}
 	},
 	"jassijs/remote/Test.ts": {
-		"date": 1630957816667,
+		"date": 1630957818000,
 		"jassijs.remote.Test": {}
 	},
 	"jassijs/remote/Transaction.ts": {
-		"date": 1622985430225,
+		"date": 1622985432000,
 		"jassijs.remote.Transaction": {}
 	},
 	"jassijs/server/Compile.ts": {
-		"date": 1625397511839
+		"date": 1625397512000
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1625410375240,
+		"date": 1635895626000,
 		"jassi_localserver.DBManager": {}
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
-		"date": 1624297017569
+		"date": 1624297018000
 	},
 	"jassijs/server/Filesystem.ts": {
-		"date": 1634319129102
+		"date": 1634319130000
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1627585234514
+		"date": 1654270950134
 	},
 	"jassijs/server/JassiServer.ts": {
-		"date": 1634238599873
+		"date": 1634238600000
 	},
 	"jassijs/server/PassportLoginRegister.ts": {
-		"date": 1622984045173
+		"date": 1622984046000
 	},
 	"jassijs/server/PassportSetup.ts": {
-		"date": 1623702075461
+		"date": 1623702076000
 	},
 	"jassijs/server/RawBody.ts": {
-		"date": 1589573020012
+		"date": 1654195780399
 	},
 	"jassijs/server/RegistryIndexer.ts": {
-		"date": 1624137152110
+		"date": 1624137154000
 	},
 	"jassijs/server/Zip.ts": {
-		"date": 1622984045173
+		"date": 1622984046000
 	},
 	"jassijs/UserModel.ts": {
-		"date": 1622984045177
+		"date": 1622984046000
 	},
 	"jassijs/util/DatabaseSchema.ts": {
-		"date": 1611490790268
+		"date": 1611490792000
 	}
 }

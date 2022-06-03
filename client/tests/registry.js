@@ -3,17 +3,17 @@ define("tests/registry",["require"], function(require) {
  return {
   default: {
 	"tests/DBTests.ts": {
-		"date": 1624296651725
+		"date": 1624296652000
 	},
 	"tests/FileActionsTests.ts": {
-		"date": 1624296373069
+		"date": 1624296374000
 	},
 	"tests/remote/T.ts": {
-		"date": 1625333609235,
+		"date": 1635803076000,
 		"tests.remote.T": {}
 	},
 	"tests/remote/TestCustomer.ts": {
-		"date": 1623488386702,
+		"date": 1623488388000,
 		"tests.TestCustomer": {
 			"$ParentRights": [
 				[
@@ -50,7 +50,7 @@ define("tests/registry",["require"], function(require) {
 		}
 	},
 	"tests/remote/TestOrder.ts": {
-		"date": 1623488474823,
+		"date": 1623488476000,
 		"tests.TestOrder": {
 			"$DBObject": [],
 			"@members": {
@@ -73,7 +73,7 @@ define("tests/registry",["require"], function(require) {
 		}
 	},
 	"tests/remote/TestOrderDetails.ts": {
-		"date": 1623488500029,
+		"date": 1623488502000,
 		"tests.TestOrderDetails": {
 			"$DBObject": [],
 			"@members": {
@@ -91,13 +91,13 @@ define("tests/registry",["require"], function(require) {
 		}
 	},
 	"tests/remote/TestServerfile.ts": {
-		"date": 1624999036922
+		"date": 1624999038000
 	},
 	"tests/RemoteModulTests.ts": {
-		"date": 1630958861386
+		"date": 1630958862000
 	},
 	"tests/TestReport.ts": {
-		"date": 1623864072454
+		"date": 1623864074000
 	}
 }
  }

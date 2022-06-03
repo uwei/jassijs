@@ -771,12 +771,22 @@ class RelationInfo {
     }
   }
   private _parseNode(context: Context, node) {
-    if (node.operator !== undefined) {
+   /* if (node.operator !== undefined) {
       var left = node.left;
       var right = node.right;
       this._checkExpression(context, left);
       this._checkExpression(context, right);
-    }
+    }*/
+    var left = node.left;
+      var right = node.right;
+      if (node.left !== undefined) {
+          this._checkExpression(context, left);
+      }
+      if (node.right !== undefined) {
+          this._checkExpression(context, right);
+      }
+        
+  
 
   }
   addWhereBySample<Entity>(context: Context, param: any, builder: SelectQueryBuilder<Entity>): SelectQueryBuilder<Entity> {
@@ -816,9 +826,9 @@ class RelationInfo {
       return ret;
     var dummyselect = "select * from k where ";
     //we must replace because parsing Exception
-    var ast = parser.parse(dummyselect + sql.replaceAll(":", "xxxparams"));
+    var ast = parser.parse(dummyselect + sql.replaceAll(":...", "fxxparams").replaceAll(":", "xxxparams"));
     this._parseNode(context, ast.value.where);
-    var newsql = parser.stringify(ast).replaceAll("xxxparams", ":");
+    var newsql = parser.stringify(ast).replaceAll("fxxparams", ":...").replaceAll("xxxparams", ":");
     ret.andWhere(newsql.substring(dummyselect.length), whereParams);
     return ret;
   }

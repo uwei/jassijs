@@ -5,4 +5,4 @@ export function rawbody (req, res, next) {
       req.rawBody = data;
       next();
     })
-  }
+  } 

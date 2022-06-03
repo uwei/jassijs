@@ -1041,8 +1041,7 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Jassi
     * @param {boolean} [properties.useSpan] -  use span not div
     *
     */
-        constructor(properties = {}) {
-            properties.isdatatable = true;
+        constructor(properties = { isdatatable: true }) {
             super(properties);
             this.reporttype = "datatable";
             this.headerPanel = new RTablerow_1.RTablerow();
@@ -2922,8 +2921,8 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Jassi"
                     title: "<span class='mdi mdi-grid'><span>",
                     action: () => {
                         var test = rt;
-                        rt.parent.parent.contextMenu.target = component.dom.children[0];
-                        rt.parent.parent.contextMenu.show();
+                        rt._parent.parent.contextMenu.target = component.dom.children[0];
+                        rt._parent.parent.contextMenu.show();
                     }
                 };
             }
@@ -4309,7 +4308,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
                 layout = properties === null || properties === void 0 ? void 0 : properties.view;
             }
             this.reportDesigner = new SimpleReportDesigner_1.SimpleReportDesigner(layout);
-            if (properties === null || properties === void 0 ? void 0 : properties.oncodechange)
+            if (properties === null || properties === void 0 ? void 0 : properties.oncodechange) //@ts-ignore
                 this.reportDesigner.oncodechanged(properties === null || properties === void 0 ? void 0 : properties.oncodechange);
             var compileTask = undefined;
             this.codeEditor.variables.addVariable("this", this.reportPanel);
@@ -4412,11 +4411,21 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
 define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Settings"], function (require, exports, FileExplorer_1, Windows_2, Panel_6, Router_1, Settings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
     //var h=new RemoteObject().test();
     async function start() {
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
         var body = new Panel_6.Panel({ id: "body" });
         body.max();
+        var site = new Panel_6.Panel();
+        Windows_2.default._desktop.add(site);
+        site.dom.innerHTML = '<h1>\n<a id="user-content-jassijs-reporteditor" class="anchor" href="#jassijs-reporteditor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Jassijs-Reporteditor</h1>\n<p>Jassijs Reporteditor is a visual tool for designing <a href="http://pdfmake.org/" rel="nofollow">pdfmake</a> reports. The reports can be rendered with pdfmake to pdf either directly in the browser or server-side with nodes.\nThe report designer can be executed directly via <a href="https://uwei.github.io/jassijs-reporteditor/web" rel="nofollow">https://uwei.github.io/jassijs-reporteditor/web</a>. The report designer can also be integrated into your own websites. An example of this is <a href="https://uwei.github.io/jassijs-reporteditor/simple" rel="nofollow">here</a>.</p>\n<h2>\n<a id="user-content-runtime" class="anchor" href="#runtime" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Runtime</h2>\n<p>The Jassijs report designer extends the syntax of pdfmake by filling data e.g. with the help of data tables. In order for the report to be filled at runtime, a conversion of the report design is necessary. Here is an <a href="https://uwei.github.io/jassijs-reporteditor/simple/usereport.html" rel="nofollow">example</a> or [with amd] (<a href="https://uwei.github.io/jassijs-reporteditor/simple/usereport-amd.html" rel="nofollow">https://uwei.github.io/jassijs-reporteditor/simple/usereport-amd.html</a>):</p>\n<div class="highlight highlight-text-html-basic"><pre><span class="pl-kos">&lt;</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">http://localhost/jassijs/dist/pdfmakejassi.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;/</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">docDefinition</span><span class="pl-c1">=</span><span class="pl-kos">{</span>\n\t\t\t<span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n\t\t\t\t<span class="pl-s">\'Hallo ${name}\'</span><span class="pl-kos">,</span>\n\t\t\t\t<span class="pl-s">\'${parameter.date}\'</span>\n\t\t\t<span class="pl-kos">]</span>\n\t\t<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-c">//fill data  </span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-c1">name</span>:<span class="pl-s">\'Max\'</span><span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">parameter</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-c1">date</span>:<span class="pl-s">\'2021-10-15\'</span><span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-s1">docDefinition</span><span class="pl-c1">=</span><span class="pl-s1">pdfmakejassi</span><span class="pl-kos">.</span><span class="pl-en">createReportDefinition</span><span class="pl-kos">(</span><span class="pl-s1">docDefinition</span><span class="pl-kos">,</span><span class="pl-s1">data</span><span class="pl-kos">,</span><span class="pl-s1">parameter</span><span class="pl-kos">)</span><span class="pl-kos">;</span>\n\n\t\t<span class="pl-s1">pdfMake</span><span class="pl-kos">.</span><span class="pl-en">createPdf</span><span class="pl-kos">(</span><span class="pl-s1">docDefinition</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">download</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>\n\t<span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;/</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span></pre></div>\n<h2>\n<a id="user-content-quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick Start:</h2>\n<p>The Jassijs Reportitor can be started directly in the <a href="https://uwei.github.io/jassijs-reporteditor/web" rel="nofollow">browser</a>. Please note that the reports stored there are not permanently stored and are lost when the browser cache is cleared.</p>\n<p>The existing reports are displayed on the right side. Double-click to open the report in Code view as javascript.\n<a href="https://camo.githubusercontent.com/9172b27b26433c0e87d06fd0419e757842ac89adb89e2bfb17be8de729d6431a/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72312e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/9172b27b26433c0e87d06fd0419e757842ac89adb89e2bfb17be8de729d6431a/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72312e6a7067" alt="jassijs-reporteditor1" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor1.jpg" style="max-width:100%;"></a></p>\n<p>With Run <a href="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" alt="jassijs-reporteditor2" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor2.jpg" style="max-width:100%;"></a> the report opens in the <strong>Design</strong> view.\n<a href="https://camo.githubusercontent.com/d014a6a69fa8a13596a3cf885687c93352c6f26c2e292889eb246b719aeb3c23/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72332e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/d014a6a69fa8a13596a3cf885687c93352c6f26c2e292889eb246b719aeb3c23/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72332e6a7067" alt="jassijs-reporteditor3" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor3.jpg" style="max-width:100%;"></a>\nThere, new report elements can be added from the <strong>Palette</strong> via drag and drop. The <strong>Properties</strong> of the selected report item can be changed in the property editor.</p>\n<p>With <a href="https://camo.githubusercontent.com/8a5bab1108211501516632442bbc08c3d50fc0eb4bf2643eaa39855eb1bb5478/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72342e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/8a5bab1108211501516632442bbc08c3d50fc0eb4bf2643eaa39855eb1bb5478/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72342e6a7067" alt="jassijs-reporteditor4" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor4.jpg" style="max-width:100%;"></a> the created pdf can be viewed.\n<a href="https://camo.githubusercontent.com/58e07784a867b283f4fb6f2770ef2d03b6367ac5fea0943030b0fdd50d7db066/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72352e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/58e07784a867b283f4fb6f2770ef2d03b6367ac5fea0943030b0fdd50d7db066/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72352e6a7067" alt="jassijs-reporteditor5" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor5.jpg" style="max-width:100%;"></a></p>\n<p>In the <strong>Code</strong> view, the report is displayed as Javascript code. With Run <a href="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" alt="jassijs-reporteditor2" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor2.jpg" style="max-width:100%;"></a> , changes in the code can be loaded back into the <strong>Design</strong> view.\nThere are many examples in the left side panel under Files that explain the report elements. Under pdfmake-Playground you will find examples of pdfmake. A detailed description of the syntax of pdfmake is described at <a href="http://pdfmake.org/" rel="nofollow">http://pdfmake.org/</a>.\nYou can create your own folders and reports (right-click context menu) under <strong>Files</strong>. But remember that the reports are only stored in the browser and are lost when the browser cache is cleared. You can also <strong>Download</strong> the <strong>modified</strong> reports (right-click on a folder in <strong>Files</strong>).</p>\n<h2>\n<a id="user-content-limitations" class="anchor" href="#limitations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Limitations</h2>\n<p>Not all properties of the report elements that are possible with pdfmake can be set with the visual disigner, but these properties are not lost when editing the report.</p>\n<h2>\n<a id="user-content-syntax-extensions" class="anchor" href="#syntax-extensions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Syntax extensions</h2>\n<p>The following extensions of the pdfmake syntax can be used with the help of link.</p>\n<h3>\n<a id="user-content-templating" class="anchor" href="#templating" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>templating:</h3>\n<p>With the help of javascript template strings, data can be filled into the report. The following example shows this.</p>\n<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-s1">reportdesign</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>\n\t<span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n        <span class="pl-s">\'Hallo ${name}\'</span><span class="pl-kos">,</span>\n        <span class="pl-s">\'${address.street}\'</span><span class="pl-kos">,</span>\n        <span class="pl-s">\'${parameter.date}\'</span>\n    <span class="pl-kos">]</span>\n<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\n<span class="pl-k">export</span> <span class="pl-k">function</span> <span class="pl-en">test</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>\n    <span class="pl-k">return</span> <span class="pl-kos">{</span> \n        reportdesign<span class="pl-kos">,</span>\n        <span class="pl-c1">data</span>:<span class="pl-kos">{</span>\n            <span class="pl-c1">name</span>:<span class="pl-s">\'Klaus\'</span><span class="pl-kos">,</span>\n            <span class="pl-c1">address</span>:<span class="pl-kos">{</span>\n                <span class="pl-c1">street</span>:<span class="pl-s">\'Mainstreet 8\'</span>\n            <span class="pl-kos">}</span>\n        <span class="pl-kos">}</span><span class="pl-kos">,</span>        \n        <span class="pl-c1">parameter</span>:<span class="pl-kos">{</span><span class="pl-c1">date</span>:<span class="pl-s">\'2021-10-10\'</span><span class="pl-kos">}</span>      <span class="pl-c">//parameter</span>\n    <span class="pl-kos">}</span><span class="pl-kos">;</span>\n<span class="pl-kos">}</span></pre></div>\n<p>The <strong>data</strong> of the report are specified in the data field or as a 2nd parameter when filling the report with <strong>pdfmakejassi.createReportDefinition</strong>.\nThis data could be filled line javascript Template-Strings like <strong>${name}</strong>.\nSimilar to data, parameters can also be filled in the report.</p>\n<h3>\n<a id="user-content-edittogether" class="anchor" href="#edittogether" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>edittogether</h3>\n<p>For texts with different formatting, individual text elements must be linked in pdfmake. Text elements that are to be edited together in a text box in the Designer are marked with edittogether. The text can be edited comfortably (thanks TinyMCE).\n<a href="https://camo.githubusercontent.com/a1741345d6b9db8cc6fa359d9ccebcb4940ba745ae8d42ec5c288553e1522dd0/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72362e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/a1741345d6b9db8cc6fa359d9ccebcb4940ba745ae8d42ec5c288553e1522dd0/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72362e6a7067" alt="jassijs-reporteditor6" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor6.jpg" style="max-width:100%;"></a></p>\n<h3>\n<a id="user-content-foreach" class="anchor" href="#foreach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>foreach</h3>\n<p>If the report data contain arrays, then this data can be filled into the report with foreach.\nHere is a simple <a href="https://uwei.github.io/jassijs-reporteditor/web/#do=jassijs_editor.CodeEditor&amp;file=demoreports/10-Foreach.ts" rel="nofollow">example</a>.</p>\n<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-s1">reportdesign</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>\n    <span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n        <span class="pl-kos">{</span>\n            <span class="pl-c1">foreach</span>: <span class="pl-s">\'line\'</span><span class="pl-kos">,</span>\n            <span class="pl-c1">text</span>: <span class="pl-s">\'${line.name}\'</span>\n        <span class="pl-kos">}</span><span class="pl-kos"></span>\n<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\n<span class="pl-k">export</span> <span class="pl-k">function</span> <span class="pl-en">test</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>\n    <span class="pl-k">return</span> <span class="pl-kos">{</span>\n        reportdesign<span class="pl-kos">,</span>\n        <span class="pl-c1">data</span>: <span class="pl-kos">[</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line1\'</span> <span class="pl-kos">}</span><span class="pl-kos">,</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line2\'</span> <span class="pl-kos">}</span><span class="pl-kos">,</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line3\'</span> <span class="pl-kos">}</span>\n        <span class="pl-kos">]</span>\n    <span class="pl-kos">}</span><span class="pl-kos">;</span>\n<span class="pl-kos">}</span></pre></div>\n<p>The element that is marked with foreach is repeated for each array element.\nThe array element can be accessed with ${line.name}.\nforeach $line is the short form for foreach $line in data.\nIf not the element itself but another report element is to be repeated,\ncan be used.</p>\n<h3>\n<a id="user-content-datatable" class="anchor" href="#datatable" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>datatable</h3>\n<p>Syntax {\n}\nBeispiel</p>\n<h3>\n<a id="user-content-format" class="anchor" href="#format" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>format</h3>\n<h2>\n<a id="user-content-aggregate-functions" class="anchor" href="#aggregate-functions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>aggregate Functions</h2>\n';
+        site.css({
+            background_color: "white",
+            overflow: "scroll"
+        });
+        site.height = "100%";
+        site.width = "100%";
         Windows_2.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
         Router_1.router.navigate(window.location.hash);
         //Ace should be default because long image blob breaks line   
@@ -4425,6 +4434,28 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/Fi
         }
     }
     start().then();
+    async function convertMD() {
+        var md = await $.ajax({
+            type: "get",
+            url: "https://uwei.github.io/jassijs-reporteditor/README.md"
+        });
+        md = md.replaceAll('"', "'");
+        md = md.substring(0, 999999).replaceAll("\n", "\\n").replaceAll("\t", "\\t");
+        debugger;
+        //console.log(md);
+        var html = await $.ajax({
+            url: "https://api.github.com/markdown",
+            type: 'post',
+            headers: {
+                "Accept": "application/vnd.github.v3+json"
+            },
+            data: '{"text":"' + md + '"}'
+        });
+    }
+    function test() {
+        convertMD();
+    }
+    exports.test = test;
 });
 define("jassijs_report/modul", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -4451,26 +4482,30 @@ define("jassijs_report/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_report/designer/Report.ts": {
-                "date": 1622998616949,
+                "date": 1622998618000,
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1634384912619,
+                "date": 1634384914000,
                 "jassijs_report.designer.ReportDesigner": {}
             },
+            "jassijs_report/designer/SimpleReportDesigner.ts": {
+                "date": 1634164976000,
+                "jassijs_report.designer.SimpleReportDesigner": {}
+            },
             "jassijs_report/modul.ts": {
-                "date": 1633111115088
+                "date": 1633111116000
             },
             "jassijs_report/PDFReport.ts": {
-                "date": 1632679267836,
+                "date": 1632679268000,
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
-                "date": 1634057193736,
+                "date": 1634057194000,
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
-                "date": 1633816765820,
+                "date": 1633816766000,
                 "jassijs_report.RColumns": {
                     "$ReportComponent": [
                         {
@@ -4483,8 +4518,241 @@ define("jassijs_report/registry", ["require"], function (require) {
                     ]
                 }
             },
+            "jassijs_report/RComponent.ts": {
+                "date": 1634385288000,
+                "jassijs_report.ReportComponent": {
+                    "$Property": [
+                        {
+                            "hideBaseClassProperties": true
+                        }
+                    ],
+                    "@members": {
+                        "foreach": {
+                            "$Property": []
+                        },
+                        "counter": {
+                            "$Property": [
+                                {
+                                    "default": "undefined",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "listType": {
+                            "$Property": [
+                                {
+                                    "name": "listType",
+                                    "default": "undefined",
+                                    "isVisible": "function",
+                                    "chooseFrom": "function"
+                                }
+                            ]
+                        },
+                        "fillColor": {
+                            "$Property": [
+                                {
+                                    "type": "color",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "colSpan": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "rowSpan": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "border": {
+                            "$Property": [
+                                {
+                                    "type": "boolean[]",
+                                    "default": [
+                                        false,
+                                        false,
+                                        false,
+                                        false
+                                    ],
+                                    "isVisible": "function",
+                                    "description": "border of the tablecell: left, top, right, bottom"
+                                }
+                            ]
+                        },
+                        "width": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "height": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "bold": {
+                            "$Property": []
+                        },
+                        "italics": {
+                            "$Property": []
+                        },
+                        "font": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "Alegreya",
+                                        "AlegreyaSans",
+                                        "AlegreyaSansSC",
+                                        "AlegreyaSC",
+                                        "AlmendraSC",
+                                        "Amaranth",
+                                        "Andada",
+                                        "AndadaSC",
+                                        "AnonymousPro",
+                                        "ArchivoNarrow",
+                                        "Arvo",
+                                        "Asap",
+                                        "AveriaLibre",
+                                        "AveriaSansLibre",
+                                        "AveriaSerifLibre",
+                                        "Cambay",
+                                        "Caudex",
+                                        "CrimsonText",
+                                        "Cuprum",
+                                        "Economica",
+                                        "Exo2",
+                                        "Exo",
+                                        "ExpletusSans",
+                                        "FiraSans",
+                                        "JosefinSans",
+                                        "JosefinSlab",
+                                        "Karla",
+                                        "Lato",
+                                        "LobsterTwo",
+                                        "Lora",
+                                        "Marvel",
+                                        "Merriweather",
+                                        "MerriweatherSans",
+                                        "Nobile",
+                                        "NoticiaText",
+                                        "Overlock",
+                                        "Philosopher",
+                                        "PlayfairDisplay",
+                                        "PlayfairDisplaySC",
+                                        "PT_Serif-Web",
+                                        "Puritan",
+                                        "Quantico",
+                                        "QuattrocentoSans",
+                                        "Quicksand",
+                                        "Rambla",
+                                        "Rosario",
+                                        "Sansation",
+                                        "Sarabun",
+                                        "Scada",
+                                        "Share",
+                                        "Sitara",
+                                        "SourceSansPro",
+                                        "TitilliumWeb",
+                                        "Volkhov",
+                                        "Vollkorn"
+                                    ]
+                                }
+                            ]
+                        },
+                        "fontSize": {
+                            "$Property": []
+                        },
+                        "background": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "color": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "alignment": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "left",
+                                        "center",
+                                        "right"
+                                    ]
+                                }
+                            ]
+                        },
+                        "decoration": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "underline",
+                                        "lineThrough",
+                                        "overline"
+                                    ]
+                                }
+                            ]
+                        },
+                        "decorationColor": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "decorationStyle": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "dashed",
+                                        "dotted",
+                                        "double",
+                                        "wavy"
+                                    ]
+                                }
+                            ]
+                        },
+                        "style": {
+                            "$Property": []
+                        },
+                        "lineHeight": {
+                            "$Property": [
+                                {
+                                    "default": 1
+                                }
+                            ]
+                        },
+                        "margin": {
+                            "$Property": [
+                                {
+                                    "type": "number[]",
+                                    "description": "margin left, top, right, bottom"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
             "jassijs_report/RDatatable.ts": {
-                "date": 1633810670682,
+                "date": 1635803254000,
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
@@ -4508,8 +4776,244 @@ define("jassijs_report/registry", ["require"], function (require) {
                     }
                 }
             },
+            "jassijs_report/remote/pdfmakejassi.ts": {
+                "date": 1634336644000
+            },
+            "jassijs_report/remote/RComponent.ts": {
+                "date": 1634381450000,
+                "jassijs_report.ReportComponent": {
+                    "$Property": [
+                        {
+                            "hideBaseClassProperties": true
+                        }
+                    ],
+                    "@members": {
+                        "foreach": {
+                            "$Property": []
+                        },
+                        "counter": {
+                            "$Property": [
+                                {
+                                    "default": "undefined",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "listType": {
+                            "$Property": [
+                                {
+                                    "name": "listType",
+                                    "default": "undefined",
+                                    "isVisible": "function",
+                                    "chooseFrom": "function"
+                                }
+                            ]
+                        },
+                        "fillColor": {
+                            "$Property": [
+                                {
+                                    "type": "color",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "colSpan": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "rowSpan": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "border": {
+                            "$Property": [
+                                {
+                                    "type": "boolean[]",
+                                    "default": [
+                                        false,
+                                        false,
+                                        false,
+                                        false
+                                    ],
+                                    "isVisible": "function",
+                                    "description": "border of the tablecell: left, top, right, bottom"
+                                }
+                            ]
+                        },
+                        "width": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "height": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "isVisible": "function"
+                                }
+                            ]
+                        },
+                        "bold": {
+                            "$Property": []
+                        },
+                        "italics": {
+                            "$Property": []
+                        },
+                        "font": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "Alegreya",
+                                        "AlegreyaSans",
+                                        "AlegreyaSansSC",
+                                        "AlegreyaSC",
+                                        "AlmendraSC",
+                                        "Amaranth",
+                                        "Andada",
+                                        "AndadaSC",
+                                        "AnonymousPro",
+                                        "ArchivoNarrow",
+                                        "Arvo",
+                                        "Asap",
+                                        "AveriaLibre",
+                                        "AveriaSansLibre",
+                                        "AveriaSerifLibre",
+                                        "Cambay",
+                                        "Caudex",
+                                        "CrimsonText",
+                                        "Cuprum",
+                                        "Economica",
+                                        "Exo2",
+                                        "Exo",
+                                        "ExpletusSans",
+                                        "FiraSans",
+                                        "JosefinSans",
+                                        "JosefinSlab",
+                                        "Karla",
+                                        "Lato",
+                                        "LobsterTwo",
+                                        "Lora",
+                                        "Marvel",
+                                        "Merriweather",
+                                        "MerriweatherSans",
+                                        "Nobile",
+                                        "NoticiaText",
+                                        "Overlock",
+                                        "Philosopher",
+                                        "PlayfairDisplay",
+                                        "PlayfairDisplaySC",
+                                        "PT_Serif-Web",
+                                        "Puritan",
+                                        "Quantico",
+                                        "QuattrocentoSans",
+                                        "Quicksand",
+                                        "Rambla",
+                                        "Rosario",
+                                        "Sansation",
+                                        "Sarabun",
+                                        "Scada",
+                                        "Share",
+                                        "Sitara",
+                                        "SourceSansPro",
+                                        "TitilliumWeb",
+                                        "Volkhov",
+                                        "Vollkorn"
+                                    ]
+                                }
+                            ]
+                        },
+                        "fontSize": {
+                            "$Property": []
+                        },
+                        "background": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "color": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "alignment": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "left",
+                                        "center",
+                                        "right"
+                                    ]
+                                }
+                            ]
+                        },
+                        "decoration": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "underline",
+                                        "lineThrough",
+                                        "overline"
+                                    ]
+                                }
+                            ]
+                        },
+                        "decorationColor": {
+                            "$Property": [
+                                {
+                                    "type": "color"
+                                }
+                            ]
+                        },
+                        "decorationStyle": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "dashed",
+                                        "dotted",
+                                        "double",
+                                        "wavy"
+                                    ]
+                                }
+                            ]
+                        },
+                        "style": {
+                            "$Property": []
+                        },
+                        "lineHeight": {
+                            "$Property": [
+                                {
+                                    "default": 1
+                                }
+                            ]
+                        },
+                        "margin": {
+                            "$Property": [
+                                {
+                                    "type": "number[]",
+                                    "description": "margin left, top, right, bottom"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1633777019318,
+                "date": 1633777020000,
                 "jassijs_report.InfoProperties": {
                     "@members": {
                         "title": {
@@ -4762,84 +5266,11 @@ define("jassijs_report/registry", ["require"], function (require) {
                     }
                 }
             },
-            "jassijs_report/RStack.ts": {
-                "date": 1632518449870,
-                "jassijs_report.RStack": {
-                    "$ReportComponent": [
-                        {
-                            "fullPath": "report/Stack",
-                            "icon": "mdi mdi-view-sequential-outline",
-                            "editableChildComponents": [
-                                "this"
-                            ]
-                        }
-                    ]
-                }
-            },
-            "jassijs_report/RTablerow.ts": {
-                "date": 1633813573497,
-                "jassijs_report.RTablerow": {
-                    "$ReportComponent": [
-                        {
-                            "editableChildComponents": [
-                                "this"
-                            ]
-                        }
-                    ]
-                }
-            },
-            "jassijs_report/RText.ts": {
-                "date": 1634384337004,
-                "jassijs_report.RText": {
-                    "$ReportComponent": [
-                        {
-                            "fullPath": "report/Text",
-                            "icon": "mdi mdi-format-color-text"
-                        }
-                    ],
-                    "$Property": [
-                        {
-                            "name": "value",
-                            "type": "string",
-                            "description": "text"
-                        }
-                    ],
-                    "@members": {
-                        "value": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "format": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "chooseFrom": "allFormats"
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "jassijs_report/RUnknown.ts": {
-                "date": 1632503057676,
-                "jassijs_report.RUnknown": {}
-            },
-            "jassijs_report/designer/SimpleReportDesigner.ts": {
-                "date": 1634164975200,
-                "jassijs_report.designer.SimpleReportDesigner": {}
-            },
-            "jassijs_report/SimpleReportEditor.ts": {
-                "date": 1634165341695,
-                "jassi_report.SimpleReportEditor": {}
-            },
-            "jassijs_report/remote/pdfmakejassi.ts": {
-                "date": 1634336643584
+            "jassijs_report/ReportTemplate.ts": {
+                "date": 1633815616000
             },
             "jassijs_report/RGroupTablerow.ts": {
-                "date": 1633548166674,
+                "date": 1633548168000,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -4855,334 +5286,54 @@ define("jassijs_report/registry", ["require"], function (require) {
                     }
                 }
             },
-            "jassijs_report/RComponent.ts": {
-                "date": 1634385287193,
-                "jassijs_report.ReportComponent": {
-                    "$Property": [
+            "jassijs_report/RImage.ts": {
+                "date": 1633792428000,
+                "jassijs_report.RImage": {
+                    "$ReportComponent": [
                         {
-                            "hideBaseClassProperties": true
+                            "fullPath": "report/Image",
+                            "icon": "mdi mdi-image-frame"
                         }
                     ],
                     "@members": {
-                        "foreach": {
-                            "$Property": []
-                        },
-                        "counter": {
+                        "image": {
                             "$Property": [
                                 {
-                                    "default": "undefined",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "listType": {
-                            "$Property": [
-                                {
-                                    "name": "listType",
-                                    "default": "undefined",
-                                    "isVisible": "function",
+                                    "type": "rimage",
                                     "chooseFrom": "function"
                                 }
                             ]
                         },
-                        "fillColor": {
-                            "$Property": [
-                                {
-                                    "type": "color",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "colSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "rowSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "border": {
-                            "$Property": [
-                                {
-                                    "type": "boolean[]",
-                                    "default": [
-                                        false,
-                                        false,
-                                        false,
-                                        false
-                                    ],
-                                    "isVisible": "function",
-                                    "description": "border of the tablecell: left, top, right, bottom"
-                                }
-                            ]
-                        },
-                        "width": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "height": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "bold": {
-                            "$Property": []
-                        },
-                        "italics": {
-                            "$Property": []
-                        },
-                        "font": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "Alegreya",
-                                        "AlegreyaSans",
-                                        "AlegreyaSansSC",
-                                        "AlegreyaSC",
-                                        "AlmendraSC",
-                                        "Amaranth",
-                                        "Andada",
-                                        "AndadaSC",
-                                        "AnonymousPro",
-                                        "ArchivoNarrow",
-                                        "Arvo",
-                                        "Asap",
-                                        "AveriaLibre",
-                                        "AveriaSansLibre",
-                                        "AveriaSerifLibre",
-                                        "Cambay",
-                                        "Caudex",
-                                        "CrimsonText",
-                                        "Cuprum",
-                                        "Economica",
-                                        "Exo2",
-                                        "Exo",
-                                        "ExpletusSans",
-                                        "FiraSans",
-                                        "JosefinSans",
-                                        "JosefinSlab",
-                                        "Karla",
-                                        "Lato",
-                                        "LobsterTwo",
-                                        "Lora",
-                                        "Marvel",
-                                        "Merriweather",
-                                        "MerriweatherSans",
-                                        "Nobile",
-                                        "NoticiaText",
-                                        "Overlock",
-                                        "Philosopher",
-                                        "PlayfairDisplay",
-                                        "PlayfairDisplaySC",
-                                        "PT_Serif-Web",
-                                        "Puritan",
-                                        "Quantico",
-                                        "QuattrocentoSans",
-                                        "Quicksand",
-                                        "Rambla",
-                                        "Rosario",
-                                        "Sansation",
-                                        "Sarabun",
-                                        "Scada",
-                                        "Share",
-                                        "Sitara",
-                                        "SourceSansPro",
-                                        "TitilliumWeb",
-                                        "Volkhov",
-                                        "Vollkorn"
-                                    ]
-                                }
-                            ]
-                        },
-                        "fontSize": {
-                            "$Property": []
-                        },
-                        "background": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "color": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "alignment": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "left",
-                                        "center",
-                                        "right"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decoration": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "underline",
-                                        "lineThrough",
-                                        "overline"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decorationColor": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "decorationStyle": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "dashed",
-                                        "dotted",
-                                        "double",
-                                        "wavy"
-                                    ]
-                                }
-                            ]
-                        },
-                        "style": {
-                            "$Property": []
-                        },
-                        "lineHeight": {
-                            "$Property": [
-                                {
-                                    "default": 1
-                                }
-                            ]
-                        },
-                        "margin": {
+                        "fit": {
                             "$Property": [
                                 {
                                     "type": "number[]",
-                                    "description": "margin left, top, right, bottom"
+                                    "decription": "fit in rectangle width, height e.g. 10,20"
+                                }
+                            ]
+                        },
+                        "opacity": {
+                            "$Property": [
+                                {
+                                    "type": "number"
                                 }
                             ]
                         }
                     }
                 }
             },
-            "jassijs_report/RStyle.ts": {
-                "date": 1632523398308,
-                "jassijs_report.RStyle": {
-                    "$ReportComponent": [
-                        {
-                            "fullPath": "report/Style",
-                            "icon": "mdi mdi-virus-outline",
-                            "editableChildComponents": [
-                                "this"
-                            ]
-                        }
-                    ],
-                    "@members": {
-                        "name": {
-                            "$Property": []
-                        }
-                    }
-                }
-            },
-            "jassijs_report/RTextGroup.ts": {
-                "date": 1633548070484,
-                "jassijs_report.RTextGroup": {
-                    "$ReportComponent": [
-                        {
-                            "fullPath": "report/TextGroup",
-                            "icon": "mdi mdi-text-box-multiple-outline",
-                            "editableChildComponents": [
-                                "this"
-                            ]
-                        }
+            "jassijs_report/RImageEditor.ts": {
+                "date": 1634053392000,
+                "jassi_report/RImagePropertyEditor": {
+                    "$PropertyEditor": [
+                        [
+                            "rimage"
+                        ]
                     ]
                 }
             },
-            "jassijs_report/RTable.ts": {
-                "date": 1633821987257,
-                "jassijs_report.RTable": {
-                    "$ReportComponent": [
-                        {
-                            "fullPath": "report/Table",
-                            "icon": "mdi mdi-table-large",
-                            "editableChildComponents": [
-                                "this",
-                                "this.headerPanel",
-                                "this.bodyPanel",
-                                "this.footerPanel"
-                            ]
-                        }
-                    ],
-                    "@members": {
-                        "headerRows": {
-                            "$Property": []
-                        },
-                        "layoutName": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": "allLayouts",
-                                    "chooseFromStrict": true
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
-            "jassijs_report/RTableLayouts.ts": {
-                "date": 1633113318723
-            },
-            "jassijs_report/RUList.ts": {
-                "date": 1633550937624,
-                "jassijs_report.RUList": {
-                    "$ReportComponent": [
-                        {
-                            "fullPath": "report/Unordered List",
-                            "icon": "mdi mdi-format-list-bulleted",
-                            "editableChildComponents": [
-                                "this"
-                            ]
-                        }
-                    ],
-                    "@members": {
-                        "type": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "square",
-                                        "circle",
-                                        "none"
-                                    ]
-                                }
-                            ]
-                        }
-                    }
-                }
-            },
             "jassijs_report/ROList.ts": {
-                "date": 1633816412533,
+                "date": 1633816414000,
                 "jassijs_report.ROList": {
                     "$ReportComponent": [
                         {
@@ -5224,290 +5375,170 @@ define("jassijs_report/registry", ["require"], function (require) {
                     }
                 }
             },
-            "jassijs_report/RImage.ts": {
-                "date": 1633792427803,
-                "jassijs_report.RImage": {
+            "jassijs_report/RStack.ts": {
+                "date": 1632518450000,
+                "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
-                            "fullPath": "report/Image",
-                            "icon": "mdi mdi-image-frame"
-                        }
-                    ],
-                    "@members": {
-                        "image": {
-                            "$Property": [
-                                {
-                                    "type": "rimage",
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "fit": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "decription": "fit in rectangle width, height e.g. 10,20"
-                                }
-                            ]
-                        },
-                        "opacity": {
-                            "$Property": [
-                                {
-                                    "type": "number"
-                                }
+                            "fullPath": "report/Stack",
+                            "icon": "mdi mdi-view-sequential-outline",
+                            "editableChildComponents": [
+                                "this"
                             ]
                         }
-                    }
-                }
-            },
-            "jassijs_report/RImageEditor.ts": {
-                "date": 1634053391301,
-                "jassi_report/RImagePropertyEditor": {
-                    "$PropertyEditor": [
-                        [
-                            "rimage"
-                        ]
                     ]
                 }
             },
-            "jassijs_report/ReportTemplate.ts": {
-                "date": 1633815615937
-            },
-            "jassijs_report/StartReporteditor.ts": {
-                "date": 1633970382677
-            },
-            "jassijs_report/remote/RComponent.ts": {
-                "date": 1634381448958,
-                "jassijs_report.ReportComponent": {
-                    "$Property": [
+            "jassijs_report/RStyle.ts": {
+                "date": 1632523400000,
+                "jassijs_report.RStyle": {
+                    "$ReportComponent": [
                         {
-                            "hideBaseClassProperties": true
+                            "fullPath": "report/Style",
+                            "icon": "mdi mdi-virus-outline",
+                            "editableChildComponents": [
+                                "this"
+                            ]
                         }
                     ],
                     "@members": {
-                        "foreach": {
+                        "name": {
+                            "$Property": []
+                        }
+                    }
+                }
+            },
+            "jassijs_report/RTable.ts": {
+                "date": 1633821988000,
+                "jassijs_report.RTable": {
+                    "$ReportComponent": [
+                        {
+                            "fullPath": "report/Table",
+                            "icon": "mdi mdi-table-large",
+                            "editableChildComponents": [
+                                "this",
+                                "this.headerPanel",
+                                "this.bodyPanel",
+                                "this.footerPanel"
+                            ]
+                        }
+                    ],
+                    "@members": {
+                        "headerRows": {
                             "$Property": []
                         },
-                        "counter": {
+                        "layoutName": {
                             "$Property": [
                                 {
-                                    "default": "undefined",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "listType": {
-                            "$Property": [
-                                {
-                                    "name": "listType",
-                                    "default": "undefined",
-                                    "isVisible": "function",
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "fillColor": {
-                            "$Property": [
-                                {
-                                    "type": "color",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "colSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "rowSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "border": {
-                            "$Property": [
-                                {
-                                    "type": "boolean[]",
-                                    "default": [
-                                        false,
-                                        false,
-                                        false,
-                                        false
-                                    ],
-                                    "isVisible": "function",
-                                    "description": "border of the tablecell: left, top, right, bottom"
-                                }
-                            ]
-                        },
-                        "width": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "height": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "bold": {
-                            "$Property": []
-                        },
-                        "italics": {
-                            "$Property": []
-                        },
-                        "font": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "Alegreya",
-                                        "AlegreyaSans",
-                                        "AlegreyaSansSC",
-                                        "AlegreyaSC",
-                                        "AlmendraSC",
-                                        "Amaranth",
-                                        "Andada",
-                                        "AndadaSC",
-                                        "AnonymousPro",
-                                        "ArchivoNarrow",
-                                        "Arvo",
-                                        "Asap",
-                                        "AveriaLibre",
-                                        "AveriaSansLibre",
-                                        "AveriaSerifLibre",
-                                        "Cambay",
-                                        "Caudex",
-                                        "CrimsonText",
-                                        "Cuprum",
-                                        "Economica",
-                                        "Exo2",
-                                        "Exo",
-                                        "ExpletusSans",
-                                        "FiraSans",
-                                        "JosefinSans",
-                                        "JosefinSlab",
-                                        "Karla",
-                                        "Lato",
-                                        "LobsterTwo",
-                                        "Lora",
-                                        "Marvel",
-                                        "Merriweather",
-                                        "MerriweatherSans",
-                                        "Nobile",
-                                        "NoticiaText",
-                                        "Overlock",
-                                        "Philosopher",
-                                        "PlayfairDisplay",
-                                        "PlayfairDisplaySC",
-                                        "PT_Serif-Web",
-                                        "Puritan",
-                                        "Quantico",
-                                        "QuattrocentoSans",
-                                        "Quicksand",
-                                        "Rambla",
-                                        "Rosario",
-                                        "Sansation",
-                                        "Sarabun",
-                                        "Scada",
-                                        "Share",
-                                        "Sitara",
-                                        "SourceSansPro",
-                                        "TitilliumWeb",
-                                        "Volkhov",
-                                        "Vollkorn"
-                                    ]
-                                }
-                            ]
-                        },
-                        "fontSize": {
-                            "$Property": []
-                        },
-                        "background": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "color": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "alignment": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "left",
-                                        "center",
-                                        "right"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decoration": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "underline",
-                                        "lineThrough",
-                                        "overline"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decorationColor": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "decorationStyle": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "dashed",
-                                        "dotted",
-                                        "double",
-                                        "wavy"
-                                    ]
-                                }
-                            ]
-                        },
-                        "style": {
-                            "$Property": []
-                        },
-                        "lineHeight": {
-                            "$Property": [
-                                {
-                                    "default": 1
-                                }
-                            ]
-                        },
-                        "margin": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "description": "margin left, top, right, bottom"
+                                    "chooseFrom": "allLayouts",
+                                    "chooseFromStrict": true
                                 }
                             ]
                         }
                     }
                 }
+            },
+            "jassijs_report/RTableLayouts.ts": {
+                "date": 1633113320000
+            },
+            "jassijs_report/RTablerow.ts": {
+                "date": 1635803272000,
+                "jassijs_report.RTablerow": {
+                    "$ReportComponent": [
+                        {
+                            "editableChildComponents": [
+                                "this"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "jassijs_report/RText.ts": {
+                "date": 1634384338000,
+                "jassijs_report.RText": {
+                    "$ReportComponent": [
+                        {
+                            "fullPath": "report/Text",
+                            "icon": "mdi mdi-format-color-text"
+                        }
+                    ],
+                    "$Property": [
+                        {
+                            "name": "value",
+                            "type": "string",
+                            "description": "text"
+                        }
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": "function"
+                                }
+                            ]
+                        },
+                        "format": {
+                            "$Property": [
+                                {
+                                    "type": "string",
+                                    "chooseFrom": "allFormats"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "jassijs_report/RTextGroup.ts": {
+                "date": 1633548072000,
+                "jassijs_report.RTextGroup": {
+                    "$ReportComponent": [
+                        {
+                            "fullPath": "report/TextGroup",
+                            "icon": "mdi mdi-text-box-multiple-outline",
+                            "editableChildComponents": [
+                                "this"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "jassijs_report/RUList.ts": {
+                "date": 1633550938000,
+                "jassijs_report.RUList": {
+                    "$ReportComponent": [
+                        {
+                            "fullPath": "report/Unordered List",
+                            "icon": "mdi mdi-format-list-bulleted",
+                            "editableChildComponents": [
+                                "this"
+                            ]
+                        }
+                    ],
+                    "@members": {
+                        "type": {
+                            "$Property": [
+                                {
+                                    "chooseFrom": [
+                                        "square",
+                                        "circle",
+                                        "none"
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "jassijs_report/RUnknown.ts": {
+                "date": 1632503058000,
+                "jassijs_report.RUnknown": {}
+            },
+            "jassijs_report/SimpleReportEditor.ts": {
+                "date": 1635803054000,
+                "jassi_report.SimpleReportEditor": {}
+            },
+            "jassijs_report/StartReporteditor.ts": {
+                "date": 1634754814000
             }
         }
     };

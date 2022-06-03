@@ -12,7 +12,6 @@ import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { Repeater } from "jassijs/ui/Repeater";
 import { Table } from "jassijs/ui/Table";
 import { Checkbox } from "jassijs/ui/Checkbox";
- 
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { TestComponent } from "demo/TestComponent";
 import { Property, $Property } from "jassijs/ui/Property";
@@ -20,7 +19,7 @@ import { router } from "jassijs/base/Router";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 type Me = {
     repeater1?: Repeater;
-    textbox1?: Textbox; 
+    textbox1?: Textbox;
     textbox2?: Textbox;
     idtable?: Table;
     select1?: Select;
@@ -36,17 +35,16 @@ export class DialogKunde extends Panel {
     me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
     value: Kunde;
-    constructor() {  
-        super(); 
+    constructor() {
+        super();
         this.me = {};
         this.layout(this.me);
     }
-     @$Action({
+    @$Action({
         name: "Demo",
         icon: "mdi mdi-television-play"
     })
     static async dummy() {
-        
     }
     @$Action({
         name: "Demo/Kunden",
@@ -86,7 +84,7 @@ export class DialogKunde extends Panel {
         me.idvorname.x = 5;
         me.idvorname.y = 35;
         me.idvorname.bind(me.binder, "vorname");
-        me.idvorname.width = 95;
+        me.idvorname.width = 145;
         me.idvorname.autocommit = false;
         me.idvorname.label = "Vorname";
         me.idvorname.value = "<strong>formatierter</strong><br />HTML Text";
@@ -108,13 +106,12 @@ export class DialogKunde extends Panel {
             cellDblClick: function (event: any, group: any) {
                 alert(8);
             },
-            movableColumns: false,
-            dataTreeChildField: ""
+            movableColumns: false
         });
         /**/
         me.idtable.width = 275;
         me.idtable.height = 195;
-       // me.idtable.selectComponent = me.binder;
+        // me.idtable.selectComponent = me.binder;
         me.idtable.onchange(function (event) {
             //alert(event.item.vorname);
         });
@@ -216,7 +213,7 @@ export class DialogKunde extends Panel {
         me.repeater1.label = "Repeater";
         me.textbox1.bind(me.binder, "nachname");
         me.textbox1.height = 15;
-        me.testcomponent1.me.button4.text = "kk";
+        me.testcomponent1.me.button4.text = "kk2";
         this.setdata();
     }
 }

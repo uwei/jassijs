@@ -19,14 +19,16 @@ class KundeExt2 {
     constructor() {
 
     }
-    extFunc2() { return 8; }
+    //Error wenn tabelle mit Tabulator mit Kunden gefüllt wird
+    //extFunc2() { return 8; }
     /**
      * is called after main class is loaded
      * example type.prototype.hallo=function(){}
      * @param {class} type - the type to extend
      */
     static extend(type) {
-        type.prototype.extFunc2 = function () { return 8; }
+        //Error wenn tabelle mit Tabulator mit Kunden gefüllt wird
+        //type.prototype.extFunc2 = function () { return 8; }
     }
 
 }

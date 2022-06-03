@@ -264,7 +264,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
                 layout = properties === null || properties === void 0 ? void 0 : properties.view;
             }
             this.reportDesigner = new SimpleReportDesigner_1.SimpleReportDesigner(layout);
-            if (properties === null || properties === void 0 ? void 0 : properties.oncodechange)
+            if (properties === null || properties === void 0 ? void 0 : properties.oncodechange) //@ts-ignore
                 this.reportDesigner.oncodechanged(properties === null || properties === void 0 ? void 0 : properties.oncodechange);
             var compileTask = undefined;
             this.codeEditor.variables.addVariable("this", this.reportPanel);

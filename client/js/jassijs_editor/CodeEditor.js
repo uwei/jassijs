@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test"], function (require, exports, Jassi_1, Panel_1, CodePanel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_1, Server_1, Reloader_1, Classes_1, Component_1, Property_1, AcePanel_1, Typescript_1, MonacoPanel_1, Settings_1, Test_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test", "jassijs_editor/util/Parser"], function (require, exports, Jassi_1, Panel_1, CodePanel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_1, Server_1, Reloader_1, Classes_1, Component_1, Property_1, AcePanel_1, Typescript_1, MonacoPanel_1, Settings_1, Test_1, Parser_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -281,6 +281,76 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         addVariables(variables) {
             this.variables.addAll(variables);
         }
+        async fillVariablesAndSetupParser(url, root, component, cache, parser) {
+            var _a, _b;
+            if (cache[component._id] === undefined && component["__stack"] !== undefined) {
+                var lines = (_a = component["__stack"]) === null || _a === void 0 ? void 0 : _a.split("\n");
+                for (var x = 0; x < lines.length; x++) {
+                    var sline = lines[x];
+                    if (sline.indexOf("$temp.js") > 0) {
+                        var spl = sline.split(":");
+                        var entr = {};
+                        cache[component._id] = {
+                            line: Number(spl[spl.length - 2]),
+                            column: Number(spl[spl.length - 1].replace(")", "")),
+                            component: component,
+                            pos: 0,
+                            name: undefined
+                        };
+                        break;
+                    }
+                }
+                if (component["_components"]) {
+                    for (var x = 0; x < component["_components"].length; x++) {
+                        this.fillVariablesAndSetupParser(url, root, component["_components"][x], cache, parser);
+                    }
+                }
+                if (component === root) {
+                    //fertig
+                    var hh = 0;
+                    console.log("load Parser and TSourcemap dynamically");
+                    var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
+                    var values = Object.values(cache);
+                    var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values);
+                    for (var x = 0; x < tmap.length; x++) {
+                        values[x].column = tmap[x].column;
+                        values[x].line = tmap[x].line;
+                        values[x].pos = this._codePanel.positionToNumber({
+                            row: values[x].line,
+                            column: values[x].column
+                        });
+                    }
+                    //setupClasscope
+                    var foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id].pos);
+                    var scope = [{ classname: (_b = root === null || root === void 0 ? void 0 : root.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }];
+                    if (foundscope)
+                        scope = [foundscope];
+                    parser.parse(this._codePanel.value, scope);
+                    for (var key in parser.data) {
+                        var com = parser.data[key];
+                        var _new_ = com["_new_"];
+                        if (_new_) {
+                            var pos = _new_[0].node.pos;
+                            var end = _new_[0].node.end;
+                            for (var x = 0; x < values.length; x++) {
+                                if (values[x].pos >= pos && values[x].pos <= end) {
+                                    values[x].name = key;
+                                }
+                            }
+                        }
+                    }
+                    for (var x = 0; x < values.length; x++) {
+                        if (values[x].name) {
+                            this.variables.addVariable(values[x].name, values[x].component, false);
+                        }
+                    }
+                    this.variables.updateCache();
+                    this.variables.update();
+                    // parser.parse(,)
+                }
+                return parser;
+            }
+        }
         async _evalCodeOnLoad(data) {
             this.variables.clear();
             var code = this._codePanel.value;
@@ -300,46 +370,57 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 islocaldb.destroyConnection();
             }
             if (data.test !== undefined) {
+                //capure created Components
+                function hook(name, component) {
+                    var _a;
+                    try {
+                        throw new Error("getstack");
+                    }
+                    catch (ex) {
+                        if (((_a = ex === null || ex === void 0 ? void 0 : ex.stack) === null || _a === void 0 ? void 0 : _a.indexOf("$temp.js")) != -1)
+                            component["__stack"] = ex.stack;
+                    }
+                }
+                Component_1.Component.onComponentCreated(hook);
                 var ret = await data.test(new Test_1.Test());
+                Component_1.Component.offComponentCreated(hook);
                 // Promise.resolve(ret).then(async function(ret) {
                 if (ret !== undefined) {
                     if (ret.layout !== undefined)
                         _this.variables.addVariable("this", ret);
-                    else {
-                        //get variablename from return
-                        var sfunc = data.test.toString();
-                        var pos = sfunc.lastIndexOf("return ");
-                        var pose = sfunc.indexOf(";", pos);
-                        var retvar = sfunc.substring(pos + 7, pose).trim();
-                        _this.variables.addVariable(retvar, ret);
-                    }
-                    _this.variables.addVariable("me", ret.me);
+                    //_this.variables.addVariable("me", ret.me);
                     _this.variables.updateCache();
                     if (ret instanceof Component_1.Component && ret["reporttype"] === undefined) {
-                        require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
-                            var ComponentDesigner = Classes_1.classes.getClass("jassijs_editor.ComponentDesigner");
-                            var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
-                            if (!((_this._design) instanceof ComponentDesigner)) {
-                                _this._design = new ComponentDesigner();
-                                _this._main.add(_this._design, "Design", "design");
-                                _this._design["codeEditor"] = _this;
-                                //@ts-ignore
-                                _this._design.connectParser(new Parser());
-                            }
-                            _this._design["designedComponent"] = ret;
-                        });
+                        //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
+                        //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
+                        //   var Parser = classes.getClass("jassijs_editor.base.Parser");
+                        var ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.ComponentDesigner");
+                        var parser = new Parser_1.Parser();
+                        await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
+                        if (!((_this._design) instanceof ComponentDesigner)) {
+                            _this._design = new ComponentDesigner();
+                            _this._main.add(_this._design, "Design", "design");
+                            _this._design["codeEditor"] = _this;
+                        }
+                        //@ts-ignore
+                        _this._design.connectParser(parser);
+                        _this._design["designedComponent"] = ret;
+                        //});
                     }
                     else if (ret["reportdesign"] !== undefined) {
                         require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign", "jassijs_editor/util/Parser"], function () {
+                            var _a, _b;
                             var ReportDesigner = Classes_1.classes.getClass("jassijs_report.designer.ReportDesigner");
                             var ReportDesign = Classes_1.classes.getClass("jassijs_report.ReportDesign");
-                            var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
                             if (!((_this._design) instanceof ReportDesigner)) {
+                                var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
                                 _this._design = new ReportDesigner();
                                 _this._main.add(_this._design, "Design", "design");
                                 _this._design["codeEditor"] = _this;
+                                var parser = new Parser();
+                                parser.classScope = [{ classname: (_b = (_a = _this._design) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
                                 //@ts-ignore
-                                _this._design.connectParser(new Parser());
+                                _this._design.connectParser(parser);
                             }
                             var rep = new ReportDesign();
                             rep.design = Object.assign({}, ret.reportdesign);
@@ -502,6 +583,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             this.variables.renameVariable(oldName, newName);
             if (this._design !== undefined && this._design["_componentExplorer"] !== undefined)
                 this._design["_componentExplorer"].update();
+        }
+        /**
+         * gets the name object of the given variabel
+         * @param {string} ob - the name of the variable
+         */
+        removeVariableInDesign(varname) {
+            return this.variables.removeVariable(varname);
         }
         /**
          * @member {string} - the code

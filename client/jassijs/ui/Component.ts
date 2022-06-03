@@ -45,8 +45,62 @@ export class ComponentCreateProperties {
     id?: string;
     noWrapper?: boolean;
 }
+
+export interface ComponentConfig{
+    /**
+    * called if the component get the focus
+    * @param {function} handler - the function which is executed
+    */
+    onfocus?(handler);
+    /**
+    * called if the component lost the focus
+    * @param {function} handler - the function which is executed
+    */
+    onblur?(handler);
+    /**
+     * @member {string} - the label over the component
+     */
+    label?:string;
+     /**
+    * @member {string} - tooltip for the component
+    */
+    tooltip?:string;
+     /**
+     * @member {number} - the left absolute position
+     */
+    x?:number;
+    /**
+     * @member {number|string} - the top absolute position
+     */
+    y?:number;
+    /**
+     * @member {boolean} - component is hidden
+     */
+    hidden?:boolean;
+     /**
+    * @member {string|number} - the width of the component 
+    * e.g. 50 or "100%"
+    */
+    width?:string | number;
+    /**
+     * @member {string|number} - the height of the component 
+     * e.g. 50 or "100%"
+     */
+    height?:string | number;
+    /**
+     * ccc-Properties
+     */
+    css?: CSSProperties;
+    styles?:any[];
+    
+    /**
+     * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
+     **/
+    contextMenu;
+}
 @$Class("jassijs.ui.Component")
-export class Component {
+export class Component implements ComponentConfig{
+    private static _componentHook=[];
     _eventHandler;
     __dom: HTMLElement;
     public domWrapper: Element;
@@ -57,6 +111,7 @@ export class Component {
     events;
     _designMode;
     _styles?: any[];
+
     protected designDummies: Component[];
     /*  get domWrapper():Element{
           return this._domWrapper;
@@ -83,7 +138,30 @@ export class Component {
             this.dom._this = this;
         }
     }
-
+    config(config:ComponentConfig):Component {
+        if(config.css){
+            this.css(config.css);
+            delete config.css;
+        }
+        for(var key in config){
+            if(typeof config[key] === 'function'){
+                this[key](config[key]);
+            }else{
+                this[key]=config[key];
+            }
+        }
+        return this;
+    //    return new c();
+    }
+    static onComponentCreated(func){
+        this._componentHook.push(func);
+    }
+    static offComponentCreated(func){
+  	        var pos=this._componentHook.indexOf(func);
+            if(pos>=0)
+                this._componentHook.splice(pos, 1);
+    }
+    
     /**
      * adds an event
      * @param {type} name - the name of the event
@@ -138,18 +216,10 @@ export class Component {
         this.dom._this = this;
 
     }
-    /**
-    * called if the component get the focus
-    * @param {function} handler - the function which is executed
-    */
     @$Property({ default: "function(event){\n\t\n}" })
     onfocus(handler) {
        return this.on("focus",handler);
     }
-    /**
-    * called if the component lost the focus
-    * @param {function} handler - the function which is executed
-    */
     @$Property({ default: "function(event){\n\t\n}" })
     onblur(handler) {
         return this.on("blur",handler);
@@ -203,10 +273,14 @@ export class Component {
         if (this.dom !== undefined) {
             this.__dom._this = undefined;
         }
-        //allready watched?
-        if (jassijs.componentSpy !== undefined) {
-            jassijs.componentSpy.unwatch(this);
+        //notify Hook
+        for(var x=0;x<Component._componentHook.length;x++){
+            Component._componentHook[x]("precreate",this);
         }
+        //allready watched?
+       // if (jassijs.componentSpy !== undefined) {
+         //   jassijs.componentSpy.unwatch(this);
+       // }
         this.dom = dom;
         this._id = registry.nextID();
         $(this.dom).attr("id", this._id);
@@ -235,10 +309,14 @@ export class Component {
             var temp = $('<template id="jassitemp"></template>')[0];
             $(document.body).append(temp);
         }
-        //for profilling save code pos
-        if (jassijs.componentSpy !== undefined) {
-            jassijs.componentSpy.watch(this);
+        //notify Hook
+        for(var x=0;x<Component._componentHook.length;x++){
+            Component._componentHook[x]("create",this);
         }
+        //for profilling save code pos
+        //if (jassijs.componentSpy !== undefined) {
+       //     jassijs.componentSpy.watch(this);
+      //  }
         $("#jassitemp")[0].appendChild(this.domWrapper);
 
     }
@@ -258,9 +336,6 @@ export class Component {
         }
     }
 
-    /**
-     * @member {string} - the label over the component
-     */
     @$Property({ description: "adds a label above the component" })
     get label(): string {
         //CHECK children(0)-> first()
@@ -273,9 +348,6 @@ export class Component {
     get tooltip(): string {
         return $(this.dom).attr("title");
     }
-    /**
-    * @member {string} - tooltip for the component
-    */
     set tooltip(value: string) { //the Code
         $(this.domWrapper).attr("title", value);
         $(this.domWrapper).tooltip();
@@ -285,9 +357,7 @@ export class Component {
     get x(): number {
         return Number($(this.domWrapper).css("left").replace("px", ""));
     }
-    /**
-     * @member {number} - the left absolute position
-     */
+   
     set x(value: number) { //the Code
         $(this.domWrapper).css("left", value);
         $(this.domWrapper).css("position", "absolute");
@@ -299,17 +369,13 @@ export class Component {
     get y(): number {
         return Number($(this.domWrapper).css("top").replace("px", ""));
     }
-    /**
-     * @member {number|string} - the top absolute position
-     */
+    
     set y(value: number) { //the Code
         $(this.domWrapper).css("top", value);
         $(this.domWrapper).css("position", "absolute");
     }
 
-    /**
-     * @member {boolean} - component is hidden
-     */
+    
     @$Property()
     get hidden(): boolean {
         return $(this.__dom).is(":hidden");
@@ -361,10 +427,7 @@ export class Component {
     get width1() {
         return $(this.domWrapper).css("width").replace("px", "");
     }
-    /**
-    * @member {string|number} - the width of the component 
-    * e.g. 50 or "100%"
-    */
+  
     set width(value: string | number) { //the Code
         //  if($.isNumeric(value))
         if (value === undefined)
@@ -384,10 +447,7 @@ export class Component {
             return $(this.domWrapper).css("width");
         return $(this.dom).css("width").replace("px", "");
     }
-    /**
-     * @member {string|number} - the height of the component 
-     * e.g. 50 or "100%"
-     */
+  
     set height(value: string | number) { //the Code
         //  if($.isNumeric(value))
         if (value === undefined)
@@ -409,9 +469,7 @@ export class Component {
             return undefined;
         return $(this.dom).css("height").replace("px", "");
     }
-    /**
-    * sets CSS Properties
-    */
+   
     @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
     css(properties: CSSProperties, removeOldProperties: boolean = true) {
         var prop = CSSProperties.applyTo(properties, this);
@@ -460,9 +518,6 @@ export class Component {
     get contextMenu() {
         return this._contextMenu;
     }
-    /**
-     * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
-     **/
     set contextMenu(value) {
 
         if (this._contextMenu !== undefined)
@@ -486,9 +541,13 @@ export class Component {
         if (this.contextMenu !== undefined) {
             this.contextMenu.destroy();
         }
-        if (jassijs.componentSpy !== undefined) {
-            jassijs.componentSpy.unwatch(this);
+        //notify Hook
+        for(var x=0;x<Component._componentHook.length;x++){
+            Component._componentHook[x]("destroy",this);
         }
+       // if (jassijs.componentSpy !== undefined) {
+        //    jassijs.componentSpy.unwatch(this);
+      //  }
         if (this._parent !== undefined) {
             this._parent.remove(this);
         }

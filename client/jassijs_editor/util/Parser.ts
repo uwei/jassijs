@@ -11,6 +11,7 @@ interface Properties {
 interface Entry {
     value?: any;
     node?: ts.Node;
+    isFunction: boolean;
 }
 class ParsedDecorator {
     node?: ts.Decorator;
@@ -42,7 +43,8 @@ export class Parser {
     imports: { [name: string]: string } = {};
     functions: { [name: string]: ts.Node } = {};
     variables: { [name: string]: ts.Node } = {};
-    collectProperties: { classname: string, methodname: string }[];
+    classScope: { classname: string, methodname: string }[];
+
     code: string;
     /**
     * @member {Object.<string,Object.<string,[object]>> - all properties
@@ -68,6 +70,7 @@ export class Parser {
 
 
 
+
     /**
      * add a property
      * @param {string} variable - name of the variable
@@ -75,7 +78,7 @@ export class Parser {
      * @param {string} value  - code - the value
      * @param node - the node of the statement
      */
-    private add(variable: string, property: string, value: string, node: ts.Node) {
+    private add(variable: string, property: string, value: string, node: ts.Node, isFunction = false) {
 
         if (value === undefined || value === null)
             return;
@@ -90,7 +93,8 @@ export class Parser {
         if (Array.isArray(this.data[variable][property])) {
             this.data[variable][property].push({
                 value: value,
-                node: node
+                node: node,
+                isFunction
             });
         }
     }
@@ -127,7 +131,7 @@ export class Parser {
     }
     addImportIfNeeded(name: string, file: string) {
         if (this.imports[name] === undefined) {
-            var imp = ts.createNamedImports([ts.createImportSpecifier(undefined, ts.createIdentifier(name))]);
+            var imp = ts.createNamedImports([ts.createImportSpecifier(false,undefined, ts.createIdentifier(name))]);
             const importNode = ts.createImportDeclaration(undefined, undefined, ts.createImportClause(undefined, imp), ts.createLiteral(file));
             this.sourceFile = ts.updateSourceFileNode(this.sourceFile, [importNode, ...this.sourceFile.statements]);
         }
@@ -236,9 +240,9 @@ export class Parser {
                     }
                 }
             }
-            if (this.collectProperties) {
-                for (let x = 0; x < this.collectProperties.length; x++) {
-                    var col = this.collectProperties[x];
+            if (this.classScope) {
+                for (let x = 0; x < this.classScope.length; x++) {
+                    var col = this.classScope[x];
                     if (col.classname === parsedClass.name && parsedClass.members[col.methodname]) {
                         var nd = parsedClass.members[col.methodname].node;
                         this.parseProperties(nd);
@@ -247,10 +251,35 @@ export class Parser {
             }
         }
     }
+    parseConfig(node: ts.CallExpression) {
+        if (node.arguments.length > 0) {
+            var left = node.expression.getText();
+            var lastpos = left.lastIndexOf(".");
+            var variable = left;
+            var prop = "";
+            if (lastpos !== -1) {
+                variable = left.substring(0, lastpos);
+                prop = left.substring(lastpos + 1);
+                 //@ts-ignore
+                 var props:any[] = node.arguments[0].properties;
+                if (props !== undefined) {
+                    for (var p = 0; p < props.length; p++) {
+                        var name=props[p].name.text;
+                       // var value = this.convertArgument(props[p].initializer);
+                        var code:string=props[p].initializer?props[p].initializer.getText():"";
+                        if(code?.indexOf(".config")>-1){
+                            this.parseProperties(props[p].initializer);
+                        }
+                        this.add(variable,name,code,props[p],false);
+                    }
+                }
+            }
+        }
+    }
     parseProperties(node: ts.Node) {
         if (ts.isVariableDeclaration(node)) {
             var name = node.name.getText();
-            if(node.initializer!==undefined){
+            if (node.initializer !== undefined) {
                 var value = node.initializer.getText();
                 this.add(name, "_new_", value, node.parent.parent);
             }
@@ -261,6 +290,7 @@ export class Parser {
             var node2;
             var left: string;
             var value: string;
+            var isFunction = false;
             if (ts.isBinaryExpression(node)) {
                 node1 = node.left;
                 node2 = node.right;
@@ -272,9 +302,14 @@ export class Parser {
             if (ts.isCallExpression(node)) {
                 node1 = node.expression;
                 node2 = node.arguments;
+                isFunction = true;
                 left = node1.getText();// this.code.substring(node1.pos, node1.end).trim();
                 var params = [];
                 node.arguments.forEach((arg) => { params.push(arg.getText()) });
+                if (left.endsWith(".config")) {
+
+                    this.parseConfig(node);
+                }
                 value = params.join(", ");//this.code.substring(node2.pos, node2.end).trim();//
             }
 
@@ -285,9 +320,9 @@ export class Parser {
                 variable = left.substring(0, lastpos);
                 prop = left.substring(lastpos + 1);
             }
-            this.add(variable, prop, value, node.parent);
-        }
-        node.getChildren().forEach(c => this.parseProperties(c));
+            this.add(variable, prop, value, node.parent, isFunction);
+        }else
+            node.getChildren().forEach(c => this.parseProperties(c));
     }
     private visitNode(node: ts.Node) {
         var _this = this;
@@ -311,13 +346,14 @@ export class Parser {
 
         } else if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) {//functions out of class
             this.functions[node["name"].text] = node;
-            if (this.collectProperties) {
-                for (let x = 0; x < this.collectProperties.length; x++) {
-                    var col = this.collectProperties[x];
+            if (this.classScope) {
+                for (let x = 0; x < this.classScope.length; x++) {
+                    var col = this.classScope[x];
                     if (col.classname === undefined && node["name"].text === col.methodname)
                         this.parseProperties(node);
                 }
-            }
+            } else
+                this.parseProperties(node);
         } else
             node.getChildren().forEach(c => this.visitNode(c));
         //TODO remove this block
@@ -325,16 +361,53 @@ export class Parser {
             this.add(node["name"].text, "", "", undefined);
         }
     }
+    searchClassnode(node: ts.Node, pos: number): { classname: string, methodname: string } {
+        if (ts.isMethodDeclaration(node)) {
+            return {
+                classname: node.parent["name"]["text"],
+                methodname: node.name["text"]
+            }
+        }
+        if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) {//functions out of class
+            var funcname = node["name"].text
+            return {
+                classname: undefined,
+                methodname: funcname
+            }
+        }
+        var childs = node.getChildren();
+        for (var x = 0; x < childs.length; x++) {
+            var c = childs[x];
+            if (pos >= c.pos && pos <= c.end) {
+                var test = this.searchClassnode(c, pos);
+                if (test)
+                    return test;
+            }
+        };
+        return undefined;
+    }
+    getClassScopeFromPosition(code: string, pos: number): { classname: string, methodname: string } {
+        this.data = {};
+        this.code = code;
 
+        this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
+
+        return this.searchClassnode(this.sourceFile, pos);
+        //return this.parseold(code,onlyfunction);
+
+    }
     /**
     * parse the code 
     * @param {string} code - the code
     * @param {string} onlyfunction - only the code in the function is parsed, e.g. "layout()"
     */
-    parse(code: string, collectProperties: { classname: string, methodname: string }[] = undefined) {
+    parse(code: string, classScope: { classname: string, methodname: string }[] = undefined) {
         this.data = {};
         this.code = code;
-        this.collectProperties = collectProperties;
+        if (classScope !== undefined)
+            this.classScope = classScope;
+        else
+            classScope = this.classScope;
 
         this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
         this.visitNode(this.sourceFile);
@@ -517,6 +590,8 @@ export class Parser {
         isFunction: boolean = false, replace: boolean = undefined,
         before: { variablename: string, property: string, value?} = undefined,
         variablescope: { variablename: string, methodname } = undefined) {
+        if (classscope === undefined)
+            classscope = this.classScope;
         var scope = this.getNodeFromScope(classscope, variablescope);
         var newExpression = undefined;
         var statements: ts.Statement[] = scope["body"].statements
@@ -566,9 +641,9 @@ export class Parser {
             } else {
                 var lastprop: ts.Node = undefined;
                 for (let prop in this.data[variableName]) {
-                    if (prop === "_new_"){
+                    if (prop === "_new_") {
                         //should be in the same scope of declaration (important for repeater)
-                        statements=this.data[variableName][prop][0].node.parent["statements"];
+                        statements = this.data[variableName][prop][0].node.parent["statements"];
                         continue;
                     }
                     var testnode: ts.Node = this.data[variableName][prop][this.data[variableName][prop].length - 1].node;
@@ -581,7 +656,7 @@ export class Parser {
                         lastprop.parent["statements"].splice(pos + 1, 0, newExpression);
                 } else {
                     var pos = statements.length;
-                    if (pos>0&&statements[statements.length - 1].getText().startsWith("return "))
+                    if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
                         pos--;
                     statements.splice(pos, 0, newExpression);
                 }
@@ -620,11 +695,21 @@ export class Parser {
     * @returns  the name of the object
     */
     addVariableInCode(fulltype: string, classscope: { classname: string, methodname: string }[], variablescope: { variablename: string, methodname } = undefined): string {
+        if (classscope === undefined)
+            classscope = this.classScope;
         let type = fulltype.split(".")[fulltype.split(".").length - 1];
         var varname = this.getNextVariableNameForType(type);
+        var useMe = false;
+        if (this.data["me"] !== undefined)
+            useMe = true;
         //var if(scopename)
-        var prefix = "me.";
         var node = this.getNodeFromScope(classscope, variablescope);
+        //@ts-ignore
+        if (node?.parameters?.length > 0 && node.parameters[0].name.text == "me") {
+            useMe = true;
+        }
+        var prefix = useMe ? "me." : "var ";
+
         var statements: ts.Statement[] = node["body"].statements;
         if (node === undefined)
             throw Error("no scope to insert a variable could be found");
@@ -634,8 +719,9 @@ export class Parser {
         }
         var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
         statements.splice(x, 0, ts.createStatement(ass));
-        this.addTypeMe(varname, type);
-        return "me." + varname;
+        if (useMe)
+            this.addTypeMe(varname, type);
+        return (useMe ? "me." : "") + varname;
     }
 }
 
@@ -643,12 +729,17 @@ export async function test() {
     await typescript.waitForInited;
     var code = typescript.getCode("jassijs_editor/util/Parser.ts");
     var parser = new Parser();
+    //code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
+   // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
+    code='import { Button as  } from "jassijs/ui/Button";import { Button } from "jassijs/remote/Jassi";';
     parser.parse(code, undefined);
-
-  /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
-    const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
-    const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);
-    console.log(result);*/
+    parser.addImportIfNeeded("Panel","kk/l");
+    console.log(parser.getModifiedCode());
+debugger;
+    /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
+      const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
+      const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);
+      console.log(result);*/
 
 
 

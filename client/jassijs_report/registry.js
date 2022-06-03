@@ -3,26 +3,30 @@ define("jassijs_report/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_report/designer/Report.ts": {
-		"date": 1622998616949,
+		"date": 1622998618000,
 		"jassijs_report.Report": {}
 	},
 	"jassijs_report/designer/ReportDesigner.ts": {
-		"date": 1634384912619,
+		"date": 1634384914000,
 		"jassijs_report.designer.ReportDesigner": {}
 	},
+	"jassijs_report/designer/SimpleReportDesigner.ts": {
+		"date": 1634164976000,
+		"jassijs_report.designer.SimpleReportDesigner": {}
+	},
 	"jassijs_report/modul.ts": {
-		"date": 1633111115088
+		"date": 1633111116000
 	},
 	"jassijs_report/PDFReport.ts": {
-		"date": 1632679267836,
+		"date": 1632679268000,
 		"jassijs_report.PDFReport": {}
 	},
 	"jassijs_report/PDFViewer.ts": {
-		"date": 1634057193736,
+		"date": 1634057194000,
 		"jassijs_report.PDFViewer": {}
 	},
 	"jassijs_report/RColumns.ts": {
-		"date": 1633816765820,
+		"date": 1633816766000,
 		"jassijs_report.RColumns": {
 			"$ReportComponent": [
 				{
@@ -35,8 +39,241 @@ define("jassijs_report/registry",["require"], function(require) {
 			]
 		}
 	},
+	"jassijs_report/RComponent.ts": {
+		"date": 1634385288000,
+		"jassijs_report.ReportComponent": {
+			"$Property": [
+				{
+					"hideBaseClassProperties": true
+				}
+			],
+			"@members": {
+				"foreach": {
+					"$Property": []
+				},
+				"counter": {
+					"$Property": [
+						{
+							"default": "undefined",
+							"isVisible": "function"
+						}
+					]
+				},
+				"listType": {
+					"$Property": [
+						{
+							"name": "listType",
+							"default": "undefined",
+							"isVisible": "function",
+							"chooseFrom": "function"
+						}
+					]
+				},
+				"fillColor": {
+					"$Property": [
+						{
+							"type": "color",
+							"isVisible": "function"
+						}
+					]
+				},
+				"colSpan": {
+					"$Property": [
+						{
+							"type": "string",
+							"isVisible": "function"
+						}
+					]
+				},
+				"rowSpan": {
+					"$Property": [
+						{
+							"type": "string",
+							"isVisible": "function"
+						}
+					]
+				},
+				"border": {
+					"$Property": [
+						{
+							"type": "boolean[]",
+							"default": [
+								false,
+								false,
+								false,
+								false
+							],
+							"isVisible": "function",
+							"description": "border of the tablecell: left, top, right, bottom"
+						}
+					]
+				},
+				"width": {
+					"$Property": [
+						{
+							"type": "string",
+							"isVisible": "function"
+						}
+					]
+				},
+				"height": {
+					"$Property": [
+						{
+							"type": "string",
+							"isVisible": "function"
+						}
+					]
+				},
+				"bold": {
+					"$Property": []
+				},
+				"italics": {
+					"$Property": []
+				},
+				"font": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"Alegreya",
+								"AlegreyaSans",
+								"AlegreyaSansSC",
+								"AlegreyaSC",
+								"AlmendraSC",
+								"Amaranth",
+								"Andada",
+								"AndadaSC",
+								"AnonymousPro",
+								"ArchivoNarrow",
+								"Arvo",
+								"Asap",
+								"AveriaLibre",
+								"AveriaSansLibre",
+								"AveriaSerifLibre",
+								"Cambay",
+								"Caudex",
+								"CrimsonText",
+								"Cuprum",
+								"Economica",
+								"Exo2",
+								"Exo",
+								"ExpletusSans",
+								"FiraSans",
+								"JosefinSans",
+								"JosefinSlab",
+								"Karla",
+								"Lato",
+								"LobsterTwo",
+								"Lora",
+								"Marvel",
+								"Merriweather",
+								"MerriweatherSans",
+								"Nobile",
+								"NoticiaText",
+								"Overlock",
+								"Philosopher",
+								"PlayfairDisplay",
+								"PlayfairDisplaySC",
+								"PT_Serif-Web",
+								"Puritan",
+								"Quantico",
+								"QuattrocentoSans",
+								"Quicksand",
+								"Rambla",
+								"Rosario",
+								"Sansation",
+								"Sarabun",
+								"Scada",
+								"Share",
+								"Sitara",
+								"SourceSansPro",
+								"TitilliumWeb",
+								"Volkhov",
+								"Vollkorn"
+							]
+						}
+					]
+				},
+				"fontSize": {
+					"$Property": []
+				},
+				"background": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"color": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"alignment": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"left",
+								"center",
+								"right"
+							]
+						}
+					]
+				},
+				"decoration": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"underline",
+								"lineThrough",
+								"overline"
+							]
+						}
+					]
+				},
+				"decorationColor": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"decorationStyle": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"dashed",
+								"dotted",
+								"double",
+								"wavy"
+							]
+						}
+					]
+				},
+				"style": {
+					"$Property": []
+				},
+				"lineHeight": {
+					"$Property": [
+						{
+							"default": 1
+						}
+					]
+				},
+				"margin": {
+					"$Property": [
+						{
+							"type": "number[]",
+							"description": "margin left, top, right, bottom"
+						}
+					]
+				}
+			}
+		}
+	},
 	"jassijs_report/RDatatable.ts": {
-		"date": 1633810670682,
+		"date": 1635803254000,
 		"jassijs_report.RDatatable": {
 			"$ReportComponent": [
 				{
@@ -60,8 +297,244 @@ define("jassijs_report/registry",["require"], function(require) {
 			}
 		}
 	},
+	"jassijs_report/remote/pdfmakejassi.ts": {
+		"date": 1634336644000
+	},
+	"jassijs_report/remote/RComponent.ts": {
+		"date": 1634381450000,
+		"jassijs_report.ReportComponent": {
+			"$Property": [
+				{
+					"hideBaseClassProperties": true
+				}
+			],
+			"@members": {
+				"foreach": {
+					"$Property": []
+				},
+				"counter": {
+					"$Property": [
+						{
+							"default": "undefined",
+							"isVisible": "function"
+						}
+					]
+				},
+				"listType": {
+					"$Property": [
+						{
+							"name": "listType",
+							"default": "undefined",
+							"isVisible": "function",
+							"chooseFrom": "function"
+						}
+					]
+				},
+				"fillColor": {
+					"$Property": [
+						{
+							"type": "color",
+							"isVisible": "function"
+						}
+					]
+				},
+				"colSpan": {
+					"$Property": [
+						{
+							"type": "string",
+							"isVisible": "function"
+						}
+					]
+				},
+				"rowSpan": {
+					"$Property": [
+						{
+							"type": "string",
+							"isVisible": "function"
+						}
+					]
+				},
+				"border": {
+					"$Property": [
+						{
+							"type": "boolean[]",
+							"default": [
+								false,
+								false,
+								false,
+								false
+							],
+							"isVisible": "function",
+							"description": "border of the tablecell: left, top, right, bottom"
+						}
+					]
+				},
+				"width": {
+					"$Property": [
+						{
+							"type": "string",
+							"isVisible": "function"
+						}
+					]
+				},
+				"height": {
+					"$Property": [
+						{
+							"type": "string",
+							"isVisible": "function"
+						}
+					]
+				},
+				"bold": {
+					"$Property": []
+				},
+				"italics": {
+					"$Property": []
+				},
+				"font": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"Alegreya",
+								"AlegreyaSans",
+								"AlegreyaSansSC",
+								"AlegreyaSC",
+								"AlmendraSC",
+								"Amaranth",
+								"Andada",
+								"AndadaSC",
+								"AnonymousPro",
+								"ArchivoNarrow",
+								"Arvo",
+								"Asap",
+								"AveriaLibre",
+								"AveriaSansLibre",
+								"AveriaSerifLibre",
+								"Cambay",
+								"Caudex",
+								"CrimsonText",
+								"Cuprum",
+								"Economica",
+								"Exo2",
+								"Exo",
+								"ExpletusSans",
+								"FiraSans",
+								"JosefinSans",
+								"JosefinSlab",
+								"Karla",
+								"Lato",
+								"LobsterTwo",
+								"Lora",
+								"Marvel",
+								"Merriweather",
+								"MerriweatherSans",
+								"Nobile",
+								"NoticiaText",
+								"Overlock",
+								"Philosopher",
+								"PlayfairDisplay",
+								"PlayfairDisplaySC",
+								"PT_Serif-Web",
+								"Puritan",
+								"Quantico",
+								"QuattrocentoSans",
+								"Quicksand",
+								"Rambla",
+								"Rosario",
+								"Sansation",
+								"Sarabun",
+								"Scada",
+								"Share",
+								"Sitara",
+								"SourceSansPro",
+								"TitilliumWeb",
+								"Volkhov",
+								"Vollkorn"
+							]
+						}
+					]
+				},
+				"fontSize": {
+					"$Property": []
+				},
+				"background": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"color": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"alignment": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"left",
+								"center",
+								"right"
+							]
+						}
+					]
+				},
+				"decoration": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"underline",
+								"lineThrough",
+								"overline"
+							]
+						}
+					]
+				},
+				"decorationColor": {
+					"$Property": [
+						{
+							"type": "color"
+						}
+					]
+				},
+				"decorationStyle": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"dashed",
+								"dotted",
+								"double",
+								"wavy"
+							]
+						}
+					]
+				},
+				"style": {
+					"$Property": []
+				},
+				"lineHeight": {
+					"$Property": [
+						{
+							"default": 1
+						}
+					]
+				},
+				"margin": {
+					"$Property": [
+						{
+							"type": "number[]",
+							"description": "margin left, top, right, bottom"
+						}
+					]
+				}
+			}
+		}
+	},
 	"jassijs_report/ReportDesign.ts": {
-		"date": 1633777019318,
+		"date": 1633777020000,
 		"jassijs_report.InfoProperties": {
 			"@members": {
 				"title": {
@@ -314,84 +787,11 @@ define("jassijs_report/registry",["require"], function(require) {
 			}
 		}
 	},
-	"jassijs_report/RStack.ts": {
-		"date": 1632518449870,
-		"jassijs_report.RStack": {
-			"$ReportComponent": [
-				{
-					"fullPath": "report/Stack",
-					"icon": "mdi mdi-view-sequential-outline",
-					"editableChildComponents": [
-						"this"
-					]
-				}
-			]
-		}
-	},
-	"jassijs_report/RTablerow.ts": {
-		"date": 1633813573497,
-		"jassijs_report.RTablerow": {
-			"$ReportComponent": [
-				{
-					"editableChildComponents": [
-						"this"
-					]
-				}
-			]
-		}
-	},
-	"jassijs_report/RText.ts": {
-		"date": 1634384337004,
-		"jassijs_report.RText": {
-			"$ReportComponent": [
-				{
-					"fullPath": "report/Text",
-					"icon": "mdi mdi-format-color-text"
-				}
-			],
-			"$Property": [
-				{
-					"name": "value",
-					"type": "string",
-					"description": "text"
-				}
-			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"chooseFrom": "function"
-						}
-					]
-				},
-				"format": {
-					"$Property": [
-						{
-							"type": "string",
-							"chooseFrom": "allFormats"
-						}
-					]
-				}
-			}
-		}
-	},
-	"jassijs_report/RUnknown.ts": {
-		"date": 1632503057676,
-		"jassijs_report.RUnknown": {}
-	},
-	"jassijs_report/designer/SimpleReportDesigner.ts": {
-		"date": 1634164975200,
-		"jassijs_report.designer.SimpleReportDesigner": {}
-	},
-	"jassijs_report/SimpleReportEditor.ts": {
-		"date": 1634165341695,
-		"jassi_report.SimpleReportEditor": {}
-	},
-	"jassijs_report/remote/pdfmakejassi.ts": {
-		"date": 1634336643584
+	"jassijs_report/ReportTemplate.ts": {
+		"date": 1633815616000
 	},
 	"jassijs_report/RGroupTablerow.ts": {
-		"date": 1633548166674,
+		"date": 1633548168000,
 		"jassijs_report.RTablerow": {
 			"$ReportComponent": [
 				{
@@ -407,334 +807,54 @@ define("jassijs_report/registry",["require"], function(require) {
 			}
 		}
 	},
-	"jassijs_report/RComponent.ts": {
-		"date": 1634385287193,
-		"jassijs_report.ReportComponent": {
-			"$Property": [
+	"jassijs_report/RImage.ts": {
+		"date": 1633792428000,
+		"jassijs_report.RImage": {
+			"$ReportComponent": [
 				{
-					"hideBaseClassProperties": true
+					"fullPath": "report/Image",
+					"icon": "mdi mdi-image-frame"
 				}
 			],
 			"@members": {
-				"foreach": {
-					"$Property": []
-				},
-				"counter": {
+				"image": {
 					"$Property": [
 						{
-							"default": "undefined",
-							"isVisible": "function"
-						}
-					]
-				},
-				"listType": {
-					"$Property": [
-						{
-							"name": "listType",
-							"default": "undefined",
-							"isVisible": "function",
+							"type": "rimage",
 							"chooseFrom": "function"
 						}
 					]
 				},
-				"fillColor": {
-					"$Property": [
-						{
-							"type": "color",
-							"isVisible": "function"
-						}
-					]
-				},
-				"colSpan": {
-					"$Property": [
-						{
-							"type": "string",
-							"isVisible": "function"
-						}
-					]
-				},
-				"rowSpan": {
-					"$Property": [
-						{
-							"type": "string",
-							"isVisible": "function"
-						}
-					]
-				},
-				"border": {
-					"$Property": [
-						{
-							"type": "boolean[]",
-							"default": [
-								false,
-								false,
-								false,
-								false
-							],
-							"isVisible": "function",
-							"description": "border of the tablecell: left, top, right, bottom"
-						}
-					]
-				},
-				"width": {
-					"$Property": [
-						{
-							"type": "string",
-							"isVisible": "function"
-						}
-					]
-				},
-				"height": {
-					"$Property": [
-						{
-							"type": "string",
-							"isVisible": "function"
-						}
-					]
-				},
-				"bold": {
-					"$Property": []
-				},
-				"italics": {
-					"$Property": []
-				},
-				"font": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"Alegreya",
-								"AlegreyaSans",
-								"AlegreyaSansSC",
-								"AlegreyaSC",
-								"AlmendraSC",
-								"Amaranth",
-								"Andada",
-								"AndadaSC",
-								"AnonymousPro",
-								"ArchivoNarrow",
-								"Arvo",
-								"Asap",
-								"AveriaLibre",
-								"AveriaSansLibre",
-								"AveriaSerifLibre",
-								"Cambay",
-								"Caudex",
-								"CrimsonText",
-								"Cuprum",
-								"Economica",
-								"Exo2",
-								"Exo",
-								"ExpletusSans",
-								"FiraSans",
-								"JosefinSans",
-								"JosefinSlab",
-								"Karla",
-								"Lato",
-								"LobsterTwo",
-								"Lora",
-								"Marvel",
-								"Merriweather",
-								"MerriweatherSans",
-								"Nobile",
-								"NoticiaText",
-								"Overlock",
-								"Philosopher",
-								"PlayfairDisplay",
-								"PlayfairDisplaySC",
-								"PT_Serif-Web",
-								"Puritan",
-								"Quantico",
-								"QuattrocentoSans",
-								"Quicksand",
-								"Rambla",
-								"Rosario",
-								"Sansation",
-								"Sarabun",
-								"Scada",
-								"Share",
-								"Sitara",
-								"SourceSansPro",
-								"TitilliumWeb",
-								"Volkhov",
-								"Vollkorn"
-							]
-						}
-					]
-				},
-				"fontSize": {
-					"$Property": []
-				},
-				"background": {
-					"$Property": [
-						{
-							"type": "color"
-						}
-					]
-				},
-				"color": {
-					"$Property": [
-						{
-							"type": "color"
-						}
-					]
-				},
-				"alignment": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"left",
-								"center",
-								"right"
-							]
-						}
-					]
-				},
-				"decoration": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"underline",
-								"lineThrough",
-								"overline"
-							]
-						}
-					]
-				},
-				"decorationColor": {
-					"$Property": [
-						{
-							"type": "color"
-						}
-					]
-				},
-				"decorationStyle": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"dashed",
-								"dotted",
-								"double",
-								"wavy"
-							]
-						}
-					]
-				},
-				"style": {
-					"$Property": []
-				},
-				"lineHeight": {
-					"$Property": [
-						{
-							"default": 1
-						}
-					]
-				},
-				"margin": {
+				"fit": {
 					"$Property": [
 						{
 							"type": "number[]",
-							"description": "margin left, top, right, bottom"
+							"decription": "fit in rectangle width, height e.g. 10,20"
+						}
+					]
+				},
+				"opacity": {
+					"$Property": [
+						{
+							"type": "number"
 						}
 					]
 				}
 			}
 		}
 	},
-	"jassijs_report/RStyle.ts": {
-		"date": 1632523398308,
-		"jassijs_report.RStyle": {
-			"$ReportComponent": [
-				{
-					"fullPath": "report/Style",
-					"icon": "mdi mdi-virus-outline",
-					"editableChildComponents": [
-						"this"
-					]
-				}
-			],
-			"@members": {
-				"name": {
-					"$Property": []
-				}
-			}
-		}
-	},
-	"jassijs_report/RTextGroup.ts": {
-		"date": 1633548070484,
-		"jassijs_report.RTextGroup": {
-			"$ReportComponent": [
-				{
-					"fullPath": "report/TextGroup",
-					"icon": "mdi mdi-text-box-multiple-outline",
-					"editableChildComponents": [
-						"this"
-					]
-				}
+	"jassijs_report/RImageEditor.ts": {
+		"date": 1634053392000,
+		"jassi_report/RImagePropertyEditor": {
+			"$PropertyEditor": [
+				[
+					"rimage"
+				]
 			]
 		}
 	},
-	"jassijs_report/RTable.ts": {
-		"date": 1633821987257,
-		"jassijs_report.RTable": {
-			"$ReportComponent": [
-				{
-					"fullPath": "report/Table",
-					"icon": "mdi mdi-table-large",
-					"editableChildComponents": [
-						"this",
-						"this.headerPanel",
-						"this.bodyPanel",
-						"this.footerPanel"
-					]
-				}
-			],
-			"@members": {
-				"headerRows": {
-					"$Property": []
-				},
-				"layoutName": {
-					"$Property": [
-						{
-							"chooseFrom": "allLayouts",
-							"chooseFromStrict": true
-						}
-					]
-				}
-			}
-		}
-	},
-	"jassijs_report/RTableLayouts.ts": {
-		"date": 1633113318723
-	},
-	"jassijs_report/RUList.ts": {
-		"date": 1633550937624,
-		"jassijs_report.RUList": {
-			"$ReportComponent": [
-				{
-					"fullPath": "report/Unordered List",
-					"icon": "mdi mdi-format-list-bulleted",
-					"editableChildComponents": [
-						"this"
-					]
-				}
-			],
-			"@members": {
-				"type": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"square",
-								"circle",
-								"none"
-							]
-						}
-					]
-				}
-			}
-		}
-	},
 	"jassijs_report/ROList.ts": {
-		"date": 1633816412533,
+		"date": 1633816414000,
 		"jassijs_report.ROList": {
 			"$ReportComponent": [
 				{
@@ -776,290 +896,170 @@ define("jassijs_report/registry",["require"], function(require) {
 			}
 		}
 	},
-	"jassijs_report/RImage.ts": {
-		"date": 1633792427803,
-		"jassijs_report.RImage": {
+	"jassijs_report/RStack.ts": {
+		"date": 1632518450000,
+		"jassijs_report.RStack": {
 			"$ReportComponent": [
 				{
-					"fullPath": "report/Image",
-					"icon": "mdi mdi-image-frame"
-				}
-			],
-			"@members": {
-				"image": {
-					"$Property": [
-						{
-							"type": "rimage",
-							"chooseFrom": "function"
-						}
-					]
-				},
-				"fit": {
-					"$Property": [
-						{
-							"type": "number[]",
-							"decription": "fit in rectangle width, height e.g. 10,20"
-						}
-					]
-				},
-				"opacity": {
-					"$Property": [
-						{
-							"type": "number"
-						}
+					"fullPath": "report/Stack",
+					"icon": "mdi mdi-view-sequential-outline",
+					"editableChildComponents": [
+						"this"
 					]
 				}
-			}
-		}
-	},
-	"jassijs_report/RImageEditor.ts": {
-		"date": 1634053391301,
-		"jassi_report/RImagePropertyEditor": {
-			"$PropertyEditor": [
-				[
-					"rimage"
-				]
 			]
 		}
 	},
-	"jassijs_report/ReportTemplate.ts": {
-		"date": 1633815615937
-	},
-	"jassijs_report/StartReporteditor.ts": {
-		"date": 1634592393955
-	},
-	"jassijs_report/remote/RComponent.ts": {
-		"date": 1634381448958,
-		"jassijs_report.ReportComponent": {
-			"$Property": [
+	"jassijs_report/RStyle.ts": {
+		"date": 1632523400000,
+		"jassijs_report.RStyle": {
+			"$ReportComponent": [
 				{
-					"hideBaseClassProperties": true
+					"fullPath": "report/Style",
+					"icon": "mdi mdi-virus-outline",
+					"editableChildComponents": [
+						"this"
+					]
 				}
 			],
 			"@members": {
-				"foreach": {
+				"name": {
+					"$Property": []
+				}
+			}
+		}
+	},
+	"jassijs_report/RTable.ts": {
+		"date": 1633821988000,
+		"jassijs_report.RTable": {
+			"$ReportComponent": [
+				{
+					"fullPath": "report/Table",
+					"icon": "mdi mdi-table-large",
+					"editableChildComponents": [
+						"this",
+						"this.headerPanel",
+						"this.bodyPanel",
+						"this.footerPanel"
+					]
+				}
+			],
+			"@members": {
+				"headerRows": {
 					"$Property": []
 				},
-				"counter": {
+				"layoutName": {
 					"$Property": [
 						{
-							"default": "undefined",
-							"isVisible": "function"
-						}
-					]
-				},
-				"listType": {
-					"$Property": [
-						{
-							"name": "listType",
-							"default": "undefined",
-							"isVisible": "function",
-							"chooseFrom": "function"
-						}
-					]
-				},
-				"fillColor": {
-					"$Property": [
-						{
-							"type": "color",
-							"isVisible": "function"
-						}
-					]
-				},
-				"colSpan": {
-					"$Property": [
-						{
-							"type": "string",
-							"isVisible": "function"
-						}
-					]
-				},
-				"rowSpan": {
-					"$Property": [
-						{
-							"type": "string",
-							"isVisible": "function"
-						}
-					]
-				},
-				"border": {
-					"$Property": [
-						{
-							"type": "boolean[]",
-							"default": [
-								false,
-								false,
-								false,
-								false
-							],
-							"isVisible": "function",
-							"description": "border of the tablecell: left, top, right, bottom"
-						}
-					]
-				},
-				"width": {
-					"$Property": [
-						{
-							"type": "string",
-							"isVisible": "function"
-						}
-					]
-				},
-				"height": {
-					"$Property": [
-						{
-							"type": "string",
-							"isVisible": "function"
-						}
-					]
-				},
-				"bold": {
-					"$Property": []
-				},
-				"italics": {
-					"$Property": []
-				},
-				"font": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"Alegreya",
-								"AlegreyaSans",
-								"AlegreyaSansSC",
-								"AlegreyaSC",
-								"AlmendraSC",
-								"Amaranth",
-								"Andada",
-								"AndadaSC",
-								"AnonymousPro",
-								"ArchivoNarrow",
-								"Arvo",
-								"Asap",
-								"AveriaLibre",
-								"AveriaSansLibre",
-								"AveriaSerifLibre",
-								"Cambay",
-								"Caudex",
-								"CrimsonText",
-								"Cuprum",
-								"Economica",
-								"Exo2",
-								"Exo",
-								"ExpletusSans",
-								"FiraSans",
-								"JosefinSans",
-								"JosefinSlab",
-								"Karla",
-								"Lato",
-								"LobsterTwo",
-								"Lora",
-								"Marvel",
-								"Merriweather",
-								"MerriweatherSans",
-								"Nobile",
-								"NoticiaText",
-								"Overlock",
-								"Philosopher",
-								"PlayfairDisplay",
-								"PlayfairDisplaySC",
-								"PT_Serif-Web",
-								"Puritan",
-								"Quantico",
-								"QuattrocentoSans",
-								"Quicksand",
-								"Rambla",
-								"Rosario",
-								"Sansation",
-								"Sarabun",
-								"Scada",
-								"Share",
-								"Sitara",
-								"SourceSansPro",
-								"TitilliumWeb",
-								"Volkhov",
-								"Vollkorn"
-							]
-						}
-					]
-				},
-				"fontSize": {
-					"$Property": []
-				},
-				"background": {
-					"$Property": [
-						{
-							"type": "color"
-						}
-					]
-				},
-				"color": {
-					"$Property": [
-						{
-							"type": "color"
-						}
-					]
-				},
-				"alignment": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"left",
-								"center",
-								"right"
-							]
-						}
-					]
-				},
-				"decoration": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"underline",
-								"lineThrough",
-								"overline"
-							]
-						}
-					]
-				},
-				"decorationColor": {
-					"$Property": [
-						{
-							"type": "color"
-						}
-					]
-				},
-				"decorationStyle": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"dashed",
-								"dotted",
-								"double",
-								"wavy"
-							]
-						}
-					]
-				},
-				"style": {
-					"$Property": []
-				},
-				"lineHeight": {
-					"$Property": [
-						{
-							"default": 1
-						}
-					]
-				},
-				"margin": {
-					"$Property": [
-						{
-							"type": "number[]",
-							"description": "margin left, top, right, bottom"
+							"chooseFrom": "allLayouts",
+							"chooseFromStrict": true
 						}
 					]
 				}
 			}
 		}
+	},
+	"jassijs_report/RTableLayouts.ts": {
+		"date": 1633113320000
+	},
+	"jassijs_report/RTablerow.ts": {
+		"date": 1635803272000,
+		"jassijs_report.RTablerow": {
+			"$ReportComponent": [
+				{
+					"editableChildComponents": [
+						"this"
+					]
+				}
+			]
+		}
+	},
+	"jassijs_report/RText.ts": {
+		"date": 1634384338000,
+		"jassijs_report.RText": {
+			"$ReportComponent": [
+				{
+					"fullPath": "report/Text",
+					"icon": "mdi mdi-format-color-text"
+				}
+			],
+			"$Property": [
+				{
+					"name": "value",
+					"type": "string",
+					"description": "text"
+				}
+			],
+			"@members": {
+				"value": {
+					"$Property": [
+						{
+							"chooseFrom": "function"
+						}
+					]
+				},
+				"format": {
+					"$Property": [
+						{
+							"type": "string",
+							"chooseFrom": "allFormats"
+						}
+					]
+				}
+			}
+		}
+	},
+	"jassijs_report/RTextGroup.ts": {
+		"date": 1633548072000,
+		"jassijs_report.RTextGroup": {
+			"$ReportComponent": [
+				{
+					"fullPath": "report/TextGroup",
+					"icon": "mdi mdi-text-box-multiple-outline",
+					"editableChildComponents": [
+						"this"
+					]
+				}
+			]
+		}
+	},
+	"jassijs_report/RUList.ts": {
+		"date": 1633550938000,
+		"jassijs_report.RUList": {
+			"$ReportComponent": [
+				{
+					"fullPath": "report/Unordered List",
+					"icon": "mdi mdi-format-list-bulleted",
+					"editableChildComponents": [
+						"this"
+					]
+				}
+			],
+			"@members": {
+				"type": {
+					"$Property": [
+						{
+							"chooseFrom": [
+								"square",
+								"circle",
+								"none"
+							]
+						}
+					]
+				}
+			}
+		}
+	},
+	"jassijs_report/RUnknown.ts": {
+		"date": 1632503058000,
+		"jassijs_report.RUnknown": {}
+	},
+	"jassijs_report/SimpleReportEditor.ts": {
+		"date": 1635803054000,
+		"jassi_report.SimpleReportEditor": {}
+	},
+	"jassijs_report/StartReporteditor.ts": {
+		"date": 1634754814000
 	}
 }
  }

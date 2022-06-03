@@ -869,14 +869,14 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
     exports.default = {
         "css": { "jassijs_editor.css": "jassijs_editor.css" },
         "types": {
-            "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/monaco.d.ts",
+            "node_modules/monaco.d.ts": "https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/monaco.d.ts",
         },
         "require": {
             paths: {
                 'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
                 'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools',
                 monacoLib: "jassijs_editor/ext/monacoLib",
-                vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/vs"
+                vs: "https://cdn.jsdelivr.net/npm/monaco-editor@0.33.0/dev/vs"
             },
             shim: {
                 'ace/ext/language_tools': ['ace/ace'],
@@ -884,7 +884,7 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
         }
     };
 });
-define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test"], function (require, exports, Jassi_4, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_2, Server_2, Reloader_2, Classes_1, Component_1, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1) {
+define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test", "jassijs_editor/util/Parser"], function (require, exports, Jassi_4, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_2, Server_2, Reloader_2, Classes_1, Component_1, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1, Parser_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1158,6 +1158,76 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
         addVariables(variables) {
             this.variables.addAll(variables);
         }
+        async fillVariablesAndSetupParser(url, root, component, cache, parser) {
+            var _a, _b;
+            if (cache[component._id] === undefined && component["__stack"] !== undefined) {
+                var lines = (_a = component["__stack"]) === null || _a === void 0 ? void 0 : _a.split("\n");
+                for (var x = 0; x < lines.length; x++) {
+                    var sline = lines[x];
+                    if (sline.indexOf("$temp.js") > 0) {
+                        var spl = sline.split(":");
+                        var entr = {};
+                        cache[component._id] = {
+                            line: Number(spl[spl.length - 2]),
+                            column: Number(spl[spl.length - 1].replace(")", "")),
+                            component: component,
+                            pos: 0,
+                            name: undefined
+                        };
+                        break;
+                    }
+                }
+                if (component["_components"]) {
+                    for (var x = 0; x < component["_components"].length; x++) {
+                        this.fillVariablesAndSetupParser(url, root, component["_components"][x], cache, parser);
+                    }
+                }
+                if (component === root) {
+                    //fertig
+                    var hh = 0;
+                    console.log("load Parser and TSourcemap dynamically");
+                    var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
+                    var values = Object.values(cache);
+                    var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values);
+                    for (var x = 0; x < tmap.length; x++) {
+                        values[x].column = tmap[x].column;
+                        values[x].line = tmap[x].line;
+                        values[x].pos = this._codePanel.positionToNumber({
+                            row: values[x].line,
+                            column: values[x].column
+                        });
+                    }
+                    //setupClasscope
+                    var foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id].pos);
+                    var scope = [{ classname: (_b = root === null || root === void 0 ? void 0 : root.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }];
+                    if (foundscope)
+                        scope = [foundscope];
+                    parser.parse(this._codePanel.value, scope);
+                    for (var key in parser.data) {
+                        var com = parser.data[key];
+                        var _new_ = com["_new_"];
+                        if (_new_) {
+                            var pos = _new_[0].node.pos;
+                            var end = _new_[0].node.end;
+                            for (var x = 0; x < values.length; x++) {
+                                if (values[x].pos >= pos && values[x].pos <= end) {
+                                    values[x].name = key;
+                                }
+                            }
+                        }
+                    }
+                    for (var x = 0; x < values.length; x++) {
+                        if (values[x].name) {
+                            this.variables.addVariable(values[x].name, values[x].component, false);
+                        }
+                    }
+                    this.variables.updateCache();
+                    this.variables.update();
+                    // parser.parse(,)
+                }
+                return parser;
+            }
+        }
         async _evalCodeOnLoad(data) {
             this.variables.clear();
             var code = this._codePanel.value;
@@ -1177,46 +1247,57 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                 islocaldb.destroyConnection();
             }
             if (data.test !== undefined) {
+                //capure created Components
+                function hook(name, component) {
+                    var _a;
+                    try {
+                        throw new Error("getstack");
+                    }
+                    catch (ex) {
+                        if (((_a = ex === null || ex === void 0 ? void 0 : ex.stack) === null || _a === void 0 ? void 0 : _a.indexOf("$temp.js")) != -1)
+                            component["__stack"] = ex.stack;
+                    }
+                }
+                Component_1.Component.onComponentCreated(hook);
                 var ret = await data.test(new Test_1.Test());
+                Component_1.Component.offComponentCreated(hook);
                 // Promise.resolve(ret).then(async function(ret) {
                 if (ret !== undefined) {
                     if (ret.layout !== undefined)
                         _this.variables.addVariable("this", ret);
-                    else {
-                        //get variablename from return
-                        var sfunc = data.test.toString();
-                        var pos = sfunc.lastIndexOf("return ");
-                        var pose = sfunc.indexOf(";", pos);
-                        var retvar = sfunc.substring(pos + 7, pose).trim();
-                        _this.variables.addVariable(retvar, ret);
-                    }
-                    _this.variables.addVariable("me", ret.me);
+                    //_this.variables.addVariable("me", ret.me);
                     _this.variables.updateCache();
                     if (ret instanceof Component_1.Component && ret["reporttype"] === undefined) {
-                        require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
-                            var ComponentDesigner = Classes_1.classes.getClass("jassijs_editor.ComponentDesigner");
-                            var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
-                            if (!((_this._design) instanceof ComponentDesigner)) {
-                                _this._design = new ComponentDesigner();
-                                _this._main.add(_this._design, "Design", "design");
-                                _this._design["codeEditor"] = _this;
-                                //@ts-ignore
-                                _this._design.connectParser(new Parser());
-                            }
-                            _this._design["designedComponent"] = ret;
-                        });
+                        //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
+                        //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
+                        //   var Parser = classes.getClass("jassijs_editor.base.Parser");
+                        var ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.ComponentDesigner");
+                        var parser = new Parser_1.Parser();
+                        await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
+                        if (!((_this._design) instanceof ComponentDesigner)) {
+                            _this._design = new ComponentDesigner();
+                            _this._main.add(_this._design, "Design", "design");
+                            _this._design["codeEditor"] = _this;
+                        }
+                        //@ts-ignore
+                        _this._design.connectParser(parser);
+                        _this._design["designedComponent"] = ret;
+                        //});
                     }
                     else if (ret["reportdesign"] !== undefined) {
                         require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign", "jassijs_editor/util/Parser"], function () {
+                            var _a, _b;
                             var ReportDesigner = Classes_1.classes.getClass("jassijs_report.designer.ReportDesigner");
                             var ReportDesign = Classes_1.classes.getClass("jassijs_report.ReportDesign");
-                            var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
                             if (!((_this._design) instanceof ReportDesigner)) {
+                                var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
                                 _this._design = new ReportDesigner();
                                 _this._main.add(_this._design, "Design", "design");
                                 _this._design["codeEditor"] = _this;
+                                var parser = new Parser();
+                                parser.classScope = [{ classname: (_b = (_a = _this._design) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
                                 //@ts-ignore
-                                _this._design.connectParser(new Parser());
+                                _this._design.connectParser(parser);
                             }
                             var rep = new ReportDesign();
                             rep.design = Object.assign({}, ret.reportdesign);
@@ -1379,6 +1460,13 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
             this.variables.renameVariable(oldName, newName);
             if (this._design !== undefined && this._design["_componentExplorer"] !== undefined)
                 this._design["_componentExplorer"].update();
+        }
+        /**
+         * gets the name object of the given variabel
+         * @param {string} ob - the name of the variable
+         */
+        removeVariableInDesign(varname) {
+            return this.variables.removeVariable(varname);
         }
         /**
          * @member {string} - the code
@@ -2222,7 +2310,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             if (this._propertyEditor.codeEditor === undefined)
                 return;
             var varname = this._propertyEditor.addVariableInCode(type, scope);
-            if (varname.startsWith("me.")) {
+            if (varname.startsWith("me.") && this._codeEditor.getObjectFromVariable("me") !== undefined) {
                 var me = this._codeEditor.getObjectFromVariable("me");
                 me[varname.substring(3)] = varvalue;
             }
@@ -2247,10 +2335,38 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             }
             return this._hasRepeatingContainer(component._parent);
         }
+        fillVariables(root, component, cache) {
+            var _a;
+            if (cache[component._id] === undefined && component["__stack"] !== undefined) {
+                var lines = (_a = component["__stack"]) === null || _a === void 0 ? void 0 : _a.split("\n");
+                for (var x = 0; x < lines.length; x++) {
+                    var sline = lines[x];
+                    if (sline.indexOf("$temp.js") > 0) {
+                        var spl = sline.split(":");
+                        var entr = {};
+                        cache[component._id] = {
+                            line: Number(spl[spl.length - 2]),
+                            column: Number(spl[spl.length - 1].replace(")", ""))
+                        };
+                        break;
+                    }
+                }
+                if (component["_components"]) {
+                    for (var x = 0; x < component["_components"].length; x++) {
+                        this.fillVariables(root, component["_components"][x], cache);
+                    }
+                }
+                if (component === root) {
+                    //fertig
+                    var hh = 0;
+                }
+            }
+        }
         /**
          * @member {jassijs.ui.Component} - the designed component
          */
         set designedComponent(component) {
+            this.fillVariables(component, component, {});
             var com = component;
             if (com["isAbsolute"] !== true && com.width === "0" && com.height === "0") {
                 component.width = "calc(100% - 1px)";
@@ -2826,7 +2942,8 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
                 theme: (theme ? theme : "vs-light"),
                 glyphMargin: true,
                 fontSize: 12,
-                automaticLayout: true
+                automaticLayout: true,
+                inlineSuggest: {}
             });
             __init(this._editor);
             this._editor.onMouseDown(function (e) {
@@ -3057,15 +3174,15 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1632251059247,
+                "date": 1632251060000,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
-                "date": 1622998653413,
+                "date": 1622998654000,
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1634160357652,
+                "date": 1654169313604,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3118,61 +3235,61 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-                "date": 1632524313473,
+                "date": 1632524314000,
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
-                "date": 1632076557166,
+                "date": 1632076558000,
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1634378928779,
+                "date": 1654164249900,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1631566305792,
+                "date": 1631566306000,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1631290327725,
+                "date": 1631290328000,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/Debugger.ts": {
-                "date": 1622998616949,
+                "date": 1622998618000,
                 "jassijs_editor.Debugger": {}
             },
             "jassijs_editor/modul.ts": {
-                "date": 1631469421689
+                "date": 1654273312166
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1634386456732,
+                "date": 1654011054229,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {
-                "date": 1623098599960
+                "date": 1623098600000
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1634340709090,
+                "date": 1634340710000,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1633771925245,
+                "date": 1654275473444,
                 "jassijs_editor.base.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1634384528225,
+                "date": 1634384530000,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/TSSourceMap.ts": {
-                "date": 1625511336878,
+                "date": 1654114048820,
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1631566733736,
+                "date": 1631566734000,
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1631388456854,
+                "date": 1631388458000,
                 "jassijs.ui.AcePanelSimple": {}
             }
         }
@@ -3228,8 +3345,7 @@ define("jassijs_editor/ext/acelib", ["require", 'ace/ace',
 });
 */
 define("jassijs_editor/ext/monacoLib", ["require"], function (require, editor) {
-    window["module"] = {};
-    window["module"].exports = {};
+    window["globalThis"] = {};
     return {};
 });
 //hach to make autocompletion for autoimports from other modules
@@ -3237,8 +3353,7 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
     //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
     let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
     //get Typescript instance
-    window.ts = window["module"].exports;
-    delete window["module"];
+    window.ts = window["globalThis"].ts;
     var platform_1 = require("vs/base/common/platform");
     platform_1.globals.MonacoEnvironment = {};
     function myfunc() {
@@ -3610,7 +3725,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
          * @param {string} value  - code - the value
          * @param node - the node of the statement
          */
-        add(variable, property, value, node) {
+        add(variable, property, value, node, isFunction = false) {
             if (value === undefined || value === null)
                 return;
             value = value.trim();
@@ -3624,7 +3739,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
             if (Array.isArray(this.data[variable][property])) {
                 this.data[variable][property].push({
                     value: value,
-                    node: node
+                    node: node,
+                    isFunction
                 });
             }
         }
@@ -3659,7 +3775,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         }
         addImportIfNeeded(name, file) {
             if (this.imports[name] === undefined) {
-                var imp = ts.createNamedImports([ts.createImportSpecifier(undefined, ts.createIdentifier(name))]);
+                var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
                 const importNode = ts.createImportDeclaration(undefined, undefined, ts.createImportClause(undefined, imp), ts.createLiteral(file));
                 this.sourceFile = ts.updateSourceFileNode(this.sourceFile, [importNode, ...this.sourceFile.statements]);
             }
@@ -3770,12 +3886,37 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                         }
                     }
                 }
-                if (this.collectProperties) {
-                    for (let x = 0; x < this.collectProperties.length; x++) {
-                        var col = this.collectProperties[x];
+                if (this.classScope) {
+                    for (let x = 0; x < this.classScope.length; x++) {
+                        var col = this.classScope[x];
                         if (col.classname === parsedClass.name && parsedClass.members[col.methodname]) {
                             var nd = parsedClass.members[col.methodname].node;
                             this.parseProperties(nd);
+                        }
+                    }
+                }
+            }
+        }
+        parseConfig(node) {
+            if (node.arguments.length > 0) {
+                var left = node.expression.getText();
+                var lastpos = left.lastIndexOf(".");
+                var variable = left;
+                var prop = "";
+                if (lastpos !== -1) {
+                    variable = left.substring(0, lastpos);
+                    prop = left.substring(lastpos + 1);
+                    //@ts-ignore
+                    var props = node.arguments[0].properties;
+                    if (props !== undefined) {
+                        for (var p = 0; p < props.length; p++) {
+                            var name = props[p].name.text;
+                            // var value = this.convertArgument(props[p].initializer);
+                            var code = props[p].initializer ? props[p].initializer.getText() : "";
+                            if ((code === null || code === void 0 ? void 0 : code.indexOf(".config")) > -1) {
+                                this.parseProperties(props[p].initializer);
+                            }
+                            this.add(variable, name, code, props[p], false);
                         }
                     }
                 }
@@ -3795,6 +3936,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 var node2;
                 var left;
                 var value;
+                var isFunction = false;
                 if (ts.isBinaryExpression(node)) {
                     node1 = node.left;
                     node2 = node.right;
@@ -3806,9 +3948,13 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 if (ts.isCallExpression(node)) {
                     node1 = node.expression;
                     node2 = node.arguments;
+                    isFunction = true;
                     left = node1.getText(); // this.code.substring(node1.pos, node1.end).trim();
                     var params = [];
                     node.arguments.forEach((arg) => { params.push(arg.getText()); });
+                    if (left.endsWith(".config")) {
+                        this.parseConfig(node);
+                    }
                     value = params.join(", "); //this.code.substring(node2.pos, node2.end).trim();//
                 }
                 var lastpos = left.lastIndexOf(".");
@@ -3818,9 +3964,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                     variable = left.substring(0, lastpos);
                     prop = left.substring(lastpos + 1);
                 }
-                this.add(variable, prop, value, node.parent);
+                this.add(variable, prop, value, node.parent, isFunction);
             }
-            node.getChildren().forEach(c => this.parseProperties(c));
+            else
+                node.getChildren().forEach(c => this.parseProperties(c));
         }
         visitNode(node) {
             var _this = this;
@@ -3845,13 +3992,15 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
             }
             else if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
                 this.functions[node["name"].text] = node;
-                if (this.collectProperties) {
-                    for (let x = 0; x < this.collectProperties.length; x++) {
-                        var col = this.collectProperties[x];
+                if (this.classScope) {
+                    for (let x = 0; x < this.classScope.length; x++) {
+                        var col = this.classScope[x];
                         if (col.classname === undefined && node["name"].text === col.methodname)
                             this.parseProperties(node);
                     }
                 }
+                else
+                    this.parseProperties(node);
             }
             else
                 node.getChildren().forEach(c => this.visitNode(c));
@@ -3860,15 +4009,51 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 this.add(node["name"].text, "", "", undefined);
             }
         }
+        searchClassnode(node, pos) {
+            if (ts.isMethodDeclaration(node)) {
+                return {
+                    classname: node.parent["name"]["text"],
+                    methodname: node.name["text"]
+                };
+            }
+            if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
+                var funcname = node["name"].text;
+                return {
+                    classname: undefined,
+                    methodname: funcname
+                };
+            }
+            var childs = node.getChildren();
+            for (var x = 0; x < childs.length; x++) {
+                var c = childs[x];
+                if (pos >= c.pos && pos <= c.end) {
+                    var test = this.searchClassnode(c, pos);
+                    if (test)
+                        return test;
+                }
+            }
+            ;
+            return undefined;
+        }
+        getClassScopeFromPosition(code, pos) {
+            this.data = {};
+            this.code = code;
+            this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
+            return this.searchClassnode(this.sourceFile, pos);
+            //return this.parseold(code,onlyfunction);
+        }
         /**
         * parse the code
         * @param {string} code - the code
         * @param {string} onlyfunction - only the code in the function is parsed, e.g. "layout()"
         */
-        parse(code, collectProperties = undefined) {
+        parse(code, classScope = undefined) {
             this.data = {};
             this.code = code;
-            this.collectProperties = collectProperties;
+            if (classScope !== undefined)
+                this.classScope = classScope;
+            else
+                classScope = this.classScope;
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
             this.visitNode(this.sourceFile);
             //return this.parseold(code,onlyfunction);
@@ -4051,6 +4236,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         * @param [variablescope] - if this scope is defined - the new property would be insert in this variable
         */
         setPropertyInCode(variableName, property, value, classscope, isFunction = false, replace = undefined, before = undefined, variablescope = undefined) {
+            if (classscope === undefined)
+                classscope = this.classScope;
             var scope = this.getNodeFromScope(classscope, variablescope);
             var newExpression = undefined;
             var statements = scope["body"].statements;
@@ -4157,11 +4344,21 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         * @returns  the name of the object
         */
         addVariableInCode(fulltype, classscope, variablescope = undefined) {
+            var _a;
+            if (classscope === undefined)
+                classscope = this.classScope;
             let type = fulltype.split(".")[fulltype.split(".").length - 1];
             var varname = this.getNextVariableNameForType(type);
+            var useMe = false;
+            if (this.data["me"] !== undefined)
+                useMe = true;
             //var if(scopename)
-            var prefix = "me.";
             var node = this.getNodeFromScope(classscope, variablescope);
+            //@ts-ignore
+            if (((_a = node === null || node === void 0 ? void 0 : node.parameters) === null || _a === void 0 ? void 0 : _a.length) > 0 && node.parameters[0].name.text == "me") {
+                useMe = true;
+            }
+            var prefix = useMe ? "me." : "var ";
             var statements = node["body"].statements;
             if (node === undefined)
                 throw Error("no scope to insert a variable could be found");
@@ -4171,8 +4368,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
             }
             var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
             statements.splice(x, 0, ts.createStatement(ass));
-            this.addTypeMe(varname, type);
-            return "me." + varname;
+            if (useMe)
+                this.addTypeMe(varname, type);
+            return (useMe ? "me." : "") + varname;
         }
     };
     Parser = __decorate([
@@ -4184,7 +4382,13 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         await Typescript_4.default.waitForInited;
         var code = Typescript_4.default.getCode("jassijs_editor/util/Parser.ts");
         var parser = new Parser();
+        //code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
+        // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
+        code = 'import { Button as  } from "jassijs/ui/Button";import { Button } from "jassijs/remote/Jassi";';
         parser.parse(code, undefined);
+        parser.addImportIfNeeded("Panel", "kk/l");
+        console.log(parser.getModifiedCode());
+        debugger;
         /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
           const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
           const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);
@@ -4579,6 +4783,9 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             return ret;
         }
         async getLineFromJS(jsfile, line, column) {
+            return await this.getLinesFromJS(jsfile, [{ line, column }])[0];
+        }
+        async getLinesFromJS(jsfile, data) {
             var jscode = await this.getCode(jsfile.split("?")[0]); // await $.ajax({ url: jsfile, dataType: "text" });
             var mapcode = "";
             var pos = jscode.indexOf("//" + "# sourceMappingURL=");
@@ -4593,23 +4800,28 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             }
             else
                 return undefined;
-            var ret = new Promise((resolve, reject) => {
-                sourcemap_1.default.SourceMapConsumer.initialize({
-                    "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
-                });
-                var rawSourceMap = JSON.parse(mapcode);
-                sourcemap_1.default.SourceMapConsumer.with(rawSourceMap, null, consumer => {
-                    var test = consumer.sources;
-                    var l = consumer.originalPositionFor({
-                        bias: sourcemap_1.default.SourceMapConsumer.GREATEST_LOWER_BOUND,
-                        line: line,
-                        column: column
-                    });
-                    return l;
-                }).then(function (whatever) {
-                    resolve(whatever);
-                });
+            sourcemap_1.default.SourceMapConsumer.initialize({
+                "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
             });
+            var rawSourceMap = JSON.parse(mapcode);
+            var ret = [];
+            for (var x = 0; x < data.length; x++) {
+                var one = await new Promise((resolve, reject) => {
+                    //for(var x=0;x<data.length;x++){
+                    sourcemap_1.default.SourceMapConsumer.with(rawSourceMap, null, consumer => {
+                        var test = consumer.sources;
+                        var l = consumer.originalPositionFor({
+                            bias: sourcemap_1.default.SourceMapConsumer.GREATEST_LOWER_BOUND,
+                            line: data[x].line,
+                            column: data[x].column
+                        });
+                        return l;
+                    }).then(function (whatever) {
+                        resolve(whatever);
+                    });
+                });
+                ret.push(one);
+            }
             return ret;
             //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js",function(data){
         }

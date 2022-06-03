@@ -2,12 +2,8 @@
 define("de/registry",["require"], function(require) {
  return {
   default: {
-	"de/Dialog.ts": {
-		"date": 1624143167811,
-		"de/Dialog": {}
-	},
 	"de/DialogKunde.ts": {
-		"date": 1627562582252,
+		"date": 1654120560798,
 		"de.DialogKunde": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -42,7 +38,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/KundeView.ts": {
-		"date": 1624207911110,
+		"date": 1624207912000,
 		"de.KundeView": {
 			"$DBObjectView": [
 				{
@@ -63,10 +59,10 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/modul.ts": {
-		"date": 1626121321303
+		"date": 1626121322000
 	},
 	"de/remote/AR.ts": {
-		"date": 1622985477990,
+		"date": 1622985478000,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -113,7 +109,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1622985479813,
+		"date": 1622985480000,
 		"de.ARZeile": {
 			"$DBObject": [],
 			"@members": {
@@ -144,8 +140,11 @@ define("de/registry",["require"], function(require) {
 			}
 		}
 	},
+	"de/remote/Kunde.ext.ts": {
+		"date": 1622985484000
+	},
 	"de/remote/Kunde.ts": {
-		"date": 1634384659871,
+		"date": 1634384660000,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -220,7 +219,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/KundeExt.ts": {
-		"date": 1626122322826,
+		"date": 1626122324000,
 		"de.KundeExt": {
 			"$Extension": [
 				"de.Kunde"
@@ -228,7 +227,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/KundeExt2.ts": {
-		"date": 1626123322693,
+		"date": 1654120297933,
 		"de.KundeExt2": {
 			"$Extension": [
 				"de.Kunde"
@@ -236,7 +235,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/Lieferant.ts": {
-		"date": 1622985489873,
+		"date": 1622985490000,
 		"de.Lieferant": {
 			"$DBObject": [],
 			"@members": {
@@ -254,7 +253,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/MyUser.ts": {
-		"date": 1622985491688,
+		"date": 1622985492000,
 		"de.MyUser": {
 			"$DBObject": [],
 			"Entity": [],
@@ -274,14 +273,8 @@ define("de/registry",["require"], function(require) {
 			}
 		}
 	},
-	"de/TestExtension.ts": {
-		"date": 1624293154792
-	},
-	"de/remote/Kunde.ext.ts": {
-		"date": 1622985482440
-	},
 	"de/ReportKunde.ts": {
-		"date": 1631970005744,
+		"date": 1631970006000,
 		"de.ReportKunde": {
 			"@members": {
 				"value": {
@@ -295,6 +288,13 @@ define("de/registry",["require"], function(require) {
 				}
 			}
 		}
+	},
+	"de/TestExtension.ts": {
+		"date": 1624293156000
+	},
+	"de/Dialog.ts": {
+		"date": 1654275496103,
+		"de/Dialog": {}
 	}
 }
  }

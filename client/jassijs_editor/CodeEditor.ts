@@ -20,6 +20,8 @@ import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
 import { Test } from "jassijs/remote/Test";
 import modul from "./modul";
 
+import { Parser } from "jassijs_editor/util/Parser";
+
 declare global {
     export interface KnownSettings {
         Development_DefaultEditor: "ace" | "monaco" | "aceOnBrowser";
@@ -341,6 +343,82 @@ export class CodeEditor extends Panel {
     addVariables(variables) {
         this.variables.addAll(variables);
     }
+    private async fillVariablesAndSetupParser(url: string, root: Component, component: Component, cache: { [componentid: string]: { component: Component, line: number, column: number, pos: number, name: string } },parser) {
+
+        if (cache[component._id] === undefined && component["__stack"] !== undefined) {
+            var lines = component["__stack"]?.split("\n");
+            for (var x = 0; x < lines.length; x++) {
+                var sline: string = lines[x];
+                if (sline.indexOf("$temp.js") > 0) {
+                    var spl = sline.split(":");
+                    var entr = {
+
+                    }
+                    cache[component._id] = {
+                        line: Number(spl[spl.length - 2]),
+                        column: Number(spl[spl.length - 1].replace(")", "")),
+                        component: component,
+                        pos: 0,
+                        name: undefined
+                    }
+                    break;
+                }
+            }
+            if (component["_components"]) {
+                for (var x = 0; x < component["_components"].length; x++) {
+                    this.fillVariablesAndSetupParser(url, root, component["_components"][x], cache,parser);
+                }
+            }
+            if (component === root) {
+                //fertig
+                var hh = 0;
+                console.log("load Parser and TSourcemap dynamically")
+              
+                var TSSourceMap = await classes.loadClass("jassijs_editor.util.TSSourceMap");
+                var values = Object.values(cache);
+                var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values)
+                for (var x = 0; x < tmap.length; x++) {
+                    values[x].column = tmap[x].column;
+                    values[x].line = tmap[x].line;
+                    values[x].pos = this._codePanel.positionToNumber({
+                        row: values[x].line,
+                        column: values[x].column
+                    });
+                }
+                //setupClasscope
+                var foundscope=parser.getClassScopeFromPosition(this._codePanel.value,cache[root._id].pos);
+                var scope=[{classname: root?.constructor?.name, methodname: "layout" }];
+                if(foundscope)
+                    scope=[foundscope];
+                parser.parse(this._codePanel.value, scope);
+                for (var key in parser.data) {
+                    var com = parser.data[key];
+                    var _new_ = com["_new_"];
+                    if (_new_) {
+                        var pos = _new_[0].node.pos;
+                        var end = _new_[0].node.end;
+                        for (var x = 0; x < values.length; x++) {
+                            if (values[x].pos >= pos && values[x].pos <= end) {
+                                values[x].name = key;
+                            }
+                        }
+                    }
+                }
+                for (var x = 0; x < values.length; x++) {
+                    if(values[x].name){
+                        this.variables.addVariable(values[x].name, values[x].component,false);
+                    }
+                }
+                
+
+                this.variables.updateCache();
+                this.variables.update();
+                // parser.parse(,)
+            }
+            return parser;
+        }
+
+    }
     private async _evalCodeOnLoad(data) {
         this.variables.clear();
         var code = this._codePanel.value;
@@ -362,48 +440,58 @@ export class CodeEditor extends Panel {
             (<any>islocaldb).destroyConnection();
         }
         if (data.test !== undefined) {
+            //capure created Components
+            function hook(name, component: Component) {
+                try {
+                    throw new Error("getstack");
+                } catch (ex) {
+                    if (ex?.stack?.indexOf("$temp.js") != -1)
+                        component["__stack"] = ex.stack;
+                }
+            }
+           Component.onComponentCreated(hook);
             var ret = await data.test(new Test());
+            Component.offComponentCreated(hook);
+
             // Promise.resolve(ret).then(async function(ret) {
             if (ret !== undefined) {
 
                 if (ret.layout !== undefined)
                     _this.variables.addVariable("this", ret);
-                else {
-                    //get variablename from return
-                    var sfunc: string = data.test.toString();
-                    var pos = sfunc.lastIndexOf("return ");
-                    var pose = sfunc.indexOf(";", pos);
-                    var retvar = sfunc.substring(pos + 7, pose).trim();
-                    _this.variables.addVariable(retvar, ret);
-                }
-                _this.variables.addVariable("me", ret.me);
+                
+                //_this.variables.addVariable("me", ret.me);
 
                 _this.variables.updateCache();
                 if (ret instanceof Component && ret["reporttype"] === undefined) {
-                    require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
-                        var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
-                        var Parser = classes.getClass("jassijs_editor.base.Parser");
+                    //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
+                    //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
+                     //   var Parser = classes.getClass("jassijs_editor.base.Parser");
+                        var ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
+                        var parser=new Parser();
+                        await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
                         if (!((_this._design) instanceof ComponentDesigner)) {
                             _this._design = new ComponentDesigner();
 
                             _this._main.add(_this._design, "Design", "design");
                             _this._design["codeEditor"] = _this;
-                            //@ts-ignore
-                            _this._design.connectParser(new Parser());
                         }
+                        //@ts-ignore
+                        _this._design.connectParser(parser);
                         _this._design["designedComponent"] = ret;
-                    });
+                    //});
                 } else if (ret["reportdesign"] !== undefined) {
                     require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign", "jassijs_editor/util/Parser"], function () {
                         var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
                         var ReportDesign = classes.getClass("jassijs_report.ReportDesign");
-                        var Parser = classes.getClass("jassijs_editor.base.Parser");
                         if (!((_this._design) instanceof ReportDesigner)) {
+                            var Parser = classes.getClass("jassijs_editor.base.Parser");
                             _this._design = new ReportDesigner();
                             _this._main.add(_this._design, "Design", "design");
                             _this._design["codeEditor"] = _this;
+                            var parser=new Parser();
+                            parser.classScope=[{classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
                             //@ts-ignore
-                            _this._design.connectParser(new Parser());
+                            _this._design.connectParser(parser);
 
                         }
                         var rep = new ReportDesign();
@@ -584,7 +672,13 @@ export class CodeEditor extends Panel {
             this._design["_componentExplorer"].update();
     }
 
-
+    /**
+     * gets the name object of the given variabel
+     * @param {string} ob - the name of the variable
+     */
+    removeVariableInDesign(varname) {
+        return this.variables.removeVariable(varname);
+    }
 
     /**
      * @member {string} - the code

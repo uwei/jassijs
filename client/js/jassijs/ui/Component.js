@@ -9,6 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties"], function (require, exports, Jassi_1, Property_1, Registry_1, Classes_1, CSSProperties_1) {
     "use strict";
+    var Component_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Component = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
     class UIComponentProperties {
@@ -23,7 +24,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
     class ComponentCreateProperties {
     }
     exports.ComponentCreateProperties = ComponentCreateProperties;
-    let Component = class Component {
+    let Component = Component_1 = class Component {
         /*  get domWrapper():Element{
               return this._domWrapper;
           }
@@ -48,6 +49,30 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
                 this.__dom = document.getElementById(properties.id);
                 this.dom._this = this;
             }
+        }
+        config(config) {
+            if (config.css) {
+                this.css(config.css);
+                delete config.css;
+            }
+            for (var key in config) {
+                if (typeof config[key] === 'function') {
+                    this[key](config[key]);
+                }
+                else {
+                    this[key] = config[key];
+                }
+            }
+            return this;
+            //    return new c();
+        }
+        static onComponentCreated(func) {
+            this._componentHook.push(func);
+        }
+        static offComponentCreated(func) {
+            var pos = this._componentHook.indexOf(func);
+            if (pos >= 0)
+                this._componentHook.splice(pos, 1);
         }
         /**
          * adds an event
@@ -100,17 +125,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
             }
             this.dom._this = this;
         }
-        /**
-        * called if the component get the focus
-        * @param {function} handler - the function which is executed
-        */
         onfocus(handler) {
             return this.on("focus", handler);
         }
-        /**
-        * called if the component lost the focus
-        * @param {function} handler - the function which is executed
-        */
         onblur(handler) {
             return this.on("blur", handler);
         }
@@ -163,10 +180,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
             if (this.dom !== undefined) {
                 this.__dom._this = undefined;
             }
-            //allready watched?
-            if (Jassi_1.default.componentSpy !== undefined) {
-                Jassi_1.default.componentSpy.unwatch(this);
+            //notify Hook
+            for (var x = 0; x < Component_1._componentHook.length; x++) {
+                Component_1._componentHook[x]("precreate", this);
             }
+            //allready watched?
+            // if (jassijs.componentSpy !== undefined) {
+            //   jassijs.componentSpy.unwatch(this);
+            // }
             this.dom = dom;
             this._id = Registry_1.default.nextID();
             $(this.dom).attr("id", this._id);
@@ -195,10 +216,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
                 var temp = $('<template id="jassitemp"></template>')[0];
                 $(document.body).append(temp);
             }
-            //for profilling save code pos
-            if (Jassi_1.default.componentSpy !== undefined) {
-                Jassi_1.default.componentSpy.watch(this);
+            //notify Hook
+            for (var x = 0; x < Component_1._componentHook.length; x++) {
+                Component_1._componentHook[x]("create", this);
             }
+            //for profilling save code pos
+            //if (jassijs.componentSpy !== undefined) {
+            //     jassijs.componentSpy.watch(this);
+            //  }
             $("#jassitemp")[0].appendChild(this.domWrapper);
         }
         set label(value) {
@@ -216,9 +241,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
                 $(this.domWrapper).children(":first").html(value);
             }
         }
-        /**
-         * @member {string} - the label over the component
-         */
         get label() {
             //CHECK children(0)-> first()
             if ($(this.domWrapper).first().attr('class') === undefined || !$(this.domWrapper).first().attr('class').startsWith("jlabel")) {
@@ -229,9 +251,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         get tooltip() {
             return $(this.dom).attr("title");
         }
-        /**
-        * @member {string} - tooltip for the component
-        */
         set tooltip(value) {
             $(this.domWrapper).attr("title", value);
             $(this.domWrapper).tooltip();
@@ -239,9 +258,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         get x() {
             return Number($(this.domWrapper).css("left").replace("px", ""));
         }
-        /**
-         * @member {number} - the left absolute position
-         */
         set x(value) {
             $(this.domWrapper).css("left", value);
             $(this.domWrapper).css("position", "absolute");
@@ -249,16 +265,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         get y() {
             return Number($(this.domWrapper).css("top").replace("px", ""));
         }
-        /**
-         * @member {number|string} - the top absolute position
-         */
         set y(value) {
             $(this.domWrapper).css("top", value);
             $(this.domWrapper).css("position", "absolute");
         }
-        /**
-         * @member {boolean} - component is hidden
-         */
         get hidden() {
             return $(this.__dom).is(":hidden");
         }
@@ -308,10 +318,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         get width1() {
             return $(this.domWrapper).css("width").replace("px", "");
         }
-        /**
-        * @member {string|number} - the width of the component
-        * e.g. 50 or "100%"
-        */
         set width(value) {
             //  if($.isNumeric(value))
             if (value === undefined)
@@ -331,10 +337,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
                 return $(this.domWrapper).css("width");
             return $(this.dom).css("width").replace("px", "");
         }
-        /**
-         * @member {string|number} - the height of the component
-         * e.g. 50 or "100%"
-         */
         set height(value) {
             //  if($.isNumeric(value))
             if (value === undefined)
@@ -356,9 +358,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
                 return undefined;
             return $(this.dom).css("height").replace("px", "");
         }
-        /**
-        * sets CSS Properties
-        */
         css(properties, removeOldProperties = true) {
             var prop = CSSProperties_1.CSSProperties.applyTo(properties, this);
             //if css-properties are already set and now a properties is deleted
@@ -403,9 +402,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         get contextMenu() {
             return this._contextMenu;
         }
-        /**
-         * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
-         **/
         set contextMenu(value) {
             if (this._contextMenu !== undefined)
                 this._contextMenu.unregisterComponent(this);
@@ -424,9 +420,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
             if (this.contextMenu !== undefined) {
                 this.contextMenu.destroy();
             }
-            if (Jassi_1.default.componentSpy !== undefined) {
-                Jassi_1.default.componentSpy.unwatch(this);
+            //notify Hook
+            for (var x = 0; x < Component_1._componentHook.length; x++) {
+                Component_1._componentHook[x]("destroy", this);
             }
+            // if (jassijs.componentSpy !== undefined) {
+            //    jassijs.componentSpy.unwatch(this);
+            //  }
             if (this._parent !== undefined) {
                 this._parent.remove(this);
             }
@@ -451,6 +451,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         extensionCalled(action) {
         }
     };
+    Component._componentHook = [];
     __decorate([
         (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
         __metadata("design:type", Function),
@@ -514,7 +515,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "contextMenu", null);
-    Component = __decorate([
+    Component = Component_1 = __decorate([
         (0, Jassi_1.$Class)("jassijs.ui.Component"),
         __metadata("design:paramtypes", [ComponentCreateProperties])
     ], Component);

@@ -10,6 +10,7 @@ import { classes } from "jassijs/remote/Classes";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import { router } from "jassijs/base/Router";
 import { ErrorPanel } from "jassijs/ui/ErrorPanel";
+import { Component } from "jassijs/ui/Component";
 
 class Me {
     IDText? : ErrorPanel;
@@ -24,8 +25,18 @@ export class ComponentSpy extends Panel {
     ids;
     labelids;
     me:Me;
+    hook=undefined;
     constructor() {
         super();
+        var _this=this;
+        this.hook=Component.onComponentCreated((name,comp)=>{
+            if(name==="create"){
+                _this.watch(comp);
+            }
+            if(name==="precreate"||name==="destroy"){
+                _this.unwatch(comp);
+            }
+        });
         this.ids = {};
         this.labelids = {};
         this.layout();
@@ -82,6 +93,7 @@ export class ComponentSpy extends Panel {
        
     }
     update() {
+        
         var data = [];
         for (var k in jassijs.componentSpy.ids) {
             data.push(jassijs.componentSpy.ids[k]);
@@ -129,6 +141,8 @@ export class ComponentSpy extends Panel {
     }
     destroy() {
         super.destroy();
+        Component.offComponentCreated(this.hook);
+        this.hook=undefined;
     }
 }
 export function test() {

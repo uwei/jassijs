@@ -15,7 +15,7 @@ export class T extends RemoteObject{
     }
 }
 export async function test(){
-     await new Server().saveFile("Hallo.ts","export class Hallo{};export function test(){return 2 };",true);
+     await new Server().saveFile("Hallo.ts","export class Hallo{};export function test(){return 2 };");
     console.log(await new T().sayHello("Kurt"));
 }
 

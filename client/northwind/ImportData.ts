@@ -5,6 +5,8 @@ import { Panel } from "jassijs/ui/Panel";
 import { CSVImport } from "jassijs/util/CSVImport";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import { router } from "jassijs/base/Router";
+import { OrderDetails } from "northwind/remote/OrderDetails";
+import { Transaction } from "jassijs/remote/Transaction";
 type Me = {
     htmlpanel1?: HTMLPanel;
     IDImport?: Button;
@@ -20,10 +22,10 @@ export class ImportData extends Panel {
         this.me = {};
         this.layout(this.me);
     }
-     @$Action({ name: "Northwind", icon: "mdi mdi-warehouse" })
+    @$Action({ name: "Northwind", icon: "mdi mdi-warehouse" })
     static async dummy() {
 
-        
+
     }
     @$Action({ name: "Northwind/Import sample data", icon: "mdi mdi-database-import" })
     static async showDialog() {
@@ -44,11 +46,27 @@ export class ImportData extends Panel {
         this.me.IDProtokoll.value += "<br>Categories " + s;
         s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/suppliers.csv", "northwind.Suppliers", { "id": "supplierid" });
         this.me.IDProtokoll.value += "<br>Suppliers " + s;
-        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid","supplier":"supplierid","category":"categoryid" } );
+        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/products.csv", "northwind.Products", { "id": "productid", "supplier": "supplierid", "category": "categoryid" });
         this.me.IDProtokoll.value += "<br>Products " + s;
-        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid","customer":"customerid","employee":"employeeid" });
+        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/orders.csv", "northwind.Orders", { "id": "orderid", "customer": "customerid", "employee": "employeeid" }, undefined, async function (data) {
+            //before save remove old OrderDetails
+            //   debugger;
+            var ids = [];
+            data.forEach((o) => { ids.push(o.id) });
+            var all2 = await OrderDetails.find({ where: "Order.id in (:...ids)", whereParams: { ids: ids } });
+            if (all2.length > 0) {
+                var trans = new Transaction();
+                for (var x = 0; x < all2.length; x++) {
+                    trans.add(all2[x], all2[x].remove);
+                }
+                await trans.execute();
+            }
+        });
         this.me.IDProtokoll.value += "<br>Orders " + s;
-        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/order_details.csv", "northwind.OrderDetails", { "order":"orderid","product":"productid" });
+        s = await CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/order_details.csv", "northwind.OrderDetails", { "order": "orderid", "product": "productid" },undefined,(data)=>{
+            debugger;
+            data.forEach((o) => { delete o.id });//remove id is autoid
+        });
         this.me.IDProtokoll.value += "<br>OrderDetails " + s;
         this.me.IDProtokoll.value += "<br>Fertig";
     }

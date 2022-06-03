@@ -3,10 +3,10 @@ define("local/registry",["require"], function(require) {
  return {
   default: {
 	"local/modul.ts": {
-		"date": 1625396399710
+		"date": 1625396400000
 	},
 	"local/remote/Book.ts": {
-		"date": 1622985545033,
+		"date": 1622985546000,
 		"local.Book": {
 			"$DBObject": [],
 			"@members": {

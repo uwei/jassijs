@@ -58,6 +58,19 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
             super();
             super.init($('<div class="Table"></div>')[0]);
             var _this = this;
+            this.options = properties;
+            this._selectHandler = [];
+        }
+        ;
+        set options(properties) {
+            var _this = this;
+            this._lastOptions = properties;
+            if (this.table) {
+                var lastSel = this.value;
+                var lastItems = this.items;
+                this.table.destroy();
+                this.table = undefined;
+            }
             if (properties === undefined)
                 properties = {};
             if (properties.autoColumns === undefined)
@@ -106,9 +119,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
                 return undefined;
             };
             this.table = new Tabulator("[id='" + this._id + "']", properties);
-            this.layout();
+            if (lastItems) {
+                this.items = lastItems;
+            }
+            if (lastSel) {
+                this.value = lastSel;
+            }
         }
-        ;
+        get options() {
+            return this._lastOptions;
+        }
         defaultAutoColumnDefinitions(definitions) {
             var _this = this;
             var ret = [];
@@ -173,9 +193,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
                 }
                 row.update(data);
             }
-        }
-        layout() {
-            this._selectHandler = [];
         }
         async update() {
             await this.table.updateData(this.items);
@@ -319,9 +336,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
         search(field, value, doSelect) {
             //custom filter function
             function matchAny(data, filterParams) {
+                var _a;
                 //data - the data for the row being filtered
                 //filterParams - params object passed to the filter
-                var _a;
                 var match = false;
                 for (var key in data) {
                     if (filterParams.value === undefined || filterParams.value === "" || ((_a = data[key]) === null || _a === void 0 ? void 0 : _a.toString().toLowerCase().indexOf(filterParams.value.toLowerCase())) > -1) {
@@ -369,6 +386,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
         }
     };
     __decorate([
+        (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Table.prototype, "options", null);
+    __decorate([
         (0, Property_1.$Property)({ default: "function(event?: JQueryEventObject, data?:Tabulator.RowComponent){\n\t\n}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", [Function]),
@@ -409,6 +431,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
     async function test() {
         var tab = new Table({});
         tab.width = 400;
+        tab.options = {
+            headerSort: true
+        };
         var tabledata = [
             { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
             { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },

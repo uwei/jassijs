@@ -69,8 +69,10 @@ export class TSSourceMap {
         });
         return ret;
     }
-
-    async getLineFromJS(jsfile, line, column): Promise<{ source: string, line: number, column: number }> {
+    async getLineFromJS(jsfile:string, line:number, column:number): Promise<{ source: string, line: number, column: number }> {
+        return await this.getLinesFromJS(jsfile,[{line,column}])[0]
+    }
+    async getLinesFromJS(jsfile, data:{line:number, column:number}[]): Promise<{ source: string, line: number, column: number }[]> {
         var jscode = await this.getCode(jsfile.split("?")[0])// await $.ajax({ url: jsfile, dataType: "text" });
         var mapcode = "";
         var pos = jscode.indexOf("//" + "# sourceMappingURL=");
@@ -83,25 +85,29 @@ export class TSSourceMap {
             mapcode = await new Server().loadFile(mapfile);
         } else
             return undefined;
-
-        var ret: any = new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
-            sourceMap.SourceMapConsumer.initialize({
+        sourceMap.SourceMapConsumer.initialize({
                 "lib/mappings.wasm": "https://unpkg.com/source-map@0.7.3/lib/mappings.wasm"
             });
-            var rawSourceMap = JSON.parse(mapcode);
-            sourceMap.SourceMapConsumer.with(rawSourceMap, null, consumer => {
-                var test = consumer.sources;
-                var l = consumer.originalPositionFor({
-                    bias: sourceMap.SourceMapConsumer.GREATEST_LOWER_BOUND,
-                    line: line,
-                    column: column
-                })
-                return l;
-            }).then(function (whatever) {
-                resolve(whatever);
+        var rawSourceMap = JSON.parse(mapcode);
+        var ret=[];
+        for(var x=0;x<data.length;x++){
+            var one: any = await new Promise((resolve, reject) => { // eslint-disable-line no-unused-vars
+            
+                //for(var x=0;x<data.length;x++){
+                sourceMap.SourceMapConsumer.with(rawSourceMap, null, consumer => {
+                    var test = consumer.sources;
+                    var l = consumer.originalPositionFor({
+                        bias: sourceMap.SourceMapConsumer.GREATEST_LOWER_BOUND,
+                        line: data[x].line,
+                        column: data[x].column
+                    })
+                    return l;
+                }).then(function (whatever) {
+                    resolve(whatever);
+                });
             });
-        });
-
+            ret.push(one);
+        }
         return ret;
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js",function(data){
     }

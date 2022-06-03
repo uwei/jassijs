@@ -74,6 +74,17 @@ export class VariablePanel extends Panel {
         }
         this.update();
     }
+    removeVariable(name:string){
+        var values = this.value;
+         for (var x = 0; x < values.length; x++) {
+            if (values[x].name === name) {
+                values.splice(x, 1);
+                return;
+            }
+
+        }
+        this.updateCache();
+    }
     /**
      * 
      * @param {string} name - name of the variable

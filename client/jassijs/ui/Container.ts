@@ -1,6 +1,12 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import {Component} from "jassijs/ui/Component";
+import {Component, ComponentConfig} from "jassijs/ui/Component";
 
+export interface ContainerConfig extends ComponentConfig{
+    /**
+     * child components
+     */
+    children:Component[];
+}
 @$Class("jassijs.ui.Container")
 export class Container extends Component{
         _components:Component[];
@@ -16,6 +22,17 @@ export class Container extends Component{
             super(properties);
             this._components=[];
         }
+        config(config:ContainerConfig):Container {
+            if(config.children){
+                this.removeAll(false);
+                for(var x=0;x<config.children.length;x++){
+                    this.add(config.children[x]);
+                }
+                delete config.children;
+            }
+            super.config(config);
+            return this;
+         }
          /**
          * inits the component
          * @param {dom} dom - init the dom element

@@ -72,6 +72,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             }
             this.update();
         }
+        removeVariable(name) {
+            var values = this.value;
+            for (var x = 0; x < values.length; x++) {
+                if (values[x].name === name) {
+                    values.splice(x, 1);
+                    return;
+                }
+            }
+            this.updateCache();
+        }
         /**
          *
          * @param {string} name - name of the variable

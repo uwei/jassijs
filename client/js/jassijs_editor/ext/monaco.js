@@ -9,8 +9,7 @@
 });
 */
 define("jassijs_editor/ext/monacoLib", ["require"], function (require, editor) {
-    window["module"] = {};
-    window["module"].exports = {};
+    window["globalThis"] = {};
     return {};
 });
 //hach to make autocompletion for autoimports from other modules
@@ -18,8 +17,7 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
     //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
     let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
     //get Typescript instance
-    window.ts = window["module"].exports;
-    delete window["module"];
+    window.ts = window["globalThis"].ts;
     var platform_1 = require("vs/base/common/platform");
     platform_1.globals.MonacoEnvironment = {};
     function myfunc() {

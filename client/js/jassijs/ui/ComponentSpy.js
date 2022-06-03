@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/ui/ErrorPanel"], function (require, exports, Jassi_1, Panel_1, Table_1, Button_1, BoxPanel_1, Classes_1, Actions_1, Router_1, ErrorPanel_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/ui/ErrorPanel", "jassijs/ui/Component"], function (require, exports, Jassi_1, Panel_1, Table_1, Button_1, BoxPanel_1, Classes_1, Actions_1, Router_1, ErrorPanel_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSpy = void 0;
@@ -16,6 +16,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
     let ComponentSpy = class ComponentSpy extends Panel_1.Panel {
         constructor() {
             super();
+            this.hook = undefined;
+            var _this = this;
+            this.hook = Component_1.Component.onComponentCreated((name, comp) => {
+                if (name === "create") {
+                    _this.watch(comp);
+                }
+                if (name === "precreate" || name === "destroy") {
+                    _this.unwatch(comp);
+                }
+            });
             this.ids = {};
             this.labelids = {};
             this.layout();
@@ -100,6 +110,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
         destroy() {
             super.destroy();
+            Component_1.Component.offComponentCreated(this.hook);
+            this.hook = undefined;
         }
     };
     __decorate([

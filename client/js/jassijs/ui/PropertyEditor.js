@@ -463,7 +463,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
          * update the parser
          */
         updateParser() {
-            var _a;
             if (this.codeEditor === undefined)
                 return;
             if (this.parentPropertyEditor !== undefined) {
@@ -473,7 +472,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 var text = this.codeEditor.value;
                 var val = this.codeEditor.getObjectFromVariable("this");
                 if (text)
-                    this.parser.parse(text, [{ classname: (_a = val === null || val === void 0 ? void 0 : val.constructor) === null || _a === void 0 ? void 0 : _a.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
+                    this.parser.parse(text);
+                // this.parser.parse(text, [{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]);
             }
         }
         /**
@@ -499,11 +499,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
          * @returns  the name of the object
          */
         addVariableInCode(type, scopename) {
-            var _a;
             var val = this.codeEditor.getObjectFromVariable("this");
-            var ret = this.parser.addVariableInCode(type, [{ classname: (_a = val === null || val === void 0 ? void 0 : val.constructor) === null || _a === void 0 ? void 0 : _a.name, methodname: "layout" },
-                { classname: undefined, methodname: "test" }], scopename);
-            this.codeEditor.value = this.parser.getModifiedCode();
+            var ret = this.parser.addVariableInCode(type, undefined, scopename);
+            /* var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
+             { classname: undefined, methodname: "test" }], scopename);
+             */ this.codeEditor.value = this.parser.getModifiedCode();
             this.updateParser();
             this.callEvent("codeChanged", {});
             return ret;
@@ -518,7 +518,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
          * @param {object} scope - the scope {variable: ,methodname:} the scope - if missing layout()
         */
         setPropertyInCode(property, value, replace = undefined, variableName = undefined, before = undefined, scopename = undefined) {
-            var _a;
             if (this.codeEditor === undefined) {
                 this.codeChanges[property] = value;
                 this.callEvent("codeChanged", {});
@@ -546,7 +545,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             }
             var isFunction = (typeof (prop) === "function");
             var val = this.codeEditor.getObjectFromVariable("this");
-            this.parser.setPropertyInCode(variableName, property, value, [{ classname: (_a = val === null || val === void 0 ? void 0 : val.constructor) === null || _a === void 0 ? void 0 : _a.name, methodname: "layout" }, { classname: undefined, methodname: "test" }], isFunction, replace, before, scopename);
+            this.parser.setPropertyInCode(variableName, property, value, 
+            /*[{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]*/ undefined, isFunction, replace, before, scopename);
             //correct spaces
             if (value && value.indexOf("\n") > -1) {
                 this.codeEditor.value = this.parser.getModifiedCode();
@@ -639,11 +639,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         */
         removeVariableInDesign(varname) {
             //TODO this und var?
-            if (varname.startsWith("me.")) {
+            if (varname.startsWith("me.") && this.codeEditor.getObjectFromVariable("me")) {
                 var vname = varname.substring(3);
                 var me = this.codeEditor.getObjectFromVariable("me");
                 delete me[vname];
             }
+            this.codeEditor.removeVariableInDesign(varname);
         }
         /**
          * removes the variable from code

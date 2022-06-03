@@ -78,8 +78,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
                     title: "<span class='mdi mdi-grid'><span>",
                     action: () => {
                         var test = rt;
-                        rt.parent.parent.contextMenu.target = component.dom.children[0];
-                        rt.parent.parent.contextMenu.show();
+                        rt._parent.parent.contextMenu.target = component.dom.children[0];
+                        rt._parent.parent.contextMenu.show();
                     }
                 };
             }

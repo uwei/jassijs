@@ -143,7 +143,8 @@ export class MonacoPanel extends CodePanel {
             theme: (theme ? theme : "vs-light"),
             glyphMargin: true,
             fontSize: 12,
-            automaticLayout: true
+            automaticLayout: true,
+            inlineSuggest:{}
         });
 
         __init(this._editor);

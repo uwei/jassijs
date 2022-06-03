@@ -7,6 +7,38 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+define("demo/DelTest", ["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Orders", "jassijs/remote/Transaction"], function (require, exports, OrderDetails_1, Orders_1, Transaction_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    async function test() {
+        var a = await Orders_1.Orders.find();
+        var ids = [];
+        a.forEach((o) => { ids.push(o.id); });
+        var all = await Orders_1.Orders.find({
+            where: "id in (:...ids)",
+            whereParams: { ids: ids },
+            relations: ["Details"]
+        });
+        var all2 = await OrderDetails_1.OrderDetails.find({
+            where: "Order.id in (:...ids)",
+            whereParams: { ids: ids }
+        });
+        var trans = new Transaction_1.Transaction();
+        console.log(all2.length);
+        trans.add(all2[0], all2[0].remove);
+        trans.add(all2[1], all2[1].remove);
+        await trans.execute();
+        // var all2=await OrderDetails.find({where:"Order.id in (10050)"});
+        //    debugger;
+        /*var dat=new OrderDetails();
+        dat.UnitPrice=1;
+        dat.Quantity=1;
+        await dat.save();
+        console.log(dat.id);*/
+    }
+    exports.test = test;
+});
 define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Button_1, BoxPanel_1, Jassi_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1371,32 +1403,32 @@ define("demo/registry", ["require"], function (require) {
     return {
         default: {
             "demo/Dialog.ts": {
-                "date": 1627586451134,
+                "date": 1627586452000,
                 "demo/Dialog": {}
             },
             "demo/EmptyDialog.ts": {
-                "date": 1633376768366,
+                "date": 1633376770000,
                 "demo.EmptyDialog": {}
             },
             "demo/MemoryTest.ts": {
-                "date": 1624296679246
+                "date": 1624296680000
             },
             "demo/modul.ts": {
-                "date": 1612818333557
+                "date": 1612818334000
             },
             "demo/ReportInvoice.ts": {
-                "date": 1632512315481,
+                "date": 1632512316000,
                 "demo.ReportInvoice": {}
             },
             "demo/StyleDialog.ts": {
-                "date": 1622984213677,
+                "date": 1622984214000,
                 "demo/StyleDialog": {}
             },
             "demo/TableContextmenu.ts": {
-                "date": 1622984379892
+                "date": 1622984380000
             },
             "demo/TestComponent.ts": {
-                "date": 1622984213677,
+                "date": 1622984214000,
                 "demo.TestComponent": {
                     "$UIComponent": [
                         {
@@ -1410,30 +1442,30 @@ define("demo/registry", ["require"], function (require) {
                 }
             },
             "demo/Testcontextmenu.ts": {
-                "date": 1622984213677,
+                "date": 1622984214000,
                 "demo.Testcontextmenu": {}
             },
             "demo/Testmenu.ts": {
-                "date": 1622985794017,
+                "date": 1622985796000,
                 "demo.Testmenu": {}
             },
             "demo/TestTree.ts": {
-                "date": 1622984213677,
+                "date": 1622984214000,
                 "demo.TestTree": {}
             },
             "demo/TestUpload.ts": {
-                "date": 1623178689366,
+                "date": 1623178690000,
                 "demo/TestUpload": {}
             },
             "demo/TreeContextmenu.ts": {
-                "date": 1634384687647
+                "date": 1634384688000
             },
             "demo/TreeTable.ts": {
-                "date": 1622984213677,
+                "date": 1622984214000,
                 "demo.TreeTable": {}
             },
             "demo/ReportKunden.ts": {
-                "date": 1631970821633,
+                "date": 1631970822000,
                 "de.ReportKunde": {
                     "@members": {
                         "value": {
@@ -1449,35 +1481,38 @@ define("demo/registry", ["require"], function (require) {
                 }
             },
             "demo/ReportInvoice2.ts": {
-                "date": 1634336859536,
+                "date": 1634336860000,
                 "demo.ReportInvoice": {}
             },
             "demo/Testdatatable.ts": {
-                "date": 1633811081159
+                "date": 1633811082000
             },
             "demo/Testdatatable2.ts": {
-                "date": 1631998782450
+                "date": 1631998784000
             },
             "demo/Testdatatable3.ts": {
-                "date": 1634325998828
+                "date": 1634326000000
             },
             "demo/ReportStyle.ts": {
-                "date": 1632525413937
+                "date": 1632525414000
             },
             "demo/Testtable.ts": {
-                "date": 1633456734618
+                "date": 1633456736000
             },
             "demo/TestList.ts": {
-                "date": 1633550554873
+                "date": 1635803026000
             },
             "demo/TestImage.ts": {
-                "date": 1633792452228
+                "date": 1633792454000
             },
             "demo/Testdatatable1.ts": {
-                "date": 1633803357422
+                "date": 1633803358000
             },
             "demo/LargeReport.ts": {
-                "date": 1634240082661
+                "date": 1634240084000
+            },
+            "demo/DelTest.ts": {
+                "date": 1635896382000
             }
         }
     };

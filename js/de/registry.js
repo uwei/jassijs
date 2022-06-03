@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"de/remote/AR.ts": {
-		"date": 1622985477990,
+		"date": 1622985478000,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -15,20 +15,77 @@ exports.default={
 					}
 				]
 			],
-			"$DBObject": []
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"strasse": {
+					"Column": []
+				},
+				"nummer": {
+					"Column": []
+				},
+				"ort": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"kunde": {
+					"$CheckParentRight": [],
+					"ManyToOne": [
+						"function",
+						"function"
+					]
+				},
+				"zeilen": {
+					"OneToMany": [
+						"function",
+						"function"
+					]
+				}
+			}
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1622985479813,
+		"date": 1622985480000,
 		"de.ARZeile": {
-			"$DBObject": []
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryGeneratedColumn": []
+				},
+				"text": {
+					"Column": []
+				},
+				"position": {
+					"Column": []
+				},
+				"preis": {
+					"Column": [
+						{
+							"nullable": true,
+							"type": "decimal"
+						}
+					]
+				},
+				"ar": {
+					"$CheckParentRight": [],
+					"ManyToOne": [
+						"function",
+						"function"
+					]
+				}
+			}
 		}
 	},
 	"de/remote/Kunde.ext.ts": {
-		"date": 1622985482440
+		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1634384659871,
+		"date": 1634384660000,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -103,7 +160,7 @@ exports.default={
 		}
 	},
 	"de/remote/KundeExt.ts": {
-		"date": 1626122322826,
+		"date": 1626122324000,
 		"de.KundeExt": {
 			"$Extension": [
 				"de.Kunde"
@@ -111,7 +168,7 @@ exports.default={
 		}
 	},
 	"de/remote/KundeExt2.ts": {
-		"date": 1626123322693,
+		"date": 1654120297933,
 		"de.KundeExt2": {
 			"$Extension": [
 				"de.Kunde"
@@ -119,16 +176,42 @@ exports.default={
 		}
 	},
 	"de/remote/Lieferant.ts": {
-		"date": 1622985489873,
+		"date": 1622985490000,
 		"de.Lieferant": {
-			"$DBObject": []
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"name": {
+					"Column": [
+						{
+							"nullable": false
+						}
+					]
+				}
+			}
 		}
 	},
 	"de/remote/MyUser.ts": {
-		"date": 1622985491688,
+		"date": 1622985492000,
 		"de.MyUser": {
 			"$DBObject": [],
-			"Entity": []
+			"Entity": [],
+			"@members": {
+				"id": {
+					"PrimaryColumn": []
+				},
+				"firstName": {
+					"Column": []
+				},
+				"lastName": {
+					"Column": []
+				},
+				"age": {
+					"Column": []
+				}
+			}
 		}
 	}
 }

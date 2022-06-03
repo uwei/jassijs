@@ -80,8 +80,8 @@ export class RTablerow extends RComponent {
                 title: "<span class='mdi mdi-grid'><span>",
                 action: () => {
                     var test=rt;
-                    rt.parent.parent.contextMenu.target = (<RText>component).dom.children[0];
-                    rt.parent.parent.contextMenu.show();
+                    rt._parent.parent.contextMenu.target = (<RText>component).dom.children[0];
+                    rt._parent.parent.contextMenu.show();
                 }
             }
 

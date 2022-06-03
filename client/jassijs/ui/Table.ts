@@ -1,6 +1,5 @@
 ;
 import { $Class } from "jassijs/remote/Jassi";
-
 import "jassijs/ext/tabulator";
 import { DataComponent } from "jassijs/ui/DataComponent";
 import { $Property } from "jassijs/ui/Property";
@@ -8,10 +7,8 @@ import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Calendar } from "jassijs/ui/Calendar";
 import { Databinder } from "jassijs/ui/Databinder";
-
 interface TableOptions extends Tabulator.Options {
-    dataTreeChildFunction?: ((data: any) => any)|any;
-
+    dataTreeChildFunction?: ((data: any) => any) | any;
 }
 @$Class("jassijs.ui.TableEditorProperties")
 class TableEditorProperties {
@@ -28,7 +25,6 @@ class TableEditorProperties {
     @$Property({ default: "function(event:any,group:any){\n\t\n}" })
     cellDblClick() { }
 }
-
 @$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" })
 @$Class("jassijs.ui.Table")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
@@ -40,28 +36,41 @@ class TableEditorProperties {
 @$Property({ name: "new/movableColumns", type: "boolean", default: false })
 @$Property({ name: "new/cellDblClick", type: "function", default: "function(event:any,group:any){\n\t\n}" })
 */
-
-
 export class Table extends DataComponent {
     table: Tabulator;
     _selectHandler;
-    _select: { value: any };;
+    _select: {
+        value: any;
+    };
+    ;
     _tree;
     _items: any[];
     _searchbox: Textbox;
-    _databinderItems:Databinder;
+    _databinderItems: Databinder;
+    _lastOptions: TableOptions;
     private dataTreeChildFunction: string | ((obj: any) => any);
     constructor(properties?: TableOptions) {
         super();
         super.init($('<div class="Table"></div>')[0]);
         var _this = this;
+        this.options = properties;
+        this._selectHandler = [];
+    }
+    @$Property({ type: "json", componentType: "jassijs.ui.TableEditorProperties" })
+    set options(properties: TableOptions) {
+        var _this=this;
+        this._lastOptions = properties;
+        if (this.table) {
+            var lastSel = this.value;
+            var lastItems = this.items;
+            this.table.destroy();
+            this.table = undefined;
+        }
         if (properties === undefined)
             properties = {};
-
         if (properties.autoColumns === undefined)
             properties.autoColumns = true;
         if (properties.autoColumnsDefinitions === undefined) {
-
             properties.autoColumnsDefinitions = this.defaultAutoColumnDefinitions.bind(this);
         }
         if (properties.dataTreeChildFunction !== undefined) {
@@ -72,12 +81,10 @@ export class Table extends DataComponent {
         }
         if (properties.dataTreeChildField !== undefined)
             properties.dataTree = true;
-
         if (properties.paginationSize !== undefined && properties.pagination == undefined)
             properties.pagination = "local";
         // if(properties.layoutColumnsOnNewData===undefined)
         //     properties.layoutColumnsOnNewData=true;
-
         if (properties.selectable === undefined)
             properties.selectable = 1;
         // if (properties.autoResize === undefined)//error ResizeObserver loop limit exceeded 
@@ -106,9 +113,16 @@ export class Table extends DataComponent {
             }
             return undefined;
         };
-
         this.table = new Tabulator("[id='" + this._id + "']", properties);
-        this.layout();
+        if (lastItems) {
+            this.items = lastItems;
+        }
+        if (lastSel) {
+            this.value = lastSel;
+        }
+    }
+    get options(): TableOptions {
+        return this._lastOptions;
     }
     private defaultAutoColumnDefinitions(definitions: Tabulator.ColumnDefinition[]): Tabulator.ColumnDefinition[] {
         var _this = this;
@@ -124,20 +138,19 @@ export class Table extends DataComponent {
                 if (data instanceof Date) {
                     definitions[x].formatter = function (cell, formatterParams, onRendered) {
                         return Calendar.formatDate(cell.getValue()); //return the contents of the cell;
-                    }
+                    };
                 }
-                
             }
-                ret.push(definitions[x]);
-            }
-            return ret;
-
+            ret.push(definitions[x]);
         }
+        return ret;
+    }
     private getChildsFromTreeFunction(data) {
         var childs;
         if (typeof this.dataTreeChildFunction === "function") {
             childs = this.dataTreeChildFunction(data);
-        } else {
+        }
+        else {
             childs = data[this.dataTreeChildFunction];
             if (typeof childs === "function")
                 childs = childs.bind(data)();
@@ -145,9 +158,7 @@ export class Table extends DataComponent {
         return childs;
     }
     private populateTreeData(data) {
-
         var childs = this.getChildsFromTreeFunction(data);
-
         if (childs && childs.length > 0) {
             Object.defineProperty(data, "__treechilds", {
                 configurable: true,
@@ -157,7 +168,6 @@ export class Table extends DataComponent {
             });
             for (var x = 0; x < childs.length; x++) {
                 var nchilds = this.getChildsFromTreeFunction(childs[x]);
-
                 if (nchilds && nchilds.length > 0) {
                     Object.defineProperty(childs[x], "__treechilds", {
                         configurable: true,
@@ -167,23 +177,18 @@ export class Table extends DataComponent {
                     });
                 }
             }
-
         }
     }
     private onTreeExpanded(row: Tabulator.RowComponent, level) {
         if (this.dataTreeChildFunction) {
             var data = row.getData();
-            let childs = data.__treechilds;//this.getChildsFromTreeFunction(data)   //row.getData()["childs"];
+            let childs = data.__treechilds; //this.getChildsFromTreeFunction(data)   //row.getData()["childs"];
             for (let f = 0; f < childs.length; f++) {
                 this.populateTreeData(childs[f]);
             }
             row.update(data);
         }
     }
-    layout() {
-        this._selectHandler = [];
-    }
-
     async update() {
         await this.table.updateData(this.items);
     }
@@ -194,7 +199,6 @@ export class Table extends DataComponent {
             this.contextMenu.show(event);
         }
     }
-
     private _onselect(event: JQueryEventObject, row: Tabulator.RowComponent) {
         var selection = [];
         var aids = undefined;
@@ -205,8 +209,6 @@ export class Table extends DataComponent {
             this._select.value = event.data;
         this.callEvent("select", event);
     }
-
-
     /**
      * register an event if an item is selected
      * @param {function} handler - the function that is called on change
@@ -226,7 +228,8 @@ export class Table extends DataComponent {
                 this._searchbox.destroy();
                 delete this._searchbox;
             }
-        } else {
+        }
+        else {
             this._searchbox = new Textbox();
             this._searchbox.placeholder = "search table...";
             this._searchbox.onkeydown(() => {
@@ -244,23 +247,21 @@ export class Table extends DataComponent {
             });
             $(this.domWrapper).prepend(this._searchbox.domWrapper);
         }
-
     }
-
     /**
       * if the value is changed then the value of _component is also changed (_component.value)
       */
-    set selectComponent(_component: any) { //the Code
+    set selectComponent(_component: any) {
         this._select = _component;
     }
     get selectComponent(): any {
-        return this._select;//$(this.dom).text();
+        return this._select; //$(this.dom).text();
     }
     /**
      * set the items of the table
      */
     set items(value: any[]) {
-        if (value && this.dataTreeChildFunction) {//populate __treechilds
+        if (value && this.dataTreeChildFunction) { //populate __treechilds
             for (let x = 0; x < value.length; x++) {
                 this.populateTreeData(value[x]);
             }
@@ -272,7 +273,6 @@ export class Table extends DataComponent {
     get items(): any[] {
         return this._items;
     }
-
     /**
      * @member {object} sel - the selected object
      */
@@ -289,7 +289,6 @@ export class Table extends DataComponent {
         this.table.scrollToRow(this.table.getRows()[pos]);
     }
     get value() {
-
         var ret = this.table.getSelectedRows();
         if (ret.length === 0) {
             return undefined;
@@ -312,15 +311,12 @@ export class Table extends DataComponent {
             }
         }
         return selection.length === 1 ? selection[0] : selection;*/
-
     }
-
-
     /**
-    * @member {string|number} - the height of the component 
+    * @member {string|number} - the height of the component
     * e.g. 50 or "100%"
     */
-    set height(value: string | number) { //the Code
+    set height(value: string | number) {
         //@ts-ignore
         this.table.setHeight(value);
         //super.height=value;
@@ -329,7 +325,6 @@ export class Table extends DataComponent {
     get height() {
         return super.height;
     }
-
     /**
      * Searches records in the grid
      * @param {string} field - name of the search field
@@ -337,42 +332,37 @@ export class Table extends DataComponent {
      * @param {boolean} [doSelect] - if true the first entry is selected
      */
     search(field, value, doSelect) {
-	//custom filter function
-			function matchAny(data, filterParams) {
-				//data - the data for the row being filtered
-				//filterParams - params object passed to the filter
-
-				var match = false;
-
-				for (var key in data) {
-					if (filterParams.value===undefined||filterParams.value===""||data[key]?.toString().toLowerCase().indexOf(filterParams.value.toLowerCase())>-1) {
-						match = true;
-					}
-				}
-
-				return match;
-			}
-
-			//set filter to custom function
-			this.table.setFilter( matchAny, { value: value });
-            if(doSelect) {
-                //@ts-ignore
-                this.table.deselectRow(this.table.getSelectedRows());
-                 //@ts-ignore
-                this.table.selectRow( this.table.getRowFromPosition(0,true));
+        //custom filter function
+        function matchAny(data, filterParams) {
+            //data - the data for the row being filtered
+            //filterParams - params object passed to the filter
+            var match = false;
+            for (var key in data) {
+                if (filterParams.value === undefined || filterParams.value === "" || data[key]?.toString().toLowerCase().indexOf(filterParams.value.toLowerCase()) > -1) {
+                    match = true;
+                }
             }
+            return match;
+        }
+        //set filter to custom function
+        this.table.setFilter(matchAny, { value: value });
+        if (doSelect) {
+            //@ts-ignore
+            this.table.deselectRow(this.table.getSelectedRows());
+            //@ts-ignore
+            this.table.selectRow(this.table.getRowFromPosition(0, true));
+        }
     }
     destroy() {
         // this.tree = undefined;
         if (this._searchbox !== undefined)
             this._searchbox.destroy();
-       if(this._databinderItems!==undefined){
+        if (this._databinderItems !== undefined) {
             this._databinderItems.remove(this);
-            this._databinderItems=undefined;
+            this._databinderItems = undefined;
         }
         super.destroy();
     }
-
     set columns(value: Tabulator.ColumnDefinition[]) {
         this.table.setColumns(value);
         this.update();
@@ -383,24 +373,22 @@ export class Table extends DataComponent {
     @$Property({ type: "databinder" })
     bindItems(databinder, property) {
         this._databinderItems = databinder;
-        var _this=this;
-         this._databinderItems.add(property, this, undefined,(tab)=>{
-             return tab.items;
-         },(tab,val)=>{
-             tab.items=val;
-         });
-
+        var _this = this;
+        this._databinderItems.add(property, this, undefined, (tab) => {
+            return tab.items;
+        }, (tab, val) => {
+            tab.items = val;
+        });
         //databinderItems.add(property, this, "onchange");
         //databinder.checkAutocommit(this);
     }
 }
-
-
 export async function test() {
-    var tab = new Table({
-
-    });
+    var tab = new Table({});
     tab.width = 400;
+    tab.options = {
+        headerSort: true
+    };
     var tabledata = [
         { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
         { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
@@ -408,19 +396,12 @@ export async function test() {
         { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: "01/08/1980" },
         { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
     ];
-
     window.setTimeout(() => {
         tab.items = tabledata;
-
     }, 100);
-
     //tab.select = {};
     // tab.showSearchbox = true;
-
-
     //    var kunden = await jassijs.db.load("de.Kunde");
     //   tab.items = kunden;
-
     return tab;
-
 }

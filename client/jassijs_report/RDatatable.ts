@@ -49,8 +49,7 @@ export class RDatatable extends RTable {
 * @param {boolean} [properties.useSpan] -  use span not div
 * 
 */
-    constructor(properties:any ={}) {//id connect to existing(not reqired)
-        properties.isdatatable=true;
+    constructor(properties:any ={isdatatable:true}) {//id connect to existing(not reqired)
         super(properties);
        // super.init($("<table style='min-width:50px;table-layout: fixed'></table>")[0]);
         var _this;

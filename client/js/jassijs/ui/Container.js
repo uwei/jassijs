@@ -22,6 +22,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component"], f
             super(properties);
             this._components = [];
         }
+        config(config) {
+            if (config.children) {
+                this.removeAll(false);
+                for (var x = 0; x < config.children.length; x++) {
+                    this.add(config.children[x]);
+                }
+                delete config.children;
+            }
+            super.config(config);
+            return this;
+        }
         /**
         * inits the component
         * @param {dom} dom - init the dom element

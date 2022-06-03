@@ -128,7 +128,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
                 theme: (theme ? theme : "vs-light"),
                 glyphMargin: true,
                 fontSize: 12,
-                automaticLayout: true
+                automaticLayout: true,
+                inlineSuggest: {}
             });
             __init(this._editor);
             this._editor.onMouseDown(function (e) {

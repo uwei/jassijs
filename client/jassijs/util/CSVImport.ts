@@ -172,7 +172,7 @@ export class CSVImport extends Panel {
 	 * @param replace - replace text e.g. {"für":"fuer"}
 	 * returns the message if succeeded
 	 */
-	static async startImport(urlcsv: string, dbclass: string, fieldmapping: { [field: string]: (string | number) } = undefined, replace: { [toReplace: string]: string } = undefined): Promise<string> {
+	static async startImport(urlcsv: string, dbclass: string, fieldmapping: { [field: string]: (string | number) } = undefined, replace: { [toReplace: string]: string } = undefined,beforeSave=undefined): Promise<string> {
 		var imp = new CSVImport();
 		var mapping = {};
 		let ret = await new Server().loadFile(urlcsv);
@@ -217,7 +217,9 @@ export class CSVImport extends Panel {
 					html = html + '<option value="' + key.toLowerCase() + '">' + key.toLowerCase() + '</option>';
 					lkeys.push(key.toLowerCase());
 				}*/
-		return await imp._doimport(imp.data, dbclass, 2, mapping);
+	//	if(beforeSave)
+		//	await beforeSave(imp.data, dbclass,mapping);
+		return await imp._doimport(imp.data, dbclass, 2, mapping,beforeSave);
 	}
 	async doimport() {
 		//read userchoices
@@ -227,11 +229,11 @@ export class CSVImport extends Panel {
 			if (value !== "")
 				assignedfields[<string>value] = x;
 		}
-		return await this._doimport(this.data, this.me.select.value, <number>this.me.fromLine.value, assignedfields);
+		return await this._doimport(this.data, this.me.select.value, <number>this.me.fromLine.value, assignedfields,undefined);
 
 	}
 
-	private async _doimport(data: any[], dbclass: string, fromLine: number, assignedfields: { [field: string]: number }) {
+	private async _doimport(data: any[], dbclass: string, fromLine: number, assignedfields: { [field: string]: number },beforeSave) {
 
 
 		var Type = classes.getClass(dbclass);
@@ -275,6 +277,9 @@ export class CSVImport extends Panel {
 			} else
 				allObjects.push(ob);
 		}
+			if(beforeSave)
+				await beforeSave(allObjects);
+
 		var ret: Promise<DBObject>[] = [];
 		var trans = new Transaction();
 
