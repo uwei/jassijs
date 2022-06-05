@@ -46,9 +46,9 @@ export class PDFViewer extends Panel {
         this.layout(this.me);
     }
     layout(me: Me) {
-        this.css({
+        this.css={
             overflow: "auto"
-        });
+        };
         me.toolbar = new BoxPanel();
         $(me.toolbar.dom).css("position","fixed");
         me.mainpanel = new Panel();

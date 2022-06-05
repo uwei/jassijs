@@ -38,7 +38,7 @@ define("de/registry", ["require"], function (require) {
                 }
             },
             "de/KundeView.ts": {
-                "date": 1624207912000,
+                "date": 1654466242688,
                 "de.KundeView": {
                     "$DBObjectView": [
                         {
@@ -293,7 +293,7 @@ define("de/registry", ["require"], function (require) {
                 "date": 1624293156000
             },
             "de/Dialog.ts": {
-                "date": 1654275496103,
+                "date": 1654381308183,
                 "de/Dialog": {}
             }
         }

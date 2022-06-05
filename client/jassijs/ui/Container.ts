@@ -5,12 +5,12 @@ export interface ContainerConfig extends ComponentConfig{
     /**
      * child components
      */
-    children:Component[];
+    children?:Component[];
 }
 @$Class("jassijs.ui.Container")
 export class Container extends Component{
         _components:Component[];
-        _designDummy:any;
+        _designDummy:any; 
         
         /**
          * 

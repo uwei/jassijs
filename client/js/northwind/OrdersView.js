@@ -57,9 +57,9 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassij
             me.id.bind(me.databinder, "id");
             me.id.label = "Order ID";
             me.id.width = 70;
-            me.id.css({
+            me.id.css = {
                 text_align: "right"
-            });
+            };
             me.customername.x = 10;
             me.customername.y = 5;
             me.customername.width = 265;
@@ -131,9 +131,9 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassij
             me.freight.label = "Freight";
             me.freight.converter = new NumberConverter_1.NumberConverter();
             me.freight.format = "#.##0,00";
-            me.freight.css({
+            me.freight.css = {
                 text_align: "right"
-            });
+            };
             me.shipName.x = 5;
             me.shipName.y = 5;
             me.shipName.bind(me.databinder, "ShipName");
@@ -180,10 +180,10 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassij
                 me.detailsProduct.template = "{{ProductName}}";
                 me.objectchooser1.bind(me.repeater1.design.databinder, "Product");
                 me.objectchooser1.items = "northwind.Products";
-                me.detailsProduct.css({
+                me.detailsProduct.css = {
                     overflow: "hidden",
                     margin_top: "5px"
-                });
+                };
                 me.detailsProduct.styles = [me.style1];
             });
             me.panel1.isAbsolute = true;
@@ -225,7 +225,7 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassij
             me.htmlpanel1.styles = [];
             me.htmlpanel2.value = "Text<br>";
             me.htmlpanel2.width = 100;
-            me.style1.css({});
+            me.style1.css = {};
         }
     };
     __decorate([

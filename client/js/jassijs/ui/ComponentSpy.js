@@ -38,7 +38,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         layout() {
             var me = this.me = {};
             me.IDText = new ErrorPanel_1.ErrorPanel(); //HTMLPanel();
-            this.css({ overflow: "scroll" });
+            this.css = { overflow: "scroll" };
             var _this = this;
             me.boxpanel1 = new BoxPanel_1.BoxPanel();
             me.IDUpdate = new Button_1.Button();

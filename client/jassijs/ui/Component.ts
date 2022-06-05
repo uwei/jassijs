@@ -96,7 +96,7 @@ export interface ComponentConfig{
     /**
      * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
      **/
-    contextMenu;
+    contextMenu?;
 }
 @$Class("jassijs.ui.Component")
 export class Component implements ComponentConfig{
@@ -139,10 +139,6 @@ export class Component implements ComponentConfig{
         }
     }
     config(config:ComponentConfig):Component {
-        if(config.css){
-            this.css(config.css);
-            delete config.css;
-        }
         for(var key in config){
             if(typeof config[key] === 'function'){
                 this[key](config[key]);
@@ -471,7 +467,7 @@ export class Component implements ComponentConfig{
     }
    
     @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
-    css(properties: CSSProperties, removeOldProperties: boolean = true) {
+    set css(properties: CSSProperties) {
         var prop = CSSProperties.applyTo(properties, this);
         //if css-properties are already set and now a properties is deleted
         if (this["_lastCssChange"]) {

@@ -129,6 +129,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
                 glyphMargin: true,
                 fontSize: 12,
                 automaticLayout: true,
+                //@ts-ignore
                 inlineSuggest: {}
             });
             __init(this._editor);

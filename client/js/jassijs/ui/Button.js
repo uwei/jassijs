@@ -16,10 +16,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             super();
             super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
         }
-        /**
-        * register an event if the button is clicked
-        * @param {function} handler - the function that is called on change
-        */
+        config(config) {
+            super.config(config);
+            return this;
+        }
         onclick(handler, removeOldHandler = true) {
             if (removeOldHandler) {
                 this.off("click");
@@ -31,9 +31,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
                         handler(ob);
                     });*/
         }
-        /**
-        * @member {string} - the icon of the button
-        */
         set icon(icon) {
             var img;
             var el1 = $(this.dom).find(".buttonspan");
@@ -56,9 +53,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             }
             return ret;
         }
-        /**
-         * @member {string} - the caption of the button
-         */
         set text(value) {
             $(this.dom).find(".buttontext").html(value);
         }

@@ -1,22 +1,36 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import { Component, $UIComponent } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
 
+export interface ButtonConfig extends ComponentConfig{
+      /**
+    * register an event if the button is clicked
+    * @param {function} handler - the function that is called on change
+    */
+    onclick?(handler, removeOldHandler: boolean );
+     /**
+    * @member {string} - the icon of the button
+    */
+    icon?:string;
+        /**
+     * @member {string} - the caption of the button
+     */
+    text?:string;
 
+}
 
 @$UIComponent({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } })
 @$Class("jassijs.ui.Button")
-export class Button extends Component {
+export class Button extends Component implements ButtonConfig {
    
     constructor() {
         super();
         super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
     }
-  
-    /**
-    * register an event if the button is clicked
-    * @param {function} handler - the function that is called on change
-    */
+   config(config:ButtonConfig):Button {
+        super.config(<ComponentConfig>config);
+        return this;
+    }
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler, removeOldHandler: boolean = true) {
        
@@ -30,9 +44,6 @@ export class Button extends Component {
             handler(ob);
         });*/
     }
-    /**
-    * @member {string} - the icon of the button
-    */
     set icon(icon: string) { //the Code
         var img;
         var el1 = $(this.dom).find(".buttonspan");
@@ -55,9 +66,6 @@ export class Button extends Component {
         }
         return ret;
     }
-    /**
-     * @member {string} - the caption of the button
-     */
     set text(value: string) { //the Code
         $(this.dom).find(".buttontext").html(value);
     }

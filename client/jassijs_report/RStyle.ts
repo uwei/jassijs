@@ -95,5 +95,5 @@ export class RStyle extends RComponent {
 export function test(){
     var n=new RStyle();
     var hh=Object.getOwnPropertyDescriptor(n,"name");
-    debugger;
+
 }

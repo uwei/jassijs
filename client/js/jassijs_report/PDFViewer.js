@@ -31,9 +31,9 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
             this.layout(this.me);
         }
         layout(me) {
-            this.css({
+            this.css = {
                 overflow: "auto"
-            });
+            };
             me.toolbar = new BoxPanel_1.BoxPanel();
             $(me.toolbar.dom).css("position", "fixed");
             me.mainpanel = new Panel_1.Panel();

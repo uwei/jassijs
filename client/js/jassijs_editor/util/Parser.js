@@ -105,8 +105,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
             var newnode = ts.createPropertySignature(undefined, name + "?", undefined, tp, undefined);
             this.typeMeNode["members"].push(newnode);
         }
+        /**
+         * add import {name} from file
+         * @param name
+         * @param file
+         */
         addImportIfNeeded(name, file) {
             if (this.imports[name] === undefined) {
+                //@ts-ignore
                 var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
                 const importNode = ts.createImportDeclaration(undefined, undefined, ts.createImportClause(undefined, imp), ts.createLiteral(file));
                 this.sourceFile = ts.updateSourceFileNode(this.sourceFile, [importNode, ...this.sourceFile.statements]);
@@ -121,7 +127,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                     if (tnode.name) {
                         var name = tnode.name.text;
                         var stype = tnode.type.typeName.text;
-                        _this.typeMe[name] = { node: tnode, value: stype };
+                        _this.typeMe[name] = { node: tnode, value: stype, isFunction: false };
                     }
                     //            this.add("me", name, "typedeclaration:" + stype, undefined, aline, aline);
                 });
@@ -285,7 +291,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                     var params = [];
                     node.arguments.forEach((arg) => { params.push(arg.getText()); });
                     if (left.endsWith(".config")) {
+                        var lastpos = left.lastIndexOf(".");
+                        var variable = left;
+                        var prop = "";
+                        if (lastpos !== -1) {
+                            variable = left.substring(0, lastpos);
+                            prop = left.substring(lastpos + 1);
+                        }
+                        value = params.join(", ");
+                        this.add(variable, prop, value, node, isFunction);
                         this.parseConfig(node);
+                        return;
                     }
                     value = params.join(", "); //this.code.substring(node2.pos, node2.end).trim();//
                 }
@@ -406,6 +422,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                 if (pos >= 0)
                     node.parent["members"].splice(pos, 1);
             }
+            else if (node.parent["properties"] !== undefined) {
+                var pos = node.parent["properties"].indexOf(node);
+                if (pos >= 0)
+                    node.parent["properties"].splice(pos, 1);
+            }
+            else if (node.parent["elements"] !== undefined) {
+                var pos = node.parent["elements"].indexOf(node);
+                if (pos >= 0)
+                    node.parent["elements"].splice(pos, 1);
+            }
             else
                 throw Error(node.getFullText() + "could not be removed");
         }
@@ -486,6 +512,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
          * @param {string} varname - the variable to remove
          */
         removeVariableInCode(varname) {
+            var _a, _b, _c;
             var prop = this.data[varname];
             var allprops = [];
             if (varname.startsWith("me.") && this.typeMe[varname.substring(3)] !== undefined)
@@ -517,6 +544,16 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                         for (var i = 0; i < params.length; i++) {
                             if (params[i] === varname || params[i] === "this." + varname) {
                                 this.removeNode(p.node);
+                            }
+                        }
+                        //in children:[]
+                        //@ts-ignore
+                        var inconfig = (_c = (_b = (_a = prop[key][0]) === null || _a === void 0 ? void 0 : _a.node) === null || _b === void 0 ? void 0 : _b.initializer) === null || _c === void 0 ? void 0 : _c.elements;
+                        if (inconfig) {
+                            for (var x = 0; x < inconfig.length; x++) {
+                                if (inconfig[x].getText() === varname || inconfig[x].getText().startsWith(varname)) {
+                                    this.removeNode(inconfig[x]);
+                                }
                             }
                         }
                     }
@@ -556,6 +593,55 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
             }
             return varname + counter;
         }
+        setPropertyInConfig(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
+            var svalue = ts.createIdentifier(value);
+            var config = this.data[variableName]["config"][0].node;
+            config = config.arguments[0];
+            /*if(config.expression)
+                    config=config.expression.arguments[0];
+            else if (config.elements)
+                    config=config.elements[0].arguments[0];
+                else{
+                    config=config.initializer.arguments[0];
+                }*/
+            var newExpression = ts.createPropertyAssignment(property, svalue);
+            if (property === "add" && replace === false) {
+                property = "children";
+                if (this.data[variableName]["children"] == undefined) { //
+                    newExpression = ts.createPropertyAssignment(property, ts.createIdentifier("[" + value + "]"));
+                    config.properties.push(newExpression);
+                }
+                else {
+                    if (before === undefined) {
+                        //@ts-ignore
+                        this.data[variableName]["children"][0].node.initializer.elements.push(ts.createIdentifier(value));
+                    }
+                    else {
+                        //@ts-ignore
+                        var array = this.data[variableName]["children"][0].node.initializer.elements;
+                        for (var x = 0; x < array.length; x++) {
+                            if (array[x].getText() === before.value || array[x].getText().startsWith(before.value + ".")) {
+                                array.splice(x, 0, ts.createIdentifier(value));
+                                return;
+                            }
+                        }
+                        throw new Error("Node " + before.value + " not found.");
+                    }
+                }
+            }
+            else { //comp.add(a) --> comp.config({children:[a]})
+                if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
+                    let node = this.data[variableName][property][0].node;
+                    var pos = config.properties.indexOf(node);
+                    config.properties[pos] = newExpression;
+                }
+                else {
+                    config.properties.push(newExpression);
+                }
+            }
+            //if (pos >= 0)
+            //  node.parent["statements"].splice(pos, 1);
+        }
         /**
         * modify the property in code
         * @param variablename - the name of the variable
@@ -572,6 +658,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                 classscope = this.classScope;
             var scope = this.getNodeFromScope(classscope, variablescope);
             var newExpression = undefined;
+            if (this.data[variableName]["config"] !== undefined) {
+                this.setPropertyInConfig(variableName, property, value, isFunction, replace, before, scope);
+                return;
+            }
             var statements = scope["body"].statements;
             if (property === "new") { //me.panel1=new Panel({});
                 let prop = this.data[variableName]["_new_"][0]; //.substring(3)];
@@ -706,7 +796,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         }
     };
     Parser = __decorate([
-        (0, Jassi_1.$Class)("jassijs_editor.base.Parser"),
+        (0, Jassi_1.$Class)("jassijs_editor.util.Parser"),
         __metadata("design:paramtypes", [])
     ], Parser);
     exports.Parser = Parser;
@@ -714,13 +804,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         await Typescript_1.default.waitForInited;
         var code = Typescript_1.default.getCode("jassijs_editor/util/Parser.ts");
         var parser = new Parser();
-        //code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
+        // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
-        code = 'import { Button as  } from "jassijs/ui/Button";import { Button } from "jassijs/remote/Jassi";';
+        code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll,aaa.config({u:1,o:2})]});}";
         parser.parse(code, undefined);
-        parser.addImportIfNeeded("Panel", "kk/l");
+        //    parser.setPropertyInCode("ppp","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"ppp",property:"add",value:"ll"});
+        parser.setPropertyInCode("aaa", "add", "cc", [{ classname: undefined, methodname: "test" }], true, false);
         console.log(parser.getModifiedCode());
-        debugger;
+        // debugger;
         /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
           const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
           const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);

@@ -22,9 +22,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
         update() {
             if (this.failedtests === 0) {
             }
-            this.statustext.css({
+            this.statustext.css = {
                 color: (this.failedtests === 0 ? "green" : "red")
-            });
+            };
             this.statustext.value = (this.finished ? "Finished " : "test running... ") + this.alltests + " Tests. " + (this.failedtests) + " Tests failed.";
         }
     }
@@ -85,9 +85,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "j
                                     newerrorpanel.addError({
                                         error: err
                                     });
-                                    newerrorpanel.css({
+                                    newerrorpanel.css = {
                                         background_color: "red"
-                                    });
+                                    };
                                     container.add(newerrorpanel);
                                     container.failedtests++;
                                     container.update();

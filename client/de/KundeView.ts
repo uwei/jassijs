@@ -61,9 +61,9 @@ export class KundeView extends DBObjectView {
         me.textbox1.label = "Vorname";
         me.textbox1.width = 95;
         me.textbox1.bind(me.databinder, "vorname");
-        me.textbox1.css({
+        me.textbox1.css={
             color: "#3dbbac",
-        });
+        };
         me.textbox2.x = 5;
         me.textbox2.y = 5;
         me.textbox2.label = "Id";

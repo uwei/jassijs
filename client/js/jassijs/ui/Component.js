@@ -51,10 +51,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
             }
         }
         config(config) {
-            if (config.css) {
-                this.css(config.css);
-                delete config.css;
-            }
             for (var key in config) {
                 if (typeof config[key] === 'function') {
                     this[key](config[key]);
@@ -358,7 +354,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
                 return undefined;
             return $(this.dom).css("height").replace("px", "");
         }
-        css(properties, removeOldProperties = true) {
+        set css(properties) {
             var prop = CSSProperties_1.CSSProperties.applyTo(properties, this);
             //if css-properties are already set and now a properties is deleted
             if (this["_lastCssChange"]) {
@@ -501,9 +497,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
     ], Component.prototype, "height", null);
     __decorate([
         (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [CSSProperties_1.CSSProperties, Boolean]),
-        __metadata("design:returntype", void 0)
+        __metadata("design:type", CSSProperties_1.CSSProperties),
+        __metadata("design:paramtypes", [CSSProperties_1.CSSProperties])
     ], Component.prototype, "css", null);
     __decorate([
         (0, Property_1.$Property)({ type: "componentselector", componentType: "[jassijs.ui.Style]" }),

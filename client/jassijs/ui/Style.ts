@@ -26,7 +26,7 @@ export class Style extends InvisibleComponent {
     * sets CSS Properties
     */
     @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties"})
-    css(properties: CSSProperties, removeOldProperties: boolean = true) {
+    set css(properties: CSSProperties) {
         //never!super.css(properties,removeOldProperties);
 
         var style: HTMLElement = document.getElementById(this.styleid);
@@ -69,8 +69,8 @@ export function test() {
 }
 export function test2() {
     var st = new Style();
-    st.css({
+    st.css={
         color: "red"
-    })
+    };
     st.destroy();
 }

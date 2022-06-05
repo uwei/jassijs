@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test", "jassijs_editor/util/Parser"], function (require, exports, Jassi_1, Panel_1, CodePanel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_1, Server_1, Reloader_1, Classes_1, Component_1, Property_1, AcePanel_1, Typescript_1, MonacoPanel_1, Settings_1, Test_1, Parser_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test"], function (require, exports, Jassi_1, Panel_1, CodePanel_1, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_1, Server_1, Reloader_1, Classes_1, Component_1, Property_1, AcePanel_1, Typescript_1, MonacoPanel_1, Settings_1, Test_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -308,7 +308,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 if (component === root) {
                     //fertig
                     var hh = 0;
-                    console.log("load Parser and TSourcemap dynamically");
                     var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
                     var values = Object.values(cache);
                     var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values);
@@ -395,7 +394,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                         //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
                         //   var Parser = classes.getClass("jassijs_editor.base.Parser");
                         var ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.ComponentDesigner");
-                        var parser = new Parser_1.Parser();
+                        var Parser = await Classes_1.classes.loadClass("jassijs_editor.util.Parser");
+                        var parser = new Parser();
                         await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
                         if (!((_this._design) instanceof ComponentDesigner)) {
                             _this._design = new ComponentDesigner();

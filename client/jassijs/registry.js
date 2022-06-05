@@ -32,7 +32,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Router": {}
 	},
 	"jassijs/base/Tests.ts": {
-		"date": 1625515526000,
+		"date": 1654466268524,
 		"jassijs.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -488,7 +488,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Button.ts": {
-		"date": 1635803284000,
+		"date": 1654465838829,
 		"jassijs.ui.Button": {
 			"$UIComponent": [
 				{
@@ -561,7 +561,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1654107871417,
+		"date": 1654466276505,
 		"jassijs.ui.Component": {
 			"@members": {
 				"onfocus": {
@@ -649,7 +649,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.ComponentDescriptor": {}
 	},
 	"jassijs/ui/ComponentSpy.ts": {
-		"date": 1654107831196,
+		"date": 1654466293098,
 		"jassijs.ui.ComponentSpy": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -675,7 +675,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1654021715794,
+		"date": 1654465833850,
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {
@@ -1218,7 +1218,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DatabaseDesigner.ts": {
-		"date": 1630958368000,
+		"date": 1654466327290,
 		"jassijs/ui/DatabaseDesigner": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -1348,7 +1348,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectView.ts": {
-		"date": 1627590778000,
+		"date": 1654466300753,
 		"jassijs/ui/DBObjectView": {
 			"$UIComponent": [
 				{
@@ -2178,7 +2178,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/SettingsDialog.ts": {
-		"date": 1627598582000,
+		"date": 1654466335052,
 		"jassijs.ui.SettingsObject": {},
 		"jassijs.ui.SettingsDialog": {
 			"$ActionProvider": [
@@ -2197,7 +2197,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Style.ts": {
-		"date": 1632513244000,
+		"date": 1654466380634,
 		"jassijs.ui.Style": {
 			"$UIComponent": [
 				{

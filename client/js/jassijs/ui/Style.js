@@ -27,7 +27,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
         /**
         * sets CSS Properties
         */
-        css(properties, removeOldProperties = true) {
+        set css(properties) {
             //never!super.css(properties,removeOldProperties);
             var style = document.getElementById(this.styleid);
             if (!document.getElementById(this.styleid)) {
@@ -53,9 +53,8 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     };
     __decorate([
         (0, Property_1.$Property)({ type: "json", componentType: "jassijs.ui.CSSProperties" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [CSSProperties_1.CSSProperties, Boolean]),
-        __metadata("design:returntype", void 0)
+        __metadata("design:type", CSSProperties_1.CSSProperties),
+        __metadata("design:paramtypes", [CSSProperties_1.CSSProperties])
     ], Style.prototype, "css", null);
     Style = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
@@ -86,9 +85,9 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     exports.test = test;
     function test2() {
         var st = new Style();
-        st.css({
+        st.css = {
             color: "red"
-        });
+        };
         st.destroy();
     }
     exports.test2 = test2;

@@ -147,9 +147,9 @@ export class ProductView extends DBObjectView {
         me.supplierchooser.items = "northwind.Suppliers";
         me.styleNumber.x = 442;
         me.styleNumber.y = 183;
-        me.styleNumber.css({
+        me.styleNumber.css={
             text_align: "right"
-        });
+        };
         console.log("main " + me.main._id);
         console.log("this " + this._id);
     }

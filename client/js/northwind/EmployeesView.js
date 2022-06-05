@@ -129,10 +129,10 @@ define(["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel"
             me.image1.x = 630;
             me.image1.y = 20;
             me.image1.src = "";
-            me.image1.css({
+            me.image1.css = {
                 background_color: "black",
                 border_style: "solid"
-            });
+            };
             me.image1.width = 125;
             me.image1.bind(me.databinder, "PhotoPath");
             me.photoPath.x = 5;

@@ -138,7 +138,7 @@ export class DBObjectView extends Panel {
     	this.add(me.main);
     	me.main.width="100%";
     	me.main.height="100%";
-    	me.main.css({ position: "relative" });
+    	me.main.css={ position: "relative" };
     	//$(me.main.dom).css("background-color","coral");
     	me.toolbar.add(me.create);
     	me.toolbar.add(me.save);

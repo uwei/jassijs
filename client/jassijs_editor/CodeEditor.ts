@@ -20,7 +20,7 @@ import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
 import { Test } from "jassijs/remote/Test";
 import modul from "./modul";
 
-import { Parser } from "jassijs_editor/util/Parser";
+
 
 declare global {
     export interface KnownSettings {
@@ -372,8 +372,6 @@ export class CodeEditor extends Panel {
             if (component === root) {
                 //fertig
                 var hh = 0;
-                console.log("load Parser and TSourcemap dynamically")
-              
                 var TSSourceMap = await classes.loadClass("jassijs_editor.util.TSSourceMap");
                 var values = Object.values(cache);
                 var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values)
@@ -467,6 +465,7 @@ export class CodeEditor extends Panel {
                     //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
                      //   var Parser = classes.getClass("jassijs_editor.base.Parser");
                         var ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
+                        var Parser = await classes.loadClass("jassijs_editor.util.Parser");
                         var parser=new Parser();
                         await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
                         if (!((_this._design) instanceof ComponentDesigner)) {

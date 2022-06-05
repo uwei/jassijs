@@ -19,8 +19,16 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/remote/Jassi", "jass
         }
         layout(me) {
             me.button1 = new Button_1.Button();
-            this.add(me.button1);
-            me.button1.text = "button";
+            this.config({
+                children: [
+                    me.button1.config({
+                        width: "150",
+                        text: "sdfsdf",
+                        label: "werwer"
+                    })
+                ],
+                height: 30
+            });
         }
     };
     Dialog = __decorate([

@@ -104,7 +104,6 @@ define(["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Jassi
     function test() {
         var n = new RStyle();
         var hh = Object.getOwnPropertyDescriptor(n, "name");
-        debugger;
     }
     exports.test = test;
 });

@@ -144,6 +144,7 @@ export class MonacoPanel extends CodePanel {
             glyphMargin: true,
             fontSize: 12,
             automaticLayout: true,
+            //@ts-ignore
             inlineSuggest:{}
         });
 

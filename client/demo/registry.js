@@ -54,7 +54,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.TestTree": {}
 	},
 	"demo/TestUpload.ts": {
-		"date": 1623178690000,
+		"date": 1654466252743,
 		"demo/TestUpload": {}
 	},
 	"demo/TreeContextmenu.ts": {
