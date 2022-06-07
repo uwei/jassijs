@@ -140,7 +140,7 @@ export class Component implements ComponentConfig{
     }
     config(config:ComponentConfig):Component {
         for(var key in config){
-            if(typeof config[key] === 'function'){
+            if(typeof this[key] === 'function'){
                 this[key](config[key]);
             }else{
                 this[key]=config[key];

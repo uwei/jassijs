@@ -784,9 +784,9 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
             });
             me.htmlpanel1.value = "";
             me.htmlpanel1.label = "Content:";
-            me.htmlpanel1.css({
+            me.htmlpanel1.css = {
                 font_size: "x-small"
-            });
+            };
         }
     };
     TestUpload = __decorate([
@@ -1454,7 +1454,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo.TestTree": {}
             },
             "demo/TestUpload.ts": {
-                "date": 1623178690000,
+                "date": 1654466252743,
                 "demo/TestUpload": {}
             },
             "demo/TreeContextmenu.ts": {

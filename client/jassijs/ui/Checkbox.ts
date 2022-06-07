@@ -1,8 +1,24 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import {Component,  $UIComponent } from "jassijs/ui/Component";
+import {ComponentConfig,  $UIComponent } from "jassijs/ui/Component";
 import {Property,  $Property } from "jassijs/ui/Property";
 import { DataComponent } from "jassijs/ui/DataComponent";
 
+export interface CheckboxConfig extends ComponentConfig{
+      /**
+    * register an event if the button is clicked
+    * @param {function} handler - the function that is called on change
+    */
+    onclick?(handler );
+   /**
+    * @member - true or "true" if selected
+    */
+    value?:string|boolean;
+    /**
+    * @member {string} - the caption of the button
+    */
+    text?:string; //the Code
+
+}
 
 @$UIComponent({ fullPath:"common/Ceckbox",icon:"mdi mdi-checkbox-marked-outline"})
 @$Class("jassijs.ui.Checkbox")
@@ -20,16 +36,17 @@ export class Checkbox extends DataComponent{
             this.checkbox=this.dom.firstChild;
 //             $(this.domWrapper).append($('<span class="checkboxtext"></span>'));
         }
-       
+        config(config:CheckboxConfig):Checkbox {
+            super.config(<ComponentConfig>config);
+            return this;
+        }
+        @$Property({ default: "function(event){\n\t\n}" })
         onclick(handler){ 
            $(this.checkbox).click(function() {
                 handler();
             }); 
         }
-        /**
-         * @member {string} - the caption of the button
-         */
-        set value(value){ //the Code
+        set value(value:string|boolean){ //the Code
             if(value==="true")
                 value=true;
             if(value==="false")
@@ -41,9 +58,7 @@ export class Checkbox extends DataComponent{
         get value(){
             return  $(this.checkbox).prop("checked");
         }
-         /**
-         * @member {string} - the caption of the button
-         */
+     
         set text(value:string){ //the Code
             $(this.domWrapper).find(".checkboxtext").html(value);
         }

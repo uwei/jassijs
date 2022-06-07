@@ -26,6 +26,7 @@ export class {{dialogname}} extends Panel {
         this.layout(this.me);
     }
     layout(me: Me) {
+        this.config({});
 	}
 }
 

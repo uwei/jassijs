@@ -410,7 +410,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/template/TemplateEmptyDialog.ts": {
-		"date": 1622984494000,
+		"date": 1654630454354,
 		"jassijs.template.TemplateEmptyDialog": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -538,7 +538,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Checkbox.ts": {
-		"date": 1623176046000,
+		"date": 1654632492660,
 		"jassijs.ui.Checkbox": {
 			"$UIComponent": [
 				{
@@ -547,6 +547,13 @@ define("jassijs/registry",["require"], function(require) {
 				}
 			],
 			"@members": {
+				"onclick": {
+					"$Property": [
+						{
+							"default": "function(event){\n\t\n}"
+						}
+					]
+				},
 				"value": {
 					"$Property": [
 						{
@@ -561,7 +568,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1654466276505,
+		"date": 1654631923861,
 		"jassijs.ui.Component": {
 			"@members": {
 				"onfocus": {
@@ -1247,7 +1254,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DataComponent.ts": {
-		"date": 1622984380000,
+		"date": 1654631678121,
 		"jassijs.ui.DataComponent": {
 			"@members": {
 				"autocommit": {
@@ -1898,7 +1905,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-		"date": 1630148662000,
+		"date": 1654631712419,
 		"jassijs.ui.PropertyEditors.DatabinderEditor": {
 			"$PropertyEditor": [
 				[
@@ -1945,7 +1952,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/FunctionEditor.ts": {
-		"date": 1622985640000,
+		"date": 1654630143534,
 		"jassijs.ui.PropertyEditors.FunctionEditor": {
 			"$PropertyEditor": [
 				[

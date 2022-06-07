@@ -61,7 +61,11 @@ export class FunctionEditor extends Editor
 
         }*/
         var node=this.propertyEditor.parser.data[this.propertyEditor.variablename][this.property.name][0].node;
-        var pos=node["expression"].arguments[0].body.pos;
+        var pos=-1;
+        if(node["expression"])
+            pos=node["expression"].arguments[0].body.pos;
+        else
+            pos=node["initializer"].body.pos;
         this.propertyEditor.gotoCodePosition(pos+2);
     }
 

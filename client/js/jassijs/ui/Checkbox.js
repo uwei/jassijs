@@ -21,14 +21,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             this.checkbox = this.dom.firstChild;
             //             $(this.domWrapper).append($('<span class="checkboxtext"></span>'));
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         onclick(handler) {
             $(this.checkbox).click(function () {
                 handler();
             });
         }
-        /**
-         * @member {string} - the caption of the button
-         */
         set value(value) {
             if (value === "true")
                 value = true;
@@ -39,9 +40,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         get value() {
             return $(this.checkbox).prop("checked");
         }
-        /**
-        * @member {string} - the caption of the button
-        */
         set text(value) {
             $(this.domWrapper).find(".checkboxtext").html(value);
         }
@@ -49,6 +47,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             return $(this.domWrapper).find(".checkboxtext").html();
         }
     };
+    __decorate([
+        (0, Property_1.$Property)({ default: "function(event){\n\t\n}" }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Object]),
+        __metadata("design:returntype", void 0)
+    ], Checkbox.prototype, "onclick", null);
     __decorate([
         (0, Property_1.$Property)({ type: "boolean" }),
         __metadata("design:type", Object),

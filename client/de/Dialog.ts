@@ -1,10 +1,10 @@
+import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { Button } from "jassijs/ui/Button";
 import { $Class } from "jassijs/remote/Jassi";
 import { Panel } from "jassijs/ui/Panel";
 type Me = {
-    button1?: Button;
-
+    textbox1?: Textbox;
 };
 @$Class("de/Dialog")
 export class Dialog extends Panel {
@@ -15,17 +15,16 @@ export class Dialog extends Panel {
         this.layout(this.me);
     }
     layout(me: Me) {
-        me.button1 = new Button();
-
+        me.textbox1 = new Textbox();
         this.config({
+            height: 20,
             children: [
-                me.button1.config({
-                    width: "150",
-                    text: "sdfsdf",
-                    label: "werwer"
+                me.textbox1.config({
+                    onclick: function (event) {
+                        alert(8)
+                    }
                 })
-            ],
-            height: 30
+            ]
         });
     }
 }

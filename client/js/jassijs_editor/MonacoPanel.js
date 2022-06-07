@@ -258,7 +258,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
             this._editor.focus();
             try {
                 this._editor.revealLine(cursor.row);
-                //this._editor.setPosition({ column: cursor.column, lineNumber: cursor.row });
+                this._editor.setPosition({ column: cursor.column, lineNumber: cursor.row });
             }
             catch (_a) {
             }

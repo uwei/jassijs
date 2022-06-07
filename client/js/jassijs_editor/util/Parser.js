@@ -593,6 +593,30 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
             }
             return varname + counter;
         }
+        /**
+         * change objectliteral to mutliline if needed
+         */
+        switchToMutlilineIfNeeded(node, newProperty, newValue) {
+            var oldValue = node.getText();
+            if (node["multiLine"] !== true) {
+                var len = 0;
+                for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
+                    var prop = node.parent["arguments"][0].properties[x];
+                    len += (prop.initializer.escapedText ? prop.initializer.escapedText.length : prop.initializer.getText().length);
+                    len += prop.name.escapedText.length + 5;
+                }
+                console.log(len);
+                if (oldValue.indexOf("\n") > -1 || (len > 60) || newValue.indexOf("\n") > -1) {
+                    //order also old elements
+                    for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
+                        var prop = node.parent["arguments"][0].properties[x];
+                        prop.pos = -1;
+                        prop.len = -1;
+                    }
+                    node.parent["arguments"][0] = ts.createObjectLiteral(node.parent["arguments"][0].properties, true);
+                }
+            }
+        }
         setPropertyInConfig(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
             var svalue = ts.createIdentifier(value);
             var config = this.data[variableName]["config"][0].node;
@@ -608,20 +632,21 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
             if (property === "add" && replace === false) {
                 property = "children";
                 if (this.data[variableName]["children"] == undefined) { //
-                    newExpression = ts.createPropertyAssignment(property, ts.createIdentifier("[" + value + "]"));
+                    newExpression = ts.createPropertyAssignment(property, ts.createArrayLiteral([ts.createIdentifier(value + ".config({})")], true));
+                    //                    newExpression=ts.createPropertyAssignment(property,ts.createArrayLiteral([ts.createIdentifier(value+".config({\n\t\n})]")]));
                     config.properties.push(newExpression);
                 }
                 else {
                     if (before === undefined) {
                         //@ts-ignore
-                        this.data[variableName]["children"][0].node.initializer.elements.push(ts.createIdentifier(value));
+                        this.data[variableName]["children"][0].node.initializer.elements.push(ts.createIdentifier(value + ".config({})"));
                     }
                     else {
                         //@ts-ignore
                         var array = this.data[variableName]["children"][0].node.initializer.elements;
                         for (var x = 0; x < array.length; x++) {
                             if (array[x].getText() === before.value || array[x].getText().startsWith(before.value + ".")) {
-                                array.splice(x, 0, ts.createIdentifier(value));
+                                array.splice(x, 0, ts.createIdentifier(value + ".config({})"));
                                 return;
                             }
                         }
@@ -634,11 +659,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                     let node = this.data[variableName][property][0].node;
                     var pos = config.properties.indexOf(node);
                     config.properties[pos] = newExpression;
+                    this.switchToMutlilineIfNeeded(config, property, value);
                 }
                 else {
                     config.properties.push(newExpression);
+                    this.switchToMutlilineIfNeeded(config, property, value);
                 }
             }
+            console.log("correct spaces");
+            this.parse(this.getModifiedCode());
             //if (pos >= 0)
             //  node.parent["statements"].splice(pos, 1);
         }

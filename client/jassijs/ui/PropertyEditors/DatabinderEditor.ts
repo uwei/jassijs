@@ -81,7 +81,7 @@ export class DatabinderEditor extends Editor
     _onchange(param) {
         var val = this.component.value;
         var sp = val.split("-");
-        val = sp[1] + ',"' + sp[0] + '"';
+        val = "["+sp[1] + ',"' + sp[0] + '"]';
         this.propertyEditor.setPropertyInCode(this.property.name, val);
 
         var func = this.propertyEditor.value[this.property.name];

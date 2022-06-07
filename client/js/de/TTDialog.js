@@ -7,39 +7,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Textbox_1, Jassi_1, Panel_1) {
+define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Jassi_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Dialog = void 0;
-    let Dialog = class Dialog extends Panel_1.Panel {
+    exports.test = exports.TTDialog = void 0;
+    let TTDialog = class TTDialog extends Panel_1.Panel {
         constructor() {
             super();
             this.me = {};
             this.layout(this.me);
         }
         layout(me) {
-            me.textbox1 = new Textbox_1.Textbox();
-            this.config({
-                height: 20,
-                children: [
-                    me.textbox1.config({
-                        onclick: function (event) {
-                            alert(8);
-                        }
-                    })
-                ]
-            });
+            me.config({});
         }
     };
-    Dialog = __decorate([
-        (0, Jassi_1.$Class)("de/Dialog"),
+    TTDialog = __decorate([
+        (0, Jassi_1.$Class)("de/TTDialog"),
         __metadata("design:paramtypes", [])
-    ], Dialog);
-    exports.Dialog = Dialog;
+    ], TTDialog);
+    exports.TTDialog = TTDialog;
     async function test() {
-        var ret = new Dialog();
+        var ret = new TTDialog();
         return ret;
     }
     exports.test = test;
 });
-//# sourceMappingURL=Dialog.js.map
+//# sourceMappingURL=TTDialog.js.map

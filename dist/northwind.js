@@ -346,10 +346,10 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
             me.image1.x = 630;
             me.image1.y = 20;
             me.image1.src = "";
-            me.image1.css({
+            me.image1.css = {
                 background_color: "black",
                 border_style: "solid"
-            });
+            };
             me.image1.width = 125;
             me.image1.bind(me.databinder, "PhotoPath");
             me.photoPath.x = 5;
@@ -542,9 +542,9 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.id.bind(me.databinder, "id");
             me.id.label = "Order ID";
             me.id.width = 70;
-            me.id.css({
+            me.id.css = {
                 text_align: "right"
-            });
+            };
             me.customername.x = 10;
             me.customername.y = 5;
             me.customername.width = 265;
@@ -616,9 +616,9 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.freight.label = "Freight";
             me.freight.converter = new NumberConverter_3.NumberConverter();
             me.freight.format = "#.##0,00";
-            me.freight.css({
+            me.freight.css = {
                 text_align: "right"
-            });
+            };
             me.shipName.x = 5;
             me.shipName.y = 5;
             me.shipName.bind(me.databinder, "ShipName");
@@ -665,10 +665,10 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
                 me.detailsProduct.template = "{{ProductName}}";
                 me.objectchooser1.bind(me.repeater1.design.databinder, "Product");
                 me.objectchooser1.items = "northwind.Products";
-                me.detailsProduct.css({
+                me.detailsProduct.css = {
                     overflow: "hidden",
                     margin_top: "5px"
-                });
+                };
                 me.detailsProduct.styles = [me.style1];
             });
             me.panel1.isAbsolute = true;
@@ -710,7 +710,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.htmlpanel1.styles = [];
             me.htmlpanel2.value = "Text<br>";
             me.htmlpanel2.width = 100;
-            me.style1.css({});
+            me.style1.css = {};
         }
     };
     __decorate([
@@ -851,9 +851,9 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
             me.supplierchooser.items = "northwind.Suppliers";
             me.styleNumber.x = 442;
             me.styleNumber.y = 183;
-            me.styleNumber.css({
+            me.styleNumber.css = {
                 text_align: "right"
-            });
+            };
             console.log("main " + me.main._id);
             console.log("this " + this._id);
         }
@@ -1250,7 +1250,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1622984380000,
+                "date": 1654466413776,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -1302,7 +1302,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1630615564000,
+                "date": 1654466444314,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1325,7 +1325,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1623092964000,
+                "date": 1654466454621,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {

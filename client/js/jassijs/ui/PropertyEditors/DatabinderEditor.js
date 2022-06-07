@@ -78,7 +78,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/D
         _onchange(param) {
             var val = this.component.value;
             var sp = val.split("-");
-            val = sp[1] + ',"' + sp[0] + '"';
+            val = "[" + sp[1] + ',"' + sp[0] + '"]';
             this.propertyEditor.setPropertyInCode(this.property.name, val);
             var func = this.propertyEditor.value[this.property.name];
             var binder = this.propertyEditor.getObjectFromVariable(sp[1]);

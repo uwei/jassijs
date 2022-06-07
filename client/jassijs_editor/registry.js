@@ -91,7 +91,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"date": 1654273312166
 	},
 	"jassijs_editor/MonacoPanel.ts": {
-		"date": 1654466576343,
+		"date": 1654630281932,
 		"jassijs_editor.MonacoPanel": {}
 	},
 	"jassijs_editor/StartEditor.ts": {
@@ -102,7 +102,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1654466624149,
+		"date": 1654629293475,
 		"jassijs_editor.util.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {

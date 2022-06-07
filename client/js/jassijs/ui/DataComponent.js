@@ -41,7 +41,11 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
          * @param {jassijs.ui.Databinder} databinder - the databinder to bind
          * @param {string} property - the property to bind
          */
-        bind(databinder, property) {
+        bind(databinder, property = undefined) {
+            if (property === undefined && Array.isArray(databinder)) {
+                property = databinder[1];
+                databinder = databinder[0];
+            }
             this._databinder = databinder;
             if (databinder !== undefined)
                 databinder.add(property, this, "onchange");
@@ -63,7 +67,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
     __decorate([
         (0, Property_1.$Property)({ type: "databinder" }),
         __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Object]),
+        __metadata("design:paramtypes", [Object, String]),
         __metadata("design:returntype", void 0)
     ], DataComponent.prototype, "bind", null);
     DataComponent = __decorate([

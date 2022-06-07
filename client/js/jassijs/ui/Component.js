@@ -52,7 +52,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         }
         config(config) {
             for (var key in config) {
-                if (typeof config[key] === 'function') {
+                if (typeof this[key] === 'function') {
                     this[key](config[key]);
                 }
                 else {

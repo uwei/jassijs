@@ -37,12 +37,20 @@ export class DataComponent extends Component {
         //    this._databinder.checkAutocommit(this);
     }
     /**
+     * @param [databinder:jassijs.ui.Databinder,"property"]
+     */
+    bind(databinder:any[]);
+    /**
      * binds a component to a databinder
      * @param {jassijs.ui.Databinder} databinder - the databinder to bind
      * @param {string} property - the property to bind
      */
     @$Property({ type: "databinder" })
-    bind(databinder, property) {
+    bind(databinder, property:string=undefined) {
+        if(property===undefined&&Array.isArray(databinder)){
+            property=databinder[1];
+            databinder=databinder[0];
+        }
         this._databinder = databinder;
         if(databinder!==undefined)
             databinder.add(property, this, "onchange");
