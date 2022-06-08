@@ -647,7 +647,6 @@ export class Parser {
                 
                 if(this.data[variableName]["children"]==undefined){//
                     newExpression=ts.createPropertyAssignment(property,ts.createArrayLiteral([ts.createIdentifier(value+".config({})")],true));
-//                    newExpression=ts.createPropertyAssignment(property,ts.createArrayLiteral([ts.createIdentifier(value+".config({\n\t\n})]")]));
                     config.properties.push(newExpression);  
                 }else{
                     if(before===undefined){
