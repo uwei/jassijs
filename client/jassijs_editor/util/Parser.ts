@@ -641,13 +641,6 @@ export class Parser {
             var svalue=ts.createIdentifier(value);
             var config=<any>this.data[variableName]["config"][0].node;
             config=config.arguments[0];
-            /*if(config.expression)
-                    config=config.expression.arguments[0];
-            else if (config.elements)
-                    config=config.elements[0].arguments[0];
-                else{
-                    config=config.initializer.arguments[0];
-                }*/
             var newExpression=ts.createPropertyAssignment(property,svalue);
             if(property==="add"&&replace===false){
                 property="children";
