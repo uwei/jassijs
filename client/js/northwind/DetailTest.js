@@ -23,7 +23,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "no
         layout(me) {
             me.textbox1 = new Textbox_1.Textbox();
             me.main.add(me.textbox1);
-            me.textbox1.bind(me.databinder, "Order.Customer.id");
+            me.textbox1.bind = [me.databinder, "Order.Customer.id"];
         }
     };
     __decorate([

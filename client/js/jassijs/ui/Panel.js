@@ -54,9 +54,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Container", "j
             this._designMode = false;
             this.isAbsolute = false;
         }
-        /**
-         * @param {boolean} the elements are ordered absolute
-         **/
+        config(config) {
+            super.config(config);
+            return this;
+        }
         set isAbsolute(value) {
             this._isAbsolute = value;
             if (value)

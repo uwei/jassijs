@@ -33,15 +33,15 @@ define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters
             me.main.add(me.panel1);
             me.main.add(me.table1);
             me.Id.label = "Id";
-            me.Id.bind(me.databinder, "id");
+            me.Id.bind = [me.databinder, "id"];
             me.Id.width = 40;
             me.Id.converter = new NumberConverter_1.NumberConverter();
-            me.name.bind(me.databinder, "CategoryName");
+            me.name.bind = [me.databinder, "CategoryName"];
             me.name.label = "Name";
             me.name.width = 225;
             me.description.height = 70;
             me.description.width = 280;
-            me.description.bind(me.databinder, "Description");
+            me.description.bind = [me.databinder, "Description"];
             me.description.label = "Description";
             me.boxpanel1.add(me.Id);
             me.boxpanel1.horizontal = true;
@@ -111,56 +111,56 @@ define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "j
             me.main.add(me.fax);
             me.id.x = 10;
             me.id.y = 5;
-            me.id.bind(me.databinder, "id");
+            me.id.bind = [me.databinder, "id"];
             me.id.width = 65;
             me.id.label = "id";
             me.companyname.x = 195;
             me.companyname.y = 45;
-            me.companyname.bind(me.databinder, "CompanyName");
+            me.companyname.bind = [me.databinder, "CompanyName"];
             me.companyname.label = "Company Name";
             me.companyname.width = 155;
             me.contacttitle.x = 10;
             me.contacttitle.y = 45;
             me.contacttitle.label = "Contact Title";
-            me.contacttitle.bind(me.databinder, "ContactTitle");
+            me.contacttitle.bind = [me.databinder, "ContactTitle"];
             me.contactname.x = 90;
             me.contactname.y = 5;
             me.contactname.label = "Contact Name";
-            me.contactname.bind(me.databinder, "ContactName");
+            me.contactname.bind = [me.databinder, "ContactName"];
             me.contactname.width = 260;
             me.address.x = 10;
             me.address.y = 90;
-            me.address.bind(me.databinder, "Address");
+            me.address.bind = [me.databinder, "Address"];
             me.address.label = "Address";
             me.address.width = 340;
             me.postalcode.x = 10;
             me.postalcode.y = 140;
             me.postalcode.label = "Postal Code";
-            me.postalcode.bind(me.databinder, "PostalCode");
+            me.postalcode.bind = [me.databinder, "PostalCode"];
             me.postalcode.width = 90;
             me.textbox1.x = 100;
             me.textbox1.y = 140;
             me.textbox1.label = "City";
             me.textbox1.width = 250;
-            me.textbox1.bind(me.databinder, "City");
+            me.textbox1.bind = [me.databinder, "City"];
             me.region.x = 10;
             me.region.y = 185;
-            me.region.bind(me.databinder, "Region");
+            me.region.bind = [me.databinder, "Region"];
             me.region.label = "Region";
             me.textbox2.x = 195;
             me.textbox2.y = 185;
             me.textbox2.label = "Country";
-            me.textbox2.bind(me.databinder, "Country");
+            me.textbox2.bind = [me.databinder, "Country"];
             this.width = 940;
             this.height = 377;
             me.phone.x = 10;
             me.phone.y = 230;
             me.phone.label = "Phone";
-            me.phone.bind(me.databinder, "Phone");
+            me.phone.bind = [me.databinder, "Phone"];
             me.fax.x = 195;
             me.fax.y = 230;
             me.fax.label = "Fax";
-            me.fax.bind(me.databinder, "Fax");
+            me.fax.bind = [me.databinder, "Fax"];
             me.toolbar.height = 20;
         }
     };
@@ -202,7 +202,7 @@ define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Jassi", "j
         layout(me) {
             me.textbox1 = new Textbox_3.Textbox();
             me.main.add(me.textbox1);
-            me.textbox1.bind(me.databinder, "Order.Customer.id");
+            me.textbox1.bind = [me.databinder, "Order.Customer.id"];
         }
     };
     __decorate([
@@ -283,65 +283,65 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
             me.titleOfCouttesy.y = 5;
             me.titleOfCouttesy.label = "Title of C.";
             me.titleOfCouttesy.width = 85;
-            me.titleOfCouttesy.bind(me.databinder, "TitleOfCourtesy");
+            me.titleOfCouttesy.bind = [me.databinder, "TitleOfCourtesy"];
             me.firstName.x = 80;
             me.firstName.y = 5;
             me.firstName.label = "First name";
-            me.firstName.bind(me.databinder, "FirstName");
+            me.firstName.bind = [me.databinder, "FirstName"];
             me.lastName.x = 250;
             me.lastName.y = 5;
             me.lastName.label = "Last Name";
-            me.lastName.bind(me.databinder, "LastName");
+            me.lastName.bind = [me.databinder, "LastName"];
             me.title.x = 420;
             me.title.y = 5;
-            me.title.bind(me.databinder, "Title");
+            me.title.bind = [me.databinder, "Title"];
             me.title.label = "Title";
             me.title.width = 90;
             me.address.x = 5;
             me.address.y = 50;
             me.address.label = "Address";
-            me.address.bind(me.databinder, "Address");
+            me.address.bind = [me.databinder, "Address"];
             me.address.width = 345;
             me.postalCode.x = 5;
             me.postalCode.y = 95;
             me.postalCode.label = "Postal Code";
-            me.postalCode.bind(me.databinder, "PostalCode");
+            me.postalCode.bind = [me.databinder, "PostalCode"];
             me.postalCode.width = 90;
             me.city.x = 110;
             me.city.y = 95;
-            me.city.bind(me.databinder, "City");
+            me.city.bind = [me.databinder, "City"];
             me.city.label = "City";
             me.city.width = 240;
             me.birthDate.x = 5;
             me.birthDate.y = 190;
             me.birthDate.width = 90;
-            me.birthDate.bind(me.databinder, "BirthDate");
+            me.birthDate.bind = [me.databinder, "BirthDate"];
             me.birthDate.label = "Birth Date";
             me.region.x = 5;
             me.region.y = 140;
-            me.region.bind(me.databinder, "Region");
+            me.region.bind = [me.databinder, "Region"];
             me.region.label = "Region";
             me.region.width = 90;
             me.state.x = 110;
             me.state.y = 140;
-            me.state.bind(me.databinder, "Country");
+            me.state.bind = [me.databinder, "Country"];
             me.state.label = "country";
             me.state.width = 240;
             me.hiredate.x = 110;
             me.hiredate.y = 190;
-            me.hiredate.bind(me.databinder, "HireDate");
+            me.hiredate.bind = [me.databinder, "HireDate"];
             me.hiredate.label = "Hire Date";
             me.hiredate.width = 85;
             me.homephone.x = 210;
             me.homephone.y = 190;
-            me.homephone.bind(me.databinder, "HomePhone");
+            me.homephone.bind = [me.databinder, "HomePhone"];
             me.homephone.label = "Home Phone";
             me.homephone.width = 140;
             me.notes.x = 375;
             me.notes.y = 50;
             me.notes.width = 240;
             me.notes.height = 155;
-            me.notes.bind(me.databinder, "Notes");
+            me.notes.bind = [me.databinder, "Notes"];
             me.notes.label = "Notes";
             me.image1.x = 630;
             me.image1.y = 20;
@@ -351,29 +351,29 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
                 border_style: "solid"
             };
             me.image1.width = 125;
-            me.image1.bind(me.databinder, "PhotoPath");
+            me.image1.bind = [me.databinder, "PhotoPath"];
             me.photoPath.x = 5;
             me.photoPath.y = 240;
-            me.photoPath.bind(me.databinder, "PhotoPath");
+            me.photoPath.bind = [me.databinder, "PhotoPath"];
             me.photoPath.label = "Photo Path";
             me.photoPath.width = 460;
             me.id.x = 5;
             me.id.y = 5;
             me.id.width = 60;
             me.id.label = "Id";
-            me.id.bind(me.databinder, "id");
+            me.id.bind = [me.databinder, "id"];
             me.id.converter = new NumberConverter_2.NumberConverter();
             me.reportsTo.x = 7;
             me.reportsTo.y = 298;
             me.reportsTo.label = "Reports To";
-            me.reportsTo.bind(me.databinder, "ReportsTo");
+            me.reportsTo.bind = [me.databinder, "ReportsTo"];
             me.reportsTo.template = "{{FirstName}} {{LastName}}";
             me.reportsTo.width = 160;
             me.objectchooser1.x = 170;
             me.objectchooser1.y = 310;
             me.objectchooser1.width = 25;
             me.objectchooser1.height = 25;
-            me.objectchooser1.bind(me.databinder, "ReportsTo");
+            me.objectchooser1.bind = [me.databinder, "ReportsTo"];
             me.objectchooser1.items = "northwind.Employees";
         }
     };
@@ -539,7 +539,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.id.x = 5;
             me.id.y = 5;
             me.id.converter = new NumberConverter_3.NumberConverter();
-            me.id.bind(me.databinder, "id");
+            me.id.bind = [me.databinder, "id"];
             me.id.label = "Order ID";
             me.id.width = 70;
             me.id.css = {
@@ -549,14 +549,14 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.customername.y = 5;
             me.customername.width = 265;
             me.customername.template = "{{id}} {{CompanyName}}";
-            me.customername.bind(me.databinder, "Customer");
+            me.customername.bind = [me.databinder, "Customer"];
             me.customername.value = "VINET Vins et alcools Chevalier";
             me.customername.label = "Customer";
             me.customername.height = 15;
             me.customername.styles = [me.style1];
             me.employeename.x = 10;
             me.employeename.y = 90;
-            me.employeename.bind(me.databinder, "Employee");
+            me.employeename.bind = [me.databinder, "Employee"];
             me.employeename.label = "Employee";
             me.employeename.width = 265;
             me.employeename.value = "5 Steven Buchanan";
@@ -564,13 +564,13 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.employeename.styles = [me.style1];
             me.chooseEmployee.x = 275;
             me.chooseEmployee.y = 105;
-            me.chooseEmployee.bind(me.databinder, "Employee");
+            me.chooseEmployee.bind = [me.databinder, "Employee"];
             me.chooseEmployee.items = "northwind.Employees";
             me.chooseEmployee.height = 20;
             me.choosecustomer.x = 275;
             me.choosecustomer.y = 15;
             me.choosecustomer.items = "northwind.Customer";
-            me.choosecustomer.bind(me.databinder, "Customer");
+            me.choosecustomer.bind = [me.databinder, "Customer"];
             me.choosecustomer.onchange(function (event) {
                 let cust = me.choosecustomer.value;
                 me.shipName.value = cust.CompanyName;
@@ -582,22 +582,22 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             });
             me.orderDate.x = 10;
             me.orderDate.y = 130;
-            me.orderDate.bind(me.databinder, "OrderDate");
+            me.orderDate.bind = [me.databinder, "OrderDate"];
             me.orderDate.label = "Order Date";
             me.orderDate.width = 70;
             me.requiredDate.x = 90;
             me.requiredDate.y = 130;
-            me.requiredDate.bind(me.databinder, "RequiredDate");
+            me.requiredDate.bind = [me.databinder, "RequiredDate"];
             me.requiredDate.label = "Required Date";
             me.requiredDate.width = 75;
             me.shippedDate.x = 175;
             me.shippedDate.y = 130;
-            me.shippedDate.bind(me.databinder, "ShippedDate");
+            me.shippedDate.bind = [me.databinder, "ShippedDate"];
             me.shippedDate.width = 75;
             me.shippedDate.label = "Shipped Date";
             me.shipVia.x = 10;
             me.shipVia.y = 45;
-            me.shipVia.bind(me.databinder, "ShipVia");
+            me.shipVia.bind = [me.databinder, "ShipVia"];
             me.shipVia.template = "{{id}} {{CompanyName}}";
             me.shipVia.label = "Ship via";
             me.shipVia.value = "3 Federal Shipping";
@@ -606,12 +606,12 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.shipVia.styles = [me.style1];
             me.shipviaChooser.x = 275;
             me.shipviaChooser.y = 60;
-            me.shipviaChooser.bind(me.databinder, "ShipVia");
+            me.shipviaChooser.bind = [me.databinder, "ShipVia"];
             me.shipviaChooser.items = "northwind.Shippers";
             me.shipviaChooser.width = 30;
             me.freight.x = 5;
             me.freight.y = 50;
-            me.freight.bind(me.databinder, "Freight");
+            me.freight.bind = [me.databinder, "Freight"];
             me.freight.width = 70;
             me.freight.label = "Freight";
             me.freight.converter = new NumberConverter_3.NumberConverter();
@@ -621,35 +621,35 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             };
             me.shipName.x = 5;
             me.shipName.y = 5;
-            me.shipName.bind(me.databinder, "ShipName");
+            me.shipName.bind = [me.databinder, "ShipName"];
             me.shipName.width = 220;
             me.shipName.label = "Ship Name";
             me.shipAddress.x = 5;
             me.shipAddress.y = 50;
-            me.shipAddress.bind(me.databinder, "ShipAddress");
+            me.shipAddress.bind = [me.databinder, "ShipAddress"];
             me.shipAddress.width = 220;
             me.shipAddress.label = "Ship Address";
             me.shipPostalCode.x = 5;
             me.shipPostalCode.y = 95;
-            me.shipPostalCode.bind(me.databinder, "ShipPostalCode");
+            me.shipPostalCode.bind = [me.databinder, "ShipPostalCode"];
             me.shipPostalCode.width = 55;
             me.shipPostalCode.label = "Postal Code";
             me.shipCity.x = 75;
             me.shipCity.y = 95;
-            me.shipCity.bind(me.databinder, "ShipCity");
+            me.shipCity.bind = [me.databinder, "ShipCity"];
             me.shipCity.label = "Ship City";
             me.shipCity.width = 150;
             me.shipCountry.x = 135;
             me.shipCountry.y = 140;
-            me.shipCountry.bind(me.databinder, "ShipCountry");
+            me.shipCountry.bind = [me.databinder, "ShipCountry"];
             me.shipCountry.label = "Ship Country";
             me.shipCountry.width = 90;
             me.shipRegion.x = 5;
             me.shipRegion.y = 140;
-            me.shipRegion.bind(me.databinder, "ShipRegion");
+            me.shipRegion.bind = [me.databinder, "ShipRegion"];
             me.shipRegion.label = "Ship Region";
             me.shipRegion.width = 120;
-            me.repeater1.bind(me.databinder, "Details");
+            me.repeater1.bind = [me.databinder, "Details"];
             me.repeater1.width = 675;
             me.repeater1.createRepeatingComponent(function (me) {
                 me.detailsQuantity = new Textbox_5.Textbox();
@@ -658,12 +658,12 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
                 this.design.add(me.detailsQuantity);
                 this.design.add(me.detailsProduct);
                 this.design.add(me.objectchooser1);
-                me.detailsQuantity.bind(me.repeater1.design.databinder, "Quantity");
+                me.detailsQuantity.bind = [me.repeater1.design.databinder, "Quantity"];
                 me.detailsQuantity.width = 60;
                 me.detailsProduct.width = 530;
-                me.detailsProduct.bind(me.repeater1.design.databinder, "Product");
+                me.detailsProduct.bind = [me.repeater1.design.databinder, "Product"];
                 me.detailsProduct.template = "{{ProductName}}";
-                me.objectchooser1.bind(me.repeater1.design.databinder, "Product");
+                me.objectchooser1.bind = [me.repeater1.design.databinder, "Product"];
                 me.objectchooser1.items = "northwind.Products";
                 me.detailsProduct.css = {
                     overflow: "hidden",
@@ -776,23 +776,23 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
             me.main.height = "170";
             me.id.x = 10;
             me.id.y = 10;
-            me.id.bind(me.databinder, "id");
+            me.id.bind = [me.databinder, "id"];
             me.id.label = "Id";
             me.id.width = 65;
             me.id.converter = new NumberConverter_4.NumberConverter();
             me.productName.x = 90;
             me.productName.y = 10;
-            me.productName.bind(me.databinder, "ProductName");
+            me.productName.bind = [me.databinder, "ProductName"];
             me.productName.label = "Product Name";
             me.productName.width = 310;
             me.quantityPerUnit.x = 10;
             me.quantityPerUnit.y = 60;
-            me.quantityPerUnit.bind(me.databinder, "QuantityPerUnit");
+            me.quantityPerUnit.bind = [me.databinder, "QuantityPerUnit"];
             me.quantityPerUnit.width = 135;
             me.quantityPerUnit.label = "Quantity per Unit";
             me.unitPrice.x = 160;
             me.unitPrice.y = 60;
-            me.unitPrice.bind(me.databinder, "UnitPrice");
+            me.unitPrice.bind = [me.databinder, "UnitPrice"];
             me.unitPrice.label = "Unit Price";
             me.unitPrice.width = 65;
             me.unitPrice.converter = new NumberConverter_4.NumberConverter();
@@ -800,7 +800,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
             me.unitPrice.styles = [me.styleNumber];
             me.unitsInStock.x = 240;
             me.unitsInStock.y = 60;
-            me.unitsInStock.bind(me.databinder, "UnitsInStock");
+            me.unitsInStock.bind = [me.databinder, "UnitsInStock"];
             me.unitsInStock.label = "Units in Stock";
             me.unitsInStock.width = 70;
             me.unitsInStock.converter = new NumberConverter_4.NumberConverter();
@@ -808,7 +808,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
             me.unitsInStock.styles = [me.styleNumber];
             me.unitsOnOrder.x = 325;
             me.unitsOnOrder.y = 60;
-            me.unitsOnOrder.bind(me.databinder, "UnitsOnOrder");
+            me.unitsOnOrder.bind = [me.databinder, "UnitsOnOrder"];
             me.unitsOnOrder.label = "Units on Order";
             me.unitsOnOrder.width = 75;
             me.unitsOnOrder.converter = new NumberConverter_4.NumberConverter();
@@ -816,7 +816,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
             me.unitsOnOrder.styles = [me.styleNumber];
             me.reorderLevel.x = 415;
             me.reorderLevel.y = 60;
-            me.reorderLevel.bind(me.databinder, "ReorderLevel");
+            me.reorderLevel.bind = [me.databinder, "ReorderLevel"];
             me.reorderLevel.width = 70;
             me.reorderLevel.label = "Reorder Level";
             me.reorderLevel.converter = new NumberConverter_4.NumberConverter();
@@ -824,30 +824,30 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
             me.discontinued.x = 415;
             me.discontinued.y = 10;
             me.discontinued.width = 70;
-            me.discontinued.bind(me.databinder, "Discontinued");
+            me.discontinued.bind = [me.databinder, "Discontinued"];
             me.discontinued.label = "Discontinued";
             me.category.x = 10;
             me.category.y = 110;
             me.category.template = "{{CategoryName}}";
             me.category.value = "Condiments";
-            me.category.bind(me.databinder, "Category");
+            me.category.bind = [me.databinder, "Category"];
             me.category.width = 170;
             me.category.label = "Category";
             me.categoryChooser.x = 185;
             me.categoryChooser.y = 125;
             me.categoryChooser.items = "northwind.Categories";
-            me.categoryChooser.bind(me.databinder, "Category");
+            me.categoryChooser.bind = [me.databinder, "Category"];
             me.categoryChooser.width = 30;
             me.supplier.x = 225;
             me.supplier.y = 110;
-            me.supplier.bind(me.databinder, "Supplier");
+            me.supplier.bind = [me.databinder, "Supplier"];
             me.supplier.value = "New Orleans Cajun Delights";
             me.supplier.template = "{{CompanyName}}";
             me.supplier.label = "Supplier";
             me.supplier.width = 230;
             me.supplierchooser.x = 460;
             me.supplierchooser.y = 125;
-            me.supplierchooser.bind(me.databinder, "Supplier");
+            me.supplierchooser.bind = [me.databinder, "Supplier"];
             me.supplierchooser.items = "northwind.Suppliers";
             me.styleNumber.x = 442;
             me.styleNumber.y = 183;
@@ -1016,20 +1016,20 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
             this.width = 626;
             this.height = 146;
             me.id.converter = new NumberConverter_5.NumberConverter();
-            me.id.bind(me.databinder, "id");
+            me.id.bind = [me.databinder, "id"];
             me.id.label = "Id";
             me.id.width = 40;
             me.id.x = 5;
             me.id.y = 0;
             me.companyName.x = 60;
             me.companyName.y = 0;
-            me.companyName.bind(me.databinder, "CompanyName");
+            me.companyName.bind = [me.databinder, "CompanyName"];
             me.companyName.label = "Company name";
             me.companyName.width = 160;
             me.phone.x = 5;
             me.phone.y = 50;
             me.phone.width = 215;
-            me.phone.bind(me.databinder, "Phone");
+            me.phone.bind = [me.databinder, "Phone"];
             me.phone.label = "Phone";
         }
     };
@@ -1096,60 +1096,60 @@ define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/
             me.id.y = 5;
             me.id.converter = new NumberConverter_6.NumberConverter();
             me.id.width = 50;
-            me.id.bind(me.databinder, "id");
+            me.id.bind = [me.databinder, "id"];
             me.id.label = "Id";
             me.companyName.x = 75;
             me.companyName.y = 5;
             me.companyName.label = "Company Name";
-            me.companyName.bind(me.databinder, "CompanyName");
+            me.companyName.bind = [me.databinder, "CompanyName"];
             me.companyName.width = 290;
             me.contactName.x = 10;
             me.contactName.y = 50;
-            me.contactName.bind(me.databinder, "ContactName");
+            me.contactName.bind = [me.databinder, "ContactName"];
             me.contactName.label = "Contact Name";
             me.contactTitle.x = 180;
             me.contactTitle.y = 50;
-            me.contactTitle.bind(me.databinder, "ContactTitle");
+            me.contactTitle.bind = [me.databinder, "ContactTitle"];
             me.contactTitle.label = "Contact Title";
             me.contactTitle.width = 185;
             me.address.x = 10;
             me.address.y = 95;
-            me.address.bind(me.databinder, "Address");
+            me.address.bind = [me.databinder, "Address"];
             me.address.label = "Address";
             me.address.width = 355;
             me.postalCode.x = 10;
             me.postalCode.y = 140;
-            me.postalCode.bind(me.databinder, "PostalCode");
+            me.postalCode.bind = [me.databinder, "PostalCode"];
             me.postalCode.width = 95;
             me.postalCode.label = "Postal Code";
             me.city.x = 120;
             me.city.y = 140;
-            me.city.bind(me.databinder, "City");
+            me.city.bind = [me.databinder, "City"];
             me.city.label = "City";
             me.city.width = 245;
             me.region.x = 10;
             me.region.y = 185;
-            me.region.bind(me.databinder, "Region");
+            me.region.bind = [me.databinder, "Region"];
             me.region.label = "Region";
             me.region.width = 155;
             me.Country.x = 180;
             me.Country.y = 185;
-            me.Country.bind(me.databinder, "Country");
+            me.Country.bind = [me.databinder, "Country"];
             me.Country.label = "Country";
             me.Country.width = 185;
             me.phone.x = 10;
             me.phone.y = 230;
-            me.phone.bind(me.databinder, "Phone");
+            me.phone.bind = [me.databinder, "Phone"];
             me.phone.label = "Phone";
             me.phone.width = 155;
             me.fax.x = 180;
             me.fax.y = 230;
-            me.fax.bind(me.databinder, "Fax");
+            me.fax.bind = [me.databinder, "Fax"];
             me.fax.label = "Fax";
             me.fax.width = 185;
             me.homepage.x = 10;
             me.homepage.y = 275;
-            me.homepage.bind(me.databinder, "HomePage");
+            me.homepage.bind = [me.databinder, "HomePage"];
             me.homepage.label = "Home Page";
             me.homepage.width = 355;
         }
@@ -1183,7 +1183,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1627601186000,
+                "date": 1654704477985,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -1206,7 +1206,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
-                "date": 1622984380000,
+                "date": 1654704542347,
                 "northwind/CustomerView": {
                     "$DBObjectView": [
                         {
@@ -1229,7 +1229,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/DetailTest.ts": {
-                "date": 1622984380000,
+                "date": 1654704557145,
                 "northwind.DetailTest": {
                     "$DBObjectView": [
                         {
@@ -1250,7 +1250,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1654466413776,
+                "date": 1654704628942,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -1302,7 +1302,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1654466444314,
+                "date": 1654704725860,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1325,7 +1325,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1654466454621,
+                "date": 1654705913406,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -1904,7 +1904,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1625946850000
             },
             "northwind/ShippersView.ts": {
-                "date": 1622984380000,
+                "date": 1654705983583,
                 "northwind.ShippersView": {
                     "$DBObjectView": [
                         {
@@ -1927,7 +1927,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/SuppliersView.ts": {
-                "date": 1622984380000,
+                "date": 1654705965374,
                 "northwind.SuppliersView": {
                     "$DBObjectView": [
                         {

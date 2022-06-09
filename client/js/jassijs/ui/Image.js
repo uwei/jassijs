@@ -21,10 +21,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             //super.init($('<img vspace="0" hspace="0"  border="0"  src="" alt="">')[0]);
             super.init($('<div style="display: inline-block;white-space: nowrap;"><img  vspace="0" hspace="0"  border="0"  src="" alt=""></div>')[0]);
         }
-        /**
-        * register an event if the image is clicked
-        * @param {function} handler - the function that is called on change
-        */
+        config(config) {
+            super.config(config);
+            return this;
+        }
         onclick(handler) {
             $("#" + this._id).click(function () {
                 handler();
@@ -59,9 +59,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
                 $(this.dom.children[0]).attr("height", "100%");
             super.height = value;
         }
-        /**
-        * @member {string} - link to image
-        */
         set src(icon) {
             $(this.dom).removeClass();
             $(this.dom.children[0]).attr("src", "");
@@ -107,8 +104,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
     ], Image);
     exports.Image = Image;
     function test() {
-        var ret = new Image();
-        ret.src = "mdi mdi-file-image";
+        var ret = new Image().config({ src: "mdi mdi-file-image" });
         return ret;
     }
     exports.test = test;

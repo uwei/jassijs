@@ -2178,14 +2178,14 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             }
             if (oldParent !== newParent || beforeComponent !== undefined || top === undefined) { //top=undefined ->on relative position at the end call the block
                 //get Position
-                _this._propertyEditor.removePropertyInCode("add", compName, oldName);
+                var oldVal = _this._propertyEditor.removePropertyInCode("add", compName, oldName, false);
                 var before;
                 if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //designdummy atEnd
                     var on = _this._codeEditor.getVariableFromObject(beforeComponent);
                     var par = _this._codeEditor.getVariableFromObject(beforeComponent._parent);
                     before = { variablename: par, property: "add", value: on };
                 }
-                _this._propertyEditor.setPropertyInCode("add", compName, false, newName, before);
+                _this._propertyEditor.setPropertyInCode("add", /*compName*/ oldVal, false, newName, before);
             }
             /* if(newParent._components.length>1){//correct dummy
                  var dummy=	newParent._components[newParent._components.length-2];
@@ -3239,7 +3239,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1654164249900,
+                "date": 1654794024688,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
@@ -3269,7 +3269,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1654629293475,
+                "date": 1654795349666,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -4146,11 +4146,26 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         * @param {string} [variablename] - thpe name of the variable - default=this.variablename
         */
         removePropertyInCode(property, onlyValue = undefined, variablename = undefined) {
+            var _a, _b, _c;
+            if (this.data[variablename] !== undefined && this.data[variablename].config !== undefined && property === "add") {
+                property = "children";
+                var oldparent = this.data[variablename][property][0].node;
+                for (var x = 0; x < oldparent.initializer.elements.length; x++) {
+                    var valueNode = oldparent.initializer.elements[x];
+                    if (valueNode.getText() === onlyValue || valueNode.getText().startsWith(onlyValue + ".")) {
+                        oldparent.initializer.elements.splice(x, 1);
+                        if (oldparent.initializer.elements.length === 0) {
+                            this.removeNode(oldparent);
+                        }
+                        return valueNode;
+                    }
+                }
+            }
             if (this.data[variablename] !== undefined && this.data[variablename][property] !== undefined) {
                 var prop = undefined;
                 if (onlyValue !== undefined) {
                     for (var x = 0; x < this.data[variablename][property].length; x++) {
-                        if (this.data[variablename][property][x].value === onlyValue) {
+                        if (this.data[variablename][property][x].value === onlyValue || this.data[variablename][property][x].value.startsWith(onlyValue + ".")) {
                             prop = this.data[variablename][property][x];
                         }
                     }
@@ -4160,6 +4175,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 if (prop == undefined)
                     return;
                 this.removeNode(prop.node);
+                if (((_b = (_a = prop.node["expression"]) === null || _a === void 0 ? void 0 : _a.arguments) === null || _b === void 0 ? void 0 : _b.length) > 0) {
+                    return (_c = prop.node["expression"]) === null || _c === void 0 ? void 0 : _c.arguments[0];
+                }
+                return prop.node;
                 /*var oldvalue = this.lines[prop.linestart - 1];
                 for (let x = prop.linestart;x <= prop.lineend;x++) {
                     this.lines[x - 1] = undefined;
@@ -4176,7 +4195,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
          * @param {string} varname - the variable to remove
          */
         removeVariableInCode(varname) {
-            var _a, _b, _c;
+            var _a, _b, _c, _d;
             var prop = this.data[varname];
             var allprops = [];
             if (varname.startsWith("me.") && this.typeMe[varname.substring(3)] !== undefined)
@@ -4218,6 +4237,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                                 if (inconfig[x].getText() === varname || inconfig[x].getText().startsWith(varname)) {
                                     this.removeNode(inconfig[x]);
                                 }
+                            }
+                            if (inconfig.length === 0) {
+                                this.removeNode((_d = prop[key][0]) === null || _d === void 0 ? void 0 : _d.node);
                             }
                         }
                     }
@@ -4282,35 +4304,28 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
             }
         }
         setPropertyInConfig(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
-            var svalue = ts.createIdentifier(value);
+            var svalue = typeof value === "string" ? ts.createIdentifier(value) : value;
             var config = this.data[variableName]["config"][0].node;
             config = config.arguments[0];
-            /*if(config.expression)
-                    config=config.expression.arguments[0];
-            else if (config.elements)
-                    config=config.elements[0].arguments[0];
-                else{
-                    config=config.initializer.arguments[0];
-                }*/
             var newExpression = ts.createPropertyAssignment(property, svalue);
             if (property === "add" && replace === false) {
                 property = "children";
+                svalue = typeof value === "string" ? ts.createIdentifier(value + ".config({})") : value;
                 if (this.data[variableName]["children"] == undefined) { //
-                    newExpression = ts.createPropertyAssignment(property, ts.createArrayLiteral([ts.createIdentifier(value + ".config({})")], true));
-                    //                    newExpression=ts.createPropertyAssignment(property,ts.createArrayLiteral([ts.createIdentifier(value+".config({\n\t\n})]")]));
+                    newExpression = ts.createPropertyAssignment(property, ts.createArrayLiteral([svalue], true));
                     config.properties.push(newExpression);
                 }
                 else {
                     if (before === undefined) {
                         //@ts-ignore
-                        this.data[variableName]["children"][0].node.initializer.elements.push(ts.createIdentifier(value + ".config({})"));
+                        this.data[variableName]["children"][0].node.initializer.elements.push(svalue);
                     }
                     else {
                         //@ts-ignore
                         var array = this.data[variableName]["children"][0].node.initializer.elements;
                         for (var x = 0; x < array.length; x++) {
                             if (array[x].getText() === before.value || array[x].getText().startsWith(before.value + ".")) {
-                                array.splice(x, 0, ts.createIdentifier(value + ".config({})"));
+                                array.splice(x, 0, svalue);
                                 return;
                             }
                         }
@@ -4335,6 +4350,19 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
             //if (pos >= 0)
             //  node.parent["statements"].splice(pos, 1);
         }
+        /*  movePropertValueInCode(variableName: string, property: string, value: string, newVariableName: string, beforeValue: any) {
+              if (this.data[variableName]["config"] !== undefined) {
+                  if (property === "add")
+                      property = "children";
+                  var oldparent:any=this.data[variableName][property][0].node;
+                  for (var x = 0; x < oldparent.initializer.elements.length; x++) {
+                      var valueNode=oldparent.initializer.elements[x];
+                      if (valueNode.getText() === value ||valueNode.getText().startsWith(value + ".")) {
+                          oldparent.initializer.elements.splice(x,1);
+                      }
+                  }
+              }
+          }*/
         /**
         * modify the property in code
         * @param variablename - the name of the variable
@@ -4355,6 +4383,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 this.setPropertyInConfig(variableName, property, value, isFunction, replace, before, scope);
                 return;
             }
+            var newValue = typeof value === "string" ? ts.createIdentifier(value) : value;
             var statements = scope["body"].statements;
             if (property === "new") { //me.panel1=new Panel({});
                 let prop = this.data[variableName]["_new_"][0]; //.substring(3)];
@@ -4364,7 +4393,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 var left = prop.node.getText();
                 left = left.substring(0, left.indexOf("=") - 1);
                 property = "_new_";
-                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), ts.createIdentifier(value)));
+                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), newValue));
                 /*	}else{//var hh=new Panel({})
                         let prop = this.data[variableName][0];
                         var constr = prop[0].value;
@@ -4375,10 +4404,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                     }*/
             }
             else if (isFunction) {
-                newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(variableName + "." + property), undefined, [ts.createIdentifier(value)]));
+                newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(variableName + "." + property), undefined, [newValue]));
             }
             else
-                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(variableName + "." + property), ts.createIdentifier(value)));
+                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(variableName + "." + property), newValue));
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
                 let node = this.data[variableName][property][0].node;
                 var pos = node.parent["statements"].indexOf(node);
@@ -4495,14 +4524,22 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
     exports.Parser = Parser;
     async function test() {
         await Typescript_4.default.waitForInited;
-        var code = Typescript_4.default.getCode("jassijs_editor/util/Parser.ts");
+        var code = Typescript_4.default.getCode("de/Dialog.ts");
         var parser = new Parser();
         // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
-        code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll,aaa.config({u:1,o:2})]});}";
-        parser.parse(code, undefined);
+        // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
+        //parser.parse(code, undefined);
+        parser.parse(code, [{ classname: "Dialog", methodname: "layout" }]);
+        debugger;
+        var node = parser.removePropertyInCode("add", "me.textbox1", "me.panel1");
+        parser.setPropertyInCode("this", "add", node, [{ classname: "Dialog", methodname: "layout" }], true, false);
+        //var node = parser.removePropertyInCode("add", "kk", "aaa");
+        //var node=parser.removePropertyInCode("add", "ll", "ppp");
+        //parser.setPropertyInCode("aaa","add",node,[{classname:undefined, methodname:"test"}],true,false,undefined,undefined);
+        //console.log(node.getText());
         //    parser.setPropertyInCode("ppp","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"ppp",property:"add",value:"ll"});
-        parser.setPropertyInCode("aaa", "add", "cc", [{ classname: undefined, methodname: "test" }], true, false);
+        //  parser.setPropertyInCode("aaa","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"aaa",property:"add",value:"kk"});
         console.log(parser.getModifiedCode());
         // debugger;
         /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });

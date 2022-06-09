@@ -7,6 +7,7 @@ import {Databinder} from "jassijs/ui/Databinder";
 import {Component,  $UIComponent } from "jassijs/ui/Component";
 import {Property,  $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Jassi";
+import { DataComponentConfig } from "jassijs/ui/DataComponent";
 
 @$UIComponent({ editableChildComponents: ["databinder"]})
 @$Class("jassijs.ui.RepeaterDesignPanel")
@@ -15,10 +16,17 @@ class RepeaterDesignPanel extends Panel {
     me;
 }
 
+export interface RepeaterConfig extends DataComponentConfig {
 
+     /**
+     *  @member {array} value - the array which objects used to create the repeating components
+     */
+    value?;
+
+}
 @$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple",editableChildComponents: ["this","design"]})
 @$Class("jassijs.ui.Repeater")
-export class Repeater extends Panel {
+export class Repeater extends Panel implements DataComponentConfig{
     _componentDesigner: ComponentDesigner;
     _autocommit: boolean;
     _createRepeatingComponent;
@@ -52,7 +60,10 @@ export class Repeater extends Panel {
         $(this.design.dom).addClass("designerNoSelectable");
         $(this.design.dom).addClass("designerNoResizable");
     }
-
+    config(config: RepeaterConfig): Repeater {
+        super.config(config);
+        return this;
+    }
     createRepeatingComponent(func) {
         this._createRepeatingComponent = func;
         func.bind(this);
@@ -143,9 +154,7 @@ export class Repeater extends Panel {
     _dummy(func) {
         //dummy
     }
-    /**
-     *  @member {array} value - the array which objects used to create the repeating components
-     */
+  
     set value(val) {
         this._value = val;
         this.update();
@@ -177,9 +186,9 @@ export class Repeater extends Panel {
      * @param {string} property - the property to bind
      */
     @$Property({type:"databinder"})
-    bind(databinder, property) {
-        this._databinder = databinder;
-        databinder.add(property, this, "_dummy");
+    set bind(databinder:any[]) {
+        this._databinder = databinder[0];
+        this._databinder.add(databinder[1], this, "_dummy");
     }
 
     destroy() {

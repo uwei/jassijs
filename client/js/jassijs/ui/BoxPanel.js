@@ -25,9 +25,10 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassi
             this.horizontal = false;
             $(this.dom).css("display", "flex");
         }
-        /**
-         * @member {boolean} - if true then the components are composed horizontally
-         **/
+        config(config) {
+            super.config(config);
+            return this;
+        }
         set horizontal(value) {
             this._horizontal = value;
             if (value)
@@ -35,15 +36,6 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassi
             else
                 $(this.dom).css("flex-direction", "column");
             this.updateSpliter();
-            /*	this._horizontal=value;
-                var jj=	$(this.dom).find(".jcomponent");
-                if(this._horizontal){
-                    $(this.dom).css("display","table");
-                    $(this.dom).find(".jcomponent").css("display","table-row");
-               }else{
-                    $(this.dom).css("display","flex");
-                    $(this.dom).find(".jcomponent").css("display","table-cell");
-               }*/
         }
         get horizontal() {
             return this._horizontal;
@@ -75,9 +67,6 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassi
             super.addBefore(component, before);
             this.updateSpliter();
         }
-        /**
-         * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
-         */
         set spliter(size) {
             this._spliter = size;
             this.updateSpliter();

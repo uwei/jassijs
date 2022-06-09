@@ -18,7 +18,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         var decimal = format.format(1.1).substring(1, 2);
         var group = format.format(1234).substring(1, 2);
         /*	const parts = format.formatToParts(1234.6);
-            var decimal = ".";
+                var decimal = ".";
             var group=",";
             parts.forEach(p => {
                 if (p.type === "decimal")
@@ -42,18 +42,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             $(this.dom).css("color", color);
             this.converter = undefined;
         }
-        /**
-         * @member {boolean} disabled - enable or disable the element
-         */
+        config(config) {
+            super.config(config);
+            return this;
+            //    return new c();
+        }
         set disabled(value) {
             $(this.dom).prop('disabled', true);
         }
         get disabled() {
             return $(this.dom).prop('disabled');
         }
-        /**
-         * @member {string} value - value of the component
-         */
         set format(value) {
             this._format = value;
             var _this = this;
@@ -88,9 +87,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             }
             this._value = ret;
         }
-        /**
-         * @member {string} value - value of the component
-         */
         set value(value) {
             this._value = value;
             var v = value;
@@ -108,31 +104,15 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
                 this.updateValue();
             return this._value;
         }
-        /**
-       * called if value has changed
-       * @param {function} handler - the function which is executed
-       */
         onclick(handler) {
             return this.on("click", handler);
         }
-        /**
-         * called if value has changed
-         * @param {function} handler - the function which is executed
-         */
         onchange(handler) {
             return this.on("change", handler);
         }
-        /**
-         * called if a key is pressed down
-         * @param {function} handler - the function which is executed
-         */
         onkeydown(handler) {
             return this.on("keydown", handler);
         }
-        /**
-         * called if user has something typed
-         * @param {function} handler - the function which is executed
-         */
         oninput(handler) {
             return this.on("input", handler);
         }
@@ -149,9 +129,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         get placeholder() {
             return $(this.dom).attr("placeholder");
         }
-        /**
-        *  @member {string|function} completerDisplay - property or function used to gets the value to display
-        */
         set autocompleterDisplay(value) {
             this._autocompleterDisplay = value;
             if (this.autocompleter !== undefined) {
@@ -181,9 +158,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             }
             comp[0].innerHTML = html;
         }
-        /**
-         *  @member {[object]} completer - values used for autocompleting
-         */
         set autocompleter(value) {
             var list = $(this.dom).attr("list");
             var _this = this;

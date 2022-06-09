@@ -1,9 +1,9 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import {ComponentConfig,  $UIComponent } from "jassijs/ui/Component";
 import {Property,  $Property } from "jassijs/ui/Property";
-import { DataComponent } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 
-export interface CheckboxConfig extends ComponentConfig{
+export interface CheckboxConfig extends DataComponentConfig{
       /**
     * register an event if the button is clicked
     * @param {function} handler - the function that is called on change

@@ -52,7 +52,7 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
             me.binder.definePropertyFor(this, "value");
             me.idvorname.x = 5;
             me.idvorname.y = 35;
-            me.idvorname.bind(me.binder, "vorname");
+            me.idvorname.bind = [me.binder, "vorname"];
             me.idvorname.width = 145;
             me.idvorname.autocommit = false;
             me.idvorname.label = "Vorname";
@@ -67,7 +67,7 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
             me.idnachname.label = "Nachname";
             me.idnachname.y = 75;
             me.idnachname.x = 5;
-            me.idnachname.bind(me.binder, "nachname");
+            me.idnachname.bind = [me.binder, "nachname"];
             me.idnachname.width = 160;
             me.idnachname.autocommit = true;
             this.add(me.idnachname);
@@ -86,7 +86,7 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
             });
             me.idtable.x = 5;
             me.idtable.y = 160;
-            me.idtable.bind(me.binder, "this");
+            me.idtable.bind = [me.binder, "this"];
             me.idtable.autocommit = true;
             me.checkPanel = new Panel_1.Panel();
             me.checkPanel.height = 120;
@@ -145,7 +145,7 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
             me.select1.x = 40;
             me.select1.y = 130;
             me.select1.width = 195;
-            me.select1.bind(me.binder, "this");
+            me.select1.bind = [me.binder, "this"];
             me.select1.display = "nachname";
             me.select1.autocommit = true;
             this.add(me.boxpanel1);
@@ -169,18 +169,18 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
                 me.textbox3 = new Textbox_1.Textbox();
                 me.textbox2 = new Textbox_1.Textbox();
                 me.textbox2.width = 40;
-                me.textbox2.bind(me.repeater1.design.databinder, "strasse");
+                me.textbox2.bind = [me.repeater1.design.databinder, "strasse"];
                 me.textbox3.width = "38";
-                me.textbox3.bind(me.repeater1.design.databinder, "id");
+                me.textbox3.bind = [me.repeater1.design.databinder, "id"];
                 me.repeater1.design.add(me.textbox2);
                 me.repeater1.design.add(me.textbox3);
                 me.repeater1.design.add(me.button1);
             });
-            me.repeater1.bind(me.binder, "rechnungen");
+            me.repeater1.bind = [me.binder, "rechnungen"];
             me.repeater1.x = 410;
             me.repeater1.y = 175;
             me.repeater1.label = "Repeater";
-            me.textbox1.bind(me.binder, "nachname");
+            me.textbox1.bind = [me.binder, "nachname"];
             me.textbox1.height = 15;
             me.testcomponent1.me.button4.text = "kk2";
             this.setdata();

@@ -39,6 +39,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Menu", "jassij
         get value() {
             return this._value;
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         /**
          * could be override to provide Context-actions
          * exsample:
@@ -120,11 +124,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Menu", "jassij
         getMainMenu() {
             return this;
         }
-        /**
-         * register an event if the contextmenu is showing
-         * @param {function} handler - the function that is called on change
-         * @returns {boolean} - false if the contextmenu should not been shown
-         */
         onbeforeshow(handler) {
             this.addEvent("beforeshow", handler);
         }

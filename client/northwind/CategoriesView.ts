@@ -46,15 +46,15 @@ export class CategoriesView extends DBObjectView {
         me.main.add(me.panel1);
         me.main.add(me.table1);
         me.Id.label = "Id";
-        me.Id.bind(me.databinder, "id");
+        me.Id.bind= [me.databinder, "id"];
         me.Id.width = 40;
         me.Id.converter = new NumberConverter();
-        me.name.bind(me.databinder, "CategoryName");
+        me.name.bind=[me.databinder, "CategoryName"];
         me.name.label = "Name";
         me.name.width = 225;
         me.description.height = 70;
         me.description.width = 280;
-        me.description.bind(me.databinder, "Description");
+        me.description.bind=[me.databinder, "Description"];
         me.description.label = "Description";
         me.boxpanel1.add(me.Id);
         me.boxpanel1.horizontal = true;

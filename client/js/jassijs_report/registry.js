@@ -844,7 +844,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RImageEditor.ts": {
-		"date": 1634053392000,
+		"date": 1654704395038,
 		"jassi_report/RImagePropertyEditor": {
 			"$PropertyEditor": [
 				[

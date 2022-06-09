@@ -30,6 +30,10 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
             DBObjectView_1.prototype.layout.bind(this)(this.me);
             // this.layout(this.me);
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         _setDesignMode(enable) {
             //no Icons to add Components in designer
         }
@@ -43,10 +47,6 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
             this.callEvent("created", this["value"]);
             return this["value"];
         }
-        /**
-        * register an event if the object is created
-        * @param {function} handler - the function that is called
-        */
         oncreated(handler) {
             this.addEvent("deleted", handler);
         }
@@ -60,10 +60,6 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
                 this.callEvent("saved", obj);
             });
         }
-        /**
-         * register an event if the object is saved
-         * @param {function} handler - the function that is called
-         */
         onsaved(handler) {
             this.addEvent("saved", handler);
         }
@@ -74,10 +70,6 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
             this.me.databinder.toForm(this["value"]);
             this.callEvent("refreshed", this["value"]);
         }
-        /**
-         * register an event if the object is refreshed
-         * @param {function} handler - the function that is called
-         */
         onrefreshed(handler) {
             this.addEvent("refreshed", handler);
         }
@@ -93,10 +85,6 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
             this["value"] = new cl();
             this.callEvent("deleted", ob);
         }
-        /**
-         * register an event if the object is deleted
-         * @param {function} handler - the function that is called
-         */
         ondeleted(handler) {
             this.addEvent("deleted", handler);
         }

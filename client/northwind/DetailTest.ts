@@ -26,7 +26,7 @@ export class DetailTest extends DBObjectView {
     layout(me: Me) {
         me.textbox1 = new Textbox();
         me.main.add(me.textbox1);
-        me.textbox1.bind(me.databinder,"Order.Customer.id");
+        me.textbox1.bind=[me.databinder,"Order.Customer.id"];
     }
 }
 export async function test() {

@@ -1,15 +1,28 @@
 import { Panel } from "jassijs/ui/Panel";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import { $UIComponent } from "jassijs/ui/Component";
+import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import { classes } from "jassijs/remote/Classes";
 //@ts-ignore
 import Split from "jassijs/ext/split";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
+
+
+export interface BoxPanelConfig extends ComponentConfig{
+    /**
+     * @member {boolean} - if true then the components are composed horizontally
+     **/
+   horizontal:boolean;
+   /**
+     * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
+     */
+    spliter:number[];
+}
+
 @$UIComponent({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] })
 @$Class("jassijs.ui.BoxPanel")
 @$Property({ name: "isAbsolute", hide: true, type: "boolean" })
-export class BoxPanel extends Panel {
+export class BoxPanel extends Panel implements BoxPanelConfig{
     _horizontal: boolean;
     private _spliter: number[];
     private _splitcomponent: any;
@@ -26,25 +39,19 @@ export class BoxPanel extends Panel {
         this.horizontal = false;
         $(this.dom).css("display", "flex");
     }
-    /**
-     * @member {boolean} - if true then the components are composed horizontally
-     **/
-    set horizontal(value: boolean) {
+
+    config(config:BoxPanelConfig):BoxPanel {
+        super.config(config);
+        return this;
+    }
+     set horizontal(value: boolean) {
         this._horizontal = value;
         if (value)
             $(this.dom).css("flex-direction", "row");
         else
             $(this.dom).css("flex-direction", "column");
         this.updateSpliter();
-        /*	this._horizontal=value;
-            var jj=	$(this.dom).find(".jcomponent");
-            if(this._horizontal){
-                $(this.dom).css("display","table");
-                $(this.dom).find(".jcomponent").css("display","table-row");
-           }else{
-                $(this.dom).css("display","flex");
-                $(this.dom).find(".jcomponent").css("display","table-cell");
-           }*/
+
     }
     @$Property({ default: true })
     get horizontal(): boolean {
@@ -77,10 +84,7 @@ export class BoxPanel extends Panel {
         super.addBefore(component, before);
         this.updateSpliter();
     }
-    /**
-     * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
-     */
-    set spliter(size: number[]) {
+      set spliter(size: number[]) {
         this._spliter = size;
         this.updateSpliter();
     }

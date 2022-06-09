@@ -24,10 +24,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             super(properties);
             this._autocommit = false;
         }
-        /**
-         * @member {bool} autocommit -  if true the databinder will update the value on every change
-         *                              if false the databinder will update the value on databinder.toForm
-         */
+        config(config) {
+            super.config(config);
+            return this;
+        }
         get autocommit() {
             return this._autocommit;
         }
@@ -37,19 +37,13 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
             //    this._databinder.checkAutocommit(this);
         }
         /**
-         * binds a component to a databinder
-         * @param {jassijs.ui.Databinder} databinder - the databinder to bind
-         * @param {string} property - the property to bind
+         * @param [databinder:jassijs.ui.Databinder,"propertyToBind"]
          */
-        bind(databinder, property = undefined) {
-            if (property === undefined && Array.isArray(databinder)) {
-                property = databinder[1];
-                databinder = databinder[0];
-            }
-            this._databinder = databinder;
-            if (databinder !== undefined)
-                databinder.add(property, this, "onchange");
-            //databinder.checkAutocommit(this);
+        set bind(databinder) {
+            var property = databinder[1];
+            this._databinder = databinder[0];
+            if (this._databinder !== undefined)
+                this._databinder.add(property, this, "onchange");
         }
         destroy() {
             if (this._databinder !== undefined) {
@@ -66,9 +60,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "ja
     ], DataComponent.prototype, "autocommit", null);
     __decorate([
         (0, Property_1.$Property)({ type: "databinder" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, String]),
-        __metadata("design:returntype", void 0)
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
     ], DataComponent.prototype, "bind", null);
     DataComponent = __decorate([
         (0, Jassi_1.$Class)("jassijs.ui.DataComponent"),

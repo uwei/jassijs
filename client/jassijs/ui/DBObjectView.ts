@@ -3,7 +3,7 @@ import {BoxPanel} from "jassijs/ui/BoxPanel";
 import { $Class } from "jassijs/remote/Jassi";
 import {Panel} from "jassijs/ui/Panel";
 import { Databinder } from "jassijs/ui/Databinder";
-import { $UIComponent } from "jassijs/ui/Component";
+import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { DBObject } from "jassijs/remote/DBObject";
@@ -34,9 +34,31 @@ export function $DBObjectView(properties: DBObjectViewProperties): Function {
 }
 type Me=DBObjectViewMe;
 
+export interface DBObjectViewConfig extends ComponentConfig {
+  /**
+     * register an event if the object is created
+     * @param {function} handler - the function that is called
+     */
+    oncreated?(handler: (obj:DBObject ) => void);
+     /**
+     * register an event if the object is saved
+     * @param {function} handler - the function that is called
+     */
+    onsaved?(handler: (obj:DBObject ) => void);
+    /**
+     * register an event if the object is refreshed
+     * @param {function} handler - the function that is called
+     */
+    onrefreshed?(handler: (obj:DBObject ) => void);
+     /**
+     * register an event if the object is deleted
+     * @param {function} handler - the function that is called
+     */
+    ondeleted?(handler: (obj:DBObject ) => void);
+}
 @$UIComponent({ editableChildComponents: ["this","me.main","me.toolbar","me.save","me.remove","me.refresh"] })
 @$Class("jassijs/ui/DBObjectView")
-export class DBObjectView extends Panel {
+export class DBObjectView extends Panel implements DBObjectViewConfig {
 	me:DBObjectViewMe;
 	value:any;
     constructor() {
@@ -46,6 +68,10 @@ export class DBObjectView extends Panel {
         //everytime call super.layout
         DBObjectView.prototype.layout.bind(this)(this.me);
        // this.layout(this.me);
+    }
+    config(config: DBObjectViewConfig): DBObjectView {
+        super.config(config);
+        return this;
     }
     protected _setDesignMode(enable) {
     	//no Icons to add Components in designer
@@ -60,10 +86,6 @@ export class DBObjectView extends Panel {
 		this.callEvent("created", this["value"]);
 		return this["value"];
     }
-     /**
-     * register an event if the object is created
-     * @param {function} handler - the function that is called
-     */
     @$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" })
     oncreated(handler: (obj:DBObject ) => void) {
         this.addEvent("deleted", handler);
@@ -79,10 +101,6 @@ export class DBObjectView extends Panel {
         });
         
     }
-    /**
-     * register an event if the object is saved
-     * @param {function} handler - the function that is called
-     */
     @$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" })
     onsaved(handler: (obj:DBObject ) => void) {
         this.addEvent("saved", handler);
@@ -94,10 +112,6 @@ export class DBObjectView extends Panel {
 		this.me.databinder.toForm(this["value"]);
 		this.callEvent("refreshed", this["value"]);
     }
-    /**
-     * register an event if the object is refreshed
-     * @param {function} handler - the function that is called
-     */
     @$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" })
     onrefreshed(handler: (obj:DBObject ) => void) {
         this.addEvent("refreshed", handler);
@@ -115,10 +129,6 @@ export class DBObjectView extends Panel {
 		this["value"]=new cl();
         this.callEvent("deleted", ob);
     }
-    /**
-     * register an event if the object is deleted
-     * @param {function} handler - the function that is called
-     */
     @$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" })
     ondeleted(handler: (obj:DBObject ) => void) {
         this.addEvent("deleted", handler);

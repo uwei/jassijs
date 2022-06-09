@@ -1,6 +1,6 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import { Container } from "jassijs/ui/Container";
-import { Component, $UIComponent, ComponentCreateProperties } from "jassijs/ui/Component";
+import { Container, ContainerConfig } from "jassijs/ui/Container";
+import { Component, $UIComponent, ComponentCreateProperties, ComponentConfig } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
 import { Image } from "jassijs/ui/Image";
 import { DesignDummy } from "jassijs/ui/DesignDummy";
@@ -10,12 +10,21 @@ export class PanelCreateProperties extends ComponentCreateProperties {
     @$Property({ default: false })
     useSpan?: boolean;
 }
+export interface PanelConfig extends ComponentConfig{
+   /**
+     * @param {boolean} the elements are ordered absolute
+     **/
+    isAbsolute:boolean;
+
+}
+
+
 
 @$UIComponent({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] })
 @$Class("jassijs.ui.Panel")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.PanelCreateProperties" })
 //@$Property({ name: "new/useSpan", type: "boolean", default: false })
-export class Panel extends Container {
+export class Panel extends Container implements PanelConfig {
     _isAbsolute: boolean;
     private _activeComponentDesigner:any;
     /**
@@ -49,10 +58,11 @@ export class Panel extends Container {
         this._designMode = false;
         this.isAbsolute = false;
     }
-    /**
-     * @param {boolean} the elements are ordered absolute
-     **/
-    set isAbsolute(value: boolean) {
+     config(config:ContainerConfig):Panel {
+        super.config(<ContainerConfig>config);
+        return this;
+    }
+   set isAbsolute(value: boolean) {
         this._isAbsolute = value;
         if (value)
             $(this.dom).addClass("jabsolutelayout");

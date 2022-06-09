@@ -1,7 +1,7 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { Table } from "jassijs/ui/Table";
 import { Panel } from "jassijs/ui/Panel";
-import { Button } from "jassijs/ui/Button";
+import { Button, ButtonConfig } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { VariablePanel } from "jassijs/ui/VariablePanel";
@@ -10,6 +10,7 @@ import { Property, $Property } from "jassijs/ui/Property";
 import { $UIComponent } from "jassijs/ui/Component";
 import { DBObject } from "jassijs/remote/DBObject";
 import { classes } from "jassijs/remote/Classes";
+import { DataComponentConfig } from "jassijs/ui/DataComponent";
 
 /*
 https://blog.openshift.com/using-filezilla-and-sftp-on-windows-with-openshift/
@@ -22,9 +23,33 @@ class Me {
 	IDOK?: Button;
 
 }
+export interface ObjectChooserConfig extends ButtonConfig {
+
+  	dialogHeight?: number;
+	dialogWidth?: number;
+	/**
+	 * @member {object} value - selection of the component 
+	 */
+	value?:any;
+	/**
+	 * @member {string} items - the items to select or  the classname to generate the items
+	 */
+	items?:string|any[];
+		/**
+	* called if value has changed
+	* @param {function} handler - the function which is executed
+	*/
+	onchange?(handler);
+	/**
+	 * @member {bool} autocommit -  if true the databinder will update the value on every change
+	 *                              if false the databinder will update the value on databinder.toForm 
+	 */
+	autocommit?:boolean;
+}
+
 @$UIComponent({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" })
 @$Class("jassijs.ui.ObjectChooser")
-export class ObjectChooser extends Button {
+export class ObjectChooser extends Button implements ObjectChooserConfig,DataComponentConfig {
 
 	@$Property({ default: 450 })
 	dialogHeight: number;
@@ -133,9 +158,7 @@ export class ObjectChooser extends Button {
 		var me = this.me;
 		$(me.IDPanel.dom).dialog("destroy");
 	}
-	/**
-	 * @member {object} value - selection of the component 
-	 */
+	
 	set value(value) { //the Code
 		this._value = value;
 	}
@@ -148,9 +171,7 @@ export class ObjectChooser extends Button {
 		return await cl.find();
 	}
 	@$Property({ type: "string", description: "the classname for to choose" })
-	/**
-	 * @member {string} items - the items to select
-	 */
+	
 	set items(value: any) {
 		var _this = this;
 		if (value !== undefined && typeof (value) === "string") {
@@ -167,22 +188,11 @@ export class ObjectChooser extends Button {
 		return this._items;
 	}
 
-
-
-
-	/**
-	* called if value has changed
-	* @param {function} handler - the function which is executed
-	*/
 	@$Property({ default: "function(event){\n\t\n}" })
 	onchange(handler) {
 		this.addEvent("change", handler);
 	}
 
-	/**
-	 * @member {bool} autocommit -  if true the databinder will update the value on every change
-	 *                              if false the databinder will update the value on databinder.toForm 
-	 */
 	@$Property()
 	get autocommit(): boolean {
 		return this._autocommit;
@@ -198,9 +208,9 @@ export class ObjectChooser extends Button {
 	 * @param {string} property - the property to bind
 	 */
 	@$Property({ type: "databinder" })
-	bind(databinder, property) {
-		this._databinder = databinder;
-		databinder.add(property, this, "onchange");
+	set bind(databinder:any[]) {
+		this._databinder = databinder[0];
+		this._databinder.add(<string>databinder[1], this, "onchange");
 		//databinder.checkAutocommit(this);
 	}
 	destroy() {

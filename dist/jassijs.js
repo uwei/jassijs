@@ -416,7 +416,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/security/UserView.ts": {
-                "date": 1622984494000,
+                "date": 1654704034248,
                 "jassijs/UserView": {
                     "$DBObjectView": [
                         {
@@ -528,11 +528,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ActionNodeMenu.ts": {
-                "date": 1627916730000,
+                "date": 1654696176754,
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
-                "date": 1623175904000,
+                "date": 1654696372603,
                 "jassijs.ui.BoxPanel": {
                     "$UIComponent": [
                         {
@@ -570,7 +570,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Button.ts": {
-                "date": 1654465838829,
+                "date": 1654695976908,
                 "jassijs.ui.Button": {
                     "$UIComponent": [
                         {
@@ -603,7 +603,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Calendar.ts": {
-                "date": 1622984380000,
+                "date": 1654705194788,
                 "jassijs.ui.Calendar": {
                     "$UIComponent": [
                         {
@@ -620,7 +620,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Checkbox.ts": {
-                "date": 1654632492660,
+                "date": 1654700986669,
                 "jassijs.ui.Checkbox": {
                     "$UIComponent": [
                         {
@@ -764,11 +764,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Container.ts": {
-                "date": 1654465833850,
+                "date": 1654695913660,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
-                "date": 1633538390000,
+                "date": 1654701972513,
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -1336,7 +1336,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DataComponent.ts": {
-                "date": 1654631678121,
+                "date": 1654703815491,
                 "jassijs.ui.DataComponent": {
                     "@members": {
                         "autocommit": {
@@ -1437,7 +1437,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1654466300753,
+                "date": 1654701942536,
                 "jassijs/ui/DBObjectView": {
                     "$UIComponent": [
                         {
@@ -1597,11 +1597,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/HTMLEditorPanel.ts": {
-                "date": 1623177020000,
+                "date": 1654701807236,
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1634379942000,
+                "date": 1654704820862,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -1632,7 +1632,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Image.ts": {
-                "date": 1633773478000,
+                "date": 1654704834003,
                 "jassijs.ui.Image": {
                     "$UIComponent": [
                         {
@@ -1676,7 +1676,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Menu.ts": {
-                "date": 1623177180000,
+                "date": 1654702715316,
                 "jassijs.ui.Menu": {
                     "$UIComponent": [
                         {
@@ -1701,7 +1701,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/MenuItem.ts": {
-                "date": 1627924540000,
+                "date": 1654702869980,
                 "jassijs.ui.MenuItem": {
                     "$UIComponent": [
                         {
@@ -1733,7 +1733,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ObjectChooser.ts": {
-                "date": 1626122222000,
+                "date": 1654704847496,
                 "jassijs.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -1805,7 +1805,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1631480196000,
+                "date": 1654696141417,
                 "jassijs.ui.PanelCreateProperties": {
                     "@members": {
                         "useSpan": {
@@ -1846,7 +1846,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1654165068196,
+                "date": 1654794147356,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {
@@ -2157,7 +2157,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Repeater.ts": {
-                "date": 1630147966000,
+                "date": 1654705741464,
                 "jassijs.ui.RepeaterDesignPanel": {
                     "$UIComponent": [
                         {
@@ -2428,7 +2428,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1624054512000,
+                "date": 1654706137482,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -7227,10 +7227,10 @@ define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/converter
             me.textbox2 = new Textbox_1.Textbox();
             this.add(me.textbox1);
             this.add(me.textbox2);
-            me.textbox1.bind(me.databinder, "id");
+            me.textbox1.bind = [me.databinder, "id"];
             me.textbox1.width = 40;
             me.textbox1.converter = new NumberConverter_1.NumberConverter();
-            me.textbox2.bind(me.databinder, "email");
+            me.textbox2.bind = [me.databinder, "email"];
         }
         createObject() {
             super.createObject();
@@ -7487,6 +7487,10 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
             this.me = {};
             this.layout(this.me);
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         layout(me) {
             me.menu = new Menu_1.Menu();
             me.menu.width = 150;
@@ -7563,9 +7567,10 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "jassijs/ui/Panel", "jassij
             this.horizontal = false;
             $(this.dom).css("display", "flex");
         }
-        /**
-         * @member {boolean} - if true then the components are composed horizontally
-         **/
+        config(config) {
+            super.config(config);
+            return this;
+        }
         set horizontal(value) {
             this._horizontal = value;
             if (value)
@@ -7573,15 +7578,6 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "jassijs/ui/Panel", "jassij
             else
                 $(this.dom).css("flex-direction", "column");
             this.updateSpliter();
-            /*	this._horizontal=value;
-                var jj=	$(this.dom).find(".jcomponent");
-                if(this._horizontal){
-                    $(this.dom).css("display","table");
-                    $(this.dom).find(".jcomponent").css("display","table-row");
-               }else{
-                    $(this.dom).css("display","flex");
-                    $(this.dom).find(".jcomponent").css("display","table-cell");
-               }*/
         }
         get horizontal() {
             return this._horizontal;
@@ -7613,9 +7609,6 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "jassijs/ui/Panel", "jassij
             super.addBefore(component, before);
             this.updateSpliter();
         }
-        /**
-         * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
-         */
         set spliter(size) {
             this._spliter = size;
             this.updateSpliter();
@@ -7966,6 +7959,10 @@ define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jass
         constructor(properties = undefined) {
             super(properties);
             $(this.dom).datepicker();
+        }
+        config(config) {
+            super.config(config);
+            return this;
         }
         get value() {
             return $(this.dom).datepicker('getDate');
@@ -9056,6 +9053,10 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", 
         get value() {
             return this._value;
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         /**
          * could be override to provide Context-actions
          * exsample:
@@ -9137,11 +9138,6 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", 
         getMainMenu() {
             return this;
         }
-        /**
-         * register an event if the contextmenu is showing
-         * @param {function} handler - the function that is called on change
-         * @returns {boolean} - false if the contextmenu should not been shown
-         */
         onbeforeshow(handler) {
             this.addEvent("beforeshow", handler);
         }
@@ -9615,6 +9611,10 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
             DBObjectView_3.prototype.layout.bind(this)(this.me);
             // this.layout(this.me);
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         _setDesignMode(enable) {
             //no Icons to add Components in designer
         }
@@ -9628,10 +9628,6 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
             this.callEvent("created", this["value"]);
             return this["value"];
         }
-        /**
-        * register an event if the object is created
-        * @param {function} handler - the function that is called
-        */
         oncreated(handler) {
             this.addEvent("deleted", handler);
         }
@@ -9645,10 +9641,6 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
                 this.callEvent("saved", obj);
             });
         }
-        /**
-         * register an event if the object is saved
-         * @param {function} handler - the function that is called
-         */
         onsaved(handler) {
             this.addEvent("saved", handler);
         }
@@ -9659,10 +9651,6 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
             this.me.databinder.toForm(this["value"]);
             this.callEvent("refreshed", this["value"]);
         }
-        /**
-         * register an event if the object is refreshed
-         * @param {function} handler - the function that is called
-         */
         onrefreshed(handler) {
             this.addEvent("refreshed", handler);
         }
@@ -9678,10 +9666,6 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
             this["value"] = new cl();
             this.callEvent("deleted", ob);
         }
-        /**
-         * register an event if the object is deleted
-         * @param {function} handler - the function that is called
-         */
         ondeleted(handler) {
             this.addEvent("deleted", handler);
         }
@@ -9786,10 +9770,10 @@ define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component"
             super(properties);
             this._autocommit = false;
         }
-        /**
-         * @member {bool} autocommit -  if true the databinder will update the value on every change
-         *                              if false the databinder will update the value on databinder.toForm
-         */
+        config(config) {
+            super.config(config);
+            return this;
+        }
         get autocommit() {
             return this._autocommit;
         }
@@ -9799,19 +9783,13 @@ define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component"
             //    this._databinder.checkAutocommit(this);
         }
         /**
-         * binds a component to a databinder
-         * @param {jassijs.ui.Databinder} databinder - the databinder to bind
-         * @param {string} property - the property to bind
+         * @param [databinder:jassijs.ui.Databinder,"propertyToBind"]
          */
-        bind(databinder, property = undefined) {
-            if (property === undefined && Array.isArray(databinder)) {
-                property = databinder[1];
-                databinder = databinder[0];
-            }
-            this._databinder = databinder;
-            if (databinder !== undefined)
-                databinder.add(property, this, "onchange");
-            //databinder.checkAutocommit(this);
+        set bind(databinder) {
+            var property = databinder[1];
+            this._databinder = databinder[0];
+            if (this._databinder !== undefined)
+                this._databinder.add(property, this, "onchange");
         }
         destroy() {
             if (this._databinder !== undefined) {
@@ -9828,9 +9806,8 @@ define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component"
     ], DataComponent.prototype, "autocommit", null);
     __decorate([
         (0, Property_13.$Property)({ type: "databinder" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, String]),
-        __metadata("design:returntype", void 0)
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
     ], DataComponent.prototype, "bind", null);
     DataComponent = __decorate([
         (0, Jassi_48.$Class)("jassijs.ui.DataComponent"),
@@ -11500,6 +11477,10 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             this.newlineafter = false;
             // $(this.__dom).css("min-width", "10px");
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         get newlineafter() {
             return $(this.dom).css("display") === "inline-block";
         }
@@ -11517,9 +11498,6 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
         get template() {
             return this._template;
         }
-        /**
-         * template string  component.value=new Person();component.template:"{{name}}"}
-         */
         set template(value) {
             this._template = value;
             this.value = this.value; //reformat value
@@ -11766,10 +11744,10 @@ define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassi
             //super.init($('<img vspace="0" hspace="0"  border="0"  src="" alt="">')[0]);
             super.init($('<div style="display: inline-block;white-space: nowrap;"><img  vspace="0" hspace="0"  border="0"  src="" alt=""></div>')[0]);
         }
-        /**
-        * register an event if the image is clicked
-        * @param {function} handler - the function that is called on change
-        */
+        config(config) {
+            super.config(config);
+            return this;
+        }
         onclick(handler) {
             $("#" + this._id).click(function () {
                 handler();
@@ -11804,9 +11782,6 @@ define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassi
                 $(this.dom.children[0]).attr("height", "100%");
             super.height = value;
         }
-        /**
-        * @member {string} - link to image
-        */
         set src(icon) {
             $(this.dom).removeClass();
             $(this.dom.children[0]).attr("src", "");
@@ -11852,8 +11827,7 @@ define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassi
     ], Image);
     exports.Image = Image;
     function test() {
-        var ret = new Image();
-        ret.src = "mdi mdi-file-image";
+        var ret = new Image().config({ src: "mdi mdi-file-image" });
         return ret;
     }
     exports.test = test;
@@ -11894,11 +11868,6 @@ define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassij
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Menu = void 0;
-    /*declare global {
-        interface JQuery {
-                //menu: any;
-        }
-    }*/
     let Menu = class Menu extends Container_2.Container {
         constructor(options = undefined) {
             super();
@@ -11911,6 +11880,10 @@ define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassij
                 $(this.dom).menu();
             this._text = "";
             this._icon = "";
+        }
+        config(config) {
+            super.config(config);
+            return this;
         }
         _sample() {
             super.init($('<ul ' + ` class="Menu">
@@ -12035,8 +12008,8 @@ define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "ja
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MenuItem = void 0;
-    //jassijs.myRequire("lib/contextMenu.css");
     let MenuItem = class MenuItem extends Container_3.Container {
+        //_components: Component[];
         constructor() {
             super();
             super.init($('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
@@ -12049,6 +12022,10 @@ define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "ja
             this._components = [this.items]; //neede for getEditableComponents
             delete this.items._isRoot;
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         onclick(handler) {
             var _this = this;
             $("#" + this._id).click(function (ob) {
@@ -12056,9 +12033,6 @@ define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "ja
                 //_this.this.items._parent.close();
             });
         }
-        /**
-        * @member {string} - the icon of the button
-        */
         set icon(icon) {
             this._icon = icon;
             var img;
@@ -12086,9 +12060,6 @@ define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "ja
             }
             return ret;
         }
-        /**
-         * @member {string} - the caption of the button
-         */
         set text(value) {
             //<li><div><img  src="res/car.ico" /><span>Save</span></div></li>
             this._text = value;
@@ -12284,9 +12255,6 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
             var me = this.me;
             $(me.IDPanel.dom).dialog("destroy");
         }
-        /**
-         * @member {object} value - selection of the component
-         */
         set value(value) {
             this._value = value;
         }
@@ -12310,17 +12278,9 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
         get items() {
             return this._items;
         }
-        /**
-        * called if value has changed
-        * @param {function} handler - the function which is executed
-        */
         onchange(handler) {
             this.addEvent("change", handler);
         }
-        /**
-         * @member {bool} autocommit -  if true the databinder will update the value on every change
-         *                              if false the databinder will update the value on databinder.toForm
-         */
         get autocommit() {
             return this._autocommit;
         }
@@ -12334,9 +12294,9 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
          * @param {jassijs.ui.Databinder} databinder - the databinder to bind
          * @param {string} property - the property to bind
          */
-        bind(databinder, property) {
-            this._databinder = databinder;
-            databinder.add(property, this, "onchange");
+        set bind(databinder) {
+            this._databinder = databinder[0];
+            this._databinder.add(databinder[1], this, "onchange");
             //databinder.checkAutocommit(this);
         }
         destroy() {
@@ -12371,9 +12331,8 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     ], ObjectChooser.prototype, "autocommit", null);
     __decorate([
         (0, Property_19.$Property)({ type: "databinder" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Object]),
-        __metadata("design:returntype", void 0)
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
     ], ObjectChooser.prototype, "bind", null);
     ObjectChooser = __decorate([
         (0, Component_18.$UIComponent)({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
@@ -12598,9 +12557,10 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassi
             this._designMode = false;
             this.isAbsolute = false;
         }
-        /**
-         * @param {boolean} the elements are ordered absolute
-         **/
+        config(config) {
+            super.config(config);
+            return this;
+        }
         set isAbsolute(value) {
             this._isAbsolute = value;
             if (value)
@@ -13299,7 +13259,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
             this.parser.setPropertyInCode(variableName, property, value, 
             /*[{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]*/ undefined, isFunction, replace, before, scopename);
             //correct spaces
-            if (value && value.indexOf("\n") > -1) {
+            if (value && value.indexOf && value.indexOf("\n") > -1) {
                 this.codeEditor.value = this.parser.getModifiedCode();
                 this.updateParser();
             }
@@ -13417,7 +13377,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
         * @param {type} [onlyValue] - remove the property only if the value is found
         * @param {string} [variablename] - the name of the variable - default=this.variablename
         */
-        removePropertyInCode(property, onlyValue = undefined, variablename = undefined) {
+        removePropertyInCode(property, onlyValue = undefined, variablename = undefined, doupdate = true) {
             if (this.codeEditor === undefined) {
                 delete this.codeChanges[property];
                 this.callEvent("codeChanged", {});
@@ -13434,13 +13394,17 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
             }
             if (variablename === undefined)
                 variablename = this.variablename;
-            this.updateParser();
-            ; //notwendig?
-            this.parser.removePropertyInCode(property, onlyValue, variablename);
-            var text = this.parser.getModifiedCode();
-            this.codeEditor.value = text;
-            this.updateParser();
-            this.callEvent("codeChanged", {});
+            if (doupdate) {
+                this.updateParser(); //notwendig?
+            }
+            var ret = this.parser.removePropertyInCode(property, onlyValue, variablename);
+            if (doupdate) {
+                var text = this.parser.getModifiedCode();
+                this.codeEditor.value = text;
+                this.updateParser();
+                this.callEvent("codeChanged", {});
+            }
+            return ret;
         }
         /**
         * removes the property in design
@@ -13588,6 +13552,10 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
             $(this.design.dom).addClass("designerNoSelectable");
             $(this.design.dom).addClass("designerNoResizable");
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         createRepeatingComponent(func) {
             this._createRepeatingComponent = func;
             func.bind(this);
@@ -13673,9 +13641,6 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
         _dummy(func) {
             //dummy
         }
-        /**
-         *  @member {array} value - the array which objects used to create the repeating components
-         */
         set value(val) {
             this._value = val;
             this.update();
@@ -13707,9 +13672,9 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
          * @param {jassijs.ui.Databinder} databinder - the databinder to bind
          * @param {string} property - the property to bind
          */
-        bind(databinder, property) {
-            this._databinder = databinder;
-            databinder.add(property, this, "_dummy");
+        set bind(databinder) {
+            this._databinder = databinder[0];
+            this._databinder.add(databinder[1], this, "_dummy");
         }
         destroy() {
             this._value = undefined;
@@ -13719,9 +13684,8 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
     };
     __decorate([
         (0, Property_23.$Property)({ type: "databinder" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Object]),
-        __metadata("design:returntype", void 0)
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
     ], Repeater.prototype, "bind", null);
     Repeater = __decorate([
         (0, Component_21.$UIComponent)({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
@@ -14803,7 +14767,7 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
         var decimal = format.format(1.1).substring(1, 2);
         var group = format.format(1234).substring(1, 2);
         /*	const parts = format.formatToParts(1234.6);
-            var decimal = ".";
+                var decimal = ".";
             var group=",";
             parts.forEach(p => {
                 if (p.type === "decimal")
@@ -14827,18 +14791,17 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
             $(this.dom).css("color", color);
             this.converter = undefined;
         }
-        /**
-         * @member {boolean} disabled - enable or disable the element
-         */
+        config(config) {
+            super.config(config);
+            return this;
+            //    return new c();
+        }
         set disabled(value) {
             $(this.dom).prop('disabled', true);
         }
         get disabled() {
             return $(this.dom).prop('disabled');
         }
-        /**
-         * @member {string} value - value of the component
-         */
         set format(value) {
             this._format = value;
             var _this = this;
@@ -14873,9 +14836,6 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
             }
             this._value = ret;
         }
-        /**
-         * @member {string} value - value of the component
-         */
         set value(value) {
             this._value = value;
             var v = value;
@@ -14893,31 +14853,15 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
                 this.updateValue();
             return this._value;
         }
-        /**
-       * called if value has changed
-       * @param {function} handler - the function which is executed
-       */
         onclick(handler) {
             return this.on("click", handler);
         }
-        /**
-         * called if value has changed
-         * @param {function} handler - the function which is executed
-         */
         onchange(handler) {
             return this.on("change", handler);
         }
-        /**
-         * called if a key is pressed down
-         * @param {function} handler - the function which is executed
-         */
         onkeydown(handler) {
             return this.on("keydown", handler);
         }
-        /**
-         * called if user has something typed
-         * @param {function} handler - the function which is executed
-         */
         oninput(handler) {
             return this.on("input", handler);
         }
@@ -14934,9 +14878,6 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
         get placeholder() {
             return $(this.dom).attr("placeholder");
         }
-        /**
-        *  @member {string|function} completerDisplay - property or function used to gets the value to display
-        */
         set autocompleterDisplay(value) {
             this._autocompleterDisplay = value;
             if (this.autocompleter !== undefined) {
@@ -14966,9 +14907,6 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
             }
             comp[0].innerHTML = html;
         }
-        /**
-         *  @member {[object]} completer - values used for autocompleting
-         */
         set autocompleter(value) {
             var list = $(this.dom).attr("list");
             var _this = this;

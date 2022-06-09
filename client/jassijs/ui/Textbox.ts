@@ -1,40 +1,85 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { Component, $UIComponent } from "jassijs/ui/Component";
-import { DataComponent } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
 import registry from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 import { Numberformatter } from "jassijs/util/Numberformatter";
 
 //calc the default Formats
-let allFormats=(()=>{
-    var ret=[];
+let allFormats = (() => {
+    var ret = [];
     const format = new Intl.NumberFormat();
-    
-    var decimal=format.format(1.1).substring(1,2);
-    var group=format.format(1234).substring(1,2);
-	/*	const parts = format.formatToParts(1234.6);
-  		var decimal = ".";
+
+    var decimal = format.format(1.1).substring(1, 2);
+    var group = format.format(1234).substring(1, 2);
+    /*	const parts = format.formatToParts(1234.6);
+            var decimal = ".";
         var group=",";
-		parts.forEach(p => {
-			if (p.type === "decimal")
-				decimal = p.value;
+        parts.forEach(p => {
+            if (p.type === "decimal")
+                decimal = p.value;
             if (p.type === "group")
-				group = p.value;
-		});*/
-    ret.push("#"+group+"##0"+decimal+"00");
-    ret.push("#"+group+"##0"+decimal+"00 €");
-    ret.push("#"+group+"##0"+decimal+"00 $");
+                group = p.value;
+        });*/
+    ret.push("#" + group + "##0" + decimal + "00");
+    ret.push("#" + group + "##0" + decimal + "00 €");
+    ret.push("#" + group + "##0" + decimal + "00 $");
     ret.push("0");
-    ret.push("0"+decimal+"00");
+    ret.push("0" + decimal + "00");
 
     return ret;
 })();
+export interface TextboxConfig extends DataComponentConfig {
+    converter?: DefaultConverter;
+    /**
+    * @member {boolean} disabled - enable or disable the element
+    */
+    disabled?: boolean;
+    /**
+    * @member {string} value - value of the component 
+    */
+    format?: string;
+    /**
+     * @member {string} value - value of the component 
+     */
+    value?;
+    /**
+ * called if value has changed
+ * @param {function} handler - the function which is executed
+ */
+    onclick?(handler);
+    /**
+     * called if value has changed
+     * @param {function} handler - the function which is executed
+     */
 
+    onchange?(handler);
+
+    /**
+     * called if a key is pressed down
+     * @param {function} handler - the function which is executed
+     */
+    onkeydown?(handler);
+    /**
+     * called if user has something typed
+     * @param {function} handler - the function which is executed
+     */
+    oninput?(handler);
+    placeholder?: string;
+    /**
+    *  @member {string|function} completerDisplay - property or function used to gets the value to display
+    */
+    autocompleterDisplay?: string | ((object: any) => string)
+    /**
+    *  @member {[object]} completer - values used for autocompleting 
+    */
+    autocompleter?: any[] | (() => any);
+}
 @$UIComponent({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" })
 @$Class("jassijs.ui.Textbox")
 @$Property({ name: "new", type: "string" })
-export class Textbox extends DataComponent {
+export class Textbox extends DataComponent implements TextboxConfig {
     /* get dom(){
          return this.dom;
      }*/
@@ -53,20 +98,17 @@ export class Textbox extends DataComponent {
         $(this.dom).css("color", color);
         this.converter = undefined;
     }
-    /**
-     * @member {boolean} disabled - enable or disable the element
-     */
+    config(config: TextboxConfig): Textbox {
+        super.config(config);
+        return this;
+        //    return new c();
+    }
     set disabled(value) {
         $(this.dom).prop('disabled', true);
     }
     get disabled() {
         return $(this.dom).prop('disabled');
     }
-
-
-    /**
-     * @member {string} value - value of the component 
-     */
     set format(value) { //the Code
         this._format = value;
         var _this = this;
@@ -74,11 +116,11 @@ export class Textbox extends DataComponent {
             this.off("focus", this._formatProps.focus);
             this.off("blur", this._formatProps.blur);
         }
-       
+
         if (value && this._formatProps === undefined) {
-            _this._formatProps={blur:undefined,focus:undefined,inEditMode:false};
+            _this._formatProps = { blur: undefined, focus: undefined, inEditMode: false };
             this._formatProps.focus = this.on("focus", () => {
-                let val=this.value;
+                let val = this.value;
                 _this._formatProps.inEditMode = true;
                 $(this.dom).val(Numberformatter.numberToString(val));
             });
@@ -88,11 +130,11 @@ export class Textbox extends DataComponent {
                 $(this.dom).val(Numberformatter.format(this._format, this.value));
             });
         }
-        if(this.value)
-            this.value=this.value;//apply the ne format
+        if (this.value)
+            this.value = this.value;//apply the ne format
         //      $(this.dom).val(value);
     }
-    @$Property({ type: "string" ,chooseFrom:allFormats})
+    @$Property({ type: "string", chooseFrom: allFormats })
     get format() {
         return this._format;
     }
@@ -103,16 +145,14 @@ export class Textbox extends DataComponent {
         }
         this._value = ret;
     }
-    /**
-     * @member {string} value - value of the component 
-     */
+
     set value(value) { //the Code
         this._value = value;
         var v = value;
         if (this.converter)
             v = this.converter.objectToString(v);
-        if(this._format){
-            v=Numberformatter.format(this._format, value);
+        if (this._format) {
+            v = Numberformatter.format(this._format, value);
         }
 
         $(this.dom).val(v);
@@ -125,37 +165,23 @@ export class Textbox extends DataComponent {
             this.updateValue();
         return this._value;
     }
-    /**
-   * called if value has changed
-   * @param {function} handler - the function which is executed
-   */
 
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler) {
         return this.on("click", handler);
     }
-    /**
-     * called if value has changed
-     * @param {function} handler - the function which is executed
-     */
 
     @$Property({ default: "function(event){\n\t\n}" })
     onchange(handler) {
         return this.on("change", handler);
     }
 
-    /**
-     * called if a key is pressed down
-     * @param {function} handler - the function which is executed
-     */
+
     @$Property({ default: "function(event){\n\t\n}" })
     onkeydown(handler) {
         return this.on("keydown", handler);
     }
-    /**
-     * called if user has something typed
-     * @param {function} handler - the function which is executed
-     */
+
     @$Property({ default: "function(event){\n\t\n}" })
     oninput(handler) {
         return this.on("input", handler);
@@ -175,9 +201,7 @@ export class Textbox extends DataComponent {
     get placeholder(): string {
         return $(this.dom).attr("placeholder");
     }
-    /**
-    *  @member {string|function} completerDisplay - property or function used to gets the value to display
-    */
+
     set autocompleterDisplay(value: string | ((object: any) => string)) {
         this._autocompleterDisplay = value;
         if (this.autocompleter !== undefined) {
@@ -206,9 +230,7 @@ export class Textbox extends DataComponent {
         }
         comp[0].innerHTML = html;
     }
-    /**
-     *  @member {[object]} completer - values used for autocompleting 
-     */
+
     set autocompleter(value: any[] | (() => any)) {
         var list = $(this.dom).attr("list");
         var _this = this;

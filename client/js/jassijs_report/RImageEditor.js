@@ -157,13 +157,13 @@ define(["require", "exports", "jassijs/ui/Databinder", "jassijs/ui/Upload", "jas
                 me.image1.height = "75";
                 me.remove.text = "";
                 me.remove.icon = "mdi mdi-delete-forever-outline";
-                me.itile.bind(me.repeater1.design.databinder, "name");
+                me.itile.bind = [me.repeater1.design.databinder, "name"];
                 me.itile.onchange(function (event) {
                     var ob = me.itile._databinder.value;
                     ob.name = me.itile.value;
                     _this.items = _this.items;
                 });
-                me.image1.bind(me.repeater1.design.databinder, "data");
+                me.image1.bind = [me.repeater1.design.databinder, "data"];
                 me.remove.onclick(function (event) {
                     var ob = me.itile._databinder.value;
                     let pos = _this._items.indexOf(ob);

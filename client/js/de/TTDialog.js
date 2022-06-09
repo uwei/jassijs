@@ -18,7 +18,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel"], funct
             this.layout(this.me);
         }
         layout(me) {
-            me.config({});
+            this.config({});
         }
     };
     TTDialog = __decorate([

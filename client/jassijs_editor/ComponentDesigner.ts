@@ -425,14 +425,14 @@ export class ComponentDesigner extends Panel {
 
         if (oldParent !== newParent || beforeComponent !== undefined || top === undefined) {//top=undefined ->on relative position at the end call the block
             //get Position
-            _this._propertyEditor.removePropertyInCode("add", compName, oldName);
+            var oldVal=_this._propertyEditor.removePropertyInCode("add", compName, oldName,false);
             var before;
             if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") {//designdummy atEnd
                 var on = _this._codeEditor.getVariableFromObject(beforeComponent);
                 var par = _this._codeEditor.getVariableFromObject(beforeComponent._parent);
                 before = { variablename: par, property: "add", value: on };
             }
-            _this._propertyEditor.setPropertyInCode("add", compName, false, newName, before);
+            _this._propertyEditor.setPropertyInCode("add", /*compName*/oldVal, false, newName, before);
 
         }
         /* if(newParent._components.length>1){//correct dummy

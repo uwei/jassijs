@@ -1,16 +1,26 @@
 
 import jassi from "jassijs/jassi";
-import {Component,  $UIComponent } from "jassijs/ui/Component";
-import {Menu} from "jassijs/ui/Menu";
-import {Property,  $Property } from "jassijs/ui/Property";
+import { Component, $UIComponent } from "jassijs/ui/Component";
+import { Menu } from "jassijs/ui/Menu";
+import { Property, $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Jassi";
-import {Container} from "jassijs/ui/Container";
+import { Container, ContainerConfig } from "jassijs/ui/Container";
 
-//jassijs.myRequire("lib/contextMenu.css");
+export interface MenuItemConfig extends ContainerConfig {
 
+    onclick?(handler);
+    /**
+     * @member {string} - the icon of the button
+     */
+    icon: string;
+    /**
+    * @member {string} - the caption of the button
+    */
+    text?: string;
+}
 @$UIComponent({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] })
 @$Class("jassijs.ui.MenuItem")
-export  class MenuItem extends Container {
+export class MenuItem extends Container implements ContainerConfig {
     /* get dom(){
          return this.dom;
      }*/
@@ -18,7 +28,7 @@ export  class MenuItem extends Container {
     items: Menu;
     _icon: string;
     _mainMenu: Menu;
-    _components: Component[];
+    //_components: Component[];
     constructor() {
         super();
 
@@ -33,32 +43,32 @@ export  class MenuItem extends Container {
         delete this.items._isRoot;
 
     }
-
+    config(config: MenuItemConfig): MenuItem {
+        super.config(config);
+        return this;
+    }
 
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler) {
         var _this = this;
-        $("#" + this._id).click(function(ob) {
+        $("#" + this._id).click(function (ob) {
             handler(ob);
             //_this.this.items._parent.close();
         });
     }
-    /**
-    * @member {string} - the icon of the button
-    */
     set icon(icon: string) { //the Code
         this._icon = icon;
-          var img;
+        var img;
         var el1 = $(this.dom).find(".menuitemspan");
         el1.removeClass();
         el1.addClass("menuitemspan");
-         $(this.dom).find(".menuitemicon").attr("src", "");
+        $(this.dom).find(".menuitemicon").attr("src", "");
         if (icon?.startsWith("mdi")) {
             el1.addClass(icon);
-            $(this.dom).find(".menuitemicon").css("display","none");
+            $(this.dom).find(".menuitemicon").css("display", "none");
         } else {
-            if(icon)
-                $(this.dom).find(".menuitemicon").css("display","initial");
+            if (icon)
+                $(this.dom).find(".menuitemicon").css("display", "initial");
             $(this.dom).find(".menuitemicon").attr("src", icon);
         }
 
@@ -68,16 +78,13 @@ export  class MenuItem extends Container {
     }
     @$Property()
     get icon(): string { //the Code
-         var ret=$(this.dom).find(".menuitemicon").attr("src");
-        if(ret===""){
-            ret= $(this.dom).find(".menuitemspan").attr("class").replace("menuitemspan ","");
+        var ret = $(this.dom).find(".menuitemicon").attr("src");
+        if (ret === "") {
+            ret = $(this.dom).find(".menuitemspan").attr("class").replace("menuitemspan ", "");
         }
         return ret;
-        
+
     }
-    /**
-     * @member {string} - the caption of the button
-     */
     set text(value: string) { //the Code
         //<li><div><img  src="res/car.ico" /><span>Save</span></div></li>
         this._text = value;
@@ -144,14 +151,14 @@ export async function test() {
 
     menu.width = 200;
     menu.add(save);
-    save.onclick(function() {
+    save.onclick(function () {
         alert("ok");
     });
     save.text = "dd";
     save.items.add(save2);
     save2.text = "pppq";
     save2.icon = "mdi mdi-car";//"res/red.jpg";
-    save2.onclick(function(event) {
+    save2.onclick(function (event) {
 
     });
     return menu;

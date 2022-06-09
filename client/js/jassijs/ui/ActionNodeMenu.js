@@ -17,6 +17,10 @@ define(["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Jassi", "jassij
             this.me = {};
             this.layout(this.me);
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         layout(me) {
             me.menu = new Menu_1.Menu();
             me.menu.width = 150;

@@ -25,10 +25,10 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
             me.textbox2 = new Textbox_1.Textbox();
             this.add(me.textbox1);
             this.add(me.textbox2);
-            me.textbox1.bind(me.databinder, "id");
+            me.textbox1.bind = [me.databinder, "id"];
             me.textbox1.width = 40;
             me.textbox1.converter = new NumberConverter_1.NumberConverter();
-            me.textbox2.bind(me.databinder, "email");
+            me.textbox2.bind = [me.databinder, "email"];
         }
         createObject() {
             super.createObject();

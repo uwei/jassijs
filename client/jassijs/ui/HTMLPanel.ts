@@ -1,17 +1,30 @@
 var bugtinymce = undefined;
 import jassi from "jassijs/jassi";
-import { Component, $UIComponent } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Jassi";
 import { Property, $Property } from "jassijs/ui/Property";
-import { DataComponent } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 declare global {
     interface JQuery {
         doubletap: any;
     }
 }
+
+export interface HTMLPanelConfig extends DataComponentConfig {
+
+    newlineafter: boolean;
+
+    /**
+     * template string  component.value=new Person();component.template:"{{name}}"}
+     */
+    template: string;
+    value: string;
+
+}
+
 @$UIComponent({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ })
 @$Class("jassijs.ui.HTMLPanel")
-export class HTMLPanel extends DataComponent {
+export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
     static oldeditor;
     private _tcm;
     toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
@@ -39,6 +52,12 @@ export class HTMLPanel extends DataComponent {
         this.newlineafter = false;
         // $(this.__dom).css("min-width", "10px");
     }
+    config(config: HTMLPanelConfig): HTMLPanel {
+        super.config(config);
+        return this;
+    }
+
+
     @$Property({ description: "line break after element", default: false })
     get newlineafter(): boolean {
         return $(this.dom).css("display") === "inline-block";
@@ -58,9 +77,6 @@ export class HTMLPanel extends DataComponent {
     get template(): string {
         return this._template;
     }
-    /**
-     * template string  component.value=new Person();component.template:"{{name}}"}
-     */
     set template(value: string) {
         this._template = value;
         this.value = this.value; //reformat value
@@ -121,7 +137,7 @@ export class HTMLPanel extends DataComponent {
     private _initTinymce(editor) {
         var _this = this;
         var tinymce = window["tinymce"]; //oder tinymcelib.default
-       
+
         var config = {
             //	                valid_elements: 'strong,em,span[style],a[href],ul,ol,li',
             //  valid_styles: {
@@ -157,25 +173,25 @@ export class HTMLPanel extends DataComponent {
                     // $(ed.getContainer()).find("svg").attr("width", "16").attr("height", "16").attr("viewbox", "0 0 24 24");
                     //$(ed.getContainer()).css("white-space","nowrap");
                 });
-                
+
                 for (var name in _this.customToolbarButtons) {
-                     var bt= _this.customToolbarButtons[name];
+                    var bt = _this.customToolbarButtons[name];
                     var button;
-                    var test=ed.ui.registry.addButton(name, {
+                    var test = ed.ui.registry.addButton(name, {
                         text: bt.title,
-                        onAction: function (e,f) {
+                        onAction: function (e, f) {
                             var bt2 = this;
                             bt.action(e);
                         },
-                        onpostrender: function() {
+                        onpostrender: function () {
                             button = this;
                         }
                     });
                 }
             }
         };
-        var mytoolbarwidth=240;
-        if(Number(_this.editor.inlineEditorPanel._parent.width.replace("px",""))-Number(_this.editor.inlineEditorPanel._parent._components[0].width.replace("px",""))<mytoolbarwidth){
+        var mytoolbarwidth = 240;
+        if (Number(_this.editor.inlineEditorPanel._parent.width.replace("px", "")) - Number(_this.editor.inlineEditorPanel._parent._components[0].width.replace("px", "")) < mytoolbarwidth) {
             delete config.fixed_toolbar_container;
         }
         if (_this["toolbar"])
@@ -189,7 +205,7 @@ export class HTMLPanel extends DataComponent {
                 return;
             editor._draganddropper.enableDraggable(false);
             let edi = tinymce.editors[_this._id];
-            if(edi)
+            if (edi)
                 $(edi.getContainer()).css("display", "flex");
             //$(this.domWrapper).draggable('disable');
         });

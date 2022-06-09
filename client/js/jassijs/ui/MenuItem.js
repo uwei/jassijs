@@ -11,8 +11,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MenuItem = void 0;
-    //jassijs.myRequire("lib/contextMenu.css");
     let MenuItem = class MenuItem extends Container_1.Container {
+        //_components: Component[];
         constructor() {
             super();
             super.init($('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
@@ -25,6 +25,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
             this._components = [this.items]; //neede for getEditableComponents
             delete this.items._isRoot;
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         onclick(handler) {
             var _this = this;
             $("#" + this._id).click(function (ob) {
@@ -32,9 +36,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
                 //_this.this.items._parent.close();
             });
         }
-        /**
-        * @member {string} - the icon of the button
-        */
         set icon(icon) {
             this._icon = icon;
             var img;
@@ -62,9 +63,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
             }
             return ret;
         }
-        /**
-         * @member {string} - the caption of the button
-         */
         set text(value) {
             //<li><div><img  src="res/car.ico" /><span>Save</span></div></li>
             this._text = value;

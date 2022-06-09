@@ -8,7 +8,7 @@ export interface ContainerConfig extends ComponentConfig{
     children?:Component[];
 }
 @$Class("jassijs.ui.Container")
-export class Container extends Component{
+export class Container extends Component implements Omit<ContainerConfig, "children">{
         _components:Component[];
         _designDummy:any; 
         

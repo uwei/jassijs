@@ -36,6 +36,10 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
             $(this.design.dom).addClass("designerNoSelectable");
             $(this.design.dom).addClass("designerNoResizable");
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         createRepeatingComponent(func) {
             this._createRepeatingComponent = func;
             func.bind(this);
@@ -121,9 +125,6 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
         _dummy(func) {
             //dummy
         }
-        /**
-         *  @member {array} value - the array which objects used to create the repeating components
-         */
         set value(val) {
             this._value = val;
             this.update();
@@ -155,9 +156,9 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
          * @param {jassijs.ui.Databinder} databinder - the databinder to bind
          * @param {string} property - the property to bind
          */
-        bind(databinder, property) {
-            this._databinder = databinder;
-            databinder.add(property, this, "_dummy");
+        set bind(databinder) {
+            this._databinder = databinder[0];
+            this._databinder.add(databinder[1], this, "_dummy");
         }
         destroy() {
             this._value = undefined;
@@ -167,9 +168,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
     };
     __decorate([
         (0, Property_1.$Property)({ type: "databinder" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Object]),
-        __metadata("design:returntype", void 0)
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
     ], Repeater.prototype, "bind", null);
     Repeater = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),

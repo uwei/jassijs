@@ -31,6 +31,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
             this.newlineafter = false;
             // $(this.__dom).css("min-width", "10px");
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         get newlineafter() {
             return $(this.dom).css("display") === "inline-block";
         }
@@ -48,9 +52,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
         get template() {
             return this._template;
         }
-        /**
-         * template string  component.value=new Person();component.template:"{{name}}"}
-         */
         set template(value) {
             this._template = value;
             this.value = this.value; //reformat value

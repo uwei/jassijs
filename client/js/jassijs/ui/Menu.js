@@ -11,11 +11,6 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Menu = void 0;
-    /*declare global {
-        interface JQuery {
-                //menu: any;
-        }
-    }*/
     let Menu = class Menu extends Container_1.Container {
         constructor(options = undefined) {
             super();
@@ -28,6 +23,10 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
                 $(this.dom).menu();
             this._text = "";
             this._icon = "";
+        }
+        config(config) {
+            super.config(config);
+            return this;
         }
         _sample() {
             super.init($('<ul ' + ` class="Menu">

@@ -137,7 +137,7 @@ export class Parser {
     addImportIfNeeded(name: string, file: string) {
         if (this.imports[name] === undefined) {
             //@ts-ignore
-            var imp = ts.createNamedImports([ts.createImportSpecifier(false,undefined, ts.createIdentifier(name))]);
+            var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
             const importNode = ts.createImportDeclaration(undefined, undefined, ts.createImportClause(undefined, imp), ts.createLiteral(file));
             this.sourceFile = ts.updateSourceFileNode(this.sourceFile, [importNode, ...this.sourceFile.statements]);
         }
@@ -151,7 +151,7 @@ export class Parser {
                 if (tnode.name) {
                     var name = tnode.name.text;
                     var stype = tnode.type.typeName.text;
-                    _this.typeMe[name] = { node: tnode, value: stype ,isFunction:false};
+                    _this.typeMe[name] = { node: tnode, value: stype, isFunction: false };
                 }
                 //            this.add("me", name, "typedeclaration:" + stype, undefined, aline, aline);
             });
@@ -266,17 +266,17 @@ export class Parser {
             if (lastpos !== -1) {
                 variable = left.substring(0, lastpos);
                 prop = left.substring(lastpos + 1);
-                 //@ts-ignore
-                 var props:any[] = node.arguments[0].properties;
+                //@ts-ignore
+                var props: any[] = node.arguments[0].properties;
                 if (props !== undefined) {
                     for (var p = 0; p < props.length; p++) {
-                        var name=props[p].name.text;
-                       // var value = this.convertArgument(props[p].initializer);
-                        var code:string=props[p].initializer?props[p].initializer.getText():"";
-                        if(code?.indexOf(".config")>-1){
+                        var name = props[p].name.text;
+                        // var value = this.convertArgument(props[p].initializer);
+                        var code: string = props[p].initializer ? props[p].initializer.getText() : "";
+                        if (code?.indexOf(".config") > -1) {
                             this.parseProperties(props[p].initializer);
                         }
-                        this.add(variable,name,code,props[p],false);
+                        this.add(variable, name, code, props[p], false);
                     }
                 }
             }
@@ -336,7 +336,7 @@ export class Parser {
                 prop = left.substring(lastpos + 1);
             }
             this.add(variable, prop, value, node.parent, isFunction);
-        }else
+        } else
             node.getChildren().forEach(c => this.parseProperties(c));
     }
     private visitNode(node: ts.Node) {
@@ -442,11 +442,11 @@ export class Parser {
             var pos = node.parent["members"].indexOf(node);
             if (pos >= 0)
                 node.parent["members"].splice(pos, 1);
-         } else if (node.parent["properties"] !== undefined) {
+        } else if (node.parent["properties"] !== undefined) {
             var pos = node.parent["properties"].indexOf(node);
             if (pos >= 0)
                 node.parent["properties"].splice(pos, 1);
-        }else if (node.parent["elements"] !== undefined) {
+        } else if (node.parent["elements"] !== undefined) {
             var pos = node.parent["elements"].indexOf(node);
             if (pos >= 0)
                 node.parent["elements"].splice(pos, 1);
@@ -499,12 +499,28 @@ export class Parser {
     * @param {type} [onlyValue] - remove the property only if the value is found
     * @param {string} [variablename] - thpe name of the variable - default=this.variablename
     */
-    removePropertyInCode(property: string, onlyValue = undefined, variablename: string = undefined) {
+    removePropertyInCode(property: string, onlyValue = undefined, variablename: string = undefined): ts.Node {
+        if (this.data[variablename] !== undefined && this.data[variablename].config !== undefined && property === "add") {
+            property = "children";
+            var oldparent: any = this.data[variablename][property][0].node;
+            for (var x = 0; x < oldparent.initializer.elements.length; x++) {
+                var valueNode = oldparent.initializer.elements[x];
+                if (valueNode.getText() === onlyValue || valueNode.getText().startsWith(onlyValue + ".")) {
+                    oldparent.initializer.elements.splice(x, 1);
+
+                    if (oldparent.initializer.elements.length === 0) {
+                        this.removeNode(oldparent);
+                    }
+                    return valueNode;
+                }
+
+            }
+        }
         if (this.data[variablename] !== undefined && this.data[variablename][property] !== undefined) {
             var prop: Entry = undefined;
             if (onlyValue !== undefined) {
                 for (var x = 0; x < this.data[variablename][property].length; x++) {
-                    if (this.data[variablename][property][x].value === onlyValue) {
+                    if (this.data[variablename][property][x].value === onlyValue||this.data[variablename][property][x].value.startsWith(onlyValue+".")) {
                         prop = this.data[variablename][property][x];
                     }
                 }
@@ -513,6 +529,10 @@ export class Parser {
             if (prop == undefined)
                 return;
             this.removeNode(prop.node);
+            if(prop.node["expression"]?.arguments?.length>0){
+                return prop.node["expression"]?.arguments[0];
+            }
+            return prop.node;
             /*var oldvalue = this.lines[prop.linestart - 1];
             for (let x = prop.linestart;x <= prop.lineend;x++) {
                 this.lines[x - 1] = undefined;
@@ -566,18 +586,22 @@ export class Parser {
                     }
                     //in children:[]
                     //@ts-ignore
-                    var inconfig=prop[key][0]?.node?.initializer?.elements;
-                    if(inconfig){
-                        for(var x=0;x<inconfig.length;x++){
-                            if(inconfig[x].getText()===varname||inconfig[x].getText().startsWith(varname)){
+                    var inconfig = prop[key][0]?.node?.initializer?.elements;
+                    if (inconfig) {
+                        for (var x = 0; x < inconfig.length; x++) {
+                            if (inconfig[x].getText() === varname || inconfig[x].getText().startsWith(varname)) {
                                 this.removeNode(inconfig[x]);
+
                             }
+                        }
+                        if (inconfig.length === 0) {
+                            this.removeNode(prop[key][0]?.node);
                         }
                     }
                 }
             }
         }
-        
+
     }
     private getNodeFromScope(classscope: { classname: string, methodname: string }[], variablescope: { variablename: string, methodname } = undefined): ts.Node {
         var scope;
@@ -612,75 +636,89 @@ export class Parser {
     /**
      * change objectliteral to mutliline if needed
      */
-    private switchToMutlilineIfNeeded(node:ts.Node,newProperty:string, newValue){
-        var oldValue=node.getText();
-        if(node["multiLine"]!==true){
-           var len=0;
-           for(var x=0;x<node.parent["arguments"][0].properties.length;x++){
-               var prop=node.parent["arguments"][0].properties[x];
-               len+=(prop.initializer.escapedText?prop.initializer.escapedText.length:prop.initializer.getText().length);
-               len+=prop.name.escapedText.length+5;
-           }
+    private switchToMutlilineIfNeeded(node: ts.Node, newProperty: string, newValue) {
+        var oldValue = node.getText();
+        if (node["multiLine"] !== true) {
+            var len = 0;
+            for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
+                var prop = node.parent["arguments"][0].properties[x];
+                len += (prop.initializer.escapedText ? prop.initializer.escapedText.length : prop.initializer.getText().length);
+                len += prop.name.escapedText.length + 5;
+            }
             console.log(len);
-            if(oldValue.indexOf("\n")>-1||(len>60)||newValue.indexOf("\n")>-1){
+            if (oldValue.indexOf("\n") > -1 || (len > 60) || newValue.indexOf("\n") > -1) {
                 //order also old elements
-                for(var x=0;x<node.parent["arguments"][0].properties.length;x++){
-                    var prop=node.parent["arguments"][0].properties[x];
-                    prop.pos=-1;
-                    prop.len=-1;
+                for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
+                    var prop = node.parent["arguments"][0].properties[x];
+                    prop.pos = -1;
+                    prop.len = -1;
                 }
-                node.parent["arguments"][0]=ts.createObjectLiteral(node.parent["arguments"][0].properties,true);
+                node.parent["arguments"][0] = ts.createObjectLiteral(node.parent["arguments"][0].properties, true);
             }
         }
     }
-    private setPropertyInConfig(variableName: string, property: string, value: string,
+    private setPropertyInConfig(variableName: string, property: string, value: string | ts.Node,
         isFunction: boolean = false, replace: boolean = undefined,
         before: { variablename: string, property: string, value?} = undefined,
-        scope:ts.Node) {
-            
-            var svalue=ts.createIdentifier(value);
-            var config=<any>this.data[variableName]["config"][0].node;
-            config=config.arguments[0];
-            var newExpression=ts.createPropertyAssignment(property,svalue);
-            if(property==="add"&&replace===false){
-                property="children";
-                if(this.data[variableName]["children"]==undefined){//
-                    newExpression=ts.createPropertyAssignment(property,ts.createArrayLiteral([ts.createIdentifier(value+".config({})")],true));
-                    config.properties.push(newExpression);  
-                }else{
-                    if(before===undefined){
-                        //@ts-ignore
-                        this.data[variableName]["children"][0].node.initializer.elements.push(ts.createIdentifier(value+".config({})"));
-                    }else{
-                        //@ts-ignore
-                        var array=this.data[variableName]["children"][0].node.initializer.elements;
-                        for(var x=0;x<array.length;x++){
-                            if(array[x].getText()===before.value||array[x].getText().startsWith(before.value+".")){
-                                array.splice(x, 0, ts.createIdentifier(value+".config({})"));
-                                return;
-                            }
+        scope: ts.Node) {
+
+        var svalue: any = typeof value === "string" ? ts.createIdentifier(value) : value;
+        var config = <any>this.data[variableName]["config"][0].node;
+        config = config.arguments[0];
+        var newExpression = ts.createPropertyAssignment(property, <any>svalue);
+        if (property === "add" && replace === false) {
+            property = "children";
+            svalue = typeof value === "string" ? ts.createIdentifier(value + ".config({})") : value;
+            if (this.data[variableName]["children"] == undefined) {//
+                newExpression = ts.createPropertyAssignment(property, ts.createArrayLiteral([svalue], true));
+                config.properties.push(newExpression);
+            } else {
+                if (before === undefined) {
+                    //@ts-ignore
+                    this.data[variableName]["children"][0].node.initializer.elements.push(svalue);
+                } else {
+                    //@ts-ignore
+                    var array = this.data[variableName]["children"][0].node.initializer.elements;
+                    for (var x = 0; x < array.length; x++) {
+                        if (array[x].getText() === before.value || array[x].getText().startsWith(before.value + ".")) {
+                            array.splice(x, 0, svalue);
+                            return;
                         }
-                        throw new Error("Node "+before.value+" not found.");
                     }
-                    
+                    throw new Error("Node " + before.value + " not found.");
                 }
-            }else{  //comp.add(a) --> comp.config({children:[a]})
-                if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) {//edit existing
-                    let node = this.data[variableName][property][0].node;
-                    var pos = config.properties.indexOf(node);
-                    config.properties[pos] = newExpression;
-                     this.switchToMutlilineIfNeeded(config,property,value);
-                }else{
-                        config.properties.push(newExpression);
-                        this.switchToMutlilineIfNeeded(config,property,value);
-                }
+
             }
-            console.log("correct spaces");
-            this.parse(this.getModifiedCode());
-            //if (pos >= 0)
-            //  node.parent["statements"].splice(pos, 1);
-        
+        } else {  //comp.add(a) --> comp.config({children:[a]})
+            if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) {//edit existing
+                let node = this.data[variableName][property][0].node;
+                var pos = config.properties.indexOf(node);
+                config.properties[pos] = newExpression;
+                this.switchToMutlilineIfNeeded(config, property, value);
+            } else {
+                config.properties.push(newExpression);
+                this.switchToMutlilineIfNeeded(config, property, value);
+            }
+        }
+        console.log("correct spaces");
+        this.parse(this.getModifiedCode());
+        //if (pos >= 0)
+        //  node.parent["statements"].splice(pos, 1);
+
     }
+    /*  movePropertValueInCode(variableName: string, property: string, value: string, newVariableName: string, beforeValue: any) {
+          if (this.data[variableName]["config"] !== undefined) {
+              if (property === "add")
+                  property = "children";
+              var oldparent:any=this.data[variableName][property][0].node;
+              for (var x = 0; x < oldparent.initializer.elements.length; x++) {
+                  var valueNode=oldparent.initializer.elements[x];
+                  if (valueNode.getText() === value ||valueNode.getText().startsWith(value + ".")) {
+                      oldparent.initializer.elements.splice(x,1);
+                  }
+              }
+          }
+      }*/
     /**
     * modify the property in code
     * @param variablename - the name of the variable
@@ -692,20 +730,20 @@ export class Parser {
     * @param [before] - the new property is placed before this property
     * @param [variablescope] - if this scope is defined - the new property would be insert in this variable
     */
-    setPropertyInCode(variableName: string, property: string, value: string,
-      classscope: { classname: string, methodname: string }[],
-      isFunction: boolean = false, replace: boolean = undefined,
-      before: { variablename: string, property: string, value?} = undefined,
-      variablescope: { variablename: string, methodname } = undefined) {
+    setPropertyInCode(variableName: string, property: string, value: string | ts.Node,
+        classscope: { classname: string, methodname: string }[],
+        isFunction: boolean = false, replace: boolean = undefined,
+        before: { variablename: string, property: string, value?} = undefined,
+        variablescope: { variablename: string, methodname } = undefined) {
         if (classscope === undefined)
             classscope = this.classScope;
         var scope = this.getNodeFromScope(classscope, variablescope);
         var newExpression = undefined;
-        if(this.data[variableName]["config"]!==undefined){
-            this.setPropertyInConfig(variableName,property,value,isFunction,replace,before,scope);
+        if (this.data[variableName]["config"] !== undefined) {
+            this.setPropertyInConfig(variableName, property, value, isFunction, replace, before, scope);
             return;
         }
-
+        var newValue: any = typeof value === "string" ? ts.createIdentifier(value) : value;
         var statements: ts.Statement[] = scope["body"].statements
         if (property === "new") { //me.panel1=new Panel({});
             let prop = this.data[variableName]["_new_"][0];//.substring(3)];
@@ -715,7 +753,7 @@ export class Parser {
             var left = prop.node.getText();
             left = left.substring(0, left.indexOf("=") - 1);
             property = "_new_";
-            newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), ts.createIdentifier(value)));
+            newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), newValue));
             /*	}else{//var hh=new Panel({})
                     let prop = this.data[variableName][0];
                     var constr = prop[0].value;
@@ -725,9 +763,9 @@ export class Parser {
                     newExpression=ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier("me."+property), ts.createIdentifier(value)));	
                 }*/
         } else if (isFunction) {
-            newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(variableName + "." + property), undefined, [ts.createIdentifier(value)]));
+            newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(variableName + "." + property), undefined, [newValue]));
         } else
-            newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(variableName + "." + property), ts.createIdentifier(value)));
+            newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(variableName + "." + property), newValue));
         if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) {//edit existing
             let node = this.data[variableName][property][0].node;
             var pos = node.parent["statements"].indexOf(node);
@@ -839,17 +877,25 @@ export class Parser {
 
 export async function test() {
     await typescript.waitForInited;
-    var code = typescript.getCode("jassijs_editor/util/Parser.ts");
+    var code = typescript.getCode("de/Dialog.ts");
     var parser = new Parser();
-   // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
-   // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
-    code="function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll,aaa.config({u:1,o:2})]});}";
-    parser.parse(code, undefined);
-   
-//    parser.setPropertyInCode("ppp","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"ppp",property:"add",value:"ll"});
-      parser.setPropertyInCode("aaa","add","cc",[{classname:undefined, methodname:"test"}],true,false);
+    // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
+    // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
+   // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
+    //parser.parse(code, undefined);
+    parser.parse(code,[{classname:"Dialog",methodname:"layout"}]);
+    debugger;
+    var node = parser.removePropertyInCode("add", "me.textbox1", "me.panel1");
+    parser.setPropertyInCode("this","add",node,[{classname:"Dialog",methodname:"layout"}],true,false);
+    //var node = parser.removePropertyInCode("add", "kk", "aaa");
+
+    //var node=parser.removePropertyInCode("add", "ll", "ppp");
+    //parser.setPropertyInCode("aaa","add",node,[{classname:undefined, methodname:"test"}],true,false,undefined,undefined);
+    //console.log(node.getText());
+    //    parser.setPropertyInCode("ppp","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"ppp",property:"add",value:"ll"});
+    //  parser.setPropertyInCode("aaa","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"aaa",property:"add",value:"kk"});
     console.log(parser.getModifiedCode());
-   // debugger;
+    // debugger;
     /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
       const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
       const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);

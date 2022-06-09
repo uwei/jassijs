@@ -38,20 +38,20 @@ export class ShippersView extends DBObjectView {
         this.width = 626;
         this.height = 146;
         me.id.converter = new NumberConverter();
-        me.id.bind(me.databinder, "id");
+        me.id.bind=[me.databinder, "id"];
         me.id.label = "Id";
         me.id.width = 40;
         me.id.x = 5;
         me.id.y = 0;
         me.companyName.x = 60;
         me.companyName.y = 0;
-        me.companyName.bind(me.databinder, "CompanyName");
+        me.companyName.bind=[me.databinder, "CompanyName"];
         me.companyName.label = "Company name";
         me.companyName.width = 160;
         me.phone.x = 5;
         me.phone.y = 50;
         me.phone.width = 215;
-        me.phone.bind(me.databinder, "Phone");
+        me.phone.bind=[me.databinder, "Phone"];
         me.phone.label = "Phone";
     }
 }

@@ -2,7 +2,7 @@ import "jassijs/ext/jquery.contextmenu";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { Menu } from "jassijs/ui/Menu";
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-import { Component, $UIComponent } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
 import { $Property } from "jassijs/ui/Property";
@@ -15,18 +15,27 @@ declare global {
         contextMenu: any;
     }
 }
+export interface ContextMenuConfig extends ComponentConfig{
+    /**
+     * @member - includes Actions from @ActionProvider for the objects in value
+     */
+    includeClassActions?: boolean;
+     /**
+     * register an event if the contextmenu is showing
+     * @param {function} handler - the function that is called on change
+     * @returns {boolean} - false if the contextmenu should not been shown
+     */
+    onbeforeshow?(handler);
+}
 //https://github.com/s-yadav/contextMenu.js/
 @$UIComponent({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] })
 @$Class("jassijs.ui.ContextMenu")
-export class ContextMenu extends InvisibleComponent {
+export class ContextMenu extends InvisibleComponent implements ContextMenuConfig {
     menu: Menu;
     contextComponents;
     _components: Component[];
     target: any;
     @$Property()
-    /**
-     * @member - includes Actions from @ActionProvider for the objects in value
-     */
     includeClassActions: boolean;
     private _value;
     /**
@@ -56,6 +65,11 @@ export class ContextMenu extends InvisibleComponent {
         this.onbeforeshow(function () {
             return _this._updateClassActions();
         })
+    }
+
+    config(config:ContextMenuConfig):ContextMenu {
+        super.config(config);
+        return this;
     }
     /**
      * could be override to provide Context-actions
@@ -141,11 +155,7 @@ export class ContextMenu extends InvisibleComponent {
     getMainMenu() {
         return this;
     }
-    /**
-     * register an event if the contextmenu is showing
-     * @param {function} handler - the function that is called on change
-     * @returns {boolean} - false if the contextmenu should not been shown
-     */
+  
     @$Property({ default: "function(event){\n\t\n}" })
     onbeforeshow(handler) {
         this.addEvent("beforeshow", handler);

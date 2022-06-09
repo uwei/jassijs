@@ -1,6 +1,6 @@
 import { Menu } from "jassijs/ui/Menu";
 import { $Class } from "jassijs/remote/Jassi";
-import { Panel } from "jassijs/ui/Panel";
+import { Panel, PanelConfig } from "jassijs/ui/Panel";
 import { Action, Actions } from "jassijs/base/Actions";
 import { ActionNode} from "jassijs/base/ActionNode";
 import { MenuItem } from "jassijs/ui/MenuItem";
@@ -14,6 +14,10 @@ export class ActionNodeMenu extends Panel {
         super();
         this.me = {};
         this.layout(this.me);
+    }
+	config(config:PanelConfig):ActionNodeMenu {
+        super.config(<PanelConfig>config);
+        return this;
     }
     layout(me: Me) {
         me.menu = new Menu();

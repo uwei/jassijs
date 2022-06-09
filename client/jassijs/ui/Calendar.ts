@@ -1,49 +1,63 @@
 import { Textbox } from "jassijs/ui/Textbox";
-import { $UIComponent } from "jassijs/ui/Component";
+import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Jassi";
 import { $Property } from "jassijs/ui/Property";
+import { DataComponentConfig } from "jassijs/ui/DataComponent";
 
-@$UIComponent({fullPath:"common/Calendar",icon:"mdi mdi-calendar-month"})
+export interface CalendarConfig extends ComponentConfig,DataComponentConfig {
+
+    /**
+    * @member  - the date
+    */
+    value?;
+
+}
+
+@$UIComponent({ fullPath: "common/Calendar", icon: "mdi mdi-calendar-month" })
 @$Class("jassijs.ui.Calendar")
-@$Property({name:"new",type:"string"})
-export  class Calendar extends Textbox{
-    constructor(properties=undefined){
+@$Property({ name: "new", type: "string" })
+export class Calendar extends Textbox implements CalendarConfig {
+    constructor(properties = undefined) { 
         super(properties);
-        $( this.dom ).datepicker();
+        $(this.dom).datepicker();
     }
-    get value(){
-        return<any> $(this.dom).datepicker( 'getDate' );
+    config(config: CalendarConfig): Calendar {
+        super.config(config);
+        return this;
     }
-    set value(val){
-        $(this.dom).datepicker( 'setDate' ,val);
+    get value() {
+        return <any>$(this.dom).datepicker('getDate');
     }
-    static parseDate(date:string,format=undefined,settings=undefined){
-        if(settings===undefined)
-            settings=$.datepicker.regional[navigator.language.split("-")[0]];
-        if(format===undefined)
-            format=settings.dateFormat;
-        return $.datepicker.parseDate(format,date,settings);
+    set value(val) {
+        $(this.dom).datepicker('setDate', val);
+    }
+    static parseDate(date: string, format = undefined, settings = undefined) {
+        if (settings === undefined)
+            settings = $.datepicker.regional[navigator.language.split("-")[0]];
+        if (format === undefined)
+            format = settings.dateFormat;
+        return $.datepicker.parseDate(format, date, settings);
 
     }
-     static formatDate(date:Date,format=undefined,settings=undefined){
-        if(settings===undefined)
-            settings=$.datepicker.regional[navigator.language.split("-")[0]];
-        if(format===undefined)
-            format=settings.dateFormat;
-        return $.datepicker.formatDate(format,date,settings);
+    static formatDate(date: Date, format = undefined, settings = undefined) {
+        if (settings === undefined)
+            settings = $.datepicker.regional[navigator.language.split("-")[0]];
+        if (format === undefined)
+            format = settings.dateFormat;
+        return $.datepicker.formatDate(format, date, settings);
 
     }
 }
 
-export function test(){
-    var cal=new Calendar();
-   
-    cal.value=new Date(1978,5,1);
-    var h=Calendar.parseDate("18.03.2020");
-    var hh=Calendar.formatDate(h);
-    var i=cal.value;
-    
- 
-   // cal.value=Date.now()
+export function test() {
+    var cal = new Calendar();
+
+    cal.value = new Date(1978, 5, 1);
+    var h = Calendar.parseDate("18.03.2020");
+    var hh = Calendar.formatDate(h);
+    var i = cal.value;
+
+
+    // cal.value=Date.now()
     return cal;
 }

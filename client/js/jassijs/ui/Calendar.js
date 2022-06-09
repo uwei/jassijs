@@ -16,6 +16,10 @@ define(["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Component", "jas
             super(properties);
             $(this.dom).datepicker();
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         get value() {
             return $(this.dom).datepicker('getDate');
         }

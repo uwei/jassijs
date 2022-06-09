@@ -27,7 +27,7 @@ export class Button extends Component implements ButtonConfig {
         super();
         super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
     }
-   config(config:ButtonConfig):Button {
+    config(config:ButtonConfig):Button {
         super.config(<ComponentConfig>config);
         return this;
     }

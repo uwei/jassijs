@@ -13,7 +13,7 @@ export class TTDialog extends Panel {
         this.layout(this.me);
     }
     layout(me: Me) {
-        me.config({});
+        this.config({});
 	}
 }
 

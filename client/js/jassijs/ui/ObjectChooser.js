@@ -108,9 +108,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassi
             var me = this.me;
             $(me.IDPanel.dom).dialog("destroy");
         }
-        /**
-         * @member {object} value - selection of the component
-         */
         set value(value) {
             this._value = value;
         }
@@ -134,17 +131,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassi
         get items() {
             return this._items;
         }
-        /**
-        * called if value has changed
-        * @param {function} handler - the function which is executed
-        */
         onchange(handler) {
             this.addEvent("change", handler);
         }
-        /**
-         * @member {bool} autocommit -  if true the databinder will update the value on every change
-         *                              if false the databinder will update the value on databinder.toForm
-         */
         get autocommit() {
             return this._autocommit;
         }
@@ -158,9 +147,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassi
          * @param {jassijs.ui.Databinder} databinder - the databinder to bind
          * @param {string} property - the property to bind
          */
-        bind(databinder, property) {
-            this._databinder = databinder;
-            databinder.add(property, this, "onchange");
+        set bind(databinder) {
+            this._databinder = databinder[0];
+            this._databinder.add(databinder[1], this, "onchange");
             //databinder.checkAutocommit(this);
         }
         destroy() {
@@ -195,9 +184,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassi
     ], ObjectChooser.prototype, "autocommit", null);
     __decorate([
         (0, Property_1.$Property)({ type: "databinder" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Object]),
-        __metadata("design:returntype", void 0)
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
     ], ObjectChooser.prototype, "bind", null);
     ObjectChooser = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),

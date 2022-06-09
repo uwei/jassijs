@@ -334,7 +334,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/security/UserView.ts": {
-		"date": 1622984494000,
+		"date": 1654704034248,
 		"jassijs/UserView": {
 			"$DBObjectView": [
 				{
@@ -446,11 +446,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/ActionNodeMenu.ts": {
-		"date": 1627916730000,
+		"date": 1654696176754,
 		"jassijs/ui/ActionNodeMenu": {}
 	},
 	"jassijs/ui/BoxPanel.ts": {
-		"date": 1623175904000,
+		"date": 1654696372603,
 		"jassijs.ui.BoxPanel": {
 			"$UIComponent": [
 				{
@@ -488,7 +488,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Button.ts": {
-		"date": 1654465838829,
+		"date": 1654695976908,
 		"jassijs.ui.Button": {
 			"$UIComponent": [
 				{
@@ -521,7 +521,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Calendar.ts": {
-		"date": 1622984380000,
+		"date": 1654705194788,
 		"jassijs.ui.Calendar": {
 			"$UIComponent": [
 				{
@@ -538,7 +538,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Checkbox.ts": {
-		"date": 1654632492660,
+		"date": 1654700986669,
 		"jassijs.ui.Checkbox": {
 			"$UIComponent": [
 				{
@@ -682,11 +682,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1654465833850,
+		"date": 1654695913660,
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {
-		"date": 1633538390000,
+		"date": 1654701972513,
 		"jassijs.ui.ContextMenu": {
 			"$UIComponent": [
 				{
@@ -1254,7 +1254,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DataComponent.ts": {
-		"date": 1654631678121,
+		"date": 1654703815491,
 		"jassijs.ui.DataComponent": {
 			"@members": {
 				"autocommit": {
@@ -1355,7 +1355,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectView.ts": {
-		"date": 1654466300753,
+		"date": 1654701942536,
 		"jassijs/ui/DBObjectView": {
 			"$UIComponent": [
 				{
@@ -1515,11 +1515,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/HTMLEditorPanel.ts": {
-		"date": 1623177020000,
+		"date": 1654701807236,
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1634379942000,
+		"date": 1654704820862,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
@@ -1550,7 +1550,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Image.ts": {
-		"date": 1633773478000,
+		"date": 1654704834003,
 		"jassijs.ui.Image": {
 			"$UIComponent": [
 				{
@@ -1594,7 +1594,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Menu.ts": {
-		"date": 1623177180000,
+		"date": 1654702715316,
 		"jassijs.ui.Menu": {
 			"$UIComponent": [
 				{
@@ -1619,7 +1619,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/MenuItem.ts": {
-		"date": 1627924540000,
+		"date": 1654702869980,
 		"jassijs.ui.MenuItem": {
 			"$UIComponent": [
 				{
@@ -1651,7 +1651,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/ObjectChooser.ts": {
-		"date": 1626122222000,
+		"date": 1654704847496,
 		"jassijs.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
@@ -1723,7 +1723,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1631480196000,
+		"date": 1654696141417,
 		"jassijs.ui.PanelCreateProperties": {
 			"@members": {
 				"useSpan": {
@@ -1764,7 +1764,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1654165068196,
+		"date": 1654794147356,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {
@@ -2075,7 +2075,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Repeater.ts": {
-		"date": 1630147966000,
+		"date": 1654705741464,
 		"jassijs.ui.RepeaterDesignPanel": {
 			"$UIComponent": [
 				{
@@ -2346,7 +2346,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1624054512000,
+		"date": 1654706137482,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{
