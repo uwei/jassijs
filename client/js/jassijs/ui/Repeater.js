@@ -151,11 +151,6 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
                 this._designMode = enable;
             //	super.setDesignMode(enable);
         }
-        /**
-         * binds a component to a databinder
-         * @param {jassijs.ui.Databinder} databinder - the databinder to bind
-         * @param {string} property - the property to bind
-         */
         set bind(databinder) {
             this._databinder = databinder[0];
             this._databinder.add(databinder[1], this, "_dummy");

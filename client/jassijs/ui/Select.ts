@@ -1,5 +1,5 @@
 import jassijs, { $Class } from "jassijs/remote/Jassi";
-import {Component,  $UIComponent, ComponentCreateProperties } from "jassijs/ui/Component";
+import {Component,  $UIComponent, ComponentCreateProperties, ComponentConfig } from "jassijs/ui/Component";
 import {DataComponent} from "jassijs/ui/DataComponent";
 //import Button from "jassijs/ui/Button";
 import "jassijs/ext/jquery.choosen";
@@ -14,6 +14,33 @@ declare global {
     }
 }
 */
+
+export interface SelectConfig extends ComponentConfig{
+   /**
+     * called if value has changed
+     * @param {function} handler - the function which is executed
+     */
+    onchange?(handler);
+    /**
+     * if the value is changed then the value of _component is also changed (_component.value)
+     */
+     selectComponent?:{value:number}; //the Code
+
+    /**
+     * @member {string|function}  - property or function to get the displaystring for the object
+     **/
+    display?;
+
+    /**
+     * all objects in the list
+     */
+    items?:any[];
+
+     /**
+     * @member {object} sel - the selected object
+     */
+    value?;
+ }
 @$Class("jassijs.ui.SelectCreateProperties")
 class SelectCreateProperties extends ComponentCreateProperties{
 	@$Property({ default: false })
@@ -73,20 +100,15 @@ export class Select extends DataComponent {
         // this.layout();
     }
 
-    refresh() {
-        $(this.domSelect).trigger("chosen:updated");
-
-        //	 $('#'+this._id).data("placeholder","Select...").chosen({
-        //	 	width: "100px"
-        //	 });
-
+    config(config:SelectConfig):Select {
+        super.config(config);
+        return this;
     }
 
+    refresh() {
+        $(this.domSelect).trigger("chosen:updated");
+    }
 
-    /**
-     * called if value has changed
-     * @param {function} handler - the function which is executed
-     */
     @$Property({ default: "function(event){\n\t\n}" })
     onchange(handler) {
 
@@ -97,18 +119,12 @@ export class Select extends DataComponent {
             handler(e);
         });
     }
-	/**
-     * if the value is changed then the value of _component is also changed (_component.value)
-     */
-    set selectComponent(_component:{value:number}) { //the Code
+	 set selectComponent(_component:{value:number}) { //the Code
         this._select = _component;
     }
     get selectComponent():{value:number} {
         return this._select;//$(this.dom).text();
     }
-    /**
-     * @member {string|function}  - property or function to get the displaystring for the object
-     **/
     set display(value: string | Function) {
         this._display = value;
         if (this.items !== undefined)
@@ -173,9 +189,7 @@ export class Select extends DataComponent {
         //   return w2ui[this._id].records;//$(this.dom).text();
     }
 
-    /**
-     * @member {object} sel - the selected object
-     */
+   
     set value(sel) {
     	var found=false;
     	if($(this.domSelect).chosen().prop("multiple")){

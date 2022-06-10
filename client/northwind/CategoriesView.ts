@@ -61,7 +61,7 @@ export class CategoriesView extends DBObjectView {
         me.boxpanel1.width = 80;
         me.boxpanel1.add(me.name);
         me.table1.height = "100%";
-        me.table1.bindItems(me.databinder, "Products");
+        me.table1.bindItems=[me.databinder, "Products"];
         me.table1.width = "100%";
     }
 }

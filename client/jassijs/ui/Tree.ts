@@ -1,6 +1,6 @@
 import "jassijs/ext/fancytree";
 import { $Class } from "jassijs/remote/Jassi";
-import { Component, $UIComponent } from "jassijs/ui/Component";
+import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import registry from "jassijs/remote/Registry";
 
@@ -29,6 +29,53 @@ class TreeEditorProperties {
     @$Property({ type: "json", componentType: "jassijs.ui.TreeEditorPropertiesMulti" })
     multi?: TreeEditorPropertiesMulti;
 }
+export interface TreeConfig extends ComponentConfig {
+    options?: Fancytree.FancytreeOptions;
+    /**
+    * @member - get the property for the display of the item or an function to get the display from an item
+    */
+    propStyle?: string | { (item: any): CSSProperties };
+    /**
+     * @member - get the property for the display of the item or an function to get the display from an item
+     */
+    propDisplay?: string | { (item: any): string };
+    /**
+     * @member - get the iconproperty of the item or an function to get the icon from an item
+     */
+    propIcon?: string | { (item: any): string }
+    /**
+    * @member - get the childs of the item or an function to get the childs from an item
+    */
+    propChilds?: string | { (item: any): any[] };
+
+    onselect?(handler);
+
+    /**
+     * register an event if an item is clicked
+     * @param {function} handler - the function that is called on click
+     */
+    onclick?(handler: (event?: JQueryEventObject, data?: Fancytree.EventData) => void);
+    /**
+    * selects items
+    */
+    selection?: any[];
+    /**
+     * set the active item
+     */
+    value?;
+    /**
+    * @param value - set the data to show in Tree
+    **/
+    items?: any;
+    /**
+     * if the value is changed then the value of _component is also changed (_component.value)
+     */
+    selectComponent?: { value: number };
+    /**
+     * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
+     **/
+    contextMenu?;
+}
 
 @$UIComponent({ fullPath: "common/Tree", icon: "mdi mdi-file-tree" })
 @$Class("jassijs.ui.Tree")
@@ -38,7 +85,7 @@ class TreeEditorProperties {
 @$Property({ name: "new/multi", type: "json" })
 @$Property({ name: "new/multi/mode", type: "string", default: "", chooseFrom: ["", "sameParent", "sameLevel"], description: "multi selection mode" })
 */
-export class Tree extends Component {
+export class Tree extends Component implements TreeConfig {
     _propDisplay: string | { (item: any): string };
     _propIcon: string | { (item: any): string };
     _propChilds: string | { (item: any): any[] };
@@ -50,10 +97,28 @@ export class Tree extends Component {
     private _items;
     private _allKeysReaded: boolean;
     private _allNodesReaded: boolean;
+    _lastOptions: Fancytree.FancytreeOptions;
     constructor(options?: Fancytree.FancytreeOptions) {
         super();
         super.init($('<div class="Tree"></div>')[0]);
         this._itemToKey = new Map();
+        this.options = options;
+    }
+    config(config: TreeConfig): Tree {
+        super.config(config);
+        return this;
+    }
+
+    @$Property({ type: "json", componentType: "jassijs.ui.TableEditorProperties" })
+    set options(options: Fancytree.FancytreeOptions) {
+        var _this = this;
+        this._lastOptions = options;
+        if (this.tree) {
+            var lastSel = this.value;
+            var lastItems = this.items;
+            //this.table.destroy();
+            //this.table = undefined;
+        }
         var _this = this;
         if (options === undefined) {
             options = {};
@@ -77,34 +142,14 @@ export class Tree extends Component {
         if (options.filter.autoExpand === undefined)
             options.filter.autoExpand = true;
 
-        /* if (options.multi === undefined) {
-             options.multi = {};
-         }
-         if (options.multi.mode === undefined) {
-             options.multi.mode = "sameParent";//"","sameLevel"
-         }*/
-
         var beforeExpand = options.beforeExpand;
         var activate = options.activate;
         var click = options.click;
-        /* options.renderTitle=function (event:JQueryEventObject,data:Fancytree.EventData){
-             var h=0;
-         });*/
         options.source = [{ title: 'Folder in home folder', key: 'fA100', folder: true, lazy: true }];
         options.icon = false;//we have an own
         options.lazyLoad = function (event, data) {
             TreeNode.loadChilds(event, data);
-
         };
-        /* options.beforeExpand = function(event: JQueryEventObject, data: Fancytree.EventData) {
-              if(data.node.children.length===1&&data.node.children[0].data.dummy===true){
-                  var node2 = _this.objectToNode.get(data.node.data.item);
-                      node2.populate(data.node);
-              }
-              if (beforeExpand !== undefined)
-                  return beforeExpand(event, data);
-              return true;
-          };*/
         options.activate = function (event: JQueryEventObject, data: Fancytree.EventData) {
             _this._onselect(event, data);
             if (activate !== undefined)
@@ -122,6 +167,15 @@ export class Tree extends Component {
         $("#" + this._id).find("ul").css("height", "calc(100% - 8px)");
         $("#" + this._id).find("ul").css("weight", "calc(100% - 8px)");
         $("#" + this._id).find("ul").css("overflow", "auto");
+        if (lastItems) {
+            this.items = lastItems;
+        }
+        if (lastSel) {
+            this.value = lastSel;
+        }
+    }
+    get options(): Fancytree.FancytreeOptions {
+        return this._lastOptions;
     }
     /**
     * @member - get the property for the display of the item or an function to get the display from an item
@@ -133,9 +187,7 @@ export class Tree extends Component {
     get propStyle() {
         return this._propStyle;
     }
-    /**
-     * @member - get the property for the display of the item or an function to get the display from an item
-     */
+
     @$Property({ type: "string", description: "the property called to get the name of the item" })
     set propDisplay(value: string | { (item: any): string }) {
         this._propDisplay = value;
@@ -143,18 +195,14 @@ export class Tree extends Component {
     get propDisplay() {
         return this._propDisplay;
     }
-    /**
-     * @member - get the iconproperty of the item or an function to get the icon from an item
-     */
+
     set propIcon(icon: string | { (item: any): string }) {
         this._propIcon = icon;
     }
     get propIcon() {
         return this._propIcon;
     }
-    /**
-    * @member - get the childs of the item or an function to get the childs from an item
-    */
+
     set propChilds(child: string | { (item: any): any[] }) {
         this._propChilds = child;
     }
@@ -165,10 +213,6 @@ export class Tree extends Component {
     onselect(handler) {
         this.addEvent("select", handler);
     }
-    /**
-     * register an event if an item is clicked
-     * @param {function} handler - the function that is called on click
-     */
     @$Property({ default: "function(event?: JQueryEventObject/*, data?:Fancytree.EventData*/){\n\t\n}" })
     onclick(handler: (event?: JQueryEventObject, data?: Fancytree.EventData) => void) {
         this.addEvent("click", handler);
@@ -259,9 +303,6 @@ export class Tree extends Component {
             this._select.value = data.node.data.item;
         this.callEvent("click", event, data);
     }
-    /**
-     * selects items
-     */
     set selection(values: any[]) {
 
         this.tree.getSelectedNodes().forEach((item) => {
@@ -393,9 +434,7 @@ export class Tree extends Component {
         return nd;
 
     }
-    /**
-     * set the active item
-     */
+
     set value(value) {
 
         this["_valueIsWaiting"] = value;
@@ -489,9 +528,6 @@ export class Tree extends Component {
         }
         this._allKeysReaded = true;
     }
-    /**
-     * @param value - set the data to show in Tree
-     **/
     set items(value: any) { //the Code
         this._items = value;
         this._allKeysReaded = undefined;
@@ -517,9 +553,6 @@ export class Tree extends Component {
     get items() {
         return this._items;
     }
-    /**
-     * if the value is changed then the value of _component is also changed (_component.value)
-     */
     set selectComponent(_component: { value: number }) { //the Code
         this._select = _component;
     }
@@ -564,9 +597,6 @@ export class Tree extends Component {
                 this._contextMenu.value = [node === undefined ? undefined : node.data.item];
         }
     }
-    /**
-     * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
-     **/
     set contextMenu(value) {
         super.contextMenu = value;
         var _this = this;
@@ -683,36 +713,40 @@ class TreeNode {
 };
 
 export async function test() {
-    var tree = new Tree({
-        checkbox: true
-    });
-
+    var tree = new Tree();
     var s: any = { name: "Sansa", id: 1, style: { color: "blue" } };
     var p = { name: "Peter", id: 2 };
     var u = { name: "Uwe", id: 3, childs: [p, s] };
     var t = { name: "Tom", id: 5 };
     var c = { name: "Christoph", id: 4, childs: [u, t] };
     s.childs = [c];
-    tree.propDisplay = "name";
-    tree.propChilds = "childs";
-    tree.propStyle = "style";
+    tree.config({
+        options: {
+            checkbox: true
+        },
+        propDisplay: "name",
+        propChilds: "childs",
+        propStyle: "style",
+        items: [c],
+        width: "100%",
+        height: "100px",
+        onclick:function (data) {
+            console.log("select " + data.data.name);
+        },
+        selection : [p, s],
+        value : p
+    });
+
+
     /*tree.propIcon = function(data) {
         if (data.name === "Uwe")
             return "res/car.ico";
     };*/
 
-    tree.items = [c];
-    tree.width = "100%";
 
-    tree.height = "100px";
     //  tree._readAllKeysIfNeeded();
 
-    tree.onclick(function (data) {
-        console.log("select " + data.data.name);
-    });
-    tree.selection = [p, s];
-    var k = tree.selection;
-    tree.value = p;
+   
     //	await tree.tree.loadKeyPath(["/Christoph/Christoph|Uwe/Christoph|Uwe|Peter"],undefined);
     //		var h=tree.tree.getNodeByKey("Christoph|Uwe|Peter");
     //		tree.tree.activateKey("Christoph|Uwe|Peter");

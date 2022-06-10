@@ -21,6 +21,10 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
             super();
             super.init($('<span class="InvisibleComponent"></span>')[0]);
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         get styleid() {
             return "jassistyle" + this._id;
         }

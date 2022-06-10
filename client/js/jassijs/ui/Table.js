@@ -44,16 +44,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
     TableEditorProperties = __decorate([
         (0, Jassi_1.$Class)("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
-    let Table = 
-    /*
-    @$Property({ name: "new/paginationSize", type: "number", default: undefined })
-    @$Property({ name: "new/headerSort", type: "boolean", default: true })
-    @$Property({ name: "new/layout", type: "string", default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] })
-    @$Property({ name: "new/dataTreeChildField", type: "string", default: undefined })
-    @$Property({ name: "new/movableColumns", type: "boolean", default: false })
-    @$Property({ name: "new/cellDblClick", type: "function", default: "function(event:any,group:any){\n\t\n}" })
-    */
-    class Table extends DataComponent_1.DataComponent {
+    let Table = class Table extends DataComponent_1.DataComponent {
         constructor(properties) {
             super();
             super.init($('<div class="Table"></div>')[0]);
@@ -62,6 +53,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
             this._selectHandler = [];
         }
         ;
+        config(config) {
+            super.config(config);
+            return this;
+        }
         set options(properties) {
             var _this = this;
             this._lastOptions = properties;
@@ -214,10 +209,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
                 this._select.value = event.data;
             this.callEvent("select", event);
         }
-        /**
-         * register an event if an item is selected
-         * @param {function} handler - the function that is called on change
-         */
         onchange(handler) {
             this.addEvent("select", handler);
         }
@@ -251,18 +242,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
                 $(this.domWrapper).prepend(this._searchbox.domWrapper);
             }
         }
-        /**
-          * if the value is changed then the value of _component is also changed (_component.value)
-          */
         set selectComponent(_component) {
             this._select = _component;
         }
         get selectComponent() {
             return this._select; //$(this.dom).text();
         }
-        /**
-         * set the items of the table
-         */
         set items(value) {
             if (value && this.dataTreeChildFunction) { //populate __treechilds
                 for (let x = 0; x < value.length; x++) {
@@ -373,10 +358,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
         get columns() {
             return this.table.getColumnDefinitions();
         }
-        bindItems(databinder, property) {
-            this._databinderItems = databinder;
+        set bindItems(databinder) {
+            this._databinderItems = databinder[0];
             var _this = this;
-            this._databinderItems.add(property, this, undefined, (tab) => {
+            this._databinderItems.add(databinder[1], this, undefined, (tab) => {
                 return tab.items;
             }, (tab, val) => {
                 tab.items = val;
@@ -408,32 +393,24 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"
     ], Table.prototype, "height", null);
     __decorate([
         (0, Property_1.$Property)({ type: "databinder" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Object]),
-        __metadata("design:returntype", void 0)
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
     ], Table.prototype, "bindItems", null);
     Table = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
         (0, Jassi_1.$Class)("jassijs.ui.Table"),
-        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
-        /*
-        @$Property({ name: "new/paginationSize", type: "number", default: undefined })
-        @$Property({ name: "new/headerSort", type: "boolean", default: true })
-        @$Property({ name: "new/layout", type: "string", default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] })
-        @$Property({ name: "new/dataTreeChildField", type: "string", default: undefined })
-        @$Property({ name: "new/movableColumns", type: "boolean", default: false })
-        @$Property({ name: "new/cellDblClick", type: "function", default: "function(event:any,group:any){\n\t\n}" })
-        */
-        ,
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
         __metadata("design:paramtypes", [Object])
     ], Table);
     exports.Table = Table;
     async function test() {
         var tab = new Table({});
-        tab.width = 400;
-        tab.options = {
-            headerSort: true
-        };
+        tab.config({
+            width: 400,
+            options: {
+                headerSort: true
+            }
+        });
         var tabledata = [
             { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
             { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },

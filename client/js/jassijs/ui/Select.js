@@ -11,13 +11,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Select = void 0;
-    /*
-    declare global {
-        interface JQuery {
-            chosen: any;
-        }
-    }
-    */
     let SelectCreateProperties = class SelectCreateProperties extends Component_1.ComponentCreateProperties {
     };
     __decorate([
@@ -69,16 +62,13 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             });
             // this.layout();
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         refresh() {
             $(this.domSelect).trigger("chosen:updated");
-            //	 $('#'+this._id).data("placeholder","Select...").chosen({
-            //	 	width: "100px"
-            //	 });
         }
-        /**
-         * called if value has changed
-         * @param {function} handler - the function which is executed
-         */
         onchange(handler) {
             var _this = this;
             $(this.domSelect).chosen().change(function (e) {
@@ -86,18 +76,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
                 handler(e);
             });
         }
-        /**
-         * if the value is changed then the value of _component is also changed (_component.value)
-         */
         set selectComponent(_component) {
             this._select = _component;
         }
         get selectComponent() {
             return this._select; //$(this.dom).text();
         }
-        /**
-         * @member {string|function}  - property or function to get the displaystring for the object
-         **/
         set display(value) {
             this._display = value;
             if (this.items !== undefined)
@@ -158,9 +142,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             return this._items;
             //   return w2ui[this._id].records;//$(this.dom).text();
         }
-        /**
-         * @member {object} sel - the selected object
-         */
         set value(sel) {
             var found = false;
             if ($(this.domSelect).chosen().prop("multiple")) {

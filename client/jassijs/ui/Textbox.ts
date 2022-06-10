@@ -45,9 +45,9 @@ export interface TextboxConfig extends DataComponentConfig {
      */
     value?;
     /**
- * called if value has changed
- * @param {function} handler - the function which is executed
- */
+    * called if value has changed
+    * @param {function} handler - the function which is executed
+    */
     onclick?(handler);
     /**
      * called if value has changed

@@ -450,7 +450,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs/ui/ActionNodeMenu": {}
 	},
 	"jassijs/ui/BoxPanel.ts": {
-		"date": 1654696372603,
+		"date": 1654899517837,
 		"jassijs.ui.BoxPanel": {
 			"$UIComponent": [
 				{
@@ -1355,7 +1355,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectView.ts": {
-		"date": 1654701942536,
+		"date": 1654899473268,
 		"jassijs/ui/DBObjectView": {
 			"$UIComponent": [
 				{
@@ -1723,7 +1723,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Panel.ts": {
-		"date": 1654696141417,
+		"date": 1654899711644,
 		"jassijs.ui.PanelCreateProperties": {
 			"@members": {
 				"useSpan": {
@@ -2075,7 +2075,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Repeater.ts": {
-		"date": 1654705741464,
+		"date": 1654899647629,
 		"jassijs.ui.RepeaterDesignPanel": {
 			"$UIComponent": [
 				{
@@ -2126,7 +2126,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Select.ts": {
-		"date": 1634385218000,
+		"date": 1654899968875,
 		"jassijs.ui.SelectCreateProperties": {
 			"@members": {
 				"multiple": {
@@ -2204,7 +2204,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Style.ts": {
-		"date": 1654466380634,
+		"date": 1654900107227,
 		"jassijs.ui.Style": {
 			"$UIComponent": [
 				{
@@ -2225,7 +2225,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1654017568358,
+		"date": 1654900765802,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {
 				"paginationSize": {
@@ -2346,7 +2346,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1654706137482,
+		"date": 1654900850429,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{
@@ -2419,7 +2419,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Tree.ts": {
-		"date": 1623866478000,
+		"date": 1654902150112,
 		"jassijs.ui.TreeEditorPropertiesMulti": {
 			"@members": {
 				"mode": {
@@ -2485,6 +2485,14 @@ define("jassijs/registry",["require"], function(require) {
 				}
 			],
 			"@members": {
+				"options": {
+					"$Property": [
+						{
+							"type": "json",
+							"componentType": "jassijs.ui.TableEditorProperties"
+						}
+					]
+				},
 				"propStyle": {
 					"$Property": [
 						{

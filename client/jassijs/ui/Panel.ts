@@ -10,11 +10,11 @@ export class PanelCreateProperties extends ComponentCreateProperties {
     @$Property({ default: false })
     useSpan?: boolean;
 }
-export interface PanelConfig extends ComponentConfig{
-   /**
-     * @param {boolean} the elements are ordered absolute
-     **/
-    isAbsolute:boolean;
+export interface PanelConfig extends ContainerConfig {
+    /**
+      * @param {boolean} the elements are ordered absolute
+      **/
+    isAbsolute?: boolean;
 
 }
 
@@ -26,7 +26,7 @@ export interface PanelConfig extends ComponentConfig{
 //@$Property({ name: "new/useSpan", type: "boolean", default: false })
 export class Panel extends Container implements PanelConfig {
     _isAbsolute: boolean;
-    private _activeComponentDesigner:any;
+    private _activeComponentDesigner: any;
     /**
     * 
     * @param {object} properties - properties to init
@@ -58,11 +58,11 @@ export class Panel extends Container implements PanelConfig {
         this._designMode = false;
         this.isAbsolute = false;
     }
-     config(config:ContainerConfig):Panel {
+    config(config: PanelConfig): Panel {
         super.config(<ContainerConfig>config);
         return this;
     }
-   set isAbsolute(value: boolean) {
+    set isAbsolute(value: boolean) {
         this._isAbsolute = value;
         if (value)
             $(this.dom).addClass("jabsolutelayout");
@@ -70,7 +70,7 @@ export class Panel extends Container implements PanelConfig {
             $(this.dom).removeClass("jabsolutelayout");
         if (this._designMode !== undefined)
             this._setDesignMode(this._designMode);
-        if(this._designMode&&this._activeComponentDesigner){
+        if (this._designMode && this._activeComponentDesigner) {
             this._activeComponentDesigner.editDialog(true);
         }
     }
@@ -89,7 +89,7 @@ export class Panel extends Container implements PanelConfig {
     }
     extensionCalled(action: ExtensionAction) {
         if (action.componentDesignerSetDesignMode) {
-            this._activeComponentDesigner=action.componentDesignerSetDesignMode.componentDesigner;
+            this._activeComponentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
             return this._setDesignMode(action.componentDesignerSetDesignMode.enable);
         }
         super.extensionCalled(action);
@@ -100,14 +100,14 @@ export class Panel extends Container implements PanelConfig {
     */
     add(component: Component) {//add a component to the container
         // $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
-        
-        return super.add(component); 
+
+        return super.add(component);
     }
     /**
      * adds a component to the container before an other component
      * @param {jassijs.ui.Component} component - the component to add
      * @param {jassijs.ui.Component} before - the component before then component to add
-     */ 
+     */
     addBefore(component: Component, before: Component) {//add a component to the container
         //   $(component.domWrapper).css({position:(this.isAbsolute ? "absolute" : "relative")});
         return super.addBefore(component, before);
@@ -117,7 +117,7 @@ export class Panel extends Container implements PanelConfig {
      * @param {boolean} enable - true if activate designMode
      */
     protected _setDesignMode(enable) {
-        this._designMode = enable; 
+        this._designMode = enable;
         if (enable) {//dummy in containers at the end
             if (this.isAbsolute === false) {
                 DesignDummy.createIfNeeded(this, "atEnd", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
@@ -146,34 +146,34 @@ export class Panel extends Container implements PanelConfig {
                      this._designDummy = undefined;
                  }*/
             }
-        }else{
-        	DesignDummy.destroyIfNeeded(this, "atEnd");
+        } else {
+            DesignDummy.destroyIfNeeded(this, "atEnd");
         }
-            if (enable) {//dummy in containers at the end
+        if (enable) {//dummy in containers at the end
 
-                if (this.isAbsolute === false) {
-                    for (var x = 0;x < this._components.length;x++) {
-                        var comp = this._components[x];
-                        if (comp instanceof Container && !$(comp.dom).hasClass("jdisableaddcomponents")) {
-                        	 DesignDummy.createIfNeeded(comp, "beforeComponent", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
-                        }
+            if (this.isAbsolute === false) {
+                for (var x = 0; x < this._components.length; x++) {
+                    var comp = this._components[x];
+                    if (comp instanceof Container && !$(comp.dom).hasClass("jdisableaddcomponents")) {
+                        DesignDummy.createIfNeeded(comp, "beforeComponent", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
                     }
                 }
-            } else {
-                for (var x = 0;x < this._components.length;x++) {
-                    var comp = this._components[x];
-                    DesignDummy.destroyIfNeeded(comp, "beforeComponent");
-                     
-                }
             }
-        
+        } else {
+            for (var x = 0; x < this._components.length; x++) {
+                var comp = this._components[x];
+                DesignDummy.destroyIfNeeded(comp, "beforeComponent");
+
+            }
+        }
+
 
     }
     destroy() {
         super.destroy();
         if (this._designDummy)
             this._designDummy.destroy();
-        this._activeComponentDesigner=undefined;
+        this._activeComponentDesigner = undefined;
     }
 }
 

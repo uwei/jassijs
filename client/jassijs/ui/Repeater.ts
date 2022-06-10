@@ -1,7 +1,7 @@
 
 import jassi from "jassijs/jassi";
 import {Container} from "jassijs/ui/Container";
-import {Panel} from "jassijs/ui/Panel";
+import {Panel, PanelConfig} from "jassijs/ui/Panel";
 import {ComponentDesigner} from "jassijs_editor/ComponentDesigner";
 import {Databinder} from "jassijs/ui/Databinder";
 import {Component,  $UIComponent } from "jassijs/ui/Component";
@@ -14,14 +14,21 @@ import { DataComponentConfig } from "jassijs/ui/DataComponent";
 class RepeaterDesignPanel extends Panel {
     databinder: Databinder;
     me;
+    
 }
 
-export interface RepeaterConfig extends DataComponentConfig {
+export interface RepeaterConfig extends PanelConfig {
 
      /**
      *  @member {array} value - the array which objects used to create the repeating components
      */
     value?;
+  /**
+     * binds a component to a databinder
+     * @param {jassijs.ui.Databinder} databinder - the databinder to bind
+     * @param {string} property - the property to bind
+     */
+   bind?:any[];
 
 }
 @$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple",editableChildComponents: ["this","design"]})
@@ -180,11 +187,7 @@ export class Repeater extends Panel implements DataComponentConfig{
             this._designMode = enable;
         //	super.setDesignMode(enable);
     }
-    /**
-     * binds a component to a databinder
-     * @param {jassijs.ui.Databinder} databinder - the databinder to bind
-     * @param {string} property - the property to bind
-     */
+    
     @$Property({type:"databinder"})
     set bind(databinder:any[]) {
         this._databinder = databinder[0];

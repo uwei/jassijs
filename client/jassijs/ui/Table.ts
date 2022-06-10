@@ -1,7 +1,7 @@
 ;
 import { $Class } from "jassijs/remote/Jassi";
 import "jassijs/ext/tabulator";
-import { DataComponent } from "jassijs/ui/DataComponent";
+import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 import { $Property } from "jassijs/ui/Property";
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Textbox } from "jassijs/ui/Textbox";
@@ -25,18 +25,30 @@ class TableEditorProperties {
     @$Property({ default: "function(event:any,group:any){\n\t\n}" })
     cellDblClick() { }
 }
+export interface TableConfig extends DataComponentConfig {
+    options?: TableOptions;
+    /**
+    * register an event if an item is selected
+    * @param {function} handler - the function that is called on change
+    */
+    onchange?(handler: (event?: JQueryEventObject, row?: Tabulator.RowComponent) => void);
+    showSearchbox?: boolean;
+    /**
+    * if the value is changed then the value of _component is also changed (_component.value)
+    */
+    selectComponent?:any;
+    /**
+     * set the items of the table
+     */
+    items?:any[];
+    columns?:Tabulator.ColumnDefinition[];
+    bindItems?:any[];
+}
+
 @$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" })
 @$Class("jassijs.ui.Table")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
-/*
-@$Property({ name: "new/paginationSize", type: "number", default: undefined })
-@$Property({ name: "new/headerSort", type: "boolean", default: true })
-@$Property({ name: "new/layout", type: "string", default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] })
-@$Property({ name: "new/dataTreeChildField", type: "string", default: undefined })
-@$Property({ name: "new/movableColumns", type: "boolean", default: false })
-@$Property({ name: "new/cellDblClick", type: "function", default: "function(event:any,group:any){\n\t\n}" })
-*/
-export class Table extends DataComponent {
+export class Table extends DataComponent implements TableConfig{
     table: Tabulator;
     _selectHandler;
     _select: {
@@ -56,9 +68,15 @@ export class Table extends DataComponent {
         this.options = properties;
         this._selectHandler = [];
     }
+
+    config(config: TableConfig): Table {
+        super.config(config);
+        return this;
+    }
+
     @$Property({ type: "json", componentType: "jassijs.ui.TableEditorProperties" })
     set options(properties: TableOptions) {
-        var _this=this;
+        var _this = this;
         this._lastOptions = properties;
         if (this.table) {
             var lastSel = this.value;
@@ -209,10 +227,6 @@ export class Table extends DataComponent {
             this._select.value = event.data;
         this.callEvent("select", event);
     }
-    /**
-     * register an event if an item is selected
-     * @param {function} handler - the function that is called on change
-     */
     @$Property({ default: "function(event?: JQueryEventObject, data?:Tabulator.RowComponent){\n\t\n}" })
     onchange(handler: (event?: JQueryEventObject, row?: Tabulator.RowComponent) => void) {
         this.addEvent("select", handler);
@@ -248,18 +262,12 @@ export class Table extends DataComponent {
             $(this.domWrapper).prepend(this._searchbox.domWrapper);
         }
     }
-    /**
-      * if the value is changed then the value of _component is also changed (_component.value)
-      */
     set selectComponent(_component: any) {
         this._select = _component;
     }
     get selectComponent(): any {
         return this._select; //$(this.dom).text();
     }
-    /**
-     * set the items of the table
-     */
     set items(value: any[]) {
         if (value && this.dataTreeChildFunction) { //populate __treechilds
             for (let x = 0; x < value.length; x++) {
@@ -371,10 +379,10 @@ export class Table extends DataComponent {
         return this.table.getColumnDefinitions();
     }
     @$Property({ type: "databinder" })
-    bindItems(databinder, property) {
-        this._databinderItems = databinder;
+    set bindItems(databinder:any[]) {
+        this._databinderItems = databinder[0];
         var _this = this;
-        this._databinderItems.add(property, this, undefined, (tab) => {
+        this._databinderItems.add(databinder[1], this, undefined, (tab) => {
             return tab.items;
         }, (tab, val) => {
             tab.items = val;
@@ -384,11 +392,15 @@ export class Table extends DataComponent {
     }
 }
 export async function test() {
-    var tab = new Table({});
-    tab.width = 400;
-    tab.options = {
-        headerSort: true
-    };
+    var tab = new Table({
+        
+    });
+    tab.config({
+        width :400,
+        options :{
+            headerSort: true
+        }
+    });
     var tabledata = [
         { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
         { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },

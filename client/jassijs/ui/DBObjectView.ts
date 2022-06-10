@@ -1,7 +1,7 @@
 import {Button} from "jassijs/ui/Button";
 import {BoxPanel} from "jassijs/ui/BoxPanel";
 import { $Class } from "jassijs/remote/Jassi";
-import {Panel} from "jassijs/ui/Panel";
+import {Panel, PanelConfig} from "jassijs/ui/Panel";
 import { Databinder } from "jassijs/ui/Databinder";
 import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
@@ -34,7 +34,7 @@ export function $DBObjectView(properties: DBObjectViewProperties): Function {
 }
 type Me=DBObjectViewMe;
 
-export interface DBObjectViewConfig extends ComponentConfig {
+export interface DBObjectViewConfig extends PanelConfig {
   /**
      * register an event if the object is created
      * @param {function} handler - the function that is called
@@ -58,7 +58,7 @@ export interface DBObjectViewConfig extends ComponentConfig {
 }
 @$UIComponent({ editableChildComponents: ["this","me.main","me.toolbar","me.save","me.remove","me.refresh"] })
 @$Class("jassijs/ui/DBObjectView")
-export class DBObjectView extends Panel implements DBObjectViewConfig {
+export class DBObjectView extends Panel implements  Omit<DBObjectViewConfig,"isAbsolute"> {
 	me:DBObjectViewMe;
 	value:any;
     constructor() {
@@ -69,7 +69,7 @@ export class DBObjectView extends Panel implements DBObjectViewConfig {
         DBObjectView.prototype.layout.bind(this)(this.me);
        // this.layout(this.me);
     }
-    config(config: DBObjectViewConfig): DBObjectView {
+    config(config: DBObjectViewConfig):DBObjectView {
         super.config(config);
         return this;
     }

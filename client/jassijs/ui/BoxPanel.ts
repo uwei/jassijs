@@ -1,4 +1,4 @@
-import { Panel } from "jassijs/ui/Panel";
+import { Panel, PanelConfig } from "jassijs/ui/Panel";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
@@ -8,7 +8,7 @@ import Split from "jassijs/ext/split";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 
 
-export interface BoxPanelConfig extends ComponentConfig{
+export interface BoxPanelConfig extends PanelConfig{
     /**
      * @member {boolean} - if true then the components are composed horizontally
      **/

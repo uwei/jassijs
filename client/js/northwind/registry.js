@@ -3,7 +3,7 @@ define("northwind/registry",["require"], function(require) {
  return {
   default: {
 	"northwind/CategoriesView.ts": {
-		"date": 1654704477985,
+		"date": 1654900468138,
 		"northwind.CategoriesView": {
 			"$DBObjectView": [
 				{

@@ -1,10 +1,16 @@
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-import { $UIComponent } from "jassijs/ui/Component";
+import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import jassijs, { $Class } from "jassijs/remote/Jassi";
 import { Property, $Property } from "jassijs/ui/Property";
 
 import { CSSProperties } from "jassijs/ui/CSSProperties";
 
+export interface StyleConfig extends ComponentConfig {
+  /**
+    * sets CSS Properties
+    */
+   css?:CSSProperties;
+}
 
 @$UIComponent({ fullPath: "common/Style", icon: "mdi mdi-virus" })
 @$Class("jassijs.ui.Style")
@@ -12,12 +18,17 @@ import { CSSProperties } from "jassijs/ui/CSSProperties";
  * on ore mors Style can be assigned to component
  * the style is appended to the head
  **/
-export class Style extends InvisibleComponent {
+export class Style extends InvisibleComponent implements StyleConfig{
     
     constructor() {//id connect to existing(not reqired)
         super();
         super.init($('<span class="InvisibleComponent"></span>')[0]);
 
+    }
+
+    config(config: StyleConfig): Style {
+        super.config(config);
+        return this;
     }
     get styleid() {
         return "jassistyle" + this._id;
