@@ -1254,7 +1254,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DataComponent.ts": {
-		"date": 1654703815491,
+		"date": 1654950526606,
 		"jassijs.ui.DataComponent": {
 			"@members": {
 				"autocommit": {
@@ -1764,7 +1764,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1654794147356,
+		"date": 1654976003583,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {
@@ -1905,7 +1905,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-		"date": 1654631712419,
+		"date": 1654950343134,
 		"jassijs.ui.PropertyEditors.DatabinderEditor": {
 			"$PropertyEditor": [
 				[
@@ -2419,7 +2419,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Tree.ts": {
-		"date": 1654902150112,
+		"date": 1654975282620,
 		"jassijs.ui.TreeEditorPropertiesMulti": {
 			"@members": {
 				"mode": {

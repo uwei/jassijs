@@ -133,6 +133,9 @@ export class ComponentExplorer extends Panel {
     update() {
         this.value = this.value;
     }
+    onselect(handler) {
+        this.tree.onselect(handler);
+    }
     onclick(handler) {
         this.tree.addEvent("click", handler);
     }

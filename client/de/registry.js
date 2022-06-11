@@ -293,7 +293,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1624293156000
 	},
 	"de/Dialog.ts": {
-		"date": 1654794943289,
+		"date": 1654972582396,
 		"de/Dialog": {}
 	},
 	"de/TTDialog.ts": {

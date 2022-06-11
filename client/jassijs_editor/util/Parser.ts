@@ -296,6 +296,7 @@ export class Parser {
             var node2;
             var left: string;
             var value: string;
+            var _this=this;
             var isFunction = false;
             if (ts.isBinaryExpression(node)) {
                 node1 = node.left;
@@ -311,7 +312,14 @@ export class Parser {
                 isFunction = true;
                 left = node1.getText();// this.code.substring(node1.pos, node1.end).trim();
                 var params = [];
-                node.arguments.forEach((arg) => { params.push(arg.getText()) });
+                node.arguments.forEach((arg) => { 
+                  
+                    params.push(arg.getText());
+                    if((<any>arg)?.expression?.name?.getText()==="config"){
+                        _this.parseConfig(<any>arg);
+                    }
+                     //arg.getText().indexOf(".config(")
+                });
                 if (left.endsWith(".config")) {
                     var lastpos = left.lastIndexOf(".");
                     var variable = left;
@@ -806,8 +814,12 @@ export class Parser {
                         lastprop.parent["statements"].splice(pos + 1, 0, newExpression);
                 } else {
                     var pos = statements.length;
-                    if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
-                        pos--;
+                    try{
+                        if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
+                            pos--;
+                    }catch{
+
+                    }
                     statements.splice(pos, 0, newExpression);
                 }
             }

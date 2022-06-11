@@ -143,17 +143,17 @@ export class Tree extends Component implements TreeConfig {
             options.filter.autoExpand = true;
 
         var beforeExpand = options.beforeExpand;
-        var activate = options.activate;
+        var select = options.select;
         var click = options.click;
         options.source = [{ title: 'Folder in home folder', key: 'fA100', folder: true, lazy: true }];
         options.icon = false;//we have an own
         options.lazyLoad = function (event, data) {
             TreeNode.loadChilds(event, data);
         };
-        options.activate = function (event: JQueryEventObject, data: Fancytree.EventData) {
+        options.select = function (event: JQueryEventObject, data: Fancytree.EventData) {
             _this._onselect(event, data);
-            if (activate !== undefined)
-                activate(event, data);
+            if (select !== undefined)
+                select(event, data);
         };
         options.click = function (event: JQueryEventObject, data: Fancytree.EventData) {
             _this._onclick(event, data);
@@ -161,6 +161,7 @@ export class Tree extends Component implements TreeConfig {
                 return click(event, data);
             return true;
         }
+        
         $("#" + this._id).fancytree(options);
         //@ts-ignore
         this.tree = $.ui.fancytree.getTree("#" + this._id);
@@ -209,7 +210,7 @@ export class Tree extends Component implements TreeConfig {
     get propChilds() {
         return this._propChilds;
     }
-
+    
     onselect(handler) {
         this.addEvent("select", handler);
     }
@@ -714,6 +715,7 @@ class TreeNode {
 
 export async function test() {
     var tree = new Tree();
+    
     var s: any = { name: "Sansa", id: 1, style: { color: "blue" } };
     var p = { name: "Peter", id: 2 };
     var u = { name: "Uwe", id: 3, childs: [p, s] };
@@ -722,7 +724,7 @@ export async function test() {
     s.childs = [c];
     tree.config({
         options: {
-            checkbox: true
+           // checkbox: true
         },
         propDisplay: "name",
         propChilds: "childs",
@@ -736,8 +738,9 @@ export async function test() {
         selection : [p, s],
         value : p
     });
-
-
+    tree.onselect(()=>{
+        console.log(tree.selection);
+    });
     /*tree.propIcon = function(data) {
         if (data.name === "Uwe")
             return "res/car.ico";

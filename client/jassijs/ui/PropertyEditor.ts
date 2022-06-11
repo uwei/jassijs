@@ -212,7 +212,7 @@ export class PropertyEditor extends Panel {
      * @member {object}  - the rendered object 
      */
     set value(value) {
-
+     
         if (value !== this._value && this.parentPropertyEditor === undefined)
             this.codeChanges = {};
         if (value !== undefined || value?.dom !== undefined) {
@@ -238,15 +238,19 @@ export class PropertyEditor extends Panel {
                     this.variablename = this.codeEditor.getVariableFromObject(value[x]);
                 this._multiselectEditors.push(multi);
             }
-            this._value = value[0];
+            this._value = value;
         } else
             this._value = value;
         if (value === []) {
             this._value = undefined;
             return;
         }
-        if (this.codeEditor !== undefined && this.parentPropertyEditor === undefined)
-            this.variablename = this.codeEditor.getVariableFromObject(this._value);
+        if (this.codeEditor !== undefined && this.parentPropertyEditor === undefined){
+            if(Array.isArray(this._value)&&this._value.length>0)
+                this.variablename = this.codeEditor.getVariableFromObject(this._value[0]);
+            else
+                this.variablename = this.codeEditor.getVariableFromObject(this._value);
+        }
 
 
 
@@ -295,8 +299,12 @@ export class PropertyEditor extends Panel {
             else {
                 if (!this._value)
                     props = [];
-                else
-                    props = ComponentDescriptor.describe(this._value.constructor)?.fields;
+                else{
+                    if(Array.isArray(this._value)&&this._value.length>0)
+                        props = ComponentDescriptor.describe(this._value[0].constructor)?.fields;
+                    else
+                        props = ComponentDescriptor.describe(this._value.constructor)?.fields;
+                }
                 if (!props)
                     props = [];
             }
@@ -548,7 +556,7 @@ export class PropertyEditor extends Panel {
     */
     setPropertyInCode(property: string, value, replace: boolean = undefined, variableName: string = undefined,
         before: { variablename: string, property: string, value?} = undefined,
-        scopename: { variablename: string, methodname: string } = undefined) {
+        scopename: { variablename: string, methodname: string } = undefined,doUpdate=true) {
 
         if (this.codeEditor === undefined) {
             this.codeChanges[property] = value;
@@ -580,14 +588,16 @@ export class PropertyEditor extends Panel {
         this.parser.setPropertyInCode(variableName, property, value,
             /*[{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]*/undefined,
             isFunction, replace, before, scopename);
-        //correct spaces
-        if (value && value.indexOf && value.indexOf("\n") > -1) {
+        if(doUpdate){
+            //correct spaces
+            if (value && value.indexOf && value.indexOf("\n") > -1) {
+                this.codeEditor.value = this.parser.getModifiedCode();
+                this.updateParser();
+            }
             this.codeEditor.value = this.parser.getModifiedCode();
             this.updateParser();
+            this.callEvent("codeChanged", {});
         }
-        this.codeEditor.value = this.parser.getModifiedCode();
-        this.updateParser();
-        this.callEvent("codeChanged", {});
     }
 
     /**

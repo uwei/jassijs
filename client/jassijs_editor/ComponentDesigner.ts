@@ -32,7 +32,12 @@ declare global {
     }
 }
 
-
+class ClipboardData {
+    varNamesToCopy: string[] = [];
+    children: { [name: string]: string[] } = {};
+    properties: { [name: string]: { [propname: string]: any[] } } = {};
+    types: { [name: string]: string } = {};
+}
 
 
 @$Class("jassijs_editor.ComponentDesigner")
@@ -56,6 +61,8 @@ export class ComponentDesigner extends Panel {
     editButton: Button;
     removeButton: Button;
     inlineEditorPanel: Panel;
+    copyButton: Button;
+    pasteButton: Button;
 
     constructor() {
         super();
@@ -156,6 +163,29 @@ export class ComponentDesigner extends Panel {
             _this.removeComponent();
         });
         this._designToolbar.add(this.removeButton);
+
+        this.editButton = new Button();
+        this.editButton.icon = "mdi mdi-run mdi-18px";
+        this.editButton.tooltip = "Test Dialog";
+        this.editButton.onclick(function () {
+            _this.editDialog(!_this.editMode);
+
+        });
+
+        this.copyButton = new Button();
+        this.copyButton.icon = "mdi mdi-content-copy mdi-18px";
+        this.copyButton.tooltip = "Copy";
+        this.copyButton.onclick(function () {
+            _this.copy();
+        });
+        this._designToolbar.add(this.copyButton);
+        this.pasteButton = new Button();
+        this.pasteButton.icon = "mdi mdi-content-paste mdi-18px";
+        this.pasteButton.tooltip = "Paste";
+        this.pasteButton.onclick(function () {
+            _this.paste();
+        });
+        this._designToolbar.add(this.pasteButton);
         var box = new BoxPanel();
         box.horizontal = true;
 
@@ -230,9 +260,16 @@ export class ComponentDesigner extends Panel {
 
     _initComponentExplorer() {
         var _this = this;
-        this._componentExplorer.onclick(function (data) {
-            var ob = data.data;
-            _this._propertyEditor.value = ob;
+        this._componentExplorer.onselect(function (data) {
+
+            // console.log(_this._componentExplorer.selection);
+            //  var ob = data.data;
+            setTimeout(() => {
+                var sel = _this._componentExplorer.tree.selection;
+                if (sel.length === 1)
+                    sel = sel[0];
+                _this._propertyEditor.value = sel;
+            }, 10);
         });
         this._componentExplorer.getComponentName = function (item) {
             var varname = _this._codeEditor.getVariableFromObject(item);
@@ -257,6 +294,169 @@ export class ComponentDesigner extends Panel {
             this._propertyEditor.removeVariableInDesign(varname);
             this._updateInvisibleComponents();
         }
+
+    }
+    private copyProperties(clip: ClipboardData, component: Component) {
+        var varname = this._codeEditor.getVariableFromObject(component);
+        var parserdata = this._propertyEditor.parser.data[varname];
+        clip.types[varname] = classes.getClassName(component);
+        if (!clip.properties[varname]) {
+            clip.properties[varname] = {};
+        }
+        var editorfields = {};
+        ComponentDescriptor.describe(component.constructor)?.fields.forEach((f) => { editorfields[f.name] = f });
+        for (var key in parserdata) {
+            if (editorfields[key] || key === "_new_" || key === "add") {
+                if (!clip.properties[varname][key]) {
+                    clip.properties[varname][key] = []
+                }
+                for (var i = 0; i < parserdata[key].length; i++) {
+                    //only add fields in Propertydescriptor
+                    clip.properties[varname][key].push(parserdata[key][i].value);
+                }
+            }
+        }
+        if (component["_components"]) {
+            for (var x = 0; x < component["_components"].length; x++) {
+                var childname = this._codeEditor.getVariableFromObject(component["_components"][x]);
+                if (childname) {
+                    if (clip.children[varname] === undefined) {
+                        clip.children[varname] = [];
+                    }
+                    clip.children[varname].push(childname);
+                    this.copyProperties(clip, component["_components"][x]);
+                }
+            }
+        }
+    }
+    copy() {
+
+        var components = this._propertyEditor.value;
+        if (!Array.isArray(components)) {
+            components = [components];
+        }
+
+        var clip = new ClipboardData();
+        clip.varNamesToCopy = [];
+        for (var x = 0; x < components.length; x++) {
+            var component: Component = components[x];
+            var varname = this._codeEditor.getVariableFromObject(component);
+            clip.varNamesToCopy.push(varname);
+            this.copyProperties(clip, component);
+        }
+
+
+
+        var text = JSON.stringify(clip);
+        console.log(text);
+        navigator.clipboard.writeText(text).then(() => {
+        });
+    }
+    private async pasteComponent(clip: ClipboardData, target: Container, varname: string, variablelistold: any[], variablelistnew: any[]) {
+        var _this = this;
+        var vartype = clip.properties[varname]["_new_"][0];
+        if (variablelistold.indexOf(varname) > -1)
+            return;
+        vartype = vartype.split("(")[0].split("new ")[1];
+
+        var targetname = _this._codeEditor.getVariableFromObject(target);
+        var newcomp = { createFromType: clip.types[varname] };
+        await classes.loadClass(clip.types[varname]);
+        var created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, undefined, false);
+        variablelistold.push(varname);
+        //correct designdummy
+        for (var t = 0; t < target._components.length; t++) {
+            var ch = target._components[t];
+            if (ch["type"] === "atEnd") {
+                target.remove(ch);
+                // target.add(ch);
+                break;
+            }
+        }
+        variablelistnew.push(_this._codeEditor.getVariableFromObject(created));
+        if (clip.children[varname] !== undefined) {
+            for (var k = 0; k < clip.children[varname].length; k++) {
+                _this.pasteComponent(clip, <Container>created, clip.children[varname][k], variablelistold, variablelistnew);
+            }
+        }
+    }
+    async paste() {
+        var text = await navigator.clipboard.readText();
+        var created
+        var clip: ClipboardData = JSON.parse(text);
+        var _this = this;
+        var variablelistold = [];
+        var variablelistnew = [];
+        //create Components
+        for (var x = 0; x < clip.varNamesToCopy.length; x++) {
+            var varname = clip.varNamesToCopy[x];
+            var target: Container = _this._propertyEditor.value;
+            await _this.pasteComponent(clip, target, varname, variablelistold, variablelistnew);
+
+            //set properties
+        }
+        //in the new Text the variables are renamed
+        var textnew = text;
+        for (var x = 0; x < variablelistnew.length; x++) {
+            var oldName = variablelistold[x];
+            var newName = variablelistnew[x];
+            var reg = new RegExp("\\W" + oldName + "\\W");
+            var found = true;
+            while (found == true) {
+                found = false;
+                textnew = textnew.replace(reg, function replacer(match, offset, string) {
+                    // p1 is nondigits, p2 digits, and p3 non-alphanumerics
+                    found = true;
+                    return match.substring(0, 1) + newName + match.substring(match.length - 1, match.length);
+                });
+            }
+        }
+        clip = JSON.parse(textnew);
+
+        //set properties
+        for (var x = 0; x < variablelistnew.length; x++) {
+            var variablename = variablelistnew[x]
+            for (var key in clip.properties[variablename]) {
+                if (key !== "_new_" && key !== "config" && key != "add") {
+                    var propdata = clip.properties[variablename][key];
+                    for (var v = 0; v < propdata.length; v++) {
+                        var svalue: string = propdata[v];
+                        var component = _this._codeEditor.getObjectFromVariable(variablename);
+                        var argnames = [];
+                        var args = [];
+                        var allvars = _this.codeEditor.variables.value;
+                        //introduce variables replace me.textbox1->me_textbox1
+                        for (var vv = 0; vv < allvars.length; vv++) {
+
+                            var newvarname = allvars[vv].name.replaceAll(".", "_");
+                            svalue = svalue.replaceAll(allvars[vv].name, newvarname);
+                            if (newvarname !== "this") {
+                                argnames.push(newvarname);
+                                args.push(allvars[vv].value);
+                            }
+                        }
+
+                        var realvalue = new Function(...argnames, "return (" + svalue + ");").bind(_this._codeEditor.getObjectFromVariable("this"))(...args);
+                        if (typeof (component[key]) === "function") {
+                            component[key](realvalue);
+                        } else {
+                            component[key] = realvalue;
+                        }
+                        //_this._propertyEditor.setPropertyInDesign(key,value);
+                        _this._propertyEditor.setPropertyInCode(key, propdata[v], propdata.length > 0, variablename, undefined, undefined, false);
+
+                    }
+                }
+            }
+        }
+        _this._propertyEditor.value = created;
+        _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
+        _this._propertyEditor.updateParser();
+        _this._propertyEditor.callEvent("codeChanged", {});
+        //include the new element
+        _this.editDialog(true);
+        _this._componentExplorer.update();
+        _this._updateInvisibleComponents();
 
     }
     /**
@@ -303,8 +503,8 @@ export class ComponentDesigner extends Panel {
         this.editMode = enable;
         this.editButton.toggle(!this.editMode);
         this.undoButton.hidden = !enable;
-        this.lassoButton.hidden=!enable;
-        this.removeButton.hidden=!enable;
+        this.lassoButton.hidden = !enable;
+        this.removeButton.hidden = !enable;
         var component = this._designPlaceholder._components[0];
         //switch designmode
         var comps = $(component.dom).find(".jcomponent");
@@ -329,7 +529,7 @@ export class ComponentDesigner extends Panel {
         //    }
         this.variables.updateCache();//variables can be added with Repeater.setDesignMode
         if (this._resizer !== undefined) {
-            this._resizer.uninstall(); 
+            this._resizer.uninstall();
         }
         if (this._draganddropper !== undefined) {
             this._draganddropper.uninstall();
@@ -358,8 +558,10 @@ export class ComponentDesigner extends Panel {
                         ob = ob["editorselectthis"];
                     ret.push(ob);
                 }
-                if (ret.length > 0) {
+                if (ret.length === 1)
                     _this._propertyEditor.value = ret[0];
+                else if (ret.length > 0) {
+                    _this._propertyEditor.value = ret;
                 }
             };
 
@@ -425,7 +627,7 @@ export class ComponentDesigner extends Panel {
 
         if (oldParent !== newParent || beforeComponent !== undefined || top === undefined) {//top=undefined ->on relative position at the end call the block
             //get Position
-            var oldVal=_this._propertyEditor.removePropertyInCode("add", compName, oldName,false);
+            var oldVal = _this._propertyEditor.removePropertyInCode("add", compName, oldName, false);
             var before;
             if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") {//designdummy atEnd
                 var on = _this._codeEditor.getVariableFromObject(beforeComponent);
@@ -456,7 +658,7 @@ export class ComponentDesigner extends Panel {
      * @param {jassijs.ui.Container} newParent - the new parent container where the component is placed
      * @param {jassijs.ui.Component} beforeComponent - insert the new component before beforeComponent
      **/
-    createComponent(type, component, top, left, newParent, beforeComponent): Component {
+    createComponent(type, component, top, left, newParent, beforeComponent, doUpdate = true): Component {
         var _this = this;
         /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor&&beforeComponent.type==="atEnd"){
             beforeComponent=undefined;
@@ -544,14 +746,13 @@ export class ComponentDesigner extends Panel {
                 }
             });
         }
-
-
-        _this._propertyEditor.value = varvalue;
-        //include the new element
-        _this.editDialog(true);
-        _this._componentExplorer.update();
-        //var test=_this._invisibleComponents;
-        _this._updateInvisibleComponents();
+        if (doUpdate) {
+            _this._propertyEditor.value = varvalue;
+            //include the new element
+            _this.editDialog(true);
+            _this._componentExplorer.update();
+            _this._updateInvisibleComponents();
+        }
         return varvalue;
     }
     createVariable(type, scope, varvalue) {
@@ -559,7 +760,7 @@ export class ComponentDesigner extends Panel {
             return;
         var varname = this._propertyEditor.addVariableInCode(type, scope);
 
-       if (varname.startsWith("me.")&&this._codeEditor.getObjectFromVariable("me")!==undefined) {
+        if (varname.startsWith("me.") && this._codeEditor.getObjectFromVariable("me") !== undefined) {
             var me = this._codeEditor.getObjectFromVariable("me");
             me[varname.substring(3)] = varvalue;
         } else if (varname.startsWith("this.")) {
@@ -583,41 +784,41 @@ export class ComponentDesigner extends Panel {
         return this._hasRepeatingContainer(component._parent);
     }
 
-    private fillVariables(root:Component,component:Component,cache:{[componentid: string]: {line:number,column:number}}){
-        if(cache[component._id]===undefined&&component["__stack"]!==undefined){
-            var lines=component["__stack"]?.split("\n");
-            for(var x=0;x<lines.length;x++){
-                var sline:string=lines[x];
-                if(sline.indexOf("$temp.js")>0){
-                    var spl=sline.split(":");
-                    var entr={
-                        
+    private fillVariables(root: Component, component: Component, cache: { [componentid: string]: { line: number, column: number } }) {
+        if (cache[component._id] === undefined && component["__stack"] !== undefined) {
+            var lines = component["__stack"]?.split("\n");
+            for (var x = 0; x < lines.length; x++) {
+                var sline: string = lines[x];
+                if (sline.indexOf("$temp.js") > 0) {
+                    var spl = sline.split(":");
+                    var entr = {
+
                     }
-                    cache[component._id]={
-                        line:Number(spl[spl.length-2]),
-                        column:Number(spl[spl.length-1].replace(")",""))
+                    cache[component._id] = {
+                        line: Number(spl[spl.length - 2]),
+                        column: Number(spl[spl.length - 1].replace(")", ""))
                     }
                     break;
                 }
             }
-             if(component["_components"]){
-            for(var x=0;x<component["_components"].length;x++){
-                this.fillVariables(root,component["_components"][x],cache);
+            if (component["_components"]) {
+                for (var x = 0; x < component["_components"].length; x++) {
+                    this.fillVariables(root, component["_components"][x], cache);
+                }
             }
-        }
-            if(component===root){
+            if (component === root) {
                 //fertig
-                var hh=0;        
+                var hh = 0;
             }
         }
-       
+
     }
 
     /**
      * @member {jassijs.ui.Component} - the designed component
      */
     set designedComponent(component) {
-        this.fillVariables(component,component,{});
+        this.fillVariables(component, component, {});
         var com = component;
         if (com["isAbsolute"] !== true && com.width === "0" && com.height === "0") {
             component.width = "calc(100% - 1px)";

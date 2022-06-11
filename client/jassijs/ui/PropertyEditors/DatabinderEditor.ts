@@ -33,6 +33,11 @@ export class DatabinderEditor extends Editor
         var value = this.propertyEditor.getPropertyValue(this.property);
         if (value !== undefined) {
             try {
+                if(value.startsWith("["))
+                    value=value.substring(1);
+                if(value.endsWith("]"))
+                    value=value.substring(0,value.length-1);
+                
                 var sp = value.replaceAll('"', "").split(",");
                 value = sp[1] + "-" + sp[0];
                 this.component.value = value;
@@ -86,7 +91,7 @@ export class DatabinderEditor extends Editor
 
         var func = this.propertyEditor.value[this.property.name];
         var binder = this.propertyEditor.getObjectFromVariable(sp[1]);
-        this.propertyEditor.value[this.property.name](binder, sp[0]);
+        this.propertyEditor.value[this.property.name]=[binder, sp[0]];
         //setPropertyInDesign(this.property.name,val);
         super.callEvent("edit", param);
     }
