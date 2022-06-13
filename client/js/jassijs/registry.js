@@ -1410,7 +1410,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/ErrorPanel.ts": {
-		"date": 1627925312000,
+		"date": 1655145155622,
 		"jassijs.ui.ErrorPanel": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"

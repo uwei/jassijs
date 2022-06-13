@@ -194,7 +194,8 @@ export class ErrorPanel extends Panel {
             if (u.indexOf("/js/") > -1 || ismodul) {
                 try {
                     var TSSourceMap = (await import("jassijs_editor/util/TSSourceMap")).TSSourceMap;
-                    var pos = await new TSSourceMap().getLineFromJS(u, Number(line), Number(col));
+                var map=new TSSourceMap();
+                    var pos = await map.getLineFromJS(u, Number(line), Number(col));
                     if (pos) {
                         return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp", "") +
                             ":" + pos.line + ":" + pos.column;

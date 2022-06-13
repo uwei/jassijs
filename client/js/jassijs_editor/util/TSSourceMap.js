@@ -65,7 +65,8 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
             return ret;
         }
         async getLineFromJS(jsfile, line, column) {
-            return await this.getLinesFromJS(jsfile, [{ line, column }])[0];
+            var data = await this.getLinesFromJS(jsfile, [{ line, column }]);
+            return ((data === undefined || data.length === 0) ? undefined : data[0]);
         }
         async getLinesFromJS(jsfile, data) {
             var jscode = await this.getCode(jsfile.split("?")[0]); // await $.ajax({ url: jsfile, dataType: "text" });
@@ -104,7 +105,7 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
                 });
                 ret.push(one);
             }
-            return ret;
+            return await ret;
             //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js",function(data){
         }
     };

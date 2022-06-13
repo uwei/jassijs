@@ -8,6 +8,7 @@ import { Panel } from "jassijs/ui/Panel";
 type Me = {
     databinder?: Databinder;
     repeater?: Repeater;
+    button?: Button;
 };
 @$Class("de/TestDialogBinder")
 export class TestDialogBinder extends Panel {
@@ -20,11 +21,19 @@ export class TestDialogBinder extends Panel {
     layout(me: Me) {
         me.databinder = new Databinder();
         me.repeater = new Repeater();
-        me.repeater.config({});
+        
+        me.repeater.config({ 
+            createRepeatingComponent: function (me: Me) {
+                
+                me.button = new Button();
+                me.repeater.design.config({ children: [
+                        me.button.config({ text: "button" })
+                    ] });
+            }
+        });
         this.add(me.databinder);
         this.add(me.repeater);
         me.repeater.bind = [me.databinder, "customers"];
-
     }
 }
 export async function test() {
@@ -35,6 +44,7 @@ export async function test() {
             { name: "Klaus" }
         ]
     };
+    throw new Error("kkk");
     ret.me.databinder.value = data;
     return ret;
 }
