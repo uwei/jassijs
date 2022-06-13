@@ -91,7 +91,7 @@ export class DialogKunde extends Panel {
         this.add(me.idvorname);
         me.idid.x = 5;
         me.idid.y = 5;
-        me.idid.bind(me.binder, "id");
+        me.idid.bind=[me.binder, "id"];
         me.idid.width = 145;
         me.idid.converter = new NumberConverter();
         this.add(me.idid);
@@ -150,7 +150,7 @@ export class DialogKunde extends Panel {
         this.add(me.binder);
         me.objectchooser1.x = 10;
         me.objectchooser1.y = 130;
-        me.objectchooser1.bind(me.binder, "this");
+        me.objectchooser1.bind=[me.binder, "this"];
         me.objectchooser1.items = "de.Kunde";
         me.objectchooser1.height = 25;
         me.objectchooser1.width = 25;

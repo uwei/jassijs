@@ -535,9 +535,9 @@ export class PropertyEditor extends Panel {
      * @param scopename - the scope {variable: ,methodname:} to add the variable - if missing layout() 
      * @returns  the name of the object
      */
-    addVariableInCode(type: string, scopename: { variablename: string, methodname: string }): string {
+    addVariableInCode(type: string, scopename: { variablename: string, methodname: string },suggestedName:string=undefined): string {
         var val = this.codeEditor.getObjectFromVariable("this");
-        var ret = this.parser.addVariableInCode(type, undefined, scopename);
+        var ret = this.parser.addVariableInCode(type, undefined, scopename,suggestedName);
        /* var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
         { classname: undefined, methodname: "test" }], scopename);
         */this.codeEditor.value = this.parser.getModifiedCode();

@@ -124,11 +124,11 @@ export class VariablePanel extends Panel {
             var val = vars[x].value;
             var name = vars[x].name;
             this._cache[name] = val;
-            if (name === "me" || name === "this") {
+           /* if (name === "me" || name === "this") {
                 for (var key in val) {
                     this._cache[name + "." + key] = val[key];
                 }
-            }
+            }*/
         }
         var _this = this;
         function update(key, val) {
@@ -151,12 +151,12 @@ export class VariablePanel extends Panel {
                     }
                     if (comp === undefined)
                         comp = comp;
-                    var complist = comp?._components;
+                   /* var complist = comp?._components;
                     if (complist !== undefined) {
                         for (var o = 0; o < complist.length; o++) {
                             update(fname, complist[o]);
                         }
-                    }
+                    }*/
                 }
             }
         }

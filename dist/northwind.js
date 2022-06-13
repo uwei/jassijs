@@ -48,7 +48,7 @@ define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters
             me.boxpanel1.width = 80;
             me.boxpanel1.add(me.name);
             me.table1.height = "100%";
-            me.table1.bindItems(me.databinder, "Products");
+            me.table1.bindItems = [me.databinder, "Products"];
             me.table1.width = "100%";
         }
     };
@@ -1183,7 +1183,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1654704477985,
+                "date": 1654900468138,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {

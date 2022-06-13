@@ -3,7 +3,7 @@ define("northwind/registry",["require"], function(require) {
  return {
   default: {
 	"northwind/CategoriesView.ts": {
-		"date": 1654900468138,
+		"date": 1655059485237,
 		"northwind.CategoriesView": {
 			"$DBObjectView": [
 				{
@@ -26,7 +26,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/CustomerView.ts": {
-		"date": 1654704542347,
+		"date": 1655060136795,
 		"northwind/CustomerView": {
 			"$DBObjectView": [
 				{
@@ -70,7 +70,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/EmployeesView.ts": {
-		"date": 1654704628942,
+		"date": 1655060579556,
 		"northwind.EmployeesView": {
 			"$DBObjectView": [
 				{

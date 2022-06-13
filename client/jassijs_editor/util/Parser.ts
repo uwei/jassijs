@@ -333,6 +333,9 @@ export class Parser {
                     this.parseConfig(node);
                     return;
                 }
+                if (left.endsWith(".createRepeatingComponent")) {
+                    this.parseProperties(node.arguments[0]["body"]);
+                }
                 value = params.join(", ");//this.code.substring(node2.pos, node2.end).trim();//
             }
 
@@ -615,7 +618,11 @@ export class Parser {
         var scope;
         if (variablescope) {
             scope = this.data[variablescope.variablename][variablescope.methodname][0]?.node;
-            scope = scope.expression.arguments[0];
+            if(scope.expression)
+                scope = scope.expression.arguments[0];
+            else
+                scope=scope.initializer;
+           
         } else {
             for (var i = 0; i < classscope.length; i++) {
                 var sc = classscope[i];
@@ -633,13 +640,15 @@ export class Parser {
     /**
      * gets the next variablename
      * */
-    getNextVariableNameForType(type: string) {
-        var varname = type.split(".")[type.split(".").length - 1].toLowerCase();
+    getNextVariableNameForType(type: string,suggestedName:string=undefined) {
+        var varname = suggestedName;
+        if(varname===undefined)
+            varname=type.split(".")[type.split(".").length - 1].toLowerCase();
         for (var counter = 1; counter < 1000; counter++) {
-            if (this.data.me === undefined || this.data.me[varname + counter] === undefined)
+            if (this.data.me === undefined || this.data.me[varname + (counter===1?"":counter)] === undefined)
                 break;
         }
-        return varname + counter;
+        return varname + (counter===1?"":counter);
     }
     /**
      * change objectliteral to mutliline if needed
@@ -743,6 +752,9 @@ export class Parser {
         isFunction: boolean = false, replace: boolean = undefined,
         before: { variablename: string, property: string, value?} = undefined,
         variablescope: { variablename: string, methodname } = undefined) {
+        
+        if(this.data[variableName]===undefined)
+            this.data[variableName]={};
         if (classscope === undefined)
             classscope = this.classScope;
         var scope = this.getNodeFromScope(classscope, variablescope);
@@ -856,11 +868,11 @@ export class Parser {
     * @param variablescope - the scope where the variable should be insert e.g. hallo.onclick
     * @returns  the name of the object
     */
-    addVariableInCode(fulltype: string, classscope: { classname: string, methodname: string }[], variablescope: { variablename: string, methodname } = undefined): string {
+    addVariableInCode(fulltype: string, classscope: { classname: string, methodname: string }[], variablescope: { variablename: string, methodname } = undefined,suggestedName=undefined): string {
         if (classscope === undefined)
             classscope = this.classScope;
         let type = fulltype.split(".")[fulltype.split(".").length - 1];
-        var varname = this.getNextVariableNameForType(type);
+        var varname = this.getNextVariableNameForType(type,suggestedName);
         var useMe = false;
         if (this.data["me"] !== undefined)
             useMe = true;
@@ -897,8 +909,8 @@ export async function test() {
     //parser.parse(code, undefined);
     parser.parse(code,[{classname:"Dialog",methodname:"layout"}]);
     debugger;
-    var node = parser.removePropertyInCode("add", "me.textbox1", "me.panel1");
-    parser.setPropertyInCode("this","add",node,[{classname:"Dialog",methodname:"layout"}],true,false);
+   // var node = parser.removePropertyInCode("add", "me.textbox1", "me.panel1");
+  // parser.setPropertyInCode("this","add",node,[{classname:"Dialog",methodname:"layout"}],true,false);
     //var node = parser.removePropertyInCode("add", "kk", "aaa");
 
     //var node=parser.removePropertyInCode("add", "ll", "ppp");

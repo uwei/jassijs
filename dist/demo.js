@@ -72,11 +72,36 @@ define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Bo
     }
     exports.test = test;
 });
-define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, HTMLPanel_1, Button_2, Jassi_2, Panel_2) {
+define("demo/Dialog2", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Jassi_2, Panel_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Dialog2 = void 0;
+    let Dialog2 = class Dialog2 extends Panel_2.Panel {
+        constructor() {
+            super();
+            this.me = {};
+            this.layout(this.me);
+        }
+        layout(me) {
+            this.config({});
+        }
+    };
+    Dialog2 = __decorate([
+        (0, Jassi_2.$Class)("demo/Dialog2"),
+        __metadata("design:paramtypes", [])
+    ], Dialog2);
+    exports.Dialog2 = Dialog2;
+    async function test() {
+        var ret = new Dialog2();
+        return ret;
+    }
+    exports.test = test;
+});
+define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, HTMLPanel_1, Button_2, Jassi_3, Panel_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmptyDialog = void 0;
-    let EmptyDialog = class EmptyDialog extends Panel_2.Panel {
+    let EmptyDialog = class EmptyDialog extends Panel_3.Panel {
         constructor() {
             super();
             this.me = {};
@@ -105,7 +130,7 @@ define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassi
         }
     };
     EmptyDialog = __decorate([
-        (0, Jassi_2.$Class)("demo.EmptyDialog"),
+        (0, Jassi_3.$Class)("demo.EmptyDialog"),
         __metadata("design:paramtypes", [])
     ], EmptyDialog);
     exports.EmptyDialog = EmptyDialog;
@@ -191,7 +216,7 @@ define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassi
     }
     exports.MemoryTest = MemoryTest;
 });
-define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_3) {
+define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
@@ -252,7 +277,7 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
         }
     };
     ReportInvoice = __decorate([
-        (0, Jassi_3.$Class)("demo.ReportInvoice"),
+        (0, Jassi_4.$Class)("demo.ReportInvoice"),
         __metadata("design:paramtypes", [])
     ], ReportInvoice);
     exports.ReportInvoice = ReportInvoice;
@@ -324,7 +349,7 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
     }
     exports.test = test;
 });
-define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_4) {
+define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
@@ -392,7 +417,7 @@ define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], fu
         }
     };
     ReportInvoice = __decorate([
-        (0, Jassi_4.$Class)("demo.ReportInvoice"),
+        (0, Jassi_5.$Class)("demo.ReportInvoice"),
         __metadata("design:paramtypes", [])
     ], ReportInvoice);
     exports.ReportInvoice = ReportInvoice;
@@ -430,7 +455,7 @@ define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], fu
     }
     exports.test = test;
 });
-define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, Jassi_5, Property_1, Kunde_1) {
+define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, Jassi_6, Property_1, Kunde_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -464,7 +489,7 @@ define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jass
         __metadata("design:type", typeof (_a = typeof Kunde_1.Kunde !== "undefined" && Kunde_1.Kunde) === "function" ? _a : Object)
     ], ReportKunde.prototype, "value", void 0);
     ReportKunde = __decorate([
-        (0, Jassi_5.$Class)("de.ReportKunde")
+        (0, Jassi_6.$Class)("de.ReportKunde")
     ], ReportKunde);
     exports.ReportKunde = ReportKunde;
     async function test() {
@@ -515,11 +540,11 @@ define("demo/ReportStyle", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Style_1, Button_3, Jassi_6, Panel_3) {
+define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Style_1, Button_3, Jassi_7, Panel_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.StyleDialog = void 0;
-    let StyleDialog = class StyleDialog extends Panel_3.Panel {
+    let StyleDialog = class StyleDialog extends Panel_4.Panel {
         constructor() {
             super();
             this.me = {};
@@ -541,7 +566,7 @@ define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/u
         }
     };
     StyleDialog = __decorate([
-        (0, Jassi_6.$Class)("demo/StyleDialog"),
+        (0, Jassi_7.$Class)("demo/StyleDialog"),
         __metadata("design:paramtypes", [])
     ], StyleDialog);
     exports.StyleDialog = StyleDialog;
@@ -596,11 +621,11 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
     }
     exports.test = test;
 });
-define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_4, Button_4, HTMLPanel_2, Jassi_7, Component_1) {
+define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_5, Button_4, HTMLPanel_2, Jassi_8, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestComponent = void 0;
-    let TestComponent = class TestComponent extends Panel_4.Panel {
+    let TestComponent = class TestComponent extends Panel_5.Panel {
         constructor() {
             super();
             this.me = {};
@@ -616,7 +641,7 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
             me.htmlpanel1 = new HTMLPanel_2.HTMLPanel();
             me.button2 = new Button_4.Button();
             me.htmlpanel2 = new HTMLPanel_2.HTMLPanel();
-            me.panel2 = new Panel_4.Panel();
+            me.panel2 = new Panel_5.Panel();
             me.button3 = new Button_4.Button();
             me.button4 = new Button_4.Button();
             this.add(me.button2);
@@ -647,7 +672,7 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
     };
     TestComponent = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
-        (0, Jassi_7.$Class)("demo.TestComponent"),
+        (0, Jassi_8.$Class)("demo.TestComponent"),
         __metadata("design:paramtypes", [])
     ], TestComponent);
     exports.TestComponent = TestComponent;
@@ -718,11 +743,11 @@ define("demo/TestList", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Jassi"], function (require, exports, Panel_5, Tree_1, Jassi_8) {
+define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Jassi"], function (require, exports, Panel_6, Tree_1, Jassi_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestTree = void 0;
-    let TestTree = class TestTree extends Panel_5.Panel {
+    let TestTree = class TestTree extends Panel_6.Panel {
         constructor() {
             super();
             this.layout();
@@ -731,12 +756,12 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
         }
     };
     TestTree = __decorate([
-        (0, Jassi_8.$Class)("demo.TestTree"),
+        (0, Jassi_9.$Class)("demo.TestTree"),
         __metadata("design:paramtypes", [])
     ], TestTree);
     exports.TestTree = TestTree;
     async function test() {
-        var ret = new Panel_5.Panel();
+        var ret = new Panel_6.Panel();
         var tree = new Tree_1.Tree();
         var s = { name: "Sansa", id: 1 };
         var p = { name: "Peter", id: 2 };
@@ -761,11 +786,11 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
     }
     exports.test = test;
 });
-define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_3, Upload_1, Jassi_9, Panel_6, papaparse_1) {
+define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_3, Upload_1, Jassi_10, Panel_7, papaparse_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestUpload = void 0;
-    let TestUpload = class TestUpload extends Panel_6.Panel {
+    let TestUpload = class TestUpload extends Panel_7.Panel {
         constructor() {
             super();
             this.me = {};
@@ -790,7 +815,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
         }
     };
     TestUpload = __decorate([
-        (0, Jassi_9.$Class)("demo/TestUpload"),
+        (0, Jassi_10.$Class)("demo/TestUpload"),
         __metadata("design:paramtypes", [])
     ], TestUpload);
     exports.TestUpload = TestUpload;
@@ -801,11 +826,11 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
     }
     exports.test = test;
 });
-define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_7, ContextMenu_2, MenuItem_2, Button_5, Jassi_10) {
+define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_8, ContextMenu_2, MenuItem_2, Button_5, Jassi_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Testcontextmenu = void 0;
-    let Testcontextmenu = class Testcontextmenu extends Panel_7.Panel {
+    let Testcontextmenu = class Testcontextmenu extends Panel_8.Panel {
         constructor() {
             super();
             this.me = {};
@@ -847,7 +872,7 @@ define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassi
         }
     };
     Testcontextmenu = __decorate([
-        (0, Jassi_10.$Class)("demo.Testcontextmenu"),
+        (0, Jassi_11.$Class)("demo.Testcontextmenu"),
         __metadata("design:paramtypes", [])
     ], Testcontextmenu);
     exports.Testcontextmenu = Testcontextmenu;
@@ -1108,11 +1133,11 @@ define("demo/Testdatatable3", ["require", "exports"], function (require, exports
     }
     exports.test = test;
 });
-define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_8, Menu_1, MenuItem_3, Button_6, Jassi_11) {
+define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_9, Menu_1, MenuItem_3, Button_6, Jassi_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testmenu = void 0;
-    let Testmenu = class Testmenu extends Panel_8.Panel {
+    let Testmenu = class Testmenu extends Panel_9.Panel {
         constructor() {
             super();
             this.me = {};
@@ -1180,7 +1205,7 @@ define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/M
         }
     };
     Testmenu = __decorate([
-        (0, Jassi_11.$Class)("demo.Testmenu"),
+        (0, Jassi_12.$Class)("demo.Testmenu"),
         __metadata("design:paramtypes", [])
     ], Testmenu);
     exports.Testmenu = Testmenu;
@@ -1220,7 +1245,7 @@ define("demo/Testtable", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Panel", "jassijs/ui/Button"], function (require, exports, Tree_2, ContextMenu_3, MenuItem_4, Panel_9, Button_7) {
+define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Panel", "jassijs/ui/Button"], function (require, exports, Tree_2, ContextMenu_3, MenuItem_4, Panel_10, Button_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -1237,7 +1262,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassij
             checkbox: true,
             selectMode: 2,
         });
-        me.panel = new Panel_9.Panel();
+        me.panel = new Panel_10.Panel();
         me.button = new Button_7.Button();
         me.panel["me"] = me;
         me.panel.add(me.tree);
@@ -1277,7 +1302,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassij
     }
     exports.test = test;
 });
-define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Table"], function (require, exports, Panel_10, Jassi_12, Table_2) {
+define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Table"], function (require, exports, Panel_11, Jassi_13, Table_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
@@ -1294,7 +1319,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
     class Me {
     }
     ;
-    let TreeTable = class TreeTable extends Panel_10.Panel {
+    let TreeTable = class TreeTable extends Panel_11.Panel {
         constructor() {
             super();
             this.me = new Me();
@@ -1380,7 +1405,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
         }
     };
     TreeTable = __decorate([
-        (0, Jassi_12.$Class)("demo.TreeTable"),
+        (0, Jassi_13.$Class)("demo.TreeTable"),
         __metadata("design:paramtypes", [])
     ], TreeTable);
     exports.TreeTable = TreeTable;
@@ -1513,6 +1538,10 @@ define("demo/registry", ["require"], function (require) {
             },
             "demo/DelTest.ts": {
                 "date": 1635896382000
+            },
+            "demo/Dialog2.ts": {
+                "date": 1654977013647,
+                "demo/Dialog2": {}
             }
         }
     };

@@ -12,13 +12,13 @@ declare global {
 
 export interface HTMLPanelConfig extends DataComponentConfig {
 
-    newlineafter: boolean;
+    newlineafter?: boolean;
 
     /**
      * template string  component.value=new Person();component.template:"{{name}}"}
      */
-    template: string;
-    value: string;
+    template?: string;
+    value?: string;
 
 }
 

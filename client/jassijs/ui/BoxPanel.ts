@@ -8,21 +8,21 @@ import Split from "jassijs/ext/split";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 
 
-export interface BoxPanelConfig extends PanelConfig{
+export interface BoxPanelConfig extends PanelConfig {
     /**
      * @member {boolean} - if true then the components are composed horizontally
      **/
-   horizontal:boolean;
-   /**
-     * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
-     */
-    spliter:number[];
+    horizontal?: boolean;
+    /**
+      * set the size of splitter e.g. [40,60] the firstcomponent size is 40%
+      */
+    spliter?: number[];
 }
 
 @$UIComponent({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] })
 @$Class("jassijs.ui.BoxPanel")
 @$Property({ name: "isAbsolute", hide: true, type: "boolean" })
-export class BoxPanel extends Panel implements BoxPanelConfig{
+export class BoxPanel extends Panel implements BoxPanelConfig {
     _horizontal: boolean;
     private _spliter: number[];
     private _splitcomponent: any;
@@ -40,11 +40,11 @@ export class BoxPanel extends Panel implements BoxPanelConfig{
         $(this.dom).css("display", "flex");
     }
 
-    config(config:BoxPanelConfig):BoxPanel {
+    config(config: BoxPanelConfig): BoxPanel {
         super.config(config);
         return this;
     }
-     set horizontal(value: boolean) {
+    set horizontal(value: boolean) {
         this._horizontal = value;
         if (value)
             $(this.dom).css("flex-direction", "row");
@@ -84,19 +84,19 @@ export class BoxPanel extends Panel implements BoxPanelConfig{
         super.addBefore(component, before);
         this.updateSpliter();
     }
-      set spliter(size: number[]) {
+    set spliter(size: number[]) {
         this._spliter = size;
         this.updateSpliter();
     }
-    @$Property({type:"number[]",description:"set the size of splitter e.g. [40,60] the firstcomponent size is 40%"})
+    @$Property({ type: "number[]", description: "set the size of splitter e.g. [40,60] the firstcomponent size is 40%" })
     get spliter(): number[] {
         return this._spliter;
     }
     updateSpliter() {
-    	if (this._splitcomponent){
+        if (this._splitcomponent) {
             this._splitcomponent.destroy();
-    		this._splitcomponent=undefined;
-    	}
+            this._splitcomponent = undefined;
+        }
         if (!this._spliter)
             return;
         var comp = [];
@@ -104,12 +104,12 @@ export class BoxPanel extends Panel implements BoxPanelConfig{
             if (this._components[x]["designDummyFor"])
                 continue;
             //test
-            $(this._components[x].__dom).css("overflow","scroll");
+            $(this._components[x].__dom).css("overflow", "scroll");
             $(this._components[x].__dom).css("width", this.horizontal ? "calc(100% - 5px)" : "100%");
             $(this._components[x].__dom).css("height", this.horizontal ? "100%" : "calc(100% - 5px)");
             comp.push(this._components[x].domWrapper);
         }
-        
+
         this._splitcomponent = Split(comp, {
             sizes: this._spliter,
             gutterSize: 8,

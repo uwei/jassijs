@@ -37,7 +37,7 @@ export class ComponentExplorer extends Panel {
      */
     set value(value) {
         this._value = value;
-        this.tree.items = value;
+        this.tree.items =(value===undefined?[]:value);
         this.tree.expandAll();
     }
     get value() {
@@ -58,6 +58,8 @@ export class ComponentExplorer extends Panel {
      * @param {object} item
      */
     getComponentChilds(item) {
+		if(item===undefined)
+			return 0;
         if (item === this.value)
             return item._components
         var comps = ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);

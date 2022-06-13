@@ -362,8 +362,10 @@ export class ComponentDesigner extends Panel {
         var targetname = _this._codeEditor.getVariableFromObject(target);
         var newcomp = { createFromType: clip.types[varname] };
         await classes.loadClass(clip.types[varname]);
-        var created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, undefined, false);
+        var svarname=varname.split(".")[varname.split(".").length-1];
+        var created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, undefined, false,svarname);
         variablelistold.push(varname);
+        variablelistnew.push(_this._codeEditor.getVariableFromObject(created));
         //correct designdummy
         for (var t = 0; t < target._components.length; t++) {
             var ch = target._components[t];
@@ -373,10 +375,10 @@ export class ComponentDesigner extends Panel {
                 break;
             }
         }
-        variablelistnew.push(_this._codeEditor.getVariableFromObject(created));
+
         if (clip.children[varname] !== undefined) {
             for (var k = 0; k < clip.children[varname].length; k++) {
-                _this.pasteComponent(clip, <Container>created, clip.children[varname][k], variablelistold, variablelistnew);
+                await _this.pasteComponent(clip, <Container>created, clip.children[varname][k], variablelistold, variablelistnew);
             }
         }
     }
@@ -400,15 +402,18 @@ export class ComponentDesigner extends Panel {
         for (var x = 0; x < variablelistnew.length; x++) {
             var oldName = variablelistold[x];
             var newName = variablelistnew[x];
-            var reg = new RegExp("\\W" + oldName + "\\W");
-            var found = true;
-            while (found == true) {
-                found = false;
-                textnew = textnew.replace(reg, function replacer(match, offset, string) {
-                    // p1 is nondigits, p2 digits, and p3 non-alphanumerics
-                    found = true;
-                    return match.substring(0, 1) + newName + match.substring(match.length - 1, match.length);
-                });
+            if (oldName !== newName) {
+
+                var reg = new RegExp("\\W" + oldName + "\\W");
+                var found = true;
+                while (found == true) {
+                    found = false;
+                    textnew = textnew.replace(reg, function replacer(match, offset, string) {
+                        // p1 is nondigits, p2 digits, and p3 non-alphanumerics
+                        found = true;
+                        return match.substring(0, 1) + newName + match.substring(match.length - 1, match.length);
+                    });
+                }
             }
         }
         clip = JSON.parse(textnew);
@@ -435,12 +440,16 @@ export class ComponentDesigner extends Panel {
                                 args.push(allvars[vv].value);
                             }
                         }
+                        try {
+                            //set value in Designer
+                            var realvalue = new Function(...argnames, "return (" + svalue + ");").bind(_this._codeEditor.getObjectFromVariable("this"))(...args);
+                            if (typeof (component[key]) === "function") {
+                                component[key](realvalue);
+                            } else {
+                                component[key] = realvalue;
+                            }
+                        } catch {
 
-                        var realvalue = new Function(...argnames, "return (" + svalue + ");").bind(_this._codeEditor.getObjectFromVariable("this"))(...args);
-                        if (typeof (component[key]) === "function") {
-                            component[key](realvalue);
-                        } else {
-                            component[key] = realvalue;
                         }
                         //_this._propertyEditor.setPropertyInDesign(key,value);
                         _this._propertyEditor.setPropertyInCode(key, propdata[v], propdata.length > 0, variablename, undefined, undefined, false);
@@ -590,6 +599,7 @@ export class ComponentDesigner extends Panel {
         } else {
 
         }
+        this._componentExplorer.update();
         /*  $(".hoho2").selectable({});
           $(".hoho2").selectable("disable");*/
         /*  $(".HTMLPanel").selectable({});
@@ -658,7 +668,7 @@ export class ComponentDesigner extends Panel {
      * @param {jassijs.ui.Container} newParent - the new parent container where the component is placed
      * @param {jassijs.ui.Component} beforeComponent - insert the new component before beforeComponent
      **/
-    createComponent(type, component, top, left, newParent, beforeComponent, doUpdate = true): Component {
+    createComponent(type, component, top, left, newParent, beforeComponent, doUpdate = true,suggestedName:string=undefined): Component {
         var _this = this;
         /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor&&beforeComponent.type==="atEnd"){
             beforeComponent=undefined;
@@ -673,8 +683,13 @@ export class ComponentDesigner extends Panel {
             var test = _this._propertyEditor.parser.getPropertyValue(repeatername, "createRepeatingComponent");
             scope = { variablename: repeatername, methodname: "createRepeatingComponent" };
             if (test === undefined) {
+                 var sfunc="function(me:Me){\n\t"+repeatername+".design.config({});\n}";
                 var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassijs.ui.Databinder");
-                _this._propertyEditor.setPropertyInCode("createRepeatingComponent", "function(me:Me){\n\t\n}", true, repeatername);
+                if(!_this._propertyEditor.parser.getPropertyValue(repeatername,"config")){
+                    sfunc="function(me:Me){\n\t\n}";
+                }
+                _this._propertyEditor.setPropertyInCode("createRepeatingComponent", sfunc, true, repeatername);
+                _this._propertyEditor.updateParser();
                 repeater.createRepeatingComponent(function (me) {
                     if (this._designMode !== true)
                         return;
@@ -689,7 +704,7 @@ export class ComponentDesigner extends Panel {
             }
         }
         var varvalue = new (classes.getClass(type));
-        var varname = _this.createVariable(type, scope, varvalue);
+        var varname = _this.createVariable(type, scope, varvalue,suggestedName);
         if (this._propertyEditor.codeEditor !== undefined) {
 
             var newName = _this._codeEditor.getVariableFromObject(newParent);
@@ -755,18 +770,18 @@ export class ComponentDesigner extends Panel {
         }
         return varvalue;
     }
-    createVariable(type, scope, varvalue) {
+    createVariable(type, scope, varvalue,suggestedName:string=undefined) {
         if (this._propertyEditor.codeEditor === undefined)
-            return;
-        var varname = this._propertyEditor.addVariableInCode(type, scope);
+            return; 
+        var varname = this._propertyEditor.addVariableInCode(type, scope,suggestedName);
 
-        if (varname.startsWith("me.") && this._codeEditor.getObjectFromVariable("me") !== undefined) {
+       /* if (varname.startsWith("me.") && this._codeEditor.getObjectFromVariable("me") !== undefined) {
             var me = this._codeEditor.getObjectFromVariable("me");
             me[varname.substring(3)] = varvalue;
         } else if (varname.startsWith("this.")) {
             var th = this._codeEditor.getObjectFromVariable("this");
             th[varname.substring(5)] = varvalue;
-        } else
+        } else*/
             this.variables.addVariable(varname, varvalue);
         return varname;
     }

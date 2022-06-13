@@ -403,8 +403,18 @@ export class CodeEditor extends Panel {
                     }
                 }
                 for (var x = 0; x < values.length; x++) {
-                    if(values[x].name){
-                        this.variables.addVariable(values[x].name, values[x].component,false);
+                    var sname=values[x].name;
+                    
+                    var found=false;
+                    this.variables.value.forEach((it)=>{
+                        if(it.name===sname)
+                            found=true;
+                    });
+                    //sometimes does a constructor create other Components so we need the first one
+                    if(found)
+                        continue;
+                    if(sname&&this.variables.getObjectFromVariable(sname)===undefined){
+                        this.variables.addVariable(sname, values[x].component,false);
                     }
                 }
                 
@@ -449,7 +459,7 @@ export class CodeEditor extends Panel {
             }
            Component.onComponentCreated(hook);
             var ret = await data.test(new Test());
-            Component.offComponentCreated(hook);
+            
 
             // Promise.resolve(ret).then(async function(ret) {
             if (ret !== undefined) {
@@ -467,7 +477,7 @@ export class CodeEditor extends Panel {
                         var ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
                         var Parser = await classes.loadClass("jassijs_editor.util.Parser");
                         var parser=new Parser();
-                        await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
+                       // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
                         if (!((_this._design) instanceof ComponentDesigner)) {
                             _this._design = new ComponentDesigner();
 
@@ -477,6 +487,9 @@ export class CodeEditor extends Panel {
                         //@ts-ignore
                         _this._design.connectParser(parser);
                         _this._design["designedComponent"] = ret;
+                        Component.offComponentCreated(hook);
+                         await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
+                         _this._design["editDialog"](true);
                     //});
                 } else if (ret["reportdesign"] !== undefined) {
                     require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign", "jassijs_editor/util/Parser"], function () {
@@ -503,7 +516,7 @@ export class CodeEditor extends Panel {
                         if (ret.parameter && rep.design.parameter === undefined)
                             rep.design.parameter = ret.parameter;
                         _this._design["designedComponent"] = rep;
-
+                        
                         /*   require(["jassijs_report/ReportDesign"], function() {
                                var rd = classes.getClass("jassijs_report.ReportDesign");
                                let rep = rd["fromJSON"](ret);
@@ -511,6 +524,7 @@ export class CodeEditor extends Panel {
                                _this._design["designedComponent"] = rep;
                            });*/
                     });
+                   
                 }/*else if (ret["reporttype"] !== undefined) {
                     require(["jassijs_report/designer/ReportDesigner"], function () {
                         var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
@@ -525,6 +539,7 @@ export class CodeEditor extends Panel {
                     });
                 }*/
             }
+            Component.offComponentCreated(hook);
             //  });
         }
 

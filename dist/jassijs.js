@@ -532,7 +532,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
-                "date": 1654696372603,
+                "date": 1654899517837,
                 "jassijs.ui.BoxPanel": {
                     "$UIComponent": [
                         {
@@ -1336,7 +1336,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DataComponent.ts": {
-                "date": 1654703815491,
+                "date": 1654950526606,
                 "jassijs.ui.DataComponent": {
                     "@members": {
                         "autocommit": {
@@ -1437,7 +1437,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1654701942536,
+                "date": 1654899473268,
                 "jassijs/ui/DBObjectView": {
                     "$UIComponent": [
                         {
@@ -1805,7 +1805,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1654696141417,
+                "date": 1654899711644,
                 "jassijs.ui.PanelCreateProperties": {
                     "@members": {
                         "useSpan": {
@@ -1846,7 +1846,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1654794147356,
+                "date": 1654976003583,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {
@@ -1987,7 +1987,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-                "date": 1654631712419,
+                "date": 1654950343134,
                 "jassijs.ui.PropertyEditors.DatabinderEditor": {
                     "$PropertyEditor": [
                         [
@@ -2157,7 +2157,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Repeater.ts": {
-                "date": 1654705741464,
+                "date": 1654899647629,
                 "jassijs.ui.RepeaterDesignPanel": {
                     "$UIComponent": [
                         {
@@ -2208,7 +2208,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Select.ts": {
-                "date": 1634385218000,
+                "date": 1654899968875,
                 "jassijs.ui.SelectCreateProperties": {
                     "@members": {
                         "multiple": {
@@ -2286,7 +2286,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Style.ts": {
-                "date": 1654466380634,
+                "date": 1654900107227,
                 "jassijs.ui.Style": {
                     "$UIComponent": [
                         {
@@ -2307,7 +2307,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
-                "date": 1654017568358,
+                "date": 1654900765802,
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {
                         "paginationSize": {
@@ -2428,7 +2428,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1654706137482,
+                "date": 1654900850429,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -2501,7 +2501,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Tree.ts": {
-                "date": 1623866478000,
+                "date": 1654975282620,
                 "jassijs.ui.TreeEditorPropertiesMulti": {
                     "@members": {
                         "mode": {
@@ -2567,6 +2567,14 @@ define("jassijs/registry", ["require"], function (require) {
                         }
                     ],
                     "@members": {
+                        "options": {
+                            "$Property": [
+                                {
+                                    "type": "json",
+                                    "componentType": "jassijs.ui.TableEditorProperties"
+                                }
+                            ]
+                        },
                         "propStyle": {
                             "$Property": [
                                 {
@@ -9786,6 +9794,13 @@ define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component"
          * @param [databinder:jassijs.ui.Databinder,"propertyToBind"]
          */
         set bind(databinder) {
+            if (databinder === undefined) {
+                if (this._databinder !== undefined) {
+                    this._databinder.remove(this);
+                    this._databinder = undefined;
+                }
+                return;
+            }
             var property = databinder[1];
             this._databinder = databinder[0];
             if (this._databinder !== undefined)
@@ -12929,7 +12944,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
                         this.variablename = this.codeEditor.getVariableFromObject(value[x]);
                     this._multiselectEditors.push(multi);
                 }
-                this._value = value[0];
+                this._value = value;
             }
             else
                 this._value = value;
@@ -12937,8 +12952,12 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
                 this._value = undefined;
                 return;
             }
-            if (this.codeEditor !== undefined && this.parentPropertyEditor === undefined)
-                this.variablename = this.codeEditor.getVariableFromObject(this._value);
+            if (this.codeEditor !== undefined && this.parentPropertyEditor === undefined) {
+                if (Array.isArray(this._value) && this._value.length > 0)
+                    this.variablename = this.codeEditor.getVariableFromObject(this._value[0]);
+                else
+                    this.variablename = this.codeEditor.getVariableFromObject(this._value);
+            }
             var _this = this;
             this._initValue();
             _this.update();
@@ -12973,7 +12992,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
             });
         }
         _initValue() {
-            var _a;
+            var _a, _b;
             var props = [];
             /* if (this.parentPropertyEditor !== undefined)
                  this._addParentEditorProperties(this.parentPropertyEditor, props, this.variablename);
@@ -12983,8 +13002,12 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
                 else {
                     if (!this._value)
                         props = [];
-                    else
-                        props = (_a = ComponentDescriptor_4.ComponentDescriptor.describe(this._value.constructor)) === null || _a === void 0 ? void 0 : _a.fields;
+                    else {
+                        if (Array.isArray(this._value) && this._value.length > 0)
+                            props = (_a = ComponentDescriptor_4.ComponentDescriptor.describe(this._value[0].constructor)) === null || _a === void 0 ? void 0 : _a.fields;
+                        else
+                            props = (_b = ComponentDescriptor_4.ComponentDescriptor.describe(this._value.constructor)) === null || _b === void 0 ? void 0 : _b.fields;
+                    }
                     if (!props)
                         props = [];
                 }
@@ -13228,7 +13251,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
          * @param {object} [before] - {variablename,property,value=undefined}
          * @param {object} scope - the scope {variable: ,methodname:} the scope - if missing layout()
         */
-        setPropertyInCode(property, value, replace = undefined, variableName = undefined, before = undefined, scopename = undefined) {
+        setPropertyInCode(property, value, replace = undefined, variableName = undefined, before = undefined, scopename = undefined, doUpdate = true) {
             if (this.codeEditor === undefined) {
                 this.codeChanges[property] = value;
                 this.callEvent("codeChanged", {});
@@ -13258,14 +13281,16 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
             var val = this.codeEditor.getObjectFromVariable("this");
             this.parser.setPropertyInCode(variableName, property, value, 
             /*[{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]*/ undefined, isFunction, replace, before, scopename);
-            //correct spaces
-            if (value && value.indexOf && value.indexOf("\n") > -1) {
+            if (doUpdate) {
+                //correct spaces
+                if (value && value.indexOf && value.indexOf("\n") > -1) {
+                    this.codeEditor.value = this.parser.getModifiedCode();
+                    this.updateParser();
+                }
                 this.codeEditor.value = this.parser.getModifiedCode();
                 this.updateParser();
+                this.callEvent("codeChanged", {});
             }
-            this.codeEditor.value = this.parser.getModifiedCode();
-            this.updateParser();
-            this.callEvent("codeChanged", {});
         }
         /**
         * modify the property in design
@@ -13667,11 +13692,6 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
                 this._designMode = enable;
             //	super.setDesignMode(enable);
         }
-        /**
-         * binds a component to a databinder
-         * @param {jassijs.ui.Databinder} databinder - the databinder to bind
-         * @param {string} property - the property to bind
-         */
         set bind(databinder) {
             this._databinder = databinder[0];
             this._databinder.add(databinder[1], this, "_dummy");
@@ -13809,13 +13829,6 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Select = void 0;
-    /*
-    declare global {
-        interface JQuery {
-            chosen: any;
-        }
-    }
-    */
     let SelectCreateProperties = class SelectCreateProperties extends Component_22.ComponentCreateProperties {
     };
     __decorate([
@@ -13867,16 +13880,13 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
             });
             // this.layout();
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         refresh() {
             $(this.domSelect).trigger("chosen:updated");
-            //	 $('#'+this._id).data("placeholder","Select...").chosen({
-            //	 	width: "100px"
-            //	 });
         }
-        /**
-         * called if value has changed
-         * @param {function} handler - the function which is executed
-         */
         onchange(handler) {
             var _this = this;
             $(this.domSelect).chosen().change(function (e) {
@@ -13884,18 +13894,12 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
                 handler(e);
             });
         }
-        /**
-         * if the value is changed then the value of _component is also changed (_component.value)
-         */
         set selectComponent(_component) {
             this._select = _component;
         }
         get selectComponent() {
             return this._select; //$(this.dom).text();
         }
-        /**
-         * @member {string|function}  - property or function to get the displaystring for the object
-         **/
         set display(value) {
             this._display = value;
             if (this.items !== undefined)
@@ -13956,9 +13960,6 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
             return this._items;
             //   return w2ui[this._id].records;//$(this.dom).text();
         }
-        /**
-         * @member {object} sel - the selected object
-         */
         set value(sel) {
             var found = false;
             if ($(this.domSelect).chosen().prop("multiple")) {
@@ -14221,6 +14222,10 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
             super();
             super.init($('<span class="InvisibleComponent"></span>')[0]);
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         get styleid() {
             return "jassistyle" + this._id;
         }
@@ -14329,16 +14334,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
     TableEditorProperties = __decorate([
         (0, Jassi_71.$Class)("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
-    let Table = 
-    /*
-    @$Property({ name: "new/paginationSize", type: "number", default: undefined })
-    @$Property({ name: "new/headerSort", type: "boolean", default: true })
-    @$Property({ name: "new/layout", type: "string", default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] })
-    @$Property({ name: "new/dataTreeChildField", type: "string", default: undefined })
-    @$Property({ name: "new/movableColumns", type: "boolean", default: false })
-    @$Property({ name: "new/cellDblClick", type: "function", default: "function(event:any,group:any){\n\t\n}" })
-    */
-    class Table extends DataComponent_5.DataComponent {
+    let Table = class Table extends DataComponent_5.DataComponent {
         constructor(properties) {
             super();
             super.init($('<div class="Table"></div>')[0]);
@@ -14347,6 +14343,10 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
             this._selectHandler = [];
         }
         ;
+        config(config) {
+            super.config(config);
+            return this;
+        }
         set options(properties) {
             var _this = this;
             this._lastOptions = properties;
@@ -14499,10 +14499,6 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
                 this._select.value = event.data;
             this.callEvent("select", event);
         }
-        /**
-         * register an event if an item is selected
-         * @param {function} handler - the function that is called on change
-         */
         onchange(handler) {
             this.addEvent("select", handler);
         }
@@ -14536,18 +14532,12 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
                 $(this.domWrapper).prepend(this._searchbox.domWrapper);
             }
         }
-        /**
-          * if the value is changed then the value of _component is also changed (_component.value)
-          */
         set selectComponent(_component) {
             this._select = _component;
         }
         get selectComponent() {
             return this._select; //$(this.dom).text();
         }
-        /**
-         * set the items of the table
-         */
         set items(value) {
             if (value && this.dataTreeChildFunction) { //populate __treechilds
                 for (let x = 0; x < value.length; x++) {
@@ -14658,10 +14648,10 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
         get columns() {
             return this.table.getColumnDefinitions();
         }
-        bindItems(databinder, property) {
-            this._databinderItems = databinder;
+        set bindItems(databinder) {
+            this._databinderItems = databinder[0];
             var _this = this;
-            this._databinderItems.add(property, this, undefined, (tab) => {
+            this._databinderItems.add(databinder[1], this, undefined, (tab) => {
                 return tab.items;
             }, (tab, val) => {
                 tab.items = val;
@@ -14693,32 +14683,24 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
     ], Table.prototype, "height", null);
     __decorate([
         (0, Property_26.$Property)({ type: "databinder" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", [Object, Object]),
-        __metadata("design:returntype", void 0)
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
     ], Table.prototype, "bindItems", null);
     Table = __decorate([
         (0, Component_24.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
         (0, Jassi_71.$Class)("jassijs.ui.Table"),
-        (0, Property_26.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
-        /*
-        @$Property({ name: "new/paginationSize", type: "number", default: undefined })
-        @$Property({ name: "new/headerSort", type: "boolean", default: true })
-        @$Property({ name: "new/layout", type: "string", default: "fitDataStretch", chooseFrom: ['fitData', 'fitColumns', 'fitDataFill', 'fitDataStretch'] })
-        @$Property({ name: "new/dataTreeChildField", type: "string", default: undefined })
-        @$Property({ name: "new/movableColumns", type: "boolean", default: false })
-        @$Property({ name: "new/cellDblClick", type: "function", default: "function(event:any,group:any){\n\t\n}" })
-        */
-        ,
+        (0, Property_26.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
         __metadata("design:paramtypes", [Object])
     ], Table);
     exports.Table = Table;
     async function test() {
         var tab = new Table({});
-        tab.width = 400;
-        tab.options = {
-            headerSort: true
-        };
+        tab.config({
+            width: 400,
+            options: {
+                headerSort: true
+            }
+        });
         var tabledata = [
             { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
             { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
@@ -15057,6 +15039,21 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
             super();
             super.init($('<div class="Tree"></div>')[0]);
             this._itemToKey = new Map();
+            this.options = options;
+        }
+        config(config) {
+            super.config(config);
+            return this;
+        }
+        set options(options) {
+            var _this = this;
+            this._lastOptions = options;
+            if (this.tree) {
+                var lastSel = this.value;
+                var lastItems = this.items;
+                //this.table.destroy();
+                //this.table = undefined;
+            }
             var _this = this;
             if (options === undefined) {
                 options = {};
@@ -15077,36 +15074,18 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
                 options.filter.mode = "hide";
             if (options.filter.autoExpand === undefined)
                 options.filter.autoExpand = true;
-            /* if (options.multi === undefined) {
-                 options.multi = {};
-             }
-             if (options.multi.mode === undefined) {
-                 options.multi.mode = "sameParent";//"","sameLevel"
-             }*/
             var beforeExpand = options.beforeExpand;
-            var activate = options.activate;
+            var select = options.select;
             var click = options.click;
-            /* options.renderTitle=function (event:JQueryEventObject,data:Fancytree.EventData){
-                 var h=0;
-             });*/
             options.source = [{ title: 'Folder in home folder', key: 'fA100', folder: true, lazy: true }];
             options.icon = false; //we have an own
             options.lazyLoad = function (event, data) {
                 TreeNode.loadChilds(event, data);
             };
-            /* options.beforeExpand = function(event: JQueryEventObject, data: Fancytree.EventData) {
-                  if(data.node.children.length===1&&data.node.children[0].data.dummy===true){
-                      var node2 = _this.objectToNode.get(data.node.data.item);
-                          node2.populate(data.node);
-                  }
-                  if (beforeExpand !== undefined)
-                      return beforeExpand(event, data);
-                  return true;
-              };*/
-            options.activate = function (event, data) {
+            options.select = function (event, data) {
                 _this._onselect(event, data);
-                if (activate !== undefined)
-                    activate(event, data);
+                if (select !== undefined)
+                    select(event, data);
             };
             options.click = function (event, data) {
                 _this._onclick(event, data);
@@ -15120,6 +15099,15 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
             $("#" + this._id).find("ul").css("height", "calc(100% - 8px)");
             $("#" + this._id).find("ul").css("weight", "calc(100% - 8px)");
             $("#" + this._id).find("ul").css("overflow", "auto");
+            if (lastItems) {
+                this.items = lastItems;
+            }
+            if (lastSel) {
+                this.value = lastSel;
+            }
+        }
+        get options() {
+            return this._lastOptions;
         }
         /**
         * @member - get the property for the display of the item or an function to get the display from an item
@@ -15130,27 +15118,18 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
         get propStyle() {
             return this._propStyle;
         }
-        /**
-         * @member - get the property for the display of the item or an function to get the display from an item
-         */
         set propDisplay(value) {
             this._propDisplay = value;
         }
         get propDisplay() {
             return this._propDisplay;
         }
-        /**
-         * @member - get the iconproperty of the item or an function to get the icon from an item
-         */
         set propIcon(icon) {
             this._propIcon = icon;
         }
         get propIcon() {
             return this._propIcon;
         }
-        /**
-        * @member - get the childs of the item or an function to get the childs from an item
-        */
         set propChilds(child) {
             this._propChilds = child;
         }
@@ -15160,10 +15139,6 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
         onselect(handler) {
             this.addEvent("select", handler);
         }
-        /**
-         * register an event if an item is clicked
-         * @param {function} handler - the function that is called on click
-         */
         onclick(handler) {
             this.addEvent("click", handler);
         }
@@ -15255,9 +15230,6 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
                 this._select.value = data.node.data.item;
             this.callEvent("click", event, data);
         }
-        /**
-         * selects items
-         */
         set selection(values) {
             this.tree.getSelectedNodes().forEach((item) => {
                 item.setSelected(false);
@@ -15379,9 +15351,6 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
             nd = this.tree.getNodeByKey(key);
             return nd;
         }
-        /**
-         * set the active item
-         */
         set value(value) {
             this["_valueIsWaiting"] = value;
             this._readNodeFromItem(value).then((node) => {
@@ -15470,9 +15439,6 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
             }
             this._allKeysReaded = true;
         }
-        /**
-         * @param value - set the data to show in Tree
-         **/
         set items(value) {
             this._items = value;
             this._allKeysReaded = undefined;
@@ -15498,9 +15464,6 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
         get items() {
             return this._items;
         }
-        /**
-         * if the value is changed then the value of _component is also changed (_component.value)
-         */
         set selectComponent(_component) {
             this._select = _component;
         }
@@ -15542,9 +15505,6 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
                     this._contextMenu.value = [node === undefined ? undefined : node.data.item];
             }
         }
-        /**
-         * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
-         **/
         set contextMenu(value) {
             super.contextMenu = value;
             var _this = this;
@@ -15560,6 +15520,11 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
             super.destroy();
         }
     };
+    __decorate([
+        (0, Property_29.$Property)({ type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Tree.prototype, "options", null);
     __decorate([
         (0, Property_29.$Property)({ type: "string", description: "the property called to get the style of the item" }),
         __metadata("design:type", Object),
@@ -15654,32 +15619,37 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
     }
     ;
     async function test() {
-        var tree = new Tree({
-            checkbox: true
-        });
+        var tree = new Tree();
         var s = { name: "Sansa", id: 1, style: { color: "blue" } };
         var p = { name: "Peter", id: 2 };
         var u = { name: "Uwe", id: 3, childs: [p, s] };
         var t = { name: "Tom", id: 5 };
         var c = { name: "Christoph", id: 4, childs: [u, t] };
         s.childs = [c];
-        tree.propDisplay = "name";
-        tree.propChilds = "childs";
-        tree.propStyle = "style";
+        tree.config({
+            options: {
+            // checkbox: true
+            },
+            propDisplay: "name",
+            propChilds: "childs",
+            propStyle: "style",
+            items: [c],
+            width: "100%",
+            height: "100px",
+            onclick: function (data) {
+                console.log("select " + data.data.name);
+            },
+            selection: [p, s],
+            value: p
+        });
+        tree.onselect(() => {
+            console.log(tree.selection);
+        });
         /*tree.propIcon = function(data) {
             if (data.name === "Uwe")
                 return "res/car.ico";
         };*/
-        tree.items = [c];
-        tree.width = "100%";
-        tree.height = "100px";
         //  tree._readAllKeysIfNeeded();
-        tree.onclick(function (data) {
-            console.log("select " + data.data.name);
-        });
-        tree.selection = [p, s];
-        var k = tree.selection;
-        tree.value = p;
         //	await tree.tree.loadKeyPath(["/Christoph/Christoph|Uwe/Christoph|Uwe|Peter"],undefined);
         //		var h=tree.tree.getNodeByKey("Christoph|Uwe|Peter");
         //		tree.tree.activateKey("Christoph|Uwe|Peter");
@@ -16740,6 +16710,10 @@ define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "ja
             var value = this.propertyEditor.getPropertyValue(this.property);
             if (value !== undefined) {
                 try {
+                    if (value.startsWith("["))
+                        value = value.substring(1);
+                    if (value.endsWith("]"))
+                        value = value.substring(0, value.length - 1);
                     var sp = value.replaceAll('"', "").split(",");
                     value = sp[1] + "-" + sp[0];
                     this.component.value = value;
@@ -16791,7 +16765,7 @@ define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "ja
             this.propertyEditor.setPropertyInCode(this.property.name, val);
             var func = this.propertyEditor.value[this.property.name];
             var binder = this.propertyEditor.getObjectFromVariable(sp[1]);
-            this.propertyEditor.value[this.property.name](binder, sp[0]);
+            this.propertyEditor.value[this.property.name] = [binder, sp[0]];
             //setPropertyInDesign(this.property.name,val);
             super.callEvent("edit", param);
         }

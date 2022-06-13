@@ -140,7 +140,53 @@ export class ComponentDescriptor {
      * @param {object} ob - the object to resolve
      * @returns {Object.<string,jassijs.ui.Component> - <name,component>
      **/
-    resolveEditableComponents(ob) {
+     resolveEditableComponents(ob,type=undefined,ret=undefined) {
+        var sclass;
+        var type;
+        if(ret===undefined){
+            ret={};
+             sclass= classes.getClassName(ob);
+             type=ob.constructor;
+        }else{
+            sclass= classes.getClassName(type);
+
+        }
+        
+        var found=false;
+        if (registry.getData("$UIComponent", sclass) !== undefined && registry.getData("$UIComponent", sclass)[0] !== undefined) {
+            var props: UIComponentProperties = registry.getData("$UIComponent", sclass)[0].params[0];
+            this.editableComponents = props.editableChildComponents;
+            if(props.editableChildComponents!==undefined)
+                found=true;
+        }
+        if (registry.getData("$ReportComponent", sclass) !== undefined && registry.getData("$ReportComponent", sclass)[0] !== undefined) {
+            var props: UIComponentProperties = registry.getData("$ReportComponent", sclass)[0].params[0];
+            this.editableComponents = props.editableChildComponents;
+            if(props.editableChildComponents!==undefined)
+                found=true;
+        }
+        if (found) {
+            for (var x = 0; x < this.editableComponents.length; x++) {
+                var field = this.editableComponents[x];
+                var members = field.split(".");
+                var retob = ob;
+                for (var m = 0; m < members.length; m++) {
+                    if (members[m] === "this")
+                        retob = retob;
+                    else
+                        retob = retob[members[m]];
+                }
+                ret[field] = retob;
+            }
+        }else{
+            type = type.__proto__;
+            if(type !== null && type.name !== "")
+                return this.resolveEditableComponents(ob,type,ret);
+        }
+        return ret;
+    }
+   /* ohne subclasses
+   resolveEditableComponents(ob) {
         var ret = {};
         var sclass = classes.getClassName(ob);
         if (registry.getData("$UIComponent", sclass) !== undefined && registry.getData("$UIComponent", sclass)[0] !== undefined) {
@@ -166,7 +212,7 @@ export class ComponentDescriptor {
             }
         }
         return ret;
-    }
+    }*/
     /**
      * remove a field 
      * @param {string} field - the name of the field to remove

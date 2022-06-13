@@ -29,6 +29,7 @@ export interface RepeaterConfig extends PanelConfig {
      * @param {string} property - the property to bind
      */
    bind?:any[];
+   createRepeatingComponent?(func);
 
 }
 @$UIComponent({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple",editableChildComponents: ["this","design"]})

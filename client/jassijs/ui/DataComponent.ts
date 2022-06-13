@@ -8,8 +8,8 @@ import { $Class } from "jassijs/remote/Jassi";
 export interface DataComponentConfig extends ComponentConfig {
     /**
         * binds a component to a databinder
-        * @param {jassijs.ui.Databinder} databinder - the databinder to bind
-        * @param {string} property - the property to bind
+        * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
+        *         {string} property - the property to bind]
         */
     bind?: any[];
     /**

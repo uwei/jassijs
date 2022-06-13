@@ -9,21 +9,21 @@ import { $Class } from "jassijs/remote/Jassi";
 import { Kunde } from "de/remote/Kunde";
 import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";
 type Me = {
-    textbox1?: Textbox;
     textbox2?: Textbox;
+    textbox1?: Textbox;
     textbox3?: Textbox;
     textbox4?: Textbox;
-    textbox5?: Textbox;
     textbox6?: Textbox;
+    textbox5?: Textbox;
     textbox7?: Textbox;
 } & DBObjectViewMe;
 //;
 @$DBObjectView({ classname: "de.Kunde" })
 @$Class("de.KundeView")
 export class KundeView extends DBObjectView {
-    me: Me;
+    declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    value: Kunde;
+    declare value: Kunde;
     constructor() {
         super();
         //this.me = {}; is initialized in super
@@ -37,67 +37,74 @@ export class KundeView extends DBObjectView {
         return this.value === undefined ? "Kunde" : "Kunde " + this.value.id;
     }
     layout(me: Me) {
-        //this.setdata();
-        me.textbox1 = new Textbox();
         me.textbox2 = new Textbox();
+        me.textbox1 = new Textbox();
         me.textbox3 = new Textbox();
         me.textbox4 = new Textbox();
-        me.textbox5 = new Textbox();
         me.textbox6 = new Textbox();
+        me.textbox5 = new Textbox();
         me.textbox7 = new Textbox();
-        me.main.isAbsolute = true;
-        me.main.width = "300";
-        me.main.height = "300";
-        me.main.add(me.textbox2);
-        me.main.add(me.textbox1);
-        me.main.add(me.textbox3);
-        me.main.add(me.databinder);
-        me.main.add(me.textbox4);
-        me.main.add(me.textbox6);
-        me.main.add(me.textbox5);
-        me.main.add(me.textbox7);
-        me.textbox1.x = 5;
-        me.textbox1.y = 45;
-        me.textbox1.label = "Vorname";
-        me.textbox1.width = 95;
-        me.textbox1.bind=[me.databinder, "vorname"];
-        me.textbox1.css={
-            color: "#3dbbac",
-        };
-        me.textbox2.x = 5;
-        me.textbox2.y = 5;
-        me.textbox2.label = "Id";
-        me.textbox2.width = 50;
-        me.textbox2.bind=[me.databinder, "id"];
-        me.textbox2.converter = new NumberConverter();
-        me.textbox3.x = 110;
-        me.textbox3.y = 45;
-        me.textbox3.label = "Nachname";
-        me.textbox3.width = 120;
-        me.textbox3.bind=[me.databinder, "nachname"];
-        me.textbox4.x = 5;
-        me.textbox4.y = 95;
-        me.textbox4.bind=[me.databinder, "strasse"];
-        me.textbox4.label = "Straße";
-        me.textbox4.width = 145;
-        me.textbox5.x = 5;
-        me.textbox5.y = 145;
-        me.textbox5.width = 55;
-        me.textbox5.bind=[me.databinder, "PLZ"];
-        me.textbox5.label = "PLZ";
-        me.textbox6.x = 160;
-        me.textbox6.y = 95;
-        me.textbox6.label = "Hausnummer";
-        me.textbox6.width = 70;
-        me.textbox6.bind=[me.databinder, "hausnummer"];
-        me.textbox7.x = 75;
-        me.textbox7.y = 145;
-        me.textbox7.label = "Ort";
-        me.textbox7.bind=[me.databinder, "ort"];
-        me.textbox7.height = 15;
-        me.textbox7.width = 155;
-        me.toolbar.height = 30;
-        this.add(me.main);
+        this.me.main.config({
+            isAbsolute: true,
+            width: "300",
+            height: "300",
+            children: [
+                me.textbox2.config({
+                    x: 5,
+                    y: 5,
+                    label: "Id",
+                    width: 50,
+                    bind: [me.databinder, "id"],
+                    converter: new NumberConverter()
+                }),
+                me.textbox1.config({
+                    x: 5,
+                    y: 45,
+                    label: "Vorname",
+                    width: 95,
+                    bind: [me.databinder, "vorname"],
+                    css: {
+                        color: "#3dbbac",
+                    }
+                }),
+                me.textbox3.config({
+                    x: 110,
+                    y: 45,
+                    label: "Nachname",
+                    width: 120,
+                    bind: [me.databinder, "nachname"]
+                }),
+                me.textbox4.config({
+                    x: 5,
+                    y: 95,
+                    bind: [me.databinder, "strasse"],
+                    label: "Straße",
+                    width: 145
+                }),
+                me.textbox6.config({
+                    x: 160,
+                    y: 95,
+                    label: "Hausnummer",
+                    width: 70,
+                    bind: [me.databinder, "hausnummer"]
+                }),
+                me.textbox5.config({
+                    x: 5,
+                    y: 145,
+                    width: 55,
+                    bind: [me.databinder, "PLZ"],
+                    label: "PLZ"
+                }),
+                me.textbox7.config({
+                    x: 75,
+                    y: 145,
+                    label: "Ort",
+                    bind: [me.databinder, "ort"],
+                    height: 15,
+                    width: 155
+                })
+            ]
+        });
     }
 }
 export async function test() {

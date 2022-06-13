@@ -3,7 +3,7 @@ define("de/registry",["require"], function(require) {
  return {
   default: {
 	"de/DialogKunde.ts": {
-		"date": 1654706014215,
+		"date": 1655135539159,
 		"de.DialogKunde": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -38,7 +38,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/KundeView.ts": {
-		"date": 1654703974285,
+		"date": 1655059901507,
 		"de.KundeView": {
 			"$DBObjectView": [
 				{
@@ -303,6 +303,10 @@ define("de/registry",["require"], function(require) {
 	"de/MyDialog.ts": {
 		"date": 1654631976092,
 		"de/MyDialog": {}
+	},
+	"de/TestDialogBinder.ts": {
+		"date": 1655143453323,
+		"de/TestDialogBinder": {}
 	}
 }
  }

@@ -247,6 +247,8 @@ export class Tree extends Component implements TreeConfig {
    */
     getStyleFromItem(item): CSSProperties {
         var ret;
+        if(item===undefined)
+            return undefined;
         if (typeof (this.propStyle) === "function") {
             ret = this.propStyle(item);
         } else
@@ -257,6 +259,8 @@ export class Tree extends Component implements TreeConfig {
     * get icon from node
     */
     getIconFromItem(item) {
+         if(item===undefined)
+            return undefined;
         if (this.propIcon !== undefined) {
             if (typeof (this.propIcon) === "function") {
                 return this.propIcon(item);
@@ -270,6 +274,8 @@ export class Tree extends Component implements TreeConfig {
     */
     getChildsFromItem(item) {
         var cs = undefined;
+         if(item===undefined)
+            return undefined;
         if (typeof (this.propChilds) === "function") {
             cs = this.propChilds(item);
         } else

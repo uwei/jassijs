@@ -101,7 +101,6 @@ export class Textbox extends DataComponent implements TextboxConfig {
     config(config: TextboxConfig): Textbox {
         super.config(config);
         return this;
-        //    return new c();
     }
     set disabled(value) {
         $(this.dom).prop('disabled', true);

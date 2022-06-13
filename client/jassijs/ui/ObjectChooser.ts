@@ -25,31 +25,37 @@ class Me {
 }
 export interface ObjectChooserConfig extends ButtonConfig {
 
-  	dialogHeight?: number;
+	dialogHeight?: number;
 	dialogWidth?: number;
 	/**
 	 * @member {object} value - selection of the component 
 	 */
-	value?:any;
+	value?: any;
 	/**
 	 * @member {string} items - the items to select or  the classname to generate the items
 	 */
-	items?:string|any[];
-		/**
-	* called if value has changed
-	* @param {function} handler - the function which is executed
-	*/
+	items?: string | any[];
+	/**
+* called if value has changed
+* @param {function} handler - the function which is executed
+*/
 	onchange?(handler);
 	/**
 	 * @member {bool} autocommit -  if true the databinder will update the value on every change
 	 *                              if false the databinder will update the value on databinder.toForm 
 	 */
-	autocommit?:boolean;
+	autocommit?: boolean;
+	/**
+	   * binds a component to a databinder
+	   * @param [{jassijs.ui.Databinder} databinder - the databinder to bind,
+	   *         {string} property - the property to bind]
+	   */
+	bind?: any[];
 }
 
 @$UIComponent({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" })
 @$Class("jassijs.ui.ObjectChooser")
-export class ObjectChooser extends Button implements ObjectChooserConfig,DataComponentConfig {
+export class ObjectChooser extends Button implements ObjectChooserConfig, DataComponentConfig {
 
 	@$Property({ default: 450 })
 	dialogHeight: number;
@@ -73,7 +79,10 @@ export class ObjectChooser extends Button implements ObjectChooserConfig,DataCom
 		this.layout();
 
 	}
-
+ 	config(config: ObjectChooserConfig): ObjectChooser {
+        super.config(config);
+        return this;
+    }
 	get title() {
 		return "Select";
 	}
@@ -119,7 +128,7 @@ export class ObjectChooser extends Button implements ObjectChooserConfig,DataCom
 		});
 		me.IDSearch.width = 170;
 		me.IDSearch.oninput(function (event) {
-		
+
 			me.IDTable.search("all", me.IDSearch.value, true);
 		});
 		$(me.IDTable.dom).doubletap(function (data) {
@@ -158,7 +167,7 @@ export class ObjectChooser extends Button implements ObjectChooserConfig,DataCom
 		var me = this.me;
 		$(me.IDPanel.dom).dialog("destroy");
 	}
-	
+
 	set value(value) { //the Code
 		this._value = value;
 	}
@@ -171,7 +180,7 @@ export class ObjectChooser extends Button implements ObjectChooserConfig,DataCom
 		return await cl.find();
 	}
 	@$Property({ type: "string", description: "the classname for to choose" })
-	
+
 	set items(value: any) {
 		var _this = this;
 		if (value !== undefined && typeof (value) === "string") {
@@ -208,7 +217,7 @@ export class ObjectChooser extends Button implements ObjectChooserConfig,DataCom
 	 * @param {string} property - the property to bind
 	 */
 	@$Property({ type: "databinder" })
-	set bind(databinder:any[]) {
+	set bind(databinder: any[]) {
 		this._databinder = databinder[0];
 		this._databinder.add(<string>databinder[1], this, "onchange");
 		//databinder.checkAutocommit(this);
