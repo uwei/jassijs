@@ -25,13 +25,14 @@ type Me = {
     supplier?: HTMLPanel;
     supplierchooser?: ObjectChooser;
     styleNumber?: Style;
+   
 } & DBObjectViewMe;
 @$DBObjectView({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" })
 @$Class("northwind.ProductView")
 export class ProductView extends DBObjectView {
-    me: Me;
+    declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    value: Products;
+    declare value: Products;
     constructor() {
         super();
         //this.me = {}; this is called in objectdialog
@@ -42,116 +43,124 @@ export class ProductView extends DBObjectView {
     }
     layout(me: Me) {
         me.id = new Textbox();
-        me.productName = new Textbox();
-        me.quantityPerUnit = new Textbox();
-        me.unitPrice = new Textbox();
-        me.unitsInStock = new Textbox();
-        me.unitsOnOrder = new Textbox();
-        me.reorderLevel = new Textbox();
-        me.discontinued = new Checkbox();
-        me.category = new HTMLPanel();
-        me.categoryChooser = new ObjectChooser();
-        me.supplier = new HTMLPanel();
-        me.supplierchooser = new ObjectChooser();
         me.styleNumber = new Style();
-        me.main.add(me.id);
-        me.main.isAbsolute = true;
-        me.main.add(me.styleNumber);
-        me.main.add(me.supplierchooser);
-        me.main.add(me.supplier);
-        me.main.add(me.categoryChooser);
-        me.main.add(me.category);
-        me.main.add(me.discontinued);
-        me.main.add(me.reorderLevel);
-        me.main.add(me.unitsOnOrder);
-        me.main.add(me.unitsInStock);
-        me.main.add(me.unitPrice);
-        me.main.add(me.quantityPerUnit);
-        me.main.add(me.productName);
-        me.main.width = 678;
-        me.main.height = "170";
-        me.id.x = 10;
-        me.id.y = 10;
-        me.id.bind=[me.databinder, "id"];
-        me.id.label = "Id";
-        me.id.width = 65;
-        me.id.converter = new NumberConverter();
-        me.productName.x = 90;
-        me.productName.y = 10;
-        me.productName.bind=[me.databinder, "ProductName"];
-        me.productName.label = "Product Name";
-        me.productName.width = 310;
-        me.quantityPerUnit.x = 10;
-        me.quantityPerUnit.y = 60;
-        me.quantityPerUnit.bind=[me.databinder, "QuantityPerUnit"];
-        me.quantityPerUnit.width = 135;
-        me.quantityPerUnit.label = "Quantity per Unit";
-        me.unitPrice.x = 160;
-        me.unitPrice.y = 60;
-        me.unitPrice.bind=[me.databinder, "UnitPrice"];
-        me.unitPrice.label = "Unit Price";
-        me.unitPrice.width = 65;
-        me.unitPrice.converter = new NumberConverter();
-        me.unitPrice.format = "#.##0,00";
-        me.unitPrice.styles = [me.styleNumber];
-        me.unitsInStock.x = 240;
-        me.unitsInStock.y = 60;
-        me.unitsInStock.bind=[me.databinder, "UnitsInStock"];
-        me.unitsInStock.label = "Units in Stock";
-        me.unitsInStock.width = 70;
-        me.unitsInStock.converter = new NumberConverter();
-        me.unitsInStock.format = "#.##0,00";
-        me.unitsInStock.styles = [me.styleNumber];
-        me.unitsOnOrder.x = 325;
-        me.unitsOnOrder.y = 60;
-        me.unitsOnOrder.bind=[me.databinder, "UnitsOnOrder"];
-        me.unitsOnOrder.label = "Units on Order";
-        me.unitsOnOrder.width = 75;
-        me.unitsOnOrder.converter = new NumberConverter();
-        me.unitsOnOrder.format = "#.##0,00";
-        me.unitsOnOrder.styles = [me.styleNumber];
-        me.reorderLevel.x = 415;
-        me.reorderLevel.y = 60;
-        me.reorderLevel.bind=[me.databinder, "ReorderLevel"];
-        me.reorderLevel.width = 70;
-        me.reorderLevel.label = "Reorder Level";
-        me.reorderLevel.converter = new NumberConverter();
-        me.reorderLevel.styles = [me.styleNumber];
-        me.discontinued.x = 415;
-        me.discontinued.y = 10;
-        me.discontinued.width = 70;
-        me.discontinued.bind=[me.databinder, "Discontinued"];
-        me.discontinued.label = "Discontinued";
-        me.category.x = 10;
-        me.category.y = 110;
-        me.category.template = "{{CategoryName}}";
-        me.category.value = "Condiments";
-        me.category.bind=[me.databinder, "Category"];
-        me.category.width = 170;
-        me.category.label = "Category";
-        me.categoryChooser.x = 185;
-        me.categoryChooser.y = 125;
-        me.categoryChooser.items = "northwind.Categories";
-        me.categoryChooser.bind=[me.databinder, "Category"];
-        me.categoryChooser.width = 30;
-        me.supplier.x = 225;
-        me.supplier.y = 110;
-        me.supplier.bind=[me.databinder, "Supplier"];
-        me.supplier.value = "New Orleans Cajun Delights";
-        me.supplier.template = "{{CompanyName}}";
-        me.supplier.label = "Supplier";
-        me.supplier.width = 230;
-        me.supplierchooser.x = 460;
-        me.supplierchooser.y = 125;
-        me.supplierchooser.bind=[me.databinder, "Supplier"];
-        me.supplierchooser.items = "northwind.Suppliers";
-        me.styleNumber.x = 442;
-        me.styleNumber.y = 183;
-        me.styleNumber.css={
-            text_align: "right"
-        };
-        console.log("main " + me.main._id);
-        console.log("this " + this._id);
+        me.supplierchooser = new ObjectChooser();
+        me.supplier = new HTMLPanel();
+        me.categoryChooser = new ObjectChooser();
+        me.category = new HTMLPanel();
+        me.discontinued = new Checkbox();
+        me.reorderLevel = new Textbox();
+        me.unitsOnOrder = new Textbox();
+        me.unitsInStock = new Textbox();
+        me.unitPrice = new Textbox();
+        me.quantityPerUnit = new Textbox();
+        me.productName = new Textbox();
+        this.me.main.config({ isAbsolute: true, width: "678", height: "170", children: [
+                me.id.config({
+                    x: 10,
+                    y: 10,
+                    bind: [me.databinder, "id"],
+                    label: "Id",
+                    width: 65,
+                    converter: new NumberConverter()
+                }),
+                me.styleNumber.config({
+                    css: {
+                        text_align: "right"
+                    }
+                }),
+                me.supplierchooser.config({
+                    x: 460,
+                    y: 125,
+                    bind: [me.databinder, "Supplier"],
+                    items: "northwind.Suppliers"
+                }),
+                me.supplier.config({
+                    x: 225,
+                    y: 110,
+                    bind: [me.databinder, "Supplier"],
+                    value: "New Orleans Cajun Delights",
+                    template: "{{CompanyName}}",
+                    label: "Supplier",
+                    width: 230
+                }),
+                me.categoryChooser.config({
+                    x: 185,
+                    y: 125,
+                    items: "northwind.Categories",
+                    bind: [me.databinder, "Category"],
+                    width: 30
+                }),
+                me.category.config({
+                    x: 10,
+                    y: 110,
+                    template: "{{CategoryName}}",
+                    value: "Condiments",
+                    bind: [me.databinder, "Category"],
+                    width: 170,
+                    label: "Category"
+                }),
+                me.discontinued.config({
+                    x: 415,
+                    y: 10,
+                    width: 70,
+                    bind: [me.databinder, "Discontinued"],
+                    label: "Discontinued"
+                }),
+                me.reorderLevel.config({
+                    x: 415,
+                    y: 60,
+                    bind: [me.databinder, "ReorderLevel"],
+                    width: 70,
+                    label: "Reorder Level",
+                    converter: new NumberConverter(),
+                    styles: [me.styleNumber]
+                }),
+                me.unitsOnOrder.config({
+                    x: 325,
+                    y: 60,
+                    bind: [me.databinder, "UnitsOnOrder"],
+                    label: "Units on Order",
+                    width: 75,
+                    converter: new NumberConverter(),
+                    format: "#.##0,00",
+                    styles: [me.styleNumber]
+                }),
+                me.unitsInStock.config({
+                    x: 240,
+                    y: 60,
+                    bind: [me.databinder, "UnitsInStock"],
+                    label: "Units in Stock",
+                    width: 70,
+                    converter: new NumberConverter(),
+                    format: "#.##0,00",
+                    styles: [me.styleNumber]
+                }),
+                me.unitPrice.config({
+                    x: 160,
+                    y: 60,
+                    bind: [me.databinder, "UnitPrice"],
+                    label: "Unit Price",
+                    width: 65,
+                    converter: new NumberConverter(),
+                    format: "#.##0,00",
+                    styles: [me.styleNumber]
+                }),
+                me.quantityPerUnit.config({
+                    x: 10,
+                    y: 60,
+                    bind: [me.databinder, "QuantityPerUnit"],
+                    width: 135,
+                    label: "Quantity per Unit"
+                }),
+                me.productName.config({
+                    x: 90,
+                    y: 10,
+                    bind: [me.databinder, "ProductName"],
+                    label: "Product Name",
+                    width: 310
+                })
+            ] });
     }
 }
 export async function test() {

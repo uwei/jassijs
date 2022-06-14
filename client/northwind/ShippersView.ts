@@ -9,15 +9,15 @@ import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObject
 import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
 type Me = {
     id?: Textbox;
-    companyName?: Textbox;
     phone?: Textbox;
+    companyName?: Textbox;
 } & DBObjectViewMe;
-@$DBObjectView({ classname: "northwind.Shippers",actionname:"Northwind/Shippers",icon:"mdi mdi-truck-delivery" })
+@$DBObjectView({ classname: "northwind.Shippers", actionname: "Northwind/Shippers", icon: "mdi mdi-truck-delivery" })
 @$Class("northwind.ShippersView")
 export class ShippersView extends DBObjectView {
-    me: Me;
+    declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    value: Shippers;
+    declare value: Shippers;
     constructor() {
         super();
         //this.me = {}; this is called in objectdialog
@@ -28,31 +28,37 @@ export class ShippersView extends DBObjectView {
     }
     layout(me: Me) {
         me.id = new Textbox();
-        me.companyName = new Textbox();
         me.phone = new Textbox();
-        me.main.add(me.id);
-        me.main.isAbsolute = true;
-        me.main.height = 110;
-        me.main.add(me.phone);
-        me.main.add(me.companyName);
-        this.width = 626;
-        this.height = 146;
-        me.id.converter = new NumberConverter();
-        me.id.bind=[me.databinder, "id"];
-        me.id.label = "Id";
-        me.id.width = 40;
-        me.id.x = 5;
-        me.id.y = 0;
-        me.companyName.x = 60;
-        me.companyName.y = 0;
-        me.companyName.bind=[me.databinder, "CompanyName"];
-        me.companyName.label = "Company name";
-        me.companyName.width = 160;
-        me.phone.x = 5;
-        me.phone.y = 50;
-        me.phone.width = 215;
-        me.phone.bind=[me.databinder, "Phone"];
-        me.phone.label = "Phone";
+        me.companyName = new Textbox();
+        this.me.main.config({
+            isAbsolute:true,
+            width: "626",
+            height: "150",
+            children: [
+                me.id.config({
+                    converter: new NumberConverter(),
+                    bind: [me.databinder, "id"],
+                    label: "Id",
+                    width: 40,
+                    x: 5,
+                    y: 0
+                }),
+                me.phone.config({
+                    x: 5,
+                    y: 50,
+                    width: 215,
+                    bind: [me.databinder, "Phone"],
+                    label: "Phone"
+                }),
+                me.companyName.config({
+                    x: 60,
+                    y: 0,
+                    bind: [me.databinder, "CompanyName"],
+                    label: "Company name",
+                    width: 160
+                })
+            ]
+        });
     }
 }
 export async function test() {

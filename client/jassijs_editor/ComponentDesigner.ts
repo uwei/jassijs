@@ -37,6 +37,7 @@ class ClipboardData {
     children: { [name: string]: string[] } = {};
     properties: { [name: string]: { [propname: string]: any[] } } = {};
     types: { [name: string]: string } = {};
+    allChilds:string[]=[];
 }
 
 
@@ -59,7 +60,7 @@ export class ComponentDesigner extends Panel {
     lassoButton: Button;
     undoButton: Button;
     editButton: Button;
-    removeButton: Button;
+    cutButton: Button;
     inlineEditorPanel: Panel;
     copyButton: Button;
     pasteButton: Button;
@@ -156,13 +157,13 @@ export class ComponentDesigner extends Panel {
         });
         this._designToolbar.add(this.lassoButton);
 
-        this.removeButton = new Button();
-        this.removeButton.icon = "mdi mdi-delete-forever-outline mdi-18px";
-        this.removeButton.tooltip = "Delete selected Control (ENTF)";
-        this.removeButton.onclick(function () {
-            _this.removeComponent();
+        this.cutButton = new Button();
+        this.cutButton.icon = "mdi mdi-content-cut mdi-18px";
+        this.cutButton.tooltip = "Cut selected Controls (ENTF)";
+        this.cutButton.onclick(function () {
+            _this.cutComponent();
         });
-        this._designToolbar.add(this.removeButton);
+        this._designToolbar.add(this.cutButton);
 
         this.editButton = new Button();
         this.editButton.icon = "mdi mdi-run mdi-18px";
@@ -230,7 +231,7 @@ export class ComponentDesigner extends Panel {
                 return false;
             }
             if (evt.keyCode === 46) {//Del
-                _this.removeComponent();
+                _this.cutComponent();
                 evt.preventDefault();
                 return false;
             }
@@ -283,22 +284,35 @@ export class ComponentDesigner extends Panel {
     /**
      * removes the selected component
      */
-    removeComponent() {
-        var todel = this._propertyEditor.value;
-        var varname = this._codeEditor.getVariableFromObject(todel);
-        if (varname !== "this") {
-            if (todel.domWrapper._parent !== undefined) {
-                todel.domWrapper._parent.remove(todel);
-            }
-            this._propertyEditor.removeVariableInCode(varname);
-            this._propertyEditor.removeVariableInDesign(varname);
-            this._updateInvisibleComponents();
+    async cutComponent() {
+        var text=await this.copy();
+        if(await navigator.clipboard.readText()!==text){
+            alert("could not copy to Clipboard.")
+            return;
         }
+        var clip: ClipboardData = JSON.parse(text);//to Clipboard
+       
+        var all = [];
+        for (var x = 0; x < clip.allChilds.length; x++) {
+            var varname = clip.allChilds[x];//this._codeEditor.getVariableFromObject(todel);
+            var todel=this._codeEditor.getObjectFromVariable(varname);
+            if (varname !== "this") {
+                if (todel?.domWrapper?._parent !== undefined) {
+                    todel.domWrapper._parent.remove(todel);
+                }
+                all.push(varname);
+                this._propertyEditor.removeVariableInDesign(varname);
+            }
+        }
+        this._propertyEditor.removeVariablesInCode(all);
+        this._updateInvisibleComponents();
+        this._componentExplorer.update();
 
     }
     private copyProperties(clip: ClipboardData, component: Component) {
         var varname = this._codeEditor.getVariableFromObject(component);
         var parserdata = this._propertyEditor.parser.data[varname];
+        clip.allChilds.push(varname);
         clip.types[varname] = classes.getClassName(component);
         if (!clip.properties[varname]) {
             clip.properties[varname] = {};
@@ -329,7 +343,7 @@ export class ComponentDesigner extends Panel {
             }
         }
     }
-    copy() {
+    async copy(): Promise<string> {
 
         var components = this._propertyEditor.value;
         if (!Array.isArray(components)) {
@@ -349,33 +363,39 @@ export class ComponentDesigner extends Panel {
 
         var text = JSON.stringify(clip);
         console.log(text);
-        navigator.clipboard.writeText(text).then(() => {
-        });
+        await navigator.clipboard.writeText(text);
+        return text;
     }
     private async pasteComponent(clip: ClipboardData, target: Container, varname: string, variablelistold: any[], variablelistnew: any[]) {
         var _this = this;
-        var vartype = clip.properties[varname]["_new_"][0];
-        if (variablelistold.indexOf(varname) > -1)
-            return;
-        vartype = vartype.split("(")[0].split("new ")[1];
+        var created: Component;
+        if (clip.properties[varname] !== undefined && clip.properties[varname]["_new_"] !== undefined) {
 
-        var targetname = _this._codeEditor.getVariableFromObject(target);
-        var newcomp = { createFromType: clip.types[varname] };
-        await classes.loadClass(clip.types[varname]);
-        var svarname=varname.split(".")[varname.split(".").length-1];
-        var created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, undefined, false,svarname);
-        variablelistold.push(varname);
-        variablelistnew.push(_this._codeEditor.getVariableFromObject(created));
-        //correct designdummy
-        for (var t = 0; t < target._components.length; t++) {
-            var ch = target._components[t];
-            if (ch["type"] === "atEnd") {
-                target.remove(ch);
-                // target.add(ch);
-                break;
+            var vartype = clip.properties[varname]["_new_"][0];
+            if (variablelistold.indexOf(varname) > -1)
+                return;
+            vartype = vartype.split("(")[0].split("new ")[1];
+
+            var targetname = _this._codeEditor.getVariableFromObject(target);
+            var newcomp = { createFromType: clip.types[varname] };
+            await classes.loadClass(clip.types[varname]);
+            var svarname = varname.split(".")[varname.split(".").length - 1];
+            created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, undefined, false, svarname);
+            variablelistold.push(varname);
+            variablelistnew.push(_this._codeEditor.getVariableFromObject(created));
+            //correct designdummy
+            for (var t = 0; t < target._components.length; t++) {
+                var ch = target._components[t];
+                if (ch["type"] === "atEnd") {
+                    target.remove(ch);
+                    // target.add(ch);
+                    break;
+                }
             }
+        } else {
+            //component is already created outside the code
+            created = _this._codeEditor.getObjectFromVariable(varname);
         }
-
         if (clip.children[varname] !== undefined) {
             for (var k = 0; k < clip.children[varname].length; k++) {
                 await _this.pasteComponent(clip, <Container>created, clip.children[varname][k], variablelistold, variablelistnew);
@@ -513,7 +533,7 @@ export class ComponentDesigner extends Panel {
         this.editButton.toggle(!this.editMode);
         this.undoButton.hidden = !enable;
         this.lassoButton.hidden = !enable;
-        this.removeButton.hidden = !enable;
+        this.cutButton.hidden = !enable;
         var component = this._designPlaceholder._components[0];
         //switch designmode
         var comps = $(component.dom).find(".jcomponent");
@@ -668,7 +688,7 @@ export class ComponentDesigner extends Panel {
      * @param {jassijs.ui.Container} newParent - the new parent container where the component is placed
      * @param {jassijs.ui.Component} beforeComponent - insert the new component before beforeComponent
      **/
-    createComponent(type, component, top, left, newParent, beforeComponent, doUpdate = true,suggestedName:string=undefined): Component {
+    createComponent(type, component, top, left, newParent, beforeComponent, doUpdate = true, suggestedName: string = undefined): Component {
         var _this = this;
         /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor&&beforeComponent.type==="atEnd"){
             beforeComponent=undefined;
@@ -683,10 +703,10 @@ export class ComponentDesigner extends Panel {
             var test = _this._propertyEditor.parser.getPropertyValue(repeatername, "createRepeatingComponent");
             scope = { variablename: repeatername, methodname: "createRepeatingComponent" };
             if (test === undefined) {
-                 var sfunc="function(me:Me){\n\t"+repeatername+".design.config({});\n}";
+                var sfunc = "function(me:Me){\n\t" + repeatername + ".design.config({});\n}";
                 var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassijs.ui.Databinder");
-                if(!_this._propertyEditor.parser.getPropertyValue(repeatername,"config")){
-                    sfunc="function(me:Me){\n\t\n}";
+                if (!_this._propertyEditor.parser.getPropertyValue(repeatername, "config")) {
+                    sfunc = "function(me:Me){\n\t\n}";
                 }
                 _this._propertyEditor.setPropertyInCode("createRepeatingComponent", sfunc, true, repeatername);
                 _this._propertyEditor.updateParser();
@@ -704,7 +724,7 @@ export class ComponentDesigner extends Panel {
             }
         }
         var varvalue = new (classes.getClass(type));
-        var varname = _this.createVariable(type, scope, varvalue,suggestedName);
+        var varname = _this.createVariable(type, scope, varvalue, suggestedName);
         if (this._propertyEditor.codeEditor !== undefined) {
 
             var newName = _this._codeEditor.getVariableFromObject(newParent);
@@ -770,19 +790,19 @@ export class ComponentDesigner extends Panel {
         }
         return varvalue;
     }
-    createVariable(type, scope, varvalue,suggestedName:string=undefined) {
+    createVariable(type, scope, varvalue, suggestedName: string = undefined) {
         if (this._propertyEditor.codeEditor === undefined)
-            return; 
-        var varname = this._propertyEditor.addVariableInCode(type, scope,suggestedName);
+            return;
+        var varname = this._propertyEditor.addVariableInCode(type, scope, suggestedName);
 
-       /* if (varname.startsWith("me.") && this._codeEditor.getObjectFromVariable("me") !== undefined) {
-            var me = this._codeEditor.getObjectFromVariable("me");
-            me[varname.substring(3)] = varvalue;
-        } else if (varname.startsWith("this.")) {
-            var th = this._codeEditor.getObjectFromVariable("this");
-            th[varname.substring(5)] = varvalue;
-        } else*/
-            this.variables.addVariable(varname, varvalue);
+        /* if (varname.startsWith("me.") && this._codeEditor.getObjectFromVariable("me") !== undefined) {
+             var me = this._codeEditor.getObjectFromVariable("me");
+             me[varname.substring(3)] = varvalue;
+         } else if (varname.startsWith("this.")) {
+             var th = this._codeEditor.getObjectFromVariable("this");
+             th[varname.substring(5)] = varvalue;
+         } else*/
+        this.variables.addVariable(varname, varvalue);
         return varname;
     }
     /**

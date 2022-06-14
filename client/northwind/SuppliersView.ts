@@ -9,24 +9,24 @@ import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObject
 import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
 type Me = {
     id?: Textbox;
-    companyName?: Textbox;
-    contactName?: Textbox;
-    contactTitle?: Textbox;
-    address?: Textbox;
-    postalCode?: Textbox;
-    city?: Textbox;
-    region?: Textbox;
-    Country?: Textbox;
-    phone?: Textbox;
-    fax?: Textbox;
     homepage?: Textbox;
+    fax?: Textbox;
+    phone?: Textbox;
+    Country?: Textbox;
+    region?: Textbox;
+    city?: Textbox;
+    postalCode?: Textbox;
+    address?: Textbox;
+    contactTitle?: Textbox;
+    contactName?: Textbox;
+    companyName?: Textbox;
 } & DBObjectViewMe;
-@$DBObjectView({ classname: "northwind.Suppliers",actionname: "Northwind/Suppliers",icon:"mdi mdi-office-building-outline" })
+@$DBObjectView({ classname: "northwind.Suppliers", actionname: "Northwind/Suppliers", icon: "mdi mdi-office-building-outline" })
 @$Class("northwind.SuppliersView")
 export class SuppliersView extends DBObjectView {
-    me: Me;
+    declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    value: Suppliers;
+    declare value: Suppliers;
     constructor() {
         super();
         //this.me = {}; this is called in objectdialog
@@ -37,92 +37,103 @@ export class SuppliersView extends DBObjectView {
     }
     layout(me: Me) {
         me.id = new Textbox();
-        me.companyName = new Textbox();
-        me.contactName = new Textbox();
-        me.contactTitle = new Textbox();
-        me.address = new Textbox();
-        me.postalCode = new Textbox();
-        me.city = new Textbox();
-        me.region = new Textbox();
-        me.Country = new Textbox();
-        me.phone = new Textbox();
-        me.fax = new Textbox();
         me.homepage = new Textbox();
-        me.main.add(me.id);
-        me.main.isAbsolute = true;
-        me.main.height = "800";
-        me.main.width = 800;
-        me.main.add(me.homepage);
-        me.main.add(me.fax);
-        me.main.add(me.phone);
-        me.main.add(me.Country);
-        me.main.add(me.region);
-        me.main.add(me.city);
-        me.main.add(me.postalCode);
-        me.main.add(me.address);
-        me.main.add(me.contactTitle);
-        me.main.add(me.contactName);
-        me.main.add(me.companyName);
-        me.id.x = 10;
-        me.id.y = 5;
-        me.id.converter = new NumberConverter();
-        me.id.width = 50;
-        me.id.bind=[me.databinder, "id"];
-        me.id.label = "Id";
-        me.companyName.x = 75;
-        me.companyName.y = 5;
-        me.companyName.label = "Company Name";
-        me.companyName.bind=[me.databinder, "CompanyName"];
-        me.companyName.width = 290;
-        me.contactName.x = 10;
-        me.contactName.y = 50;
-        me.contactName.bind=[me.databinder, "ContactName"];
-        me.contactName.label = "Contact Name";
-        me.contactTitle.x = 180;
-        me.contactTitle.y = 50;
-        me.contactTitle.bind=[me.databinder, "ContactTitle"];
-        me.contactTitle.label = "Contact Title";
-        me.contactTitle.width = 185;
-        me.address.x = 10;
-        me.address.y = 95;
-        me.address.bind=[me.databinder, "Address"];
-        me.address.label = "Address";
-        me.address.width = 355;
-        me.postalCode.x = 10;
-        me.postalCode.y = 140;
-        me.postalCode.bind=[me.databinder, "PostalCode"];
-        me.postalCode.width = 95;
-        me.postalCode.label = "Postal Code";
-        me.city.x = 120;
-        me.city.y = 140;
-        me.city.bind=[me.databinder, "City"];
-        me.city.label = "City";
-        me.city.width = 245;
-        me.region.x = 10;
-        me.region.y = 185;
-        me.region.bind=[me.databinder, "Region"];
-        me.region.label = "Region";
-        me.region.width = 155;
-        me.Country.x = 180;
-        me.Country.y = 185;
-        me.Country.bind=[me.databinder, "Country"];
-        me.Country.label = "Country";
-        me.Country.width = 185;
-        me.phone.x = 10;
-        me.phone.y = 230;
-        me.phone.bind=[me.databinder, "Phone"];
-        me.phone.label = "Phone";
-        me.phone.width = 155;
-        me.fax.x = 180;
-        me.fax.y = 230;
-        me.fax.bind=[me.databinder, "Fax"];
-        me.fax.label = "Fax";
-        me.fax.width = 185;
-        me.homepage.x = 10;
-        me.homepage.y = 275;
-        me.homepage.bind=[me.databinder, "HomePage"];
-        me.homepage.label = "Home Page";
-        me.homepage.width = 355;
+        me.fax = new Textbox();
+        me.phone = new Textbox();
+        me.Country = new Textbox();
+        me.region = new Textbox();
+        me.city = new Textbox();
+        me.postalCode = new Textbox();
+        me.address = new Textbox();
+        me.contactTitle = new Textbox();
+        me.contactName = new Textbox();
+        me.companyName = new Textbox();
+        this.me.main.config({ isAbsolute: true, width: "800", height: "800", children: [
+                me.id.config({
+                    x: 10,
+                    y: 5,
+                    converter: new NumberConverter(),
+                    width: 50,
+                    bind: [me.databinder, "id"],
+                    label: "Id"
+                }),
+                me.homepage.config({
+                    x: 10,
+                    y: 275,
+                    bind: [me.databinder, "HomePage"],
+                    label: "Home Page",
+                    width: 355
+                }),
+                me.fax.config({
+                    x: 180,
+                    y: 230,
+                    bind: [me.databinder, "Fax"],
+                    label: "Fax",
+                    width: 185
+                }),
+                me.phone.config({
+                    x: 10,
+                    y: 230,
+                    bind: [me.databinder, "Phone"],
+                    label: "Phone",
+                    width: 155
+                }),
+                me.Country.config({
+                    x: 180,
+                    y: 185,
+                    bind: [me.databinder, "Country"],
+                    label: "Country",
+                    width: 185
+                }),
+                me.region.config({
+                    x: 10,
+                    y: 185,
+                    bind: [me.databinder, "Region"],
+                    label: "Region",
+                    width: 155
+                }),
+                me.city.config({
+                    x: 120,
+                    y: 140,
+                    bind: [me.databinder, "City"],
+                    label: "City",
+                    width: 245
+                }),
+                me.postalCode.config({
+                    x: 10,
+                    y: 140,
+                    bind: [me.databinder, "PostalCode"],
+                    width: 95,
+                    label: "Postal Code"
+                }),
+                me.address.config({
+                    x: 10,
+                    y: 95,
+                    bind: [me.databinder, "Address"],
+                    label: "Address",
+                    width: 355
+                }),
+                me.contactTitle.config({
+                    x: 180,
+                    y: 50,
+                    bind: [me.databinder, "ContactTitle"],
+                    label: "Contact Title",
+                    width: 185
+                }),
+                me.contactName.config({
+                    x: 10,
+                    y: 50,
+                    bind: [me.databinder, "ContactName"],
+                    label: "Contact Name"
+                }),
+                me.companyName.config({
+                    x: 75,
+                    y: 5,
+                    label: "Company Name",
+                    bind: [me.databinder, "CompanyName"],
+                    width: 290
+                })
+            ] });
     }
 }
 export async function test() {

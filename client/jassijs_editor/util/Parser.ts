@@ -257,7 +257,7 @@ export class Parser {
             }
         }
     }
-    parseConfig(node: ts.CallExpression) {
+    private parseConfig(node: ts.CallExpression) {
         if (node.arguments.length > 0) {
             var left = node.expression.getText();
             var lastpos = left.lastIndexOf(".");
@@ -282,7 +282,7 @@ export class Parser {
             }
         }
     }
-    parseProperties(node: ts.Node) {
+    private parseProperties(node: ts.Node) {
         if (ts.isVariableDeclaration(node)) {
             var name = node.name.getText();
             if (node.initializer !== undefined) {
@@ -296,7 +296,7 @@ export class Parser {
             var node2;
             var left: string;
             var value: string;
-            var _this=this;
+            var _this = this;
             var isFunction = false;
             if (ts.isBinaryExpression(node)) {
                 node1 = node.left;
@@ -312,13 +312,13 @@ export class Parser {
                 isFunction = true;
                 left = node1.getText();// this.code.substring(node1.pos, node1.end).trim();
                 var params = [];
-                node.arguments.forEach((arg) => { 
-                  
+                node.arguments.forEach((arg) => {
+
                     params.push(arg.getText());
-                    if((<any>arg)?.expression?.name?.getText()==="config"){
+                    if ((<any>arg)?.expression?.name?.getText() === "config") {
                         _this.parseConfig(<any>arg);
                     }
-                     //arg.getText().indexOf(".config(")
+                    //arg.getText().indexOf(".config(")
                 });
                 if (left.endsWith(".config")) {
                     var lastpos = left.lastIndexOf(".");
@@ -461,7 +461,11 @@ export class Parser {
             var pos = node.parent["elements"].indexOf(node);
             if (pos >= 0)
                 node.parent["elements"].splice(pos, 1);
-        } else
+         }else if(node.parent.kind===ts.SyntaxKind.ExpressionStatement){
+              var pos = node.parent.parent["statements"].indexOf(node.parent);
+            if (pos >= 0)
+                node.parent.parent["statements"].splice(pos, 1);
+         }else
             throw Error(node.getFullText() + "could not be removed");
     }
     /** 
@@ -531,7 +535,7 @@ export class Parser {
             var prop: Entry = undefined;
             if (onlyValue !== undefined) {
                 for (var x = 0; x < this.data[variablename][property].length; x++) {
-                    if (this.data[variablename][property][x].value === onlyValue||this.data[variablename][property][x].value.startsWith(onlyValue+".")) {
+                    if (this.data[variablename][property][x].value === onlyValue || this.data[variablename][property][x].value.startsWith(onlyValue + ".")) {
                         prop = this.data[variablename][property][x];
                     }
                 }
@@ -540,7 +544,7 @@ export class Parser {
             if (prop == undefined)
                 return;
             this.removeNode(prop.node);
-            if(prop.node["expression"]?.arguments?.length>0){
+            if (prop.node["expression"]?.arguments?.length > 0) {
                 return prop.node["expression"]?.arguments[0];
             }
             return prop.node;
@@ -560,53 +564,62 @@ export class Parser {
      * removes the variable from code
      * @param {string} varname - the variable to remove
      */
-    removeVariableInCode(varname: string) {
-
-        var prop = this.data[varname];
+    removeVariablesInCode(varnames: string[]) {
         var allprops: Entry[] = [];
-        if (varname.startsWith("me.") && this.typeMe[varname.substring(3)] !== undefined)
-            allprops.push(this.typeMe[varname.substring(3)]);
-        //remove properties
-        for (var key in prop) {
-            let props = prop[key];
-            props.forEach((p) => {
-                allprops.push(p);
-            });
+        //collect allNodes to delete
+        for (var vv = 0; vv < varnames.length; vv++) {
+            var varname = varnames[vv];
+            var prop = this.data[varname];
+
+            if (varname.startsWith("me.") && this.typeMe[varname.substring(3)] !== undefined)
+                allprops.push(this.typeMe[varname.substring(3)]);
+            //remove properties
+            for (var key in prop) {
+                let props = prop[key];
+                props.forEach((p) => {
+                    allprops.push(p);
+                });
+            }
+            if (varname.startsWith("me.")) {
+                let props = this.data.me[varname.substring(3)];
+                props?.forEach((p) => {
+                    allprops.push(p);
+                });
+            }
         }
-        if (varname.startsWith("me.")) {
-            let props = this.data.me[varname.substring(3)];
-            props?.forEach((p) => {
-                allprops.push(p);
-            });
-        }
+        //remove nodes
         for (var x = 0; x < allprops.length; x++) {
             this.removeNode(allprops[x].node);
         }
-        //remove lines where used as parameter
-        for (var propkey in this.data) {
-            var prop = this.data[propkey];
-            for (var key in prop) {
-                var props = prop[key];
-                for (var x = 0; x < props.length; x++) {
-                    let p = props[x];
-                    var params = p.value.split(",");
-                    for (var i = 0; i < params.length; i++) {
-                        if (params[i] === varname || params[i] === "this." + varname) {
-                            this.removeNode(p.node);
-                        }
-                    }
-                    //in children:[]
-                    //@ts-ignore
-                    var inconfig = prop[key][0]?.node?.initializer?.elements;
-                    if (inconfig) {
-                        for (var x = 0; x < inconfig.length; x++) {
-                            if (inconfig[x].getText() === varname || inconfig[x].getText().startsWith(varname)) {
-                                this.removeNode(inconfig[x]);
+        for (var vv = 0; vv < varnames.length; vv++) {
+            var varname = varnames[vv];
 
+            //remove lines where used as parameter
+            for (var propkey in this.data) {
+                var prop = this.data[propkey];
+                for (var key in prop) {
+                    var props = prop[key];
+                    for (var x = 0; x < props.length; x++) {
+                        let p = props[x];
+                        var params = p.value.split(",");
+                        for (var i = 0; i < params.length; i++) {
+                            if (params[i] === varname || params[i] === "this." + varname) {
+                                this.removeNode(p.node);
                             }
                         }
-                        if (inconfig.length === 0) {
-                            this.removeNode(prop[key][0]?.node);
+                        //in children:[]
+                        //@ts-ignore
+                        var inconfig = prop[key][0]?.node?.initializer?.elements;
+                        if (inconfig) {
+                            for (var x = 0; x < inconfig.length; x++) {
+                                if (inconfig[x].getText() === varname || inconfig[x].getText().startsWith(varname)) {
+                                    this.removeNode(inconfig[x]);
+
+                                }
+                            }
+                            if (inconfig.length === 0) {
+                                this.removeNode(prop[key][0]?.node);
+                            }
                         }
                     }
                 }
@@ -618,11 +631,11 @@ export class Parser {
         var scope;
         if (variablescope) {
             scope = this.data[variablescope.variablename][variablescope.methodname][0]?.node;
-            if(scope.expression)
+            if (scope.expression)
                 scope = scope.expression.arguments[0];
             else
-                scope=scope.initializer;
-           
+                scope = scope.initializer;
+
         } else {
             for (var i = 0; i < classscope.length; i++) {
                 var sc = classscope[i];
@@ -640,15 +653,15 @@ export class Parser {
     /**
      * gets the next variablename
      * */
-    getNextVariableNameForType(type: string,suggestedName:string=undefined) {
+    getNextVariableNameForType(type: string, suggestedName: string = undefined) {
         var varname = suggestedName;
-        if(varname===undefined)
-            varname=type.split(".")[type.split(".").length - 1].toLowerCase();
+        if (varname === undefined)
+            varname = type.split(".")[type.split(".").length - 1].toLowerCase();
         for (var counter = 1; counter < 1000; counter++) {
-            if (this.data.me === undefined || this.data.me[varname + (counter===1?"":counter)] === undefined)
+            if (this.data.me === undefined || this.data.me[varname + (counter === 1 ? "" : counter)] === undefined)
                 break;
         }
-        return varname + (counter===1?"":counter);
+        return varname + (counter === 1 ? "" : counter);
     }
     /**
      * change objectliteral to mutliline if needed
@@ -752,9 +765,9 @@ export class Parser {
         isFunction: boolean = false, replace: boolean = undefined,
         before: { variablename: string, property: string, value?} = undefined,
         variablescope: { variablename: string, methodname } = undefined) {
-        
-        if(this.data[variableName]===undefined)
-            this.data[variableName]={};
+
+        if (this.data[variableName] === undefined)
+            this.data[variableName] = {};
         if (classscope === undefined)
             classscope = this.classScope;
         var scope = this.getNodeFromScope(classscope, variablescope);
@@ -826,10 +839,10 @@ export class Parser {
                         lastprop.parent["statements"].splice(pos + 1, 0, newExpression);
                 } else {
                     var pos = statements.length;
-                    try{
+                    try {
                         if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
                             pos--;
-                    }catch{
+                    } catch {
 
                     }
                     statements.splice(pos, 0, newExpression);
@@ -868,11 +881,11 @@ export class Parser {
     * @param variablescope - the scope where the variable should be insert e.g. hallo.onclick
     * @returns  the name of the object
     */
-    addVariableInCode(fulltype: string, classscope: { classname: string, methodname: string }[], variablescope: { variablename: string, methodname } = undefined,suggestedName=undefined): string {
+    addVariableInCode(fulltype: string, classscope: { classname: string, methodname: string }[], variablescope: { variablename: string, methodname } = undefined, suggestedName = undefined): string {
         if (classscope === undefined)
             classscope = this.classScope;
         let type = fulltype.split(".")[fulltype.split(".").length - 1];
-        var varname = this.getNextVariableNameForType(type,suggestedName);
+        var varname = this.getNextVariableNameForType(type, suggestedName);
         var useMe = false;
         if (this.data["me"] !== undefined)
             useMe = true;
@@ -888,7 +901,7 @@ export class Parser {
         if (node === undefined)
             throw Error("no scope to insert a variable could be found");
         for (var x = 0; x < statements.length; x++) {
-            if (!statements[x].getText().includes("new ") && !statements[x].getText().includes("var "))
+            if (!statements[x].getText().split("\n")[0].includes("new ") && !statements[x].getText().split("\n")[0].includes("var "))
                 break;
         }
         var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
@@ -901,16 +914,20 @@ export class Parser {
 
 export async function test() {
     await typescript.waitForInited;
-    var code = typescript.getCode("de/Dialog.ts");
+    var code = typescript.getCode("de/TestDialogBinder.ts");
     var parser = new Parser();
     // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
     // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
-   // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
+    // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
     //parser.parse(code, undefined);
-    parser.parse(code,[{classname:"Dialog",methodname:"layout"}]);
+    parser.parse(code, [{ classname: "TestDialogBinder", methodname: "layout" }]);
     debugger;
-   // var node = parser.removePropertyInCode("add", "me.textbox1", "me.panel1");
-  // parser.setPropertyInCode("this","add",node,[{classname:"Dialog",methodname:"layout"}],true,false);
+    parser.removeVariablesInCode(["me.repeater"]);
+    //parser.addVariableInCode("Component", [{ classname: "Dialog", methodname: "layout" }]);
+    //parser.setPropertyInCode("component", "x", "1", [{ classname: "Dialog", methodname: "layout" }]);
+    
+    // var node = parser.removePropertyInCode("add", "me.textbox1", "me.panel1");
+    // parser.setPropertyInCode("this","add",node,[{classname:"Dialog",methodname:"layout"}],true,false);
     //var node = parser.removePropertyInCode("add", "kk", "aaa");
 
     //var node=parser.removePropertyInCode("add", "ll", "ppp");

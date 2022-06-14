@@ -698,12 +698,12 @@ export class PropertyEditor extends Panel {
      * removes the variable from code
      * @param {string} varname - the variable to remove
      */
-    removeVariableInCode(varname: string) {
+    removeVariablesInCode(varname: string[]) {
         if (this.codeEditor === undefined) {
             this.callEvent("codeChanged", {});
             return;
         }
-        this.parser.removeVariableInCode(varname);
+        this.parser.removeVariablesInCode(varname); 
         this.codeEditor.value = this.parser.getModifiedCode();
         this.updateParser();
         this.callEvent("codeChanged", {});
