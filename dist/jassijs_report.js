@@ -4479,7 +4479,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1634384914000,
+                "date": 1655311958351,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -5609,7 +5609,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         }
         connectParser(parser) {
             this._propertyEditor.parser = parser;
-            var Parser = Classes_4.classes.getClass("jassijs_editor.base.Parser");
+            var Parser = Classes_4.classes.getClass("jassijs_editor.util.Parser");
             this._codeChanger.parser = new Parser();
         }
         editDialog(enable) {

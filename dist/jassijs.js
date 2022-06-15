@@ -532,7 +532,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
-                "date": 1654899517837,
+                "date": 1654984297312,
                 "jassijs.ui.BoxPanel": {
                     "$UIComponent": [
                         {
@@ -734,7 +734,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ComponentDescriptor.ts": {
-                "date": 1622985640000,
+                "date": 1655029061275,
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/ComponentSpy.ts": {
@@ -1336,7 +1336,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DataComponent.ts": {
-                "date": 1654950526606,
+                "date": 1655060463951,
                 "jassijs.ui.DataComponent": {
                     "@members": {
                         "autocommit": {
@@ -1437,7 +1437,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1654899473268,
+                "date": 1655058328961,
                 "jassijs/ui/DBObjectView": {
                     "$UIComponent": [
                         {
@@ -1492,7 +1492,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/ErrorPanel.ts": {
-                "date": 1627925312000,
+                "date": 1655145155622,
                 "jassijs.ui.ErrorPanel": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -1601,7 +1601,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1654704820862,
+                "date": 1654984567578,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -1733,7 +1733,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ObjectChooser.ts": {
-                "date": 1654704847496,
+                "date": 1655060562375,
                 "jassijs.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -1846,7 +1846,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1654976003583,
+                "date": 1655231884727,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {
@@ -2157,7 +2157,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Repeater.ts": {
-                "date": 1654899647629,
+                "date": 1655144356595,
                 "jassijs.ui.RepeaterDesignPanel": {
                     "$UIComponent": [
                         {
@@ -2428,7 +2428,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1654900850429,
+                "date": 1655060542267,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -2501,7 +2501,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Tree.ts": {
-                "date": 1654975282620,
+                "date": 1655140880763,
                 "jassijs.ui.TreeEditorPropertiesMulti": {
                     "@members": {
                         "mode": {
@@ -2641,7 +2641,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/VariablePanel.ts": {
-                "date": 1654165002481,
+                "date": 1655133146213,
                 "jassijs.ui.VariablePanel": {}
             },
             "jassijs/util/Cookies.ts": {
@@ -8721,18 +8721,31 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
          * @param {object} ob - the object to resolve
          * @returns {Object.<string,jassijs.ui.Component> - <name,component>
          **/
-        resolveEditableComponents(ob) {
-            var ret = {};
-            var sclass = Classes_17.classes.getClassName(ob);
+        resolveEditableComponents(ob, type = undefined, ret = undefined) {
+            var sclass;
+            var type;
+            if (ret === undefined) {
+                ret = {};
+                sclass = Classes_17.classes.getClassName(ob);
+                type = ob.constructor;
+            }
+            else {
+                sclass = Classes_17.classes.getClassName(type);
+            }
+            var found = false;
             if (Registry_13.default.getData("$UIComponent", sclass) !== undefined && Registry_13.default.getData("$UIComponent", sclass)[0] !== undefined) {
                 var props = Registry_13.default.getData("$UIComponent", sclass)[0].params[0];
                 this.editableComponents = props.editableChildComponents;
+                if (props.editableChildComponents !== undefined)
+                    found = true;
             }
             if (Registry_13.default.getData("$ReportComponent", sclass) !== undefined && Registry_13.default.getData("$ReportComponent", sclass)[0] !== undefined) {
                 var props = Registry_13.default.getData("$ReportComponent", sclass)[0].params[0];
                 this.editableComponents = props.editableChildComponents;
+                if (props.editableChildComponents !== undefined)
+                    found = true;
             }
-            if (this.editableComponents !== undefined) {
+            if (found) {
                 for (var x = 0; x < this.editableComponents.length; x++) {
                     var field = this.editableComponents[x];
                     var members = field.split(".");
@@ -8746,8 +8759,41 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
                     ret[field] = retob;
                 }
             }
+            else {
+                type = type.__proto__;
+                if (type !== null && type.name !== "")
+                    return this.resolveEditableComponents(ob, type, ret);
+            }
             return ret;
         }
+        /* ohne subclasses
+        resolveEditableComponents(ob) {
+             var ret = {};
+             var sclass = classes.getClassName(ob);
+             if (registry.getData("$UIComponent", sclass) !== undefined && registry.getData("$UIComponent", sclass)[0] !== undefined) {
+                 var props: UIComponentProperties = registry.getData("$UIComponent", sclass)[0].params[0];
+                 this.editableComponents = props.editableChildComponents;
+             }
+             if (registry.getData("$ReportComponent", sclass) !== undefined && registry.getData("$ReportComponent", sclass)[0] !== undefined) {
+                 var props: UIComponentProperties = registry.getData("$ReportComponent", sclass)[0].params[0];
+                 this.editableComponents = props.editableChildComponents;
+             }
+             if (this.editableComponents !== undefined) {
+                 for (var x = 0; x < this.editableComponents.length; x++) {
+                     var field = this.editableComponents[x];
+                     var members = field.split(".");
+                     var retob = ob;
+                     for (var m = 0; m < members.length; m++) {
+                         if (members[m] === "this")
+                             retob = retob;
+                         else
+                             retob = retob[members[m]];
+                     }
+                     ret[field] = retob;
+                 }
+             }
+             return ret;
+         }*/
         /**
          * remove a field
          * @param {string} field - the name of the field to remove
@@ -10959,7 +11005,8 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
                 if (u.indexOf("/js/") > -1 || ismodul) {
                     try {
                         var TSSourceMap = (await new Promise((resolve_36, reject_36) => { require(["jassijs_editor/util/TSSourceMap"], resolve_36, reject_36); })).TSSourceMap;
-                        var pos = await new TSSourceMap().getLineFromJS(u, Number(line), Number(col));
+                        var map = new TSSourceMap();
+                        var pos = await map.getLineFromJS(u, Number(line), Number(col));
                         if (pos) {
                             return pos.source.replace("../client/", "").replaceAll("../", "").replace("$temp", "") +
                                 ":" + pos.line + ":" + pos.column;
@@ -12191,6 +12238,10 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
             this.dialogWidth = 450;
             this.layout();
         }
+        config(config) {
+            super.config(config);
+            return this;
+        }
         get title() {
             return "Select";
         }
@@ -13232,9 +13283,9 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
          * @param scopename - the scope {variable: ,methodname:} to add the variable - if missing layout()
          * @returns  the name of the object
          */
-        addVariableInCode(type, scopename) {
+        addVariableInCode(type, scopename, suggestedName = undefined) {
             var val = this.codeEditor.getObjectFromVariable("this");
-            var ret = this.parser.addVariableInCode(type, undefined, scopename);
+            var ret = this.parser.addVariableInCode(type, undefined, scopename, suggestedName);
             /* var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
              { classname: undefined, methodname: "test" }], scopename);
              */ this.codeEditor.value = this.parser.getModifiedCode();
@@ -13386,12 +13437,12 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
          * removes the variable from code
          * @param {string} varname - the variable to remove
          */
-        removeVariableInCode(varname) {
+        removeVariablesInCode(varname) {
             if (this.codeEditor === undefined) {
                 this.callEvent("codeChanged", {});
                 return;
             }
-            this.parser.removeVariableInCode(varname);
+            this.parser.removeVariablesInCode(varname);
             this.codeEditor.value = this.parser.getModifiedCode();
             this.updateParser();
             this.callEvent("codeChanged", {});
@@ -14776,7 +14827,6 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
         config(config) {
             super.config(config);
             return this;
-            //    return new c();
         }
         set disabled(value) {
             $(this.dom).prop('disabled', true);
@@ -15172,6 +15222,8 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
        */
         getStyleFromItem(item) {
             var ret;
+            if (item === undefined)
+                return undefined;
             if (typeof (this.propStyle) === "function") {
                 ret = this.propStyle(item);
             }
@@ -15183,6 +15235,8 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
         * get icon from node
         */
         getIconFromItem(item) {
+            if (item === undefined)
+                return undefined;
             if (this.propIcon !== undefined) {
                 if (typeof (this.propIcon) === "function") {
                     return this.propIcon(item);
@@ -15197,6 +15251,8 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
         */
         getChildsFromItem(item) {
             var cs = undefined;
+            if (item === undefined)
+                return undefined;
             if (typeof (this.propChilds) === "function") {
                 cs = this.propChilds(item);
             }
@@ -15909,11 +15965,11 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
                 var val = vars[x].value;
                 var name = vars[x].name;
                 this._cache[name] = val;
-                if (name === "me" || name === "this") {
-                    for (var key in val) {
-                        this._cache[name + "." + key] = val[key];
-                    }
-                }
+                /* if (name === "me" || name === "this") {
+                     for (var key in val) {
+                         this._cache[name + "." + key] = val[key];
+                     }
+                 }*/
             }
             var _this = this;
             function update(key, val) {
@@ -15935,12 +15991,12 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
                         }
                         if (comp === undefined)
                             comp = comp;
-                        var complist = comp === null || comp === void 0 ? void 0 : comp._components;
-                        if (complist !== undefined) {
-                            for (var o = 0; o < complist.length; o++) {
-                                update(fname, complist[o]);
-                            }
-                        }
+                        /* var complist = comp?._components;
+                         if (complist !== undefined) {
+                             for (var o = 0; o < complist.length; o++) {
+                                 update(fname, complist[o]);
+                             }
+                         }*/
                     }
                 }
             }
