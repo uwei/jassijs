@@ -23,6 +23,7 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
     let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
     //get Typescript instance
     window.ts = window["globalThis"].ts;
+    delete window["globalThis"];
     var platform_1 = require("vs/base/common/platform");
     platform_1.globals.MonacoEnvironment = {};
 

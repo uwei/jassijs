@@ -61,7 +61,7 @@ export class ReportDesigner extends ComponentDesigner {
         $(this.dom).css("width", "");
 
     }
-    connectParser(parser) {
+    connectParser(parser) { 
         this._propertyEditor.parser = parser;
         var Parser = classes.getClass("jassijs_editor.util.Parser");
         this._codeChanger.parser = new Parser();

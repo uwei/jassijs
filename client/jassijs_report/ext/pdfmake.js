@@ -18,10 +18,13 @@
           }
       }
     });*/
-define("jassijs_report/ext/pdfmake",['pdfMake',"vfs_fonts"],function(ttt,vfs){
+    if(window["globalThis"]!==undefined)
+        console.log("window.globalThis is defined")
+    define("jassijs_report/ext/pdfmake",['pdfMakelib',"vfs_fonts"],function(ttt,vfs){
         var fonts=require("vfs_fonts");
 
             return {
                 default:pdfMake
             }
     });
+

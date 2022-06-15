@@ -7,12 +7,12 @@ define(["require", "exports"], function (require, exports) {
             paths: {
                 'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
                 'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts',
-                'pdfMake': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake' //'../../lib/pdfmake'
+                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/vfs_fonts',
+                'pdfMakelib': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/pdfmake' //'../../lib/pdfmake'
             },
             shim: {
                 'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
-                "vfs_fonts": ["pdfMake"]
+                "vfs_fonts": ["pdfMakelib"]
                 //"pdfMake":["vfs_fonts"]
             },
         }

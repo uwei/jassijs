@@ -499,7 +499,7 @@ export class CodeEditor extends Panel {
                         _this._design = new ReportDesigner();
                         _this._main.add(_this._design, "Design", "design");
                         _this._design["codeEditor"] = _this;
-                        parser = new Parser();
+                        parser = new Parser();  
                         parser.classScope = [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
                         //@ts-ignore
                         _this._design.connectParser(parser);

@@ -46,13 +46,14 @@ export class PDFReport {
 
     async getBase64() {
         var _this = this;
-        return new Promise(
+        return await this.report.getBase64();
+        /*return new Promise(
             function (resolve, reject) {
                 _this.report.getBase64(function (data) {
                     resolve(data);
 
                 });
-            });
+            });*/
 
     };
 

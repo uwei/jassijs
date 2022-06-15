@@ -35,11 +35,14 @@ define("jassijs_report/PDFReport", ["require", "exports", "jassijs/remote/Jassi"
         }
         async getBase64() {
             var _this = this;
-            return new Promise(function (resolve, reject) {
-                _this.report.getBase64(function (data) {
-                    resolve(data);
-                });
-            });
+            return await this.report.getBase64();
+            /*return new Promise(
+                function (resolve, reject) {
+                    _this.report.getBase64(function (data) {
+                        resolve(data);
+    
+                    });
+                });*/
         }
         ;
     };
@@ -4459,12 +4462,12 @@ define("jassijs_report/modul", ["require", "exports"], function (require, export
             paths: {
                 'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
                 'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts',
-                'pdfMake': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake' //'../../lib/pdfmake'
+                'vfs_fonts': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/vfs_fonts',
+                'pdfMakelib': '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.3.0-beta.2/pdfmake' //'../../lib/pdfmake'
             },
             shim: {
                 'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
-                "vfs_fonts": ["pdfMake"]
+                "vfs_fonts": ["pdfMakelib"]
                 //"pdfMake":["vfs_fonts"]
             },
         }
@@ -4479,7 +4482,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1655311958351,
+                "date": 1655328770110,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -4487,10 +4490,10 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.designer.SimpleReportDesigner": {}
             },
             "jassijs_report/modul.ts": {
-                "date": 1633111116000
+                "date": 1655329708587
             },
             "jassijs_report/PDFReport.ts": {
-                "date": 1632679268000,
+                "date": 1655330340750,
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
@@ -6004,7 +6007,9 @@ define("jassijs_report/ext/pdfjs", ["pdfjs-dist/build/pdf", "pdfjs-dist/build/pd
           }
       }
     });*/
-define("jassijs_report/ext/pdfmake", ['pdfMake', "vfs_fonts"], function (ttt, vfs) {
+if (window["globalThis"] !== undefined)
+    console.log("window.globalThis is defined");
+define("jassijs_report/ext/pdfmake", ['pdfMakelib', "vfs_fonts"], function (ttt, vfs) {
     var fonts = require("vfs_fonts");
     return {
         default: pdfMake

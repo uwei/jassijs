@@ -7,7 +7,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.Report": {}
 	},
 	"jassijs_report/designer/ReportDesigner.ts": {
-		"date": 1655311958351,
+		"date": 1655328770110,
 		"jassijs_report.designer.ReportDesigner": {}
 	},
 	"jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -15,10 +15,10 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.designer.SimpleReportDesigner": {}
 	},
 	"jassijs_report/modul.ts": {
-		"date": 1633111116000
+		"date": 1655329708587
 	},
 	"jassijs_report/PDFReport.ts": {
-		"date": 1632679268000,
+		"date": 1655330340750,
 		"jassijs_report.PDFReport": {}
 	},
 	"jassijs_report/PDFViewer.ts": {

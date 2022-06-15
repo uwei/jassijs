@@ -3,7 +3,7 @@ define("demoreports/registry",["require"], function(require) {
  return {
   default: {
 	"demoreports/01-Simpledata.ts": {
-		"date": 1633970830000
+		"date": 1655329734555
 	},
 	"demoreports/10-Foreach.ts": {
 		"date": 1634336968000
