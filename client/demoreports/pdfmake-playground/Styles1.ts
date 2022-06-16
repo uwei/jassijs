@@ -1,4 +1,4 @@
-var reportdesign = {
+reportdesign = {
 	content: [
 		{
 			text: 'This is a header, using header style',
@@ -40,12 +40,4 @@ var reportdesign = {
 		}
 	}
 	
-}
-
-export function test() {
-    return { 
-        reportdesign,
-        //data:{},         //data
-       // parameter:{}      //parameter
-    };
 }

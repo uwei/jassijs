@@ -326,7 +326,7 @@ export function test() {
     var reportdesign = {
         content: [
             {
-                text: "Hallo Herr {{nachname}}"
+                text: "Hallo Herr {nachname}"
             },
             {
                 text: "ok"

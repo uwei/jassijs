@@ -11,7 +11,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1655328796479,
+		"date": 1655400646800,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {
@@ -102,7 +102,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1655236758190,
+		"date": 1655402840834,
 		"jassijs_editor.util.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {
@@ -120,6 +120,9 @@ define("jassijs_editor/registry",["require"], function(require) {
 	"jassijs_editor/AcePanelSimple.ts": {
 		"date": 1631388458000,
 		"jassijs.ui.AcePanelSimple": {}
+	},
+	"jassijs_editor/ext/pdfMake-interface.ts": {
+		"date": 1655407578946
 	}
 }
  }

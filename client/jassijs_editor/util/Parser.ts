@@ -290,6 +290,7 @@ export class Parser {
                 this.add(name, "_new_", value, node.parent.parent);
             }
         }
+        
         if ((ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.EqualsToken) ||
             ts.isCallExpression(node)) {
             var node1;
@@ -436,7 +437,10 @@ export class Parser {
             classScope = this.classScope;
 
         this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
-        this.visitNode(this.sourceFile);
+        if(this.classScope===undefined)
+            this.parseProperties(this.sourceFile);
+        else
+            this.visitNode(this.sourceFile);
 
         //return this.parseold(code,onlyfunction);
     }
@@ -629,6 +633,9 @@ export class Parser {
     }
     private getNodeFromScope(classscope: { classname: string, methodname: string }[], variablescope: { variablename: string, methodname } = undefined): ts.Node {
         var scope;
+        if(classscope===undefined){
+            return this.sourceFile;
+        }
         if (variablescope) {
             scope = this.data[variablescope.variablename][variablescope.methodname][0]?.node;
             if (scope.expression)
@@ -777,7 +784,7 @@ export class Parser {
             return;
         }
         var newValue: any = typeof value === "string" ? ts.createIdentifier(value) : value;
-        var statements: ts.Statement[] = scope["body"].statements
+        var statements: ts.Statement[] = scope["body"]?scope["body"].statements:scope["statements"];
         if (property === "new") { //me.panel1=new Panel({});
             let prop = this.data[variableName]["_new_"][0];//.substring(3)];
             var constr = prop.value;
@@ -787,18 +794,12 @@ export class Parser {
             left = left.substring(0, left.indexOf("=") - 1);
             property = "_new_";
             newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), newValue));
-            /*	}else{//var hh=new Panel({})
-                    let prop = this.data[variableName][0];
-                    var constr = prop[0].value;
-                    value = constr.substring(0, constr.indexOf("(") + 1) + value + constr.substring(constr.lastIndexOf(")"));
-                    replace = true;
-                    isFunction=true;
-                    newExpression=ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier("me."+property), ts.createIdentifier(value)));	
-                }*/
         } else if (isFunction) {
-            newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(variableName + "." + property), undefined, [newValue]));
+            newExpression = ts.createExpressionStatement(ts.createCall(
+                ts.createIdentifier(property===""?variableName:(variableName + "." + property)), undefined, [newValue]));
         } else
-            newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(variableName + "." + property), newValue));
+            newExpression = ts.createExpressionStatement(ts.createAssignment(
+                ts.createIdentifier(property===""?variableName:(variableName + "." + property)), newValue));
         if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) {//edit existing
             let node = this.data[variableName][property][0].node;
             var pos = node.parent["statements"].indexOf(node);
@@ -920,9 +921,13 @@ export async function test() {
     // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
     // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
     //parser.parse(code, undefined);
-    parser.parse(code, [{ classname: "TestDialogBinder", methodname: "layout" }]);
-    debugger;
-    parser.removeVariablesInCode(["me.repeater"]);
+    code="reportdesign={k:9};";
+  
+    parser.parse(code);// [{ classname: "TestDialogBinder", methodname: "layout" }]);
+ 
+    parser.setPropertyInCode("reportdesign","","{o:0}",undefined);
+    
+   // parser.removeVariablesInCode(["me.repeater"]);
     //parser.addVariableInCode("Component", [{ classname: "Dialog", methodname: "layout" }]);
     //parser.setPropertyInCode("component", "x", "1", [{ classname: "Dialog", methodname: "layout" }]);
     

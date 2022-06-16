@@ -1,4 +1,4 @@
-var reportdesign ={
+reportdesign ={
 	content: [
 		{text: 'Tables', style: 'header'},
 		'Official documentation is in progress, this document is just a glimpse of what is possible with pdfmake and its layout engine.',
@@ -545,12 +545,4 @@ var reportdesign ={
 		// alignment: 'justify'
 	}
 	
-}
-
-export function test() {
-    return { 
-        reportdesign,
-        //data:{},         //data
-       // parameter:{}      //parameter
-    };
 }

@@ -259,7 +259,9 @@ export class Component implements ComponentConfig{
      * @param {dom} dom - init the dom element
      * @paran {object} properties - properties to init
     */
-    init(dom, properties: ComponentCreateProperties = undefined) {
+    init(dom:Element|string, properties: ComponentCreateProperties = undefined) {
+        if(typeof dom==="string")
+            dom=document.createRange().createContextualFragment(dom).children[0];
         //is already attached
         if (this.domWrapper !== undefined) {
             if (this.domWrapper.parentNode !== undefined)

@@ -447,7 +447,7 @@ export class CodeEditor extends Panel {
 
             (<any>islocaldb).destroyConnection();
         }
-        if (data.test !== undefined) {
+        if (data.test !== undefined||window.reportdesign) {
             //capure created Components
             function hook(name, component: Component) {
                 try {
@@ -458,8 +458,19 @@ export class CodeEditor extends Panel {
                 }
             }
             Component.onComponentCreated(hook);
-            var ret = await data.test(new Test());
-
+            var ret;
+            if(data.test){
+                ret = await data.test(new Test());
+            }else{
+                if(window.reportdesign){
+                    ret={
+                        reportdesign:reportdesign
+                    }
+                }else{
+                    Component.offComponentCreated(hook);
+                    return;
+                }
+            }
 
             // Promise.resolve(ret).then(async function(ret) {
             if (ret !== undefined) {
@@ -500,7 +511,7 @@ export class CodeEditor extends Panel {
                         _this._main.add(_this._design, "Design", "design");
                         _this._design["codeEditor"] = _this;
                         parser = new Parser();  
-                        parser.classScope = [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
+                        parser.classScope =undefined;// [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
                         //@ts-ignore
                         _this._design.connectParser(parser);
 
@@ -619,7 +630,7 @@ export class CodeEditor extends Panel {
         //await new Server().saveFile("tmp/" + _this._file, code);
         //only local - no TS File in Debugger
         await this.saveTempFile(jsfile, code);
-
+        window.reportdesign=undefined;
         try { requirejs.undef("js/" + jsfile + ".js"); } catch (ex) { };
         var onload = function (data) {
 

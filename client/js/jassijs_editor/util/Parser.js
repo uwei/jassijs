@@ -414,7 +414,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
             else
                 classScope = this.classScope;
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
-            this.visitNode(this.sourceFile);
+            if (this.classScope === undefined)
+                this.parseProperties(this.sourceFile);
+            else
+                this.visitNode(this.sourceFile);
             //return this.parseold(code,onlyfunction);
         }
         removeNode(node) {
@@ -609,6 +612,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         getNodeFromScope(classscope, variablescope = undefined) {
             var _a, _b, _c;
             var scope;
+            if (classscope === undefined) {
+                return this.sourceFile;
+            }
             if (variablescope) {
                 scope = (_a = this.data[variablescope.variablename][variablescope.methodname][0]) === null || _a === void 0 ? void 0 : _a.node;
                 if (scope.expression)
@@ -751,7 +757,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                 return;
             }
             var newValue = typeof value === "string" ? ts.createIdentifier(value) : value;
-            var statements = scope["body"].statements;
+            var statements = scope["body"] ? scope["body"].statements : scope["statements"];
             if (property === "new") { //me.panel1=new Panel({});
                 let prop = this.data[variableName]["_new_"][0]; //.substring(3)];
                 var constr = prop.value;
@@ -761,20 +767,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
                 left = left.substring(0, left.indexOf("=") - 1);
                 property = "_new_";
                 newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), newValue));
-                /*	}else{//var hh=new Panel({})
-                        let prop = this.data[variableName][0];
-                        var constr = prop[0].value;
-                        value = constr.substring(0, constr.indexOf("(") + 1) + value + constr.substring(constr.lastIndexOf(")"));
-                        replace = true;
-                        isFunction=true;
-                        newExpression=ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier("me."+property), ts.createIdentifier(value)));
-                    }*/
             }
             else if (isFunction) {
-                newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(variableName + "." + property), undefined, [newValue]));
+                newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
             }
             else
-                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(variableName + "." + property), newValue));
+                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
                 let node = this.data[variableName][property][0].node;
                 var pos = node.parent["statements"].indexOf(node);
@@ -901,9 +899,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
         // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
         //parser.parse(code, undefined);
-        parser.parse(code, [{ classname: "TestDialogBinder", methodname: "layout" }]);
-        debugger;
-        parser.removeVariablesInCode(["me.repeater"]);
+        code = "reportdesign={k:9};";
+        parser.parse(code); // [{ classname: "TestDialogBinder", methodname: "layout" }]);
+        parser.setPropertyInCode("reportdesign", "", "{o:0}", undefined);
+        // parser.removeVariablesInCode(["me.repeater"]);
         //parser.addVariableInCode("Component", [{ classname: "Dialog", methodname: "layout" }]);
         //parser.setPropertyInCode("component", "x", "1", [{ classname: "Dialog", methodname: "layout" }]);
         // var node = parser.removePropertyInCode("add", "me.textbox1", "me.panel1");

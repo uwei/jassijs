@@ -1,4 +1,4 @@
-var reportdesign = {
+reportdesign = {
 	content: [
 		'By default paragraphs are stacked one on top of (or actually - below) another. ',
 		'It\'s possible however to split any paragraph (or even the whole document) into columns.\n\n',
@@ -148,12 +148,4 @@ var reportdesign = {
 		columnGap: 20
 	}
 	
-}
-
-export function test() {
-    return { 
-        reportdesign,
-        //data:{},         //data
-       // parameter:{}      //parameter
-    };
 }

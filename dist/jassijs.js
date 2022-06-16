@@ -650,7 +650,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1654631923861,
+                "date": 1655408435027,
                 "jassijs.ui.Component": {
                     "@members": {
                         "onfocus": {
@@ -1846,7 +1846,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1655231884727,
+                "date": 1655407166793,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {
@@ -2428,7 +2428,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1655060542267,
+                "date": 1655408456169,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -8241,6 +8241,8 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
          * @paran {object} properties - properties to init
         */
         init(dom, properties = undefined) {
+            if (typeof dom === "string")
+                dom = document.createRange().createContextualFragment(dom).children[0];
             //is already attached
             if (this.domWrapper !== undefined) {
                 if (this.domWrapper.parentNode !== undefined)
@@ -13321,15 +13323,17 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
                     this.updateParser();
             }
             var prop;
-            if (variableName === undefined) {
-                variableName = this.variablename;
-                prop = this._value[property];
+            var isFunction = false;
+            if (property !== "") {
+                if (variableName === undefined) {
+                    variableName = this.variablename;
+                    prop = this._value[property];
+                }
+                else {
+                    prop = this.codeEditor.getObjectFromVariable(variableName)[property];
+                }
+                isFunction = (typeof (prop) === "function");
             }
-            else {
-                prop = this.codeEditor.getObjectFromVariable(variableName)[property];
-            }
-            var isFunction = (typeof (prop) === "function");
-            var val = this.codeEditor.getObjectFromVariable("this");
             this.parser.setPropertyInCode(variableName, property, value, 
             /*[{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]*/ undefined, isFunction, replace, before, scopename);
             if (doUpdate) {
@@ -14820,7 +14824,7 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
             super();
             this._value = "";
             this._formatProps = undefined;
-            super.init($('<input type="text" />')[0]);
+            super.init('<input type="text" />');
             $(this.dom).css("color", color);
             this.converter = undefined;
         }

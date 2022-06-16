@@ -38,7 +38,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
             super();
             this._value = "";
             this._formatProps = undefined;
-            super.init($('<input type="text" />')[0]);
+            super.init('<input type="text" />');
             $(this.dom).css("color", color);
             this.converter = undefined;
         }

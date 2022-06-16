@@ -4367,7 +4367,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         var reportdesign = {
             content: [
                 {
-                    text: "Hallo Herr {{nachname}}"
+                    text: "Hallo Herr {nachname}"
                 },
                 {
                     text: "ok"
@@ -4482,7 +4482,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1655328770110,
+                "date": 1655406856752,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -5530,11 +5530,14 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.RUnknown": {}
             },
             "jassijs_report/SimpleReportEditor.ts": {
-                "date": 1635803054000,
+                "date": 1655376474071,
                 "jassi_report.SimpleReportEditor": {}
             },
             "jassijs_report/StartReporteditor.ts": {
                 "date": 1654466752918
+            },
+            "jassijs_report/ReportDesignGlobal.ts": {
+                "date": 1655397712425
             }
         }
     };
@@ -5663,8 +5666,13 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                 this._codeChanger.callEvent("codeChanged", {});
                 //this.callEvent("codeChanged", {});
             }
-            else
-                this._codeChanger.setPropertyInCode("reportdesign", ob);
+            else {
+                if (this._codeChanger.parser.data["reportdesign"] && this._codeChanger.parser.data["reportdesign"][""].length > 0) {
+                    this._codeChanger.setPropertyInCode("", ob, true, "reportdesign");
+                }
+                else
+                    this._codeChanger.setPropertyInCode("reportdesign", ob);
+            }
             this.propertyIsChanging = false;
         }
         createComponent(type, component, top, left, newParent, beforeComponent) {

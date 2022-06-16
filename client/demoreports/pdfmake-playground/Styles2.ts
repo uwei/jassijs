@@ -1,4 +1,4 @@
-var reportdesign ={
+reportdesign ={
 	content: [
 		{
 			text: 'This is a header (whole paragraph uses the same header style)\n\n',
@@ -47,10 +47,3 @@ var reportdesign ={
 	}
 }
 
-export function test() {
-    return { 
-        reportdesign,
-        //data:{},         //data
-       // parameter:{}      //parameter
-    };
-}

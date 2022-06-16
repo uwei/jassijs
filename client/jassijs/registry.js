@@ -568,7 +568,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1654631923861,
+		"date": 1655408435027,
 		"jassijs.ui.Component": {
 			"@members": {
 				"onfocus": {
@@ -1764,7 +1764,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1655231884727,
+		"date": 1655407166793,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {
@@ -2346,7 +2346,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1655060542267,
+		"date": 1655408456169,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{

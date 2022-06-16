@@ -1,4 +1,4 @@
- var reportdesign={
+reportdesign={
 	content: [
 		{
 			stack: [
@@ -70,11 +70,4 @@
 		}
 	}
 	
-}
-export function test() {
-    return { 
-        reportdesign,
-        //data:{},         //data
-       // parameter:{}      //parameter
-    };
 }

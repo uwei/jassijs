@@ -1,4 +1,4 @@
-var reportdesign = {
+ reportdesign = {
 	content: [
 		{
 			text: 'This paragraph uses header style and extends the alignment property',
@@ -23,12 +23,4 @@ var reportdesign = {
 		}
 	}
 	
-}
-
-export function test() {
-    return { 
-        reportdesign,
-        //data:{},         //data
-       // parameter:{}      //parameter
-    };
 }

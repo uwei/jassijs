@@ -117,8 +117,14 @@ export class ReportDesigner extends ComponentDesigner {
             this._codeChanger.callEvent("codeChanged", {});
            
             //this.callEvent("codeChanged", {});
-        } else
-            this._codeChanger.setPropertyInCode("reportdesign", ob);
+        } else{
+            if(this._codeChanger.parser.data["reportdesign"]&&this._codeChanger.parser.data["reportdesign"][""].length>0){
+                this._codeChanger.setPropertyInCode("", ob,true,"reportdesign");
+                
+            }else
+                this._codeChanger.setPropertyInCode("reportdesign", ob);
+            
+        }
         this.propertyIsChanging = false;
     }
     createComponent(type, component, top, left, newParent, beforeComponent) {

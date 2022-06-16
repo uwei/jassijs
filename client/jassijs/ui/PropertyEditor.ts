@@ -212,7 +212,7 @@ export class PropertyEditor extends Panel {
      * @member {object}  - the rendered object 
      */
     set value(value) {
-     
+
         if (value !== this._value && this.parentPropertyEditor === undefined)
             this.codeChanges = {};
         if (value !== undefined || value?.dom !== undefined) {
@@ -245,8 +245,8 @@ export class PropertyEditor extends Panel {
             this._value = undefined;
             return;
         }
-        if (this.codeEditor !== undefined && this.parentPropertyEditor === undefined){
-            if(Array.isArray(this._value)&&this._value.length>0)
+        if (this.codeEditor !== undefined && this.parentPropertyEditor === undefined) {
+            if (Array.isArray(this._value) && this._value.length > 0)
                 this.variablename = this.codeEditor.getVariableFromObject(this._value[0]);
             else
                 this.variablename = this.codeEditor.getVariableFromObject(this._value);
@@ -299,8 +299,8 @@ export class PropertyEditor extends Panel {
             else {
                 if (!this._value)
                     props = [];
-                else{
-                    if(Array.isArray(this._value)&&this._value.length>0)
+                else {
+                    if (Array.isArray(this._value) && this._value.length > 0)
                         props = ComponentDescriptor.describe(this._value[0].constructor)?.fields;
                     else
                         props = ComponentDescriptor.describe(this._value.constructor)?.fields;
@@ -535,9 +535,9 @@ export class PropertyEditor extends Panel {
      * @param scopename - the scope {variable: ,methodname:} to add the variable - if missing layout() 
      * @returns  the name of the object
      */
-    addVariableInCode(type: string, scopename: { variablename: string, methodname: string },suggestedName:string=undefined): string {
+    addVariableInCode(type: string, scopename: { variablename: string, methodname: string }, suggestedName: string = undefined): string {
         var val = this.codeEditor.getObjectFromVariable("this");
-        var ret = this.parser.addVariableInCode(type, undefined, scopename,suggestedName);
+        var ret = this.parser.addVariableInCode(type, undefined, scopename, suggestedName);
        /* var ret = this.parser.addVariableInCode(type, [{ classname: val?.constructor?.name, methodname: "layout" },
         { classname: undefined, methodname: "test" }], scopename);
         */this.codeEditor.value = this.parser.getModifiedCode();
@@ -556,7 +556,7 @@ export class PropertyEditor extends Panel {
     */
     setPropertyInCode(property: string, value, replace: boolean = undefined, variableName: string = undefined,
         before: { variablename: string, property: string, value?} = undefined,
-        scopename: { variablename: string, methodname: string } = undefined,doUpdate=true) {
+        scopename: { variablename: string, methodname: string } = undefined, doUpdate = true) {
 
         if (this.codeEditor === undefined) {
             this.codeChanges[property] = value;
@@ -577,18 +577,20 @@ export class PropertyEditor extends Panel {
                 this.updateParser();
         }
         var prop;
-        if (variableName === undefined) {
-            variableName = this.variablename;
-            prop = this._value[property];
-        } else {
-            prop = this.codeEditor.getObjectFromVariable(variableName)[property];
+        var isFunction = false;
+        if (property !== "") {
+            if (variableName === undefined) {
+                variableName = this.variablename;
+                prop = this._value[property];
+            } else {
+                prop = this.codeEditor.getObjectFromVariable(variableName)[property];
+            }
+            isFunction = (typeof (prop) === "function");
         }
-        var isFunction = (typeof (prop) === "function");
-        var val = this.codeEditor.getObjectFromVariable("this");
         this.parser.setPropertyInCode(variableName, property, value,
             /*[{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]*/undefined,
             isFunction, replace, before, scopename);
-        if(doUpdate){
+        if (doUpdate) {
             //correct spaces
             if (value && value.indexOf && value.indexOf("\n") > -1) {
                 this.codeEditor.value = this.parser.getModifiedCode();
@@ -703,7 +705,7 @@ export class PropertyEditor extends Panel {
             this.callEvent("codeChanged", {});
             return;
         }
-        this.parser.removeVariablesInCode(varname); 
+        this.parser.removeVariablesInCode(varname);
         this.codeEditor.value = this.parser.getModifiedCode();
         this.updateParser();
         this.callEvent("codeChanged", {});

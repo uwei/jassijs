@@ -1,5 +1,5 @@
 //this sample is modified a litle, because we have no node running in server
-var reportdesign = {
+ reportdesign = {
 	content: [
 		'pdfmake (since it\'s based on pdfkit) supports JPEG and PNG format',
 		'If no width/height/fit is provided, image original size will be used',
@@ -50,12 +50,4 @@ var reportdesign = {
 	
 	}
 	
-}
-
-export function test() {
-    return { 
-        reportdesign,
-        //data:{},         //data
-       // parameter:{}      //parameter
-    };
 }

@@ -1,5 +1,5 @@
-var reportdesign = {
-	header: [{}],
+reportdesign = {
+	header: [],
 	content: [
 		{
 			table: {
@@ -59,12 +59,7 @@ var reportdesign = {
 	]
 };
 
-export function test() {
-    return { 
-        reportdesign,
-        data:{
-            date:new Date(),
-            num:12502.55
-        }
-    };
+reportdesign.data = {
+	date: new Date(),
+	num: 12502.55
 }

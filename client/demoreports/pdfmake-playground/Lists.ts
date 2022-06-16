@@ -1,4 +1,4 @@
-var reportdesign = {
+reportdesign = {
 	content: [
 		{text: 'Unordered list', style: 'header'},
 		{
@@ -386,12 +386,4 @@ var reportdesign = {
 		fontSize: 12
 	}
 	
-}
-
-export function test() {
-    return { 
-        reportdesign,
-        //data:{},         //data
-       // parameter:{}      //parameter
-    };
 }

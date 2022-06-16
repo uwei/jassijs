@@ -544,15 +544,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                     this.updateParser();
             }
             var prop;
-            if (variableName === undefined) {
-                variableName = this.variablename;
-                prop = this._value[property];
+            var isFunction = false;
+            if (property !== "") {
+                if (variableName === undefined) {
+                    variableName = this.variablename;
+                    prop = this._value[property];
+                }
+                else {
+                    prop = this.codeEditor.getObjectFromVariable(variableName)[property];
+                }
+                isFunction = (typeof (prop) === "function");
             }
-            else {
-                prop = this.codeEditor.getObjectFromVariable(variableName)[property];
-            }
-            var isFunction = (typeof (prop) === "function");
-            var val = this.codeEditor.getObjectFromVariable("this");
             this.parser.setPropertyInCode(variableName, property, value, 
             /*[{ classname: val?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }]*/ undefined, isFunction, replace, before, scopename);
             if (doUpdate) {

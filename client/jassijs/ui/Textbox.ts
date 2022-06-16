@@ -94,7 +94,7 @@ export class Textbox extends DataComponent implements TextboxConfig {
                 alert("Hallo");
             };*/
         super();
-        super.init($('<input type="text" />')[0]);
+        super.init('<input type="text" />');
         $(this.dom).css("color", color);
         this.converter = undefined;
     }

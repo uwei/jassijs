@@ -167,6 +167,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
          * @paran {object} properties - properties to init
         */
         init(dom, properties = undefined) {
+            if (typeof dom === "string")
+                dom = document.createRange().createContextualFragment(dom).children[0];
             //is already attached
             if (this.domWrapper !== undefined) {
                 if (this.domWrapper.parentNode !== undefined)

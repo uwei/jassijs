@@ -1,1 +1,1 @@
-{"version":3,"file":"Basics.js","sourceRoot":"","sources":["../../../demoreports/pdfmake-playground/Basics.ts"],"names":[],"mappings":";;;;IAAA,IAAI,YAAY,GAAE;QACjB,OAAO,EAAE;YACR,iBAAiB;YACjB,kHAAkH;SAClH;KAED,CAAA;IAED,SAAgB,IAAI;QAChB,OAAO;YACH,YAAY;YACZ,yBAAyB;YAC1B,gCAAgC;SAClC,CAAC;IACN,CAAC;IAND,oBAMC"}
+{"version":3,"file":"Basics.js","sourceRoot":"","sources":["../../../demoreports/pdfmake-playground/Basics.ts"],"names":[],"mappings":"AAAA,YAAY,GAAE;IACb,OAAO,EAAE;QACR,iBAAiB;QACjB,kHAAkH;KAClH;CAED,CAAA"}

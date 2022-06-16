@@ -326,7 +326,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Runlater", "
         var reportdesign = {
             content: [
                 {
-                    text: "Hallo Herr {{nachname}}"
+                    text: "Hallo Herr {nachname}"
                 },
                 {
                     text: "ok"

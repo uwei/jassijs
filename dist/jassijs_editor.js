@@ -1232,7 +1232,6 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
             }
         }
         async _evalCodeOnLoad(data) {
-            var _a, _b;
             this.variables.clear();
             var code = this._codePanel.value;
             var lines = code.split("\n");
@@ -1250,7 +1249,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
             if (islocaldb && code.indexOf("@$DBObject(") > -1) {
                 islocaldb.destroyConnection();
             }
-            if (data.test !== undefined) {
+            if (data.test !== undefined || window.reportdesign) {
                 //capure created Components
                 function hook(name, component) {
                     var _a;
@@ -1263,7 +1262,21 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                     }
                 }
                 Component_1.Component.onComponentCreated(hook);
-                var ret = await data.test(new Test_1.Test());
+                var ret;
+                if (data.test) {
+                    ret = await data.test(new Test_1.Test());
+                }
+                else {
+                    if (window.reportdesign) {
+                        ret = {
+                            reportdesign: reportdesign
+                        };
+                    }
+                    else {
+                        Component_1.Component.offComponentCreated(hook);
+                        return;
+                    }
+                }
                 // Promise.resolve(ret).then(async function(ret) {
                 if (ret !== undefined) {
                     if (ret.layout !== undefined)
@@ -1300,7 +1313,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                             _this._main.add(_this._design, "Design", "design");
                             _this._design["codeEditor"] = _this;
                             parser = new Parser();
-                            parser.classScope = [{ classname: (_b = (_a = _this._design) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
+                            parser.classScope = undefined; // [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
                             //@ts-ignore
                             _this._design.connectParser(parser);
                         }
@@ -1406,6 +1419,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
             //await new Server().saveFile("tmp/" + _this._file, code);
             //only local - no TS File in Debugger
             await this.saveTempFile(jsfile, code);
+            window.reportdesign = undefined;
             try {
                 requirejs.undef("js/" + jsfile + ".js");
             }
@@ -3416,7 +3430,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1655328796479,
+                "date": 1655400646800,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3507,7 +3521,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1655236758190,
+                "date": 1655402840834,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -3525,6 +3539,9 @@ define("jassijs_editor/registry", ["require"], function (require) {
             "jassijs_editor/AcePanelSimple.ts": {
                 "date": 1631388458000,
                 "jassijs.ui.AcePanelSimple": {}
+            },
+            "jassijs_editor/ext/pdfMake-interface.ts": {
+                "date": 1655407578946
             }
         }
     };
@@ -3671,6 +3688,24 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
         return this._worker;
 
     }*/ 
+//source from https://cdn.jsdelivr.net/npm/@types/pdfmake/interfaces.d.ts
+// Type definitions for pdfmake 0.1
+// Project: http://pdfmake.org
+// Definitions by: Milen Stefanov <https://github.com/m1llen1um>
+//                 Rajab Shakirov <https://github.com/radziksh>
+//                 Enzo Volkmann <https://github.com/evolkmann>
+//                 Andi Pätzold <https://github.com/andipaetzold>
+//                 Neal Mummau <https://github.com/nmummau>
+//                 Jean-Raphaël Matte <https://github.com/jeralm>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 3.0
+//  changes by jassijs are tagged with /*changed by jassijs*/
+/// <reference types="node" />
+/// <reference types="pdfkit" />
+define("jassijs_editor/ext/pdfMake-interface", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4317,7 +4352,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
             else
                 classScope = this.classScope;
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
-            this.visitNode(this.sourceFile);
+            if (this.classScope === undefined)
+                this.parseProperties(this.sourceFile);
+            else
+                this.visitNode(this.sourceFile);
             //return this.parseold(code,onlyfunction);
         }
         removeNode(node) {
@@ -4512,6 +4550,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         getNodeFromScope(classscope, variablescope = undefined) {
             var _a, _b, _c;
             var scope;
+            if (classscope === undefined) {
+                return this.sourceFile;
+            }
             if (variablescope) {
                 scope = (_a = this.data[variablescope.variablename][variablescope.methodname][0]) === null || _a === void 0 ? void 0 : _a.node;
                 if (scope.expression)
@@ -4654,7 +4695,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 return;
             }
             var newValue = typeof value === "string" ? ts.createIdentifier(value) : value;
-            var statements = scope["body"].statements;
+            var statements = scope["body"] ? scope["body"].statements : scope["statements"];
             if (property === "new") { //me.panel1=new Panel({});
                 let prop = this.data[variableName]["_new_"][0]; //.substring(3)];
                 var constr = prop.value;
@@ -4664,20 +4705,12 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 left = left.substring(0, left.indexOf("=") - 1);
                 property = "_new_";
                 newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), newValue));
-                /*	}else{//var hh=new Panel({})
-                        let prop = this.data[variableName][0];
-                        var constr = prop[0].value;
-                        value = constr.substring(0, constr.indexOf("(") + 1) + value + constr.substring(constr.lastIndexOf(")"));
-                        replace = true;
-                        isFunction=true;
-                        newExpression=ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier("me."+property), ts.createIdentifier(value)));
-                    }*/
             }
             else if (isFunction) {
-                newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(variableName + "." + property), undefined, [newValue]));
+                newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
             }
             else
-                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(variableName + "." + property), newValue));
+                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
                 let node = this.data[variableName][property][0].node;
                 var pos = node.parent["statements"].indexOf(node);
@@ -4804,9 +4837,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
         // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
         //parser.parse(code, undefined);
-        parser.parse(code, [{ classname: "TestDialogBinder", methodname: "layout" }]);
-        debugger;
-        parser.removeVariablesInCode(["me.repeater"]);
+        code = "reportdesign={k:9};";
+        parser.parse(code); // [{ classname: "TestDialogBinder", methodname: "layout" }]);
+        parser.setPropertyInCode("reportdesign", "", "{o:0}", undefined);
+        // parser.removeVariablesInCode(["me.repeater"]);
         //parser.addVariableInCode("Component", [{ classname: "Dialog", methodname: "layout" }]);
         //parser.setPropertyInCode("component", "x", "1", [{ classname: "Dialog", methodname: "layout" }]);
         // var node = parser.removePropertyInCode("add", "me.textbox1", "me.panel1");

@@ -1,12 +1,18 @@
-var reportdesign = {
+reportdesign = {
 	content: [
         "Hallo ${name}",
         "${address.street}",
         "${parameter.date}"
     ]
 };
-
-export function test() {
+reportdesign.data={
+            name:"Klaus",
+            address:{
+                street:"Mainstreet 8"
+            }
+        }
+reportdesign.parameter={date:"2021-10-10"};      //parameter
+/*export function test() {
     return { 
         reportdesign,
         data:{
@@ -17,4 +23,4 @@ export function test() {
         },        
         parameter:{date:"2021-10-10"}      //parameter
     };
-}
+}*/

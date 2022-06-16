@@ -360,7 +360,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             }
         }
         async _evalCodeOnLoad(data) {
-            var _a, _b;
             this.variables.clear();
             var code = this._codePanel.value;
             var lines = code.split("\n");
@@ -378,7 +377,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             if (islocaldb && code.indexOf("@$DBObject(") > -1) {
                 islocaldb.destroyConnection();
             }
-            if (data.test !== undefined) {
+            if (data.test !== undefined || window.reportdesign) {
                 //capure created Components
                 function hook(name, component) {
                     var _a;
@@ -391,7 +390,21 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                     }
                 }
                 Component_1.Component.onComponentCreated(hook);
-                var ret = await data.test(new Test_1.Test());
+                var ret;
+                if (data.test) {
+                    ret = await data.test(new Test_1.Test());
+                }
+                else {
+                    if (window.reportdesign) {
+                        ret = {
+                            reportdesign: reportdesign
+                        };
+                    }
+                    else {
+                        Component_1.Component.offComponentCreated(hook);
+                        return;
+                    }
+                }
                 // Promise.resolve(ret).then(async function(ret) {
                 if (ret !== undefined) {
                     if (ret.layout !== undefined)
@@ -428,7 +441,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                             _this._main.add(_this._design, "Design", "design");
                             _this._design["codeEditor"] = _this;
                             parser = new Parser();
-                            parser.classScope = [{ classname: (_b = (_a = _this._design) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
+                            parser.classScope = undefined; // [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
                             //@ts-ignore
                             _this._design.connectParser(parser);
                         }
@@ -534,6 +547,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             //await new Server().saveFile("tmp/" + _this._file, code);
             //only local - no TS File in Debugger
             await this.saveTempFile(jsfile, code);
+            window.reportdesign = undefined;
             try {
                 requirejs.undef("js/" + jsfile + ".js");
             }
