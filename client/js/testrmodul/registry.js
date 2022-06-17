@@ -3,7 +3,7 @@ define("testrmodul/registry", ["require"], function (require) {
     return {
         default: {
             "testrmodul/remote/TestRModul.ts": {
-                "date": 1654466765629,
+                "date": 1655459935291,
                 "testrmodul.remote.TestRModul": {}
             }
         }

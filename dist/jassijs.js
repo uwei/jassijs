@@ -650,7 +650,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1655408435027,
+                "date": 1655460715801,
                 "jassijs.ui.Component": {
                     "@members": {
                         "onfocus": {
@@ -8185,13 +8185,12 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
             var domalt = this.__dom;
             this.__dom = value;
             /** @member {dom} - the dom-element*/
-            this.$ = $(value);
             /** @member {numer}  - the id of the element */
-            $(this.dom).addClass("jinlinecomponent");
-            $(this.dom).addClass("jresizeable");
+            this.dom.classList.add("jinlinecomponent");
+            this.dom.classList.add("jresizeable");
             if (domalt !== undefined) {
-                $(domalt).removeClass("jinlinecomponent");
-                $(domalt).removeClass("jresizeable");
+                domalt.classList.remove("jinlinecomponent");
+                domalt.classList.remove("jresizeable");
             }
             this.dom._this = this;
         }
@@ -8206,26 +8205,24 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
          * @returns the handler to off the event
          */
         on(eventname, handler) {
-            let func = function (e) {
-                handler(e);
-            };
-            $(this.dom).on(eventname, func);
-            return func;
+            this.dom.addEventListener(eventname, handler);
+            /*let func = function (e) {
+                 handler(e);
+             };*/
+            return handler;
         }
-        off(eventname, func = undefined) {
-            $(this.dom).off(eventname, func);
+        off(eventname, handler) {
+            this.dom.removeEventListener(eventname, handler);
         }
         static cloneAttributes(target, source) {
             [...source.attributes].forEach(attr => { target.setAttribute(attr.nodeName === "id" ? 'data-id' : attr.nodeName, attr.nodeValue); });
         }
         static replaceWrapper(old, newWrapper) {
             //Component.cloneAttributes(newWrapper,old.domWrapper);
-            var cls = $(old.domWrapper).attr("class");
-            //var st=$(old.domWrapper).attr("style");
-            var id = $(old.domWrapper).attr("id"); //old.domWrapper._id;
-            $(newWrapper).attr("id", id);
-            $(newWrapper).attr("class", cls);
-            //$(newWrapper).attr("style",st);
+            var cls = old.domWrapper.getAttribute("class");
+            var id = old.domWrapper.getAttribute("id"); //old.domWrapper._id;
+            newWrapper.setAttribute("id", id);
+            newWrapper.setAttribute("class", cls);
             while (old.domWrapper.children.length > 0) {
                 newWrapper.appendChild(old.domWrapper.children[0]);
             }
@@ -8236,13 +8233,19 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
             old.domWrapper._id = id;
         }
         /**
+         * create an Element from an htmlstring e.g. createDom("<input/>")
+         */
+        static createHTMLElement(html) {
+            return document.createRange().createContextualFragment(html).children[0];
+        }
+        /**
          * inits the component
          * @param {dom} dom - init the dom element
          * @paran {object} properties - properties to init
         */
         init(dom, properties = undefined) {
             if (typeof dom === "string")
-                dom = document.createRange().createContextualFragment(dom).children[0];
+                dom = Component_6.createHTMLElement(dom);
             //is already attached
             if (this.domWrapper !== undefined) {
                 if (this.domWrapper.parentNode !== undefined)
@@ -8262,7 +8265,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
             // }
             this.dom = dom;
             this._id = Registry_12.default.nextID();
-            $(this.dom).attr("id", this._id);
+            this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
@@ -8274,19 +8277,20 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
             if (properties !== undefined && properties.noWrapper === true) {
                 this.domWrapper = this.dom;
                 this.domWrapper._id = this._id;
-                $(this.domWrapper).addClass("jcomponent");
+                this.domWrapper.classList.add("jcomponent");
             }
             else {
                 /** @member {dom} - the dom element for label*/
-                this.domWrapper = $('<div id="' + lid + '" class ="jcomponent"' + st + '></div>')[0];
+                let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
+                this.domWrapper = Component_6.createHTMLElement(strdom);
                 this.domWrapper._this = this;
                 this.domWrapper._id = lid;
                 this.domWrapper.appendChild(dom);
             }
             //append temporary so new elements must not added immediately
             if (document.getElementById("jassitemp") === null) {
-                var temp = $('<template id="jassitemp"></template>')[0];
-                $(document.body).append(temp);
+                var temp = Component_6.createHTMLElement('<template id="jassitemp"></template>');
+                document.body.appendChild(temp);
             }
             //notify Hook
             for (var x = 0; x < Component_6._componentHook.length; x++) {
@@ -8296,139 +8300,102 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
             //if (jassijs.componentSpy !== undefined) {
             //     jassijs.componentSpy.watch(this);
             //  }
-            $("#jassitemp")[0].appendChild(this.domWrapper);
+            document.getElementById("jassitemp").appendChild(this.domWrapper);
         }
         set label(value) {
             if (value === undefined) {
-                var lab = $(this.domWrapper).find(".jlabel");
-                if (lab.length === 1)
-                    this.domWrapper.removeChild(lab[0]);
+                var lab = this.domWrapper.querySelector(".jlabel"); //this.domWrapper.getElementsByClassName("jlabel");
+                if (lab)
+                    this.domWrapper.removeChild(lab);
             }
             else {
                 //CHECK children(0)-> first() 
-                if ($(this.domWrapper).find(".jlabel").length === 0) {
-                    let lab = $('<label class="jlabel" for="' + this._id + '"></label>')[0]; //
-                    $(this.domWrapper).prepend(lab);
+                if (!this.domWrapper.querySelector(".jlabel")) {
+                    let lab = Component_6.createHTMLElement('<label class="jlabel" for="' + this._id + '"></label>'); //
+                    this.domWrapper.prepend(lab);
                 }
-                $(this.domWrapper).children(":first").html(value);
+                this.domWrapper.querySelector(".jlabel").innerHTML = value;
             }
         }
         get label() {
-            //CHECK children(0)-> first()
-            if ($(this.domWrapper).first().attr('class') === undefined || !$(this.domWrapper).first().attr('class').startsWith("jlabel")) {
-                return "";
-            }
-            return $(this.domWrapper).children(":first").text();
+            var _a;
+            return (_a = this.domWrapper.querySelector(".jlabel")) === null || _a === void 0 ? void 0 : _a.innerHTML;
         }
         get tooltip() {
-            return $(this.dom).attr("title");
+            return this.dom.getAttribute("title");
         }
         set tooltip(value) {
-            $(this.domWrapper).attr("title", value);
+            this.dom.setAttribute("title", value);
             $(this.domWrapper).tooltip();
         }
         get x() {
-            return Number($(this.domWrapper).css("left").replace("px", ""));
+            return Number(this.domWrapper.style.left.replace("px", ""));
         }
         set x(value) {
-            $(this.domWrapper).css("left", value);
-            $(this.domWrapper).css("position", "absolute");
+            this.domWrapper.style.left = value.toString().replace("px", "") + "px";
+            this.domWrapper.style.position = "absolute";
         }
         get y() {
-            return Number($(this.domWrapper).css("top").replace("px", ""));
+            return Number(this.domWrapper.style.top.replace("px", ""));
         }
         set y(value) {
-            $(this.domWrapper).css("top", value);
-            $(this.domWrapper).css("position", "absolute");
+            this.domWrapper.style.top = value.toString().replace("px", "") + "px";
+            this.domWrapper.style.position = "absolute";
         }
         get hidden() {
-            return $(this.__dom).is(":hidden");
+            return (this.dom.getAttribute("hidden") === "");
         }
         set hidden(value) {
-            $(this.__dom).css('visibility', value ? "hidden" : "visible");
-            /*if (value) {
-                this["old_display"] = $(this.__dom).css('display');
-                $(this.__dom).css('display', 'none');
-            } else if ($(this.__dom).css('display') === "none") {
-                if (this["old_display"] !== undefined)
-                    $(this.__dom).css('display', this["old_display"]);
-                else
-                    $(this.__dom).removeAttr('display');
-            }*/
-        }
-        /**
-         * @member {string|number} - the height of the component
-         * e.g. 50 or "100%"
-         */
-        set height1(value) {
-            //  if($.isNumeric(value))
-            if (value === undefined)
-                value = "";
-            if (typeof (value) === "string" && value.indexOf("%") > -1)
-                $(this.dom).css("height", "100%");
+            if (value)
+                this.dom.setAttribute("hidden", "");
             else
-                $(this.dom).css("height", value);
-            $(this.domWrapper).css("height", value);
-        }
-        get height1() {
-            return $(this.domWrapper).css("height").replace("px", "");
-        }
-        /**
-         * @member {string|number} - the width of the component
-         * e.g. 50 or "100%"
-         */
-        set width1(value) {
-            //  if($.isNumeric(value))
-            if (value === undefined)
-                value = "";
-            if (typeof (value) === "string" && value.indexOf("%") > -1 && $(this.domWrapper).is("div"))
-                $(this.dom).css("width", "100%");
-            else
-                $(this.dom).css("width", value);
-            $(this.domWrapper).css("width", value);
-        }
-        get width1() {
-            return $(this.domWrapper).css("width").replace("px", "");
+                this.dom.removeAttribute("hidden");
         }
         set width(value) {
             //  if($.isNumeric(value))
             if (value === undefined)
                 value = "";
-            if (typeof (value) === "string" && value.indexOf("%") > -1 && $(this.domWrapper).css("display") !== "inline") { //&&$(this.domWrapper).is("div"))7
-                $(this.dom).css("width", "100%");
-                $(this.domWrapper).css("width", value);
+            value = value.toString();
+            if (!isNaN(value))
+                value = value + "px";
+            if (typeof (value) === "string" && value.indexOf("%") > -1 && this.domWrapper.style.display !== "inline") { //&&$(this.domWrapper).is("div"))7
+                this.dom.style.width = "100%";
+                this.domWrapper.style.width = value;
             }
             else {
-                $(this.dom).css("width", value);
-                $(this.domWrapper).css("width", "");
+                this.dom.style.width = value.toString();
+                this.domWrapper.style.width = "";
             }
             //  
         }
         get width() {
-            if ($(this.domWrapper).css("width") !== undefined)
-                return $(this.domWrapper).css("width");
-            return $(this.dom).css("width").replace("px", "");
+            if (this.domWrapper.style.width !== undefined)
+                return this.domWrapper.style.width;
+            return this.dom.style.width.replace("px", "");
         }
         set height(value) {
             //  if($.isNumeric(value))
             if (value === undefined)
                 value = "";
+            value = value.toString();
+            if (!isNaN(value))
+                value = value + "px";
             if (typeof (value) === "string" && value.indexOf("%") > -1) {
-                $(this.dom).css("height", "100%");
-                $(this.domWrapper).css("height", value);
+                this.dom.style.height = "100%";
+                this.domWrapper.style.height = value;
             }
             else {
-                $(this.dom).css("height", value);
-                $(this.domWrapper).css("height", "");
+                this.dom.style.height = value.toString();
+                this.domWrapper.style.height = "";
             }
             //$(this.domWrapper).css("height",value);
         }
         get height() {
-            if ($(this.domWrapper).css("height") !== undefined)
-                return $(this.domWrapper).css("height");
-            if ($(this.dom).css("height") !== undefined)
+            if (this.domWrapper.style.height !== undefined)
+                return this.domWrapper.style.height;
+            if (this.dom.style.height !== undefined)
                 return undefined;
-            return $(this.dom).css("height").replace("px", "");
+            return this.dom.style.height.replace("px", "");
         }
         set css(properties) {
             var prop = CSSProperties_1.CSSProperties.applyTo(properties, this);
@@ -8436,7 +8403,7 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
             if (this["_lastCssChange"]) {
                 for (let key in this["_lastCssChange"]) {
                     if (prop[key] === undefined) {
-                        $(this.dom).css(key, "");
+                        this.dom.style[key] = "";
                     }
                 }
             }
@@ -8447,8 +8414,8 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
          */
         maximize() {
             // $(this.dom).addClass("jmaximized");
-            $(this.dom).css("width", "calc(100% - 2px)");
-            $(this.dom).css("height", "calc(100% - 2px)");
+            this.dom.style.width = "calc(100% - 2px)";
+            this.dom.style.height = "calc(100% - 2px)";
         }
         get styles() {
             return this._styles;
@@ -8460,15 +8427,15 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
                 newstyles.push(st.styleid);
             });
             //removeOld
-            var classes = $(this.dom).attr("class").split(" ");
+            var classes = this.dom.getAttribute("class").split(" ");
             classes.forEach((cl) => {
                 if (cl.startsWith("jassistyle") && newstyles.indexOf(cl) === -1) {
-                    $(this.dom).removeClass(cl);
+                    this.dom.classList.remove(cl);
                 }
             });
             newstyles.forEach((st) => {
                 if (classes.indexOf(st) === -1)
-                    $(this.dom).addClass(st);
+                    this.dom.classList.add(st);
             });
         }
         get contextMenu() {
@@ -8518,7 +8485,6 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
                 this.designDummies.forEach((dummy) => { dummy.destroy(); });
             }
             this.events = [];
-            this.$ = undefined;
         }
         extensionCalled(action) {
         }
@@ -8563,8 +8529,8 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
     ], Component.prototype, "hidden", null);
     __decorate([
         (0, Property_9.$Property)({ type: "string" }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
     ], Component.prototype, "width", null);
     __decorate([
         (0, Property_9.$Property)({ type: "string" }),

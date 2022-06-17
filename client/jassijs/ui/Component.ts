@@ -46,7 +46,7 @@ export class ComponentCreateProperties {
     noWrapper?: boolean;
 }
 
-export interface ComponentConfig{
+export interface ComponentConfig {
     /**
     * called if the component get the focus
     * @param {function} handler - the function which is executed
@@ -60,53 +60,52 @@ export interface ComponentConfig{
     /**
      * @member {string} - the label over the component
      */
-    label?:string;
-     /**
-    * @member {string} - tooltip for the component
+    label?: string;
+    /**
+   * @member {string} - tooltip for the component
+   */
+    tooltip?: string;
+    /**
+    * @member {number} - the left absolute position
     */
-    tooltip?:string;
-     /**
-     * @member {number} - the left absolute position
-     */
-    x?:number;
+    x?: number;
     /**
      * @member {number|string} - the top absolute position
      */
-    y?:number;
+    y?: number;
     /**
      * @member {boolean} - component is hidden
      */
-    hidden?:boolean;
-     /**
-    * @member {string|number} - the width of the component 
-    * e.g. 50 or "100%"
-    */
-    width?:string | number;
+    hidden?: boolean;
+    /**
+   * @member {string|number} - the width of the component 
+   * e.g. 50 or "100%"
+   */
+    width?: string | number;
     /**
      * @member {string|number} - the height of the component 
      * e.g. 50 or "100%"
      */
-    height?:string | number;
+    height?: string | number;
     /**
      * ccc-Properties
      */
     css?: CSSProperties;
-    styles?:any[];
-    
+    styles?: any[];
+
     /**
      * @member {jassijs.ui.ContextMenu} - the contextmenu of the component
      **/
     contextMenu?;
 }
 @$Class("jassijs.ui.Component")
-export class Component implements ComponentConfig{
-    private static _componentHook=[];
+export class Component implements ComponentConfig {
+    private static _componentHook = [];
     _eventHandler;
     __dom: HTMLElement;
-    public domWrapper: Element;
+    public domWrapper: HTMLElement;
     _id: string;
     _contextMenu?;
-    $: JQuery;
     _parent;
     events;
     _designMode;
@@ -138,26 +137,26 @@ export class Component implements ComponentConfig{
             this.dom._this = this;
         }
     }
-    config(config:ComponentConfig):Component {
-        for(var key in config){
-            if(typeof this[key] === 'function'){
+    config(config: ComponentConfig): Component {
+        for (var key in config) {
+            if (typeof this[key] === 'function') {
                 this[key](config[key]);
-            }else{
-                this[key]=config[key];
+            } else {
+                this[key] = config[key];
             }
         }
         return this;
-    //    return new c();
+        //    return new c();
     }
-    static onComponentCreated(func){
+    static onComponentCreated(func) {
         this._componentHook.push(func);
     }
-    static offComponentCreated(func){
-  	        var pos=this._componentHook.indexOf(func);
-            if(pos>=0)
-                this._componentHook.splice(pos, 1);
+    static offComponentCreated(func) {
+        var pos = this._componentHook.indexOf(func);
+        if (pos >= 0)
+            this._componentHook.splice(pos, 1);
     }
-    
+
     /**
      * adds an event
      * @param {type} name - the name of the event
@@ -196,55 +195,53 @@ export class Component implements ComponentConfig{
     get dom(): HTMLElement {
         return this.__dom;
     }
+
     set dom(value: HTMLElement) {
         var domalt = this.__dom;
         this.__dom = value;
         /** @member {dom} - the dom-element*/
-        this.$ = $(value);
         /** @member {numer}  - the id of the element */
-
-        $(this.dom).addClass("jinlinecomponent");
-        $(this.dom).addClass("jresizeable");
+        this.dom.classList.add("jinlinecomponent");
+        this.dom.classList.add("jresizeable");
         if (domalt !== undefined) {
-            $(domalt).removeClass("jinlinecomponent");
-            $(domalt).removeClass("jresizeable");
+            domalt.classList.remove("jinlinecomponent");
+            domalt.classList.remove("jresizeable");
         }
         this.dom._this = this;
 
     }
     @$Property({ default: "function(event){\n\t\n}" })
     onfocus(handler) {
-       return this.on("focus",handler);
+        return this.on("focus", handler);
     }
     @$Property({ default: "function(event){\n\t\n}" })
     onblur(handler) {
-        return this.on("blur",handler);
+        return this.on("blur", handler);
     }
     /**
      * attach an eventhandler
      * @returns the handler to off the event
      */
-    on(eventname:string,handler):any{
-       let func = function (e) {
-            handler(e);
-        };
-        $(this.dom).on(eventname, func);
-        return func;
+    on(eventname: string, handler: EventListenerOrEventListenerObject) {
+        this.dom.addEventListener(eventname, handler)
+        /*let func = function (e) {
+             handler(e);
+         };*/
+        return handler;
     }
-    off(eventname:string,func=undefined){
-        $(this.dom).off(eventname,func);
+    off(eventname: string, handler: EventListenerOrEventListenerObject) {
+        this.dom.removeEventListener(eventname, handler);
     }
     private static cloneAttributes(target, source) {
         [...source.attributes].forEach(attr => { target.setAttribute(attr.nodeName === "id" ? 'data-id' : attr.nodeName, attr.nodeValue) })
     }
     static replaceWrapper(old: Component, newWrapper: HTMLElement) {
         //Component.cloneAttributes(newWrapper,old.domWrapper);
-        var cls = $(old.domWrapper).attr("class");
-        //var st=$(old.domWrapper).attr("style");
-        var id = $(old.domWrapper).attr("id");//old.domWrapper._id;
-        $(newWrapper).attr("id", id);
-        $(newWrapper).attr("class", cls);
-        //$(newWrapper).attr("style",st);
+        var cls = old.domWrapper.getAttribute("class");
+
+        var id = old.domWrapper.getAttribute("id");//old.domWrapper._id;
+        newWrapper.setAttribute("id", id);
+        newWrapper.setAttribute("class", cls);
         while (old.domWrapper.children.length > 0) {
             newWrapper.appendChild(old.domWrapper.children[0]);
         }
@@ -255,13 +252,19 @@ export class Component implements ComponentConfig{
         old.domWrapper._id = id;
     }
     /**
+     * create an Element from an htmlstring e.g. createDom("<input/>")
+     */
+    static createHTMLElement(html: string): HTMLElement {
+        return <HTMLElement>document.createRange().createContextualFragment(html).children[0];
+    }
+    /**
      * inits the component
      * @param {dom} dom - init the dom element
      * @paran {object} properties - properties to init
     */
-    init(dom:Element|string, properties: ComponentCreateProperties = undefined) {
-        if(typeof dom==="string")
-            dom=document.createRange().createContextualFragment(dom).children[0];
+    init(dom: HTMLElement | string, properties: ComponentCreateProperties = undefined) {
+        if (typeof dom === "string")
+            dom = Component.createHTMLElement(dom);
         //is already attached
         if (this.domWrapper !== undefined) {
             if (this.domWrapper.parentNode !== undefined)
@@ -272,16 +275,16 @@ export class Component implements ComponentConfig{
             this.__dom._this = undefined;
         }
         //notify Hook
-        for(var x=0;x<Component._componentHook.length;x++){
-            Component._componentHook[x]("precreate",this);
+        for (var x = 0; x < Component._componentHook.length; x++) {
+            Component._componentHook[x]("precreate", this);
         }
         //allready watched?
-       // if (jassijs.componentSpy !== undefined) {
-         //   jassijs.componentSpy.unwatch(this);
-       // }
+        // if (jassijs.componentSpy !== undefined) {
+        //   jassijs.componentSpy.unwatch(this);
+        // }
         this.dom = dom;
         this._id = registry.nextID();
-        $(this.dom).attr("id", this._id);
+        this.dom.setAttribute("id", this._id);
         /** @member {Object.<string,function>} - all event handlers*/
         this._eventHandler = {};
         //add _this to the dom element
@@ -294,188 +297,151 @@ export class Component implements ComponentConfig{
         if (properties !== undefined && properties.noWrapper === true) {
             this.domWrapper = this.dom;
             this.domWrapper._id = this._id;
-            $(this.domWrapper).addClass("jcomponent");
+            this.domWrapper.classList.add("jcomponent");
         } else {
             /** @member {dom} - the dom element for label*/
-            this.domWrapper = $('<div id="' + lid + '" class ="jcomponent"' + st + '></div>')[0];
+            let strdom = '<div id="' + lid + '" class ="jcomponent"' + st + '></div>';
+            this.domWrapper = Component.createHTMLElement(strdom);
             this.domWrapper._this = this;
             this.domWrapper._id = lid;
             this.domWrapper.appendChild(dom);
         }
         //append temporary so new elements must not added immediately
         if (document.getElementById("jassitemp") === null) {
-            var temp = $('<template id="jassitemp"></template>')[0];
-            $(document.body).append(temp);
+            var temp = Component.createHTMLElement('<template id="jassitemp"></template>');
+            document.body.appendChild(temp);
         }
         //notify Hook
-        for(var x=0;x<Component._componentHook.length;x++){
-            Component._componentHook[x]("create",this);
+        for (var x = 0; x < Component._componentHook.length; x++) {
+            Component._componentHook[x]("create", this);
         }
         //for profilling save code pos
         //if (jassijs.componentSpy !== undefined) {
-       //     jassijs.componentSpy.watch(this);
-      //  }
-        $("#jassitemp")[0].appendChild(this.domWrapper);
+        //     jassijs.componentSpy.watch(this);
+        //  }
+        document.getElementById("jassitemp").appendChild(this.domWrapper);
 
     }
 
     set label(value: string) { //the Code
         if (value === undefined) {
-            var lab = $(this.domWrapper).find(".jlabel");
-            if (lab.length === 1)
-                this.domWrapper.removeChild(lab[0]);
+            var lab = this.domWrapper.querySelector(".jlabel"); //this.domWrapper.getElementsByClassName("jlabel");
+            if (lab)
+                this.domWrapper.removeChild(lab);
         } else {
             //CHECK children(0)-> first() 
-            if ($(this.domWrapper).find(".jlabel").length === 0) {
-                let lab = $('<label class="jlabel" for="' + this._id + '"></label>')[0]; //
-                $(this.domWrapper).prepend(lab);
+            if (!this.domWrapper.querySelector(".jlabel")) {
+                let lab = Component.createHTMLElement('<label class="jlabel" for="' + this._id + '"></label>'); //
+                this.domWrapper.prepend(lab);
             }
-            $(this.domWrapper).children(":first").html(value);
+            this.domWrapper.querySelector(".jlabel").innerHTML = value;
         }
     }
 
     @$Property({ description: "adds a label above the component" })
     get label(): string {
-        //CHECK children(0)-> first()
-        if ($(this.domWrapper).first().attr('class') === undefined || !$(this.domWrapper).first().attr('class').startsWith("jlabel")) {
-            return "";
-        }
-        return $(this.domWrapper).children(":first").text();
+        return this.domWrapper.querySelector(".jlabel")?.innerHTML;
     }
     @$Property({ description: "tooltip are displayed on mouse over" })
     get tooltip(): string {
-        return $(this.dom).attr("title");
+        return this.dom.getAttribute("title");
     }
     set tooltip(value: string) { //the Code
-        $(this.domWrapper).attr("title", value);
+        this.dom.setAttribute("title", value);
         $(this.domWrapper).tooltip();
     }
 
     @$Property({})
     get x(): number {
-        return Number($(this.domWrapper).css("left").replace("px", ""));
+        return Number(this.domWrapper.style.left.replace("px", ""));
     }
-   
+
     set x(value: number) { //the Code
-        $(this.domWrapper).css("left", value);
-        $(this.domWrapper).css("position", "absolute");
+        this.domWrapper.style.left = value.toString().replace("px", "") + "px";
+        this.domWrapper.style.position = "absolute";
     }
 
 
 
     @$Property()
     get y(): number {
-        return Number($(this.domWrapper).css("top").replace("px", ""));
-    }
-    
-    set y(value: number) { //the Code
-        $(this.domWrapper).css("top", value);
-        $(this.domWrapper).css("position", "absolute");
+        return Number(this.domWrapper.style.top.replace("px", ""));
     }
 
-    
+    set y(value: number) { //the Code
+        this.domWrapper.style.top = value.toString().replace("px", "") + "px";
+        this.domWrapper.style.position = "absolute";
+    }
+
     @$Property()
     get hidden(): boolean {
-        return $(this.__dom).is(":hidden");
+        return (this.dom.getAttribute("hidden")==="");
     }
     set hidden(value: boolean) {
-         $(this.__dom).css('visibility', value?"hidden":"visible");
-        /*if (value) {
-            this["old_display"] = $(this.__dom).css('display');
-            $(this.__dom).css('display', 'none');
-        } else if ($(this.__dom).css('display') === "none") {
-            if (this["old_display"] !== undefined)
-                $(this.__dom).css('display', this["old_display"]);
-            else
-                $(this.__dom).removeAttr('display');
-        }*/
+        if(value)
+            this.dom.setAttribute("hidden","");
+        else
+            this.dom.removeAttribute("hidden");
     }
 
-    /**
-     * @member {string|number} - the height of the component 
-     * e.g. 50 or "100%"
-     */
-    set height1(value) { //the Code
+
+    set width(value: string) { //the Code
         //  if($.isNumeric(value))
         if (value === undefined)
             value = "";
-        if (typeof (value) === "string" && value.indexOf("%") > -1)
-            $(this.dom).css("height", "100%");
-        else
-            $(this.dom).css("height", value);
-        $(this.domWrapper).css("height", value);
-    }
-    get height1() {
-        return $(this.domWrapper).css("height").replace("px", "");
-    }
-    /**
-     * @member {string|number} - the width of the component 
-     * e.g. 50 or "100%"
-     */
-    set width1(value) { //the Code
-        //  if($.isNumeric(value))
-        if (value === undefined)
-            value = "";
-        if (typeof (value) === "string" && value.indexOf("%") > -1 && $(this.domWrapper).is("div"))
-            $(this.dom).css("width", "100%");
-        else
-            $(this.dom).css("width", value);
-        $(this.domWrapper).css("width", value);
-    }
-    get width1() {
-        return $(this.domWrapper).css("width").replace("px", "");
-    }
-  
-    set width(value: string | number) { //the Code
-        //  if($.isNumeric(value))
-        if (value === undefined)
-            value = "";
-        if (typeof (value) === "string" && value.indexOf("%") > -1 && $(this.domWrapper).css("display") !== "inline") {//&&$(this.domWrapper).is("div"))7
-            $(this.dom).css("width", "100%");
-            $(this.domWrapper).css("width", value);
+        value = value.toString();
+        if (!isNaN(<any>value))
+            value = value + "px";
+        if (typeof (value) === "string" && value.indexOf("%") > -1 && this.domWrapper.style.display !== "inline") {//&&$(this.domWrapper).is("div"))7
+            this.dom.style.width = "100%";
+            this.domWrapper.style.width = value;
         } else {
-            $(this.dom).css("width", value);
-            $(this.domWrapper).css("width", "");
+            this.dom.style.width = value.toString();
+            this.domWrapper.style.width = "";
         }
         //  
     }
     @$Property({ type: "string" })
     get width() {
-        if ($(this.domWrapper).css("width") !== undefined)
-            return $(this.domWrapper).css("width");
-        return $(this.dom).css("width").replace("px", "");
+        if (this.domWrapper.style.width !== undefined)
+            return this.domWrapper.style.width;
+        return this.dom.style.width.replace("px", "");
     }
-  
+
     set height(value: string | number) { //the Code
         //  if($.isNumeric(value))
         if (value === undefined)
             value = "";
+        value = value.toString();
+        if (!isNaN(<any>value))
+            value = value + "px";
         if (typeof (value) === "string" && value.indexOf("%") > -1) {
-            $(this.dom).css("height", "100%");
-            $(this.domWrapper).css("height", value);
+            this.dom.style.height = "100%";
+            this.domWrapper.style.height = value;
         } else {
-            $(this.dom).css("height", value);
-            $(this.domWrapper).css("height", "");
+            this.dom.style.height = value.toString();
+            this.domWrapper.style.height = "";
         }
         //$(this.domWrapper).css("height",value);
     }
     @$Property({ type: "string" })
     get height() {
-        if ($(this.domWrapper).css("height") !== undefined)
-            return $(this.domWrapper).css("height");
-        if ($(this.dom).css("height") !== undefined)
+        if (this.domWrapper.style.height !== undefined)
+            return this.domWrapper.style.height;
+        if (this.dom.style.height !== undefined)
             return undefined;
-        return $(this.dom).css("height").replace("px", "");
+        return this.dom.style.height.replace("px", "");
     }
-   
+
     @$Property({ type: "json", componentType: "jassijs.ui.CSSProperties" })
     set css(properties: CSSProperties) {
         var prop = CSSProperties.applyTo(properties, this);
         //if css-properties are already set and now a properties is deleted
         if (this["_lastCssChange"]) {
             for (let key in this["_lastCssChange"]) {
+
                 if (prop[key] === undefined) {
-                    $(this.dom).css(key, "");
+                    this.dom.style[key] = "";
                 }
             }
         }
@@ -486,8 +452,8 @@ export class Component implements ComponentConfig{
      */
     maximize() {
         // $(this.dom).addClass("jmaximized");
-        $(this.dom).css("width", "calc(100% - 2px)");
-        $(this.dom).css("height", "calc(100% - 2px)");
+        this.dom.style.width = "calc(100% - 2px)";
+        this.dom.style.height = "calc(100% - 2px)";
     }
     @$Property({ type: "componentselector", componentType: "[jassijs.ui.Style]" })
     get styles(): any[] {
@@ -500,15 +466,15 @@ export class Component implements ComponentConfig{
             newstyles.push(st.styleid);
         });
         //removeOld
-        var classes = $(this.dom).attr("class").split(" ");
+        var classes = this.dom.getAttribute("class").split(" ");
         classes.forEach((cl) => {
             if (cl.startsWith("jassistyle") && newstyles.indexOf(cl) === -1) {
-                $(this.dom).removeClass(cl);
+                this.dom.classList.remove(cl);
             }
         });
         newstyles.forEach((st) => {
             if (classes.indexOf(st) === -1)
-                $(this.dom).addClass(st);
+                this.dom.classList.add(st);
         });
     }
 
@@ -540,12 +506,12 @@ export class Component implements ComponentConfig{
             this.contextMenu.destroy();
         }
         //notify Hook
-        for(var x=0;x<Component._componentHook.length;x++){
-            Component._componentHook[x]("destroy",this);
+        for (var x = 0; x < Component._componentHook.length; x++) {
+            Component._componentHook[x]("destroy", this);
         }
-       // if (jassijs.componentSpy !== undefined) {
+        // if (jassijs.componentSpy !== undefined) {
         //    jassijs.componentSpy.unwatch(this);
-      //  }
+        //  }
         if (this._parent !== undefined) {
             this._parent.remove(this);
         }
@@ -565,7 +531,6 @@ export class Component implements ComponentConfig{
             this.designDummies.forEach((dummy) => { dummy.destroy() });
         }
         this.events = [];
-        this.$ = undefined;
     }
     extensionCalled(action: ExtensionAction) {
     }

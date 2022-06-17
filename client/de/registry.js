@@ -311,6 +311,10 @@ define("de/registry",["require"], function(require) {
 	"de/TestDialogBinder2.ts": {
 		"date": 1655227283769,
 		"de/TestDialogBinder": {}
+	},
+	"de/TH.ts": {
+		"date": 1655460605844,
+		"de/TH": {}
 	}
 }
  }

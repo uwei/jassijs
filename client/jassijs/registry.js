@@ -568,7 +568,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1655408435027,
+		"date": 1655460715801,
 		"jassijs.ui.Component": {
 			"@members": {
 				"onfocus": {

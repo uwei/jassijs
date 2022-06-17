@@ -534,6 +534,8 @@ export class ComponentDesigner extends Panel {
         this.undoButton.hidden = !enable;
         this.lassoButton.hidden = !enable;
         this.cutButton.hidden = !enable;
+        this.copyButton.hidden = !enable;
+        this.pasteButton.hidden = !enable;
         var component = this._designPlaceholder._components[0];
         //switch designmode
         var comps = $(component.dom).find(".jcomponent");

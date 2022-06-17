@@ -13,6 +13,8 @@ import { PDFReport } from "jassijs_report/PDFReport";
 import { PDFViewer } from "jassijs_report/PDFViewer";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { Tools } from "jassijs/util/Tools";
+import { RComponent } from "jassijs_report/RComponent";
+import { RStack } from "jassijs_report/RStack";
 
 
 @$Class("jassijs_report.designer.ReportDesigner")
@@ -30,7 +32,7 @@ export class ReportDesigner extends ComponentDesigner {
 
         this.editButton.tooltip = "pdf preview";
         this.editButton.icon = "mdi mdi-18px mdi-file-pdf-outline";
-        
+
     }
     set codeEditor(value) {
         var _this = this;
@@ -61,14 +63,15 @@ export class ReportDesigner extends ComponentDesigner {
         $(this.dom).css("width", "");
 
     }
-    connectParser(parser) { 
+
+    connectParser(parser) {
         this._propertyEditor.parser = parser;
         var Parser = classes.getClass("jassijs_editor.util.Parser");
         this._codeChanger.parser = new Parser();
     }
     editDialog(enable) {
         if (enable === false) {
-            super.editDialog(enable); 
+            super.editDialog(enable);
 
             var rep = new PDFReport();
             //rep.content=this.designedComponent["design];
@@ -89,17 +92,17 @@ export class ReportDesigner extends ComponentDesigner {
 
             }
 
-//            this.lastView = this._designPlaceholder._components[0];
-  //          if (this._designPlaceholder._components.length > 0)
-                this._designPlaceholder.remove(this._designPlaceholder._components[0], false);
+            //            this.lastView = this._designPlaceholder._components[0];
+            //          if (this._designPlaceholder._components.length > 0)
+            this._designPlaceholder.remove(this._designPlaceholder._components[0], false);
             this._designPlaceholder.add(this.pdfviewer);
         } else {
             this._designPlaceholder.remove(this._designPlaceholder._components[0], false);
             this._designPlaceholder.add(this.componentviewer);
             super.editDialog(enable);
-        } 
+        }
     }
-   
+
     propertyChanged() {
         this.propertyIsChanging = true;
         if (this._codeChanger.parser.sourceFile === undefined)
@@ -115,15 +118,15 @@ export class ReportDesigner extends ComponentDesigner {
             this.codeEditor.value = s;
             this._codeChanger.updateParser();
             this._codeChanger.callEvent("codeChanged", {});
-           
+
             //this.callEvent("codeChanged", {});
-        } else{
-            if(this._codeChanger.parser.data["reportdesign"]&&this._codeChanger.parser.data["reportdesign"][""].length>0){
-                this._codeChanger.setPropertyInCode("", ob,true,"reportdesign");
-                
-            }else
+        } else {
+            if (this._codeChanger.parser.data["reportdesign"] && this._codeChanger.parser.data["reportdesign"][""].length > 0) {
+                this._codeChanger.setPropertyInCode("", ob, true, "reportdesign");
+
+            } else
                 this._codeChanger.setPropertyInCode("reportdesign", ob);
-            
+
         }
         this.propertyIsChanging = false;
     }
@@ -162,12 +165,73 @@ export class ReportDesigner extends ComponentDesigner {
         return sname;
 
     }
+    async paste() {
+        var text = await navigator.clipboard.readText();
+        var all: any[] = JSON.parse(text);
+        var target: RStack = this._propertyEditor.value;
+
+        var comp: RStack = ReportDesign.fromJSON(all);
+        for (var x = 0; x < comp._components.length; x++) {
+            target.addBefore(comp._components[x], target._components[target._components.length - 1]);//design dummy
+        }
+
+        this.propertyChanged();
+        /*  var comp:RComponent=ReportDesign.fromJSON(all[x])
+         for(var x=0;x<all.length;x++){
+            
+             parent.add(all[x]);
+         }*/
+    }
+    async copy(): Promise<string> {
+
+        var text = "";
+        var components = this._propertyEditor.value;
+        if (!Array.isArray(components)) {
+            components = [components];
+        }
+        var scomponents = [];
+
+        for (var x = 0; x < components.length; x++) {
+            var component: RComponent = components[x];
+            scomponents.push(component.toJSON());
+            //  scomponents.add(component);
+        }
+
+        text = JSON.stringify(scomponents);
+        console.log(text);
+        await navigator.clipboard.writeText(text);
+
+        return text;
+    }
+    async cutComponent() {
+        var text = await this.copy();
+        if (await navigator.clipboard.readText() !== text) {
+            alert("could not copy to Clipboard.")
+            return;
+        }
+
+        var components = this._propertyEditor.value;
+        if (!Array.isArray(components)) {
+            components = [components];
+        }
+        var scomponents = [];
+
+        for (var x = 0; x < components.length; x++) {
+            var component: RComponent = components[x];
+
+            (<RStack>component._parent).remove(component);
+            //  scomponents.add(component);
+        }
+        this.propertyChanged();
+
+
+    }
     /**
       * @member {jassijs.ui.Component} - the designed component
       */
     set designedComponent(component: ReportDesign) {
-        this.componentviewer=component;
-        if(this._designPlaceholder._components.length>0&&this._designPlaceholder._components[0]===this.pdfviewer){
+        this.componentviewer = component;
+        if (this._designPlaceholder._components.length > 0 && this._designPlaceholder._components[0] === this.pdfviewer) {
             this._designPlaceholder.remove(this._designPlaceholder._components[0], false);//should not be destroyed
         }
         //create _children
@@ -180,11 +244,11 @@ export class ReportDesigner extends ComponentDesigner {
         this.createVariable(undefined, undefined, <Container>component);
         this._propertyEditor.value = component;
         this._codeChanger.parser = this._propertyEditor.parser;
-         //@ts.ignore
+        //@ts.ignore
         this._codeChanger.value = component;
         super.designedComponent = component;
-       
-       
+
+
     }
     /**
        * undo action
@@ -220,10 +284,16 @@ export class ReportDesigner extends ComponentDesigner {
 
     _initComponentExplorer() {
         var _this = this;
-        this._componentExplorer.onclick(function (data) {
-            var ob = data.data;
-            _this._propertyEditor.value = ob;
+
+        this._componentExplorer.onselect(function (data) {
+            setTimeout(() => {
+                var sel = _this._componentExplorer.tree.selection;
+                if (sel.length === 1)
+                    sel = sel[0];
+                _this._propertyEditor.value = sel;
+            }, 10);
         });
+
         this._componentExplorer.getComponentName = function (item) {
             var varname = _this._codeEditor.getVariableFromObject(item);
             if (varname === undefined)

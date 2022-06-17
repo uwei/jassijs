@@ -2305,6 +2305,8 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.undoButton.hidden = !enable;
             this.lassoButton.hidden = !enable;
             this.cutButton.hidden = !enable;
+            this.copyButton.hidden = !enable;
+            this.pasteButton.hidden = !enable;
             var component = this._designPlaceholder._components[0];
             //switch designmode
             var comps = $(component.dom).find(".jcomponent");
@@ -3491,7 +3493,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1655237959510,
+                "date": 1655461753005,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {

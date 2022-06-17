@@ -4482,7 +4482,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1655406856752,
+                "date": 1655465322018,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -5708,6 +5708,56 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             }
             return sname;
         }
+        async paste() {
+            var text = await navigator.clipboard.readText();
+            var all = JSON.parse(text);
+            var target = this._propertyEditor.value;
+            var comp = ReportDesign_10.ReportDesign.fromJSON(all);
+            for (var x = 0; x < comp._components.length; x++) {
+                target.addBefore(comp._components[x], target._components[target._components.length - 1]); //design dummy
+            }
+            this.propertyChanged();
+            /*  var comp:RComponent=ReportDesign.fromJSON(all[x])
+             for(var x=0;x<all.length;x++){
+                
+                 parent.add(all[x]);
+             }*/
+        }
+        async copy() {
+            var text = "";
+            var components = this._propertyEditor.value;
+            if (!Array.isArray(components)) {
+                components = [components];
+            }
+            var scomponents = [];
+            for (var x = 0; x < components.length; x++) {
+                var component = components[x];
+                scomponents.push(component.toJSON());
+                //  scomponents.add(component);
+            }
+            text = JSON.stringify(scomponents);
+            console.log(text);
+            await navigator.clipboard.writeText(text);
+            return text;
+        }
+        async cutComponent() {
+            var text = await this.copy();
+            if (await navigator.clipboard.readText() !== text) {
+                alert("could not copy to Clipboard.");
+                return;
+            }
+            var components = this._propertyEditor.value;
+            if (!Array.isArray(components)) {
+                components = [components];
+            }
+            var scomponents = [];
+            for (var x = 0; x < components.length; x++) {
+                var component = components[x];
+                component._parent.remove(component);
+                //  scomponents.add(component);
+            }
+            this.propertyChanged();
+        }
         /**
           * @member {jassijs.ui.Component} - the designed component
           */
@@ -5761,9 +5811,13 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         }
         _initComponentExplorer() {
             var _this = this;
-            this._componentExplorer.onclick(function (data) {
-                var ob = data.data;
-                _this._propertyEditor.value = ob;
+            this._componentExplorer.onselect(function (data) {
+                setTimeout(() => {
+                    var sel = _this._componentExplorer.tree.selection;
+                    if (sel.length === 1)
+                        sel = sel[0];
+                    _this._propertyEditor.value = sel;
+                }, 10);
             });
             this._componentExplorer.getComponentName = function (item) {
                 var varname = _this._codeEditor.getVariableFromObject(item);
