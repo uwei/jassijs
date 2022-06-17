@@ -283,12 +283,12 @@ export class Component implements ComponentConfig {
         //   jassijs.componentSpy.unwatch(this);
         // }
         this.dom = dom;
-        this._id = registry.nextID();
+        this._id = "j"+registry.nextID();
         this.dom.setAttribute("id", this._id);
         /** @member {Object.<string,function>} - all event handlers*/
         this._eventHandler = {};
         //add _this to the dom element
-        var lid = registry.nextID();
+        var lid = "j"+registry.nextID();
         var st = 'style="display: inline-block"';
         if (this instanceof classes.getClass("jassijs.ui.Container")) {
             st = "";

@@ -47,6 +47,7 @@ export default {
             'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
             'tabulatorlib': '//unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator',
             'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.2/tinymce.min'//also define in tinymce.js
+           // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
         },
         "shim": {
             'goldenlayout': ["jquery"],

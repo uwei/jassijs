@@ -343,7 +343,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
         getDocTooltip(item) {
             if (item.file === undefined)
                 return "";
-            var _id = Registry_1.default.nextID();
+            var _id = "j" + Registry_1.default.nextID();
             item.docHTML = "<span id='" + _id + "'> please try later ... loading in progress<span>";
             Typescript_1.default.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
                 if (ret === undefined)
@@ -3424,7 +3424,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1632251060000,
+                "date": 1655467369881,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {

@@ -3,7 +3,7 @@ define("jassijs_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_editor/AcePanel.ts": {
-		"date": 1632251060000,
+		"date": 1655467369881,
 		"jassijs.ui.AcePanel": {}
 	},
 	"jassijs_editor/ChromeDebugger.ts": {

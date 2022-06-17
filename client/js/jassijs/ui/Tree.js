@@ -579,7 +579,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
         constructor(tree, item, parent = undefined) {
             this.tree = tree;
             this.parent = parent;
-            this._id = Registry_1.default.nextID();
+            this._id = "j" + Registry_1.default.nextID();
             this.item = item;
             var title = this.tree.getTitleFromItem(this.item);
             this.key = (parent !== undefined ? parent.key + "|" : "") + (title === undefined ? "" : title).replaceAll("|", "!");

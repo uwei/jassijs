@@ -63,6 +63,7 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
                 'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
                 'tabulatorlib': '//unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator',
                 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.2/tinymce.min' //also define in tinymce.js
+                // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
             },
             "shim": {
                 'goldenlayout': ["jquery"],
@@ -138,7 +139,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985802000
             },
             "jassijs/modul.ts": {
-                "date": 1654017492691
+                "date": 1655467803073
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1624296520000,
@@ -650,7 +651,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1655460715801,
+                "date": 1655467331127,
                 "jassijs.ui.Component": {
                     "@members": {
                         "onfocus": {
@@ -1601,7 +1602,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1654984567578,
+                "date": 1655468189498,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -2428,7 +2429,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1655408456169,
+                "date": 1655467353393,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -2501,7 +2502,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Tree.ts": {
-                "date": 1655140880763,
+                "date": 1655467362926,
                 "jassijs.ui.TreeEditorPropertiesMulti": {
                     "@members": {
                         "mode": {
@@ -4429,6 +4430,7 @@ define("jassijs/ext/tabulator", ['tabulatorlib'], function (Tabulator) {
 var tinyMCEPreInit = {
     suffix: '.min',
     base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.2",
+    //base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3",
     query: ''
 };
 define("jassijs/ext/tinymce", ["tinymcelib"], function (require) {
@@ -8264,12 +8266,12 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
             //   jassijs.componentSpy.unwatch(this);
             // }
             this.dom = dom;
-            this._id = Registry_12.default.nextID();
+            this._id = "j" + Registry_12.default.nextID();
             this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
-            var lid = Registry_12.default.nextID();
+            var lid = "j" + Registry_12.default.nextID();
             var st = 'style="display: inline-block"';
             if (this instanceof Classes_16.classes.getClass("jassijs.ui.Container")) {
                 st = "";
@@ -11639,9 +11641,10 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                 }
             };
             var mytoolbarwidth = 240;
-            if (Number(_this.editor.inlineEditorPanel._parent.width.replace("px", "")) - Number(_this.editor.inlineEditorPanel._parent._components[0].width.replace("px", "")) < mytoolbarwidth) {
-                delete config.fixed_toolbar_container;
-            }
+            console.log("fix Component width in tiny");
+            // if (Number(_this.editor.inlineEditorPanel._parent.width.replace("px", "")) - Number(_this.editor.inlineEditorPanel._parent._components[0].width.replace("px", "")) < mytoolbarwidth) {
+            //     delete config.fixed_toolbar_container;
+            // }
             if (_this["toolbar"])
                 config["toolbar"] = _this["toolbar"];
             for (var name in _this.customToolbarButtons) {
@@ -11754,8 +11757,8 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             //   ret.editor._draganddropper.enableDraggable(false);
         });
         ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsf<span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>g<strong>sdfgsd</strong>fgsdfg</span></span><br><strong><span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>sdfgsdgsdf</span>gfdsg</strong>";
-        ret.height = 25;
-        ret.width = 107;
+        ret.height = 400;
+        ret.width = 400;
         return ret;
     }
     exports.test = test;
@@ -14921,7 +14924,7 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
                 });
             }
             if (list === undefined) {
-                list = Registry_20.default.nextID();
+                list = "j" + Registry_20.default.nextID();
                 this._autocompleter = $('<datalist id="' + list + '"/>')[0];
                 this.domWrapper.appendChild(this._autocompleter);
                 $(this.dom).attr("list", list);
@@ -15585,7 +15588,7 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
         constructor(tree, item, parent = undefined) {
             this.tree = tree;
             this.parent = parent;
-            this._id = Registry_21.default.nextID();
+            this._id = "j" + Registry_21.default.nextID();
             this.item = item;
             var title = this.tree.getTitleFromItem(this.item);
             this.key = (parent !== undefined ? parent.key + "|" : "") + (title === undefined ? "" : title).replaceAll("|", "!");

@@ -190,12 +190,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
             //   jassijs.componentSpy.unwatch(this);
             // }
             this.dom = dom;
-            this._id = Registry_1.default.nextID();
+            this._id = "j" + Registry_1.default.nextID();
             this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
-            var lid = Registry_1.default.nextID();
+            var lid = "j" + Registry_1.default.nextID();
             var st = 'style="display: inline-block"';
             if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
                 st = "";

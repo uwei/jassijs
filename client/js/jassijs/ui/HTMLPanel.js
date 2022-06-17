@@ -163,9 +163,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
                 }
             };
             var mytoolbarwidth = 240;
-            if (Number(_this.editor.inlineEditorPanel._parent.width.replace("px", "")) - Number(_this.editor.inlineEditorPanel._parent._components[0].width.replace("px", "")) < mytoolbarwidth) {
-                delete config.fixed_toolbar_container;
-            }
+            console.log("fix Component width in tiny");
+            // if (Number(_this.editor.inlineEditorPanel._parent.width.replace("px", "")) - Number(_this.editor.inlineEditorPanel._parent._components[0].width.replace("px", "")) < mytoolbarwidth) {
+            //     delete config.fixed_toolbar_container;
+            // }
             if (_this["toolbar"])
                 config["toolbar"] = _this["toolbar"];
             for (var name in _this.customToolbarButtons) {
@@ -278,8 +279,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
             //   ret.editor._draganddropper.enableDraggable(false);
         });
         ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsf<span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>g<strong>sdfgsd</strong>fgsdfg</span></span><br><strong><span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>sdfgsdgsdf</span>gfdsg</strong>";
-        ret.height = 25;
-        ret.width = 107;
+        ret.height = 400;
+        ret.width = 400;
         return ret;
     }
     exports.test = test;

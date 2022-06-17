@@ -242,7 +242,7 @@ export class Textbox extends DataComponent implements TextboxConfig {
             })
         }
         if (list === undefined) {
-            list = registry.nextID();
+            list = "j"+registry.nextID();
             this._autocompleter = $('<datalist id="' + list + '"/>')[0];
             this.domWrapper.appendChild(this._autocompleter);
             $(this.dom).attr("list", list);

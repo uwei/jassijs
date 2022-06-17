@@ -10,6 +10,7 @@
 var tinyMCEPreInit = {
     suffix: '.min',
     base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.2",
+    //base: "//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3",
     query: ''
 
 };

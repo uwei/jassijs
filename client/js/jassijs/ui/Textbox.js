@@ -169,7 +169,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
                 });
             }
             if (list === undefined) {
-                list = Registry_1.default.nextID();
+                list = "j" + Registry_1.default.nextID();
                 this._autocompleter = $('<datalist id="' + list + '"/>')[0];
                 this.domWrapper.appendChild(this._autocompleter);
                 $(this.dom).attr("list", list);

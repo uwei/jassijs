@@ -639,7 +639,7 @@ class TreeNode {
     constructor(tree, item, parent: TreeNode = undefined) {
         this.tree = tree;
         this.parent = parent;
-        this._id = registry.nextID();
+        this._id = "j"+registry.nextID();
         this.item = item;
         var title = this.tree.getTitleFromItem(this.item);
         this.key = (parent !== undefined ? parent.key + "|" : "") + (title === undefined ? "" : title).replaceAll("|", "!");
