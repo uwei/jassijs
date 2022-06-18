@@ -7,11 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/Debugger", "jassijs/ui/OptionDialog", "jassijs_editor/util/TSSourceMap", "jassijs/util/Reloader", "jassijs/remote/Server", "jassijs/base/Windows"], function (require, exports, Registry_1, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/Debugger", "jassijs/ui/OptionDialog", "jassijs_editor/util/TSSourceMap", "jassijs/util/Reloader", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/Notify"], function (require, exports, Registry_1, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1, Notify_1) {
     "use strict";
     var ChromeDebugger_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ChromeDebugger = void 0;
+    exports.test = exports.ChromeDebugger = void 0;
     var installed = undefined;
     /**
      * debugging in Chrome
@@ -29,7 +29,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/Debugge
             });
         }
         static showHintExtensionNotInstalled() {
-            $.notify.addStyle('downloadlink', {
+            (0, Notify_1.notifyAddStyle)('downloadlink', {
                 html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
                 classes: {
                     base: {
@@ -38,7 +38,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/Debugge
                     }
                 }
             });
-            $.notify("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000, });
+            (0, Notify_1.notify)("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000 });
         }
         //on receiving messages from chrome extension
         onChromeMessage(event) {
@@ -206,5 +206,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/Debugge
     //if connected then this instance is registred to jassijs.debugger;
     new ChromeDebugger();
     window.postMessage({ toJassiExtension: true, name: "connect" }, "*");
+    function test() {
+        ChromeDebugger.showHintExtensionNotInstalled();
+    }
+    exports.test = test;
 });
 //# sourceMappingURL=ChromeDebugger.js.map

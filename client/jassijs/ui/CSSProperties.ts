@@ -94,8 +94,9 @@ export class CSSProperties{
 			if(newKey==="font-family"){
 				loadFontIfNedded(prop[newKey]);
 			}
+			component.dom.style[key]=properties[key];
 		}
-		$(component.dom).css(prop);
+		//$(component.dom).css(prop);
 		return prop;
 	}
 }

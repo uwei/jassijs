@@ -1,4 +1,4 @@
-
+import "jquery";
 import { Container, ContainerConfig } from "jassijs/ui/Container";
 import { Button } from "jassijs/ui/Button";
 import { Property, $Property } from "jassijs/ui/Property";

@@ -7,6 +7,7 @@ import { User } from "jassijs/remote/security/User";
 import { Databinder } from "jassijs/ui/Databinder";
 import { DBObjectView, DBObjectViewMe, $DBObjectView } from "jassijs/ui/DBObjectView";
 import { DBObjectDialog } from "jassijs/ui/DBObjectDialog";
+import { notify } from "jassijs/ui/Notify";
 
 type Me = {
 	textbox1?:Textbox,
@@ -40,7 +41,7 @@ export class UserView extends DBObjectView {
 	createObject():any{
 		super.createObject();
 		this.value.password=Math.random().toString(36).slice(-8);//random password
-		$.notify( "random password set: "+this.value.password,"info",{position:"right"});
+		notify( "random password set: "+this.value.password,"info",{position:"right"});
 		console.log("random password set: "+this.value.password);
 	}
 }

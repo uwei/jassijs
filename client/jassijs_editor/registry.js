@@ -7,7 +7,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs.ui.AcePanel": {}
 	},
 	"jassijs_editor/ChromeDebugger.ts": {
-		"date": 1655556793963,
+		"date": 1655584741932,
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
@@ -68,7 +68,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.CodeEditorInvisibleComponents": {}
 	},
 	"jassijs_editor/CodePanel.ts": {
-		"date": 1655556793963,
+		"date": 1655584787288,
 		"jassijs_editor.CodePanel": {}
 	},
 	"jassijs_editor/ComponentDesigner.ts": {

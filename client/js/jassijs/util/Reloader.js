@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry"], function (require, exports, Registry_1, Registry_2) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Notify"], function (require, exports, Registry_1, Registry_2, Notify_1) {
     "use strict";
     var Reloader_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -38,7 +38,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                     for (var x = 0; x < len; x++) {
                         var file = h.files[x];
                         new Reloader_1().reloadJS(file);
-                        $.notify(file + " reloaded", "info", { position: "bottom right" });
+                        (0, Notify_1.notify)(file + " reloaded", "info", { position: "bottom right" });
                     }
                     window.setTimeout(f, 100000);
                 });

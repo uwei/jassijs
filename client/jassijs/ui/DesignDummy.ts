@@ -35,9 +35,9 @@ export class DesignDummy extends Image {
         designDummy.type = type;
         designDummy._parent=designDummyFor;
         designDummy.editorselectthis = editorselectthis;
-        $(designDummy.domWrapper).removeClass("jcomponent");
-        $(designDummy.domWrapper).addClass("jdesigndummy");
-        $(designDummy.domWrapper).css("width", "16px");
+        (<Component> designDummy).domWrapper.classList.remove("jcomponent");
+       (<Component> designDummy).domWrapper.classList.add("jdesigndummy");
+        (<Component> designDummy).domWrapper.style.width="16px";
        
         if(oclass===MenuItem){
     		designDummy.icon = icon;	
@@ -46,12 +46,12 @@ export class DesignDummy extends Image {
         if(type==="atEnd")
 	         (<Container>designDummyFor).add(designDummy);
 	    if(type==="beforeComponent")
-	        $(designDummyFor.domWrapper).prepend(designDummy.domWrapper);
+	        designDummyFor.domWrapper.prepend(designDummy.domWrapper);
         if(!designDummyFor["designDummies"])
         	designDummyFor["designDummies"]=[];
         designDummyFor["designDummies"].push(designDummy);
         
-        $(designDummy.dom).addClass("designerNoResizable");
+        (<Component>designDummy).dom.classList.add("designerNoResizable");
         return designDummy;
         //
     }
@@ -75,3 +75,4 @@ export class DesignDummy extends Image {
         }
     }
 }
+

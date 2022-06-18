@@ -1,3 +1,4 @@
+import "jquery";
 import { Textbox } from "jassijs/ui/Textbox";
 import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";

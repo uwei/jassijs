@@ -36,7 +36,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
             desc.actions.push({
                 name: "Bewertung", description: "Bewerte den Kunden", icon: "mdi mdi-car", run: function (kunden) {
                     for (var x = 0; x < kunden.length; x++) {
-                        // $.notify("bewerte..." + kunden[x].vorname, "info", { position: "right" });
+                        // notify("bewerte..." + kunden[x].vorname, "info", { position: "right" });
                         //	alert("bewerten..."+kunden[x].vorname);
                     }
                 }

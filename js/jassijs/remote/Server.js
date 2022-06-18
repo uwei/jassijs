@@ -221,7 +221,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
             var res = await this.call(this, this.saveFiles, allfileNames, allcontents, context);
             if (res === "") {
                 //@ts-ignore
-                $.notify(fileName + " saved", "info", { position: "bottom right" });
+                Promise.resolve().then(() => require("jassijs/ui/Notify")).then((el) => {
+                    el.notify(fileName + " saved", "info", { position: "bottom right" });
+                });
                 //if (!fromServerdirectory) {
                 for (var x = 0; x < alltsfiles.length; x++) {
                     await $.ajax({ url: alltsfiles[x], dataType: "text" });
@@ -230,7 +232,9 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
             }
             else {
                 //@ts-ignore
-                $.notify(fileName + " not saved", "error", { position: "bottom right" });
+                Promise.resolve().then(() => require("jassijs/ui/Notify")).then((el) => {
+                    el.notify(fileName + " not saved", "error", { position: "bottom right" });
+                });
                 throw new Classes_1.JassiError(res);
             }
             return res;
@@ -253,7 +257,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         /*await this.fillFilesInMapIfNeeded();
         if (Server.filesInMap[fileName]) {
             //@ts-ignore
-             $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
+             notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
             return;
         }*/
         return await this.saveFiles([fileName], [content], context);
@@ -409,7 +413,7 @@ Server.isonline = undefined;
 //files found in js.map of modules in the jassijs.json
 Server.filesInMap = undefined;
 Server = Server_1 = __decorate([
-    (0, Registry_1.$Class)("jassijs.remote.Server"),
+    Registry_1.$Class("jassijs.remote.Server"),
     __metadata("design:paramtypes", [])
 ], Server);
 exports.Server = Server;

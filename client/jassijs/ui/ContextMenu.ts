@@ -1,3 +1,4 @@
+import "jquery";
 import "jassijs/ext/jquery.contextmenu";
 import { $Class } from "jassijs/remote/Registry";
 import { Menu } from "jassijs/ui/Menu";
@@ -15,16 +16,16 @@ declare global {
         contextMenu: any;
     }
 }
-export interface ContextMenuConfig extends ComponentConfig{
+export interface ContextMenuConfig extends ComponentConfig {
     /**
      * @member - includes Actions from @ActionProvider for the objects in value
      */
     includeClassActions?: boolean;
-     /**
-     * register an event if the contextmenu is showing
-     * @param {function} handler - the function that is called on change
-     * @returns {boolean} - false if the contextmenu should not been shown
-     */
+    /**
+    * register an event if the contextmenu is showing
+    * @param {function} handler - the function that is called on change
+    * @returns {boolean} - false if the contextmenu should not been shown
+    */
     onbeforeshow?(handler);
 }
 //https://github.com/s-yadav/contextMenu.js/
@@ -51,23 +52,23 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
 
     constructor() {//id connect to existing(not reqired)
         super();
-        super.init($('<span class="InvisibleComponent"></span>')[0]);
+        super.init('<span class="InvisibleComponent"></span>');
         var _this = this;
         this.menu = new Menu({ noUpdate: true });
         this.menu._mainMenu = this;
         //this.menu._parent=this;
-        $(this.dom).append(this.menu.dom);
+        this.dom.append(this.menu.dom);
         $(this.menu.dom).contextMenu("menu", "#" + this.menu._id, { triggerOn: 'dummyevent' });
         this.contextComponents = [];
         //this.menu._parent=this;
-        $(this.menu.dom).addClass("jcontainer");
+        this.menu.dom.classList.add("jcontainer");
         this._components = [this.menu];//neede for getEditablecontextComponents
         this.onbeforeshow(function () {
             return _this._updateClassActions();
         })
     }
 
-    config(config:ContextMenuConfig):ContextMenu {
+    config(config: ContextMenuConfig): ContextMenu {
         super.config(config);
         return this;
     }
@@ -155,7 +156,7 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
     getMainMenu() {
         return this;
     }
-  
+
     @$Property({ default: "function(event){\n\t\n}" })
     onbeforeshow(handler) {
         this.addEvent("beforeshow", handler);
@@ -174,11 +175,7 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
             }
         }
         let y = evt.originalEvent.clientY;
-
-        //$(_this.menu.dom).contextMenu("menu","#"+_this.menu._id);//,{triggerOn:'contextmenu'});
-        //$(_this.menu.dom).contextMenu('open',evt);
         this.show({ left: evt.originalEvent.clientX, top: y });
-
     }
 
 
@@ -244,7 +241,6 @@ export class ContextMenu extends InvisibleComponent implements ContextMenuConfig
         }
         if (action.componentDesignerInvisibleComponentClicked) {
             var design = action.componentDesignerInvisibleComponentClicked.designButton.dom;
-            //return this.show({ top: $(design).offset().top + 30, left: $(design).offset().left + 5 });
             return this.show(design);//{ top: $(design).offset().top, left: $(design).offset().left });
 
         }

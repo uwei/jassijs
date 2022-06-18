@@ -102,6 +102,13 @@ export class Textbox extends DataComponent implements TextboxConfig {
         super.config(config);
         return this;
     }
+     get dom(): HTMLInputElement {
+        return <any>super.dom;
+    }
+
+    set dom(value: HTMLInputElement) {
+        super.dom=value;
+    }
     set disabled(value) {
         $(this.dom).prop('disabled', true);
     }

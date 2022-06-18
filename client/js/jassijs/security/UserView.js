@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/security/User", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_1, Registry_1, Property_1, User_1, DBObjectView_1) {
+define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/security/User", "jassijs/ui/DBObjectView", "jassijs/ui/Notify"], function (require, exports, NumberConverter_1, Textbox_1, Registry_1, Property_1, User_1, DBObjectView_1, Notify_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.UserView = void 0;
@@ -33,7 +33,7 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
         createObject() {
             super.createObject();
             this.value.password = Math.random().toString(36).slice(-8); //random password
-            $.notify("random password set: " + this.value.password, "info", { position: "right" });
+            (0, Notify_1.notify)("random password set: " + this.value.password, "info", { position: "right" });
             console.log("random password set: " + this.value.password);
         }
     };

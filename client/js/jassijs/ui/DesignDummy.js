@@ -36,9 +36,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Image", "ja
             designDummy.type = type;
             designDummy._parent = designDummyFor;
             designDummy.editorselectthis = editorselectthis;
-            $(designDummy.domWrapper).removeClass("jcomponent");
-            $(designDummy.domWrapper).addClass("jdesigndummy");
-            $(designDummy.domWrapper).css("width", "16px");
+            designDummy.domWrapper.classList.remove("jcomponent");
+            designDummy.domWrapper.classList.add("jdesigndummy");
+            designDummy.domWrapper.style.width = "16px";
             if (oclass === MenuItem_1.MenuItem) {
                 designDummy.icon = icon;
             }
@@ -47,11 +47,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Image", "ja
             if (type === "atEnd")
                 designDummyFor.add(designDummy);
             if (type === "beforeComponent")
-                $(designDummyFor.domWrapper).prepend(designDummy.domWrapper);
+                designDummyFor.domWrapper.prepend(designDummy.domWrapper);
             if (!designDummyFor["designDummies"])
                 designDummyFor["designDummies"] = [];
             designDummyFor["designDummies"].push(designDummy);
-            $(designDummy.dom).addClass("designerNoResizable");
+            designDummy.dom.classList.add("designerNoResizable");
             return designDummy;
             //
         }

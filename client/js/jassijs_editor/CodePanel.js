@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router"], function (require, exports, Registry_1, Panel_1, Router_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/ui/Notify"], function (require, exports, Registry_1, Panel_1, Router_1, Notify_1) {
     "use strict";
     var CodePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -118,7 +118,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             var pos = this.positionToNumber(this.cursorPosition);
             var test = this.numberToPosition(pos);
             if (!CodePanel_1.typescript.isInited(this.file)) {
-                $.notify("please try later ... loading in progress", "info", { position: "bottom right" });
+                (0, Notify_1.notify)("please try later ... loading in progress", "info", { position: "bottom right" });
                 return;
             }
             CodePanel_1.typescript.getDefinitionAtPosition(this.file, pos).then((def) => {

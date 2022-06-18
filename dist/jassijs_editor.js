@@ -658,11 +658,11 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/e
     }
     exports.test = test;
 });
-define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/Debugger", "jassijs/ui/OptionDialog", "jassijs_editor/util/TSSourceMap", "jassijs/util/Reloader", "jassijs/remote/Server", "jassijs/base/Windows"], function (require, exports, Registry_4, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1) {
+define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/Debugger", "jassijs/ui/OptionDialog", "jassijs_editor/util/TSSourceMap", "jassijs/util/Reloader", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/Notify"], function (require, exports, Registry_4, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1, Notify_1) {
     "use strict";
     var ChromeDebugger_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ChromeDebugger = void 0;
+    exports.test = exports.ChromeDebugger = void 0;
     var installed = undefined;
     /**
      * debugging in Chrome
@@ -680,7 +680,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/R
             });
         }
         static showHintExtensionNotInstalled() {
-            $.notify.addStyle('downloadlink', {
+            (0, Notify_1.notifyAddStyle)('downloadlink', {
                 html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
                 classes: {
                     base: {
@@ -689,7 +689,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/R
                     }
                 }
             });
-            $.notify("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000, });
+            (0, Notify_1.notify)("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000 });
         }
         //on receiving messages from chrome extension
         onChromeMessage(event) {
@@ -857,6 +857,10 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/R
     //if connected then this instance is registred to jassijs.debugger;
     new ChromeDebugger();
     window.postMessage({ toJassiExtension: true, name: "connect" }, "*");
+    function test() {
+        ChromeDebugger.showHintExtensionNotInstalled();
+    }
+    exports.test = test;
 });
 define("jassijs_editor/modul", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1727,7 +1731,7 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
     ], CodeEditorInvisibleComponents);
     exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;
 });
-define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router"], function (require, exports, Registry_9, Panel_3, Router_1) {
+define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/ui/Notify"], function (require, exports, Registry_9, Panel_3, Router_1, Notify_2) {
     "use strict";
     var CodePanel_4;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1841,7 +1845,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Regist
             var pos = this.positionToNumber(this.cursorPosition);
             var test = this.numberToPosition(pos);
             if (!CodePanel_4.typescript.isInited(this.file)) {
-                $.notify("please try later ... loading in progress", "info", { position: "bottom right" });
+                (0, Notify_2.notify)("please try later ... loading in progress", "info", { position: "bottom right" });
                 return;
             }
             CodePanel_4.typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
@@ -3429,7 +3433,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
-                "date": 1655556793963,
+                "date": 1655584741932,
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
@@ -3490,7 +3494,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
-                "date": 1655556793963,
+                "date": 1655584787288,
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {

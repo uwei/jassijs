@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquery.contextmenu"], function (require, exports, Registry_1, Menu_1, InvisibleComponent_1, Component_1, Classes_1, Property_1, Actions_1, MenuItem_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jquery", "jassijs/ext/jquery.contextmenu"], function (require, exports, Registry_1, Menu_1, InvisibleComponent_1, Component_1, Classes_1, Property_1, Actions_1, MenuItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ContextMenu = void 0;
@@ -15,16 +15,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
     let ContextMenu = class ContextMenu extends InvisibleComponent_1.InvisibleComponent {
         constructor() {
             super();
-            super.init($('<span class="InvisibleComponent"></span>')[0]);
+            super.init('<span class="InvisibleComponent"></span>');
             var _this = this;
             this.menu = new Menu_1.Menu({ noUpdate: true });
             this.menu._mainMenu = this;
             //this.menu._parent=this;
-            $(this.dom).append(this.menu.dom);
+            this.dom.append(this.menu.dom);
             $(this.menu.dom).contextMenu("menu", "#" + this.menu._id, { triggerOn: 'dummyevent' });
             this.contextComponents = [];
             //this.menu._parent=this;
-            $(this.menu.dom).addClass("jcontainer");
+            this.menu.dom.classList.add("jcontainer");
             this._components = [this.menu]; //neede for getEditablecontextComponents
             this.onbeforeshow(function () {
                 return _this._updateClassActions();
@@ -141,8 +141,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
                 }
             }
             let y = evt.originalEvent.clientY;
-            //$(_this.menu.dom).contextMenu("menu","#"+_this.menu._id);//,{triggerOn:'contextmenu'});
-            //$(_this.menu.dom).contextMenu('open',evt);
             this.show({ left: evt.originalEvent.clientX, top: y });
         }
         /**
@@ -204,7 +202,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
             }
             if (action.componentDesignerInvisibleComponentClicked) {
                 var design = action.componentDesignerInvisibleComponentClicked.designButton.dom;
-                //return this.show({ top: $(design).offset().top + 30, left: $(design).offset().left + 5 });
                 return this.show(design); //{ top: $(design).offset().top, left: $(design).offset().left });
             }
             super.extensionCalled(action);

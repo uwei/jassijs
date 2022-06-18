@@ -226,8 +226,8 @@ export class FileExplorer extends Panel {
         super();
         FileExplorer.instance = this;
         //this.maximize();
-        $(this.dom).css("width", "calc(100% - 8px)");
-        $(this.dom).css("height", "calc(100% - 25px)");//why 25????
+        this.dom.style.width="calc(100% - 8px)";
+        this.dom.style.height="calc(100% - 25px)";//why 25????
         this.tree = new Tree();
         this.search = new Textbox();
         this.layout();
@@ -297,7 +297,8 @@ export class FileExplorer extends Panel {
 
             }
         });
-        $("#" + this._id).css("flow", "visible");
+        //@ts-ignore
+        this.dom.style.flow="visible";
         this.search.onkeydown(function (evt) {
             window.setTimeout(() => {
                 _this.tree.filter(<string>_this.search.value);

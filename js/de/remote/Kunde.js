@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var Kunde_1;
+var Kunde_1, _a, _b;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.Kunde = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
@@ -41,7 +41,7 @@ let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
         desc.actions.push({
             name: "Bewertung", description: "Bewerte den Kunden", icon: "mdi mdi-car", run: function (kunden) {
                 for (var x = 0; x < kunden.length; x++) {
-                    // $.notify("bewerte..." + kunden[x].vorname, "info", { position: "right" });
+                    // notify("bewerte..." + kunden[x].vorname, "info", { position: "right" });
                     //	alert("bewerten..."+kunden[x].vorname);
                 }
             }
@@ -80,62 +80,62 @@ let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
     }
 };
 __decorate([
-    (0, DatabaseSchema_1.PrimaryColumn)(),
+    DatabaseSchema_1.PrimaryColumn(),
     __metadata("design:type", Number)
 ], Kunde.prototype, "id", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], Kunde.prototype, "vorname", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], Kunde.prototype, "nachname", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], Kunde.prototype, "strasse", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", String)
 ], Kunde.prototype, "PLZ", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Kunde.prototype, "ort", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)(),
+    DatabaseSchema_1.Column(),
     __metadata("design:type", Number)
 ], Kunde.prototype, "hausnummer", void 0);
 __decorate([
-    (0, DatabaseSchema_1.OneToMany)(type => AR_1.AR, ar => ar.kunde),
+    DatabaseSchema_1.OneToMany(type => AR_1.AR, ar => ar.kunde),
     __metadata("design:type", Array)
 ], Kunde.prototype, "rechnungen", void 0);
 __decorate([
-    (0, DatabaseSchema_1.Column)({ nullable: true }),
+    DatabaseSchema_1.Column({ nullable: true }),
     __metadata("design:type", String)
 ], Kunde.prototype, "land", void 0);
 __decorate([
-    (0, DBObjectQuery_1.$DBObjectQuery)({ name: "Alle nach Namen", description: "Kundenliste nach Namen" }),
+    DBObjectQuery_1.$DBObjectQuery({ name: "Alle nach Namen", description: "Kundenliste nach Namen" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
 ], Kunde, "alleKundenNachNachname", null);
 __decorate([
-    (0, DBObjectQuery_1.$DBObjectQuery)({ name: "Alle nach Nummer", description: "Kundenliste nach Nummer" }),
+    DBObjectQuery_1.$DBObjectQuery({ name: "Alle nach Nummer", description: "Kundenliste nach Nummer" }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
+    __metadata("design:returntype", typeof (_b = typeof Promise !== "undefined" && Promise) === "function" ? _b : Object)
 ], Kunde, "alleKundenNachNummer", null);
 Kunde = Kunde_1 = __decorate([
-    (0, Rights_1.$ParentRights)([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
+    Rights_1.$ParentRights([{ name: "Kundennummern", sqlToCheck: "me.id>=:i1 and me.id<=:i2",
             description: {
                 text: "Kundennummern",
                 i1: "von",
                 i2: "bis"
             } }]),
-    (0, DBObject_1.$DBObject)(),
-    (0, Registry_1.$Class)("de.Kunde"),
+    DBObject_1.$DBObject(),
+    Registry_1.$Class("de.Kunde"),
     __metadata("design:paramtypes", [])
 ], Kunde);
 exports.Kunde = Kunde;

@@ -14,7 +14,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     let Databinder = class Databinder extends InvisibleComponent_1.InvisibleComponent {
         constructor() {
             super();
-            super.init($('<span class="InvisibleComponent"></span>')[0]);
+            super.init('<span class="InvisibleComponent"></span>');
             /** @member {[jassijs.ui.Component]} components - all binded components*/
             this.components = [];
             /** @member {[string]} properties - all binded properties*/

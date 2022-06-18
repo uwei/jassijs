@@ -6,7 +6,8 @@ import { TSSourceMap } from "jassijs_editor/util/TSSourceMap";
 import { Reloader } from "jassijs/util/Reloader";
 import { Server } from "jassijs/remote/Server";
 import windows from "jassijs/base/Windows";
-var installed=undefined;
+import { notify, notifyAddStyle } from "jassijs/ui/Notify";
+var installed = undefined;
 
 
 /**
@@ -26,18 +27,18 @@ export class ChromeDebugger extends Debugger {
             this.onChromeMessage(event);
         });
     }
-    public static showHintExtensionNotInstalled(){
-            $.notify.addStyle('downloadlink', {
-        html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
-        classes: {
-            base: {
-                "color": "white",
-                "background-color": "lightblue"
+    public static showHintExtensionNotInstalled() {
+        notifyAddStyle('downloadlink', {
+            html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
+            classes: {
+                base: {
+                    "color": "white",
+                    "background-color": "lightblue"
+                }
             }
-        }
-    });
-   
-    $.notify("Jassi Debugger Chrome extension not installed. Click here to download.",  { position: "right bottom", style: 'downloadlink',autoHideDelay: 7000, });
+        });
+
+        notify("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000 });
 
     }
     //on receiving messages from chrome extension
@@ -48,7 +49,7 @@ export class ChromeDebugger extends Debugger {
             _this.saveCode(event.data.url.url, event.data.data);
         }
         if (event.data.fromJassiExtension && event.data.connected) {
-            installed=true;
+            installed = true;
             //clearTimeout(checkExtensionInstalled);
             if (jassijs.debugger !== undefined)
                 jassijs.debugger.destroy();
@@ -137,7 +138,7 @@ export class ChromeDebugger extends Debugger {
      * @param {string} type - the type default undefined->stop debugging 
      **/
     async breakpointChanged(file, line, column, enable, type = undefined) {
-        if(!installed)
+        if (!installed)
             ChromeDebugger.showHintExtensionNotInstalled();
         if (this.allBreakPoints[file] === undefined) {
             this.allBreakPoints[file] = [];
@@ -208,3 +209,6 @@ export class ChromeDebugger extends Debugger {
 //if connected then this instance is registred to jassijs.debugger;
 new ChromeDebugger();
 window.postMessage({ toJassiExtension: true, name: "connect" }, "*");
+export function test(){
+    ChromeDebugger.showHintExtensionNotInstalled();
+}

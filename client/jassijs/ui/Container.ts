@@ -40,7 +40,7 @@ export class Container extends Component implements Omit<ContainerConfig, "child
         */
         init(dom,properties=undefined){
             super.init(dom,properties);
-            $(this.domWrapper).addClass("jcontainer");
+            this.domWrapper.classList.add("jcontainer");
         }
        
         /**
@@ -70,9 +70,9 @@ export class Container extends Component implements Omit<ContainerConfig, "child
          * @param {jassijs.ui.Component} component - the component to add
          * @param {jassijs.ui.Component} before - the component before then component to add
          */
-        addBefore(component,before){//add a component to the container
+        addBefore(component:Component,before:Component){//add a component to the container
             component._parent=this;
-            component.domWrapper._parent=this;
+            component.domWrapper["_parent"]=this;
             var index=this._components.indexOf(before);
             if(component.domWrapper.parentNode!==null&&component.domWrapper.parentNode!==undefined){
                  component.domWrapper.parentNode.removeChild(component.domWrapper);
@@ -82,8 +82,7 @@ export class Container extends Component implements Omit<ContainerConfig, "child
             else
             	this._components.splice(index, 0, component);
             
-          
-            $(component.domWrapper).insertBefore(before.domWrapper===undefined?before.dom:before.domWrapper);
+            before.domWrapper.parentNode.insertBefore(component.domWrapper,before.domWrapper===undefined?before.dom:before.domWrapper);
         }
           /**
          * remove the component

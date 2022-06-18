@@ -7,6 +7,8 @@ import { Button } from "jassijs/ui/Button";
 import { classes } from "jassijs/remote/Classes";
 import { router } from "jassijs/base/Router";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
+import { notify } from "jassijs/ui/Notify";
+import { Component } from "jassijs/ui/Component";
 @$ActionProvider("jassijs.base.ActionNode")
 @$Class("jassijs.ui.ErrorPanel")
 export class ErrorPanel extends Panel {
@@ -61,9 +63,9 @@ export class ErrorPanel extends Panel {
             this.IDToolbar.height = 20;
             super.add(this.IDToolbar);
         }
-        var value = $('<div><font  size="2"><div class="errorpanel"></div></font></div>')[0];
+        var value = Component.createHTMLElement('<div><font  size="2"><div class="errorpanel"></div></font></div>');
         this.dom.appendChild(value);
-        this._container = $(this.dom).find(".errorpanel")[0];
+        this._container = this.dom.querySelector(".errorpanel");
         if (this.withNewErrors)
             this.registerError();
         if (this.withLastErrors) {
@@ -84,7 +86,7 @@ export class ErrorPanel extends Panel {
         await typescript.initService();
         var all = await typescript.getDiagnosticsForAll();
         if (all.length === 0)
-            $.notify("no Errors found", "info", { position: "right" });
+            notify("no Errors found", "info", { position: "right" });
         for (var x = 0; x < all.length; x++) {
             var diag = all[x];
             var s = diag.file.fileName;
@@ -156,8 +158,8 @@ export class ErrorPanel extends Panel {
             }
 
         }
-        var value = $('<span>' + msg + '</span>');
-        $(this._container).prepend(value);
+        var value = Component.createHTMLElement('<span>' + msg + '</span>');
+        this._container.prepend(value);
         //  this.dom.appendChild(value);
     }
     async _convertURL(url: string) {

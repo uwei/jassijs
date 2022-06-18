@@ -1,12 +1,8 @@
 define("jassijs/ext/jquerylib", [
     "jquery",
-    "jquery.ui",
-    "jquery.ui.touch",
-    "jquery.doubletap",
-    "jquery.notify"
+    "jquery.ui"
 ], function (require) {
     jassijs.includeCSSFile("jquery-ui.css");
-    $.notify.defaults({ position: "bottom right", className: "info" });
     define("../widgets/datepicker", [], function () {
         return $.datepicker;
     });

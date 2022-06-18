@@ -137,7 +137,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
              };*/
             return handler;
         }
-        off(eventname, handler) {
+        off(eventname, handler = undefined) {
             this.dom.removeEventListener(eventname, handler);
         }
         static cloneAttributes(target, source) {

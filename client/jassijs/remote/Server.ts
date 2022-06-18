@@ -6,6 +6,7 @@ import { classes, JassiError } from "./Classes";
 
 
 
+
 @$Class("jassijs.remote.Server")
 export class Server extends RemoteObject {
     private static isonline: Promise<boolean> = undefined;
@@ -218,7 +219,9 @@ export class Server extends RemoteObject {
 
             if (res === "") {
                 //@ts-ignore
-                $.notify(fileName + " saved", "info", { position: "bottom right" });
+                import ("jassijs/ui/Notify").then((el)=>{
+                    el.notify(fileName + " saved", "info", { position: "bottom right" });
+                });
                 //if (!fromServerdirectory) {
                     for (var x = 0; x < alltsfiles.length; x++) {
                         await $.ajax({ url: alltsfiles[x], dataType: "text" });
@@ -226,7 +229,9 @@ export class Server extends RemoteObject {
                // }
             } else {
                 //@ts-ignore
-                $.notify(fileName + " not saved", "error", { position: "bottom right" });
+                 import ("jassijs/ui/Notify").then((el)=>{
+                     el.notify(fileName + " not saved", "error", { position: "bottom right" });
+                 });
                 throw new JassiError(res);
             }
             return res;
@@ -248,7 +253,7 @@ export class Server extends RemoteObject {
         /*await this.fillFilesInMapIfNeeded();
         if (Server.filesInMap[fileName]) {
             //@ts-ignore
-             $.notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
+             notify(fileName + " could not be saved on server", "error", { position: "bottom right" });
             return;
         }*/
         return await this.saveFiles([fileName], [content], context);

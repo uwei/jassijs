@@ -21,7 +21,7 @@ export class Databinder extends InvisibleComponent {
     userObject;
     constructor() {//id connect to existing(not reqired)
         super();
-        super.init($('<span class="InvisibleComponent"></span>')[0]);
+        super.init('<span class="InvisibleComponent"></span>');
         /** @member {[jassijs.ui.Component]} components - all binded components*/
         this.components = [];
         /** @member {[string]} properties - all binded properties*/

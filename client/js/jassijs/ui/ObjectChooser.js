@@ -58,6 +58,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
                 _this.callEvent("showDialog", event);
             });
             this.icon = "mdi mdi-glasses";
+            this.width = 29;
+            this.height = 21;
             me.IDPanel = new Panel_1.Panel();
             me.IDCancel = new Button_1.Button();
             var _this = this;
@@ -77,7 +79,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
             me.IDSearch.oninput(function (event) {
                 me.IDTable.search("all", me.IDSearch.value, true);
             });
-            $(me.IDTable.dom).doubletap(function (data) {
+            me.IDTable.dom.addEventListener("dblclick", function (data) {
                 _this.ok();
             });
             me.IDSearch.onkeydown(function (event) {

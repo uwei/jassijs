@@ -17,16 +17,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
          }*/
         constructor() {
             super();
-            super.init($('<div><input type="checkbox"><span class="checkboxtext" style="width:100%"></span></div>')[0]);
+            super.init('<div><input type="checkbox"><span class="checkboxtext" style="width:100%"></span></div>');
             this.checkbox = this.dom.firstChild;
-            //             $(this.domWrapper).append($('<span class="checkboxtext"></span>'));
         }
         config(config) {
             super.config(config);
             return this;
         }
         onclick(handler) {
-            $(this.checkbox).click(function () {
+            this.on("click", function () {
                 handler();
             });
         }
@@ -35,16 +34,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 value = true;
             if (value === "false")
                 value = false;
-            $(this.checkbox).prop("checked", value);
+            this.checkbox.checked = value;
         }
         get value() {
-            return $(this.checkbox).prop("checked");
+            return this.checkbox.checked;
         }
         set text(value) {
-            $(this.domWrapper).find(".checkboxtext").html(value);
+            this.domWrapper.querySelector(".checkboxtext").innerHTML = value === undefined ? "" : value;
         }
         get text() {
-            return $(this.domWrapper).find(".checkboxtext").html();
+            return this.domWrapper.querySelector(".checkboxtext").innerHTML;
         }
     };
     __decorate([

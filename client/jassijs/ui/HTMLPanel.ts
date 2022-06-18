@@ -277,13 +277,7 @@ export function test() {
     $(ret.dom).on("blur", (e) => {
         $(ret.domWrapper).draggable('enable');
     });
-    $(ret.dom).doubletap(function (e) {
-        // if (_this._designMode === false)
-        //      return;
-        // _this.initIfNeeded(tinymce, config);
-        var h = 9;
-        //   ret.editor._draganddropper.enableDraggable(false);
-    });
+   
     ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsf<span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>g<strong>sdfgsd</strong>fgsdfg</span></span><br><strong><span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>sdfgsdgsdf</span>gfdsg</strong>";
     ret.height =400;
     ret.width = 400;

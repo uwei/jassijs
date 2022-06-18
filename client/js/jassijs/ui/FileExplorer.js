@@ -260,8 +260,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
             super();
             FileExplorer_1.instance = this;
             //this.maximize();
-            $(this.dom).css("width", "calc(100% - 8px)");
-            $(this.dom).css("height", "calc(100% - 25px)"); //why 25????
+            this.dom.style.width = "calc(100% - 8px)";
+            this.dom.style.height = "calc(100% - 25px)"; //why 25????
             this.tree = new Tree_1.Tree();
             this.search = new Textbox_1.Textbox();
             this.layout();
@@ -324,7 +324,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
                     FileActions.open([evt.data]);
                 }
             });
-            $("#" + this._id).css("flow", "visible");
+            //@ts-ignore
+            this.dom.style.flow = "visible";
             this.search.onkeydown(function (evt) {
                 window.setTimeout(() => {
                     _this.tree.filter(_this.search.value);

@@ -2,6 +2,7 @@ import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 //import typescript from "jassijs_editor/util/Typescript";
 import { router } from "jassijs/base/Router";
+import { notify } from "jassijs/ui/Notify";
 
 @$Class("jassijs_editor.CodePanel")
 export abstract class CodePanel extends Panel {
@@ -135,7 +136,7 @@ export abstract class CodePanel extends Panel {
         var pos = this.positionToNumber(this.cursorPosition)
         var test = this.numberToPosition(pos);
         if (!CodePanel.typescript.isInited(this.file)) {
-            $.notify("please try later ... loading in progress", "info", { position: "bottom right" });
+            notify("please try later ... loading in progress", "info", { position: "bottom right" });
             return;
         }
         CodePanel.typescript.getDefinitionAtPosition(this.file, pos).then((def) => {

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_1, Errors_1, Registry_1, Button_1, Router_1, Actions_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/Notify", "jassijs/ui/Component"], function (require, exports, Panel_1, Errors_1, Registry_1, Button_1, Router_1, Actions_1, Notify_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.ErrorPanel = void 0;
@@ -50,9 +50,9 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                 this.IDToolbar.height = 20;
                 super.add(this.IDToolbar);
             }
-            var value = $('<div><font  size="2"><div class="errorpanel"></div></font></div>')[0];
+            var value = Component_1.Component.createHTMLElement('<div><font  size="2"><div class="errorpanel"></div></font></div>');
             this.dom.appendChild(value);
-            this._container = $(this.dom).find(".errorpanel")[0];
+            this._container = this.dom.querySelector(".errorpanel");
             if (this.withNewErrors)
                 this.registerError();
             if (this.withLastErrors) {
@@ -72,7 +72,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
             await typescript.initService();
             var all = await typescript.getDiagnosticsForAll();
             if (all.length === 0)
-                $.notify("no Errors found", "info", { position: "right" });
+                (0, Notify_1.notify)("no Errors found", "info", { position: "right" });
             for (var x = 0; x < all.length; x++) {
                 var diag = all[x];
                 var s = diag.file.fileName;
@@ -139,8 +139,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                     }
                 }
             }
-            var value = $('<span>' + msg + '</span>');
-            $(this._container).prepend(value);
+            var value = Component_1.Component.createHTMLElement('<span>' + msg + '</span>');
+            this._container.prepend(value);
             //  this.dom.appendChild(value);
         }
         async _convertURL(url) {

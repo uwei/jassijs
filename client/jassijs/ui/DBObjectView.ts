@@ -64,7 +64,7 @@ export class DBObjectView extends Panel implements  Omit<DBObjectViewConfig,"isA
     constructor() {
         super();
         this.me={};
-        $(this.dom).addClass("designerNoResizable");//this should not be resized only me.main
+        this.dom.classList.add("designerNoResizable");//this should not be resized only me.main
         //everytime call super.layout
         DBObjectView.prototype.layout.bind(this)(this.me);
        // this.layout(this.me);
@@ -149,7 +149,6 @@ export class DBObjectView extends Panel implements  Omit<DBObjectViewConfig,"isA
     	me.main.width="100%";
     	me.main.height="100%";
     	me.main.css={ position: "relative" };
-    	//$(me.main.dom).css("background-color","coral");
     	me.toolbar.add(me.create);
     	me.toolbar.add(me.save);
     	me.toolbar.horizontal=true;

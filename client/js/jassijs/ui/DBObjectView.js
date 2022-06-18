@@ -25,7 +25,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
         constructor() {
             super();
             this.me = {};
-            $(this.dom).addClass("designerNoResizable"); //this should not be resized only me.main
+            this.dom.classList.add("designerNoResizable"); //this should not be resized only me.main
             //everytime call super.layout
             DBObjectView_1.prototype.layout.bind(this)(this.me);
             // this.layout(this.me);
@@ -103,7 +103,6 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
             me.main.width = "100%";
             me.main.height = "100%";
             me.main.css = { position: "relative" };
-            //$(me.main.dom).css("background-color","coral");
             me.toolbar.add(me.create);
             me.toolbar.add(me.save);
             me.toolbar.horizontal = true;

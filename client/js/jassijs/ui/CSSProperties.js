@@ -34,8 +34,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
                 if (newKey === "font-family") {
                     loadFontIfNedded(prop[newKey]);
                 }
+                component.dom.style[key] = properties[key];
             }
-            $(component.dom).css(prop);
+            //$(component.dom).css(prop);
             return prop;
         }
     };

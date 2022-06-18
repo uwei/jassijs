@@ -46,6 +46,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             super.config(config);
             return this;
         }
+        get dom() {
+            return super.dom;
+        }
+        set dom(value) {
+            super.dom = value;
+        }
         set disabled(value) {
             $(this.dom).prop('disabled', true);
         }

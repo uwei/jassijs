@@ -1,4 +1,5 @@
 //@ts-ignore
+import "jquery";
 import GoldenLayout from "jassijs/ext/goldenlayout";
 import { $Class } from "jassijs/remote/Registry";
 import {Container} from "jassijs/ui/Container";
@@ -21,7 +22,7 @@ export class DockingContainer extends Container {
     */
     constructor(id=undefined) {//id connect to existing(not reqired)
         super(id);
-        super.init($('<div class="DockingContainer"/>')[0]);
+        super.init('<div class="DockingContainer"/>');
         this.maximize();
         var _this = this;
         this._registeredcomponents = {};

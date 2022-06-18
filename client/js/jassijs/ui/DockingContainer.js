@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Button", "jassijs/ui/Textbox"], function (require, exports, goldenlayout_1, Registry_1, Container_1, Button_1, Textbox_1) {
+define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Button", "jassijs/ui/Textbox", "jquery"], function (require, exports, goldenlayout_1, Registry_1, Container_1, Button_1, Textbox_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DockingContainer = void 0;
@@ -19,7 +19,7 @@ define(["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Regist
     */
         constructor(id = undefined) {
             super(id);
-            super.init($('<div class="DockingContainer"/>')[0]);
+            super.init('<div class="DockingContainer"/>');
             this.maximize();
             var _this = this;
             this._registeredcomponents = {};

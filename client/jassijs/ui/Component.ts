@@ -229,7 +229,7 @@ export class Component implements ComponentConfig {
          };*/
         return handler;
     }
-    off(eventname: string, handler: EventListenerOrEventListenerObject) {
+    off(eventname: string, handler: EventListenerOrEventListenerObject=undefined) {
         this.dom.removeEventListener(eventname, handler);
     }
     private static cloneAttributes(target, source) {

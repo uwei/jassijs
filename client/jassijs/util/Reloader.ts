@@ -1,5 +1,6 @@
 import { $Class } from "jassijs/remote/Registry";
 import registry from "jassijs/remote/Registry";
+import { notify } from "jassijs/ui/Notify";
 
 @$Class("jassijs.util.Reloader")
 export class Reloader {
@@ -32,7 +33,7 @@ export class Reloader {
                 for (var x = 0; x < len; x++) {
                     var file = h.files[x];
                     new Reloader().reloadJS(file);
-                    $.notify(file + " reloaded", "info", { position: "bottom right" });
+                    notify(file + " reloaded", "info", { position: "bottom right" });
                 }
                 window.setTimeout(f, 100000);
             });

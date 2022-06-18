@@ -14,62 +14,68 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     let Button = class Button extends Component_1.Component {
         constructor() {
             super();
-            super.init($('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>')[0]);
+            super.init('<button class="Button" id="dummy" contenteditable=false><span class="buttonspan"><img style="display: none" class="buttonimg"></img></span><span class="buttontext" > </span></button>');
         }
         config(config) {
             super.config(config);
             return this;
+        }
+        get dom() {
+            return super.dom;
+        }
+        set dom(value) {
+            super.dom = value;
         }
         onclick(handler, removeOldHandler = true) {
             if (removeOldHandler) {
                 this.off("click");
             }
             return this.on("click", handler);
-            /*        if (removeOldHandler)
-                        $("#" + this._id).prop("onclick", null).off("click");
-                    $("#" + this._id).click(function (ob) {
-                        handler(ob);
-                    });*/
         }
         set icon(icon) {
             var img;
-            var el1 = $(this.dom).find(".buttonspan");
-            el1.removeClass();
-            el1.addClass("buttonspan");
-            $(this.dom).find(".buttonimg").attr("src", "");
+            if (icon === undefined)
+                icon = "";
+            var el1 = this.dom.querySelector(".buttonspan");
+            el1.classList.forEach((cl) => { el1.classList.remove(cl); });
+            el1.classList.add("buttonspan");
+            this.dom.querySelector(".buttonimg").setAttribute("src", "");
             if (icon === null || icon === void 0 ? void 0 : icon.startsWith("mdi")) {
-                el1.addClass(icon);
-                $(this.dom).find(".buttonimg").css("display", "none");
+                icon.split(" ").forEach((cl) => { el1.classList.add(cl); });
+                this.dom.querySelector(".buttonimg").style.display = "none";
             }
             else {
-                $(this.dom).find(".buttonimg").css("display", "initial");
-                $(this.dom).find(".buttonimg").attr("src", icon);
+                this.dom.querySelector(".buttonimg").style.display = "initial";
+                this.dom.querySelector(".buttonimg").setAttribute("src", icon);
             }
         }
         get icon() {
-            var ret = $(this.dom).find(".buttonimg").attr("src");
+            var ret = this.dom.querySelector(".buttonimg").getAttribute("src");
             if (ret === "") {
-                ret = $(this.dom).find(".buttonspan").attr("class").replace("buttonspan ", "");
+                ret = this.dom.querySelector(".buttonspan").getAttribute("class").replace("buttonspan ", "");
             }
             return ret;
         }
         set text(value) {
-            $(this.dom).find(".buttontext").html(value);
+            this.dom.querySelector(".buttontext").innerText = value === undefined ? "" : value;
         }
         get text() {
-            return $(this.dom).find(".buttontext").text();
+            var ret = this.dom.querySelector(".buttontext").innerText;
+            if (ret === undefined)
+                ret = "";
+            return ret;
         }
         toggle(setDown = undefined) {
             if (setDown === undefined) {
-                $(this.dom).toggleClass("down");
-                return $(this.dom).hasClass("down");
+                this.dom.classList.contains("down") ? this.dom.classList.remove("down") : this.dom.classList.add("down");
+                return this.dom.classList.contains("down");
             }
             else {
-                if (setDown && !$(this.dom).hasClass("down"))
-                    $(this.dom).toggleClass("down");
-                if (!setDown && $(this.dom).hasClass("down"))
-                    $(this.dom).toggleClass("down");
-                return $(this.dom).hasClass("down");
+                if (setDown && !this.dom.classList.contains("down"))
+                    this.dom.classList.contains("down") ? this.dom.classList.remove("down") : this.dom.classList.add("down");
+                if (!setDown && this.dom.classList.contains("down"))
+                    this.dom.classList.contains("down") ? this.dom.classList.remove("down") : this.dom.classList.add("down");
+                return this.dom.classList.contains("down");
             }
         }
     };

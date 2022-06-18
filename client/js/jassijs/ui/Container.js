@@ -40,7 +40,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
        */
         init(dom, properties = undefined) {
             super.init(dom, properties);
-            $(this.domWrapper).addClass("jcontainer");
+            this.domWrapper.classList.add("jcontainer");
         }
         /**
          * adds a component to the container
@@ -70,7 +70,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
          */
         addBefore(component, before) {
             component._parent = this;
-            component.domWrapper._parent = this;
+            component.domWrapper["_parent"] = this;
             var index = this._components.indexOf(before);
             if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
                 component.domWrapper.parentNode.removeChild(component.domWrapper);
@@ -79,7 +79,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
                 this.designDummies.push(component);
             else
                 this._components.splice(index, 0, component);
-            $(component.domWrapper).insertBefore(before.domWrapper === undefined ? before.dom : before.domWrapper);
+            before.domWrapper.parentNode.insertBefore(component.domWrapper, before.domWrapper === undefined ? before.dom : before.domWrapper);
         }
         /**
        * remove the component
