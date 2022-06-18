@@ -5,7 +5,7 @@ import { Image } from "jassijs/ui/Image";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Button } from "jassijs/ui/Button";
 import { Repeater } from "jassijs/ui/Repeater";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { $PropertyEditor, Editor } from "jassijs/ui/PropertyEditors/Editor";
 import { $Action } from "jassijs/base/Actions";

@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs_editor/util/Parser", "jassijs/template/TemplateDBObject", "jassijs/util/Tools", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/OptionDialog", "jassijs/ext/jquery.choosen"], function (require, exports, Jassi_1, Registry_1, Typescript_1, Parser_1, TemplateDBObject_1, Tools_1, Server_1, Windows_1, OptionDialog_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs_editor/util/Parser", "jassijs/template/TemplateDBObject", "jassijs/util/Tools", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/OptionDialog", "jassijs/ext/jquery.choosen"], function (require, exports, Registry_1, Registry_2, Typescript_1, Parser_1, TemplateDBObject_1, Tools_1, Server_1, Windows_1, OptionDialog_1) {
     "use strict";
     var DatabaseSchema_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -362,7 +362,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
             this.parsedClasses = {};
             this.definedImports = {};
             await Typescript_1.default.waitForInited;
-            var data = await Registry_1.default.getJSONData("$DBObject");
+            var data = await Registry_2.default.getJSONData("$DBObject");
             for (let x = 0; x < data.length; x++) {
                 var entr = data[x];
                 var parser = new Parser_1.Parser();
@@ -393,8 +393,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
         async loadSchemaFromCode() {
             await this.parseFiles();
             //await registry.loadAllFilesForService("$DBObject")
-            await Registry_1.default.reload();
-            var data = Registry_1.default.getJSONData("$DBObject");
+            await Registry_2.default.reload();
+            var data = Registry_2.default.getJSONData("$DBObject");
             this.databaseClasses = [];
             var _this = this;
             (await data).forEach((entr) => {
@@ -532,7 +532,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
     };
     DatabaseSchema.basicdatatypes = ["string", "int", "decimal", "boolean", "Date"];
     DatabaseSchema = DatabaseSchema_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs.base.DatabaseSchema")
+        (0, Registry_1.$Class)("jassijs.base.DatabaseSchema")
     ], DatabaseSchema);
     exports.DatabaseSchema = DatabaseSchema;
     /*

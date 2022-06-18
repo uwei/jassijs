@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import {DBObject, $DBObject } from "jassijs/remote/DBObject";
 import { PrimaryColumn, Column, OneToOne } from "jassijs/util/DatabaseSchema";
 //import { Entity, PrimaryColumn, Column,OneToOne,ManyToMany,ManyToOne,OneToMany } from "typeorm";

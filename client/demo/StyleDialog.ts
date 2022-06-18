@@ -1,6 +1,6 @@
 import {Style} from "jassijs/ui/Style";
 import {Button} from "jassijs/ui/Button";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import {Panel} from "jassijs/ui/Panel";
 
 type Me = {

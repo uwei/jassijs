@@ -1,7 +1,19 @@
 define(["require", "exports", "reflect-metadata"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.migrateModul = exports.Registry = void 0;
+    exports.migrateModul = exports.Registry = exports.$register = exports.$Class = void 0;
+    function $Class(longclassname) {
+        return function (pclass) {
+            registry.register("$Class", pclass, longclassname);
+        };
+    }
+    exports.$Class = $Class;
+    function $register(servicename, ...params) {
+        return function (pclass) {
+            registry.register(servicename, pclass, params);
+        };
+    }
+    exports.$register = $register;
     if (Reflect["_metadataorg"] === undefined) {
         Reflect["_metadataorg"] = Reflect["metadata"];
         if (Reflect["_metadataorg"] === undefined)

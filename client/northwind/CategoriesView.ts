@@ -4,7 +4,7 @@ import { Table } from "jassijs/ui/Table";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { Textarea } from "jassijs/ui/Textarea";
 import { Textbox } from "jassijs/ui/Textbox";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { Categories } from "northwind/remote/Categories";

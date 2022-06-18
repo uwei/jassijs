@@ -161,7 +161,6 @@ class JassijsStarter {
             paths: {
                 //"jassijs/ext": '../../jassijs/ext',
                 "remote/jassijs/ext": '../../remote/jassijs/ext',
-                "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect",
             }
         });
         var mods = [];

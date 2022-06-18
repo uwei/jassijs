@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_1, NumberConverter_1, Textbox_1, BoxPanel_1, Select_1, Table_1, Jassi_1, Panel_1, papaparse_1, Database_1, Registry_1, Classes_1, DBObject_1, Actions_1, Router_1, Server_1, Transaction_1) {
+define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_1, NumberConverter_1, Textbox_1, BoxPanel_1, Select_1, Table_1, Registry_1, Panel_1, papaparse_1, Database_1, Registry_2, Classes_1, DBObject_1, Actions_1, Router_1, Server_1, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -47,8 +47,8 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
         async initClasses() {
             var cls = [];
             var _this = this;
-            await Registry_1.default.loadAllFilesForService("$DBObject");
-            var data = Registry_1.default.getData("$DBObject");
+            await Registry_2.default.loadAllFilesForService("$DBObject");
+            var data = Registry_2.default.getData("$DBObject");
             data.forEach((entr) => {
                 cls.push(Classes_1.classes.getClassName(entr.oclass));
             });
@@ -208,7 +208,7 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
             //read objects so we can read from cache
             let nil = await Type["find"]();
             var meta = (_a = Database_1.db.getMetadata(await Classes_1.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
-            var members = Registry_1.default.getMemberData("design:type")[dbclass];
+            var members = Registry_2.default.getMemberData("design:type")[dbclass];
             var allObjects = [];
             var from = fromLine;
             for (var x = from - 1; x < data.length; x++) {
@@ -274,7 +274,7 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
     ], CSVImport, "showDialog", null);
     CSVImport = CSVImport_1 = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_1.$Class)("jassijs.util.CSVImport"),
+        (0, Registry_1.$Class)("jassijs.util.CSVImport"),
         __metadata("design:paramtypes", [])
     ], CSVImport);
     exports.CSVImport = CSVImport;

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_1, Router_1, Typescript_1, CodePanel_1, Settings_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Router_1, Typescript_1, CodePanel_1, Settings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -306,7 +306,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "ja
         }
     };
     MonacoPanel = __decorate([
-        (0, Jassi_1.$Class)("jassijs_editor.MonacoPanel"),
+        (0, Registry_1.$Class)("jassijs_editor.MonacoPanel"),
         __metadata("design:paramtypes", [])
     ], MonacoPanel);
     exports.MonacoPanel = MonacoPanel;

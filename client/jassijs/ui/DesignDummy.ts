@@ -1,5 +1,5 @@
 import { Component } from "jassijs/ui/Component";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Image } from "jassijs/ui/Image";
 import { MenuItem } from "jassijs/ui/MenuItem";
 import { Container } from "jassijs/ui/Container";

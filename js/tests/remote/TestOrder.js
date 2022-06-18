@@ -13,7 +13,7 @@ exports.test = exports.TestOrder = void 0;
 const TestOrderDetails_1 = require("tests/remote/TestOrderDetails");
 const TestCustomer_1 = require("tests/remote/TestCustomer");
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Rights_1 = require("jassijs/remote/security/Rights");
 let TestOrder = class TestOrder extends DBObject_1.DBObject {
@@ -36,7 +36,7 @@ __decorate([
 ], TestOrder.prototype, "details", void 0);
 TestOrder = __decorate([
     (0, DBObject_1.$DBObject)(),
-    (0, Jassi_1.$Class)("tests.TestOrder"),
+    (0, Registry_1.$Class)("tests.TestOrder"),
     __metadata("design:paramtypes", [])
 ], TestOrder);
 exports.TestOrder = TestOrder;

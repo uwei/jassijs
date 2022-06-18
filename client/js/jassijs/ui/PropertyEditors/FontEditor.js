@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_1, Editor_1, Textbox_1, Jassi_1, Select_1, CSSProperties_1) {
+define(["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_1, Editor_1, Textbox_1, Registry_1, Select_1, CSSProperties_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.FontEditor = void 0;
@@ -81,7 +81,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyE
     };
     FontEditor = __decorate([
         (0, Editor_1.$PropertyEditor)(["font"]),
-        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.FontEditor")
+        (0, Registry_1.$Class)("jassijs.ui.PropertyEditors.FontEditor")
         /**
         * Editor for font
         * used by PropertyEditor

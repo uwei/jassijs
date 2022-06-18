@@ -1,6 +1,6 @@
 import { Button } from "jassijs/ui/Button";
 import { Table } from "jassijs/ui/Table";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import registry from "jassijs/remote/Registry";
 import { DBObject, $DBObject } from "jassijs/remote/DBObject";

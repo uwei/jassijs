@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "jassijs/util/Tools", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/util/Runlater", "jassijs_report/RTableLayouts"], function (require, exports, Jassi_1, RText_1, Tools_1, RComponent_1, RTablerow_1, Property_1, ContextMenu_1, MenuItem_1, Button_1, Runlater_1, RTableLayouts_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText", "jassijs/util/Tools", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/util/Runlater", "jassijs_report/RTableLayouts"], function (require, exports, Registry_1, RText_1, Tools_1, RComponent_1, RTablerow_1, Property_1, ContextMenu_1, MenuItem_1, Button_1, Runlater_1, RTableLayouts_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RTable = void 0;
@@ -718,7 +718,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
     ], RTable.prototype, "layoutName", null);
     RTable = __decorate([
         (0, RComponent_1.$ReportComponent)({ fullPath: "report/Table", icon: "mdi mdi-table-large", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
-        (0, Jassi_1.$Class)("jassijs_report.RTable"),
+        (0, Registry_1.$Class)("jassijs_report.RTable"),
         __metadata("design:paramtypes", [Object])
     ], RTable);
     exports.RTable = RTable;

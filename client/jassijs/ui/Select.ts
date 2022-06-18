@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import {Component,  $UIComponent, ComponentCreateProperties, ComponentConfig } from "jassijs/ui/Component";
 import {DataComponent} from "jassijs/ui/DataComponent";
 //import Button from "jassijs/ui/Button";

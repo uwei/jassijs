@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { CodePanel } from "jassijs_editor/CodePanel";
 import { VariablePanel } from "jassijs/ui/VariablePanel";
@@ -807,7 +807,7 @@ export async function test() {
     //await editor.openFile(url);
     editor.value = `import { Button } from "jassijs/ui/Button";
 import { Repeater } from "jassijs/ui/Repeater";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 type Me = {
     button1?: Button;

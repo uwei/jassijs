@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test2 = exports.test = exports.T = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Server_1 = require("jassijs/remote/Server");
 let T = class T extends RemoteObject_1.RemoteObject {
@@ -23,7 +23,7 @@ let T = class T extends RemoteObject_1.RemoteObject {
     }
 };
 T = __decorate([
-    (0, Jassi_1.$Class)("tests.remote.T")
+    (0, Registry_1.$Class)("tests.remote.T")
 ], T);
 exports.T = T;
 async function test() {

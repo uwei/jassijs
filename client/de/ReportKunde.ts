@@ -1,5 +1,5 @@
 import { ReportDesign } from "jassijs_report/ReportDesign";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
 import { Kunde } from "de/remote/Kunde";
 var reportdesign = {

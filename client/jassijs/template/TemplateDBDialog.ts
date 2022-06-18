@@ -1,5 +1,5 @@
 import { $ActionProvider, $Action } from "jassijs/base/Actions";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { FileNode } from "jassijs/remote/FileNode";
 import { OptionDialog } from "jassijs/ui/OptionDialog";
 import { FileExplorer, FileActions } from "jassijs/ui/FileExplorer";

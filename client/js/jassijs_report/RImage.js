@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs_report/RComponent"], function (require, exports, Jassi_1, Property_1, RComponent_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs_report/RComponent"], function (require, exports, Registry_1, Property_1, RComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RImage = void 0;
@@ -157,7 +157,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
     ], RImage.prototype, "opacity", null);
     RImage = __decorate([
         (0, RComponent_1.$ReportComponent)({ fullPath: "report/Image", icon: "mdi mdi-image-frame" }),
-        (0, Jassi_1.$Class)("jassijs_report.RImage")
+        (0, Registry_1.$Class)("jassijs_report.RImage")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])

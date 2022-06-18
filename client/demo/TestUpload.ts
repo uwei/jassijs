@@ -1,6 +1,6 @@
 import {HTMLPanel} from "jassijs/ui/HTMLPanel";
 import {Upload} from "jassijs/ui/Upload";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import {Panel} from "jassijs/ui/Panel";
 //@ts-ignore
 import {Papa} from "jassijs/ext/papaparse";

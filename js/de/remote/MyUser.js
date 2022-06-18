@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MyUser = void 0;
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 let MyUser = class MyUser {
 };
 __decorate([
@@ -34,7 +34,7 @@ __decorate([
 MyUser = __decorate([
     (0, DBObject_1.$DBObject)(),
     (0, DatabaseSchema_1.Entity)(),
-    (0, Jassi_1.$Class)("de.MyUser")
+    (0, Registry_1.$Class)("de.MyUser")
 ], MyUser);
 exports.MyUser = MyUser;
 //# sourceMappingURL=MyUser.js.map

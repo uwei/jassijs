@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/remote/Jassi", "de/remote/Kunde", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_1, Property_1, Jassi_1, Kunde_1, DBObjectView_1) {
+define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/remote/Registry", "de/remote/Kunde", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_1, Property_1, Registry_1, Kunde_1, DBObjectView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.KundeView = void 0;
@@ -102,7 +102,7 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
     ], KundeView.prototype, "value", void 0);
     KundeView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({ classname: "de.Kunde" }),
-        (0, Jassi_1.$Class)("de.KundeView"),
+        (0, Registry_1.$Class)("de.KundeView"),
         __metadata("design:paramtypes", [])
     ], KundeView);
     exports.KundeView = KundeView;

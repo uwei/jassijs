@@ -1,6 +1,6 @@
 import {Button} from "jassijs/ui/Button";
 import {BoxPanel} from "jassijs/ui/BoxPanel";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import {Panel, PanelConfig} from "jassijs/ui/Panel";
 import { Databinder } from "jassijs/ui/Databinder";
 import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";

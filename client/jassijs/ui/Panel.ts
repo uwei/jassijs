@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Container, ContainerConfig } from "jassijs/ui/Container";
 import { Component, $UIComponent, ComponentCreateProperties, ComponentConfig } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";

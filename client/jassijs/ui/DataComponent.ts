@@ -3,7 +3,7 @@ import jassi from "jassijs/jassi";
 import { Component, ComponentConfig } from "jassijs/ui/Component";
 import { Databinder } from "jassijs/ui/Databinder";
 import { Property, $Property } from "jassijs/ui/Property";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 
 export interface DataComponentConfig extends ComponentConfig {
     /**

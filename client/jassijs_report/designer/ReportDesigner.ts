@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { ComponentExplorer } from "jassijs_editor/ComponentExplorer";
@@ -364,7 +364,7 @@ export async function test() {
     //await editor.openFile(url);
     editor.value = `import { ReportDesign } from "jassijs_report/ReportDesign";
 
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
 
 export class SampleReport extends ReportDesign {

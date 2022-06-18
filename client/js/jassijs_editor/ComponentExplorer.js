@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs/ui/PropertyEditor", "jassijs/remote/Classes"], function (require, exports, Jassi_1, Panel_1, Tree_1, ComponentDescriptor_1, ContextMenu_1, PropertyEditor_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs/ui/PropertyEditor", "jassijs/remote/Classes"], function (require, exports, Registry_1, Panel_1, Tree_1, ComponentDescriptor_1, ContextMenu_1, PropertyEditor_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentExplorer = void 0;
@@ -136,7 +136,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     ComponentExplorer = __decorate([
-        (0, Jassi_1.$Class)("jassijs_editor.ComponentExplorer"),
+        (0, Registry_1.$Class)("jassijs_editor.ComponentExplorer"),
         __metadata("design:paramtypes", [Object, PropertyEditor_1.PropertyEditor])
     ], ComponentExplorer);
     exports.ComponentExplorer = ComponentExplorer;

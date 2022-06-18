@@ -3,7 +3,7 @@ import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { Button } from "jassijs/ui/Button";
 import { Textbox } from "jassijs/ui/Textbox";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 type Me = {
     panel1?: Panel;

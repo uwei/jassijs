@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Image", "jassijs/ui/MenuItem"], function (require, exports, Jassi_1, Image_1, MenuItem_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Image", "jassijs/ui/MenuItem"], function (require, exports, Registry_1, Image_1, MenuItem_1) {
     "use strict";
     var DesignDummy_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -75,7 +75,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Image", "jassi
         }
     };
     DesignDummy = DesignDummy_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.DesignDummy"),
+        (0, Registry_1.$Class)("jassijs.ui.DesignDummy"),
         __metadata("design:paramtypes", [])
     ], DesignDummy);
     exports.DesignDummy = DesignDummy;

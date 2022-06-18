@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, RComponent_1, Jassi_1, Property_1, Classes_1) {
+define(["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, RComponent_1, Registry_1, Property_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RStyle = void 0;
@@ -95,7 +95,7 @@ define(["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Jassi
     ], RStyle.prototype, "name", null);
     RStyle = __decorate([
         (0, RComponent_1.$ReportComponent)({ fullPath: "report/Style", icon: "mdi mdi-virus-outline", editableChildComponents: ["this"] }),
-        (0, Jassi_1.$Class)("jassijs_report.RStyle")
+        (0, Registry_1.$Class)("jassijs_report.RStyle")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])

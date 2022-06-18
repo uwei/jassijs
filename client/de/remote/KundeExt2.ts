@@ -1,7 +1,7 @@
 
 import { Kunde } from "de/remote/Kunde";
 import { extensions, $Extension } from "jassijs/remote/Extensions";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 
 //Do not import the class we want to extend!
 declare module "de/remote/Kunde"{

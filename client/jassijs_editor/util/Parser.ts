@@ -1,5 +1,5 @@
 
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 
 
 import typescript from "jassijs_editor/util/Typescript";

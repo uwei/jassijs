@@ -39,7 +39,7 @@ define("demo/DelTest", ["require", "exports", "northwind/remote/OrderDetails", "
     }
     exports.test = test;
 });
-define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Button_1, BoxPanel_1, Jassi_1, Panel_1) {
+define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Button_1, BoxPanel_1, Registry_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog = void 0;
@@ -62,7 +62,7 @@ define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Bo
         }
     };
     Dialog = __decorate([
-        (0, Jassi_1.$Class)("demo/Dialog"),
+        (0, Registry_1.$Class)("demo/Dialog"),
         __metadata("design:paramtypes", [])
     ], Dialog);
     exports.Dialog = Dialog;
@@ -72,7 +72,7 @@ define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Bo
     }
     exports.test = test;
 });
-define("demo/Dialog2", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Jassi_2, Panel_2) {
+define("demo/Dialog2", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Registry_2, Panel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog2 = void 0;
@@ -87,7 +87,7 @@ define("demo/Dialog2", ["require", "exports", "jassijs/remote/Jassi", "jassijs/u
         }
     };
     Dialog2 = __decorate([
-        (0, Jassi_2.$Class)("demo/Dialog2"),
+        (0, Registry_2.$Class)("demo/Dialog2"),
         __metadata("design:paramtypes", [])
     ], Dialog2);
     exports.Dialog2 = Dialog2;
@@ -97,7 +97,7 @@ define("demo/Dialog2", ["require", "exports", "jassijs/remote/Jassi", "jassijs/u
     }
     exports.test = test;
 });
-define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, HTMLPanel_1, Button_2, Jassi_3, Panel_3) {
+define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, HTMLPanel_1, Button_2, Registry_3, Panel_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.EmptyDialog = void 0;
@@ -130,7 +130,7 @@ define("demo/EmptyDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassi
         }
     };
     EmptyDialog = __decorate([
-        (0, Jassi_3.$Class)("demo.EmptyDialog"),
+        (0, Registry_3.$Class)("demo.EmptyDialog"),
         __metadata("design:paramtypes", [])
     ], EmptyDialog);
     exports.EmptyDialog = EmptyDialog;
@@ -193,7 +193,7 @@ define("demo/LargeReport", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Registry"], function (require, exports, Server_1, Reloader_1, Registry_1) {
+define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Registry"], function (require, exports, Server_1, Reloader_1, Registry_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.MemoryTest = void 0;
@@ -209,14 +209,14 @@ define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassi
             let test = await server.loadFile("demo/DK.ts");
             await server.saveFile("demo/DK.ts", test);
             await Reloader_1.Reloader.instance.reloadJS("demo/DK.js");
-            delete Registry_1.default.data["$Class"]["demo.DK"];
+            delete Registry_4.default.data["$Class"]["demo.DK"];
             requirejs.undef("demo/DK.js");
             requirejs.undef("demo/DK");
         }
     }
     exports.MemoryTest = MemoryTest;
 });
-define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_4) {
+define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
@@ -277,7 +277,7 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
         }
     };
     ReportInvoice = __decorate([
-        (0, Jassi_4.$Class)("demo.ReportInvoice"),
+        (0, Registry_5.$Class)("demo.ReportInvoice"),
         __metadata("design:paramtypes", [])
     ], ReportInvoice);
     exports.ReportInvoice = ReportInvoice;
@@ -349,7 +349,7 @@ define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Jassi"], fun
     }
     exports.test = test;
 });
-define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_5) {
+define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportInvoice = void 0;
@@ -417,7 +417,7 @@ define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], fu
         }
     };
     ReportInvoice = __decorate([
-        (0, Jassi_5.$Class)("demo.ReportInvoice"),
+        (0, Registry_6.$Class)("demo.ReportInvoice"),
         __metadata("design:paramtypes", [])
     ], ReportInvoice);
     exports.ReportInvoice = ReportInvoice;
@@ -455,7 +455,7 @@ define("demo/ReportInvoice2", ["require", "exports", "jassijs/remote/Jassi"], fu
     }
     exports.test = test;
 });
-define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, Jassi_6, Property_1, Kunde_1) {
+define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, Registry_7, Property_1, Kunde_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -489,7 +489,7 @@ define("demo/ReportKunden", ["require", "exports", "jassijs/remote/Jassi", "jass
         __metadata("design:type", typeof (_a = typeof Kunde_1.Kunde !== "undefined" && Kunde_1.Kunde) === "function" ? _a : Object)
     ], ReportKunde.prototype, "value", void 0);
     ReportKunde = __decorate([
-        (0, Jassi_6.$Class)("de.ReportKunde")
+        (0, Registry_7.$Class)("de.ReportKunde")
     ], ReportKunde);
     exports.ReportKunde = ReportKunde;
     async function test() {
@@ -540,7 +540,7 @@ define("demo/ReportStyle", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Panel"], function (require, exports, Style_1, Button_3, Jassi_7, Panel_4) {
+define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Style_1, Button_3, Registry_8, Panel_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.StyleDialog = void 0;
@@ -566,7 +566,7 @@ define("demo/StyleDialog", ["require", "exports", "jassijs/ui/Style", "jassijs/u
         }
     };
     StyleDialog = __decorate([
-        (0, Jassi_7.$Class)("demo/StyleDialog"),
+        (0, Registry_8.$Class)("demo/StyleDialog"),
         __metadata("design:paramtypes", [])
     ], StyleDialog);
     exports.StyleDialog = StyleDialog;
@@ -621,7 +621,7 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
     }
     exports.test = test;
 });
-define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Panel_5, Button_4, HTMLPanel_2, Jassi_8, Component_1) {
+define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Registry", "jassijs/ui/Component"], function (require, exports, Panel_5, Button_4, HTMLPanel_2, Registry_9, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestComponent = void 0;
@@ -672,7 +672,7 @@ define("demo/TestComponent", ["require", "exports", "jassijs/ui/Panel", "jassijs
     };
     TestComponent = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/TestComponent", editableChildComponents: ["this", "me.button4"] }),
-        (0, Jassi_8.$Class)("demo.TestComponent"),
+        (0, Registry_9.$Class)("demo.TestComponent"),
         __metadata("design:paramtypes", [])
     ], TestComponent);
     exports.TestComponent = TestComponent;
@@ -743,7 +743,7 @@ define("demo/TestList", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
-define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Jassi"], function (require, exports, Panel_6, Tree_1, Jassi_9) {
+define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Registry"], function (require, exports, Panel_6, Tree_1, Registry_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestTree = void 0;
@@ -756,7 +756,7 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
         }
     };
     TestTree = __decorate([
-        (0, Jassi_9.$Class)("demo.TestTree"),
+        (0, Registry_10.$Class)("demo.TestTree"),
         __metadata("design:paramtypes", [])
     ], TestTree);
     exports.TestTree = TestTree;
@@ -786,7 +786,7 @@ define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/T
     }
     exports.test = test;
 });
-define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_3, Upload_1, Jassi_10, Panel_7, papaparse_1) {
+define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Upload", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse"], function (require, exports, HTMLPanel_3, Upload_1, Registry_11, Panel_7, papaparse_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestUpload = void 0;
@@ -815,7 +815,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
         }
     };
     TestUpload = __decorate([
-        (0, Jassi_10.$Class)("demo/TestUpload"),
+        (0, Registry_11.$Class)("demo/TestUpload"),
         __metadata("design:paramtypes", [])
     ], TestUpload);
     exports.TestUpload = TestUpload;
@@ -826,7 +826,7 @@ define("demo/TestUpload", ["require", "exports", "jassijs/ui/HTMLPanel", "jassij
     }
     exports.test = test;
 });
-define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_8, ContextMenu_2, MenuItem_2, Button_5, Jassi_11) {
+define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Registry"], function (require, exports, Panel_8, ContextMenu_2, MenuItem_2, Button_5, Registry_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Testcontextmenu = void 0;
@@ -872,7 +872,7 @@ define("demo/Testcontextmenu", ["require", "exports", "jassijs/ui/Panel", "jassi
         }
     };
     Testcontextmenu = __decorate([
-        (0, Jassi_11.$Class)("demo.Testcontextmenu"),
+        (0, Registry_12.$Class)("demo.Testcontextmenu"),
         __metadata("design:paramtypes", [])
     ], Testcontextmenu);
     exports.Testcontextmenu = Testcontextmenu;
@@ -1133,7 +1133,7 @@ define("demo/Testdatatable3", ["require", "exports"], function (require, exports
     }
     exports.test = test;
 });
-define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Panel_9, Menu_1, MenuItem_3, Button_6, Jassi_12) {
+define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/remote/Registry"], function (require, exports, Panel_9, Menu_1, MenuItem_3, Button_6, Registry_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testmenu = void 0;
@@ -1205,7 +1205,7 @@ define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/M
         }
     };
     Testmenu = __decorate([
-        (0, Jassi_12.$Class)("demo.Testmenu"),
+        (0, Registry_13.$Class)("demo.Testmenu"),
         __metadata("design:paramtypes", [])
     ], Testmenu);
     exports.Testmenu = Testmenu;
@@ -1302,7 +1302,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassij
     }
     exports.test = test;
 });
-define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Table"], function (require, exports, Panel_11, Jassi_13, Table_2) {
+define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Table"], function (require, exports, Panel_11, Registry_14, Table_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
@@ -1405,7 +1405,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
         }
     };
     TreeTable = __decorate([
-        (0, Jassi_13.$Class)("demo.TreeTable"),
+        (0, Registry_14.$Class)("demo.TreeTable"),
         __metadata("design:paramtypes", [])
     ], TreeTable);
     exports.TreeTable = TreeTable;
@@ -1428,11 +1428,11 @@ define("demo/registry", ["require"], function (require) {
     return {
         default: {
             "demo/Dialog.ts": {
-                "date": 1627586452000,
+                "date": 1655556795284,
                 "demo/Dialog": {}
             },
             "demo/EmptyDialog.ts": {
-                "date": 1633376770000,
+                "date": 1655556795283,
                 "demo.EmptyDialog": {}
             },
             "demo/MemoryTest.ts": {
@@ -1442,18 +1442,18 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1612818334000
             },
             "demo/ReportInvoice.ts": {
-                "date": 1632512316000,
+                "date": 1655556795176,
                 "demo.ReportInvoice": {}
             },
             "demo/StyleDialog.ts": {
-                "date": 1622984214000,
+                "date": 1655556793964,
                 "demo/StyleDialog": {}
             },
             "demo/TableContextmenu.ts": {
                 "date": 1622984380000
             },
             "demo/TestComponent.ts": {
-                "date": 1622984214000,
+                "date": 1655556793964,
                 "demo.TestComponent": {
                     "$UIComponent": [
                         {
@@ -1467,30 +1467,30 @@ define("demo/registry", ["require"], function (require) {
                 }
             },
             "demo/Testcontextmenu.ts": {
-                "date": 1622984214000,
+                "date": 1655556793964,
                 "demo.Testcontextmenu": {}
             },
             "demo/Testmenu.ts": {
-                "date": 1655546359451,
+                "date": 1655556795177,
                 "demo.Testmenu": {}
             },
             "demo/TestTree.ts": {
-                "date": 1622984214000,
+                "date": 1655556795176,
                 "demo.TestTree": {}
             },
             "demo/TestUpload.ts": {
-                "date": 1654466252743,
+                "date": 1655556795176,
                 "demo/TestUpload": {}
             },
             "demo/TreeContextmenu.ts": {
                 "date": 1634384688000
             },
             "demo/TreeTable.ts": {
-                "date": 1622984214000,
+                "date": 1655556795176,
                 "demo.TreeTable": {}
             },
             "demo/ReportKunden.ts": {
-                "date": 1631970822000,
+                "date": 1655556795176,
                 "de.ReportKunde": {
                     "@members": {
                         "value": {
@@ -1506,23 +1506,23 @@ define("demo/registry", ["require"], function (require) {
                 }
             },
             "demo/ReportInvoice2.ts": {
-                "date": 1634336860000,
+                "date": 1655556795176,
                 "demo.ReportInvoice": {}
             },
             "demo/Testdatatable.ts": {
-                "date": 1633811082000
+                "date": 1655556793965
             },
             "demo/Testdatatable2.ts": {
-                "date": 1631998784000
+                "date": 1655556795176
             },
             "demo/Testdatatable3.ts": {
-                "date": 1634326000000
+                "date": 1655556795176
             },
             "demo/ReportStyle.ts": {
-                "date": 1632525414000
+                "date": 1655556795175
             },
             "demo/Testtable.ts": {
-                "date": 1633456736000
+                "date": 1655556795176
             },
             "demo/TestList.ts": {
                 "date": 1635803026000
@@ -1531,7 +1531,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1633792454000
             },
             "demo/Testdatatable1.ts": {
-                "date": 1633803358000
+                "date": 1655556795175
             },
             "demo/LargeReport.ts": {
                 "date": 1634240084000
@@ -1540,7 +1540,7 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1635896382000
             },
             "demo/Dialog2.ts": {
-                "date": 1654977013647,
+                "date": 1655556795284,
                 "demo/Dialog2": {}
             }
         }

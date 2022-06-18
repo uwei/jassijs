@@ -14,7 +14,7 @@ exports.test = exports.AR = void 0;
 const ARZeile_1 = require("de/remote/ARZeile");
 const Kunde_1 = require("de/remote/Kunde");
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Rights_1 = require("jassijs/remote/security/Rights");
 /**
@@ -112,7 +112,7 @@ AR = AR_1 = __decorate([
     (0, Rights_1.$Rights)([{ name: "Auftragswesen/Ausgangsrechnung/festschreiben" },
         { name: "Auftragswesen/Ausgangsrechnung/löschen" }]),
     (0, DBObject_1.$DBObject)(),
-    (0, Jassi_1.$Class)("de.AR"),
+    (0, Registry_1.$Class)("de.AR"),
     __metadata("design:paramtypes", [])
 ], AR);
 exports.AR = AR;

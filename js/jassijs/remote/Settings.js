@@ -8,8 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var Settings_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
 const Registry_1 = require("jassijs/remote/Registry");
+const Registry_2 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Setting_1 = require("jassijs/remote/security/Setting");
 const Server_1 = require("./Server");
@@ -167,14 +167,14 @@ Settings.browserSettings = undefined;
 Settings.userSettings = undefined;
 Settings.allusersSettings = undefined;
 Settings = Settings_1 = __decorate([
-    (0, Jassi_1.$Class)("jassijs.remote.Settings")
+    (0, Registry_1.$Class)("jassijs.remote.Settings")
 ], Settings);
 exports.Settings = Settings;
 var settings = new Settings();
 exports.settings = settings;
 function $SettingsDescriptor() {
     return function (pclass) {
-        Registry_1.default.register("$SettingsDescriptor", pclass);
+        Registry_2.default.register("$SettingsDescriptor", pclass);
     };
 }
 exports.$SettingsDescriptor = $SettingsDescriptor;

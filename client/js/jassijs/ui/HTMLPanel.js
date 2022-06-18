@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_1, Jassi_1, Property_1, DataComponent_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_1, Registry_1, Property_1, DataComponent_1) {
     "use strict";
     var HTMLPanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -254,7 +254,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "j
     ], HTMLPanel.prototype, "value", null);
     HTMLPanel = HTMLPanel_1 = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
-        (0, Jassi_1.$Class)("jassijs.ui.HTMLPanel"),
+        (0, Registry_1.$Class)("jassijs.ui.HTMLPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel);
     exports.HTMLPanel = HTMLPanel;

@@ -12,7 +12,7 @@ var Employees_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test2 = exports.test = exports.Employees = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Transaction_1 = require("jassijs/remote/Transaction");
 let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
@@ -117,7 +117,7 @@ __decorate([
 ], Employees.prototype, "HireDate", void 0);
 Employees = Employees_1 = __decorate([
     (0, DBObject_1.$DBObject)(),
-    (0, Jassi_1.$Class)("northwind.Employees"),
+    (0, Registry_1.$Class)("northwind.Employees"),
     __metadata("design:paramtypes", [])
 ], Employees);
 exports.Employees = Employees;

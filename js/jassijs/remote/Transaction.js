@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Transaction = exports.TransactionItem = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 //var serversession;
 class TransactionItem {
@@ -135,7 +135,7 @@ let Transaction = class Transaction extends RemoteObject_1.RemoteObject {
     }
 };
 Transaction = __decorate([
-    (0, Jassi_1.$Class)("jassijs.remote.Transaction")
+    (0, Registry_1.$Class)("jassijs.remote.Transaction")
 ], Transaction);
 exports.Transaction = Transaction;
 //# sourceMappingURL=Transaction.js.map

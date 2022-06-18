@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/base/Router"], function (require, exports, Jassi_1, Panel_1, Router_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router"], function (require, exports, Registry_1, Panel_1, Router_1) {
     "use strict";
     var CodePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -135,7 +135,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     CodePanel = CodePanel_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs_editor.CodePanel")
+        (0, Registry_1.$Class)("jassijs_editor.CodePanel")
     ], CodePanel);
     exports.CodePanel = CodePanel;
 });

@@ -1,6 +1,6 @@
 import { ContextMenu } from "jassijs/ui/ContextMenu";
 import { Tree } from "jassijs/ui/Tree";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { $ActionProvider, $Action } from "jassijs/base/Actions";
 import { Panel } from "jassijs/ui/Panel";
 import registry from "jassijs/remote/Registry";

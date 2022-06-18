@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Button_1, BoxPanel_1, Jassi_1, Panel_1, Databinder_1, Component_1, Registry_1, Classes_1, Property_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Button_1, BoxPanel_1, Registry_1, Panel_1, Databinder_1, Component_1, Registry_2, Classes_1, Property_1) {
     "use strict";
     var DBObjectView_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17,7 +17,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
     exports.DBObjectViewProperties = DBObjectViewProperties;
     function $DBObjectView(properties) {
         return function (pclass) {
-            Registry_1.default.register("$DBObjectView", pclass, properties);
+            Registry_2.default.register("$DBObjectView", pclass, properties);
         };
     }
     exports.$DBObjectView = $DBObjectView;
@@ -41,7 +41,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
          * create a new object
          */
         createObject() {
-            var clname = Registry_1.default.getData("$DBObjectView", Classes_1.classes.getClassName(this))[0].params[0].classname;
+            var clname = Registry_2.default.getData("$DBObjectView", Classes_1.classes.getClassName(this))[0].params[0].classname;
             var cl = Classes_1.classes.getClass(clname);
             this["value"] = new cl();
             this.callEvent("created", this["value"]);
@@ -80,7 +80,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
             var ob = this.me.databinder.fromForm();
             ob.remove();
             //set obj to null
-            var clname = Registry_1.default.getData("$DBObjectView", Classes_1.classes.getClassName(this))[0].params[0].classname;
+            var clname = Registry_2.default.getData("$DBObjectView", Classes_1.classes.getClassName(this))[0].params[0].classname;
             var cl = Classes_1.classes.getClass(clname);
             this["value"] = new cl();
             this.callEvent("deleted", ob);
@@ -162,7 +162,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
     ], DBObjectView.prototype, "ondeleted", null);
     DBObjectView = DBObjectView_1 = __decorate([
         (0, Component_1.$UIComponent)({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh"] }),
-        (0, Jassi_1.$Class)("jassijs/ui/DBObjectView"),
+        (0, Registry_1.$Class)("jassijs/ui/DBObjectView"),
         __metadata("design:paramtypes", [])
     ], DBObjectView);
     exports.DBObjectView = DBObjectView;

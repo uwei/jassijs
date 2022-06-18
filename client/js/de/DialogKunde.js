@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui/ObjectChooser", "jassijs/ui/Databinder", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/ui/Textbox", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/Table", "jassijs/ui/Checkbox", "jassijs/remote/Jassi", "demo/TestComponent", "jassijs/ui/Property", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_1, Kunde_1, ObjectChooser_1, Databinder_1, NumberConverter_1, Button_1, HTMLPanel_1, Textbox_1, Select_1, BoxPanel_1, Repeater_1, Table_1, Checkbox_1, Jassi_1, TestComponent_1, Property_1, Router_1, Actions_1) {
+define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui/ObjectChooser", "jassijs/ui/Databinder", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/ui/Textbox", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/Table", "jassijs/ui/Checkbox", "jassijs/remote/Registry", "demo/TestComponent", "jassijs/ui/Property", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_1, Kunde_1, ObjectChooser_1, Databinder_1, NumberConverter_1, Button_1, HTMLPanel_1, Textbox_1, Select_1, BoxPanel_1, Repeater_1, Table_1, Checkbox_1, Registry_1, TestComponent_1, Property_1, Router_1, Actions_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DialogKunde = void 0;
@@ -210,7 +210,7 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
     ], DialogKunde, "showDialog", null);
     DialogKunde = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_1.$Class)("de.DialogKunde"),
+        (0, Registry_1.$Class)("de.DialogKunde"),
         __metadata("design:paramtypes", [])
     ], DialogKunde);
     exports.DialogKunde = DialogKunde;

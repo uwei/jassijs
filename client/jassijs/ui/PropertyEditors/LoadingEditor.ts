@@ -1,6 +1,6 @@
 import {Textbox} from "jassijs/ui/Textbox";
 import {Editor, $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
-import  { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { Component } from "jassijs/ui/Component";
 

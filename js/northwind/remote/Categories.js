@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.Categories = void 0;
 const Products_1 = require("northwind/remote/Products");
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 let Categories = class Categories extends DBObject_1.DBObject {
     constructor() {
@@ -41,7 +41,7 @@ __decorate([
 ], Categories.prototype, "Products", void 0);
 Categories = __decorate([
     (0, DBObject_1.$DBObject)(),
-    (0, Jassi_1.$Class)("northwind.Categories"),
+    (0, Registry_1.$Class)("northwind.Categories"),
     __metadata("design:paramtypes", [])
 ], Categories);
 exports.Categories = Categories;

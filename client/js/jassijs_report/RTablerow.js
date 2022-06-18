@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs_report/ReportDesign", "jassijs_report/RComponent", "jassijs_report/RText"], function (require, exports, Jassi_1, Component_1, ReportDesign_1, RComponent_1, RText_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs_report/ReportDesign", "jassijs_report/RComponent", "jassijs_report/RText"], function (require, exports, Registry_1, Component_1, ReportDesign_1, RComponent_1, RText_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTablerow = void 0;
@@ -174,7 +174,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
     };
     RTablerow = __decorate([
         (0, RComponent_1.$ReportComponent)({ editableChildComponents: ["this"] }),
-        (0, Jassi_1.$Class)("jassijs_report.RTablerow")
+        (0, Registry_1.$Class)("jassijs_report.RTablerow")
         //@$Property({name:"horizontal",hide:true})
         ,
         __metadata("design:paramtypes", [Object])

@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Jassi"], function (require, exports, sourcemap_1, Server_1, Jassi_1) {
+define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Registry"], function (require, exports, sourcemap_1, Server_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TSSourceMap = void 0;
@@ -110,7 +110,7 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", 
         }
     };
     TSSourceMap = __decorate([
-        (0, Jassi_1.$Class)("jassijs_editor.util.TSSourceMap")
+        (0, Registry_1.$Class)("jassijs_editor.util.TSSourceMap")
     ], TSSourceMap);
     exports.TSSourceMap = TSSourceMap;
 });

@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import {Panel} from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { Group } from "jassijs/remote/security/Group";

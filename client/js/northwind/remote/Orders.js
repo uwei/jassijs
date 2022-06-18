@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_1, Employees_1, Customer_1, DBObject_1, Jassi_1, DatabaseSchema_1, Shippers_1) {
+define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote/Employees", "northwind/remote/Customer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "northwind/remote/Shippers"], function (require, exports, OrderDetails_1, Employees_1, Customer_1, DBObject_1, Registry_1, DatabaseSchema_1, Shippers_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Orders = void 0;
@@ -78,7 +78,7 @@ define(["require", "exports", "northwind/remote/OrderDetails", "northwind/remote
     ], Orders.prototype, "Details", void 0);
     Orders = __decorate([
         (0, DBObject_1.$DBObject)(),
-        (0, Jassi_1.$Class)("northwind.Orders"),
+        (0, Registry_1.$Class)("northwind.Orders"),
         __metadata("design:paramtypes", [])
     ], Orders);
     exports.Orders = Orders;

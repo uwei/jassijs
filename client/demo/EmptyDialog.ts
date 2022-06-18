@@ -1,7 +1,7 @@
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Button } from "jassijs/ui/Button";
 import { Repeater } from "jassijs/ui/Repeater";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 type Me = {
     repeater1?: Repeater;

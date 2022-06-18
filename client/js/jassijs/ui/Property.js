@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Jassi_1, Registry_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_1, Registry_2, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Property = exports.$Property = void 0;
@@ -16,9 +16,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
             //debugger;
             var test = Classes_1.classes.getClassName(target);
             if (propertyKey === undefined)
-                Registry_1.default.registerMember("$Property", target.prototype, "new", property); //allow registerMember in class definition
+                Registry_2.default.registerMember("$Property", target.prototype, "new", property); //allow registerMember in class definition
             else
-                Registry_1.default.registerMember("$Property", target, propertyKey, property);
+                Registry_2.default.registerMember("$Property", target, propertyKey, property);
         };
     }
     exports.$Property = $Property;
@@ -33,7 +33,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
         }
     };
     Property = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.Property"),
+        (0, Registry_1.$Class)("jassijs.ui.Property"),
         __metadata("design:paramtypes", [Object, Object])
     ], Property);
     exports.Property = Property;

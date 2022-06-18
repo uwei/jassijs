@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties"], function (require, exports, Jassi_1, Property_1, Registry_1, Classes_1, CSSProperties_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties"], function (require, exports, Registry_1, Property_1, Registry_2, Classes_1, CSSProperties_1) {
     "use strict";
     var Component_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17,7 +17,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
     exports.UIComponentProperties = UIComponentProperties;
     function $UIComponent(properties) {
         return function (pclass) {
-            Registry_1.default.register("$UIComponent", pclass, properties);
+            Registry_2.default.register("$UIComponent", pclass, properties);
         };
     }
     exports.$UIComponent = $UIComponent;
@@ -190,12 +190,12 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
             //   jassijs.componentSpy.unwatch(this);
             // }
             this.dom = dom;
-            this._id = "j" + Registry_1.default.nextID();
+            this._id = "j" + Registry_2.default.nextID();
             this.dom.setAttribute("id", this._id);
             /** @member {Object.<string,function>} - all event handlers*/
             this._eventHandler = {};
             //add _this to the dom element
-            var lid = "j" + Registry_1.default.nextID();
+            var lid = "j" + Registry_2.default.nextID();
             var st = 'style="display: inline-block"';
             if (this instanceof Classes_1.classes.getClass("jassijs.ui.Container")) {
                 st = "";
@@ -479,7 +479,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "contextMenu", null);
     Component = Component_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.Component"),
+        (0, Registry_1.$Class)("jassijs.ui.Component"),
         __metadata("design:paramtypes", [ComponentCreateProperties])
     ], Component);
     exports.Component = Component;

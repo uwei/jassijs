@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.db = exports.Database = exports.TypeDef = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const Classes_1 = require("./Classes");
 class TypeDef {
     constructor() {
@@ -81,7 +81,7 @@ let Database = class Database {
     }
 };
 Database = __decorate([
-    (0, Jassi_1.$Class)("jassijs.remote.Database"),
+    (0, Registry_1.$Class)("jassijs.remote.Database"),
     __metadata("design:paramtypes", [])
 ], Database);
 exports.Database = Database;

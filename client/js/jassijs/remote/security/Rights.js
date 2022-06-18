@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Jassi_1, Registry_1, RemoteObject_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_1, Registry_2, RemoteObject_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Rights = exports.$CheckParentRight = exports.$ParentRights = exports.$Rights = exports.ParentRightProperties = exports.RightProperties = void 0;
@@ -16,19 +16,19 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
     exports.ParentRightProperties = ParentRightProperties;
     function $Rights(rights) {
         return function (pclass) {
-            Registry_1.default.register("$Rights", pclass, rights);
+            Registry_2.default.register("$Rights", pclass, rights);
         };
     }
     exports.$Rights = $Rights;
     function $ParentRights(rights) {
         return function (pclass) {
-            Registry_1.default.register("$ParentRights", pclass, rights);
+            Registry_2.default.register("$ParentRights", pclass, rights);
         };
     }
     exports.$ParentRights = $ParentRights;
     function $CheckParentRight() {
         return function (target, propertyKey, descriptor) {
-            Registry_1.default.registerMember("$CheckParentRight", target, propertyKey, undefined);
+            Registry_2.default.registerMember("$CheckParentRight", target, propertyKey, undefined);
         };
     }
     exports.$CheckParentRight = $CheckParentRight;
@@ -47,7 +47,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
         }
     };
     Rights = __decorate([
-        (0, Jassi_1.$Class)("jassijs.security.Rights")
+        (0, Registry_1.$Class)("jassijs.security.Rights")
     ], Rights);
     exports.Rights = Rights;
     var rights = new Rights();

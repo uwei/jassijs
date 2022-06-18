@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var Server_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.Server = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const FileNode_1 = require("jassijs/remote/FileNode");
 const Classes_1 = require("./Classes");
@@ -409,7 +409,7 @@ Server.isonline = undefined;
 //files found in js.map of modules in the jassijs.json
 Server.filesInMap = undefined;
 Server = Server_1 = __decorate([
-    (0, Jassi_1.$Class)("jassijs.remote.Server"),
+    (0, Registry_1.$Class)("jassijs.remote.Server"),
     __metadata("design:paramtypes", [])
 ], Server);
 exports.Server = Server;

@@ -1,7 +1,7 @@
 import { Products } from "northwind/remote/Products";
 import { Orders } from "northwind/remote/Orders";
 import { DBObject, $DBObject } from "jassijs/remote/DBObject";
-import  { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, JoinColumn, JoinTable, PrimaryGeneratedColumn } from "jassijs/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 @$DBObject()

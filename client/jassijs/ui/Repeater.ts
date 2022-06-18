@@ -6,7 +6,7 @@ import {ComponentDesigner} from "jassijs_editor/ComponentDesigner";
 import {Databinder} from "jassijs/ui/Databinder";
 import {Component,  $UIComponent } from "jassijs/ui/Component";
 import {Property,  $Property } from "jassijs/ui/Property";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { DataComponentConfig } from "jassijs/ui/DataComponent";
 
 @$UIComponent({ editableChildComponents: ["databinder"]})

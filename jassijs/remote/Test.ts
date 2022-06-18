@@ -1,4 +1,4 @@
-import { $Class } from "./Jassi";
+import { $Class } from "jassijs/remote/Registry";
 
 @$Class("jassijs.remote.Test")
 export class Test {

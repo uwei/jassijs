@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DBArray = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const Classes_1 = require("jassijs/remote/Classes");
 let cl = Classes_1.classes; //force Classes.
 let DBArray = class DBArray
@@ -86,7 +86,7 @@ let DBArray = class DBArray
     }
 };
 DBArray = __decorate([
-    (0, Jassi_1.$Class)("jassijs.remote.DBArray"),
+    (0, Registry_1.$Class)("jassijs.remote.DBArray"),
     __metadata("design:paramtypes", [Object])
 ], DBArray);
 exports.DBArray = DBArray;

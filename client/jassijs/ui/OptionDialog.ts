@@ -2,7 +2,7 @@ import {Panel} from "jassijs/ui/Panel";
 import {BoxPanel} from "jassijs/ui/BoxPanel";
 import {HTMLPanel} from "jassijs/ui/HTMLPanel";
 import {Button} from "jassijs/ui/Button";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import {Component} from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import {Textbox} from "jassijs/ui/Textbox";

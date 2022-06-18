@@ -4,7 +4,7 @@ import { Component } from "jassijs/ui/Component";
 import ace from "jassijs_editor/ext/acelib";
 import "jassijs_editor/Debugger";
 import typescript, { Typescript } from "jassijs_editor/util/Typescript";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { router } from "jassijs/base/Router";
 import registry from "jassijs/remote/Registry";
 import { CodePanel } from "jassijs_editor/CodePanel";

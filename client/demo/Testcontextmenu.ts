@@ -3,7 +3,7 @@ import jassi from "jassijs/jassi";
 import {ContextMenu} from "jassijs/ui/ContextMenu";
 import {MenuItem} from "jassijs/ui/MenuItem";
 import {Button} from "jassijs/ui/Button";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 
 @$Class("demo.Testcontextmenu")
 export  class Testcontextmenu extends Panel{

@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Server", "jassijs_localserver/Filesystem", "jassijs/remote/Jassi"], function (require, exports, Indexer_1, Server_1, Filesystem_1, Jassi_1) {
+define(["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Server", "jassijs_localserver/Filesystem", "jassijs/remote/Registry"], function (require, exports, Indexer_1, Server_1, Filesystem_1, Registry_1) {
     "use strict";
     var RegistryIndexer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -97,7 +97,7 @@ define(["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Ser
     };
     RegistryIndexer.version = Math.floor(Math.random() * 100000);
     RegistryIndexer = RegistryIndexer_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs_localserver.RegistryIndexer")
+        (0, Registry_1.$Class)("jassijs_localserver.RegistryIndexer")
     ], RegistryIndexer);
     exports.RegistryIndexer = RegistryIndexer;
 });

@@ -1,6 +1,6 @@
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Select } from "jassijs/ui/Select";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { Button } from "jassijs/ui/Button";

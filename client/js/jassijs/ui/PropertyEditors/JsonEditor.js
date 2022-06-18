@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Jassi_1, Editor_1, Button_1, PropertyEditor_1, Tools_1, Classes_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Registry_1, Editor_1, Button_1, PropertyEditor_1, Tools_1, Classes_1, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.JsonEditor = void 0;
@@ -192,7 +192,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
     };
     JsonEditor = __decorate([
         (0, Editor_1.$PropertyEditor)(["json"]),
-        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditors.JsonEditor"),
+        (0, Registry_1.$Class)("jassijs.ui.PropertyEditors.JsonEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], JsonEditor);
     exports.JsonEditor = JsonEditor;
@@ -208,7 +208,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
         __metadata("design:type", Object)
     ], TestProperties.prototype, "jo", void 0);
     TestProperties = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditorTestProperties")
+        (0, Registry_1.$Class)("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     let TestProperties2 = class TestProperties2 {
     };
@@ -221,7 +221,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor
         __metadata("design:type", String)
     ], TestProperties2.prototype, "name2", void 0);
     TestProperties2 = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.PropertyEditorTestProperties2")
+        (0, Registry_1.$Class)("jassijs.ui.PropertyEditorTestProperties2")
     ], TestProperties2);
     function test() {
         var ret = new PropertyEditor_1.PropertyEditor();

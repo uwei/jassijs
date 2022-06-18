@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs_report/RGroupTablerow", "jassijs_report/RTable"], function (require, exports, Jassi_1, RComponent_1, RTablerow_1, Property_1, Classes_1, RGroupTablerow_1, RTable_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs_report/RGroupTablerow", "jassijs_report/RTable"], function (require, exports, Registry_1, RComponent_1, RTablerow_1, Property_1, Classes_1, RGroupTablerow_1, RTable_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RDatatable = void 0;
@@ -303,7 +303,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RComponent
     ], RDatatable.prototype, "groupCount", null);
     RDatatable = __decorate([
         (0, RComponent_1.$ReportComponent)({ fullPath: "report/Datatable", icon: "mdi mdi-table-cog", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
-        (0, Jassi_1.$Class)("jassijs_report.RDatatable"),
+        (0, Registry_1.$Class)("jassijs_report.RDatatable"),
         __metadata("design:paramtypes", [Object])
     ], RDatatable);
     exports.RDatatable = RDatatable;

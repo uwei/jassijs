@@ -12,7 +12,7 @@ import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { Repeater } from "jassijs/ui/Repeater";
 import { Table } from "jassijs/ui/Table";
 import { Checkbox } from "jassijs/ui/Checkbox";
-import  { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { TestComponent } from "demo/TestComponent";
 import { Property, $Property } from "jassijs/ui/Property";
 import { router } from "jassijs/base/Router";

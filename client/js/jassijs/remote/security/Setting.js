@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "../Classes"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "../Classes"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Setting = void 0;
@@ -41,7 +41,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
     ], Setting.prototype, "data", void 0);
     Setting = __decorate([
         (0, DBObject_1.$DBObject)({ name: "jassijs_setting" }),
-        (0, Jassi_1.$Class)("jassijs.security.Setting"),
+        (0, Registry_1.$Class)("jassijs.security.Setting"),
         __metadata("design:paramtypes", [])
     ], Setting);
     exports.Setting = Setting;

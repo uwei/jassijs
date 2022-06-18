@@ -3,7 +3,7 @@ import {Panel} from "jassijs/ui/Panel";
 import {Menu} from "jassijs/ui/Menu";
 import {MenuItem} from "jassijs/ui/MenuItem";
 import {Button} from "jassijs/ui/Button";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 @$Class("demo.Testmenu")
 export  class Testmenu extends Panel {
 	me={};

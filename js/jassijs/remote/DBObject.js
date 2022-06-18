@@ -11,10 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var DBObject_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.DBObject = exports.MyFindManyOptions = exports.$DBObject = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const Classes_1 = require("jassijs/remote/Classes");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
-const Registry_1 = require("jassijs/remote/Registry");
+const Registry_2 = require("jassijs/remote/Registry");
 let cl = Classes_1.classes; //force Classes
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Database_1 = require("jassijs/remote/Database");
@@ -25,7 +25,7 @@ function $DBObject(options) {
             options = {};
         if (!options.name)
             options.name = classname.toLowerCase().replaceAll(".", "_");
-        Registry_1.default.register("$DBObject", pclass, options);
+        Registry_2.default.register("$DBObject", pclass, options);
         (0, DatabaseSchema_1.Entity)(options)(pclass, ...params); //pass to orginal Entitiy
     };
 }
@@ -44,7 +44,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
     }
     //clear cache on reload
     static _initFunc() {
-        Registry_1.default.onregister("$Class", (data, name) => {
+        Registry_2.default.onregister("$Class", (data, name) => {
             delete DBObject_1.cache[name];
         });
     }
@@ -229,7 +229,7 @@ let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
 DBObject.cache = {};
 DBObject._init = DBObject_1._initFunc();
 DBObject = DBObject_1 = __decorate([
-    (0, Jassi_1.$Class)("jassijs.remote.DBObject"),
+    (0, Registry_1.$Class)("jassijs.remote.DBObject"),
     __metadata("design:paramtypes", [])
 ], DBObject);
 exports.DBObject = DBObject;

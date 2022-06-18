@@ -1,4 +1,4 @@
-import jassi from "jassijs/remote/Jassi";
+
 import { Context } from "jassijs/remote/RemoteObject";
 import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
 

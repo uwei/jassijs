@@ -6,7 +6,7 @@ declare global {
 }
 (global as any).window = {};
 (global as any).$ = {};
-
+import "jassijs/remote/Jassi";
 require("app-module-path").addPath("./js");
 import "jassijs/remote/Registry";
 //import "reflect-metadata";

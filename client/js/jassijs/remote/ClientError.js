@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "./Jassi"], function (require, exports, Jassi_1) {
+define(["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClientError = void 0;
@@ -17,7 +17,7 @@ define(["require", "exports", "./Jassi"], function (require, exports, Jassi_1) {
         }
     };
     ClientError = __decorate([
-        (0, Jassi_1.$Class)("jassijs.remote.ClientError"),
+        (0, Registry_1.$Class)("jassijs.remote.ClientError"),
         __metadata("design:paramtypes", [String])
     ], ClientError);
     exports.ClientError = ClientError;

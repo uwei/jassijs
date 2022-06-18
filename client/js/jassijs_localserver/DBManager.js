@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Jassi"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, Jassi_1) {
+define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, Registry_2) {
     "use strict";
     var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -489,7 +489,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
         }
     };
     DBManager = DBManager_1 = __decorate([
-        (0, Jassi_1.$Class)("jassi_localserver.DBManager"),
+        (0, Registry_2.$Class)("jassi_localserver.DBManager"),
         __metadata("design:paramtypes", [])
     ], DBManager);
     exports.DBManager = DBManager;

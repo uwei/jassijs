@@ -3,7 +3,7 @@ define("northwind/registry",["require"], function(require) {
  return {
   default: {
 	"northwind/CategoriesView.ts": {
-		"date": 1655059485237,
+		"date": 1655556792359,
 		"northwind.CategoriesView": {
 			"$DBObjectView": [
 				{
@@ -26,7 +26,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/CustomerView.ts": {
-		"date": 1655060136795,
+		"date": 1655556792358,
 		"northwind/CustomerView": {
 			"$DBObjectView": [
 				{
@@ -49,7 +49,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/DetailTest.ts": {
-		"date": 1654704557145,
+		"date": 1655556792359,
 		"northwind.DetailTest": {
 			"$DBObjectView": [
 				{
@@ -70,7 +70,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/EmployeesView.ts": {
-		"date": 1655060579556,
+		"date": 1655556792358,
 		"northwind.EmployeesView": {
 			"$DBObjectView": [
 				{
@@ -93,7 +93,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ImportData.ts": {
-		"date": 1635898120000,
+		"date": 1655556792358,
 		"northwind.ImportData": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -122,7 +122,7 @@ define("northwind/registry",["require"], function(require) {
 		"date": 1613551044000
 	},
 	"northwind/OrdersView.ts": {
-		"date": 1655229198304,
+		"date": 1655556792358,
 		"northwind.OrdersView": {
 			"$DBObjectView": [
 				{
@@ -145,7 +145,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ProductView.ts": {
-		"date": 1655229497535,
+		"date": 1655556792358,
 		"northwind.ProductView": {
 			"$DBObjectView": [
 				{
@@ -168,7 +168,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Categories.ts": {
-		"date": 1655548919282,
+		"date": 1655556792358,
 		"northwind.Categories": {
 			"$DBObject": [],
 			"@members": {
@@ -202,7 +202,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Customer.ts": {
-		"date": 1655548934731,
+		"date": 1655556862854,
 		"northwind.Customer": {
 			"$DBObject": [],
 			"@members": {
@@ -263,7 +263,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Employees.ts": {
-		"date": 1655548929825,
+		"date": 1655556792357,
 		"northwind.Employees": {
 			"$DBObject": [],
 			"@members": {
@@ -392,7 +392,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/OrderDetails.ts": {
-		"date": 1655548939000,
+		"date": 1655556862851,
 		"northwind.OrderDetails": {
 			"$DBObject": [],
 			"@members": {
@@ -433,7 +433,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Orders.ts": {
-		"date": 1655548947602,
+		"date": 1655556792357,
 		"northwind.Orders": {
 			"$DBObject": [],
 			"@members": {
@@ -536,7 +536,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Products.ts": {
-		"date": 1655548952259,
+		"date": 1655556862851,
 		"northwind.Products": {
 			"$DBObject": [],
 			"@members": {
@@ -608,7 +608,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Shippers.ts": {
-		"date": 1655548962178,
+		"date": 1655556792356,
 		"northwind.Shippers": {
 			"$DBObject": [],
 			"@members": {
@@ -633,7 +633,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/remote/Suppliers.ts": {
-		"date": 1655548968564,
+		"date": 1655556792357,
 		"northwind.Suppliers": {
 			"$DBObject": [],
 			"@members": {
@@ -724,7 +724,7 @@ define("northwind/registry",["require"], function(require) {
 		"date": 1625946850000
 	},
 	"northwind/ShippersView.ts": {
-		"date": 1655229726930,
+		"date": 1655556792357,
 		"northwind.ShippersView": {
 			"$DBObjectView": [
 				{
@@ -747,7 +747,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/SuppliersView.ts": {
-		"date": 1655229938330,
+		"date": 1655556792356,
 		"northwind.SuppliersView": {
 			"$DBObjectView": [
 				{

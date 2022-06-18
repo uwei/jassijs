@@ -1,29 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Jassi = exports.$register = exports.$Class = void 0;
-const Registry_1 = require("jassijs/remote/Registry");
-/*
-window.extentsionCalled = function (param:  ExtensionAction) {
-    if (param.sample) {
-        alert("default:" + param.defaultAction.name);
-    }
-   
-}
-window.extentsionCalled({
-    sample: { name: "Passt" }
-})*/
-function $Class(longclassname) {
-    return function (pclass) {
-        Registry_1.default.register("$Class", pclass, longclassname);
-    };
-}
-exports.$Class = $Class;
-function $register(servicename, ...params) {
-    return function (pclass) {
-        Registry_1.default.register(servicename, pclass, params);
-    };
-}
-exports.$register = $register;
+exports.Jassi = void 0;
 //@ts-ignore
 String.prototype.replaceAll = function (search, replacement) {
     var target = this;

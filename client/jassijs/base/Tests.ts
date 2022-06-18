@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { $ActionProvider, $Action } from "jassijs/base/Actions";
 import { FileNode } from "jassijs/remote/FileNode";
 import typescript, { Typescript } from "jassijs_editor/util/Typescript";

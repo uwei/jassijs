@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Jassi"], function (require, exports, Panel_1, Databinder_1, Component_1, Property_1, Jassi_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Panel_1, Databinder_1, Component_1, Property_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Repeater = void 0;
@@ -15,7 +15,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
     };
     RepeaterDesignPanel = __decorate([
         (0, Component_1.$UIComponent)({ editableChildComponents: ["databinder"] }),
-        (0, Jassi_1.$Class)("jassijs.ui.RepeaterDesignPanel")
+        (0, Registry_1.$Class)("jassijs.ui.RepeaterDesignPanel")
     ], RepeaterDesignPanel);
     let Repeater = class Repeater extends Panel_1.Panel {
         /**
@@ -168,7 +168,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
     ], Repeater.prototype, "bind", null);
     Repeater = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
-        (0, Jassi_1.$Class)("jassijs.ui.Repeater"),
+        (0, Registry_1.$Class)("jassijs.ui.Repeater"),
         __metadata("design:paramtypes", [Object])
     ], Repeater);
     exports.Repeater = Repeater;

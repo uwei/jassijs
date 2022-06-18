@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Test = void 0;
-const Jassi_1 = require("./Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 let Test = class Test {
     /**
      * fails if the condition is false
@@ -70,7 +70,7 @@ let Test = class Test {
     }
 };
 Test = __decorate([
-    (0, Jassi_1.$Class)("jassijs.remote.Test")
+    (0, Registry_1.$Class)("jassijs.remote.Test")
 ], Test);
 exports.Test = Test;
 //# sourceMappingURL=Test.js.map

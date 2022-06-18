@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Property"], function (require, exports, Component_1, Registry_1, Jassi_1, Panel_1, Property_1) {
+define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property"], function (require, exports, Component_1, Registry_1, Registry_2, Panel_1, Property_1) {
     "use strict";
     var RComponent_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -609,7 +609,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         __metadata("design:paramtypes", [Array])
     ], RComponent.prototype, "margin", null);
     RComponent = RComponent_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs_report.ReportComponent"),
+        (0, Registry_2.$Class)("jassijs_report.ReportComponent"),
         (0, Property_1.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], RComponent);

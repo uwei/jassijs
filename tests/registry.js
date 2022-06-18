@@ -3,11 +3,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"tests/remote/T.ts": {
-		"date": 1635803076000,
+		"date": 1655556792356,
 		"tests.remote.T": {}
 	},
 	"tests/remote/TestCustomer.ts": {
-		"date": 1655549088355,
+		"date": 1655556862850,
 		"tests.TestCustomer": {
 			"$ParentRights": [
 				[
@@ -44,7 +44,7 @@ exports.default={
 		}
 	},
 	"tests/remote/TestOrder.ts": {
-		"date": 1655549092959,
+		"date": 1655556862850,
 		"tests.TestOrder": {
 			"$DBObject": [],
 			"@members": {
@@ -67,7 +67,7 @@ exports.default={
 		}
 	},
 	"tests/remote/TestOrderDetails.ts": {
-		"date": 1655549097289,
+		"date": 1655556862840,
 		"tests.TestOrderDetails": {
 			"$DBObject": [],
 			"@members": {

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs_editor/Debugger"], function (require, exports, acelib_1, Typescript_1, Jassi_1, Registry_1, CodePanel_1, Runlater_1) {
+define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs_editor/Debugger"], function (require, exports, acelib_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -343,7 +343,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
         getDocTooltip(item) {
             if (item.file === undefined)
                 return "";
-            var _id = "j" + Registry_1.default.nextID();
+            var _id = "j" + Registry_2.default.nextID();
             item.docHTML = "<span id='" + _id + "'> please try later ... loading in progress<span>";
             Typescript_1.default.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
                 if (ret === undefined)
@@ -482,7 +482,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
         }
     };
     AcePanel = AcePanel_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.AcePanel"),
+        (0, Registry_1.$Class)("jassijs.ui.AcePanel"),
         __metadata("design:paramtypes", [])
     ], AcePanel);
     exports.AcePanel = AcePanel;

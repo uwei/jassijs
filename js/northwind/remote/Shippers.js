@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.Shippers = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 let Shippers = class Shippers extends DBObject_1.DBObject {
     constructor() {
@@ -32,7 +32,7 @@ __decorate([
 ], Shippers.prototype, "Phone", void 0);
 Shippers = __decorate([
     (0, DBObject_1.$DBObject)(),
-    (0, Jassi_1.$Class)("northwind.Shippers"),
+    (0, Registry_1.$Class)("northwind.Shippers"),
     __metadata("design:paramtypes", [])
 ], Shippers);
 exports.Shippers = Shippers;

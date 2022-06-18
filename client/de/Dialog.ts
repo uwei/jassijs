@@ -3,7 +3,7 @@ import { ContextMenu } from "jassijs/ui/ContextMenu";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { Button } from "jassijs/ui/Button";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 type Me = {
     textbox1?: Textbox;

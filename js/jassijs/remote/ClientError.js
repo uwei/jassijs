@@ -10,14 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ClientError = void 0;
-const Jassi_1 = require("./Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 let ClientError = class ClientError extends Error {
     constructor(msg) {
         super(msg);
     }
 };
 ClientError = __decorate([
-    (0, Jassi_1.$Class)("jassijs.remote.ClientError"),
+    (0, Registry_1.$Class)("jassijs.remote.ClientError"),
     __metadata("design:paramtypes", [String])
 ], ClientError);
 exports.ClientError = ClientError;

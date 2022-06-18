@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "./Classes"], function (require, exports, Jassi_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "./Classes"], function (require, exports, Registry_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.db = exports.Database = exports.TypeDef = void 0;
@@ -80,7 +80,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "./Classes"], function (re
         }
     };
     Database = __decorate([
-        (0, Jassi_1.$Class)("jassijs.remote.Database"),
+        (0, Registry_1.$Class)("jassijs.remote.Database"),
         __metadata("design:paramtypes", [])
     ], Database);
     exports.Database = Database;

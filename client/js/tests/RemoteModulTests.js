@@ -6,7 +6,7 @@ define(["require", "exports", "jassijs/remote/FileNode", "jassijs/remote/Server"
         try {
             await new Server_1.Server().createModule("testrmodul");
             await new Server_1.Server().createFolder("testrmodul/remote");
-            await new Server_1.Server().saveFile("testrmodul/remote/TestRModul.ts", `import { $Class } from "jassijs/remote/Jassi";
+            await new Server_1.Server().saveFile("testrmodul/remote/TestRModul.ts", `import { $Class } from "jassijs/remote/Registry";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 
 @$Class("testrmodul.remote.TestRModul")

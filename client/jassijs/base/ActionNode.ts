@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi"; 
+import { $Class } from "jassijs/remote/Registry"; 
 
 
 @$Class("jassijs.base.ActionNode")

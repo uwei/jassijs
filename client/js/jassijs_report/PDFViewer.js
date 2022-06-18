@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/BoxPanel"], function (require, exports, Button_1, pdfjs_1, Component_1, Jassi_1, Panel_1, BoxPanel_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/BoxPanel"], function (require, exports, Button_1, pdfjs_1, Component_1, Registry_1, Panel_1, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.PDFViewer = void 0;
@@ -139,7 +139,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
         }
     };
     PDFViewer = __decorate([
-        (0, Jassi_1.$Class)("jassijs_report.PDFViewer"),
+        (0, Registry_1.$Class)("jassijs_report.PDFViewer"),
         __metadata("design:paramtypes", [])
     ], PDFViewer);
     exports.PDFViewer = PDFViewer;

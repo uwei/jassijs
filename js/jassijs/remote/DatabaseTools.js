@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var DatabaseTools_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.DatabaseTools = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const Classes_1 = require("jassijs/remote/Classes");
 let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1.RemoteObject {
@@ -38,7 +38,7 @@ let DatabaseTools = DatabaseTools_1 = class DatabaseTools extends RemoteObject_1
     }
 };
 DatabaseTools = DatabaseTools_1 = __decorate([
-    (0, Jassi_1.$Class)("jassijs.remote.DatabaseTools")
+    (0, Registry_1.$Class)("jassijs.remote.DatabaseTools")
 ], DatabaseTools);
 exports.DatabaseTools = DatabaseTools;
 async function test() {

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Jassi_1, Property_1, Classes_1, Registry_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Registry_1, Property_1, Classes_1, Registry_2) {
     "use strict";
     var ComponentDescriptor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -49,11 +49,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
                     do {
                         family.push(type);
                         var sclass = Classes_1.classes.getClassName(type);
-                        if (Registry_1.default.getMemberData("$Property") === undefined)
+                        if (Registry_2.default.getMemberData("$Property") === undefined)
                             return cache;
-                        var props = Registry_1.default.getMemberData("$Property")[sclass];
+                        var props = Registry_2.default.getMemberData("$Property")[sclass];
                         if (props !== undefined) {
-                            var info = Registry_1.default.getMemberData("design:type")[sclass];
+                            var info = Registry_2.default.getMemberData("design:type")[sclass];
                             for (var key in props) {
                                 var data = props[key];
                                 for (let x = 0; x < data.length; x++) {
@@ -110,9 +110,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         static getEditableComponents(component, idFromLabel, includeFrozenContainer, flag) {
             var ret = "";
             var sclass = Classes_1.classes.getClassName(component);
-            var props = Registry_1.default.getData("$UIComponent")[sclass];
+            var props = Registry_2.default.getData("$UIComponent")[sclass];
             if (!props) {
-                props = props = Registry_1.default.getData("$ReportComponent")[sclass];
+                props = props = Registry_2.default.getData("$ReportComponent")[sclass];
             }
             if (!props === undefined)
                 return ret;
@@ -150,14 +150,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
                 sclass = Classes_1.classes.getClassName(type);
             }
             var found = false;
-            if (Registry_1.default.getData("$UIComponent", sclass) !== undefined && Registry_1.default.getData("$UIComponent", sclass)[0] !== undefined) {
-                var props = Registry_1.default.getData("$UIComponent", sclass)[0].params[0];
+            if (Registry_2.default.getData("$UIComponent", sclass) !== undefined && Registry_2.default.getData("$UIComponent", sclass)[0] !== undefined) {
+                var props = Registry_2.default.getData("$UIComponent", sclass)[0].params[0];
                 this.editableComponents = props.editableChildComponents;
                 if (props.editableChildComponents !== undefined)
                     found = true;
             }
-            if (Registry_1.default.getData("$ReportComponent", sclass) !== undefined && Registry_1.default.getData("$ReportComponent", sclass)[0] !== undefined) {
-                var props = Registry_1.default.getData("$ReportComponent", sclass)[0].params[0];
+            if (Registry_2.default.getData("$ReportComponent", sclass) !== undefined && Registry_2.default.getData("$ReportComponent", sclass)[0] !== undefined) {
+                var props = Registry_2.default.getData("$ReportComponent", sclass)[0].params[0];
                 this.editableComponents = props.editableChildComponents;
                 if (props.editableChildComponents !== undefined)
                     found = true;
@@ -225,7 +225,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
         }
     };
     ComponentDescriptor = ComponentDescriptor_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.ComponentDescriptor"),
+        (0, Registry_1.$Class)("jassijs.ui.ComponentDescriptor"),
         __metadata("design:paramtypes", [])
     ], ComponentDescriptor);
     exports.ComponentDescriptor = ComponentDescriptor;

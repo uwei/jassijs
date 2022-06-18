@@ -9,7 +9,7 @@
 import sourceMap from "jassijs/ext/sourcemap";
 
 import { Server } from "jassijs/remote/Server";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 //var sourceMap=window["sourceMap"];
 @$Class("jassijs_editor.util.TSSourceMap")
 export class TSSourceMap {

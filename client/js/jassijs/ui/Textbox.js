@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, Jassi_1, Component_1, DataComponent_1, DefaultConverter_1, Registry_1, Property_1, Numberformatter_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, Registry_1, Component_1, DataComponent_1, DefaultConverter_1, Registry_2, Property_1, Numberformatter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Textbox = void 0;
@@ -169,7 +169,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
                 });
             }
             if (list === undefined) {
-                list = "j" + Registry_1.default.nextID();
+                list = "j" + Registry_2.default.nextID();
                 this._autocompleter = $('<datalist id="' + list + '"/>')[0];
                 this.domWrapper.appendChild(this._autocompleter);
                 $(this.dom).attr("list", list);
@@ -248,7 +248,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "j
     ], Textbox.prototype, "placeholder", null);
     Textbox = __decorate([
         (0, Component_1.$UIComponent)({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
-        (0, Jassi_1.$Class)("jassijs.ui.Textbox"),
+        (0, Registry_1.$Class)("jassijs.ui.Textbox"),
         (0, Property_1.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [Object])
     ], Textbox);

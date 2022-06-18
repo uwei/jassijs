@@ -1,7 +1,7 @@
 import jassi from "jassijs/jassi";
 import { Component } from "jassijs/ui/Component";
 import "jassijs_editor/Debugger";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { router } from "jassijs/base/Router";
 import "jassijs_editor/ext/monaco";
 import typescript from "jassijs_editor/util/Typescript";

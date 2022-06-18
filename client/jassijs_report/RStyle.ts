@@ -1,5 +1,5 @@
 import { $ReportComponent, RComponent } from "jassijs_report/RComponent";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
 import { JassiError } from "jassijs/remote/Classes";
 

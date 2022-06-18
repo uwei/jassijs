@@ -1,5 +1,5 @@
 
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { FileNode } from "jassijs/remote/FileNode";
 import { classes, JassiError } from "./Classes";

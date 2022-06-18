@@ -2,7 +2,7 @@
 import { Component } from "jassijs/ui/Component";
 //@ts-ignore
 import ace from "jassijs_editor/ext/acelib";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import registry from "jassijs/remote/Registry";
 import { CodePanel } from "jassijs_editor/CodePanel";
 import { Textbox } from "jassijs/ui/Textbox";

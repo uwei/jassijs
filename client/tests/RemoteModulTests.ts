@@ -13,7 +13,7 @@ export async function test(teste: Test) {
     try {
         await new Server().createModule("testrmodul");
         await new Server().createFolder("testrmodul/remote");
-        await new Server().saveFile("testrmodul/remote/TestRModul.ts", `import { $Class } from "jassijs/remote/Jassi";
+        await new Server().saveFile("testrmodul/remote/TestRModul.ts", `import { $Class } from "jassijs/remote/Registry";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 
 @$Class("testrmodul.remote.TestRModul")

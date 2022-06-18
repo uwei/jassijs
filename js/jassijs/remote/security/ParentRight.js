@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ParentRight = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Group_1 = require("jassijs/remote/security/Group");
 //import "jassijs/ext/enableExtension.js?de.Kunde";
@@ -51,7 +51,7 @@ __decorate([
 ], ParentRight.prototype, "groups", void 0);
 ParentRight = __decorate([
     (0, DBObject_1.$DBObject)({ name: "jassijs_parentright" }),
-    (0, Jassi_1.$Class)("jassijs.security.ParentRight")
+    (0, Registry_1.$Class)("jassijs.security.ParentRight")
 ], ParentRight);
 exports.ParentRight = ParentRight;
 //# sourceMappingURL=ParentRight.js.map

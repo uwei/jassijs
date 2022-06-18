@@ -1,5 +1,5 @@
 import { Textbox } from "jassijs/ui/Textbox";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
 import { Customer } from "northwind/remote/Customer";
 import { DBObjectView, $DBObjectView, DBObjectViewMe } from "jassijs/ui/DBObjectView";

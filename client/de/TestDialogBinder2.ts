@@ -3,7 +3,7 @@ import { Textbox } from "jassijs/ui/Textbox";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { Databinder } from "jassijs/ui/Databinder";
 import { Repeater } from "jassijs/ui/Repeater";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 type Me = {
 

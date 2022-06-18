@@ -2,7 +2,7 @@ import {Editor,  $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
 import {Select} from "jassijs/ui/Select";
 
 import { classes } from "jassijs/remote/Classes";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 /**
  * select one or more instances of an class
  * used by PropertyEditor

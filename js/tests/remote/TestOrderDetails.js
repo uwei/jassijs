@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.TestOrderDetails = void 0;
 const TestOrder_1 = require("tests/remote/TestOrder");
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Rights_1 = require("jassijs/remote/security/Rights");
 let TestOrderDetails = class TestOrderDetails extends DBObject_1.DBObject {
@@ -31,7 +31,7 @@ __decorate([
 ], TestOrderDetails.prototype, "Order", void 0);
 TestOrderDetails = __decorate([
     (0, DBObject_1.$DBObject)(),
-    (0, Jassi_1.$Class)("tests.TestOrderDetails"),
+    (0, Registry_1.$Class)("tests.TestOrderDetails"),
     __metadata("design:paramtypes", [])
 ], TestOrderDetails);
 exports.TestOrderDetails = TestOrderDetails;

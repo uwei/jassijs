@@ -228,7 +228,7 @@ define("tests/RemoteModulTests", ["require", "exports", "jassijs/remote/FileNode
         try {
             await new Server_2.Server().createModule("testrmodul");
             await new Server_2.Server().createFolder("testrmodul/remote");
-            await new Server_2.Server().saveFile("testrmodul/remote/TestRModul.ts", `import { $Class } from "jassijs/remote/Jassi";
+            await new Server_2.Server().saveFile("testrmodul/remote/TestRModul.ts", `import { $Class } from "jassijs/remote/Registry";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 
 @$Class("testrmodul.remote.TestRModul")
@@ -300,11 +300,11 @@ define("tests/registry", ["require"], function (require) {
                 "date": 1624296374000
             },
             "tests/remote/T.ts": {
-                "date": 1635803076000,
+                "date": 1655556792356,
                 "tests.remote.T": {}
             },
             "tests/remote/TestCustomer.ts": {
-                "date": 1655549088355,
+                "date": 1655556862850,
                 "tests.TestCustomer": {
                     "$ParentRights": [
                         [
@@ -341,7 +341,7 @@ define("tests/registry", ["require"], function (require) {
                 }
             },
             "tests/remote/TestOrder.ts": {
-                "date": 1655549092959,
+                "date": 1655556862850,
                 "tests.TestOrder": {
                     "$DBObject": [],
                     "@members": {
@@ -364,7 +364,7 @@ define("tests/registry", ["require"], function (require) {
                 }
             },
             "tests/remote/TestOrderDetails.ts": {
-                "date": 1655549097289,
+                "date": 1655556862840,
                 "tests.TestOrderDetails": {
                     "$DBObject": [],
                     "@members": {
@@ -385,7 +385,7 @@ define("tests/registry", ["require"], function (require) {
                 "date": 1624999038000
             },
             "tests/RemoteModulTests.ts": {
-                "date": 1630958862000
+                "date": 1655556792356
             },
             "tests/TestReport.ts": {
                 "date": 1623864074000
@@ -393,7 +393,7 @@ define("tests/registry", ["require"], function (require) {
         }
     };
 });
-define("tests/remote/T", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject", "jassijs/remote/Server"], function (require, exports, Jassi_1, RemoteObject_1, Server_3) {
+define("tests/remote/T", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/Server"], function (require, exports, Registry_2, RemoteObject_1, Server_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.T = void 0;
@@ -410,7 +410,7 @@ define("tests/remote/T", ["require", "exports", "jassijs/remote/Jassi", "jassijs
         }
     };
     T = __decorate([
-        (0, Jassi_1.$Class)("tests.remote.T")
+        (0, Registry_2.$Class)("tests.remote.T")
     ], T);
     exports.T = T;
     async function test() {
@@ -422,7 +422,7 @@ define("tests/remote/T", ["require", "exports", "jassijs/remote/Jassi", "jassijs
     }
     exports.test2 = test2;
 });
-define("tests/remote/TestCustomer", ["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_2, DBObject_3, Jassi_2, DatabaseSchema_1, Rights_1) {
+define("tests/remote/TestCustomer", ["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_2, DBObject_3, Registry_3, DatabaseSchema_1, Rights_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestCustomer = void 0;
@@ -451,7 +451,7 @@ define("tests/remote/TestCustomer", ["require", "exports", "tests/remote/TestOrd
                     i2: "to"
                 } }]),
         (0, DBObject_3.$DBObject)(),
-        (0, Jassi_2.$Class)("tests.TestCustomer"),
+        (0, Registry_3.$Class)("tests.TestCustomer"),
         __metadata("design:paramtypes", [])
     ], TestCustomer);
     exports.TestCustomer = TestCustomer;
@@ -460,7 +460,7 @@ define("tests/remote/TestCustomer", ["require", "exports", "tests/remote/TestOrd
     exports.test = test;
     ;
 });
-define("tests/remote/TestOrder", ["require", "exports", "tests/remote/TestOrderDetails", "tests/remote/TestCustomer", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrderDetails_2, TestCustomer_2, DBObject_4, Jassi_3, DatabaseSchema_2, Rights_2) {
+define("tests/remote/TestOrder", ["require", "exports", "tests/remote/TestOrderDetails", "tests/remote/TestCustomer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrderDetails_2, TestCustomer_2, DBObject_4, Registry_4, DatabaseSchema_2, Rights_2) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -485,7 +485,7 @@ define("tests/remote/TestOrder", ["require", "exports", "tests/remote/TestOrderD
     ], TestOrder.prototype, "details", void 0);
     TestOrder = __decorate([
         (0, DBObject_4.$DBObject)(),
-        (0, Jassi_3.$Class)("tests.TestOrder"),
+        (0, Registry_4.$Class)("tests.TestOrder"),
         __metadata("design:paramtypes", [])
     ], TestOrder);
     exports.TestOrder = TestOrder;
@@ -494,7 +494,7 @@ define("tests/remote/TestOrder", ["require", "exports", "tests/remote/TestOrderD
     exports.test = test;
     ;
 });
-define("tests/remote/TestOrderDetails", ["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_3, DBObject_5, Jassi_4, DatabaseSchema_3, Rights_3) {
+define("tests/remote/TestOrderDetails", ["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_3, DBObject_5, Registry_5, DatabaseSchema_3, Rights_3) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -515,7 +515,7 @@ define("tests/remote/TestOrderDetails", ["require", "exports", "tests/remote/Tes
     ], TestOrderDetails.prototype, "Order", void 0);
     TestOrderDetails = __decorate([
         (0, DBObject_5.$DBObject)(),
-        (0, Jassi_4.$Class)("tests.TestOrderDetails"),
+        (0, Registry_5.$Class)("tests.TestOrderDetails"),
         __metadata("design:paramtypes", [])
     ], TestOrderDetails);
     exports.TestOrderDetails = TestOrderDetails;

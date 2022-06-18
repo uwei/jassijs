@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Jassi_1, Registry_1, Property_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_1, Registry_2, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DefaultConverter = exports.$Converter = exports.$ConverterProperties = void 0;
@@ -16,7 +16,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
     exports.$ConverterProperties = $ConverterProperties;
     function $Converter(param) {
         return function (pclass) {
-            Registry_1.default.register("$Converter", pclass, param);
+            Registry_2.default.register("$Converter", pclass, param);
         };
     }
     exports.$Converter = $Converter;
@@ -31,7 +31,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
         __metadata("design:returntype", void 0)
     ], DefaultConverterProperties.prototype, "stringToObject", null);
     DefaultConverterProperties = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.converters.DefaultConverterProperties")
+        (0, Registry_1.$Class)("jassijs.ui.converters.DefaultConverterProperties")
     ], DefaultConverterProperties);
     let DefaultConverter = 
     //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
@@ -56,7 +56,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
     };
     DefaultConverter = __decorate([
         $Converter({ name: "custom" }),
-        (0, Jassi_1.$Class)("jassijs.ui.converters.DefaultConverter"),
+        (0, Registry_1.$Class)("jassijs.ui.converters.DefaultConverter"),
         (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
         //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
         ,

@@ -13,7 +13,7 @@ exports.test = exports.Products = void 0;
 const Categories_1 = require("northwind/remote/Categories");
 const Suppliers_1 = require("northwind/remote/Suppliers");
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 let Products = class Products extends DBObject_1.DBObject {
     constructor() {
@@ -62,7 +62,7 @@ __decorate([
 ], Products.prototype, "Discontinued", void 0);
 Products = __decorate([
     (0, DBObject_1.$DBObject)(),
-    (0, Jassi_1.$Class)("northwind.Products"),
+    (0, Registry_1.$Class)("northwind.Products"),
     __metadata("design:paramtypes", [])
 ], Products);
 exports.Products = Products;

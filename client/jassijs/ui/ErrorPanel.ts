@@ -1,7 +1,7 @@
 
 import { Panel } from "jassijs/ui/Panel";
 import { Errors } from "jassijs/base/Errors";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Button } from "jassijs/ui/Button";
 
 import { classes } from "jassijs/remote/Classes";

@@ -1,7 +1,6 @@
 
 import  "jassijs/remote/Jassi";
 import  "jassijs/remote/Classes";
-import  "jassijs/remote/Jassi";
 //import  "jassijs/base/Router";
 import  "jassijs/base/Extensions";
 import "jassijs/remote/Registry";

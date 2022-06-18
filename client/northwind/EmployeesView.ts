@@ -6,7 +6,7 @@ import { Textarea } from "jassijs/ui/Textarea";
 import { Calendar } from "jassijs/ui/Calendar";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Button } from "jassijs/ui/Button";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { Employees } from "northwind/remote/Employees";

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/LoadingEditor"], function (require, exports, Jassi_1, Classes_1, Registry_1, LoadingEditor_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/LoadingEditor"], function (require, exports, Registry_1, Classes_1, Registry_2, LoadingEditor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.propertyeditor = exports.PropertyEditorService = void 0;
@@ -20,17 +20,17 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
             /** @member {Object.<string,[class]>}
              *  data[type]*/
             this.data = {};
-            this.funcRegister = Registry_1.default.onregister("$PropertyEditor", this.register.bind(this));
+            this.funcRegister = Registry_2.default.onregister("$PropertyEditor", this.register.bind(this));
         }
         reset() {
             this.data = {};
         }
         destroy() {
-            Registry_1.default.offregister("$PropertyEditor", this.funcRegister);
+            Registry_2.default.offregister("$PropertyEditor", this.funcRegister);
         }
         async loadType(type) {
             if (this.data[type] === undefined) {
-                var dat = await Registry_1.default.getJSONData("$PropertyEditor");
+                var dat = await Registry_2.default.getJSONData("$PropertyEditor");
                 for (var x = 0; x < dat.length; x++) {
                     if (dat[x].params[0].indexOf(type) !== -1) {
                         await Classes_1.classes.loadClass(dat[x].classname);
@@ -82,7 +82,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
         }
     };
     PropertyEditorService = __decorate([
-        (0, Jassi_1.$Class)("jassijs.base.PropertyEditorService"),
+        (0, Registry_1.$Class)("jassijs.base.PropertyEditorService"),
         __metadata("design:paramtypes", [])
     ], PropertyEditorService);
     exports.PropertyEditorService = PropertyEditorService;

@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Runlater } from "jassijs/util/Runlater";
 import { SimpleReportDesigner } from "jassijs_report/designer/SimpleReportDesigner";
 import { AcePanelSimple } from "jassijs_editor/AcePanelSimple";

@@ -3,6 +3,16 @@ import "reflect-metadata";
 
 
 
+export function $Class(longclassname: string): Function {
+    return function (pclass) {
+        registry.register("$Class", pclass, longclassname);
+    }
+}
+export function $register(servicename: string, ...params): Function {
+    return function (pclass) {
+        registry.register(servicename, pclass, params);
+    }
+}
 
 if (Reflect["_metadataorg"] === undefined) {
     Reflect["_metadataorg"] = Reflect["metadata"];

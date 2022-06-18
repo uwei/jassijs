@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_1, HTMLPanel_1, Button_1, Jassi_1, tinymce_1, Registry_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_1, HTMLPanel_1, Button_1, Registry_1, tinymce_1, Registry_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.te = exports.HTMLEditorPanel = void 0;
@@ -25,7 +25,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassi
             this.add(me.IDHtml);
             this.add(me.IDChange);
             //me.IDHtml.text="Hallo";
-            var randclass = "ed" + Registry_1.default.nextID();
+            var randclass = "ed" + Registry_2.default.nextID();
             $(me.IDHtml.dom).addClass(randclass);
             me.IDChange.text = "OK";
             me.IDChange.onclick(function (event) {
@@ -77,7 +77,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassi
         }
     };
     HTMLEditorPanel = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.HTMLEditorPanel"),
+        (0, Registry_1.$Class)("jassijs.ui.HTMLEditorPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLEditorPanel);
     exports.HTMLEditorPanel = HTMLEditorPanel;

@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server"], function (require, exports, Jassi_1, Registry_1, RemoteObject_1, Setting_1, Server_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "./Server"], function (require, exports, Registry_1, Registry_2, RemoteObject_1, Setting_1, Server_1) {
     "use strict";
     var Settings_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -163,14 +163,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry",
     Settings.userSettings = undefined;
     Settings.allusersSettings = undefined;
     Settings = Settings_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs.remote.Settings")
+        (0, Registry_1.$Class)("jassijs.remote.Settings")
     ], Settings);
     exports.Settings = Settings;
     var settings = new Settings();
     exports.settings = settings;
     function $SettingsDescriptor() {
         return function (pclass) {
-            Registry_1.default.register("$SettingsDescriptor", pclass);
+            Registry_2.default.register("$SettingsDescriptor", pclass);
         };
     }
     exports.$SettingsDescriptor = $SettingsDescriptor;

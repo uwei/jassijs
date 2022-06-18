@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Jassi_1, Panel_1, Image_1, Registry_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_1, Panel_1, Image_1, Registry_2, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentPalette = void 0;
@@ -27,7 +27,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             while (this._components.length > 0) {
                 this.remove(this._components[0]);
             }
-            Registry_1.default.getJSONData(this._service).then((jdata) => {
+            Registry_2.default.getJSONData(this._service).then((jdata) => {
                 for (var x = 0; x < jdata.length; x++) {
                     var mdata = jdata[x];
                     var data = mdata.params[0];
@@ -113,7 +113,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     ComponentPalette = __decorate([
-        (0, Jassi_1.$Class)("jassijs_editor.ComponentPalette"),
+        (0, Registry_1.$Class)("jassijs_editor.ComponentPalette"),
         __metadata("design:paramtypes", [])
     ], ComponentPalette);
     exports.ComponentPalette = ComponentPalette;

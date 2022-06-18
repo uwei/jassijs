@@ -1,6 +1,6 @@
 var bugtinymce = undefined;
 import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 declare global {

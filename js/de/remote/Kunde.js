@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = exports.Kunde = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
 const AR_1 = require("de/remote/AR");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const DBObjectQuery_1 = require("jassijs/remote/DBObjectQuery");
 const Rights_1 = require("jassijs/remote/security/Rights");
@@ -136,7 +136,7 @@ Kunde = Kunde_1 = __decorate([
                 i2: "bis"
             } }]),
     (0, DBObject_1.$DBObject)(),
-    (0, Jassi_1.$Class)("de.Kunde"),
+    (0, Registry_1.$Class)("de.Kunde"),
     __metadata("design:paramtypes", [])
 ], Kunde);
 exports.Kunde = Kunde;

@@ -1,6 +1,6 @@
 import { UIComponentProperties } from "jassijs/ui/Component";
 import registry from "jassijs/remote/Registry";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { ReportDesign } from "jassijs_report/ReportDesign";

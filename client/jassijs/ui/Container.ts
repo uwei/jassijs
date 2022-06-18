@@ -1,4 +1,4 @@
-import  { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import {Component, ComponentConfig} from "jassijs/ui/Component";
 
 export interface ContainerConfig extends ComponentConfig{

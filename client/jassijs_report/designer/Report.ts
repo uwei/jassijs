@@ -1,4 +1,4 @@
-import  { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import {BoxPanel} from "jassijs/ui/BoxPanel";
 
 @$Class("jassijs_report.Report")

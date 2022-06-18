@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "de/remote/AR"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, Rights_1, AR_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights", "de/remote/AR"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Rights_1, AR_1) {
     "use strict";
     var ARZeile_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -80,7 +80,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
     ], ARZeile.prototype, "ar", void 0);
     ARZeile = ARZeile_1 = __decorate([
         (0, DBObject_1.$DBObject)(),
-        (0, Jassi_1.$Class)("de.ARZeile"),
+        (0, Registry_1.$Class)("de.ARZeile"),
         __metadata("design:paramtypes", [])
     ], ARZeile);
     exports.ARZeile = ARZeile;

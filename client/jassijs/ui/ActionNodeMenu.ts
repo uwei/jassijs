@@ -1,5 +1,5 @@
 import { Menu } from "jassijs/ui/Menu";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel, PanelConfig } from "jassijs/ui/Panel";
 import { Action, Actions } from "jassijs/base/Actions";
 import { ActionNode} from "jassijs/base/ActionNode";

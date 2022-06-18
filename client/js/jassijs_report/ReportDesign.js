@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable", "jassijs_report/RUList", "jassijs_report/ROList", "jassijs_report/RImage"], function (require, exports, BoxPanel_1, Jassi_1, RStack_1, RText_1, RColumns_1, RUnknown_1, Panel_1, RComponent_1, RDatatable_1, Property_1, RStyle_1, RTextGroup_1, RTable_1, RUList_1, ROList_1, RImage_1) {
+define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable", "jassijs_report/RUList", "jassijs_report/ROList", "jassijs_report/RImage"], function (require, exports, BoxPanel_1, Registry_1, RStack_1, RText_1, RColumns_1, RUnknown_1, Panel_1, RComponent_1, RDatatable_1, Property_1, RStyle_1, RTextGroup_1, RTable_1, RUList_1, ROList_1, RImage_1) {
     "use strict";
     var ReportDesign_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -40,7 +40,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
         __metadata("design:type", String)
     ], InfoProperties.prototype, "producer", void 0);
     InfoProperties = __decorate([
-        (0, Jassi_1.$Class)("jassijs_report.InfoProperties")
+        (0, Registry_1.$Class)("jassijs_report.InfoProperties")
     ], InfoProperties);
     let PermissionProperties = class PermissionProperties {
         constructor() {
@@ -81,7 +81,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "documentAssembly", void 0);
     PermissionProperties = __decorate([
-        (0, Jassi_1.$Class)("jassijs_report.PermissionProperties")
+        (0, Registry_1.$Class)("jassijs_report.PermissionProperties")
     ], PermissionProperties);
     let StyleContainer = class StyleContainer extends Panel_1.Panel {
         constructor(props) {
@@ -92,7 +92,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
         }
     };
     StyleContainer = __decorate([
-        (0, Jassi_1.$Class)("jassijs_report.StyleContainer"),
+        (0, Registry_1.$Class)("jassijs_report.StyleContainer"),
         (0, Property_1.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], StyleContainer);
@@ -526,7 +526,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "ja
     ], ReportDesign.prototype, "pageOrientation", null);
     ReportDesign = ReportDesign_1 = __decorate([
         (0, RComponent_1.$ReportComponent)({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
-        (0, Jassi_1.$Class)("jassijs_report.ReportDesign"),
+        (0, Registry_1.$Class)("jassijs_report.ReportDesign"),
         (0, Property_1.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);

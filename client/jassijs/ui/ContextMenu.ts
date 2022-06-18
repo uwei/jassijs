@@ -1,5 +1,5 @@
 import "jassijs/ext/jquery.contextmenu";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Menu } from "jassijs/ui/Menu";
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
 import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";

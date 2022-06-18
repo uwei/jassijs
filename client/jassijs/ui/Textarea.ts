@@ -1,5 +1,5 @@
 import { $UIComponent } from "jassijs/ui/Component";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
 import { Textbox } from "jassijs/ui/Textbox";
 

@@ -7,8 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Rights = exports.$CheckParentRight = exports.$ParentRights = exports.$Rights = exports.ParentRightProperties = exports.RightProperties = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
 const Registry_1 = require("jassijs/remote/Registry");
+const Registry_2 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 class RightProperties {
 }
@@ -18,19 +18,19 @@ class ParentRightProperties {
 exports.ParentRightProperties = ParentRightProperties;
 function $Rights(rights) {
     return function (pclass) {
-        Registry_1.default.register("$Rights", pclass, rights);
+        Registry_2.default.register("$Rights", pclass, rights);
     };
 }
 exports.$Rights = $Rights;
 function $ParentRights(rights) {
     return function (pclass) {
-        Registry_1.default.register("$ParentRights", pclass, rights);
+        Registry_2.default.register("$ParentRights", pclass, rights);
     };
 }
 exports.$ParentRights = $ParentRights;
 function $CheckParentRight() {
     return function (target, propertyKey, descriptor) {
-        Registry_1.default.registerMember("$CheckParentRight", target, propertyKey, undefined);
+        Registry_2.default.registerMember("$CheckParentRight", target, propertyKey, undefined);
     };
 }
 exports.$CheckParentRight = $CheckParentRight;
@@ -49,7 +49,7 @@ let Rights = class Rights extends RemoteObject_1.RemoteObject {
     }
 };
 Rights = __decorate([
-    (0, Jassi_1.$Class)("jassijs.security.Rights")
+    (0, Registry_1.$Class)("jassijs.security.Rights")
 ], Rights);
 exports.Rights = Rights;
 var rights = new Rights();

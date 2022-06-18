@@ -1,5 +1,5 @@
 import {DefaultConverter,  $Converter } from "jassijs/ui/converters/DefaultConverter";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
 
 @$Converter({name:"string"})

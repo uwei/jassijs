@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database"], function (require, exports, Jassi_1, Classes_1, RemoteObject_1, Registry_1, DatabaseSchema_1, Database_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database"], function (require, exports, Registry_1, Classes_1, RemoteObject_1, Registry_2, DatabaseSchema_1, Database_1) {
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -20,7 +20,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
                 options = {};
             if (!options.name)
                 options.name = classname.toLowerCase().replaceAll(".", "_");
-            Registry_1.default.register("$DBObject", pclass, options);
+            Registry_2.default.register("$DBObject", pclass, options);
             (0, DatabaseSchema_1.Entity)(options)(pclass, ...params); //pass to orginal Entitiy
         };
     }
@@ -39,7 +39,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
         }
         //clear cache on reload
         static _initFunc() {
-            Registry_1.default.onregister("$Class", (data, name) => {
+            Registry_2.default.onregister("$Class", (data, name) => {
                 delete DBObject_1.cache[name];
             });
         }
@@ -224,7 +224,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
     DBObject.cache = {};
     DBObject._init = DBObject_1._initFunc();
     DBObject = DBObject_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs.remote.DBObject"),
+        (0, Registry_1.$Class)("jassijs.remote.DBObject"),
         __metadata("design:paramtypes", [])
     ], DBObject);
     exports.DBObject = DBObject;

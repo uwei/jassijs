@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { ReportDesigner } from "jassijs_report/designer/ReportDesigner";
 
 import { Tools } from "jassijs/util/Tools";

@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FileNode = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 ;
 let FileNode = class FileNode {
     constructor(fullpath = undefined) {
@@ -36,7 +36,7 @@ let FileNode = class FileNode {
     }
 };
 FileNode = __decorate([
-    (0, Jassi_1.$Class)("jassijs.remote.FileNode"),
+    (0, Registry_1.$Class)("jassijs.remote.FileNode"),
     __metadata("design:paramtypes", [String])
 ], FileNode);
 exports.FileNode = FileNode;

@@ -1,6 +1,6 @@
 import {Entity, PrimaryColumn, Column} from "jassijs/util/DatabaseSchema"; 
 import { $DBObject } from "jassijs/remote/DBObject";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 
 
 @$DBObject()

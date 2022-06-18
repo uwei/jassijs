@@ -1,11 +1,11 @@
 import { $ActionProvider, $Action } from "jassijs/base/Actions";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { FileNode } from "jassijs/remote/FileNode";
 import { OptionDialog } from "jassijs/ui/OptionDialog";
 import { FileExplorer, FileActions } from "jassijs/ui/FileExplorer";
 import { Server } from "jassijs/remote/Server";
 import { router } from "jassijs/base/Router";
-const code=`import { $Class } from "jassijs/remote/Jassi";
+const code=`import { $Class } from "jassijs/remote/Registry";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 
 @$Class("{{fullclassname}}")

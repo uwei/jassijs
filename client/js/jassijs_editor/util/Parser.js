@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Typescript"], function (require, exports, Jassi_1, Typescript_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript"], function (require, exports, Registry_1, Typescript_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Parser = exports.ParsedClass = void 0;
@@ -887,7 +887,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/util/Types
         }
     };
     Parser = __decorate([
-        (0, Jassi_1.$Class)("jassijs_editor.util.Parser"),
+        (0, Registry_1.$Class)("jassijs_editor.util.Parser"),
         __metadata("design:paramtypes", [])
     ], Parser);
     exports.Parser = Parser;

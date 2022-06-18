@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs/ui/DBObjectDialog", "jassijs/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Jassi_1, Actions_1, Panel_1, Registry_1, Router_1, DBObjectDialog_1, Windows_1) {
+define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs/ui/DBObjectDialog", "jassijs/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Registry_1, Actions_1, Panel_1, Registry_2, Router_1, DBObjectDialog_1, Windows_1) {
     "use strict";
     var DBObjectExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -15,12 +15,12 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
     let DBObjectNode = class DBObjectNode {
     };
     DBObjectNode = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.DBObjectNode")
+        (0, Registry_1.$Class)("jassijs.ui.DBObjectNode")
     ], DBObjectNode);
     exports.DBObjectNode = DBObjectNode;
     let DBFileActions = class DBFileActions {
         static async ViewData(all) {
-            var entrys = await Registry_1.default.getJSONData("$DBObject");
+            var entrys = await Registry_2.default.getJSONData("$DBObject");
             for (var x = 0; x < entrys.length; x++) {
                 if (all[0].fullpath === entrys[x].filename) {
                     var h = new DBObjectNode();
@@ -38,7 +38,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
                 if (all[0].isDirectory())
                     return false;
                 //console.log("TODO make isEnabled this async")
-                var entrys = await Registry_1.default.getJSONData("$DBObject");
+                var entrys = await Registry_2.default.getJSONData("$DBObject");
                 for (var x = 0; x < entrys.length; x++) {
                     if (all[0].fullpath === entrys[x].filename)
                         return true;
@@ -52,7 +52,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
     ], DBFileActions, "ViewData", null);
     DBFileActions = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
-        (0, Jassi_1.$Class)("jassijs.ui.DBFileActions")
+        (0, Registry_1.$Class)("jassijs.ui.DBFileActions")
     ], DBFileActions);
     exports.DBFileActions = DBFileActions;
     let DBObjectActions = class DBObjectActions {
@@ -80,7 +80,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
     ], DBObjectActions, "OpenCode", null);
     DBObjectActions = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.ui.DBObjectNode"),
-        (0, Jassi_1.$Class)("jassijs.ui.DBObjectActions")
+        (0, Registry_1.$Class)("jassijs.ui.DBObjectActions")
     ], DBObjectActions);
     exports.DBObjectActions = DBObjectActions;
     let DBObjectExplorer = DBObjectExplorer_1 = class DBObjectExplorer extends Panel_1.Panel {
@@ -116,7 +116,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
                 Windows_1.default.addLeft(new DBObjectExplorer_1(), "DBObjects");
         }
         async update() {
-            var entrys = await Registry_1.default.getJSONData("$DBObject");
+            var entrys = await Registry_2.default.getJSONData("$DBObject");
             var all = [];
             entrys.forEach((entry) => {
                 var h = new DBObjectNode();
@@ -157,7 +157,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jass
     ], DBObjectExplorer, "show", null);
     DBObjectExplorer = DBObjectExplorer_1 = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_1.$Class)("jassijs.ui.DBObjectExplorer"),
+        (0, Registry_1.$Class)("jassijs.ui.DBObjectExplorer"),
         __metadata("design:paramtypes", [])
     ], DBObjectExplorer);
     exports.DBObjectExplorer = DBObjectExplorer;

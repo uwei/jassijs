@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const Extensions_1 = require("jassijs/remote/Extensions");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 let KundeExt2 = class KundeExt2 {
     /**
     * sample Extension
@@ -31,7 +31,7 @@ let KundeExt2 = class KundeExt2 {
 };
 KundeExt2 = __decorate([
     (0, Extensions_1.$Extension)("de.Kunde"),
-    (0, Jassi_1.$Class)("de.KundeExt2"),
+    (0, Registry_1.$Class)("de.KundeExt2"),
     __metadata("design:paramtypes", [])
 ], KundeExt2);
 //jassijs.register("extensions", "de.Kunde", KundeExt2, "KundeExt2");

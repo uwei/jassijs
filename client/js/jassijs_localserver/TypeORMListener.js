@@ -4,13 +4,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Jassi", "typeorm", "jassijs_localserver/Filesystem", "jassijs/util/Reloader", "jassijs/remote/Registry", "./DBManager"], function (require, exports, Jassi_1, typeorm_1, Filesystem_1, Reloader_1, Registry_1, DBManager_1) {
+define(["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs_localserver/Filesystem", "jassijs/util/Reloader", "jassijs/remote/Registry", "./DBManager"], function (require, exports, Registry_1, typeorm_1, Filesystem_1, Reloader_1, Registry_2, DBManager_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeORMListener = void 0;
     //listener for code changes
     Reloader_1.Reloader.instance.addEventCodeReloaded(async function (files) {
-        var dbobjects = await Registry_1.default.getJSONData("$DBObject");
+        var dbobjects = await Registry_2.default.getJSONData("$DBObject");
         var reload = false;
         for (var x = 0; x < files.length; x++) {
             var file = files[x];
@@ -120,7 +120,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "typeorm", "jassijs_locals
     };
     TypeORMListener = __decorate([
         (0, typeorm_1.EventSubscriber)(),
-        (0, Jassi_1.$Class)("jassijs_localserver.TypeORMListener")
+        (0, Registry_1.$Class)("jassijs_localserver.TypeORMListener")
     ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
 });

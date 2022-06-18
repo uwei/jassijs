@@ -1,6 +1,6 @@
 import { DBObject, $DBObject } from "jassijs/remote/DBObject";
 import { AR } from "de/remote/AR";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassijs/util/DatabaseSchema";
 import { ExtensionProvider } from "jassijs/remote/Extensions";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";

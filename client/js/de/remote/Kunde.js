@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObjectQuery", "jassijs/remote/security/Rights"], function (require, exports, DBObject_1, AR_1, Jassi_1, DatabaseSchema_1, DBObjectQuery_1, Rights_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObjectQuery", "jassijs/remote/security/Rights"], function (require, exports, DBObject_1, AR_1, Registry_1, DatabaseSchema_1, DBObjectQuery_1, Rights_1) {
     "use strict";
     var Kunde_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -131,7 +131,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
                     i2: "bis"
                 } }]),
         (0, DBObject_1.$DBObject)(),
-        (0, Jassi_1.$Class)("de.Kunde"),
+        (0, Registry_1.$Class)("de.Kunde"),
         __metadata("design:paramtypes", [])
     ], Kunde);
     exports.Kunde = Kunde;

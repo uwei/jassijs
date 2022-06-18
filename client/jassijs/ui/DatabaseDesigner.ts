@@ -3,7 +3,7 @@ import { Button } from "jassijs/ui/Button";
 import { Databinder } from "jassijs/ui/Databinder";
 import { Select } from "jassijs/ui/Select";
 import { Table } from "jassijs/ui/Table";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { DatabaseSchema, DatabaseClass, DatabaseField } from "jassijs/base/DatabaseSchema";
 import { OptionDialog } from "jassijs/ui/OptionDialog";

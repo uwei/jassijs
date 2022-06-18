@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Jassi_1, ReportDesigner_1, Tools_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Registry_1, ReportDesigner_1, Tools_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SimpleReportDesigner = void 0;
@@ -86,7 +86,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/designer/R
         }
     };
     SimpleReportDesigner = __decorate([
-        (0, Jassi_1.$Class)("jassijs_report.designer.SimpleReportDesigner"),
+        (0, Registry_1.$Class)("jassijs_report.designer.SimpleReportDesigner"),
         __metadata("design:paramtypes", [Object])
     ], SimpleReportDesigner);
     exports.SimpleReportDesigner = SimpleReportDesigner;

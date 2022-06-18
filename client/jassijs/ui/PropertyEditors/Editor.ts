@@ -1,5 +1,5 @@
 import {Property} from "jassijs/ui/Property";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import {PropertyEditor} from "jassijs/ui/PropertyEditor";
 import registry from "jassijs/remote/Registry";
 

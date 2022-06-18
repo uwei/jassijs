@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"de/remote/AR.ts": {
-		"date": 1655546326817,
+		"date": 1655556864383,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -50,7 +50,7 @@ exports.default={
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1655546344012,
+		"date": 1655556864383,
 		"de.ARZeile": {
 			"$DBObject": [],
 			"@members": {
@@ -85,7 +85,7 @@ exports.default={
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1655546351246,
+		"date": 1655556795287,
 		"de.Kunde": {
 			"$ParentRights": [
 				[
@@ -160,7 +160,7 @@ exports.default={
 		}
 	},
 	"de/remote/KundeExt.ts": {
-		"date": 1655546367310,
+		"date": 1655556795285,
 		"de.KundeExt": {
 			"$Extension": [
 				"de.Kunde"
@@ -168,7 +168,7 @@ exports.default={
 		}
 	},
 	"de/remote/KundeExt2.ts": {
-		"date": 1654120297933,
+		"date": 1655556795285,
 		"de.KundeExt2": {
 			"$Extension": [
 				"de.Kunde"
@@ -176,7 +176,7 @@ exports.default={
 		}
 	},
 	"de/remote/Lieferant.ts": {
-		"date": 1622985490000,
+		"date": 1655556795285,
 		"de.Lieferant": {
 			"$DBObject": [],
 			"@members": {
@@ -194,7 +194,7 @@ exports.default={
 		}
 	},
 	"de/remote/MyUser.ts": {
-		"date": 1622985492000,
+		"date": 1655556795285,
 		"de.MyUser": {
 			"$DBObject": [],
 			"Entity": [],

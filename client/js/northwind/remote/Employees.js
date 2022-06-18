@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction"], function (require, exports, DBObject_1, Jassi_1, DatabaseSchema_1, Transaction_1) {
+define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Transaction"], function (require, exports, DBObject_1, Registry_1, DatabaseSchema_1, Transaction_1) {
     "use strict";
     var Employees_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -114,7 +114,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
     ], Employees.prototype, "HireDate", void 0);
     Employees = Employees_1 = __decorate([
         (0, DBObject_1.$DBObject)(),
-        (0, Jassi_1.$Class)("northwind.Employees"),
+        (0, Registry_1.$Class)("northwind.Employees"),
         __metadata("design:paramtypes", [])
     ], Employees);
     exports.Employees = Employees;

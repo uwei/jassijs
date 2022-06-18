@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.test2 = exports.test = exports.User = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Group_1 = require("jassijs/remote/security/Group");
 const ParentRight_1 = require("jassijs/remote/security/ParentRight");
@@ -54,7 +54,7 @@ __decorate([
 ], User.prototype, "isAdmin", void 0);
 User = __decorate([
     (0, DBObject_1.$DBObject)({ name: "jassijs_user" }),
-    (0, Jassi_1.$Class)("jassijs.security.User")
+    (0, Registry_1.$Class)("jassijs.security.User")
 ], User);
 exports.User = User;
 async function test() {

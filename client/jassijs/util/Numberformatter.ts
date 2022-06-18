@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 //https://github.com/Mottie/javascript-number-formatter/blob/master/src/format.js
 //license https://github.com/Mottie/javascript-number-formatter/blob/master/LICENSE
 const maskRegex = /[0-9\-+#]/;

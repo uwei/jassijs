@@ -1,4 +1,4 @@
-import  { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { classes, JassiError } from "jassijs/remote/Classes";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import registry from "jassijs/remote/Registry";

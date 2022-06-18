@@ -4,7 +4,7 @@ import { Indexer } from "jassijs_localserver/Indexer";
 
 import { Server } from "jassijs/remote/Server";
 import Filessystem from "jassijs_localserver/Filesystem";
-import  { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 
 @$Class("jassijs_localserver.RegistryIndexer")
 export class RegistryIndexer extends Indexer {

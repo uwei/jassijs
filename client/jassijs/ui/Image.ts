@@ -1,6 +1,6 @@
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Property, $Property } from "jassijs/ui/Property";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 
 export interface ImageConfig extends DataComponentConfig {

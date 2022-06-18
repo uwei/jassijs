@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"], function (require, exports, Jassi_1, Registry_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry"], function (require, exports, Registry_1, Registry_2) {
     "use strict";
     var Reloader_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -90,7 +90,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"]
                     }
                 }
                 //load all classes which are in the same filename
-                var allclasses = await Registry_1.default.getJSONData("$Class");
+                var allclasses = await Registry_2.default.getJSONData("$Class");
                 var classesInFile = [];
                 for (var x = 0; x < allclasses.length; x++) {
                     var pclass = allclasses[x];
@@ -254,7 +254,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"]
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_1();
     Reloader = Reloader_1 = __decorate([
-        (0, Jassi_1.$Class)("jassijs.util.Reloader"),
+        (0, Registry_1.$Class)("jassijs.util.Reloader"),
         __metadata("design:paramtypes", [])
     ], Reloader);
     exports.Reloader = Reloader;

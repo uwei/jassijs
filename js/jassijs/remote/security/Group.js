@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Group = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const ParentRight_1 = require("jassijs/remote/security/ParentRight");
 const User_1 = require("jassijs/remote/security/User");
@@ -43,7 +43,7 @@ __decorate([
 ], Group.prototype, "users", void 0);
 Group = __decorate([
     (0, DBObject_1.$DBObject)({ name: "jassijs_group" }),
-    (0, Jassi_1.$Class)("jassijs.security.Group")
+    (0, Registry_1.$Class)("jassijs.security.Group")
 ], Group);
 exports.Group = Group;
 //# sourceMappingURL=Group.js.map

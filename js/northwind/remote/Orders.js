@@ -14,7 +14,7 @@ const OrderDetails_1 = require("northwind/remote/OrderDetails");
 const Employees_1 = require("northwind/remote/Employees");
 const Customer_1 = require("northwind/remote/Customer");
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Shippers_1 = require("northwind/remote/Shippers");
 let Orders = class Orders extends DBObject_1.DBObject {
@@ -84,7 +84,7 @@ __decorate([
 ], Orders.prototype, "Details", void 0);
 Orders = __decorate([
     (0, DBObject_1.$DBObject)(),
-    (0, Jassi_1.$Class)("northwind.Orders"),
+    (0, Registry_1.$Class)("northwind.Orders"),
     __metadata("design:paramtypes", [])
 ], Orders);
 exports.Orders = Orders;

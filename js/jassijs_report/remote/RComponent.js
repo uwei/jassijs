@@ -13,7 +13,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RComponent = exports.$ReportComponent = exports.ReportComponentProperties = void 0;
 const Component_1 = require("jassijs/ui/Component");
 const Registry_1 = require("jassijs/remote/Registry");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_2 = require("jassijs/remote/Registry");
 const Panel_1 = require("jassijs/ui/Panel");
 const Property_1 = require("jassijs/ui/Property");
 //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
@@ -606,7 +606,7 @@ __decorate([
     __metadata("design:paramtypes", [Array])
 ], RComponent.prototype, "margin", null);
 RComponent = RComponent_1 = __decorate([
-    (0, Jassi_1.$Class)("jassijs_report.ReportComponent"),
+    (0, Registry_2.$Class)("jassijs_report.ReportComponent"),
     (0, Property_1.$Property)({ hideBaseClassProperties: true }),
     __metadata("design:paramtypes", [Object])
 ], RComponent);

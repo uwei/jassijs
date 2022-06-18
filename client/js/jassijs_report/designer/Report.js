@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/BoxPanel"], function (require, exports, Jassi_1, BoxPanel_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/BoxPanel"], function (require, exports, Registry_1, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Report = void 0;
@@ -27,7 +27,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/BoxPanel"], fu
         }
     };
     Report = __decorate([
-        (0, Jassi_1.$Class)("jassijs_report.Report")
+        (0, Registry_1.$Class)("jassijs_report.Report")
         //@$UIComponent({editableChildComponents:["this"]})
         //@$Property({name:"horizontal",hide:true})
         ,

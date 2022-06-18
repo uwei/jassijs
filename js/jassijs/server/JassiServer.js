@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 global.window = {};
 global.$ = {};
+require("jassijs/remote/Jassi");
 require("app-module-path").addPath("./js");
 require("jassijs/remote/Registry");
 //import "reflect-metadata";

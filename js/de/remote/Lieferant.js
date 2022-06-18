@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Lieferant = void 0;
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 const DBObject_1 = require("jassijs/remote/DBObject");
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 //import { Entity, PrimaryColumn, Column,OneToOne,ManyToMany,ManyToOne,OneToMany } from "typeorm";
@@ -25,7 +25,7 @@ __decorate([
     __metadata("design:type", String)
 ], Lieferant.prototype, "name", void 0);
 Lieferant = __decorate([
-    (0, Jassi_1.$Class)("de.Lieferant"),
+    (0, Registry_1.$Class)("de.Lieferant"),
     (0, DBObject_1.$DBObject)()
 ], Lieferant);
 exports.Lieferant = Lieferant;

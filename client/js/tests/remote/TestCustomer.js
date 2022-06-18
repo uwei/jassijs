@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_1, DBObject_1, Jassi_1, DatabaseSchema_1, Rights_1) {
+define(["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_1, DBObject_1, Registry_1, DatabaseSchema_1, Rights_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestCustomer = void 0;
@@ -36,7 +36,7 @@ define(["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject
                     i2: "to"
                 } }]),
         (0, DBObject_1.$DBObject)(),
-        (0, Jassi_1.$Class)("tests.TestCustomer"),
+        (0, Registry_1.$Class)("tests.TestCustomer"),
         __metadata("design:paramtypes", [])
     ], TestCustomer);
     exports.TestCustomer = TestCustomer;

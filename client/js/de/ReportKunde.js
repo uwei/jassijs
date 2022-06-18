@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, Jassi_1, Property_1, Kunde_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "de/remote/Kunde"], function (require, exports, Registry_1, Property_1, Kunde_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportKunde = exports.reportdesign = void 0;
@@ -48,7 +48,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "de
         __metadata("design:type", Kunde_1.Kunde)
     ], ReportKunde.prototype, "value", void 0);
     ReportKunde = __decorate([
-        (0, Jassi_1.$Class)("de.ReportKunde")
+        (0, Registry_1.$Class)("de.ReportKunde")
     ], ReportKunde);
     exports.ReportKunde = ReportKunde;
     async function test() {

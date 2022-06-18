@@ -7,14 +7,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_1, Select_1, Jassi_1, Panel_1, PropertyEditor_1, Button_1, Settings_1, ComponentDescriptor_1, Registry_1, Actions_1, Windows_1) {
+define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_1, Select_1, Registry_1, Panel_1, PropertyEditor_1, Button_1, Settings_1, ComponentDescriptor_1, Registry_2, Actions_1, Windows_1) {
     "use strict";
     var SettingsDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SettingsDialog = void 0;
     let SettingsObject = class SettingsObject {
         static customComponentDescriptor() {
-            var allcl = Registry_1.default.getData("$SettingsDescriptor");
+            var allcl = Registry_2.default.getData("$SettingsDescriptor");
             var ret = new ComponentDescriptor_1.ComponentDescriptor();
             ret.fields = [];
             for (var x = 0; x < allcl.length; x++) {
@@ -28,7 +28,7 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jass
         }
     };
     SettingsObject = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.SettingsObject")
+        (0, Registry_1.$Class)("jassijs.ui.SettingsObject")
     ], SettingsObject);
     let SettingsDialog = SettingsDialog_1 = class SettingsDialog extends Panel_1.Panel {
         constructor() {
@@ -41,7 +41,7 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jass
         }
         async update() {
             await Settings_1.Settings.load();
-            await Registry_1.default.loadAllFilesForService("$SettingsDescriptor");
+            await Registry_2.default.loadAllFilesForService("$SettingsDescriptor");
             var testob = new SettingsObject();
             var scope = "browser";
             if (this.me.Scope.value === "current user") {
@@ -111,7 +111,7 @@ define(["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jass
     ], SettingsDialog, "show", null);
     SettingsDialog = SettingsDialog_1 = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_1.$Class)("jassijs.ui.SettingsDialog"),
+        (0, Registry_1.$Class)("jassijs.ui.SettingsDialog"),
         __metadata("design:paramtypes", [])
     ], SettingsDialog);
     exports.SettingsDialog = SettingsDialog;

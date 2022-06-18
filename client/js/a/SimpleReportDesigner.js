@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_report/ReportDesign", "jassijs/ui/DockingContainer", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs/util/Tools", "jassijs_editor/util/Parser", "jassijs/ui/VariablePanel", "jassijs/ui/Panel"], function (require, exports, ReportDesign_1, DockingContainer_1, Jassi_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, Tools_1, Parser_1, VariablePanel_1, Panel_1) {
+define(["require", "exports", "jassijs_report/ReportDesign", "jassijs/ui/DockingContainer", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs/util/Tools", "jassijs_editor/util/Parser", "jassijs/ui/VariablePanel", "jassijs/ui/Panel"], function (require, exports, ReportDesign_1, DockingContainer_1, Registry_1, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, PDFReport_1, PDFViewer_1, Tools_1, Parser_1, VariablePanel_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SimpleReportDesigner = void 0;
@@ -170,7 +170,7 @@ define(["require", "exports", "jassijs_report/ReportDesign", "jassijs/ui/Docking
         }
     };
     SimpleReportDesigner = __decorate([
-        (0, Jassi_1.$Class)("jassijs_report.designer.ReportDesigner"),
+        (0, Registry_1.$Class)("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], SimpleReportDesigner);
     exports.SimpleReportDesigner = SimpleReportDesigner;

@@ -12,7 +12,7 @@ var ARZeile_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ARZeile = void 0;
 const DBObject_1 = require("jassijs/remote/DBObject");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_1 = require("jassijs/remote/Registry");
 //import Kunde from "de/Kunde";
 const DatabaseSchema_1 = require("jassijs/util/DatabaseSchema");
 const Rights_1 = require("jassijs/remote/security/Rights");
@@ -85,7 +85,7 @@ __decorate([
 ], ARZeile.prototype, "ar", void 0);
 ARZeile = ARZeile_1 = __decorate([
     (0, DBObject_1.$DBObject)(),
-    (0, Jassi_1.$Class)("de.ARZeile"),
+    (0, Registry_1.$Class)("de.ARZeile"),
     __metadata("design:paramtypes", [])
 ], ARZeile);
 exports.ARZeile = ARZeile;

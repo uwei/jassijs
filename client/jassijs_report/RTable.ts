@@ -1,5 +1,5 @@
 import { BoxPanel } from "jassijs/ui/BoxPanel";
-import  { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { RStack } from "jassijs_report/RStack";
 import { RText } from "jassijs_report/RText";
 

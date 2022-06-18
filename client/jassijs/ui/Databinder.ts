@@ -2,7 +2,7 @@
 import jassi from "jassijs/jassi";
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
 import { Component, $UIComponent } from "jassijs/ui/Component";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { DataComponent } from "jassijs/ui/DataComponent";
 import { db, TypeDef } from "jassijs/remote/Database";
 import { classes } from "jassijs/remote/Classes";

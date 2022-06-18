@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs/remote/Jassi", "jassijs_editor/CodePanel"], function (require, exports, acelib_1, Jassi_1, CodePanel_1) {
+define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs/remote/Registry", "jassijs_editor/CodePanel"], function (require, exports, acelib_1, Registry_1, CodePanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.AcePanelSimple = void 0;
@@ -147,7 +147,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs/remote/Jassi
         }
     };
     AcePanelSimple = __decorate([
-        (0, Jassi_1.$Class)("jassijs.ui.AcePanelSimple"),
+        (0, Registry_1.$Class)("jassijs.ui.AcePanelSimple"),
         __metadata("design:paramtypes", [])
     ], AcePanelSimple);
     exports.AcePanelSimple = AcePanelSimple;

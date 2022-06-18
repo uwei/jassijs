@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/remote/Classes", "jassijs/ui/Image"], function (require, exports, Jassi_1, Panel_1, Registry_1, Button_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Button", "jassijs/remote/Classes", "jassijs/ui/Image"], function (require, exports, Registry_1, Panel_1, Registry_2, Button_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CodeEditorInvisibleComponents = void 0;
@@ -48,7 +48,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 });
                 var cn = Classes_1.classes.getClassName(ob);
                 //search icon
-                Registry_1.default.getJSONData("$UIComponent").then((regdata) => {
+                Registry_2.default.getJSONData("$UIComponent").then((regdata) => {
                     regdata.forEach(function (val) {
                         if (val.classname === cn) {
                             img.icon = val.params[0].icon;
@@ -100,7 +100,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
     };
     CodeEditorInvisibleComponents = __decorate([
-        (0, Jassi_1.$Class)("jassijs_editor.CodeEditorInvisibleComponents"),
+        (0, Registry_1.$Class)("jassijs_editor.CodeEditorInvisibleComponents"),
         __metadata("design:paramtypes", [Object])
     ], CodeEditorInvisibleComponents);
     exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;

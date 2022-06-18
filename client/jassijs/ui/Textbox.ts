@@ -1,4 +1,4 @@
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";

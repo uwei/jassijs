@@ -3,7 +3,7 @@ import { Container, ContainerConfig } from "jassijs/ui/Container";
 import { Button } from "jassijs/ui/Button";
 import { Property, $Property } from "jassijs/ui/Property";
 import { MenuItem } from "jassijs/ui/MenuItem";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { $UIComponent } from "jassijs/ui/Component";
 import { DesignDummy } from "jassijs/ui/DesignDummy";
 /*declare global {

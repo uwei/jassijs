@@ -1,7 +1,5 @@
 
 
-import registry from "jassijs/remote/Registry";
-
 
 declare global {
 
@@ -25,16 +23,6 @@ window.extentsionCalled({
 })*/
 
 
-export function $Class(longclassname: string): Function {
-    return function (pclass) {
-        registry.register("$Class", pclass, longclassname);
-    }
-}
-export function $register(servicename: string, ...params): Function {
-    return function (pclass) {
-        registry.register(servicename, pclass, params);
-    }
-}
 
 declare global {
     interface String {

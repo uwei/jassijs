@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, DefaultConverter_1, Jassi_1, Property_1, Numberformatter_1) {
+define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, DefaultConverter_1, Registry_1, Property_1, Numberformatter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NumberConverter = void 0;
@@ -40,7 +40,7 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
     };
     NumberConverter = __decorate([
         (0, DefaultConverter_1.$Converter)({ name: "number" }),
-        (0, Jassi_1.$Class)("jassijs.ui.converters.NumberConverter"),
+        (0, Registry_1.$Class)("jassijs.ui.converters.NumberConverter"),
         (0, Property_1.$Property)({ name: "new", type: "json" })
         //@$Property({name:"new/min",type:"number",default:undefined})
         //@$Property({name:"new/max",type:"number",default:undefined})

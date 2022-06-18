@@ -3,7 +3,7 @@ import jassi from "jassijs/jassi";
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Menu } from "jassijs/ui/Menu";
 import { Property, $Property } from "jassijs/ui/Property";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Container, ContainerConfig } from "jassijs/ui/Container";
 
 export interface MenuItemConfig extends ContainerConfig {

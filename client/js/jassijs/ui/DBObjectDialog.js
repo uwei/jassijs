@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_1, Jassi_1, Panel_1, Registry_1, Classes_1, BoxPanel_1, Actions_1, Windows_1) {
+define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_1, Registry_1, Panel_1, Registry_2, Classes_1, BoxPanel_1, Actions_1, Windows_1) {
     "use strict";
     var DBObjectDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -51,7 +51,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassi
             this.data = await cl.find();
             this.me.table1.items = this.data;
             //DBView
-            var data = await Registry_1.default.getJSONData("$DBObjectView");
+            var data = await Registry_2.default.getJSONData("$DBObjectView");
             for (var x = 0; x < data.length; x++) {
                 var param = data[x].params[0];
                 if (param.classname === this.dbclassname) {
@@ -108,7 +108,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassi
          */
         static async createActions() {
             var ret = [];
-            var data = await Registry_1.default.getJSONData("$DBObjectView");
+            var data = await Registry_2.default.getJSONData("$DBObjectView");
             for (var x = 0; x < data.length; x++) {
                 var param = data[x].params[0];
                 if (param.actionname) {
@@ -140,7 +140,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassi
     ], DBObjectDialog, "createActions", null);
     DBObjectDialog = DBObjectDialog_1 = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_1.$Class)("jassijs.ui.DBObjectDialog"),
+        (0, Registry_1.$Class)("jassijs.ui.DBObjectDialog"),
         __metadata("design:paramtypes", [])
     ], DBObjectDialog);
     exports.DBObjectDialog = DBObjectDialog;

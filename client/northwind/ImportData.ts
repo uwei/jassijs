@@ -1,6 +1,6 @@
 import { Button } from "jassijs/ui/Button";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
-import { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { CSVImport } from "jassijs/util/CSVImport";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";

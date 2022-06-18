@@ -16,7 +16,7 @@ const typeorm_1 = require("typeorm");
 const Classes_1 = require("jassijs/remote/Classes");
 const Registry_1 = require("jassijs/remote/Registry");
 const User_1 = require("jassijs/remote/security/User");
-const Jassi_1 = require("jassijs/remote/Jassi");
+const Registry_2 = require("jassijs/remote/Registry");
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
 var _instance = undefined;
@@ -505,7 +505,7 @@ let DBManager = DBManager_1 = class DBManager {
     }
 };
 DBManager = DBManager_1 = __decorate([
-    (0, Jassi_1.$Class)("jassi_localserver.DBManager"),
+    (0, Registry_2.$Class)("jassi_localserver.DBManager"),
     __metadata("design:paramtypes", [])
 ], DBManager);
 exports.DBManager = DBManager;
