@@ -13,7 +13,6 @@ define("jassijs/jassi", ["require", "exports", "jassijs/base/Errors", "jassijs/r
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
     jassijs.errors = new Errors_1.Errors();
-    exports.default = jassijs;
 });
 define("jassijs/modul", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -4320,7 +4319,6 @@ define("jassijs/ext/jquery.contextmenu", ["jassijs/remote/Jassi", "jquery.contex
         default: ""
     };
 });
-jassijs.includeCSSFile("jquery-ui.css");
 define("jassijs/ext/jquerylib", [
     "jquery",
     "jquery.ui",
@@ -4328,6 +4326,7 @@ define("jassijs/ext/jquerylib", [
     "jquery.doubletap",
     "jquery.notify"
 ], function (require) {
+    jassijs.includeCSSFile("jquery-ui.css");
     $.notify.defaults({ position: "bottom right", className: "info" });
     define("../widgets/datepicker", [], function () {
         return $.datepicker;

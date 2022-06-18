@@ -53,7 +53,7 @@ export class SimpleReportDesigner extends ComponentDesigner {
             _this.propertyChanged();
         });
         this.dom.classList.add("ReportDesigner");
-        this.dom.style.overflow= "scroll")
+        this.dom.style.overflow= "scroll";
         this.dom.style.width= "";
     }
     editDialog(enable) {

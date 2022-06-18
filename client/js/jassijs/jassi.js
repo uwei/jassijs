@@ -4,6 +4,5 @@ define(["require", "exports", "jassijs/base/Errors", "jassijs/remote/Jassi", "ja
     jassijs.includeCSSFile("jassijs.css");
     jassijs.includeCSSFile("materialdesignicons.min.css");
     jassijs.errors = new Errors_1.Errors();
-    exports.default = jassijs;
 });
 //# sourceMappingURL=jassi.js.map

@@ -7,9 +7,9 @@ import "jassijs/remote/Registry";
 import "jassijs/ext/jquerylib";
 import "jassijs/ext/intersection-observer";
 import { Errors } from "jassijs/base/Errors";
-
 jassijs.includeCSSFile( "jassijs.css");
 jassijs.includeCSSFile( "materialdesignicons.min.css");
+
 declare global {
   interface JQueryStatic {
           notify: any;
@@ -17,6 +17,6 @@ declare global {
 }
 jassijs.errors=new Errors();
 
-export default jassijs;
+
 
 

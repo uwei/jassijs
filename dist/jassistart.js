@@ -53,7 +53,7 @@ class JassijsStarter {
             window.document.head.appendChild(js);
         });
     }
-    loadModules(res, mods, modules, requireconfig, startlib,beforestartlib) {
+    loadModules(res, mods, modules, requireconfig, startlib, beforestartlib) {
         for (let x = 0; x < res.length; x++) {
             if (res[x].default.css) {
                 var mod = mods[x];
@@ -62,13 +62,13 @@ class JassijsStarter {
                 for (let key in res[x].default.css) {
                     let f = res[x].default.css[key];
                     if (f.indexOf(":") > -1) //https://cdn
-                        this.cssFiles[key]=f;
+                        this.cssFiles[key] = f;
                     else if (modpath.endsWith(".js") || modpath.indexOf(".js?") > -1) {
                         var m = modpath.substring(0, modpath.lastIndexOf("/"));
-                        this.cssFiles[key]=m + "/" + f;
+                        this.cssFiles[key] = m + "/" + f;
                     }
                     else {
-                        this.cssFiles[key]=modpath + "/" + f;
+                        this.cssFiles[key] = modpath + "/" + f;
                     }
                 }
             }
@@ -108,7 +108,7 @@ class JassijsStarter {
                 });
             })
             if (beforestartlib[x] === "jassijs/jassi") {
-                
+
             }
         }
     }
@@ -131,17 +131,17 @@ class JassijsStarter {
             }
         };*/
     }
-    async loadInternetModules(modules){
+    async loadInternetModules(modules) {
         let allmodules = {};
-            let dowait = [];
-            for (let modul in modules) {
-                if (modules[modul].endsWith(".js") || modules[modul].indexOf(".js?") > -1) {
-                    dowait.push(this.loadScript(modules[modul]));
-                }
+        let dowait = [];
+        for (let modul in modules) {
+            if (modules[modul].endsWith(".js") || modules[modul].indexOf(".js?") > -1) {
+                dowait.push(this.loadScript(modules[modul]));
             }
-            for (let x = 0; x < dowait.length; x++) {
-                var mod = await dowait[x];
-            }
+        }
+        for (let x = 0; x < dowait.length; x++) {
+            var mod = await dowait[x];
+        }
     }
     async run() {
         var smodules = await this.loadText(this.configFile);
@@ -153,10 +153,10 @@ class JassijsStarter {
             if (data.require)
                 requireconfig = data.require;
             modules = data.modules;
-            this.config=data;
-           // window.__jassijsconfig__ = data;//is consumed by Jassijs
-            
-            
+            this.config = data;
+            // window.__jassijsconfig__ = data;//is consumed by Jassijs
+
+
         }
         await this.loadRequirejs(requireconfig);
         await this.loadInternetModules(modules);
@@ -166,7 +166,7 @@ class JassijsStarter {
             paths: {
                 //"jassijs/ext": '../../jassijs/ext',
                 "remote/jassijs/ext": '../../remote/jassijs/ext',
-              
+
             }
         });
         var mods = [];
@@ -179,11 +179,11 @@ class JassijsStarter {
         var beforestartlib = [];
         var _this = this;
         require(all, function (remoteJassi, ...res) {
-            window.jassijs.modules=_this.config.modules;
-          
-            _this.loadModules(res, mods, modules, requireconfig, startlib,beforestartlib);
-            window.jassijs.options=_this.config.options;
-            window.jassijs.cssFiles=_this.cssFiles;
+            window.jassijs.modules = _this.config.modules;
+
+            _this.loadModules(res, mods, modules, requireconfig, startlib, beforestartlib);
+            window.jassijs.options = _this.config.options;
+            window.jassijs.cssFiles = _this.cssFiles;
             requirejs.config(requireconfig);
             //read UserSettings after all beforestartlib are loaded
             beforestartlib.push("jassijs/jassi");
@@ -192,10 +192,10 @@ class JassijsStarter {
 
             _this.loadBeforestart(beforestartlib).then(() => {
                 require(startlib, function (jassijs, ...others) {
-                    for(var key in _this.cssFiles){
+                    for (var key in _this.cssFiles) {
                         //jassijs.default.myRequire(_this.cssFiles[key]);
                     }
-                    if (_this.runFunction && window[runFunction]) {
+                    if (_this.runFunction && window[_this.runFunction]) {
                         window[_this.runFunction]();
                     }
                     if (_this.runScript) {
@@ -207,8 +207,16 @@ class JassijsStarter {
         });
     }
 }
+(() => {
+    var jstart = new JassijsStarter();
+    try {
+        jstart.registerServiceWorker();
+    } catch {
+        console.log("could not start Serviceworker");
+    }
+    jstart.run();
 
-new JassijsStarter().registerServiceWorker().run();
+})();
 
 
 /*
