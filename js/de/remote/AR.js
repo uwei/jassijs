@@ -62,8 +62,6 @@ let AR = AR_1 = class AR extends DBObject_1.DBObject {
     }
     async sample() {
         var all = AR_1.myfind();
-        debugger;
-        // $(document.body).html(ret);
         var ar = new AR_1();
         ar.strasse = "gemeindeberg";
         ar.nummer = 7;

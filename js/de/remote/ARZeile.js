@@ -46,7 +46,6 @@ let ARZeile = ARZeile_1 = class ARZeile extends DBObject_1.DBObject {
         var h = await ar2.zeilen.resolve();
         ar2.zeilen.add(az3);
         ar2.zeilen.remove(az3);
-        // $(document.body).html(ret);
         /*var z1=new de.ARZeile();
         z1.id=110;
         z1.text="lkjlk";

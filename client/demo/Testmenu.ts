@@ -37,9 +37,6 @@ export  class Testmenu extends Panel {
 			window.setTimeout(function () {
 				$(me.menu1.dom).menu("expand", null, true);
 			}, 2000);
-			//$(me.menu1.dom).menu();
-			//	$(me.menu1.dom).menu("destroy");
-			//$(me.menu1.dom).menu();
 		});
 		me.car = new MenuItem();
 		me.car.text = "car sdf sdf aaa";

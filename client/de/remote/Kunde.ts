@@ -91,7 +91,6 @@ export class Kunde extends DBObject implements ExtensionProvider {
         await kunde2.save();
         await kunde3.save();
         await kunde4.save();
-        //  $(document.body).html(h);
         //jassijs.db.delete(kunde);
     }
     @Column({	nullable: true})

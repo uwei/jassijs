@@ -252,7 +252,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         }
         set tooltip(value) {
             this.dom.setAttribute("title", value);
-            $(this.domWrapper).tooltip();
         }
         get x() {
             return Number(this.domWrapper.style.left.replace("px", ""));
@@ -284,7 +283,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             value = value.toString();
             if (!isNaN(value))
                 value = value + "px";
-            if (typeof (value) === "string" && value.indexOf("%") > -1 && this.domWrapper.style.display !== "inline") { //&&$(this.domWrapper).is("div"))7
+            if (typeof (value) === "string" && value.indexOf("%") > -1 && this.domWrapper.style.display !== "inline") {
                 this.dom.style.width = "100%";
                 this.domWrapper.style.width = value;
             }
@@ -314,7 +313,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 this.dom.style.height = value.toString();
                 this.domWrapper.style.height = "";
             }
-            //$(this.domWrapper).css("height",value);
         }
         get height() {
             if (this.domWrapper.style.height !== undefined)
@@ -339,7 +337,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
          * maximize the component
          */
         maximize() {
-            // $(this.dom).addClass("jmaximized");
             this.dom.style.width = "calc(100% - 2px)";
             this.dom.style.height = "calc(100% - 2px)";
         }
@@ -398,12 +395,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             if (this.domWrapper !== undefined && this.domWrapper.parentNode !== undefined && this.domWrapper.parentNode !== null)
                 this.domWrapper.parentNode.removeChild(this.domWrapper);
             if (this.__dom !== undefined) {
-                $(this.__dom).remove();
+                this.__dom.remove();
                 this.__dom._this = undefined;
                 this.__dom = undefined;
             }
             if (this.domWrapper !== undefined) {
-                $(this.domWrapper).remove();
+                this.domWrapper.remove();
                 this.domWrapper._this = undefined;
                 this.domWrapper = undefined;
             }

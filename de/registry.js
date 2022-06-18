@@ -3,7 +3,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default={
 	"de/remote/AR.ts": {
-		"date": 1655556864383,
+		"date": 1655558717565,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -50,7 +50,7 @@ exports.default={
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1655556864383,
+		"date": 1655558723414,
 		"de.ARZeile": {
 			"$DBObject": [],
 			"@members": {
@@ -85,7 +85,7 @@ exports.default={
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1655556795287,
+		"date": 1655558730985,
 		"de.Kunde": {
 			"$ParentRights": [
 				[

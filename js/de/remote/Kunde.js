@@ -76,7 +76,6 @@ let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
         await kunde2.save();
         await kunde3.save();
         await kunde4.save();
-        //  $(document.body).html(h);
         //jassijs.db.delete(kunde);
     }
 };

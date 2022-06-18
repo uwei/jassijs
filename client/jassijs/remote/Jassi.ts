@@ -84,7 +84,7 @@ export class Jassi {
         var style: HTMLElement = document.getElementById(id);
         //@ts-ignore
         if (!document.getElementById(id)) {
-            style = $('<style id=' + id + '></style>')[0];
+            style =  <HTMLElement>document.createRange().createContextualFragment('<style id=' + id + '></style>').children[0];
             //@ts-ignore
             document.head.appendChild(style);
         }

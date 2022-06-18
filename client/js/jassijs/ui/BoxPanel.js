@@ -21,9 +21,10 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
         */
         constructor(properties = undefined) {
             super(properties);
-            $(this.domWrapper).addClass('BoxPanel').removeClass('Panel');
+            this.domWrapper.classList.add('BoxPanel');
+            this.domWrapper.classList.remove('Panel');
             this.horizontal = false;
-            $(this.dom).css("display", "flex");
+            this.dom.style.display = "flex";
         }
         config(config) {
             super.config(config);
@@ -32,9 +33,9 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
         set horizontal(value) {
             this._horizontal = value;
             if (value)
-                $(this.dom).css("flex-direction", "row");
+                this.dom.style["flex-direction"] = "row";
             else
-                $(this.dom).css("flex-direction", "column");
+                this.dom.style["flex-direction"] = "column";
             this.updateSpliter();
         }
         get horizontal() {
@@ -45,11 +46,6 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
         * @param {jassijs.ui.Component} component - the component to add
         */
         add(component) {
-            /* if(this._horizontal){
-                        $(component.domWrapper).css("display","table-row");
-             }else{
-                        $(component.domWrapper).css("display","table-cell");
-             }*/
             super.add(component);
             this.updateSpliter();
         }
@@ -59,11 +55,6 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
         * @param {jassijs.ui.Component} before - the component before then component to add
         */
         addBefore(component, before) {
-            /*if(this._horizontal){
-                    $(component.domWrapper).css("display","table-row");
-               }else{
-                    $(component.domWrapper).css("display","table-cell");
-               }*/
             super.addBefore(component, before);
             this.updateSpliter();
         }
@@ -86,9 +77,9 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
                 if (this._components[x]["designDummyFor"])
                     continue;
                 //test
-                $(this._components[x].__dom).css("overflow", "scroll");
-                $(this._components[x].__dom).css("width", this.horizontal ? "calc(100% - 5px)" : "100%");
-                $(this._components[x].__dom).css("height", this.horizontal ? "100%" : "calc(100% - 5px)");
+                this._components[x].__dom.style.overflow = "scroll";
+                this._components[x].__dom.style.width = (this.horizontal ? "calc(100% - 5px)" : "100%");
+                this._components[x].__dom.style.height = (this.horizontal ? "100%" : "calc(100% - 5px)");
                 comp.push(this._components[x].domWrapper);
             }
             this._splitcomponent = (0, split_1.default)(comp, {

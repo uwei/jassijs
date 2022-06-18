@@ -68,8 +68,7 @@ export class AR extends DBObject {
     }
     async sample() {
         var all = AR.myfind();
-        debugger;
-        // $(document.body).html(ret);
+
         var ar = new AR();
         ar.strasse = "gemeindeberg";
         ar.nummer = 7;

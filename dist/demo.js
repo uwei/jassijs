@@ -1167,9 +1167,6 @@ define("demo/Testmenu", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/M
                 window.setTimeout(function () {
                     $(me.menu1.dom).menu("expand", null, true);
                 }, 2000);
-                //$(me.menu1.dom).menu();
-                //	$(me.menu1.dom).menu("destroy");
-                //$(me.menu1.dom).menu();
             });
             me.car = new MenuItem_3.MenuItem();
             me.car.text = "car sdf sdf aaa";
@@ -1471,7 +1468,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo.Testcontextmenu": {}
             },
             "demo/Testmenu.ts": {
-                "date": 1655556795177,
+                "date": 1655558914749,
                 "demo.Testmenu": {}
             },
             "demo/TestTree.ts": {

@@ -21,7 +21,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655549182897
 	},
 	"jassijs/base/LoginDialog.ts": {
-		"date": 1623093222000
+		"date": 1655558933565
 	},
 	"jassijs/base/PropertyEditorService.ts": {
 		"date": 1655556795176,
@@ -32,7 +32,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Router": {}
 	},
 	"jassijs/base/Tests.ts": {
-		"date": 1655556793963,
+		"date": 1655558795865,
 		"jassijs.ui.TestAction": {
 			"$ActionProvider": [
 				"jassijs.remote.FileNode"
@@ -49,7 +49,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/base/Windows.ts": {
-		"date": 1655556864382,
+		"date": 1655558880650,
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/jassi.ts": {
@@ -97,7 +97,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1655557390073
+		"date": 1655559055265
 	},
 	"jassijs/remote/ObjectTransaction.ts": {
 		"date": 1622985414000
@@ -449,7 +449,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs/ui/ActionNodeMenu": {}
 	},
 	"jassijs/ui/BoxPanel.ts": {
-		"date": 1655556795276,
+		"date": 1655558623582,
 		"jassijs.ui.BoxPanel": {
 			"$UIComponent": [
 				{
@@ -567,7 +567,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1655556864382,
+		"date": 1655559209241,
 		"jassijs.ui.Component": {
 			"@members": {
 				"onfocus": {

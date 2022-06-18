@@ -58,37 +58,6 @@ define(["require", "exports", "jassijs/ext/jquerylib"], function (require, expor
             setTimeout(() => {
                 $(fr).contents().find("#loginButton").focus();
             }, 200);
-            //ts-ignore
-            //fr[0].contentWindow.document.body.focus();
-            /* var sform = `
-             
-             <form    action="javascript:alert(9);" method="post" class="" >
-                 <input type="text" name="username" ><br>
-                 <input type="password" name="password" ><br>
-                  <button  class="LoginButton" type="button">Login</button>
-             </form>
-             
-             `;
-             var form = $(sform);
-             form.submit("submit", function (e) {
-                // e.preventDefault();
-             });
-             form.find(":button").on("click", () => {
-                 //@ts-ignore
-                 form.submit();
-                 $.post({
-                     url:"user/login",
-                     data:"user=admin&password=jsi"
-                 })
-                 form.dialog("destroy");
-             })
-            
-             document.body.appendChild(form[0]);
-             var ret=form.dialog({
-                 modal:true
-             });
-             return ret;
-         });*/
         });
     }
     exports.login = login;

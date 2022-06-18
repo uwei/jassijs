@@ -68,7 +68,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
                                     container.update();
                                     var ret = await func(new Test_1.Test());
                                     if (ret instanceof Component_1.Component) {
-                                        $(ret.dom).css({ position: "relative" });
+                                        ret.dom.style.position = "relative";
                                         ret.width = "100%";
                                         var head = new HTMLPanel_1.HTMLPanel();
                                         head.value = "<b>" + file.fullpath + "</b>";

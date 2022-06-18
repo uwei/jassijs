@@ -46,7 +46,7 @@ define(["require", "exports"], function (require, exports) {
             var style = document.getElementById(id);
             //@ts-ignore
             if (!document.getElementById(id)) {
-                style = $('<style id=' + id + '></style>')[0];
+                style = document.createRange().createContextualFragment('<style id=' + id + '></style>').children[0];
                 //@ts-ignore
                 document.head.appendChild(style);
             }

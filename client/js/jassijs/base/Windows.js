@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ext/goldenlayout", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/util/Cookies"], function (require, exports, Panel_1, Registry_1, goldenlayout_1, ComponentDescriptor_1, Classes_1, Cookies_1) {
+define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ext/goldenlayout", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/util/Cookies", "jassijs/ui/Component"], function (require, exports, Panel_1, Registry_1, goldenlayout_1, ComponentDescriptor_1, Classes_1, Cookies_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Windows = void 0;
@@ -21,13 +21,13 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
             this._myLayout = undefined;
             this._counter = 0;
             this._id = "jassijs.windows";
-            this.dom = $('<div class="Windows" id="' + this._id + 'jassijs.windows"/>')[0];
+            this.dom = Component_1.Component.createHTMLElement('<div class="Windows" id="' + this._id + 'jassijs.windows"/>');
             this._desktop = new Panel_1.Panel();
             this._desktop.maximize();
             //@member {Object.<string,lm.items.Component>} holds all known windows 
             this.components = [];
             //  this._desktop.add(new jassijs.ui.Button());
-            $(document.body).append(this.dom);
+            document.body.append(this.dom);
             //formemoryleak
             this._init();
         }
@@ -252,7 +252,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
                 componentName: name,
                 componentState: { title: title, name: name }
             };
-            var tt = $("<Button>");
+            var tt = Component_1.Component.createHTMLElement("<Button>");
             var _this = this;
             this._myLayout.registerComponent(name, function (container, componentState) {
                 // var v=container.getElement();

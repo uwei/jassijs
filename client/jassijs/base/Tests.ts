@@ -77,7 +77,7 @@ export class TestAction {
                                 container.update();
                                 var ret = await func(new Test());
                                 if (ret instanceof Component) {
-                                    $(ret.dom).css({ position: "relative" });
+                                    ret.dom.style.position= "relative" ;
                                     ret.width = "100%";
                                     var head = new HTMLPanel();
                                     head.value = "<b>" + file.fullpath + "</b>";

@@ -348,7 +348,7 @@ export class Component implements ComponentConfig {
     }
     set tooltip(value: string) { //the Code
         this.dom.setAttribute("title", value);
-        $(this.domWrapper).tooltip();
+
     }
 
     @$Property({})
@@ -392,7 +392,7 @@ export class Component implements ComponentConfig {
         value = value.toString();
         if (!isNaN(<any>value))
             value = value + "px";
-        if (typeof (value) === "string" && value.indexOf("%") > -1 && this.domWrapper.style.display !== "inline") {//&&$(this.domWrapper).is("div"))7
+        if (typeof (value) === "string" && value.indexOf("%") > -1 && this.domWrapper.style.display !== "inline") {
             this.dom.style.width = "100%";
             this.domWrapper.style.width = value;
         } else {
@@ -422,7 +422,6 @@ export class Component implements ComponentConfig {
             this.dom.style.height = value.toString();
             this.domWrapper.style.height = "";
         }
-        //$(this.domWrapper).css("height",value);
     }
     @$Property({ type: "string" })
     get height() {
@@ -451,7 +450,6 @@ export class Component implements ComponentConfig {
      * maximize the component
      */
     maximize() {
-        // $(this.dom).addClass("jmaximized");
         this.dom.style.width = "calc(100% - 2px)";
         this.dom.style.height = "calc(100% - 2px)";
     }
@@ -518,12 +516,12 @@ export class Component implements ComponentConfig {
         if (this.domWrapper !== undefined && this.domWrapper.parentNode !== undefined && this.domWrapper.parentNode !== null)
             this.domWrapper.parentNode.removeChild(this.domWrapper);
         if (this.__dom !== undefined) {
-            $(this.__dom).remove();
+            this.__dom.remove();
             this.__dom._this = undefined;
             this.__dom = undefined;
         }
         if (this.domWrapper !== undefined) {
-            $(this.domWrapper).remove();
+            this.domWrapper.remove();
             this.domWrapper._this = undefined;
             this.domWrapper = undefined;
         }

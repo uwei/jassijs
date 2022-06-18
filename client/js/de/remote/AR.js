@@ -57,8 +57,6 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/r
         }
         async sample() {
             var all = AR_1.myfind();
-            debugger;
-            // $(document.body).html(ret);
             var ar = new AR_1();
             ar.strasse = "gemeindeberg";
             ar.nummer = 7;

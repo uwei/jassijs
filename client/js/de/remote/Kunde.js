@@ -71,7 +71,6 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
             await kunde2.save();
             await kunde3.save();
             await kunde4.save();
-            //  $(document.body).html(h);
             //jassijs.db.delete(kunde);
         }
     };

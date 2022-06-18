@@ -62,7 +62,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1626121322000
 	},
 	"de/remote/AR.ts": {
-		"date": 1655556864383,
+		"date": 1655558717565,
 		"de.AR": {
 			"$Rights": [
 				[
@@ -109,7 +109,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/remote/ARZeile.ts": {
-		"date": 1655556864383,
+		"date": 1655558723414,
 		"de.ARZeile": {
 			"$DBObject": [],
 			"@members": {
@@ -144,7 +144,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1622985484000
 	},
 	"de/remote/Kunde.ts": {
-		"date": 1655556795287,
+		"date": 1655558730985,
 		"de.Kunde": {
 			"$ParentRights": [
 				[

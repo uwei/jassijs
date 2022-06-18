@@ -7,6 +7,7 @@ import {ComponentDescriptor} from "jassijs/ui/ComponentDescriptor";
 import { classes } from "jassijs/remote/Classes";
 import {DockingContainer} from "jassijs/ui/DockingContainer";
 import { Cookies } from "jassijs/util/Cookies";
+import { Component } from "jassijs/ui/Component";
 
 
 
@@ -29,13 +30,13 @@ export class Windows {
         this._myLayout = undefined;
         this._counter = 0;
         this._id = "jassijs.windows";
-        this.dom = $('<div class="Windows" id="' + this._id + 'jassijs.windows"/>')[0];
+        this.dom = Component.createHTMLElement('<div class="Windows" id="' + this._id + 'jassijs.windows"/>');
         this._desktop = new Panel();
         this._desktop.maximize();
         //@member {Object.<string,lm.items.Component>} holds all known windows 
         this.components = [];
         //  this._desktop.add(new jassijs.ui.Button());
-        $(document.body).append(this.dom);
+        document.body.append(this.dom);
         //formemoryleak
         this._init();
     }
@@ -274,7 +275,7 @@ export class Windows {
             componentName: name,
             componentState: { title: title, name: name }
         };
-        var tt = $("<Button>");
+        var tt = Component.createHTMLElement("<Button>");
 
         var _this = this;
         this._myLayout.registerComponent(name, function (container, componentState) {
