@@ -6,8 +6,8 @@ declare global {
 }
 (global as any).window = {};
 (global as any).$ = {};
-import "jassijs/remote/Jassi";
 require("app-module-path").addPath("./js");
+import "jassijs/remote/Jassi";
 import "jassijs/remote/Registry";
 //import "reflect-metadata";
 //important: registry must be loaded after "reflect-metadata" and before the typeorm (because delegation of Reflect.metadata)
