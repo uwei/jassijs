@@ -88,7 +88,7 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
         * @param {jassijs_editor.CodeEditor} codeEditor
         */
         addDebugpoints(lines, debugpoints, codeEditor) {
-            Jassi_1.default.d[codeEditor._id] = undefined;
+            jassijs.d[codeEditor._id] = undefined;
             //        	jassijs.ui.VariablePanel.get(this._id).__db=undefined;
             var hassome = undefined;
             this.debugpoints = debugpoints;
@@ -148,8 +148,8 @@ define(["require", "exports", "jassijs/remote/Jassi"], function (require, export
         __metadata("design:paramtypes", [])
     ], Debugger);
     exports.Debugger = Debugger;
-    if (Jassi_1.default.debugger === undefined)
-        Jassi_1.default.debugger = new Debugger();
+    if (jassijs.debugger === undefined)
+        jassijs.debugger = new Debugger();
     require(["jassijs_editor/ChromeDebugger"]);
 });
 //# sourceMappingURL=Debugger.js.map

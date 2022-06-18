@@ -1,5 +1,5 @@
 import { BoxPanel } from "jassijs/ui/BoxPanel";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 import { $UIComponent } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import { ReportDesign } from "jassijs_report/ReportDesign";

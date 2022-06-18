@@ -73,7 +73,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Server", "
         //load  d.ts from modulpackage
         async includeModulTypes() {
             var nodeFiles = {};
-            for (var mod in Jassi_1.default.modules) {
+            for (var mod in jassijs.modules) {
                 var config = (await new Promise((resolve_1, reject_1) => { require([mod + "/modul"], resolve_1, reject_1); })).default;
                 if (config.types) {
                     for (var key in config.types) {

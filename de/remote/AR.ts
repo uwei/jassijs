@@ -2,7 +2,7 @@
 import { ARZeile } from "de/remote/ARZeile";
 import { Kunde } from "de/remote/Kunde";
 import { DBObject, $DBObject } from "jassijs/remote/DBObject";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 import { JoinColumn, JoinTable, Entity, PrimaryColumn, Column, ManyToMany, ManyToOne, OneToMany, OneToOne } from "jassijs/util/DatabaseSchema";
 import { $CheckParentRight, $Rights } from "jassijs/remote/security/Rights";
 import { Context } from "jassijs/remote/RemoteObject";

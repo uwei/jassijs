@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import  {classes, JassiError} from "jassijs/remote/Classes";
 let cl=classes;//force Classes.
 

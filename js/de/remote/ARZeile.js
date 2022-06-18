@@ -22,7 +22,7 @@ let ARZeile = ARZeile_1 = class ARZeile extends DBObject_1.DBObject {
         super();
     }
     static async find(options = undefined, context = undefined) {
-        if (!Jassi_1.default.isServer) {
+        if (!jassijs.isServer) {
             return await this.call(this.find, options, context);
         }
         else {
@@ -39,9 +39,9 @@ let ARZeile = ARZeile_1 = class ARZeile extends DBObject_1.DBObject {
     }
     async sample() {
         var ret;
-        var az = await Jassi_1.default.db.load("de.ARZeile", 120);
+        var az = await jassijs.db.load("de.ARZeile", 120);
         var h = await az.ar.resolve();
-        var ar2 = await Jassi_1.default.db.load("de.AR", 30);
+        var ar2 = await jassijs.db.load("de.AR", 30);
         var az3 = new ARZeile_1();
         var h = await ar2.zeilen.resolve();
         ar2.zeilen.add(az3);
@@ -89,10 +89,10 @@ ARZeile = ARZeile_1 = __decorate([
     __metadata("design:paramtypes", [])
 ], ARZeile);
 exports.ARZeile = ARZeile;
-Jassi_1.default.test = async function () {
+jassijs.test = async function () {
     //	var k=new Kunde();
     //k=k;
-    var test = await Jassi_1.default.db.load("de.ARZeile");
+    var test = await jassijs.db.load("de.ARZeile");
     var z = new ARZeile();
     z.id = 150;
     z.text = "jjj";

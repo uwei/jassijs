@@ -75,14 +75,14 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
         var css = {
             filter: "drop-shadow(16px 16px 20px blue)"
         };
-        Jassi_1.default.includeCSS("mytest2id", {
+        jassijs.includeCSS("mytest2id", {
             ".Panel": css,
             ".jinlinecomponent": {
                 color: "red"
             }
         });
         setTimeout(() => {
-            Jassi_1.default.includeCSS("mytest2id", undefined); //remove
+            jassijs.includeCSS("mytest2id", undefined); //remove
         }, 400);
         // includeCSS("mytest2id",undefined);
     }

@@ -1,5 +1,5 @@
 import { $DBObject, DBObject } from "jassijs/remote/DBObject";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 import {  PrimaryGeneratedColumn,JoinTable,Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany } from "jassijs/util/DatabaseSchema";
 import { Group } from "jassijs/remote/security/Group";
 import { ParentRight } from "jassijs/remote/security/ParentRight";

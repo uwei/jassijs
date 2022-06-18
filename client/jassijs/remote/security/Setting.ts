@@ -1,5 +1,5 @@
 import { DBObject, $DBObject, MyFindManyOptions } from "jassijs/remote/DBObject";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, JoinColumn, JoinTable } from "jassijs/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { Context } from "jassijs/remote/RemoteObject";

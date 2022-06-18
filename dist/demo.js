@@ -1471,7 +1471,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo.Testcontextmenu": {}
             },
             "demo/Testmenu.ts": {
-                "date": 1622985796000,
+                "date": 1655546359451,
                 "demo.Testmenu": {}
             },
             "demo/TestTree.ts": {

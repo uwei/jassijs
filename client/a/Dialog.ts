@@ -4,7 +4,7 @@ import { Checkbox } from "jassijs/ui/Checkbox";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Button } from "jassijs/ui/Button";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { Panel } from "jassijs/ui/Panel";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Style } from "jassijs/ui/Style";

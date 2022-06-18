@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { ComponentExplorer } from "jassijs_editor/ComponentExplorer";

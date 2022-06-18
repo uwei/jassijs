@@ -1,5 +1,4 @@
 var bugtinymce = undefined;
-import jassi from "jassijs/jassi";
 import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Jassi";
 import { Property, $Property } from "jassijs/ui/Property";

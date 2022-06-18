@@ -1,5 +1,5 @@
 
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { FileNode } from "jassijs/remote/FileNode";
 import { classes, JassiError } from "./Classes";
@@ -12,7 +12,7 @@ export class Server extends RemoteObject {
     //files found in js.map of modules in the jassijs.json
     public static filesInMap: { [name: string]: { modul: string, id: number } } = undefined;
     constructor() {
-        super();
+        super(); 
 
     }
     private _convertFileNode(node: FileNode): FileNode {

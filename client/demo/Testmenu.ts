@@ -1,5 +1,5 @@
 import {Panel} from "jassijs/ui/Panel";
-import jassijs from "jassijs/jassi";
+
 import {Menu} from "jassijs/ui/Menu";
 import {MenuItem} from "jassijs/ui/MenuItem";
 import {Button} from "jassijs/ui/Button";

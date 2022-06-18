@@ -1,5 +1,5 @@
 import {Panel} from "jassijs/ui/Panel";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 //@ts-ignore
 import GoldenLayout from "jassijs/ext/goldenlayout";
 

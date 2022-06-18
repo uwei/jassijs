@@ -164,7 +164,7 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/E
         __metadata("design:paramtypes", [Object, Object])
     ], ClassSelectorEditor);
     exports.ClassSelectorEditor = ClassSelectorEditor;
-    Jassi_1.default.test = function () {
+    jassijs.test = function () {
         ComponentDescriptor_1.ComponentDescriptor.cache = {};
         var t = new ClassSelectorEditor();
         t.layout();

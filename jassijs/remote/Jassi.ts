@@ -4,6 +4,7 @@ import registry from "jassijs/remote/Registry";
 
 
 declare global {
+
     export class ExtensionAction {
         /* sample?: {
              name: string,
@@ -61,11 +62,12 @@ export class Jassi {
     public modules: { [key: string]: string };
     public options: any;
     isServer: boolean = false;
+    cssFiles:{[key:string]:string};
     constructor() {
         //@ts-ignore
         this.isServer = window.document === undefined;
         //@ts-ignore
-       //this.modules = window?.__jassijsconfig__?.modules;
+        //this.modules = window?.__jassijsconfig__?.modules;
         //@ts-ignore
         //this.options = window?.__jassijsconfig__?.options;
         if (!this.isServer) {
@@ -80,6 +82,9 @@ export class Jassi {
             //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
             //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
         }
+    }
+    includeCSSFile(modulkey:string){
+        this.myRequire(this.cssFiles[modulkey]);
     }
     /**
      * include a global stylesheet
@@ -172,13 +177,23 @@ export class Jassi {
     }
 };
 var jassijs: Jassi = new Jassi();
-//@ts-ignore
-if (window["jassijs"] === undefined) {//reloading this file -> no destroy namespace
-    //@ts-ignore
-    window["jassijs"] = jassijs;
+globalThis.jassijs=jassijs;
+/*//@ts-ignore
+if (window) {
+    if (window["jassijs"] === undefined) {//reloading this file -> no destroy namespace
+        //@ts-ignore
+        window["jassijs"] = jassijs;
+    }
 }
+if(global){
+    global["jassijs"] = jassijs;
+}*/
 
 
+declare global {
+    class JassiStatic extends Jassi {
 
-export default jassijs;
+    }
+
+}
 

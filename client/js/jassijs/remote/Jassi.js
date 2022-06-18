@@ -55,6 +55,9 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
                 //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
             }
         }
+        includeCSSFile(modulkey) {
+            this.myRequire(this.cssFiles[modulkey]);
+        }
         /**
          * include a global stylesheet
          * @id - the given id - important for update
@@ -149,11 +152,6 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
     exports.Jassi = Jassi;
     ;
     var jassijs = new Jassi();
-    //@ts-ignore
-    if (window["jassijs"] === undefined) { //reloading this file -> no destroy namespace
-        //@ts-ignore
-        window["jassijs"] = jassijs;
-    }
-    exports.default = jassijs;
+    globalThis.jassijs = jassijs;
 });
 //# sourceMappingURL=Jassi.js.map

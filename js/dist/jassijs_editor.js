@@ -348,7 +348,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
         getDocTooltip(item) {
             if (item.file === undefined)
                 return "";
-            var _id = Registry_1.default.nextID();
+            var _id = "j" + Registry_1.default.nextID();
             item.docHTML = "<span id='" + _id + "'> please try later ... loading in progress<span>";
             Typescript_1.default.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
                 if (ret === undefined)
@@ -707,9 +707,9 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/J
             if (event.data.fromJassiExtension && event.data.connected) {
                 installed = true;
                 //clearTimeout(checkExtensionInstalled);
-                if (Jassi_3.default.debugger !== undefined)
-                    Jassi_3.default.debugger.destroy();
-                Jassi_3.default.debugger = this;
+                if (jassijs.debugger !== undefined)
+                    jassijs.debugger.destroy();
+                jassijs.debugger = this;
             }
             if (event.data.fromJassiExtension && event.data.mid) {
                 var test = this.responseList[event.data.mid];
@@ -766,7 +766,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/J
             new Server_1.Server().saveFile(file, code).then(function () {
                 Reloader_1.Reloader.instance.reloadJS(file.replace(".ts", ""));
                 if (code.indexOf("jassijs.register(") > -1) {
-                    Jassi_3.default.registry.reload();
+                    jassijs.registry.reload();
                 }
             });
         }
@@ -843,7 +843,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/J
             return;
             var file = this.urlToFile(url);
             var _this = this;
-            var editor = Jassi_3.default.windows.findComponent("jassijs_editor.CodeEditor-" + file);
+            var editor = jassijs.windows.findComponent("jassijs_editor.CodeEditor-" + file);
             if (editor !== undefined) {
                 editor.addVariables(variables);
             }
@@ -884,11 +884,12 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
         }
     };
 });
-define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test", "jassijs_editor/util/Parser"], function (require, exports, Jassi_4, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_2, Server_2, Reloader_2, Classes_1, Component_1, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1, Parser_1) {
+define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test"], function (require, exports, Jassi_4, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_2, Server_2, Reloader_2, Classes_1, Component_1, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CodeEditor = void 0;
+    jassijs.includeCSSFile("jassijs_editor.css");
     let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
     };
     __decorate([
@@ -943,7 +944,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
             this._codePanel.height = "calc(100% - 31px)";
             let _this = this;
             this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
-                Jassi_4.default.debugger.breakpointChanged(_this._file, line, column, enable, type);
+                jassijs.debugger.breakpointChanged(_this._file, line, column, enable, type);
             });
         }
         _init(hideToolbar) {
@@ -981,7 +982,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                 goto.onclick(function () {
                     _this.gotoDeclaration();
                 });
-                Jassi_4.default["$CodeEditor"] = CodeEditor_1;
+                jassijs["$CodeEditor"] = CodeEditor_1;
                 $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
                 $(goto.dom).attr("ondragover", "event.preventDefault();");
                 this._codeToolbar.add(goto);
@@ -1185,7 +1186,6 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                 if (component === root) {
                     //fertig
                     var hh = 0;
-                    console.log("load Parser and TSourcemap dynamically");
                     var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
                     var values = Object.values(cache);
                     var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values);
@@ -1217,8 +1217,17 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                         }
                     }
                     for (var x = 0; x < values.length; x++) {
-                        if (values[x].name) {
-                            this.variables.addVariable(values[x].name, values[x].component, false);
+                        var sname = values[x].name;
+                        var found = false;
+                        this.variables.value.forEach((it) => {
+                            if (it.name === sname)
+                                found = true;
+                        });
+                        //sometimes does a constructor create other Components so we need the first one
+                        if (found)
+                            continue;
+                        if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
+                            this.variables.addVariable(sname, values[x].component, false);
                         }
                     }
                     this.variables.updateCache();
@@ -1235,18 +1244,18 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
             var _this = this;
             var breakpoints = _this._codePanel.getBreakpoints();
             var filename = _this._file.replace(".ts", "$temp.ts");
-            await Jassi_4.default.debugger.removeBreakpointsForFile(filename);
+            await jassijs.debugger.removeBreakpointsForFile(filename);
             for (var line in breakpoints) {
                 if (breakpoints[line]) {
                     var row = lines[line].length;
-                    await Jassi_4.default.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
+                    await jassijs.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
                 }
             }
             var islocaldb = Classes_1.classes.getClass("jassijs_localserver.DBManager");
             if (islocaldb && code.indexOf("@$DBObject(") > -1) {
                 islocaldb.destroyConnection();
             }
-            if (data.test !== undefined) {
+            if (data.test !== undefined || window.reportdesign) {
                 //capure created Components
                 function hook(name, component) {
                     var _a;
@@ -1259,8 +1268,21 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                     }
                 }
                 Component_1.Component.onComponentCreated(hook);
-                var ret = await data.test(new Test_1.Test());
-                Component_1.Component.offComponentCreated(hook);
+                var ret;
+                if (data.test) {
+                    ret = await data.test(new Test_1.Test());
+                }
+                else {
+                    if (window.reportdesign) {
+                        ret = {
+                            reportdesign: reportdesign
+                        };
+                    }
+                    else {
+                        Component_1.Component.offComponentCreated(hook);
+                        return;
+                    }
+                }
                 // Promise.resolve(ret).then(async function(ret) {
                 if (ret !== undefined) {
                     if (ret.layout !== undefined)
@@ -1272,8 +1294,9 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                         //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
                         //   var Parser = classes.getClass("jassijs_editor.base.Parser");
                         var ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.ComponentDesigner");
-                        var parser = new Parser_1.Parser();
-                        await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
+                        var Parser = await Classes_1.classes.loadClass("jassijs_editor.util.Parser");
+                        var parser = new Parser();
+                        // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
                         if (!((_this._design) instanceof ComponentDesigner)) {
                             _this._design = new ComponentDesigner();
                             _this._main.add(_this._design, "Design", "design");
@@ -1282,39 +1305,39 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                         //@ts-ignore
                         _this._design.connectParser(parser);
                         _this._design["designedComponent"] = ret;
+                        Component_1.Component.offComponentCreated(hook);
+                        await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
+                        _this._design["editDialog"](true);
                         //});
                     }
                     else if (ret["reportdesign"] !== undefined) {
-                        require(["jassijs_report/designer/ReportDesigner", "jassijs_report/ReportDesign", "jassijs_editor/util/Parser"], function () {
-                            var _a, _b;
-                            var ReportDesigner = Classes_1.classes.getClass("jassijs_report.designer.ReportDesigner");
-                            var ReportDesign = Classes_1.classes.getClass("jassijs_report.ReportDesign");
-                            if (!((_this._design) instanceof ReportDesigner)) {
-                                var Parser = Classes_1.classes.getClass("jassijs_editor.base.Parser");
-                                _this._design = new ReportDesigner();
-                                _this._main.add(_this._design, "Design", "design");
-                                _this._design["codeEditor"] = _this;
-                                var parser = new Parser();
-                                parser.classScope = [{ classname: (_b = (_a = _this._design) === null || _a === void 0 ? void 0 : _a.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
-                                //@ts-ignore
-                                _this._design.connectParser(parser);
-                            }
-                            var rep = new ReportDesign();
-                            rep.design = Object.assign({}, ret.reportdesign);
-                            if (ret.value && rep.design.data === undefined)
-                                rep.design.data = ret.value;
-                            else if (ret.data && rep.design.data === undefined)
-                                rep.design.data = ret.data;
-                            if (ret.parameter && rep.design.parameter === undefined)
-                                rep.design.parameter = ret.parameter;
-                            _this._design["designedComponent"] = rep;
-                            /*   require(["jassijs_report/ReportDesign"], function() {
-                                   var rd = classes.getClass("jassijs_report.ReportDesign");
-                                   let rep = rd["fromJSON"](ret);
-                                   
-                                   _this._design["designedComponent"] = rep;
-                               });*/
-                        });
+                        var Parser = await Classes_1.classes.loadClass("jassijs_editor.util.Parser");
+                        var ReportDesigner = await Classes_1.classes.loadClass("jassijs_report.designer.ReportDesigner");
+                        var ReportDesign = await Classes_1.classes.loadClass("jassijs_report.ReportDesign");
+                        if (!((_this._design) instanceof ReportDesigner)) {
+                            _this._design = new ReportDesigner();
+                            _this._main.add(_this._design, "Design", "design");
+                            _this._design["codeEditor"] = _this;
+                            parser = new Parser();
+                            parser.classScope = undefined; // [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
+                            //@ts-ignore
+                            _this._design.connectParser(parser);
+                        }
+                        var rep = new ReportDesign();
+                        rep.design = Object.assign({}, ret.reportdesign);
+                        if (ret.value && rep.design.data === undefined)
+                            rep.design.data = ret.value;
+                        else if (ret.data && rep.design.data === undefined)
+                            rep.design.data = ret.data;
+                        if (ret.parameter && rep.design.parameter === undefined)
+                            rep.design.parameter = ret.parameter;
+                        _this._design["designedComponent"] = rep;
+                        /*   require(["jassijs_report/ReportDesign"], function() {
+                               var rd = classes.getClass("jassijs_report.ReportDesign");
+                               let rep = rd["fromJSON"](ret);
+                               
+                               _this._design["designedComponent"] = rep;
+                           });*/
                     } /*else if (ret["reporttype"] !== undefined) {
                         require(["jassijs_report/designer/ReportDesigner"], function () {
                             var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
@@ -1329,6 +1352,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                         });
                     }*/
                 }
+                Component_1.Component.offComponentCreated(hook);
                 //  });
             }
         }
@@ -1401,6 +1425,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
             //await new Server().saveFile("tmp/" + _this._file, code);
             //only local - no TS File in Debugger
             await this.saveTempFile(jsfile, code);
+            window.reportdesign = undefined;
             try {
                 requirejs.undef("js/" + jsfile + ".js");
             }
@@ -1842,10 +1867,19 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Jassi"
     ], CodePanel);
     exports.CodePanel = CodePanel;
 });
-define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Jassi_7, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, Classes_3, BoxPanel_1) {
+define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/util/Resizer", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs/ui/Repeater", "jassijs/ui/Button", "jassijs_editor/util/DragAndDropper", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/ui/Databinder"], function (require, exports, Jassi_7, Panel_4, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, Resizer_1, CodeEditorInvisibleComponents_1, Repeater_1, Button_3, DragAndDropper_1, ComponentDescriptor_1, Classes_3, BoxPanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentDesigner = void 0;
+    class ClipboardData {
+        constructor() {
+            this.varNamesToCopy = [];
+            this.children = {};
+            this.properties = {};
+            this.types = {};
+            this.allChilds = [];
+        }
+    }
     let ComponentDesigner = class ComponentDesigner extends Panel_4.Panel {
         constructor() {
             super();
@@ -1927,13 +1961,33 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 //_this._draganddropper.activateDragging(!val);
             });
             this._designToolbar.add(this.lassoButton);
-            this.removeButton = new Button_3.Button();
-            this.removeButton.icon = "mdi mdi-delete-forever-outline mdi-18px";
-            this.removeButton.tooltip = "Delete selected Control (ENTF)";
-            this.removeButton.onclick(function () {
-                _this.removeComponent();
+            this.cutButton = new Button_3.Button();
+            this.cutButton.icon = "mdi mdi-content-cut mdi-18px";
+            this.cutButton.tooltip = "Cut selected Controls (ENTF)";
+            this.cutButton.onclick(function () {
+                _this.cutComponent();
             });
-            this._designToolbar.add(this.removeButton);
+            this._designToolbar.add(this.cutButton);
+            this.editButton = new Button_3.Button();
+            this.editButton.icon = "mdi mdi-run mdi-18px";
+            this.editButton.tooltip = "Test Dialog";
+            this.editButton.onclick(function () {
+                _this.editDialog(!_this.editMode);
+            });
+            this.copyButton = new Button_3.Button();
+            this.copyButton.icon = "mdi mdi-content-copy mdi-18px";
+            this.copyButton.tooltip = "Copy";
+            this.copyButton.onclick(function () {
+                _this.copy();
+            });
+            this._designToolbar.add(this.copyButton);
+            this.pasteButton = new Button_3.Button();
+            this.pasteButton.icon = "mdi mdi-content-paste mdi-18px";
+            this.pasteButton.tooltip = "Paste";
+            this.pasteButton.onclick(function () {
+                _this.paste();
+            });
+            this._designToolbar.add(this.pasteButton);
             var box = new BoxPanel_1.BoxPanel();
             box.horizontal = true;
             this.inlineEditorPanel = new Panel_4.Panel();
@@ -1976,7 +2030,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     return false;
                 }
                 if (evt.keyCode === 46) { //Del
-                    _this.removeComponent();
+                    _this.cutComponent();
                     evt.preventDefault();
                     return false;
                 }
@@ -2002,9 +2056,15 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
         }
         _initComponentExplorer() {
             var _this = this;
-            this._componentExplorer.onclick(function (data) {
-                var ob = data.data;
-                _this._propertyEditor.value = ob;
+            this._componentExplorer.onselect(function (data) {
+                // console.log(_this._componentExplorer.selection);
+                //  var ob = data.data;
+                setTimeout(() => {
+                    var sel = _this._componentExplorer.tree.selection;
+                    if (sel.length === 1)
+                        sel = sel[0];
+                    _this._propertyEditor.value = sel;
+                }, 10);
             });
             this._componentExplorer.getComponentName = function (item) {
                 var varname = _this._codeEditor.getVariableFromObject(item);
@@ -2018,17 +2078,198 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
         /**
          * removes the selected component
          */
-        removeComponent() {
-            var todel = this._propertyEditor.value;
-            var varname = this._codeEditor.getVariableFromObject(todel);
-            if (varname !== "this") {
-                if (todel.domWrapper._parent !== undefined) {
-                    todel.domWrapper._parent.remove(todel);
-                }
-                this._propertyEditor.removeVariableInCode(varname);
-                this._propertyEditor.removeVariableInDesign(varname);
-                this._updateInvisibleComponents();
+        async cutComponent() {
+            var _a;
+            var text = await this.copy();
+            if (await navigator.clipboard.readText() !== text) {
+                alert("could not copy to Clipboard.");
+                return;
             }
+            var clip = JSON.parse(text); //to Clipboard
+            var all = [];
+            for (var x = 0; x < clip.allChilds.length; x++) {
+                var varname = clip.allChilds[x]; //this._codeEditor.getVariableFromObject(todel);
+                var todel = this._codeEditor.getObjectFromVariable(varname);
+                if (varname !== "this") {
+                    if (((_a = todel === null || todel === void 0 ? void 0 : todel.domWrapper) === null || _a === void 0 ? void 0 : _a._parent) !== undefined) {
+                        todel.domWrapper._parent.remove(todel);
+                    }
+                    all.push(varname);
+                    this._propertyEditor.removeVariableInDesign(varname);
+                }
+            }
+            this._propertyEditor.removeVariablesInCode(all);
+            this._updateInvisibleComponents();
+            this._componentExplorer.update();
+        }
+        copyProperties(clip, component) {
+            var _a;
+            var varname = this._codeEditor.getVariableFromObject(component);
+            var parserdata = this._propertyEditor.parser.data[varname];
+            clip.allChilds.push(varname);
+            clip.types[varname] = Classes_3.classes.getClassName(component);
+            if (!clip.properties[varname]) {
+                clip.properties[varname] = {};
+            }
+            var editorfields = {};
+            (_a = ComponentDescriptor_1.ComponentDescriptor.describe(component.constructor)) === null || _a === void 0 ? void 0 : _a.fields.forEach((f) => { editorfields[f.name] = f; });
+            for (var key in parserdata) {
+                if (editorfields[key] || key === "_new_" || key === "add") {
+                    if (!clip.properties[varname][key]) {
+                        clip.properties[varname][key] = [];
+                    }
+                    for (var i = 0; i < parserdata[key].length; i++) {
+                        //only add fields in Propertydescriptor
+                        clip.properties[varname][key].push(parserdata[key][i].value);
+                    }
+                }
+            }
+            if (component["_components"]) {
+                for (var x = 0; x < component["_components"].length; x++) {
+                    var childname = this._codeEditor.getVariableFromObject(component["_components"][x]);
+                    if (childname) {
+                        if (clip.children[varname] === undefined) {
+                            clip.children[varname] = [];
+                        }
+                        clip.children[varname].push(childname);
+                        this.copyProperties(clip, component["_components"][x]);
+                    }
+                }
+            }
+        }
+        async copy() {
+            var components = this._propertyEditor.value;
+            if (!Array.isArray(components)) {
+                components = [components];
+            }
+            var clip = new ClipboardData();
+            clip.varNamesToCopy = [];
+            for (var x = 0; x < components.length; x++) {
+                var component = components[x];
+                var varname = this._codeEditor.getVariableFromObject(component);
+                clip.varNamesToCopy.push(varname);
+                this.copyProperties(clip, component);
+            }
+            var text = JSON.stringify(clip);
+            console.log(text);
+            await navigator.clipboard.writeText(text);
+            return text;
+        }
+        async pasteComponent(clip, target, varname, variablelistold, variablelistnew) {
+            var _this = this;
+            var created;
+            if (clip.properties[varname] !== undefined && clip.properties[varname]["_new_"] !== undefined) {
+                var vartype = clip.properties[varname]["_new_"][0];
+                if (variablelistold.indexOf(varname) > -1)
+                    return;
+                vartype = vartype.split("(")[0].split("new ")[1];
+                var targetname = _this._codeEditor.getVariableFromObject(target);
+                var newcomp = { createFromType: clip.types[varname] };
+                await Classes_3.classes.loadClass(clip.types[varname]);
+                var svarname = varname.split(".")[varname.split(".").length - 1];
+                created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, undefined, false, svarname);
+                variablelistold.push(varname);
+                variablelistnew.push(_this._codeEditor.getVariableFromObject(created));
+                //correct designdummy
+                for (var t = 0; t < target._components.length; t++) {
+                    var ch = target._components[t];
+                    if (ch["type"] === "atEnd") {
+                        target.remove(ch);
+                        // target.add(ch);
+                        break;
+                    }
+                }
+            }
+            else {
+                //component is already created outside the code
+                created = _this._codeEditor.getObjectFromVariable(varname);
+            }
+            if (clip.children[varname] !== undefined) {
+                for (var k = 0; k < clip.children[varname].length; k++) {
+                    await _this.pasteComponent(clip, created, clip.children[varname][k], variablelistold, variablelistnew);
+                }
+            }
+        }
+        async paste() {
+            var text = await navigator.clipboard.readText();
+            var created;
+            var clip = JSON.parse(text);
+            var _this = this;
+            var variablelistold = [];
+            var variablelistnew = [];
+            //create Components
+            for (var x = 0; x < clip.varNamesToCopy.length; x++) {
+                var varname = clip.varNamesToCopy[x];
+                var target = _this._propertyEditor.value;
+                await _this.pasteComponent(clip, target, varname, variablelistold, variablelistnew);
+                //set properties
+            }
+            //in the new Text the variables are renamed
+            var textnew = text;
+            for (var x = 0; x < variablelistnew.length; x++) {
+                var oldName = variablelistold[x];
+                var newName = variablelistnew[x];
+                if (oldName !== newName) {
+                    var reg = new RegExp("\\W" + oldName + "\\W");
+                    var found = true;
+                    while (found == true) {
+                        found = false;
+                        textnew = textnew.replace(reg, function replacer(match, offset, string) {
+                            // p1 is nondigits, p2 digits, and p3 non-alphanumerics
+                            found = true;
+                            return match.substring(0, 1) + newName + match.substring(match.length - 1, match.length);
+                        });
+                    }
+                }
+            }
+            clip = JSON.parse(textnew);
+            //set properties
+            for (var x = 0; x < variablelistnew.length; x++) {
+                var variablename = variablelistnew[x];
+                for (var key in clip.properties[variablename]) {
+                    if (key !== "_new_" && key !== "config" && key != "add") {
+                        var propdata = clip.properties[variablename][key];
+                        for (var v = 0; v < propdata.length; v++) {
+                            var svalue = propdata[v];
+                            var component = _this._codeEditor.getObjectFromVariable(variablename);
+                            var argnames = [];
+                            var args = [];
+                            var allvars = _this.codeEditor.variables.value;
+                            //introduce variables replace me.textbox1->me_textbox1
+                            for (var vv = 0; vv < allvars.length; vv++) {
+                                var newvarname = allvars[vv].name.replaceAll(".", "_");
+                                svalue = svalue.replaceAll(allvars[vv].name, newvarname);
+                                if (newvarname !== "this") {
+                                    argnames.push(newvarname);
+                                    args.push(allvars[vv].value);
+                                }
+                            }
+                            try {
+                                //set value in Designer
+                                var realvalue = new Function(...argnames, "return (" + svalue + ");").bind(_this._codeEditor.getObjectFromVariable("this"))(...args);
+                                if (typeof (component[key]) === "function") {
+                                    component[key](realvalue);
+                                }
+                                else {
+                                    component[key] = realvalue;
+                                }
+                            }
+                            catch (_a) {
+                            }
+                            //_this._propertyEditor.setPropertyInDesign(key,value);
+                            _this._propertyEditor.setPropertyInCode(key, propdata[v], propdata.length > 0, variablename, undefined, undefined, false);
+                        }
+                    }
+                }
+            }
+            _this._propertyEditor.value = created;
+            _this._propertyEditor.codeEditor.value = _this._propertyEditor.parser.getModifiedCode();
+            _this._propertyEditor.updateParser();
+            _this._propertyEditor.callEvent("codeChanged", {});
+            //include the new element
+            _this.editDialog(true);
+            _this._componentExplorer.update();
+            _this._updateInvisibleComponents();
         }
         /**
         * execute the current code
@@ -2069,7 +2310,9 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.editButton.toggle(!this.editMode);
             this.undoButton.hidden = !enable;
             this.lassoButton.hidden = !enable;
-            this.removeButton.hidden = !enable;
+            this.cutButton.hidden = !enable;
+            this.copyButton.hidden = !enable;
+            this.pasteButton.hidden = !enable;
             var component = this._designPlaceholder._components[0];
             //switch designmode
             var comps = $(component.dom).find(".jcomponent");
@@ -2119,8 +2362,10 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                             ob = ob["editorselectthis"];
                         ret.push(ob);
                     }
-                    if (ret.length > 0) {
+                    if (ret.length === 1)
                         _this._propertyEditor.value = ret[0];
+                    else if (ret.length > 0) {
+                        _this._propertyEditor.value = ret;
                     }
                 };
                 this._resizer.onpropertychanged = function (comp, prop, value) {
@@ -2146,6 +2391,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             }
             else {
             }
+            this._componentExplorer.update();
             /*  $(".hoho2").selectable({});
               $(".hoho2").selectable("disable");*/
             /*  $(".HTMLPanel").selectable({});
@@ -2183,14 +2429,14 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             }
             if (oldParent !== newParent || beforeComponent !== undefined || top === undefined) { //top=undefined ->on relative position at the end call the block
                 //get Position
-                _this._propertyEditor.removePropertyInCode("add", compName, oldName);
+                var oldVal = _this._propertyEditor.removePropertyInCode("add", compName, oldName, false);
                 var before;
                 if (beforeComponent !== undefined && beforeComponent.type !== "atEnd") { //designdummy atEnd
                     var on = _this._codeEditor.getVariableFromObject(beforeComponent);
                     var par = _this._codeEditor.getVariableFromObject(beforeComponent._parent);
                     before = { variablename: par, property: "add", value: on };
                 }
-                _this._propertyEditor.setPropertyInCode("add", compName, false, newName, before);
+                _this._propertyEditor.setPropertyInCode("add", /*compName*/ oldVal, false, newName, before);
             }
             /* if(newParent._components.length>1){//correct dummy
                  var dummy=	newParent._components[newParent._components.length-2];
@@ -2213,7 +2459,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
          * @param {jassijs.ui.Container} newParent - the new parent container where the component is placed
          * @param {jassijs.ui.Component} beforeComponent - insert the new component before beforeComponent
          **/
-        createComponent(type, component, top, left, newParent, beforeComponent) {
+        createComponent(type, component, top, left, newParent, beforeComponent, doUpdate = true, suggestedName = undefined) {
             var _this = this;
             /*if(beforeComponent!==undefined&&beforeComponent.designDummyFor&&beforeComponent.type==="atEnd"){
                 beforeComponent=undefined;
@@ -2228,8 +2474,13 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 var test = _this._propertyEditor.parser.getPropertyValue(repeatername, "createRepeatingComponent");
                 scope = { variablename: repeatername, methodname: "createRepeatingComponent" };
                 if (test === undefined) {
+                    var sfunc = "function(me:Me){\n\t" + repeatername + ".design.config({});\n}";
                     var vardatabinder = _this._propertyEditor.getNextVariableNameForType("jassijs.ui.Databinder");
-                    _this._propertyEditor.setPropertyInCode("createRepeatingComponent", "function(me:Me){\n\t\n}", true, repeatername);
+                    if (!_this._propertyEditor.parser.getPropertyValue(repeatername, "config")) {
+                        sfunc = "function(me:Me){\n\t\n}";
+                    }
+                    _this._propertyEditor.setPropertyInCode("createRepeatingComponent", sfunc, true, repeatername);
+                    _this._propertyEditor.updateParser();
                     repeater.createRepeatingComponent(function (me) {
                         if (this._designMode !== true)
                             return;
@@ -2244,7 +2495,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 }
             }
             var varvalue = new (Classes_3.classes.getClass(type));
-            var varname = _this.createVariable(type, scope, varvalue);
+            var varname = _this.createVariable(type, scope, varvalue, suggestedName);
             if (this._propertyEditor.codeEditor !== undefined) {
                 var newName = _this._codeEditor.getVariableFromObject(newParent);
                 var before;
@@ -2298,28 +2549,27 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     }
                 });
             }
-            _this._propertyEditor.value = varvalue;
-            //include the new element
-            _this.editDialog(true);
-            _this._componentExplorer.update();
-            //var test=_this._invisibleComponents;
-            _this._updateInvisibleComponents();
+            if (doUpdate) {
+                _this._propertyEditor.value = varvalue;
+                //include the new element
+                _this.editDialog(true);
+                _this._componentExplorer.update();
+                _this._updateInvisibleComponents();
+            }
             return varvalue;
         }
-        createVariable(type, scope, varvalue) {
+        createVariable(type, scope, varvalue, suggestedName = undefined) {
             if (this._propertyEditor.codeEditor === undefined)
                 return;
-            var varname = this._propertyEditor.addVariableInCode(type, scope);
-            if (varname.startsWith("me.") && this._codeEditor.getObjectFromVariable("me") !== undefined) {
-                var me = this._codeEditor.getObjectFromVariable("me");
-                me[varname.substring(3)] = varvalue;
-            }
-            else if (varname.startsWith("this.")) {
-                var th = this._codeEditor.getObjectFromVariable("this");
-                th[varname.substring(5)] = varvalue;
-            }
-            else
-                this.variables.addVariable(varname, varvalue);
+            var varname = this._propertyEditor.addVariableInCode(type, scope, suggestedName);
+            /* if (varname.startsWith("me.") && this._codeEditor.getObjectFromVariable("me") !== undefined) {
+                 var me = this._codeEditor.getObjectFromVariable("me");
+                 me[varname.substring(3)] = varvalue;
+             } else if (varname.startsWith("this.")) {
+                 var th = this._codeEditor.getObjectFromVariable("this");
+                 th[varname.substring(5)] = varvalue;
+             } else*/
+            this.variables.addVariable(varname, varvalue);
             return varname;
         }
         /**
@@ -2420,7 +2670,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
     exports.test = test;
     ;
 });
-define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs/ui/PropertyEditor", "jassijs/remote/Classes"], function (require, exports, Jassi_8, Panel_5, Tree_1, ComponentDescriptor_1, ContextMenu_1, PropertyEditor_2, Classes_4) {
+define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/ui/ComponentDescriptor", "jassijs/ui/ContextMenu", "jassijs/ui/PropertyEditor", "jassijs/remote/Classes"], function (require, exports, Jassi_8, Panel_5, Tree_1, ComponentDescriptor_2, ContextMenu_1, PropertyEditor_2, Classes_4) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -2445,7 +2695,7 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
          */
         set value(value) {
             this._value = value;
-            this.tree.items = value;
+            this.tree.items = (value === undefined ? [] : value);
             this.tree.expandAll();
         }
         get value() {
@@ -2465,9 +2715,11 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
          * @param {object} item
          */
         getComponentChilds(item) {
+            if (item === undefined)
+                return 0;
             if (item === this.value)
                 return item._components;
-            var comps = ComponentDescriptor_1.ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);
+            var comps = ComponentDescriptor_2.ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);
             var ret = [];
             for (var name in comps) {
                 var comp = comps[name];
@@ -2535,6 +2787,9 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
         }
         update() {
             this.value = this.value;
+        }
+        onselect(handler) {
+            this.tree.onselect(handler);
         }
         onclick(handler) {
             this.tree.addEvent("click", handler);
@@ -2757,7 +3012,7 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Jassi"]
         * @param {jassijs_editor.CodeEditor} codeEditor
         */
         addDebugpoints(lines, debugpoints, codeEditor) {
-            Jassi_10.default.d[codeEditor._id] = undefined;
+            jassijs.d[codeEditor._id] = undefined;
             //        	jassijs.ui.VariablePanel.get(this._id).__db=undefined;
             var hassome = undefined;
             this.debugpoints = debugpoints;
@@ -2817,8 +3072,8 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Jassi"]
         __metadata("design:paramtypes", [])
     ], Debugger);
     exports.Debugger = Debugger;
-    if (Jassi_10.default.debugger === undefined)
-        Jassi_10.default.debugger = new Debugger();
+    if (jassijs.debugger === undefined)
+        jassijs.debugger = new Debugger();
     require(["jassijs_editor/ChromeDebugger"]);
 });
 define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_11, Router_2, Typescript_3, CodePanel_5, Settings_2) {
@@ -2943,6 +3198,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
                 glyphMargin: true,
                 fontSize: 12,
                 automaticLayout: true,
+                //@ts-ignore
                 inlineSuggest: {}
             });
             __init(this._editor);
@@ -3071,7 +3327,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jass
             this._editor.focus();
             try {
                 this._editor.revealLine(cursor.row);
-                //this._editor.setPosition({ column: cursor.column, lineNumber: cursor.row });
+                this._editor.setPosition({ column: cursor.column, lineNumber: cursor.row });
             }
             catch (_a) {
             }
@@ -3174,15 +3430,15 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1632251060000,
+                "date": 1655549402601,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
-                "date": 1622998654000,
+                "date": 1655549438570,
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1654169313604,
+                "date": 1655549443015,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3235,7 +3491,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-                "date": 1632524314000,
+                "date": 1655549449262,
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
@@ -3243,54 +3499,57 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1654164249900,
+                "date": 1655546244521,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1631566306000,
+                "date": 1655549453768,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1631290328000,
+                "date": 1655549458531,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/Debugger.ts": {
-                "date": 1622998618000,
+                "date": 1655549467467,
                 "jassijs_editor.Debugger": {}
             },
             "jassijs_editor/modul.ts": {
                 "date": 1654273312166
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1654011054229,
+                "date": 1654630281932,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {
                 "date": 1623098600000
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1634340710000,
+                "date": 1655549473433,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1654275473444,
-                "jassijs_editor.base.Parser": {}
+                "date": 1655402840834,
+                "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1634384530000,
+                "date": 1655549479845,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/TSSourceMap.ts": {
-                "date": 1654114048820,
+                "date": 1655549491655,
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1631566734000,
+                "date": 1655549497536,
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1631388458000,
+                "date": 1655549414488,
                 "jassijs.ui.AcePanelSimple": {}
+            },
+            "jassijs_editor/ext/pdfMake-interface.ts": {
+                "date": 1655407578946
             }
         }
     };
@@ -3354,6 +3613,7 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
     let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
     //get Typescript instance
     window.ts = window["globalThis"].ts;
+    delete window["globalThis"];
     var platform_1 = require("vs/base/common/platform");
     platform_1.globals.MonacoEnvironment = {};
     function myfunc() {
@@ -3436,6 +3696,24 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
         return this._worker;
 
     }*/
+//source from https://cdn.jsdelivr.net/npm/@types/pdfmake/interfaces.d.ts
+// Type definitions for pdfmake 0.1
+// Project: http://pdfmake.org
+// Definitions by: Milen Stefanov <https://github.com/m1llen1um>
+//                 Rajab Shakirov <https://github.com/radziksh>
+//                 Enzo Volkmann <https://github.com/evolkmann>
+//                 Andi Pätzold <https://github.com/andipaetzold>
+//                 Neal Mummau <https://github.com/nmummau>
+//                 Jean-Raphaël Matte <https://github.com/jeralm>
+// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
+// TypeScript Version: 3.0
+//  changes by jassijs are tagged with /*changed by jassijs*/
+/// <reference types="node" />
+/// <reference types="pdfkit" />
+define("jassijs_editor/ext/pdfMake-interface", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+});
 define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3773,8 +4051,14 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
             var newnode = ts.createPropertySignature(undefined, name + "?", undefined, tp, undefined);
             this.typeMeNode["members"].push(newnode);
         }
+        /**
+         * add import {name} from file
+         * @param name
+         * @param file
+         */
         addImportIfNeeded(name, file) {
             if (this.imports[name] === undefined) {
+                //@ts-ignore
                 var imp = ts.createNamedImports([ts.createImportSpecifier(false, undefined, ts.createIdentifier(name))]);
                 const importNode = ts.createImportDeclaration(undefined, undefined, ts.createImportClause(undefined, imp), ts.createLiteral(file));
                 this.sourceFile = ts.updateSourceFileNode(this.sourceFile, [importNode, ...this.sourceFile.statements]);
@@ -3789,7 +4073,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                     if (tnode.name) {
                         var name = tnode.name.text;
                         var stype = tnode.type.typeName.text;
-                        _this.typeMe[name] = { node: tnode, value: stype };
+                        _this.typeMe[name] = { node: tnode, value: stype, isFunction: false };
                     }
                     //            this.add("me", name, "typedeclaration:" + stype, undefined, aline, aline);
                 });
@@ -3936,6 +4220,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 var node2;
                 var left;
                 var value;
+                var _this = this;
                 var isFunction = false;
                 if (ts.isBinaryExpression(node)) {
                     node1 = node.left;
@@ -3951,9 +4236,29 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                     isFunction = true;
                     left = node1.getText(); // this.code.substring(node1.pos, node1.end).trim();
                     var params = [];
-                    node.arguments.forEach((arg) => { params.push(arg.getText()); });
+                    node.arguments.forEach((arg) => {
+                        var _a, _b, _c;
+                        params.push(arg.getText());
+                        if (((_c = (_b = (_a = arg) === null || _a === void 0 ? void 0 : _a.expression) === null || _b === void 0 ? void 0 : _b.name) === null || _c === void 0 ? void 0 : _c.getText()) === "config") {
+                            _this.parseConfig(arg);
+                        }
+                        //arg.getText().indexOf(".config(")
+                    });
                     if (left.endsWith(".config")) {
+                        var lastpos = left.lastIndexOf(".");
+                        var variable = left;
+                        var prop = "";
+                        if (lastpos !== -1) {
+                            variable = left.substring(0, lastpos);
+                            prop = left.substring(lastpos + 1);
+                        }
+                        value = params.join(", ");
+                        this.add(variable, prop, value, node, isFunction);
                         this.parseConfig(node);
+                        return;
+                    }
+                    if (left.endsWith(".createRepeatingComponent")) {
+                        this.parseProperties(node.arguments[0]["body"]);
                     }
                     value = params.join(", "); //this.code.substring(node2.pos, node2.end).trim();//
                 }
@@ -4055,7 +4360,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
             else
                 classScope = this.classScope;
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
-            this.visitNode(this.sourceFile);
+            if (this.classScope === undefined)
+                this.parseProperties(this.sourceFile);
+            else
+                this.visitNode(this.sourceFile);
             //return this.parseold(code,onlyfunction);
         }
         removeNode(node) {
@@ -4073,6 +4381,21 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 var pos = node.parent["members"].indexOf(node);
                 if (pos >= 0)
                     node.parent["members"].splice(pos, 1);
+            }
+            else if (node.parent["properties"] !== undefined) {
+                var pos = node.parent["properties"].indexOf(node);
+                if (pos >= 0)
+                    node.parent["properties"].splice(pos, 1);
+            }
+            else if (node.parent["elements"] !== undefined) {
+                var pos = node.parent["elements"].indexOf(node);
+                if (pos >= 0)
+                    node.parent["elements"].splice(pos, 1);
+            }
+            else if (node.parent.kind === ts.SyntaxKind.ExpressionStatement) {
+                var pos = node.parent.parent["statements"].indexOf(node.parent);
+                if (pos >= 0)
+                    node.parent.parent["statements"].splice(pos, 1);
             }
             else
                 throw Error(node.getFullText() + "could not be removed");
@@ -4124,11 +4447,26 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         * @param {string} [variablename] - thpe name of the variable - default=this.variablename
         */
         removePropertyInCode(property, onlyValue = undefined, variablename = undefined) {
+            var _a, _b, _c;
+            if (this.data[variablename] !== undefined && this.data[variablename].config !== undefined && property === "add") {
+                property = "children";
+                var oldparent = this.data[variablename][property][0].node;
+                for (var x = 0; x < oldparent.initializer.elements.length; x++) {
+                    var valueNode = oldparent.initializer.elements[x];
+                    if (valueNode.getText() === onlyValue || valueNode.getText().startsWith(onlyValue + ".")) {
+                        oldparent.initializer.elements.splice(x, 1);
+                        if (oldparent.initializer.elements.length === 0) {
+                            this.removeNode(oldparent);
+                        }
+                        return valueNode;
+                    }
+                }
+            }
             if (this.data[variablename] !== undefined && this.data[variablename][property] !== undefined) {
                 var prop = undefined;
                 if (onlyValue !== undefined) {
                     for (var x = 0; x < this.data[variablename][property].length; x++) {
-                        if (this.data[variablename][property][x].value === onlyValue) {
+                        if (this.data[variablename][property][x].value === onlyValue || this.data[variablename][property][x].value.startsWith(onlyValue + ".")) {
                             prop = this.data[variablename][property][x];
                         }
                     }
@@ -4138,6 +4476,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 if (prop == undefined)
                     return;
                 this.removeNode(prop.node);
+                if (((_b = (_a = prop.node["expression"]) === null || _a === void 0 ? void 0 : _a.arguments) === null || _b === void 0 ? void 0 : _b.length) > 0) {
+                    return (_c = prop.node["expression"]) === null || _c === void 0 ? void 0 : _c.arguments[0];
+                }
+                return prop.node;
                 /*var oldvalue = this.lines[prop.linestart - 1];
                 for (let x = prop.linestart;x <= prop.lineend;x++) {
                     this.lines[x - 1] = undefined;
@@ -4153,38 +4495,60 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
          * removes the variable from code
          * @param {string} varname - the variable to remove
          */
-        removeVariableInCode(varname) {
-            var prop = this.data[varname];
+        removeVariablesInCode(varnames) {
+            var _a, _b, _c, _d;
             var allprops = [];
-            if (varname.startsWith("me.") && this.typeMe[varname.substring(3)] !== undefined)
-                allprops.push(this.typeMe[varname.substring(3)]);
-            //remove properties
-            for (var key in prop) {
-                let props = prop[key];
-                props.forEach((p) => {
-                    allprops.push(p);
-                });
+            //collect allNodes to delete
+            for (var vv = 0; vv < varnames.length; vv++) {
+                var varname = varnames[vv];
+                var prop = this.data[varname];
+                if (varname.startsWith("me.") && this.typeMe[varname.substring(3)] !== undefined)
+                    allprops.push(this.typeMe[varname.substring(3)]);
+                //remove properties
+                for (var key in prop) {
+                    let props = prop[key];
+                    props.forEach((p) => {
+                        allprops.push(p);
+                    });
+                }
+                if (varname.startsWith("me.")) {
+                    let props = this.data.me[varname.substring(3)];
+                    props === null || props === void 0 ? void 0 : props.forEach((p) => {
+                        allprops.push(p);
+                    });
+                }
             }
-            if (varname.startsWith("me.")) {
-                let props = this.data.me[varname.substring(3)];
-                props === null || props === void 0 ? void 0 : props.forEach((p) => {
-                    allprops.push(p);
-                });
-            }
+            //remove nodes
             for (var x = 0; x < allprops.length; x++) {
                 this.removeNode(allprops[x].node);
             }
-            //remove lines where used as parameter
-            for (var propkey in this.data) {
-                var prop = this.data[propkey];
-                for (var key in prop) {
-                    var props = prop[key];
-                    for (var x = 0; x < props.length; x++) {
-                        let p = props[x];
-                        var params = p.value.split(",");
-                        for (var i = 0; i < params.length; i++) {
-                            if (params[i] === varname || params[i] === "this." + varname) {
-                                this.removeNode(p.node);
+            for (var vv = 0; vv < varnames.length; vv++) {
+                var varname = varnames[vv];
+                //remove lines where used as parameter
+                for (var propkey in this.data) {
+                    var prop = this.data[propkey];
+                    for (var key in prop) {
+                        var props = prop[key];
+                        for (var x = 0; x < props.length; x++) {
+                            let p = props[x];
+                            var params = p.value.split(",");
+                            for (var i = 0; i < params.length; i++) {
+                                if (params[i] === varname || params[i] === "this." + varname) {
+                                    this.removeNode(p.node);
+                                }
+                            }
+                            //in children:[]
+                            //@ts-ignore
+                            var inconfig = (_c = (_b = (_a = prop[key][0]) === null || _a === void 0 ? void 0 : _a.node) === null || _b === void 0 ? void 0 : _b.initializer) === null || _c === void 0 ? void 0 : _c.elements;
+                            if (inconfig) {
+                                for (var x = 0; x < inconfig.length; x++) {
+                                    if (inconfig[x].getText() === varname || inconfig[x].getText().startsWith(varname)) {
+                                        this.removeNode(inconfig[x]);
+                                    }
+                                }
+                                if (inconfig.length === 0) {
+                                    this.removeNode((_d = prop[key][0]) === null || _d === void 0 ? void 0 : _d.node);
+                                }
                             }
                         }
                     }
@@ -4194,9 +4558,15 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         getNodeFromScope(classscope, variablescope = undefined) {
             var _a, _b, _c;
             var scope;
+            if (classscope === undefined) {
+                return this.sourceFile;
+            }
             if (variablescope) {
                 scope = (_a = this.data[variablescope.variablename][variablescope.methodname][0]) === null || _a === void 0 ? void 0 : _a.node;
-                scope = scope.expression.arguments[0];
+                if (scope.expression)
+                    scope = scope.expression.arguments[0];
+                else
+                    scope = scope.initializer;
             }
             else {
                 for (var i = 0; i < classscope.length; i++) {
@@ -4216,14 +4586,100 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         /**
          * gets the next variablename
          * */
-        getNextVariableNameForType(type) {
-            var varname = type.split(".")[type.split(".").length - 1].toLowerCase();
+        getNextVariableNameForType(type, suggestedName = undefined) {
+            var varname = suggestedName;
+            if (varname === undefined)
+                varname = type.split(".")[type.split(".").length - 1].toLowerCase();
             for (var counter = 1; counter < 1000; counter++) {
-                if (this.data.me === undefined || this.data.me[varname + counter] === undefined)
+                if (this.data.me === undefined || this.data.me[varname + (counter === 1 ? "" : counter)] === undefined)
                     break;
             }
-            return varname + counter;
+            return varname + (counter === 1 ? "" : counter);
         }
+        /**
+         * change objectliteral to mutliline if needed
+         */
+        switchToMutlilineIfNeeded(node, newProperty, newValue) {
+            var oldValue = node.getText();
+            if (node["multiLine"] !== true) {
+                var len = 0;
+                for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
+                    var prop = node.parent["arguments"][0].properties[x];
+                    len += (prop.initializer.escapedText ? prop.initializer.escapedText.length : prop.initializer.getText().length);
+                    len += prop.name.escapedText.length + 5;
+                }
+                console.log(len);
+                if (oldValue.indexOf("\n") > -1 || (len > 60) || newValue.indexOf("\n") > -1) {
+                    //order also old elements
+                    for (var x = 0; x < node.parent["arguments"][0].properties.length; x++) {
+                        var prop = node.parent["arguments"][0].properties[x];
+                        prop.pos = -1;
+                        prop.len = -1;
+                    }
+                    node.parent["arguments"][0] = ts.createObjectLiteral(node.parent["arguments"][0].properties, true);
+                }
+            }
+        }
+        setPropertyInConfig(variableName, property, value, isFunction = false, replace = undefined, before = undefined, scope) {
+            var svalue = typeof value === "string" ? ts.createIdentifier(value) : value;
+            var config = this.data[variableName]["config"][0].node;
+            config = config.arguments[0];
+            var newExpression = ts.createPropertyAssignment(property, svalue);
+            if (property === "add" && replace === false) {
+                property = "children";
+                svalue = typeof value === "string" ? ts.createIdentifier(value + ".config({})") : value;
+                if (this.data[variableName]["children"] == undefined) { //
+                    newExpression = ts.createPropertyAssignment(property, ts.createArrayLiteral([svalue], true));
+                    config.properties.push(newExpression);
+                }
+                else {
+                    if (before === undefined) {
+                        //@ts-ignore
+                        this.data[variableName]["children"][0].node.initializer.elements.push(svalue);
+                    }
+                    else {
+                        //@ts-ignore
+                        var array = this.data[variableName]["children"][0].node.initializer.elements;
+                        for (var x = 0; x < array.length; x++) {
+                            if (array[x].getText() === before.value || array[x].getText().startsWith(before.value + ".")) {
+                                array.splice(x, 0, svalue);
+                                return;
+                            }
+                        }
+                        throw new Error("Node " + before.value + " not found.");
+                    }
+                }
+            }
+            else { //comp.add(a) --> comp.config({children:[a]})
+                if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
+                    let node = this.data[variableName][property][0].node;
+                    var pos = config.properties.indexOf(node);
+                    config.properties[pos] = newExpression;
+                    this.switchToMutlilineIfNeeded(config, property, value);
+                }
+                else {
+                    config.properties.push(newExpression);
+                    this.switchToMutlilineIfNeeded(config, property, value);
+                }
+            }
+            console.log("correct spaces");
+            this.parse(this.getModifiedCode());
+            //if (pos >= 0)
+            //  node.parent["statements"].splice(pos, 1);
+        }
+        /*  movePropertValueInCode(variableName: string, property: string, value: string, newVariableName: string, beforeValue: any) {
+              if (this.data[variableName]["config"] !== undefined) {
+                  if (property === "add")
+                      property = "children";
+                  var oldparent:any=this.data[variableName][property][0].node;
+                  for (var x = 0; x < oldparent.initializer.elements.length; x++) {
+                      var valueNode=oldparent.initializer.elements[x];
+                      if (valueNode.getText() === value ||valueNode.getText().startsWith(value + ".")) {
+                          oldparent.initializer.elements.splice(x,1);
+                      }
+                  }
+              }
+          }*/
         /**
         * modify the property in code
         * @param variablename - the name of the variable
@@ -4236,11 +4692,18 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         * @param [variablescope] - if this scope is defined - the new property would be insert in this variable
         */
         setPropertyInCode(variableName, property, value, classscope, isFunction = false, replace = undefined, before = undefined, variablescope = undefined) {
+            if (this.data[variableName] === undefined)
+                this.data[variableName] = {};
             if (classscope === undefined)
                 classscope = this.classScope;
             var scope = this.getNodeFromScope(classscope, variablescope);
             var newExpression = undefined;
-            var statements = scope["body"].statements;
+            if (this.data[variableName]["config"] !== undefined) {
+                this.setPropertyInConfig(variableName, property, value, isFunction, replace, before, scope);
+                return;
+            }
+            var newValue = typeof value === "string" ? ts.createIdentifier(value) : value;
+            var statements = scope["body"] ? scope["body"].statements : scope["statements"];
             if (property === "new") { //me.panel1=new Panel({});
                 let prop = this.data[variableName]["_new_"][0]; //.substring(3)];
                 var constr = prop.value;
@@ -4249,21 +4712,13 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                 var left = prop.node.getText();
                 left = left.substring(0, left.indexOf("=") - 1);
                 property = "_new_";
-                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), ts.createIdentifier(value)));
-                /*	}else{//var hh=new Panel({})
-                        let prop = this.data[variableName][0];
-                        var constr = prop[0].value;
-                        value = constr.substring(0, constr.indexOf("(") + 1) + value + constr.substring(constr.lastIndexOf(")"));
-                        replace = true;
-                        isFunction=true;
-                        newExpression=ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier("me."+property), ts.createIdentifier(value)));
-                    }*/
+                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(left), newValue));
             }
             else if (isFunction) {
-                newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(variableName + "." + property), undefined, [ts.createIdentifier(value)]));
+                newExpression = ts.createExpressionStatement(ts.createCall(ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), undefined, [newValue]));
             }
             else
-                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(variableName + "." + property), ts.createIdentifier(value)));
+                newExpression = ts.createExpressionStatement(ts.createAssignment(ts.createIdentifier(property === "" ? variableName : (variableName + "." + property)), newValue));
             if (replace !== false && this.data[variableName] !== undefined && this.data[variableName][property] !== undefined) { //edit existing
                 let node = this.data[variableName][property][0].node;
                 var pos = node.parent["statements"].indexOf(node);
@@ -4307,8 +4762,12 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
                     }
                     else {
                         var pos = statements.length;
-                        if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
-                            pos--;
+                        try {
+                            if (pos > 0 && statements[statements.length - 1].getText().startsWith("return "))
+                                pos--;
+                        }
+                        catch (_a) {
+                        }
                         statements.splice(pos, 0, newExpression);
                     }
                 }
@@ -4343,12 +4802,12 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         * @param variablescope - the scope where the variable should be insert e.g. hallo.onclick
         * @returns  the name of the object
         */
-        addVariableInCode(fulltype, classscope, variablescope = undefined) {
+        addVariableInCode(fulltype, classscope, variablescope = undefined, suggestedName = undefined) {
             var _a;
             if (classscope === undefined)
                 classscope = this.classScope;
             let type = fulltype.split(".")[fulltype.split(".").length - 1];
-            var varname = this.getNextVariableNameForType(type);
+            var varname = this.getNextVariableNameForType(type, suggestedName);
             var useMe = false;
             if (this.data["me"] !== undefined)
                 useMe = true;
@@ -4363,7 +4822,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
             if (node === undefined)
                 throw Error("no scope to insert a variable could be found");
             for (var x = 0; x < statements.length; x++) {
-                if (!statements[x].getText().includes("new ") && !statements[x].getText().includes("var "))
+                if (!statements[x].getText().split("\n")[0].includes("new ") && !statements[x].getText().split("\n")[0].includes("var "))
                     break;
             }
             var ass = ts.createAssignment(ts.createIdentifier(prefix + varname), ts.createIdentifier("new " + type + "()"));
@@ -4374,21 +4833,34 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Jass
         }
     };
     Parser = __decorate([
-        (0, Jassi_13.$Class)("jassijs_editor.base.Parser"),
+        (0, Jassi_13.$Class)("jassijs_editor.util.Parser"),
         __metadata("design:paramtypes", [])
     ], Parser);
     exports.Parser = Parser;
     async function test() {
         await Typescript_4.default.waitForInited;
-        var code = Typescript_4.default.getCode("jassijs_editor/util/Parser.ts");
+        var code = Typescript_4.default.getCode("de/TestDialogBinder.ts");
         var parser = new Parser();
-        //code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
+        // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
-        code = 'import { Button as  } from "jassijs/ui/Button";import { Button } from "jassijs/remote/Jassi";';
-        parser.parse(code, undefined);
-        parser.addImportIfNeeded("Panel", "kk/l");
+        // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
+        //parser.parse(code, undefined);
+        code = "reportdesign={k:9};";
+        parser.parse(code); // [{ classname: "TestDialogBinder", methodname: "layout" }]);
+        parser.setPropertyInCode("reportdesign", "", "{o:0}", undefined);
+        // parser.removeVariablesInCode(["me.repeater"]);
+        //parser.addVariableInCode("Component", [{ classname: "Dialog", methodname: "layout" }]);
+        //parser.setPropertyInCode("component", "x", "1", [{ classname: "Dialog", methodname: "layout" }]);
+        // var node = parser.removePropertyInCode("add", "me.textbox1", "me.panel1");
+        // parser.setPropertyInCode("this","add",node,[{classname:"Dialog",methodname:"layout"}],true,false);
+        //var node = parser.removePropertyInCode("add", "kk", "aaa");
+        //var node=parser.removePropertyInCode("add", "ll", "ppp");
+        //parser.setPropertyInCode("aaa","add",node,[{classname:undefined, methodname:"test"}],true,false,undefined,undefined);
+        //console.log(node.getText());
+        //    parser.setPropertyInCode("ppp","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"ppp",property:"add",value:"ll"});
+        //  parser.setPropertyInCode("aaa","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"aaa",property:"add",value:"kk"});
         console.log(parser.getModifiedCode());
-        debugger;
+        // debugger;
         /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
           const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
           const result = printer.printNode(ts.EmitHint.Unspecified, parser.sourceFile, resultFile);
@@ -4722,7 +5194,7 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
     ], Resizer);
     exports.Resizer = Resizer;
 });
-define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs/remote/Server", "jassijs/remote/Jassi"], function (require, exports, sourcemap_1, jassi_1, Server_3, Jassi_15) {
+define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Jassi"], function (require, exports, sourcemap_1, Server_3, Jassi_15) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TSSourceMap = void 0;
@@ -4739,7 +5211,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             var jsfilename;
             if (Server_3.Server.filesInMap && Server_3.Server.filesInMap[tsfile]) {
                 var mod = Server_3.Server.filesInMap[tsfile].modul;
-                jsfilename = jassi_1.default.modules[mod];
+                jsfilename = jassijs.modules[mod];
                 var mapname = jsfilename.split("").reverse().join("").replace("sj.", "pam.sj.").split("").reverse().join("").split("?")[0];
                 mapcode = await this.getCode(mapname); //await $.ajax({ url: jsfilename+".map", dataType: "text" });
                 filenumber = Server_3.Server.filesInMap[tsfile].id;
@@ -4783,7 +5255,8 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             return ret;
         }
         async getLineFromJS(jsfile, line, column) {
-            return await this.getLinesFromJS(jsfile, [{ line, column }])[0];
+            var data = await this.getLinesFromJS(jsfile, [{ line, column }]);
+            return ((data === undefined || data.length === 0) ? undefined : data[0]);
         }
         async getLinesFromJS(jsfile, data) {
             var jscode = await this.getCode(jsfile.split("?")[0]); // await $.ajax({ url: jsfile, dataType: "text" });
@@ -4822,7 +5295,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
                 });
                 ret.push(one);
             }
-            return ret;
+            return await ret;
             //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js",function(data){
         }
     };
@@ -4897,7 +5370,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
         //load  d.ts from modulpackage
         async includeModulTypes() {
             var nodeFiles = {};
-            for (var mod in Jassi_16.default.modules) {
+            for (var mod in jassijs.modules) {
                 var config = (await new Promise((resolve_3, reject_3) => { require([mod + "/modul"], resolve_3, reject_3); })).default;
                 if (config.types) {
                     for (var key in config.types) {

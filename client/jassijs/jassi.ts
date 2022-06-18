@@ -1,5 +1,5 @@
 
-import jassijs from    "jassijs/remote/Jassi";
+import  "jassijs/remote/Jassi";
 import  "jassijs/remote/Classes";
 import  "jassijs/remote/Jassi";
 //import  "jassijs/base/Router";
@@ -8,6 +8,9 @@ import "jassijs/remote/Registry";
 import "jassijs/ext/jquerylib";
 import "jassijs/ext/intersection-observer";
 import { Errors } from "jassijs/base/Errors";
+
+jassijs.includeCSSFile( "jassijs.css");
+jassijs.includeCSSFile( "materialdesignicons.min.css");
 declare global {
   interface JQueryStatic {
           notify: any;

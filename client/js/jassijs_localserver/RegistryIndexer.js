@@ -33,11 +33,11 @@ define(["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Ser
         async dirFiles(modul, path, extensions, ignore = []) {
             var tsfiles = await new Filesystem_1.default().dirFiles(path, extensions, ignore);
             //add files from map
-            if (this.mapcache[modul] === undefined && Jassi_1.default.modules[modul] !== undefined && Jassi_1.default.modules[modul].indexOf(".js") > 0) { //read webtsfiles
+            if (this.mapcache[modul] === undefined && jassijs.modules[modul] !== undefined && jassijs.modules[modul].indexOf(".js") > 0) { //read webtsfiles
                 let ret = {};
-                let mapname = Jassi_1.default.modules[modul].split("?")[0] + ".map";
-                if (Jassi_1.default.modules[modul].indexOf(".js?") > -1)
-                    mapname = mapname + "?" + Jassi_1.default.modules[modul].split("?")[1];
+                let mapname = jassijs.modules[modul].split("?")[0] + ".map";
+                if (jassijs.modules[modul].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + jassijs.modules[modul].split("?")[1];
                 var code = await $.ajax({ url: mapname, dataType: "text" });
                 var data = JSON.parse(code);
                 var files = data.sources;

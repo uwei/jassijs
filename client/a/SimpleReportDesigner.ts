@@ -1,7 +1,7 @@
 import { ReportDesigner } from "jassijs_report/designer/ReportDesigner";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { DockingContainer } from "jassijs/ui/DockingContainer";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { ComponentExplorer } from "jassijs_editor/ComponentExplorer";
 import { ComponentPalette } from "jassijs_editor/ComponentPalette";

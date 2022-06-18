@@ -20,7 +20,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property"], fu
         if (systemFonts.indexOf(font) === -1) {
             var sfont = font.replaceAll(" ", "+");
             if (!document.getElementById("-->" + api + sfont)) { //"-->https://fonts.googleapis.com/css?family=Aclonica">
-                Jassi_1.default.myRequire(api + sfont);
+                jassijs.myRequire(api + sfont);
             }
         }
     }

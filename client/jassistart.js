@@ -2,7 +2,7 @@ class JassijsStarter {
     runScript = document.currentScript.getAttribute("data-run");
     configFile = document.currentScript.getAttribute("data-config");
     runFunction = document.currentScript.getAttribute("data-run-function");
-    cssFiles = [];
+    cssFiles = {};
     //config data
     config;
     registerServiceWorker() {
@@ -62,13 +62,13 @@ class JassijsStarter {
                 for (let key in res[x].default.css) {
                     let f = res[x].default.css[key];
                     if (f.indexOf(":") > -1) //https://cdn
-                        this.cssFiles.push(f);
+                        this.cssFiles[key]=f;
                     else if (modpath.endsWith(".js") || modpath.indexOf(".js?") > -1) {
                         var m = modpath.substring(0, modpath.lastIndexOf("/"));
-                        this.cssFiles.push(m + "/" + f);
+                        this.cssFiles[key]=m + "/" + f;
                     }
                     else {
-                        this.cssFiles.push(modpath + "/" + f);
+                        this.cssFiles[key]=modpath + "/" + f;
                     }
                 }
             }
@@ -108,9 +108,7 @@ class JassijsStarter {
                 });
             })
             if (beforestartlib[x] === "jassijs/jassi") {
-                _this.cssFiles.forEach((css) => {
-                    //    jassijs.myRequire(css);//needed for Login Dialog
-                });
+                
             }
         }
     }
@@ -183,8 +181,10 @@ class JassijsStarter {
         var _this = this;
         require(all, function (remoteJassi, ...res) {
             window.jassijs.modules=_this.config.modules;
-            window.jassijs.options=_this.config.options;
+          
             _this.loadModules(res, mods, modules, requireconfig, startlib,beforestartlib);
+            window.jassijs.options=_this.config.options;
+            window.jassijs.cssFiles=_this.cssFiles;
             requirejs.config(requireconfig);
             //read UserSettings after all beforestartlib are loaded
             beforestartlib.push("jassijs/jassi");
@@ -193,9 +193,9 @@ class JassijsStarter {
 
             _this.loadBeforestart(beforestartlib).then(() => {
                 require(startlib, function (jassijs, ...others) {
-                    _this.cssFiles.forEach((css) => {
-                        jassijs.default.myRequire(css);
-                    });
+                    for(var key in _this.cssFiles){
+                        //jassijs.default.myRequire(_this.cssFiles[key]);
+                    }
                     if (_this.runFunction && window[runFunction]) {
                         window[_this.runFunction]();
                     }

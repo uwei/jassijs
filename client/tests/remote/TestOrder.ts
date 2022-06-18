@@ -1,7 +1,7 @@
 import { TestOrderDetails } from "tests/remote/TestOrderDetails";
 import { TestCustomer } from "tests/remote/TestCustomer";
 import { DBObject, $DBObject } from "jassijs/remote/DBObject";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany, JoinColumn, JoinTable } from "jassijs/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 import { $CheckParentRight } from "jassijs/remote/security/Rights";

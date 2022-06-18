@@ -23,7 +23,7 @@ define(["require", "exports", "jassijs/ui/MenuItem", "jassijs/ui/Checkbox", "jas
             me.button5 = new Button_1.Button();
             me.checkbox2 = new Checkbox_1.Checkbox();
             me.menuitem2 = new MenuItem_1.MenuItem();
-            Jassi_1.default.includeCSS("kkkk", {
+            jassijs.includeCSS("kkkk", {
                 ".ui-state-highlight": {
                     border: "3px solid yellow"
                 }

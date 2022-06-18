@@ -51,9 +51,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/Debugger",
             if (event.data.fromJassiExtension && event.data.connected) {
                 installed = true;
                 //clearTimeout(checkExtensionInstalled);
-                if (Jassi_1.default.debugger !== undefined)
-                    Jassi_1.default.debugger.destroy();
-                Jassi_1.default.debugger = this;
+                if (jassijs.debugger !== undefined)
+                    jassijs.debugger.destroy();
+                jassijs.debugger = this;
             }
             if (event.data.fromJassiExtension && event.data.mid) {
                 var test = this.responseList[event.data.mid];
@@ -110,7 +110,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/Debugger",
             new Server_1.Server().saveFile(file, code).then(function () {
                 Reloader_1.Reloader.instance.reloadJS(file.replace(".ts", ""));
                 if (code.indexOf("jassijs.register(") > -1) {
-                    Jassi_1.default.registry.reload();
+                    jassijs.registry.reload();
                 }
             });
         }
@@ -187,7 +187,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_editor/Debugger",
             return;
             var file = this.urlToFile(url);
             var _this = this;
-            var editor = Jassi_1.default.windows.findComponent("jassijs_editor.CodeEditor-" + file);
+            var editor = jassijs.windows.findComponent("jassijs_editor.CodeEditor-" + file);
             if (editor !== undefined) {
                 editor.addVariables(variables);
             }

@@ -2,7 +2,7 @@ import { Button } from "jassijs/ui/Button";
 //@ts-ignore
 import PDFJS from "jassijs_report/ext/pdfjs";
 import { Component } from "jassijs/ui/Component";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 import { Panel } from "jassijs/ui/Panel";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { PDFReport } from "jassijs_report/PDFReport";

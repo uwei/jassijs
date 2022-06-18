@@ -33,7 +33,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"],
             this.push(ob);
             if (this._parentObject !== undefined) {
                 //set linked object
-                var link = Jassi_1.default.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
+                var link = jassijs.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
                 if (link !== undefined && link.type === "array") { //array can not connected){
                     var test = ob._objectProperties[link.name]; //do not resolve!
                     if (test !== undefined && test.unresolvedclassname === undefined) {
@@ -67,7 +67,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"],
                 this.splice(pos, 1);
             if (this._parentObject !== undefined) {
                 //set linked object
-                var link = Jassi_1.default.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
+                var link = jassijs.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
                 if (link !== undefined && link.type === "array") { //array can not connected){
                     var test = ob._objectProperties[link.name]; //do not resolve!
                     if (test !== undefined && test.unresolvedclassname === undefined) {

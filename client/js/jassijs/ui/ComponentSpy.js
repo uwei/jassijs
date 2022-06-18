@@ -68,14 +68,14 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         }
         update() {
             var data = [];
-            for (var k in Jassi_1.default.componentSpy.ids) {
-                data.push(Jassi_1.default.componentSpy.ids[k]);
+            for (var k in jassijs.componentSpy.ids) {
+                data.push(jassijs.componentSpy.ids[k]);
             }
             this.me.IDTable.items = data;
         }
         clear() {
-            Jassi_1.default.componentSpy.ids = {};
-            Jassi_1.default.componentSpy.labelids = {};
+            jassijs.componentSpy.ids = {};
+            jassijs.componentSpy.labelids = {};
             this.update();
         }
         watch(component) {
@@ -145,6 +145,6 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
         return sp;
     }
     exports.test = test;
-    Jassi_1.default.componentSpy = new ComponentSpy();
+    jassijs.componentSpy = new ComponentSpy();
 });
 //# sourceMappingURL=ComponentSpy.js.map

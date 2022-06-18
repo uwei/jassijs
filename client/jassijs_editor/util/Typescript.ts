@@ -1,5 +1,5 @@
 
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { Server } from "jassijs/remote/Server";
 import { FileNode } from "jassijs/remote/FileNode";
 //@ts-ignore

@@ -1,6 +1,6 @@
 import {DefaultConverter, $Converter } from "jassijs/ui/converters/DefaultConverter";
 
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { $Property } from "jassijs/ui/Property";
 import { Numberformatter } from "jassijs/util/Numberformatter";
 

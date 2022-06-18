@@ -29,7 +29,7 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi",
             }
         }
         async hallo(num) {
-            if (!Jassi_1.default.isServer) {
+            if (!jassijs.isServer) {
                 var ret = await this.call(this, this.hallo, num);
                 return ret * 10;
             }

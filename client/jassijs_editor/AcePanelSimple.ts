@@ -1,4 +1,4 @@
-import jassijs from "jassijs/jassi";
+
 import { Component } from "jassijs/ui/Component";
 //@ts-ignore
 import ace from "jassijs_editor/ext/acelib";

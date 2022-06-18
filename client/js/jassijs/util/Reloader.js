@@ -30,7 +30,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"]
             }
             var h = { date: 0, files: [] };
             var f = async function () {
-                Jassi_1.default.server.call("checkDir", h.date).then(function (t) {
+                jassijs.server.call("checkDir", h.date).then(function (t) {
                     h = JSON.parse(t);
                     var len = h.files.length;
                     if (len > 3)

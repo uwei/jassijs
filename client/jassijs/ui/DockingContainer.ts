@@ -1,6 +1,6 @@
 //@ts-ignore
 import GoldenLayout from "jassijs/ext/goldenlayout";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import {Container} from "jassijs/ui/Container";
 //import "jassijs/ext/jquery.resize";
 import {Button} from "jassijs/ui/Button";

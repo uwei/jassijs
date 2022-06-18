@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { Debugger } from "jassijs_editor/Debugger";
 import { CodeEditor } from "jassijs_editor/CodeEditor";
 import { OptionDialog } from "jassijs/ui/OptionDialog";

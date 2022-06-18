@@ -27,34 +27,43 @@ define("northwind/CategoriesView", ["require", "exports", "jassijs/ui/converters
             return this.value === undefined ? "CategoriesView" : "CategoriesView " + this.value.id;
         }
         layout(me) {
+            me.boxpanel1 = new BoxPanel_1.BoxPanel();
             me.Id = new Textbox_1.Textbox();
             me.name = new Textbox_1.Textbox();
             me.description = new Textarea_1.Textarea();
-            me.boxpanel1 = new BoxPanel_1.BoxPanel();
-            me.table1 = new Table_1.Table();
             me.panel1 = new Panel_1.Panel();
-            me.main.add(me.boxpanel1);
-            me.main.add(me.description);
-            me.main.add(me.panel1);
-            me.main.add(me.table1);
-            me.Id.label = "Id";
-            me.Id.bind(me.databinder, "id");
-            me.Id.width = 40;
-            me.Id.converter = new NumberConverter_1.NumberConverter();
-            me.name.bind(me.databinder, "CategoryName");
-            me.name.label = "Name";
-            me.name.width = 225;
-            me.description.height = 70;
-            me.description.width = 280;
-            me.description.bind(me.databinder, "Description");
-            me.description.label = "Description";
-            me.boxpanel1.add(me.Id);
-            me.boxpanel1.horizontal = true;
-            me.boxpanel1.width = 80;
-            me.boxpanel1.add(me.name);
-            me.table1.height = "100%";
-            me.table1.bindItems(me.databinder, "Products");
-            me.table1.width = "100%";
+            me.table1 = new Table_1.Table();
+            this.me.main.config({ children: [
+                    me.boxpanel1.config({
+                        children: [
+                            me.Id.config({
+                                label: "Id",
+                                bind: [me.databinder, "id"],
+                                width: 40,
+                                converter: new NumberConverter_1.NumberConverter()
+                            }),
+                            me.name.config({
+                                bind: [me.databinder, "CategoryName"],
+                                label: "Name",
+                                width: 225
+                            })
+                        ],
+                        width: 80,
+                        horizontal: true
+                    }),
+                    me.description.config({
+                        height: 70,
+                        width: 280,
+                        bind: [me.databinder, "Description"],
+                        label: "Description"
+                    }),
+                    me.panel1.config({}),
+                    me.table1.config({
+                        height: "100%",
+                        bindItems: [me.databinder, "Products"],
+                        width: "100%"
+                    })
+                ] });
         }
     };
     __decorate([
@@ -100,73 +109,85 @@ define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "j
             me.textbox2 = new Textbox_2.Textbox();
             me.phone = new Textbox_2.Textbox();
             me.fax = new Textbox_2.Textbox();
-            me.main.isAbsolute = true;
-            me.main.width = 560;
-            me.main.height = "300";
-            me.main.add(me.id);
-            me.main.add(me.companyname);
-            me.main.add(me.contacttitle);
-            me.main.add(me.contactname);
-            me.main.add(me.address);
-            me.main.add(me.postalcode);
-            me.main.add(me.textbox1);
-            me.main.add(me.region);
-            me.main.add(me.textbox2);
-            me.main.add(me.phone);
-            me.main.add(me.fax);
-            me.id.x = 10;
-            me.id.y = 5;
-            me.id.bind(me.databinder, "id");
-            me.id.width = 65;
-            me.id.label = "id";
-            me.companyname.x = 195;
-            me.companyname.y = 45;
-            me.companyname.bind(me.databinder, "CompanyName");
-            me.companyname.label = "Company Name";
-            me.companyname.width = 155;
-            me.contacttitle.x = 10;
-            me.contacttitle.y = 45;
-            me.contacttitle.label = "Contact Title";
-            me.contacttitle.bind(me.databinder, "ContactTitle");
-            me.contactname.x = 90;
-            me.contactname.y = 5;
-            me.contactname.label = "Contact Name";
-            me.contactname.bind(me.databinder, "ContactName");
-            me.contactname.width = 260;
-            me.address.x = 10;
-            me.address.y = 90;
-            me.address.bind(me.databinder, "Address");
-            me.address.label = "Address";
-            me.address.width = 340;
-            me.postalcode.x = 10;
-            me.postalcode.y = 140;
-            me.postalcode.label = "Postal Code";
-            me.postalcode.bind(me.databinder, "PostalCode");
-            me.postalcode.width = 90;
-            me.textbox1.x = 100;
-            me.textbox1.y = 140;
-            me.textbox1.label = "City";
-            me.textbox1.width = 250;
-            me.textbox1.bind(me.databinder, "City");
-            me.region.x = 10;
-            me.region.y = 185;
-            me.region.bind(me.databinder, "Region");
-            me.region.label = "Region";
-            me.textbox2.x = 195;
-            me.textbox2.y = 185;
-            me.textbox2.label = "Country";
-            me.textbox2.bind(me.databinder, "Country");
-            this.width = 940;
-            this.height = 377;
-            me.phone.x = 10;
-            me.phone.y = 230;
-            me.phone.label = "Phone";
-            me.phone.bind(me.databinder, "Phone");
-            me.fax.x = 195;
-            me.fax.y = 230;
-            me.fax.label = "Fax";
-            me.fax.bind(me.databinder, "Fax");
-            me.toolbar.height = 20;
+            this.me.main.config({
+                isAbsolute: true,
+                width: 560,
+                height: "300",
+                children: [
+                    me.id.config({
+                        x: 10,
+                        y: 5,
+                        bind: [me.databinder, "id"],
+                        width: 65,
+                        label: "id"
+                    }),
+                    me.companyname.config({
+                        x: 195,
+                        y: 45,
+                        bind: [me.databinder, "CompanyName"],
+                        label: "Company Name",
+                        width: 155
+                    }),
+                    me.contacttitle.config({
+                        x: 10,
+                        y: 45,
+                        label: "Contact Title",
+                        bind: [me.databinder, "ContactTitle"]
+                    }),
+                    me.contactname.config({
+                        x: 90,
+                        y: 5,
+                        label: "Contact Name",
+                        bind: [me.databinder, "ContactName"],
+                        width: 260
+                    }),
+                    me.address.config({
+                        x: 10,
+                        y: 90,
+                        bind: [me.databinder, "Address"],
+                        label: "Address",
+                        width: 340
+                    }),
+                    me.postalcode.config({
+                        x: 10,
+                        y: 140,
+                        label: "Postal Code",
+                        bind: [me.databinder, "PostalCode"],
+                        width: 90
+                    }),
+                    me.textbox1.config({
+                        x: 100,
+                        y: 140,
+                        label: "City",
+                        width: 250,
+                        bind: [me.databinder, "City"]
+                    }),
+                    me.region.config({
+                        x: 10,
+                        y: 185,
+                        bind: [me.databinder, "Region"],
+                        label: "Region"
+                    }),
+                    me.textbox2.config({
+                        x: 195,
+                        y: 185,
+                        label: "Country",
+                        bind: [me.databinder, "Country"]
+                    }),
+                    me.phone.config({
+                        x: 10,
+                        y: 230,
+                        label: "Phone",
+                        bind: [me.databinder, "Phone"]
+                    }),
+                    me.fax.config({
+                        x: 195,
+                        y: 230,
+                        label: "Fax",
+                        bind: [me.databinder, "Fax"]
+                    })
+                ]
+            });
         }
     };
     __decorate([
@@ -207,7 +228,7 @@ define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Jassi", "j
         layout(me) {
             me.textbox1 = new Textbox_3.Textbox();
             me.main.add(me.textbox1);
-            me.textbox1.bind(me.databinder, "Order.Customer.id");
+            me.textbox1.bind = [me.databinder, "Order.Customer.id"];
         }
     };
     __decorate([
@@ -228,7 +249,7 @@ define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Jassi", "j
     }
     exports.test = test;
 });
-define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Calendar", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView"], function (require, exports, ObjectChooser_1, HTMLPanel_1, NumberConverter_2, Image_1, Textarea_2, Calendar_1, Textbox_4, Button_1, Jassi_4, Property_4, Employees_1, DBObjectView_4) {
+define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Calendar", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView"], function (require, exports, ObjectChooser_1, HTMLPanel_1, NumberConverter_2, Image_1, Textarea_2, Calendar_1, Textbox_4, Jassi_4, Property_4, Employees_1, DBObjectView_4) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -243,17 +264,16 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
             return this.value === undefined ? "EmployeesView" : "EmployeesView " + this.value.id;
         }
         layout(me) {
-            me.button1 = new Button_1.Button();
-            me.titleOfCouttesy = new Textbox_4.Textbox();
             me.firstName = new Textbox_4.Textbox();
             me.lastName = new Textbox_4.Textbox();
             me.title = new Textbox_4.Textbox();
+            me.titleOfCouttesy = new Textbox_4.Textbox();
             me.address = new Textbox_4.Textbox();
             me.postalCode = new Textbox_4.Textbox();
             me.city = new Textbox_4.Textbox();
-            me.birthDate = new Calendar_1.Calendar();
             me.region = new Textbox_4.Textbox();
             me.state = new Textbox_4.Textbox();
+            me.birthDate = new Calendar_1.Calendar();
             me.hiredate = new Calendar_1.Calendar();
             me.homephone = new Textbox_4.Textbox();
             me.notes = new Textarea_2.Textarea();
@@ -262,124 +282,145 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
             me.id = new Textbox_4.Textbox();
             me.reportsTo = new HTMLPanel_1.HTMLPanel();
             me.objectchooser1 = new ObjectChooser_1.ObjectChooser();
-            me.button1.text = "button";
-            me.main.width = 900;
-            me.main.height = "900";
-            me.main.isAbsolute = true;
-            me.main.add(me.firstName);
-            me.main.add(me.lastName);
-            me.main.add(me.title);
-            me.main.add(me.titleOfCouttesy);
-            me.main.add(me.address);
-            me.main.add(me.postalCode);
-            me.main.add(me.city);
-            me.main.add(me.region);
-            me.main.add(me.state);
-            me.main.add(me.birthDate);
-            me.main.add(me.hiredate);
-            me.main.add(me.homephone);
-            me.main.add(me.notes);
-            me.main.add(me.image1);
-            me.main.add(me.photoPath);
-            me.main.add(me.id);
-            me.main.add(me.reportsTo);
-            me.main.add(me.objectchooser1);
-            me.titleOfCouttesy.x = 525;
-            me.titleOfCouttesy.y = 5;
-            me.titleOfCouttesy.label = "Title of C.";
-            me.titleOfCouttesy.width = 85;
-            me.titleOfCouttesy.bind(me.databinder, "TitleOfCourtesy");
-            me.firstName.x = 80;
-            me.firstName.y = 5;
-            me.firstName.label = "First name";
-            me.firstName.bind(me.databinder, "FirstName");
-            me.lastName.x = 250;
-            me.lastName.y = 5;
-            me.lastName.label = "Last Name";
-            me.lastName.bind(me.databinder, "LastName");
-            me.title.x = 420;
-            me.title.y = 5;
-            me.title.bind(me.databinder, "Title");
-            me.title.label = "Title";
-            me.title.width = 90;
-            me.address.x = 5;
-            me.address.y = 50;
-            me.address.label = "Address";
-            me.address.bind(me.databinder, "Address");
-            me.address.width = 345;
-            me.postalCode.x = 5;
-            me.postalCode.y = 95;
-            me.postalCode.label = "Postal Code";
-            me.postalCode.bind(me.databinder, "PostalCode");
-            me.postalCode.width = 90;
-            me.city.x = 110;
-            me.city.y = 95;
-            me.city.bind(me.databinder, "City");
-            me.city.label = "City";
-            me.city.width = 240;
-            me.birthDate.x = 5;
-            me.birthDate.y = 190;
-            me.birthDate.width = 90;
-            me.birthDate.bind(me.databinder, "BirthDate");
-            me.birthDate.label = "Birth Date";
-            me.region.x = 5;
-            me.region.y = 140;
-            me.region.bind(me.databinder, "Region");
-            me.region.label = "Region";
-            me.region.width = 90;
-            me.state.x = 110;
-            me.state.y = 140;
-            me.state.bind(me.databinder, "Country");
-            me.state.label = "country";
-            me.state.width = 240;
-            me.hiredate.x = 110;
-            me.hiredate.y = 190;
-            me.hiredate.bind(me.databinder, "HireDate");
-            me.hiredate.label = "Hire Date";
-            me.hiredate.width = 85;
-            me.homephone.x = 210;
-            me.homephone.y = 190;
-            me.homephone.bind(me.databinder, "HomePhone");
-            me.homephone.label = "Home Phone";
-            me.homephone.width = 140;
-            me.notes.x = 375;
-            me.notes.y = 50;
-            me.notes.width = 240;
-            me.notes.height = 155;
-            me.notes.bind(me.databinder, "Notes");
-            me.notes.label = "Notes";
-            me.image1.x = 630;
-            me.image1.y = 20;
-            me.image1.src = "";
-            me.image1.css({
-                background_color: "black",
-                border_style: "solid"
+            this.me.main.config({
+                children: [
+                    me.firstName.config({
+                        x: 80,
+                        y: 5,
+                        label: "First name",
+                        bind: [me.databinder, "FirstName"]
+                    }),
+                    me.lastName.config({
+                        x: 250,
+                        y: 5,
+                        label: "Last Name",
+                        bind: [me.databinder, "LastName"]
+                    }),
+                    me.title.config({
+                        x: 420,
+                        y: 5,
+                        bind: [me.databinder, "Title"],
+                        label: "Title",
+                        width: 90
+                    }),
+                    me.titleOfCouttesy.config({
+                        x: 525,
+                        y: 5,
+                        label: "Title of C.",
+                        width: 85,
+                        bind: [me.databinder, "TitleOfCourtesy"]
+                    }),
+                    me.address.config({
+                        x: 5,
+                        y: 50,
+                        label: "Address",
+                        bind: [me.databinder, "Address"],
+                        width: 345
+                    }),
+                    me.postalCode.config({
+                        x: 5,
+                        y: 95,
+                        label: "Postal Code",
+                        bind: [me.databinder, "PostalCode"],
+                        width: 90
+                    }),
+                    me.city.config({
+                        x: 110,
+                        y: 95,
+                        bind: [me.databinder, "City"],
+                        label: "City",
+                        width: 240
+                    }),
+                    me.region.config({
+                        x: 5,
+                        y: 140,
+                        bind: [me.databinder, "Region"],
+                        label: "Region",
+                        width: 90
+                    }),
+                    me.state.config({
+                        x: 110,
+                        y: 140,
+                        bind: [me.databinder, "Country"],
+                        label: "country",
+                        width: 240
+                    }),
+                    me.birthDate.config({
+                        x: 5,
+                        y: 190,
+                        width: 90,
+                        bind: [me.databinder, "BirthDate"],
+                        label: "Birth Date"
+                    }),
+                    me.hiredate.config({
+                        x: 110,
+                        y: 190,
+                        bind: [me.databinder, "HireDate"],
+                        label: "Hire Date",
+                        width: 85
+                    }),
+                    me.homephone.config({
+                        x: 210,
+                        y: 190,
+                        bind: [me.databinder, "HomePhone"],
+                        label: "Home Phone",
+                        width: 140
+                    }),
+                    me.notes.config({
+                        x: 375,
+                        y: 50,
+                        width: 240,
+                        height: 155,
+                        bind: [me.databinder, "Notes"],
+                        label: "Notes"
+                    }),
+                    me.image1.config({
+                        x: 630,
+                        y: 20,
+                        src: "",
+                        css: {
+                            background_color: "black",
+                            border_style: "solid"
+                        },
+                        width: 125,
+                        bind: [me.databinder, "PhotoPath"]
+                    }),
+                    me.photoPath.config({
+                        x: 5,
+                        y: 240,
+                        bind: [me.databinder, "PhotoPath"],
+                        label: "Photo Path",
+                        width: 460
+                    }),
+                    me.id.config({
+                        x: 5,
+                        y: 5,
+                        width: 60,
+                        label: "Id",
+                        bind: [me.databinder, "id"],
+                        converter: new NumberConverter_2.NumberConverter()
+                    }),
+                    me.reportsTo.config({
+                        x: 7,
+                        y: 298,
+                        label: "Reports To",
+                        bind: [me.databinder, "ReportsTo"],
+                        template: "{{FirstName}} {{LastName}}",
+                        width: 160
+                    }),
+                    me.objectchooser1.config({
+                        x: 170,
+                        y: 310,
+                        width: 25,
+                        height: 25,
+                        bind: [me.databinder, "ReportsTo"],
+                        items: "northwind.Employees"
+                    })
+                ],
+                isAbsolute: true,
+                width: "900",
+                height: "900"
             });
-            me.image1.width = 125;
-            me.image1.bind(me.databinder, "PhotoPath");
-            me.photoPath.x = 5;
-            me.photoPath.y = 240;
-            me.photoPath.bind(me.databinder, "PhotoPath");
-            me.photoPath.label = "Photo Path";
-            me.photoPath.width = 460;
-            me.id.x = 5;
-            me.id.y = 5;
-            me.id.width = 60;
-            me.id.label = "Id";
-            me.id.bind(me.databinder, "id");
-            me.id.converter = new NumberConverter_2.NumberConverter();
-            me.reportsTo.x = 7;
-            me.reportsTo.y = 298;
-            me.reportsTo.label = "Reports To";
-            me.reportsTo.bind(me.databinder, "ReportsTo");
-            me.reportsTo.template = "{{FirstName}} {{LastName}}";
-            me.reportsTo.width = 160;
-            me.objectchooser1.x = 170;
-            me.objectchooser1.y = 310;
-            me.objectchooser1.width = 25;
-            me.objectchooser1.height = 25;
-            me.objectchooser1.bind(me.databinder, "ReportsTo");
-            me.objectchooser1.items = "northwind.Employees";
         }
     };
     __decorate([
@@ -400,7 +441,7 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
     }
     exports.test = test;
 });
-define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router", "northwind/remote/OrderDetails", "jassijs/remote/Transaction"], function (require, exports, Button_2, HTMLPanel_2, Jassi_5, Panel_2, CSVImport_1, Actions_1, Router_1, OrderDetails_2, Transaction_1) {
+define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/util/CSVImport", "jassijs/base/Actions", "jassijs/base/Router", "northwind/remote/OrderDetails", "jassijs/remote/Transaction"], function (require, exports, Button_1, HTMLPanel_2, Jassi_5, Panel_2, CSVImport_1, Actions_1, Router_1, OrderDetails_2, Transaction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ImportData = void 0;
@@ -456,7 +497,7 @@ define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jass
         layout(me) {
             var _this = this;
             me.htmlpanel1 = new HTMLPanel_2.HTMLPanel();
-            me.IDImport = new Button_2.Button();
+            me.IDImport = new Button_1.Button();
             me.htmlpanel2 = new HTMLPanel_2.HTMLPanel();
             me.IDProtokoll = new HTMLPanel_2.HTMLPanel();
             this.add(me.htmlpanel1);
@@ -511,188 +552,55 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             return this.value === undefined ? "OrdersView" : "OrdersView " + this.value.id;
         }
         layout(me) {
-            me.id = new Textbox_5.Textbox();
-            me.customername = new HTMLPanel_3.HTMLPanel();
-            me.employeename = new HTMLPanel_3.HTMLPanel();
-            me.chooseEmployee = new ObjectChooser_2.ObjectChooser();
-            me.choosecustomer = new ObjectChooser_2.ObjectChooser();
-            me.orderDate = new Calendar_2.Calendar();
-            me.requiredDate = new Calendar_2.Calendar();
-            me.shippedDate = new Calendar_2.Calendar();
-            me.shipVia = new HTMLPanel_3.HTMLPanel();
-            me.shipviaChooser = new ObjectChooser_2.ObjectChooser();
-            me.freight = new Textbox_5.Textbox();
+            me.boxpanel1 = new BoxPanel_2.BoxPanel();
+            me.panel1 = new Panel_3.Panel();
             me.shipName = new Textbox_5.Textbox();
             me.shipAddress = new Textbox_5.Textbox();
             me.shipPostalCode = new Textbox_5.Textbox();
             me.shipCity = new Textbox_5.Textbox();
             me.shipCountry = new Textbox_5.Textbox();
             me.shipRegion = new Textbox_5.Textbox();
-            me.repeater1 = new Repeater_1.Repeater();
-            me.panel1 = new Panel_3.Panel();
             me.panel2 = new Panel_3.Panel();
+            me.id = new Textbox_5.Textbox();
+            me.freight = new Textbox_5.Textbox();
             me.panel3 = new Panel_3.Panel();
-            me.boxpanel1 = new BoxPanel_2.BoxPanel();
+            me.customername = new HTMLPanel_3.HTMLPanel();
+            me.choosecustomer = new ObjectChooser_2.ObjectChooser();
+            me.shipVia = new HTMLPanel_3.HTMLPanel();
+            me.shipviaChooser = new ObjectChooser_2.ObjectChooser();
+            me.employeename = new HTMLPanel_3.HTMLPanel();
+            me.chooseEmployee = new ObjectChooser_2.ObjectChooser();
+            me.orderDate = new Calendar_2.Calendar();
+            me.requiredDate = new Calendar_2.Calendar();
+            me.shippedDate = new Calendar_2.Calendar();
             me.boxpanel2 = new BoxPanel_2.BoxPanel();
             me.htmlpanel1 = new HTMLPanel_3.HTMLPanel();
             me.htmlpanel2 = new HTMLPanel_3.HTMLPanel();
+            me.repeater1 = new Repeater_1.Repeater();
             me.style1 = new Style_1.Style();
-            me.main.add(me.boxpanel1);
-            me.main.add(me.boxpanel2);
-            me.main.add(me.repeater1);
-            me.main.add(me.style1);
-            me.id.x = 5;
-            me.id.y = 5;
-            me.id.converter = new NumberConverter_3.NumberConverter();
-            me.id.bind(me.databinder, "id");
-            me.id.label = "Order ID";
-            me.id.width = 70;
-            me.id.css({
-                text_align: "right"
-            });
-            me.customername.x = 10;
-            me.customername.y = 5;
-            me.customername.width = 265;
-            me.customername.template = "{{id}} {{CompanyName}}";
-            me.customername.bind(me.databinder, "Customer");
-            me.customername.value = "VINET Vins et alcools Chevalier";
-            me.customername.label = "Customer";
-            me.customername.height = 15;
-            me.customername.styles = [me.style1];
-            me.employeename.x = 10;
-            me.employeename.y = 90;
-            me.employeename.bind(me.databinder, "Employee");
-            me.employeename.label = "Employee";
-            me.employeename.width = 265;
-            me.employeename.value = "5 Steven Buchanan";
-            me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
-            me.employeename.styles = [me.style1];
-            me.chooseEmployee.x = 275;
-            me.chooseEmployee.y = 105;
-            me.chooseEmployee.bind(me.databinder, "Employee");
-            me.chooseEmployee.items = "northwind.Employees";
-            me.chooseEmployee.height = 20;
-            me.choosecustomer.x = 275;
-            me.choosecustomer.y = 15;
-            me.choosecustomer.items = "northwind.Customer";
-            me.choosecustomer.bind(me.databinder, "Customer");
-            me.choosecustomer.onchange(function (event) {
-                let cust = me.choosecustomer.value;
-                me.shipName.value = cust.CompanyName;
-                me.shipAddress.value = cust.Address;
-                me.shipPostalCode.value = cust.PostalCode;
-                me.shipCity.value = cust.City;
-                me.shipCountry.value = cust.Country;
-                me.shipRegion.value = cust.Region;
-            });
-            me.orderDate.x = 10;
-            me.orderDate.y = 130;
-            me.orderDate.bind(me.databinder, "OrderDate");
-            me.orderDate.label = "Order Date";
-            me.orderDate.width = 70;
-            me.requiredDate.x = 90;
-            me.requiredDate.y = 130;
-            me.requiredDate.bind(me.databinder, "RequiredDate");
-            me.requiredDate.label = "Required Date";
-            me.requiredDate.width = 75;
-            me.shippedDate.x = 175;
-            me.shippedDate.y = 130;
-            me.shippedDate.bind(me.databinder, "ShippedDate");
-            me.shippedDate.width = 75;
-            me.shippedDate.label = "Shipped Date";
-            me.shipVia.x = 10;
-            me.shipVia.y = 45;
-            me.shipVia.bind(me.databinder, "ShipVia");
-            me.shipVia.template = "{{id}} {{CompanyName}}";
-            me.shipVia.label = "Ship via";
-            me.shipVia.value = "3 Federal Shipping";
-            me.shipVia.width = 260;
-            me.shipVia.height = 20;
-            me.shipVia.styles = [me.style1];
-            me.shipviaChooser.x = 275;
-            me.shipviaChooser.y = 60;
-            me.shipviaChooser.bind(me.databinder, "ShipVia");
-            me.shipviaChooser.items = "northwind.Shippers";
-            me.shipviaChooser.width = 30;
-            me.freight.x = 5;
-            me.freight.y = 50;
-            me.freight.bind(me.databinder, "Freight");
-            me.freight.width = 70;
-            me.freight.label = "Freight";
-            me.freight.converter = new NumberConverter_3.NumberConverter();
-            me.freight.format = "#.##0,00";
-            me.freight.css({
-                text_align: "right"
-            });
-            me.shipName.x = 5;
-            me.shipName.y = 5;
-            me.shipName.bind(me.databinder, "ShipName");
-            me.shipName.width = 220;
-            me.shipName.label = "Ship Name";
-            me.shipAddress.x = 5;
-            me.shipAddress.y = 50;
-            me.shipAddress.bind(me.databinder, "ShipAddress");
-            me.shipAddress.width = 220;
-            me.shipAddress.label = "Ship Address";
-            me.shipPostalCode.x = 5;
-            me.shipPostalCode.y = 95;
-            me.shipPostalCode.bind(me.databinder, "ShipPostalCode");
-            me.shipPostalCode.width = 55;
-            me.shipPostalCode.label = "Postal Code";
-            me.shipCity.x = 75;
-            me.shipCity.y = 95;
-            me.shipCity.bind(me.databinder, "ShipCity");
-            me.shipCity.label = "Ship City";
-            me.shipCity.width = 150;
-            me.shipCountry.x = 135;
-            me.shipCountry.y = 140;
-            me.shipCountry.bind(me.databinder, "ShipCountry");
-            me.shipCountry.label = "Ship Country";
-            me.shipCountry.width = 90;
-            me.shipRegion.x = 5;
-            me.shipRegion.y = 140;
-            me.shipRegion.bind(me.databinder, "ShipRegion");
-            me.shipRegion.label = "Ship Region";
-            me.shipRegion.width = 120;
-            me.repeater1.bind(me.databinder, "Details");
-            me.repeater1.width = 675;
-            me.repeater1.createRepeatingComponent(function (me) {
-                me.detailsQuantity = new Textbox_5.Textbox();
-                me.detailsProduct = new HTMLPanel_3.HTMLPanel();
-                me.objectchooser1 = new ObjectChooser_2.ObjectChooser();
-                this.design.add(me.detailsQuantity);
-                this.design.add(me.detailsProduct);
-                this.design.add(me.objectchooser1);
-                me.detailsQuantity.bind(me.repeater1.design.databinder, "Quantity");
-                me.detailsQuantity.width = 60;
-                me.detailsProduct.width = 530;
-                me.detailsProduct.bind(me.repeater1.design.databinder, "Product");
-                me.detailsProduct.template = "{{ProductName}}";
-                me.objectchooser1.bind(me.repeater1.design.databinder, "Product");
-                me.objectchooser1.items = "northwind.Products";
-                me.detailsProduct.css({
-                    overflow: "hidden",
-                    margin_top: "5px"
-                });
-                me.detailsProduct.styles = [me.style1];
-            });
-            me.panel1.isAbsolute = true;
-            me.panel1.height = 185;
-            me.panel1.width = 250;
+            this.me.main.add(me.boxpanel1);
+            this.me.main.add(me.boxpanel2);
+            this.me.main.add(me.repeater1);
+            this.me.main.add(me.style1);
+            me.boxpanel1.add(me.panel1);
+            me.boxpanel1.add(me.panel2);
+            me.boxpanel1.add(me.panel3);
+            me.boxpanel1.height = 230;
+            me.boxpanel1.horizontal = true;
             me.panel1.add(me.shipName);
             me.panel1.add(me.shipAddress);
             me.panel1.add(me.shipPostalCode);
             me.panel1.add(me.shipCity);
             me.panel1.add(me.shipCountry);
             me.panel1.add(me.shipRegion);
-            me.panel2.width = 105;
-            me.panel2.height = 185;
-            me.panel2.isAbsolute = true;
+            me.panel1.width = 250;
+            me.panel1.height = 185;
+            me.panel1.isAbsolute = true;
             me.panel2.add(me.id);
             me.panel2.add(me.freight);
-            me.panel3.width = 320;
-            me.panel3.height = 185;
-            me.panel3.isAbsolute = true;
+            me.panel2.isAbsolute = true;
+            me.panel2.height = 185;
+            me.panel2.width = 105;
             me.panel3.add(me.customername);
             me.panel3.add(me.choosecustomer);
             me.panel3.add(me.shipVia);
@@ -702,20 +610,153 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.panel3.add(me.orderDate);
             me.panel3.add(me.requiredDate);
             me.panel3.add(me.shippedDate);
-            me.boxpanel1.horizontal = true;
-            me.boxpanel1.add(me.panel1);
-            me.boxpanel1.add(me.panel2);
-            me.boxpanel1.add(me.panel3);
-            me.boxpanel1.height = 230;
+            me.panel3.isAbsolute = true;
+            me.panel3.height = 185;
+            me.panel3.width = 320;
             me.boxpanel2.add(me.htmlpanel1);
             me.boxpanel2.add(me.htmlpanel2);
             me.boxpanel2.horizontal = true;
+            me.repeater1.createRepeatingComponent(function (me) {
+                me.detailsQuantity = new Textbox_5.Textbox();
+                me.detailsProduct = new HTMLPanel_3.HTMLPanel();
+                me.objectchooser1 = new ObjectChooser_2.ObjectChooser();
+                me.repeater1.design.add(me.detailsQuantity);
+                me.repeater1.design.add(me.detailsProduct);
+                me.repeater1.design.add(me.objectchooser1);
+                me.detailsQuantity.bind = [me.repeater1.design.databinder, "Quantity"];
+                me.detailsQuantity.width = 60;
+                me.detailsProduct.width = 530;
+                me.detailsProduct.bind = [me.repeater1.design.databinder, "Product"];
+                me.detailsProduct.template = "{{ProductName}}";
+                me.detailsProduct.css = {
+                    overflow: "hidden",
+                    margin_top: "5px"
+                };
+                me.detailsProduct.styles = [me.style1];
+                me.objectchooser1.bind = [me.repeater1.design.databinder, "Product"];
+                me.objectchooser1.items = "northwind.Products";
+            });
+            me.repeater1.width = 675;
+            me.repeater1.bind = [me.databinder, "Details"];
+            me.shipName.x = 5;
+            me.shipName.y = 5;
+            me.shipName.bind = [me.databinder, "ShipName"];
+            me.shipName.width = 220;
+            me.shipName.label = "Ship Name";
+            me.shipAddress.x = 5;
+            me.shipAddress.y = 50;
+            me.shipAddress.bind = [me.databinder, "ShipAddress"];
+            me.shipAddress.width = 220;
+            me.shipAddress.label = "Ship Address";
+            me.shipPostalCode.x = 5;
+            me.shipPostalCode.y = 95;
+            me.shipPostalCode.bind = [me.databinder, "ShipPostalCode"];
+            me.shipPostalCode.width = 55;
+            me.shipPostalCode.label = "Postal Code";
+            me.shipCity.x = 75;
+            me.shipCity.y = 95;
+            me.shipCity.bind = [me.databinder, "ShipCity"];
+            me.shipCity.label = "Ship City";
+            me.shipCity.width = 150;
+            me.shipCountry.x = 135;
+            me.shipCountry.y = 140;
+            me.shipCountry.bind = [me.databinder, "ShipCountry"];
+            me.shipCountry.label = "Ship Country";
+            me.shipCountry.width = 90;
+            me.shipRegion.x = 5;
+            me.shipRegion.y = 140;
+            me.shipRegion.bind = [me.databinder, "ShipRegion"];
+            me.shipRegion.label = "Ship Region";
+            me.shipRegion.width = 120;
+            me.id.x = 5;
+            me.id.y = 5;
+            me.id.converter = new NumberConverter_3.NumberConverter();
+            me.id.bind = [me.databinder, "id"];
+            me.id.label = "Order ID";
+            me.id.width = 70;
+            me.id.css = {
+                text_align: "right"
+            };
+            me.freight.x = 5;
+            me.freight.y = 50;
+            me.freight.bind = [me.databinder, "Freight"];
+            me.freight.width = 70;
+            me.freight.label = "Freight";
+            me.freight.converter = new NumberConverter_3.NumberConverter();
+            me.freight.format = "#.##0,00";
+            me.freight.css = {
+                text_align: "right"
+            };
+            me.customername.x = 10;
+            me.customername.y = 5;
+            me.customername.width = 265;
+            me.customername.template = "{{id}} {{CompanyName}}";
+            me.customername.bind = [me.databinder, "Customer"];
+            me.customername.value = "VINET Vins et alcools Chevalier";
+            me.customername.label = "Customer";
+            me.customername.height = 15;
+            me.customername.styles = [me.style1];
+            me.choosecustomer.x = 275;
+            me.choosecustomer.y = 15;
+            me.choosecustomer.items = "northwind.Customer";
+            me.choosecustomer.bind = [me.databinder, "Customer"];
+            me.choosecustomer.onchange(function (event) {
+                let cust = me.choosecustomer.value;
+                me.shipName.value = cust.CompanyName;
+                me.shipAddress.value = cust.Address;
+                me.shipPostalCode.value = cust.PostalCode;
+                me.shipCity.value = cust.City;
+                me.shipCountry.value = cust.Country;
+                me.shipRegion.value = cust.Region;
+            });
+            me.shipVia.x = 10;
+            me.shipVia.y = 45;
+            me.shipVia.bind = [me.databinder, "ShipVia"];
+            me.shipVia.template = "{{id}} {{CompanyName}}";
+            me.shipVia.label = "Ship via";
+            me.shipVia.value = "3 Federal Shipping";
+            me.shipVia.width = 260;
+            me.shipVia.height = 20;
+            me.shipVia.styles = [me.style1];
+            me.shipviaChooser.x = 275;
+            me.shipviaChooser.y = 60;
+            me.shipviaChooser.bind = [me.databinder, "ShipVia"];
+            me.shipviaChooser.items = "northwind.Shippers";
+            me.shipviaChooser.width = 30;
+            me.employeename.x = 10;
+            me.employeename.y = 90;
+            me.employeename.bind = [me.databinder, "Employee"];
+            me.employeename.label = "Employee";
+            me.employeename.width = 265;
+            me.employeename.value = "5 Steven Buchanan";
+            me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
+            me.employeename.styles = [me.style1];
+            me.chooseEmployee.x = 275;
+            me.chooseEmployee.y = 105;
+            me.chooseEmployee.bind = [me.databinder, "Employee"];
+            me.chooseEmployee.items = "northwind.Employees";
+            me.chooseEmployee.height = 20;
+            me.orderDate.x = 10;
+            me.orderDate.y = 130;
+            me.orderDate.bind = [me.databinder, "OrderDate"];
+            me.orderDate.label = "Order Date";
+            me.orderDate.width = 70;
+            me.requiredDate.x = 90;
+            me.requiredDate.y = 130;
+            me.requiredDate.bind = [me.databinder, "RequiredDate"];
+            me.requiredDate.label = "Required Date";
+            me.requiredDate.width = 75;
+            me.shippedDate.x = 175;
+            me.shippedDate.y = 130;
+            me.shippedDate.bind = [me.databinder, "ShippedDate"];
+            me.shippedDate.width = 75;
+            me.shippedDate.label = "Shipped Date";
             me.htmlpanel1.value = "Quantity<br>";
             me.htmlpanel1.width = 65;
             me.htmlpanel1.styles = [];
             me.htmlpanel2.value = "Text<br>";
             me.htmlpanel2.width = 100;
-            me.style1.css({});
+            me.style1.css = {};
         }
     };
     __decorate([
@@ -730,7 +771,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
     exports.OrdersView = OrdersView;
     async function test() {
         var ret = new OrdersView;
-        ret["value"] = await Orders_1.Orders.findOne({ id: 10250, relations: ["*"] });
+        ret["value"] = await Orders_1.Orders.findOne({ id: 10249, relations: ["*"] });
         return ret;
     }
     exports.test = test;
@@ -751,116 +792,124 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
         }
         layout(me) {
             me.id = new Textbox_6.Textbox();
-            me.productName = new Textbox_6.Textbox();
-            me.quantityPerUnit = new Textbox_6.Textbox();
-            me.unitPrice = new Textbox_6.Textbox();
-            me.unitsInStock = new Textbox_6.Textbox();
-            me.unitsOnOrder = new Textbox_6.Textbox();
-            me.reorderLevel = new Textbox_6.Textbox();
-            me.discontinued = new Checkbox_1.Checkbox();
-            me.category = new HTMLPanel_4.HTMLPanel();
-            me.categoryChooser = new ObjectChooser_3.ObjectChooser();
-            me.supplier = new HTMLPanel_4.HTMLPanel();
-            me.supplierchooser = new ObjectChooser_3.ObjectChooser();
             me.styleNumber = new Style_2.Style();
-            me.main.add(me.id);
-            me.main.isAbsolute = true;
-            me.main.add(me.styleNumber);
-            me.main.add(me.supplierchooser);
-            me.main.add(me.supplier);
-            me.main.add(me.categoryChooser);
-            me.main.add(me.category);
-            me.main.add(me.discontinued);
-            me.main.add(me.reorderLevel);
-            me.main.add(me.unitsOnOrder);
-            me.main.add(me.unitsInStock);
-            me.main.add(me.unitPrice);
-            me.main.add(me.quantityPerUnit);
-            me.main.add(me.productName);
-            me.main.width = 678;
-            me.main.height = "170";
-            me.id.x = 10;
-            me.id.y = 10;
-            me.id.bind(me.databinder, "id");
-            me.id.label = "Id";
-            me.id.width = 65;
-            me.id.converter = new NumberConverter_4.NumberConverter();
-            me.productName.x = 90;
-            me.productName.y = 10;
-            me.productName.bind(me.databinder, "ProductName");
-            me.productName.label = "Product Name";
-            me.productName.width = 310;
-            me.quantityPerUnit.x = 10;
-            me.quantityPerUnit.y = 60;
-            me.quantityPerUnit.bind(me.databinder, "QuantityPerUnit");
-            me.quantityPerUnit.width = 135;
-            me.quantityPerUnit.label = "Quantity per Unit";
-            me.unitPrice.x = 160;
-            me.unitPrice.y = 60;
-            me.unitPrice.bind(me.databinder, "UnitPrice");
-            me.unitPrice.label = "Unit Price";
-            me.unitPrice.width = 65;
-            me.unitPrice.converter = new NumberConverter_4.NumberConverter();
-            me.unitPrice.format = "#.##0,00";
-            me.unitPrice.styles = [me.styleNumber];
-            me.unitsInStock.x = 240;
-            me.unitsInStock.y = 60;
-            me.unitsInStock.bind(me.databinder, "UnitsInStock");
-            me.unitsInStock.label = "Units in Stock";
-            me.unitsInStock.width = 70;
-            me.unitsInStock.converter = new NumberConverter_4.NumberConverter();
-            me.unitsInStock.format = "#.##0,00";
-            me.unitsInStock.styles = [me.styleNumber];
-            me.unitsOnOrder.x = 325;
-            me.unitsOnOrder.y = 60;
-            me.unitsOnOrder.bind(me.databinder, "UnitsOnOrder");
-            me.unitsOnOrder.label = "Units on Order";
-            me.unitsOnOrder.width = 75;
-            me.unitsOnOrder.converter = new NumberConverter_4.NumberConverter();
-            me.unitsOnOrder.format = "#.##0,00";
-            me.unitsOnOrder.styles = [me.styleNumber];
-            me.reorderLevel.x = 415;
-            me.reorderLevel.y = 60;
-            me.reorderLevel.bind(me.databinder, "ReorderLevel");
-            me.reorderLevel.width = 70;
-            me.reorderLevel.label = "Reorder Level";
-            me.reorderLevel.converter = new NumberConverter_4.NumberConverter();
-            me.reorderLevel.styles = [me.styleNumber];
-            me.discontinued.x = 415;
-            me.discontinued.y = 10;
-            me.discontinued.width = 70;
-            me.discontinued.bind(me.databinder, "Discontinued");
-            me.discontinued.label = "Discontinued";
-            me.category.x = 10;
-            me.category.y = 110;
-            me.category.template = "{{CategoryName}}";
-            me.category.value = "Condiments";
-            me.category.bind(me.databinder, "Category");
-            me.category.width = 170;
-            me.category.label = "Category";
-            me.categoryChooser.x = 185;
-            me.categoryChooser.y = 125;
-            me.categoryChooser.items = "northwind.Categories";
-            me.categoryChooser.bind(me.databinder, "Category");
-            me.categoryChooser.width = 30;
-            me.supplier.x = 225;
-            me.supplier.y = 110;
-            me.supplier.bind(me.databinder, "Supplier");
-            me.supplier.value = "New Orleans Cajun Delights";
-            me.supplier.template = "{{CompanyName}}";
-            me.supplier.label = "Supplier";
-            me.supplier.width = 230;
-            me.supplierchooser.x = 460;
-            me.supplierchooser.y = 125;
-            me.supplierchooser.bind(me.databinder, "Supplier");
-            me.supplierchooser.items = "northwind.Suppliers";
-            me.styleNumber.x = 442;
-            me.styleNumber.y = 183;
-            me.styleNumber.css({
-                text_align: "right"
-            });
-            console.log("main " + me.main._id);
-            console.log("this " + this._id);
+            me.supplierchooser = new ObjectChooser_3.ObjectChooser();
+            me.supplier = new HTMLPanel_4.HTMLPanel();
+            me.categoryChooser = new ObjectChooser_3.ObjectChooser();
+            me.category = new HTMLPanel_4.HTMLPanel();
+            me.discontinued = new Checkbox_1.Checkbox();
+            me.reorderLevel = new Textbox_6.Textbox();
+            me.unitsOnOrder = new Textbox_6.Textbox();
+            me.unitsInStock = new Textbox_6.Textbox();
+            me.unitPrice = new Textbox_6.Textbox();
+            me.quantityPerUnit = new Textbox_6.Textbox();
+            me.productName = new Textbox_6.Textbox();
+            this.me.main.config({ isAbsolute: true, width: "678", height: "170", children: [
+                    me.id.config({
+                        x: 10,
+                        y: 10,
+                        bind: [me.databinder, "id"],
+                        label: "Id",
+                        width: 65,
+                        converter: new NumberConverter_4.NumberConverter()
+                    }),
+                    me.styleNumber.config({
+                        css: {
+                            text_align: "right"
+                        }
+                    }),
+                    me.supplierchooser.config({
+                        x: 460,
+                        y: 125,
+                        bind: [me.databinder, "Supplier"],
+                        items: "northwind.Suppliers"
+                    }),
+                    me.supplier.config({
+                        x: 225,
+                        y: 110,
+                        bind: [me.databinder, "Supplier"],
+                        value: "New Orleans Cajun Delights",
+                        template: "{{CompanyName}}",
+                        label: "Supplier",
+                        width: 230
+                    }),
+                    me.categoryChooser.config({
+                        x: 185,
+                        y: 125,
+                        items: "northwind.Categories",
+                        bind: [me.databinder, "Category"],
+                        width: 30
+                    }),
+                    me.category.config({
+                        x: 10,
+                        y: 110,
+                        template: "{{CategoryName}}",
+                        value: "Condiments",
+                        bind: [me.databinder, "Category"],
+                        width: 170,
+                        label: "Category"
+                    }),
+                    me.discontinued.config({
+                        x: 415,
+                        y: 10,
+                        width: 70,
+                        bind: [me.databinder, "Discontinued"],
+                        label: "Discontinued"
+                    }),
+                    me.reorderLevel.config({
+                        x: 415,
+                        y: 60,
+                        bind: [me.databinder, "ReorderLevel"],
+                        width: 70,
+                        label: "Reorder Level",
+                        converter: new NumberConverter_4.NumberConverter(),
+                        styles: [me.styleNumber]
+                    }),
+                    me.unitsOnOrder.config({
+                        x: 325,
+                        y: 60,
+                        bind: [me.databinder, "UnitsOnOrder"],
+                        label: "Units on Order",
+                        width: 75,
+                        converter: new NumberConverter_4.NumberConverter(),
+                        format: "#.##0,00",
+                        styles: [me.styleNumber]
+                    }),
+                    me.unitsInStock.config({
+                        x: 240,
+                        y: 60,
+                        bind: [me.databinder, "UnitsInStock"],
+                        label: "Units in Stock",
+                        width: 70,
+                        converter: new NumberConverter_4.NumberConverter(),
+                        format: "#.##0,00",
+                        styles: [me.styleNumber]
+                    }),
+                    me.unitPrice.config({
+                        x: 160,
+                        y: 60,
+                        bind: [me.databinder, "UnitPrice"],
+                        label: "Unit Price",
+                        width: 65,
+                        converter: new NumberConverter_4.NumberConverter(),
+                        format: "#.##0,00",
+                        styles: [me.styleNumber]
+                    }),
+                    me.quantityPerUnit.config({
+                        x: 10,
+                        y: 60,
+                        bind: [me.databinder, "QuantityPerUnit"],
+                        width: 135,
+                        label: "Quantity per Unit"
+                    }),
+                    me.productName.config({
+                        x: 90,
+                        y: 10,
+                        bind: [me.databinder, "ProductName"],
+                        label: "Product Name",
+                        width: 310
+                    })
+                ] });
         }
     };
     __decorate([
@@ -1011,31 +1060,37 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
         }
         layout(me) {
             me.id = new Textbox_7.Textbox();
-            me.companyName = new Textbox_7.Textbox();
             me.phone = new Textbox_7.Textbox();
-            me.main.add(me.id);
-            me.main.isAbsolute = true;
-            me.main.height = 110;
-            me.main.add(me.phone);
-            me.main.add(me.companyName);
-            this.width = 626;
-            this.height = 146;
-            me.id.converter = new NumberConverter_5.NumberConverter();
-            me.id.bind(me.databinder, "id");
-            me.id.label = "Id";
-            me.id.width = 40;
-            me.id.x = 5;
-            me.id.y = 0;
-            me.companyName.x = 60;
-            me.companyName.y = 0;
-            me.companyName.bind(me.databinder, "CompanyName");
-            me.companyName.label = "Company name";
-            me.companyName.width = 160;
-            me.phone.x = 5;
-            me.phone.y = 50;
-            me.phone.width = 215;
-            me.phone.bind(me.databinder, "Phone");
-            me.phone.label = "Phone";
+            me.companyName = new Textbox_7.Textbox();
+            this.me.main.config({
+                isAbsolute: true,
+                width: "626",
+                height: "150",
+                children: [
+                    me.id.config({
+                        converter: new NumberConverter_5.NumberConverter(),
+                        bind: [me.databinder, "id"],
+                        label: "Id",
+                        width: 40,
+                        x: 5,
+                        y: 0
+                    }),
+                    me.phone.config({
+                        x: 5,
+                        y: 50,
+                        width: 215,
+                        bind: [me.databinder, "Phone"],
+                        label: "Phone"
+                    }),
+                    me.companyName.config({
+                        x: 60,
+                        y: 0,
+                        bind: [me.databinder, "CompanyName"],
+                        label: "Company name",
+                        width: 160
+                    })
+                ]
+            });
         }
     };
     __decorate([
@@ -1071,92 +1126,103 @@ define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/
         }
         layout(me) {
             me.id = new Textbox_8.Textbox();
-            me.companyName = new Textbox_8.Textbox();
-            me.contactName = new Textbox_8.Textbox();
-            me.contactTitle = new Textbox_8.Textbox();
-            me.address = new Textbox_8.Textbox();
-            me.postalCode = new Textbox_8.Textbox();
-            me.city = new Textbox_8.Textbox();
-            me.region = new Textbox_8.Textbox();
-            me.Country = new Textbox_8.Textbox();
-            me.phone = new Textbox_8.Textbox();
-            me.fax = new Textbox_8.Textbox();
             me.homepage = new Textbox_8.Textbox();
-            me.main.add(me.id);
-            me.main.isAbsolute = true;
-            me.main.height = "800";
-            me.main.width = 800;
-            me.main.add(me.homepage);
-            me.main.add(me.fax);
-            me.main.add(me.phone);
-            me.main.add(me.Country);
-            me.main.add(me.region);
-            me.main.add(me.city);
-            me.main.add(me.postalCode);
-            me.main.add(me.address);
-            me.main.add(me.contactTitle);
-            me.main.add(me.contactName);
-            me.main.add(me.companyName);
-            me.id.x = 10;
-            me.id.y = 5;
-            me.id.converter = new NumberConverter_6.NumberConverter();
-            me.id.width = 50;
-            me.id.bind(me.databinder, "id");
-            me.id.label = "Id";
-            me.companyName.x = 75;
-            me.companyName.y = 5;
-            me.companyName.label = "Company Name";
-            me.companyName.bind(me.databinder, "CompanyName");
-            me.companyName.width = 290;
-            me.contactName.x = 10;
-            me.contactName.y = 50;
-            me.contactName.bind(me.databinder, "ContactName");
-            me.contactName.label = "Contact Name";
-            me.contactTitle.x = 180;
-            me.contactTitle.y = 50;
-            me.contactTitle.bind(me.databinder, "ContactTitle");
-            me.contactTitle.label = "Contact Title";
-            me.contactTitle.width = 185;
-            me.address.x = 10;
-            me.address.y = 95;
-            me.address.bind(me.databinder, "Address");
-            me.address.label = "Address";
-            me.address.width = 355;
-            me.postalCode.x = 10;
-            me.postalCode.y = 140;
-            me.postalCode.bind(me.databinder, "PostalCode");
-            me.postalCode.width = 95;
-            me.postalCode.label = "Postal Code";
-            me.city.x = 120;
-            me.city.y = 140;
-            me.city.bind(me.databinder, "City");
-            me.city.label = "City";
-            me.city.width = 245;
-            me.region.x = 10;
-            me.region.y = 185;
-            me.region.bind(me.databinder, "Region");
-            me.region.label = "Region";
-            me.region.width = 155;
-            me.Country.x = 180;
-            me.Country.y = 185;
-            me.Country.bind(me.databinder, "Country");
-            me.Country.label = "Country";
-            me.Country.width = 185;
-            me.phone.x = 10;
-            me.phone.y = 230;
-            me.phone.bind(me.databinder, "Phone");
-            me.phone.label = "Phone";
-            me.phone.width = 155;
-            me.fax.x = 180;
-            me.fax.y = 230;
-            me.fax.bind(me.databinder, "Fax");
-            me.fax.label = "Fax";
-            me.fax.width = 185;
-            me.homepage.x = 10;
-            me.homepage.y = 275;
-            me.homepage.bind(me.databinder, "HomePage");
-            me.homepage.label = "Home Page";
-            me.homepage.width = 355;
+            me.fax = new Textbox_8.Textbox();
+            me.phone = new Textbox_8.Textbox();
+            me.Country = new Textbox_8.Textbox();
+            me.region = new Textbox_8.Textbox();
+            me.city = new Textbox_8.Textbox();
+            me.postalCode = new Textbox_8.Textbox();
+            me.address = new Textbox_8.Textbox();
+            me.contactTitle = new Textbox_8.Textbox();
+            me.contactName = new Textbox_8.Textbox();
+            me.companyName = new Textbox_8.Textbox();
+            this.me.main.config({ isAbsolute: true, width: "800", height: "800", children: [
+                    me.id.config({
+                        x: 10,
+                        y: 5,
+                        converter: new NumberConverter_6.NumberConverter(),
+                        width: 50,
+                        bind: [me.databinder, "id"],
+                        label: "Id"
+                    }),
+                    me.homepage.config({
+                        x: 10,
+                        y: 275,
+                        bind: [me.databinder, "HomePage"],
+                        label: "Home Page",
+                        width: 355
+                    }),
+                    me.fax.config({
+                        x: 180,
+                        y: 230,
+                        bind: [me.databinder, "Fax"],
+                        label: "Fax",
+                        width: 185
+                    }),
+                    me.phone.config({
+                        x: 10,
+                        y: 230,
+                        bind: [me.databinder, "Phone"],
+                        label: "Phone",
+                        width: 155
+                    }),
+                    me.Country.config({
+                        x: 180,
+                        y: 185,
+                        bind: [me.databinder, "Country"],
+                        label: "Country",
+                        width: 185
+                    }),
+                    me.region.config({
+                        x: 10,
+                        y: 185,
+                        bind: [me.databinder, "Region"],
+                        label: "Region",
+                        width: 155
+                    }),
+                    me.city.config({
+                        x: 120,
+                        y: 140,
+                        bind: [me.databinder, "City"],
+                        label: "City",
+                        width: 245
+                    }),
+                    me.postalCode.config({
+                        x: 10,
+                        y: 140,
+                        bind: [me.databinder, "PostalCode"],
+                        width: 95,
+                        label: "Postal Code"
+                    }),
+                    me.address.config({
+                        x: 10,
+                        y: 95,
+                        bind: [me.databinder, "Address"],
+                        label: "Address",
+                        width: 355
+                    }),
+                    me.contactTitle.config({
+                        x: 180,
+                        y: 50,
+                        bind: [me.databinder, "ContactTitle"],
+                        label: "Contact Title",
+                        width: 185
+                    }),
+                    me.contactName.config({
+                        x: 10,
+                        y: 50,
+                        bind: [me.databinder, "ContactName"],
+                        label: "Contact Name"
+                    }),
+                    me.companyName.config({
+                        x: 75,
+                        y: 5,
+                        label: "Company Name",
+                        bind: [me.databinder, "CompanyName"],
+                        width: 290
+                    })
+                ] });
         }
     };
     __decorate([
@@ -1188,7 +1254,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1627601186000,
+                "date": 1655059485237,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -1211,7 +1277,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
-                "date": 1622984380000,
+                "date": 1655060136795,
                 "northwind/CustomerView": {
                     "$DBObjectView": [
                         {
@@ -1234,7 +1300,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/DetailTest.ts": {
-                "date": 1622984380000,
+                "date": 1654704557145,
                 "northwind.DetailTest": {
                     "$DBObjectView": [
                         {
@@ -1255,7 +1321,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1622984380000,
+                "date": 1655060579556,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -1307,7 +1373,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1630615564000,
+                "date": 1655229198304,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1330,7 +1396,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1623092964000,
+                "date": 1655229497535,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -1353,7 +1419,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Categories.ts": {
-                "date": 1623093052000,
+                "date": 1655548919282,
                 "northwind.Categories": {
                     "$DBObject": [],
                     "@members": {
@@ -1387,7 +1453,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Customer.ts": {
-                "date": 1622985442000,
+                "date": 1655548934731,
                 "northwind.Customer": {
                     "$DBObject": [],
                     "@members": {
@@ -1448,7 +1514,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Employees.ts": {
-                "date": 1623093100000,
+                "date": 1655548929825,
                 "northwind.Employees": {
                     "$DBObject": [],
                     "@members": {
@@ -1577,7 +1643,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/OrderDetails.ts": {
-                "date": 1622985446000,
+                "date": 1655548939000,
                 "northwind.OrderDetails": {
                     "$DBObject": [],
                     "@members": {
@@ -1618,7 +1684,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Orders.ts": {
-                "date": 1635891936000,
+                "date": 1655548947602,
                 "northwind.Orders": {
                     "$DBObject": [],
                     "@members": {
@@ -1721,7 +1787,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Products.ts": {
-                "date": 1623093058000,
+                "date": 1655548952259,
                 "northwind.Products": {
                     "$DBObject": [],
                     "@members": {
@@ -1793,7 +1859,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Shippers.ts": {
-                "date": 1622985454000,
+                "date": 1655548962178,
                 "northwind.Shippers": {
                     "$DBObject": [],
                     "@members": {
@@ -1818,7 +1884,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/remote/Suppliers.ts": {
-                "date": 1622985456000,
+                "date": 1655548968564,
                 "northwind.Suppliers": {
                     "$DBObject": [],
                     "@members": {
@@ -1909,7 +1975,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1625946850000
             },
             "northwind/ShippersView.ts": {
-                "date": 1622984380000,
+                "date": 1655229726930,
                 "northwind.ShippersView": {
                     "$DBObjectView": [
                         {
@@ -1932,7 +1998,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/SuppliersView.ts": {
-                "date": 1622984380000,
+                "date": 1655229938330,
                 "northwind.SuppliersView": {
                     "$DBObjectView": [
                         {
@@ -2102,7 +2168,7 @@ define("northwind/remote/Employees", ["require", "exports", "jassijs/remote/DBOb
             }
         }
         async hallo(num) {
-            if (!Jassi_12.default.isServer) {
+            if (!jassijs.isServer) {
                 var ret = await this.call(this, this.hallo, num);
                 return ret * 10;
             }

@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"], function (require, exports, Jassi_1, Registry_1) {
+define(["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Extensions = void 0;
@@ -65,7 +65,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"]
         }
     }
     exports.Extensions = Extensions;
-    var extensions = Jassi_1.default.extensions;
+    var extensions = jassijs.extensions;
     exports.default = extensions;
 });
 //# sourceMappingURL=Extensions.js.map

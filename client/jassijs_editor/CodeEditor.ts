@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { Panel } from "jassijs/ui/Panel";
 import { CodePanel } from "jassijs_editor/CodePanel";
 import { VariablePanel } from "jassijs/ui/VariablePanel";
@@ -20,7 +20,7 @@ import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
 import { Test } from "jassijs/remote/Test";
 import modul from "./modul";
 
-
+jassijs.includeCSSFile("jassijs_editor.css");
 
 declare global {
     export interface KnownSettings {

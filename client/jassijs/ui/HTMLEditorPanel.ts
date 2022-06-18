@@ -2,7 +2,7 @@
 import { Panel } from "jassijs/ui/Panel";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { Button } from "jassijs/ui/Button";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 //@ts-ignore
 import tinymce from "jassijs/ext/tinymce"
 import registry from "jassijs/remote/Registry";

@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 
 import("jassijs/remote/Classes");
 import registry from "jassijs/remote/Registry";

@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 import registry from "jassijs/remote/Registry";
 
 @$Class("jassijs.util.Reloader")

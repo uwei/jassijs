@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 
 //@ts-ignore
 //import lodash from "jassijs/ext/lodash";

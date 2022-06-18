@@ -149,7 +149,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             var api = 'https://fonts.googleapis.com/css?family=';
             var sfont = value.replaceAll(" ", "+");
             if (!document.getElementById("-->" + api + sfont)) { //"-->https://fonts.googleapis.com/css?family=Aclonica">
-                Jassi_1.default.myRequire(api + sfont);
+                jassijs.myRequire(api + sfont);
             }
             if (value === undefined)
                 $(this.dom).css("font_family", "");

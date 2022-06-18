@@ -425,7 +425,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs_report/RText", "j
                     if (document.getElementById(scssid) === null) {
                         var sc = {};
                         sc["." + scssid] = css;
-                        Jassi_1.default.includeCSS(scssid, sc);
+                        jassijs.includeCSS(scssid, sc);
                     }
                 }
             }

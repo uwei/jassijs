@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "remote/jassijs/base/Jassi";
+import { $Class } from "remote/jassijs/base/Jassi";
 import w2ui from "jassijs/ext/jquery.w2ui";
 import Component, { $UIComponent } from "jassijs/ui/Component";
 import {DataComponent} from "jassijs/ui/DataComponent";

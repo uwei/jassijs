@@ -8,8 +8,6 @@
 //@ts-ignore
 import sourceMap from "jassijs/ext/sourcemap";
 
-
-import jassijs from "jassijs/jassi";
 import { Server } from "jassijs/remote/Server";
 import { $Class } from "jassijs/remote/Jassi";
 //var sourceMap=window["sourceMap"];

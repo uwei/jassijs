@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { Component } from "jassijs/ui/Component";
 
 @$Class("jassijs_editor.util.DragAndDropper")

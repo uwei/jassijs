@@ -1,5 +1,5 @@
 import { Panel, PanelConfig } from "jassijs/ui/Panel";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import { classes } from "jassijs/remote/Classes";

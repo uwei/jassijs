@@ -1,5 +1,5 @@
 import registry from "jassijs/remote/Registry";
-import jassijs,{ $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { FileNode } from "jassijs/remote/FileNode";
 import { classes } from "jassijs/remote/Classes";
 

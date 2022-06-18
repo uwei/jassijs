@@ -4,7 +4,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs/remote/Server", "jassijs/remote/Jassi"], function (require, exports, sourcemap_1, jassi_1, Server_1, Jassi_1) {
+define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Jassi"], function (require, exports, sourcemap_1, Server_1, Jassi_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TSSourceMap = void 0;
@@ -21,7 +21,7 @@ define(["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs
             var jsfilename;
             if (Server_1.Server.filesInMap && Server_1.Server.filesInMap[tsfile]) {
                 var mod = Server_1.Server.filesInMap[tsfile].modul;
-                jsfilename = jassi_1.default.modules[mod];
+                jsfilename = jassijs.modules[mod];
                 var mapname = jsfilename.split("").reverse().join("").replace("sj.", "pam.sj.").split("").reverse().join("").split("?")[0];
                 mapcode = await this.getCode(mapname); //await $.ajax({ url: jsfilename+".map", dataType: "text" });
                 filenumber = Server_1.Server.filesInMap[tsfile].id;

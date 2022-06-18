@@ -87,8 +87,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi",
                     }
                 }
             }
-            if ((_b = (_a = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterActions) {
-                var test = (_d = (_c = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterActions[sclass];
+            if ((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterActions) {
+                var test = (_d = (_c = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterActions[sclass];
                 var filterd = [];
                 if (test) {
                     for (var x = 0; x < ret.length; x++) {

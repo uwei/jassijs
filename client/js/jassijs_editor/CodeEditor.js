@@ -12,6 +12,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CodeEditor = void 0;
+    jassijs.includeCSSFile("jassijs_editor.css");
     let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
     };
     __decorate([
@@ -66,7 +67,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             this._codePanel.height = "calc(100% - 31px)";
             let _this = this;
             this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
-                Jassi_1.default.debugger.breakpointChanged(_this._file, line, column, enable, type);
+                jassijs.debugger.breakpointChanged(_this._file, line, column, enable, type);
             });
         }
         _init(hideToolbar) {
@@ -104,7 +105,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
                 goto.onclick(function () {
                     _this.gotoDeclaration();
                 });
-                Jassi_1.default["$CodeEditor"] = CodeEditor_1;
+                jassijs["$CodeEditor"] = CodeEditor_1;
                 $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
                 $(goto.dom).attr("ondragover", "event.preventDefault();");
                 this._codeToolbar.add(goto);
@@ -366,11 +367,11 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
             var _this = this;
             var breakpoints = _this._codePanel.getBreakpoints();
             var filename = _this._file.replace(".ts", "$temp.ts");
-            await Jassi_1.default.debugger.removeBreakpointsForFile(filename);
+            await jassijs.debugger.removeBreakpointsForFile(filename);
             for (var line in breakpoints) {
                 if (breakpoints[line]) {
                     var row = lines[line].length;
-                    await Jassi_1.default.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
+                    await jassijs.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
                 }
             }
             var islocaldb = Classes_1.classes.getClass("jassijs_localserver.DBManager");

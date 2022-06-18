@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 
 //https://developer.chrome.com/extensions/messaging
 @$Class("jassijs_editor.Debugger")

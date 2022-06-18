@@ -299,7 +299,7 @@ define("tests/registry", ["require"], function (require) {
                 "tests.remote.T": {}
             },
             "tests/remote/TestCustomer.ts": {
-                "date": 1623488388000,
+                "date": 1655549088355,
                 "tests.TestCustomer": {
                     "$ParentRights": [
                         [
@@ -336,7 +336,7 @@ define("tests/registry", ["require"], function (require) {
                 }
             },
             "tests/remote/TestOrder.ts": {
-                "date": 1623488476000,
+                "date": 1655549092959,
                 "tests.TestOrder": {
                     "$DBObject": [],
                     "@members": {
@@ -359,7 +359,7 @@ define("tests/registry", ["require"], function (require) {
                 }
             },
             "tests/remote/TestOrderDetails.ts": {
-                "date": 1623488502000,
+                "date": 1655549097289,
                 "tests.TestOrderDetails": {
                     "$DBObject": [],
                     "@members": {

@@ -32,7 +32,7 @@ let Employees = Employees_1 = class Employees extends DBObject_1.DBObject {
         }
     }
     async hallo(num) {
-        if (!Jassi_1.default.isServer) {
+        if (!jassijs.isServer) {
             var ret = await this.call(this, this.hallo, num);
             return ret * 10;
         }

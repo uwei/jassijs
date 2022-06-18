@@ -40,7 +40,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
             for (let x = 0; x < all.length; x++) {
                 let fname = all[x].id;
                 var include = true;
-                if (((_b = (_a = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
+                if (((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
                     if (fname === "__default.db")
                         include = false;
                 }
@@ -98,7 +98,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/util/Reloader", "
             for (let x = 0; x < all.length; x++) {
                 var entr = all[x];
                 var paths = entr.id.split("/");
-                if (((_b = (_a = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
+                if (((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
                     if (entr.id === "__default.db")
                         continue;
                 }

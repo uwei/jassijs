@@ -95,7 +95,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
             var res = await OptionDialog_1.OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
             if (res.button === "ok" && res.text !== all[0].name) {
                 var smodule = res.text.toLocaleLowerCase();
-                if (Jassi_1.default.modules[smodule]) {
+                if (jassijs.modules[smodule]) {
                     alert("modul allready exists");
                     return;
                 }
@@ -107,7 +107,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
                     return;
                 }
                 else {
-                    Jassi_1.default.modules[smodule] = smodule;
+                    jassijs.modules[smodule] = smodule;
                 }
                 await FileExplorer.instance.refresh();
                 FileExplorer.instance.tree.activateKey(newkey);
@@ -295,7 +295,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassij
             root.name = "client";
             //flag modules
             for (let x = 0; x < root.files.length; x++) {
-                if (Jassi_1.default.modules[root.files[x].name] !== undefined) {
+                if (jassijs.modules[root.files[x].name] !== undefined) {
                     root.files[x].flag = (((_a = root.files[x].flag) === null || _a === void 0 ? void 0 : _a.length) > 0) ? "module" : root.files[x].flag + " module";
                 }
             }

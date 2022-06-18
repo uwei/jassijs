@@ -34,7 +34,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                 this.IDClear.icon = "mdi mdi-delete";
                 this.IDClear.onclick(function () {
                     _this.clear();
-                    Jassi_1.default.errors.items = [];
+                    jassijs.errors.items = [];
                 });
                 this.IDClear.width = 35;
                 this.IDSearch = new Button_1.Button();
@@ -57,8 +57,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                 this.registerError();
             if (this.withLastErrors) {
                 //old Errors
-                for (var x = 0; x < Jassi_1.default.errors.items.length; x++) {
-                    this.addError(Jassi_1.default.errors.items[x]);
+                for (var x = 0; x < jassijs.errors.items.length; x++) {
+                    this.addError(jassijs.errors.items[x]);
                 }
             }
             if (window["jassijs_debug"] === undefined)
@@ -168,8 +168,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                 if (line === "" || col === "" || u === "")
                     return url;
                 var ismodul = false;
-                for (var mod in Jassi_1.default.modules) {
-                    if (Jassi_1.default.modules[mod] === u)
+                for (var mod in jassijs.modules) {
+                    if (jassijs.modules[mod] === u)
                         ismodul = true;
                 }
                 if (u.indexOf("/js/") > -1 || ismodul) {
@@ -208,12 +208,12 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
         }
         registerError() {
             var _this = this;
-            Jassi_1.default.errors.onerror(function (err) {
+            jassijs.errors.onerror(function (err) {
                 _this.addError(err);
             }, this._id);
         }
         unregisterError() {
-            Jassi_1.default.errors.offerror(this._id);
+            jassijs.errors.offerror(this._id);
         }
         destroy() {
             this.unregisterError();
@@ -249,6 +249,6 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
         Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + data[0] + "&line=" + data[1]);
         // jassijs_editor.CodeEditor.open(param.text);
     };
-    Jassi_1.default.ErrorPanel = ErrorPanel;
+    jassijs.ErrorPanel = ErrorPanel;
 });
 //# sourceMappingURL=ErrorPanel.js.map

@@ -12,7 +12,7 @@ exports.default={
 		"jassijs.remote.ClientError": {}
 	},
 	"jassijs/remote/Database.ts": {
-		"date": 1622985396000,
+		"date": 1655548856794,
 		"jassijs.remote.Database": {}
 	},
 	"jassijs/remote/DatabaseTools.ts": {
@@ -20,11 +20,11 @@ exports.default={
 		"jassijs.remote.DatabaseTools": {}
 	},
 	"jassijs/remote/DBArray.ts": {
-		"date": 1624295776000,
+		"date": 1655548871204,
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1624295826000,
+		"date": 1655546441320,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -41,7 +41,7 @@ exports.default={
 		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1655545374373
+		"date": 1655550959631
 	},
 	"jassijs/remote/ObjectTransaction.ts": {
 		"date": 1622985414000
@@ -50,11 +50,11 @@ exports.default={
 		"date": 1634384712000
 	},
 	"jassijs/remote/RemoteObject.ts": {
-		"date": 1627600804000,
+		"date": 1655548876969,
 		"jassijs.remote.RemoteObject": {}
 	},
 	"jassijs/remote/RemoteProtocol.ts": {
-		"date": 1624295910000,
+		"date": 1655546448681,
 		"jassijs.remote.RemoteProtocol": {}
 	},
 	"jassijs/remote/security/Group.ts": {
@@ -175,11 +175,11 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/Rights.ts": {
-		"date": 1622985524000,
+		"date": 1655546460996,
 		"jassijs.security.Rights": {}
 	},
 	"jassijs/remote/security/Setting.ts": {
-		"date": 1624296036000,
+		"date": 1655546474909,
 		"jassijs.security.Setting": {
 			"$DBObject": [
 				{
@@ -201,7 +201,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/security/User.ts": {
-		"date": 1623528370000,
+		"date": 1655548888227,
 		"jassijs.security.User": {
 			"$DBObject": [
 				{
@@ -240,7 +240,7 @@ exports.default={
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1633979244000,
+		"date": 1655549792306,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {
@@ -252,7 +252,7 @@ exports.default={
 		"jassijs.remote.Test": {}
 	},
 	"jassijs/remote/Transaction.ts": {
-		"date": 1622985432000,
+		"date": 1655546454394,
 		"jassijs.remote.Transaction": {}
 	},
 	"jassijs/server/Compile.ts": {
@@ -294,5 +294,8 @@ exports.default={
 	},
 	"jassijs/util/DatabaseSchema.ts": {
 		"date": 1611490792000
+	},
+	"jassijs/remote/JassijsGlobal.ts": {
+		"date": 1655549781561
 	}
 }

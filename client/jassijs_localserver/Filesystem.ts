@@ -1,4 +1,4 @@
-import jassijs,{ $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { Context } from "jassijs/remote/RemoteObject";
 import { Reloader } from "jassijs/util/Reloader";
 //@ts-ignore force load this class

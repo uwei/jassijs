@@ -702,9 +702,9 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/J
             if (event.data.fromJassiExtension && event.data.connected) {
                 installed = true;
                 //clearTimeout(checkExtensionInstalled);
-                if (Jassi_3.default.debugger !== undefined)
-                    Jassi_3.default.debugger.destroy();
-                Jassi_3.default.debugger = this;
+                if (jassijs.debugger !== undefined)
+                    jassijs.debugger.destroy();
+                jassijs.debugger = this;
             }
             if (event.data.fromJassiExtension && event.data.mid) {
                 var test = this.responseList[event.data.mid];
@@ -761,7 +761,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/J
             new Server_1.Server().saveFile(file, code).then(function () {
                 Reloader_1.Reloader.instance.reloadJS(file.replace(".ts", ""));
                 if (code.indexOf("jassijs.register(") > -1) {
-                    Jassi_3.default.registry.reload();
+                    jassijs.registry.reload();
                 }
             });
         }
@@ -838,7 +838,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/J
             return;
             var file = this.urlToFile(url);
             var _this = this;
-            var editor = Jassi_3.default.windows.findComponent("jassijs_editor.CodeEditor-" + file);
+            var editor = jassijs.windows.findComponent("jassijs_editor.CodeEditor-" + file);
             if (editor !== undefined) {
                 editor.addVariables(variables);
             }
@@ -884,6 +884,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.CodeEditor = void 0;
+    jassijs.includeCSSFile("jassijs_editor.css");
     let CodeEditorSettingsDescriptor = class CodeEditorSettingsDescriptor {
     };
     __decorate([
@@ -938,7 +939,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
             this._codePanel.height = "calc(100% - 31px)";
             let _this = this;
             this._codePanel.onBreakpointChanged(function (line, column, enable, type) {
-                Jassi_4.default.debugger.breakpointChanged(_this._file, line, column, enable, type);
+                jassijs.debugger.breakpointChanged(_this._file, line, column, enable, type);
             });
         }
         _init(hideToolbar) {
@@ -976,7 +977,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
                 goto.onclick(function () {
                     _this.gotoDeclaration();
                 });
-                Jassi_4.default["$CodeEditor"] = CodeEditor_1;
+                jassijs["$CodeEditor"] = CodeEditor_1;
                 $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
                 $(goto.dom).attr("ondragover", "event.preventDefault();");
                 this._codeToolbar.add(goto);
@@ -1238,11 +1239,11 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Jassi
             var _this = this;
             var breakpoints = _this._codePanel.getBreakpoints();
             var filename = _this._file.replace(".ts", "$temp.ts");
-            await Jassi_4.default.debugger.removeBreakpointsForFile(filename);
+            await jassijs.debugger.removeBreakpointsForFile(filename);
             for (var line in breakpoints) {
                 if (breakpoints[line]) {
                     var row = lines[line].length;
-                    await Jassi_4.default.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
+                    await jassijs.debugger.breakpointChanged(filename, line, row, true, "debugpoint");
                 }
             }
             var islocaldb = Classes_1.classes.getClass("jassijs_localserver.DBManager");
@@ -3006,7 +3007,7 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Jassi"]
         * @param {jassijs_editor.CodeEditor} codeEditor
         */
         addDebugpoints(lines, debugpoints, codeEditor) {
-            Jassi_10.default.d[codeEditor._id] = undefined;
+            jassijs.d[codeEditor._id] = undefined;
             //        	jassijs.ui.VariablePanel.get(this._id).__db=undefined;
             var hassome = undefined;
             this.debugpoints = debugpoints;
@@ -3066,8 +3067,8 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Jassi"]
         __metadata("design:paramtypes", [])
     ], Debugger);
     exports.Debugger = Debugger;
-    if (Jassi_10.default.debugger === undefined)
-        Jassi_10.default.debugger = new Debugger();
+    if (jassijs.debugger === undefined)
+        jassijs.debugger = new Debugger();
     require(["jassijs_editor/ChromeDebugger"]);
 });
 define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Jassi_11, Router_2, Typescript_3, CodePanel_5, Settings_2) {
@@ -3424,15 +3425,15 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1655467369881,
+                "date": 1655549402601,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
-                "date": 1622998654000,
+                "date": 1655549438570,
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1655400646800,
+                "date": 1655549443015,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3485,7 +3486,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-                "date": 1632524314000,
+                "date": 1655549449262,
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
@@ -3493,19 +3494,19 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1655461753005,
+                "date": 1655546244521,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1655141119339,
+                "date": 1655549453768,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1631290328000,
+                "date": 1655549458531,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/Debugger.ts": {
-                "date": 1622998618000,
+                "date": 1655549467467,
                 "jassijs_editor.Debugger": {}
             },
             "jassijs_editor/modul.ts": {
@@ -3519,7 +3520,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1623098600000
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1634340710000,
+                "date": 1655549473433,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
@@ -3527,19 +3528,19 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1634384530000,
+                "date": 1655549479845,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/TSSourceMap.ts": {
-                "date": 1655146083774,
+                "date": 1655549491655,
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1631566734000,
+                "date": 1655549497536,
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1631388458000,
+                "date": 1655549414488,
                 "jassijs.ui.AcePanelSimple": {}
             },
             "jassijs_editor/ext/pdfMake-interface.ts": {
@@ -5188,7 +5189,7 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Jas
     ], Resizer);
     exports.Resizer = Resizer;
 });
-define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/sourcemap", "jassijs/jassi", "jassijs/remote/Server", "jassijs/remote/Jassi"], function (require, exports, sourcemap_1, jassi_1, Server_3, Jassi_15) {
+define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/sourcemap", "jassijs/remote/Server", "jassijs/remote/Jassi"], function (require, exports, sourcemap_1, Server_3, Jassi_15) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TSSourceMap = void 0;
@@ -5205,7 +5206,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
             var jsfilename;
             if (Server_3.Server.filesInMap && Server_3.Server.filesInMap[tsfile]) {
                 var mod = Server_3.Server.filesInMap[tsfile].modul;
-                jsfilename = jassi_1.default.modules[mod];
+                jsfilename = jassijs.modules[mod];
                 var mapname = jsfilename.split("").reverse().join("").replace("sj.", "pam.sj.").split("").reverse().join("").split("?")[0];
                 mapcode = await this.getCode(mapname); //await $.ajax({ url: jsfilename+".map", dataType: "text" });
                 filenumber = Server_3.Server.filesInMap[tsfile].id;
@@ -5364,7 +5365,7 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
         //load  d.ts from modulpackage
         async includeModulTypes() {
             var nodeFiles = {};
-            for (var mod in Jassi_16.default.modules) {
+            for (var mod in jassijs.modules) {
                 var config = (await new Promise((resolve_3, reject_3) => { require([mod + "/modul"], resolve_3, reject_3); })).default;
                 if (config.types) {
                     for (var key in config.types) {

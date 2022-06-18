@@ -34,21 +34,21 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
             if (Server_1.filesInMap)
                 return;
             var ret = {};
-            for (var mod in Jassi_1.default.modules) {
-                if ((_b = (_a = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
-                    if (((_d = (_c = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
+            for (var mod in jassijs.modules) {
+                if ((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
+                    if (((_d = (_c = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
                         continue;
                 }
-                if (Jassi_1.default.modules[mod].endsWith(".js") || Jassi_1.default.modules[mod].indexOf(".js?") > -1) {
-                    let mapname = Jassi_1.default.modules[mod].split("?")[0] + ".map";
-                    if (Jassi_1.default.modules[mod].indexOf(".js?") > -1)
-                        mapname = mapname + "?" + Jassi_1.default.modules[mod].split("?")[1];
+                if (jassijs.modules[mod].endsWith(".js") || jassijs.modules[mod].indexOf(".js?") > -1) {
+                    let mapname = jassijs.modules[mod].split("?")[0] + ".map";
+                    if (jassijs.modules[mod].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + jassijs.modules[mod].split("?")[1];
                     var code = await $.ajax({ url: mapname, dataType: "text" });
                     var data = JSON.parse(code);
                     var files = data.sources;
                     for (let x = 0; x < files.length; x++) {
                         let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                        if (((_f = (_e = Jassi_1.default === null || Jassi_1.default === void 0 ? void 0 : Jassi_1.default.options) === null || _e === void 0 ? void 0 : _e.Server) === null || _f === void 0 ? void 0 : _f.filterSytemfilesInFilemap) === true) {
+                        if (((_f = (_e = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _e === void 0 ? void 0 : _e.Server) === null || _f === void 0 ? void 0 : _f.filterSytemfilesInFilemap) === true) {
                             if (fname.endsWith("/modul.js") || fname.endsWith("/registry.js"))
                                 continue;
                         }
@@ -164,9 +164,9 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObje
                     }
                     else {
                         var found = Server_1.filesInMap[fileName];
-                        let mapname = Jassi_1.default.modules[found.modul].split("?")[0] + ".map";
-                        if (Jassi_1.default.modules[found.modul].indexOf(".js?") > -1)
-                            mapname = mapname + "?" + Jassi_1.default.modules[found.modul].split("?")[1];
+                        let mapname = jassijs.modules[found.modul].split("?")[0] + ".map";
+                        if (jassijs.modules[found.modul].indexOf(".js?") > -1)
+                            mapname = mapname + "?" + jassijs.modules[found.modul].split("?")[1];
                         var code = await this.loadFile(mapname, context);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;

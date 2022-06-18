@@ -1,5 +1,5 @@
 
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { classes } from "./Classes";
 export class TypeDef{
 	fields:{[fieldname:string]:{[decorater:string]:any[]}}={};

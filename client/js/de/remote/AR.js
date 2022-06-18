@@ -25,7 +25,7 @@ define(["require", "exports", "de/remote/ARZeile", "de/remote/Kunde", "jassijs/r
             this.nummer = 0;
         }
         static async myfind(options = undefined, context = undefined) {
-            if (!Jassi_1.default.isServer) {
+            if (!jassijs.isServer) {
                 return await this.call(this.myfind, options, context);
             }
             else {

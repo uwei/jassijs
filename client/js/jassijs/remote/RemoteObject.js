@@ -13,7 +13,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
     exports.Context = Context;
     let RemoteObject = class RemoteObject {
         static async call(method, ...parameter) {
-            if (Jassi_1.default.isServer)
+            if (jassijs.isServer)
                 throw new Classes_1.JassiError("should be called on client");
             var prot = new RemoteProtocol_1.RemoteProtocol();
             var context = parameter[parameter.length - 1];
@@ -37,7 +37,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", 
             return ret;
         }
         async call(_this, method, ...parameter) {
-            if (Jassi_1.default.isServer)
+            if (jassijs.isServer)
                 throw new Classes_1.JassiError("should be called on client");
             var prot = new RemoteProtocol_1.RemoteProtocol();
             var context = parameter[parameter.length - 1];

@@ -878,7 +878,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             for (let x = 0; x < all.length; x++) {
                 let fname = all[x].id;
                 var include = true;
-                if (((_b = (_a = Jassi_2.default === null || Jassi_2.default === void 0 ? void 0 : Jassi_2.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
+                if (((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
                     if (fname === "__default.db")
                         include = false;
                 }
@@ -936,7 +936,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
             for (let x = 0; x < all.length; x++) {
                 var entr = all[x];
                 var paths = entr.id.split("/");
-                if (((_b = (_a = Jassi_2.default === null || Jassi_2.default === void 0 ? void 0 : Jassi_2.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
+                if (((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterSytemfilesInFilemap) === true) {
                     if (entr.id === "__default.db")
                         continue;
                 }
@@ -1718,11 +1718,11 @@ define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_lo
         async dirFiles(modul, path, extensions, ignore = []) {
             var tsfiles = await new Filesystem_2.default().dirFiles(path, extensions, ignore);
             //add files from map
-            if (this.mapcache[modul] === undefined && Jassi_3.default.modules[modul] !== undefined && Jassi_3.default.modules[modul].indexOf(".js") > 0) { //read webtsfiles
+            if (this.mapcache[modul] === undefined && jassijs.modules[modul] !== undefined && jassijs.modules[modul].indexOf(".js") > 0) { //read webtsfiles
                 let ret = {};
-                let mapname = Jassi_3.default.modules[modul].split("?")[0] + ".map";
-                if (Jassi_3.default.modules[modul].indexOf(".js?") > -1)
-                    mapname = mapname + "?" + Jassi_3.default.modules[modul].split("?")[1];
+                let mapname = jassijs.modules[modul].split("?")[0] + ".map";
+                if (jassijs.modules[modul].indexOf(".js?") > -1)
+                    mapname = mapname + "?" + jassijs.modules[modul].split("?")[1];
                 var code = await $.ajax({ url: mapname, dataType: "text" });
                 var data = JSON.parse(code);
                 var files = data.sources;

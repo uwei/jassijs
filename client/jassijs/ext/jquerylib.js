@@ -1,5 +1,5 @@
 
-
+jassijs.includeCSSFile( "jquery-ui.css");
 define("jassijs/ext/jquerylib", [
     "jquery",
     "jquery.ui",

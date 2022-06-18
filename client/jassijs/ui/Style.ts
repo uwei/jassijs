@@ -1,6 +1,6 @@
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
 import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 import { Property, $Property } from "jassijs/ui/Property";
 
 import { CSSProperties } from "jassijs/ui/CSSProperties";

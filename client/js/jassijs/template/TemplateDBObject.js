@@ -13,7 +13,7 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateDBObject = exports.TemplateDBObjectProperties = void 0;
     var code = `import {DBObject, $DBObject } from "jassijs/remote/DBObject";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany,JoinColumn,JoinTable } from "jassijs/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 

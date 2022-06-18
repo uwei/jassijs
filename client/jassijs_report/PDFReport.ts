@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 //@ts-ignore
 import pdfMake from "jassijs_report/ext/pdfmake";
 import { PDFViewer } from "jassijs_report/PDFViewer";

@@ -11,10 +11,10 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassi
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.VariablePanel = void 0;
-    Jassi_1.default.d = function (id) {
-        if (Jassi_1.default.d[id] === true)
+    jassijs.d = function (id) {
+        if (jassijs.d[id] === true)
             return false;
-        Jassi_1.default.d[id] = true;
+        jassijs.d[id] = true;
         return true;
     };
     // console.log(jassijs.d(9)?debug:0);

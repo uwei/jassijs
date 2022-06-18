@@ -1,4 +1,4 @@
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import  { $Class } from "jassijs/remote/Jassi";
 import { Context, RemoteObject } from "jassijs/remote/RemoteObject";
 import { RemoteProtocol } from "jassijs/remote/RemoteProtocol";
 

@@ -7,11 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("jassijs/jassi", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Errors", "jassijs/remote/Classes", "jassijs/remote/Jassi", "jassijs/base/Extensions", "jassijs/remote/Registry", "jassijs/ext/jquerylib", "jassijs/ext/intersection-observer"], function (require, exports, Jassi_1, Errors_1) {
+define("jassijs/jassi", ["require", "exports", "jassijs/base/Errors", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/Jassi", "jassijs/base/Extensions", "jassijs/remote/Registry", "jassijs/ext/jquerylib", "jassijs/ext/intersection-observer"], function (require, exports, Errors_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    Jassi_1.default.errors = new Errors_1.Errors();
-    exports.default = Jassi_1.default;
+    jassijs.includeCSSFile("jassijs.css");
+    jassijs.includeCSSFile("materialdesignicons.min.css");
+    jassijs.errors = new Errors_1.Errors();
+    exports.default = jassijs;
 });
 define("jassijs/modul", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -89,7 +91,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.ActionNode": {}
             },
             "jassijs/base/Actions.ts": {
-                "date": 1633978962000,
+                "date": 1655549173360,
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/DatabaseSchema.ts": {
@@ -100,17 +102,17 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1623094944000
             },
             "jassijs/base/Extensions.ts": {
-                "date": 1622985782000
+                "date": 1655549182897
             },
             "jassijs/base/LoginDialog.ts": {
                 "date": 1623093222000
             },
             "jassijs/base/PropertyEditorService.ts": {
-                "date": 1633125786000,
+                "date": 1655546422621,
                 "jassijs.base.PropertyEditorService": {}
             },
             "jassijs/base/Router.ts": {
-                "date": 1622985640000,
+                "date": 1655549188671,
                 "jassijs.base.Router": {}
             },
             "jassijs/base/Tests.ts": {
@@ -131,14 +133,14 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/base/Windows.ts": {
-                "date": 1622985640000,
+                "date": 1655546427892,
                 "jassijs.base.Windows": {}
             },
             "jassijs/jassi.ts": {
-                "date": 1622985802000
+                "date": 1655551060729
             },
             "jassijs/modul.ts": {
-                "date": 1655540263633
+                "date": 1655551280173
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1624296520000,
@@ -150,7 +152,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.ClientError": {}
             },
             "jassijs/remote/Database.ts": {
-                "date": 1622985396000,
+                "date": 1655548856794,
                 "jassijs.remote.Database": {}
             },
             "jassijs/remote/DatabaseTools.ts": {
@@ -158,11 +160,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.DatabaseTools": {}
             },
             "jassijs/remote/DBArray.ts": {
-                "date": 1624295776000,
+                "date": 1655548871204,
                 "jassijs.remote.DBArray": {}
             },
             "jassijs/remote/DBObject.ts": {
-                "date": 1624295826000,
+                "date": 1655546441320,
                 "jassijs.remote.DBObject": {}
             },
             "jassijs/remote/DBObjectQuery.ts": {
@@ -179,7 +181,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985410000
             },
             "jassijs/remote/Jassi.ts": {
-                "date": 1655545374373
+                "date": 1655550959631
             },
             "jassijs/remote/ObjectTransaction.ts": {
                 "date": 1622985414000
@@ -188,11 +190,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1634384712000
             },
             "jassijs/remote/RemoteObject.ts": {
-                "date": 1627600804000,
+                "date": 1655548876969,
                 "jassijs.remote.RemoteObject": {}
             },
             "jassijs/remote/RemoteProtocol.ts": {
-                "date": 1624295910000,
+                "date": 1655546448681,
                 "jassijs.remote.RemoteProtocol": {}
             },
             "jassijs/remote/security/Group.ts": {
@@ -313,11 +315,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/Rights.ts": {
-                "date": 1622985524000,
+                "date": 1655546460996,
                 "jassijs.security.Rights": {}
             },
             "jassijs/remote/security/Setting.ts": {
-                "date": 1624296036000,
+                "date": 1655546474909,
                 "jassijs.security.Setting": {
                     "$DBObject": [
                         {
@@ -339,7 +341,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/security/User.ts": {
-                "date": 1623528370000,
+                "date": 1655548888227,
                 "jassijs.security.User": {
                     "$DBObject": [
                         {
@@ -378,7 +380,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1633979244000,
+                "date": 1655549792306,
                 "jassijs.remote.Server": {}
             },
             "jassijs/remote/Settings.ts": {
@@ -390,7 +392,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.Test": {}
             },
             "jassijs/remote/Transaction.ts": {
-                "date": 1622985432000,
+                "date": 1655546454394,
                 "jassijs.remote.Transaction": {}
             },
             "jassijs/security/GroupView.ts": {
@@ -454,7 +456,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/template/TemplateDBObject.ts": {
-                "date": 1622985640000,
+                "date": 1655549198216,
                 "jassijs.template.TemplateDBDialogProperties": {
                     "@members": {
                         "name": {
@@ -531,7 +533,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
-                "date": 1654984297312,
+                "date": 1655546483390,
                 "jassijs.ui.BoxPanel": {
                     "$UIComponent": [
                         {
@@ -569,7 +571,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Button.ts": {
-                "date": 1654695976908,
+                "date": 1655549209173,
                 "jassijs.ui.Button": {
                     "$UIComponent": [
                         {
@@ -619,7 +621,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Checkbox.ts": {
-                "date": 1654700986669,
+                "date": 1655546489728,
                 "jassijs.ui.Checkbox": {
                     "$UIComponent": [
                         {
@@ -649,7 +651,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1655539396580,
+                "date": 1655549203742,
                 "jassijs.ui.Component": {
                     "@members": {
                         "onfocus": {
@@ -733,11 +735,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ComponentDescriptor.ts": {
-                "date": 1655029061275,
+                "date": 1655546495784,
                 "jassijs.ui.ComponentDescriptor": {}
             },
             "jassijs/ui/ComponentSpy.ts": {
-                "date": 1654466293098,
+                "date": 1655549214069,
                 "jassijs.ui.ComponentSpy": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -763,11 +765,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Container.ts": {
-                "date": 1654695913660,
+                "date": 1655546502045,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
-                "date": 1654701972513,
+                "date": 1655549221092,
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -793,7 +795,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/converters/DefaultConverter.ts": {
-                "date": 1622985640000,
+                "date": 1655549298739,
                 "jassijs.ui.converters.DefaultConverterProperties": {
                     "@members": {
                         "stringToObject": {
@@ -821,7 +823,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/converters/NumberConverter.ts": {
-                "date": 1622985640000,
+                "date": 1655549302931,
                 "jassijs.ui.converters.NumberConverter": {
                     "$Converter": [
                         {
@@ -837,7 +839,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/converters/StringConverter.ts": {
-                "date": 1622985640000,
+                "date": 1655549313839,
                 "jassijs.ui.converters.StringConverter": {
                     "$Converter": [
                         {
@@ -853,7 +855,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/CSSProperties.ts": {
-                "date": 1622985640000,
+                "date": 1655549226456,
                 "jassijs.ui.CSSProperties": {
                     "@members": {
                         "background_color": {
@@ -1487,11 +1489,11 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DesignDummy": {}
             },
             "jassijs/ui/DockingContainer.ts": {
-                "date": 1634384980000,
+                "date": 1655546517280,
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/ErrorPanel.ts": {
-                "date": 1655145155622,
+                "date": 1655549231795,
                 "jassijs.ui.ErrorPanel": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -1509,7 +1511,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/FileExplorer.ts": {
-                "date": 1634384746000,
+                "date": 1655549236673,
                 "jassijs.ui.FileActions": {
                     "$ActionProvider": [
                         "jassijs.remote.FileNode"
@@ -1596,11 +1598,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/HTMLEditorPanel.ts": {
-                "date": 1654701807236,
+                "date": 1655549241168,
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1655468189498,
+                "date": 1655546209863,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -1631,7 +1633,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Image.ts": {
-                "date": 1654704834003,
+                "date": 1655546533276,
                 "jassijs.ui.Image": {
                     "$UIComponent": [
                         {
@@ -1675,7 +1677,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Menu.ts": {
-                "date": 1654702715316,
+                "date": 1655549246186,
                 "jassijs.ui.Menu": {
                     "$UIComponent": [
                         {
@@ -1732,7 +1734,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/ObjectChooser.ts": {
-                "date": 1655060562375,
+                "date": 1655546538648,
                 "jassijs.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -1784,7 +1786,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/OptionDialog.ts": {
-                "date": 1627926138000,
+                "date": 1655549251333,
                 "jassijs.ui.OptionDialog": {
                     "@members": {
                         "text": {
@@ -1804,7 +1806,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Panel.ts": {
-                "date": 1654899711644,
+                "date": 1655546543390,
                 "jassijs.ui.PanelCreateProperties": {
                     "@members": {
                         "useSpan": {
@@ -1841,11 +1843,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Property.ts": {
-                "date": 1622985640000,
+                "date": 1655549256252,
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1655407166793,
+                "date": 1655549260915,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {
@@ -1946,7 +1948,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/BooleanEditor.ts": {
-                "date": 1622985640000,
+                "date": 1655549317930,
                 "jassijs.ui.PropertyEditors.BooleanEditor": {
                     "$PropertyEditor": [
                         [
@@ -1956,7 +1958,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/ClassSelectorEditor.ts": {
-                "date": 1622985640000,
+                "date": 1655549323209,
                 "jassijs.ui.PropertyEditors.ClassSelectorEditor": {
                     "$PropertyEditor": [
                         [
@@ -1966,7 +1968,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/ColorEditor.ts": {
-                "date": 1633539862000,
+                "date": 1655549327200,
                 "jassijs.ui.PropertyEditors.ColorEditor": {
                     "$PropertyEditor": [
                         [
@@ -1986,7 +1988,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-                "date": 1654950343134,
+                "date": 1655549330765,
                 "jassijs.ui.PropertyEditors.DatabinderEditor": {
                     "$PropertyEditor": [
                         [
@@ -1996,7 +1998,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/DBObjectEditor.ts": {
-                "date": 1622985640000,
+                "date": 1655549334627,
                 "jassijs.ui.PropertyEditors.DBObjectEditor": {
                     "$PropertyEditor": [
                         [
@@ -2006,7 +2008,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/DefaultEditor.ts": {
-                "date": 1633126372000,
+                "date": 1655549346430,
                 "jassijs.ui.PropertyEditors.DefaultEditor": {
                     "$PropertyEditor": [
                         [
@@ -2019,11 +2021,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/Editor.ts": {
-                "date": 1622985640000,
+                "date": 1655549351544,
                 "jassijs.ui.PropertyEditors.Editor": {}
             },
             "jassijs/ui/PropertyEditors/FontEditor.ts": {
-                "date": 1632505076000,
+                "date": 1655549356659,
                 "jassijs.ui.PropertyEditors.FontEditor": {
                     "$PropertyEditor": [
                         [
@@ -2033,7 +2035,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/FunctionEditor.ts": {
-                "date": 1654630143534,
+                "date": 1655549359934,
                 "jassijs.ui.PropertyEditors.FunctionEditor": {
                     "$PropertyEditor": [
                         [
@@ -2043,7 +2045,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/HTMLEditor.ts": {
-                "date": 1622985640000,
+                "date": 1655549365739,
                 "jassijs.ui.PropertyEditors.HTMLEditor": {
                     "$PropertyEditor": [
                         [
@@ -2053,7 +2055,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/ImageEditor.ts": {
-                "date": 1634384832000,
+                "date": 1655549371281,
                 "jassijs.ui.PropertyEditors.ImageEditor": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2084,7 +2086,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/JsonEditor.ts": {
-                "date": 1627596236000,
+                "date": 1655549375725,
                 "jassijs.ui.PropertyEditors.JsonEditor": {
                     "$PropertyEditor": [
                         [
@@ -2143,10 +2145,10 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/LoadingEditor.ts": {
-                "date": 1622985640000
+                "date": 1655549379527
             },
             "jassijs/ui/PropertyEditors/NameEditor.ts": {
-                "date": 1622985640000,
+                "date": 1655549386608,
                 "jassijs.ui.PropertyEditors.NameEditor": {
                     "$PropertyEditor": [
                         [
@@ -2189,7 +2191,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/SearchExplorer.ts": {
-                "date": 1627596576000,
+                "date": 1655549267768,
                 "jassijs.ui.SearchExplorer": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -2207,7 +2209,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Select.ts": {
-                "date": 1654899968875,
+                "date": 1655549273737,
                 "jassijs.ui.SelectCreateProperties": {
                     "@members": {
                         "multiple": {
@@ -2285,7 +2287,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Style.ts": {
-                "date": 1654900107227,
+                "date": 1655549278614,
                 "jassijs.ui.Style": {
                     "$UIComponent": [
                         {
@@ -2427,7 +2429,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1655467353393,
+                "date": 1655548388924,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -2601,7 +2603,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Upload.ts": {
-                "date": 1633773138000,
+                "date": 1655549289580,
                 "jassijs.ui.Upload": {
                     "$UIComponent": [
                         {
@@ -2640,7 +2642,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/VariablePanel.ts": {
-                "date": 1655133146213,
+                "date": 1655549294316,
                 "jassijs.ui.VariablePanel": {}
             },
             "jassijs/util/Cookies.ts": {
@@ -2672,28 +2674,31 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
-                "date": 1622985640000,
+                "date": 1655549390887,
                 "jassijs.util.Reloader": {}
             },
             "jassijs/util/Tools.ts": {
-                "date": 1634384136000,
+                "date": 1655549396225,
                 "jassijs.util.Tools": {}
             },
             "jassijs/util/Runlater.ts": {
                 "date": 1631479654000,
                 "jassi.util.Runlater": {}
+            },
+            "jassijs/remote/jassijsGlobal.ts": {
+                "date": 1655549781561
             }
         }
     };
 });
-define("jassijs/base/ActionNode", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_2) {
+define("jassijs/base/ActionNode", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ActionNode = void 0;
     let ActionNode = class ActionNode {
     };
     ActionNode = __decorate([
-        (0, Jassi_2.$Class)("jassijs.base.ActionNode")
+        (0, Jassi_1.$Class)("jassijs.base.ActionNode")
     ], ActionNode);
     exports.ActionNode = ActionNode;
     async function test() {
@@ -2703,7 +2708,7 @@ define("jassijs/base/ActionNode", ["require", "exports", "jassijs/remote/Jassi"]
     }
     exports.test = test;
 });
-define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, Registry_1, Jassi_3, Classes_1) {
+define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, Registry_1, Jassi_2, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Actions = exports.$ActionProvider = exports.$Action = exports.$Actions = exports.ActionProperties = void 0;
@@ -2786,8 +2791,8 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
                     }
                 }
             }
-            if ((_b = (_a = Jassi_3.default === null || Jassi_3.default === void 0 ? void 0 : Jassi_3.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterActions) {
-                var test = (_d = (_c = Jassi_3.default === null || Jassi_3.default === void 0 ? void 0 : Jassi_3.default.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterActions[sclass];
+            if ((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterActions) {
+                var test = (_d = (_c = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterActions[sclass];
                 var filterd = [];
                 if (test) {
                     for (var x = 0; x < ret.length; x++) {
@@ -2802,14 +2807,14 @@ define("jassijs/base/Actions", ["require", "exports", "jassijs/remote/Registry",
         }
     };
     Actions = __decorate([
-        (0, Jassi_3.$Class)("jassijs.base.Actions")
+        (0, Jassi_2.$Class)("jassijs.base.Actions")
     ], Actions);
     exports.Actions = Actions;
     async function test() {
     }
     exports.test = test;
 });
-define("jassijs/base/DatabaseSchema", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs_editor/util/Parser", "jassijs/template/TemplateDBObject", "jassijs/util/Tools", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/OptionDialog", "jassijs/ext/jquery.choosen"], function (require, exports, Jassi_4, Registry_2, Typescript_1, Parser_1, TemplateDBObject_1, Tools_1, Server_1, Windows_1, OptionDialog_1) {
+define("jassijs/base/DatabaseSchema", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs_editor/util/Parser", "jassijs/template/TemplateDBObject", "jassijs/util/Tools", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/OptionDialog", "jassijs/ext/jquery.choosen"], function (require, exports, Jassi_3, Registry_2, Typescript_1, Parser_1, TemplateDBObject_1, Tools_1, Server_1, Windows_1, OptionDialog_1) {
     "use strict";
     var DatabaseSchema_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3337,7 +3342,7 @@ define("jassijs/base/DatabaseSchema", ["require", "exports", "jassijs/remote/Jas
     };
     DatabaseSchema.basicdatatypes = ["string", "int", "decimal", "boolean", "Date"];
     DatabaseSchema = DatabaseSchema_1 = __decorate([
-        (0, Jassi_4.$Class)("jassijs.base.DatabaseSchema")
+        (0, Jassi_3.$Class)("jassijs.base.DatabaseSchema")
     ], DatabaseSchema);
     exports.DatabaseSchema = DatabaseSchema;
     /*
@@ -3472,7 +3477,7 @@ define("jassijs/base/Errors", ["require", "exports"], function (require, exports
     Errors._randomID = 100000;
     ;
 });
-define("jassijs/base/Extensions", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"], function (require, exports, Jassi_5, Registry_3) {
+define("jassijs/base/Extensions", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Extensions = void 0;
@@ -3539,7 +3544,7 @@ define("jassijs/base/Extensions", ["require", "exports", "jassijs/remote/Jassi",
         }
     }
     exports.Extensions = Extensions;
-    var extensions = Jassi_5.default.extensions;
+    var extensions = jassijs.extensions;
     exports.default = extensions;
 });
 define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ext/jquerylib"], function (require, exports) {
@@ -3641,7 +3646,7 @@ define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ext/jquerylib
     }
     exports.test = test;
 });
-define("jassijs/base/PropertyEditorService", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/LoadingEditor"], function (require, exports, Jassi_6, Classes_2, Registry_4, LoadingEditor_1) {
+define("jassijs/base/PropertyEditorService", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/LoadingEditor"], function (require, exports, Jassi_4, Classes_2, Registry_4, LoadingEditor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.propertyeditor = exports.PropertyEditorService = void 0;
@@ -3716,14 +3721,14 @@ define("jassijs/base/PropertyEditorService", ["require", "exports", "jassijs/rem
         }
     };
     PropertyEditorService = __decorate([
-        (0, Jassi_6.$Class)("jassijs.base.PropertyEditorService"),
+        (0, Jassi_4.$Class)("jassijs.base.PropertyEditorService"),
         __metadata("design:paramtypes", [])
     ], PropertyEditorService);
     exports.PropertyEditorService = PropertyEditorService;
     var propertyeditor = new PropertyEditorService();
     exports.propertyeditor = propertyeditor;
 });
-define("jassijs/base/Router", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/ui/ComponentDescriptor", "jassijs/base/Windows"], function (require, exports, Jassi_7, Classes_3, ComponentDescriptor_1, Windows_2) {
+define("jassijs/base/Router", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/ui/ComponentDescriptor", "jassijs/base/Windows"], function (require, exports, Jassi_5, Classes_3, ComponentDescriptor_1, Windows_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.router = exports.Router = void 0;
@@ -3821,7 +3826,7 @@ define("jassijs/base/Router", ["require", "exports", "jassijs/remote/Jassi", "ja
         }
     };
     Router = __decorate([
-        (0, Jassi_7.$Class)("jassijs.base.Router"),
+        (0, Jassi_5.$Class)("jassijs.base.Router"),
         __metadata("design:paramtypes", [])
     ], Router);
     exports.Router = Router;
@@ -3832,7 +3837,7 @@ define("jassijs/base/Router", ["require", "exports", "jassijs/remote/Jassi", "ja
     let router = new Router();
     exports.router = router;
 });
-define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs_editor/util/Typescript", "jassijs/ui/Component", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel", "jassijs/base/Errors", "jassijs/ui/ErrorPanel", "jassijs/remote/Test"], function (require, exports, Jassi_8, Actions_1, Typescript_2, Component_1, BoxPanel_1, Windows_3, HTMLPanel_1, Errors_2, ErrorPanel_1, Test_1) {
+define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs_editor/util/Typescript", "jassijs/ui/Component", "jassijs/ui/BoxPanel", "jassijs/base/Windows", "jassijs/ui/HTMLPanel", "jassijs/base/Errors", "jassijs/ui/ErrorPanel", "jassijs/remote/Test"], function (require, exports, Jassi_6, Actions_1, Typescript_2, Component_1, BoxPanel_1, Windows_3, HTMLPanel_1, Errors_2, ErrorPanel_1, Test_1) {
     "use strict";
     var TestAction_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3942,7 +3947,7 @@ define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jas
     ], TestAction, "testNode", null);
     TestAction = TestAction_1 = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
-        (0, Jassi_8.$Class)("jassijs.ui.TestAction")
+        (0, Jassi_6.$Class)("jassijs.ui.TestAction")
     ], TestAction);
     exports.TestAction = TestAction;
     class Tests {
@@ -3958,7 +3963,7 @@ define("jassijs/base/Tests", ["require", "exports", "jassijs/remote/Jassi", "jas
     }
     exports.test = test;
 });
-define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ext/goldenlayout", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/util/Cookies"], function (require, exports, Panel_1, Jassi_9, goldenlayout_1, ComponentDescriptor_2, Classes_4, Cookies_1) {
+define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ext/goldenlayout", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes", "jassijs/util/Cookies"], function (require, exports, Panel_1, Jassi_7, goldenlayout_1, ComponentDescriptor_2, Classes_4, Cookies_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Windows = void 0;
@@ -4283,7 +4288,7 @@ define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassi
         }
     };
     Windows = __decorate([
-        (0, Jassi_9.$Class)("jassijs.base.Windows"),
+        (0, Jassi_7.$Class)("jassijs.base.Windows"),
         __metadata("design:paramtypes", [])
     ], Windows);
     exports.Windows = Windows;
@@ -4345,6 +4350,7 @@ define("jassijs/ext/jquery.contextmenu", ["jassijs/remote/Jassi", "jquery.contex
         default: ""
     };
 });
+jassijs.includeCSSFile("jquery-ui.css");
 define("jassijs/ext/jquerylib", [
     "jquery",
     "jquery.ui",
@@ -4629,6 +4635,9 @@ define("jassijs/remote/Jassi", ["require", "exports", "jassijs/remote/Registry"]
                 //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
             }
         }
+        includeCSSFile(modulkey) {
+            this.myRequire(this.cssFiles[modulkey]);
+        }
         /**
          * include a global stylesheet
          * @id - the given id - important for update
@@ -4723,14 +4732,9 @@ define("jassijs/remote/Jassi", ["require", "exports", "jassijs/remote/Registry"]
     exports.Jassi = Jassi;
     ;
     var jassijs = new Jassi();
-    //@ts-ignore
-    if (window["jassijs"] === undefined) { //reloading this file -> no destroy namespace
-        //@ts-ignore
-        window["jassijs"] = jassijs;
-    }
-    exports.default = jassijs;
+    globalThis.jassijs = jassijs;
 });
-define("jassijs/remote/ClientError", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_10) {
+define("jassijs/remote/ClientError", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClientError = void 0;
@@ -4740,12 +4744,12 @@ define("jassijs/remote/ClientError", ["require", "exports", "jassijs/remote/Jass
         }
     };
     ClientError = __decorate([
-        (0, Jassi_10.$Class)("jassijs.remote.ClientError"),
+        (0, Jassi_8.$Class)("jassijs.remote.ClientError"),
         __metadata("design:paramtypes", [String])
     ], ClientError);
     exports.ClientError = ClientError;
 });
-define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, Jassi_11, Classes_5) {
+define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, Jassi_9, Classes_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBArray = void 0;
@@ -4771,7 +4775,7 @@ define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Jassi", 
             this.push(ob);
             if (this._parentObject !== undefined) {
                 //set linked object
-                var link = Jassi_11.default.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
+                var link = jassijs.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
                 if (link !== undefined && link.type === "array") { //array can not connected){
                     var test = ob._objectProperties[link.name]; //do not resolve!
                     if (test !== undefined && test.unresolvedclassname === undefined) {
@@ -4805,7 +4809,7 @@ define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Jassi", 
                 this.splice(pos, 1);
             if (this._parentObject !== undefined) {
                 //set linked object
-                var link = Jassi_11.default.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
+                var link = jassijs.db.typeDef.linkForField(this._parentObject.__proto__._dbtype, this._parentObjectMember);
                 if (link !== undefined && link.type === "array") { //array can not connected){
                     var test = ob._objectProperties[link.name]; //do not resolve!
                     if (test !== undefined && test.unresolvedclassname === undefined) {
@@ -4823,12 +4827,12 @@ define("jassijs/remote/DBArray", ["require", "exports", "jassijs/remote/Jassi", 
         }
     };
     DBArray = __decorate([
-        (0, Jassi_11.$Class)("jassijs.remote.DBArray"),
+        (0, Jassi_9.$Class)("jassijs.remote.DBArray"),
         __metadata("design:paramtypes", [Object])
     ], DBArray);
     exports.DBArray = DBArray;
 });
-define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database"], function (require, exports, Jassi_12, Classes_6, RemoteObject_1, Registry_7, DatabaseSchema_2, Database_1) {
+define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/RemoteObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/Database"], function (require, exports, Jassi_10, Classes_6, RemoteObject_1, Registry_7, DatabaseSchema_2, Database_1) {
     "use strict";
     var DBObject_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -5045,7 +5049,7 @@ define("jassijs/remote/DBObject", ["require", "exports", "jassijs/remote/Jassi",
     DBObject.cache = {};
     DBObject._init = DBObject_1._initFunc();
     DBObject = DBObject_1 = __decorate([
-        (0, Jassi_12.$Class)("jassijs.remote.DBObject"),
+        (0, Jassi_10.$Class)("jassijs.remote.DBObject"),
         __metadata("design:paramtypes", [])
     ], DBObject);
     exports.DBObject = DBObject;
@@ -5099,7 +5103,7 @@ define("jassijs/remote/DBObjectQuery", ["require", "exports", "jassijs/remote/Cl
     }
     exports.test = test;
 });
-define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, Jassi_13, Classes_8) {
+define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, Jassi_11, Classes_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.db = exports.Database = exports.TypeDef = void 0;
@@ -5172,7 +5176,7 @@ define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Jassi",
         }
     };
     Database = __decorate([
-        (0, Jassi_13.$Class)("jassijs.remote.Database"),
+        (0, Jassi_11.$Class)("jassijs.remote.Database"),
         __metadata("design:paramtypes", [])
     ], Database);
     exports.Database = Database;
@@ -5180,7 +5184,7 @@ define("jassijs/remote/Database", ["require", "exports", "jassijs/remote/Jassi",
     var db = new Database();
     exports.db = db;
 });
-define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject", "jassijs/remote/Classes"], function (require, exports, Jassi_14, RemoteObject_2, Classes_9) {
+define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject", "jassijs/remote/Classes"], function (require, exports, Jassi_12, RemoteObject_2, Classes_9) {
     "use strict";
     var DatabaseTools_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -5212,7 +5216,7 @@ define("jassijs/remote/DatabaseTools", ["require", "exports", "jassijs/remote/Ja
         }
     };
     DatabaseTools = DatabaseTools_1 = __decorate([
-        (0, Jassi_14.$Class)("jassijs.remote.DatabaseTools")
+        (0, Jassi_12.$Class)("jassijs.remote.DatabaseTools")
     ], DatabaseTools);
     exports.DatabaseTools = DatabaseTools;
     async function test() {
@@ -5297,7 +5301,7 @@ define("jassijs/remote/Extensions", ["require", "exports", "jassijs/remote/Regis
     var extensions = new Extensions();
     exports.extensions = extensions;
 });
-define("jassijs/remote/FileNode", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_15) {
+define("jassijs/remote/FileNode", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.FileNode = void 0;
@@ -5326,7 +5330,7 @@ define("jassijs/remote/FileNode", ["require", "exports", "jassijs/remote/Jassi"]
         }
     };
     FileNode = __decorate([
-        (0, Jassi_15.$Class)("jassijs.remote.FileNode"),
+        (0, Jassi_13.$Class)("jassijs.remote.FileNode"),
         __metadata("design:paramtypes", [String])
     ], FileNode);
     exports.FileNode = FileNode;
@@ -5786,7 +5790,7 @@ define("jassijs/remote/Registry", ["require", "exports", "reflect-metadata"], fu
     exports.migrateModul = migrateModul;
 });
 //jassijs.registry=registry;
-define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol"], function (require, exports, Jassi_16, Classes_10, RemoteProtocol_1) {
+define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes", "jassijs/remote/RemoteProtocol"], function (require, exports, Jassi_14, Classes_10, RemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteObject = exports.Context = void 0;
@@ -5795,7 +5799,7 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Jas
     exports.Context = Context;
     let RemoteObject = class RemoteObject {
         static async call(method, ...parameter) {
-            if (Jassi_16.default.isServer)
+            if (jassijs.isServer)
                 throw new Classes_10.JassiError("should be called on client");
             var prot = new RemoteProtocol_1.RemoteProtocol();
             var context = parameter[parameter.length - 1];
@@ -5819,7 +5823,7 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Jas
             return ret;
         }
         async call(_this, method, ...parameter) {
-            if (Jassi_16.default.isServer)
+            if (jassijs.isServer)
                 throw new Classes_10.JassiError("should be called on client");
             var prot = new RemoteProtocol_1.RemoteProtocol();
             var context = parameter[parameter.length - 1];
@@ -5842,11 +5846,11 @@ define("jassijs/remote/RemoteObject", ["require", "exports", "jassijs/remote/Jas
         }
     };
     RemoteObject = __decorate([
-        (0, Jassi_16.$Class)("jassijs.remote.RemoteObject")
+        (0, Jassi_14.$Class)("jassijs.remote.RemoteObject")
     ], RemoteObject);
     exports.RemoteObject = RemoteObject;
 });
-define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, Jassi_17, Classes_11) {
+define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Classes"], function (require, exports, Jassi_15, Classes_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RemoteProtocol = void 0;
@@ -5922,7 +5926,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/J
        * call the server
        */
         async call() {
-            if (Jassi_17.default.isServer)
+            if (jassijs.isServer)
                 throw new Classes_11.JassiError("should be called on client");
             var sdataObject = undefined;
             var url = "remoteprotocol?" + Date.now();
@@ -6050,7 +6054,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/J
     };
     RemoteProtocol.counter = 0;
     RemoteProtocol = __decorate([
-        (0, Jassi_17.$Class)("jassijs.remote.RemoteProtocol")
+        (0, Jassi_15.$Class)("jassijs.remote.RemoteProtocol")
     ], RemoteProtocol);
     exports.RemoteProtocol = RemoteProtocol;
     class A {
@@ -6060,7 +6064,7 @@ define("jassijs/remote/RemoteProtocol", ["require", "exports", "jassijs/remote/J
     }
 });
 //jassijs.register("classes", "de.B", B);
-define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "jassijs/remote/Classes"], function (require, exports, Jassi_18, RemoteObject_3, FileNode_1, Classes_12) {
+define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject", "jassijs/remote/FileNode", "jassijs/remote/Classes"], function (require, exports, Jassi_16, RemoteObject_3, FileNode_1, Classes_12) {
     "use strict";
     var Server_2;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6087,21 +6091,21 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
             if (Server_2.filesInMap)
                 return;
             var ret = {};
-            for (var mod in Jassi_18.default.modules) {
-                if ((_b = (_a = Jassi_18.default === null || Jassi_18.default === void 0 ? void 0 : Jassi_18.default.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
-                    if (((_d = (_c = Jassi_18.default === null || Jassi_18.default === void 0 ? void 0 : Jassi_18.default.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
+            for (var mod in jassijs.modules) {
+                if ((_b = (_a = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _a === void 0 ? void 0 : _a.Server) === null || _b === void 0 ? void 0 : _b.filterModulInFilemap) {
+                    if (((_d = (_c = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _c === void 0 ? void 0 : _c.Server) === null || _d === void 0 ? void 0 : _d.filterModulInFilemap.indexOf(mod)) === -1)
                         continue;
                 }
-                if (Jassi_18.default.modules[mod].endsWith(".js") || Jassi_18.default.modules[mod].indexOf(".js?") > -1) {
-                    let mapname = Jassi_18.default.modules[mod].split("?")[0] + ".map";
-                    if (Jassi_18.default.modules[mod].indexOf(".js?") > -1)
-                        mapname = mapname + "?" + Jassi_18.default.modules[mod].split("?")[1];
+                if (jassijs.modules[mod].endsWith(".js") || jassijs.modules[mod].indexOf(".js?") > -1) {
+                    let mapname = jassijs.modules[mod].split("?")[0] + ".map";
+                    if (jassijs.modules[mod].indexOf(".js?") > -1)
+                        mapname = mapname + "?" + jassijs.modules[mod].split("?")[1];
                     var code = await $.ajax({ url: mapname, dataType: "text" });
                     var data = JSON.parse(code);
                     var files = data.sources;
                     for (let x = 0; x < files.length; x++) {
                         let fname = files[x].substring(files[x].indexOf(mod + "/"));
-                        if (((_f = (_e = Jassi_18.default === null || Jassi_18.default === void 0 ? void 0 : Jassi_18.default.options) === null || _e === void 0 ? void 0 : _e.Server) === null || _f === void 0 ? void 0 : _f.filterSytemfilesInFilemap) === true) {
+                        if (((_f = (_e = jassijs === null || jassijs === void 0 ? void 0 : jassijs.options) === null || _e === void 0 ? void 0 : _e.Server) === null || _f === void 0 ? void 0 : _f.filterSytemfilesInFilemap) === true) {
                             if (fname.endsWith("/modul.js") || fname.endsWith("/registry.js"))
                                 continue;
                         }
@@ -6217,9 +6221,9 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
                     }
                     else {
                         var found = Server_2.filesInMap[fileName];
-                        let mapname = Jassi_18.default.modules[found.modul].split("?")[0] + ".map";
-                        if (Jassi_18.default.modules[found.modul].indexOf(".js?") > -1)
-                            mapname = mapname + "?" + Jassi_18.default.modules[found.modul].split("?")[1];
+                        let mapname = jassijs.modules[found.modul].split("?")[0] + ".map";
+                        if (jassijs.modules[found.modul].indexOf(".js?") > -1)
+                            mapname = mapname + "?" + jassijs.modules[found.modul].split("?")[1];
                         var code = await this.loadFile(mapname, context);
                         var data = JSON.parse(code).sourcesContent[found.id];
                         return data;
@@ -6459,7 +6463,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
     //files found in js.map of modules in the jassijs.json
     Server.filesInMap = undefined;
     Server = Server_2 = __decorate([
-        (0, Jassi_18.$Class)("jassijs.remote.Server"),
+        (0, Jassi_16.$Class)("jassijs.remote.Server"),
         __metadata("design:paramtypes", [])
     ], Server);
     exports.Server = Server;
@@ -6467,7 +6471,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Jassi", "
     }
     exports.test = test;
 });
-define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_19) {
+define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_17) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Test = void 0;
@@ -6533,11 +6537,11 @@ define("jassijs/remote/Test", ["require", "exports", "jassijs/remote/Jassi"], fu
         }
     };
     Test = __decorate([
-        (0, Jassi_19.$Class)("jassijs.remote.Test")
+        (0, Jassi_17.$Class)("jassijs.remote.Test")
     ], Test);
     exports.Test = Test;
 });
-define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "jassijs/remote/Server"], function (require, exports, Jassi_20, Registry_10, RemoteObject_4, Setting_1, Server_3) {
+define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/remote/security/Setting", "jassijs/remote/Server"], function (require, exports, Jassi_18, Registry_10, RemoteObject_4, Setting_1, Server_3) {
     "use strict";
     var Settings_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -6696,7 +6700,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Jassi",
     Settings.userSettings = undefined;
     Settings.allusersSettings = undefined;
     Settings = Settings_1 = __decorate([
-        (0, Jassi_20.$Class)("jassijs.remote.Settings")
+        (0, Jassi_18.$Class)("jassijs.remote.Settings")
     ], Settings);
     exports.Settings = Settings;
     var settings = new Settings();
@@ -6743,7 +6747,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Jassi",
     }
     exports.test = test;
 });
-define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject"], function (require, exports, Jassi_21, RemoteObject_5) {
+define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/RemoteObject"], function (require, exports, Jassi_19, RemoteObject_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Transaction = exports.TransactionItem = void 0;
@@ -6873,7 +6877,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Jass
         }
     };
     Transaction = __decorate([
-        (0, Jassi_21.$Class)("jassijs.remote.Transaction")
+        (0, Jassi_19.$Class)("jassijs.remote.Transaction")
     ], Transaction);
     exports.Transaction = Transaction;
 });
@@ -6896,7 +6900,7 @@ define("jassijs/remote/hallo", ["require", "exports"], function (require, export
     }
     exports.OO = OO;
 });
-define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/ParentRight", "jassijs/remote/security/User", "jassijs/remote/security/Right"], function (require, exports, DBObject_2, Jassi_22, DatabaseSchema_3, ParentRight_1, User_1, Right_1) {
+define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/ParentRight", "jassijs/remote/security/User", "jassijs/remote/security/Right"], function (require, exports, DBObject_2, Jassi_20, DatabaseSchema_3, ParentRight_1, User_1, Right_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Group = void 0;
@@ -6927,11 +6931,11 @@ define("jassijs/remote/security/Group", ["require", "exports", "jassijs/remote/D
     ], Group.prototype, "users", void 0);
     Group = __decorate([
         (0, DBObject_2.$DBObject)({ name: "jassijs_group" }),
-        (0, Jassi_22.$Class)("jassijs.security.Group")
+        (0, Jassi_20.$Class)("jassijs.security.Group")
     ], Group);
     exports.Group = Group;
 });
-define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group"], function (require, exports, DBObject_3, Jassi_23, DatabaseSchema_4, Group_1) {
+define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group"], function (require, exports, DBObject_3, Jassi_21, DatabaseSchema_4, Group_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ParentRight = void 0;
@@ -6972,11 +6976,11 @@ define("jassijs/remote/security/ParentRight", ["require", "exports", "jassijs/re
     ], ParentRight.prototype, "groups", void 0);
     ParentRight = __decorate([
         (0, DBObject_3.$DBObject)({ name: "jassijs_parentright" }),
-        (0, Jassi_23.$Class)("jassijs.security.ParentRight")
+        (0, Jassi_21.$Class)("jassijs.security.ParentRight")
     ], ParentRight);
     exports.ParentRight = ParentRight;
 });
-define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group"], function (require, exports, DBObject_4, Jassi_24, DatabaseSchema_5, Group_2) {
+define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group"], function (require, exports, DBObject_4, Jassi_22, DatabaseSchema_5, Group_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Right = void 0;
@@ -6997,11 +7001,11 @@ define("jassijs/remote/security/Right", ["require", "exports", "jassijs/remote/D
     ], Right.prototype, "groups", void 0);
     Right = __decorate([
         (0, DBObject_4.$DBObject)({ name: "jassijs_right" }),
-        (0, Jassi_24.$Class)("jassijs.security.Right")
+        (0, Jassi_22.$Class)("jassijs.security.Right")
     ], Right);
     exports.Right = Right;
 });
-define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Jassi_25, Registry_11, RemoteObject_6) {
+define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Jassi_23, Registry_11, RemoteObject_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Rights = exports.$CheckParentRight = exports.$ParentRights = exports.$Rights = exports.ParentRightProperties = exports.RightProperties = void 0;
@@ -7044,13 +7048,13 @@ define("jassijs/remote/security/Rights", ["require", "exports", "jassijs/remote/
         }
     };
     Rights = __decorate([
-        (0, Jassi_25.$Class)("jassijs.security.Rights")
+        (0, Jassi_23.$Class)("jassijs.security.Rights")
     ], Rights);
     exports.Rights = Rights;
     var rights = new Rights();
     exports.default = rights;
 });
-define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/Classes"], function (require, exports, DBObject_5, Jassi_26, DatabaseSchema_6, Classes_13) {
+define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/Classes"], function (require, exports, DBObject_5, Jassi_24, DatabaseSchema_6, Classes_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Setting = void 0;
@@ -7084,7 +7088,7 @@ define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote
     ], Setting.prototype, "data", void 0);
     Setting = __decorate([
         (0, DBObject_5.$DBObject)({ name: "jassijs_setting" }),
-        (0, Jassi_26.$Class)("jassijs.security.Setting"),
+        (0, Jassi_24.$Class)("jassijs.security.Setting"),
         __metadata("design:paramtypes", [])
     ], Setting);
     exports.Setting = Setting;
@@ -7093,7 +7097,7 @@ define("jassijs/remote/security/Setting", ["require", "exports", "jassijs/remote
     exports.test = test;
     ;
 });
-define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight"], function (require, exports, DBObject_6, Jassi_27, DatabaseSchema_7, Group_3, ParentRight_2) {
+define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Jassi", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight"], function (require, exports, DBObject_6, Jassi_25, DatabaseSchema_7, Group_3, ParentRight_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.User = void 0;
@@ -7136,7 +7140,7 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
     ], User.prototype, "isAdmin", void 0);
     User = __decorate([
         (0, DBObject_6.$DBObject)({ name: "jassijs_user" }),
-        (0, Jassi_27.$Class)("jassijs.security.User")
+        (0, Jassi_25.$Class)("jassijs.security.User")
     ], User);
     exports.User = User;
     async function test() {
@@ -7177,7 +7181,7 @@ define("jassijs/remote/security/User", ["require", "exports", "jassijs/remote/DB
     }
     exports.test2 = test2;
 });
-define("jassijs/security/GroupView", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/security/Group", "jassijs/ui/DBObjectView"], function (require, exports, Jassi_28, Property_1, Group_4, DBObjectView_1) {
+define("jassijs/security/GroupView", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/security/Group", "jassijs/ui/DBObjectView"], function (require, exports, Jassi_26, Property_1, Group_4, DBObjectView_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -7200,7 +7204,7 @@ define("jassijs/security/GroupView", ["require", "exports", "jassijs/remote/Jass
     ], GroupView.prototype, "value", void 0);
     GroupView = __decorate([
         (0, DBObjectView_1.$DBObjectView)({ classname: "{{dbfullclassname}}" }),
-        (0, Jassi_28.$Class)("jassijs/security/GroupView"),
+        (0, Jassi_26.$Class)("jassijs/security/GroupView"),
         __metadata("design:paramtypes", [])
     ], GroupView);
     exports.GroupView = GroupView;
@@ -7211,7 +7215,7 @@ define("jassijs/security/GroupView", ["require", "exports", "jassijs/remote/Jass
     }
     exports.test = test;
 });
-define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/security/User", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_1, Jassi_29, Property_2, User_2, DBObjectView_2) {
+define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/security/User", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_1, Textbox_1, Jassi_27, Property_2, User_2, DBObjectView_2) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -7248,7 +7252,7 @@ define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/converter
     ], UserView.prototype, "value", void 0);
     UserView = __decorate([
         (0, DBObjectView_2.$DBObjectView)({ classname: "jassijs.security.User" }),
-        (0, Jassi_29.$Class)("jassijs/UserView"),
+        (0, Jassi_27.$Class)("jassijs/UserView"),
         __metadata("design:paramtypes", [])
     ], UserView);
     exports.UserView = UserView;
@@ -7259,7 +7263,7 @@ define("jassijs/security/UserView", ["require", "exports", "jassijs/ui/converter
     }
     exports.test = test;
 });
-define("jassijs/template/TemplateDBDialog", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Jassi", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_2, Jassi_30, OptionDialog_2, FileExplorer_1) {
+define("jassijs/template/TemplateDBDialog", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Jassi", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_2, Jassi_28, OptionDialog_2, FileExplorer_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateDBDialog = void 0;
@@ -7297,17 +7301,17 @@ export function test() {
     ], TemplateDBDialog, "newFile", null);
     TemplateDBDialog = __decorate([
         (0, Actions_2.$ActionProvider)("jassijs.remote.FileNode"),
-        (0, Jassi_30.$Class)("jassijs.ui.TemplateDBDialog")
+        (0, Jassi_28.$Class)("jassijs.ui.TemplateDBDialog")
     ], TemplateDBDialog);
     exports.TemplateDBDialog = TemplateDBDialog;
 });
-define("jassijs/template/TemplateDBObject", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Jassi_31, Property_3, Actions_3, OptionDialog_3, FileExplorer_2) {
+define("jassijs/template/TemplateDBObject", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Jassi_29, Property_3, Actions_3, OptionDialog_3, FileExplorer_2) {
     "use strict";
     var TemplateDBObject_2;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateDBObject = exports.TemplateDBObjectProperties = void 0;
     var code = `import {DBObject, $DBObject } from "jassijs/remote/DBObject";
-import jassijs, { $Class } from "jassijs/remote/Jassi";
+import { $Class } from "jassijs/remote/Jassi";
 import { Entity, PrimaryColumn, Column, OneToOne, ManyToMany, ManyToOne, OneToMany,JoinColumn,JoinTable } from "jassijs/util/DatabaseSchema";
 import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 
@@ -7339,7 +7343,7 @@ export async function test() {
         __metadata("design:type", String)
     ], TemplateDBObjectProperties.prototype, "autogeneratedid", void 0);
     TemplateDBObjectProperties = __decorate([
-        (0, Jassi_31.$Class)("jassijs.template.TemplateDBDialogProperties")
+        (0, Jassi_29.$Class)("jassijs.template.TemplateDBDialogProperties")
     ], TemplateDBObjectProperties);
     exports.TemplateDBObjectProperties = TemplateDBObjectProperties;
     let TemplateDBObject = TemplateDBObject_2 = class TemplateDBObject {
@@ -7371,11 +7375,11 @@ export async function test() {
     ], TemplateDBObject, "newFile", null);
     TemplateDBObject = TemplateDBObject_2 = __decorate([
         (0, Actions_3.$ActionProvider)("jassijs.remote.FileNode"),
-        (0, Jassi_31.$Class)("jassijs.ui.TemplateDBObject")
+        (0, Jassi_29.$Class)("jassijs.ui.TemplateDBObject")
     ], TemplateDBObject);
     exports.TemplateDBObject = TemplateDBObject;
 });
-define("jassijs/template/TemplateEmptyDialog", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Jassi", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_4, Jassi_32, OptionDialog_4, FileExplorer_3) {
+define("jassijs/template/TemplateEmptyDialog", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Jassi", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_4, Jassi_30, OptionDialog_4, FileExplorer_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateEmptyDialog = void 0;
@@ -7426,11 +7430,11 @@ export async function test(){
     ], TemplateEmptyDialog, "newFile", null);
     TemplateEmptyDialog = __decorate([
         (0, Actions_4.$ActionProvider)("jassijs.remote.FileNode"),
-        (0, Jassi_32.$Class)("jassijs.template.TemplateEmptyDialog")
+        (0, Jassi_30.$Class)("jassijs.template.TemplateEmptyDialog")
     ], TemplateEmptyDialog);
     exports.TemplateEmptyDialog = TemplateEmptyDialog;
 });
-define("jassijs/template/TemplateRemoteObject", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Jassi", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_5, Jassi_33, OptionDialog_5, FileExplorer_4) {
+define("jassijs/template/TemplateRemoteObject", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Jassi", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_5, Jassi_31, OptionDialog_5, FileExplorer_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateRemoteObject = void 0;
@@ -7476,11 +7480,11 @@ export async function test(){
     ], TemplateRemoteObject, "newFile", null);
     TemplateRemoteObject = __decorate([
         (0, Actions_5.$ActionProvider)("jassijs.remote.FileNode"),
-        (0, Jassi_33.$Class)("jassijs.template.TemplateRemoteObject")
+        (0, Jassi_31.$Class)("jassijs.template.TemplateRemoteObject")
     ], TemplateRemoteObject);
     exports.TemplateRemoteObject = TemplateRemoteObject;
 });
-define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/ActionNode", "jassijs/ui/MenuItem"], function (require, exports, Menu_1, Jassi_34, Panel_2, Actions_6, ActionNode_1, MenuItem_1) {
+define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/ActionNode", "jassijs/ui/MenuItem"], function (require, exports, Menu_1, Jassi_32, Panel_2, Actions_6, ActionNode_1, MenuItem_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ActionNodeMenu = void 0;
@@ -7542,7 +7546,7 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
         }
     };
     ActionNodeMenu = __decorate([
-        (0, Jassi_34.$Class)("jassijs/ui/ActionNodeMenu"),
+        (0, Jassi_32.$Class)("jassijs/ui/ActionNodeMenu"),
         __metadata("design:paramtypes", [])
     ], ActionNodeMenu);
     exports.ActionNodeMenu = ActionNodeMenu;
@@ -7552,7 +7556,7 @@ define("jassijs/ui/ActionNodeMenu", ["require", "exports", "jassijs/ui/Menu", "j
     }
     exports.test = test;
 });
-define("jassijs/ui/BoxPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/split"], function (require, exports, Panel_3, Jassi_35, Component_2, Property_4, Classes_14, split_1) {
+define("jassijs/ui/BoxPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/split"], function (require, exports, Panel_3, Jassi_33, Component_2, Property_4, Classes_14, split_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.BoxPanel = void 0;
@@ -7656,7 +7660,7 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "jassijs/ui/Panel", "jassij
     ], BoxPanel.prototype, "spliter", null);
     BoxPanel = __decorate([
         (0, Component_2.$UIComponent)({ fullPath: "common/BoxPanel", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
-        (0, Jassi_35.$Class)("jassijs.ui.BoxPanel"),
+        (0, Jassi_33.$Class)("jassijs.ui.BoxPanel"),
         (0, Property_4.$Property)({ name: "isAbsolute", hide: true, type: "boolean" }),
         __metadata("design:paramtypes", [Object])
     ], BoxPanel);
@@ -7682,7 +7686,7 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "jassijs/ui/Panel", "jassij
     exports.test = test;
     ;
 });
-define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Jassi_36, Component_3, Property_5) {
+define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Jassi_34, Component_3, Property_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Button = void 0;
@@ -7766,7 +7770,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Jassi", "jass
     ], Button.prototype, "text", null);
     Button = __decorate([
         (0, Component_3.$UIComponent)({ fullPath: "common/Button", icon: "mdi mdi-gesture-tap-button", initialize: { text: "button" } }),
-        (0, Jassi_36.$Class)("jassijs.ui.Button"),
+        (0, Jassi_34.$Class)("jassijs.ui.Button"),
         __metadata("design:paramtypes", [])
     ], Button);
     exports.Button = Button;
@@ -7785,7 +7789,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Jassi", "jass
     }
     exports.test = test;
 });
-define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, Jassi_37, Property_6) {
+define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, Jassi_35, Property_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CSSProperties = exports.loadFontIfNedded = void 0;
@@ -7798,7 +7802,7 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Jassi"
         if (systemFonts.indexOf(font) === -1) {
             var sfont = font.replaceAll(" ", "+");
             if (!document.getElementById("-->" + api + sfont)) { //"-->https://fonts.googleapis.com/css?family=Aclonica">
-                Jassi_37.default.myRequire(api + sfont);
+                jassijs.myRequire(api + sfont);
             }
         }
     }
@@ -7950,11 +7954,11 @@ define("jassijs/ui/CSSProperties", ["require", "exports", "jassijs/remote/Jassi"
         __metadata("design:type", String)
     ], CSSProperties.prototype, "z_index", void 0);
     CSSProperties = __decorate([
-        (0, Jassi_37.$Class)("jassijs.ui.CSSProperties")
+        (0, Jassi_35.$Class)("jassijs.ui.CSSProperties")
     ], CSSProperties);
     exports.CSSProperties = CSSProperties;
 });
-define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, Textbox_2, Component_4, Jassi_38, Property_7) {
+define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, Textbox_2, Component_4, Jassi_36, Property_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Calendar = void 0;
@@ -7990,7 +7994,7 @@ define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jass
     };
     Calendar = __decorate([
         (0, Component_4.$UIComponent)({ fullPath: "common/Calendar", icon: "mdi mdi-calendar-month" }),
-        (0, Jassi_38.$Class)("jassijs.ui.Calendar"),
+        (0, Jassi_36.$Class)("jassijs.ui.Calendar"),
         (0, Property_7.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [Object])
     ], Calendar);
@@ -8006,7 +8010,7 @@ define("jassijs/ui/Calendar", ["require", "exports", "jassijs/ui/Textbox", "jass
     }
     exports.test = test;
 });
-define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Jassi_39, Component_5, Property_8, DataComponent_1) {
+define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Jassi_37, Component_5, Property_8, DataComponent_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Checkbox = void 0;
@@ -8064,7 +8068,7 @@ define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Jassi", "ja
     ], Checkbox.prototype, "text", null);
     Checkbox = __decorate([
         (0, Component_5.$UIComponent)({ fullPath: "common/Ceckbox", icon: "mdi mdi-checkbox-marked-outline" }),
-        (0, Jassi_39.$Class)("jassijs.ui.Checkbox"),
+        (0, Jassi_37.$Class)("jassijs.ui.Checkbox"),
         __metadata("design:paramtypes", [])
     ], Checkbox);
     exports.Checkbox = Checkbox;
@@ -8076,7 +8080,7 @@ define("jassijs/ui/Checkbox", ["require", "exports", "jassijs/remote/Jassi", "ja
     }
     exports.test = test;
 });
-define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties"], function (require, exports, Jassi_40, Property_9, Registry_12, Classes_15, CSSProperties_1) {
+define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/CSSProperties"], function (require, exports, Jassi_38, Property_9, Registry_12, Classes_15, CSSProperties_1) {
     "use strict";
     var Component_6, _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -8548,12 +8552,12 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Jassi", "j
         __metadata("design:paramtypes", [Object])
     ], Component.prototype, "contextMenu", null);
     Component = Component_6 = __decorate([
-        (0, Jassi_40.$Class)("jassijs.ui.Component"),
+        (0, Jassi_38.$Class)("jassijs.ui.Component"),
         __metadata("design:paramtypes", [ComponentCreateProperties])
     ], Component);
     exports.Component = Component;
 });
-define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Jassi_41, Property_10, Classes_16, Registry_13) {
+define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Jassi_39, Property_10, Classes_16, Registry_13) {
     "use strict";
     var ComponentDescriptor_3;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -8771,12 +8775,12 @@ define("jassijs/ui/ComponentDescriptor", ["require", "exports", "jassijs/remote/
         }
     };
     ComponentDescriptor = ComponentDescriptor_3 = __decorate([
-        (0, Jassi_41.$Class)("jassijs.ui.ComponentDescriptor"),
+        (0, Jassi_39.$Class)("jassijs.ui.ComponentDescriptor"),
         __metadata("design:paramtypes", [])
     ], ComponentDescriptor);
     exports.ComponentDescriptor = ComponentDescriptor;
 });
-define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/ui/ErrorPanel", "jassijs/ui/Component"], function (require, exports, Jassi_42, Panel_4, Table_1, Button_1, BoxPanel_2, Classes_17, Actions_7, Router_1, ErrorPanel_2, Component_7) {
+define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Table", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/ui/ErrorPanel", "jassijs/ui/Component"], function (require, exports, Jassi_40, Panel_4, Table_1, Button_1, BoxPanel_2, Classes_17, Actions_7, Router_1, ErrorPanel_2, Component_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSpy = void 0;
@@ -8837,14 +8841,14 @@ define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi",
         }
         update() {
             var data = [];
-            for (var k in Jassi_42.default.componentSpy.ids) {
-                data.push(Jassi_42.default.componentSpy.ids[k]);
+            for (var k in jassijs.componentSpy.ids) {
+                data.push(jassijs.componentSpy.ids[k]);
             }
             this.me.IDTable.items = data;
         }
         clear() {
-            Jassi_42.default.componentSpy.ids = {};
-            Jassi_42.default.componentSpy.labelids = {};
+            jassijs.componentSpy.ids = {};
+            jassijs.componentSpy.labelids = {};
             this.update();
         }
         watch(component) {
@@ -8903,7 +8907,7 @@ define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi",
     ], ComponentSpy, "showDialog", null);
     ComponentSpy = __decorate([
         (0, Actions_7.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_42.$Class)("jassijs.ui.ComponentSpy"),
+        (0, Jassi_40.$Class)("jassijs.ui.ComponentSpy"),
         __metadata("design:paramtypes", [])
     ], ComponentSpy);
     exports.ComponentSpy = ComponentSpy;
@@ -8914,9 +8918,9 @@ define("jassijs/ui/ComponentSpy", ["require", "exports", "jassijs/remote/Jassi",
         return sp;
     }
     exports.test = test;
-    Jassi_42.default.componentSpy = new ComponentSpy();
+    jassijs.componentSpy = new ComponentSpy();
 });
-define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Jassi_43, Component_8) {
+define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component"], function (require, exports, Jassi_41, Component_8) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Container = void 0;
@@ -9033,12 +9037,12 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Jassi", "j
         }
     };
     Container = __decorate([
-        (0, Jassi_43.$Class)("jassijs.ui.Container"),
+        (0, Jassi_41.$Class)("jassijs.ui.Container"),
         __metadata("design:paramtypes", [Object])
     ], Container);
     exports.Container = Container;
 });
-define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquery.contextmenu"], function (require, exports, Jassi_44, Menu_2, InvisibleComponent_1, Component_9, Classes_18, Property_11, Actions_8, MenuItem_2) {
+define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquery.contextmenu"], function (require, exports, Jassi_42, Menu_2, InvisibleComponent_1, Component_9, Classes_18, Property_11, Actions_8, MenuItem_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ContextMenu = void 0;
@@ -9263,7 +9267,7 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", 
     ], ContextMenu.prototype, "onbeforeshow", null);
     ContextMenu = __decorate([
         (0, Component_9.$UIComponent)({ fullPath: "common/ContextMenu", icon: "mdi mdi-dots-vertical", editableChildComponents: ["menu"] }),
-        (0, Jassi_44.$Class)("jassijs.ui.ContextMenu"),
+        (0, Jassi_42.$Class)("jassijs.ui.ContextMenu"),
         __metadata("design:paramtypes", [])
     ], ContextMenu);
     exports.ContextMenu = ContextMenu;
@@ -9300,7 +9304,7 @@ define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Jassi", 
     }
     exports.test = test;
 });
-define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_2, Jassi_45, Panel_5, Registry_14, Classes_19, BoxPanel_3, Actions_9, Windows_4) {
+define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/BoxPanel", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Table_2, Jassi_43, Panel_5, Registry_14, Classes_19, BoxPanel_3, Actions_9, Windows_4) {
     "use strict";
     var DBObjectDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -9433,7 +9437,7 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
     ], DBObjectDialog, "createActions", null);
     DBObjectDialog = DBObjectDialog_1 = __decorate([
         (0, Actions_9.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_45.$Class)("jassijs.ui.DBObjectDialog"),
+        (0, Jassi_43.$Class)("jassijs.ui.DBObjectDialog"),
         __metadata("design:paramtypes", [])
     ], DBObjectDialog);
     exports.DBObjectDialog = DBObjectDialog;
@@ -9444,7 +9448,7 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
     }
     exports.test = test;
 });
-define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs/ui/DBObjectDialog", "jassijs/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Jassi_46, Actions_10, Panel_6, Registry_15, Router_2, DBObjectDialog_2, Windows_5) {
+define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Tree", "jassijs/remote/Jassi", "jassijs/base/Actions", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs/ui/DBObjectDialog", "jassijs/base/Windows"], function (require, exports, ContextMenu_1, Tree_1, Jassi_44, Actions_10, Panel_6, Registry_15, Router_2, DBObjectDialog_2, Windows_5) {
     "use strict";
     var DBObjectExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -9452,7 +9456,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     let DBObjectNode = class DBObjectNode {
     };
     DBObjectNode = __decorate([
-        (0, Jassi_46.$Class)("jassijs.ui.DBObjectNode")
+        (0, Jassi_44.$Class)("jassijs.ui.DBObjectNode")
     ], DBObjectNode);
     exports.DBObjectNode = DBObjectNode;
     let DBFileActions = class DBFileActions {
@@ -9489,7 +9493,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     ], DBFileActions, "ViewData", null);
     DBFileActions = __decorate([
         (0, Actions_10.$ActionProvider)("jassijs.remote.FileNode"),
-        (0, Jassi_46.$Class)("jassijs.ui.DBFileActions")
+        (0, Jassi_44.$Class)("jassijs.ui.DBFileActions")
     ], DBFileActions);
     exports.DBFileActions = DBFileActions;
     let DBObjectActions = class DBObjectActions {
@@ -9517,7 +9521,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     ], DBObjectActions, "OpenCode", null);
     DBObjectActions = __decorate([
         (0, Actions_10.$ActionProvider)("jassijs.ui.DBObjectNode"),
-        (0, Jassi_46.$Class)("jassijs.ui.DBObjectActions")
+        (0, Jassi_44.$Class)("jassijs.ui.DBObjectActions")
     ], DBObjectActions);
     exports.DBObjectActions = DBObjectActions;
     let DBObjectExplorer = DBObjectExplorer_1 = class DBObjectExplorer extends Panel_6.Panel {
@@ -9594,7 +9598,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     ], DBObjectExplorer, "show", null);
     DBObjectExplorer = DBObjectExplorer_1 = __decorate([
         (0, Actions_10.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_46.$Class)("jassijs.ui.DBObjectExplorer"),
+        (0, Jassi_44.$Class)("jassijs.ui.DBObjectExplorer"),
         __metadata("design:paramtypes", [])
     ], DBObjectExplorer);
     exports.DBObjectExplorer = DBObjectExplorer;
@@ -9605,7 +9609,7 @@ define("jassijs/ui/DBObjectExplorer", ["require", "exports", "jassijs/ui/Context
     }
     exports.test = test;
 });
-define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Button_2, BoxPanel_4, Jassi_47, Panel_7, Databinder_1, Component_10, Registry_16, Classes_20, Property_12) {
+define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Button_2, BoxPanel_4, Jassi_45, Panel_7, Databinder_1, Component_10, Registry_16, Classes_20, Property_12) {
     "use strict";
     var DBObjectView_3;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -9760,7 +9764,7 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
     ], DBObjectView.prototype, "ondeleted", null);
     DBObjectView = DBObjectView_3 = __decorate([
         (0, Component_10.$UIComponent)({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh"] }),
-        (0, Jassi_47.$Class)("jassijs/ui/DBObjectView"),
+        (0, Jassi_45.$Class)("jassijs/ui/DBObjectView"),
         __metadata("design:paramtypes", [])
     ], DBObjectView);
     exports.DBObjectView = DBObjectView;
@@ -9770,7 +9774,7 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
     }
     exports.test = test;
 });
-define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Jassi"], function (require, exports, Component_11, Property_13, Jassi_48) {
+define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Jassi"], function (require, exports, Component_11, Property_13, Jassi_46) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DataComponent = void 0;
@@ -9834,12 +9838,12 @@ define("jassijs/ui/DataComponent", ["require", "exports", "jassijs/ui/Component"
         __metadata("design:paramtypes", [Array])
     ], DataComponent.prototype, "bind", null);
     DataComponent = __decorate([
-        (0, Jassi_48.$Class)("jassijs.ui.DataComponent"),
+        (0, Jassi_46.$Class)("jassijs.ui.DataComponent"),
         __metadata("design:paramtypes", [Object])
     ], DataComponent);
     exports.DataComponent = DataComponent;
 });
-define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Databinder", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/base/DatabaseSchema", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, BoxPanel_5, Button_3, Databinder_2, Select_1, Table_3, Jassi_49, Panel_8, DatabaseSchema_8, OptionDialog_6, Router_3, Actions_11, Windows_6) {
+define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/Databinder", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/base/DatabaseSchema", "jassijs/ui/OptionDialog", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, BoxPanel_5, Button_3, Databinder_2, Select_1, Table_3, Jassi_47, Panel_8, DatabaseSchema_8, OptionDialog_6, Router_3, Actions_11, Windows_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DatabaseDesigner = void 0;
@@ -10063,7 +10067,7 @@ define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPane
     ], DatabaseDesigner, "showDialog", null);
     DatabaseDesigner = __decorate([
         (0, Actions_11.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_49.$Class)("jassijs/ui/DatabaseDesigner"),
+        (0, Jassi_47.$Class)("jassijs/ui/DatabaseDesigner"),
         __metadata("design:paramtypes", [Object])
     ], DatabaseDesigner);
     exports.DatabaseDesigner = DatabaseDesigner;
@@ -10073,7 +10077,7 @@ define("jassijs/ui/DatabaseDesigner", ["require", "exports", "jassijs/ui/BoxPane
     }
     exports.test = test;
 });
-define("jassijs/ui/Databinder", ["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/remote/Database"], function (require, exports, InvisibleComponent_2, Component_12, Jassi_50, Database_2) {
+define("jassijs/ui/Databinder", ["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/remote/Database"], function (require, exports, InvisibleComponent_2, Component_12, Jassi_48, Database_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Databinder = void 0;
@@ -10305,7 +10309,7 @@ define("jassijs/ui/Databinder", ["require", "exports", "jassijs/ui/InvisibleComp
     };
     Databinder = __decorate([
         (0, Component_12.$UIComponent)({ fullPath: "common/Databinder", icon: "mdi mdi-connection" }),
-        (0, Jassi_50.$Class)("jassijs.ui.Databinder"),
+        (0, Jassi_48.$Class)("jassijs.ui.Databinder"),
         __metadata("design:paramtypes", [])
     ], Databinder);
     exports.Databinder = Databinder;
@@ -10390,7 +10394,7 @@ define("jassijs/ui/Databinder", ["require", "exports", "jassijs/ui/InvisibleComp
     }
 });
 // return CodeEditor.constructor;
-define("jassijs/ui/DesignDummy", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Image", "jassijs/ui/MenuItem"], function (require, exports, Jassi_51, Image_1, MenuItem_3) {
+define("jassijs/ui/DesignDummy", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Image", "jassijs/ui/MenuItem"], function (require, exports, Jassi_49, Image_1, MenuItem_3) {
     "use strict";
     var DesignDummy_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -10458,12 +10462,12 @@ define("jassijs/ui/DesignDummy", ["require", "exports", "jassijs/remote/Jassi", 
         }
     };
     DesignDummy = DesignDummy_1 = __decorate([
-        (0, Jassi_51.$Class)("jassijs.ui.DesignDummy"),
+        (0, Jassi_49.$Class)("jassijs.ui.DesignDummy"),
         __metadata("design:paramtypes", [])
     ], DesignDummy);
     exports.DesignDummy = DesignDummy;
 });
-define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Jassi", "jassijs/ui/Container", "jassijs/ui/Button", "jassijs/ui/Textbox"], function (require, exports, goldenlayout_2, Jassi_52, Container_1, Button_4, Textbox_3) {
+define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Jassi", "jassijs/ui/Container", "jassijs/ui/Button", "jassijs/ui/Textbox"], function (require, exports, goldenlayout_2, Jassi_50, Container_1, Button_4, Textbox_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DockingContainer = void 0;
@@ -10777,7 +10781,7 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
         }
     };
     DockingContainer = __decorate([
-        (0, Jassi_52.$Class)("jassijs.ui.DockingContainer"),
+        (0, Jassi_50.$Class)("jassijs.ui.DockingContainer"),
         __metadata("design:paramtypes", [Object])
     ], DockingContainer);
     exports.DockingContainer = DockingContainer;
@@ -10800,7 +10804,7 @@ define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/golden
     }
     exports.test = test;
 });
-define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Jassi", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_9, Errors_3, Jassi_53, Button_5, Router_4, Actions_12) {
+define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassijs/remote/Jassi", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/base/Actions"], function (require, exports, Panel_9, Errors_3, Jassi_51, Button_5, Router_4, Actions_12) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.ErrorPanel = void 0;
@@ -10827,7 +10831,7 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
                 this.IDClear.icon = "mdi mdi-delete";
                 this.IDClear.onclick(function () {
                     _this.clear();
-                    Jassi_53.default.errors.items = [];
+                    jassijs.errors.items = [];
                 });
                 this.IDClear.width = 35;
                 this.IDSearch = new Button_5.Button();
@@ -10850,8 +10854,8 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
                 this.registerError();
             if (this.withLastErrors) {
                 //old Errors
-                for (var x = 0; x < Jassi_53.default.errors.items.length; x++) {
-                    this.addError(Jassi_53.default.errors.items[x]);
+                for (var x = 0; x < jassijs.errors.items.length; x++) {
+                    this.addError(jassijs.errors.items[x]);
                 }
             }
             if (window["jassijs_debug"] === undefined)
@@ -10961,8 +10965,8 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
                 if (line === "" || col === "" || u === "")
                     return url;
                 var ismodul = false;
-                for (var mod in Jassi_53.default.modules) {
-                    if (Jassi_53.default.modules[mod] === u)
+                for (var mod in jassijs.modules) {
+                    if (jassijs.modules[mod] === u)
                         ismodul = true;
                 }
                 if (u.indexOf("/js/") > -1 || ismodul) {
@@ -11001,12 +11005,12 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
         }
         registerError() {
             var _this = this;
-            Jassi_53.default.errors.onerror(function (err) {
+            jassijs.errors.onerror(function (err) {
                 _this.addError(err);
             }, this._id);
         }
         unregisterError() {
-            Jassi_53.default.errors.offerror(this._id);
+            jassijs.errors.offerror(this._id);
         }
         destroy() {
             this.unregisterError();
@@ -11025,7 +11029,7 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
     ], ErrorPanel, "showDialog", null);
     ErrorPanel = __decorate([
         (0, Actions_12.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_53.$Class)("jassijs.ui.ErrorPanel"),
+        (0, Jassi_51.$Class)("jassijs.ui.ErrorPanel"),
         __metadata("design:paramtypes", [Object, Object, Object])
     ], ErrorPanel);
     exports.ErrorPanel = ErrorPanel;
@@ -11042,9 +11046,9 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
         Router_4.router.navigate("#do=jassijs_editor.CodeEditor&file=" + data[0] + "&line=" + data[1]);
         // jassijs_editor.CodeEditor.open(param.text);
     };
-    Jassi_53.default.ErrorPanel = ErrorPanel;
+    jassijs.ErrorPanel = ErrorPanel;
 });
-define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Jassi_54, Tree_2, Panel_10, Textbox_4, Server_4, Router_5, Actions_13, OptionDialog_7, ContextMenu_2, Windows_7) {
+define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Server", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/ui/OptionDialog", "jassijs/ui/ContextMenu", "jassijs/base/Windows"], function (require, exports, Jassi_52, Tree_2, Panel_10, Textbox_4, Server_4, Router_5, Actions_13, OptionDialog_7, ContextMenu_2, Windows_7) {
     "use strict";
     var FileExplorer_5;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -11132,7 +11136,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
             var res = await OptionDialog_7.OptionDialog.show("Enter file name:", ["ok", "cancel"], undefined, true, "");
             if (res.button === "ok" && res.text !== all[0].name) {
                 var smodule = res.text.toLocaleLowerCase();
-                if (Jassi_54.default.modules[smodule]) {
+                if (jassijs.modules[smodule]) {
                     alert("modul allready exists");
                     return;
                 }
@@ -11144,7 +11148,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
                     return;
                 }
                 else {
-                    Jassi_54.default.modules[smodule] = smodule;
+                    jassijs.modules[smodule] = smodule;
                 }
                 await FileExplorer.instance.refresh();
                 FileExplorer.instance.tree.activateKey(newkey);
@@ -11289,7 +11293,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
     ], FileActions, "open", null);
     FileActions = __decorate([
         (0, Actions_13.$ActionProvider)("jassijs.remote.FileNode"),
-        (0, Jassi_54.$Class)("jassijs.ui.FileActions")
+        (0, Jassi_52.$Class)("jassijs.ui.FileActions")
     ], FileActions);
     exports.FileActions = FileActions;
     let FileExplorer = FileExplorer_5 = class FileExplorer extends Panel_10.Panel {
@@ -11332,7 +11336,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
             root.name = "client";
             //flag modules
             for (let x = 0; x < root.files.length; x++) {
-                if (Jassi_54.default.modules[root.files[x].name] !== undefined) {
+                if (jassijs.modules[root.files[x].name] !== undefined) {
                     root.files[x].flag = (((_a = root.files[x].flag) === null || _a === void 0 ? void 0 : _a.length) > 0) ? "module" : root.files[x].flag + " module";
                 }
             }
@@ -11384,7 +11388,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
     ], FileExplorer, "show", null);
     FileExplorer = FileExplorer_5 = __decorate([
         (0, Actions_13.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_54.$Class)("jassijs.ui.FileExplorer"),
+        (0, Jassi_52.$Class)("jassijs.ui.FileExplorer"),
         __metadata("design:paramtypes", [])
     ], FileExplorer);
     exports.FileExplorer = FileExplorer;
@@ -11395,7 +11399,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Jassi",
     }
     exports.test = test;
 });
-define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_11, HTMLPanel_2, Button_6, Jassi_55, tinymce_1, Registry_17) {
+define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ext/tinymce", "jassijs/remote/Registry"], function (require, exports, Panel_11, HTMLPanel_2, Button_6, Jassi_53, tinymce_1, Registry_17) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.te = exports.HTMLEditorPanel = void 0;
@@ -11465,7 +11469,7 @@ define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", 
         }
     };
     HTMLEditorPanel = __decorate([
-        (0, Jassi_55.$Class)("jassijs.ui.HTMLEditorPanel"),
+        (0, Jassi_53.$Class)("jassijs.ui.HTMLEditorPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLEditorPanel);
     exports.HTMLEditorPanel = HTMLEditorPanel;
@@ -11478,7 +11482,7 @@ define("jassijs/ui/HTMLEditorPanel", ["require", "exports", "jassijs/ui/Panel", 
     exports.te = te;
 });
 // return CodeEditor.constructor;
-define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_13, Jassi_56, Property_14, DataComponent_2) {
+define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/DataComponent"], function (require, exports, Component_13, Jassi_54, Property_14, DataComponent_2) {
     "use strict";
     var HTMLPanel_3;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -11725,7 +11729,7 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
     ], HTMLPanel.prototype, "value", null);
     HTMLPanel = HTMLPanel_3 = __decorate([
         (0, Component_13.$UIComponent)({ fullPath: "common/HTMLPanel", icon: "mdi mdi-cloud-tags" /*, initialize: { value: "text" } */ }),
-        (0, Jassi_56.$Class)("jassijs.ui.HTMLPanel"),
+        (0, Jassi_54.$Class)("jassijs.ui.HTMLPanel"),
         __metadata("design:paramtypes", [Object])
     ], HTMLPanel);
     exports.HTMLPanel = HTMLPanel;
@@ -11756,7 +11760,7 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
     }
     exports.test = test;
 });
-define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"], function (require, exports, Component_14, Property_15, Jassi_57, DataComponent_3) {
+define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Jassi", "jassijs/ui/DataComponent"], function (require, exports, Component_14, Property_15, Jassi_55, DataComponent_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Image = void 0;
@@ -11848,7 +11852,7 @@ define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassi
     Image = __decorate([
         (0, Component_14.$UIComponent)({ fullPath: "default/Image", icon: "mdi mdi-file-image" }) //
         ,
-        (0, Jassi_57.$Class)("jassijs.ui.Image"),
+        (0, Jassi_55.$Class)("jassijs.ui.Image"),
         __metadata("design:paramtypes", [])
     ], Image);
     exports.Image = Image;
@@ -11858,7 +11862,7 @@ define("jassijs/ui/Image", ["require", "exports", "jassijs/ui/Component", "jassi
     }
     exports.test = test;
 });
-define("jassijs/ui/InvisibleComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, Component_15, Jassi_58, Property_16) {
+define("jassijs/ui/InvisibleComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, Component_15, Jassi_56, Property_16) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.InvisibleComponent = void 0;
@@ -11872,7 +11876,7 @@ define("jassijs/ui/InvisibleComponent", ["require", "exports", "jassijs/ui/Compo
         }
     };
     InvisibleComponent = __decorate([
-        (0, Jassi_58.$Class)("jassijs.ui.InvisibleComponent")
+        (0, Jassi_56.$Class)("jassijs.ui.InvisibleComponent")
         /*@$Property({name:"label",hide:true})
         @$Property({name:"icon",hide:true})
         @$Property({name:"tooltip",hide:true})
@@ -11890,7 +11894,7 @@ define("jassijs/ui/InvisibleComponent", ["require", "exports", "jassijs/ui/Compo
     ], InvisibleComponent);
     exports.InvisibleComponent = InvisibleComponent;
 });
-define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/MenuItem", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DesignDummy"], function (require, exports, Container_2, Property_17, MenuItem_4, Jassi_59, Component_16, DesignDummy_2) {
+define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/MenuItem", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DesignDummy"], function (require, exports, Container_2, Property_17, MenuItem_4, Jassi_57, Component_16, DesignDummy_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Menu = void 0;
@@ -12016,7 +12020,7 @@ define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassij
     ], Menu.prototype, "onclick", null);
     Menu = __decorate([
         (0, Component_16.$UIComponent)({ fullPath: "common/Menu", icon: "mdi mdi-menu", initialize: { text: "menu" } }),
-        (0, Jassi_59.$Class)("jassijs.ui.Menu"),
+        (0, Jassi_57.$Class)("jassijs.ui.Menu"),
         __metadata("design:paramtypes", [Object])
     ], Menu);
     exports.Menu = Menu;
@@ -12030,7 +12034,7 @@ define("jassijs/ui/Menu", ["require", "exports", "jassijs/ui/Container", "jassij
     }
     exports.test = test;
 });
-define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassijs/ui/Property", "jassijs/remote/Jassi", "jassijs/ui/Container"], function (require, exports, Component_17, Menu_3, Property_18, Jassi_60, Container_3) {
+define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassijs/ui/Property", "jassijs/remote/Jassi", "jassijs/ui/Container"], function (require, exports, Component_17, Menu_3, Property_18, Jassi_58, Container_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MenuItem = void 0;
@@ -12156,7 +12160,7 @@ define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "ja
     ], MenuItem.prototype, "text", null);
     MenuItem = __decorate([
         (0, Component_17.$UIComponent)({ fullPath: "common/MenuItem", icon: "mdi mdi-menu-open", initialize: { text: "menu" }, editableChildComponents: ["items"] }),
-        (0, Jassi_60.$Class)("jassijs.ui.MenuItem"),
+        (0, Jassi_58.$Class)("jassijs.ui.MenuItem"),
         __metadata("design:paramtypes", [])
     ], MenuItem);
     exports.MenuItem = MenuItem;
@@ -12180,7 +12184,7 @@ define("jassijs/ui/MenuItem", ["require", "exports", "jassijs/ui/Component", "ja
     }
     exports.test = test;
 });
-define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes"], function (require, exports, Jassi_61, Table_4, Panel_12, Button_7, Textbox_5, Property_19, Component_18, Classes_21) {
+define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Table", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Textbox", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes"], function (require, exports, Jassi_59, Table_4, Panel_12, Button_7, Textbox_5, Property_19, Component_18, Classes_21) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.ObjectChooser = void 0;
@@ -12366,7 +12370,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     ], ObjectChooser.prototype, "bind", null);
     ObjectChooser = __decorate([
         (0, Component_18.$UIComponent)({ fullPath: "common/ObjectChooser", icon: "mdi mdi-glasses" }),
-        (0, Jassi_61.$Class)("jassijs.ui.ObjectChooser"),
+        (0, Jassi_59.$Class)("jassijs.ui.ObjectChooser"),
         __metadata("design:paramtypes", [])
     ], ObjectChooser);
     exports.ObjectChooser = ObjectChooser;
@@ -12395,7 +12399,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Jassi"
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_4, Button_8, Jassi_62, Property_20, Textbox_6) {
+define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Button", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Panel_13, BoxPanel_6, HTMLPanel_4, Button_8, Jassi_60, Property_20, Textbox_6) {
     "use strict";
     var OptionDialog_8;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -12508,7 +12512,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
         __metadata("design:type", String)
     ], OptionDialog.prototype, "text", void 0);
     OptionDialog = OptionDialog_8 = __decorate([
-        (0, Jassi_62.$Class)("jassijs.ui.OptionDialog"),
+        (0, Jassi_60.$Class)("jassijs.ui.OptionDialog"),
         __metadata("design:paramtypes", [Object])
     ], OptionDialog);
     exports.OptionDialog = OptionDialog;
@@ -12523,7 +12527,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
         __metadata("design:type", String)
     ], Testprop.prototype, "text", void 0);
     Testprop = __decorate([
-        (0, Jassi_62.$Class)("jassijs.ui.OptionDialogTestProp")
+        (0, Jassi_60.$Class)("jassijs.ui.OptionDialogTestProp")
     ], Testprop);
     async function test2() {
         var tet = await OptionDialog.show("Should I ask?", ["yes", "no"], undefined, false);
@@ -12540,7 +12544,7 @@ define("jassijs/ui/OptionDialog", ["require", "exports", "jassijs/ui/Panel", "ja
     exports.test2 = test2;
     ;
 });
-define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DesignDummy"], function (require, exports, Jassi_63, Container_4, Component_19, Property_21, DesignDummy_3) {
+define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Container", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/ui/DesignDummy"], function (require, exports, Jassi_61, Container_4, Component_19, Property_21, DesignDummy_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Panel = exports.PanelCreateProperties = void 0;
@@ -12551,7 +12555,7 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassi
         __metadata("design:type", Boolean)
     ], PanelCreateProperties.prototype, "useSpan", void 0);
     PanelCreateProperties = __decorate([
-        (0, Jassi_63.$Class)("jassijs.ui.PanelCreateProperties")
+        (0, Jassi_61.$Class)("jassijs.ui.PanelCreateProperties")
     ], PanelCreateProperties);
     exports.PanelCreateProperties = PanelCreateProperties;
     let Panel = 
@@ -12709,7 +12713,7 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassi
     ], Panel.prototype, "isAbsolute", null);
     Panel = __decorate([
         (0, Component_19.$UIComponent)({ fullPath: "common/Panel", icon: "mdi mdi-checkbox-blank-outline", editableChildComponents: ["this"] }),
-        (0, Jassi_63.$Class)("jassijs.ui.Panel"),
+        (0, Jassi_61.$Class)("jassijs.ui.Panel"),
         (0, Property_21.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.PanelCreateProperties" })
         //@$Property({ name: "new/useSpan", type: "boolean", default: false })
         ,
@@ -12717,7 +12721,7 @@ define("jassijs/ui/Panel", ["require", "exports", "jassijs/remote/Jassi", "jassi
     ], Panel);
     exports.Panel = Panel;
 });
-define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Jassi_64, Registry_18, Classes_22) {
+define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Jassi_62, Registry_18, Classes_22) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Property = exports.$Property = void 0;
@@ -12743,12 +12747,12 @@ define("jassijs/ui/Property", ["require", "exports", "jassijs/remote/Jassi", "ja
         }
     };
     Property = __decorate([
-        (0, Jassi_64.$Class)("jassijs.ui.Property"),
+        (0, Jassi_62.$Class)("jassijs.ui.Property"),
         __metadata("design:paramtypes", [Object, Object])
     ], Property);
     exports.Property = Property;
 });
-define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/base/PropertyEditorService"], function (require, exports, Jassi_65, Panel_14, Image_2, ComponentDescriptor_4, NameEditor_1, PropertyEditorService_1, Property_22, Component_20) {
+define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/base/PropertyEditorService"], function (require, exports, Jassi_63, Panel_14, Image_2, ComponentDescriptor_4, NameEditor_1, PropertyEditorService_1, Property_22, Component_20) {
     "use strict";
     var PropertyEditor_1, _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -13475,7 +13479,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
         }
     };
     PropertyEditor = PropertyEditor_1 = __decorate([
-        (0, Jassi_65.$Class)("jassijs.ui.PropertyEditor"),
+        (0, Jassi_63.$Class)("jassijs.ui.PropertyEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], PropertyEditor);
     exports.PropertyEditor = PropertyEditor;
@@ -13494,7 +13498,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
         __metadata("design:type", String)
     ], PropertyEditorTestSubProperties.prototype, "text", void 0);
     PropertyEditorTestSubProperties = __decorate([
-        (0, Jassi_65.$Class)("jassijs.ui.PropertyEditorTestSubProperties")
+        (0, Jassi_63.$Class)("jassijs.ui.PropertyEditorTestSubProperties")
     ], PropertyEditorTestSubProperties);
     exports.PropertyEditorTestSubProperties = PropertyEditorTestSubProperties;
     let TestProperties = class TestProperties {
@@ -13556,7 +13560,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
         __metadata("design:type", Object)
     ], TestProperties.prototype, "json", void 0);
     TestProperties = __decorate([
-        (0, Jassi_65.$Class)("jassijs.ui.PropertyEditorTestProperties")
+        (0, Jassi_63.$Class)("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     function test() {
         var ret = new PropertyEditor();
@@ -13565,7 +13569,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Jassi
     }
     exports.test = test;
 });
-define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Jassi"], function (require, exports, Panel_15, Databinder_3, Component_21, Property_23, Jassi_66) {
+define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Jassi"], function (require, exports, Panel_15, Databinder_3, Component_21, Property_23, Jassi_64) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Repeater = void 0;
@@ -13573,7 +13577,7 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
     };
     RepeaterDesignPanel = __decorate([
         (0, Component_21.$UIComponent)({ editableChildComponents: ["databinder"] }),
-        (0, Jassi_66.$Class)("jassijs.ui.RepeaterDesignPanel")
+        (0, Jassi_64.$Class)("jassijs.ui.RepeaterDesignPanel")
     ], RepeaterDesignPanel);
     let Repeater = class Repeater extends Panel_15.Panel {
         /**
@@ -13726,12 +13730,12 @@ define("jassijs/ui/Repeater", ["require", "exports", "jassijs/ui/Panel", "jassij
     ], Repeater.prototype, "bind", null);
     Repeater = __decorate([
         (0, Component_21.$UIComponent)({ fullPath: "common/Repeater", icon: "mdi mdi-locker-multiple", editableChildComponents: ["this", "design"] }),
-        (0, Jassi_66.$Class)("jassijs.ui.Repeater"),
+        (0, Jassi_64.$Class)("jassijs.ui.Repeater"),
         __metadata("design:paramtypes", [Object])
     ], Repeater);
     exports.Repeater = Repeater;
 });
-define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Jassi_67, Tree_3, Panel_16, Textbox_7, Router_6, Actions_14, Windows_8) {
+define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Tree", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/base/Router", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, Jassi_65, Tree_3, Panel_16, Textbox_7, Router_6, Actions_14, Windows_8) {
     "use strict";
     var SearchExplorer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -13833,7 +13837,7 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi
     ], SearchExplorer, "show", null);
     SearchExplorer = SearchExplorer_1 = __decorate([
         (0, Actions_14.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_67.$Class)("jassijs.ui.SearchExplorer"),
+        (0, Jassi_65.$Class)("jassijs.ui.SearchExplorer"),
         __metadata("design:paramtypes", [])
     ], SearchExplorer);
     exports.SearchExplorer = SearchExplorer;
@@ -13842,7 +13846,7 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Jassi
     }
     exports.test = test;
 });
-define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/jquery.choosen"], function (require, exports, Jassi_68, Component_22, DataComponent_4, Property_24, Classes_23) {
+define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/jquery.choosen"], function (require, exports, Jassi_66, Component_22, DataComponent_4, Property_24, Classes_23) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Select = void 0;
@@ -13861,7 +13865,7 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
         __metadata("design:type", String)
     ], SelectCreateProperties.prototype, "placeholder", void 0);
     SelectCreateProperties = __decorate([
-        (0, Jassi_68.$Class)("jassijs.ui.SelectCreateProperties")
+        (0, Jassi_66.$Class)("jassijs.ui.SelectCreateProperties")
     ], SelectCreateProperties);
     let Select = class Select extends DataComponent_4.DataComponent {
         constructor(properties = undefined) {
@@ -14067,7 +14071,7 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
     ], Select.prototype, "display", null);
     Select = __decorate([
         (0, Component_22.$UIComponent)({ fullPath: "common/Select", icon: "mdi mdi-form-dropdown" }),
-        (0, Jassi_68.$Class)("jassijs.ui.Select"),
+        (0, Jassi_66.$Class)("jassijs.ui.Select"),
         (0, Property_24.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.SelectCreateProperties" }),
         __metadata("design:paramtypes", [SelectCreateProperties])
     ], Select);
@@ -14108,7 +14112,7 @@ define("jassijs/ui/Select", ["require", "exports", "jassijs/remote/Jassi", "jass
     }
     exports.test = test;
 });
-define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_5, Select_2, Jassi_69, Panel_17, PropertyEditor_2, Button_9, Settings_2, ComponentDescriptor_5, Registry_19, Actions_15, Windows_9) {
+define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel", "jassijs/ui/Select", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/PropertyEditor", "jassijs/ui/Button", "jassijs/remote/Settings", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Registry", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, HTMLPanel_5, Select_2, Jassi_67, Panel_17, PropertyEditor_2, Button_9, Settings_2, ComponentDescriptor_5, Registry_19, Actions_15, Windows_9) {
     "use strict";
     var SettingsDialog_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -14129,7 +14133,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
         }
     };
     SettingsObject = __decorate([
-        (0, Jassi_69.$Class)("jassijs.ui.SettingsObject")
+        (0, Jassi_67.$Class)("jassijs.ui.SettingsObject")
     ], SettingsObject);
     let SettingsDialog = SettingsDialog_1 = class SettingsDialog extends Panel_17.Panel {
         constructor() {
@@ -14212,7 +14216,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
     ], SettingsDialog, "show", null);
     SettingsDialog = SettingsDialog_1 = __decorate([
         (0, Actions_15.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_69.$Class)("jassijs.ui.SettingsDialog"),
+        (0, Jassi_67.$Class)("jassijs.ui.SettingsDialog"),
         __metadata("design:paramtypes", [])
     ], SettingsDialog);
     exports.SettingsDialog = SettingsDialog;
@@ -14224,7 +14228,7 @@ define("jassijs/ui/SettingsDialog", ["require", "exports", "jassijs/ui/HTMLPanel
     }
     exports.test = test;
 });
-define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/CSSProperties"], function (require, exports, InvisibleComponent_3, Component_23, Jassi_70, Property_25, CSSProperties_2) {
+define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/CSSProperties"], function (require, exports, InvisibleComponent_3, Component_23, Jassi_68, Property_25, CSSProperties_2) {
     "use strict";
     var _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -14280,7 +14284,7 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
     ], Style.prototype, "css", null);
     Style = __decorate([
         (0, Component_23.$UIComponent)({ fullPath: "common/Style", icon: "mdi mdi-virus" }),
-        (0, Jassi_70.$Class)("jassijs.ui.Style")
+        (0, Jassi_68.$Class)("jassijs.ui.Style")
         /**
          * on ore mors Style can be assigned to component
          * the style is appended to the head
@@ -14293,14 +14297,14 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
         var css = {
             filter: "drop-shadow(16px 16px 20px blue)"
         };
-        Jassi_70.default.includeCSS("mytest2id", {
+        jassijs.includeCSS("mytest2id", {
             ".Panel": css,
             ".jinlinecomponent": {
                 color: "red"
             }
         });
         setTimeout(() => {
-            Jassi_70.default.includeCSS("mytest2id", undefined); //remove
+            jassijs.includeCSS("mytest2id", undefined); //remove
         }, 400);
         // includeCSS("mytest2id",undefined);
     }
@@ -14314,7 +14318,7 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Calendar", "jassijs/ext/tabulator"], function (require, exports, Jassi_71, DataComponent_5, Property_26, Component_24, Textbox_8, Calendar_1) {
+define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Calendar", "jassijs/ext/tabulator"], function (require, exports, Jassi_69, DataComponent_5, Property_26, Component_24, Textbox_8, Calendar_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -14349,7 +14353,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
         __metadata("design:returntype", void 0)
     ], TableEditorProperties.prototype, "cellDblClick", null);
     TableEditorProperties = __decorate([
-        (0, Jassi_71.$Class)("jassijs.ui.TableEditorProperties")
+        (0, Jassi_69.$Class)("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
     let Table = class Table extends DataComponent_5.DataComponent {
         constructor(properties) {
@@ -14705,7 +14709,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
     ], Table.prototype, "bindItems", null);
     Table = __decorate([
         (0, Component_24.$UIComponent)({ fullPath: "common/Table", icon: "mdi mdi-grid" }),
-        (0, Jassi_71.$Class)("jassijs.ui.Table"),
+        (0, Jassi_69.$Class)("jassijs.ui.Table"),
         (0, Property_26.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" }),
         __metadata("design:paramtypes", [Object])
     ], Table);
@@ -14736,7 +14740,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Jassi", "jassi
     }
     exports.test = test;
 });
-define("jassijs/ui/Textarea", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Component_25, Jassi_72, Property_27, Textbox_9) {
+define("jassijs/ui/Textarea", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/ui/Textbox"], function (require, exports, Component_25, Jassi_70, Property_27, Textbox_9) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Textarea = void 0;
@@ -14748,13 +14752,13 @@ define("jassijs/ui/Textarea", ["require", "exports", "jassijs/ui/Component", "ja
     };
     Textarea = __decorate([
         (0, Component_25.$UIComponent)({ fullPath: "common/Textarea", icon: "mdi mdi-text-box-outline" }),
-        (0, Jassi_72.$Class)("jassijs.ui.Textarea"),
+        (0, Jassi_70.$Class)("jassijs.ui.Textarea"),
         (0, Property_27.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [])
     ], Textarea);
     exports.Textarea = Textarea;
 });
-define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, Jassi_73, Component_26, DataComponent_6, DefaultConverter_1, Registry_20, Property_28, Numberformatter_1) {
+define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, Jassi_71, Component_26, DataComponent_6, DefaultConverter_1, Registry_20, Property_28, Numberformatter_1) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -14996,7 +15000,7 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
     ], Textbox.prototype, "placeholder", null);
     Textbox = __decorate([
         (0, Component_26.$UIComponent)({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" }),
-        (0, Jassi_73.$Class)("jassijs.ui.Textbox"),
+        (0, Jassi_71.$Class)("jassijs.ui.Textbox"),
         (0, Property_28.$Property)({ name: "new", type: "string" }),
         __metadata("design:paramtypes", [Object])
     ], Textbox);
@@ -15009,7 +15013,7 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Jassi", "jas
     exports.test = test;
 });
 // return CodeEditor.constructor;
-define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ext/fancytree"], function (require, exports, Jassi_74, Component_27, Registry_21, Property_29) {
+define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ext/fancytree"], function (require, exports, Jassi_72, Component_27, Registry_21, Property_29) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Tree = void 0;
@@ -15025,7 +15029,7 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
         __metadata("design:type", String)
     ], TreeEditorPropertiesMulti.prototype, "mode", void 0);
     TreeEditorPropertiesMulti = __decorate([
-        (0, Jassi_74.$Class)("jassijs.ui.TreeEditorPropertiesMulti")
+        (0, Jassi_72.$Class)("jassijs.ui.TreeEditorPropertiesMulti")
     ], TreeEditorPropertiesMulti);
     let TreeEditorProperties = class TreeEditorProperties {
     };
@@ -15042,7 +15046,7 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
         __metadata("design:type", TreeEditorPropertiesMulti)
     ], TreeEditorProperties.prototype, "multi", void 0);
     TreeEditorProperties = __decorate([
-        (0, Jassi_74.$Class)("jassijs.ui.TreeEditorProperties")
+        (0, Jassi_72.$Class)("jassijs.ui.TreeEditorProperties")
     ], TreeEditorProperties);
     let Tree = 
     /*@$Property({ name: "new/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
@@ -15565,7 +15569,7 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
     ], Tree.prototype, "onclick", null);
     Tree = __decorate([
         (0, Component_27.$UIComponent)({ fullPath: "common/Tree", icon: "mdi mdi-file-tree" }),
-        (0, Jassi_74.$Class)("jassijs.ui.Tree"),
+        (0, Jassi_72.$Class)("jassijs.ui.Tree"),
         (0, Property_29.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.TreeEditorProperties" })
         /*@$Property({ name: "new/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
         @$Property({ name: "new/checkbox", type: "boolean", default: false, description: "desplay a checkbos before the node" })
@@ -15702,7 +15706,7 @@ define("jassijs/ui/Tree", ["require", "exports", "jassijs/remote/Jassi", "jassij
     }
     exports.test = test;
 });
-define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Jassi_75, Component_28, Property_30) {
+define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Component", "jassijs/ui/Property"], function (require, exports, Jassi_73, Component_28, Property_30) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Upload = void 0;
@@ -15797,7 +15801,7 @@ define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Jassi", "jass
     ], Upload.prototype, "onuploaded", null);
     Upload = __decorate([
         (0, Component_28.$UIComponent)({ fullPath: "common/Upload", icon: "mdi mdi-cloud-upload-outline" }),
-        (0, Jassi_75.$Class)("jassijs.ui.Upload"),
+        (0, Jassi_73.$Class)("jassijs.ui.Upload"),
         __metadata("design:paramtypes", [])
     ], Upload);
     exports.Upload = Upload;
@@ -15820,14 +15824,14 @@ define("jassijs/ui/Upload", ["require", "exports", "jassijs/remote/Jassi", "jass
     }
     exports.test = test;
 });
-define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/ComponentDescriptor"], function (require, exports, Jassi_76, Panel_18, Component_29, ComponentDescriptor_6) {
+define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Component", "jassijs/ui/ComponentDescriptor"], function (require, exports, Jassi_74, Panel_18, Component_29, ComponentDescriptor_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.VariablePanel = void 0;
-    Jassi_76.default.d = function (id) {
-        if (Jassi_76.default.d[id] === true)
+    jassijs.d = function (id) {
+        if (jassijs.d[id] === true)
             return false;
-        Jassi_76.default.d[id] = true;
+        jassijs.d[id] = true;
         return true;
     };
     // console.log(jassijs.d(9)?debug:0);
@@ -16168,12 +16172,12 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Jassi"
         }
     };
     VariablePanel = __decorate([
-        (0, Jassi_76.$Class)("jassijs.ui.VariablePanel"),
+        (0, Jassi_74.$Class)("jassijs.ui.VariablePanel"),
         __metadata("design:paramtypes", [])
     ], VariablePanel);
     exports.VariablePanel = VariablePanel;
 });
-define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Checkbox", "jassijs/ui/PropertyEditors/Editor"], function (require, exports, Jassi_77, Checkbox_1, Editor_1) {
+define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Checkbox", "jassijs/ui/PropertyEditors/Editor"], function (require, exports, Jassi_75, Checkbox_1, Editor_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.BooleanEditor = void 0;
@@ -16218,12 +16222,12 @@ define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassi
     };
     BooleanEditor = __decorate([
         (0, Editor_1.$PropertyEditor)(["boolean"]),
-        (0, Jassi_77.$Class)("jassijs.ui.PropertyEditors.BooleanEditor"),
+        (0, Jassi_75.$Class)("jassijs.ui.PropertyEditors.BooleanEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], BooleanEditor);
     exports.BooleanEditor = BooleanEditor;
 });
-define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/PropertyEditors/JsonEditor", "jassijs/util/Tools", "jassijs/ui/converters/StringConverter", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes"], function (require, exports, Select_3, Editor_2, JsonEditor_1, Tools_2, StringConverter_1, Jassi_78, Panel_19, Textbox_10, Registry_22, ComponentDescriptor_7, Classes_24) {
+define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/PropertyEditors/JsonEditor", "jassijs/util/Tools", "jassijs/ui/converters/StringConverter", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes"], function (require, exports, Select_3, Editor_2, JsonEditor_1, Tools_2, StringConverter_1, Jassi_76, Panel_19, Textbox_10, Registry_22, ComponentDescriptor_7, Classes_24) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClassSelectorEditor = void 0;
@@ -16376,18 +16380,18 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
     };
     ClassSelectorEditor = __decorate([
         (0, Editor_2.$PropertyEditor)(["classselector"]),
-        (0, Jassi_78.$Class)("jassijs.ui.PropertyEditors.ClassSelectorEditor"),
+        (0, Jassi_76.$Class)("jassijs.ui.PropertyEditors.ClassSelectorEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ClassSelectorEditor);
     exports.ClassSelectorEditor = ClassSelectorEditor;
-    Jassi_78.default.test = function () {
+    jassijs.test = function () {
         ComponentDescriptor_7.ComponentDescriptor.cache = {};
         var t = new ClassSelectorEditor();
         t.layout();
         return t.me.pan;
     };
 });
-define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ext/spectrum"], function (require, exports, PropertyEditor_3, Editor_3, Textbox_11, Jassi_79, Select_4, BoxPanel_7) {
+define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/BoxPanel", "jassijs/ext/spectrum"], function (require, exports, PropertyEditor_3, Editor_3, Textbox_11, Jassi_77, Select_4, BoxPanel_7) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test3 = exports.ColorEditor = void 0;
@@ -16492,7 +16496,7 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
     };
     ColorEditor = __decorate([
         (0, Editor_3.$PropertyEditor)(["color"]),
-        (0, Jassi_79.$Class)("jassijs.ui.PropertyEditors.ColorEditor")
+        (0, Jassi_77.$Class)("jassijs.ui.PropertyEditors.ColorEditor")
         /**
         * Editor for color
         * used by PropertyEditor
@@ -16523,7 +16527,7 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Jassi"], function (require, exports, Editor_4, Select_5, Classes_25, Jassi_80) {
+define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Jassi"], function (require, exports, Editor_4, Select_5, Classes_25, Jassi_78) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSelectorEditor = void 0;
@@ -16595,7 +16599,7 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
     };
     ComponentSelectorEditor = __decorate([
         (0, Editor_4.$PropertyEditor)(["componentselector"]),
-        (0, Jassi_80.$Class)("jassijs.ui.PropertyEditors.ComponentSelectorEditor"),
+        (0, Jassi_78.$Class)("jassijs.ui.PropertyEditors.ComponentSelectorEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ComponentSelectorEditor);
     exports.ComponentSelectorEditor = ComponentSelectorEditor;
@@ -16603,7 +16607,7 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
     }
     exports.test = test;
 });
-define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/remote/Classes"], function (require, exports, Editor_5, Jassi_81, Panel_20, Textbox_12, ObjectChooser_1, Classes_26) {
+define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/remote/Classes"], function (require, exports, Editor_5, Jassi_79, Panel_20, Textbox_12, ObjectChooser_1, Classes_26) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectEditor = void 0;
@@ -16703,12 +16707,12 @@ define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jass
     };
     DBObjectEditor = __decorate([
         (0, Editor_5.$PropertyEditor)(["dbobject"]),
-        (0, Jassi_81.$Class)("jassijs.ui.PropertyEditors.DBObjectEditor"),
+        (0, Jassi_79.$Class)("jassijs.ui.PropertyEditors.DBObjectEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DBObjectEditor);
     exports.DBObjectEditor = DBObjectEditor;
 });
-define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Databinder", "jassijs/remote/Jassi", "jassijs/ui/Textbox"], function (require, exports, Editor_6, Databinder_4, Jassi_82, Textbox_13) {
+define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Databinder", "jassijs/remote/Jassi", "jassijs/ui/Textbox"], function (require, exports, Editor_6, Databinder_4, Jassi_80, Textbox_13) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DatabinderEditor = void 0;
@@ -16794,12 +16798,12 @@ define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "ja
     };
     DatabinderEditor = __decorate([
         (0, Editor_6.$PropertyEditor)(["databinder"]),
-        (0, Jassi_82.$Class)("jassijs.ui.PropertyEditors.DatabinderEditor"),
+        (0, Jassi_80.$Class)("jassijs.ui.PropertyEditors.DatabinderEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DatabinderEditor);
     exports.DatabinderEditor = DatabinderEditor;
 });
-define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Select"], function (require, exports, Textbox_14, Editor_7, Jassi_83, Select_6) {
+define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassijs/ui/Textbox", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Select"], function (require, exports, Textbox_14, Editor_7, Jassi_81, Select_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     let DefaultEditor = class DefaultEditor extends Editor_7.Editor {
@@ -16903,11 +16907,11 @@ define("jassijs/ui/PropertyEditors/DefaultEditor", ["require", "exports", "jassi
     };
     DefaultEditor = __decorate([
         (0, Editor_7.$PropertyEditor)(["string", "number", "number[]", "boolean[]"]),
-        (0, Jassi_83.$Class)("jassijs.ui.PropertyEditors.DefaultEditor"),
+        (0, Jassi_81.$Class)("jassijs.ui.PropertyEditors.DefaultEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], DefaultEditor);
 });
-define("jassijs/ui/PropertyEditors/Editor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"], function (require, exports, Jassi_84, Registry_23) {
+define("jassijs/ui/PropertyEditors/Editor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"], function (require, exports, Jassi_82, Registry_23) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Editor = exports.$PropertyEditor = void 0;
@@ -16999,12 +17003,12 @@ define("jassijs/ui/PropertyEditors/Editor", ["require", "exports", "jassijs/remo
         }
     };
     Editor = __decorate([
-        (0, Jassi_84.$Class)("jassijs.ui.PropertyEditors.Editor"),
+        (0, Jassi_82.$Class)("jassijs.ui.PropertyEditors.Editor"),
         __metadata("design:paramtypes", [Object, Object])
     ], Editor);
     exports.Editor = Editor;
 });
-define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_4, Editor_8, Textbox_15, Jassi_85, Select_7, CSSProperties_3) {
+define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi", "jassijs/ui/Select", "jassijs/ui/CSSProperties"], function (require, exports, PropertyEditor_4, Editor_8, Textbox_15, Jassi_83, Select_7, CSSProperties_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.FontEditor = void 0;
@@ -17078,7 +17082,7 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
     };
     FontEditor = __decorate([
         (0, Editor_8.$PropertyEditor)(["font"]),
-        (0, Jassi_85.$Class)("jassijs.ui.PropertyEditors.FontEditor")
+        (0, Jassi_83.$Class)("jassijs.ui.PropertyEditors.FontEditor")
         /**
         * Editor for font
         * used by PropertyEditor
@@ -17099,7 +17103,7 @@ define("jassijs/ui/PropertyEditors/FontEditor", ["require", "exports", "jassijs/
     }
     exports.test = test;
 });
-define("jassijs/ui/PropertyEditors/FunctionEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Editor_9, Button_10, Jassi_86) {
+define("jassijs/ui/PropertyEditors/FunctionEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/remote/Jassi"], function (require, exports, Editor_9, Button_10, Jassi_84) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.FunctionEditor = void 0;
@@ -17164,12 +17168,12 @@ define("jassijs/ui/PropertyEditors/FunctionEditor", ["require", "exports", "jass
     };
     FunctionEditor = __decorate([
         (0, Editor_9.$PropertyEditor)(["function"]),
-        (0, Jassi_86.$Class)("jassijs.ui.PropertyEditors.FunctionEditor"),
+        (0, Jassi_84.$Class)("jassijs.ui.PropertyEditors.FunctionEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], FunctionEditor);
     exports.FunctionEditor = FunctionEditor;
 });
-define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/ui/Panel"], function (require, exports, Editor_10, Jassi_87, Textbox_16, ObjectChooser_2, Panel_21) {
+define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/ui/Panel"], function (require, exports, Editor_10, Jassi_85, Textbox_16, ObjectChooser_2, Panel_21) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.HTMLEditor = void 0;
@@ -17249,12 +17253,12 @@ define("jassijs/ui/PropertyEditors/HTMLEditor", ["require", "exports", "jassijs/
     };
     HTMLEditor = __decorate([
         (0, Editor_10.$PropertyEditor)(["html"]),
-        (0, Jassi_87.$Class)("jassijs.ui.PropertyEditors.HTMLEditor"),
+        (0, Jassi_85.$Class)("jassijs.ui.PropertyEditors.HTMLEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], HTMLEditor);
     exports.HTMLEditor = HTMLEditor;
 });
-define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions"], function (require, exports, Editor_11, Jassi_88, Panel_22, Textbox_17, Button_11, Actions_16) {
+define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions"], function (require, exports, Editor_11, Jassi_86, Panel_22, Textbox_17, Button_11, Actions_16) {
     "use strict";
     var ImageEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17389,7 +17393,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
     ImageEditor = ImageEditor_1 = __decorate([
         (0, Actions_16.$ActionProvider)("jassijs.base.ActionNode"),
         (0, Editor_11.$PropertyEditor)(["image"]),
-        (0, Jassi_88.$Class)("jassijs.ui.PropertyEditors.ImageEditor"),
+        (0, Jassi_86.$Class)("jassijs.ui.PropertyEditors.ImageEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], ImageEditor);
     exports.ImageEditor = ImageEditor;
@@ -17400,7 +17404,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
     }
     exports.test = test;
 });
-define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Jassi_89, Editor_12, Button_12, PropertyEditor_5, Tools_3, Classes_27, Property_31) {
+define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property"], function (require, exports, Jassi_87, Editor_12, Button_12, PropertyEditor_5, Tools_3, Classes_27, Property_31) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.JsonEditor = void 0;
@@ -17585,7 +17589,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
     };
     JsonEditor = __decorate([
         (0, Editor_12.$PropertyEditor)(["json"]),
-        (0, Jassi_89.$Class)("jassijs.ui.PropertyEditors.JsonEditor"),
+        (0, Jassi_87.$Class)("jassijs.ui.PropertyEditors.JsonEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], JsonEditor);
     exports.JsonEditor = JsonEditor;
@@ -17601,7 +17605,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         __metadata("design:type", Object)
     ], TestProperties.prototype, "jo", void 0);
     TestProperties = __decorate([
-        (0, Jassi_89.$Class)("jassijs.ui.PropertyEditorTestProperties")
+        (0, Jassi_87.$Class)("jassijs.ui.PropertyEditorTestProperties")
     ], TestProperties);
     let TestProperties2 = class TestProperties2 {
     };
@@ -17614,7 +17618,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         __metadata("design:type", String)
     ], TestProperties2.prototype, "name2", void 0);
     TestProperties2 = __decorate([
-        (0, Jassi_89.$Class)("jassijs.ui.PropertyEditorTestProperties2")
+        (0, Jassi_87.$Class)("jassijs.ui.PropertyEditorTestProperties2")
     ], TestProperties2);
     function test() {
         var ret = new PropertyEditor_5.PropertyEditor();
@@ -17667,7 +17671,7 @@ define("jassijs/ui/PropertyEditors/LoadingEditor", ["require", "exports", "jassi
     }
     exports.LoadingEditor = LoadingEditor;
 });
-define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi"], function (require, exports, Editor_14, Textbox_19, Jassi_90) {
+define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Textbox", "jassijs/remote/Jassi"], function (require, exports, Editor_14, Textbox_19, Jassi_88) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NameEditor = void 0;
@@ -17732,12 +17736,12 @@ define("jassijs/ui/PropertyEditors/NameEditor", ["require", "exports", "jassijs/
     };
     NameEditor = __decorate([
         (0, Editor_14.$PropertyEditor)(["*name*"]),
-        (0, Jassi_90.$Class)("jassijs.ui.PropertyEditors.NameEditor"),
+        (0, Jassi_88.$Class)("jassijs.ui.PropertyEditors.NameEditor"),
         __metadata("design:paramtypes", [Object, Object])
     ], NameEditor);
     exports.NameEditor = NameEditor;
 });
-define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Jassi_91, Registry_24, Property_32) {
+define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Jassi_89, Registry_24, Property_32) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DefaultConverter = exports.$Converter = exports.$ConverterProperties = void 0;
@@ -17761,7 +17765,7 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
         __metadata("design:returntype", void 0)
     ], DefaultConverterProperties.prototype, "stringToObject", null);
     DefaultConverterProperties = __decorate([
-        (0, Jassi_91.$Class)("jassijs.ui.converters.DefaultConverterProperties")
+        (0, Jassi_89.$Class)("jassijs.ui.converters.DefaultConverterProperties")
     ], DefaultConverterProperties);
     let DefaultConverter = 
     //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
@@ -17786,7 +17790,7 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
     };
     DefaultConverter = __decorate([
         $Converter({ name: "custom" }),
-        (0, Jassi_91.$Class)("jassijs.ui.converters.DefaultConverter"),
+        (0, Jassi_89.$Class)("jassijs.ui.converters.DefaultConverter"),
         (0, Property_32.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
         //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
         ,
@@ -17794,7 +17798,7 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
     ], DefaultConverter);
     exports.DefaultConverter = DefaultConverter;
 });
-define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, DefaultConverter_2, Jassi_92, Property_33, Numberformatter_2) {
+define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Jassi", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, DefaultConverter_2, Jassi_90, Property_33, Numberformatter_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NumberConverter = void 0;
@@ -17827,7 +17831,7 @@ define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/
     };
     NumberConverter = __decorate([
         (0, DefaultConverter_2.$Converter)({ name: "number" }),
-        (0, Jassi_92.$Class)("jassijs.ui.converters.NumberConverter"),
+        (0, Jassi_90.$Class)("jassijs.ui.converters.NumberConverter"),
         (0, Property_33.$Property)({ name: "new", type: "json" })
         //@$Property({name:"new/min",type:"number",default:undefined})
         //@$Property({name:"new/max",type:"number",default:undefined})
@@ -17836,7 +17840,7 @@ define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/
     ], NumberConverter);
     exports.NumberConverter = NumberConverter;
 });
-define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, DefaultConverter_3, Jassi_93, Property_34) {
+define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Jassi", "jassijs/ui/Property"], function (require, exports, DefaultConverter_3, Jassi_91, Property_34) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StringConverter = void 0;
@@ -17865,7 +17869,7 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
     };
     StringConverter = __decorate([
         (0, DefaultConverter_3.$Converter)({ name: "string" }),
-        (0, Jassi_93.$Class)("jassijs.ui.converters.StringConverter"),
+        (0, Jassi_91.$Class)("jassijs.ui.converters.StringConverter"),
         (0, Property_34.$Property)({ name: "new", type: "json" })
         //@$Property({ name: "new/minChars", type: "number", default: undefined })
         //@$Property({ name: "new/maxChars", type: "number", default: undefined })
@@ -17874,7 +17878,7 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
     ], StringConverter);
     exports.StringConverter = StringConverter;
 });
-define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_13, NumberConverter_2, Textbox_20, BoxPanel_8, Select_8, Table_5, Jassi_94, Panel_23, papaparse_1, Database_3, Registry_25, Classes_28, DBObject_7, Actions_17, Router_7, Server_5, Transaction_1) {
+define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Jassi", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_13, NumberConverter_2, Textbox_20, BoxPanel_8, Select_8, Table_5, Jassi_92, Panel_23, papaparse_1, Database_3, Registry_25, Classes_28, DBObject_7, Actions_17, Router_7, Server_5, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -18141,7 +18145,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
     ], CSVImport, "showDialog", null);
     CSVImport = CSVImport_1 = __decorate([
         (0, Actions_17.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Jassi_94.$Class)("jassijs.util.CSVImport"),
+        (0, Jassi_92.$Class)("jassijs.util.CSVImport"),
         __metadata("design:paramtypes", [])
     ], CSVImport);
     exports.CSVImport = CSVImport;
@@ -18322,7 +18326,7 @@ define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Dat
     }
     exports.ManyToMany = ManyToMany;
 });
-define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_95) {
+define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_93) {
     "use strict";
     var Numberformatter_3;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -18489,7 +18493,7 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Ja
         }
     };
     Numberformatter = Numberformatter_3 = __decorate([
-        (0, Jassi_95.$Class)("jassijs.util.Numberformatter")
+        (0, Jassi_93.$Class)("jassijs.util.Numberformatter")
     ], Numberformatter);
     exports.Numberformatter = Numberformatter;
     function test() {
@@ -18500,7 +18504,7 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Ja
     }
     exports.test = test;
 });
-define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"], function (require, exports, Jassi_96, Registry_26) {
+define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Jassi", "jassijs/remote/Registry"], function (require, exports, Jassi_94, Registry_26) {
     "use strict";
     var Reloader_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -18523,7 +18527,7 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Jassi", "
             }
             var h = { date: 0, files: [] };
             var f = async function () {
-                Jassi_96.default.server.call("checkDir", h.date).then(function (t) {
+                jassijs.server.call("checkDir", h.date).then(function (t) {
                     h = JSON.parse(t);
                     var len = h.files.length;
                     if (len > 3)
@@ -18747,12 +18751,12 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Jassi", "
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_1();
     Reloader = Reloader_1 = __decorate([
-        (0, Jassi_96.$Class)("jassijs.util.Reloader"),
+        (0, Jassi_94.$Class)("jassijs.util.Reloader"),
         __metadata("design:paramtypes", [])
     ], Reloader);
     exports.Reloader = Reloader;
 });
-define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_97) {
+define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_95) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Runlater = void 0;
@@ -18789,12 +18793,12 @@ define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Jassi"], 
         }
     };
     Runlater = __decorate([
-        (0, Jassi_97.$Class)("jassi.util.Runlater"),
+        (0, Jassi_95.$Class)("jassi.util.Runlater"),
         __metadata("design:paramtypes", [Object, Object])
     ], Runlater);
     exports.Runlater = Runlater;
 });
-define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_98) {
+define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi"], function (require, exports, Jassi_96) {
     "use strict";
     var Tools_4;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -19095,7 +19099,7 @@ define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Jassi"], fun
         }
     };
     Tools = Tools_4 = __decorate([
-        (0, Jassi_98.$Class)("jassijs.util.Tools"),
+        (0, Jassi_96.$Class)("jassijs.util.Tools"),
         __metadata("design:paramtypes", [])
     ], Tools);
     exports.Tools = Tools;

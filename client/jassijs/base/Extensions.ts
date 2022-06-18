@@ -1,4 +1,4 @@
-import jassijs from "jassijs/remote/Jassi";
+
 import registry from "jassijs/remote/Registry";
 
 export class Extensions
