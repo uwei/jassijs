@@ -56,7 +56,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985802000
 	},
 	"jassijs/modul.ts": {
-		"date": 1655467803073
+		"date": 1655540263633
 	},
 	"jassijs/remote/Classes.ts": {
 		"date": 1624296520000,
@@ -97,8 +97,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1634389646000,
-		"jassijs.remote.Jassi": {}
+		"date": 1655545374373
 	},
 	"jassijs/remote/ObjectTransaction.ts": {
 		"date": 1622985414000
@@ -568,7 +567,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1655467331127,
+		"date": 1655539396580,
 		"jassijs.ui.Component": {
 			"@members": {
 				"onfocus": {

@@ -1,13 +1,4 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define(["require", "exports", "jassijs/remote/Registry", "./Classes"], function (require, exports, Registry_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Jassi = exports.$register = exports.$Class = void 0;
@@ -42,16 +33,15 @@ define(["require", "exports", "jassijs/remote/Registry", "./Classes"], function 
     * main class for jassi
     * @class Jassi
     */
-    let Jassi = class Jassi {
+    class Jassi {
         constructor() {
-            var _a, _b;
             this.isServer = false;
             //@ts-ignore
             this.isServer = window.document === undefined;
             //@ts-ignore
-            this.modules = (_a = window === null || window === void 0 ? void 0 : window.__jassijsconfig__) === null || _a === void 0 ? void 0 : _a.modules;
+            //this.modules = window?.__jassijsconfig__?.modules;
             //@ts-ignore
-            this.options = (_b = window === null || window === void 0 ? void 0 : window.__jassijsconfig__) === null || _b === void 0 ? void 0 : _b.options;
+            //this.options = window?.__jassijsconfig__?.options;
             if (!this.isServer) {
                 //@ts-ignore 
                 /*import("jassijs/modul").then((modul)=>{
@@ -102,7 +92,7 @@ define(["require", "exports", "jassijs/remote/Registry", "./Classes"], function 
         */
         myRequire(href, event = undefined, param = undefined) {
             if (this.isServer)
-                throw new Classes_1.JassiError("jassi.Require is only available on client");
+                throw new Error("jassi.Require is only available on client");
             if ((typeof href) === "string") {
                 href = [href];
             }
@@ -155,11 +145,7 @@ define(["require", "exports", "jassijs/remote/Registry", "./Classes"], function 
                 head.appendChild(link);
             }
         }
-    };
-    Jassi = __decorate([
-        $Class("jassijs.remote.Jassi"),
-        __metadata("design:paramtypes", [])
-    ], Jassi);
+    }
     exports.Jassi = Jassi;
     ;
     var jassijs = new Jassi();

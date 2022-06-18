@@ -1,8 +1,6 @@
 
 
 import registry from "jassijs/remote/Registry";
-import { JassiError } from "./Classes";
-
 
 
 declare global {
@@ -55,7 +53,7 @@ String.prototype.replaceAll = function (search: string, replacement: string): st
 * main class for jassi
 * @class Jassi
 */
-@$Class("jassijs.remote.Jassi")
+
 export class Jassi {
     //  public classes:Classes=undefined;
     [key: string]: any;
@@ -67,9 +65,9 @@ export class Jassi {
         //@ts-ignore
         this.isServer = window.document === undefined;
         //@ts-ignore
-        this.modules = window?.__jassijsconfig__?.modules;
+       //this.modules = window?.__jassijsconfig__?.modules;
         //@ts-ignore
-        this.options = window?.__jassijsconfig__?.options;
+        //this.options = window?.__jassijsconfig__?.options;
         if (!this.isServer) {
             //@ts-ignore 
             /*import("jassijs/modul").then((modul)=>{
@@ -120,7 +118,7 @@ export class Jassi {
     */
     myRequire(href, event = undefined, param = undefined) {
         if (this.isServer)
-            throw new JassiError("jassi.Require is only available on client");
+            throw new Error("jassi.Require is only available on client");
         if ((typeof href) === "string") {
             href = [href];
         }

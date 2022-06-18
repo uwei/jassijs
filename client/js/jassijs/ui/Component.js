@@ -455,8 +455,8 @@ define(["require", "exports", "jassijs/remote/Jassi", "jassijs/ui/Property", "ja
     ], Component.prototype, "hidden", null);
     __decorate([
         (0, Property_1.$Property)({ type: "string" }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
     ], Component.prototype, "width", null);
     __decorate([
         (0, Property_1.$Property)({ type: "string" }),

@@ -385,7 +385,7 @@ export class Component implements ComponentConfig {
     }
 
 
-    set width(value: string) { //the Code
+    set width(value: string|number) { //the Code
         //  if($.isNumeric(value))
         if (value === undefined)
             value = "";
@@ -402,7 +402,7 @@ export class Component implements ComponentConfig {
         //  
     }
     @$Property({ type: "string" })
-    get width() {
+    get width():string {
         if (this.domWrapper.style.width !== undefined)
             return this.domWrapper.style.width;
         return this.dom.style.width.replace("px", "");
