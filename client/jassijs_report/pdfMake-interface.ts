@@ -1,5 +1,8 @@
 
 //source from https://cdn.jsdelivr.net/npm/@types/pdfmake/interfaces.d.ts
+//  changes by jassijs are tagged with /*changed by jassijs*/
+
+
 // Type definitions for pdfmake 0.1
 // Project: http://pdfmake.org
 // Definitions by: Milen Stefanov <https://github.com/m1llen1um>
@@ -10,7 +13,7 @@
 //                 Jean-Raphaël Matte <https://github.com/jeralm>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 3.0
-//  changes by jassijs are tagged with /*changed by jassijs*/
+
 /// <reference types="node" />
 /// <reference types="pdfkit" />
 
