@@ -1,9 +1,10 @@
 
+
 reportdesign = {
 	content: [
         "Hallo ${name}",
         "${address.street}",
-        "${parameter.date}",
+        "${parameter.date}"
     ]
 };
 reportdesign.data={

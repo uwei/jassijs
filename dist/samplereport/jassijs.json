@@ -13,7 +13,7 @@
 	},
 	"options":{
 		"Server":{
-			"filterModulInFilemap":["demoreports","jassijs_reportdefinition"],
+			"filterModulInFilemap":["demoreports"],
 			"filterSytemfilesInFilemap":true,
 			"filterActions":{
 				"jassijs.remote.FileNode":[
