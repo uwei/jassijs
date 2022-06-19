@@ -14,7 +14,7 @@
 	},
 	"options":{
 		"Server":{
-			"filterModulInFilemap":["demoreports"],
+			"filterModulInFilemap":["demoreports","jassijs_reportdefinition"],
 			"filterSytemfilesInFilemap":true,
 			"filterActions":{
 				"jassijs.remote.FileNode":[

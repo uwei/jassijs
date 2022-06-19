@@ -134,6 +134,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 //_this.editorProvider="ace";
             }, 100);
         }
+        static async addFilesToCompletion(filenames) {
+            // await typescript.initService();
+        }
         _installView() {
             this._main.add(this._codeView, "Code..", "code");
             this._main.add(this.variables, "Variables", "variables");

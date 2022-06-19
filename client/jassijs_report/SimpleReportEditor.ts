@@ -253,7 +253,7 @@ export class SimpleReportEditor extends Panel {
         super(properties);
         var _this = this;
         this.acePanel = new AcePanelSimple();
-        this.codeEditor = new SimpleCodeEditor(this.acePanel);
+        this.codeEditor = new SimpleCodeEditor(<any>this.acePanel);
         this.add(this.codeEditor);
         this.codeEditor.width = "100%";
         this.codeEditor.height = "100%";

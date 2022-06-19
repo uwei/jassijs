@@ -261,6 +261,13 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
             });
         }
         /**
+         * text changes
+         * @param {function} handler
+         */
+        onchange(handler) {
+            this._editor.on('change', handler);
+        }
+        /**
          * initialize the Ace language Tools (only once)
          */
         _installLangTools() {

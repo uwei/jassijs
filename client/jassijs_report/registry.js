@@ -1055,14 +1055,11 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.RUnknown": {}
 	},
 	"jassijs_report/SimpleReportEditor.ts": {
-		"date": 1655556792359,
+		"date": 1655637340626,
 		"jassi_report.SimpleReportEditor": {}
 	},
 	"jassijs_report/StartReporteditor.ts": {
 		"date": 1654466752918
-	},
-	"jassijs_report/ReportDesignGlobal.ts": {
-		"date": 1655397712425
 	}
 }
  }

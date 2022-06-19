@@ -2,7 +2,7 @@ reportdesign = {
     content: [
         "Hallo ${name}",
         "${address.street}",
-        "${parameter.date}"
+        "${parameter.date}",
     ]
 };
 reportdesign.data = {
@@ -515,7 +515,7 @@ define("demoreports/registry", ["require"], function (require) {
     return {
         default: {
             "demoreports/01-Simpledata.ts": {
-                "date": 1655545558908
+                "date": 1655637914135
             },
             "demoreports/10-Foreach.ts": {
                 "date": 1655407641261

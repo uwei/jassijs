@@ -281,6 +281,13 @@ export class AcePanel extends CodePanel{
 
     }
     /**
+     * text changes
+     * @param {function} handler
+     */
+    onchange(handler) {
+       this._editor.on('change', handler);
+    }
+    /**
      * initialize the Ace language Tools (only once)
      */
     private _installLangTools() {

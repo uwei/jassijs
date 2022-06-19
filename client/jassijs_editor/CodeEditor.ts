@@ -175,7 +175,11 @@ export class CodeEditor extends Panel {
             //_this.editorProvider="ace";
         }, 100);
     }
-
+    static async addFilesToCompletion(filenames:string[]){
+       // await typescript.initService();
+        
+            
+    }
     _installView() {
         this._main.add(this._codeView, "Code..", "code");
         this._main.add(this.variables, "Variables", "variables");

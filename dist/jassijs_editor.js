@@ -261,6 +261,13 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
             });
         }
         /**
+         * text changes
+         * @param {function} handler
+         */
+        onchange(handler) {
+            this._editor.on('change', handler);
+        }
+        /**
          * initialize the Ace language Tools (only once)
          */
         _installLangTools() {
@@ -1009,6 +1016,9 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             setTimeout(() => {
                 //_this.editorProvider="ace";
             }, 100);
+        }
+        static async addFilesToCompletion(filenames) {
+            // await typescript.initService();
         }
         _installView() {
             this._main.add(this._codeView, "Code..", "code");
@@ -3429,15 +3439,19 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1655556793963,
+                "date": 1655629520595,
                 "jassijs.ui.AcePanel": {}
+            },
+            "jassijs_editor/AcePanelSimple.ts": {
+                "date": 1655556793963,
+                "jassijs.ui.AcePanelSimple": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
                 "date": 1655584741932,
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1655556793963,
+                "date": 1655636028029,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3542,13 +3556,6 @@ define("jassijs_editor/registry", ["require"], function (require) {
             "jassijs_editor/util/Typescript.ts": {
                 "date": 1655556793864,
                 "jassijs_editor.util.Typescript": {}
-            },
-            "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1655556793963,
-                "jassijs.ui.AcePanelSimple": {}
-            },
-            "jassijs_editor/ext/pdfMake-interface.ts": {
-                "date": 1655407578946
             }
         }
     };
@@ -3695,24 +3702,6 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
         return this._worker;
 
     }*/ 
-//source from https://cdn.jsdelivr.net/npm/@types/pdfmake/interfaces.d.ts
-// Type definitions for pdfmake 0.1
-// Project: http://pdfmake.org
-// Definitions by: Milen Stefanov <https://github.com/m1llen1um>
-//                 Rajab Shakirov <https://github.com/radziksh>
-//                 Enzo Volkmann <https://github.com/evolkmann>
-//                 Andi Pätzold <https://github.com/andipaetzold>
-//                 Neal Mummau <https://github.com/nmummau>
-//                 Jean-Raphaël Matte <https://github.com/jeralm>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 3.0
-//  changes by jassijs are tagged with /*changed by jassijs*/
-/// <reference types="node" />
-/// <reference types="pdfkit" />
-define("jassijs_editor/ext/pdfMake-interface", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
 define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_16) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

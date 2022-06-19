@@ -3,15 +3,19 @@ define("jassijs_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_editor/AcePanel.ts": {
-		"date": 1655556793963,
+		"date": 1655629520595,
 		"jassijs.ui.AcePanel": {}
+	},
+	"jassijs_editor/AcePanelSimple.ts": {
+		"date": 1655556793963,
+		"jassijs.ui.AcePanelSimple": {}
 	},
 	"jassijs_editor/ChromeDebugger.ts": {
 		"date": 1655584741932,
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1655556793963,
+		"date": 1655636028029,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {
@@ -116,13 +120,6 @@ define("jassijs_editor/registry",["require"], function(require) {
 	"jassijs_editor/util/Typescript.ts": {
 		"date": 1655556793864,
 		"jassijs_editor.util.Typescript": {}
-	},
-	"jassijs_editor/AcePanelSimple.ts": {
-		"date": 1655556793963,
-		"jassijs.ui.AcePanelSimple": {}
-	},
-	"jassijs_editor/ext/pdfMake-interface.ts": {
-		"date": 1655407578946
 	}
 }
  }
