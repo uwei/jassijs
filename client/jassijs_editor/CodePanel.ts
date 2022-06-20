@@ -20,6 +20,7 @@ export abstract class CodePanel extends Panel {
     abstract get mode(): string;
     abstract set value(value: string);
     abstract get value(): string;
+    abstract autocomplete();
     /**
      * breakpoint changed
      * @param {function} handler - function(line,enabled,type)

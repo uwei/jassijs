@@ -34,7 +34,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                 this.IDClear.icon = "mdi mdi-delete";
                 this.IDClear.onclick(function () {
                     _this.clear();
-                    jassijs.errors.items = [];
+                    Errors_1.errors.items = [];
                 });
                 this.IDClear.width = 35;
                 this.IDSearch = new Button_1.Button();
@@ -57,8 +57,8 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
                 this.registerError();
             if (this.withLastErrors) {
                 //old Errors
-                for (var x = 0; x < jassijs.errors.items.length; x++) {
-                    this.addError(jassijs.errors.items[x]);
+                for (var x = 0; x < Errors_1.errors.items.length; x++) {
+                    this.addError(Errors_1.errors.items[x]);
                 }
             }
             if (window["jassijs_debug"] === undefined)
@@ -208,12 +208,12 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/base/Errors", "jassij
         }
         registerError() {
             var _this = this;
-            jassijs.errors.onerror(function (err) {
+            Errors_1.errors.onerror(function (err) {
                 _this.addError(err);
             }, this._id);
         }
         unregisterError() {
-            jassijs.errors.offerror(this._id);
+            Errors_1.errors.offerror(this._id);
         }
         destroy() {
             this.unregisterError();

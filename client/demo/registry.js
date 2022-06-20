@@ -3,7 +3,7 @@ define("demo/registry",["require"], function(require) {
  return {
   default: {
 	"demo/Dialog.ts": {
-		"date": 1655556795284,
+		"date": 1655726757706,
 		"demo/Dialog": {}
 	},
 	"demo/EmptyDialog.ts": {
@@ -46,7 +46,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.Testcontextmenu": {}
 	},
 	"demo/Testmenu.ts": {
-		"date": 1655558914749,
+		"date": 1655726455896,
 		"demo.Testmenu": {}
 	},
 	"demo/TestTree.ts": {
@@ -54,7 +54,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.TestTree": {}
 	},
 	"demo/TestUpload.ts": {
-		"date": 1655556795176,
+		"date": 1655669139122,
 		"demo/TestUpload": {}
 	},
 	"demo/TreeContextmenu.ts": {
@@ -117,6 +117,9 @@ define("demo/registry",["require"], function(require) {
 	"demo/Dialog2.ts": {
 		"date": 1655556795284,
 		"demo/Dialog2": {}
+	},
+	"demo/MyTest.ts": {
+		"date": 1655757461754
 	}
 }
  }

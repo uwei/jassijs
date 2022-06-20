@@ -1,10 +1,8 @@
 
-define("jassijs/ext/goldenlayout",['goldenlayout',"jassijs/remote/Jassi"],function(GoldenLayout){ 
-    var path=require('jassijs/modul').default.require.paths["goldenlayout"]; 
-    path=path.substring(0,path.lastIndexOf("/"));      
-    jassijs.myRequire(path+"/css/goldenlayout-base.css");
-    jassijs.myRequire(path+"/css/goldenlayout-light-theme.css");
+define("jassijs/ext/goldenlayout", ['goldenlayout', "jassijs/remote/Jassi"], function (GoldenLayout) {
+    jassijs.includeCSSFile("goldenlayout-base.css");
+    jassijs.includeCSSFile("goldenlayout-light-theme.css");
     return {
-                default:GoldenLayout
-            }
-    });
+        default: GoldenLayout
+    }
+});

@@ -8,6 +8,7 @@ import typescript from "jassijs_editor/util/Typescript";
 import { Server } from "jassijs/remote/Server";
 import { CodePanel } from "jassijs_editor/CodePanel";
 import { Settings } from "jassijs/remote/Settings";
+import { currentsettings } from "jassijs/base/CurrentSettings";
 
 
 var inited = false;
@@ -136,7 +137,7 @@ export class MonacoPanel extends CodePanel {
                  _this.callEvent("breakpointChanged", row, column, false, type);
              }
          });*/
-        let theme = Settings.gets(Settings.keys.Development_MoanacoEditorTheme);
+        let theme = currentsettings.gets(Settings.keys.Development_MoanacoEditorTheme);
         this._editor = monaco.editor.create(this.dom, {
             //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
             language: 'typescript',
@@ -162,6 +163,9 @@ export class MonacoPanel extends CodePanel {
                 return decs[x];
         }
         return undefined;
+    }
+     autocomplete(){
+        this._editor.trigger("äläöl",'editor.action.triggerSuggest',"{}");
     }
     private _mouseDown(e) {
         if (e.target.type === 2) {

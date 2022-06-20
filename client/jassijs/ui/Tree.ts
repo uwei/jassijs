@@ -100,7 +100,7 @@ export class Tree extends Component implements TreeConfig {
     _lastOptions: Fancytree.FancytreeOptions;
     constructor(options?: Fancytree.FancytreeOptions) {
         super();
-        super.init($('<div class="Tree"></div>')[0]);
+        super.init('<div class="Tree"></div>');
         this._itemToKey = new Map();
         this.options = options;
     }
@@ -564,13 +564,11 @@ export class Tree extends Component implements TreeConfig {
         this._select = _component;
     }
     get selectComponent(): { value: number } {
-        return this._select;//$(this.dom).text();
+        return this._select;
     }
 
     private _callContextmenu(event) {
         var x = 9;
-        //var tree=$(event.target).attr("treeid");
-        //tree=$("#"+tree)[0]._this;
 
         var newevent = {
             originalEvent: event,

@@ -19,6 +19,7 @@ import { MonacoPanel } from "jassijs_editor/MonacoPanel";
 import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
 import { Test } from "jassijs/remote/Test";
 import modul from "./modul";
+import { currentsettings } from "jassijs/base/CurrentSettings";
 
 jassijs.includeCSSFile("jassijs_editor.css");
 
@@ -54,7 +55,7 @@ export class CodeEditor extends Panel {
     _design: Panel;
     editMode: boolean;
     __evalToCursorReached: boolean;
-
+    autoCompleteButton:Button;
 
     private _line: number;
     constructor(properties: { codePanel?: CodePanel, hideToolbar?: boolean } = undefined) {
@@ -65,7 +66,7 @@ export class CodeEditor extends Panel {
         this._codeToolbar = new Panel();
         //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
         let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-        let sett = Settings.gets(Settings.keys.Development_DefaultEditor);
+        let sett = currentsettings.gets(Settings.keys.Development_DefaultEditor);
         if (properties?.codePanel) {
             this._codePanel = properties.codePanel;
         } else {
@@ -140,10 +141,18 @@ export class CodeEditor extends Panel {
             goto.onclick(function () {
                 _this.gotoDeclaration();
             });
+            this._codeToolbar.add(goto);
+            this.autoCompleteButton = new Button();
+            this.autoCompleteButton.icon = "mdi mdi-robot-happy-outline mdi-18px";
+            this.autoCompleteButton.tooltip = "autocomplete (ctrl space)";
+            this.autoCompleteButton.onclick(function () {
+                _this._codePanel.autocomplete();
+            });
+            this._codeToolbar.add(this.autoCompleteButton);
             jassijs["$CodeEditor"] = CodeEditor;
             $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
             $(goto.dom).attr("ondragover", "event.preventDefault();");
-            this._codeToolbar.add(goto);
+            
         }
         this._codeView.add(this._codePanel);
 
@@ -180,6 +189,7 @@ export class CodeEditor extends Panel {
         
             
     }
+    
     _installView() {
         this._main.add(this._codeView, "Code..", "code");
         this._main.add(this.variables, "Variables", "variables");

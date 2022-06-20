@@ -1,11 +1,9 @@
-
-import { Component } from "jassijs/ui/Component";
 //@ts-ignore
-import ace from "jassijs_editor/ext/acelib";
+import ace from 'ace/ace';
+import 'ace/ext/language_tools';
 import "jassijs_editor/Debugger";
 import typescript, { Typescript } from "jassijs_editor/util/Typescript";
 import { $Class } from "jassijs/remote/Registry";
-import { router } from "jassijs/base/Router";
 import registry from "jassijs/remote/Registry";
 import { CodePanel } from "jassijs_editor/CodePanel";
 import { Runlater } from "jassijs/util/Runlater";
@@ -107,6 +105,9 @@ export class AcePanel extends CodePanel{
         this._editor.on("mousemove", function (e) {
             _this._manageTooltip(e);
         })
+    }
+    autocomplete(){
+        this._editor.commands.byName.startAutocomplete.exec(this._editor);
     }
     /**
      * add commands to Ace Editor

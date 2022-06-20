@@ -255,7 +255,14 @@ export class Component implements ComponentConfig {
      * create an Element from an htmlstring e.g. createDom("<input/>")
      */
     static createHTMLElement(html: string): HTMLElement {
-        return <HTMLElement>document.createRange().createContextualFragment(html).children[0];
+        var lower=html.toLocaleLowerCase();
+        if(lower.startsWith("<td")||lower.startsWith("<tr")){
+            const template = document.createElement("template");
+            template.innerHTML = html;
+            const node = template.content.firstElementChild;
+            return<HTMLElement> node;
+        }else
+            return <HTMLElement>document.createRange().createContextualFragment(html).children[0];
     }
     /**
      * inits the component

@@ -37,11 +37,6 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Menu", "jassijs/ui
             me.del = new MenuItem_1.MenuItem();
             me.del.text = "delete";
             me.del.icon = "mdi mdi-delete";
-            me.del.onclick(function () {
-                window.setTimeout(function () {
-                    $(me.menu1.dom).menu("expand", null, true);
-                }, 2000);
-            });
             me.car = new MenuItem_1.MenuItem();
             me.car.text = "car sdf sdf aaa";
             me.car.icon = "mdi mdi-car";

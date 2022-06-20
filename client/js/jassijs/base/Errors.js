@@ -1,7 +1,7 @@
 define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Errors = void 0;
+    exports.errors = exports.Errors = void 0;
     class Errors {
         /**
         * Error handling.
@@ -79,5 +79,7 @@ define(["require", "exports"], function (require, exports) {
     exports.Errors = Errors;
     Errors._randomID = 100000;
     ;
+    var errors = new Errors();
+    exports.errors = errors;
 });
 //# sourceMappingURL=Errors.js.map

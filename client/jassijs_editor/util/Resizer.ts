@@ -1,3 +1,4 @@
+import "jquery.ui";
 import { $Class } from "jassijs/remote/Registry";
 import { Component } from "jassijs/ui/Component";
 import { DragAndDropper } from "jassijs_editor/util/DragAndDropper";

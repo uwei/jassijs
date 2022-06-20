@@ -5,7 +5,7 @@ import { Panel } from "jassijs/ui/Panel";
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { Button } from "jassijs/ui/Button";
 import { $Property } from "jassijs/ui/Property";
-import { $SettingsDescriptor, Settings, settings } from "jassijs/remote/Settings";
+import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
 import { classes } from "jassijs/remote/Classes";
 import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import registry from "jassijs/remote/Registry";

@@ -108,6 +108,11 @@ class Jassi {
             }
         }
         else {
+            if (document.getElementById("-->" + url) != null) {
+                if (event)
+                    event();
+                return;
+            }
             //    <link href="lib/jquery.splitter.css" rel="stylesheet"/>
             //@ts-ignore
             var head = window.document.getElementsByTagName('head')[0];

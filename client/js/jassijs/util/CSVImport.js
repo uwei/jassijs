@@ -34,12 +34,12 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
                 lkeys.push(key.toLowerCase());
             }
             for (var x = 0; x < this.fieldCount; x++) {
-                var el = $("#" + this._id + "--" + x)[0];
+                var el = document.getElementById(this._id + "--" + x);
                 el.innerHTML = html;
                 var pos = lkeys.indexOf(this.data[0]["Column " + x].toLowerCase());
                 //assign dettected fields in first row
                 if (pos !== -1) {
-                    $("#" + this._id + "--" + x).val(lkeys[pos]);
+                    document.getElementById(this._id + "--" + x).value = lkeys[pos];
                 }
             }
             //this.me.table.
@@ -196,7 +196,7 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
             //read userchoices
             var assignedfields = {};
             for (var x = 0; x < this.fieldCount; x++) {
-                var value = $("#" + this._id + "--" + x).val();
+                var value = document.getElementById(this._id + "--" + x).value;
                 if (value !== "")
                     assignedfields[value] = x;
             }

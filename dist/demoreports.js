@@ -520,7 +520,7 @@ define("demoreports/registry", ["require"], function (require) {
     return {
         default: {
             "demoreports/01-Simpledata.ts": {
-                "date": 1655637914135
+                "date": 1655640800970
             },
             "demoreports/10-Foreach.ts": {
                 "date": 1655407641261
@@ -575,6 +575,9 @@ define("demoreports/registry", ["require"], function (require) {
             },
             "demoreports/pdfmake-playground/Tables.ts": {
                 "date": 1655408197639
+            },
+            "demoreports/modul.ts": {
+                "date": 1655641244993
             }
         }
     };

@@ -95,7 +95,7 @@ export class Textbox extends DataComponent implements TextboxConfig {
             };*/
         super();
         super.init('<input type="text" />');
-        $(this.dom).css("color", color);
+        this.dom.style.color= color;
         this.converter = undefined;
     }
     config(config: TextboxConfig): Textbox {
@@ -110,10 +110,10 @@ export class Textbox extends DataComponent implements TextboxConfig {
         super.dom=value;
     }
     set disabled(value) {
-        $(this.dom).prop('disabled', true);
+        this.dom.disabled= true;
     }
     get disabled() {
-        return $(this.dom).prop('disabled');
+        return this.dom.disabled;
     }
     set format(value) { //the Code
         this._format = value;
@@ -128,24 +128,24 @@ export class Textbox extends DataComponent implements TextboxConfig {
             this._formatProps.focus = this.on("focus", () => {
                 let val = this.value;
                 _this._formatProps.inEditMode = true;
-                $(this.dom).val(Numberformatter.numberToString(val));
+                this.dom.value=Numberformatter.numberToString(val);
             });
             this._formatProps.blur = this.on("blur", () => {
                 _this.updateValue();
                 _this._formatProps.inEditMode = false;
-                $(this.dom).val(Numberformatter.format(this._format, this.value));
+                this.dom.value=Numberformatter.format(this._format, this.value);
             });
         }
         if (this.value)
             this.value = this.value;//apply the ne format
-        //      $(this.dom).val(value);
+
     }
     @$Property({ type: "string", chooseFrom: allFormats })
     get format() {
         return this._format;
     }
     private updateValue() {
-        var ret = $(this.dom).val();
+        var ret = this.dom.value;
         if (this.converter !== undefined) {
             ret = this.converter.stringToObject(ret);
         }
@@ -161,7 +161,7 @@ export class Textbox extends DataComponent implements TextboxConfig {
             v = Numberformatter.format(this._format, value);
         }
 
-        $(this.dom).val(v);
+        this.dom.value=value===undefined?"":value;
     }
     @$Property({ type: "string" })
     get value() {
@@ -201,11 +201,11 @@ export class Textbox extends DataComponent implements TextboxConfig {
      */
     @$Property()
     set placeholder(text: string) {
-        $(this.dom).attr("placeholder", text);
+        this.dom.placeholder= text;
     }
 
     get placeholder(): string {
-        return $(this.dom).attr("placeholder");
+        return this.dom.placeholder;
     }
 
     set autocompleterDisplay(value: string | ((object: any) => string)) {
@@ -219,10 +219,10 @@ export class Textbox extends DataComponent implements TextboxConfig {
     }
     private fillCompletionList(values: any) {
         var h: any[] | (() => any);
-        var list = $(this.dom).attr("list");
+        var list = this.dom.getAttribute("list");
         var html = "";
-        var comp: any = $("#" + list);
-        comp[0]._values = values;
+        var comp: any = document.getElementById( list);
+        comp._values = values;
         //comp.empty();
         for (var x = 0; x < values.length; x++) {
             var val = values[x];
@@ -234,25 +234,25 @@ export class Textbox extends DataComponent implements TextboxConfig {
             html += '<option value="' + val + '">';
             //comp.append('<option value="'+val+'">');
         }
-        comp[0].innerHTML = html;
+        comp.innerHTML = html;
     }
 
     set autocompleter(value: any[] | (() => any)) {
-        var list = $(this.dom).attr("list");
+        var list = this.dom.getAttribute("list");
         var _this = this;
         if (!list && typeof (value) === "function") {
-            $(this.dom).on("mouseover", (ob) => {
+            this.on("mouseover", (ob) => {
                 if (_this._autocompleter.children.length === 0) {
                     var values = value();
                     _this.fillCompletionList(values);
                 }
             })
         }
-        if (list === undefined) {
+        if (list === undefined||list === null) {
             list = "j"+registry.nextID();
-            this._autocompleter = $('<datalist id="' + list + '"/>')[0];
+            this._autocompleter = Component.createHTMLElement('<datalist id="' + list + '"/>');
             this.domWrapper.appendChild(this._autocompleter);
-            $(this.dom).attr("list", list);
+            this.dom.setAttribute("list", list);
         }
         if (typeof (value) === "function") {
 
@@ -263,30 +263,32 @@ export class Textbox extends DataComponent implements TextboxConfig {
         // $(this.dom).val(value);
     }
     get autocompleter() {
-        var list = $(this.dom).prop("list");
+        var list = this.dom.list;
         if (list === undefined)
             return undefined;
         var comp = $(list)[0];
         if (comp === undefined)
             return undefined;
-        return comp._values;
+        return comp["_values"];
         // return $(this.dom).val();
     }
     /**
      * focus the textbox
      */
     focus() {
-        $(this.dom).focus();
+        this.dom.focus();
     }
     destroy() {
         if (this._autocompleter)
-            $(this._autocompleter).remove();
+            this._autocompleter.remove();
         super.destroy();
     }
 
 }
 export function test() {
+    
     var ret = new Textbox();
+    ret.autocompleter=["Hallo","Du"];
     //ret.autocompleter=()=>[];
     return ret;
 }

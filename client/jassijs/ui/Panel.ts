@@ -52,7 +52,7 @@ export class Panel extends Container implements PanelConfig {
             super(properties);
             if (properties === undefined || properties.id === undefined) {
                 //super.init($('<div class="Panel"/>')[0]);
-                super.init($('<' + tag + ' class="Panel" />')[0]);
+                super.init('<' + tag + ' class="Panel" />');
             }
         }
         this._designMode = false;
@@ -65,9 +65,9 @@ export class Panel extends Container implements PanelConfig {
     set isAbsolute(value: boolean) {
         this._isAbsolute = value;
         if (value)
-            $(this.dom).addClass("jabsolutelayout");
+            this.dom.classList.add("jabsolutelayout");
         else
-            $(this.dom).removeClass("jabsolutelayout");
+            this.dom.classList.remove("jabsolutelayout");
         if (this._designMode !== undefined)
             this._setDesignMode(this._designMode);
         if (this._designMode && this._activeComponentDesigner) {
@@ -80,11 +80,11 @@ export class Panel extends Container implements PanelConfig {
     }
     max() {
         if (this._id == "body") {
-            $(this.domWrapper).css("width", "100%");
-            $(this.domWrapper).css("height", "calc(100vh - 2px)");
+            this.domWrapper.style.width="100%";
+            this.domWrapper.style.height="calc(100vh - 2px)";
         } else {
-            $(this.domWrapper).css("width", "100%");
-            $(this.domWrapper).css("height", "100%");
+            this.domWrapper.style.width= "100%";
+            this.domWrapper.style.height="100%";
         }
     }
     extensionCalled(action: ExtensionAction) {
@@ -154,7 +154,7 @@ export class Panel extends Container implements PanelConfig {
             if (this.isAbsolute === false) {
                 for (var x = 0; x < this._components.length; x++) {
                     var comp = this._components[x];
-                    if (comp instanceof Container && !$(comp.dom).hasClass("jdisableaddcomponents")) {
+                    if (comp instanceof Container && !comp.dom.classList.contains("jdisableaddcomponents")) {
                         DesignDummy.createIfNeeded(comp, "beforeComponent", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
                     }
                 }

@@ -1,5 +1,6 @@
 
 define("jassijs/ext/jquerylib", [
+   
     "jquery",
     "jquery.ui"], function (require) {
         

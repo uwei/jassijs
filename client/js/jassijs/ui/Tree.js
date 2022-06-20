@@ -51,7 +51,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     class Tree extends Component_1.Component {
         constructor(options) {
             super();
-            super.init($('<div class="Tree"></div>')[0]);
+            super.init('<div class="Tree"></div>');
             this._itemToKey = new Map();
             this.options = options;
         }
@@ -488,12 +488,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             this._select = _component;
         }
         get selectComponent() {
-            return this._select; //$(this.dom).text();
+            return this._select;
         }
         _callContextmenu(event) {
             var x = 9;
-            //var tree=$(event.target).attr("treeid");
-            //tree=$("#"+tree)[0]._this;
             var newevent = {
                 originalEvent: event,
                 target: $(event.target).prev()[0]

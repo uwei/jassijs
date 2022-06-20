@@ -63,7 +63,7 @@ export class Table extends DataComponent implements TableConfig{
     private dataTreeChildFunction: string | ((obj: any) => any);
     constructor(properties?: TableOptions) {
         super();
-        super.init($('<div class="Table"></div>')[0]);
+        super.init('<div class="Table"></div>');
         var _this = this;
         this.options = properties;
         this._selectHandler = [];
@@ -259,7 +259,7 @@ export class Table extends DataComponent implements TableConfig{
                     });
                 }, 100);
             });
-            $(this.domWrapper).prepend(this._searchbox.domWrapper);
+            this.domWrapper.prepend(this._searchbox.domWrapper);
         }
     }
     set selectComponent(_component: any) {
@@ -401,6 +401,7 @@ export async function test() {
             headerSort: true
         }
     });
+    tab.showSearchbox=true;
     var tabledata = [
         { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
         { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },

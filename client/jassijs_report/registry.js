@@ -1059,7 +1059,13 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassi_report.SimpleReportEditor": {}
 	},
 	"jassijs_report/StartReporteditor.ts": {
-		"date": 1654466752918
+		"date": 1655760762456
+	},
+	"jassijs_report/pdfMake-interface.ts": {
+		"date": 1655640655695
+	},
+	"jassijs_report/ReportDesignGlobal.ts": {
+		"date": 1655397712425
 	}
 }
  }

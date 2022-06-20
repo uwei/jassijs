@@ -73,7 +73,7 @@ export class Settings extends RemoteObject {
         }
         return ret;
     }
-    static gets<T>(Settings_key: T): T {
+    gets<T>(Settings_key: T): T {
         if (Settings.browserSettings && Settings.browserSettings[Settings_key])
             return Settings.browserSettings[Settings_key];
         if (Settings.userSettings && Settings.userSettings[Settings_key])
@@ -187,27 +187,28 @@ export async function autostart() {
 
 export async function test(t: Test) {
     try {
+        var settings=new Settings();
         await Settings.remove("antestsetting", "user");
         await Settings.remove("antestsetting", "browser");
         await Settings.remove("antestsetting", "allusers");
-          t.expectEqual(Settings.gets("antestsetting") === undefined);
+          t.expectEqual(settings.gets("antestsetting") === undefined);
         await Settings.load();
-        t.expectEqual(Settings.gets("antestsetting") === undefined);
+        t.expectEqual(settings.gets("antestsetting") === undefined);
 
         await Settings.save("antestsetting", "1", "allusers");
-        t.expectEqual(<string>Settings.gets("antestsetting") === "1");
+        t.expectEqual(<string>settings.gets("antestsetting") === "1");
         await Settings.load();
-        t.expectEqual(<string>Settings.gets("antestsetting") === "1");
+        t.expectEqual(<string>settings.gets("antestsetting") === "1");
 
         await Settings.save("antestsetting", "2", "user");
-        t.expectEqual(<string>Settings.gets("antestsetting") === "2");
+        t.expectEqual(<string>settings.gets("antestsetting") === "2");
         await Settings.load();
-        t.expectEqual(<string>Settings.gets("antestsetting") === "2");
+        t.expectEqual(<string>settings.gets("antestsetting") === "2");
 
         await Settings.save("antestsetting", "3", "browser");
-        t.expectEqual(<string>Settings.gets("antestsetting") === "3");
+        t.expectEqual(<string>settings.gets("antestsetting") === "3");
         await Settings.load();
-        t.expectEqual(<string>Settings.gets("antestsetting") === "3");
+        t.expectEqual(<string>settings.gets("antestsetting") === "3");
     } catch (ex) {
       
 
@@ -218,4 +219,7 @@ export async function test(t: Test) {
         await Settings.remove("antestsetting", "allusers");
     }
 
+}
+export async function load(){
+    return Settings.load();
 }

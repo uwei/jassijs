@@ -11,6 +11,6 @@ export  class Textarea extends Textbox{
                 alert("Hallo");
             };*/
             super();
-            super.init($('<textarea  />')[0]);
+            super.init('<textarea  />');
         }
 }

@@ -47,7 +47,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
     let Table = class Table extends DataComponent_1.DataComponent {
         constructor(properties) {
             super();
-            super.init($('<div class="Table"></div>')[0]);
+            super.init('<div class="Table"></div>');
             var _this = this;
             this.options = properties;
             this._selectHandler = [];
@@ -239,7 +239,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                         });
                     }, 100);
                 });
-                $(this.domWrapper).prepend(this._searchbox.domWrapper);
+                this.domWrapper.prepend(this._searchbox.domWrapper);
             }
         }
         set selectComponent(_component) {
@@ -411,6 +411,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                 headerSort: true
             }
         });
+        tab.showSearchbox = true;
         var tabledata = [
             { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
             { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },

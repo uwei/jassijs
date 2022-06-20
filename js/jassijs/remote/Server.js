@@ -413,7 +413,7 @@ Server.isonline = undefined;
 //files found in js.map of modules in the jassijs.json
 Server.filesInMap = undefined;
 Server = Server_1 = __decorate([
-    Registry_1.$Class("jassijs.remote.Server"),
+    (0, Registry_1.$Class)("jassijs.remote.Server"),
     __metadata("design:paramtypes", [])
 ], Server);
 exports.Server = Server;

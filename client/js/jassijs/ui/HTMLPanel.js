@@ -23,7 +23,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             this.toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
             this.inited = false;
             this.customToolbarButtons = {};
-            super.init($('<div class="HTMLPanel mce-content-body" tabindex="-1" ><div class="HTMLPanelContent"> </div></div>')[0]); //tabindex for key-event
+            super.init('<div class="HTMLPanel mce-content-body" tabindex="-1" ><div class="HTMLPanelContent"> </div></div>'); //tabindex for key-event
             //$(this.domWrapper).removeClass("jcontainer");
             //  super.init($('<div class="HTMLPanel"></div>')[0]);
             var el = this.dom.children[0];
@@ -36,11 +36,11 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             return this;
         }
         get newlineafter() {
-            return $(this.dom).css("display") === "inline-block";
+            return this.dom.style.display === "inline-block";
         }
         set newlineafter(value) {
-            $(this.dom).css("display", value ? "" : "inline-block");
-            $(this.dom.children[0]).css("display", value ? "" : "inline-block");
+            this.dom.style.display = value ? "" : "inline-block";
+            this.dom.children[0].style.display = value ? "" : "inline-block";
         }
         compileTemplate(template) {
             return new Function('obj', 'with(obj){ return \'' +
@@ -80,14 +80,9 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 this.dom.appendChild(el);
             }
             else
-                $(el).html(scode);
+                el.innerHTML = scode;
         }
         get value() {
-            /*var el = this.dom.children[0];
-            if (el === undefined)
-                return "";
-            var ret = $(el).html();
-            return ret;*/
             return this._value;
         }
         extensionCalled(action) {
@@ -137,7 +132,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                         if (_this._designMode === false)
                             return;
                         //editor.editDialog(false);
-                        if ($("#" + ed.id)[0] === undefined)
+                        if (!document.getElementById(ed.id))
                             return;
                         editor._draganddropper.enableDraggable(true);
                         //editor.editDialog(true);
@@ -173,13 +168,13 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 config["toolbar"][config["toolbar"].length - 1] =
                     config["toolbar"][config["toolbar"].length - 1] + " | " + name;
             }
-            $(this.dom).on("mouseup", (e) => {
+            this.on("mouseup", (e) => {
                 if (_this._designMode === false)
                     return;
                 editor._draganddropper.enableDraggable(false);
                 let edi = tinymce.editors[_this._id];
                 if (edi)
-                    $(edi.getContainer()).css("display", "flex");
+                    edi.getContainer().style.display = "flex";
                 //$(this.domWrapper).draggable('disable');
             });
             //_this.value=sic;
@@ -189,7 +184,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                     _this.initIfNeeded(tinymce, config);
                     editor._draganddropper.enableDraggable(false);
                 });*/
-            $(_this.dom).on('blur', function () {
+            _this.on('blur', function () {
                 HTMLPanel_1.oldeditor = tinymce.editors[_this._id];
                 editor._draganddropper.enableDraggable(true);
                 setTimeout(() => {
@@ -197,11 +192,11 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                     //  $(edi?.getContainer()).css("display", "none");
                 }, 100);
             });
-            $(_this.dom).on('focus', function () {
+            _this.on('focus', function () {
                 _this.initIfNeeded(tinymce, config);
-                $('#' + _this.editor.inlineEditorPanel._id).find(".tox-tinymce-inline").css("display", "none");
+                document.getElementById(_this.editor.inlineEditorPanel._id).querySelector(".tox-tinymce-inline").style.display = "none";
                 if (HTMLPanel_1.oldeditor) {
-                    $(HTMLPanel_1.oldeditor.getContainer()).css("display", "none");
+                    HTMLPanel_1.oldeditor.getContainer().style.display = "none";
                 }
             });
         }
@@ -212,18 +207,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
          */
         _setDesignMode(enable, editor) {
             this.editor = editor;
-            /* if (enable) {
-                 $(this.dom).on("mouseup", (e) => {
-                     editor._draganddropper.enableDraggable(false);
-                     //$(this.domWrapper).draggable('disable');
-     
-                 });
-                 $(this.dom).on("blur", (e) => {
-                     editor._draganddropper.enableDraggable(true);
-     
-                 });
-             }
-             return;*/
             var _this = this;
             this._designMode = enable;
             if (enable) {
@@ -264,13 +247,6 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             title: "Table",
             action: () => { alert(8); }
         };
-        /*$(ret.dom).on("mouseup", (e) => {
-            $(ret.domWrapper).draggable('disable');
-            
-        });*/
-        $(ret.dom).on("blur", (e) => {
-            $(ret.domWrapper).draggable('enable');
-        });
         ret.value = "<span style='font-size: 12px;' data-mce-style='font-size: 12px;'>dsf<span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>g<strong>sdfgsd</strong>fgsdfg</span></span><br><strong><span style='color: rgb(241, 196, 15);' data-mce-style='color: #f1c40f;'>sdfgsdgsdf</span>gfdsg</strong>";
         ret.height = 400;
         ret.width = 400;

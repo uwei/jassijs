@@ -1,6 +1,6 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
-import { Property, $Property } from "jassijs/ui/Property";
+import { $Property } from "jassijs/ui/Property";
 
 export interface ButtonConfig extends ComponentConfig{
       /**

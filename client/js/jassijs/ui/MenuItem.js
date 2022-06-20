@@ -15,8 +15,8 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
         //_components: Component[];
         constructor() {
             super();
-            super.init($('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
-            $(this.dom).addClass("designerNoResizable");
+            super.init('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>', { noWrapper: true });
+            this.dom.classList.add("designerNoResizable");
             this._text = "";
             this._icon = "";
             this.items = new Menu_1.Menu();
@@ -30,36 +30,32 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
             return this;
         }
         onclick(handler) {
-            var _this = this;
-            $("#" + this._id).click(function (ob) {
-                handler(ob);
-                //_this.this.items._parent.close();
-            });
+            this.on("click", handler);
         }
         set icon(icon) {
             this._icon = icon;
             var img;
-            var el1 = $(this.dom).find(".menuitemspan");
-            el1.removeClass();
-            el1.addClass("menuitemspan");
-            $(this.dom).find(".menuitemicon").attr("src", "");
+            var el1 = this.dom.querySelector(".menuitemspan");
+            el1.setAttribute("class", ""); //removeClass();
+            el1.classList.add("menuitemspan");
+            this.dom.querySelector(".menuitemicon").setAttribute("src", "");
             if (icon === null || icon === void 0 ? void 0 : icon.startsWith("mdi")) {
-                el1.addClass(icon);
-                $(this.dom).find(".menuitemicon").css("display", "none");
+                icon.split(" ").forEach((cl) => el1.classList.add(cl));
+                this.dom.querySelector(".menuitemicon").style.display = "none";
             }
             else {
                 if (icon)
-                    $(this.dom).find(".menuitemicon").css("display", "initial");
-                $(this.dom).find(".menuitemicon").attr("src", icon);
+                    this.dom.querySelector(".menuitemicon").style.display = "initial";
+                this.dom.querySelector(".menuitemicon").setAttribute("src", icon);
             }
             //if (icon === "")
             //    icon = "res/dummy.ico";
             //$(this.dom).find(".menuitemicon").attr("src", icon);
         }
         get icon() {
-            var ret = $(this.dom).find(".menuitemicon").attr("src");
+            var ret = this.dom.querySelector(".menuitemicon").getAttribute("src");
             if (ret === "") {
-                ret = $(this.dom).find(".menuitemspan").attr("class").replace("menuitemspan ", "");
+                ret = this.dom.querySelector(".menuitemicon").getAttribute("class").replace("menuitemspan ", "");
             }
             return ret;
         }
@@ -67,10 +63,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
             //<li><div><img  src="res/car.ico" /><span>Save</span></div></li>
             this._text = value;
             var h;
-            $(this.dom).find(".menuitemtext")[0].innerText = value;
+            this.dom.querySelector(".menuitemtext").innerText = value;
         }
         get text() {
-            return $(this.dom).find(".menuitemtext")[0].innerText;
+            return this.dom.querySelector(".menuitemtext").innerText;
         }
         destroy() {
             super.destroy();
@@ -87,12 +83,12 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/ui/Menu", "jassij
             if (this.items._components.length > 0 && this.items.dom.parentNode !== this.dom) {
                 this.items.dom.parentNode.removeChild(this.items.dom);
                 this.dom.appendChild(this.items.dom);
-                $(this.items.dom).addClass("jcontainer"); //for drop-target
+                this.items.dom.classList.add("jcontainer"); //for drop-target
             }
             if (this.items._components.length > 0)
-                $(this.dom).addClass("iw-has-submenu");
+                this.dom.classList.add("iw-has-submenu");
             else
-                $(this.dom).removeClass("iw-has-submenu");
+                this.dom.classList.remove("iw-has-submenu");
             if (this._parent !== undefined && this._parent._menueChanged !== undefined)
                 this._parent._menueChanged();
         }

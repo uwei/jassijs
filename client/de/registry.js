@@ -59,7 +59,7 @@ define("de/registry",["require"], function(require) {
 		}
 	},
 	"de/modul.ts": {
-		"date": 1626121322000
+		"date": 1655740311208
 	},
 	"de/remote/AR.ts": {
 		"date": 1655558717565,
@@ -293,7 +293,7 @@ define("de/registry",["require"], function(require) {
 		"date": 1624293156000
 	},
 	"de/Dialog.ts": {
-		"date": 1655558043734,
+		"date": 1655755200865,
 		"de/Dialog": {}
 	},
 	"de/TTDialog.ts": {

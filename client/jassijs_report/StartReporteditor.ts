@@ -10,6 +10,7 @@ import { SearchExplorer } from "jassijs/ui/SearchExplorer";
 import { DBObjectExplorer } from "jassijs/ui/DBObjectExplorer";
 import { ActionNodeMenu } from "jassijs/ui/ActionNodeMenu";
 import { Settings } from "jassijs/remote/Settings";
+import { currentsettings } from "jassijs/base/CurrentSettings";
 
 
 
@@ -35,7 +36,7 @@ async function start() {
     windows.addLeft(new FileExplorer(), "Files");
     router.navigate(window.location.hash);
     //Ace should be default because long image blob breaks line   
-    if (Settings.gets(Settings.keys.Development_DefaultEditor) === undefined) {
+    if (currentsettings.gets(Settings.keys.Development_DefaultEditor) === undefined) {
         Settings.save(Settings.keys.Development_DefaultEditor, "ace", "browser");
     }
 

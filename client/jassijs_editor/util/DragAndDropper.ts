@@ -1,6 +1,6 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Component } from "jassijs/ui/Component";
-
+import "jquery.ui";
 @$Class("jassijs_editor.util.DragAndDropper")
 export class DragAndDropper {
     //called if a property has changed the position

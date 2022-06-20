@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs/remote/Registry", "jassijs_editor/CodePanel"], function (require, exports, acelib_1, Registry_1, CodePanel_1) {
+define(["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "ace/ext/language_tools"], function (require, exports, ace_1, Registry_1, CodePanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.AcePanelSimple = void 0;
@@ -22,7 +22,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs/remote/Regis
             var test = $('<div class="CodePanel" style="height: 500px; width: 500px"></div>')[0];
             super.init(test);
             $(this.domWrapper).css("display", "");
-            this._editor = acelib_1.default.edit(this._id);
+            this._editor = ace_1.default.edit(this._id);
             this.file = "";
             this._editor.setOptions({
                 enableBasicAutocompletion: true,
@@ -47,6 +47,9 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs/remote/Regis
                      editorDiv.style.height = lineHeight * _this._editor.getSession().getDocument().getLength() + " px";
                      _this._editor.resize();
                  });*/
+        }
+        autocomplete() {
+            console.log("not implemented");
         }
         insert(pos, text) {
             this._editor.session.insert(pos, text);
@@ -82,7 +85,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs/remote/Regis
             //force ctrl+z not shows an empty document
             if (this._isInited === undefined) {
                 this._isInited = true;
-                this._editor.getSession().setUndoManager(new acelib_1.default.UndoManager());
+                this._editor.getSession().setUndoManager(new ace_1.default.UndoManager());
             }
             if (lastcursor !== undefined) {
                 //this.cursorPosition = lastcursor;

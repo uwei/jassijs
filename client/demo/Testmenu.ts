@@ -33,11 +33,7 @@ export  class Testmenu extends Panel {
 		me.del = new MenuItem();
 		me.del.text = "delete";
 		me.del.icon = "mdi mdi-delete";
-		me.del.onclick(function () {
-			window.setTimeout(function () {
-				$(me.menu1.dom).menu("expand", null, true);
-			}, 2000);
-		});
+		
 		me.car = new MenuItem();
 		me.car.text = "car sdf sdf aaa";
 		me.car.icon = "mdi mdi-car";

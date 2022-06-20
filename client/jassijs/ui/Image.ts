@@ -22,13 +22,9 @@ export class Image extends DataComponent implements ImageConfig{
     /* get dom(){
          return this.dom;
      }*/
-    constructor() { /* document.onkeydown = function(event) {
-                alert("Hallo");
-            };*/
+    constructor() { 
         super();
-        //  var img=$('<div >')[0];
-        //super.init($('<img vspace="0" hspace="0"  border="0"  src="" alt="">')[0]);
-        super.init($('<div style="display: inline-block;white-space: nowrap;"><img  vspace="0" hspace="0"  border="0"  src="" alt=""></div>')[0]);
+        super.init('<div style="display: inline-block;white-space: nowrap;"><img  vspace="0" hspace="0"  border="0"  src="" alt=""></div>');
     }
      config(config:ImageConfig ): Image {
         super.config(config);
@@ -36,9 +32,8 @@ export class Image extends DataComponent implements ImageConfig{
     }
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler) {
-        $("#" + this._id).click(function () {
-            handler();
-        });
+        this.on("click",handler);
+
     }
 
     /**
@@ -57,9 +52,9 @@ export class Image extends DataComponent implements ImageConfig{
     }
     set width(value) {
         if (value === undefined)
-            $(this.dom.children[0]).attr("width", "");
+            (<HTMLElement>this.dom.children[0]).setAttribute("width", "");
         else
-            $(this.dom.children[0]).attr("width", "100%");
+            (<HTMLElement>this.dom.children[0]).setAttribute("width", "100%");
         super.width = value;
     }
     get height() {
@@ -68,27 +63,27 @@ export class Image extends DataComponent implements ImageConfig{
     }
     set height(value) {
         if (value === undefined)
-            $(this.dom.children[0]).attr("height", "");
+            (<HTMLElement>this.dom.children[0]).setAttribute("height", "");
         else
-            $(this.dom.children[0]).attr("height", "100%");
+            (<HTMLElement>this.dom.children[0]).setAttribute("height", "100%");
         super.height = value;
     }
     set src(icon: string) {
-        $(this.dom).removeClass();
-        $(this.dom.children[0]).attr("src", "")
+        this.dom.classList.forEach((cl)=>{this.dom.classList.remove(cl)});
+        (<HTMLElement>this.dom.children[0]).setAttribute("src", "")
         if (icon?.startsWith("mdi ")) {
-            $(this.dom).addClass(icon);
-            $(this.dom.children[0]).css("visibility", "hidden");
+            icon.split(" ").forEach((cl)=>this.dom.classList.add(cl)) ;
+            (<HTMLElement>this.dom.children[0]).style.visibility= "hidden";
         } else {
-            $(this.dom.children[0]).attr("src", icon)
-            $(this.dom.children[0]).css("visibility", "");
+           (<HTMLElement>this.dom.children[0]).setAttribute("src", icon);
+            (<HTMLElement>this.dom.children[0]).style.visibility= "";
         }
     }
     @$Property({ type: "image" })
     get src(): string {
-        var ret = $(this.dom).attr("src");
+        var ret = (<HTMLElement>this.dom.children[0]).getAttribute("src");
         if (ret === "")
-            return $(this.dom).attr('class');
+            return this.dom.getAttribute('class');
         else
             return ret;
         //            return $(this.dom).attr("src");

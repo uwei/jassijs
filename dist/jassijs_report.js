@@ -4406,7 +4406,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
     }
     exports.test = test;
 });
-define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Settings"], function (require, exports, FileExplorer_1, Windows_2, Panel_6, Router_1, Settings_1) {
+define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Settings", "jassijs/base/CurrentSettings"], function (require, exports, FileExplorer_1, Windows_2, Panel_6, Router_1, Settings_1, CurrentSettings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -4427,7 +4427,7 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/Fi
         Windows_2.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
         Router_1.router.navigate(window.location.hash);
         //Ace should be default because long image blob breaks line   
-        if (Settings_1.Settings.gets(Settings_1.Settings.keys.Development_DefaultEditor) === undefined) {
+        if (CurrentSettings_1.currentsettings.gets(Settings_1.Settings.keys.Development_DefaultEditor) === undefined) {
             Settings_1.Settings.save(Settings_1.Settings.keys.Development_DefaultEditor, "ace", "browser");
         }
     }
@@ -5543,7 +5543,13 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassi_report.SimpleReportEditor": {}
             },
             "jassijs_report/StartReporteditor.ts": {
-                "date": 1654466752918
+                "date": 1655760762456
+            },
+            "jassijs_report/pdfMake-interface.ts": {
+                "date": 1655640655695
+            },
+            "jassijs_report/ReportDesignGlobal.ts": {
+                "date": 1655397712425
             }
         }
     };

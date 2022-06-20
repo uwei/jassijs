@@ -1,6 +1,6 @@
 
 import { Panel } from "jassijs/ui/Panel";
-import { Errors } from "jassijs/base/Errors";
+import { errors, Errors } from "jassijs/base/Errors";
 import { $Class } from "jassijs/remote/Registry";
 import { Button } from "jassijs/ui/Button";
 
@@ -45,7 +45,7 @@ export class ErrorPanel extends Panel {
             this.IDClear.icon = "mdi mdi-delete";
             this.IDClear.onclick(function () {
                 _this.clear();
-                jassijs.errors.items = [];
+                errors.items = [];
             });
             this.IDClear.width = 35;
             this.IDSearch = new Button();
@@ -70,8 +70,8 @@ export class ErrorPanel extends Panel {
             this.registerError();
         if (this.withLastErrors) {
             //old Errors
-            for (var x = 0; x < jassijs.errors.items.length; x++) {
-                this.addError(jassijs.errors.items[x]);
+            for (var x = 0; x < errors.items.length; x++) {
+                this.addError(errors.items[x]);
             }
         }
         if (window["jassijs_debug"] === undefined)
@@ -229,13 +229,13 @@ export class ErrorPanel extends Panel {
     }
     registerError() {
         var _this = this;
-        jassijs.errors.onerror(function (err) {
+        errors.onerror(function (err) {
             _this.addError(err);
 
         }, this._id);
     }
     unregisterError() {
-        jassijs.errors.offerror(this._id);
+        errors.offerror(this._id);
     }
     destroy() {
         this.unregisterError();

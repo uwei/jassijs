@@ -39,7 +39,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             this._value = "";
             this._formatProps = undefined;
             super.init('<input type="text" />');
-            $(this.dom).css("color", color);
+            this.dom.style.color = color;
             this.converter = undefined;
         }
         config(config) {
@@ -53,10 +53,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             super.dom = value;
         }
         set disabled(value) {
-            $(this.dom).prop('disabled', true);
+            this.dom.disabled = true;
         }
         get disabled() {
-            return $(this.dom).prop('disabled');
+            return this.dom.disabled;
         }
         set format(value) {
             this._format = value;
@@ -70,23 +70,22 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 this._formatProps.focus = this.on("focus", () => {
                     let val = this.value;
                     _this._formatProps.inEditMode = true;
-                    $(this.dom).val(Numberformatter_1.Numberformatter.numberToString(val));
+                    this.dom.value = Numberformatter_1.Numberformatter.numberToString(val);
                 });
                 this._formatProps.blur = this.on("blur", () => {
                     _this.updateValue();
                     _this._formatProps.inEditMode = false;
-                    $(this.dom).val(Numberformatter_1.Numberformatter.format(this._format, this.value));
+                    this.dom.value = Numberformatter_1.Numberformatter.format(this._format, this.value);
                 });
             }
             if (this.value)
                 this.value = this.value; //apply the ne format
-            //      $(this.dom).val(value);
         }
         get format() {
             return this._format;
         }
         updateValue() {
-            var ret = $(this.dom).val();
+            var ret = this.dom.value;
             if (this.converter !== undefined) {
                 ret = this.converter.stringToObject(ret);
             }
@@ -100,7 +99,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             if (this._format) {
                 v = Numberformatter_1.Numberformatter.format(this._format, value);
             }
-            $(this.dom).val(v);
+            this.dom.value = value === undefined ? "" : value;
         }
         get value() {
             if (this._formatProps && this._formatProps.inEditMode === false) //
@@ -129,10 +128,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     </datalist>+>
          */
         set placeholder(text) {
-            $(this.dom).attr("placeholder", text);
+            this.dom.placeholder = text;
         }
         get placeholder() {
-            return $(this.dom).attr("placeholder");
+            return this.dom.placeholder;
         }
         set autocompleterDisplay(value) {
             this._autocompleterDisplay = value;
@@ -145,10 +144,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         }
         fillCompletionList(values) {
             var h;
-            var list = $(this.dom).attr("list");
+            var list = this.dom.getAttribute("list");
             var html = "";
-            var comp = $("#" + list);
-            comp[0]._values = values;
+            var comp = document.getElementById(list);
+            comp._values = values;
             //comp.empty();
             for (var x = 0; x < values.length; x++) {
                 var val = values[x];
@@ -161,24 +160,24 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 html += '<option value="' + val + '">';
                 //comp.append('<option value="'+val+'">');
             }
-            comp[0].innerHTML = html;
+            comp.innerHTML = html;
         }
         set autocompleter(value) {
-            var list = $(this.dom).attr("list");
+            var list = this.dom.getAttribute("list");
             var _this = this;
             if (!list && typeof (value) === "function") {
-                $(this.dom).on("mouseover", (ob) => {
+                this.on("mouseover", (ob) => {
                     if (_this._autocompleter.children.length === 0) {
                         var values = value();
                         _this.fillCompletionList(values);
                     }
                 });
             }
-            if (list === undefined) {
+            if (list === undefined || list === null) {
                 list = "j" + Registry_2.default.nextID();
-                this._autocompleter = $('<datalist id="' + list + '"/>')[0];
+                this._autocompleter = Component_1.Component.createHTMLElement('<datalist id="' + list + '"/>');
                 this.domWrapper.appendChild(this._autocompleter);
-                $(this.dom).attr("list", list);
+                this.dom.setAttribute("list", list);
             }
             if (typeof (value) === "function") {
             }
@@ -188,24 +187,24 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             // $(this.dom).val(value);
         }
         get autocompleter() {
-            var list = $(this.dom).prop("list");
+            var list = this.dom.list;
             if (list === undefined)
                 return undefined;
             var comp = $(list)[0];
             if (comp === undefined)
                 return undefined;
-            return comp._values;
+            return comp["_values"];
             // return $(this.dom).val();
         }
         /**
          * focus the textbox
          */
         focus() {
-            $(this.dom).focus();
+            this.dom.focus();
         }
         destroy() {
             if (this._autocompleter)
-                $(this._autocompleter).remove();
+                this._autocompleter.remove();
             super.destroy();
         }
     };
@@ -261,6 +260,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     exports.Textbox = Textbox;
     function test() {
         var ret = new Textbox();
+        ret.autocompleter = ["Hallo", "Du"];
         //ret.autocompleter=()=>[];
         return ret;
     }

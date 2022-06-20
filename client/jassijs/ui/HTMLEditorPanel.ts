@@ -28,7 +28,7 @@ export class HTMLEditorPanel extends Panel {
 		this.add(me.IDChange);
 		//me.IDHtml.text="Hallo";
 		var randclass = "ed" + registry.nextID();
-		$(me.IDHtml.dom).addClass(randclass);
+		me.IDHtml.dom.classList.add(randclass);
 		me.IDChange.text = "OK";
 		me.IDChange.onclick(function (event) {
 
@@ -66,19 +66,19 @@ export class HTMLEditorPanel extends Panel {
 	}
 
 	set value(val) { //the Code
-		var el: any = this.dom.children[0];
+		var el: Element = this.dom.children[0];
 		if (el === undefined) {
-			el = document.createTextNode(val);
-			this.dom.appendChild(el);
+			var el1 = document.createTextNode(val);
+			this.dom.appendChild(el1);
 		} else
-			$(el).html(val);
+			el.innerHTML=val;
 
 	}
 	get value() {
 		var el = this.dom.children[0];
 		if (el === undefined)
 			return "";
-		return $(el).html();
+		return el.innerHTML;
 	}
 }
 export function te() {

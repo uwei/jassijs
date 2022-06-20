@@ -14,7 +14,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
     let Textarea = class Textarea extends Textbox_1.Textbox {
         constructor() {
             super();
-            super.init($('<textarea  />')[0]);
+            super.init('<textarea  />');
         }
     };
     Textarea = __decorate([

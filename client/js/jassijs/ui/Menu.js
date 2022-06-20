@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/MenuItem", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DesignDummy", "jquery"], function (require, exports, Container_1, Property_1, MenuItem_1, Registry_1, Component_1, DesignDummy_1) {
+define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "jassijs/ui/MenuItem", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DesignDummy", "jassijs/ext/jquerylib"], function (require, exports, Container_1, Property_1, MenuItem_1, Registry_1, Component_1, DesignDummy_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Menu = void 0;
@@ -15,7 +15,7 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
         constructor(options = undefined) {
             super();
             this._isRoot = true;
-            super.init($('<ul ' + ` style="Menu"></ul>`)[0]);
+            super.init('<ul ' + ` style="Menu"></ul>`);
             if (options !== undefined && options.noUpdate === true) {
                 this._noUpdate = true;
             }
@@ -29,7 +29,7 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
             return this;
         }
         _sample() {
-            super.init($('<ul ' + ` class="Menu">
+            super.init('<ul ' + ` class="Menu">
 <li>  <div><img  src="res/car.ico" />Save</div></li>
 <li title="create button" onclick="doCreate()"><div><img  src="res/car.ico" />Create</div>
     <ul class="Menu" style="visibility:hidden">
@@ -43,7 +43,7 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
       </ul>
 </li>
 <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
-</ul>`)[0]);
+</ul>`);
         }
         _menueChanged() {
             if (this._isRoot && this._noUpdate !== true) {
@@ -82,7 +82,7 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
             this._menueChanged();
         }
         onclick(handler) {
-            $("#" + this._id).click(function (ob) {
+            document.getElementById(this._id).addEventListener("click", function (ob) {
                 handler(ob);
             });
         }
@@ -141,7 +141,7 @@ define(["require", "exports", "jassijs/ui/Container", "jassijs/ui/Property", "ja
         var men = new Menu();
         var it = new MenuItem_1.MenuItem();
         it.text = "Hallo";
-        it.onclick(() => alert("ok"));
+        //it.onclick(() => alert("ok"));
         men.add(it);
         return men;
     }

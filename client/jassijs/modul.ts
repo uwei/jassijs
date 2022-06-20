@@ -4,7 +4,11 @@ export default {
     "css": {
         "jassijs.css":"jassijs.css",
         "materialdesignicons.min.css":"https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css",
-        "jquery-ui.css":"https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css"
+        "jquery-ui.css":"https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css",
+        "chosen.css":'https://cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css',
+        "goldenlayout-base.css":"https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-base.css",
+        "goldenlayout-light-theme.css":"https://cdnjs.cloudflare.com/ajax/libs/golden-layout/1.5.9/css/goldenlayout-light-theme.css",
+        "contextMenu.css":'https://rawgit.com/s-yadav/contextMenu.js/master/contextMenu.css'
     },
     "types": {
         
@@ -59,7 +63,7 @@ export default {
             'jquery.notify': ["jquery"],
       //      'jquery.ui.touch': ["jquery", "jquery.ui"],
 //            'jquery.doubletap': ["jquery"],
-            'jassijs/jassi': ['jquery', 'jquery.ui', /*'jquery.ui.touch'*/],
+          //  'jassijs/jassi': ['jquery', 'jquery.ui', /*'jquery.ui.touch'*/],
             "spectrum": ["jquery"]
         }
     }

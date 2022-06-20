@@ -1,4 +1,4 @@
-import "jquery";
+import "jassijs/ext/jquerylib";
 import { Container, ContainerConfig } from "jassijs/ui/Container";
 import { Button } from "jassijs/ui/Button";
 import { Property, $Property } from "jassijs/ui/Property";
@@ -30,7 +30,7 @@ export class Menu extends Container implements MenuConfig {
     constructor(options = undefined) {
         super();
         this._isRoot = true;
-        super.init($('<ul ' + ` style="Menu"></ul>`)[0]);
+        super.init('<ul ' + ` style="Menu"></ul>`);
         if (options !== undefined && options.noUpdate === true) {
             this._noUpdate = true;
         } else
@@ -43,7 +43,7 @@ export class Menu extends Container implements MenuConfig {
         return this;
     }
     _sample() {
-        super.init($('<ul ' + ` class="Menu">
+        super.init('<ul ' + ` class="Menu">
 <li>  <div><img  src="res/car.ico" />Save</div></li>
 <li title="create button" onclick="doCreate()"><div><img  src="res/car.ico" />Create</div>
     <ul class="Menu" style="visibility:hidden">
@@ -57,7 +57,7 @@ export class Menu extends Container implements MenuConfig {
       </ul>
 </li>
 <li title="add new" onclick="doCreate()"><div><img  src="res/add-component.ico" /></div></li>
-</ul>`)[0]);
+</ul>`);
     }
 
     _menueChanged() {
@@ -103,7 +103,7 @@ export class Menu extends Container implements MenuConfig {
 
     @$Property({ name: "onclick", type: "function", default: "function(event){\n\t\n}" })
     onclick(handler) {
-        $("#" + this._id).click(function (ob) {
+        document.getElementById(this._id).addEventListener("click",function (ob) {
             handler(ob);
         });
     }
@@ -151,7 +151,7 @@ export function test() {
     var men = new Menu();
     var it = new MenuItem();
     it.text = "Hallo";
-    it.onclick(() => alert("ok"));
+    //it.onclick(() => alert("ok"));
     men.add(it);
     return men;
 }

@@ -162,7 +162,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
          * create an Element from an htmlstring e.g. createDom("<input/>")
          */
         static createHTMLElement(html) {
-            return document.createRange().createContextualFragment(html).children[0];
+            var lower = html.toLocaleLowerCase();
+            if (lower.startsWith("<td") || lower.startsWith("<tr")) {
+                const template = document.createElement("template");
+                template.innerHTML = html;
+                const node = template.content.firstElementChild;
+                return node;
+            }
+            else
+                return document.createRange().createContextualFragment(html).children[0];
         }
         /**
          * inits the component

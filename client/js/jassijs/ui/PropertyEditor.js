@@ -22,7 +22,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.codeChanges = {};
             this.table = new Panel_1.Panel();
             this.parser = parser;
-            this.table.init($(`<table style="table-layout: fixed;font-size:11px">
+            this.table.init(`<table style="table-layout: fixed;font-size:11px">
                             <thead>
                                 <tr>
                                     <th class="propertyeditorheader">Name</th>
@@ -34,12 +34,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                                     <td >a1</td><td>b1</td>
                                 </tr>
                             </tbody>
-                            </table>`)[0]);
+                            </table>`);
             this.add(this.table);
             this.table.width = "98%";
-            $(".propertyeditorheader").resizable({ handles: "e" });
-            //            $( ".propertyeditorheader" ).css("height","8px");
-            //$(this.dom).css("height","");
+            $(this.table.dom).find(".propertyeditorheader").resizable({ handles: "e" });
             this.clear();
             this.layout();
             /**
@@ -63,7 +61,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          */
         addProperty(name, editor, description) {
             var component = editor.getComponent();
-            var row = $('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>')[0];
+            //dont work
+            //var row =Component.createHTMLElement('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>');
+            var row = Component_1.Component.createHTMLElement('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>');
+            //var row=$('<tr nowrap class="propertyeditorrow"><td  style="font-size:11px" nowrap title="' + description + '">' + name + '</td><td class="propertyvalue"  nowrap></td></tr>')[0];
             var deletebutton = new Image_1.Image();
             deletebutton.src = "mdi mdi-delete-forever-outline";
             var _this = this;
@@ -73,18 +74,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 _this.updateParser();
                 _this.value = _this.value;
             });
-            $(row.children[0]).tooltip();
-            // $(row.children[0]).css("font-size", "11px");
-            $(row.children[0]).prepend(deletebutton.dom);
-            //$(component.dom).css("font-size", "11px");
+            row.children[0].prepend(deletebutton.dom);
             this.table.dom.children[1].appendChild(row);
             row["propertyName"] = name;
             row["_components"] = [editor, deletebutton];
-            /* $(component.dom).css({
-                 "width":"100%",
-                 "padding":"initial",
-                 "font-size":"11px"
-             });*/
             try {
                 row.children[1].appendChild(component.dom);
             }
@@ -111,7 +104,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          * delete all properties
          */
         clear() {
-            var trs = $(this.dom).find(".propertyeditorrow");
+            var trs = this.dom.querySelectorAll(".propertyeditorrow");
             for (var x = 0; x < trs.length; x++) {
                 var row = trs[x];
                 if (row["_components"] !== undefined) {
@@ -120,7 +113,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         row["_components"][c].destroy();
                     }
                 }
-                $(row).remove();
+                row.remove();
             }
         }
         /**
@@ -243,7 +236,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             var parent = first._parent;
             var ifirst = parent._components.indexOf(first);
             var isecond = parent._components.indexOf(second);
-            var dummy = $("<div/>");
+            var dummy = Component_1.Component.createHTMLElement("<div/>");
             parent._components[ifirst] = second;
             parent._components[isecond] = first;
             $(first.domWrapper).replaceWith(dummy);
@@ -262,7 +255,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             editor.onedit(function (event) {
                 _this.callEvent("propertyChanged", event);
                 let deletebutton = editor.component.dom.parentNode.parentNode.children[0].children[0];
-                $(deletebutton).css('visibility', 'visible');
+                if (deletebutton)
+                    deletebutton.style.visibility = 'visible';
             });
         }
         _initValue() {
@@ -318,12 +312,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     }
                     var sname = editor.property.name;
                     this.controlEditor(editor);
-                    /*                editor.onedit(function (event) {
-                                        _this.callEvent("propertyChanged", event);
-                                        let deletebutton = editor.component.dom.parentNode.parentNode.children[0].children[0];
-                                        $(deletebutton).css('visibility', 'visible');
-                                    });*/
-                    //editor.ob = _this._value;
                     if (_this.properties[editor.property.name] === undefined) {
                         console.log("Property not found " + editor.property);
                         continue;
@@ -376,26 +364,24 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                                 label = row;
                         }
                         if (isVisible) {
-                            $(prop.editor.component.dom.parentNode).css('display', '');
-                            $(label).css('display', '');
+                            prop.editor.component.dom.parentNode.style.display = '';
+                            label.style.display = '';
                         }
                         else {
-                            $(prop.editor.component.dom.parentNode).css('display', 'none');
-                            $(label).css('display', 'none');
+                            prop.editor.component.dom.parentNode.style.display = 'none';
+                            label.style.display = 'none';
                         }
                     }
                     let deletebutton = prop.editor.component.dom.parentNode.parentNode.children[0].children[0];
-                    var ll = this.getPropertyValue(prop, false);
-                    if (ll === undefined) {
-                        $(deletebutton).css('visibility', 'hidden');
+                    if (deletebutton) {
+                        var ll = this.getPropertyValue(prop, false);
+                        if (ll === undefined) {
+                            deletebutton.style.visibility = 'hidden';
+                        }
+                        else {
+                            deletebutton.style.visibility = 'visible';
+                        }
                     }
-                    else {
-                        $(deletebutton).css('visibility', 'visible');
-                    }
-                    /*   $(prop.editor.component.dom.parentNode).css('display', '');
-                         } else {
-                             $(prop.editor.component.dom.parentNode).css('display', 'none');
-     */
                     prop.editor.ob = this.value;
                 }
             }

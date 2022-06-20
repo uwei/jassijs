@@ -34,7 +34,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
         __metadata("design:paramtypes", [])
     ], Dialog);
     exports.Dialog = Dialog;
-    async function test() {
+    function test() {
         var ret = new Dialog();
         return ret;
     }

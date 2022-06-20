@@ -48,7 +48,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
                 super(properties);
                 if (properties === undefined || properties.id === undefined) {
                     //super.init($('<div class="Panel"/>')[0]);
-                    super.init($('<' + tag + ' class="Panel" />')[0]);
+                    super.init('<' + tag + ' class="Panel" />');
                 }
             }
             this._designMode = false;
@@ -61,9 +61,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
         set isAbsolute(value) {
             this._isAbsolute = value;
             if (value)
-                $(this.dom).addClass("jabsolutelayout");
+                this.dom.classList.add("jabsolutelayout");
             else
-                $(this.dom).removeClass("jabsolutelayout");
+                this.dom.classList.remove("jabsolutelayout");
             if (this._designMode !== undefined)
                 this._setDesignMode(this._designMode);
             if (this._designMode && this._activeComponentDesigner) {
@@ -75,12 +75,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
         }
         max() {
             if (this._id == "body") {
-                $(this.domWrapper).css("width", "100%");
-                $(this.domWrapper).css("height", "calc(100vh - 2px)");
+                this.domWrapper.style.width = "100%";
+                this.domWrapper.style.height = "calc(100vh - 2px)";
             }
             else {
-                $(this.domWrapper).css("width", "100%");
-                $(this.domWrapper).css("height", "100%");
+                this.domWrapper.style.width = "100%";
+                this.domWrapper.style.height = "100%";
             }
         }
         extensionCalled(action) {
@@ -149,7 +149,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
                 if (this.isAbsolute === false) {
                     for (var x = 0; x < this._components.length; x++) {
                         var comp = this._components[x];
-                        if (comp instanceof Container_1.Container && !$(comp.dom).hasClass("jdisableaddcomponents")) {
+                        if (comp instanceof Container_1.Container && !comp.dom.classList.contains("jdisableaddcomponents")) {
                             DesignDummy_1.DesignDummy.createIfNeeded(comp, "beforeComponent", (this["_editorselectthis"] ? this["_editorselectthis"] : this));
                         }
                     }

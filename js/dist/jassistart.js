@@ -187,7 +187,7 @@ class JassijsStarter {
                     for (var key in _this.cssFiles) {
                         //jassijs.default.myRequire(_this.cssFiles[key]);
                     }
-                    if (_this.runFunction && window[runFunction]) {
+                    if (_this.runFunction && window[_this.runFunction]) {
                         window[_this.runFunction]();
                     }
                     if (_this.runScript) {
@@ -199,7 +199,16 @@ class JassijsStarter {
         });
     }
 }
-new JassijsStarter().registerServiceWorker().run();
+(() => {
+    var jstart = new JassijsStarter();
+    try {
+        jstart.registerServiceWorker();
+    }
+    catch (_a) {
+        console.log("could not start Serviceworker");
+    }
+    jstart.run();
+})();
 /*
  window.onerror =function(errorMsg, url, lineNumber, column, errorObj) {
     var stack=(errorObj===null||errorObj===undefined)?"":errorObj.stack;

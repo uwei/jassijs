@@ -1,4 +1,4 @@
-import "jquery";
+import "jassijs/ext/jquerylib";
 import "jassijs/ext/jquery.contextmenu";
 import { $Class } from "jassijs/remote/Registry";
 import { Menu } from "jassijs/ui/Menu";
@@ -10,7 +10,7 @@ import { $Property } from "jassijs/ui/Property";
 import { Actions, Action } from "jassijs/base/Actions";
 import { MenuItem } from "jassijs/ui/MenuItem";
 
-
+jassijs.includeCSSFile("contextMenu.css");
 declare global {
     interface JQuery {
         contextMenu: any;

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Image", "jassijs/ui/MenuItem"], function (require, exports, Registry_1, Image_1, MenuItem_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Image"], function (require, exports, Registry_1, Image_1) {
     "use strict";
     var DesignDummy_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -39,7 +39,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Image", "ja
             designDummy.domWrapper.classList.remove("jcomponent");
             designDummy.domWrapper.classList.add("jdesigndummy");
             designDummy.domWrapper.style.width = "16px";
-            if (oclass === MenuItem_1.MenuItem) {
+            if ((oclass === null || oclass === void 0 ? void 0 : oclass._classname) === 'jassijs.ui.MenuItem') {
                 designDummy.icon = icon;
             }
             else

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs_editor/Debugger"], function (require, exports, acelib_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1) {
+define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -23,7 +23,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
             var test = $('<div class="CodePanel" style="height: 500px; width: 500px"></div>')[0];
             super.init(test);
             $(this.domWrapper).css("display", "");
-            this._editor = acelib_1.default.edit(this._id);
+            this._editor = ace_1.default.edit(this._id);
             this.file = "";
             this.checkErrorTask = new Runlater_1.Runlater(function () {
                 _this._checkCode();
@@ -95,6 +95,9 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
             this._editor.on("mousemove", function (e) {
                 _this._manageTooltip(e);
             });
+        }
+        autocomplete() {
+            this._editor.commands.byName.startAutocomplete.exec(this._editor);
         }
         /**
          * add commands to Ace Editor
@@ -271,7 +274,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
          * initialize the Ace language Tools (only once)
          */
         _installLangTools() {
-            var aceLangTools = acelib_1.default.require("ace/ext/language_tools");
+            var aceLangTools = ace_1.default.require("ace/ext/language_tools");
             var _this = this;
             if (aceLangTools.jassi === undefined) {
                 aceLangTools.jassi = {
@@ -420,7 +423,7 @@ define(["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/
             //force ctrl+z not shows an empty document
             if (this._isInited === undefined) {
                 this._isInited = true;
-                this._editor.getSession().setUndoManager(new acelib_1.default.UndoManager());
+                this._editor.getSession().setUndoManager(new ace_1.default.UndoManager());
             }
             if (lastcursor !== undefined) {
                 //this.cursorPosition = lastcursor;

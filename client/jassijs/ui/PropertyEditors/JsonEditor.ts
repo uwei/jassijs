@@ -1,3 +1,4 @@
+import "jassijs/ext/jquerylib";
 import { $Class } from "jassijs/remote/Registry";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Editor, $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";

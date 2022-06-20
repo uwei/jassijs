@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs_editor/Debugger"], function (require, exports, acelib_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1) {
+define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -23,7 +23,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
             var test = $('<div class="CodePanel" style="height: 500px; width: 500px"></div>')[0];
             super.init(test);
             $(this.domWrapper).css("display", "");
-            this._editor = acelib_1.default.edit(this._id);
+            this._editor = ace_1.default.edit(this._id);
             this.file = "";
             this.checkErrorTask = new Runlater_1.Runlater(function () {
                 _this._checkCode();
@@ -95,6 +95,9 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
             this._editor.on("mousemove", function (e) {
                 _this._manageTooltip(e);
             });
+        }
+        autocomplete() {
+            this._editor.commands.byName.startAutocomplete.exec(this._editor);
         }
         /**
          * add commands to Ace Editor
@@ -271,7 +274,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
          * initialize the Ace language Tools (only once)
          */
         _installLangTools() {
-            var aceLangTools = acelib_1.default.require("ace/ext/language_tools");
+            var aceLangTools = ace_1.default.require("ace/ext/language_tools");
             var _this = this;
             if (aceLangTools.jassi === undefined) {
                 aceLangTools.jassi = {
@@ -420,7 +423,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
             //force ctrl+z not shows an empty document
             if (this._isInited === undefined) {
                 this._isInited = true;
-                this._editor.getSession().setUndoManager(new acelib_1.default.UndoManager());
+                this._editor.getSession().setUndoManager(new ace_1.default.UndoManager());
             }
             if (lastcursor !== undefined) {
                 //this.cursorPosition = lastcursor;
@@ -507,7 +510,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
     }
     exports.test = test;
 });
-define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/ext/acelib", "jassijs/remote/Registry", "jassijs_editor/CodePanel"], function (require, exports, acelib_2, Registry_3, CodePanel_2) {
+define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "ace/ext/language_tools"], function (require, exports, ace_2, Registry_3, CodePanel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.AcePanelSimple = void 0;
@@ -522,7 +525,7 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/e
             var test = $('<div class="CodePanel" style="height: 500px; width: 500px"></div>')[0];
             super.init(test);
             $(this.domWrapper).css("display", "");
-            this._editor = acelib_2.default.edit(this._id);
+            this._editor = ace_2.default.edit(this._id);
             this.file = "";
             this._editor.setOptions({
                 enableBasicAutocompletion: true,
@@ -547,6 +550,9 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/e
                      editorDiv.style.height = lineHeight * _this._editor.getSession().getDocument().getLength() + " px";
                      _this._editor.resize();
                  });*/
+        }
+        autocomplete() {
+            console.log("not implemented");
         }
         insert(pos, text) {
             this._editor.session.insert(pos, text);
@@ -582,7 +588,7 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/e
             //force ctrl+z not shows an empty document
             if (this._isInited === undefined) {
                 this._isInited = true;
-                this._editor.getSession().setUndoManager(new acelib_2.default.UndoManager());
+                this._editor.getSession().setUndoManager(new ace_2.default.UndoManager());
             }
             if (lastcursor !== undefined) {
                 //this.cursorPosition = lastcursor;
@@ -890,7 +896,7 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
         }
     };
 });
-define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test"], function (require, exports, Registry_5, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_6, Server_2, Reloader_2, Classes_1, Component_1, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1) {
+define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test", "jassijs/base/CurrentSettings"], function (require, exports, Registry_5, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_6, Server_2, Reloader_2, Classes_1, Component_1, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1, CurrentSettings_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -923,7 +929,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             this._codeToolbar = new Panel_1.Panel();
             //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-            let sett = Settings_1.Settings.gets(Settings_1.Settings.keys.Development_DefaultEditor);
+            let sett = CurrentSettings_1.currentsettings.gets(Settings_1.Settings.keys.Development_DefaultEditor);
             if (properties === null || properties === void 0 ? void 0 : properties.codePanel) {
                 this._codePanel = properties.codePanel;
             }
@@ -988,10 +994,17 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 goto.onclick(function () {
                     _this.gotoDeclaration();
                 });
+                this._codeToolbar.add(goto);
+                this.autoCompleteButton = new Button_1.Button();
+                this.autoCompleteButton.icon = "mdi mdi-robot-happy-outline mdi-18px";
+                this.autoCompleteButton.tooltip = "autocomplete (ctrl space)";
+                this.autoCompleteButton.onclick(function () {
+                    _this._codePanel.autocomplete();
+                });
+                this._codeToolbar.add(this.autoCompleteButton);
                 jassijs["$CodeEditor"] = CodeEditor_1;
                 $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
                 $(goto.dom).attr("ondragover", "event.preventDefault();");
-                this._codeToolbar.add(goto);
             }
             this._codeView.add(this._codePanel);
             this._main.width = "calc(100% - 1px)";
@@ -3085,7 +3098,7 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Registr
         jassijs.debugger = new Debugger();
     require(["jassijs_editor/ChromeDebugger"]);
 });
-define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Registry_15, Router_2, Typescript_3, CodePanel_5, Settings_2) {
+define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs/base/CurrentSettings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Registry_15, Router_2, Typescript_3, CodePanel_5, Settings_2, CurrentSettings_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -3199,7 +3212,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
                      _this.callEvent("breakpointChanged", row, column, false, type);
                  }
              });*/
-            let theme = Settings_2.Settings.gets(Settings_2.Settings.keys.Development_MoanacoEditorTheme);
+            let theme = CurrentSettings_2.currentsettings.gets(Settings_2.Settings.keys.Development_MoanacoEditorTheme);
             this._editor = monaco.editor.create(this.dom, {
                 //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
                 language: 'typescript',
@@ -3223,6 +3236,9 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
                     return decs[x];
             }
             return undefined;
+        }
+        autocomplete() {
+            this._editor.trigger("äläöl", 'editor.action.triggerSuggest', "{}");
         }
         _mouseDown(e) {
             if (e.target.type === 2) {
@@ -3439,11 +3455,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1655629520595,
+                "date": 1655665513704,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1655556793963,
+                "date": 1655665585495,
                 "jassijs.ui.AcePanelSimple": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
@@ -3451,7 +3467,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1655636028029,
+                "date": 1655740060584,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3508,7 +3524,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
-                "date": 1655584787288,
+                "date": 1655661688870,
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
@@ -3531,14 +3547,14 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1654273312166
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1655556792359,
+                "date": 1655740092054,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {
                 "date": 1623098600000
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1655556792359,
+                "date": 1655755191635,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
@@ -3546,7 +3562,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1655556863818,
+                "date": 1655755183646,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/TSSourceMap.ts": {
@@ -3558,45 +3574,6 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.Typescript": {}
             }
         }
-    };
-});
-/*
-requirejs.config({
-    paths: {
-        'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
-        'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools'
-    },
-    shim: {
-        'ace/ext/language_tools': ['ace/ace'],
-    }
-});*/
-//ok
-define("jassijs_editor/ext/acelib", ["require", 'ace/ace',
-    'ace/ext/language_tools'], function (require, ac) {
-    //  var tsmode= require("ace/mode/typescript");
-    /*  var WorkerClient = require("ace/worker/worker_client").WorkerClient;
-      var createWorker = function (session) {
-          var worker = new WorkerClient(["ace"], "jassijs/ext/ace_tsmode", "WorkerModule");
-          worker.attachToDocument(session.getDocument());
-
-          worker.on("lint", function (results) {
-              session.setAnnotations(results.data);
-          });
-
-          worker.on("terminate", function () {
-              session.clearAnnotations();
-          });
-
-          return worker;
-      };*/
-    return {
-        default: ac,
-        /*  createWorker:createWorker,
-          changeTSMode:function(session){
-            //  var tsmode=session.$mode;
-              session.$mode.createWorker=createWorker;
-              var k=9;
-          }*/
     };
 });
 //require.config({ paths: { vs: '//cdn.jsdelivr.net/npm/monaco-editor@0.20.0/dev/vs' } });
@@ -3702,7 +3679,7 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
         return this._worker;
 
     }*/ 
-define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_16) {
+define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function (require, exports, Registry_16) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DragAndDropper = void 0;
@@ -4856,7 +4833,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
     }
     exports.test = test;
 });
-define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_18) {
+define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function (require, exports, Registry_18) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Resizer = void 0;

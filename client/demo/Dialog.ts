@@ -27,7 +27,7 @@ export class Dialog extends Panel {
         this.add(me.boxpanel1);
     }
 }
-export async function test() {
+export function test() {
     var ret = new Dialog();
     return ret;
 }

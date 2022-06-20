@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Router_1, Typescript_1, CodePanel_1, Settings_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs/base/CurrentSettings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Router_1, Typescript_1, CodePanel_1, Settings_1, CurrentSettings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -121,7 +121,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
                      _this.callEvent("breakpointChanged", row, column, false, type);
                  }
              });*/
-            let theme = Settings_1.Settings.gets(Settings_1.Settings.keys.Development_MoanacoEditorTheme);
+            let theme = CurrentSettings_1.currentsettings.gets(Settings_1.Settings.keys.Development_MoanacoEditorTheme);
             this._editor = monaco.editor.create(this.dom, {
                 //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
                 language: 'typescript',
@@ -145,6 +145,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
                     return decs[x];
             }
             return undefined;
+        }
+        autocomplete() {
+            this._editor.trigger("äläöl", 'editor.action.triggerSuggest', "{}");
         }
         _mouseDown(e) {
             if (e.target.type === 2) {

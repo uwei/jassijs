@@ -32,9 +32,9 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Databinder", "jass
             this.add(this.design);
             this.design.width = "100%";
             this.design.height = "100%";
-            $(this.design.domWrapper).addClass("designerNoDraggable");
-            $(this.design.dom).addClass("designerNoSelectable");
-            $(this.design.dom).addClass("designerNoResizable");
+            this.design.domWrapper.classList.add("designerNoDraggable");
+            this.design.dom.classList.add("designerNoSelectable");
+            this.design.dom.classList.add("designerNoResizable");
         }
         config(config) {
             super.config(config);

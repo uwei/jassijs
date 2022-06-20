@@ -58,12 +58,12 @@ export class CSVImport extends Panel {
 			lkeys.push(key.toLowerCase());
 		}
 		for (var x = 0; x < this.fieldCount; x++) {
-			var el: HTMLElement = $("#" + this._id + "--" + x)[0];
+			var el: HTMLElement = document.getElementById( this._id + "--" + x);
 			el.innerHTML = html;
 			var pos = lkeys.indexOf(this.data[0]["Column " + x].toLowerCase());
 			//assign dettected fields in first row
 			if (pos !== -1) {
-				$("#" + this._id + "--" + x).val(lkeys[pos]);
+				(<HTMLInputElement> document.getElementById( this._id + "--" + x)).value=lkeys[pos];
 			}
 
 		}
@@ -225,7 +225,7 @@ export class CSVImport extends Panel {
 		//read userchoices
 		var assignedfields = {};
 		for (var x = 0; x < this.fieldCount; x++) {
-			var value: any = $("#" + this._id + "--" + x).val();
+			var value: any = (<HTMLInputElement>document.getElementById(this._id + "--" + x)).value;
 			if (value !== "")
 				assignedfields[<string>value] = x;
 		}

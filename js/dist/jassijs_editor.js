@@ -266,6 +266,13 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
             });
         }
         /**
+         * text changes
+         * @param {function} handler
+         */
+        onchange(handler) {
+            this._editor.on('change', handler);
+        }
+        /**
          * initialize the Ace language Tools (only once)
          */
         _installLangTools() {
@@ -663,11 +670,11 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/e
     }
     exports.test = test;
 });
-define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/Debugger", "jassijs/ui/OptionDialog", "jassijs_editor/util/TSSourceMap", "jassijs/util/Reloader", "jassijs/remote/Server", "jassijs/base/Windows"], function (require, exports, Registry_4, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1) {
+define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/Debugger", "jassijs/ui/OptionDialog", "jassijs_editor/util/TSSourceMap", "jassijs/util/Reloader", "jassijs/remote/Server", "jassijs/base/Windows", "jassijs/ui/Notify"], function (require, exports, Registry_4, Debugger_1, OptionDialog_1, TSSourceMap_1, Reloader_1, Server_1, Windows_1, Notify_1) {
     "use strict";
     var ChromeDebugger_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ChromeDebugger = void 0;
+    exports.test = exports.ChromeDebugger = void 0;
     var installed = undefined;
     /**
      * debugging in Chrome
@@ -685,7 +692,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/R
             });
         }
         static showHintExtensionNotInstalled() {
-            $.notify.addStyle('downloadlink', {
+            (0, Notify_1.notifyAddStyle)('downloadlink', {
                 html: "<div><a href='https://uwei.github.io/jassijs/jassichrome/jassijsext.zip'><span data-notify-text/></a></div>",
                 classes: {
                     base: {
@@ -694,7 +701,7 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/R
                     }
                 }
             });
-            $.notify("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000, });
+            (0, Notify_1.notify)("Jassi Debugger Chrome extension not installed. Click here to download.", { position: "right bottom", style: 'downloadlink', autoHideDelay: 7000 });
         }
         //on receiving messages from chrome extension
         onChromeMessage(event) {
@@ -862,6 +869,10 @@ define("jassijs_editor/ChromeDebugger", ["require", "exports", "jassijs/remote/R
     //if connected then this instance is registred to jassijs.debugger;
     new ChromeDebugger();
     window.postMessage({ toJassiExtension: true, name: "connect" }, "*");
+    function test() {
+        ChromeDebugger.showHintExtensionNotInstalled();
+    }
+    exports.test = test;
 });
 define("jassijs_editor/modul", ["require", "exports"], function (require, exports) {
     "use strict";
@@ -1010,6 +1021,9 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             setTimeout(() => {
                 //_this.editorProvider="ace";
             }, 100);
+        }
+        static async addFilesToCompletion(filenames) {
+            // await typescript.initService();
         }
         _installView() {
             this._main.add(this._codeView, "Code..", "code");
@@ -1732,7 +1746,7 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
     ], CodeEditorInvisibleComponents);
     exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;
 });
-define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router"], function (require, exports, Registry_9, Panel_3, Router_1) {
+define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/ui/Notify"], function (require, exports, Registry_9, Panel_3, Router_1, Notify_2) {
     "use strict";
     var CodePanel_4;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1846,7 +1860,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Regist
             var pos = this.positionToNumber(this.cursorPosition);
             var test = this.numberToPosition(pos);
             if (!CodePanel_4.typescript.isInited(this.file)) {
-                $.notify("please try later ... loading in progress", "info", { position: "bottom right" });
+                (0, Notify_2.notify)("please try later ... loading in progress", "info", { position: "bottom right" });
                 return;
             }
             CodePanel_4.typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
@@ -3430,15 +3444,19 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1655556793963,
+                "date": 1655629520595,
                 "jassijs.ui.AcePanel": {}
             },
-            "jassijs_editor/ChromeDebugger.ts": {
+            "jassijs_editor/AcePanelSimple.ts": {
                 "date": 1655556793963,
+                "jassijs.ui.AcePanelSimple": {}
+            },
+            "jassijs_editor/ChromeDebugger.ts": {
+                "date": 1655584741932,
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1655556793963,
+                "date": 1655636028029,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3495,7 +3513,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
-                "date": 1655556793963,
+                "date": 1655584787288,
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
@@ -3543,13 +3561,6 @@ define("jassijs_editor/registry", ["require"], function (require) {
             "jassijs_editor/util/Typescript.ts": {
                 "date": 1655556793864,
                 "jassijs_editor.util.Typescript": {}
-            },
-            "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1655556793963,
-                "jassijs.ui.AcePanelSimple": {}
-            },
-            "jassijs_editor/ext/pdfMake-interface.ts": {
-                "date": 1655407578946
             }
         }
     };
@@ -3696,24 +3707,6 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
         return this._worker;
 
     }*/
-//source from https://cdn.jsdelivr.net/npm/@types/pdfmake/interfaces.d.ts
-// Type definitions for pdfmake 0.1
-// Project: http://pdfmake.org
-// Definitions by: Milen Stefanov <https://github.com/m1llen1um>
-//                 Rajab Shakirov <https://github.com/radziksh>
-//                 Enzo Volkmann <https://github.com/evolkmann>
-//                 Andi Pätzold <https://github.com/andipaetzold>
-//                 Neal Mummau <https://github.com/nmummau>
-//                 Jean-Raphaël Matte <https://github.com/jeralm>
-// Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
-// TypeScript Version: 3.0
-//  changes by jassijs are tagged with /*changed by jassijs*/
-/// <reference types="node" />
-/// <reference types="pdfkit" />
-define("jassijs_editor/ext/pdfMake-interface", ["require", "exports"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-});
 define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_16) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });

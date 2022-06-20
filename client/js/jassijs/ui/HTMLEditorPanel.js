@@ -26,7 +26,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassi
             this.add(me.IDChange);
             //me.IDHtml.text="Hallo";
             var randclass = "ed" + Registry_2.default.nextID();
-            $(me.IDHtml.dom).addClass(randclass);
+            me.IDHtml.dom.classList.add(randclass);
             me.IDChange.text = "OK";
             me.IDChange.onclick(function (event) {
             });
@@ -63,17 +63,17 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/ui/HTMLPanel", "jassi
         set value(val) {
             var el = this.dom.children[0];
             if (el === undefined) {
-                el = document.createTextNode(val);
-                this.dom.appendChild(el);
+                var el1 = document.createTextNode(val);
+                this.dom.appendChild(el1);
             }
             else
-                $(el).html(val);
+                el.innerHTML = val;
         }
         get value() {
             var el = this.dom.children[0];
             if (el === undefined)
                 return "";
-            return $(el).html();
+            return el.innerHTML;
         }
     };
     HTMLEditorPanel = __decorate([

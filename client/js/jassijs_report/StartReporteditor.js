@@ -1,4 +1,4 @@
-define(["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Settings"], function (require, exports, FileExplorer_1, Windows_1, Panel_1, Router_1, Settings_1) {
+define(["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Settings", "jassijs/base/CurrentSettings"], function (require, exports, FileExplorer_1, Windows_1, Panel_1, Router_1, Settings_1, CurrentSettings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -19,7 +19,7 @@ define(["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows",
         Windows_1.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
         Router_1.router.navigate(window.location.hash);
         //Ace should be default because long image blob breaks line   
-        if (Settings_1.Settings.gets(Settings_1.Settings.keys.Development_DefaultEditor) === undefined) {
+        if (CurrentSettings_1.currentsettings.gets(Settings_1.Settings.keys.Development_DefaultEditor) === undefined) {
             Settings_1.Settings.save(Settings_1.Settings.keys.Development_DefaultEditor, "ace", "browser");
         }
     }

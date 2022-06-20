@@ -1,11 +1,8 @@
-
-import { Component } from "jassijs/ui/Component";
 //@ts-ignore
-import ace from "jassijs_editor/ext/acelib";
+import ace from 'ace/ace';
+import 'ace/ext/language_tools';
 import { $Class } from "jassijs/remote/Registry";
-import registry from "jassijs/remote/Registry";
 import { CodePanel } from "jassijs_editor/CodePanel";
-import { Textbox } from "jassijs/ui/Textbox";
 
 
 
@@ -53,7 +50,9 @@ export class AcePanelSimple extends CodePanel{
 
 
     }
-   
+    autocomplete(){
+        console.log("not implemented");
+    }
 	public insert(pos:number,text:string){
 		this._editor.session.insert(pos, text);
 	}

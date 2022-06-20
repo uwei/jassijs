@@ -1,0 +1,12 @@
+{"demoreport": "jassijs_report",
+	"modules": {
+		"jassijs": "jassijs"
+
+	},
+	"require": {
+		"paths": {
+			"require.js": "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js"
+		}
+	}
+	
+}

@@ -8,7 +8,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
     "use strict";
     var Settings_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
+    exports.load = exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
     const proxyhandler = {
         get: function (target, prop, receiver) {
             return prop;
@@ -62,7 +62,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
             }
             return ret;
         }
-        static gets(Settings_key) {
+        gets(Settings_key) {
             if (Settings_1.browserSettings && Settings_1.browserSettings[Settings_key])
                 return Settings_1.browserSettings[Settings_key];
             if (Settings_1.userSettings && Settings_1.userSettings[Settings_key])
@@ -180,24 +180,25 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
     exports.autostart = autostart;
     async function test(t) {
         try {
+            var settings = new Settings();
             await Settings.remove("antestsetting", "user");
             await Settings.remove("antestsetting", "browser");
             await Settings.remove("antestsetting", "allusers");
-            t.expectEqual(Settings.gets("antestsetting") === undefined);
+            t.expectEqual(settings.gets("antestsetting") === undefined);
             await Settings.load();
-            t.expectEqual(Settings.gets("antestsetting") === undefined);
+            t.expectEqual(settings.gets("antestsetting") === undefined);
             await Settings.save("antestsetting", "1", "allusers");
-            t.expectEqual(Settings.gets("antestsetting") === "1");
+            t.expectEqual(settings.gets("antestsetting") === "1");
             await Settings.load();
-            t.expectEqual(Settings.gets("antestsetting") === "1");
+            t.expectEqual(settings.gets("antestsetting") === "1");
             await Settings.save("antestsetting", "2", "user");
-            t.expectEqual(Settings.gets("antestsetting") === "2");
+            t.expectEqual(settings.gets("antestsetting") === "2");
             await Settings.load();
-            t.expectEqual(Settings.gets("antestsetting") === "2");
+            t.expectEqual(settings.gets("antestsetting") === "2");
             await Settings.save("antestsetting", "3", "browser");
-            t.expectEqual(Settings.gets("antestsetting") === "3");
+            t.expectEqual(settings.gets("antestsetting") === "3");
             await Settings.load();
-            t.expectEqual(Settings.gets("antestsetting") === "3");
+            t.expectEqual(settings.gets("antestsetting") === "3");
         }
         catch (ex) {
             throw ex;
@@ -209,5 +210,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
         }
     }
     exports.test = test;
+    async function load() {
+        return Settings.load();
+    }
+    exports.load = load;
 });
 //# sourceMappingURL=Settings.js.map

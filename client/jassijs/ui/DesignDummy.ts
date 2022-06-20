@@ -1,7 +1,6 @@
 import { Component } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { Image } from "jassijs/ui/Image";
-import { MenuItem } from "jassijs/ui/MenuItem";
 import { Container } from "jassijs/ui/Container";
 
 @$Class("jassijs.ui.DesignDummy")
@@ -39,7 +38,7 @@ export class DesignDummy extends Image {
        (<Component> designDummy).domWrapper.classList.add("jdesigndummy");
         (<Component> designDummy).domWrapper.style.width="16px";
        
-        if(oclass===MenuItem){
+        if(oclass?._classname==='jassijs.ui.MenuItem'){
     		designDummy.icon = icon;	
         }else
 	        designDummy.src = icon;

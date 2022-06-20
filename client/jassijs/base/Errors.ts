@@ -79,4 +79,6 @@ export class Errors {
         delete this.handler[id];
     }
 };
+var errors=new Errors();
+export {errors};
 

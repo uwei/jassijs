@@ -1,20 +1,14 @@
+import "jassijs/ext/jquerylib";
 import { $Class } from "jassijs/remote/Registry";
 import {Component,  $UIComponent, ComponentCreateProperties, ComponentConfig } from "jassijs/ui/Component";
 import {DataComponent} from "jassijs/ui/DataComponent";
 //import Button from "jassijs/ui/Button";
-import "jassijs/ext/jquery.choosen";
+import "jquery.choosen";
 //import {Panel} from "jassijs/ui/Panel";
 import { $Property } from "jassijs/ui/Property";
 import { classes } from "jassijs/remote/Classes";
 
-/*
-declare global {
-    interface JQuery {
-        chosen: any;
-    }
-}
-*/
-
+jassijs.includeCSSFile("chosen.css");
 export interface SelectConfig extends ComponentConfig{
    /**
      * called if value has changed

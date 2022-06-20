@@ -1,5 +1,4 @@
 
-import jassi from "jassijs/jassi";
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Menu } from "jassijs/ui/Menu";
 import { Property, $Property } from "jassijs/ui/Property";
@@ -32,8 +31,8 @@ export class MenuItem extends Container implements ContainerConfig {
     constructor() {
         super();
 
-        super.init($('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>')[0], { noWrapper: true });
-        $(this.dom).addClass("designerNoResizable");
+        super.init('<li style="white-space: nowrap"><div><span class="menuitemspan"><img style="display: none" class="menuitemicon" /></span><span class="menuitemtext">.</span></div></li>', { noWrapper: true });
+        this.dom.classList.add("designerNoResizable");
         this._text = "";
         this._icon = "";
         this.items = new Menu();
@@ -50,26 +49,22 @@ export class MenuItem extends Container implements ContainerConfig {
 
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler) {
-        var _this = this;
-        $("#" + this._id).click(function (ob) {
-            handler(ob);
-            //_this.this.items._parent.close();
-        });
+        this.on("click",handler);
     }
     set icon(icon: string) { //the Code
         this._icon = icon;
         var img;
-        var el1 = $(this.dom).find(".menuitemspan");
-        el1.removeClass();
-        el1.addClass("menuitemspan");
-        $(this.dom).find(".menuitemicon").attr("src", "");
+        var el1 = this.dom.querySelector(".menuitemspan");
+        el1.setAttribute("class","");//removeClass();
+        el1.classList.add("menuitemspan");
+        this.dom.querySelector(".menuitemicon").setAttribute("src", "");
         if (icon?.startsWith("mdi")) {
-            el1.addClass(icon);
-            $(this.dom).find(".menuitemicon").css("display", "none");
+            icon.split(" ").forEach((cl)=>el1.classList.add(cl)) ;
+            (<HTMLElement> this.dom.querySelector(".menuitemicon")).style.display= "none";
         } else {
             if (icon)
-                $(this.dom).find(".menuitemicon").css("display", "initial");
-            $(this.dom).find(".menuitemicon").attr("src", icon);
+                (<HTMLElement> this.dom.querySelector(".menuitemicon")).style.display="initial";
+            this.dom.querySelector(".menuitemicon").setAttribute("src", icon);
         }
 
         //if (icon === "")
@@ -78,9 +73,9 @@ export class MenuItem extends Container implements ContainerConfig {
     }
     @$Property()
     get icon(): string { //the Code
-        var ret = $(this.dom).find(".menuitemicon").attr("src");
+        var ret = this.dom.querySelector(".menuitemicon").getAttribute("src");
         if (ret === "") {
-            ret = $(this.dom).find(".menuitemspan").attr("class").replace("menuitemspan ", "");
+            ret = this.dom.querySelector(".menuitemicon").getAttribute("class").replace("menuitemspan ", "");
         }
         return ret;
 
@@ -90,11 +85,11 @@ export class MenuItem extends Container implements ContainerConfig {
         this._text = value;
         var h: HTMLElement;
 
-        (<HTMLElement>$(this.dom).find(".menuitemtext")[0]).innerText = value;
+        (<HTMLElement>this.dom.querySelector(".menuitemtext")).innerText = value;
     }
     @$Property()
     get text(): string {
-        return (<HTMLElement>$(this.dom).find(".menuitemtext")[0]).innerText;
+        return (<HTMLElement>this.dom.querySelector(".menuitemtext")).innerText;
     }
     destroy() {
         super.destroy();
@@ -111,13 +106,13 @@ export class MenuItem extends Container implements ContainerConfig {
         if (this.items._components.length > 0 && this.items.dom.parentNode !== this.dom) {
             this.items.dom.parentNode.removeChild(this.items.dom);
             this.dom.appendChild(this.items.dom);
-            $(this.items.dom).addClass("jcontainer");//for drop-target
+            this.items.dom.classList.add("jcontainer");//for drop-target
 
         }
         if (this.items._components.length > 0)
-            $(this.dom).addClass("iw-has-submenu");
+            this.dom.classList.add("iw-has-submenu");
         else
-            $(this.dom).removeClass("iw-has-submenu");
+            this.dom.classList.remove("iw-has-submenu");
 
         if (this._parent !== undefined && this._parent._menueChanged !== undefined)
             this._parent._menueChanged();
