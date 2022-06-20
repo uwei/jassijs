@@ -1,10 +1,9 @@
-//@ts-ignore
 import "jquery";
+import "jassijs/ext/intersection-observer";
 //@ts-ignore
 import GoldenLayout from "jassijs/ext/goldenlayout";
 import { $Class } from "jassijs/remote/Registry";
 import {Container} from "jassijs/ui/Container";
-//import "jassijs/ext/jquery.resize";
 import {Button} from "jassijs/ui/Button";
 import {Textbox} from "jassijs/ui/Textbox";
 

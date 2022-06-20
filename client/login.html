@@ -1,8 +1,14 @@
 <html>
-    <body>
-        <form id="form" action="user/login" method="post" >
-            <input type="text" name="username"><br>
-            <input type="password" name="password"><br>
+    <body style="background-color: beige;">
+        <b>Login</b>
+        
+      <br>
+        <form id="form" action="user/login" method="post"  >
+            <table>
+                <tr><td>Username: </td><td><input type="text" name="username"></td></tr>
+                <tr><td>Password: </td><td><input type="password" name="password"></td></tr>
+            </table>
+            <br>
             <button id="loginButton" onclick="doSubmit()" type="button" autofocus>Login</button>
             <button id="registerButton" onclick="window.location.href = '/register.html';" type="button">Register</button>
         </form>

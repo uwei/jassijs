@@ -20,16 +20,8 @@ class Jassi {
         //@ts-ignore
         //this.options = window?.__jassijsconfig__?.options;
         if (!this.isServer) {
-            //@ts-ignore 
-            /*import("jassijs/modul").then((modul)=>{
-                jassijs.myRequire(modul.default.css["jassijs.css"]);
-                jassijs.myRequire(modul.default.css["jquery-ui.css"]);
-                jassijs.myRequire(modul.default.css["materialdesignicons.min.css"]);
-    
-            });*/
-            //  this.myRequire("jassi/jassijs.css");
-            //  this.myRequire("https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css");
-            //  this.myRequire("https:///cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.css");
+            this.includeCSSFile("jassijs.css");
+            this.includeCSSFile("materialdesignicons.min.css");
         }
     }
     includeCSSFile(modulkey) {

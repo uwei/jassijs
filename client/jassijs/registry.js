@@ -53,7 +53,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/jassi.ts": {
-		"date": 1655737814487
+		"date": 1655761303461
 	},
 	"jassijs/modul.ts": {
 		"date": 1655754833063
@@ -97,7 +97,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1655666907287
+		"date": 1655761414825
 	},
 	"jassijs/remote/ObjectTransaction.ts": {
 		"date": 1622985414000
@@ -1405,7 +1405,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DesignDummy": {}
 	},
 	"jassijs/ui/DockingContainer.ts": {
-		"date": 1655668027838,
+		"date": 1655761234321,
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/ErrorPanel.ts": {
