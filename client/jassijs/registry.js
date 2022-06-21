@@ -53,7 +53,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/jassi.ts": {
-		"date": 1655761303461
+		"date": 1655761686547
 	},
 	"jassijs/modul.ts": {
 		"date": 1655754833063
@@ -97,7 +97,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1655761414825
+		"date": 1655761747851
 	},
 	"jassijs/remote/ObjectTransaction.ts": {
 		"date": 1622985414000

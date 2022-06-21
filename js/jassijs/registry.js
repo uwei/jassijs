@@ -41,7 +41,7 @@ exports.default={
 		"date": 1622985410000
 	},
 	"jassijs/remote/Jassi.ts": {
-		"date": 1655761414825
+		"date": 1655761747851
 	},
 	"jassijs/remote/ObjectTransaction.ts": {
 		"date": 1622985414000

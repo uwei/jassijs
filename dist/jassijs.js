@@ -7,12 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("jassijs/jassi", ["require", "exports", "jassijs/ext/intersection-observer"], function (require, exports) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    jassijs.includeCSSFile("jassijs.css");
-    jassijs.includeCSSFile("materialdesignicons.min.css");
-});
+//do load on startup
+jassijs.includeCSSFile("jassijs.css");
+jassijs.includeCSSFile("materialdesignicons.min.css");
 define("jassijs/modul", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -140,7 +137,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Windows": {}
             },
             "jassijs/jassi.ts": {
-                "date": 1655737814487
+                "date": 1655761686547
             },
             "jassijs/modul.ts": {
                 "date": 1655754833063
@@ -184,7 +181,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622985410000
             },
             "jassijs/remote/Jassi.ts": {
-                "date": 1655666907287
+                "date": 1655761747851
             },
             "jassijs/remote/ObjectTransaction.ts": {
                 "date": 1622985414000
@@ -1492,7 +1489,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DesignDummy": {}
             },
             "jassijs/ui/DockingContainer.ts": {
-                "date": 1655668027838,
+                "date": 1655761234321,
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/ErrorPanel.ts": {
@@ -9023,7 +9020,7 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry",
     ], Container);
     exports.Container = Container;
 });
-define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquerylib", "jassijs/ext/jquery.contextmenu"], function (require, exports, Registry_54, Menu_2, InvisibleComponent_1, Component_11, Classes_18, Property_11, Actions_8, MenuItem_2) {
+define("jassijs/ui/ContextMenu", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jassijs/ui/InvisibleComponent", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/base/Actions", "jassijs/ui/MenuItem", "jassijs/ext/jquerylib", "jquery.contextMenu"], function (require, exports, Registry_54, Menu_2, InvisibleComponent_1, Component_11, Classes_18, Property_11, Actions_8, MenuItem_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ContextMenu = void 0;
@@ -10445,7 +10442,7 @@ define("jassijs/ui/DesignDummy", ["require", "exports", "jassijs/remote/Registry
     ], DesignDummy);
     exports.DesignDummy = DesignDummy;
 });
-define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Button", "jassijs/ui/Textbox", "jquery"], function (require, exports, goldenlayout_2, Registry_65, Container_1, Button_4, Textbox_3) {
+define("jassijs/ui/DockingContainer", ["require", "exports", "jassijs/ext/goldenlayout", "jassijs/remote/Registry", "jassijs/ui/Container", "jassijs/ui/Button", "jassijs/ui/Textbox", "jquery", "jassijs/ext/intersection-observer"], function (require, exports, goldenlayout_2, Registry_65, Container_1, Button_4, Textbox_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DockingContainer = void 0;
