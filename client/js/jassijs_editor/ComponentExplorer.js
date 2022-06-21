@@ -53,8 +53,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         getComponentChilds(item) {
             if (item === undefined)
                 return 0;
-            if (item === this.value)
-                return item._components;
+            if (item === this.value) {
+                var all = [];
+                item._components.forEach((e) => {
+                    if (!e["designDummyFor"])
+                        all.push(e);
+                });
+                return all;
+            }
             var comps = ComponentDescriptor_1.ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);
             var ret = [];
             for (var name in comps) {

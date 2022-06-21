@@ -211,8 +211,9 @@ export class PropertyEditor extends Panel {
         if (value !== this._value && this.parentPropertyEditor === undefined)
             this.codeChanges = {};
         if (value !== undefined || value?.dom !== undefined) {
-            if (!$(value.dom).is(":focus"))
-                $(value.dom).focus();
+            //if (!$(value.dom).is(":focus"))
+            if(value.dom&&document.activeElement!==value.dom)
+                (<HTMLElement> value.dom).focus();
         }
         if (value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
             this._value = value;
@@ -265,9 +266,9 @@ export class PropertyEditor extends Panel {
 
         parent._components[ifirst] = second;
         parent._components[isecond] = first;
-        $(first.domWrapper).replaceWith(dummy);
-        $(second.domWrapper).replaceWith($(first.domWrapper));
-        dummy.replaceWith($(second.domWrapper));
+        first.domWrapper.replaceWith(dummy);
+        second.domWrapper.replaceWith(first.domWrapper);
+        dummy.replaceWith(second.domWrapper);
         //swap Code
         var firstname = this.getVariableFromObject(first);
         var secondname = this.getVariableFromObject(second);

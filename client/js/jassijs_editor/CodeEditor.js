@@ -293,7 +293,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.variables.addAll(variables);
         }
         async fillVariablesAndSetupParser(url, root, component, cache, parser) {
-            var _a, _b;
+            var _a, _b, _c;
             if (cache[component._id] === undefined && component["__stack"] !== undefined) {
                 var lines = (_a = component["__stack"]) === null || _a === void 0 ? void 0 : _a.split("\n");
                 for (var x = 0; x < lines.length; x++) {
@@ -301,14 +301,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     if (sline.indexOf("$temp.js") > 0) {
                         var spl = sline.split(":");
                         var entr = {};
-                        cache[component._id] = {
+                        if (cache[component._id] === undefined)
+                            cache[component._id] = [];
+                        cache[component._id].push({
                             line: Number(spl[spl.length - 2]),
                             column: Number(spl[spl.length - 1].replace(")", "")),
                             component: component,
                             pos: 0,
                             name: undefined
-                        };
-                        break;
+                        });
                     }
                 }
                 if (component["_components"]) {
@@ -320,21 +321,30 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     //fertig
                     var hh = 0;
                     var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
-                    var values = Object.values(cache);
+                    var values = [];
+                    Object.values(cache).forEach((e) => {
+                        e.forEach(f => values.push(f));
+                    });
                     var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values);
                     for (var x = 0; x < tmap.length; x++) {
-                        values[x].column = tmap[x].column;
-                        values[x].line = tmap[x].line;
-                        values[x].pos = this._codePanel.positionToNumber({
-                            row: values[x].line,
-                            column: values[x].column
+                        var val = values[x];
+                        val.column = tmap[x].column;
+                        val.line = tmap[x].line;
+                        val.pos = this._codePanel.positionToNumber({
+                            row: val.line,
+                            column: val.column
                         });
                     }
                     //setupClasscope
-                    var foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id].pos);
+                    var foundscope;
+                    for (var xx = 0; xx < cache[root._id].length; xx++) {
+                        foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
+                        if (foundscope)
+                            break;
+                    }
                     var scope = [{ classname: (_b = root === null || root === void 0 ? void 0 : root.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }];
                     if (foundscope)
-                        scope = [foundscope];
+                        scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }, foundscope];
                     parser.parse(this._codePanel.value, scope);
                     for (var key in parser.data) {
                         var com = parser.data[key];
@@ -343,14 +353,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                             var pos = _new_[0].node.pos;
                             var end = _new_[0].node.end;
                             for (var x = 0; x < values.length; x++) {
-                                if (values[x].pos >= pos && values[x].pos <= end) {
-                                    values[x].name = key;
+                                var val = values[x];
+                                if (val.pos >= pos && val.pos <= end) {
+                                    val.name = key;
                                 }
                             }
                         }
                     }
                     for (var x = 0; x < values.length; x++) {
-                        var sname = values[x].name;
+                        var val = values[x];
+                        var sname = val.name;
                         var found = false;
                         this.variables.value.forEach((it) => {
                             if (it.name === sname)
@@ -360,7 +372,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         if (found)
                             continue;
                         if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
-                            this.variables.addVariable(sname, values[x].component, false);
+                            this.variables.addVariable(sname, val.component, false);
                         }
                     }
                     this.variables.updateCache();

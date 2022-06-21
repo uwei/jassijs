@@ -10,6 +10,7 @@ import { ComponentDesigner } from "jassijs_editor/ComponentDesigner";
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { propertyeditor } from "jassijs/base/PropertyEditorService";
 import { classes } from "jassijs/remote/Classes";
+import { Component } from "jassijs/ui/Component";
 
 @$Class("jassijs_editor.ComponentExplorer")
 export class ComponentExplorer extends Panel {
@@ -60,8 +61,14 @@ export class ComponentExplorer extends Panel {
     getComponentChilds(item) {
 		if(item===undefined)
 			return 0;
-        if (item === this.value)
-            return item._components
+        if (item === this.value){
+            var all=[];
+            (<Component[]>item._components).forEach((e)=>{
+                if(!e["designDummyFor"])
+                    all.push(e);
+            });
+            return all;
+        }
         var comps = ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);
 
         var ret = [];

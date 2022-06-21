@@ -60,6 +60,7 @@ export async function login() {
         fr.style.position = "absolute";
         fr.style.left = (window.innerWidth / 2 - fr.offsetWidth / 2) + "px";
         fr.style.top = (window.innerHeight / 2 - fr.offsetHeight / 2) + "px";
+        fr.style.zIndex = "100";
         fr.contentWindow.focus();
         setTimeout(() => {
             (<HTMLElement>fr.contentWindow.document.querySelector("#loginButton"))?.focus();

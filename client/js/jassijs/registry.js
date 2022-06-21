@@ -21,7 +21,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655549182897
             },
             "jassijs/base/LoginDialog.ts": {
-                "date": 1655752289179
+                "date": 1655806951272
             },
             "jassijs/base/PropertyEditorService.ts": {
                 "date": 1655556795176,
@@ -685,7 +685,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
-                "date": 1655753284313,
+                "date": 1655797617321,
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -1763,7 +1763,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1655760599864,
+                "date": 1655814760033,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {
@@ -2345,7 +2345,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1655759242068,
+                "date": 1655813426575,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {

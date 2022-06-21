@@ -145,7 +145,8 @@ export class Textbox extends DataComponent implements TextboxConfig {
         return this._format;
     }
     private updateValue() {
-        var ret = this.dom.value;
+        
+        var ret = this.dom?.value;
         if (this.converter !== undefined) {
             ret = this.converter.stringToObject(ret);
         }

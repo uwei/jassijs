@@ -3,6 +3,8 @@ import { $Class } from "jassijs/remote/Registry";
 
 
 import typescript from "jassijs_editor/util/Typescript";
+import { Tests } from "jassijs/base/Tests";
+import { Test } from "jassijs/remote/Test";
 
 
 interface Properties {
@@ -335,7 +337,8 @@ export class Parser {
                     return;
                 }
                 if (left.endsWith(".createRepeatingComponent")) {
-                    this.parseProperties(node.arguments[0]["body"]);
+                    this.visitNode(node.arguments[0]["body"],true)
+                    //this.parseProperties(node.arguments[0]["body"]);
                 }
                 value = params.join(", ");//this.code.substring(node2.pos, node2.end).trim();//
             }
@@ -349,9 +352,9 @@ export class Parser {
             }
             this.add(variable, prop, value, node.parent, isFunction);
         } else
-            node.getChildren().forEach(c => this.parseProperties(c));
+            node.getChildren().forEach(c => this.visitNode(c,true);
     }
-    private visitNode(node: ts.Node) {
+    private visitNode(node: ts.Node,consumeProperties=undefined) {
         var _this = this;
         if (node.kind === ts.SyntaxKind.VariableDeclaration) {
             this.variables[node["name"].text] = node;
@@ -365,28 +368,33 @@ export class Parser {
                     this.imports[names[e].name.escapedText] = file;
                 }
             }
+            return;
         }
         if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
             this.parseTypeMeNode(node);
+            return;
         } else if (node.kind === ts.SyntaxKind.ClassDeclaration) {
             this.parseClass(<ts.ClassElement>node);
-
+            return;
         } else if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) {//functions out of class
             this.functions[node["name"].text] = node;
             if (this.classScope) {
                 for (let x = 0; x < this.classScope.length; x++) {
                     var col = this.classScope[x];
                     if (col.classname === undefined && node["name"].text === col.methodname)
-                        this.parseProperties(node);
+                        consumeProperties=true;
                 }
             } else
-                this.parseProperties(node);
-        } else
-            node.getChildren().forEach(c => this.visitNode(c));
+                consumeProperties=true;
+        } 
+        if(consumeProperties)
+            this.parseProperties(node);
+        else
+            node.getChildren().forEach(c => this.visitNode(c,consumeProperties));
         //TODO remove this block
-        if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
+      /*  if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
             this.add(node["name"].text, "", "", undefined);
-        }
+        }*/
     }
     searchClassnode(node: ts.Node, pos: number): { classname: string, methodname: string } {
         if (ts.isMethodDeclaration(node)) {
@@ -438,7 +446,7 @@ export class Parser {
 
         this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
         if(this.classScope===undefined)
-            this.parseProperties(this.sourceFile);
+            this.visitNode(this.sourceFile,true);
         else
             this.visitNode(this.sourceFile);
 
@@ -858,6 +866,25 @@ export class Parser {
         var first: ts.Node = undefined;
         var second: ts.Node = undefined;
         var parent = this.data[variable][property];
+        if(this.data[variable]["config"]&&property==="add"){
+            var children=(<any>this.data[variable]["children"][0].node).initializer.elements;
+            var ifirst;
+            var isecond;
+            
+            for(var x=0;x<children.length;x++){
+                var text=children[x].getText()
+                if(text===parameter1||text.startsWith(parameter1+".config")){
+                    ifirst=x;
+                }
+                if(text===parameter2||text.startsWith(parameter2+".config")){
+                    isecond=x;
+                }
+            }
+            var temp=children[ifirst];
+            children[ifirst]=children[isecond];
+            children[isecond]=temp;
+            return;
+        }
         for (var x = 0; x < parent.length; x++) {
             if (parent[x].value.split(",")[0].trim() === parameter1)
                 first = parent[x].node;
@@ -897,10 +924,10 @@ export class Parser {
             useMe = true;
         }
         var prefix = useMe ? "me." : "var ";
-
-        var statements: ts.Statement[] = node["body"].statements;
         if (node === undefined)
             throw Error("no scope to insert a variable could be found");
+       
+        var statements: ts.Statement[] = node["body"]?node["body"].statements:node["statements"];
         for (var x = 0; x < statements.length; x++) {
             if (!statements[x].getText().split("\n")[0].includes("new ") && !statements[x].getText().split("\n")[0].includes("var "))
                 break;
@@ -913,15 +940,54 @@ export class Parser {
     }
 }
 
-export async function test() {
+export async function tests(t:Test){
+    function clean(s:string):string{
+        return s.replaceAll("\t","").replaceAll("\r","").replaceAll("\n","")
+    }
     await typescript.waitForInited;
-    var code = typescript.getCode("de/TestDialogBinder.ts");
+    var parser=new Parser();
+    parser.parse("var j;j.config({children:[a,b,c]})");
+    parser.swapPropertyWithParameter("j","add","c","a");
+    t.expectEqual(clean(parser.getModifiedCode())==='var j;j.config({ children: [c, b, a] });');
+    parser.parse("var j;j.add(a);j.add(b);j.add(c);");
+    parser.swapPropertyWithParameter("j","add","c","a");
+    t.expectEqual(clean(parser.getModifiedCode())==='var j;j.add(c);j.add(b);j.add(a);');
+   
+    
+    parser.parse("class A{}");
+    t.expectEqual(parser.classes.A!==undefined);
+    parser.parse("var a=8;");
+    t.expectEqual(parser.data.a!==undefined);
+    parser.parse("b=8;");
+    t.expectEqual(parser.data.b!==undefined);
+    parser.parse("b=8",[{classname:undefined,methodname:"test"}]);
+    t.expectEqual(parser.data.b===undefined);
+    var scope=[{classname:undefined,methodname:"test"}];
+    parser.parse("function test(){b=8;}",scope);
+    t.expectEqual(parser.data.b!==undefined);
+    
+    parser.addVariableInCode("MyClass",scope);
+    parser.setPropertyInCode("myclass","a","9",scope);
+    t.expectEqual(clean(parser.getModifiedCode())==="function test() { var myclass = new MyClass(); b = 8; myclass.a = 9; }");
+    
+    parser=new Parser();
+    parser.parse("");
+    parser.addVariableInCode("MyClass",undefined);
+    parser.setPropertyInCode("myclass","a","9",undefined);
+    t.expectEqual(clean(parser.getModifiedCode())==="var myclass = new MyClass();myclass.a = 9;");
+
+}
+export async function test() {
+    tests(new Test());
+   
+    await typescript.waitForInited;
+    var code = typescript.getCode("jassijs/remote/security/Group.ts");
     var parser = new Parser();
     // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
     // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
     // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
     //parser.parse(code, undefined);
-    code="reportdesign={k:9};";
+    //code="reportdesign={k:9};";
   
     parser.parse(code);// [{ classname: "TestDialogBinder", methodname: "layout" }]);
  
@@ -940,7 +1006,7 @@ export async function test() {
     //console.log(node.getText());
     //    parser.setPropertyInCode("ppp","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"ppp",property:"add",value:"ll"});
     //  parser.setPropertyInCode("aaa","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"aaa",property:"add",value:"kk"});
-    console.log(parser.getModifiedCode());
+
     // debugger;
     /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
       const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
@@ -950,5 +1016,6 @@ export async function test() {
 
 
 }
+
 
 

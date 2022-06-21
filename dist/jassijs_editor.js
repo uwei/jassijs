@@ -1182,7 +1182,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             this.variables.addAll(variables);
         }
         async fillVariablesAndSetupParser(url, root, component, cache, parser) {
-            var _a, _b;
+            var _a, _b, _c;
             if (cache[component._id] === undefined && component["__stack"] !== undefined) {
                 var lines = (_a = component["__stack"]) === null || _a === void 0 ? void 0 : _a.split("\n");
                 for (var x = 0; x < lines.length; x++) {
@@ -1190,14 +1190,15 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                     if (sline.indexOf("$temp.js") > 0) {
                         var spl = sline.split(":");
                         var entr = {};
-                        cache[component._id] = {
+                        if (cache[component._id] === undefined)
+                            cache[component._id] = [];
+                        cache[component._id].push({
                             line: Number(spl[spl.length - 2]),
                             column: Number(spl[spl.length - 1].replace(")", "")),
                             component: component,
                             pos: 0,
                             name: undefined
-                        };
-                        break;
+                        });
                     }
                 }
                 if (component["_components"]) {
@@ -1209,21 +1210,30 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                     //fertig
                     var hh = 0;
                     var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
-                    var values = Object.values(cache);
+                    var values = [];
+                    Object.values(cache).forEach((e) => {
+                        e.forEach(f => values.push(f));
+                    });
                     var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values);
                     for (var x = 0; x < tmap.length; x++) {
-                        values[x].column = tmap[x].column;
-                        values[x].line = tmap[x].line;
-                        values[x].pos = this._codePanel.positionToNumber({
-                            row: values[x].line,
-                            column: values[x].column
+                        var val = values[x];
+                        val.column = tmap[x].column;
+                        val.line = tmap[x].line;
+                        val.pos = this._codePanel.positionToNumber({
+                            row: val.line,
+                            column: val.column
                         });
                     }
                     //setupClasscope
-                    var foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id].pos);
+                    var foundscope;
+                    for (var xx = 0; xx < cache[root._id].length; xx++) {
+                        foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
+                        if (foundscope)
+                            break;
+                    }
                     var scope = [{ classname: (_b = root === null || root === void 0 ? void 0 : root.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }];
                     if (foundscope)
-                        scope = [foundscope];
+                        scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }, foundscope];
                     parser.parse(this._codePanel.value, scope);
                     for (var key in parser.data) {
                         var com = parser.data[key];
@@ -1232,14 +1242,16 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                             var pos = _new_[0].node.pos;
                             var end = _new_[0].node.end;
                             for (var x = 0; x < values.length; x++) {
-                                if (values[x].pos >= pos && values[x].pos <= end) {
-                                    values[x].name = key;
+                                var val = values[x];
+                                if (val.pos >= pos && val.pos <= end) {
+                                    val.name = key;
                                 }
                             }
                         }
                     }
                     for (var x = 0; x < values.length; x++) {
-                        var sname = values[x].name;
+                        var val = values[x];
+                        var sname = val.name;
                         var found = false;
                         this.variables.value.forEach((it) => {
                             if (it.name === sname)
@@ -1249,7 +1261,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                         if (found)
                             continue;
                         if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
-                            this.variables.addVariable(sname, values[x].component, false);
+                            this.variables.addVariable(sname, val.component, false);
                         }
                     }
                     this.variables.updateCache();
@@ -2739,8 +2751,14 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
         getComponentChilds(item) {
             if (item === undefined)
                 return 0;
-            if (item === this.value)
-                return item._components;
+            if (item === this.value) {
+                var all = [];
+                item._components.forEach((e) => {
+                    if (!e["designDummyFor"])
+                        all.push(e);
+                });
+                return all;
+            }
             var comps = ComponentDescriptor_2.ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);
             var ret = [];
             for (var name in comps) {
@@ -3467,7 +3485,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1655740060584,
+                "date": 1655811385505,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3532,7 +3550,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1655556864298,
+                "date": 1655812558055,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
@@ -3558,7 +3576,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1655556792361,
+                "date": 1655814530797,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -3918,10 +3936,10 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
     ], DragAndDropper);
     exports.DragAndDropper = DragAndDropper;
 });
-define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript"], function (require, exports, Registry_17, Typescript_4) {
+define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs/remote/Test"], function (require, exports, Registry_17, Typescript_4, Test_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Parser = exports.ParsedClass = void 0;
+    exports.test = exports.tests = exports.Parser = exports.ParsedClass = void 0;
     class ParsedDecorator {
         constructor() {
             this.parsedParameter = [];
@@ -4223,7 +4241,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         return;
                     }
                     if (left.endsWith(".createRepeatingComponent")) {
-                        this.parseProperties(node.arguments[0]["body"]);
+                        this.visitNode(node.arguments[0]["body"], true);
+                        //this.parseProperties(node.arguments[0]["body"]);
                     }
                     value = params.join(", "); //this.code.substring(node2.pos, node2.end).trim();//
                 }
@@ -4237,9 +4256,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 this.add(variable, prop, value, node.parent, isFunction);
             }
             else
-                node.getChildren().forEach(c => this.parseProperties(c));
+                node.getChildren().forEach(c => this.visitNode(c, true));
         }
-        visitNode(node) {
+        visitNode(node, consumeProperties = undefined) {
             var _this = this;
             if (node.kind === ts.SyntaxKind.VariableDeclaration) {
                 this.variables[node["name"].text] = node;
@@ -4253,12 +4272,15 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         this.imports[names[e].name.escapedText] = file;
                     }
                 }
+                return;
             }
             if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
                 this.parseTypeMeNode(node);
+                return;
             }
             else if (node.kind === ts.SyntaxKind.ClassDeclaration) {
                 this.parseClass(node);
+                return;
             }
             else if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
                 this.functions[node["name"].text] = node;
@@ -4266,18 +4288,20 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     for (let x = 0; x < this.classScope.length; x++) {
                         var col = this.classScope[x];
                         if (col.classname === undefined && node["name"].text === col.methodname)
-                            this.parseProperties(node);
+                            consumeProperties = true;
                     }
                 }
                 else
-                    this.parseProperties(node);
+                    consumeProperties = true;
             }
+            if (consumeProperties)
+                this.parseProperties(node);
             else
-                node.getChildren().forEach(c => this.visitNode(c));
+                node.getChildren().forEach(c => this.visitNode(c, consumeProperties));
             //TODO remove this block
-            if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
-                this.add(node["name"].text, "", "", undefined);
-            }
+            /*  if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
+                  this.add(node["name"].text, "", "", undefined);
+              }*/
         }
         searchClassnode(node, pos) {
             if (ts.isMethodDeclaration(node)) {
@@ -4326,7 +4350,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 classScope = this.classScope;
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
             if (this.classScope === undefined)
-                this.parseProperties(this.sourceFile);
+                this.visitNode(this.sourceFile, true);
             else
                 this.visitNode(this.sourceFile);
             //return this.parseold(code,onlyfunction);
@@ -4745,6 +4769,24 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             var first = undefined;
             var second = undefined;
             var parent = this.data[variable][property];
+            if (this.data[variable]["config"] && property === "add") {
+                var children = this.data[variable]["children"][0].node.initializer.elements;
+                var ifirst;
+                var isecond;
+                for (var x = 0; x < children.length; x++) {
+                    var text = children[x].getText();
+                    if (text === parameter1 || text.startsWith(parameter1 + ".config")) {
+                        ifirst = x;
+                    }
+                    if (text === parameter2 || text.startsWith(parameter2 + ".config")) {
+                        isecond = x;
+                    }
+                }
+                var temp = children[ifirst];
+                children[ifirst] = children[isecond];
+                children[isecond] = temp;
+                return;
+            }
             for (var x = 0; x < parent.length; x++) {
                 if (parent[x].value.split(",")[0].trim() === parameter1)
                     first = parent[x].node;
@@ -4783,9 +4825,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 useMe = true;
             }
             var prefix = useMe ? "me." : "var ";
-            var statements = node["body"].statements;
             if (node === undefined)
                 throw Error("no scope to insert a variable could be found");
+            var statements = node["body"] ? node["body"].statements : node["statements"];
             for (var x = 0; x < statements.length; x++) {
                 if (!statements[x].getText().split("\n")[0].includes("new ") && !statements[x].getText().split("\n")[0].includes("var "))
                     break;
@@ -4802,15 +4844,49 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         __metadata("design:paramtypes", [])
     ], Parser);
     exports.Parser = Parser;
-    async function test() {
+    async function tests(t) {
+        function clean(s) {
+            return s.replaceAll("\t", "").replaceAll("\r", "").replaceAll("\n", "");
+        }
         await Typescript_4.default.waitForInited;
-        var code = Typescript_4.default.getCode("de/TestDialogBinder.ts");
+        var parser = new Parser();
+        parser.parse("var j;j.config({children:[a,b,c]})");
+        parser.swapPropertyWithParameter("j", "add", "c", "a");
+        t.expectEqual(clean(parser.getModifiedCode()) === 'var j;j.config({ children: [c, b, a] });');
+        parser.parse("var j;j.add(a);j.add(b);j.add(c);");
+        parser.swapPropertyWithParameter("j", "add", "c", "a");
+        t.expectEqual(clean(parser.getModifiedCode()) === 'var j;j.add(c);j.add(b);j.add(a);');
+        parser.parse("class A{}");
+        t.expectEqual(parser.classes.A !== undefined);
+        parser.parse("var a=8;");
+        t.expectEqual(parser.data.a !== undefined);
+        parser.parse("b=8;");
+        t.expectEqual(parser.data.b !== undefined);
+        parser.parse("b=8", [{ classname: undefined, methodname: "test" }]);
+        t.expectEqual(parser.data.b === undefined);
+        var scope = [{ classname: undefined, methodname: "test" }];
+        parser.parse("function test(){b=8;}", scope);
+        t.expectEqual(parser.data.b !== undefined);
+        parser.addVariableInCode("MyClass", scope);
+        parser.setPropertyInCode("myclass", "a", "9", scope);
+        t.expectEqual(clean(parser.getModifiedCode()) === "function test() { var myclass = new MyClass(); b = 8; myclass.a = 9; }");
+        parser = new Parser();
+        parser.parse("");
+        parser.addVariableInCode("MyClass", undefined);
+        parser.setPropertyInCode("myclass", "a", "9", undefined);
+        t.expectEqual(clean(parser.getModifiedCode()) === "var myclass = new MyClass();myclass.a = 9;");
+    }
+    exports.tests = tests;
+    async function test() {
+        tests(new Test_2.Test());
+        await Typescript_4.default.waitForInited;
+        var code = Typescript_4.default.getCode("jassijs/remote/security/Group.ts");
         var parser = new Parser();
         // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
         // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
         //parser.parse(code, undefined);
-        code = "reportdesign={k:9};";
+        //code="reportdesign={k:9};";
         parser.parse(code); // [{ classname: "TestDialogBinder", methodname: "layout" }]);
         parser.setPropertyInCode("reportdesign", "", "{o:0}", undefined);
         // parser.removeVariablesInCode(["me.repeater"]);
@@ -4824,7 +4900,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         //console.log(node.getText());
         //    parser.setPropertyInCode("ppp","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"ppp",property:"add",value:"ll"});
         //  parser.setPropertyInCode("aaa","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"aaa",property:"add",value:"kk"});
-        console.log(parser.getModifiedCode());
         // debugger;
         /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
           const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);

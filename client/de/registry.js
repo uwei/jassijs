@@ -315,6 +315,10 @@ define("de/registry",["require"], function(require) {
 	"de/TH.ts": {
 		"date": 1655556795285,
 		"de/TH": {}
+	},
+	"de/Dialog2.ts": {
+		"date": 1655812637737,
+		"de/Dialog2": {}
 	}
 }
  }

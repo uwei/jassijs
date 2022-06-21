@@ -105,7 +105,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655549182897
             },
             "jassijs/base/LoginDialog.ts": {
-                "date": 1655752289179
+                "date": 1655806951272
             },
             "jassijs/base/PropertyEditorService.ts": {
                 "date": 1655556795176,
@@ -769,7 +769,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
-                "date": 1655753284313,
+                "date": 1655797617321,
                 "jassijs.ui.ContextMenu": {
                     "$UIComponent": [
                         {
@@ -1847,7 +1847,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1655760599864,
+                "date": 1655814760033,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {
@@ -2429,7 +2429,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1655759242068,
+                "date": 1655813426575,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -3623,6 +3623,7 @@ define("jassijs/base/LoginDialog", ["require", "exports", "jassijs/ui/Component"
             fr.style.position = "absolute";
             fr.style.left = (window.innerWidth / 2 - fr.offsetWidth / 2) + "px";
             fr.style.top = (window.innerHeight / 2 - fr.offsetHeight / 2) + "px";
+            fr.style.zIndex = "100";
             fr.contentWindow.focus();
             setTimeout(() => {
                 var _a;
@@ -12890,8 +12891,9 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
             if (value !== this._value && this.parentPropertyEditor === undefined)
                 this.codeChanges = {};
             if (value !== undefined || (value === null || value === void 0 ? void 0 : value.dom) !== undefined) {
-                if (!$(value.dom).is(":focus"))
-                    $(value.dom).focus();
+                //if (!$(value.dom).is(":focus"))
+                if (value.dom && document.activeElement !== value.dom)
+                    value.dom.focus();
             }
             if (value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
                 this._value = value;
@@ -12940,9 +12942,9 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
             var dummy = Component_23.Component.createHTMLElement("<div/>");
             parent._components[ifirst] = second;
             parent._components[isecond] = first;
-            $(first.domWrapper).replaceWith(dummy);
-            $(second.domWrapper).replaceWith($(first.domWrapper));
-            dummy.replaceWith($(second.domWrapper));
+            first.domWrapper.replaceWith(dummy);
+            second.domWrapper.replaceWith(first.domWrapper);
+            dummy.replaceWith(second.domWrapper);
             //swap Code
             var firstname = this.getVariableFromObject(first);
             var secondname = this.getVariableFromObject(second);
@@ -14781,7 +14783,8 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Registry", "
             return this._format;
         }
         updateValue() {
-            var ret = this.dom.value;
+            var _a;
+            var ret = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.value;
             if (this.converter !== undefined) {
                 ret = this.converter.stringToObject(ret);
             }

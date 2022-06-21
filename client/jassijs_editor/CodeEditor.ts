@@ -55,7 +55,7 @@ export class CodeEditor extends Panel {
     _design: Panel;
     editMode: boolean;
     __evalToCursorReached: boolean;
-    autoCompleteButton:Button;
+    autoCompleteButton: Button;
 
     private _line: number;
     constructor(properties: { codePanel?: CodePanel, hideToolbar?: boolean } = undefined) {
@@ -152,7 +152,7 @@ export class CodeEditor extends Panel {
             jassijs["$CodeEditor"] = CodeEditor;
             $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
             $(goto.dom).attr("ondragover", "event.preventDefault();");
-            
+
         }
         this._codeView.add(this._codePanel);
 
@@ -184,12 +184,12 @@ export class CodeEditor extends Panel {
             //_this.editorProvider="ace";
         }, 100);
     }
-    static async addFilesToCompletion(filenames:string[]){
-       // await typescript.initService();
-        
-            
+    static async addFilesToCompletion(filenames: string[]) {
+        // await typescript.initService();
+
+
     }
-    
+
     _installView() {
         this._main.add(this._codeView, "Code..", "code");
         this._main.add(this.variables, "Variables", "variables");
@@ -357,7 +357,7 @@ export class CodeEditor extends Panel {
     addVariables(variables) {
         this.variables.addAll(variables);
     }
-    private async fillVariablesAndSetupParser(url: string, root: Component, component: Component, cache: { [componentid: string]: { component: Component, line: number, column: number, pos: number, name: string } }, parser) {
+    private async fillVariablesAndSetupParser(url: string, root: Component, component: Component, cache: { [componentid: string]: [{ component: Component, line: number, column: number, pos: number, name: string }] }, parser) {
 
         if (cache[component._id] === undefined && component["__stack"] !== undefined) {
             var lines = component["__stack"]?.split("\n");
@@ -368,14 +368,15 @@ export class CodeEditor extends Panel {
                     var entr = {
 
                     }
-                    cache[component._id] = {
+                    if (cache[component._id] === undefined)
+                        cache[component._id] = [];
+                    cache[component._id].push({
                         line: Number(spl[spl.length - 2]),
                         column: Number(spl[spl.length - 1].replace(")", "")),
                         component: component,
                         pos: 0,
                         name: undefined
-                    }
-                    break;
+                    });
                 }
             }
             if (component["_components"]) {
@@ -387,22 +388,36 @@ export class CodeEditor extends Panel {
                 //fertig
                 var hh = 0;
                 var TSSourceMap = await classes.loadClass("jassijs_editor.util.TSSourceMap");
-                var values = Object.values(cache);
+                var values = [];
+
+                Object.values(cache).forEach((e) => {
+                    e.forEach(f => values.push(f));
+                });
+
                 var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values)
                 for (var x = 0; x < tmap.length; x++) {
-                    values[x].column = tmap[x].column;
-                    values[x].line = tmap[x].line;
-                    values[x].pos = this._codePanel.positionToNumber({
-                        row: values[x].line,
-                        column: values[x].column
+                    var val = values[x];
+                    val.column = tmap[x].column;
+                    val.line = tmap[x].line;
+                    val.pos = this._codePanel.positionToNumber({
+                        row: val.line,
+                        column: val.column
                     });
+
                 }
                 //setupClasscope
-                var foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id].pos);
+                var foundscope;
+                for (var xx = 0; xx < cache[root._id].length; xx++) {
+                    foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
+                    if (foundscope)
+                        break;
+                }
                 var scope = [{ classname: root?.constructor?.name, methodname: "layout" }];
                 if (foundscope)
-                    scope = [foundscope];
+                    scope = [{ classname: root?.constructor?.name, methodname: "layout" },foundscope];
+                
                 parser.parse(this._codePanel.value, scope);
+
                 for (var key in parser.data) {
                     var com = parser.data[key];
                     var _new_ = com["_new_"];
@@ -410,14 +425,16 @@ export class CodeEditor extends Panel {
                         var pos = _new_[0].node.pos;
                         var end = _new_[0].node.end;
                         for (var x = 0; x < values.length; x++) {
-                            if (values[x].pos >= pos && values[x].pos <= end) {
-                                values[x].name = key;
+                            var val = values[x];
+                            if (val.pos >= pos && val.pos <= end) {
+                                val.name = key;
                             }
                         }
                     }
                 }
                 for (var x = 0; x < values.length; x++) {
-                    var sname = values[x].name;
+                    var val = values[x];
+                    var sname = val.name;
 
                     var found = false;
                     this.variables.value.forEach((it) => {
@@ -428,9 +445,10 @@ export class CodeEditor extends Panel {
                     if (found)
                         continue;
                     if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
-                        this.variables.addVariable(sname, values[x].component, false);
+                        this.variables.addVariable(sname, val.component, false);
                     }
                 }
+
 
 
                 this.variables.updateCache();
@@ -461,7 +479,7 @@ export class CodeEditor extends Panel {
 
             (<any>islocaldb).destroyConnection();
         }
-        if (data.test !== undefined||window.reportdesign) {
+        if (data.test !== undefined || window.reportdesign) {
             //capure created Components
             function hook(name, component: Component) {
                 try {
@@ -473,14 +491,14 @@ export class CodeEditor extends Panel {
             }
             Component.onComponentCreated(hook);
             var ret;
-            if(data.test){
+            if (data.test) {
                 ret = await data.test(new Test());
-            }else{
-                if(window.reportdesign){
-                    ret={
-                        reportdesign:reportdesign
+            } else {
+                if (window.reportdesign) {
+                    ret = {
+                        reportdesign: reportdesign
                     }
-                }else{
+                } else {
                     Component.offComponentCreated(hook);
                     return;
                 }
@@ -524,8 +542,8 @@ export class CodeEditor extends Panel {
                         _this._design = new ReportDesigner();
                         _this._main.add(_this._design, "Design", "design");
                         _this._design["codeEditor"] = _this;
-                        parser = new Parser();  
-                        parser.classScope =undefined;// [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
+                        parser = new Parser();
+                        parser.classScope = undefined;// [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
                         //@ts-ignore
                         _this._design.connectParser(parser);
 
@@ -644,7 +662,7 @@ export class CodeEditor extends Panel {
         //await new Server().saveFile("tmp/" + _this._file, code);
         //only local - no TS File in Debugger
         await this.saveTempFile(jsfile, code);
-        window.reportdesign=undefined;
+        window.reportdesign = undefined;
         try { requirejs.undef("js/" + jsfile + ".js"); } catch (ex) { };
         var onload = function (data) {
 

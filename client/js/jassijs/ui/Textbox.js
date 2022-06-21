@@ -85,7 +85,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             return this._format;
         }
         updateValue() {
-            var ret = this.dom.value;
+            var _a;
+            var ret = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.value;
             if (this.converter !== undefined) {
                 ret = this.converter.stringToObject(ret);
             }
