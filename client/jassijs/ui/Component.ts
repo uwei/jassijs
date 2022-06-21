@@ -7,7 +7,8 @@ import { CSSProperties } from "jassijs/ui/CSSProperties";
 
 //import { CSSProperties } from "jassijs/ui/Style";
 
-
+jassijs.includeCSSFile( "jassijs.css");
+jassijs.includeCSSFile( "materialdesignicons.min.css");
 
 declare global {
     interface Element {

@@ -61,7 +61,7 @@ export class ComponentExplorer extends Panel {
     getComponentChilds(item) {
 		if(item===undefined)
 			return 0;
-        if (item === this.value){
+        if (item === this.value&&item._components){
             var all=[];
             (<Component[]>item._components).forEach((e)=>{
                 if(!e["designDummyFor"])

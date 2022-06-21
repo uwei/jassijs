@@ -53,7 +53,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         getComponentChilds(item) {
             if (item === undefined)
                 return 0;
-            if (item === this.value) {
+            if (item === this.value && item._components) {
                 var all = [];
                 item._components.forEach((e) => {
                     if (!e["designDummyFor"])

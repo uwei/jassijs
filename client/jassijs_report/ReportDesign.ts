@@ -21,7 +21,7 @@ import { RUList } from "jassijs_report/RUList";
 import { ROList } from "jassijs_report/ROList";
 import { RImage } from "jassijs_report/RImage";
 
-jassijs.includeCSSFile("jassijs_report.css");
+
 
 @$Class("jassijs_report.InfoProperties")
 class InfoProperties {

@@ -1,5 +1,4 @@
 
-import jassi from "jassijs/jassi";
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";

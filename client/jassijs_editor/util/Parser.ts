@@ -352,7 +352,7 @@ export class Parser {
             }
             this.add(variable, prop, value, node.parent, isFunction);
         } else
-            node.getChildren().forEach(c => this.visitNode(c,true);
+            node.getChildren().forEach(c => this.visitNode(c,true));
     }
     private visitNode(node: ts.Node,consumeProperties=undefined) {
         var _this = this;

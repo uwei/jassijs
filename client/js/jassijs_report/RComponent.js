@@ -13,6 +13,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RComponent = exports.$ReportComponent = exports.ReportComponentProperties = void 0;
     //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
+    jassijs.includeCSSFile("jassijs_report.css");
     class ReportComponentProperties extends Component_1.UIComponentProperties {
     }
     exports.ReportComponentProperties = ReportComponentProperties;

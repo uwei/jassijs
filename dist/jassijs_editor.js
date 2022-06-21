@@ -2751,7 +2751,7 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
         getComponentChilds(item) {
             if (item === undefined)
                 return 0;
-            if (item === this.value) {
+            if (item === this.value && item._components) {
                 var all = [];
                 item._components.forEach((e) => {
                     if (!e["designDummyFor"])
@@ -3550,7 +3550,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1655812558055,
+                "date": 1655844350656,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
@@ -3565,7 +3565,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1654273312166
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1655740092054,
+                "date": 1655843361885,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {
@@ -3576,7 +3576,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1655814530797,
+                "date": 1655843380791,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {

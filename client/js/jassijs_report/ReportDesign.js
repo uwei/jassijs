@@ -12,7 +12,6 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
     var ReportDesign_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportDesign = void 0;
-    jassijs.includeCSSFile("jassijs_report.css");
     let InfoProperties = class InfoProperties {
     };
     __decorate([

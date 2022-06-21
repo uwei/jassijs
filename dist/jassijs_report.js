@@ -423,6 +423,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RComponent = exports.$ReportComponent = exports.ReportComponentProperties = void 0;
     //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
+    jassijs.includeCSSFile("jassijs_report.css");
     class ReportComponentProperties extends Component_2.UIComponentProperties {
     }
     exports.ReportComponentProperties = ReportComponentProperties;
@@ -3525,7 +3526,6 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     var ReportDesign_8;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ReportDesign = void 0;
-    jassijs.includeCSSFile("jassijs_report.css");
     let InfoProperties = class InfoProperties {
     };
     __decorate([
@@ -6085,6 +6085,8 @@ if (window["globalThis"] !== undefined)
     console.log("window.globalThis is defined");
 define("jassijs_report/ext/pdfmake", ['pdfMakelib', "vfs_fonts"], function (ttt, vfs) {
     var fonts = require("vfs_fonts");
+    if (window["globalThis"] && window["globalThis"]["pdfMake"])
+        window.pdfMake = window["globalThis"]["pdfMake"];
     return {
         default: pdfMake
     };

@@ -52,9 +52,6 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655668017666,
 		"jassijs.base.Windows": {}
 	},
-	"jassijs/jassi.ts": {
-		"date": 1655761686547
-	},
 	"jassijs/modul.ts": {
 		"date": 1655754833063
 	},
@@ -567,7 +564,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Component.ts": {
-		"date": 1655760404127,
+		"date": 1655842907611,
 		"jassijs.ui.Component": {
 			"@members": {
 				"onfocus": {
@@ -1242,7 +1239,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Databinder.ts": {
-		"date": 1655588566255,
+		"date": 1655843328772,
 		"jassijs.ui.Databinder": {
 			"$UIComponent": [
 				{
@@ -1253,7 +1250,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DataComponent.ts": {
-		"date": 1655556795276,
+		"date": 1655843335457,
 		"jassijs.ui.DataComponent": {
 			"@members": {
 				"autocommit": {
@@ -1583,7 +1580,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/InvisibleComponent.ts": {
-		"date": 1655556795277,
+		"date": 1655843345124,
 		"jassijs.ui.InvisibleComponent": {
 			"$Property": [
 				{
@@ -2074,7 +2071,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Repeater.ts": {
-		"date": 1655757118198,
+		"date": 1655843352860,
 		"jassijs.ui.RepeaterDesignPanel": {
 			"$UIComponent": [
 				{

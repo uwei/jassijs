@@ -7,9 +7,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-//do load on startup
-jassijs.includeCSSFile("jassijs.css");
-jassijs.includeCSSFile("materialdesignicons.min.css");
 define("jassijs/modul", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -135,9 +132,6 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/base/Windows.ts": {
                 "date": 1655668017666,
                 "jassijs.base.Windows": {}
-            },
-            "jassijs/jassi.ts": {
-                "date": 1655761686547
             },
             "jassijs/modul.ts": {
                 "date": 1655754833063
@@ -651,7 +645,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Component.ts": {
-                "date": 1655760404127,
+                "date": 1655842907611,
                 "jassijs.ui.Component": {
                     "@members": {
                         "onfocus": {
@@ -1326,7 +1320,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Databinder.ts": {
-                "date": 1655588566255,
+                "date": 1655843328772,
                 "jassijs.ui.Databinder": {
                     "$UIComponent": [
                         {
@@ -1337,7 +1331,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DataComponent.ts": {
-                "date": 1655556795276,
+                "date": 1655843335457,
                 "jassijs.ui.DataComponent": {
                     "@members": {
                         "autocommit": {
@@ -1667,7 +1661,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/InvisibleComponent.ts": {
-                "date": 1655556795277,
+                "date": 1655843345124,
                 "jassijs.ui.InvisibleComponent": {
                     "$Property": [
                         {
@@ -2158,7 +2152,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Repeater.ts": {
-                "date": 1655757118198,
+                "date": 1655843352860,
                 "jassijs.ui.RepeaterDesignPanel": {
                     "$UIComponent": [
                         {
@@ -8059,6 +8053,9 @@ define("jassijs/ui/Component", ["require", "exports", "jassijs/remote/Registry",
     var Component_8, _a, _b;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Component = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
+    //import { CSSProperties } from "jassijs/ui/Style";
+    jassijs.includeCSSFile("jassijs.css");
+    jassijs.includeCSSFile("materialdesignicons.min.css");
     class UIComponentProperties {
     }
     exports.UIComponentProperties = UIComponentProperties;
@@ -11625,7 +11622,7 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                     return;
                 editor._draganddropper.enableDraggable(false);
                 let edi = tinymce.editors[_this._id];
-                if (edi)
+                if (edi.getContainer())
                     edi.getContainer().style.display = "flex";
                 //$(this.domWrapper).draggable('disable');
             });
@@ -11646,7 +11643,9 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
             });
             _this.on('focus', function () {
                 _this.initIfNeeded(tinymce, config);
-                document.getElementById(_this.editor.inlineEditorPanel._id).querySelector(".tox-tinymce-inline").style.display = "none";
+                var el = document.getElementById(_this.editor.inlineEditorPanel._id).querySelector(".tox-tinymce-inline");
+                if (el)
+                    el.style.display = "none";
                 if (HTMLPanel_3.oldeditor) {
                     HTMLPanel_3.oldeditor.getContainer().style.display = "none";
                 }

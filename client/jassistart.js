@@ -107,9 +107,7 @@ class JassijsStarter {
                     }
                 });
             })
-            if (beforestartlib[x] === "jassijs/jassi") {
-
-            }
+            
         }
     }
     async loadRequirejs(requireconfig) {
@@ -185,7 +183,7 @@ class JassijsStarter {
             mods.push(key + "/modul");
             all.push(key + "/modul");
         }
-        var startlib = ["jassijs/jassi"];
+        var startlib = [];
         var beforestartlib = [];
         var _this = this;
         require(all, function (remoteJassi, ...res) {
@@ -196,7 +194,7 @@ class JassijsStarter {
             window.jassijs.cssFiles = _this.cssFiles;
             requirejs.config(requireconfig);
             //read UserSettings after all beforestartlib are loaded
-            beforestartlib.push("jassijs/jassi");
+           // beforestartlib.push("jassijs/jassi");
            // beforestartlib.push("jassijs/remote/Settings");
             //load beforestartlib synchron
 

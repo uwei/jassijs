@@ -6,7 +6,7 @@ import { $Property } from "jassijs/ui/Property";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { RStyle } from "jassijs_report/RStyle";
 //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
-
+jassijs.includeCSSFile("jassijs_report.css");
 export class ReportComponentProperties extends UIComponentProperties {
 
 }

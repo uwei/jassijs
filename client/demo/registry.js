@@ -17,7 +17,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1612818334000
 	},
 	"demo/ReportInvoice.ts": {
-		"date": 1655556795176,
+		"date": 1655843275065,
 		"demo.ReportInvoice": {}
 	},
 	"demo/StyleDialog.ts": {
@@ -28,7 +28,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1622984380000
 	},
 	"demo/TestComponent.ts": {
-		"date": 1655556793964,
+		"date": 1655843269124,
 		"demo.TestComponent": {
 			"$UIComponent": [
 				{
@@ -42,7 +42,7 @@ define("demo/registry",["require"], function(require) {
 		}
 	},
 	"demo/Testcontextmenu.ts": {
-		"date": 1655556793964,
+		"date": 1655843286580,
 		"demo.Testcontextmenu": {}
 	},
 	"demo/Testmenu.ts": {
@@ -50,7 +50,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.Testmenu": {}
 	},
 	"demo/TestTree.ts": {
-		"date": 1655556795176,
+		"date": 1655843317921,
 		"demo.TestTree": {}
 	},
 	"demo/TestUpload.ts": {
@@ -81,23 +81,23 @@ define("demo/registry",["require"], function(require) {
 		}
 	},
 	"demo/ReportInvoice2.ts": {
-		"date": 1655556795176,
+		"date": 1655843265068,
 		"demo.ReportInvoice": {}
 	},
 	"demo/Testdatatable.ts": {
-		"date": 1655556793965
+		"date": 1655843290844
 	},
 	"demo/Testdatatable2.ts": {
-		"date": 1655556795176
+		"date": 1655843302183
 	},
 	"demo/Testdatatable3.ts": {
-		"date": 1655556795176
+		"date": 1655843306600
 	},
 	"demo/ReportStyle.ts": {
-		"date": 1655556795175
+		"date": 1655843280145
 	},
 	"demo/Testtable.ts": {
-		"date": 1655556795176
+		"date": 1655843313498
 	},
 	"demo/TestList.ts": {
 		"date": 1635803026000
@@ -106,7 +106,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1633792454000
 	},
 	"demo/Testdatatable1.ts": {
-		"date": 1655556795175
+		"date": 1655843295823
 	},
 	"demo/LargeReport.ts": {
 		"date": 1634240084000

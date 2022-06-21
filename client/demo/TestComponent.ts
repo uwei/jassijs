@@ -1,5 +1,4 @@
 import {Panel} from "jassijs/ui/Panel";
-import jassi from "jassijs/jassi";
 import {Button} from "jassijs/ui/Button";
 import {HTMLPanel} from "jassijs/ui/HTMLPanel";
 import { $Class } from "jassijs/remote/Registry";

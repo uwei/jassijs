@@ -1,5 +1,4 @@
 
-import jassi from "jassijs/jassi";
 import {Container} from "jassijs/ui/Container";
 import {Panel, PanelConfig} from "jassijs/ui/Panel";
 import {ComponentDesigner} from "jassijs_editor/ComponentDesigner";

@@ -1,4 +1,4 @@
-import jassi from "jassijs/jassi";
+
 import { Component } from "jassijs/ui/Component";
 import "jassijs_editor/Debugger";
 import { $Class } from "jassijs/remote/Registry";

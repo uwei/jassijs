@@ -12,6 +12,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     var Component_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Component = exports.ComponentCreateProperties = exports.$UIComponent = exports.UIComponentProperties = void 0;
+    //import { CSSProperties } from "jassijs/ui/Style";
+    jassijs.includeCSSFile("jassijs.css");
+    jassijs.includeCSSFile("materialdesignicons.min.css");
     class UIComponentProperties {
     }
     exports.UIComponentProperties = UIComponentProperties;

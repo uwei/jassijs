@@ -173,7 +173,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                     return;
                 editor._draganddropper.enableDraggable(false);
                 let edi = tinymce.editors[_this._id];
-                if (edi)
+                if (edi.getContainer())
                     edi.getContainer().style.display = "flex";
                 //$(this.domWrapper).draggable('disable');
             });
@@ -194,7 +194,9 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             });
             _this.on('focus', function () {
                 _this.initIfNeeded(tinymce, config);
-                document.getElementById(_this.editor.inlineEditorPanel._id).querySelector(".tox-tinymce-inline").style.display = "none";
+                var el = document.getElementById(_this.editor.inlineEditorPanel._id).querySelector(".tox-tinymce-inline");
+                if (el)
+                    el.style.display = "none";
                 if (HTMLPanel_1.oldeditor) {
                     HTMLPanel_1.oldeditor.getContainer().style.display = "none";
                 }
