@@ -24,6 +24,8 @@ define("jassijs_report/ext/pdfmake", ['pdfMakelib', "vfs_fonts"], function (ttt,
     var fonts = require("vfs_fonts");
     if (window["globalThis"] && window["globalThis"]["pdfMake"])
         window.pdfMake = window["globalThis"]["pdfMake"];
+    if (window["globalThisOld"] && window["globalThisOld"]["pdfMake"])
+        window.pdfMake = window["globalThisOld"]["pdfMake"];
     return {
         default: window.pdfMake
     };
