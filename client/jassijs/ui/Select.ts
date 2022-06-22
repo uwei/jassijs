@@ -59,10 +59,10 @@ export class Select extends DataComponent {
     constructor(properties:SelectCreateProperties = undefined) {
         super();
 
-        super.init($('<select class="Select"><option value=""></option></select>')[0]);
+        super.init('<select class="Select"><option value=""></option></select>');
         var _this=this;
         if (properties !== undefined && properties.multiple === true)
-            $('#' + this._id).prop("multiple", true);
+            document.getElementById(this._id)["multiple"]= true;
         var single = false;
         if (properties !== undefined && properties.allowDeselect !== undefined)
             single = properties.allowDeselect;
@@ -81,8 +81,8 @@ export class Select extends DataComponent {
             this.dom = this.domSelect;
         } else
             this.dom = <HTMLElement>this.domWrapper.children[1];
-        $(this.domSelect).attr("id", "");
-        $(this.dom).attr("id", this._id);
+        this.domSelect.setAttribute("id","");
+        this.dom.setAttribute("id", this._id);
         $(this.domSelect).chosen().change(function(e) {
         	if (_this._select !== undefined)
             	_this._select.value = _this.value;
@@ -172,15 +172,9 @@ export class Select extends DataComponent {
         }
         this.domSelect.innerHTML=html;
 		 this.refresh();
-        /*   for(var x=0;x<value.length;x++){
-               delete value[x].recid;
-           }*/
     }
     get items() {
-
-        //  if(w2ui[this._id]===undefined)
-        return this._items;
-        //   return w2ui[this._id].records;//$(this.dom).text();
+       return this._items;
     }
 
    

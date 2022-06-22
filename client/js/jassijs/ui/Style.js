@@ -19,7 +19,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     class Style extends InvisibleComponent_1.InvisibleComponent {
         constructor() {
             super();
-            super.init($('<span class="InvisibleComponent"></span>')[0]);
+            super.init('<span class="InvisibleComponent"></span>');
         }
         config(config) {
             super.config(config);
@@ -35,7 +35,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
             //never!super.css(properties,removeOldProperties);
             var style = document.getElementById(this.styleid);
             if (!document.getElementById(this.styleid)) {
-                style = $('<style id=' + this.styleid + '></style>')[0];
+                style = Component_1.Component.createHTMLElement('<style id=' + this.styleid + '></style>');
                 document.head.appendChild(style);
             }
             var prop = {};

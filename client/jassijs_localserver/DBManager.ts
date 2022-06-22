@@ -2,12 +2,12 @@
 import { ConnectionOptions, createConnection, getConnection, SaveOptions, FindConditions, FindOneOptions, ObjectType, ObjectID, FindManyOptions, Connection, SelectQueryBuilder, Brackets, EntitySchema, getMetadataArgsStorage, Entity } from "typeorm";
 import { classes } from "jassijs/remote/Classes";
 
-import registry from "jassijs/remote/Registry";
+import registry, { $Class } from "jassijs/remote/Registry";
 import { DBObject } from "jassijs/remote/DBObject";
 import { ParentRightProperties } from "jassijs/remote/security/Rights";
 import { User } from "jassijs/remote/security/User";
 import { Context } from "jassijs/remote/RemoteObject";
-import { $Class } from "jassijs/remote/Registry";
+
 const parser = require('js-sql-parser');
 const passwordIteration = 10000;
 

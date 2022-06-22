@@ -3,7 +3,7 @@ define("demo/registry",["require"], function(require) {
  return {
   default: {
 	"demo/Dialog.ts": {
-		"date": 1655726757706,
+		"date": 1655851715726,
 		"demo/Dialog": {}
 	},
 	"demo/EmptyDialog.ts": {
@@ -115,7 +115,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1635896382000
 	},
 	"demo/Dialog2.ts": {
-		"date": 1655556795284,
+		"date": 1655852878011,
 		"demo/Dialog2": {}
 	},
 	"demo/MyTest.ts": {

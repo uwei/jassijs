@@ -261,7 +261,6 @@ export class Textbox extends DataComponent implements TextboxConfig {
             this.fillCompletionList(value);
 
         }
-        // $(this.dom).val(value);
     }
     get autocompleter() {
         var list = this.dom.list;
@@ -271,7 +270,7 @@ export class Textbox extends DataComponent implements TextboxConfig {
         if (comp === undefined)
             return undefined;
         return comp["_values"];
-        // return $(this.dom).val();
+
     }
     /**
      * focus the textbox

@@ -32,10 +32,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     let Select = class Select extends DataComponent_1.DataComponent {
         constructor(properties = undefined) {
             super();
-            super.init($('<select class="Select"><option value=""></option></select>')[0]);
+            super.init('<select class="Select"><option value=""></option></select>');
             var _this = this;
             if (properties !== undefined && properties.multiple === true)
-                $('#' + this._id).prop("multiple", true);
+                document.getElementById(this._id)["multiple"] = true;
             var single = false;
             if (properties !== undefined && properties.allowDeselect !== undefined)
                 single = properties.allowDeselect;
@@ -53,8 +53,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             }
             else
                 this.dom = this.domWrapper.children[1];
-            $(this.domSelect).attr("id", "");
-            $(this.dom).attr("id", this._id);
+            this.domSelect.setAttribute("id", "");
+            this.dom.setAttribute("id", this._id);
             $(this.domSelect).chosen().change(function (e) {
                 if (_this._select !== undefined)
                     _this._select.value = _this.value;
@@ -134,14 +134,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             }
             this.domSelect.innerHTML = html;
             this.refresh();
-            /*   for(var x=0;x<value.length;x++){
-                   delete value[x].recid;
-               }*/
         }
         get items() {
-            //  if(w2ui[this._id]===undefined)
             return this._items;
-            //   return w2ui[this._id].records;//$(this.dom).text();
         }
         set value(sel) {
             var found = false;

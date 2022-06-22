@@ -17,29 +17,35 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
          }*/
         constructor() {
             super();
-            super.init($('<input type="file" id="dateien" name="files[]" />')[0]);
+            super.init('<input type="file" id="dateien" name="files[]" />');
             var _this = this;
-            $(this.dom).on("change", function (evt) {
+            this.on("change", function (evt) {
                 _this.readUpload(evt);
             });
         }
+        get dom() {
+            return super.dom;
+        }
+        set dom(value) {
+            super.dom = value;
+        }
         get accept() {
-            return $(this.dom).prop("accept");
+            return this.dom.accept;
         }
         /**
          * which file types are accepted e.g ".txt,.csv"
          **/
         set accept(value) {
-            $(this.dom).prop("accept", value);
+            this.dom.accept = value;
         }
         get multiple() {
-            return $(this.dom).prop("multiple");
+            return this.dom.multiple;
         }
         /**
          * multiple files can be uploaded
          **/
         set multiple(value) {
-            $(this.dom).prop("multiple", value);
+            this.dom.multiple = value;
         }
         async readUpload(evt) {
             var files = evt.target["files"];

@@ -185,7 +185,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             else {
                 this.fillCompletionList(value);
             }
-            // $(this.dom).val(value);
         }
         get autocompleter() {
             var list = this.dom.list;
@@ -195,7 +194,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             if (comp === undefined)
                 return undefined;
             return comp["_values"];
-            // return $(this.dom).val();
         }
         /**
          * focus the textbox

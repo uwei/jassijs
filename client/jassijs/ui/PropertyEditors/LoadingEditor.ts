@@ -4,11 +4,12 @@ import { $Class } from "jassijs/remote/Registry";
 import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { Component } from "jassijs/ui/Component";
 
-
+@$Class("jassijs.ui.PropertyEditors.LoadingEditor")
 export class LoadingEditor extends Editor{
 	_property;
 	_propertyEditor;
 	_editor;
+    _saveOb;
     constructor( property, propertyEditor,waitforclass:Promise<any>) {
     	super(property,propertyEditor);
         this._property=property;
@@ -19,7 +20,7 @@ export class LoadingEditor extends Editor{
 		waitforclass.then((cl)=>{
 			_this._editor=new cl(_this.property,_this.propertyEditor);
 			(<Component>_this.component).dom.parentNode.replaceChild(_this._editor.getComponent().dom,_this.component.dom);
-			_this._editor.ob=_this.ob;
+			_this._editor.ob=_this._saveOb;
 			_this.component=_this._editor.component;
 		});
     }
@@ -27,6 +28,7 @@ export class LoadingEditor extends Editor{
      * @member {object} ob - the object which is edited
      */
     set ob(ob) {
+        this._saveOb=ob;
     	if(this._editor)
     		this._editor=ob;
     	else

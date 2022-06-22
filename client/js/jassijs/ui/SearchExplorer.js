@@ -18,8 +18,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
             //@member - maximal hits which are found 
             this.maximalFounds = 100;
             //this.maximize();
-            $(this.dom).css("width", "calc(100% - 8px)");
-            $(this.dom).css("height", "calc(100% - 25px)"); //why 25????
+            this.dom.style.width = "calc(100% - 8px)";
+            this.dom.style.height = "calc(100% - 25px)"; //why 25????
             this.tree = new Tree_1.Tree();
             this.search = new Textbox_1.Textbox();
             this.layout();
@@ -87,7 +87,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Tree", "jas
                     });
                 }
             });
-            $("#" + this._id).css("flow", "visible");
+            this.dom.style["flow"] = "visible";
             this.search.onkeydown(function (evt) {
                 window.setTimeout(() => {
                     //	if(evt.code==="Enter"){

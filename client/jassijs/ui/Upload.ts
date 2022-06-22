@@ -10,34 +10,42 @@ export class Upload extends Component{
         }*/
         constructor(){ 
             super();    
-            super.init($('<input type="file" id="dateien" name="files[]" />')[0]);
+            super.init('<input type="file" id="dateien" name="files[]" />');
             var _this=this;
-            $(this.dom).on("change",function(evt){
+            this.on("change",function(evt){
             	_this.readUpload(<any>evt);
             });
+        }
+
+        get dom(): HTMLInputElement {
+            return <any>super.dom;
+        }
+    
+        set dom(value: HTMLInputElement) {
+            super.dom=value;
         }
         @$Property({chooseFromStrict:true,chooseFrom:["Text","DataUrl","ArrayBuffer","BinaryString"]})
         readAs:"Text"|"DataUrl"|"ArrayBuffer"|"BinaryString";
 
         get accept():string{
-        	return $(this.dom).prop("accept");
+        	return this.dom.accept;
         }
         /**
          * which file types are accepted e.g ".txt,.csv"
          **/
         @$Property()
         set accept(value:string){
-        	$(this.dom).prop("accept",value);
+        	this.dom.accept=value;
         }
         get multiple():boolean{
-        	return $(this.dom).prop("multiple");
+        	return this.dom.multiple;
         }
         /**
          * multiple files can be uploaded
          **/
         @$Property()
         set multiple(value:boolean){
-        	$(this.dom).prop("multiple",value);
+        	this.dom.multiple=value;
         }
 		private async readUpload(evt:JQuery.TriggeredEvent<any,any,any,any>){
 			var files:FileList = evt.target["files"];

@@ -48,19 +48,22 @@ define(["require", "exports", "jassijs/ui/PropertyEditor", "jassijs/ui/PropertyE
                 }
             });
             //correct height
-            var bt = $(this.icon.domWrapper).find(".sp-preview");
-            bt.css("width", "8px");
-            bt.css("height", "8px");
-            var bx = $(this.icon.domWrapper).find(".sp-replacer");
-            bx.css("height", "10px");
-            bx.css("width", "10px");
-            var bp = $(this.icon.domWrapper).find(".sp-dd");
-            bp.css("height", "6px");
+            var bt = this.icon.domWrapper.querySelector(".sp-preview");
+            bt.style.width = "8px";
+            bt.style.height = "8px";
+            var bx = this.icon.domWrapper.querySelector(".sp-replacer");
+            bx.style.height = "10px";
+            bx.style.width = "10px";
+            var bp = this.icon.domWrapper.querySelector(".sp-dd");
+            bp.style.height = "6px";
             //spec.width="10px";
             //   this.component.dom=font[0];
             this.select.onchange(function (param) {
                 _this._onchange(param);
             });
+        }
+        onedit(param) {
+            super.onedit(param);
         }
         /**
          * @member {object} ob - the object which is edited

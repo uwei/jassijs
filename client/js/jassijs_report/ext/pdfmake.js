@@ -25,7 +25,7 @@ define("jassijs_report/ext/pdfmake", ['pdfMakelib', "vfs_fonts"], function (ttt,
     if (window["globalThis"] && window["globalThis"]["pdfMake"])
         window.pdfMake = window["globalThis"]["pdfMake"];
     return {
-        default: pdfMake
+        default: window.pdfMake
     };
 });
 //# sourceMappingURL=pdfmake.js.map

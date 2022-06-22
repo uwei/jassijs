@@ -40,7 +40,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RComponent.ts": {
-		"date": 1655556864298,
+		"date": 1655844557360,
 		"jassijs_report.ReportComponent": {
 			"$Property": [
 				{
@@ -534,7 +534,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/ReportDesign.ts": {
-		"date": 1655556792356,
+		"date": 1655844545390,
 		"jassijs_report.InfoProperties": {
 			"@members": {
 				"title": {

@@ -14,6 +14,7 @@ import { Property, $Property } from "jassijs/ui/Property";
 import { Editor } from "jassijs/ui/PropertyEditors/Editor";
 import { Component } from "jassijs/ui/Component";
 import { Container } from "jassijs/ui/Container";
+import { classes } from "jassijs/remote/Classes";
 
 @$Class("jassijs.ui.PropertyEditor")
 export class PropertyEditor extends Panel {
@@ -28,6 +29,7 @@ export class PropertyEditor extends Panel {
     properties;
     _value;
     codeChanges: { [property: string]: string | {} } = {};
+    private hasLoadingEditor=false;
     /**
     * edit object properties
     */
@@ -215,7 +217,7 @@ export class PropertyEditor extends Panel {
             if(value.dom&&document.activeElement!==value.dom)
                 (<HTMLElement> value.dom).focus();
         }
-        if (value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
+        if (this.hasLoadingEditor===false&& value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
             this._value = value;
             if (this.codeEditor)
                 this.variablename = this.codeEditor.getVariableFromObject(this._value);
@@ -327,12 +329,16 @@ export class PropertyEditor extends Panel {
                 //nameEditor.ob = _this._value;
             }
         }
+        this.hasLoadingEditor=false;
         for (var x = 0; x < props.length; x++) {
             if (props[x].name.indexOf("/") > -1) {
             } else {
                 _this.properties[props[x].name] = { isVisible: props[x].isVisible, name: props[x].name, component: undefined, description: props[x].description };
 
                 var editor = propertyeditor.createFor(props[x], _this);
+                if(classes.getClassName(editor)==="jassijs.ui.PropertyEditors.LoadingEditor"){
+                    this.hasLoadingEditor=true;
+                }
                 if (editor === undefined) {
                     console.log("Editor not found for " + _this.variablename);
                     continue;

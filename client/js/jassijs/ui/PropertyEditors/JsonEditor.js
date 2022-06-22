@@ -19,6 +19,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
          */
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
+            console.log("constr" + property.name);
             /** @member - the renedering component **/
             this.component = new Button_1.Button();
             var _this = this;
@@ -30,7 +31,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
          * @member {object} ob - the object which is edited
          */
         set ob(ob) {
+            if (ob === undefined)
+                debugger;
             super.ob = ob;
+            console.log("setob" + this.property.name + "=>" + ob);
             var value = this.propertyEditor.getPropertyValue(this.property);
             //set cache for propertyvalues
             var empty = value === undefined || value.length === 0;
@@ -75,6 +79,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
                     //set Property in Design
                     //???Alternativ: 
                     var test = _this._ob; //Tools.stringObjectToObject
+                    if (test === undefined) {
+                        //_this.ob={};
+                        // _this.propertyEditor.setPropertyInDesign(_this.property.name,_this.ob);
+                    }
                     if (typeof (_this._ob[_this.property.name]) === "function")
                         _this._ob[_this.property.name](propEditor.value);
                     else

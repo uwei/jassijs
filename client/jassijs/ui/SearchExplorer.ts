@@ -18,8 +18,8 @@ export class SearchExplorer extends Panel {
     constructor() {
         super();
         //this.maximize();
-           $(this.dom).css("width", "calc(100% - 8px)");
-        $(this.dom).css("height", "calc(100% - 25px)");//why 25????
+        this.dom.style.width= "calc(100% - 8px)";
+        this.dom.style.height= "calc(100% - 25px)";//why 25????
         this.tree = new Tree();
         this.search = new Textbox();
         this.layout();
@@ -95,7 +95,7 @@ export class SearchExplorer extends Panel {
 
             }
         });
-        $("#" + this._id).css("flow", "visible");
+        this.dom.style["flow"]="visible";
         this.search.onkeydown(function(evt) {
             window.setTimeout(() => {
                 //	if(evt.code==="Enter"){

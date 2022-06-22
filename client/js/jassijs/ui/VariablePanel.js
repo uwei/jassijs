@@ -54,9 +54,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          * @returns  {jassijs.ui.VariablePanel}
         **/
         static get(id) {
-            if ($("#" + id).length === 0) //dummy for Codeeditor has closed
+            if (!document.getElementById(id)) //dummy for Codeeditor has closed
                 return { __db: true, add: function () { }, update: function () { } };
-            return $("#" + id)[0]._this;
+            return document.getElementById(id)._this;
         }
         clear() {
             this.value = [];

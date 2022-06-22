@@ -1,5 +1,5 @@
 import { InvisibleComponent } from "jassijs/ui/InvisibleComponent";
-import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
+import { $UIComponent, Component, ComponentConfig } from "jassijs/ui/Component";
 import { $Class } from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 
@@ -22,7 +22,7 @@ export class Style extends InvisibleComponent implements StyleConfig{
     
     constructor() {//id connect to existing(not reqired)
         super();
-        super.init($('<span class="InvisibleComponent"></span>')[0]);
+        super.init('<span class="InvisibleComponent"></span>');
 
     }
 
@@ -42,7 +42,7 @@ export class Style extends InvisibleComponent implements StyleConfig{
 
         var style: HTMLElement = document.getElementById(this.styleid);
         if (!document.getElementById(this.styleid)) {
-            style = $('<style id=' + this.styleid + '></style>')[0];
+            style =Component.createHTMLElement('<style id=' + this.styleid + '></style>');
             document.head.appendChild(style);
         }
         var prop = {};
