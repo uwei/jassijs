@@ -55,7 +55,7 @@ export class Reloader {
     }
 
     private _findScript(name: string) {
-        var scripts = $('script');
+        var scripts = document.querySelectorAll('script');
         for (var x = 0; x < scripts.length; x++) {
             var attr = scripts[x].getAttributeNode("src");
             if (attr !== null && attr !== undefined && attr.value === (name + ".js")) {//?bust="+window.jassiversion
@@ -144,7 +144,7 @@ export class Reloader {
 
         }
         await new Promise((resolve, reject) => {
-
+            //@ts-ignore
             require(allfiles, function (...ret) {
                 for (var rx = 0; rx < ret.length; rx++) {
                     allModules[allfiles[rx]] = ret[rx];
@@ -183,6 +183,7 @@ export class Reloader {
 
         // console.log("reload " + JSON.stringify(fileNameBlank));
         await new Promise((resolve, reject) => {
+            //@ts-ignore
             require(allfiles, function (...ret) {
                 async function run() {
                     for (let f = 0; f < allfiles.length; f++) {

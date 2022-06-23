@@ -5,6 +5,7 @@ import { $Property } from "jassijs/ui/Property";
 import { ReportDesign } from "jassijs_report/ReportDesign";
 import { loadFontIfNedded } from "jassijs/ui/CSSProperties";
 import { Tools } from "jassijs/util/Tools";
+import { Component } from "jassijs/ui/Component";
 
 
 
@@ -76,19 +77,16 @@ export class RText extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        super.init($('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>')[0]);//tabindex for key-event
-        $(this.domWrapper).removeClass("jcontainer");
-        $(this.__dom).css("text-overflow", "ellipsis");
-        $(this.__dom).css("overflow", "hidden");
-        $(this.dom).addClass("designerNoResizable");
+        super.init('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>');//tabindex for key-event
+        this.domWrapper.classList.remove("jcontainer");
+        this.__dom.style["text-overflow"]= "ellipsis";
+        this.__dom.style["overflow"]= "hidden";
+        this.dom.classList.add("designerNoResizable");
 
         loadFontIfNedded("Roboto");
-        //  super.init($('<div class="RText"></div>')[0]);
         var el = this.dom.children[0];
         this._designMode = false;
-        $(this.dom).css("display", "block");
-        // this.css({ font_family: "inherit", font_size: "inherit" })
-        //   $(this.dom.children[0]).css("display","inline-block");
+        this.dom.style["display"]= "block";
         this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
         this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
         this.initIfNeeded = HTMLPanel.prototype.initIfNeeded.bind(this);
@@ -105,7 +103,7 @@ export class RText extends RComponent {
         var el = this.dom.children[0];
         if (el === undefined)
             return "";
-        var ret = $(el).html();
+        var ret = el.innerHTML;
         return ret;
     }
     set value(code: string) {
@@ -114,7 +112,7 @@ export class RText extends RComponent {
             el = document.createTextNode(code);
             this.dom.appendChild(el);
         } else
-            $(el).html(code);
+            el.innerHTML=code;
     }
     @$Property({ type: "string", chooseFrom: allFormats })
     set format(value: string) {
@@ -253,17 +251,17 @@ export class RText extends RComponent {
         var sval = decodeURI(this.value);
         sval = sval.replaceAll("<br>", "\n")
         ret.text = sval//.replaceAll("<br>","\\n");
-        var node = $("<span>" + ret.text + "</span>");
-        if (node[0].innerText !== node[0].innerHTML) {//htmltext
+        var node = Component.createHTMLElement("<span>" + ret.text + "</span>");
+        if (node.innerText !== node.innerHTML) {//htmltext
             var style = new InlineStyling();
             var list: any[] = [];
-            this.convertFromHTMLNode(node[0], list, style);
+            this.convertFromHTMLNode(node, list, style);
             if (list.length > 1) {
                 ret.editTogether = true;
                 ret.text = list;
             } else { //only one text found so we transfer the html 
                 ret = list[0];
-                ret.text = node[0].innerText;
+                ret.text = node.innerText;
 
                 this.fromJSON(Tools.copyObject(ret));
             }

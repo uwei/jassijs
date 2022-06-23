@@ -23,7 +23,7 @@ export class RUList extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        this.init($("<ul></ul>")[0]);
+        this.init("<ul></ul>");
        
     }
      /**
@@ -55,9 +55,9 @@ export class RUList extends RComponent {
     set type(value:string){
         this._type=value;
         if(value===undefined)
-            $(this.dom).css("list-style-type","");
+            this.dom.style["list-style-type"]="";
         else
-            $(this.dom).css("list-style-type",value);
+            this.dom.style["list-style-type"]=value;
     }
     get type():string{
         return this._type;

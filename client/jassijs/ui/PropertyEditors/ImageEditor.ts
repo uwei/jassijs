@@ -1,3 +1,4 @@
+import "jassijs/ext/jquerylib";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { Editor, $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
 import { Databinder } from "jassijs/ui/Databinder";
@@ -9,6 +10,7 @@ import { DBObject } from "jassijs/remote/DBObject";
 import { classes } from "jassijs/remote/Classes";
 import { Button } from "jassijs/ui/Button";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
+import { Component } from "../Component";
 @$ActionProvider("jassijs.base.ActionNode")
 @$PropertyEditor(["image"])
 @$Class("jassijs.ui.PropertyEditors.ImageEditor")
@@ -129,7 +131,7 @@ export class ImageEditor extends Editor {
 
                 html = html + "<span title='" + icon + "' onclick=ImageEditorClicked('" + icon + "') class='mdi " + icon + "'></span>";
             }
-            var node = $("<span style='font-size:18pt'>" + html + "</span>");
+            var node = Component.createHTMLElement("<span style='font-size:18pt'>" + html + "</span>");
             icons.__dom.appendChild(node[0]);
             if(!onlytest)
                 $(this.dialog.__dom).dialog({ height: "400", width: "400" });

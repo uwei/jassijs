@@ -18,7 +18,7 @@ export class RUnknown extends RComponent{
     */
     constructor(properties=undefined) {//id connect to existing(not reqired)
         super(properties);
-        super.init($('<span class="InvisibleComponent"></span>')[0]);
+        super.init('<span class="InvisibleComponent"></span>');
         this.horizonzal = false;
     }
    fromJSON(ob:any){

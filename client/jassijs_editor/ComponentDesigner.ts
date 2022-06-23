@@ -193,15 +193,15 @@ export class ComponentDesigner extends Panel {
         this.inlineEditorPanel = new Panel();
         this.inlineEditorPanel._id = "i" + this.inlineEditorPanel._id;
         this.inlineEditorPanel.dom.setAttribute("id", this.inlineEditorPanel._id);
-        $(this.inlineEditorPanel.dom).css("display", "inline");
-        $(this.inlineEditorPanel.domWrapper).css("display", "inline");
-        $(this.inlineEditorPanel.dom).addClass("InlineEditorPanel");
+        this.inlineEditorPanel.dom.style.display="inline";
+        this.inlineEditorPanel.domWrapper.style.display="inline";
+        this.inlineEditorPanel.dom.classList.add("InlineEditorPanel");
 
         //   box.height=40;
         box.add(this._designToolbar);
         box.add(this.inlineEditorPanel);
         this.add(box);
-        $(this._designPlaceholder.domWrapper).css("position", "relative");
+        this._designPlaceholder.domWrapper.style.position="relative";
         this.add(this._designPlaceholder);
 
     }
@@ -210,8 +210,8 @@ export class ComponentDesigner extends Panel {
    */
     registerKeys() {
         var _this = this;
-        $(this._codeEditor._design.dom).attr("tabindex", "1");
-        $(this._codeEditor._design.dom).keydown(function (evt) {
+        this._codeEditor._design.dom.tabindex= "1";
+        this._codeEditor._design.dom.addEventListener("keydown",function (evt) {
             if (evt.keyCode === 115 && evt.shiftKey) {//F4
                 // var thiss=this._this._id;
                 // var editor = ace.edit(this._this._id);
@@ -538,8 +538,8 @@ export class ComponentDesigner extends Panel {
         this.pasteButton.hidden = !enable;
         var component = this._designPlaceholder._components[0];
         //switch designmode
-        var comps = $(component.dom).find(".jcomponent");
-        comps.addClass("jdesignmode");
+        var comps = component.dom.querySelectorAll(".jcomponent");
+        comps.forEach((c)=>c.classList.add("jdesignmode"));
         for (var c = 0; c < comps.length; c++) {
 
             if (comps[c]._this["extensionCalled"] !== undefined) {
@@ -584,7 +584,7 @@ export class ComponentDesigner extends Panel {
             this._resizer.onelementselected = function (elementIDs, e) {
                 var ret = [];
                 for (var x = 0; x < elementIDs.length; x++) {
-                    var ob = $("#" + elementIDs[x])[0]._this;
+                    var ob = document.getElementById(elementIDs[x])._this;
                     if (ob["editorselectthis"])
                         ob = ob["editorselectthis"];
                     ret.push(ob);
@@ -622,12 +622,6 @@ export class ComponentDesigner extends Panel {
 
         }
         this._componentExplorer.update();
-        /*  $(".hoho2").selectable({});
-          $(".hoho2").selectable("disable");*/
-        /*  $(".HTMLPanel").selectable({});
-          $(".HTMLPanel").selectable("disable");
-          $(".HTMLPanel").draggable({});
-          $(".HTMLPanel").draggable("disable");*/
     }
 
     /**
@@ -873,7 +867,7 @@ export class ComponentDesigner extends Panel {
 
         this._componentExplorer.value = component;
 
-        $(this.dom).focus();
+        this.dom.focus();
 
 
         this._updateInvisibleComponents();

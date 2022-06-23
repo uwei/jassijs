@@ -1,3 +1,4 @@
+import "jassijs/ext/jquerylib";
 import { Databinder } from "jassijs/ui/Databinder";
 import { Upload } from "jassijs/ui/Upload";
 import { Textbox } from "jassijs/ui/Textbox";

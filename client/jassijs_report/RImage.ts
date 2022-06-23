@@ -25,8 +25,8 @@ export class RImage extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        this.init($('<img class="RImage"></img>')[0]);
-        $(this.domWrapper).removeClass("jcontainer");
+        this.init('<img class="RImage"></img>');
+        this.domWrapper.classList.remove("jcontainer");
     }
     /**
      * adds a component to the container before an other component
@@ -53,7 +53,7 @@ export class RImage extends RComponent {
     set image(value: string) {
         this._image = value;
         if (value === undefined)
-            $(this.dom).attr("src", "");
+            this.dom.setAttribute("src", "");
         else {
 
             //later we have a parent
@@ -71,9 +71,9 @@ export class RImage extends RComponent {
             } else {
                 var im = report.images;
                 if (im !== undefined && im[value] !== undefined) {
-                    $(this.dom).attr("src", im[value]);
+                    this.dom.setAttribute("src", im[value]);
                 } else {
-                    $(this.dom).attr("src", value);
+                    this.dom.setAttribute("src", value);
                 }
             }
         }
@@ -86,13 +86,13 @@ export class RImage extends RComponent {
     set fit(value: number[]) {
         this._fit = value;
         if (value === undefined) {
-            $(this.__dom).css("object-fit", "");
+            this.__dom.style["object-fit"]= "";
             this.width = this.width;
             this.height = this.height;
         } else {
-            $(this.__dom).css("object-fit", "contain");
-            $(this.__dom).css("width", value[0]);
-            $(this.__dom).css("height", value[1]);
+            this.__dom.style["object-fit"] ="contain";
+            this.__dom.style.width= value[0].toString();
+            this.__dom.style.height= value[1].toString();
         }
     }
     get fit(): number[] {
@@ -102,9 +102,9 @@ export class RImage extends RComponent {
     set opacity(value: number) {
         this._opacity = value;
         if (value === undefined) {
-            $(this.__dom).css("opacity", "");
+            this.__dom.style.opacity= "";
         } else {
-            $(this.__dom).css("opacity", value);
+            this.__dom.style.opacity= value.toString();
         }
     }
     get opacity(): number {

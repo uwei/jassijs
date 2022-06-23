@@ -62,7 +62,7 @@ export class RStyle extends RComponent {
     update() {
         var style: HTMLElement = document.getElementById(this.styleid);
         if (!document.getElementById(this.styleid)) {
-            style = $('<style id=' + this.styleid + '></style>')[0];
+            style = RComponent.createHTMLElement('<style id=' + this.styleid + '></style>');
             document.head.appendChild(style);
         }
         var prop = {};

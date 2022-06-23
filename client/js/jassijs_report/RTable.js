@@ -29,18 +29,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             this.insertEmptyCells = true;
             this.widths = [];
             this.heights = [];
-            super.init($("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>")[0]);
-            //	this.backgroundPanel.width="500px";
-            //$(this.backgroundPanel.dom).css("min-width","200px");
-            //$(this.dom).css("display", "table");
-            // $(this.dom).css("min-width", "50px");
+            super.init("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>");
             this.updater = new Runlater_1.Runlater(() => {
                 _this.updateLayout(false);
             }, 100);
             let tr = new RTablerow_1.RTablerow();
             tr.parent = this;
             this.add(tr);
-            $(this.dom).addClass("designerNoResizable");
+            this.dom.classList.add("designerNoResizable");
             this.initContextMenu(properties === null || properties === void 0 ? void 0 : properties.isdatatable);
             var _this = this;
             this.initKeys();
@@ -84,8 +80,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             var _this = this;
             this.contextMenu = new ContextMenu_1.ContextMenu();
             this.contextMenu._isNotEditableInDesigner = true;
-            $(this.contextMenu.menu.dom).css("font-family", "Roboto");
-            $(this.contextMenu.menu.dom).css("font-size", "12px");
+            this.contextMenu.menu.dom.style["font-family"] = "Roboto";
+            this.contextMenu.menu.dom.style["font-size"] = "12px";
             this.contextMenu.menu._setDesignMode = (nothing) => { }; //should net be editable in designer
             if (isDatatable !== true) {
                 var insertRowBefore = new MenuItem_1.MenuItem();
@@ -215,11 +211,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
                 this.contextMenu.menu.add(removeRow);
             }
             var copyMenu = new Button_1.Button();
-            $(copyMenu.dom).css("font-family", "Roboto");
-            $(copyMenu.dom).css("font-size", "12px");
+            copyMenu.dom.style["font-family"] = "Roboto";
+            copyMenu.dom.style["font-size"] = "12px";
             copyMenu.text = "copy";
             copyMenu.width = "100%";
-            $(copyMenu.dom).removeClass("jinlinecomponent");
+            copyMenu.dom.classList.remove("jinlinecomponent");
             let func = function (evt) {
                 var info = _this.getInfoFromEvent(evt);
                 //@ts-ignore
@@ -230,11 +226,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             copyMenu.onclick(func);
             this.contextMenu.menu.add(copyMenu);
             var pasteMenu = new Button_1.Button();
-            $(pasteMenu.dom).css("font-family", "Roboto");
-            $(pasteMenu.dom).css("font-size", "12px");
+            pasteMenu.dom.style["font-family"] = "Roboto";
+            pasteMenu.dom.style["font-size"] = "12px";
             pasteMenu.text = "paste";
             pasteMenu.width = "100%";
-            $(pasteMenu.dom).removeClass("jinlinecomponent");
+            pasteMenu.dom.classList.remove("jinlinecomponent");
             let func2 = function (evt) {
                 var info = _this.getInfoFromEvent(evt);
                 //@ts-ignore
@@ -278,10 +274,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
                         }
                     }
                     if (hiddenCells[r + ":" + c] === true) {
-                        $(cell.domWrapper).addClass("invisibleAfterSpan");
+                        cell.domWrapper.classList.add("invisibleAfterSpan");
                     }
                     else {
-                        $(cell.domWrapper).removeClass("invisibleAfterSpan");
+                        cell.domWrapper.classList.remove("invisibleAfterSpan");
                     }
                 }
             }
@@ -319,7 +315,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
                         }
                         else
                             val = this.heights[r];
-                        $(row._components[c].dom).css("height", Number.isInteger(val) ? val + "px" : val);
+                        row._components[c].dom.style.height = Number.isInteger(val) ? val + "px" : val;
                     }
                     var v = null;
                     if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.fillColor) {
@@ -467,7 +463,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
                 this.heights = height;
                 var test = Number(height);
                 for (var x = 0; x < tr._components.length; x++) {
-                    $(tr._components[x].dom).css("height", (test === NaN) ? height : (test + "px"));
+                    tr._components[x].dom.style.height = (test === NaN) ? height : (test + "px");
                 }
                 return;
             }
@@ -479,7 +475,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             var max = tr._components.length - 1;
             var test = Number(height);
             for (var x = 0; x < tr._components.length; x++) {
-                $(tr._components[x].dom).css("height", (test === NaN) ? height : (test + "px"));
+                tr._components[x].dom.style.height = (test === NaN) ? height : (test + "px");
             }
             for (var t = this.heights.length; t < max; t++) {
                 this.heights.push("auto");
@@ -530,7 +526,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
                 this.widths[found] = Number(width);
                 if (this.widths[found] === NaN)
                     this.widths[found] = width;
-                $(this._components[0]._components[found].domWrapper).attr("width", width);
+                this._components[0]._components[found].domWrapper.setAttribute("width", width);
             }
             //this._parent.setChildWidth(component,value);
         }
@@ -628,7 +624,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
             }
             var tr = this._components[0];
             for (var x = 0; x < tr._components.length; x++) {
-                $(tr._components[x].domWrapper).attr("width", this.widths[x]);
+                tr._components[x].domWrapper.setAttribute("width", this.widths[x]);
             }
             if (this.heights) {
                 for (var r = 0; r < this._components.length; r++) {
@@ -644,7 +640,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText",
                         }
                         else
                             val = this.heights[r];
-                        $(row._components[c].dom).css("height", Number.isInteger(val) ? val + "px" : val);
+                        row._components[c].dom.style.height = Number.isInteger(val) ? val + "px" : val;
                     }
                 }
             }

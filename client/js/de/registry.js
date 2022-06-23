@@ -319,6 +319,30 @@ define("de/registry", ["require"], function (require) {
             "de/Dialog2.ts": {
                 "date": 1655812637737,
                 "de/Dialog2": {}
+            },
+            "de/Report1.ts": {
+                "date": 1656019762350
+            },
+            "de/MyView.ts": {
+                "date": 1656021267398,
+                "de.MyView": {
+                    "$DBObjectView": [
+                        {
+                            "classname": "de.Kunde"
+                        }
+                    ],
+                    "@members": {
+                        "value": {
+                            "$Property": [
+                                {
+                                    "isUrlTag": true,
+                                    "id": true,
+                                    "editor": "jassi.ui.PropertyEditors.DBObjectEditor"
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         }
     };

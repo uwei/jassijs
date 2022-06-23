@@ -13,7 +13,6 @@ reportdesign = {
                     "Date: ${invoice.date}",
                     "Number: ${invoice.number}"
                 ],
-                {}
             ]
         },
         {
@@ -27,8 +26,6 @@ reportdesign = {
                 ]
             }
         },
-        {},
-        {},
         "\n",
         {
             foreach: "sum in invoice.summary",

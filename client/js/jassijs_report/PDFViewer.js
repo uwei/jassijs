@@ -14,13 +14,12 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
     class Canavas extends Component_1.Component {
         constructor() {
             super();
-            super.init($('<canvas type="pdfviewer"></canvas>')[0]);
+            super.init('<canvas type="pdfviewer"></canvas>');
         }
     }
     let PDFViewer = class PDFViewer extends Panel_1.Panel {
         constructor() {
             super();
-            //super.init(undefined);//$('<canvas type="pdfviewer"></canvas>')[0]);
             this.pdfjsLib = pdfjs_1.default;
             this.pdfDoc = null;
             this.pageNum = 1;
@@ -35,18 +34,12 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
                 overflow: "auto"
             };
             me.toolbar = new BoxPanel_1.BoxPanel();
-            $(me.toolbar.dom).css("position", "fixed");
+            me.toolbar.dom.style.position = "fixed";
             me.mainpanel = new Panel_1.Panel();
             me.plus = new Button_1.Button();
             me.minus = new Button_1.Button();
             var _this = this;
             me.download = new Button_1.Button();
-            //me.canavasPanel.height="90%";
-            //	me.canavasPanel.width="90%";
-            //	var cn=$('<canvas type="pdfviewer"></canvas>')[0]
-            //this.dom.appendChild(cn);
-            //this.canvas = cn;
-            // this.ctx = this.canvas.getContext('2d');
             this.add(me.toolbar);
             var placeholder = new Panel_1.Panel();
             placeholder.height = 20;
@@ -135,7 +128,6 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs_report/ext/pdfjs", "
         }
         get value() {
             return this._data;
-            //return  $(this.checkbox).prop("checked");
         }
     };
     PDFViewer = __decorate([

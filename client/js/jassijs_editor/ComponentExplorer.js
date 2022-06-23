@@ -52,7 +52,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          */
         getComponentChilds(item) {
             if (item === undefined)
-                return 0;
+                return [];
             if (item === this.value && item._components) {
                 var all = [];
                 item._components.forEach((e) => {

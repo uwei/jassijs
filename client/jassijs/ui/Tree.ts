@@ -1,3 +1,4 @@
+import "jassijs/ext/jquerylib";
 import "jassijs/ext/fancytree";
 import { $Class } from "jassijs/remote/Registry";
 import { Component, $UIComponent, ComponentConfig } from "jassijs/ui/Component";
@@ -737,7 +738,7 @@ export async function test() {
         width: "100%",
         height: "100px",
         onclick:function (data) {
-            console.log("select " + data.data.name);
+            console.log("select " + data["data"].name);
         },
         selection : [p, s],
         value : p

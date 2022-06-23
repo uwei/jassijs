@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions"], function (require, exports, Editor_1, Registry_1, Panel_1, Textbox_1, Button_1, Actions_1) {
+define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/base/Actions", "../Component", "jassijs/ext/jquerylib"], function (require, exports, Editor_1, Registry_1, Panel_1, Textbox_1, Button_1, Actions_1, Component_1) {
     "use strict";
     var ImageEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -111,7 +111,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
                     var icon = all[x].split(":")[0];
                     html = html + "<span title='" + icon + "' onclick=ImageEditorClicked('" + icon + "') class='mdi " + icon + "'></span>";
                 }
-                var node = $("<span style='font-size:18pt'>" + html + "</span>");
+                var node = Component_1.Component.createHTMLElement("<span style='font-size:18pt'>" + html + "</span>");
                 icons.__dom.appendChild(node[0]);
                 if (!onlytest)
                     $(this.dialog.__dom).dialog({ height: "400", width: "400" });

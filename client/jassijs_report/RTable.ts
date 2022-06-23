@@ -56,18 +56,14 @@ export class RTable extends RComponent {
 */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        super.init($("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>")[0]);
-        //	this.backgroundPanel.width="500px";
-        //$(this.backgroundPanel.dom).css("min-width","200px");
-        //$(this.dom).css("display", "table");
-        // $(this.dom).css("min-width", "50px");
+        super.init("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>");
         this.updater = new Runlater(() => {
             _this.updateLayout(false);
         }, 100);
         let tr = new RTablerow();
         tr.parent = this;
         this.add(tr);
-        $(this.dom).addClass("designerNoResizable");
+        this.dom.classList.add("designerNoResizable");
         this.initContextMenu(properties?.isdatatable);
         var _this = this;
         this.initKeys();
@@ -75,7 +71,7 @@ export class RTable extends RComponent {
     }
     private initKeys() {
         var _this = this;
-        this.on("keydown", (evt) => {
+        this.on("keydown", (evt:any) => {
             if (evt.key === "Tab") {//Tabelle erweitern?
                 if (evt.target?._this?.reporttype === "text"&&this.reporttype==="table") {
                     var rt: RText = evt.target?._this;
@@ -112,8 +108,8 @@ export class RTable extends RComponent {
         var _this = this;
         this.contextMenu = new ContextMenu();
         this.contextMenu._isNotEditableInDesigner = true;
-        $(this.contextMenu.menu.dom).css("font-family", "Roboto");
-        $(this.contextMenu.menu.dom).css("font-size", "12px");
+        this.contextMenu.menu.dom.style["font-family"]= "Roboto";
+        this.contextMenu.menu.dom.style["font-size"]= "12px";
         this.contextMenu.menu._setDesignMode = (nothing) => { };//should net be editable in designer
         if (isDatatable !== true) {
             var insertRowBefore = new MenuItem();
@@ -248,11 +244,11 @@ export class RTable extends RComponent {
             (<ContextMenu>this.contextMenu).menu.add(removeRow);
         }
         var copyMenu = new Button();
-        $(copyMenu.dom).css("font-family", "Roboto");
-        $(copyMenu.dom).css("font-size", "12px");
+        copyMenu.dom.style["font-family"]= "Roboto";
+        copyMenu.dom.style["font-size"]= "12px";
         copyMenu.text = "copy";
         copyMenu.width = "100%";
-        $(copyMenu.dom).removeClass("jinlinecomponent");
+        copyMenu.dom.classList.remove("jinlinecomponent");
         let func = function (evt) {
             var info = _this.getInfoFromEvent(evt);
             //@ts-ignore
@@ -264,11 +260,11 @@ export class RTable extends RComponent {
         (<ContextMenu>this.contextMenu).menu.add(copyMenu);
 
         var pasteMenu = new Button();
-        $(pasteMenu.dom).css("font-family", "Roboto");
-        $(pasteMenu.dom).css("font-size", "12px");
+        pasteMenu.dom.style["font-family"]= "Roboto";
+        pasteMenu.dom.style["font-size"]= "12px";
         pasteMenu.text = "paste";
         pasteMenu.width = "100%";
-        $(pasteMenu.dom).removeClass("jinlinecomponent");
+        pasteMenu.dom.classList.remove("jinlinecomponent");
         let func2 = function (evt) {
             var info = _this.getInfoFromEvent(evt);
             //@ts-ignore
@@ -314,9 +310,9 @@ export class RTable extends RComponent {
                     }
                 }
                 if (hiddenCells[r + ":" + c] === true) {
-                    $(cell.domWrapper).addClass("invisibleAfterSpan");
+                    cell.domWrapper.classList.add("invisibleAfterSpan");
                 } else {
-                    $(cell.domWrapper).removeClass("invisibleAfterSpan");
+                    cell.domWrapper.classList.remove("invisibleAfterSpan");
                 }
             }
         }
@@ -354,7 +350,7 @@ export class RTable extends RComponent {
                         val = this.heights(r);
                     } else
                         val = this.heights[r];
-                    $(row._components[c].dom).css("height", Number.isInteger(val) ? val + "px" : val);
+                    row._components[c].dom.style.height= Number.isInteger(val) ? val + "px" : val;
                 }
 
 
@@ -524,7 +520,7 @@ export class RTable extends RComponent {
             this.heights = height;
             var test = Number(height);
             for (var x = 0; x < tr._components.length; x++) {
-                $(tr._components[x].dom).css("height", (test === NaN) ? height : (test + "px"));
+                tr._components[x].dom.style.height=(test === NaN) ? height : (test + "px");
             }
             return;
         }
@@ -536,7 +532,7 @@ export class RTable extends RComponent {
         var max = tr._components.length - 1;
         var test = Number(height);
         for (var x = 0; x < tr._components.length; x++) {
-            $(tr._components[x].dom).css("height", (test === NaN) ? height : (test + "px"));
+            tr._components[x].dom.style.height= (test === NaN) ? height : (test + "px");
         }
         for (var t = this.heights.length; t < max; t++) {
             this.heights.push("auto");
@@ -586,7 +582,7 @@ export class RTable extends RComponent {
             this.widths[found] = Number(width);
             if (this.widths[found] === NaN)
                 this.widths[found] = width;
-            $((<Container>this._components[0])._components[found].domWrapper).attr("width", width);
+                (<Container>this._components[0])._components[found].domWrapper.setAttribute("width", width);
         }
         //this._parent.setChildWidth(component,value);
     }
@@ -689,7 +685,7 @@ export class RTable extends RComponent {
         }
         var tr = (<RTablerow>this._components[0]);
         for (var x = 0; x < tr._components.length; x++) {
-            $(tr._components[x].domWrapper).attr("width", this.widths[x]);
+            tr._components[x].domWrapper.setAttribute("width", this.widths[x]);
         }
         if (this.heights) {
             for (var r = 0; r < this._components.length; r++) {
@@ -703,7 +699,7 @@ export class RTable extends RComponent {
                         val = this.heights(r);
                     } else
                         val = this.heights[r];
-                    $(row._components[c].dom).css("height", Number.isInteger(val) ? val + "px" : val);
+                        row._components[c].dom.style.height= Number.isInteger(val) ? val + "px" : val;
 
                 }
             }

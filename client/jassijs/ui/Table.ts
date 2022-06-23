@@ -266,7 +266,7 @@ export class Table extends DataComponent implements TableConfig{
         this._select = _component;
     }
     get selectComponent(): any {
-        return this._select; //$(this.dom).text();
+        return this._select; 
     }
     set items(value: any[]) {
         if (value && this.dataTreeChildFunction) { //populate __treechilds

@@ -14,7 +14,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
     let CodeEditorInvisibleComponents = class CodeEditorInvisibleComponents extends Panel_1.Panel {
         constructor(codeeditor) {
             super();
-            super.init($('<span class="Panel" style="border:1px solid #ccc;"/>')[0]);
+            super.init('<span class="Panel" style="border:1px solid #ccc;"/>');
             /**
            * @member {jassijs_editor.CodeEditor} - the parent CodeEditor
            * */
@@ -79,7 +79,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          */
         _makeDraggable(component) {
             var helper = new (Classes_1.classes.getClass(component.createFromType))();
-            $("#jassitemp")[0].removeChild(helper.domWrapper);
+            document.getElementById("jassitemp").removeChild(helper.domWrapper);
             $(component.dom).draggable({
                 cancel: "false", revert: "invalid",
                 appendTo: "body",

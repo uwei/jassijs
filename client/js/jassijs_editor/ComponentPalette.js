@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_1, Panel_1, Image_1, Registry_2, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Registry_1, Panel_1, Image_1, Registry_2, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentPalette = void 0;
@@ -85,8 +85,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         helper = new cl();
                         var img = new Image_1.Image();
                         img.src = component.src;
-                        img.height = 24;
-                        img.width = 24;
+                        img.height = "24";
+                        img.width = "24";
                         img.x = component.x;
                         img.y = component.y;
                         helper._position = img;
@@ -94,10 +94,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         if (component.createFromParam !== undefined) {
                             $.extend(helper, component.createFromParam);
                         }
-                        $("#jassitemp")[0].removeChild(helper.domWrapper);
-                        $("#jassitemp")[0].removeChild(helper._position.domWrapper);
+                        document.getElementById("jassitemp").removeChild(helper.domWrapper);
+                        document.getElementById("jassitemp").removeChild(helper._position.domWrapper);
                     }
-                    return helper._position.dom; //$(helper.dom);
+                    return helper._position.dom;
                 }
             });
         }

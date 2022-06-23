@@ -1,3 +1,4 @@
+import "jassijs/ext/jquerylib";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
@@ -89,8 +90,8 @@ export class ComponentPalette extends Panel {
                     helper = new cl();
                     var img = new Image();
                     img.src = component.src;
-                    img.height = 24;
-                    img.width = 24;
+                    img.height = "24";
+                    img.width = "24";
                     img.x = component.x;
                     img.y = component.y;
                     helper._position = img;
@@ -98,10 +99,10 @@ export class ComponentPalette extends Panel {
                     if (component.createFromParam !== undefined) {
                         $.extend(helper, component.createFromParam);
                     }
-                    $("#jassitemp")[0].removeChild(helper.domWrapper);
-                    $("#jassitemp")[0].removeChild(helper._position.domWrapper);
+                    document.getElementById("jassitemp").removeChild(helper.domWrapper);
+                    document.getElementById("jassitemp").removeChild(helper._position.domWrapper);
                 }
-                return helper._position.dom;//$(helper.dom);
+                return helper._position.dom;
             }
         });
     }

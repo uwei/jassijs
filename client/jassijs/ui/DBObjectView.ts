@@ -56,7 +56,7 @@ export interface DBObjectViewConfig extends PanelConfig {
      */
     ondeleted?(handler: (obj:DBObject ) => void);
 }
-@$UIComponent({ editableChildComponents: ["this","me.main","me.toolbar","me.save","me.remove","me.refresh"] })
+@$UIComponent({ editableChildComponents: ["this","me.main","me.toolbar","me.save","me.remove","me.refresh","me.databinder"] })
 @$Class("jassijs/ui/DBObjectView")
 export class DBObjectView extends Panel implements  Omit<DBObjectViewConfig,"isAbsolute"> {
 	me;

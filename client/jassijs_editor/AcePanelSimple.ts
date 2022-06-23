@@ -18,9 +18,9 @@ export class AcePanelSimple extends CodePanel{
     constructor() {
         super();
         var _this = this;
-        var test = $('<div class="CodePanel" style="height: 500px; width: 500px"></div>')[0];
+        var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
         super.init(test);
-        $(this.domWrapper).css("display", "");
+        this.domWrapper.style.display="";
         this._editor = ace.edit(this._id);
         this.file = "";
         this._editor.setOptions({
@@ -70,14 +70,14 @@ export class AcePanelSimple extends CodePanel{
      * @param {function} handler
      */
     onfocus(handler) {
-        this._editor.on("focus", handler);
+        return this._editor.on("focus", handler);
     }
     /**
      * component lost focus
      * @param {function} handler
      */
     onblur(handler) {
-        this._editor.on("blur", handler);
+        return this._editor.on("blur", handler);
     }
     /**
      * @param - the codetext

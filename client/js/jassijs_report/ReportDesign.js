@@ -85,9 +85,11 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
     let StyleContainer = class StyleContainer extends Panel_1.Panel {
         constructor(props) {
             super(props);
-            $(this.dom).removeClass("Panel").removeClass("jinlinecomponent");
-            $(this.domWrapper).removeClass("jcomponent").removeClass("jcontainer");
-            $(this.dom).hide();
+            this.dom.classList.remove("Panel");
+            this.dom.classList.remove("jinlinecomponent");
+            this.domWrapper.classList.remove("jcomponent");
+            this.domWrapper.classList.remove("jcontainer");
+            this.dom.hidden = true;
         }
     };
     StyleContainer = __decorate([
@@ -178,11 +180,9 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
                 LETTER: [612.00, 792.00],
                 TABLOID: [792.00, 1224.00]
             };
-            //	this.backgroundPanel.width="500px";
-            //$(this.backgroundPanel.dom).css("min-width","200px");
-            $(this.backgroundPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Background</text></svg>" + '")');
-            $(this.footerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Footer</text></svg>" + '")');
-            $(this.headerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Header</text></svg>" + '")');
+            this.backgroundPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Background</text></svg>" + '")';
+            this.footerPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Footer</text></svg>" + '")';
+            this.headerPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Header</text></svg>" + '")';
             //select the Report if the user click the Panel
             this.backgroundPanel["_editorselectthis"] = this;
             this.headerPanel["_editorselectthis"] = this;
@@ -208,8 +208,8 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
             if (value === undefined)
                 value = [40, 40, 40, 40];
             this.updateWidth();
-            $(this.contentPanel.dom).css("margin-left", value[1] + "px");
-            $(this.contentPanel.dom).css("margin-right", value[3] + "px");
+            this.contentPanel.dom.style["margin-left"] = value[1] + "px";
+            this.contentPanel.dom.style["margin-right"] = value[3] + "px";
         }
         get pageSize() {
             return this._pageSize;
@@ -348,7 +348,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
             if (ob.defaultStyle) {
                 this.defaultStyle = new RStyle_1.RStyle().fromJSON(ob.defaultStyle);
                 this.defaultStyle.name = "defaultStyle";
-                $(this.dom).addClass(this.defaultStyle.styleid);
+                this.dom.classList.add(this.defaultStyle.styleid);
                 delete ob.defaultStyle;
             }
             if (ob.styles) {

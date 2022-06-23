@@ -100,11 +100,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
         constructor() {
             super();
             var _this = this;
-            // super.init($('<div style="width: 800px; height: 600px; border: 1px solid grey"></div>')[0]);
-            var test = $('<div class="MonacoPanel" style="height: 100px; width: 100px"></div>')[0];
+            var test = '<div class="MonacoPanel" style="height: 100px; width: 100px"></div>';
             super.init(test);
-            $(this.domWrapper).css("overflow", "hidden");
-            $(this.domWrapper).css("display", "");
+            this.domWrapper.style.overflow = "hidden";
+            this.domWrapper.style.display = "";
             /* _this._editor.on("guttermousedown", function(e) {
      
                  var row = e.getDocumentPosition().row;
@@ -200,6 +199,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
          * @param {function} handler
          */
         onfocus(handler) {
+            return undefined;
             //   this._editor.on("focus", handler);
         }
         /**
@@ -207,6 +207,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", 
          * @param {function} handler
          */
         onblur(handler) {
+            return undefined;
             // this._editor.on("blur", handler);
         }
         /**

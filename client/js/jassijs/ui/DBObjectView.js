@@ -160,7 +160,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
         __metadata("design:returntype", void 0)
     ], DBObjectView.prototype, "ondeleted", null);
     DBObjectView = DBObjectView_1 = __decorate([
-        (0, Component_1.$UIComponent)({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh"] }),
+        (0, Component_1.$UIComponent)({ editableChildComponents: ["this", "me.main", "me.toolbar", "me.save", "me.remove", "me.refresh", "me.databinder"] }),
         (0, Registry_1.$Class)("jassijs/ui/DBObjectView"),
         __metadata("design:paramtypes", [])
     ], DBObjectView);

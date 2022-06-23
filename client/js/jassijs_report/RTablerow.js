@@ -27,8 +27,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             this.reporttype = "tablerow";
             properties = undefined === properties ? {} : properties;
             properties.noWrapper = true;
-            super.init($("<tr></tr>")[0], properties);
-            $(this.dom).addClass("designerNoResizable");
+            super.init("<tr></tr>", properties);
+            this.dom.classList.add("designerNoResizable");
         }
         oncomponentAdded(callback) {
             this.addEvent("componentAdded", callback);
@@ -60,18 +60,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             Component_1.Component.replaceWrapper(component, document.createElement("td"));
             var border = component["border"];
             if (border !== undefined) {
-                $(component.domWrapper).css("border-left-style", border[0] ? "solid" : "none");
-                $(component.domWrapper).css("border-top-style", border[1] ? "solid" : "none");
-                $(component.domWrapper).css("border-right-style", border[2] ? "solid" : "none");
-                $(component.domWrapper).css("border-bottom-style", border[3] ? "solid" : "none");
+                component.domWrapper.style["border-left-style"] = border[0] ? "solid" : "none";
+                component.domWrapper.style["border-top-style"] = border[1] ? "solid" : "none";
+                component.domWrapper.style["border-right-style"] = border[2] ? "solid" : "none";
+                component.domWrapper.style["border-bottom-style"] = border[3] ? "solid" : "none";
             }
             if (component.colSpan)
-                $(component.domWrapper).attr("colspan", component.colSpan);
+                component.domWrapper.setAttribute("colspan", component.colSpan.toString());
             if (component.rowSpan)
-                $(component.domWrapper).attr("rowspan", component.rowSpan);
-            //$(component.dom).css("background-color","inherit");
-            $(component.domWrapper).css("word-break", "break-all");
-            $(component.domWrapper).css("display", "");
+                component.domWrapper.setAttribute("rowspan", component.rowSpan.toString());
+            component.domWrapper.style["word-break"] = "break-all";
+            component.domWrapper.style["display"] = "";
             if (component.reporttype === "text") {
                 var rt = component;
                 rt.customToolbarButtons["Table"] = {
@@ -83,8 +82,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                     }
                 };
             }
-            $(component.dom).removeClass("designerNoResizable");
-            $(component.dom).addClass("designerNoResizableY");
+            component.dom.classList.remove("designerNoResizable");
+            component.dom.classList.add("designerNoResizableY");
         }
         /**
         * adds a component to the container
@@ -99,14 +98,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             this.wrapComponent(component);
             component.parent = this;
             super.add(component);
-            // $(component.domWrapper).css("display", "table-cell");
             this.callEvent("componentAdded", component, this);
             if (this._parent)
                 this._parent.addEmptyCellsIfNeeded(this);
             if (component.designDummyFor) {
-                $(component.domWrapper).attr("colspan", "100");
-                if ($(this.dom).width() < 140) {
-                    component.width = 140 - $(this.dom).width();
+                component.domWrapper.setAttribute("colspan", "100");
+                // if ($(this.dom).width() < 140) {
+                //    component.width = 140 - $(this.dom).width();
+                if (this.dom.clientWidth < 140) {
+                    component.width = 140 - this.dom.clientWidth;
                 }
             }
             if ((_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout)
@@ -132,15 +132,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 //(<RText>component).newlineafter = true;
             }
             super.addBefore(component, before);
-            // $(component.domWrapper).css("display", "table-cell");
             this.callEvent("componentAdded", component, this);
-            //if (this._parent)
-            //  this._parent.addEmptyCellsIfNeeded(this);
             if ((_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout)
                 (_b = this.parent) === null || _b === void 0 ? void 0 : _b.updateLayout(true);
-            /*var test=component.height;
-            if(test)
-                component.height=test;*/
         }
         fromJSON(columns) {
             var ret = this;
@@ -149,7 +143,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
                 dummy.value = "foreach";
                 dummy.colSpan = 200;
                 this.add(dummy);
-                //this.domWrapper.appendChild($('<td colspan=500>foreach</td>')[0]);
                 ret.forEachDummy = columns;
                 return ret;
             }

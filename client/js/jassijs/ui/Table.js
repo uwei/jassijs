@@ -246,7 +246,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             this._select = _component;
         }
         get selectComponent() {
-            return this._select; //$(this.dom).text();
+            return this._select;
         }
         set items(value) {
             if (value && this.dataTreeChildFunction) { //populate __treechilds

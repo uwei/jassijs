@@ -62,11 +62,11 @@ class PermissionProperties {
 class StyleContainer extends Panel {
     constructor(props) {
         super(props);
-        $(this.dom).removeClass("Panel").removeClass("jinlinecomponent");
-        $(this.domWrapper).removeClass("jcomponent").removeClass("jcontainer");
-
-
-        $(this.dom).hide();
+        this.dom.classList.remove("Panel");
+        this.dom.classList.remove("jinlinecomponent");
+        this.domWrapper.classList.remove("jcomponent");
+        this.domWrapper.classList.remove("jcontainer");
+        this.dom.hidden=true;
     }
 }
 //@$UIComponent({editableChildComponents:["this"]})
@@ -108,11 +108,9 @@ export class ReportDesign extends BoxPanel {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        //	this.backgroundPanel.width="500px";
-        //$(this.backgroundPanel.dom).css("min-width","200px");
-        $(this.backgroundPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Background</text></svg>" + '")');
-        $(this.footerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Footer</text></svg>" + '")');
-        $(this.headerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Header</text></svg>" + '")');
+        this.backgroundPanel.dom.style["background-image"]= 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Background</text></svg>" + '")';
+        this.footerPanel.dom.style["background-image"]= 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Footer</text></svg>" + '")';
+        this.headerPanel.dom.style["background-image"]= 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Header</text></svg>" + '")';
         //select the Report if the user click the Panel
         this.backgroundPanel["_editorselectthis"] = this;
         this.headerPanel["_editorselectthis"] = this;
@@ -140,8 +138,8 @@ export class ReportDesign extends BoxPanel {
         if (value === undefined)
             value = [40, 40, 40, 40];
         this.updateWidth();
-        $(this.contentPanel.dom).css("margin-left", value[1] + "px");
-        $(this.contentPanel.dom).css("margin-right", value[3] + "px");
+        this.contentPanel.dom.style["margin-left"]= value[1] + "px";
+        this.contentPanel.dom.style["margin-right"]= value[3] + "px";
 
     }
     @$Property({ description: "the size of the page", default: "A4", chooseFrom: ['4A0', '2A0', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 'A6', 'A7', 'A8', 'A9', 'A10', 'B0', 'B1', 'B2', 'B3', 'B4', 'B5', 'B6', 'B7', 'B8', 'B9', 'B10', 'C0', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'RA0', 'RA1', 'RA2', 'RA3', 'RA4', 'SRA0', 'SRA1', 'SRA2', 'SRA3', 'SRA4', 'EXECUTIVE', 'FOLIO', 'LEGAL', 'LETTER', 'TABLOID'] })
@@ -278,7 +276,7 @@ export class ReportDesign extends BoxPanel {
         if (ob.defaultStyle) {
             this.defaultStyle = new RStyle().fromJSON(ob.defaultStyle);
             this.defaultStyle.name = "defaultStyle";
-            $(this.dom).addClass(this.defaultStyle.styleid);
+            this.dom.classList.add(this.defaultStyle.styleid);
             delete ob.defaultStyle;
         }
         if (ob.styles) {

@@ -15,25 +15,64 @@
 // TypeScript Version: 3.0
 
 /// <reference types="node" />
+/* @ts-ignore changed by jassijs*/
 /// <reference types="pdfkit" />
 
 declare var reportdesign1: JassijsReportDefinition;
-declare global{
-    export interface JassijsReportDefinition extends TDocumentDefinitions{
+declare global {
+    export interface JassijsReportDefinition extends TDocumentDefinitions {
         /**
          * the data which is filled into the report
          * e.g. reportdesign.data={name:"Hallo"}
          * could be filled in textfield  like "{name}"  
          */
-        data?:any|any[];
+        data?: any | any[];
         /**
          * the parameter which are filled into the report
          * e.g. reportdesign.parameter = { date: "2021-10-10" };
          * could be filled in textfield like "{parameter.data}"
          */
-        parameter?:any;
-    } 
+        parameter?: any;
+    }
 }
+/*changed by jassijs*/
+export interface ContentDataTable{
+    datatable:DataTable;
+}
+export interface DataTableGroup{
+    header?:any[];
+    expression:string;
+    footer?:any[];
+}
+export interface DataTable extends Omit<Table,"body">{
+    //the table header
+    header?: Content[];
+    //the table footer
+    footer?: Content[];
+    /**
+     * e.g. "customer"  - the object could be used e.g. {text:"{$customer.city}"}
+     */
+    dataforeach: string;
+    //the table body
+    body: Content[];
+
+    groups?:DataTableGroup[]
+}
+export interface ContentForEach extends ContentBase{
+    /*changed by jassijs*/
+    /** 
+     * e.g. foreach:"comp in components"
+     * repeats the element for each arrayitem in components comp could be used as pattern {comp.text}
+    */
+     foreach: string;
+     /** 
+     * e.g. foreach:"comp in components" do:{text:"hallo"}
+     * together with foreach - 'do' contains the element which is repeated 
+     */
+     do: Content|Content[];
+}
+/*end changed by jassijs*/
+
 
 export type PageSize = PredefinedPageSize | CustomPageSize;
 
@@ -71,9 +110,13 @@ export interface TFontDictionary {
 }
 
 export interface TFontFamilyTypes {
+    /* @ts-ignore changed by jassijs*/
     normal?: PDFKit.Mixins.PDFFontSource | undefined;
+    /* @ts-ignore changed by jassijs*/
     bold?: PDFKit.Mixins.PDFFontSource | undefined;
+    /* @ts-ignore changed by jassijs*/
     italics?: PDFKit.Mixins.PDFFontSource | undefined;
+    /* @ts-ignore changed by jassijs*/
     bolditalics?: PDFKit.Mixins.PDFFontSource | undefined;
 }
 
@@ -138,15 +181,16 @@ export interface LineStyle {
 export type TableCell =
     | {} // Used when another cell spans over this cell
     | (Content & {
-          rowSpan?: number | undefined;
-          colSpan?: number | undefined;
-          border?: [boolean, boolean, boolean, boolean] | undefined;
-          borderColor?: [string, string, string, string] | undefined;
-          fillOpacity?: number | undefined;
-      });
+        rowSpan?: number | undefined;
+        colSpan?: number | undefined;
+        border?: [boolean, boolean, boolean, boolean] | undefined;
+        borderColor?: [string, string, string, string] | undefined;
+        fillOpacity?: number | undefined;
+    });
 
 export interface Table {
-    body: TableCell[][];
+    body: TableCell[][]   
+            | (ContentForEach|TableCell[])[] /*changed by jassijs*/ ;
     widths?: '*' | 'auto' | Size[] | undefined;
     heights?: number | number[] | DynamicRowSize | undefined;
     headerRows?: number | undefined;
@@ -163,6 +207,7 @@ export interface Style {
     font?: string | undefined;
     /** size of the font in pt */
     fontSize?: number | undefined;
+    /* @ts-ignore changed by jassijs*/
     fontFeatures?: PDFKit.Mixins.OpenTypeFeatures[] | undefined;
     /** the line height (default: 1) */
     lineHeight?: number | undefined;
@@ -226,13 +271,19 @@ export type Content =
     | ContentImage
     | ContentSvg
     | ContentQr
+    /*changed by jassijs*/
+    | ContentDataTable
+    | ContentForEach
+    /*end changed by jassijs*/
     | ContentCanvas;
 
 // not exported, only used to prevent Content from circularly referencing itself
-interface ArrayOfContent extends Array<Content> {}
+interface ArrayOfContent extends Array<Content> { }
 
 export interface ContentText extends ContentLink, ContentBase {
     text: Content;
+    /*changed by jassijs*/
+    editTogether?: boolean;
 }
 
 export interface ContentColumns extends ContentBase {
@@ -322,6 +373,20 @@ export interface ContentQr extends ContentBase {
 }
 
 export interface ContentBase extends Style {
+    /*changed by jassijs*/
+    /** 
+     * e.g. foreach:"comp in components"
+     * repeats the element for each arrayitem in components comp could be used as pattern {comp.text}
+    */
+    foreach?: string;
+
+    /**
+     * format a given date or value
+     * e.g. "$#,###.00" or "$#,###.00"
+     */
+    format?:string;
+
+
     style?: string | string[] | Style | undefined;
     absolutePosition?: Position | undefined;
     relativePosition?: Position | undefined;
@@ -464,6 +529,7 @@ export interface TDocumentDefinitions {
     styles?: StyleDictionary | undefined;
     userPassword?: string | undefined;
     ownerPassword?: string | undefined;
+    /* @ts-ignore changed by jassijs*/
     permissions?: PDFKit.DocumentPermissions | undefined;
     version?: PDFVersion | undefined;
     watermark?: string | Watermark | undefined;
@@ -514,4 +580,4 @@ export interface BufferOptions {
 }
 
 // disable automatic exporting
-export {};
+export { };

@@ -34,9 +34,9 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         set counter(value) {
             this._counter = value;
             if (value === undefined)
-                $(this.domWrapper).removeAttr("value");
+                this.domWrapper.removeAttribute("value");
             else
-                $(this.domWrapper).attr("value", value);
+                this.domWrapper.setAttribute("value", value.toString());
         }
         get counter() {
             return this._counter;
@@ -44,9 +44,9 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         set listType(value) {
             this._listType = value;
             if (value === undefined)
-                $(this.domWrapper).css("list-style-type", "");
+                this.domWrapper.style["list-style-type"] = "";
             else
-                $(this.domWrapper).css("list-style-type", value);
+                this.domWrapper.style["list-style-type"] = value;
         }
         get listType() {
             return this._listType;
@@ -56,14 +56,14 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
         set fillColor(value) {
             this._fillColor = value;
-            $(this.dom).css("background-color", value);
+            this.dom.style["background-color"] = value;
         }
         get colSpan() {
             return this._colSpan;
         }
         set colSpan(value) {
             var _a, _b, _c, _d;
-            $(this.domWrapper).attr("colspan", value === undefined ? "" : value);
+            this.domWrapper.setAttribute("colspan", value === undefined ? "" : value.toString());
             this._colSpan = value;
             if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
                 (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
@@ -73,7 +73,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
         set rowSpan(value) {
             var _a, _b, _c, _d;
-            $(this.domWrapper).attr("rowspan", value === undefined ? "" : value);
+            this.domWrapper.setAttribute("rowspan", value === undefined ? "" : value.toString());
             this._rowSpan = value;
             if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
                 (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
@@ -85,10 +85,10 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             this._border = value;
             if (value === undefined)
                 value = [false, false, false, false];
-            $(this.domWrapper).css("border-left-style", value[0] ? "solid" : "none");
-            $(this.domWrapper).css("border-top-style", value[1] ? "solid" : "none");
-            $(this.domWrapper).css("border-right-style", value[2] ? "solid" : "none");
-            $(this.domWrapper).css("border-bottom-style", value[3] ? "solid" : "none");
+            this.domWrapper.style["border-left-style"] = value[0] ? "solid" : "none";
+            this.domWrapper.style["border-top-style"] = value[1] ? "solid" : "none";
+            this.domWrapper.style["border-right-style"] = value[2] ? "solid" : "none";
+            this.domWrapper.style["border-bottom-style"] = value[3] ? "solid" : "none";
         }
         get width() {
             var _a;
@@ -131,7 +131,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
         set bold(value) {
             this._bold = value;
-            $(this.dom).css("font-weight", value ? "bold" : "normal");
+            this.dom.style["font-weight"] = value ? "bold" : "normal";
             this.callEvent("stylechanged", "font-weight", value);
         }
         get italics() {
@@ -139,7 +139,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
         set italics(value) {
             this._italics = value;
-            $(this.dom).css("font-style", value ? "italic" : "normal");
+            this.dom.style["font-style"] = value ? "italic" : "normal";
             this.callEvent("stylechanged", "font-style", value);
         }
         get font() {
@@ -154,9 +154,9 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 jassijs.myRequire(api + sfont);
             }
             if (value === undefined)
-                $(this.dom).css("font_family", "");
+                this.dom.style["font_family"] = "";
             else
-                $(this.dom).css("font_family", value);
+                this.dom.style["font_family"] = value;
             this.callEvent("stylechanged", "font", value);
         }
         get fontSize() {
@@ -165,9 +165,9 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         set fontSize(value) {
             this._fontSize = value;
             if (value === undefined)
-                $(this.dom).css("font-size", "");
+                this.dom.style["font-size"] = "";
             else
-                $(this.dom).css("font-size", value + "px");
+                this.dom.style["font-size"] = value + "px";
             this.callEvent("stylechanged", "fontSize", value);
         }
         get background() {
@@ -175,7 +175,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
         set background(value) {
             this._background = value;
-            $(this.dom).css("background-color", value);
+            this.dom.style["background-color"] = value;
             this.callEvent("stylechanged", "background", value);
         }
         get color() {
@@ -183,7 +183,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
         set color(value) {
             this._color = value;
-            $(this.dom).css("color", value);
+            this.dom.style.color = value;
             this.callEvent("stylechanged", "color", value);
         }
         get alignment() {
@@ -191,7 +191,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
         set alignment(value) {
             this._alignment = value;
-            $(this.dom).css("text-align", value);
+            this.dom.style["text-align"] = value;
             this.callEvent("stylechanged", "alignment", value);
         }
         get decoration() {
@@ -206,7 +206,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 val = "line-through";
             if (value === "overline")
                 val = "overline";
-            $(this.dom).css("text-decoration", val);
+            this.dom.style["text-decoration"] = val;
             this.callEvent("stylechanged", "decoration", value);
         }
         get decorationColor() {
@@ -214,7 +214,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
         set decorationColor(value) {
             this._decorationColor = value;
-            $(this.dom).css("textDecorationColor", value);
+            this.dom.style["textDecorationColor"] = value;
             this.callEvent("stylechanged", "textDecorationColor", value);
         }
         get decorationStyle() {
@@ -231,7 +231,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                 val = "double";
             if (value === "wavy")
                 val = "wavy";
-            $(this.dom).css("textDecorationStyle", val);
+            this.dom.style["textDecorationStyle"] = val;
             this.callEvent("stylechanged", "decorationStyle", value);
         }
         static findReport(parent) {
@@ -252,12 +252,12 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
             if (report) {
                 report.styleContainer._components.forEach((comp) => {
                     if (comp.name === old) {
-                        $(this.dom).removeClass(comp.styleid);
+                        this.dom.classList.remove(comp.styleid);
                     }
                 });
                 report.styleContainer._components.forEach((comp) => {
                     if (comp.name === value) {
-                        $(this.dom).addClass(comp.styleid);
+                        this.dom.classList.add(comp.styleid);
                     }
                 });
             }
@@ -268,7 +268,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
         set lineHeight(value) {
             this._lineHeight = value;
-            $(this.dom).css("line-height", value);
+            this.dom.style["line-height"] = value;
             this.callEvent("stylechanged", "lineHeight", value);
             //  super.width = value;
         }
@@ -278,7 +278,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         set margin(value) {
             if (value === undefined) {
                 this._margin = value;
-                $(this.dom).css("margin", "");
+                this.dom.style["margin"] = "";
             }
             else {
                 if (Number.isInteger(value)) {
@@ -289,7 +289,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
                     value = [value[0], value[1], value[0], value[1]];
                 }
                 this._margin = value;
-                $(this.dom).css("margin", value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ");
+                this.dom.style["margin"] = value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ";
             }
         }
         fromJSON(ob) {

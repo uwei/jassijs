@@ -190,7 +190,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             var list = this.dom.list;
             if (list === undefined)
                 return undefined;
-            var comp = $(list)[0];
+            var comp = list; //$(list)[0];
             if (comp === undefined)
                 return undefined;
             return comp["_values"];

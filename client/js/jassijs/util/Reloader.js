@@ -59,7 +59,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
             }
         }
         _findScript(name) {
-            var scripts = $('script');
+            var scripts = document.querySelectorAll('script');
             for (var x = 0; x < scripts.length; x++) {
                 var attr = scripts[x].getAttributeNode("src");
                 if (attr !== null && attr !== undefined && attr.value === (name + ".js")) { //?bust="+window.jassiversion
@@ -143,6 +143,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                 //save all modules
             }
             await new Promise((resolve, reject) => {
+                //@ts-ignore
                 require(allfiles, function (...ret) {
                     for (var rx = 0; rx < ret.length; rx++) {
                         allModules[allfiles[rx]] = ret[rx];
@@ -179,6 +180,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
             var _this = this;
             // console.log("reload " + JSON.stringify(fileNameBlank));
             await new Promise((resolve, reject) => {
+                //@ts-ignore
                 require(allfiles, function (...ret) {
                     async function run() {
                         for (let f = 0; f < allfiles.length; f++) {

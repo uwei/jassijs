@@ -25,14 +25,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "ol";
-            this.init($("<ol></ol>")[0]);
+            this.init("<ol></ol>");
         }
         set type(value) {
             this._type = value;
             if (value === undefined)
-                $(this.dom).css("list-style-type", "");
+                this.dom.style["list-style-type"] = "";
             else
-                $(this.dom).css("list-style-type", value);
+                this.dom.style["list-style-type"] = value;
         }
         get type() {
             return this._type;
@@ -40,16 +40,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         set reversed(value) {
             this._reversed = value;
             if (this._reversed)
-                $(this.__dom).attr("reversed", "");
+                this.__dom.setAttribute("reversed", "");
             else
-                $(this.__dom).removeAttr("reversed");
+                this.__dom.removeAttribute("reversed");
         }
         get reversed() {
             return this._reversed;
         }
         set start(value) {
             this._start = value;
-            $(this.__dom).attr("start", value);
+            this.__dom.setAttribute("start", value.toString());
         }
         get start() {
             return this._start;

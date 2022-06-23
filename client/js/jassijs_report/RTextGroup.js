@@ -25,8 +25,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
         constructor(properties = { useSpan: true }) {
             super(properties);
             this.reporttype = "textgroup";
-            // $(this.dom).css("flex-direction", "column");
-            //$(this.dom).addClass("designerNoResizable");
         }
         /**
           * adds a component to the container before an other component
@@ -39,8 +37,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
             if (component.reporttype !== "text" && component.reporttype !== "textgroup" && !component.designDummyFor)
                 throw new Classes_1.JassiError("only text oder textgroup could be added to TextGroup");
             super.addBefore(component, before);
-            //  $(component.dom).css("display", "inline");
-            $(component.domWrapper).css("display", "inline-block");
+            component.domWrapper.style["display"] = "inline-block";
         }
         /**
       * adds a component to the container
@@ -52,8 +49,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
             if (component.reporttype !== "text" && component.reporttype !== "textgroup" && !component.designDummyFor)
                 throw new Classes_1.JassiError("only text oder textgroup could be added to TextGroup");
             super.add(component);
-            //  $(component.dom).css("display", "inline-block");
-            $(component.domWrapper).css("display", "inline-block");
+            component.domWrapper.style.display = "inline-block";
         }
         toJSON() {
             var ret = super.toJSON();

@@ -114,8 +114,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 });
                 this._codeToolbar.add(this.autoCompleteButton);
                 jassijs["$CodeEditor"] = CodeEditor_1;
-                $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
-                $(goto.dom).attr("ondragover", "event.preventDefault();");
+                // $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
+                //  $(goto.dom).attr("ondragover", "event.preventDefault();");
             }
             this._codeView.add(this._codePanel);
             this._main.width = "calc(100% - 1px)";
@@ -241,7 +241,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
          */
         registerKeys() {
             var _this = this;
-            $(this._codePanel.dom).keydown(function (evt) {
+            this._codePanel.dom.addEventListener("keydown", function (evt) {
                 if (evt.keyCode === 115 && evt.shiftKey) { //F4
                     // var thiss=this._this._id;
                     // var editor = ace.edit(this._this._id);
@@ -583,9 +583,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             };
             //await new Promise(resolve => setTimeout(resolve, 1000));
             //if this is the first save for the tmpfile then it fails - I dont know why, give it a second try
+            //@ts-ignore
             require(["js/" + jsfile + ".js"], onload, /*error*/ function (err) {
                 //console.log("reload");
                 window.setTimeout(function () {
+                    //@ts-ignore
                     require(["js/" + jsfile + ".js"], onload, function (err) {
                         throw err;
                     });

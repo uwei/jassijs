@@ -62,9 +62,9 @@ export class RComponent extends Panel {
     set counter(value: number) {
         this._counter = value;
         if (value === undefined)
-            $(this.domWrapper).removeAttr("value");
+            this.domWrapper.removeAttribute("value");
         else
-            $(this.domWrapper).attr("value", value);
+            this.domWrapper.setAttribute("value", value.toString());
     }
     get counter(): number {
         return this._counter;
@@ -88,9 +88,9 @@ export class RComponent extends Panel {
     set listType(value: string) {
         this._listType = value;
         if (value === undefined)
-            $(this.domWrapper).css("list-style-type", "");
+            this.domWrapper.style["list-style-type"]= "";
         else
-            $(this.domWrapper).css("list-style-type", value);
+        this.domWrapper.style["list-style-type"]=value;
     }
     get listType(): string {
         return this._listType;
@@ -108,7 +108,7 @@ export class RComponent extends Panel {
 
     set fillColor(value: string) {
         this._fillColor = value;
-        $(this.dom).css("background-color", value);
+        this.dom.style["background-color"]= value;
 
     }
     @$Property({
@@ -122,7 +122,7 @@ export class RComponent extends Panel {
     }
 
     set colSpan(value: number) {
-        $(this.domWrapper).attr("colspan", value === undefined ? "" : value);
+        this.domWrapper.setAttribute("colspan", value === undefined ? "" : value.toString());
         this._colSpan = value;
         if (this._parent?._parent?.updateLayout)
             this._parent?._parent?.updateLayout(true);
@@ -138,7 +138,7 @@ export class RComponent extends Panel {
     }
 
     set rowSpan(value: number) {
-        $(this.domWrapper).attr("rowspan", value === undefined ? "" : value);
+        this.domWrapper.setAttribute("rowspan", value === undefined ? "" : value.toString());
         this._rowSpan = value;
         if (this._parent?._parent?.updateLayout)
             this._parent?._parent?.updateLayout(true);
@@ -161,10 +161,10 @@ export class RComponent extends Panel {
             value = [false, false, false, false];
 
 
-        $(this.domWrapper).css("border-left-style", value[0] ? "solid" : "none");
-        $(this.domWrapper).css("border-top-style", value[1] ? "solid" : "none");
-        $(this.domWrapper).css("border-right-style", value[2] ? "solid" : "none");
-        $(this.domWrapper).css("border-bottom-style", value[3] ? "solid" : "none");
+        this.domWrapper.style["border-left-style"]= value[0] ? "solid" : "none";
+        this.domWrapper.style["border-top-style"]= value[1] ? "solid" : "none";
+        this.domWrapper.style["border-right-style"]= value[2] ? "solid" : "none";
+        this.domWrapper.style["border-bottom-style"]= value[3] ? "solid" : "none";
     }
     @$Property({
         type: "string", isVisible: (component) => {
@@ -219,7 +219,7 @@ export class RComponent extends Panel {
     }
     set bold(value: boolean) {
         this._bold = value;
-        $(this.dom).css("font-weight", value ? "bold" : "normal");
+        this.dom.style["font-weight"]= value ? "bold" : "normal";
         this.callEvent("stylechanged", "font-weight", value);
     }
     @$Property()
@@ -228,7 +228,7 @@ export class RComponent extends Panel {
     }
     set italics(value: boolean) {
         this._italics = value;
-        $(this.dom).css("font-style", value ? "italic" : "normal");
+        this.dom.style["font-style"]= value ? "italic" : "normal";
         this.callEvent("stylechanged", "font-style", value);
     }
     @$Property({ chooseFrom: ["Alegreya", "AlegreyaSans", "AlegreyaSansSC", "AlegreyaSC", "AlmendraSC", "Amaranth", "Andada", "AndadaSC", "AnonymousPro", "ArchivoNarrow", "Arvo", "Asap", "AveriaLibre", "AveriaSansLibre", "AveriaSerifLibre", "Cambay", "Caudex", "CrimsonText", "Cuprum", "Economica", "Exo2", "Exo", "ExpletusSans", "FiraSans", "JosefinSans", "JosefinSlab", "Karla", "Lato", "LobsterTwo", "Lora", "Marvel", "Merriweather", "MerriweatherSans", "Nobile", "NoticiaText", "Overlock", "Philosopher", "PlayfairDisplay", "PlayfairDisplaySC", "PT_Serif-Web", "Puritan", "Quantico", "QuattrocentoSans", "Quicksand", "Rambla", "Rosario", "Sansation", "Sarabun", "Scada", "Share", "Sitara", "SourceSansPro", "TitilliumWeb", "Volkhov", "Vollkorn"] })
@@ -245,9 +245,9 @@ export class RComponent extends Panel {
         }
 
         if (value === undefined)
-            $(this.dom).css("font_family", "");
+            this.dom.style["font_family"]= "";
         else
-            $(this.dom).css("font_family", value);
+            this.dom.style["font_family"]= value;
         this.callEvent("stylechanged", "font", value);
     }
     @$Property()
@@ -257,9 +257,9 @@ export class RComponent extends Panel {
     set fontSize(value: number) {
         this._fontSize = value;
         if (value === undefined)
-            $(this.dom).css("font-size", "");
+            this.dom.style["font-size"]= "";
         else
-            $(this.dom).css("font-size", value + "px");
+            this.dom.style["font-size"]= value + "px";
         this.callEvent("stylechanged", "fontSize", value);
     }
     @$Property({ type: "color" })
@@ -268,7 +268,7 @@ export class RComponent extends Panel {
     }
     set background(value: string) {
         this._background = value;
-        $(this.dom).css("background-color", value);
+        this.dom.style["background-color"]= value;
         this.callEvent("stylechanged", "background", value);
     }
     @$Property({ type: "color" })
@@ -277,7 +277,7 @@ export class RComponent extends Panel {
     }
     set color(value: string) {
         this._color = value;
-        $(this.dom).css("color", value);
+        this.dom.style.color= value;
         this.callEvent("stylechanged", "color", value);
     }
     @$Property({ chooseFrom: ["left", "center", "right"] })
@@ -286,7 +286,7 @@ export class RComponent extends Panel {
     }
     set alignment(value: string) {
         this._alignment = value;
-        $(this.dom).css("text-align", value);
+        this.dom.style["text-align"]= value;
         this.callEvent("stylechanged", "alignment", value);
     }
     @$Property({ chooseFrom: ["underline", "lineThrough", "overline"] })
@@ -302,7 +302,7 @@ export class RComponent extends Panel {
             val = "line-through";
         if (value === "overline")
             val = "overline";
-        $(this.dom).css("text-decoration", val);
+        this.dom.style["text-decoration"]= val;
         this.callEvent("stylechanged", "decoration", value);
     }
 
@@ -313,7 +313,7 @@ export class RComponent extends Panel {
     }
     set decorationColor(value: string) {
         this._decorationColor = value;
-        $(this.dom).css("textDecorationColor", value);
+        this.dom.style["textDecorationColor"]= value;
         this.callEvent("stylechanged", "textDecorationColor", value);
     }
     @$Property({ chooseFrom: ["dashed", "dotted", "double", "wavy"] })
@@ -331,7 +331,7 @@ export class RComponent extends Panel {
             val = "double";
         if (value === "wavy")
             val = "wavy";
-        $(this.dom).css("textDecorationStyle", val);
+        this.dom.style["textDecorationStyle"]= val;
         this.callEvent("stylechanged", "decorationStyle", value);
     }
     static findReport(parent): ReportDesign {
@@ -354,12 +354,12 @@ export class RComponent extends Panel {
         if (report) {
             report.styleContainer._components.forEach((comp: RStyle) => {
                 if (comp.name === old) {
-                    $(this.dom).removeClass(comp.styleid);
+                    this.dom.classList.remove(comp.styleid);
                 }
             });
             report.styleContainer._components.forEach((comp: RStyle) => {
                 if (comp.name === value) {
-                    $(this.dom).addClass(comp.styleid);
+                    this.dom.classList.add(comp.styleid);
                 }
             });
 
@@ -374,7 +374,7 @@ export class RComponent extends Panel {
     }
     set lineHeight(value: number) {
         this._lineHeight = value;
-        $(this.dom).css("line-height", value);
+        this.dom.style["line-height"]= value;
         this.callEvent("stylechanged", "lineHeight", value);
         //  super.width = value;
     }
@@ -386,7 +386,7 @@ export class RComponent extends Panel {
     set margin(value: number[]) {
         if (value === undefined) {
             this._margin = value;
-            $(this.dom).css("margin", "");
+            this.dom.style["margin"]= "";
         } else {
             if (Number.isInteger(value)) {
                 //@ts-ignore
@@ -397,7 +397,7 @@ export class RComponent extends Panel {
             }
             this._margin = value;
 
-            $(this.dom).css("margin", value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ");
+            this.dom.style["margin"]= value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ";
         }
     }
 

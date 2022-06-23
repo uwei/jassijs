@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1) {
+define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1, Component_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -20,9 +20,9 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
         constructor() {
             super();
             var _this = this;
-            var test = $('<div class="CodePanel" style="height: 500px; width: 500px"></div>')[0];
+            var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
             super.init(test);
-            $(this.domWrapper).css("display", "");
+            this.domWrapper.style.display = "";
             this._editor = ace_1.default.edit(this._id);
             this.file = "";
             this.checkErrorTask = new Runlater_1.Runlater(function () {
@@ -147,8 +147,12 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
                             }
                         }
                         text = text + "<br>" + (p.documentation === undefined ? "" : p.documentation) + "<div>";
-                        $(AcePanel_1._tooltipdiv).html(text);
-                        $(AcePanel_1._tooltipdiv).css({ "background-color": "#f7f4a5", display: "block", position: "absolute", 'top': event.y, 'left': event.x }).fadeIn('fast');
+                        AcePanel_1._tooltipdiv.innerHTML = text;
+                        AcePanel_1._tooltipdiv.style["background-color"] = "#f7f4a5";
+                        AcePanel_1._tooltipdiv.style.display = "block";
+                        AcePanel_1._tooltipdiv.style.position = "absolute";
+                        AcePanel_1._tooltipdiv.style.top = event.y + "px";
+                        AcePanel_1._tooltipdiv.style.left = event.x + "px";
                     }
                 });
             }
@@ -158,11 +162,15 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
          */
         _manageTooltip(event) {
             if (AcePanel_1._tooltipdiv === undefined) {
-                AcePanel_1._tooltipdiv = $('<div id="tt">hallo</div>')[0];
+                AcePanel_1._tooltipdiv = Component_1.Component.createHTMLElement('<div id="tt">hallo</div>');
                 document.body.append(AcePanel_1._tooltipdiv);
             }
-            if (event !== undefined)
-                $(AcePanel_1._tooltipdiv).css({ display: "none", position: "absolute", 'top': event.y, 'left': event.x });
+            if (event !== undefined) {
+                AcePanel_1._tooltipdiv.style.display = "none";
+                AcePanel_1._tooltipdiv.style.position = "absolute";
+                AcePanel_1._tooltipdiv.style.top = event.y + "px";
+                AcePanel_1._tooltipdiv.style.left = event.x + "px";
+            }
             this._lastTooltipRefresh = Date.now();
             event = event;
             window.setTimeout(this._tooltiprefresh.bind(this), 400, event);
@@ -253,11 +261,13 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
                             //}
                         }
                         _this._editor.getSession().setAnnotations(annotaions);
-                        if (iserror) {
-                            $(_this.dom).find(".ace_gutter").css("background", "#ffbdb9");
-                        }
-                        else {
-                            $(_this.dom).find(".ace_gutter").css("background", "");
+                        if (_this.dom) {
+                            if (iserror) {
+                                _this.dom.querySelector(".ace_gutter").style.background = "#ffbdb9";
+                            }
+                            else {
+                                _this.dom.querySelector(".ace_gutter").style.background = "";
+                            }
                         }
                     });
                 });
@@ -374,13 +384,19 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
                 doc = doc;
                 if (ret.tags !== undefined) {
                     for (var x = 0; x < ret.tags.length; x++) {
-                        doc = doc + "<b>" + ret.tags[x].name + " </b> " + (ret.tags[x].text === undefined ? "" : ret.tags[x].text.replaceAll("<", "&#60;").replaceAll(">", "&#62;") + "<br>");
+                        var text = ret.tags[x].text;
+                        if (Array.isArray(text)) {
+                            var t = "";
+                            text.forEach((e) => t += e.text);
+                            text = t;
+                        }
+                        doc = doc + "<b>" + ret.tags[x].name + " </b> " + (text === undefined ? "" : text.replaceAll("<", "&#60;").replaceAll(">", "&#62;") + "<br>");
                     }
                 }
                 doc = doc;
                 var html = "<div style='font-size:12px'>" + doc + "<div>"; //this._getDescForMember(item.parent, item.name);
                 //window.setTimeout(()=>{
-                $("#" + _id)[0].outerHTML = html;
+                document.getElementById(_id).outerHTML = html;
                 // },10);
             });
         }
@@ -404,14 +420,14 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
          * @param {function} handler
          */
         onfocus(handler) {
-            this._editor.on("focus", handler);
+            return this._editor.on("focus", handler);
         }
         /**
          * component lost focus
          * @param {function} handler
          */
         onblur(handler) {
-            this._editor.on("blur", handler);
+            return this._editor.on("blur", handler);
         }
         /**
          * @param - the codetext

@@ -25,7 +25,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "ul";
-            this.init($("<ul></ul>")[0]);
+            this.init("<ul></ul>");
         }
         /**
          * adds a component to the container before an other component
@@ -55,9 +55,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         set type(value) {
             this._type = value;
             if (value === undefined)
-                $(this.dom).css("list-style-type", "");
+                this.dom.style["list-style-type"] = "";
             else
-                $(this.dom).css("list-style-type", value);
+                this.dom.style["list-style-type"] = value;
         }
         get type() {
             return this._type;

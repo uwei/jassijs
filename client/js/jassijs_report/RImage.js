@@ -26,8 +26,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
             super(properties);
             this.reporttype = "image";
             this._image = "";
-            this.init($('<img class="RImage"></img>')[0]);
-            $(this.domWrapper).removeClass("jcontainer");
+            this.init('<img class="RImage"></img>');
+            this.domWrapper.classList.remove("jcontainer");
         }
         /**
          * adds a component to the container before an other component
@@ -47,7 +47,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         set image(value) {
             this._image = value;
             if (value === undefined)
-                $(this.dom).attr("src", "");
+                this.dom.setAttribute("src", "");
             else {
                 //later we have a parent
                 var report = RComponent_1.RComponent.findReport(this);
@@ -66,10 +66,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
                 else {
                     var im = report.images;
                     if (im !== undefined && im[value] !== undefined) {
-                        $(this.dom).attr("src", im[value]);
+                        this.dom.setAttribute("src", im[value]);
                     }
                     else {
-                        $(this.dom).attr("src", value);
+                        this.dom.setAttribute("src", value);
                     }
                 }
             }
@@ -80,14 +80,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         set fit(value) {
             this._fit = value;
             if (value === undefined) {
-                $(this.__dom).css("object-fit", "");
+                this.__dom.style["object-fit"] = "";
                 this.width = this.width;
                 this.height = this.height;
             }
             else {
-                $(this.__dom).css("object-fit", "contain");
-                $(this.__dom).css("width", value[0]);
-                $(this.__dom).css("height", value[1]);
+                this.__dom.style["object-fit"] = "contain";
+                this.__dom.style.width = value[0].toString();
+                this.__dom.style.height = value[1].toString();
             }
         }
         get fit() {
@@ -96,10 +96,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
         set opacity(value) {
             this._opacity = value;
             if (value === undefined) {
-                $(this.__dom).css("opacity", "");
+                this.__dom.style.opacity = "";
             }
             else {
-                $(this.__dom).css("opacity", value);
+                this.__dom.style.opacity = value.toString();
             }
         }
         get opacity() {

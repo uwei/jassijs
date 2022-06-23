@@ -1,4 +1,5 @@
 
+import "jassijs/ext/jquerylib";
 import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Menu } from "jassijs/ui/Menu";
 import { Property, $Property } from "jassijs/ui/Property";

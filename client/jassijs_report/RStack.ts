@@ -23,8 +23,8 @@ export class RStack extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        $(this.dom).css("flex-direction", "column");
-        $(this.dom).addClass("designerNoResizable");
+        this.dom.style["flex-direction"]= "column";
+        this.dom.classList.add("designerNoResizable");
     }
     /**
       * adds a component to the container before an other component

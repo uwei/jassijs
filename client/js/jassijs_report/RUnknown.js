@@ -23,7 +23,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "unkown";
-            super.init($('<span class="InvisibleComponent"></span>')[0]);
+            super.init('<span class="InvisibleComponent"></span>');
             this.horizonzal = false;
         }
         fromJSON(ob) {

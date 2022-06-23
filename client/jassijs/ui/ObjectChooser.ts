@@ -1,3 +1,4 @@
+import "jassijs/ext/jquerylib";
 import { $Class } from "jassijs/remote/Registry";
 import { Table } from "jassijs/ui/Table";
 import { Panel } from "jassijs/ui/Panel";

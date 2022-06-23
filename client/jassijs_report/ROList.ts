@@ -26,7 +26,7 @@ export class ROList extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        this.init($("<ol></ol>")[0]);
+        this.init("<ol></ol>");
 
     }
 
@@ -34,9 +34,9 @@ export class ROList extends RComponent {
     set type(value: string) {
         this._type = value;
         if (value === undefined)
-            $(this.dom).css("list-style-type", "");
+            this.dom.style["list-style-type"]= "";
         else
-            $(this.dom).css("list-style-type", value);
+            this.dom.style["list-style-type"]= value;
     }
     get type(): string {
         return this._type;
@@ -46,9 +46,9 @@ export class ROList extends RComponent {
     set reversed(value: boolean) {
         this._reversed = value;
         if (this._reversed)
-            $(this.__dom).attr("reversed", "");
+            this.__dom.setAttribute("reversed", "");
         else
-            $(this.__dom).removeAttr("reversed");
+            this.__dom.removeAttribute("reversed");
     }
     get reversed(): boolean {
         return this._reversed;
@@ -56,7 +56,7 @@ export class ROList extends RComponent {
     @$Property({ default: 1 })
     set start(value: number) {
         this._start = value;
-        $(this.__dom).attr("start", value);
+        this.__dom.setAttribute("start", value.toString());
 
     }
     get start(): number {

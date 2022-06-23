@@ -150,8 +150,8 @@ export class CodeEditor extends Panel {
             });
             this._codeToolbar.add(this.autoCompleteButton);
             jassijs["$CodeEditor"] = CodeEditor;
-            $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
-            $(goto.dom).attr("ondragover", "event.preventDefault();");
+           // $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
+          //  $(goto.dom).attr("ondragover", "event.preventDefault();");
 
         }
         this._codeView.add(this._codePanel);
@@ -301,7 +301,7 @@ export class CodeEditor extends Panel {
      */
     registerKeys() {
         var _this = this;
-        $(this._codePanel.dom).keydown(function (evt) {
+        this._codePanel.dom.addEventListener("keydown",function (evt) {
             if (evt.keyCode === 115 && evt.shiftKey) {//F4
                 // var thiss=this._this._id;
                 // var editor = ace.edit(this._this._id);
@@ -369,7 +369,7 @@ export class CodeEditor extends Panel {
 
                     }
                     if (cache[component._id] === undefined)
-                        cache[component._id] = [];
+                        cache[component._id] = <any>[];
                     cache[component._id].push({
                         line: Number(spl[spl.length - 2]),
                         column: Number(spl[spl.length - 1].replace(")", "")),
@@ -673,9 +673,11 @@ export class CodeEditor extends Panel {
         }
         //await new Promise(resolve => setTimeout(resolve, 1000));
         //if this is the first save for the tmpfile then it fails - I dont know why, give it a second try
+        //@ts-ignore
         require(["js/" + jsfile + ".js"], onload,/*error*/function (err) {
             //console.log("reload");
             window.setTimeout(function () {
+                //@ts-ignore
                 require(["js/" + jsfile + ".js"], onload, function (err) {
                     throw err;
                 });

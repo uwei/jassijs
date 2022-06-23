@@ -25,10 +25,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "columns";
-            $(this.domWrapper).addClass('BoxPanel').removeClass('Panel');
-            $(this.dom).addClass("designerNoResizable");
-            $(this.dom).css("display", "table");
-            $(this.dom).css("min-width", "50px");
+            this.domWrapper.classList.add('BoxPanel');
+            this.domWrapper.classList.remove('Panel');
+            this.dom.classList.add("designerNoResizable");
+            this.dom.style.display = "table";
+            this.dom.style["min-width"] = "50px";
             // this.width="300px"
         }
         /**
@@ -43,9 +44,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
                 //(<RText>component).newlineafter=true;
             }
             super.addBefore(component, before);
-            $(component.domWrapper).css("display", "table-cell");
-            $(component.dom).removeClass("designerNoResizable");
-            $(component.dom).addClass("designerNoResizableY");
+            component.domWrapper.style.display = "table-cell";
+            component.dom.classList.remove("designerNoResizable");
+            component.dom.classList.add("designerNoResizableY");
         }
         /**
       * adds a component to the container
@@ -55,9 +56,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
             if (component.addToParent)
                 return component.addToParent(this);
             super.add(component);
-            $(component.domWrapper).css("display", "table-cell");
-            $(component.dom).removeClass("designerNoResizable");
-            $(component.dom).addClass("designerNoResizableY");
+            component.domWrapper.style.display = "table-cell";
+            component.dom.classList.remove("designerNoResizable");
+            component.dom.classList.add("designerNoResizableY");
         }
         toJSON() {
             var ret = super.toJSON();

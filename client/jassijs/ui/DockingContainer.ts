@@ -1,4 +1,4 @@
-import "jquery";
+import "jassijs/ext/jquerylib";
 import "jassijs/ext/intersection-observer";
 //@ts-ignore
 import GoldenLayout from "jassijs/ext/goldenlayout";

@@ -23,7 +23,7 @@ export class CodeEditorInvisibleComponents extends Panel {
     codeeditor;
     constructor(codeeditor) {
         super();
-        super.init($('<span class="Panel" style="border:1px solid #ccc;"/>')[0]);
+        super.init('<span class="Panel" style="border:1px solid #ccc;"/>');
         /** 
        * @member {jassijs_editor.CodeEditor} - the parent CodeEditor
        * */
@@ -92,7 +92,7 @@ export class CodeEditorInvisibleComponents extends Panel {
      */
     _makeDraggable(component) {
         var helper = new (classes.getClass(component.createFromType))();
-        $("#jassitemp")[0].removeChild(helper.domWrapper);
+        document.getElementById("jassitemp").removeChild(helper.domWrapper);
         $(component.dom).draggable({
             cancel: "false", revert: "invalid",
             appendTo: "body",

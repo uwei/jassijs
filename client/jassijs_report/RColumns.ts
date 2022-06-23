@@ -24,47 +24,47 @@ export class RColumns extends RComponent {
     */
     constructor(properties = undefined) {//id connect to existing(not reqired)
         super(properties);
-        $(this.domWrapper).addClass('BoxPanel').removeClass('Panel');
-       $(this.dom).addClass("designerNoResizable");
-        $(this.dom).css("display", "table");
-        $(this.dom).css("min-width", "50px");
+        this.domWrapper.classList.add('BoxPanel');
+        this.domWrapper.classList.remove('Panel');
+        this.dom.classList.add("designerNoResizable");
+        this.dom.style.display="table";
+        this.dom.style["min-width"]= "50px";
         // this.width="300px"
     }
-   
+
     /**
    * adds a component to the container before an other component
    * @param {jassijs.ui.Component} component - the component to add
    * @param {jassijs.ui.Component} before - the component before then component to add
    */
     addBefore(component, before) {
-        if(component.addToParent)
+        if (component.addToParent)
             return component.addToParent(this);
         if (component["reporttype"] === "text") {
             //(<RText>component).newlineafter=true;
         }
         super.addBefore(component, before);
-        $(component.domWrapper).css("display", "table-cell");
-         $(component.dom).removeClass("designerNoResizable");
-         $(component.dom).addClass("designerNoResizableY");
-
+        component.domWrapper.style.display= "table-cell";
+        component.dom.classList.remove("designerNoResizable");
+        component.dom.classList.add("designerNoResizableY");
     }
     /**
   * adds a component to the container
   * @param {jassijs.ui.Component} component - the component to add
   */
     add(component) {
-        if(component.addToParent)
+        if (component.addToParent)
             return component.addToParent(this);
         super.add(component);
-        $(component.domWrapper).css("display", "table-cell");
-         $(component.dom).removeClass("designerNoResizable");
-         $(component.dom).addClass("designerNoResizableY");
+        component.domWrapper.style.display= "table-cell";
+        component.dom.classList.remove("designerNoResizable");
+        component.dom.classList.add("designerNoResizableY");
 
     }
     toJSON() {
         var ret = super.toJSON();
         ret.columns = [];
-        for (let x = 0;x < this._components.length;x++) {
+        for (let x = 0; x < this._components.length; x++) {
             if (this._components[x]["designDummyFor"])
                 continue;
             //@ts-ignore
@@ -75,7 +75,7 @@ export class RColumns extends RComponent {
 
     fromJSON(ob: any): any {
         var ret = this;
-        for (let x = 0;x < ob.columns.length;x++) {
+        for (let x = 0; x < ob.columns.length; x++) {
             ret.add(ReportDesign.fromJSON(ob.columns[x]));
         }
         delete ob.columns;

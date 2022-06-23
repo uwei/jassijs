@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function (require, exports, Registry_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"], function (require, exports, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Resizer = void 0;
@@ -28,19 +28,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function 
         }
         mouseDown(event) {
             event.data._resizeComponent(event);
-            let elementID = $(this).attr('id');
+            let elementID = this.getAttribute('id');
             var _this = event === null || event === void 0 ? void 0 : event.data;
             if (_this.onelementselected !== undefined) {
                 //select with click
                 //delegate only the top window - this is the first event????
                 if (_this.topElement === undefined) {
-                    if ($("#" + elementID).hasClass("designerNoSelectable")) {
+                    if (document.getElementById(elementID).classList.contains("designerNoSelectable")) {
                         return;
                     }
                     _this.topElement = elementID;
                     setTimeout(function () {
-                        $(".jselected").removeClass("jselected");
-                        $("#" + _this.topElement).addClass("jselected");
+                        _this.parentPanel.dom.querySelectorAll(".jselected").forEach((c) => { c.classList.remove("jselected"); });
+                        //                   $(".jselected").removeClass("jselected");
+                        document.getElementById(_this.topElement).classList.add("jselected");
                         _this.lastSelected = [_this.topElement];
                         if (!_this.onelementselected)
                             console.log("onselected undefined");
@@ -165,9 +166,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function 
                 var element = els[i];
                 if (element === null)
                     continue;
-                var noresizex = $(element).hasClass("designerNoResizableX");
-                var noresizey = $(element).hasClass("designerNoResizableY");
-                if ($(element).hasClass("designerNoResizable")) {
+                var noresizex = element.classList.contains("designerNoResizableX");
+                var noresizey = element.classList.contains("designerNoResizableY");
+                if (element.classList.contains("designerNoResizable")) {
                     continue;
                 }
                 //code start for changing the cursor
@@ -242,7 +243,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function 
                     selected: function (event, ui) {
                         if (new Date().getTime() - lastTime > 500) { //new selection
                             _this.lastSelected = [];
-                            $(".jselected").removeClass("jselected");
+                            _this.parentPanel.dom.querySelectorAll(".jselected").forEach((c) => { c.classList.remove("jselected"); });
+                            //                 
+                            //$(".jselected").removeClass("jselected");
                             setTimeout(function () {
                                 _this.onelementselected(_this.lastSelected, event);
                                 _this.lastSelected = undefined;
@@ -250,11 +253,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function 
                         }
                         lastTime = new Date().getTime();
                         var a = 9;
-                        if (ui.selected._this && $(ui.selected).hasClass("jcomponent") && !$(ui.selected).hasClass("designerNoSelectable")) {
+                        if (ui.selected._this && ui.selected.classList.contains("jcomponent") &&
+                            !ui.selected.classList.contains("designerNoSelectable")) {
                             var ids = _this.elements + ",";
                             if (ids.indexOf("#" + ui.selected._this._id + ",") > -1) {
                                 _this.lastSelected.push(ui.selected._this._id);
-                                $("#" + ui.selected._this._id).addClass("jselected");
+                                document.getElementById(ui.selected._this._id).classList.add("jselected");
                             }
                         }
                     }
@@ -271,7 +275,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function 
          */
         install(parentPanel, elements) {
             var _this = this;
-            if (!$(parentPanel.dom).hasClass("designerNoResizable")) {
+            if (!parentPanel.dom.classList.contains("designerNoResizable")) {
                 $(parentPanel.domWrapper).resizable({
                     resize: function (evt) {
                         var h = evt.target.offsetHeight;
@@ -281,8 +285,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function 
                             evt.target._this.height = h;
                             _this.onpropertychanged(evt.target._this, "width", w);
                             _this.onpropertychanged(evt.target._this, "height", h);
-                            $(evt.target._this.domWrapper).css("width", w + "px");
-                            $(evt.target._this.domWrapper).css("height", h + "px");
+                            evt.target._this.domWrapper.style.width = w + "px";
+                            evt.target._this.domWrapper.style.height = h + "px";
                         }
                     }
                 });

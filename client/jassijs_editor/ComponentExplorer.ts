@@ -60,7 +60,7 @@ export class ComponentExplorer extends Panel {
      */
     getComponentChilds(item) {
 		if(item===undefined)
-			return 0;
+			return [];
         if (item === this.value&&item._components){
             var all=[];
             (<Component[]>item._components).forEach((e)=>{

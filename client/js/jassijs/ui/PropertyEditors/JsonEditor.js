@@ -19,7 +19,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
          */
         constructor(property, propertyEditor) {
             super(property, propertyEditor);
-            console.log("constr" + property.name);
             /** @member - the renedering component **/
             this.component = new Button_1.Button();
             var _this = this;
@@ -34,7 +33,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
             if (ob === undefined)
                 debugger;
             super.ob = ob;
-            console.log("setob" + this.property.name + "=>" + ob);
             var value = this.propertyEditor.getPropertyValue(this.property);
             //set cache for propertyvalues
             var empty = value === undefined || value.length === 0;
@@ -142,6 +140,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
             propEditor.parentPropertyEditor = this.propertyEditor;
             propEditor.variablename = this.property.name;
             var newclass = Classes_1.classes.getClass(this.property.componentType);
+            if (!this.property.componentType)
+                return;
             var newvalue = new newclass();
             //only the top-PropertyEditor changed something
             if (this.propertyEditor.parentPropertyEditor === undefined) {

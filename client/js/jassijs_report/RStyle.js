@@ -61,7 +61,7 @@ define(["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Regis
         update() {
             var style = document.getElementById(this.styleid);
             if (!document.getElementById(this.styleid)) {
-                style = $('<style id=' + this.styleid + '></style>')[0];
+                style = RComponent_1.RComponent.createHTMLElement('<style id=' + this.styleid + '></style>');
                 document.head.appendChild(style);
             }
             var prop = {};

@@ -1,3 +1,4 @@
+import "jassijs/ext/jquerylib";
 import {Panel} from "jassijs/ui/Panel";
 import {BoxPanel} from "jassijs/ui/BoxPanel";
 import {HTMLPanel} from "jassijs/ui/HTMLPanel";

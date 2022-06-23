@@ -58,9 +58,9 @@ export class ReportDesigner extends ComponentDesigner {
         this._propertyEditor.addEvent("codeChanged", function () {
             _this.propertyChanged();
         });
-        $(this.__dom).addClass("ReportDesigner");
-        $(this.dom).css("overflow", "scroll");
-        $(this.dom).css("width", "");
+        this.__dom.classList.add("ReportDesigner");
+        this.dom.style.overflow= "scroll";
+        this.dom.style.width= "";
 
     }
 

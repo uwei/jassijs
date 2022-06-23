@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function (require, exports, Registry_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"], function (require, exports, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DragAndDropper = void 0;
@@ -68,8 +68,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jquery.ui"], function 
                 newParent = newParent.designDummyFor._parent;
             }
             if (target._this.isAbsolute) {
-                var left = parseInt($(ui.helper).css('left'));
-                var top = parseInt($(ui.helper).css('top'));
+                var left = parseInt(ui.helper.style.left);
+                var top = parseInt(ui.helper.style.top);
                 if (ui.draggable[0]._this.createFromType !== undefined) {
                     var offsetNewParent = $(target._this.dom).offset();
                     left = -offsetNewParent.left + parseInt($(ui.helper).css('left'));

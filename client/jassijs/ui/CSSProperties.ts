@@ -96,7 +96,6 @@ export class CSSProperties{
 			}
 			component.dom.style[newKey]=properties[key];
 		}
-		//$(component.dom).css(prop);
 		return prop;
 	}
 }

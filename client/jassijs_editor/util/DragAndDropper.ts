@@ -1,6 +1,6 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Component } from "jassijs/ui/Component";
-import "jquery.ui";
+import "jassijs/ext/jquerylib";
 @$Class("jassijs_editor.util.DragAndDropper")
 export class DragAndDropper {
     //called if a property has changed the position
@@ -75,8 +75,8 @@ export class DragAndDropper {
         }
         if (target._this.isAbsolute) {
 
-            var left = parseInt($(ui.helper).css('left'));
-            var top = parseInt($(ui.helper).css('top'));
+            var left = parseInt(ui.helper.style.left);
+            var top = parseInt(ui.helper.style.top);
             if (ui.draggable[0]._this.createFromType !== undefined) {
                 var offsetNewParent = $(target._this.dom).offset();
                 left = -offsetNewParent.left + parseInt($(ui.helper).css('left'));

@@ -7,6 +7,7 @@ import { $Class } from "jassijs/remote/Registry";
 import registry from "jassijs/remote/Registry";
 import { CodePanel } from "jassijs_editor/CodePanel";
 import { Runlater } from "jassijs/util/Runlater";
+import { Component } from 'jassijs/ui/Component';
 
 
 
@@ -15,21 +16,21 @@ import { Runlater } from "jassijs/util/Runlater";
 * @class jassijs.ui.CodePanel
 */
 @$Class("jassijs.ui.AcePanel")
-export class AcePanel extends CodePanel{
+export class AcePanel extends CodePanel {
     private _mode: string;
     private _editor;
     private _isInited: boolean;
     //   private _lastCursorPosition;
     file: string;
-    private static _tooltipdiv;
+    private static _tooltipdiv: HTMLElement;
     private _lastTooltipRefresh;
     checkErrorTask: Runlater;
     constructor() {
         super();
         var _this = this;
-        var test = $('<div class="CodePanel" style="height: 500px; width: 500px"></div>')[0];
+        var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
         super.init(test);
-        $(this.domWrapper).css("display", "");
+        this.domWrapper.style.display = "";
         this._editor = ace.edit(this._id);
         this.file = "";
         this.checkErrorTask = new Runlater(function () {
@@ -106,7 +107,7 @@ export class AcePanel extends CodePanel{
             _this._manageTooltip(e);
         })
     }
-    autocomplete(){
+    autocomplete() {
         this._editor.commands.byName.startAutocomplete.exec(this._editor);
     }
     /**
@@ -118,7 +119,7 @@ export class AcePanel extends CodePanel{
             name: "formatDocument",
             bindKey: { win: "Shift-Alt-f", mac: "Shift-Alt-f" },
             exec: function (editor) {
-                typescript.formatDocument(_this.file, _this.value).then((val)=>{
+                typescript.formatDocument(_this.file, _this.value).then((val) => {
                     _this.value = val;
                 });
             }
@@ -140,13 +141,13 @@ export class AcePanel extends CodePanel{
             if (pos.row === 0 || pos.column == 0)
                 return;
             let lpos = this.positionToNumber({
-            	column:pos.column+1,
-            	row:pos.row+1
+                column: pos.column + 1,
+                row: pos.row + 1
             }) - 1;
             if (!typescript.isInited(this.file))
                 return;
             var p;
-            typescript.getQuickInfoAtPosition(this.file, lpos,this.value).then((p) => {
+            typescript.getQuickInfoAtPosition(this.file, lpos, this.value).then((p) => {
                 if (p !== undefined) {
                     var text = "<div style='font-size:12px'>";
                     for (let x = 0; x < p.displayParts.length; x++) {
@@ -158,48 +159,55 @@ export class AcePanel extends CodePanel{
                         }
                     }
                     text = text + "<br>" + (p.documentation === undefined ? "" : p.documentation) + "<div>";
-                    $(AcePanel._tooltipdiv).html(text);
-                    $(AcePanel._tooltipdiv).css({ "background-color": "#f7f4a5", display: "block", position: "absolute", 'top': event.y, 'left': event.x }).fadeIn('fast');
+                    AcePanel._tooltipdiv.innerHTML = text;
+                    AcePanel._tooltipdiv.style["background-color"] = "#f7f4a5";
+                    AcePanel._tooltipdiv.style.display = "block";
+                    AcePanel._tooltipdiv.style.position = "absolute";
+                    AcePanel._tooltipdiv.style.top = event.y + "px";
+                    AcePanel._tooltipdiv.style.left = event.x + "px";
                 }
             })
         }
     }
-	/**
-	 * show tooltip
-	 */
+    /**
+     * show tooltip
+     */
     private _manageTooltip(event) {
         if (AcePanel._tooltipdiv === undefined) {
-            AcePanel._tooltipdiv = $('<div id="tt">hallo</div>')[0];
+            AcePanel._tooltipdiv = Component.createHTMLElement('<div id="tt">hallo</div>');
             document.body.append(AcePanel._tooltipdiv);
         }
-        if (event !== undefined)
-            $(AcePanel._tooltipdiv).css({ display: "none", position: "absolute", 'top': event.y, 'left': event.x });
-
+        if (event !== undefined) {
+            AcePanel._tooltipdiv.style.display = "none";
+            AcePanel._tooltipdiv.style.position = "absolute";
+            AcePanel._tooltipdiv.style.top = event.y + "px";
+            AcePanel._tooltipdiv.style.left = event.x + "px";
+        }
         this._lastTooltipRefresh = Date.now();
         event = event;
         window.setTimeout(this._tooltiprefresh.bind(this), 400, event);
     }
-   
-	public insert(pos:number,text:string){
-		this._editor.session.insert(pos, text);
-	}
-	/**
-	 * check if imports are neded and do so 
-	 **/
+
+    public insert(pos: number, text: string) {
+        this._editor.session.insert(pos, text);
+    }
+    /**
+     * check if imports are neded and do so 
+     **/
     _doRequiredImports(pos: { row: number, column: number }, name: string) {
         if (!typescript.isInited(this.file))
             return;
         if (this.value.indexOf("import " + name + " ") === -1 && this.value.indexOf("import {" + name + "} ") === -1) {
-            
+
             let lpos = this.positionToNumber({
-            	column:pos.column+1,
-            	row:pos.row+1
+                column: pos.column + 1,
+                row: pos.row + 1
             }) - 1;
-            CodePanel.getAutoimport(lpos,this.file,this.value).then((data)=>{
-            	if(data!==undefined){
-            		this._editor.session.insert(data.pos, data.text);
+            CodePanel.getAutoimport(lpos, this.file, this.value).then((data) => {
+                if (data !== undefined) {
+                    this._editor.session.insert(data.pos, data.text);
                     typescript.setCode(this.file, this.value);
-            	}
+                }
             });
         }
     }
@@ -223,13 +231,13 @@ export class AcePanel extends CodePanel{
             typescript.setCode(_this.file, _this.value).then((tt) => {
                 if (_this.file === undefined)
                     return;
-                typescript.getDiagnostics(_this.file, _this.value).then((diag)=>{
-                var annotaions = [];
-                var iserror = false;
-                for (var x = 0; x < diag.semantic.length; x++) {
-                   // if (diag.semantic[x].file === undefined)
-                     //   continue;
-                   // if (diag.semantic[x].file === undefined||diag.semantic[x].file.fileName === ("file:///" + _this.file) {
+                typescript.getDiagnostics(_this.file, _this.value).then((diag) => {
+                    var annotaions = [];
+                    var iserror = false;
+                    for (var x = 0; x < diag.semantic.length; x++) {
+                        // if (diag.semantic[x].file === undefined)
+                        //   continue;
+                        // if (diag.semantic[x].file === undefined||diag.semantic[x].file.fileName === ("file:///" + _this.file) {
                         var err = _this.numberToPosition(diag.semantic[x].start);
                         annotaions.push({
                             row: err.row - 1,
@@ -238,12 +246,12 @@ export class AcePanel extends CodePanel{
                             type: "error" // also warning and information
                         })
                         iserror = true;
-                  //  }
-                }
-                for (var y = 0; y < diag.suggestion.length; y++) {
-                    //if (diag.suggestion[y].file === undefined)
-                    //    continue;
-                 //   if (diag.suggestion[y].file === undefined||diag.suggestion[y].file.fileName === _this.file) {
+                        //  }
+                    }
+                    for (var y = 0; y < diag.suggestion.length; y++) {
+                        //if (diag.suggestion[y].file === undefined)
+                        //    continue;
+                        //   if (diag.suggestion[y].file === undefined||diag.suggestion[y].file.fileName === _this.file) {
                         var err = _this.numberToPosition(diag.suggestion[y].start);
                         annotaions.push({
                             row: err.row - 1,
@@ -251,12 +259,12 @@ export class AcePanel extends CodePanel{
                             text: diag.suggestion[y].messageText,
                             type: "warning" // also warning and information
                         })
-                  //  }
-                }
-                for (var x = 0; x < diag.syntactic.length; x++) {
-                  //  if (diag.syntactic[x].file === undefined)
-                    //    continue;
-                   // if (iag.syntactic[x].file === undefined||diag.syntactic[x].file.fileName === _this.file) {
+                        //  }
+                    }
+                    for (var x = 0; x < diag.syntactic.length; x++) {
+                        //  if (diag.syntactic[x].file === undefined)
+                        //    continue;
+                        // if (iag.syntactic[x].file === undefined||diag.syntactic[x].file.fileName === _this.file) {
                         var err = _this.numberToPosition(diag.syntactic[x].start);
                         annotaions.push({
                             row: err.row - 1,
@@ -265,14 +273,16 @@ export class AcePanel extends CodePanel{
                             type: "error" // also warning and information
                         })
                         iserror = true;
-                    //}
-                }
-                _this._editor.getSession().setAnnotations(annotaions);
-                if (iserror) {
-                    $(_this.dom).find(".ace_gutter").css("background", "#ffbdb9");
-                } else {
-                    $(_this.dom).find(".ace_gutter").css("background", "");
-                }
+                        //}
+                    }
+                    _this._editor.getSession().setAnnotations(annotaions);
+                    if (_this.dom) {
+                        if (iserror) {
+                            (<HTMLElement>_this.dom.querySelector(".ace_gutter")).style.background = "#ffbdb9";
+                        } else {
+                            (<HTMLElement>_this.dom.querySelector(".ace_gutter")).style.background = "";
+                        }
+                    }
 
 
                 })
@@ -286,14 +296,14 @@ export class AcePanel extends CodePanel{
      * @param {function} handler
      */
     onchange(handler) {
-       this._editor.on('change', handler);
+        this._editor.on('change', handler);
     }
     /**
      * initialize the Ace language Tools (only once)
      */
     private _installLangTools() {
         var aceLangTools = ace.require("ace/ext/language_tools");
-        var _this=this;
+        var _this = this;
         if (aceLangTools.jassi === undefined) {
             aceLangTools.jassi = {
                 constructor: {
@@ -313,8 +323,8 @@ export class AcePanel extends CodePanel{
         aceLangTools.setCompleters([aceLangTools.jassi, aceLangTools.keyWordCompleter]);
 
     }
-   
-    
+
+
     /**
     * get the completion entrys for the Ace-Code-Editor
     * @param editor - the editor instance
@@ -331,8 +341,8 @@ export class AcePanel extends CodePanel{
         var ret = [];
         var _this = this;
         var p = _this.positionToNumber({
-            column:pos.column+1,
-            row:pos.row+1
+            column: pos.column + 1,
+            row: pos.row + 1
         });
         var code = this.value;
 
@@ -343,7 +353,7 @@ export class AcePanel extends CodePanel{
         }
         if (_this.file.endsWith(".js"))
             return;
-        typescript.getCompletion(_this.file, p, code,{ includeExternalModuleExports: true }).then((data) => {
+        typescript.getCompletion(_this.file, p, code, { includeExternalModuleExports: true }).then((data) => {
             if (data !== undefined) {
                 for (let e = 0; e < data.entries.length; e++) {
                     let entr = data.entries[e];
@@ -374,13 +384,13 @@ export class AcePanel extends CodePanel{
     }
 
     /**
-	* get the documentation for a member for the Ace-Code-Editor
-	* @param {object} item - the member to describe
-	*/
+    * get the documentation for a member for the Ace-Code-Editor
+    * @param {object} item - the member to describe
+    */
     getDocTooltip(item) {
         if (item.file === undefined)
             return "";
-        var _id = "j"+registry.nextID();
+        var _id = "j" + registry.nextID();
         item.docHTML = "<span id='" + _id + "'> please try later ... loading in progress<span>";
 
         typescript.getCompletionEntryDetails(item.file, item.pos, item.name, {}, undefined, {}).then((ret) => {
@@ -402,13 +412,19 @@ export class AcePanel extends CodePanel{
             doc = doc;
             if (ret.tags !== undefined) {
                 for (var x = 0; x < ret.tags.length; x++) {
-                    doc = doc + "<b>" + ret.tags[x].name + " </b> " + (ret.tags[x].text === undefined ? "" : ret.tags[x].text.replaceAll("<", "&#60;").replaceAll(">", "&#62;") + "<br>");
+                    var text = ret.tags[x].text;
+                    if (Array.isArray(text)) {
+                        var t = "";
+                        text.forEach((e) => t += e.text);
+                        text = t;
+                    }
+                    doc = doc + "<b>" + ret.tags[x].name + " </b> " + (text === undefined ? "" : text.replaceAll("<", "&#60;").replaceAll(">", "&#62;") + "<br>");
                 }
             }
             doc = doc;
             var html = "<div style='font-size:12px'>" + doc + "<div>";//this._getDescForMember(item.parent, item.name);
             //window.setTimeout(()=>{
-            $("#" + _id)[0].outerHTML = html;
+            document.getElementById(_id).outerHTML = html;
 
             // },10);
         })
@@ -429,20 +445,20 @@ export class AcePanel extends CodePanel{
         }
         return ret;
     }
-    
+
     /**
      * component get focus
      * @param {function} handler
      */
     onfocus(handler) {
-        this._editor.on("focus", handler);
+        return this._editor.on("focus", handler);
     }
     /**
      * component lost focus
      * @param {function} handler
      */
     onblur(handler) {
-        this._editor.on("blur", handler);
+        return this._editor.on("blur", handler);
     }
     /**
      * @param - the codetext
@@ -477,13 +493,13 @@ export class AcePanel extends CodePanel{
         this._editor.gotoLine(cursor.row, cursor.column, true);
         var r = cursor.row;
         if (r > 5)
-            r = r -5;
+            r = r - 5;
         var _this = this;
         //_this._editor.renderer.scrollToRow(r);
-       // _this._editor.renderer.scrollCursorIntoView({ row: cursor.row, column: cursor.column  }, 0.5);
+        // _this._editor.renderer.scrollCursorIntoView({ row: cursor.row, column: cursor.column  }, 0.5);
     }
     get cursorPosition(): { row: number, column: number } {
-        var ret= this._editor.getCursorPosition();
+        var ret = this._editor.getCursorPosition();
         ret.row++;
         ret.column++;
         return ret;
@@ -529,7 +545,7 @@ export async function test() {
     var dlg = new AcePanel();
     dlg.value = "var h;\r\nvar k;\r\nvar k;\r\nvar k;\r\nconsole.debug('ddd');";
     dlg.mode = "typescript";
-    dlg.height=100;
+    dlg.height = 100;
 
     //dlg._editor.renderer.setShowGutter(false);		
     //dlg._editor.getSession().addGutterDecoration(1,"error_line");

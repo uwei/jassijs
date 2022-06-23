@@ -21,7 +21,6 @@ export class JsonEditor extends Editor {
      */
     constructor(property, propertyEditor) {
         super(property, propertyEditor);
-        console.log("constr"+property.name);
         /** @member - the renedering component **/
         this.component = new Button();
         var _this = this;
@@ -36,8 +35,7 @@ export class JsonEditor extends Editor {
         if(ob===undefined)
             debugger;
         super.ob = ob;
-        console.log("setob"+this.property.name+"=>"+ob);
-
+       
         var value = this.propertyEditor.getPropertyValue(this.property);
         //set cache for propertyvalues
 
@@ -152,6 +150,8 @@ export class JsonEditor extends Editor {
         propEditor.parentPropertyEditor = this.propertyEditor;
         propEditor.variablename = this.property.name;
         var newclass = classes.getClass(this.property.componentType);
+        if(!this.property.componentType)
+            return;
         var newvalue = new newclass();
         //only the top-PropertyEditor changed something
         if (this.propertyEditor.parentPropertyEditor === undefined) {

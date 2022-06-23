@@ -25,8 +25,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "stack";
-            $(this.dom).css("flex-direction", "column");
-            $(this.dom).addClass("designerNoResizable");
+            this.dom.style["flex-direction"] = "column";
+            this.dom.classList.add("designerNoResizable");
         }
         /**
           * adds a component to the container before an other component

@@ -30,19 +30,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
             this.groupFooterPanel = [];
             this.groupExpression = [];
             this.footerPanel = new RTablerow_1.RTablerow();
-            // super.init($("<table style='min-width:50px;table-layout: fixed'></table>")[0]);
             var _this;
-            //	this.backgroundPanel.width="500px";
-            //$(this.backgroundPanel.dom).css("min-width","200px");
-            //$(this.dom).css("display", "table");
-            // $(this.dom).css("min-width", "50px");
-            $(this.footerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tablefooter</text></svg>" + '")');
-            $(this.headerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tableheader</text></svg>" + '")');
+            this.footerPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tablefooter</text></svg>" + '")';
+            this.headerPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tableheader</text></svg>" + '")';
             this.removeAll(); //from Table Constructor
             this.add(this.headerPanel);
             this.add(this.bodyPanel);
             this.add(this.footerPanel);
-            // $(this.dom).addClass("designerNoResizable");
             this.headerPanel.parent = this;
             this.footerPanel.parent = this;
             this.bodyPanel.parent = this;
@@ -64,47 +58,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
             this.fillTableRow(this.bodyPanel, count);
             this.fillTableRow(this.footerPanel, count);
         }
-        /*
-         setChildWidth(component: Component, width: any) {
-             var max = 0;
-             var found = -1;
-             for (var x = 0; x < this._components.length; x++) {
-                 for (var i = 0; i < (<Container>this._components[x])._components.length; i++) {
-                     if (i > max)
-                         max = i;
-                     var row = (<Container>this._components[x])._components[i];
-                     if (row === component)
-                         found = i;
-                 }
-             }
-             for (var t = this.widths.length; t < max; t++) {
-                 this.widths.push("auto");
-             }
-             if (found !== -1) {
-                 this.widths[found] = width;
-                 var test = this.headerPanel._components[found].domWrapper;
-                 $((<Container>this._components[0])._components[found].domWrapper).attr("width", width);
-             }
-             //this._parent.setChildWidth(component,value);
-         }
-        
-         getChildWidth(component: Component): any {
-             var found = -1;
-             for (var x = 0; x < this._components.length; x++) {
-                 if ((<Container>this._components[x])._components) {
-                     for (var i = 0; i < (<Container>this._components[x])._components.length; i++) {
-                         var row = (<Container>this._components[x])._components[i];
-                         if (row === component)
-                             found = i;
-                     }
-                 }
-             }
-     
-             if (found !== -1)
-                 return this.widths[found];
-             //this._parent.setChildWidth(component,value);
-         }
-         */
         extensionCalled(action) {
             if (action.componentDesignerSetDesignMode) {
                 this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
@@ -135,7 +88,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
                 let tr = new RGroupTablerow_1.RGroupTablerow();
                 tr.parent = this;
                 var id = this.groupHeaderPanel.length + 1;
-                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Header</text></svg>" + '")');
+                tr.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Header</text></svg>" + '")';
                 this.addBefore(tr, this.bodyPanel);
                 this.groupHeaderPanel.push(tr);
             }
@@ -143,7 +96,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
                 let tr = new RGroupTablerow_1.RGroupTablerow();
                 tr.parent = this;
                 var id = this.groupFooterPanel.length + 1;
-                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Footer</text></svg>" + '")');
+                tr.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Footer</text></svg>" + '")';
                 var prev = this.footerPanel;
                 if (this.groupFooterPanel.length > 0)
                     prev = this.groupFooterPanel[this.groupFooterPanel.length - 1];
@@ -224,17 +177,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
                 ret.heights = ob.heights;
                 delete ob.heights;
             }
-            /* if (ob.widths) {
-                 ret.widths = ob.widths;
-                 delete ob.widths;
-     
-             }
-             var tr = (<RTablerow>this._components[0]);
-             for (var x = 0; x < tr._components.length; x++) {
-     
-                 $(tr._components[x].domWrapper).attr("width", this.widths[x]);
-             }
-             */
             ret.dataforeach = ob.dataforeach;
             delete ob.dataforeach;
             delete obj.datatable;

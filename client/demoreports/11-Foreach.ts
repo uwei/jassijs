@@ -13,7 +13,7 @@ reportdesign = {
                     "Date: ${invoice.date}",
                     "Number: ${invoice.number}"
                 ],
-                {}
+
             ]
         },
         {
@@ -21,19 +21,18 @@ reportdesign = {
                 body: [
                     ["Item", "Price"],
                     {
-                        foreach: "line in invoice.lines",
+                        foreach: "line in invoice.lines", 
                         do: ["${line.text}", "${line.price}"]
                     }
                 ]
             }
         },
-        {},
-        {},
+  
         "\n",
         {
             foreach: "sum in invoice.summary",
             do: {
-                columns: [
+                columns: [ 
                     {
                         text: "${sum.text}"
                     },

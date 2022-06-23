@@ -77,7 +77,7 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
          * @param {[Object.<string,object>]} variables
          */
         reportVariables(id, variables) {
-            var editor = $("#" + id)[0]._this;
+            var editor = document.getElementById(id)._this;
             alert(editor);
             editor["addVariables"](variables);
         }
@@ -96,10 +96,6 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
                 if (debugpoints[point] === true) {
                     //lines[point]="if(jassijs.ui.VariablePanel.get("+this._id+").__db===undefined){ jassijs.ui.VariablePanel.get("+this._id+").__db=true;debugger;}"+lines[point];
                     lines[point] = "if(jassijs.d(" + codeEditor._id + ")) debugger;" + lines[point];
-                    /*if(hassome===undefined){
-                        hassome=true;
-                        lines[0]="var _variables_=$('#"+this._id+"')[0]._this;"+lines[0];
-                    }*/
                 }
             }
         }
@@ -130,7 +126,7 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
                 }
                 test = reg.exec(code);
             }
-            var svars = "{var debug_editor=$('#'+" + codeEditor._id + ")[0]._this;var _variables_={} ;try{if(this!==jassi)_variables_['this']=this;}catch(ex){};";
+            var svars = "{var debug_editor=document.getElementById(" + codeEditor._id + ")._this;var _variables_={} ;try{if(this!==jassi)_variables_['this']=this;}catch(ex){};";
             //svars=svars+"try{_variables_.addParameters(arguments);}catch(ex){};";
             for (var x = 0; x < vars.length; x++) {
                 //        alert(vars[x]);
@@ -150,6 +146,7 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
     exports.Debugger = Debugger;
     if (jassijs.debugger === undefined)
         jassijs.debugger = new Debugger();
+    //@ts-ignore
     require(["jassijs_editor/ChromeDebugger"]);
 });
 //# sourceMappingURL=Debugger.js.map

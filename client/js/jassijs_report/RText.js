@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties", "jassijs/util/Tools"], function (require, exports, Registry_1, RComponent_1, HTMLPanel_1, Property_1, ReportDesign_1, CSSProperties_1, Tools_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties", "jassijs/util/Tools", "jassijs/ui/Component"], function (require, exports, Registry_1, RComponent_1, HTMLPanel_1, Property_1, ReportDesign_1, CSSProperties_1, Tools_1, Component_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RText = void 0;
@@ -55,18 +55,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
             this.reporttype = "text";
             this.toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
             this.customToolbarButtons = {};
-            super.init($('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>')[0]); //tabindex for key-event
-            $(this.domWrapper).removeClass("jcontainer");
-            $(this.__dom).css("text-overflow", "ellipsis");
-            $(this.__dom).css("overflow", "hidden");
-            $(this.dom).addClass("designerNoResizable");
+            super.init('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>'); //tabindex for key-event
+            this.domWrapper.classList.remove("jcontainer");
+            this.__dom.style["text-overflow"] = "ellipsis";
+            this.__dom.style["overflow"] = "hidden";
+            this.dom.classList.add("designerNoResizable");
             (0, CSSProperties_1.loadFontIfNedded)("Roboto");
-            //  super.init($('<div class="RText"></div>')[0]);
             var el = this.dom.children[0];
             this._designMode = false;
-            $(this.dom).css("display", "block");
-            // this.css({ font_family: "inherit", font_size: "inherit" })
-            //   $(this.dom.children[0]).css("display","inline-block");
+            this.dom.style["display"] = "block";
             this.extensionCalled = HTMLPanel_1.HTMLPanel.prototype.extensionCalled.bind(this);
             this._setDesignMode = HTMLPanel_1.HTMLPanel.prototype._setDesignMode.bind(this);
             this.initIfNeeded = HTMLPanel_1.HTMLPanel.prototype.initIfNeeded.bind(this);
@@ -77,7 +74,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
             var el = this.dom.children[0];
             if (el === undefined)
                 return "";
-            var ret = $(el).html();
+            var ret = el.innerHTML;
             return ret;
         }
         set value(code) {
@@ -87,7 +84,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
                 this.dom.appendChild(el);
             }
             else
-                $(el).html(code);
+                el.innerHTML = code;
         }
         set format(value) {
             this._format = value;
@@ -230,18 +227,18 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
             var sval = decodeURI(this.value);
             sval = sval.replaceAll("<br>", "\n");
             ret.text = sval; //.replaceAll("<br>","\\n");
-            var node = $("<span>" + ret.text + "</span>");
-            if (node[0].innerText !== node[0].innerHTML) { //htmltext
+            var node = Component_1.Component.createHTMLElement("<span>" + ret.text + "</span>");
+            if (node.innerText !== node.innerHTML) { //htmltext
                 var style = new InlineStyling();
                 var list = [];
-                this.convertFromHTMLNode(node[0], list, style);
+                this.convertFromHTMLNode(node, list, style);
                 if (list.length > 1) {
                     ret.editTogether = true;
                     ret.text = list;
                 }
                 else { //only one text found so we transfer the html 
                     ret = list[0];
-                    ret.text = node[0].innerText;
+                    ret.text = node.innerText;
                     this.fromJSON(Tools_1.Tools.copyObject(ret));
                 }
             }

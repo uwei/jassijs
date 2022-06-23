@@ -9,7 +9,7 @@ import { PDFReport } from "jassijs_report/PDFReport";
 class Canavas extends Component {
     constructor() {
         super();
-        super.init($('<canvas type="pdfviewer"></canvas>')[0]);
+        super.init('<canvas type="pdfviewer"></canvas>');
     }
 }
 type Me = {
@@ -35,7 +35,6 @@ export class PDFViewer extends Panel {
     report: PDFReport;
     constructor() {
         super();
-        //super.init(undefined);//$('<canvas type="pdfviewer"></canvas>')[0]);
         this.pdfjsLib = PDFJS;
         this.pdfDoc = null;
         this.pageNum = 1;
@@ -50,18 +49,12 @@ export class PDFViewer extends Panel {
             overflow: "auto"
         };
         me.toolbar = new BoxPanel();
-        $(me.toolbar.dom).css("position","fixed");
+        me.toolbar.dom.style.position="fixed";
         me.mainpanel = new Panel();
         me.plus = new Button();
         me.minus = new Button();
         var _this = this;
         me.download = new Button();
-        //me.canavasPanel.height="90%";
-        //	me.canavasPanel.width="90%";
-        //	var cn=$('<canvas type="pdfviewer"></canvas>')[0]
-        //this.dom.appendChild(cn);
-        //this.canvas = cn;
-        // this.ctx = this.canvas.getContext('2d');
         this.add(me.toolbar);
         var placeholder=new Panel();
         placeholder.height=20;
@@ -150,7 +143,6 @@ export class PDFViewer extends Panel {
     }
     get value() {
         return this._data;
-        //return  $(this.checkbox).prop("checked");
     }
 }
 export async function test() {
