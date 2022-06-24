@@ -10,7 +10,6 @@ import { Server } from "jassijs/remote/Server";
 import { Reloader } from "jassijs/util/Reloader";
 import { classes } from "jassijs/remote/Classes";
 import { Component } from "jassijs/ui/Component";
-import { ReportDesign } from "jassijs_report/ReportDesign";
 import { $Property } from "jassijs/ui/Property";
 
 import { AcePanel } from "jassijs_editor/AcePanel";
