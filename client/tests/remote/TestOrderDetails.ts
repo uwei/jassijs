@@ -8,7 +8,7 @@ import { $CheckParentRight } from "jassijs/remote/security/Rights";
 @$Class("tests.TestOrderDetails")
 export class TestOrderDetails extends DBObject {
     @PrimaryColumn()
-    id: number;
+    declare id: number;
     constructor() {
         super(); 
     }

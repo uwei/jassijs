@@ -8,7 +8,7 @@ import { JassiError } from "../Classes";
 @$Class("jassijs.security.Setting")
 export class Setting extends DBObject {
     @PrimaryColumn()
-    id: number;
+    declare id: number;
     constructor() {
         super();
     }

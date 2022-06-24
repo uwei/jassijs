@@ -150,8 +150,8 @@ export class CodeEditor extends Panel {
             });
             this._codeToolbar.add(this.autoCompleteButton);
             jassijs["$CodeEditor"] = CodeEditor;
-           // $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
-          //  $(goto.dom).attr("ondragover", "event.preventDefault();");
+            // $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
+            //  $(goto.dom).attr("ondragover", "event.preventDefault();");
 
         }
         this._codeView.add(this._codePanel);
@@ -301,7 +301,7 @@ export class CodeEditor extends Panel {
      */
     registerKeys() {
         var _this = this;
-        this._codePanel.dom.addEventListener("keydown",function (evt) {
+        this._codePanel.dom.addEventListener("keydown", function (evt) {
             if (evt.keyCode === 115 && evt.shiftKey) {//F4
                 // var thiss=this._this._id;
                 // var editor = ace.edit(this._this._id);
@@ -359,6 +359,7 @@ export class CodeEditor extends Panel {
     }
     private async fillVariablesAndSetupParser(url: string, root: Component, component: Component, cache: { [componentid: string]: [{ component: Component, line: number, column: number, pos: number, name: string }] }, parser) {
 
+        var useThis = false;
         if (cache[component._id] === undefined && component["__stack"] !== undefined) {
             var lines = component["__stack"]?.split("\n");
             for (var x = 0; x < lines.length; x++) {
@@ -414,10 +415,14 @@ export class CodeEditor extends Panel {
                 }
                 var scope = [{ classname: root?.constructor?.name, methodname: "layout" }];
                 if (foundscope)
-                    scope = [{ classname: root?.constructor?.name, methodname: "layout" },foundscope];
-                
-                parser.parse(this._codePanel.value, scope);
+                    scope = [{ classname: root?.constructor?.name, methodname: "layout" }, foundscope];
 
+                parser.parse(this._codePanel.value, scope);
+                //if layout is rendered and an other variable is assigned to this, then remove ths variable
+                if (parser.classes[root?.constructor?.name] && parser.classes[root?.constructor?.name].members["layout"]) {
+                    useThis = true;
+                    this.variables.addVariable("this", root);
+                }
                 for (var key in parser.data) {
                     var com = parser.data[key];
                     var _new_ = com["_new_"];
@@ -432,6 +437,7 @@ export class CodeEditor extends Panel {
                         }
                     }
                 }
+                var ignoreVar = [];
                 for (var x = 0; x < values.length; x++) {
                     var val = values[x];
                     var sname = val.name;
@@ -444,8 +450,14 @@ export class CodeEditor extends Panel {
                     //sometimes does a constructor create other Components so we need the first one
                     if (found)
                         continue;
+                    
                     if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
-                        this.variables.addVariable(sname, val.component, false);
+                        if (ignoreVar.indexOf(sname) === -1) {
+                            if (useThis && root === val.component)
+                                ignoreVar.push(sname);//do nothing
+                            else
+                                this.variables.addVariable(sname, val.component, false);
+                        }
                     }
                 }
 
@@ -507,8 +519,7 @@ export class CodeEditor extends Panel {
             // Promise.resolve(ret).then(async function(ret) {
             if (ret !== undefined) {
 
-                if (ret.layout !== undefined)
-                    _this.variables.addVariable("this", ret);
+               
 
                 //_this.variables.addVariable("me", ret.me);
 
@@ -839,32 +850,11 @@ export async function test() {
     editor.height = 300;
     editor.width = "100%";
     //await editor.openFile(url);
-    editor.value = `import { Button } from "jassijs/ui/Button";
-import { Repeater } from "jassijs/ui/Repeater";
-import { $Class } from "jassijs/remote/Registry";
-import { Panel } from "jassijs/ui/Panel";
-type Me = {
-    button1?: Button;
-};
-@$Class("demo.EmptyDialog")
-export class EmptyDialog extends Panel {
-    me: Me;
-    constructor() {
-        super();
-        this.me = {};
-        this.layout(this.me);
-    }
-    layout(me: Me) {
-        me.button1 = new Button();
-        this.add(me.button1);
-    }
-}
-export async function test() {
-    var ret = new EmptyDialog();
-    return ret;
-}
-`;
+    editor.file="tests/TestDialog.ts";
+    setTimeout(()=>{
     editor.evalCode();
+
+    },500);
     return editor;
 
 };

@@ -187,6 +187,7 @@ export async function autostart() {
 
 export async function test(t: Test) {
     try {
+        await Settings.load();
         var settings=new Settings();
         await Settings.remove("antestsetting", "user");
         await Settings.remove("antestsetting", "browser");

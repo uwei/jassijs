@@ -9,7 +9,7 @@ import { $Class } from "jassijs/remote/Registry";
 export class MyUser{   
 
     @PrimaryColumn()
-    id: number;
+    declare id: number;
 
     @Column()
     firstName: string;

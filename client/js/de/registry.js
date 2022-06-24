@@ -62,7 +62,7 @@ define("de/registry", ["require"], function (require) {
                 "date": 1655740311208
             },
             "de/remote/AR.ts": {
-                "date": 1655558717565,
+                "date": 1656072649465,
                 "de.AR": {
                     "$Rights": [
                         [
@@ -109,7 +109,7 @@ define("de/registry", ["require"], function (require) {
                 }
             },
             "de/remote/ARZeile.ts": {
-                "date": 1655558723414,
+                "date": 1656072657913,
                 "de.ARZeile": {
                     "$DBObject": [],
                     "@members": {
@@ -144,7 +144,7 @@ define("de/registry", ["require"], function (require) {
                 "date": 1622985484000
             },
             "de/remote/Kunde.ts": {
-                "date": 1655583678924,
+                "date": 1656077074054,
                 "de.Kunde": {
                     "$ParentRights": [
                         [
@@ -235,7 +235,7 @@ define("de/registry", ["require"], function (require) {
                 }
             },
             "de/remote/Lieferant.ts": {
-                "date": 1655556795285,
+                "date": 1656072673189,
                 "de.Lieferant": {
                     "$DBObject": [],
                     "@members": {
@@ -253,7 +253,7 @@ define("de/registry", ["require"], function (require) {
                 }
             },
             "de/remote/MyUser.ts": {
-                "date": 1655556795285,
+                "date": 1656072678712,
                 "de.MyUser": {
                     "$DBObject": [],
                     "Entity": [],
@@ -290,7 +290,7 @@ define("de/registry", ["require"], function (require) {
                 }
             },
             "de/TestExtension.ts": {
-                "date": 1624293156000
+                "date": 1656077195438
             },
             "de/Dialog.ts": {
                 "date": 1655755200865,
@@ -323,9 +323,9 @@ define("de/registry", ["require"], function (require) {
             "de/Report1.ts": {
                 "date": 1656019762350
             },
-            "de/MyView.ts": {
-                "date": 1656021267398,
-                "de.MyView": {
+            "de/myview2.ts": {
+                "date": 1656067922579,
+                "de.myview2": {
                     "$DBObjectView": [
                         {
                             "classname": "de.Kunde"

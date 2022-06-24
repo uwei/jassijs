@@ -6,7 +6,7 @@ import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 @$Class("local.Book")
 export class Book extends DBObject {
     @PrimaryColumn()
-    id: number;
+    declare id: number;
     constructor() {
         super();
     }

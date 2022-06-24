@@ -180,6 +180,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
     exports.autostart = autostart;
     async function test(t) {
         try {
+            await Settings.load();
             var settings = new Settings();
             await Settings.remove("antestsetting", "user");
             await Settings.remove("antestsetting", "browser");

@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/acelib", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs_editor/Debugger"], function (require, exports, acelib_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1) {
+define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1, Component_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -25,10 +25,10 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
         constructor() {
             super();
             var _this = this;
-            var test = $('<div class="CodePanel" style="height: 500px; width: 500px"></div>')[0];
+            var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
             super.init(test);
-            $(this.domWrapper).css("display", "");
-            this._editor = acelib_1.default.edit(this._id);
+            this.domWrapper.style.display = "";
+            this._editor = ace_1.default.edit(this._id);
             this.file = "";
             this.checkErrorTask = new Runlater_1.Runlater(function () {
                 _this._checkCode();
@@ -101,6 +101,9 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
                 _this._manageTooltip(e);
             });
         }
+        autocomplete() {
+            this._editor.commands.byName.startAutocomplete.exec(this._editor);
+        }
         /**
          * add commands to Ace Editor
          **/
@@ -149,8 +152,12 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
                             }
                         }
                         text = text + "<br>" + (p.documentation === undefined ? "" : p.documentation) + "<div>";
-                        $(AcePanel_1._tooltipdiv).html(text);
-                        $(AcePanel_1._tooltipdiv).css({ "background-color": "#f7f4a5", display: "block", position: "absolute", 'top': event.y, 'left': event.x }).fadeIn('fast');
+                        AcePanel_1._tooltipdiv.innerHTML = text;
+                        AcePanel_1._tooltipdiv.style["background-color"] = "#f7f4a5";
+                        AcePanel_1._tooltipdiv.style.display = "block";
+                        AcePanel_1._tooltipdiv.style.position = "absolute";
+                        AcePanel_1._tooltipdiv.style.top = event.y + "px";
+                        AcePanel_1._tooltipdiv.style.left = event.x + "px";
                     }
                 });
             }
@@ -160,11 +167,15 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
          */
         _manageTooltip(event) {
             if (AcePanel_1._tooltipdiv === undefined) {
-                AcePanel_1._tooltipdiv = $('<div id="tt">hallo</div>')[0];
+                AcePanel_1._tooltipdiv = Component_1.Component.createHTMLElement('<div id="tt">hallo</div>');
                 document.body.append(AcePanel_1._tooltipdiv);
             }
-            if (event !== undefined)
-                $(AcePanel_1._tooltipdiv).css({ display: "none", position: "absolute", 'top': event.y, 'left': event.x });
+            if (event !== undefined) {
+                AcePanel_1._tooltipdiv.style.display = "none";
+                AcePanel_1._tooltipdiv.style.position = "absolute";
+                AcePanel_1._tooltipdiv.style.top = event.y + "px";
+                AcePanel_1._tooltipdiv.style.left = event.x + "px";
+            }
             this._lastTooltipRefresh = Date.now();
             event = event;
             window.setTimeout(this._tooltiprefresh.bind(this), 400, event);
@@ -255,11 +266,13 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
                             //}
                         }
                         _this._editor.getSession().setAnnotations(annotaions);
-                        if (iserror) {
-                            $(_this.dom).find(".ace_gutter").css("background", "#ffbdb9");
-                        }
-                        else {
-                            $(_this.dom).find(".ace_gutter").css("background", "");
+                        if (_this.dom) {
+                            if (iserror) {
+                                _this.dom.querySelector(".ace_gutter").style.background = "#ffbdb9";
+                            }
+                            else {
+                                _this.dom.querySelector(".ace_gutter").style.background = "";
+                            }
                         }
                     });
                 });
@@ -276,7 +289,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
          * initialize the Ace language Tools (only once)
          */
         _installLangTools() {
-            var aceLangTools = acelib_1.default.require("ace/ext/language_tools");
+            var aceLangTools = ace_1.default.require("ace/ext/language_tools");
             var _this = this;
             if (aceLangTools.jassi === undefined) {
                 aceLangTools.jassi = {
@@ -376,13 +389,19 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
                 doc = doc;
                 if (ret.tags !== undefined) {
                     for (var x = 0; x < ret.tags.length; x++) {
-                        doc = doc + "<b>" + ret.tags[x].name + " </b> " + (ret.tags[x].text === undefined ? "" : ret.tags[x].text.replaceAll("<", "&#60;").replaceAll(">", "&#62;") + "<br>");
+                        var text = ret.tags[x].text;
+                        if (Array.isArray(text)) {
+                            var t = "";
+                            text.forEach((e) => t += e.text);
+                            text = t;
+                        }
+                        doc = doc + "<b>" + ret.tags[x].name + " </b> " + (text === undefined ? "" : text.replaceAll("<", "&#60;").replaceAll(">", "&#62;") + "<br>");
                     }
                 }
                 doc = doc;
                 var html = "<div style='font-size:12px'>" + doc + "<div>"; //this._getDescForMember(item.parent, item.name);
                 //window.setTimeout(()=>{
-                $("#" + _id)[0].outerHTML = html;
+                document.getElementById(_id).outerHTML = html;
                 // },10);
             });
         }
@@ -406,14 +425,14 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
          * @param {function} handler
          */
         onfocus(handler) {
-            this._editor.on("focus", handler);
+            return this._editor.on("focus", handler);
         }
         /**
          * component lost focus
          * @param {function} handler
          */
         onblur(handler) {
-            this._editor.on("blur", handler);
+            return this._editor.on("blur", handler);
         }
         /**
          * @param - the codetext
@@ -425,7 +444,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
             //force ctrl+z not shows an empty document
             if (this._isInited === undefined) {
                 this._isInited = true;
-                this._editor.getSession().setUndoManager(new acelib_1.default.UndoManager());
+                this._editor.getSession().setUndoManager(new ace_1.default.UndoManager());
             }
             if (lastcursor !== undefined) {
                 //this.cursorPosition = lastcursor;
@@ -512,7 +531,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "jassijs_editor/ext/ace
     }
     exports.test = test;
 });
-define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/ext/acelib", "jassijs/remote/Registry", "jassijs_editor/CodePanel"], function (require, exports, acelib_2, Registry_3, CodePanel_2) {
+define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "ace/ext/language_tools"], function (require, exports, ace_2, Registry_3, CodePanel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.AcePanelSimple = void 0;
@@ -524,10 +543,10 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/e
         constructor() {
             super();
             var _this = this;
-            var test = $('<div class="CodePanel" style="height: 500px; width: 500px"></div>')[0];
+            var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
             super.init(test);
-            $(this.domWrapper).css("display", "");
-            this._editor = acelib_2.default.edit(this._id);
+            this.domWrapper.style.display = "";
+            this._editor = ace_2.default.edit(this._id);
             this.file = "";
             this._editor.setOptions({
                 enableBasicAutocompletion: true,
@@ -553,6 +572,9 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/e
                      _this._editor.resize();
                  });*/
         }
+        autocomplete() {
+            console.log("not implemented");
+        }
         insert(pos, text) {
             this._editor.session.insert(pos, text);
         }
@@ -568,14 +590,14 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/e
          * @param {function} handler
          */
         onfocus(handler) {
-            this._editor.on("focus", handler);
+            return this._editor.on("focus", handler);
         }
         /**
          * component lost focus
          * @param {function} handler
          */
         onblur(handler) {
-            this._editor.on("blur", handler);
+            return this._editor.on("blur", handler);
         }
         /**
          * @param - the codetext
@@ -587,7 +609,7 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "jassijs_editor/e
             //force ctrl+z not shows an empty document
             if (this._isInited === undefined) {
                 this._isInited = true;
-                this._editor.getSession().setUndoManager(new acelib_2.default.UndoManager());
+                this._editor.getSession().setUndoManager(new ace_2.default.UndoManager());
             }
             if (lastcursor !== undefined) {
                 //this.cursorPosition = lastcursor;
@@ -895,7 +917,7 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
         }
     };
 });
-define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test"], function (require, exports, Registry_5, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_6, Server_2, Reloader_2, Classes_1, Component_1, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1) {
+define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test", "jassijs/base/CurrentSettings"], function (require, exports, Registry_5, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_6, Server_2, Reloader_2, Classes_1, Component_2, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1, CurrentSettings_1) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -928,7 +950,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             this._codeToolbar = new Panel_1.Panel();
             //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             let mobil = (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-            let sett = Settings_1.Settings.gets(Settings_1.Settings.keys.Development_DefaultEditor);
+            let sett = CurrentSettings_1.currentsettings.gets(Settings_1.Settings.keys.Development_DefaultEditor);
             if (properties === null || properties === void 0 ? void 0 : properties.codePanel) {
                 this._codePanel = properties.codePanel;
             }
@@ -993,10 +1015,17 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 goto.onclick(function () {
                     _this.gotoDeclaration();
                 });
-                jassijs["$CodeEditor"] = CodeEditor_1;
-                $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
-                $(goto.dom).attr("ondragover", "event.preventDefault();");
                 this._codeToolbar.add(goto);
+                this.autoCompleteButton = new Button_1.Button();
+                this.autoCompleteButton.icon = "mdi mdi-robot-happy-outline mdi-18px";
+                this.autoCompleteButton.tooltip = "autocomplete (ctrl space)";
+                this.autoCompleteButton.onclick(function () {
+                    _this._codePanel.autocomplete();
+                });
+                this._codeToolbar.add(this.autoCompleteButton);
+                jassijs["$CodeEditor"] = CodeEditor_1;
+                // $(goto.dom).attr("ondrop", "event.preventDefault();jassijs.$CodeEditor.search(event.dataTransfer.getData('text'));");
+                //  $(goto.dom).attr("ondragover", "event.preventDefault();");
             }
             this._codeView.add(this._codePanel);
             this._main.width = "calc(100% - 1px)";
@@ -1122,7 +1151,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
          */
         registerKeys() {
             var _this = this;
-            $(this._codePanel.dom).keydown(function (evt) {
+            this._codePanel.dom.addEventListener("keydown", function (evt) {
                 if (evt.keyCode === 115 && evt.shiftKey) { //F4
                     // var thiss=this._this._id;
                     // var editor = ace.edit(this._this._id);
@@ -1174,7 +1203,8 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             this.variables.addAll(variables);
         }
         async fillVariablesAndSetupParser(url, root, component, cache, parser) {
-            var _a, _b;
+            var _a, _b, _c, _d, _e;
+            var useThis = false;
             if (cache[component._id] === undefined && component["__stack"] !== undefined) {
                 var lines = (_a = component["__stack"]) === null || _a === void 0 ? void 0 : _a.split("\n");
                 for (var x = 0; x < lines.length; x++) {
@@ -1182,14 +1212,15 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                     if (sline.indexOf("$temp.js") > 0) {
                         var spl = sline.split(":");
                         var entr = {};
-                        cache[component._id] = {
+                        if (cache[component._id] === undefined)
+                            cache[component._id] = [];
+                        cache[component._id].push({
                             line: Number(spl[spl.length - 2]),
                             column: Number(spl[spl.length - 1].replace(")", "")),
                             component: component,
                             pos: 0,
                             name: undefined
-                        };
-                        break;
+                        });
                     }
                 }
                 if (component["_components"]) {
@@ -1201,22 +1232,36 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                     //fertig
                     var hh = 0;
                     var TSSourceMap = await Classes_1.classes.loadClass("jassijs_editor.util.TSSourceMap");
-                    var values = Object.values(cache);
+                    var values = [];
+                    Object.values(cache).forEach((e) => {
+                        e.forEach(f => values.push(f));
+                    });
                     var tmap = await new TSSourceMap().getLinesFromJS("js/" + url.replace(".ts", ".js"), values);
                     for (var x = 0; x < tmap.length; x++) {
-                        values[x].column = tmap[x].column;
-                        values[x].line = tmap[x].line;
-                        values[x].pos = this._codePanel.positionToNumber({
-                            row: values[x].line,
-                            column: values[x].column
+                        var val = values[x];
+                        val.column = tmap[x].column;
+                        val.line = tmap[x].line;
+                        val.pos = this._codePanel.positionToNumber({
+                            row: val.line,
+                            column: val.column
                         });
                     }
                     //setupClasscope
-                    var foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id].pos);
+                    var foundscope;
+                    for (var xx = 0; xx < cache[root._id].length; xx++) {
+                        foundscope = parser.getClassScopeFromPosition(this._codePanel.value, cache[root._id][xx].pos);
+                        if (foundscope)
+                            break;
+                    }
                     var scope = [{ classname: (_b = root === null || root === void 0 ? void 0 : root.constructor) === null || _b === void 0 ? void 0 : _b.name, methodname: "layout" }];
                     if (foundscope)
-                        scope = [foundscope];
+                        scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }, foundscope];
                     parser.parse(this._codePanel.value, scope);
+                    //if layout is rendered and an other variable is assigned to this, then remove ths variable
+                    if (parser.classes[(_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name] && parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name].members["layout"]) {
+                        useThis = true;
+                        this.variables.addVariable("this", root);
+                    }
                     for (var key in parser.data) {
                         var com = parser.data[key];
                         var _new_ = com["_new_"];
@@ -1224,14 +1269,17 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                             var pos = _new_[0].node.pos;
                             var end = _new_[0].node.end;
                             for (var x = 0; x < values.length; x++) {
-                                if (values[x].pos >= pos && values[x].pos <= end) {
-                                    values[x].name = key;
+                                var val = values[x];
+                                if (val.pos >= pos && val.pos <= end) {
+                                    val.name = key;
                                 }
                             }
                         }
                     }
+                    var ignoreVar = [];
                     for (var x = 0; x < values.length; x++) {
-                        var sname = values[x].name;
+                        var val = values[x];
+                        var sname = val.name;
                         var found = false;
                         this.variables.value.forEach((it) => {
                             if (it.name === sname)
@@ -1241,7 +1289,12 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                         if (found)
                             continue;
                         if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
-                            this.variables.addVariable(sname, values[x].component, false);
+                            if (ignoreVar.indexOf(sname) === -1) {
+                                if (useThis && root === val.component)
+                                    ignoreVar.push(sname); //do nothing
+                                else
+                                    this.variables.addVariable(sname, val.component, false);
+                            }
                         }
                     }
                     this.variables.updateCache();
@@ -1281,7 +1334,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                             component["__stack"] = ex.stack;
                     }
                 }
-                Component_1.Component.onComponentCreated(hook);
+                Component_2.Component.onComponentCreated(hook);
                 var ret;
                 if (data.test) {
                     ret = await data.test(new Test_1.Test());
@@ -1293,17 +1346,15 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                         };
                     }
                     else {
-                        Component_1.Component.offComponentCreated(hook);
+                        Component_2.Component.offComponentCreated(hook);
                         return;
                     }
                 }
                 // Promise.resolve(ret).then(async function(ret) {
                 if (ret !== undefined) {
-                    if (ret.layout !== undefined)
-                        _this.variables.addVariable("this", ret);
                     //_this.variables.addVariable("me", ret.me);
                     _this.variables.updateCache();
-                    if (ret instanceof Component_1.Component && ret["reporttype"] === undefined) {
+                    if (ret instanceof Component_2.Component && ret["reporttype"] === undefined) {
                         //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
                         //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
                         //   var Parser = classes.getClass("jassijs_editor.base.Parser");
@@ -1319,7 +1370,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                         //@ts-ignore
                         _this._design.connectParser(parser);
                         _this._design["designedComponent"] = ret;
-                        Component_1.Component.offComponentCreated(hook);
+                        Component_2.Component.offComponentCreated(hook);
                         await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
                         _this._design["editDialog"](true);
                         //});
@@ -1366,7 +1417,7 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                         });
                     }*/
                 }
-                Component_1.Component.offComponentCreated(hook);
+                Component_2.Component.offComponentCreated(hook);
                 //  });
             }
         }
@@ -1452,9 +1503,11 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             };
             //await new Promise(resolve => setTimeout(resolve, 1000));
             //if this is the first save for the tmpfile then it fails - I dont know why, give it a second try
+            //@ts-ignore
             require(["js/" + jsfile + ".js"], onload, /*error*/ function (err) {
                 //console.log("reload");
                 window.setTimeout(function () {
+                    //@ts-ignore
                     require(["js/" + jsfile + ".js"], onload, function (err) {
                         throw err;
                     });
@@ -1616,32 +1669,10 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
         editor.height = 300;
         editor.width = "100%";
         //await editor.openFile(url);
-        editor.value = `import { Button } from "jassijs/ui/Button";
-import { Repeater } from "jassijs/ui/Repeater";
-import { $Class } from "jassijs/remote/Registry";
-import { Panel } from "jassijs/ui/Panel";
-type Me = {
-    button1?: Button;
-};
-@$Class("demo.EmptyDialog")
-export class EmptyDialog extends Panel {
-    me: Me;
-    constructor() {
-        super();
-        this.me = {};
-        this.layout(this.me);
-    }
-    layout(me: Me) {
-        me.button1 = new Button();
-        this.add(me.button1);
-    }
-}
-export async function test() {
-    var ret = new EmptyDialog();
-    return ret;
-}
-`;
-        editor.evalCode();
+        editor.file = "tests/TestDialog.ts";
+        setTimeout(() => {
+            editor.evalCode();
+        }, 500);
         return editor;
     }
     exports.test = test;
@@ -1655,7 +1686,7 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
     let CodeEditorInvisibleComponents = class CodeEditorInvisibleComponents extends Panel_2.Panel {
         constructor(codeeditor) {
             super();
-            super.init($('<span class="Panel" style="border:1px solid #ccc;"/>')[0]);
+            super.init('<span class="Panel" style="border:1px solid #ccc;"/>');
             /**
            * @member {jassijs_editor.CodeEditor} - the parent CodeEditor
            * */
@@ -1720,7 +1751,7 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
          */
         _makeDraggable(component) {
             var helper = new (Classes_2.classes.getClass(component.createFromType))();
-            $("#jassitemp")[0].removeChild(helper.domWrapper);
+            document.getElementById("jassitemp").removeChild(helper.domWrapper);
             $(component.dom).draggable({
                 cancel: "false", revert: "invalid",
                 appendTo: "body",
@@ -2007,14 +2038,14 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.inlineEditorPanel = new Panel_4.Panel();
             this.inlineEditorPanel._id = "i" + this.inlineEditorPanel._id;
             this.inlineEditorPanel.dom.setAttribute("id", this.inlineEditorPanel._id);
-            $(this.inlineEditorPanel.dom).css("display", "inline");
-            $(this.inlineEditorPanel.domWrapper).css("display", "inline");
-            $(this.inlineEditorPanel.dom).addClass("InlineEditorPanel");
+            this.inlineEditorPanel.dom.style.display = "inline";
+            this.inlineEditorPanel.domWrapper.style.display = "inline";
+            this.inlineEditorPanel.dom.classList.add("InlineEditorPanel");
             //   box.height=40;
             box.add(this._designToolbar);
             box.add(this.inlineEditorPanel);
             this.add(box);
-            $(this._designPlaceholder.domWrapper).css("position", "relative");
+            this._designPlaceholder.domWrapper.style.position = "relative";
             this.add(this._designPlaceholder);
         }
         /**
@@ -2022,8 +2053,8 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
        */
         registerKeys() {
             var _this = this;
-            $(this._codeEditor._design.dom).attr("tabindex", "1");
-            $(this._codeEditor._design.dom).keydown(function (evt) {
+            this._codeEditor._design.dom.tabindex = "1";
+            this._codeEditor._design.dom.addEventListener("keydown", function (evt) {
                 if (evt.keyCode === 115 && evt.shiftKey) { //F4
                     // var thiss=this._this._id;
                     // var editor = ace.edit(this._this._id);
@@ -2329,8 +2360,8 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this.pasteButton.hidden = !enable;
             var component = this._designPlaceholder._components[0];
             //switch designmode
-            var comps = $(component.dom).find(".jcomponent");
-            comps.addClass("jdesignmode");
+            var comps = component.dom.querySelectorAll(".jcomponent");
+            comps.forEach((c) => c.classList.add("jdesignmode"));
             for (var c = 0; c < comps.length; c++) {
                 if (comps[c]._this["extensionCalled"] !== undefined) {
                     comps[c]._this["extensionCalled"]({
@@ -2371,7 +2402,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 this._resizer.onelementselected = function (elementIDs, e) {
                     var ret = [];
                     for (var x = 0; x < elementIDs.length; x++) {
-                        var ob = $("#" + elementIDs[x])[0]._this;
+                        var ob = document.getElementById(elementIDs[x])._this;
                         if (ob["editorselectthis"])
                             ob = ob["editorselectthis"];
                         ret.push(ob);
@@ -2406,12 +2437,6 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             else {
             }
             this._componentExplorer.update();
-            /*  $(".hoho2").selectable({});
-              $(".hoho2").selectable("disable");*/
-            /*  $(".HTMLPanel").selectable({});
-              $(".HTMLPanel").selectable("disable");
-              $(".HTMLPanel").draggable({});
-              $(".HTMLPanel").draggable("disable");*/
         }
         /**
          * move a component
@@ -2646,7 +2671,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this._propertyEditor.updateParser();
             this.editDialog(this.editMode === undefined ? true : this.editMode);
             this._componentExplorer.value = component;
-            $(this.dom).focus();
+            this.dom.focus();
             this._updateInvisibleComponents();
             while (this.inlineEditorPanel.dom.firstChild) {
                 this.inlineEditorPanel.dom.firstChild.remove();
@@ -2730,9 +2755,15 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
          */
         getComponentChilds(item) {
             if (item === undefined)
-                return 0;
-            if (item === this.value)
-                return item._components;
+                return [];
+            if (item === this.value && item._components) {
+                var all = [];
+                item._components.forEach((e) => {
+                    if (!e["designDummyFor"])
+                        all.push(e);
+                });
+                return all;
+            }
             var comps = ComponentDescriptor_2.ComponentDescriptor.describe(item.constructor).resolveEditableComponents(item);
             var ret = [];
             for (var name in comps) {
@@ -2828,7 +2859,7 @@ define("jassijs_editor/ComponentExplorer", ["require", "exports", "jassijs/remot
     }
     exports.test = test;
 });
-define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes"], function (require, exports, Registry_12, Panel_6, Image_1, Registry_13, Classes_5) {
+define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/ext/jquerylib"], function (require, exports, Registry_12, Panel_6, Image_1, Registry_13, Classes_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentPalette = void 0;
@@ -2906,8 +2937,8 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
                         helper = new cl();
                         var img = new Image_1.Image();
                         img.src = component.src;
-                        img.height = 24;
-                        img.width = 24;
+                        img.height = "24";
+                        img.width = "24";
                         img.x = component.x;
                         img.y = component.y;
                         helper._position = img;
@@ -2915,10 +2946,10 @@ define("jassijs_editor/ComponentPalette", ["require", "exports", "jassijs/remote
                         if (component.createFromParam !== undefined) {
                             $.extend(helper, component.createFromParam);
                         }
-                        $("#jassitemp")[0].removeChild(helper.domWrapper);
-                        $("#jassitemp")[0].removeChild(helper._position.domWrapper);
+                        document.getElementById("jassitemp").removeChild(helper.domWrapper);
+                        document.getElementById("jassitemp").removeChild(helper._position.domWrapper);
                     }
-                    return helper._position.dom; //$(helper.dom);
+                    return helper._position.dom;
                 }
             });
         }
@@ -3015,7 +3046,7 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Registr
          * @param {[Object.<string,object>]} variables
          */
         reportVariables(id, variables) {
-            var editor = $("#" + id)[0]._this;
+            var editor = document.getElementById(id)._this;
             alert(editor);
             editor["addVariables"](variables);
         }
@@ -3034,10 +3065,6 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Registr
                 if (debugpoints[point] === true) {
                     //lines[point]="if(jassijs.ui.VariablePanel.get("+this._id+").__db===undefined){ jassijs.ui.VariablePanel.get("+this._id+").__db=true;debugger;}"+lines[point];
                     lines[point] = "if(jassijs.d(" + codeEditor._id + ")) debugger;" + lines[point];
-                    /*if(hassome===undefined){
-                        hassome=true;
-                        lines[0]="var _variables_=$('#"+this._id+"')[0]._this;"+lines[0];
-                    }*/
                 }
             }
         }
@@ -3068,7 +3095,7 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Registr
                 }
                 test = reg.exec(code);
             }
-            var svars = "{var debug_editor=$('#'+" + codeEditor._id + ")[0]._this;var _variables_={} ;try{if(this!==jassi)_variables_['this']=this;}catch(ex){};";
+            var svars = "{var debug_editor=document.getElementById(" + codeEditor._id + ")._this;var _variables_={} ;try{if(this!==jassi)_variables_['this']=this;}catch(ex){};";
             //svars=svars+"try{_variables_.addParameters(arguments);}catch(ex){};";
             for (var x = 0; x < vars.length; x++) {
                 //        alert(vars[x]);
@@ -3088,9 +3115,10 @@ define("jassijs_editor/Debugger", ["require", "exports", "jassijs/remote/Registr
     exports.Debugger = Debugger;
     if (jassijs.debugger === undefined)
         jassijs.debugger = new Debugger();
+    //@ts-ignore
     require(["jassijs_editor/ChromeDebugger"]);
 });
-define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Registry_15, Router_2, Typescript_3, CodePanel_5, Settings_2) {
+define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/base/Router", "jassijs_editor/util/Typescript", "jassijs_editor/CodePanel", "jassijs/remote/Settings", "jassijs/base/CurrentSettings", "jassijs_editor/Debugger", "jassijs_editor/ext/monaco"], function (require, exports, Registry_15, Router_2, Typescript_3, CodePanel_5, Settings_2, CurrentSettings_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.MonacoPanel = void 0;
@@ -3183,11 +3211,10 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
         constructor() {
             super();
             var _this = this;
-            // super.init($('<div style="width: 800px; height: 600px; border: 1px solid grey"></div>')[0]);
-            var test = $('<div class="MonacoPanel" style="height: 100px; width: 100px"></div>')[0];
+            var test = '<div class="MonacoPanel" style="height: 100px; width: 100px"></div>';
             super.init(test);
-            $(this.domWrapper).css("overflow", "hidden");
-            $(this.domWrapper).css("display", "");
+            this.domWrapper.style.overflow = "hidden";
+            this.domWrapper.style.display = "";
             /* _this._editor.on("guttermousedown", function(e) {
      
                  var row = e.getDocumentPosition().row;
@@ -3204,7 +3231,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
                      _this.callEvent("breakpointChanged", row, column, false, type);
                  }
              });*/
-            let theme = Settings_2.Settings.gets(Settings_2.Settings.keys.Development_MoanacoEditorTheme);
+            let theme = CurrentSettings_2.currentsettings.gets(Settings_2.Settings.keys.Development_MoanacoEditorTheme);
             this._editor = monaco.editor.create(this.dom, {
                 //value:  monaco.editor.getModels()[0], //['class A{b:B;};\nclass B{a:A;};\nfunction x() {', '\tconsole.log("Hello world!");', '}'].join('\n'),
                 language: 'typescript',
@@ -3228,6 +3255,9 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
                     return decs[x];
             }
             return undefined;
+        }
+        autocomplete() {
+            this._editor.trigger("äläöl", 'editor.action.triggerSuggest', "{}");
         }
         _mouseDown(e) {
             if (e.target.type === 2) {
@@ -3280,6 +3310,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
          * @param {function} handler
          */
         onfocus(handler) {
+            return undefined;
             //   this._editor.on("focus", handler);
         }
         /**
@@ -3287,6 +3318,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
          * @param {function} handler
          */
         onblur(handler) {
+            return undefined;
             // this._editor.on("blur", handler);
         }
         /**
@@ -3444,11 +3476,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1655629520595,
+                "date": 1656073135815,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1655556793963,
+                "date": 1656022299019,
                 "jassijs.ui.AcePanelSimple": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
@@ -3456,7 +3488,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1655636028029,
+                "date": 1656079754918,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {
@@ -3509,49 +3541,49 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
-                "date": 1655556793963,
+                "date": 1655928743384,
                 "jassijs_editor.CodeEditorInvisibleComponents": {}
             },
             "jassijs_editor/CodePanel.ts": {
-                "date": 1655584787288,
+                "date": 1655661688870,
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1655556793962,
+                "date": 1655929453651,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {
-                "date": 1655556864298,
+                "date": 1656022470991,
                 "jassijs_editor.ComponentExplorer": {}
             },
             "jassijs_editor/ComponentPalette.ts": {
-                "date": 1655556864298,
+                "date": 1656017272626,
                 "jassijs_editor.ComponentPalette": {}
             },
             "jassijs_editor/Debugger.ts": {
-                "date": 1655556863794,
+                "date": 1656019585644,
                 "jassijs_editor.Debugger": {}
             },
             "jassijs_editor/modul.ts": {
                 "date": 1654273312166
             },
             "jassijs_editor/MonacoPanel.ts": {
-                "date": 1655556792359,
+                "date": 1656073118850,
                 "jassijs_editor.MonacoPanel": {}
             },
             "jassijs_editor/StartEditor.ts": {
                 "date": 1623098600000
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1655556792359,
+                "date": 1655929645867,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1655556792361,
+                "date": 1656064903907,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
-                "date": 1655556863818,
+                "date": 1656018239890,
                 "jassijs_editor.util.Resizer": {}
             },
             "jassijs_editor/util/TSSourceMap.ts": {
@@ -3559,49 +3591,10 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1655556793864,
+                "date": 1656073493631,
                 "jassijs_editor.util.Typescript": {}
             }
         }
-    };
-});
-/*
-requirejs.config({
-    paths: {
-        'ace': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/',
-        'ace/ext/language_tools': '//cdnjs.cloudflare.com/ajax/libs/ace/1.4.7/ext-language_tools'
-    },
-    shim: {
-        'ace/ext/language_tools': ['ace/ace'],
-    }
-});*/
-//ok
-define("jassijs_editor/ext/acelib", ["require", 'ace/ace',
-    'ace/ext/language_tools'], function (require, ac) {
-    //  var tsmode= require("ace/mode/typescript");
-    /*  var WorkerClient = require("ace/worker/worker_client").WorkerClient;
-      var createWorker = function (session) {
-          var worker = new WorkerClient(["ace"], "jassijs/ext/ace_tsmode", "WorkerModule");
-          worker.attachToDocument(session.getDocument());
-
-          worker.on("lint", function (results) {
-              session.setAnnotations(results.data);
-          });
-
-          worker.on("terminate", function () {
-              session.clearAnnotations();
-          });
-
-          return worker;
-      };*/
-    return {
-        default: ac,
-        /*  createWorker:createWorker,
-          changeTSMode:function(session){
-            //  var tsmode=session.$mode;
-              session.$mode.createWorker=createWorker;
-              var k=9;
-          }*/
     };
 });
 //require.config({ paths: { vs: '//cdn.jsdelivr.net/npm/monaco-editor@0.20.0/dev/vs' } });
@@ -3624,6 +3617,7 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
     let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
     //get Typescript instance
     window.ts = window["globalThis"].ts;
+    window.globalThisOld = window["globalThis"];
     delete window["globalThis"];
     var platform_1 = require("vs/base/common/platform");
     platform_1.globals.MonacoEnvironment = {};
@@ -3707,7 +3701,7 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
         return this._worker;
 
     }*/
-define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_16) {
+define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"], function (require, exports, Registry_16) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DragAndDropper = void 0;
@@ -3768,8 +3762,8 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
                 newParent = newParent.designDummyFor._parent;
             }
             if (target._this.isAbsolute) {
-                var left = parseInt($(ui.helper).css('left'));
-                var top = parseInt($(ui.helper).css('top'));
+                var left = parseInt(ui.helper.style.left);
+                var top = parseInt(ui.helper.style.top);
                 if (ui.draggable[0]._this.createFromType !== undefined) {
                     var offsetNewParent = $(target._this.dom).offset();
                     left = -offsetNewParent.left + parseInt($(ui.helper).css('left'));
@@ -3946,10 +3940,10 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
     ], DragAndDropper);
     exports.DragAndDropper = DragAndDropper;
 });
-define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript"], function (require, exports, Registry_17, Typescript_4) {
+define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs/remote/Test"], function (require, exports, Registry_17, Typescript_4, Test_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Parser = exports.ParsedClass = void 0;
+    exports.test = exports.tests = exports.Parser = exports.ParsedClass = void 0;
     class ParsedDecorator {
         constructor() {
             this.parsedParameter = [];
@@ -4251,7 +4245,8 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         return;
                     }
                     if (left.endsWith(".createRepeatingComponent")) {
-                        this.parseProperties(node.arguments[0]["body"]);
+                        this.visitNode(node.arguments[0]["body"], true);
+                        //this.parseProperties(node.arguments[0]["body"]);
                     }
                     value = params.join(", "); //this.code.substring(node2.pos, node2.end).trim();//
                 }
@@ -4265,9 +4260,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 this.add(variable, prop, value, node.parent, isFunction);
             }
             else
-                node.getChildren().forEach(c => this.parseProperties(c));
+                node.getChildren().forEach(c => this.visitNode(c, true));
         }
-        visitNode(node) {
+        visitNode(node, consumeProperties = undefined) {
             var _this = this;
             if (node.kind === ts.SyntaxKind.VariableDeclaration) {
                 this.variables[node["name"].text] = node;
@@ -4281,12 +4276,15 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                         this.imports[names[e].name.escapedText] = file;
                     }
                 }
+                return;
             }
             if (node.kind == ts.SyntaxKind.TypeAliasDeclaration && node["name"].text === "Me") {
                 this.parseTypeMeNode(node);
+                return;
             }
             else if (node.kind === ts.SyntaxKind.ClassDeclaration) {
                 this.parseClass(node);
+                return;
             }
             else if (node && node.kind === ts.SyntaxKind.FunctionDeclaration) { //functions out of class
                 this.functions[node["name"].text] = node;
@@ -4294,18 +4292,20 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                     for (let x = 0; x < this.classScope.length; x++) {
                         var col = this.classScope[x];
                         if (col.classname === undefined && node["name"].text === col.methodname)
-                            this.parseProperties(node);
+                            consumeProperties = true;
                     }
                 }
                 else
-                    this.parseProperties(node);
+                    consumeProperties = true;
             }
+            if (consumeProperties)
+                this.parseProperties(node);
             else
-                node.getChildren().forEach(c => this.visitNode(c));
+                node.getChildren().forEach(c => this.visitNode(c, consumeProperties));
             //TODO remove this block
-            if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
-                this.add(node["name"].text, "", "", undefined);
-            }
+            /*  if (node.kind === ts.SyntaxKind.FunctionDeclaration && node["name"].text === "test") {
+                  this.add(node["name"].text, "", "", undefined);
+              }*/
         }
         searchClassnode(node, pos) {
             if (ts.isMethodDeclaration(node)) {
@@ -4354,7 +4354,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 classScope = this.classScope;
             this.sourceFile = ts.createSourceFile('dummy.ts', code, ts.ScriptTarget.ES5, true);
             if (this.classScope === undefined)
-                this.parseProperties(this.sourceFile);
+                this.visitNode(this.sourceFile, true);
             else
                 this.visitNode(this.sourceFile);
             //return this.parseold(code,onlyfunction);
@@ -4773,6 +4773,24 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             var first = undefined;
             var second = undefined;
             var parent = this.data[variable][property];
+            if (this.data[variable]["config"] && property === "add") {
+                var children = this.data[variable]["children"][0].node.initializer.elements;
+                var ifirst;
+                var isecond;
+                for (var x = 0; x < children.length; x++) {
+                    var text = children[x].getText();
+                    if (text === parameter1 || text.startsWith(parameter1 + ".config")) {
+                        ifirst = x;
+                    }
+                    if (text === parameter2 || text.startsWith(parameter2 + ".config")) {
+                        isecond = x;
+                    }
+                }
+                var temp = children[ifirst];
+                children[ifirst] = children[isecond];
+                children[isecond] = temp;
+                return;
+            }
             for (var x = 0; x < parent.length; x++) {
                 if (parent[x].value.split(",")[0].trim() === parameter1)
                     first = parent[x].node;
@@ -4811,9 +4829,9 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 useMe = true;
             }
             var prefix = useMe ? "me." : "var ";
-            var statements = node["body"].statements;
             if (node === undefined)
                 throw Error("no scope to insert a variable could be found");
+            var statements = node["body"] ? node["body"].statements : node["statements"];
             for (var x = 0; x < statements.length; x++) {
                 if (!statements[x].getText().split("\n")[0].includes("new ") && !statements[x].getText().split("\n")[0].includes("var "))
                     break;
@@ -4830,15 +4848,49 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         __metadata("design:paramtypes", [])
     ], Parser);
     exports.Parser = Parser;
-    async function test() {
+    async function tests(t) {
+        function clean(s) {
+            return s.replaceAll("\t", "").replaceAll("\r", "").replaceAll("\n", "");
+        }
         await Typescript_4.default.waitForInited;
-        var code = Typescript_4.default.getCode("de/TestDialogBinder.ts");
+        var parser = new Parser();
+        parser.parse("var j;j.config({children:[a,b,c]})");
+        parser.swapPropertyWithParameter("j", "add", "c", "a");
+        t.expectEqual(clean(parser.getModifiedCode()) === 'var j;j.config({ children: [c, b, a] });');
+        parser.parse("var j;j.add(a);j.add(b);j.add(c);");
+        parser.swapPropertyWithParameter("j", "add", "c", "a");
+        t.expectEqual(clean(parser.getModifiedCode()) === 'var j;j.add(c);j.add(b);j.add(a);');
+        parser.parse("class A{}");
+        t.expectEqual(parser.classes.A !== undefined);
+        parser.parse("var a=8;");
+        t.expectEqual(parser.data.a !== undefined);
+        parser.parse("b=8;");
+        t.expectEqual(parser.data.b !== undefined);
+        parser.parse("b=8", [{ classname: undefined, methodname: "test" }]);
+        t.expectEqual(parser.data.b === undefined);
+        var scope = [{ classname: undefined, methodname: "test" }];
+        parser.parse("function test(){b=8;}", scope);
+        t.expectEqual(parser.data.b !== undefined);
+        parser.addVariableInCode("MyClass", scope);
+        parser.setPropertyInCode("myclass", "a", "9", scope);
+        t.expectEqual(clean(parser.getModifiedCode()) === "function test() { var myclass = new MyClass(); b = 8; myclass.a = 9; }");
+        parser = new Parser();
+        parser.parse("");
+        parser.addVariableInCode("MyClass", undefined);
+        parser.setPropertyInCode("myclass", "a", "9", undefined);
+        t.expectEqual(clean(parser.getModifiedCode()) === "var myclass = new MyClass();myclass.a = 9;");
+    }
+    exports.tests = tests;
+    async function test() {
+        tests(new Test_2.Test());
+        await Typescript_4.default.waitForInited;
+        var code = Typescript_4.default.getCode("jassijs/remote/security/Group.ts");
         var parser = new Parser();
         // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
         // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
         //parser.parse(code, undefined);
-        code = "reportdesign={k:9};";
+        //code="reportdesign={k:9};";
         parser.parse(code); // [{ classname: "TestDialogBinder", methodname: "layout" }]);
         parser.setPropertyInCode("reportdesign", "", "{o:0}", undefined);
         // parser.removeVariablesInCode(["me.repeater"]);
@@ -4852,7 +4904,6 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
         //console.log(node.getText());
         //    parser.setPropertyInCode("ppp","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"ppp",property:"add",value:"ll"});
         //  parser.setPropertyInCode("aaa","add","cc",[{classname:undefined, methodname:"test"}],true,false,{variablename:"aaa",property:"add",value:"kk"});
-        console.log(parser.getModifiedCode());
         // debugger;
         /*  const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed });
           const resultFile = ts.createSourceFile("dummy.ts", "", ts.ScriptTarget.Latest, false, ts.ScriptKind.TS);
@@ -4861,7 +4912,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
     }
     exports.test = test;
 });
-define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_18) {
+define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"], function (require, exports, Registry_18) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Resizer = void 0;
@@ -4882,19 +4933,20 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
         }
         mouseDown(event) {
             event.data._resizeComponent(event);
-            let elementID = $(this).attr('id');
+            let elementID = this.getAttribute('id');
             var _this = event === null || event === void 0 ? void 0 : event.data;
             if (_this.onelementselected !== undefined) {
                 //select with click
                 //delegate only the top window - this is the first event????
                 if (_this.topElement === undefined) {
-                    if ($("#" + elementID).hasClass("designerNoSelectable")) {
+                    if (document.getElementById(elementID).classList.contains("designerNoSelectable")) {
                         return;
                     }
                     _this.topElement = elementID;
                     setTimeout(function () {
-                        $(".jselected").removeClass("jselected");
-                        $("#" + _this.topElement).addClass("jselected");
+                        _this.parentPanel.dom.querySelectorAll(".jselected").forEach((c) => { c.classList.remove("jselected"); });
+                        //                   $(".jselected").removeClass("jselected");
+                        document.getElementById(_this.topElement).classList.add("jselected");
                         _this.lastSelected = [_this.topElement];
                         if (!_this.onelementselected)
                             console.log("onselected undefined");
@@ -5019,9 +5071,9 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
                 var element = els[i];
                 if (element === null)
                     continue;
-                var noresizex = $(element).hasClass("designerNoResizableX");
-                var noresizey = $(element).hasClass("designerNoResizableY");
-                if ($(element).hasClass("designerNoResizable")) {
+                var noresizex = element.classList.contains("designerNoResizableX");
+                var noresizey = element.classList.contains("designerNoResizableY");
+                if (element.classList.contains("designerNoResizable")) {
                     continue;
                 }
                 //code start for changing the cursor
@@ -5096,7 +5148,9 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
                     selected: function (event, ui) {
                         if (new Date().getTime() - lastTime > 500) { //new selection
                             _this.lastSelected = [];
-                            $(".jselected").removeClass("jselected");
+                            _this.parentPanel.dom.querySelectorAll(".jselected").forEach((c) => { c.classList.remove("jselected"); });
+                            //                 
+                            //$(".jselected").removeClass("jselected");
                             setTimeout(function () {
                                 _this.onelementselected(_this.lastSelected, event);
                                 _this.lastSelected = undefined;
@@ -5104,11 +5158,12 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
                         }
                         lastTime = new Date().getTime();
                         var a = 9;
-                        if (ui.selected._this && $(ui.selected).hasClass("jcomponent") && !$(ui.selected).hasClass("designerNoSelectable")) {
+                        if (ui.selected._this && ui.selected.classList.contains("jcomponent") &&
+                            !ui.selected.classList.contains("designerNoSelectable")) {
                             var ids = _this.elements + ",";
                             if (ids.indexOf("#" + ui.selected._this._id + ",") > -1) {
                                 _this.lastSelected.push(ui.selected._this._id);
-                                $("#" + ui.selected._this._id).addClass("jselected");
+                                document.getElementById(ui.selected._this._id).classList.add("jselected");
                             }
                         }
                     }
@@ -5125,7 +5180,7 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
          */
         install(parentPanel, elements) {
             var _this = this;
-            if (!$(parentPanel.dom).hasClass("designerNoResizable")) {
+            if (!parentPanel.dom.classList.contains("designerNoResizable")) {
                 $(parentPanel.domWrapper).resizable({
                     resize: function (evt) {
                         var h = evt.target.offsetHeight;
@@ -5135,8 +5190,8 @@ define("jassijs_editor/util/Resizer", ["require", "exports", "jassijs/remote/Reg
                             evt.target._this.height = h;
                             _this.onpropertychanged(evt.target._this, "width", w);
                             _this.onpropertychanged(evt.target._this, "height", h);
-                            $(evt.target._this.domWrapper).css("width", w + "px");
-                            $(evt.target._this.domWrapper).css("height", h + "px");
+                            evt.target._this.domWrapper.style.width = w + "px";
+                            evt.target._this.domWrapper.style.height = h + "px";
                         }
                     }
                 });
@@ -5618,27 +5673,35 @@ define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/
         async getDiagnosticsForAll() {
             var mods = monaco.editor.getModels();
             var ret = [];
+            var countErrors = 0;
             for (var x = 0; x < mods.length; x++) {
                 var url = "file:///" + mods[x].uri.path;
                 if (url.indexOf("node_modules/") > 0)
                     continue;
-                var sug = await this.tsWorker.getSemanticDiagnostics(url);
-                for (var s = 0; s < sug.length; s++) {
-                    //@ts-ignore
-                    sug[s]["file"] = {
-                        fileName: mods[x].uri.path.substring(1)
-                    };
-                    ret.push(sug[s]);
+                try {
+                    var sug = await this.tsWorker.getSemanticDiagnostics(url);
+                    for (var s = 0; s < sug.length; s++) {
+                        //@ts-ignore
+                        sug[s]["file"] = {
+                            fileName: mods[x].uri.path.substring(1)
+                        };
+                        ret.push(sug[s]);
+                    }
+                    sug = await this.tsWorker.getSyntacticDiagnostics(url);
+                    for (var s = 0; s < sug.length; s++) {
+                        //@ts-ignore
+                        sug[s]["file"] = {
+                            fileName: mods[x].uri.path.substring(1)
+                        };
+                        ret.push(sug[s]);
+                    }
                 }
-                sug = await this.tsWorker.getSyntacticDiagnostics(url);
-                for (var s = 0; s < sug.length; s++) {
-                    //@ts-ignore
-                    sug[s]["file"] = {
-                        fileName: mods[x].uri.path.substring(1)
-                    };
-                    ret.push(sug[s]);
+                catch (ex) {
+                    if (!ex.message.indexOf("file:////lib.dom.d.ts") && ex.message.indexOf(" file:////lib.es5.d.ts"))
+                        console.log("Error: " + url + ex.message);
                 }
             }
+            console.log("ready");
             return ret;
             /* var prog=Typescript.languageService.getProgram();
              let all=Typescript.ts.getPreEmitDiagnostics(prog);

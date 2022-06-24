@@ -183,13 +183,12 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
     class Canavas extends Component_1.Component {
         constructor() {
             super();
-            super.init($('<canvas type="pdfviewer"></canvas>')[0]);
+            super.init('<canvas type="pdfviewer"></canvas>');
         }
     }
     let PDFViewer = class PDFViewer extends Panel_1.Panel {
         constructor() {
             super();
-            //super.init(undefined);//$('<canvas type="pdfviewer"></canvas>')[0]);
             this.pdfjsLib = pdfjs_1.default;
             this.pdfDoc = null;
             this.pageNum = 1;
@@ -204,18 +203,12 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
                 overflow: "auto"
             };
             me.toolbar = new BoxPanel_1.BoxPanel();
-            $(me.toolbar.dom).css("position", "fixed");
+            me.toolbar.dom.style.position = "fixed";
             me.mainpanel = new Panel_1.Panel();
             me.plus = new Button_1.Button();
             me.minus = new Button_1.Button();
             var _this = this;
             me.download = new Button_1.Button();
-            //me.canavasPanel.height="90%";
-            //	me.canavasPanel.width="90%";
-            //	var cn=$('<canvas type="pdfviewer"></canvas>')[0]
-            //this.dom.appendChild(cn);
-            //this.canvas = cn;
-            // this.ctx = this.canvas.getContext('2d');
             this.add(me.toolbar);
             var placeholder = new Panel_1.Panel();
             placeholder.height = 20;
@@ -304,7 +297,6 @@ define("jassijs_report/PDFViewer", ["require", "exports", "jassijs/ui/Button", "
         }
         get value() {
             return this._data;
-            //return  $(this.checkbox).prop("checked");
         }
     };
     PDFViewer = __decorate([
@@ -352,10 +344,11 @@ define("jassijs_report/RColumns", ["require", "exports", "jassijs/remote/Registr
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "columns";
-            $(this.domWrapper).addClass('BoxPanel').removeClass('Panel');
-            $(this.dom).addClass("designerNoResizable");
-            $(this.dom).css("display", "table");
-            $(this.dom).css("min-width", "50px");
+            this.domWrapper.classList.add('BoxPanel');
+            this.domWrapper.classList.remove('Panel');
+            this.dom.classList.add("designerNoResizable");
+            this.dom.style.display = "table";
+            this.dom.style["min-width"] = "50px";
             // this.width="300px"
         }
         /**
@@ -370,9 +363,9 @@ define("jassijs_report/RColumns", ["require", "exports", "jassijs/remote/Registr
                 //(<RText>component).newlineafter=true;
             }
             super.addBefore(component, before);
-            $(component.domWrapper).css("display", "table-cell");
-            $(component.dom).removeClass("designerNoResizable");
-            $(component.dom).addClass("designerNoResizableY");
+            component.domWrapper.style.display = "table-cell";
+            component.dom.classList.remove("designerNoResizable");
+            component.dom.classList.add("designerNoResizableY");
         }
         /**
       * adds a component to the container
@@ -382,9 +375,9 @@ define("jassijs_report/RColumns", ["require", "exports", "jassijs/remote/Registr
             if (component.addToParent)
                 return component.addToParent(this);
             super.add(component);
-            $(component.domWrapper).css("display", "table-cell");
-            $(component.dom).removeClass("designerNoResizable");
-            $(component.dom).addClass("designerNoResizableY");
+            component.domWrapper.style.display = "table-cell";
+            component.dom.classList.remove("designerNoResizable");
+            component.dom.classList.add("designerNoResizableY");
         }
         toJSON() {
             var ret = super.toJSON();
@@ -444,9 +437,9 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         set counter(value) {
             this._counter = value;
             if (value === undefined)
-                $(this.domWrapper).removeAttr("value");
+                this.domWrapper.removeAttribute("value");
             else
-                $(this.domWrapper).attr("value", value);
+                this.domWrapper.setAttribute("value", value.toString());
         }
         get counter() {
             return this._counter;
@@ -454,9 +447,9 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         set listType(value) {
             this._listType = value;
             if (value === undefined)
-                $(this.domWrapper).css("list-style-type", "");
+                this.domWrapper.style["list-style-type"] = "";
             else
-                $(this.domWrapper).css("list-style-type", value);
+                this.domWrapper.style["list-style-type"] = value;
         }
         get listType() {
             return this._listType;
@@ -466,14 +459,14 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         }
         set fillColor(value) {
             this._fillColor = value;
-            $(this.dom).css("background-color", value);
+            this.dom.style["background-color"] = value;
         }
         get colSpan() {
             return this._colSpan;
         }
         set colSpan(value) {
             var _a, _b, _c, _d;
-            $(this.domWrapper).attr("colspan", value === undefined ? "" : value);
+            this.domWrapper.setAttribute("colspan", value === undefined ? "" : value.toString());
             this._colSpan = value;
             if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
                 (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
@@ -483,7 +476,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         }
         set rowSpan(value) {
             var _a, _b, _c, _d;
-            $(this.domWrapper).attr("rowspan", value === undefined ? "" : value);
+            this.domWrapper.setAttribute("rowspan", value === undefined ? "" : value.toString());
             this._rowSpan = value;
             if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
                 (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
@@ -495,10 +488,10 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
             this._border = value;
             if (value === undefined)
                 value = [false, false, false, false];
-            $(this.domWrapper).css("border-left-style", value[0] ? "solid" : "none");
-            $(this.domWrapper).css("border-top-style", value[1] ? "solid" : "none");
-            $(this.domWrapper).css("border-right-style", value[2] ? "solid" : "none");
-            $(this.domWrapper).css("border-bottom-style", value[3] ? "solid" : "none");
+            this.domWrapper.style["border-left-style"] = value[0] ? "solid" : "none";
+            this.domWrapper.style["border-top-style"] = value[1] ? "solid" : "none";
+            this.domWrapper.style["border-right-style"] = value[2] ? "solid" : "none";
+            this.domWrapper.style["border-bottom-style"] = value[3] ? "solid" : "none";
         }
         get width() {
             var _a;
@@ -541,7 +534,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         }
         set bold(value) {
             this._bold = value;
-            $(this.dom).css("font-weight", value ? "bold" : "normal");
+            this.dom.style["font-weight"] = value ? "bold" : "normal";
             this.callEvent("stylechanged", "font-weight", value);
         }
         get italics() {
@@ -549,7 +542,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         }
         set italics(value) {
             this._italics = value;
-            $(this.dom).css("font-style", value ? "italic" : "normal");
+            this.dom.style["font-style"] = value ? "italic" : "normal";
             this.callEvent("stylechanged", "font-style", value);
         }
         get font() {
@@ -564,9 +557,9 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
                 jassijs.myRequire(api + sfont);
             }
             if (value === undefined)
-                $(this.dom).css("font_family", "");
+                this.dom.style["font_family"] = "";
             else
-                $(this.dom).css("font_family", value);
+                this.dom.style["font_family"] = value;
             this.callEvent("stylechanged", "font", value);
         }
         get fontSize() {
@@ -575,9 +568,9 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         set fontSize(value) {
             this._fontSize = value;
             if (value === undefined)
-                $(this.dom).css("font-size", "");
+                this.dom.style["font-size"] = "";
             else
-                $(this.dom).css("font-size", value + "px");
+                this.dom.style["font-size"] = value + "px";
             this.callEvent("stylechanged", "fontSize", value);
         }
         get background() {
@@ -585,7 +578,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         }
         set background(value) {
             this._background = value;
-            $(this.dom).css("background-color", value);
+            this.dom.style["background-color"] = value;
             this.callEvent("stylechanged", "background", value);
         }
         get color() {
@@ -593,7 +586,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         }
         set color(value) {
             this._color = value;
-            $(this.dom).css("color", value);
+            this.dom.style.color = value;
             this.callEvent("stylechanged", "color", value);
         }
         get alignment() {
@@ -601,7 +594,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         }
         set alignment(value) {
             this._alignment = value;
-            $(this.dom).css("text-align", value);
+            this.dom.style["text-align"] = value;
             this.callEvent("stylechanged", "alignment", value);
         }
         get decoration() {
@@ -616,7 +609,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
                 val = "line-through";
             if (value === "overline")
                 val = "overline";
-            $(this.dom).css("text-decoration", val);
+            this.dom.style["text-decoration"] = val;
             this.callEvent("stylechanged", "decoration", value);
         }
         get decorationColor() {
@@ -624,7 +617,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         }
         set decorationColor(value) {
             this._decorationColor = value;
-            $(this.dom).css("textDecorationColor", value);
+            this.dom.style["textDecorationColor"] = value;
             this.callEvent("stylechanged", "textDecorationColor", value);
         }
         get decorationStyle() {
@@ -641,7 +634,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
                 val = "double";
             if (value === "wavy")
                 val = "wavy";
-            $(this.dom).css("textDecorationStyle", val);
+            this.dom.style["textDecorationStyle"] = val;
             this.callEvent("stylechanged", "decorationStyle", value);
         }
         static findReport(parent) {
@@ -662,12 +655,12 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
             if (report) {
                 report.styleContainer._components.forEach((comp) => {
                     if (comp.name === old) {
-                        $(this.dom).removeClass(comp.styleid);
+                        this.dom.classList.remove(comp.styleid);
                     }
                 });
                 report.styleContainer._components.forEach((comp) => {
                     if (comp.name === value) {
-                        $(this.dom).addClass(comp.styleid);
+                        this.dom.classList.add(comp.styleid);
                     }
                 });
             }
@@ -678,7 +671,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         }
         set lineHeight(value) {
             this._lineHeight = value;
-            $(this.dom).css("line-height", value);
+            this.dom.style["line-height"] = value;
             this.callEvent("stylechanged", "lineHeight", value);
             //  super.width = value;
         }
@@ -688,7 +681,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
         set margin(value) {
             if (value === undefined) {
                 this._margin = value;
-                $(this.dom).css("margin", "");
+                this.dom.style["margin"] = "";
             }
             else {
                 if (Number.isInteger(value)) {
@@ -699,7 +692,7 @@ define("jassijs_report/RComponent", ["require", "exports", "jassijs/ui/Component
                     value = [value[0], value[1], value[0], value[1]];
                 }
                 this._margin = value;
-                $(this.dom).css("margin", value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ");
+                this.dom.style["margin"] = value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ";
             }
         }
         fromJSON(ob) {
@@ -1049,19 +1042,13 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Regis
             this.groupFooterPanel = [];
             this.groupExpression = [];
             this.footerPanel = new RTablerow_1.RTablerow();
-            // super.init($("<table style='min-width:50px;table-layout: fixed'></table>")[0]);
             var _this;
-            //	this.backgroundPanel.width="500px";
-            //$(this.backgroundPanel.dom).css("min-width","200px");
-            //$(this.dom).css("display", "table");
-            // $(this.dom).css("min-width", "50px");
-            $(this.footerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tablefooter</text></svg>" + '")');
-            $(this.headerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tableheader</text></svg>" + '")');
+            this.footerPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tablefooter</text></svg>" + '")';
+            this.headerPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Tableheader</text></svg>" + '")';
             this.removeAll(); //from Table Constructor
             this.add(this.headerPanel);
             this.add(this.bodyPanel);
             this.add(this.footerPanel);
-            // $(this.dom).addClass("designerNoResizable");
             this.headerPanel.parent = this;
             this.footerPanel.parent = this;
             this.bodyPanel.parent = this;
@@ -1083,47 +1070,6 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Regis
             this.fillTableRow(this.bodyPanel, count);
             this.fillTableRow(this.footerPanel, count);
         }
-        /*
-         setChildWidth(component: Component, width: any) {
-             var max = 0;
-             var found = -1;
-             for (var x = 0; x < this._components.length; x++) {
-                 for (var i = 0; i < (<Container>this._components[x])._components.length; i++) {
-                     if (i > max)
-                         max = i;
-                     var row = (<Container>this._components[x])._components[i];
-                     if (row === component)
-                         found = i;
-                 }
-             }
-             for (var t = this.widths.length; t < max; t++) {
-                 this.widths.push("auto");
-             }
-             if (found !== -1) {
-                 this.widths[found] = width;
-                 var test = this.headerPanel._components[found].domWrapper;
-                 $((<Container>this._components[0])._components[found].domWrapper).attr("width", width);
-             }
-             //this._parent.setChildWidth(component,value);
-         }
-        
-         getChildWidth(component: Component): any {
-             var found = -1;
-             for (var x = 0; x < this._components.length; x++) {
-                 if ((<Container>this._components[x])._components) {
-                     for (var i = 0; i < (<Container>this._components[x])._components.length; i++) {
-                         var row = (<Container>this._components[x])._components[i];
-                         if (row === component)
-                             found = i;
-                     }
-                 }
-             }
-     
-             if (found !== -1)
-                 return this.widths[found];
-             //this._parent.setChildWidth(component,value);
-         }
-         */
         extensionCalled(action) {
             if (action.componentDesignerSetDesignMode) {
                 this._componentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
@@ -1154,7 +1100,7 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Regis
                 let tr = new RGroupTablerow_1.RGroupTablerow();
                 tr.parent = this;
                 var id = this.groupHeaderPanel.length + 1;
-                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Header</text></svg>" + '")');
+                tr.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Header</text></svg>" + '")';
                 this.addBefore(tr, this.bodyPanel);
                 this.groupHeaderPanel.push(tr);
             }
@@ -1162,7 +1108,7 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Regis
                 let tr = new RGroupTablerow_1.RGroupTablerow();
                 tr.parent = this;
                 var id = this.groupFooterPanel.length + 1;
-                $(tr.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Footer</text></svg>" + '")');
+                tr.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Group" + id + "-Footer</text></svg>" + '")';
                 var prev = this.footerPanel;
                 if (this.groupFooterPanel.length > 0)
                     prev = this.groupFooterPanel[this.groupFooterPanel.length - 1];
@@ -1243,17 +1189,6 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Regis
                 ret.heights = ob.heights;
                 delete ob.heights;
             }
-            /* if (ob.widths) {
-                 ret.widths = ob.widths;
-                 delete ob.widths;
-     
-             }
-             var tr = (<RTablerow>this._components[0]);
-             for (var x = 0; x < tr._components.length; x++) {
-     
-                 $(tr._components[x].domWrapper).attr("width", this.widths[x]);
-             }
-             */
             ret.dataforeach = ob.dataforeach;
             delete ob.dataforeach;
             delete obj.datatable;
@@ -1330,14 +1265,708 @@ define("jassijs_report/RDatatable", ["require", "exports", "jassijs/remote/Regis
     }
     exports.test = test;
 });
-define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText", "jassijs/util/Tools", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/util/Runlater", "jassijs_report/RTableLayouts"], function (require, exports, Registry_7, RText_1, Tools_1, RComponent_4, RTablerow_2, Property_3, ContextMenu_1, MenuItem_1, Button_2, Runlater_1, RTableLayouts_1) {
+define("jassijs_report/RGroupTablerow", ["require", "exports", "jassijs_report/RTablerow", "jassijs_report/RComponent", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, RTablerow_2, RComponent_4, Registry_7, Property_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.RGroupTablerow = void 0;
+    let RGroupTablerow = 
+    //@$Property({name:"horizontal",hide:true})
+    class RGroupTablerow extends RTablerow_2.RTablerow {
+        get expression() {
+            var _a, _b, _c;
+            var pos = (_a = this.parent) === null || _a === void 0 ? void 0 : _a.groupFooterPanel.indexOf(this);
+            if (pos === -1)
+                pos = (_b = this.parent) === null || _b === void 0 ? void 0 : _b.groupHeaderPanel.indexOf(this);
+            if (pos === -1)
+                return undefined;
+            return (_c = this.parent) === null || _c === void 0 ? void 0 : _c.groupExpression[pos];
+        }
+        set expression(value) {
+            var _a, _b;
+            var pos = (_a = this.parent) === null || _a === void 0 ? void 0 : _a.groupFooterPanel.indexOf(this);
+            if (pos === -1)
+                pos = (_b = this.parent) === null || _b === void 0 ? void 0 : _b.groupHeaderPanel.indexOf(this);
+            if (pos === -1)
+                return;
+            this.parent.groupExpression[pos] = value;
+        }
+        get _editorselectthis() {
+            return this;
+        }
+    };
+    __decorate([
+        (0, Property_3.$Property)(),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], RGroupTablerow.prototype, "expression", null);
+    RGroupTablerow = __decorate([
+        (0, RComponent_4.$ReportComponent)({ editableChildComponents: ["this"] }),
+        (0, Registry_7.$Class)("jassijs_report.RTablerow")
+        //@$Property({name:"horizontal",hide:true})
+    ], RGroupTablerow);
+    exports.RGroupTablerow = RGroupTablerow;
+});
+define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs_report/RComponent"], function (require, exports, Registry_8, Property_4, RComponent_5) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.RImage = void 0;
+    //mdi-format-list-numbered
+    let RImage = 
+    //@$Property({name:"horizontal",hide:true})
+    class RImage extends RComponent_5.RComponent {
+        /**
+        *
+        * @param {object} properties - properties to init
+        * @param {string} [properties.id] -  connect to existing id (not reqired)
+        * @param {boolean} [properties.useSpan] -  use span not div
+        *
+        */
+        constructor(properties = undefined) {
+            super(properties);
+            this.reporttype = "image";
+            this._image = "";
+            this.init('<img class="RImage"></img>');
+            this.domWrapper.classList.remove("jcontainer");
+        }
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
+         */
+        addBefore(component, before) {
+            //do nothing
+        }
+        /**
+      * adds a component to the container
+      * @param {jassijs.ui.Component} component - the component to add
+      */
+        add(component) {
+            //do nothing
+        }
+        set image(value) {
+            this._image = value;
+            if (value === undefined)
+                this.dom.setAttribute("src", "");
+            else {
+                //later we have a parent
+                var report = RComponent_5.RComponent.findReport(this);
+                var _this = this;
+                if (report === undefined) {
+                    if (_this["nextTry"] === undefined) { //deny recurse
+                        setTimeout(() => {
+                            _this["nextTry"] = true;
+                            _this.image = value;
+                        }, 200);
+                    }
+                    else {
+                        delete _this["nextTry"];
+                    }
+                }
+                else {
+                    var im = report.images;
+                    if (im !== undefined && im[value] !== undefined) {
+                        this.dom.setAttribute("src", im[value]);
+                    }
+                    else {
+                        this.dom.setAttribute("src", value);
+                    }
+                }
+            }
+        }
+        get image() {
+            return this._image;
+        }
+        set fit(value) {
+            this._fit = value;
+            if (value === undefined) {
+                this.__dom.style["object-fit"] = "";
+                this.width = this.width;
+                this.height = this.height;
+            }
+            else {
+                this.__dom.style["object-fit"] = "contain";
+                this.__dom.style.width = value[0].toString();
+                this.__dom.style.height = value[1].toString();
+            }
+        }
+        get fit() {
+            return this._fit;
+        }
+        set opacity(value) {
+            this._opacity = value;
+            if (value === undefined) {
+                this.__dom.style.opacity = "";
+            }
+            else {
+                this.__dom.style.opacity = value.toString();
+            }
+        }
+        get opacity() {
+            return this._opacity;
+        }
+        toJSON() {
+            var ret = super.toJSON();
+            if (this.fit) {
+                ret.fit = this.fit;
+            }
+            if (this.opacity) {
+                ret.opacity = this.opacity;
+            }
+            //if (this.image)
+            ret.image = this.image;
+            return ret;
+        }
+        fromJSON(ob) {
+            var ret = this;
+            if (ob.fit) {
+                ret.fit = ob.fit;
+                delete ob.fit;
+            }
+            if (ob.opacity) {
+                ret.opacity = ob.opacity;
+                delete ob.opacity;
+            }
+            //if (ob.image)
+            ret.image = ob.image;
+            delete ob.image;
+            super.fromJSON(ob);
+            return ret;
+        }
+    };
+    __decorate([
+        (0, Property_4.$Property)({
+            type: "rimage",
+            chooseFrom: (data) => {
+                debugger;
+                return [];
+            }
+        }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], RImage.prototype, "image", null);
+    __decorate([
+        (0, Property_4.$Property)({ type: "number[]", decription: "fit in rectangle width, height e.g. 10,20" }),
+        __metadata("design:type", Array),
+        __metadata("design:paramtypes", [Array])
+    ], RImage.prototype, "fit", null);
+    __decorate([
+        (0, Property_4.$Property)({ type: "number" }),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], RImage.prototype, "opacity", null);
+    RImage = __decorate([
+        (0, RComponent_5.$ReportComponent)({ fullPath: "report/Image", icon: "mdi mdi-image-frame" }),
+        (0, Registry_8.$Class)("jassijs_report.RImage")
+        //@$Property({name:"horizontal",hide:true})
+        ,
+        __metadata("design:paramtypes", [Object])
+    ], RImage);
+    exports.RImage = RImage;
+});
+define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databinder", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent", "jassijs/ext/jquerylib"], function (require, exports, Databinder_1, Upload_1, Textbox_1, Image_1, Button_2, Repeater_1, Registry_9, Panel_3, Editor_1, RComponent_6) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.RImageChooser = exports.RImageEditor = void 0;
+    let RImageEditor = class RImageEditor extends Editor_1.Editor {
+        /**
+         * Checkbox Editor for boolean values
+         * used by PropertyEditor
+         * @class jassijs.ui.PropertyEditors.BooleanEditor
+         */
+        constructor(property, propertyEditor) {
+            super(property, propertyEditor);
+            /** @member - the renedering component **/
+            this.component = new Panel_3.Panel( /*{useSpan:true}*/);
+            this._button = new Button_2.Button();
+            this._textbox = new Textbox_1.Textbox();
+            this._textbox.width = "calc(100% - 34px)";
+            this.component.height = 24;
+            this._button.icon = "mdi mdi-glasses";
+            this.component.add(this._textbox);
+            this.component.add(this._button);
+            var _this = this;
+            this._textbox.onchange(function (param) {
+                _this._onchange(param);
+            });
+            this._button.onclick(() => {
+                _this.showDialog();
+            });
+        }
+        /**
+         * @member {object} ob - the object which is edited
+         */
+        set ob(ob) {
+            super.ob = ob;
+            //databinder,"prop"
+            var value = this.propertyEditor.getPropertyValue(this.property);
+            if (value === null || value === void 0 ? void 0 : value.startsWith('"'))
+                value = value.substring(1);
+            if (value === null || value === void 0 ? void 0 : value.endsWith('"')) {
+                value = value.substring(0, value.length - 1);
+            }
+            this._textbox.value = value;
+        }
+        get ob() {
+            return this._ob;
+        }
+        /**
+       * get the renderer for the PropertyEditor
+       * @returns - the UI-component for the editor
+       */
+        getComponent() {
+            return this.component;
+        }
+        /**
+        * intern the value changes
+        * @param {type} param
+        */
+        _onchange(param = undefined) {
+            var val = this._textbox.value;
+            if (this.property) {
+                this.propertyEditor.setPropertyInCode(this.property.name, '"' + val + '"');
+                this.propertyEditor.setPropertyInDesign(this.property.name, val);
+            }
+            super.callEvent("edit", param);
+        }
+        async showDialog(onlytest = undefined) {
+            var _this = this;
+            if (!this.dialog) {
+                this.dialog = new RImageChooser();
+                var image = this.ob;
+                var report = RComponent_6.RComponent.findReport(image);
+                if (report === null || report === void 0 ? void 0 : report.images)
+                    this.dialog.items = report.images;
+                $(this.dialog.__dom).dialog({ height: "400", width: "400",
+                    close: () => {
+                        if (report)
+                            report.images = _this.dialog.items;
+                        _this._onchange();
+                    } });
+                this.dialog.onpictureselected((val) => {
+                    _this._textbox.value = val;
+                    if (report)
+                        report.images = _this.dialog.items;
+                    _this._onchange();
+                    $(this.dialog.__dom).dialog("close");
+                });
+            }
+            else {
+                $(this.dialog.__dom).dialog("open");
+            }
+        }
+    };
+    RImageEditor = __decorate([
+        (0, Editor_1.$PropertyEditor)(["rimage"]),
+        (0, Registry_9.$Class)("jassi_report/RImagePropertyEditor"),
+        __metadata("design:paramtypes", [Object, Object])
+    ], RImageEditor);
+    exports.RImageEditor = RImageEditor;
+    class RImageChooser extends Panel_3.Panel {
+        constructor() {
+            super();
+            this._items = [];
+            this.me = {};
+            this.layout(this.me);
+        }
+        set items(val) {
+            this._items.splice(0, this._items.length);
+            for (var key in val) {
+                this._items.push({ name: key, data: val[key] });
+            }
+            this.me.repeater1.value = this._items;
+        }
+        get items() {
+            var ret = {};
+            for (var x = 0; x < this._items.length; x++) {
+                ret[this._items[x].name] = this._items[x].data;
+            }
+            return ret;
+        }
+        onpictureselected(func) {
+            this.addEvent("pictureselected", func);
+        }
+        layout(me) {
+            var _this = this;
+            me.repeater1 = new Repeater_1.Repeater();
+            me.databinder1 = new Databinder_1.Databinder();
+            me.databinder1.value = this;
+            me.repeater1.value = this._items;
+            me.upload1 = new Upload_1.Upload();
+            me.upload1.onuploaded((data) => {
+                for (var key in data) {
+                    _this._items.push({ name: key.split(".")[0], data: data[key] });
+                }
+                _this.items = _this.items;
+            });
+            me.upload1.readAs = "DataUrl";
+            this.add(me.upload1);
+            this.add(me.repeater1);
+            me.repeater1.createRepeatingComponent(function (me) {
+                me.panel1 = new Panel_3.Panel();
+                me.image1 = new Image_1.Image();
+                me.itile = new Textbox_1.Textbox();
+                me.remove = new Button_2.Button();
+                me.repeater1.design.add(me.panel1);
+                me.panel1.add(me.itile);
+                me.panel1.add(me.remove);
+                me.panel1.add(me.image1);
+                me.image1.height = "75";
+                me.remove.text = "";
+                me.remove.icon = "mdi mdi-delete-forever-outline";
+                me.itile.bind = [me.repeater1.design.databinder, "name"];
+                me.itile.onchange(function (event) {
+                    var ob = me.itile._databinder.value;
+                    ob.name = me.itile.value;
+                    _this.items = _this.items;
+                });
+                me.image1.bind = [me.repeater1.design.databinder, "data"];
+                me.remove.onclick(function (event) {
+                    var ob = me.itile._databinder.value;
+                    let pos = _this._items.indexOf(ob);
+                    _this._items.splice(pos, 1);
+                    _this.items = _this.items;
+                });
+                me.image1.onclick(function (event) {
+                    var ob = me.itile._databinder.value;
+                    _this.value = ob.name;
+                    _this.callEvent("pictureselected", ob.name);
+                });
+            });
+        }
+    }
+    exports.RImageChooser = RImageChooser;
+    async function test() {
+        var ret = new RImageChooser();
+        return ret;
+    }
+    exports.test = test;
+});
+define("jassijs_report/ROList", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_10, Component_3, Property_5, ReportDesign_2, RComponent_7) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.ROList = void 0;
+    //Limitations not implemented: separator,markerColor, counter is counting also the next elements
+    let ROList = 
+    //@$Property({name:"horizontal",hide:true})
+    class ROList extends RComponent_7.RComponent {
+        /**
+        *
+        * @param {object} properties - properties to init
+        * @param {string} [properties.id] -  connect to existing id (not reqired)
+        * @param {boolean} [properties.useSpan] -  use span not div
+        *
+        */
+        constructor(properties = undefined) {
+            super(properties);
+            this.reporttype = "ol";
+            this.init("<ol></ol>");
+        }
+        set type(value) {
+            this._type = value;
+            if (value === undefined)
+                this.dom.style["list-style-type"] = "";
+            else
+                this.dom.style["list-style-type"] = value;
+        }
+        get type() {
+            return this._type;
+        }
+        set reversed(value) {
+            this._reversed = value;
+            if (this._reversed)
+                this.__dom.setAttribute("reversed", "");
+            else
+                this.__dom.removeAttribute("reversed");
+        }
+        get reversed() {
+            return this._reversed;
+        }
+        set start(value) {
+            this._start = value;
+            this.__dom.setAttribute("start", value.toString());
+        }
+        get start() {
+            return this._start;
+        }
+        /**
+         * adds a component to the container before an other component
+         * @param {jassijs.ui.Component} component - the component to add
+         * @param {jassijs.ui.Component} before - the component before then component to add
+         */
+        addBefore(component, before) {
+            if (component.addToParent)
+                return component.addToParent(this);
+            Component_3.Component.replaceWrapper(component, document.createElement("li"));
+            if (component._counter)
+                component.counter = component._counter;
+            if (component.listType !== undefined)
+                component.listType = component._listType;
+            super.addBefore(component, before);
+        }
+        /**
+      * adds a component to the container
+      * @param {jassijs.ui.Component} component - the component to add
+      */
+        add(component) {
+            if (component.addToParent)
+                return component.addToParent(this);
+            Component_3.Component.replaceWrapper(component, document.createElement("li"));
+            if (component.listType !== undefined)
+                component.listType = component._listType;
+            if (component._counter)
+                component.counter = component._counter;
+            super.add(component);
+        }
+        toJSON() {
+            var ret = super.toJSON();
+            ret.ol = [];
+            if (this.reversed)
+                ret.reversed = true;
+            if (this.start)
+                ret.start = this.start;
+            if (this.type)
+                ret.type = this.type;
+            for (let x = 0; x < this._components.length; x++) {
+                if (this._components[x]["designDummyFor"])
+                    continue;
+                //@ts-ignore
+                ret.ol.push(this._components[x].toJSON());
+            }
+            return ret;
+        }
+        fromJSON(ob) {
+            var ret = this;
+            var arr = ob.ol;
+            for (let x = 0; x < arr.length; x++) {
+                ret.add(ReportDesign_2.ReportDesign.fromJSON(arr[x]));
+            }
+            delete ob.ol;
+            if (ob.reversed)
+                ret.reversed = ob.reversed;
+            delete ob.reversed;
+            if (ob.start)
+                ret.start = ob.start;
+            delete ob.start;
+            if (ob.type)
+                ret.type = ob.type;
+            delete ob.type;
+            super.fromJSON(ob);
+            return ret;
+        }
+    };
+    __decorate([
+        (0, Property_5.$Property)({ chooseFrom: ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"] }),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], ROList.prototype, "type", null);
+    __decorate([
+        (0, Property_5.$Property)({ default: false }),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Boolean])
+    ], ROList.prototype, "reversed", null);
+    __decorate([
+        (0, Property_5.$Property)({ default: 1 }),
+        __metadata("design:type", Number),
+        __metadata("design:paramtypes", [Number])
+    ], ROList.prototype, "start", null);
+    ROList = __decorate([
+        (0, RComponent_7.$ReportComponent)({ fullPath: "report/Ordered List", icon: "mdi mdi-format-list-numbered", editableChildComponents: ["this"] }),
+        (0, Registry_10.$Class)("jassijs_report.ROList")
+        //@$Property({name:"horizontal",hide:true})
+        ,
+        __metadata("design:paramtypes", [Object])
+    ], ROList);
+    exports.ROList = ROList;
+});
+define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_11, ReportDesign_3, RComponent_8) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.RStack = void 0;
+    //@$UIComponent({editableChildComponents:["this"]})
+    let RStack = 
+    //@$Property({name:"horizontal",hide:true})
+    class RStack extends RComponent_8.RComponent {
+        /**
+        *
+        * @param {object} properties - properties to init
+        * @param {string} [properties.id] -  connect to existing id (not reqired)
+        * @param {boolean} [properties.useSpan] -  use span not div
+        *
+        */
+        constructor(properties = undefined) {
+            super(properties);
+            this.reporttype = "stack";
+            this.dom.style["flex-direction"] = "column";
+            this.dom.classList.add("designerNoResizable");
+        }
+        /**
+          * adds a component to the container before an other component
+          * @param {jassijs.ui.Component} component - the component to add
+          * @param {jassijs.ui.Component} before - the component before then component to add
+          */
+        addBefore(component, before) {
+            if (component.addToParent)
+                return component.addToParent(this);
+            super.addBefore(component, before);
+        }
+        /**
+      * adds a component to the container
+      * @param {jassijs.ui.Component} component - the component to add
+      */
+        add(component) {
+            if (component.addToParent)
+                return component.addToParent(this);
+            super.add(component);
+        }
+        toJSON() {
+            var ret = super.toJSON();
+            ret.stack = [];
+            for (let x = 0; x < this._components.length; x++) {
+                if (this._components[x]["designDummyFor"])
+                    continue;
+                //@ts-ignore
+                ret.stack.push(this._components[x].toJSON());
+            }
+            var test = 0;
+            for (var key in ret) {
+                test++;
+            }
+            if (test === 1)
+                ret = ret.stack; //short version
+            return ret;
+        }
+        fromJSON(ob) {
+            var ret = this;
+            var arr = ob;
+            if (ob.stack)
+                arr = ob.stack;
+            for (let x = 0; x < arr.length; x++) {
+                ret.add(ReportDesign_3.ReportDesign.fromJSON(arr[x]));
+            }
+            delete ob.stack;
+            if (!Array.isArray(ob))
+                super.fromJSON(ob);
+            return ret;
+        }
+    };
+    RStack = __decorate([
+        (0, RComponent_8.$ReportComponent)({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
+        (0, Registry_11.$Class)("jassijs_report.RStack")
+        //@$Property({name:"horizontal",hide:true})
+        ,
+        __metadata("design:paramtypes", [Object])
+    ], RStack);
+    exports.RStack = RStack;
+});
+//    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
+define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, RComponent_9, Registry_12, Property_6, Classes_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.RStyle = void 0;
+    //@$UIComponent({editableChildComponents:["this"]})
+    let RStyle = 
+    //@$Property({name:"horizontal",hide:true})
+    class RStyle extends RComponent_9.RComponent {
+        constructor(properties = undefined) {
+            super(properties);
+            this.$isInivisibleComponent = true; //invisible component in designer
+            this.reporttype = "style";
+            var _this = this;
+            this.onstylechanged((param1, param2) => {
+                _this.update();
+            });
+        }
+        set name(value) {
+            var old = this._name;
+            this._name = value;
+            if (this.activeComponentDesigner) {
+                if (old) { //remove old
+                    var all = this.activeComponentDesigner.variables.value;
+                    for (let x = 0; x < all.length; x++) {
+                        if (all[x].name === old) {
+                            all.splice(x, 1);
+                            this.activeComponentDesigner.variables.value = all;
+                            break;
+                        }
+                    }
+                    this.activeComponentDesigner.variables.addVariable(value, this, true);
+                    this.activeComponentDesigner.resize();
+                }
+            }
+        }
+        addToParent(suggestedparent) {
+            if (suggestedparent === undefined)
+                throw new Classes_2.JassiError("suggestedparent is undefined");
+            if (suggestedparent.reporttype === "report") {
+                suggestedparent.styleContainer.add(this);
+                return;
+            }
+            this.addToParent(suggestedparent._parent);
+        }
+        get name() {
+            return this._name;
+        }
+        toJSON() {
+            var ret = super.toJSON();
+            return ret;
+        }
+        update() {
+            var style = document.getElementById(this.styleid);
+            if (!document.getElementById(this.styleid)) {
+                style = RComponent_9.RComponent.createHTMLElement('<style id=' + this.styleid + '></style>');
+                document.head.appendChild(style);
+            }
+            var prop = {};
+            var sstyle = "\t." + this.styleid + "{\n";
+            sstyle += this.dom.style.cssText;
+            sstyle = sstyle + "\t}\n";
+            style.innerHTML = sstyle;
+        }
+        fromJSON(ob) {
+            var ret = this;
+            super.fromJSON(ob);
+            //delete ob.stack;
+            return ret;
+        }
+        //this.dom.style.cssText
+        get styleid() {
+            return "jassistyle" + this._id;
+        }
+        extensionCalled(action) {
+            if (action.componentDesignerSetDesignMode) {
+                this.activeComponentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
+                return this._setDesignMode(action.componentDesignerSetDesignMode.enable);
+            }
+            super.extensionCalled(action);
+        }
+    };
+    __decorate([
+        (0, Property_6.$Property)(),
+        __metadata("design:type", String),
+        __metadata("design:paramtypes", [String])
+    ], RStyle.prototype, "name", null);
+    RStyle = __decorate([
+        (0, RComponent_9.$ReportComponent)({ fullPath: "report/Style", icon: "mdi mdi-virus-outline", editableChildComponents: ["this"] }),
+        (0, Registry_12.$Class)("jassijs_report.RStyle")
+        //@$Property({name:"horizontal",hide:true})
+        ,
+        __metadata("design:paramtypes", [Object])
+    ], RStyle);
+    exports.RStyle = RStyle;
+    function test() {
+        var n = new RStyle();
+        var hh = Object.getOwnPropertyDescriptor(n, "name");
+    }
+    exports.test = test;
+});
+define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RText", "jassijs/util/Tools", "jassijs_report/RComponent", "jassijs_report/RTablerow", "jassijs/ui/Property", "jassijs/ui/ContextMenu", "jassijs/ui/MenuItem", "jassijs/ui/Button", "jassijs/util/Runlater", "jassijs_report/RTableLayouts"], function (require, exports, Registry_13, RText_1, Tools_1, RComponent_10, RTablerow_3, Property_7, ContextMenu_1, MenuItem_1, Button_3, Runlater_1, RTableLayouts_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RTable = void 0;
     var allLayouts = Object.keys(RTableLayouts_1.tableLayouts);
     //@$UIComponent({editableChildComponents:["this"]})
     //@$Property({name:"horizontal",hide:true})
-    let RTable = class RTable extends RComponent_4.RComponent {
+    let RTable = class RTable extends RComponent_10.RComponent {
         /**
     *
     * @param {object} properties - properties to init
@@ -1352,18 +1981,14 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             this.insertEmptyCells = true;
             this.widths = [];
             this.heights = [];
-            super.init($("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>")[0]);
-            //	this.backgroundPanel.width="500px";
-            //$(this.backgroundPanel.dom).css("min-width","200px");
-            //$(this.dom).css("display", "table");
-            // $(this.dom).css("min-width", "50px");
+            super.init("<table  style='border-spacing:0px;min-width:50px;table-layout: fixed'></table>");
             this.updater = new Runlater_1.Runlater(() => {
                 _this.updateLayout(false);
             }, 100);
-            let tr = new RTablerow_2.RTablerow();
+            let tr = new RTablerow_3.RTablerow();
             tr.parent = this;
             this.add(tr);
-            $(this.dom).addClass("designerNoResizable");
+            this.dom.classList.add("designerNoResizable");
             this.initContextMenu(properties === null || properties === void 0 ? void 0 : properties.isdatatable);
             var _this = this;
             this.initKeys();
@@ -1377,7 +2002,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                         var rt = (_c = evt.target) === null || _c === void 0 ? void 0 : _c._this;
                         if (rt._parent._components.indexOf(rt) === rt._parent._components.length - 2) { //last row
                             if (rt._parent.parent._components.indexOf(rt._parent) + 1 === rt._parent.parent._components.length) { //lastline
-                                var row = new RTablerow_2.RTablerow();
+                                var row = new RTablerow_3.RTablerow();
                                 row.parent = this;
                                 _this.add(row);
                                 var cell = new RText_1.RText();
@@ -1407,8 +2032,8 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             var _this = this;
             this.contextMenu = new ContextMenu_1.ContextMenu();
             this.contextMenu._isNotEditableInDesigner = true;
-            $(this.contextMenu.menu.dom).css("font-family", "Roboto");
-            $(this.contextMenu.menu.dom).css("font-size", "12px");
+            this.contextMenu.menu.dom.style["font-family"] = "Roboto";
+            this.contextMenu.menu.dom.style["font-size"] = "12px";
             this.contextMenu.menu._setDesignMode = (nothing) => { }; //should net be editable in designer
             if (isDatatable !== true) {
                 var insertRowBefore = new MenuItem_1.MenuItem();
@@ -1419,7 +2044,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                 insertRowBefore.text = "insert row before";
                 insertRowBefore.onclick((evt) => {
                     var info = _this.getInfoFromEvent(evt);
-                    var newRow = new RTablerow_2.RTablerow();
+                    var newRow = new RTablerow_3.RTablerow();
                     if (_this.heights && Array.isArray(_this.heights))
                         _this.heights.splice(info.row, 0, "auto");
                     newRow.parent = _this;
@@ -1440,7 +2065,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                 insertRowAfter.text = "insert row after";
                 insertRowAfter.onclick((evt) => {
                     var info = _this.getInfoFromEvent(evt);
-                    var newRow = new RTablerow_2.RTablerow();
+                    var newRow = new RTablerow_3.RTablerow();
                     if (_this.heights && Array.isArray(_this.heights))
                         _this.heights.splice(info.row + 1, 0, "auto");
                     newRow.parent = _this;
@@ -1537,12 +2162,12 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                 });
                 this.contextMenu.menu.add(removeRow);
             }
-            var copyMenu = new Button_2.Button();
-            $(copyMenu.dom).css("font-family", "Roboto");
-            $(copyMenu.dom).css("font-size", "12px");
+            var copyMenu = new Button_3.Button();
+            copyMenu.dom.style["font-family"] = "Roboto";
+            copyMenu.dom.style["font-size"] = "12px";
             copyMenu.text = "copy";
             copyMenu.width = "100%";
-            $(copyMenu.dom).removeClass("jinlinecomponent");
+            copyMenu.dom.classList.remove("jinlinecomponent");
             let func = function (evt) {
                 var info = _this.getInfoFromEvent(evt);
                 //@ts-ignore
@@ -1552,12 +2177,12 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             };
             copyMenu.onclick(func);
             this.contextMenu.menu.add(copyMenu);
-            var pasteMenu = new Button_2.Button();
-            $(pasteMenu.dom).css("font-family", "Roboto");
-            $(pasteMenu.dom).css("font-size", "12px");
+            var pasteMenu = new Button_3.Button();
+            pasteMenu.dom.style["font-family"] = "Roboto";
+            pasteMenu.dom.style["font-size"] = "12px";
             pasteMenu.text = "paste";
             pasteMenu.width = "100%";
-            $(pasteMenu.dom).removeClass("jinlinecomponent");
+            pasteMenu.dom.classList.remove("jinlinecomponent");
             let func2 = function (evt) {
                 var info = _this.getInfoFromEvent(evt);
                 //@ts-ignore
@@ -1601,10 +2226,10 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                         }
                     }
                     if (hiddenCells[r + ":" + c] === true) {
-                        $(cell.domWrapper).addClass("invisibleAfterSpan");
+                        cell.domWrapper.classList.add("invisibleAfterSpan");
                     }
                     else {
-                        $(cell.domWrapper).removeClass("invisibleAfterSpan");
+                        cell.domWrapper.classList.remove("invisibleAfterSpan");
                     }
                 }
             }
@@ -1642,7 +2267,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                         }
                         else
                             val = this.heights[r];
-                        $(row._components[c].dom).css("height", Number.isInteger(val) ? val + "px" : val);
+                        row._components[c].dom.style.height = Number.isInteger(val) ? val + "px" : val;
                     }
                     var v = null;
                     if ((_a = this.layout) === null || _a === void 0 ? void 0 : _a.fillColor) {
@@ -1790,7 +2415,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                 this.heights = height;
                 var test = Number(height);
                 for (var x = 0; x < tr._components.length; x++) {
-                    $(tr._components[x].dom).css("height", (test === NaN) ? height : (test + "px"));
+                    tr._components[x].dom.style.height = (test === NaN) ? height : (test + "px");
                 }
                 return;
             }
@@ -1802,7 +2427,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             var max = tr._components.length - 1;
             var test = Number(height);
             for (var x = 0; x < tr._components.length; x++) {
-                $(tr._components[x].dom).css("height", (test === NaN) ? height : (test + "px"));
+                tr._components[x].dom.style.height = (test === NaN) ? height : (test + "px");
             }
             for (var t = this.heights.length; t < max; t++) {
                 this.heights.push("auto");
@@ -1853,7 +2478,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                 this.widths[found] = Number(width);
                 if (this.widths[found] === NaN)
                     this.widths[found] = width;
-                $(this._components[0]._components[found].domWrapper).attr("width", width);
+                this._components[0]._components[found].domWrapper.setAttribute("width", width);
             }
             //this._parent.setChildWidth(component,value);
         }
@@ -1917,7 +2542,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                 ob = callingFromTable;
             if (ob === null || ob === void 0 ? void 0 : ob.body) {
                 for (var x = 0; x < ob.body.length; x++) {
-                    let obb = new RTablerow_2.RTablerow().fromJSON(ob.body[x]);
+                    let obb = new RTablerow_3.RTablerow().fromJSON(ob.body[x]);
                     obb.parent = this;
                     ret.add(obb);
                     /*   let all = [];
@@ -1951,7 +2576,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
             }
             var tr = this._components[0];
             for (var x = 0; x < tr._components.length; x++) {
-                $(tr._components[x].domWrapper).attr("width", this.widths[x]);
+                tr._components[x].domWrapper.setAttribute("width", this.widths[x]);
             }
             if (this.heights) {
                 for (var r = 0; r < this._components.length; r++) {
@@ -1967,7 +2592,7 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
                         }
                         else
                             val = this.heights[r];
-                        $(row._components[c].dom).css("height", Number.isInteger(val) ? val + "px" : val);
+                        row._components[c].dom.style.height = Number.isInteger(val) ? val + "px" : val;
                     }
                 }
             }
@@ -2031,715 +2656,21 @@ define("jassijs_report/RTable", ["require", "exports", "jassijs/remote/Registry"
         }
     };
     __decorate([
-        (0, Property_3.$Property)(),
+        (0, Property_7.$Property)(),
         __metadata("design:type", Number)
     ], RTable.prototype, "headerRows", void 0);
     __decorate([
-        (0, Property_3.$Property)({ chooseFrom: allLayouts, chooseFromStrict: true }),
+        (0, Property_7.$Property)({ chooseFrom: allLayouts, chooseFromStrict: true }),
         __metadata("design:type", String),
         __metadata("design:paramtypes", [String])
     ], RTable.prototype, "layoutName", null);
     RTable = __decorate([
-        (0, RComponent_4.$ReportComponent)({ fullPath: "report/Table", icon: "mdi mdi-table-large", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
-        (0, Registry_7.$Class)("jassijs_report.RTable"),
+        (0, RComponent_10.$ReportComponent)({ fullPath: "report/Table", icon: "mdi mdi-table-large", editableChildComponents: ["this", "this.headerPanel", "this.bodyPanel", "this.footerPanel"] }),
+        (0, Registry_13.$Class)("jassijs_report.RTable"),
         __metadata("design:paramtypes", [Object])
     ], RTable);
     exports.RTable = RTable;
     async function test() {
-    }
-    exports.test = test;
-});
-define("jassijs_report/RGroupTablerow", ["require", "exports", "jassijs_report/RTablerow", "jassijs_report/RComponent", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, RTablerow_3, RComponent_5, Registry_8, Property_4) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.RGroupTablerow = void 0;
-    let RGroupTablerow = 
-    //@$Property({name:"horizontal",hide:true})
-    class RGroupTablerow extends RTablerow_3.RTablerow {
-        get expression() {
-            var _a, _b, _c;
-            var pos = (_a = this.parent) === null || _a === void 0 ? void 0 : _a.groupFooterPanel.indexOf(this);
-            if (pos === -1)
-                pos = (_b = this.parent) === null || _b === void 0 ? void 0 : _b.groupHeaderPanel.indexOf(this);
-            if (pos === -1)
-                return undefined;
-            return (_c = this.parent) === null || _c === void 0 ? void 0 : _c.groupExpression[pos];
-        }
-        set expression(value) {
-            var _a, _b;
-            var pos = (_a = this.parent) === null || _a === void 0 ? void 0 : _a.groupFooterPanel.indexOf(this);
-            if (pos === -1)
-                pos = (_b = this.parent) === null || _b === void 0 ? void 0 : _b.groupHeaderPanel.indexOf(this);
-            if (pos === -1)
-                return;
-            this.parent.groupExpression[pos] = value;
-        }
-        get _editorselectthis() {
-            return this;
-        }
-    };
-    __decorate([
-        (0, Property_4.$Property)(),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RGroupTablerow.prototype, "expression", null);
-    RGroupTablerow = __decorate([
-        (0, RComponent_5.$ReportComponent)({ editableChildComponents: ["this"] }),
-        (0, Registry_8.$Class)("jassijs_report.RTablerow")
-        //@$Property({name:"horizontal",hide:true})
-    ], RGroupTablerow);
-    exports.RGroupTablerow = RGroupTablerow;
-});
-define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs_report/RComponent"], function (require, exports, Registry_9, Property_5, RComponent_6) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.RImage = void 0;
-    //mdi-format-list-numbered
-    let RImage = 
-    //@$Property({name:"horizontal",hide:true})
-    class RImage extends RComponent_6.RComponent {
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties = undefined) {
-            super(properties);
-            this.reporttype = "image";
-            this._image = "";
-            this.init($('<img class="RImage"></img>')[0]);
-            $(this.domWrapper).removeClass("jcontainer");
-        }
-        /**
-         * adds a component to the container before an other component
-         * @param {jassijs.ui.Component} component - the component to add
-         * @param {jassijs.ui.Component} before - the component before then component to add
-         */
-        addBefore(component, before) {
-            //do nothing
-        }
-        /**
-      * adds a component to the container
-      * @param {jassijs.ui.Component} component - the component to add
-      */
-        add(component) {
-            //do nothing
-        }
-        set image(value) {
-            this._image = value;
-            if (value === undefined)
-                $(this.dom).attr("src", "");
-            else {
-                //later we have a parent
-                var report = RComponent_6.RComponent.findReport(this);
-                var _this = this;
-                if (report === undefined) {
-                    if (_this["nextTry"] === undefined) { //deny recurse
-                        setTimeout(() => {
-                            _this["nextTry"] = true;
-                            _this.image = value;
-                        }, 200);
-                    }
-                    else {
-                        delete _this["nextTry"];
-                    }
-                }
-                else {
-                    var im = report.images;
-                    if (im !== undefined && im[value] !== undefined) {
-                        $(this.dom).attr("src", im[value]);
-                    }
-                    else {
-                        $(this.dom).attr("src", value);
-                    }
-                }
-            }
-        }
-        get image() {
-            return this._image;
-        }
-        set fit(value) {
-            this._fit = value;
-            if (value === undefined) {
-                $(this.__dom).css("object-fit", "");
-                this.width = this.width;
-                this.height = this.height;
-            }
-            else {
-                $(this.__dom).css("object-fit", "contain");
-                $(this.__dom).css("width", value[0]);
-                $(this.__dom).css("height", value[1]);
-            }
-        }
-        get fit() {
-            return this._fit;
-        }
-        set opacity(value) {
-            this._opacity = value;
-            if (value === undefined) {
-                $(this.__dom).css("opacity", "");
-            }
-            else {
-                $(this.__dom).css("opacity", value);
-            }
-        }
-        get opacity() {
-            return this._opacity;
-        }
-        toJSON() {
-            var ret = super.toJSON();
-            if (this.fit) {
-                ret.fit = this.fit;
-            }
-            if (this.opacity) {
-                ret.opacity = this.opacity;
-            }
-            //if (this.image)
-            ret.image = this.image;
-            return ret;
-        }
-        fromJSON(ob) {
-            var ret = this;
-            if (ob.fit) {
-                ret.fit = ob.fit;
-                delete ob.fit;
-            }
-            if (ob.opacity) {
-                ret.opacity = ob.opacity;
-                delete ob.opacity;
-            }
-            //if (ob.image)
-            ret.image = ob.image;
-            delete ob.image;
-            super.fromJSON(ob);
-            return ret;
-        }
-    };
-    __decorate([
-        (0, Property_5.$Property)({
-            type: "rimage",
-            chooseFrom: (data) => {
-                debugger;
-                return [];
-            }
-        }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RImage.prototype, "image", null);
-    __decorate([
-        (0, Property_5.$Property)({ type: "number[]", decription: "fit in rectangle width, height e.g. 10,20" }),
-        __metadata("design:type", Array),
-        __metadata("design:paramtypes", [Array])
-    ], RImage.prototype, "fit", null);
-    __decorate([
-        (0, Property_5.$Property)({ type: "number" }),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], RImage.prototype, "opacity", null);
-    RImage = __decorate([
-        (0, RComponent_6.$ReportComponent)({ fullPath: "report/Image", icon: "mdi mdi-image-frame" }),
-        (0, Registry_9.$Class)("jassijs_report.RImage")
-        //@$Property({name:"horizontal",hide:true})
-        ,
-        __metadata("design:paramtypes", [Object])
-    ], RImage);
-    exports.RImage = RImage;
-});
-define("jassijs_report/RImageEditor", ["require", "exports", "jassijs/ui/Databinder", "jassijs/ui/Upload", "jassijs/ui/Textbox", "jassijs/ui/Image", "jassijs/ui/Button", "jassijs/ui/Repeater", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/PropertyEditors/Editor", "jassijs_report/RComponent"], function (require, exports, Databinder_1, Upload_1, Textbox_1, Image_1, Button_3, Repeater_1, Registry_10, Panel_3, Editor_1, RComponent_7) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.RImageChooser = exports.RImageEditor = void 0;
-    let RImageEditor = class RImageEditor extends Editor_1.Editor {
-        /**
-         * Checkbox Editor for boolean values
-         * used by PropertyEditor
-         * @class jassijs.ui.PropertyEditors.BooleanEditor
-         */
-        constructor(property, propertyEditor) {
-            super(property, propertyEditor);
-            /** @member - the renedering component **/
-            this.component = new Panel_3.Panel( /*{useSpan:true}*/);
-            this._button = new Button_3.Button();
-            this._textbox = new Textbox_1.Textbox();
-            this._textbox.width = "calc(100% - 34px)";
-            this.component.height = 24;
-            this._button.icon = "mdi mdi-glasses";
-            this.component.add(this._textbox);
-            this.component.add(this._button);
-            var _this = this;
-            this._textbox.onchange(function (param) {
-                _this._onchange(param);
-            });
-            this._button.onclick(() => {
-                _this.showDialog();
-            });
-        }
-        /**
-         * @member {object} ob - the object which is edited
-         */
-        set ob(ob) {
-            super.ob = ob;
-            //databinder,"prop"
-            var value = this.propertyEditor.getPropertyValue(this.property);
-            if (value === null || value === void 0 ? void 0 : value.startsWith('"'))
-                value = value.substring(1);
-            if (value === null || value === void 0 ? void 0 : value.endsWith('"')) {
-                value = value.substring(0, value.length - 1);
-            }
-            this._textbox.value = value;
-        }
-        get ob() {
-            return this._ob;
-        }
-        /**
-       * get the renderer for the PropertyEditor
-       * @returns - the UI-component for the editor
-       */
-        getComponent() {
-            return this.component;
-        }
-        /**
-        * intern the value changes
-        * @param {type} param
-        */
-        _onchange(param = undefined) {
-            var val = this._textbox.value;
-            if (this.property) {
-                this.propertyEditor.setPropertyInCode(this.property.name, '"' + val + '"');
-                this.propertyEditor.setPropertyInDesign(this.property.name, val);
-            }
-            super.callEvent("edit", param);
-        }
-        async showDialog(onlytest = undefined) {
-            var _this = this;
-            if (!this.dialog) {
-                this.dialog = new RImageChooser();
-                var image = this.ob;
-                var report = RComponent_7.RComponent.findReport(image);
-                if (report === null || report === void 0 ? void 0 : report.images)
-                    this.dialog.items = report.images;
-                $(this.dialog.__dom).dialog({ height: "400", width: "400",
-                    close: () => {
-                        if (report)
-                            report.images = _this.dialog.items;
-                        _this._onchange();
-                    } });
-                this.dialog.onpictureselected((val) => {
-                    _this._textbox.value = val;
-                    if (report)
-                        report.images = _this.dialog.items;
-                    _this._onchange();
-                    $(this.dialog.__dom).dialog("close");
-                });
-            }
-            else {
-                $(this.dialog.__dom).dialog("open");
-            }
-        }
-    };
-    RImageEditor = __decorate([
-        (0, Editor_1.$PropertyEditor)(["rimage"]),
-        (0, Registry_10.$Class)("jassi_report/RImagePropertyEditor"),
-        __metadata("design:paramtypes", [Object, Object])
-    ], RImageEditor);
-    exports.RImageEditor = RImageEditor;
-    class RImageChooser extends Panel_3.Panel {
-        constructor() {
-            super();
-            this._items = [];
-            this.me = {};
-            this.layout(this.me);
-        }
-        set items(val) {
-            this._items.splice(0, this._items.length);
-            for (var key in val) {
-                this._items.push({ name: key, data: val[key] });
-            }
-            this.me.repeater1.value = this._items;
-        }
-        get items() {
-            var ret = {};
-            for (var x = 0; x < this._items.length; x++) {
-                ret[this._items[x].name] = this._items[x].data;
-            }
-            return ret;
-        }
-        onpictureselected(func) {
-            this.addEvent("pictureselected", func);
-        }
-        layout(me) {
-            var _this = this;
-            me.repeater1 = new Repeater_1.Repeater();
-            me.databinder1 = new Databinder_1.Databinder();
-            me.databinder1.value = this;
-            me.repeater1.value = this._items;
-            me.upload1 = new Upload_1.Upload();
-            me.upload1.onuploaded((data) => {
-                for (var key in data) {
-                    _this._items.push({ name: key.split(".")[0], data: data[key] });
-                }
-                _this.items = _this.items;
-            });
-            me.upload1.readAs = "DataUrl";
-            this.add(me.upload1);
-            this.add(me.repeater1);
-            me.repeater1.createRepeatingComponent(function (me) {
-                me.panel1 = new Panel_3.Panel();
-                me.image1 = new Image_1.Image();
-                me.itile = new Textbox_1.Textbox();
-                me.remove = new Button_3.Button();
-                me.repeater1.design.add(me.panel1);
-                me.panel1.add(me.itile);
-                me.panel1.add(me.remove);
-                me.panel1.add(me.image1);
-                me.image1.height = "75";
-                me.remove.text = "";
-                me.remove.icon = "mdi mdi-delete-forever-outline";
-                me.itile.bind = [me.repeater1.design.databinder, "name"];
-                me.itile.onchange(function (event) {
-                    var ob = me.itile._databinder.value;
-                    ob.name = me.itile.value;
-                    _this.items = _this.items;
-                });
-                me.image1.bind = [me.repeater1.design.databinder, "data"];
-                me.remove.onclick(function (event) {
-                    var ob = me.itile._databinder.value;
-                    let pos = _this._items.indexOf(ob);
-                    _this._items.splice(pos, 1);
-                    _this.items = _this.items;
-                });
-                me.image1.onclick(function (event) {
-                    var ob = me.itile._databinder.value;
-                    _this.value = ob.name;
-                    _this.callEvent("pictureselected", ob.name);
-                });
-            });
-        }
-    }
-    exports.RImageChooser = RImageChooser;
-    async function test() {
-        var ret = new RImageChooser();
-        return ret;
-    }
-    exports.test = test;
-});
-define("jassijs_report/ROList", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_11, Component_3, Property_6, ReportDesign_2, RComponent_8) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.ROList = void 0;
-    //Limitations not implemented: separator,markerColor, counter is counting also the next elements
-    let ROList = 
-    //@$Property({name:"horizontal",hide:true})
-    class ROList extends RComponent_8.RComponent {
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties = undefined) {
-            super(properties);
-            this.reporttype = "ol";
-            this.init($("<ol></ol>")[0]);
-        }
-        set type(value) {
-            this._type = value;
-            if (value === undefined)
-                $(this.dom).css("list-style-type", "");
-            else
-                $(this.dom).css("list-style-type", value);
-        }
-        get type() {
-            return this._type;
-        }
-        set reversed(value) {
-            this._reversed = value;
-            if (this._reversed)
-                $(this.__dom).attr("reversed", "");
-            else
-                $(this.__dom).removeAttr("reversed");
-        }
-        get reversed() {
-            return this._reversed;
-        }
-        set start(value) {
-            this._start = value;
-            $(this.__dom).attr("start", value);
-        }
-        get start() {
-            return this._start;
-        }
-        /**
-         * adds a component to the container before an other component
-         * @param {jassijs.ui.Component} component - the component to add
-         * @param {jassijs.ui.Component} before - the component before then component to add
-         */
-        addBefore(component, before) {
-            if (component.addToParent)
-                return component.addToParent(this);
-            Component_3.Component.replaceWrapper(component, document.createElement("li"));
-            if (component._counter)
-                component.counter = component._counter;
-            if (component.listType !== undefined)
-                component.listType = component._listType;
-            super.addBefore(component, before);
-        }
-        /**
-      * adds a component to the container
-      * @param {jassijs.ui.Component} component - the component to add
-      */
-        add(component) {
-            if (component.addToParent)
-                return component.addToParent(this);
-            Component_3.Component.replaceWrapper(component, document.createElement("li"));
-            if (component.listType !== undefined)
-                component.listType = component._listType;
-            if (component._counter)
-                component.counter = component._counter;
-            super.add(component);
-        }
-        toJSON() {
-            var ret = super.toJSON();
-            ret.ol = [];
-            if (this.reversed)
-                ret.reversed = true;
-            if (this.start)
-                ret.start = this.start;
-            if (this.type)
-                ret.type = this.type;
-            for (let x = 0; x < this._components.length; x++) {
-                if (this._components[x]["designDummyFor"])
-                    continue;
-                //@ts-ignore
-                ret.ol.push(this._components[x].toJSON());
-            }
-            return ret;
-        }
-        fromJSON(ob) {
-            var ret = this;
-            var arr = ob.ol;
-            for (let x = 0; x < arr.length; x++) {
-                ret.add(ReportDesign_2.ReportDesign.fromJSON(arr[x]));
-            }
-            delete ob.ol;
-            if (ob.reversed)
-                ret.reversed = ob.reversed;
-            delete ob.reversed;
-            if (ob.start)
-                ret.start = ob.start;
-            delete ob.start;
-            if (ob.type)
-                ret.type = ob.type;
-            delete ob.type;
-            super.fromJSON(ob);
-            return ret;
-        }
-    };
-    __decorate([
-        (0, Property_6.$Property)({ chooseFrom: ["lower-alpha", "upper-alpha", "lower-roman", "upper-roman", "none"] }),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], ROList.prototype, "type", null);
-    __decorate([
-        (0, Property_6.$Property)({ default: false }),
-        __metadata("design:type", Boolean),
-        __metadata("design:paramtypes", [Boolean])
-    ], ROList.prototype, "reversed", null);
-    __decorate([
-        (0, Property_6.$Property)({ default: 1 }),
-        __metadata("design:type", Number),
-        __metadata("design:paramtypes", [Number])
-    ], ROList.prototype, "start", null);
-    ROList = __decorate([
-        (0, RComponent_8.$ReportComponent)({ fullPath: "report/Ordered List", icon: "mdi mdi-format-list-numbered", editableChildComponents: ["this"] }),
-        (0, Registry_11.$Class)("jassijs_report.ROList")
-        //@$Property({name:"horizontal",hide:true})
-        ,
-        __metadata("design:paramtypes", [Object])
-    ], ROList);
-    exports.ROList = ROList;
-});
-define("jassijs_report/RStack", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_12, ReportDesign_3, RComponent_9) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.RStack = void 0;
-    //@$UIComponent({editableChildComponents:["this"]})
-    let RStack = 
-    //@$Property({name:"horizontal",hide:true})
-    class RStack extends RComponent_9.RComponent {
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties = undefined) {
-            super(properties);
-            this.reporttype = "stack";
-            $(this.dom).css("flex-direction", "column");
-            $(this.dom).addClass("designerNoResizable");
-        }
-        /**
-          * adds a component to the container before an other component
-          * @param {jassijs.ui.Component} component - the component to add
-          * @param {jassijs.ui.Component} before - the component before then component to add
-          */
-        addBefore(component, before) {
-            if (component.addToParent)
-                return component.addToParent(this);
-            super.addBefore(component, before);
-        }
-        /**
-      * adds a component to the container
-      * @param {jassijs.ui.Component} component - the component to add
-      */
-        add(component) {
-            if (component.addToParent)
-                return component.addToParent(this);
-            super.add(component);
-        }
-        toJSON() {
-            var ret = super.toJSON();
-            ret.stack = [];
-            for (let x = 0; x < this._components.length; x++) {
-                if (this._components[x]["designDummyFor"])
-                    continue;
-                //@ts-ignore
-                ret.stack.push(this._components[x].toJSON());
-            }
-            var test = 0;
-            for (var key in ret) {
-                test++;
-            }
-            if (test === 1)
-                ret = ret.stack; //short version
-            return ret;
-        }
-        fromJSON(ob) {
-            var ret = this;
-            var arr = ob;
-            if (ob.stack)
-                arr = ob.stack;
-            for (let x = 0; x < arr.length; x++) {
-                ret.add(ReportDesign_3.ReportDesign.fromJSON(arr[x]));
-            }
-            delete ob.stack;
-            if (!Array.isArray(ob))
-                super.fromJSON(ob);
-            return ret;
-        }
-    };
-    RStack = __decorate([
-        (0, RComponent_9.$ReportComponent)({ fullPath: "report/Stack", icon: "mdi mdi-view-sequential-outline", editableChildComponents: ["this"] }),
-        (0, Registry_12.$Class)("jassijs_report.RStack")
-        //@$Property({name:"horizontal",hide:true})
-        ,
-        __metadata("design:paramtypes", [Object])
-    ], RStack);
-    exports.RStack = RStack;
-});
-//    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RStyle", ["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, RComponent_10, Registry_13, Property_7, Classes_2) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.RStyle = void 0;
-    //@$UIComponent({editableChildComponents:["this"]})
-    let RStyle = 
-    //@$Property({name:"horizontal",hide:true})
-    class RStyle extends RComponent_10.RComponent {
-        constructor(properties = undefined) {
-            super(properties);
-            this.$isInivisibleComponent = true; //invisible component in designer
-            this.reporttype = "style";
-            var _this = this;
-            this.onstylechanged((param1, param2) => {
-                _this.update();
-            });
-        }
-        set name(value) {
-            var old = this._name;
-            this._name = value;
-            if (this.activeComponentDesigner) {
-                if (old) { //remove old
-                    var all = this.activeComponentDesigner.variables.value;
-                    for (let x = 0; x < all.length; x++) {
-                        if (all[x].name === old) {
-                            all.splice(x, 1);
-                            this.activeComponentDesigner.variables.value = all;
-                            break;
-                        }
-                    }
-                    this.activeComponentDesigner.variables.addVariable(value, this, true);
-                    this.activeComponentDesigner.resize();
-                }
-            }
-        }
-        addToParent(suggestedparent) {
-            if (suggestedparent === undefined)
-                throw new Classes_2.JassiError("suggestedparent is undefined");
-            if (suggestedparent.reporttype === "report") {
-                suggestedparent.styleContainer.add(this);
-                return;
-            }
-            this.addToParent(suggestedparent._parent);
-        }
-        get name() {
-            return this._name;
-        }
-        toJSON() {
-            var ret = super.toJSON();
-            return ret;
-        }
-        update() {
-            var style = document.getElementById(this.styleid);
-            if (!document.getElementById(this.styleid)) {
-                style = $('<style id=' + this.styleid + '></style>')[0];
-                document.head.appendChild(style);
-            }
-            var prop = {};
-            var sstyle = "\t." + this.styleid + "{\n";
-            sstyle += this.dom.style.cssText;
-            sstyle = sstyle + "\t}\n";
-            style.innerHTML = sstyle;
-        }
-        fromJSON(ob) {
-            var ret = this;
-            super.fromJSON(ob);
-            //delete ob.stack;
-            return ret;
-        }
-        //this.dom.style.cssText
-        get styleid() {
-            return "jassistyle" + this._id;
-        }
-        extensionCalled(action) {
-            if (action.componentDesignerSetDesignMode) {
-                this.activeComponentDesigner = action.componentDesignerSetDesignMode.componentDesigner;
-                return this._setDesignMode(action.componentDesignerSetDesignMode.enable);
-            }
-            super.extensionCalled(action);
-        }
-    };
-    __decorate([
-        (0, Property_7.$Property)(),
-        __metadata("design:type", String),
-        __metadata("design:paramtypes", [String])
-    ], RStyle.prototype, "name", null);
-    RStyle = __decorate([
-        (0, RComponent_10.$ReportComponent)({ fullPath: "report/Style", icon: "mdi mdi-virus-outline", editableChildComponents: ["this"] }),
-        (0, Registry_13.$Class)("jassijs_report.RStyle")
-        //@$Property({name:"horizontal",hide:true})
-        ,
-        __metadata("design:paramtypes", [Object])
-    ], RStyle);
-    exports.RStyle = RStyle;
-    function test() {
-        var n = new RStyle();
-        var hh = Object.getOwnPropertyDescriptor(n, "name");
     }
     exports.test = test;
 });
@@ -2868,8 +2799,8 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
             this.reporttype = "tablerow";
             properties = undefined === properties ? {} : properties;
             properties.noWrapper = true;
-            super.init($("<tr></tr>")[0], properties);
-            $(this.dom).addClass("designerNoResizable");
+            super.init("<tr></tr>", properties);
+            this.dom.classList.add("designerNoResizable");
         }
         oncomponentAdded(callback) {
             this.addEvent("componentAdded", callback);
@@ -2901,18 +2832,17 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
             Component_4.Component.replaceWrapper(component, document.createElement("td"));
             var border = component["border"];
             if (border !== undefined) {
-                $(component.domWrapper).css("border-left-style", border[0] ? "solid" : "none");
-                $(component.domWrapper).css("border-top-style", border[1] ? "solid" : "none");
-                $(component.domWrapper).css("border-right-style", border[2] ? "solid" : "none");
-                $(component.domWrapper).css("border-bottom-style", border[3] ? "solid" : "none");
+                component.domWrapper.style["border-left-style"] = border[0] ? "solid" : "none";
+                component.domWrapper.style["border-top-style"] = border[1] ? "solid" : "none";
+                component.domWrapper.style["border-right-style"] = border[2] ? "solid" : "none";
+                component.domWrapper.style["border-bottom-style"] = border[3] ? "solid" : "none";
             }
             if (component.colSpan)
-                $(component.domWrapper).attr("colspan", component.colSpan);
+                component.domWrapper.setAttribute("colspan", component.colSpan.toString());
             if (component.rowSpan)
-                $(component.domWrapper).attr("rowspan", component.rowSpan);
-            //$(component.dom).css("background-color","inherit");
-            $(component.domWrapper).css("word-break", "break-all");
-            $(component.domWrapper).css("display", "");
+                component.domWrapper.setAttribute("rowspan", component.rowSpan.toString());
+            component.domWrapper.style["word-break"] = "break-all";
+            component.domWrapper.style["display"] = "";
             if (component.reporttype === "text") {
                 var rt = component;
                 rt.customToolbarButtons["Table"] = {
@@ -2924,8 +2854,8 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
                     }
                 };
             }
-            $(component.dom).removeClass("designerNoResizable");
-            $(component.dom).addClass("designerNoResizableY");
+            component.dom.classList.remove("designerNoResizable");
+            component.dom.classList.add("designerNoResizableY");
         }
         /**
         * adds a component to the container
@@ -2940,14 +2870,15 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
             this.wrapComponent(component);
             component.parent = this;
             super.add(component);
-            // $(component.domWrapper).css("display", "table-cell");
             this.callEvent("componentAdded", component, this);
             if (this._parent)
                 this._parent.addEmptyCellsIfNeeded(this);
             if (component.designDummyFor) {
-                $(component.domWrapper).attr("colspan", "100");
-                if ($(this.dom).width() < 140) {
-                    component.width = 140 - $(this.dom).width();
+                component.domWrapper.setAttribute("colspan", "100");
+                // if ($(this.dom).width() < 140) {
+                //    component.width = 140 - $(this.dom).width();
+                if (this.dom.clientWidth < 140) {
+                    component.width = 140 - this.dom.clientWidth;
                 }
             }
             if ((_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout)
@@ -2973,15 +2904,9 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
                 //(<RText>component).newlineafter = true;
             }
             super.addBefore(component, before);
-            // $(component.domWrapper).css("display", "table-cell");
             this.callEvent("componentAdded", component, this);
-            //if (this._parent)
-            //  this._parent.addEmptyCellsIfNeeded(this);
             if ((_a = this.parent) === null || _a === void 0 ? void 0 : _a.updateLayout)
                 (_b = this.parent) === null || _b === void 0 ? void 0 : _b.updateLayout(true);
-            /*var test=component.height;
-            if(test)
-                component.height=test;*/
         }
         fromJSON(columns) {
             var ret = this;
@@ -2990,7 +2915,6 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
                 dummy.value = "foreach";
                 dummy.colSpan = 200;
                 this.add(dummy);
-                //this.domWrapper.appendChild($('<td colspan=500>foreach</td>')[0]);
                 ret.forEachDummy = columns;
                 return ret;
             }
@@ -3023,7 +2947,7 @@ define("jassijs_report/RTablerow", ["require", "exports", "jassijs/remote/Regist
     exports.RTablerow = RTablerow;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties", "jassijs/util/Tools"], function (require, exports, Registry_15, RComponent_12, HTMLPanel_1, Property_8, ReportDesign_5, CSSProperties_1, Tools_2) {
+define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/RComponent", "jassijs/ui/HTMLPanel", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs/ui/CSSProperties", "jassijs/util/Tools", "jassijs/ui/Component"], function (require, exports, Registry_15, RComponent_12, HTMLPanel_1, Property_8, ReportDesign_5, CSSProperties_1, Tools_2, Component_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RText = void 0;
@@ -3071,18 +2995,15 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
             this.reporttype = "text";
             this.toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
             this.customToolbarButtons = {};
-            super.init($('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>')[0]); //tabindex for key-event
-            $(this.domWrapper).removeClass("jcontainer");
-            $(this.__dom).css("text-overflow", "ellipsis");
-            $(this.__dom).css("overflow", "hidden");
-            $(this.dom).addClass("designerNoResizable");
+            super.init('<div class="RText mce-content-body jdisableaddcomponents" tabindex="0" ><div  class="HTMLPanelContent"></div></div>'); //tabindex for key-event
+            this.domWrapper.classList.remove("jcontainer");
+            this.__dom.style["text-overflow"] = "ellipsis";
+            this.__dom.style["overflow"] = "hidden";
+            this.dom.classList.add("designerNoResizable");
             (0, CSSProperties_1.loadFontIfNedded)("Roboto");
-            //  super.init($('<div class="RText"></div>')[0]);
             var el = this.dom.children[0];
             this._designMode = false;
-            $(this.dom).css("display", "block");
-            // this.css({ font_family: "inherit", font_size: "inherit" })
-            //   $(this.dom.children[0]).css("display","inline-block");
+            this.dom.style["display"] = "block";
             this.extensionCalled = HTMLPanel_1.HTMLPanel.prototype.extensionCalled.bind(this);
             this._setDesignMode = HTMLPanel_1.HTMLPanel.prototype._setDesignMode.bind(this);
             this.initIfNeeded = HTMLPanel_1.HTMLPanel.prototype.initIfNeeded.bind(this);
@@ -3093,7 +3014,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
             var el = this.dom.children[0];
             if (el === undefined)
                 return "";
-            var ret = $(el).html();
+            var ret = el.innerHTML;
             return ret;
         }
         set value(code) {
@@ -3103,7 +3024,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
                 this.dom.appendChild(el);
             }
             else
-                $(el).html(code);
+                el.innerHTML = code;
         }
         set format(value) {
             this._format = value;
@@ -3246,18 +3167,18 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
             var sval = decodeURI(this.value);
             sval = sval.replaceAll("<br>", "\n");
             ret.text = sval; //.replaceAll("<br>","\\n");
-            var node = $("<span>" + ret.text + "</span>");
-            if (node[0].innerText !== node[0].innerHTML) { //htmltext
+            var node = Component_5.Component.createHTMLElement("<span>" + ret.text + "</span>");
+            if (node.innerText !== node.innerHTML) { //htmltext
                 var style = new InlineStyling();
                 var list = [];
-                this.convertFromHTMLNode(node[0], list, style);
+                this.convertFromHTMLNode(node, list, style);
                 if (list.length > 1) {
                     ret.editTogether = true;
                     ret.text = list;
                 }
                 else { //only one text found so we transfer the html 
                     ret = list[0];
-                    ret.text = node[0].innerText;
+                    ret.text = node.innerText;
                     this.fromJSON(Tools_2.Tools.copyObject(ret));
                 }
             }
@@ -3327,8 +3248,6 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Regis
         constructor(properties = { useSpan: true }) {
             super(properties);
             this.reporttype = "textgroup";
-            // $(this.dom).css("flex-direction", "column");
-            //$(this.dom).addClass("designerNoResizable");
         }
         /**
           * adds a component to the container before an other component
@@ -3341,8 +3260,7 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Regis
             if (component.reporttype !== "text" && component.reporttype !== "textgroup" && !component.designDummyFor)
                 throw new Classes_3.JassiError("only text oder textgroup could be added to TextGroup");
             super.addBefore(component, before);
-            //  $(component.dom).css("display", "inline");
-            $(component.domWrapper).css("display", "inline-block");
+            component.domWrapper.style["display"] = "inline-block";
         }
         /**
       * adds a component to the container
@@ -3354,8 +3272,7 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Regis
             if (component.reporttype !== "text" && component.reporttype !== "textgroup" && !component.designDummyFor)
                 throw new Classes_3.JassiError("only text oder textgroup could be added to TextGroup");
             super.add(component);
-            //  $(component.dom).css("display", "inline-block");
-            $(component.domWrapper).css("display", "inline-block");
+            component.domWrapper.style.display = "inline-block";
         }
         toJSON() {
             var ret = super.toJSON();
@@ -3388,7 +3305,7 @@ define("jassijs_report/RTextGroup", ["require", "exports", "jassijs/remote/Regis
     exports.RTextGroup = RTextGroup;
 });
 //    jassijs.register("reportcomponent","jassijs_report.Stack","report/Stack","res/boxpanel.ico");
-define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_17, Component_5, Property_9, ReportDesign_7, RComponent_14) {
+define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_report/ReportDesign", "jassijs_report/RComponent"], function (require, exports, Registry_17, Component_6, Property_9, ReportDesign_7, RComponent_14) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RUList = void 0;
@@ -3406,7 +3323,7 @@ define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry"
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "ul";
-            this.init($("<ul></ul>")[0]);
+            this.init("<ul></ul>");
         }
         /**
          * adds a component to the container before an other component
@@ -3416,7 +3333,7 @@ define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry"
         addBefore(component, before) {
             if (component.addToParent)
                 return component.addToParent(this);
-            Component_5.Component.replaceWrapper(component, document.createElement("li"));
+            Component_6.Component.replaceWrapper(component, document.createElement("li"));
             if (component._listType !== undefined)
                 component.listType = component._listType;
             super.addBefore(component, before);
@@ -3428,7 +3345,7 @@ define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry"
         add(component) {
             if (component.addToParent)
                 return component.addToParent(this);
-            Component_5.Component.replaceWrapper(component, document.createElement("li"));
+            Component_6.Component.replaceWrapper(component, document.createElement("li"));
             if (component.listType !== undefined)
                 component.listType = component._listType;
             super.add(component);
@@ -3436,9 +3353,9 @@ define("jassijs_report/RUList", ["require", "exports", "jassijs/remote/Registry"
         set type(value) {
             this._type = value;
             if (value === undefined)
-                $(this.dom).css("list-style-type", "");
+                this.dom.style["list-style-type"] = "";
             else
-                $(this.dom).css("list-style-type", value);
+                this.dom.style["list-style-type"] = value;
         }
         get type() {
             return this._type;
@@ -3500,7 +3417,7 @@ define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Registr
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "unkown";
-            super.init($('<span class="InvisibleComponent"></span>')[0]);
+            super.init('<span class="InvisibleComponent"></span>');
             this.horizonzal = false;
         }
         fromJSON(ob) {
@@ -3599,9 +3516,11 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     let StyleContainer = class StyleContainer extends Panel_4.Panel {
         constructor(props) {
             super(props);
-            $(this.dom).removeClass("Panel").removeClass("jinlinecomponent");
-            $(this.domWrapper).removeClass("jcomponent").removeClass("jcontainer");
-            $(this.dom).hide();
+            this.dom.classList.remove("Panel");
+            this.dom.classList.remove("jinlinecomponent");
+            this.domWrapper.classList.remove("jcomponent");
+            this.domWrapper.classList.remove("jcontainer");
+            this.dom.hidden = true;
         }
     };
     StyleContainer = __decorate([
@@ -3692,11 +3611,9 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
                 LETTER: [612.00, 792.00],
                 TABLOID: [792.00, 1224.00]
             };
-            //	this.backgroundPanel.width="500px";
-            //$(this.backgroundPanel.dom).css("min-width","200px");
-            $(this.backgroundPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Background</text></svg>" + '")');
-            $(this.footerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Footer</text></svg>" + '")');
-            $(this.headerPanel.dom).css("background-image", 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Header</text></svg>" + '")');
+            this.backgroundPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Background</text></svg>" + '")';
+            this.footerPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Footer</text></svg>" + '")';
+            this.headerPanel.dom.style["background-image"] = 'url("' + "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='50px' width='120px'><text x='0' y='15' fill='black' opacity='0.18' font-size='20'>Header</text></svg>" + '")';
             //select the Report if the user click the Panel
             this.backgroundPanel["_editorselectthis"] = this;
             this.headerPanel["_editorselectthis"] = this;
@@ -3722,8 +3639,8 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             if (value === undefined)
                 value = [40, 40, 40, 40];
             this.updateWidth();
-            $(this.contentPanel.dom).css("margin-left", value[1] + "px");
-            $(this.contentPanel.dom).css("margin-right", value[3] + "px");
+            this.contentPanel.dom.style["margin-left"] = value[1] + "px";
+            this.contentPanel.dom.style["margin-right"] = value[3] + "px";
         }
         get pageSize() {
             return this._pageSize;
@@ -3862,7 +3779,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
             if (ob.defaultStyle) {
                 this.defaultStyle = new RStyle_1.RStyle().fromJSON(ob.defaultStyle);
                 this.defaultStyle.name = "defaultStyle";
-                $(this.dom).addClass(this.defaultStyle.styleid);
+                this.dom.classList.add(this.defaultStyle.styleid);
                 delete ob.defaultStyle;
             }
             if (ob.styles) {
@@ -4454,6 +4371,40 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/Fi
     }
     exports.test = test;
 });
+define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_1, Registry_21, OptionDialog_1, FileExplorer_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.TemplateReport = void 0;
+    const code = `reportdesign = {
+	content: [
+    ]
+};`;
+    let TemplateReport = class TemplateReport {
+        static async newFile(all) {
+            var res = await OptionDialog_1.OptionDialog.show("Create new Report:", ["ok", "cancel"], undefined, false, "Report1");
+            if (res.button === "ok") {
+                FileExplorer_2.FileActions.newFile(all, res.text + ".ts", code, true);
+            }
+        }
+    };
+    TemplateReport.code = code;
+    __decorate([
+        (0, Actions_1.$Action)({
+            name: "New/Report",
+            isEnabled: function (all) {
+                return all[0].isDirectory();
+            }
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Array]),
+        __metadata("design:returntype", Promise)
+    ], TemplateReport, "newFile", null);
+    TemplateReport = __decorate([
+        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Registry_21.$Class)("jassijs_report.TemplateReport")
+    ], TemplateReport);
+    exports.TemplateReport = TemplateReport;
+});
 define("jassijs_report/modul", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -4491,7 +4442,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.Report": {}
             },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1655556793963,
+                "date": 1656016464249,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -4506,11 +4457,11 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.PDFReport": {}
             },
             "jassijs_report/PDFViewer.ts": {
-                "date": 1655556864381,
+                "date": 1656015023161,
                 "jassijs_report.PDFViewer": {}
             },
             "jassijs_report/RColumns.ts": {
-                "date": 1655556864298,
+                "date": 1655929932578,
                 "jassijs_report.RColumns": {
                     "$ReportComponent": [
                         {
@@ -4524,7 +4475,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RComponent.ts": {
-                "date": 1655556864298,
+                "date": 1655930739791,
                 "jassijs_report.ReportComponent": {
                     "$Property": [
                         {
@@ -4757,7 +4708,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RDatatable.ts": {
-                "date": 1655556864381,
+                "date": 1655930954595,
                 "jassijs_report.RDatatable": {
                     "$ReportComponent": [
                         {
@@ -4785,7 +4736,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1634336644000
             },
             "jassijs_report/remote/RComponent.ts": {
-                "date": 1655556793962,
+                "date": 1656016829917,
                 "jassijs_report.ReportComponent": {
                     "$Property": [
                         {
@@ -5018,7 +4969,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportDesign.ts": {
-                "date": 1655556792356,
+                "date": 1656014998740,
                 "jassijs_report.InfoProperties": {
                     "@members": {
                         "title": {
@@ -5271,11 +5222,8 @@ define("jassijs_report/registry", ["require"], function (require) {
                     }
                 }
             },
-            "jassijs_report/ReportTemplate.ts": {
-                "date": 1633815616000
-            },
             "jassijs_report/RGroupTablerow.ts": {
-                "date": 1655556793962,
+                "date": 1656073103788,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -5292,7 +5240,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RImage.ts": {
-                "date": 1655556863815,
+                "date": 1656015205540,
                 "jassijs_report.RImage": {
                     "$ReportComponent": [
                         {
@@ -5328,7 +5276,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RImageEditor.ts": {
-                "date": 1655556792363,
+                "date": 1656017313344,
                 "jassi_report/RImagePropertyEditor": {
                     "$PropertyEditor": [
                         [
@@ -5338,7 +5286,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ROList.ts": {
-                "date": 1655556864060,
+                "date": 1656019460389,
                 "jassijs_report.ROList": {
                     "$ReportComponent": [
                         {
@@ -5381,7 +5329,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStack.ts": {
-                "date": 1655556863817,
+                "date": 1656015321904,
                 "jassijs_report.RStack": {
                     "$ReportComponent": [
                         {
@@ -5395,7 +5343,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RStyle.ts": {
-                "date": 1655556792360,
+                "date": 1656015338312,
                 "jassijs_report.RStyle": {
                     "$ReportComponent": [
                         {
@@ -5414,7 +5362,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTable.ts": {
-                "date": 1655556863905,
+                "date": 1656019451264,
                 "jassijs_report.RTable": {
                     "$ReportComponent": [
                         {
@@ -5447,7 +5395,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1633113320000
             },
             "jassijs_report/RTablerow.ts": {
-                "date": 1655556863906,
+                "date": 1656019423044,
                 "jassijs_report.RTablerow": {
                     "$ReportComponent": [
                         {
@@ -5459,7 +5407,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1655556792359,
+                "date": 1656021839670,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -5494,7 +5442,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RTextGroup.ts": {
-                "date": 1655556864060,
+                "date": 1656016375966,
                 "jassijs_report.RTextGroup": {
                     "$ReportComponent": [
                         {
@@ -5508,7 +5456,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RUList.ts": {
-                "date": 1655556864060,
+                "date": 1656016417389,
                 "jassijs_report.RUList": {
                     "$ReportComponent": [
                         {
@@ -5535,7 +5483,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RUnknown.ts": {
-                "date": 1655556864060,
+                "date": 1656016429630,
                 "jassijs_report.RUnknown": {}
             },
             "jassijs_report/SimpleReportEditor.ts": {
@@ -5546,15 +5494,33 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "date": 1655760762456
             },
             "jassijs_report/pdfMake-interface.ts": {
-                "date": 1655640655695
+                "date": 1656073303823
             },
             "jassijs_report/ReportDesignGlobal.ts": {
                 "date": 1655397712425
+            },
+            "jassijs_report/TemplateReport.ts": {
+                "date": 1656019402317,
+                "jassijs_report.TemplateReport": {
+                    "$ActionProvider": [
+                        "jassijs.remote.FileNode"
+                    ],
+                    "@members": {
+                        "newFile": {
+                            "$Action": [
+                                {
+                                    "name": "New/Report",
+                                    "isEnabled": "function"
+                                }
+                            ]
+                        }
+                    }
+                }
             }
         }
     };
 });
-define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/BoxPanel"], function (require, exports, Registry_21, BoxPanel_3) {
+define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/BoxPanel"], function (require, exports, Registry_22, BoxPanel_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Report = void 0;
@@ -5574,7 +5540,7 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
         }
     };
     Report = __decorate([
-        (0, Registry_21.$Class)("jassijs_report.Report")
+        (0, Registry_22.$Class)("jassijs_report.Report")
         //@$UIComponent({editableChildComponents:["this"]})
         //@$Property({name:"horizontal",hide:true})
         ,
@@ -5584,7 +5550,7 @@ define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/
 });
 //jassijs.register("reportcomponent", "jassijs_report.Report", "report/Report", "res/report.ico");
 // return CodeEditor.constructor;
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Registry_22, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_4, PDFReport_1, PDFViewer_2, ReportDesign_10, Tools_3) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Registry_23, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_4, PDFReport_1, PDFViewer_2, ReportDesign_10, Tools_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
@@ -5621,9 +5587,9 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             this._propertyEditor.addEvent("codeChanged", function () {
                 _this.propertyChanged();
             });
-            $(this.__dom).addClass("ReportDesigner");
-            $(this.dom).css("overflow", "scroll");
-            $(this.dom).css("width", "");
+            this.__dom.classList.add("ReportDesigner");
+            this.dom.style.overflow = "scroll";
+            this.dom.style.width = "";
         }
         connectParser(parser) {
             this._propertyEditor.parser = parser;
@@ -5842,7 +5808,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         }
     };
     ReportDesigner = __decorate([
-        (0, Registry_22.$Class)("jassijs_report.designer.ReportDesigner"),
+        (0, Registry_23.$Class)("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;
@@ -5931,7 +5897,7 @@ export async function test() {
     exports.test = test;
     ;
 });
-define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Registry_23, ReportDesigner_1, Tools_4) {
+define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Registry_24, ReportDesigner_1, Tools_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SimpleReportDesigner = void 0;
@@ -6010,7 +5976,7 @@ define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "j
         }
     };
     SimpleReportDesigner = __decorate([
-        (0, Registry_23.$Class)("jassijs_report.designer.SimpleReportDesigner"),
+        (0, Registry_24.$Class)("jassijs_report.designer.SimpleReportDesigner"),
         __metadata("design:paramtypes", [Object])
     ], SimpleReportDesigner);
     exports.SimpleReportDesigner = SimpleReportDesigner;
@@ -6087,22 +6053,24 @@ define("jassijs_report/ext/pdfmake", ['pdfMakelib', "vfs_fonts"], function (ttt,
     var fonts = require("vfs_fonts");
     if (window["globalThis"] && window["globalThis"]["pdfMake"])
         window.pdfMake = window["globalThis"]["pdfMake"];
+    if (window["globalThisOld"] && window["globalThisOld"]["pdfMake"])
+        window.pdfMake = window["globalThisOld"]["pdfMake"];
     return {
-        default: pdfMake
+        default: window.pdfMake
     };
 });
-define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property"], function (require, exports, Component_6, Registry_24, Registry_25, Panel_7, Property_12) {
+define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property"], function (require, exports, Component_7, Registry_25, Registry_26, Panel_7, Property_12) {
     "use strict";
     var RComponent_17;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RComponent = exports.$ReportComponent = exports.ReportComponentProperties = void 0;
     //Limitations Styles1 -> not implemented	style as array e.g. style: ['quote', 'small']  
-    class ReportComponentProperties extends Component_6.UIComponentProperties {
+    class ReportComponentProperties extends Component_7.UIComponentProperties {
     }
     exports.ReportComponentProperties = ReportComponentProperties;
     function $ReportComponent(properties) {
         return function (pclass) {
-            Registry_24.default.register("$ReportComponent", pclass, properties);
+            Registry_25.default.register("$ReportComponent", pclass, properties);
         };
     }
     exports.$ReportComponent = $ReportComponent;
@@ -6117,9 +6085,9 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         set counter(value) {
             this._counter = value;
             if (value === undefined)
-                $(this.domWrapper).removeAttr("value");
+                this.domWrapper.removeAttribute("value");
             else
-                $(this.domWrapper).attr("value", value);
+                this.domWrapper.setAttribute("value", value.toString());
         }
         get counter() {
             return this._counter;
@@ -6127,9 +6095,9 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         set listType(value) {
             this._listType = value;
             if (value === undefined)
-                $(this.domWrapper).css("list-style-type", "");
+                this.domWrapper.style["list-style-type"] = "";
             else
-                $(this.domWrapper).css("list-style-type", value);
+                this.domWrapper.style["list-style-type"] = value;
         }
         get listType() {
             return this._listType;
@@ -6139,14 +6107,14 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         }
         set fillColor(value) {
             this._fillColor = value;
-            $(this.dom).css("background-color", value);
+            this.dom.style["background-color"] = value;
         }
         get colSpan() {
             return this._colSpan;
         }
         set colSpan(value) {
             var _a, _b, _c, _d;
-            $(this.domWrapper).attr("colspan", value === undefined ? "" : value);
+            this.domWrapper.setAttribute("colspan", value === undefined ? "" : value.toString());
             this._colSpan = value;
             if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
                 (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
@@ -6156,7 +6124,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         }
         set rowSpan(value) {
             var _a, _b, _c, _d;
-            $(this.domWrapper).attr("rowspan", value === undefined ? "" : value);
+            this.domWrapper.setAttribute("rowspan", value === undefined ? "" : value.toString());
             this._rowSpan = value;
             if ((_b = (_a = this._parent) === null || _a === void 0 ? void 0 : _a._parent) === null || _b === void 0 ? void 0 : _b.updateLayout)
                 (_d = (_c = this._parent) === null || _c === void 0 ? void 0 : _c._parent) === null || _d === void 0 ? void 0 : _d.updateLayout(true);
@@ -6168,10 +6136,10 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
             this._border = value;
             if (value === undefined)
                 value = [false, false, false, false];
-            $(this.domWrapper).css("border-left-style", value[0] ? "solid" : "none");
-            $(this.domWrapper).css("border-top-style", value[1] ? "solid" : "none");
-            $(this.domWrapper).css("border-right-style", value[2] ? "solid" : "none");
-            $(this.domWrapper).css("border-bottom-style", value[3] ? "solid" : "none");
+            this.domWrapper.style["border-left-style"] = value[0] ? "solid" : "none";
+            this.domWrapper.style["border-top-style"] = value[1] ? "solid" : "none";
+            this.domWrapper.style["border-right-style"] = value[2] ? "solid" : "none";
+            this.domWrapper.style["border-bottom-style"] = value[3] ? "solid" : "none";
         }
         get width() {
             var _a;
@@ -6213,7 +6181,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         }
         set bold(value) {
             this._bold = value;
-            $(this.dom).css("font-weight", value ? "bold" : "normal");
+            this.dom.style["font-weight"] = value ? "bold" : "normal";
             this.callEvent("stylechanged", "font-weight", value);
         }
         get italics() {
@@ -6221,7 +6189,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         }
         set italics(value) {
             this._italics = value;
-            $(this.dom).css("font-style", value ? "italic" : "normal");
+            this.dom.style["font-style"] = value ? "italic" : "normal";
             this.callEvent("stylechanged", "font-style", value);
         }
         get font() {
@@ -6236,9 +6204,9 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
                 jassijs.myRequire(api + sfont);
             }
             if (value === undefined)
-                $(this.dom).css("font_family", "");
+                this.dom.style["font_family"] = "";
             else
-                $(this.dom).css("font_family", value);
+                this.dom.style["font_family"] = value;
             this.callEvent("stylechanged", "font", value);
         }
         get fontSize() {
@@ -6247,9 +6215,9 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         set fontSize(value) {
             this._fontSize = value;
             if (value === undefined)
-                $(this.dom).css("font-size", "");
+                this.dom.style["font-size"] = "";
             else
-                $(this.dom).css("font-size", value + "px");
+                this.dom.style["font-size"] = value + "px";
             this.callEvent("stylechanged", "fontSize", value);
         }
         get background() {
@@ -6257,7 +6225,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         }
         set background(value) {
             this._background = value;
-            $(this.dom).css("background-color", value);
+            this.dom.style["background-color"] = value;
             this.callEvent("stylechanged", "background", value);
         }
         get color() {
@@ -6265,7 +6233,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         }
         set color(value) {
             this._color = value;
-            $(this.dom).css("color", value);
+            this.dom.style.color = value;
             this.callEvent("stylechanged", "color", value);
         }
         get alignment() {
@@ -6273,7 +6241,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         }
         set alignment(value) {
             this._alignment = value;
-            $(this.dom).css("text-align", value);
+            this.dom.style["text-align"] = value;
             this.callEvent("stylechanged", "alignment", value);
         }
         get decoration() {
@@ -6288,7 +6256,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
                 val = "line-through";
             if (value === "overline")
                 val = "overline";
-            $(this.dom).css("text-decoration", val);
+            this.dom.style["text-decoration"] = val;
             this.callEvent("stylechanged", "decoration", value);
         }
         get decorationColor() {
@@ -6296,7 +6264,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         }
         set decorationColor(value) {
             this._decorationColor = value;
-            $(this.dom).css("textDecorationColor", value);
+            this.dom.style["textDecorationColor"] = value;
             this.callEvent("stylechanged", "textDecorationColor", value);
         }
         get decorationStyle() {
@@ -6313,7 +6281,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
                 val = "double";
             if (value === "wavy")
                 val = "wavy";
-            $(this.dom).css("textDecorationStyle", val);
+            this.dom.style["textDecorationStyle"] = val;
             this.callEvent("stylechanged", "decorationStyle", value);
         }
         static findReport(parent) {
@@ -6334,12 +6302,12 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
             if (report) {
                 report.styleContainer._components.forEach((comp) => {
                     if (comp.name === old) {
-                        $(this.dom).removeClass(comp.styleid);
+                        this.dom.classList.remove(comp.styleid);
                     }
                 });
                 report.styleContainer._components.forEach((comp) => {
                     if (comp.name === value) {
-                        $(this.dom).addClass(comp.styleid);
+                        this.dom.classList.add(comp.styleid);
                     }
                 });
             }
@@ -6350,7 +6318,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         }
         set lineHeight(value) {
             this._lineHeight = value;
-            $(this.dom).css("line-height", value);
+            this.dom.style["line-height"] = value;
             this.callEvent("stylechanged", "lineHeight", value);
             //  super.width = value;
         }
@@ -6360,7 +6328,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         set margin(value) {
             if (value === undefined) {
                 this._margin = value;
-                $(this.dom).css("margin", "");
+                this.dom.style.margin = "";
             }
             else {
                 if (Number.isInteger(value)) {
@@ -6371,7 +6339,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
                     value = [value[0], value[1], value[0], value[1]];
                 }
                 this._margin = value;
-                $(this.dom).css("margin", value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ");
+                this.dom.style.margin = value[1] + "px " + value[2] + "px " + value[3] + "px " + value[0] + "px ";
             }
         }
         fromJSON(ob) {
@@ -6686,7 +6654,7 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         __metadata("design:paramtypes", [Array])
     ], RComponent.prototype, "margin", null);
     RComponent = RComponent_17 = __decorate([
-        (0, Registry_25.$Class)("jassijs_report.ReportComponent"),
+        (0, Registry_26.$Class)("jassijs_report.ReportComponent"),
         (0, Property_12.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], RComponent);

@@ -9,7 +9,7 @@ import { Context } from "jassijs/remote/RemoteObject";
 @$Class("de.ARZeile")
 export class ARZeile extends DBObject {
     @PrimaryGeneratedColumn()
-    public id: number;
+    declare id: number;
     @Column()
     public text: string;
     @Column()

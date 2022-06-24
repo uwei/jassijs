@@ -106,8 +106,6 @@ class JassijsStarter {
                     }
                 });
             });
-            if (beforestartlib[x] === "jassijs/jassi") {
-            }
         }
     }
     async loadRequirejs(requireconfig) {
@@ -121,13 +119,23 @@ class JassijsStarter {
                 path = "//cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.js";
             await this.loadScript(path);
         }
-        /*requirejs.onResourceLoad = function (context, map, depArray, o) {
+        //wait for async sample
+        define("async", {
+            load: function (name, req, onload, config) {
+                var file = name.split(":")[0];
+                var func = name.split(":")[1];
+                req([file], function (value) {
+                    value[func]().then((ret) => onload(ret));
+                });
+            }
+        });
+        requirejs.onResourceLoad = function (context, map, depArray, o) {
             for (var x = 0; x < depArray.length; x++) {
-                if (depArray[x].name.indexOf("util/Parser") > -1) {
+                if (depArray[x].name.indexOf("jquery") > -1) {
                     x = x;
                 }
             }
-        };*/
+        };
     }
     async loadInternetModules(modules) {
         let allmodules = {};
@@ -169,7 +177,7 @@ class JassijsStarter {
             mods.push(key + "/modul");
             all.push(key + "/modul");
         }
-        var startlib = ["jassijs/jassi"];
+        var startlib = [];
         var beforestartlib = [];
         var _this = this;
         require(all, function (remoteJassi, ...res) {
@@ -179,8 +187,8 @@ class JassijsStarter {
             window.jassijs.cssFiles = _this.cssFiles;
             requirejs.config(requireconfig);
             //read UserSettings after all beforestartlib are loaded
-            beforestartlib.push("jassijs/jassi");
-            beforestartlib.push("jassijs/remote/Settings");
+            // beforestartlib.push("jassijs/jassi");
+            // beforestartlib.push("jassijs/remote/Settings");
             //load beforestartlib synchron
             _this.loadBeforestart(beforestartlib).then(() => {
                 require(startlib, function (jassijs, ...others) {

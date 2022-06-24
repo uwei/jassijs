@@ -13,7 +13,7 @@
 //                 Jean-Raphaël Matte <https://github.com/jeralm>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 3.0
-
+/* @ts-ignore changed by jassijs*/
 /// <reference types="node" />
 /* @ts-ignore changed by jassijs*/
 /// <reference types="pdfkit" />

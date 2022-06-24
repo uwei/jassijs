@@ -10,7 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var Server_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.Server = void 0;
+exports.Server = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
 const FileNode_1 = require("jassijs/remote/FileNode");
@@ -417,7 +417,4 @@ Server = Server_1 = __decorate([
     __metadata("design:paramtypes", [])
 ], Server);
 exports.Server = Server;
-async function test() {
-}
-exports.test = test;
 //# sourceMappingURL=Server.js.map

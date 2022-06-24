@@ -71,8 +71,6 @@ class Filesystem {
     loadFile(fileName) {
         var fromServerdirectory = fileName.startsWith("$serverside/");
         let file = this._pathForFile(fileName, fromServerdirectory);
-        if (fromServerdirectory)
-            file = "./" + fileName;
         return fs.readFileSync(file, { encoding: 'utf-8' });
     }
     loadFiles(fileNames) {
@@ -139,8 +137,12 @@ class Filesystem {
         if (serverdir) {
             root = ".";
         }
+        if(!fs.existsSync("/tmp")){
+            fs.mkdirSync("/tmp");
+        }
         let filename = directoryname.split("/")[directoryname.split("/").length - 1] + Filesystem.zipid++;
         await this.zipFolder(root + "/" + directoryname, "/tmp/" + filename + ".zip");
+        
         var data = fs.readFileSync("/tmp/" + filename + ".zip"); //,'binary');
         fs.unlinkSync("/tmp/" + filename + ".zip");
         //let buff = new Buffer(data);

@@ -23,9 +23,9 @@ type Me = {
 })
 @$Class("northwind/CustomerView")
 export class CustomerView extends DBObjectView {
-    me: Me;
+    declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    value: Customer;
+    declare value: Customer;
     constructor() {
         super();
         //this.me = {}; this is called in objectdialog

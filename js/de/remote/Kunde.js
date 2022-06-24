@@ -141,8 +141,8 @@ Kunde = Kunde_1 = __decorate([
 exports.Kunde = Kunde;
 async function test() {
     let test = new Kunde();
-    var g = test.extFunc2();
-    var h = test.extFunc();
+    //var g=test.extFunc2();   
+    //var h=test.extFunc();
     //await Kunde.sample();
     var k = await Kunde.findOne({ id: 1 });
     k.vorname = "Ella";

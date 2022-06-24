@@ -13,7 +13,7 @@ define("tests/registry",["require"], function(require) {
 		"tests.remote.T": {}
 	},
 	"tests/remote/TestCustomer.ts": {
-		"date": 1655556862850,
+		"date": 1656073034029,
 		"tests.TestCustomer": {
 			"$ParentRights": [
 				[
@@ -50,7 +50,7 @@ define("tests/registry",["require"], function(require) {
 		}
 	},
 	"tests/remote/TestOrder.ts": {
-		"date": 1655556862850,
+		"date": 1656073023813,
 		"tests.TestOrder": {
 			"$DBObject": [],
 			"@members": {
@@ -73,7 +73,7 @@ define("tests/registry",["require"], function(require) {
 		}
 	},
 	"tests/remote/TestOrderDetails.ts": {
-		"date": 1655556862840,
+		"date": 1656073236783,
 		"tests.TestOrderDetails": {
 			"$DBObject": [],
 			"@members": {
@@ -98,6 +98,13 @@ define("tests/registry",["require"], function(require) {
 	},
 	"tests/TestReport.ts": {
 		"date": 1623864074000
+	},
+	"tests/ServerTests.ts": {
+		"date": 1656077953224
+	},
+	"tests/TestDialog.ts": {
+		"date": 1656079687883,
+		"tests/TestDialog": {}
 	}
 }
  }

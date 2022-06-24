@@ -13,7 +13,7 @@ import { Context } from "jassijs/remote/RemoteObject";
 export class User extends DBObject  {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    declare id: number;
     @Column()
     email:string;
     @Column({select: false})

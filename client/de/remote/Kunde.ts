@@ -17,7 +17,7 @@ import { Context } from "jassijs/remote/RemoteObject";
 @$Class("de.Kunde") 
 export class Kunde extends DBObject implements ExtensionProvider {
     @PrimaryColumn()
-    id: number;
+    declare id: number;
     @Column()
     vorname: string;
     @Column()
@@ -98,8 +98,8 @@ export class Kunde extends DBObject implements ExtensionProvider {
 }
 export async function test() {
     let test=new Kunde();
-    var g=test.extFunc2();   
-    var h=test.extFunc();
+    //var g=test.extFunc2();   
+    //var h=test.extFunc();
     
     //await Kunde.sample();
     var k = <Kunde>await Kunde.findOne({ id: 1 });

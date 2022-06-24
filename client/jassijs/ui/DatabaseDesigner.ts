@@ -10,7 +10,7 @@ import { OptionDialog } from "jassijs/ui/OptionDialog";
 import { router } from "jassijs/base/Router";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import windows from "jassijs/base/Windows";
-type Me = {
+type Me = { 
     table?: Table;
     select?: Select;
     databinder?: Databinder;
@@ -22,7 +22,7 @@ type Me = {
     removefield?: Button;
     boxpanel3?: BoxPanel;
 };
-var ttt = 1;
+
 @$ActionProvider("jassijs.base.ActionNode")
 @$Class("jassijs/ui/DatabaseDesigner")
 export class DatabaseDesigner extends Panel {
@@ -151,6 +151,7 @@ export class DatabaseDesigner extends Panel {
         me.boxpanel3.add(me.newfield);
         me.boxpanel3.add(me.removefield);
     }
+    
     async saveAll(showChanges=undefined):Promise<string> {
         try {
             var text = await this.currentSchema.updateSchema(true);
@@ -171,6 +172,7 @@ export class DatabaseDesigner extends Panel {
         }
         return "";
     }
+    
     addField(typename:string=undefined,name:string=undefined,nullable:boolean=undefined,relation:string=undefined){
             var field = new DatabaseField();
             //@ts-ignore
@@ -186,6 +188,7 @@ export class DatabaseDesigner extends Panel {
             this.currentClass.fields.push(field);
             this.me.table.items = this.currentClass.fields;
     }
+    
     async addClass(classname:string=undefined) {
         var sub = this.currentClass.name.substring(0, this.currentClass.name.lastIndexOf("."));
         var res;
@@ -211,6 +214,7 @@ export class DatabaseDesigner extends Panel {
             this.update();
         }
     }
+    
     updatePossibleRelations(cell: Tabulator.CellComponent) {
         var _this = this;
         var tp: DatabaseField = <DatabaseField>cell.getData();
@@ -240,6 +244,7 @@ export class DatabaseDesigner extends Panel {
         this.update();
     }
 }
+
 export async function test() {
     var ret = new DatabaseDesigner();
    

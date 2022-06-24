@@ -149,6 +149,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
                         allModules[allfiles[rx]] = ret[rx];
                     }
                     resolve(undefined);
+                }, (err) => {
+                    throw err;
                 });
             });
             for (let x = 0; x < allfiles.length; x++) {

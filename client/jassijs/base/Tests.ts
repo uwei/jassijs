@@ -71,7 +71,7 @@ export class TestAction {
                     try {
                         if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
                             console.log("test " + file.fullpath);
-                            var func = (await import(file.fullpath.substring(0, file.fullpath.length - 3))).test;
+                            var func = (await import(file.fullpath.substring(0, file.fullpath.length - 3)))?.test;
                             if (typeof func === "function") {
                                 container.alltests++;
                                 container.update();

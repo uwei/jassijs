@@ -10,7 +10,7 @@ import { Shippers } from "northwind/remote/Shippers";
 @$Class("northwind.Orders")
 export class Orders extends DBObject {
     @PrimaryColumn()
-    id: number;
+    declare id: number;
     constructor() {
         super();
     } 

@@ -204,23 +204,25 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 if (this.isTypeOf(val, type) && ret.indexOf(name) === -1)
                     ret.push(name);
             }
-            //seach in this
-            vars = this._cache["this"];
-            for (let y in vars) {
-                if (this.isTypeOf(vars[y], type) && ret.indexOf("this." + y) === -1)
-                    ret.push("this." + y);
-            }
-            //seach in me
-            vars = this._cache["me"];
-            if (vars !== undefined) {
-                for (let z in vars) {
-                    if (this.isTypeOf(vars[z], type) && ret.indexOf("me." + z) === -1)
-                        ret.push("me." + z);
-                }
-            }
+            /*  //seach in this
+              vars = this._cache["this"];
+              for (let y in vars) {
+      
+                  if (this.isTypeOf(vars[y],type))//&&ret.indexOf("this." + y)===-1)
+                      ret.push("this." + y);
+              }
+              //seach in me
+              vars = this._cache["me"];
+              if (vars !== undefined) {
+                  for (let z in vars) {
+      
+                      if (this.isTypeOf(vars[z],type)&&ret.indexOf("me." + z)===-1)
+                          ret.push("me." + z);
+                  }
+              }*/
             //search in cache (published by updateCache)
             for (let key in this._cache) {
-                if (!key.startsWith("this.") && this.isTypeOf(this._cache[key], type) && ret.indexOf(key) === -1)
+                if (this.isTypeOf(this._cache[key], type) && ret.indexOf(key) === -1)
                     ret.push(key);
             }
             return ret;

@@ -1,6 +1,3 @@
-
-
-
 import {FileExplorer} from "jassijs/ui/FileExplorer";
 import windows from "jassijs/base/Windows";
 import {Panel} from "jassijs/ui/Panel";
@@ -9,12 +6,6 @@ import { router } from "jassijs/base/Router";
 import {SearchExplorer} from "jassijs/ui/SearchExplorer";
 import { DBObjectExplorer } from "jassijs/ui/DBObjectExplorer";
 import { ActionNodeMenu } from "jassijs/ui/ActionNodeMenu";
- 
-
-
-
-
-//var h=new RemoteObject().test();
 
 async function test() {
   //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");

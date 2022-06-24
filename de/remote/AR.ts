@@ -16,7 +16,7 @@ import { Context } from "jassijs/remote/RemoteObject";
 @$Class("de.AR")
 export class AR extends DBObject {
     @PrimaryColumn()
-    id: number;
+    declare id: number;
     @Column()
     strasse: string;
     @Column()

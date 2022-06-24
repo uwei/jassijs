@@ -141,7 +141,7 @@ export class ImageEditor extends Editor {
 
     }
 }
-export function test() {
+export function test2() {
     var ed = new ImageEditor(undefined, undefined);
     ed.showDialog(true);
     return ed.dialog;

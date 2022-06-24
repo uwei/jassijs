@@ -30,6 +30,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
     }
     let TestAction = TestAction_1 = class TestAction {
         static async testNode(all, container = undefined) {
+            var _a;
             var isRoot = false;
             if (container === undefined) {
                 container = new MyContainer();
@@ -62,7 +63,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
                         try {
                             if (text.indexOf("export function test(") !== -1 || text.indexOf("export async function test(") !== -1) {
                                 console.log("test " + file.fullpath);
-                                var func = (await new Promise((resolve_1, reject_1) => { require([file.fullpath.substring(0, file.fullpath.length - 3)], resolve_1, reject_1); })).test;
+                                var func = (_a = (await new Promise((resolve_1, reject_1) => { require([file.fullpath.substring(0, file.fullpath.length - 3)], resolve_1, reject_1); }))) === null || _a === void 0 ? void 0 : _a.test;
                                 if (typeof func === "function") {
                                     container.alltests++;
                                     container.update();
@@ -92,7 +93,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/base/Actions",
                                     container.failedtests++;
                                     container.update();
                                 }
-                                catch (_a) {
+                                catch (_b) {
                                 }
                             }
                         }

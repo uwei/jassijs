@@ -7,37 +7,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", "de/remote/Kunde", "jassijs/ui/DBObjectView"], function (require, exports, Registry_1, Property_1, Kunde_1, DBObjectView_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Registry_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.MyView = void 0;
-    let MyView = class MyView extends DBObjectView_1.DBObjectView {
+    exports.test = exports.Dialog2 = void 0;
+    let Dialog2 = class Dialog2 extends Panel_1.Panel {
         constructor() {
             super();
-            //this.me = {}; this is called in objectdialog
+            this.me = {};
             this.layout(this.me);
         }
-        get title() {
-            return this.value === undefined ? "MyView" : "MyView " + this.value.id;
-        }
         layout(me) {
+            this.config({});
         }
     };
-    __decorate([
-        (0, Property_1.$Property)({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" }),
-        __metadata("design:type", Kunde_1.Kunde)
-    ], MyView.prototype, "value", void 0);
-    MyView = __decorate([
-        (0, DBObjectView_1.$DBObjectView)({ classname: "de.Kunde" }),
-        (0, Registry_1.$Class)("de.MyView"),
+    Dialog2 = __decorate([
+        (0, Registry_1.$Class)("a/Dialog2"),
         __metadata("design:paramtypes", [])
-    ], MyView);
-    exports.MyView = MyView;
+    ], Dialog2);
+    exports.Dialog2 = Dialog2;
     async function test() {
-        var ret = new MyView;
-        ret["value"] = await Kunde_1.Kunde.findOne();
+        var ret = new Dialog2();
         return ret;
     }
     exports.test = test;
 });
-//# sourceMappingURL=MyView.js.map
+//# sourceMappingURL=Dialog2.js.map

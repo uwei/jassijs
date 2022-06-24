@@ -12,7 +12,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
-define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, Registry_2) {
+define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1) {
     "use strict";
     var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -494,7 +494,7 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
         }
     };
     DBManager = DBManager_1 = __decorate([
-        (0, Registry_2.$Class)("jassi_localserver.DBManager"),
+        (0, Registry_1.$Class)("jassi_localserver.DBManager"),
         __metadata("design:paramtypes", [])
     ], DBManager);
     exports.DBManager = DBManager;
@@ -847,7 +847,7 @@ define("jassijs_localserver/DatabaseSchema", ["require", "exports", "jassijs/rem
 });
 //export function Entity(options?: EntityOptions): Function;
 //export declare type PrimaryGeneratedColumnType = "int" | "int2" | "int4" | "int8" | "integer" | "tinyint" | "smallint" | "mediumint" | "bigint" | "dec" | "decimal" | "fixed" | "numeric" | "number" | "uuid";
-define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/server/DBManager", "jassijs/remote/Registry", "jassijs/remote/Server"], function (require, exports, Registry_3, Reloader_1, DBManager_2, Registry_4, Server_1) {
+define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Reloader", "jassijs/server/DBManager", "jassijs/remote/Registry", "jassijs/remote/Server"], function (require, exports, Registry_2, Reloader_1, DBManager_2, Registry_3, Server_1) {
     "use strict";
     var Filessystem_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1050,7 +1050,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
                 return;
             var RegistryIndexer = (await new Promise((resolve_4, reject_4) => { require(["jassijs_localserver/RegistryIndexer"], resolve_4, reject_4); })).RegistryIndexer;
             await new RegistryIndexer().updateRegistry();
-            await Registry_4.default.reload();
+            await Registry_3.default.reload();
             if (rollbackonerror) {
                 try {
                     await Reloader_1.Reloader.instance.reloadJSAll(jsToReload);
@@ -1224,7 +1224,7 @@ define("jassijs_localserver/Filesystem", ["require", "exports", "jassijs/remote/
         }
     };
     Filessystem = Filessystem_1 = __decorate([
-        (0, Registry_3.$Class)("jassijs_localserver.Filessystem")
+        (0, Registry_2.$Class)("jassijs_localserver.Filessystem")
     ], Filessystem);
     exports.default = Filessystem;
     async function test2() {
@@ -1694,7 +1694,7 @@ define("jassijs_localserver/LocalProtocol", ["require", "exports", "jassijs/remo
     }
     exports.localExec = localExec;
 });
-define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Server", "jassijs_localserver/Filesystem", "jassijs/remote/Registry"], function (require, exports, Indexer_1, Server_2, Filesystem_2, Registry_5) {
+define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_localserver/Indexer", "jassijs/remote/Server", "jassijs_localserver/Filesystem", "jassijs/remote/Registry"], function (require, exports, Indexer_1, Server_2, Filesystem_2, Registry_4) {
     "use strict";
     var RegistryIndexer_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1787,11 +1787,11 @@ define("jassijs_localserver/RegistryIndexer", ["require", "exports", "jassijs_lo
     };
     RegistryIndexer.version = Math.floor(Math.random() * 100000);
     RegistryIndexer = RegistryIndexer_1 = __decorate([
-        (0, Registry_5.$Class)("jassijs_localserver.RegistryIndexer")
+        (0, Registry_4.$Class)("jassijs_localserver.RegistryIndexer")
     ], RegistryIndexer);
     exports.RegistryIndexer = RegistryIndexer;
 });
-define("jassijs_localserver/Testuser", ["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObject", "jassijs/remote/Registry"], function (require, exports, DatabaseSchema_1, DBObject_1, Registry_6) {
+define("jassijs_localserver/Testuser", ["require", "exports", "jassijs/util/DatabaseSchema", "jassijs/remote/DBObject", "jassijs/remote/Registry"], function (require, exports, DatabaseSchema_1, DBObject_1, Registry_5) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Testuser = void 0;
@@ -1811,17 +1811,17 @@ define("jassijs_localserver/Testuser", ["require", "exports", "jassijs/util/Data
     ], Testuser.prototype, "lastname", void 0);
     Testuser = __decorate([
         (0, DBObject_1.$DBObject)(),
-        (0, Registry_6.$Class)("Testuser")
+        (0, Registry_5.$Class)("Testuser")
     ], Testuser);
     exports.Testuser = Testuser;
 });
-define("jassijs_localserver/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs_localserver/Filesystem", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs_localserver/DBManager"], function (require, exports, Registry_7, typeorm_3, Filesystem_3, Reloader_2, Registry_8, DBManager_3) {
+define("jassijs_localserver/TypeORMListener", ["require", "exports", "jassijs/remote/Registry", "typeorm", "jassijs_localserver/Filesystem", "jassijs/util/Reloader", "jassijs/remote/Registry", "jassijs_localserver/DBManager"], function (require, exports, Registry_6, typeorm_3, Filesystem_3, Reloader_2, Registry_7, DBManager_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TypeORMListener = void 0;
     //listener for code changes
     Reloader_2.Reloader.instance.addEventCodeReloaded(async function (files) {
-        var dbobjects = await Registry_8.default.getJSONData("$DBObject");
+        var dbobjects = await Registry_7.default.getJSONData("$DBObject");
         var reload = false;
         for (var x = 0; x < files.length; x++) {
             var file = files[x];
@@ -1931,7 +1931,7 @@ define("jassijs_localserver/TypeORMListener", ["require", "exports", "jassijs/re
     };
     TypeORMListener = __decorate([
         (0, typeorm_3.EventSubscriber)(),
-        (0, Registry_7.$Class)("jassijs_localserver.TypeORMListener")
+        (0, Registry_6.$Class)("jassijs_localserver.TypeORMListener")
     ], TypeORMListener);
     exports.TypeORMListener = TypeORMListener;
 });

@@ -148,8 +148,11 @@ export class Reloader {
             require(allfiles, function (...ret) {
                 for (var rx = 0; rx < ret.length; rx++) {
                     allModules[allfiles[rx]] = ret[rx];
-                }
+                } 
                 resolve(undefined);
+            },(err)=>{
+                throw err;
+
             });
         });
         for (let x = 0; x < allfiles.length; x++) {

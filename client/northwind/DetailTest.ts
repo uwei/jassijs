@@ -12,9 +12,9 @@ type Me = {
 @$DBObjectView({ classname: "northwind.OrderDetails" })
 @$Class("northwind.DetailTest")
 export class DetailTest extends DBObjectView {
-    me: Me;
+    declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    value: OrderDetails;
+    declare value: OrderDetails;
     constructor() {
         super();
         //this.me = {}; this is called in objectdialog

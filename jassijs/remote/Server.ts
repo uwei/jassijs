@@ -402,7 +402,3 @@ export class Server extends RemoteObject {
     }
 }
 
-
-export async function test() {
-
-}

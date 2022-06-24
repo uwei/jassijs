@@ -21,7 +21,7 @@ let TestRModul = class TestRModul extends RemoteObject_1.RemoteObject {
     }
 };
 TestRModul = __decorate([
-    Registry_1.$Class("testrmodul.remote.TestRModul")
+    (0, Registry_1.$Class)("testrmodul.remote.TestRModul")
 ], TestRModul);
 exports.TestRModul = TestRModul;
 //# sourceMappingURL=TestRModul.js.map

@@ -6,7 +6,7 @@ import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 @$Class("northwind.Suppliers")
 export class Suppliers extends DBObject {
     @PrimaryColumn()
-    id: number;
+    declare id: number;
     constructor() {
         super();
     } 

@@ -64,7 +64,6 @@ reportdesign = {
                     "Date: ${invoice.date}",
                     "Number: ${invoice.number}"
                 ],
-                {}
             ]
         },
         {
@@ -78,8 +77,6 @@ reportdesign = {
                 ]
             }
         },
-        {},
-        {},
         "\n",
         {
             foreach: "sum in invoice.summary",
@@ -526,7 +523,7 @@ define("demoreports/registry", ["require"], function (require) {
                 "date": 1655407641261
             },
             "demoreports/11-Foreach.ts": {
-                "date": 1655407712154
+                "date": 1656025255234
             },
             "demoreports/12-Foreach.ts": {
                 "date": 1634336976000
@@ -538,7 +535,7 @@ define("demoreports/registry", ["require"], function (require) {
                 "date": 1655407875091
             },
             "demoreports/23-Datatable.ts": {
-                "date": 1655407937845
+                "date": 1656024793633
             },
             "demoreports/30-Format.ts": {
                 "date": 1655407998923

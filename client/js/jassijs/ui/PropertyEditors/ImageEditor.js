@@ -11,7 +11,7 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
     "use strict";
     var ImageEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.ImageEditor = void 0;
+    exports.test2 = exports.ImageEditor = void 0;
     let ImageEditor = ImageEditor_1 = class ImageEditor extends Editor_1.Editor {
         /**
          * Checkbox Editor for boolean values
@@ -146,11 +146,11 @@ define(["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remo
         __metadata("design:paramtypes", [Object, Object])
     ], ImageEditor);
     exports.ImageEditor = ImageEditor;
-    function test() {
+    function test2() {
         var ed = new ImageEditor(undefined, undefined);
         ed.showDialog(true);
         return ed.dialog;
     }
-    exports.test = test;
+    exports.test2 = test2;
 });
 //# sourceMappingURL=ImageEditor.js.map

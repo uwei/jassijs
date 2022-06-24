@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var Settings_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
+exports.load = exports.test = exports.autostart = exports.$SettingsDescriptor = exports.settings = exports.Settings = void 0;
 const Registry_1 = require("jassijs/remote/Registry");
 const Registry_2 = require("jassijs/remote/Registry");
 const RemoteObject_1 = require("jassijs/remote/RemoteObject");
@@ -66,7 +66,7 @@ let Settings = Settings_1 = class Settings extends RemoteObject_1.RemoteObject {
         }
         return ret;
     }
-    static gets(Settings_key) {
+    gets(Settings_key) {
         if (Settings_1.browserSettings && Settings_1.browserSettings[Settings_key])
             return Settings_1.browserSettings[Settings_key];
         if (Settings_1.userSettings && Settings_1.userSettings[Settings_key])
@@ -184,24 +184,26 @@ async function autostart() {
 exports.autostart = autostart;
 async function test(t) {
     try {
+        await Settings.load();
+        var settings = new Settings();
         await Settings.remove("antestsetting", "user");
         await Settings.remove("antestsetting", "browser");
         await Settings.remove("antestsetting", "allusers");
-        t.expectEqual(Settings.gets("antestsetting") === undefined);
+        t.expectEqual(settings.gets("antestsetting") === undefined);
         await Settings.load();
-        t.expectEqual(Settings.gets("antestsetting") === undefined);
+        t.expectEqual(settings.gets("antestsetting") === undefined);
         await Settings.save("antestsetting", "1", "allusers");
-        t.expectEqual(Settings.gets("antestsetting") === "1");
+        t.expectEqual(settings.gets("antestsetting") === "1");
         await Settings.load();
-        t.expectEqual(Settings.gets("antestsetting") === "1");
+        t.expectEqual(settings.gets("antestsetting") === "1");
         await Settings.save("antestsetting", "2", "user");
-        t.expectEqual(Settings.gets("antestsetting") === "2");
+        t.expectEqual(settings.gets("antestsetting") === "2");
         await Settings.load();
-        t.expectEqual(Settings.gets("antestsetting") === "2");
+        t.expectEqual(settings.gets("antestsetting") === "2");
         await Settings.save("antestsetting", "3", "browser");
-        t.expectEqual(Settings.gets("antestsetting") === "3");
+        t.expectEqual(settings.gets("antestsetting") === "3");
         await Settings.load();
-        t.expectEqual(Settings.gets("antestsetting") === "3");
+        t.expectEqual(settings.gets("antestsetting") === "3");
     }
     catch (ex) {
         throw ex;
@@ -213,4 +215,8 @@ async function test(t) {
     }
 }
 exports.test = test;
+async function load() {
+    return Settings.load();
+}
+exports.load = load;
 //# sourceMappingURL=Settings.js.map

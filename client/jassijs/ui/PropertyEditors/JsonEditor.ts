@@ -7,7 +7,7 @@ import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { Tools } from "jassijs/util/Tools";
 import { classes } from "jassijs/remote/Classes";
 import { $Property } from "jassijs/ui/Property";
-import { support } from "jszip";
+
 
 @$PropertyEditor(["json"])
 @$Class("jassijs.ui.PropertyEditors.JsonEditor")

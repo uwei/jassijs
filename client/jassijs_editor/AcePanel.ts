@@ -21,7 +21,7 @@ export class AcePanel extends CodePanel {
     private _editor;
     private _isInited: boolean;
     //   private _lastCursorPosition;
-    file: string;
+    declare file: string;
     private static _tooltipdiv: HTMLElement;
     private _lastTooltipRefresh;
     checkErrorTask: Runlater;

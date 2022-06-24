@@ -11,7 +11,6 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassi
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DatabaseDesigner = void 0;
-    var ttt = 1;
     let DatabaseDesigner = class DatabaseDesigner extends Panel_1.Panel {
         constructor(readShema = true) {
             super();

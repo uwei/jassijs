@@ -10,25 +10,25 @@ type Me = {
 }&DBObjectViewMe
 
 @$DBObjectView({classname:"de.Kunde"})
-@$Class("de.MyView")
-export class MyView extends DBObjectView {
-    me: Me;
+@$Class("de.myview2")
+export class myview2 extends DBObjectView {
+    declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassi.ui.PropertyEditors.DBObjectEditor" })
-    value: Kunde;
+    declare value: Kunde;
     constructor() {
         super();
         //this.me = {}; this is called in objectdialog
         this.layout(this.me);
     }
     get title() {
-        return this.value === undefined ? "MyView" : "MyView " + this.value.id;
+        return this.value === undefined ? "myview2" : "myview2 " + this.value.id;
     }
     layout(me: Me) {
     }
 }
 
 export async function test(){
-	var ret=new MyView;
+	var ret=new myview2();
 	
 	ret["value"]=<Kunde>await Kunde.findOne();
 	return ret;

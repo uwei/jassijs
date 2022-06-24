@@ -1,17 +1,10 @@
 import { $Class } from "jassijs/remote/Registry";
 import registry from "jassijs/remote/Registry";
-import { classes } from "jassijs/remote/Classes";
-import { db } from "jassijs/remote/Database";
-import "jassijs/ext/jquery.choosen";
-import typescript, { Typescript } from "jassijs_editor/util/Typescript";
-
+import "jquery.choosen";
+import typescript from "jassijs_editor/util/Typescript";
 import { Parser, ParsedClass } from "jassijs_editor/util/Parser";
-import { Property, $Property } from "jassijs/ui/Property";
-
 import { TemplateDBObject } from "jassijs/template/TemplateDBObject";
-
 import { Tools } from "jassijs/util/Tools";
-
 import { Server } from "jassijs/remote/Server";
 import windows from "jassijs/base/Windows";
 import { OptionDialog } from "jassijs/ui/OptionDialog";

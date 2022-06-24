@@ -107,7 +107,7 @@ export class MonacoPanel extends CodePanel {
     private _editor: monaco.editor.IStandaloneCodeEditor;
     private _isInited: boolean;
     //   private _lastCursorPosition;
-    file: string;
+    declare file: string;
     private static _tooltipdiv;
     private _lastTooltipRefresh;
     constructor() {

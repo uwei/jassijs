@@ -14,7 +14,7 @@ import { Right } from "jassijs/remote/security/Right";
 export class Group extends DBObject  {
  
     @PrimaryColumn()
-    id: number;
+    declare id: number;
     @Column()
     name:string;
     @JoinTable()

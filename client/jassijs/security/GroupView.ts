@@ -12,9 +12,9 @@ type Me = {
 @$DBObjectView({classname:"{{dbfullclassname}}"})
 @$Class("jassijs/security/GroupView")
 export class GroupView extends DBObjectView {
-    me: Me;
+    declare me: Me;
     @$Property({ isUrlTag: true, id: true, editor: "jassijs.ui.PropertyEditors.DBObjectEditor" })
-    value: Group;
+    declare value: Group;
     constructor() {
         super();
         //this.me = {}; this is called in objectdialog

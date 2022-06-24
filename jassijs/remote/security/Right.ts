@@ -10,7 +10,7 @@ import { Group } from "jassijs/remote/security/Group";
 export class Right extends DBObject  {
  
     @PrimaryColumn()
-    id: number;
+    declare id: number;
     @Column()
     name:string;
     @ManyToMany(type=>Group,ob=>ob.rights)

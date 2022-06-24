@@ -328,27 +328,35 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
         async getDiagnosticsForAll() {
             var mods = monaco.editor.getModels();
             var ret = [];
+            var countErrors = 0;
             for (var x = 0; x < mods.length; x++) {
                 var url = "file:///" + mods[x].uri.path;
                 if (url.indexOf("node_modules/") > 0)
                     continue;
-                var sug = await this.tsWorker.getSemanticDiagnostics(url);
-                for (var s = 0; s < sug.length; s++) {
-                    //@ts-ignore
-                    sug[s]["file"] = {
-                        fileName: mods[x].uri.path.substring(1)
-                    };
-                    ret.push(sug[s]);
+                try {
+                    var sug = await this.tsWorker.getSemanticDiagnostics(url);
+                    for (var s = 0; s < sug.length; s++) {
+                        //@ts-ignore
+                        sug[s]["file"] = {
+                            fileName: mods[x].uri.path.substring(1)
+                        };
+                        ret.push(sug[s]);
+                    }
+                    sug = await this.tsWorker.getSyntacticDiagnostics(url);
+                    for (var s = 0; s < sug.length; s++) {
+                        //@ts-ignore
+                        sug[s]["file"] = {
+                            fileName: mods[x].uri.path.substring(1)
+                        };
+                        ret.push(sug[s]);
+                    }
                 }
-                sug = await this.tsWorker.getSyntacticDiagnostics(url);
-                for (var s = 0; s < sug.length; s++) {
-                    //@ts-ignore
-                    sug[s]["file"] = {
-                        fileName: mods[x].uri.path.substring(1)
-                    };
-                    ret.push(sug[s]);
+                catch (ex) {
+                    if (!ex.message.indexOf("file:////lib.dom.d.ts") && ex.message.indexOf(" file:////lib.es5.d.ts"))
+                        console.log("Error: " + url + ex.message);
                 }
             }
+            console.log("ready");
             return ret;
             /* var prog=Typescript.languageService.getProgram();
              let all=Typescript.ts.getPreEmitDiagnostics(prog);

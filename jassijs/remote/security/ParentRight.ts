@@ -11,8 +11,8 @@ import { Group } from "jassijs/remote/security/Group";
 export class ParentRight extends DBObject  {
  
     @PrimaryGeneratedColumn()
-    id: number;
-    @Column()
+    declare id: number;
+    @Column() 
     name:string;
     @Column()
     classname:string;

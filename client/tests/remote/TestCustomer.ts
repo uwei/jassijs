@@ -14,7 +14,7 @@ import { $ParentRights } from "jassijs/remote/security/Rights";
 @$Class("tests.TestCustomer")
 export class TestCustomer extends DBObject {
     @PrimaryColumn()
-    id: number;
+    declare id: number;
     constructor() {
         super();
     }

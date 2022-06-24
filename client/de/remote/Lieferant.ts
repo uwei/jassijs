@@ -8,7 +8,7 @@ import { PrimaryColumn, Column, OneToOne } from "jassijs/util/DatabaseSchema";
 @$DBObject() 
 export class Lieferant extends DBObject {
     @PrimaryColumn()
-    id:number;
+    declare id:number;
     @Column({nullable:false})
     name:string;
      

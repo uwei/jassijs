@@ -4,7 +4,7 @@ define(["require", "exports", "de/remote/Kunde"], function (require, exports, Ku
     exports.test = void 0;
     function test() {
         var kd = new Kunde_1.Kunde();
-        console.log(kd.extFunc());
+        console.error("TODO repair" /*kd.extFunc()*/);
     }
     exports.test = test;
 });

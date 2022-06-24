@@ -8,7 +8,7 @@ import { Context } from "jassijs/remote/RemoteObject";
 @$Class("northwind.Employees")
 export class Employees extends DBObject {
     @PrimaryColumn()
-    id: number;
+    declare id: number;
 
     constructor() {
         super();

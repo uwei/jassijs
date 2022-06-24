@@ -11,7 +11,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
     "use strict";
     var Server_1;
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.Server = void 0;
+    exports.Server = void 0;
     let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
         constructor() {
             super();
@@ -414,8 +414,5 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         __metadata("design:paramtypes", [])
     ], Server);
     exports.Server = Server;
-    async function test() {
-    }
-    exports.test = test;
 });
 //# sourceMappingURL=Server.js.map

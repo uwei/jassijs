@@ -293,7 +293,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.variables.addAll(variables);
         }
         async fillVariablesAndSetupParser(url, root, component, cache, parser) {
-            var _a, _b, _c;
+            var _a, _b, _c, _d, _e;
+            var useThis = false;
             if (cache[component._id] === undefined && component["__stack"] !== undefined) {
                 var lines = (_a = component["__stack"]) === null || _a === void 0 ? void 0 : _a.split("\n");
                 for (var x = 0; x < lines.length; x++) {
@@ -346,6 +347,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     if (foundscope)
                         scope = [{ classname: (_c = root === null || root === void 0 ? void 0 : root.constructor) === null || _c === void 0 ? void 0 : _c.name, methodname: "layout" }, foundscope];
                     parser.parse(this._codePanel.value, scope);
+                    //if layout is rendered and an other variable is assigned to this, then remove ths variable
+                    if (parser.classes[(_d = root === null || root === void 0 ? void 0 : root.constructor) === null || _d === void 0 ? void 0 : _d.name] && parser.classes[(_e = root === null || root === void 0 ? void 0 : root.constructor) === null || _e === void 0 ? void 0 : _e.name].members["layout"]) {
+                        useThis = true;
+                        this.variables.addVariable("this", root);
+                    }
                     for (var key in parser.data) {
                         var com = parser.data[key];
                         var _new_ = com["_new_"];
@@ -360,6 +366,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                             }
                         }
                     }
+                    var ignoreVar = [];
                     for (var x = 0; x < values.length; x++) {
                         var val = values[x];
                         var sname = val.name;
@@ -372,7 +379,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                         if (found)
                             continue;
                         if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
-                            this.variables.addVariable(sname, val.component, false);
+                            if (ignoreVar.indexOf(sname) === -1) {
+                                if (useThis && root === val.component)
+                                    ignoreVar.push(sname); //do nothing
+                                else
+                                    this.variables.addVariable(sname, val.component, false);
+                            }
                         }
                     }
                     this.variables.updateCache();
@@ -430,8 +442,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 }
                 // Promise.resolve(ret).then(async function(ret) {
                 if (ret !== undefined) {
-                    if (ret.layout !== undefined)
-                        _this.variables.addVariable("this", ret);
                     //_this.variables.addVariable("me", ret.me);
                     _this.variables.updateCache();
                     if (ret instanceof Component_1.Component && ret["reporttype"] === undefined) {
@@ -749,32 +759,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         editor.height = 300;
         editor.width = "100%";
         //await editor.openFile(url);
-        editor.value = `import { Button } from "jassijs/ui/Button";
-import { Repeater } from "jassijs/ui/Repeater";
-import { $Class } from "jassijs/remote/Registry";
-import { Panel } from "jassijs/ui/Panel";
-type Me = {
-    button1?: Button;
-};
-@$Class("demo.EmptyDialog")
-export class EmptyDialog extends Panel {
-    me: Me;
-    constructor() {
-        super();
-        this.me = {};
-        this.layout(this.me);
-    }
-    layout(me: Me) {
-        me.button1 = new Button();
-        this.add(me.button1);
-    }
-}
-export async function test() {
-    var ret = new EmptyDialog();
-    return ret;
-}
-`;
-        editor.evalCode();
+        editor.file = "tests/TestDialog.ts";
+        setTimeout(() => {
+            editor.evalCode();
+        }, 500);
         return editor;
     }
     exports.test = test;

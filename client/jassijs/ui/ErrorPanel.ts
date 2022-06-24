@@ -84,7 +84,9 @@ export class ErrorPanel extends Panel {
     async search() {
         var typescript = (await import("jassijs_editor/util/Typescript")).default;
         await typescript.initService();
+       
         var all = await typescript.getDiagnosticsForAll();
+        
         if (all.length === 0)
             notify("no Errors found", "info", { position: "right" });
         for (var x = 0; x < all.length; x++) {

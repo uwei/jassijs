@@ -1,10 +1,8 @@
 import { RTablerow } from "jassijs_report/RTablerow";
 import { $ReportComponent } from "jassijs_report/RComponent";
 import { $Class } from "jassijs/remote/Registry";
-import { RDatatable } from "jassijs_report/RDatatable";
 import { $Property } from "jassijs/ui/Property";
-import { Table } from "typeorm";
-import { RTable } from "./RTable";
+
 
 
 

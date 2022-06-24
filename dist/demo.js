@@ -72,7 +72,7 @@ define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Bo
     }
     exports.test = test;
 });
-define("demo/Dialog2", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Registry_2, Panel_2) {
+define("demo/Dialog2", ["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Textbox_1, Registry_2, Panel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog2 = void 0;
@@ -83,7 +83,10 @@ define("demo/Dialog2", ["require", "exports", "jassijs/remote/Registry", "jassij
             this.layout(this.me);
         }
         layout(me) {
-            this.config({});
+            me.textbox = new Textbox_1.Textbox();
+            me.textbox2 = new Textbox_1.Textbox();
+            me.textbox3 = new Textbox_1.Textbox();
+            this.config({ children: [me.textbox3.config({})] });
         }
     };
     Dialog2 = __decorate([
@@ -216,14 +219,14 @@ define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassi
     }
     exports.MemoryTest = MemoryTest;
 });
-define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Textarea", "jassijs/ui/Table", "jassijs/ui/Style", "jassijs/ui/Repeater", "jassijs/ui/Image", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/Checkbox", "jassijs/ui/BoxPanel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Panel"], function (require, exports, Tree_1, Textarea_1, Table_1, Style_1, Repeater_1, Image_1, HTMLPanel_2, Databinder_1, Checkbox_1, BoxPanel_2, Textbox_1, Button_3, Panel_4) {
+define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Textarea", "jassijs/ui/Table", "jassijs/ui/Style", "jassijs/ui/Repeater", "jassijs/ui/Image", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/Checkbox", "jassijs/ui/BoxPanel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Panel"], function (require, exports, Tree_1, Textarea_1, Table_1, Style_1, Repeater_1, Image_1, HTMLPanel_2, Databinder_1, Checkbox_1, BoxPanel_2, Textbox_2, Button_3, Panel_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     function test() {
         var ret = new Panel_4.Panel();
         var button = new Button_3.Button();
-        var textbox = new Textbox_1.Textbox();
+        var textbox = new Textbox_2.Textbox();
         var boxpanel = new BoxPanel_2.BoxPanel();
         var checkbox = new Checkbox_1.Checkbox();
         var databinder = new Databinder_1.Databinder();
@@ -253,6 +256,22 @@ define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Text
     }
     exports.test = test;
     document.body.append(test().dom);
+});
+define("demo/Report1", ["require", "exports"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var reportdesign = {
+        content: []
+    };
+    function test() {
+        return {
+            reportdesign,
+            //data:{},         //data
+            // parameter:{}      //parameter
+        };
+    }
+    exports.test = test;
 });
 define("demo/ReportInvoice", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_5) {
     "use strict";
@@ -1458,7 +1477,7 @@ define("demo/registry", ["require"], function (require) {
     return {
         default: {
             "demo/Dialog.ts": {
-                "date": 1655726757706,
+                "date": 1655851715726,
                 "demo/Dialog": {}
             },
             "demo/EmptyDialog.ts": {
@@ -1567,14 +1586,17 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1634240084000
             },
             "demo/DelTest.ts": {
-                "date": 1635896382000
+                "date": 1656074244413
             },
             "demo/Dialog2.ts": {
-                "date": 1655556795284,
+                "date": 1655890994125,
                 "demo/Dialog2": {}
             },
             "demo/MyTest.ts": {
                 "date": 1655757461754
+            },
+            "demo/Report1.ts": {
+                "date": 1656018450105
             }
         }
     };

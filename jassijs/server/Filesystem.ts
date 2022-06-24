@@ -76,8 +76,6 @@ export default class Filesystem {
     public loadFile(fileName:string) {
         var fromServerdirectory=fileName.startsWith("$serverside/");
         let file=this._pathForFile(fileName,fromServerdirectory);
-        if(fromServerdirectory)
-            file="./"+fileName;
         return fs.readFileSync(file, { encoding: 'utf-8' });
 
     }

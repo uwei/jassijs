@@ -675,6 +675,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         //	node.setActive(true);
         // var j = tree.value;
         window.setTimeout(async () => {
+            u.childs = [p];
+            tree.items = [c];
             var k = tree.selection;
             //		var nod=tree.tree.getNodeByKey("Christoph/Uwe/Tom1");
             // await tree.expandAll(true);

@@ -21,7 +21,7 @@ import { $DBObjectQuery } from "jassijs/remote/DBObjectQuery";
 export class {{classname}} extends DBObject {
 
     {{PrimaryAnnotator}}
-    id: number;
+    declare id: number;
   
     constructor() {
         super();
