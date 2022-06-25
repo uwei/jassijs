@@ -132,7 +132,7 @@ export class ImageEditor extends Editor {
                 html = html + "<span title='" + icon + "' onclick=ImageEditorClicked('" + icon + "') class='mdi " + icon + "'></span>";
             }
             var node = Component.createHTMLElement("<span style='font-size:18pt'>" + html + "</span>");
-            icons.__dom.appendChild(node[0]);
+            icons.__dom.appendChild(node);
             if(!onlytest)
                 $(this.dialog.__dom).dialog({ height: "400", width: "400" });
         }else{
