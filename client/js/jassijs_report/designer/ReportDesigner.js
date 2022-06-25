@@ -47,6 +47,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
             this.__dom.classList.add("ReportDesigner");
             this.dom.style.overflow = "scroll";
             this.dom.style.width = "";
+            this.registerKeys();
         }
         connectParser(parser) {
             this._propertyEditor.parser = parser;
@@ -147,11 +148,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
             var text = await navigator.clipboard.readText();
             var all = JSON.parse(text);
             var target = this._propertyEditor.value;
+            var before = undefined;
+            if (target._components === undefined) {
+                before = target;
+                target = target._parent;
+            }
+            else
+                before = target._components[target._components.length - 1]; //design dummy
             var comp = ReportDesign_1.ReportDesign.fromJSON(all);
             for (var x = 0; x < comp._components.length; x++) {
-                target.addBefore(comp._components[x], target._components[target._components.length - 1]); //design dummy
+                target.addBefore(comp._components[x], before); //design dummy
             }
             this.propertyChanged();
+            this.editDialog(true);
+            this._componentExplorer.update();
             /*  var comp:RComponent=ReportDesign.fromJSON(all[x])
              for(var x=0;x<all.length;x++){
                 

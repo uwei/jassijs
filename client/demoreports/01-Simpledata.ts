@@ -14,15 +14,3 @@ reportdesign.data={
             }
         }
 reportdesign.parameter={date:"2021-10-10"};      //parameter
-/*export function test() {
-    return { 
-        reportdesign,
-        data:{
-            name:"Klaus",
-            address:{
-                street:"Mainstreet 8"
-            }
-        },        
-        parameter:{date:"2021-10-10"}      //parameter
-    };
-}*/

@@ -27,6 +27,7 @@ export class RImage extends RComponent {
         super(properties);
         this.init('<img class="RImage"></img>');
         this.domWrapper.classList.remove("jcontainer");
+         delete this._components;
     }
     /**
      * adds a component to the container before an other component

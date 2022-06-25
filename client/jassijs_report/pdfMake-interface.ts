@@ -18,7 +18,7 @@
 /* @ts-ignore changed by jassijs*/
 /// <reference types="pdfkit" />
 
-declare var reportdesign1: JassijsReportDefinition;
+declare var reportdesign: JassijsReportDefinition;
 declare global {
     export interface JassijsReportDefinition extends TDocumentDefinitions {
         /**

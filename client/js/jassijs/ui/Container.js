@@ -115,11 +115,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
             }
         }
         destroy() {
-            var tmp = [].concat(this._components);
-            for (var k = 0; k < tmp.length; k++) {
-                tmp[k].destroy();
+            if (this._components !== undefined) {
+                var tmp = [].concat(this._components);
+                for (var k = 0; k < tmp.length; k++) {
+                    tmp[k].destroy();
+                }
+                this._components = [];
             }
-            this._components = [];
             super.destroy();
         }
     };

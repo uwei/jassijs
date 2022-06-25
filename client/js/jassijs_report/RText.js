@@ -60,6 +60,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/RCompon
             this.__dom.style["text-overflow"] = "ellipsis";
             this.__dom.style["overflow"] = "hidden";
             this.dom.classList.add("designerNoResizable");
+            delete this._components;
             (0, CSSProperties_1.loadFontIfNedded)("Roboto");
             var el = this.dom.children[0];
             this._designMode = false;

@@ -82,7 +82,7 @@ export class RText extends RComponent {
         this.__dom.style["text-overflow"]= "ellipsis";
         this.__dom.style["overflow"]= "hidden";
         this.dom.classList.add("designerNoResizable");
-
+        delete this._components;
         loadFontIfNedded("Roboto");
         var el = this.dom.children[0];
         this._designMode = false;
