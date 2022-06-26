@@ -2,6 +2,14 @@
 define("de/registry",["require"], function(require) {
  return {
   default: {
+	"de/Dialog.ts": {
+		"date": 1655755200865,
+		"de/Dialog": {}
+	},
+	"de/Dialog2.ts": {
+		"date": 1655812637737,
+		"de/Dialog2": {}
+	},
 	"de/DialogKunde.ts": {
 		"date": 1655556864383,
 		"de.DialogKunde": {
@@ -9,15 +17,6 @@ define("de/registry",["require"], function(require) {
 				"jassijs.base.ActionNode"
 			],
 			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				},
 				"dummy": {
 					"$Action": [
 						{
@@ -45,21 +44,26 @@ define("de/registry",["require"], function(require) {
 					"classname": "de.Kunde"
 				}
 			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
 	},
 	"de/modul.ts": {
 		"date": 1655740311208
+	},
+	"de/MyDialog.ts": {
+		"date": 1655556795285,
+		"de/MyDialog": {}
+	},
+	"de/myview2.ts": {
+		"date": 1656067922579,
+		"de.myview2": {
+			"$DBObjectView": [
+				{
+					"classname": "de.Kunde"
+				}
+			],
+			"@members": {}
+		}
 	},
 	"de/remote/AR.ts": {
 		"date": 1656072649465,
@@ -273,36 +277,14 @@ define("de/registry",["require"], function(require) {
 			}
 		}
 	},
+	"de/Report1.ts": {
+		"date": 1656019762350
+	},
 	"de/ReportKunde.ts": {
 		"date": 1655556795285,
 		"de.ReportKunde": {
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
-	},
-	"de/TestExtension.ts": {
-		"date": 1656077195438
-	},
-	"de/Dialog.ts": {
-		"date": 1655755200865,
-		"de/Dialog": {}
-	},
-	"de/TTDialog.ts": {
-		"date": 1655556795285,
-		"de/TTDialog": {}
-	},
-	"de/MyDialog.ts": {
-		"date": 1655556795285,
-		"de/MyDialog": {}
 	},
 	"de/TestDialogBinder.ts": {
 		"date": 1655556795285,
@@ -312,37 +294,16 @@ define("de/registry",["require"], function(require) {
 		"date": 1655556795285,
 		"de/TestDialogBinder": {}
 	},
+	"de/TestExtension.ts": {
+		"date": 1656077195438
+	},
 	"de/TH.ts": {
 		"date": 1655556795285,
 		"de/TH": {}
 	},
-	"de/Dialog2.ts": {
-		"date": 1655812637737,
-		"de/Dialog2": {}
-	},
-	"de/Report1.ts": {
-		"date": 1656019762350
-	},
-	"de/myview2.ts": {
-		"date": 1656067922579,
-		"de.myview2": {
-			"$DBObjectView": [
-				{
-					"classname": "de.Kunde"
-				}
-			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassi.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
-		}
+	"de/TTDialog.ts": {
+		"date": 1655556795285,
+		"de/TTDialog": {}
 	}
 }
  }

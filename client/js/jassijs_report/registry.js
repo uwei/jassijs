@@ -17,6 +17,9 @@ define("jassijs_report/registry", ["require"], function (require) {
             "jassijs_report/modul.ts": {
                 "date": 1655329708587
             },
+            "jassijs_report/pdfMake-interface.ts": {
+                "date": 1656184595147
+            },
             "jassijs_report/PDFReport.ts": {
                 "date": 1655556864381,
                 "jassijs_report.PDFReport": {}
@@ -47,229 +50,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "hideBaseClassProperties": true
                         }
                     ],
-                    "@members": {
-                        "foreach": {
-                            "$Property": []
-                        },
-                        "counter": {
-                            "$Property": [
-                                {
-                                    "default": "undefined",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "listType": {
-                            "$Property": [
-                                {
-                                    "name": "listType",
-                                    "default": "undefined",
-                                    "isVisible": "function",
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "fillColor": {
-                            "$Property": [
-                                {
-                                    "type": "color",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "colSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "rowSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "border": {
-                            "$Property": [
-                                {
-                                    "type": "boolean[]",
-                                    "default": [
-                                        false,
-                                        false,
-                                        false,
-                                        false
-                                    ],
-                                    "isVisible": "function",
-                                    "description": "border of the tablecell: left, top, right, bottom"
-                                }
-                            ]
-                        },
-                        "width": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "height": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "bold": {
-                            "$Property": []
-                        },
-                        "italics": {
-                            "$Property": []
-                        },
-                        "font": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "Alegreya",
-                                        "AlegreyaSans",
-                                        "AlegreyaSansSC",
-                                        "AlegreyaSC",
-                                        "AlmendraSC",
-                                        "Amaranth",
-                                        "Andada",
-                                        "AndadaSC",
-                                        "AnonymousPro",
-                                        "ArchivoNarrow",
-                                        "Arvo",
-                                        "Asap",
-                                        "AveriaLibre",
-                                        "AveriaSansLibre",
-                                        "AveriaSerifLibre",
-                                        "Cambay",
-                                        "Caudex",
-                                        "CrimsonText",
-                                        "Cuprum",
-                                        "Economica",
-                                        "Exo2",
-                                        "Exo",
-                                        "ExpletusSans",
-                                        "FiraSans",
-                                        "JosefinSans",
-                                        "JosefinSlab",
-                                        "Karla",
-                                        "Lato",
-                                        "LobsterTwo",
-                                        "Lora",
-                                        "Marvel",
-                                        "Merriweather",
-                                        "MerriweatherSans",
-                                        "Nobile",
-                                        "NoticiaText",
-                                        "Overlock",
-                                        "Philosopher",
-                                        "PlayfairDisplay",
-                                        "PlayfairDisplaySC",
-                                        "PT_Serif-Web",
-                                        "Puritan",
-                                        "Quantico",
-                                        "QuattrocentoSans",
-                                        "Quicksand",
-                                        "Rambla",
-                                        "Rosario",
-                                        "Sansation",
-                                        "Sarabun",
-                                        "Scada",
-                                        "Share",
-                                        "Sitara",
-                                        "SourceSansPro",
-                                        "TitilliumWeb",
-                                        "Volkhov",
-                                        "Vollkorn"
-                                    ]
-                                }
-                            ]
-                        },
-                        "fontSize": {
-                            "$Property": []
-                        },
-                        "background": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "color": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "alignment": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "left",
-                                        "center",
-                                        "right"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decoration": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "underline",
-                                        "lineThrough",
-                                        "overline"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decorationColor": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "decorationStyle": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "dashed",
-                                        "dotted",
-                                        "double",
-                                        "wavy"
-                                    ]
-                                }
-                            ]
-                        },
-                        "style": {
-                            "$Property": []
-                        },
-                        "lineHeight": {
-                            "$Property": [
-                                {
-                                    "default": 1
-                                }
-                            ]
-                        },
-                        "margin": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "description": "margin left, top, right, bottom"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RDatatable.ts": {
@@ -287,14 +68,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "dataforeach": {
-                            "$Property": []
-                        },
-                        "groupCount": {
-                            "$Property": []
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/remote/pdfmakejassi.ts": {
@@ -308,335 +82,16 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "hideBaseClassProperties": true
                         }
                     ],
-                    "@members": {
-                        "foreach": {
-                            "$Property": []
-                        },
-                        "counter": {
-                            "$Property": [
-                                {
-                                    "default": "undefined",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "listType": {
-                            "$Property": [
-                                {
-                                    "name": "listType",
-                                    "default": "undefined",
-                                    "isVisible": "function",
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "fillColor": {
-                            "$Property": [
-                                {
-                                    "type": "color",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "colSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "rowSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "border": {
-                            "$Property": [
-                                {
-                                    "type": "boolean[]",
-                                    "default": [
-                                        false,
-                                        false,
-                                        false,
-                                        false
-                                    ],
-                                    "isVisible": "function",
-                                    "description": "border of the tablecell: left, top, right, bottom"
-                                }
-                            ]
-                        },
-                        "width": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "height": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "bold": {
-                            "$Property": []
-                        },
-                        "italics": {
-                            "$Property": []
-                        },
-                        "font": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "Alegreya",
-                                        "AlegreyaSans",
-                                        "AlegreyaSansSC",
-                                        "AlegreyaSC",
-                                        "AlmendraSC",
-                                        "Amaranth",
-                                        "Andada",
-                                        "AndadaSC",
-                                        "AnonymousPro",
-                                        "ArchivoNarrow",
-                                        "Arvo",
-                                        "Asap",
-                                        "AveriaLibre",
-                                        "AveriaSansLibre",
-                                        "AveriaSerifLibre",
-                                        "Cambay",
-                                        "Caudex",
-                                        "CrimsonText",
-                                        "Cuprum",
-                                        "Economica",
-                                        "Exo2",
-                                        "Exo",
-                                        "ExpletusSans",
-                                        "FiraSans",
-                                        "JosefinSans",
-                                        "JosefinSlab",
-                                        "Karla",
-                                        "Lato",
-                                        "LobsterTwo",
-                                        "Lora",
-                                        "Marvel",
-                                        "Merriweather",
-                                        "MerriweatherSans",
-                                        "Nobile",
-                                        "NoticiaText",
-                                        "Overlock",
-                                        "Philosopher",
-                                        "PlayfairDisplay",
-                                        "PlayfairDisplaySC",
-                                        "PT_Serif-Web",
-                                        "Puritan",
-                                        "Quantico",
-                                        "QuattrocentoSans",
-                                        "Quicksand",
-                                        "Rambla",
-                                        "Rosario",
-                                        "Sansation",
-                                        "Sarabun",
-                                        "Scada",
-                                        "Share",
-                                        "Sitara",
-                                        "SourceSansPro",
-                                        "TitilliumWeb",
-                                        "Volkhov",
-                                        "Vollkorn"
-                                    ]
-                                }
-                            ]
-                        },
-                        "fontSize": {
-                            "$Property": []
-                        },
-                        "background": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "color": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "alignment": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "left",
-                                        "center",
-                                        "right"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decoration": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "underline",
-                                        "lineThrough",
-                                        "overline"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decorationColor": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "decorationStyle": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "dashed",
-                                        "dotted",
-                                        "double",
-                                        "wavy"
-                                    ]
-                                }
-                            ]
-                        },
-                        "style": {
-                            "$Property": []
-                        },
-                        "lineHeight": {
-                            "$Property": [
-                                {
-                                    "default": 1
-                                }
-                            ]
-                        },
-                        "margin": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "description": "margin left, top, right, bottom"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/ReportDesign.ts": {
                 "date": 1656014998740,
                 "jassijs_report.InfoProperties": {
-                    "@members": {
-                        "title": {
-                            "$Property": [
-                                {
-                                    "description": "the title of the document"
-                                }
-                            ]
-                        },
-                        "author": {
-                            "$Property": [
-                                {
-                                    "description": "the name of the author"
-                                }
-                            ]
-                        },
-                        "subject": {
-                            "$Property": [
-                                {
-                                    "description": "the subject of the document"
-                                }
-                            ]
-                        },
-                        "keywords": {
-                            "$Property": [
-                                {
-                                    "description": "keywords associated with the document"
-                                }
-                            ]
-                        },
-                        "creator": {
-                            "$Property": [
-                                {
-                                    "description": "the creator of the document (default is ‘pdfmake’)"
-                                }
-                            ]
-                        },
-                        "producer": {
-                            "$Property": [
-                                {
-                                    "description": "the producer of the document"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 },
                 "jassijs_report.PermissionProperties": {
-                    "@members": {
-                        "printing": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "lowResolution",
-                                        "highResolution"
-                                    ],
-                                    "description": "whether printing is allowed. Specify \"lowResolution\" to allow degraded printing, or \"highResolution\" to allow printing with high resolution"
-                                }
-                            ]
-                        },
-                        "modifying": {
-                            "$Property": [
-                                {
-                                    "description": "whether modifying the file is allowed. Specify true to allow modifying document content"
-                                }
-                            ]
-                        },
-                        "copying": {
-                            "$Property": [
-                                {
-                                    "description": "whether copying text or graphics is allowed. Specify true to allow copying"
-                                }
-                            ]
-                        },
-                        "annotating": {
-                            "$Property": [
-                                {
-                                    "description": "whether annotating, form filling is allowed. Specify true to allow annotating and form filling"
-                                }
-                            ]
-                        },
-                        "fillingForms": {
-                            "$Property": [
-                                {
-                                    "description": "whether form filling and signing is allowed. Specify true to allow filling in form fields and signing"
-                                }
-                            ]
-                        },
-                        "contentAccessibility": {
-                            "$Property": [
-                                {
-                                    "description": "whether copying text for accessibility is allowed. Specify true to allow copying for accessibility"
-                                }
-                            ]
-                        },
-                        "documentAssembly": {
-                            "$Property": [
-                                {
-                                    "description": "whether assembling document is allowed. Specify true to allow document assembly"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 },
                 "jassijs_report.StyleContainer": {
                     "$Property": [
@@ -664,128 +119,11 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "hideBaseClassProperties": true
                         }
                     ],
-                    "@members": {
-                        "compress": {
-                            "$Property": []
-                        },
-                        "userPassword": {
-                            "$Property": [
-                                {
-                                    "description": "To enable encryption set user password in userPassword (string value). The PDF file will be encrypted when a user password is provided, and users will be prompted to enter the password to decrypt the file when opening it."
-                                }
-                            ]
-                        },
-                        "ownerPassword": {
-                            "$Property": [
-                                {
-                                    "description": "To set access privileges for the PDF file, you need to provide an owner password in ownerPassword (string value) and object permissions with permissions. By default, all operations are disallowed. You need to explicitly allow certain operations."
-                                }
-                            ]
-                        },
-                        "info": {
-                            "$Property": [
-                                {
-                                    "type": "json",
-                                    "componentType": "jassijs_report.InfoProperties"
-                                }
-                            ]
-                        },
-                        "permissions": {
-                            "$Property": [
-                                {
-                                    "type": "json",
-                                    "componentType": "jassijs_report.PermissionProperties"
-                                }
-                            ]
-                        },
-                        "pageMargins": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "default": [
-                                        40,
-                                        40,
-                                        40,
-                                        40
-                                    ],
-                                    "description": "margin of the page: left, top, right, bottom"
-                                }
-                            ]
-                        },
-                        "pageSize": {
-                            "$Property": [
-                                {
-                                    "description": "the size of the page",
-                                    "default": "A4",
-                                    "chooseFrom": [
-                                        "4A0",
-                                        "2A0",
-                                        "A0",
-                                        "A1",
-                                        "A2",
-                                        "A3",
-                                        "A4",
-                                        "A5",
-                                        "A6",
-                                        "A7",
-                                        "A8",
-                                        "A9",
-                                        "A10",
-                                        "B0",
-                                        "B1",
-                                        "B2",
-                                        "B3",
-                                        "B4",
-                                        "B5",
-                                        "B6",
-                                        "B7",
-                                        "B8",
-                                        "B9",
-                                        "B10",
-                                        "C0",
-                                        "C1",
-                                        "C2",
-                                        "C3",
-                                        "C4",
-                                        "C5",
-                                        "C6",
-                                        "C7",
-                                        "C8",
-                                        "C9",
-                                        "C10",
-                                        "RA0",
-                                        "RA1",
-                                        "RA2",
-                                        "RA3",
-                                        "RA4",
-                                        "SRA0",
-                                        "SRA1",
-                                        "SRA2",
-                                        "SRA3",
-                                        "SRA4",
-                                        "EXECUTIVE",
-                                        "FOLIO",
-                                        "LEGAL",
-                                        "LETTER",
-                                        "TABLOID"
-                                    ]
-                                }
-                            ]
-                        },
-                        "pageOrientation": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "landscape",
-                                        "portrait"
-                                    ],
-                                    "default": "portrait",
-                                    "description": "the orientation of the page landscape or portrait"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
+            },
+            "jassijs_report/ReportDesignGlobal.ts": {
+                "date": 1655397712425
             },
             "jassijs_report/RGroupTablerow.ts": {
                 "date": 1656073103788,
@@ -797,11 +135,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "expression": {
-                            "$Property": []
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RImage.ts": {
@@ -813,31 +147,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "icon": "mdi mdi-image-frame"
                         }
                     ],
-                    "@members": {
-                        "image": {
-                            "$Property": [
-                                {
-                                    "type": "rimage",
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "fit": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "decription": "fit in rectangle width, height e.g. 10,20"
-                                }
-                            ]
-                        },
-                        "opacity": {
-                            "$Property": [
-                                {
-                                    "type": "number"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RImageEditor.ts": {
@@ -862,35 +172,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "type": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "lower-alpha",
-                                        "upper-alpha",
-                                        "lower-roman",
-                                        "upper-roman",
-                                        "none"
-                                    ]
-                                }
-                            ]
-                        },
-                        "reversed": {
-                            "$Property": [
-                                {
-                                    "default": false
-                                }
-                            ]
-                        },
-                        "start": {
-                            "$Property": [
-                                {
-                                    "default": 1
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RStack.ts": {
@@ -919,11 +201,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "name": {
-                            "$Property": []
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RTable.ts": {
@@ -941,19 +219,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "headerRows": {
-                            "$Property": []
-                        },
-                        "layoutName": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": "allLayouts",
-                                    "chooseFromStrict": true
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RTableLayouts.ts": {
@@ -987,23 +253,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "description": "text"
                         }
                     ],
-                    "@members": {
-                        "value": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "format": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "chooseFrom": "allFormats"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RTextGroup.ts": {
@@ -1032,19 +282,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "type": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "square",
-                                        "circle",
-                                        "none"
-                                    ]
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RUnknown.ts": {
@@ -1057,12 +295,6 @@ define("jassijs_report/registry", ["require"], function (require) {
             },
             "jassijs_report/StartReporteditor.ts": {
                 "date": 1655760762456
-            },
-            "jassijs_report/pdfMake-interface.ts": {
-                "date": 1656184595147
-            },
-            "jassijs_report/ReportDesignGlobal.ts": {
-                "date": 1655397712425
             },
             "jassijs_report/TemplateReport.ts": {
                 "date": 1656019402317,

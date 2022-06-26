@@ -32,6 +32,9 @@ define("demoreports/registry",["require"], function(require) {
 	"demoreports/Invoice.ts": {
 		"date": 1655408066557
 	},
+	"demoreports/modul.ts": {
+		"date": 1655641244993
+	},
 	"demoreports/pdfmake-playground/Basics.ts": {
 		"date": 1655408093593
 	},
@@ -58,9 +61,6 @@ define("demoreports/registry",["require"], function(require) {
 	},
 	"demoreports/pdfmake-playground/Tables.ts": {
 		"date": 1655408197639
-	},
-	"demoreports/modul.ts": {
-		"date": 1655641244993
 	}
 }
  }

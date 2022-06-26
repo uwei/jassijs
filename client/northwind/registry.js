@@ -12,17 +12,7 @@ define("northwind/registry",["require"], function(require) {
 					"icon": "mdi mdi-cube"
 				}
 			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
 	},
 	"northwind/CustomerView.ts": {
@@ -35,17 +25,7 @@ define("northwind/registry",["require"], function(require) {
 					"icon": "mdi mdi-nature-people"
 				}
 			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
 	},
 	"northwind/DetailTest.ts": {
@@ -56,17 +36,7 @@ define("northwind/registry",["require"], function(require) {
 					"classname": "northwind.OrderDetails"
 				}
 			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
 	},
 	"northwind/EmployeesView.ts": {
@@ -79,17 +49,7 @@ define("northwind/registry",["require"], function(require) {
 					"icon": "mdi mdi-account-tie"
 				}
 			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
 	},
 	"northwind/ImportData.ts": {
@@ -131,17 +91,7 @@ define("northwind/registry",["require"], function(require) {
 					"icon": "mdi mdi-script-text"
 				}
 			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
 	},
 	"northwind/ProductView.ts": {
@@ -154,17 +104,7 @@ define("northwind/registry",["require"], function(require) {
 					"icon": "mdi mdi-reproduction"
 				}
 			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
 	},
 	"northwind/remote/Categories.ts": {
@@ -733,17 +673,7 @@ define("northwind/registry",["require"], function(require) {
 					"icon": "mdi mdi-truck-delivery"
 				}
 			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
 	},
 	"northwind/SuppliersView.ts": {
@@ -756,17 +686,7 @@ define("northwind/registry",["require"], function(require) {
 					"icon": "mdi mdi-office-building-outline"
 				}
 			],
-			"@members": {
-				"value": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true,
-							"editor": "jassijs.ui.PropertyEditors.DBObjectEditor"
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
 	}
 }

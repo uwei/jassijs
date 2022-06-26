@@ -5,7 +5,6 @@ import Filesystem from "jassijs/server/Filesystem";
 import { JassiError } from "jassijs/remote/Classes";
 
 
-
 export abstract class Indexer {
 
     abstract fileExists(name);
@@ -30,7 +29,13 @@ export abstract class Indexer {
                 text = text.substring(text.indexOf("default=") + 8);
             }
         }
-        var index = JSON.parse(text);
+        try {
+            var index = JSON.parse(text);
+        } catch {
+            console.log("error read modul " + modul + "- create new");
+            index = {};
+        }
+
         //remove deleted files
         for (var key in index) {
             if (!(await this.fileExists(root + (root === "" ? "" : "/") + key))) {
@@ -132,7 +137,7 @@ export abstract class Indexer {
             return false;
         } else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
             return Number(arg.text);
-        } else if (arg.kind === ts.SyntaxKind.ArrowFunction||arg.kind === ts.SyntaxKind.FunctionExpression) {
+        } else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
             return "function";
         }
 
@@ -169,11 +174,11 @@ export abstract class Indexer {
                     var member = node["members"][x];
                     var membername = node["members"][x].name?.escapedText;
                     if (member.decorators !== undefined) {
-                        if(!dec["@members"])
-                            dec["@members"]={}
-                       
+                        if (!dec["@members"])
+                            dec["@members"] = {}
+
                         var decm = {};
-                        dec["@members"][membername]=decm;
+                        dec["@members"][membername] = decm;
                         for (let x = 0; x < member.decorators.length; x++) {
                             var decnode = member.decorators[x];
                             var ex: any = decnode.expression;
@@ -181,19 +186,26 @@ export abstract class Indexer {
                             if (ex.expression === undefined) {
                                 decm[ex.text] = [];//Annotation without parameter
                             } else {
-
-                                if (decm[ex.expression.text] === undefined) {
-                                    decm[ex.expression.text] = [];
-                                }
-                                for (var a = 0; a < ex.arguments.length; a++) {
-                                    decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
-                                }
+                                if (ex.expression.text === "$Property") {
+                                    //do nothing;
+                                }else{
+                                    if (decm[ex.expression.text] === undefined) {
+                                        decm[ex.expression.text] = [];
+                                    }
+                                    for (var a = 0; a < ex.arguments.length; a++) {
+                                        decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                    }
+                                } 
                             }
+                        }  
+                        if(Object.keys(dec["@members"][membername]).length===0){
+                            delete dec["@members"][membername];
                         }
                     }
+                    
 
                 }
-                
+
             }
         }
         depth++;
@@ -207,3 +219,4 @@ export abstract class Indexer {
         var h = 9;
     }*/
 }
+

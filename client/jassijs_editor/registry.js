@@ -18,53 +18,10 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"date": 1656080508765,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
-			"@members": {
-				"Development_DefaultEditor": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"ace",
-								"monaco",
-								"aceOnBrowser"
-							],
-							"default": "aceOnBrowser",
-							"chooseFromStrict": true
-						}
-					]
-				},
-				"Development_MoanacoEditorTheme": {
-					"$Property": [
-						{
-							"chooseFrom": [
-								"vs-dark",
-								"vs-light",
-								"hc-black"
-							],
-							"default": "vs-light",
-							"chooseFromStrict": true
-						}
-					]
-				}
-			}
+			"@members": {}
 		},
 		"jassijs_editor.CodeEditor": {
-			"@members": {
-				"file": {
-					"$Property": [
-						{
-							"isUrlTag": true,
-							"id": true
-						}
-					]
-				},
-				"line": {
-					"$Property": [
-						{
-							"isUrlTag": true
-						}
-					]
-				}
-			}
+			"@members": {}
 		}
 	},
 	"jassijs_editor/CodeEditorInvisibleComponents.ts": {
