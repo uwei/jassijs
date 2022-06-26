@@ -1,23 +1,10 @@
 import registry from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
-import { Report } from "jassijs_report/designer/Report";
 
-export class ReportProperties {
+import { $Report } from "jassijs_report/remote/Report";
 
-    /**
-     * full path to classifiy the UIComponent e.g common/TopComponent 
-     */
-    fullPath?: string;
-    icon?: string;
-    serverReportClass?:string;
-    
 
-}
-export function $Report(properties: ReportProperties): Function {
-    return function (pclass) {
-        registry.register("$Report", pclass, properties);
-    }
-}
+
 @$Report({fullPath:"northwind.SampleServerReport",serverReportClass:"northwind.SampleServerReport"})
 export class SampleServerReport{
     @$Property()

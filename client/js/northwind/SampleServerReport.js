@@ -7,19 +7,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_1, Property_1) {
+define(["require", "exports", "jassijs/ui/Property", "jassijs_report/remote/Report"], function (require, exports, Property_1, Report_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test2 = exports.SampleClientReport = exports.SampleServerReport = exports.$Report = exports.ReportProperties = void 0;
-    class ReportProperties {
-    }
-    exports.ReportProperties = ReportProperties;
-    function $Report(properties) {
-        return function (pclass) {
-            Registry_1.default.register("$Report", pclass, properties);
-        };
-    }
-    exports.$Report = $Report;
+    exports.test2 = exports.SampleClientReport = exports.SampleServerReport = void 0;
     let SampleServerReport = class SampleServerReport {
         constructor() {
             this.content = undefined;
@@ -61,7 +52,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
         __metadata("design:type", String)
     ], SampleServerReport.prototype, "name", void 0);
     SampleServerReport = __decorate([
-        $Report({ fullPath: "northwind.SampleServerReport", serverReportClass: "northwind.SampleServerReport" })
+        (0, Report_1.$Report)({ fullPath: "northwind.SampleServerReport", serverReportClass: "northwind.SampleServerReport" })
     ], SampleServerReport);
     exports.SampleServerReport = SampleServerReport;
     let SampleClientReport = class SampleClientReport {
@@ -104,7 +95,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property"],
         __metadata("design:type", String)
     ], SampleClientReport.prototype, "name", void 0);
     SampleClientReport = __decorate([
-        $Report({ fullPath: "northwind.SampleServerReport" })
+        (0, Report_1.$Report)({ fullPath: "northwind.SampleServerReport" })
     ], SampleClientReport);
     exports.SampleClientReport = SampleClientReport;
     async function test2() {

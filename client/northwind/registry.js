@@ -661,7 +661,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/SampleServerReport.ts": {
-		"date": 1625946850000
+		"date": 1656275125505
 	},
 	"northwind/ShippersView.ts": {
 		"date": 1655556792357,
