@@ -17,13 +17,13 @@ exports.default={
 		}
 	},
 	"jassijs_report/TestServerreport.ts": {
-		"date": 1656274977929
+		"date": 1656337203991
 	},
 	"jassijs_report/remote/ServerReport.ts": {
-		"date": 1656280942580,
+		"date": 1656331483222,
 		"jassijs_report.remote.ServerReport": {}
 	},
 	"jassijs_report/DoServerreport.ts": {
-		"date": 1656282098890
+		"date": 1656331375990
 	}
 }

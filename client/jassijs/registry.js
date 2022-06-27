@@ -299,7 +299,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1656076933159,
+		"date": 1656331319093,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {
@@ -853,7 +853,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1655844743106,
+		"date": 1656335881756,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{

@@ -275,6 +275,29 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     /**
    * deletes a server modul
    **/
+    async testServersideFile(name, context = undefined) {
+        if (!name.startsWith("$serverside/"))
+            throw new Classes_1.JassiError(name + " i not a serverside file");
+        if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+            var ret = await this.call(this, this.testServersideFile, name, context);
+            //@ts-ignore
+            //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+            return ret;
+        }
+        else {
+            if (!context.request.user.isAdmin) {
+                throw new Classes_1.JassiError("only admins can delete");
+            }
+            //@ts-ignore
+            var test = (await Promise.resolve().then(() => require(name.replaceAll("$serverside/", "")))).test;
+            if (test)
+                Server_1.lastTestServersideFileResult = await test();
+            return Server_1.lastTestServersideFileResult;
+        }
+    }
+    /**
+   * deletes a server modul
+   **/
     async removeServerModul(name, context = undefined) {
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
             var ret = await this.call(this, this.removeServerModul, name, context);
@@ -410,10 +433,11 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
     }
 };
 Server.isonline = undefined;
+Server.lastTestServersideFileResult = undefined;
 //files found in js.map of modules in the jassijs.json
 Server.filesInMap = undefined;
 Server = Server_1 = __decorate([
-    (0, Registry_1.$Class)("jassijs.remote.Server"),
+    Registry_1.$Class("jassijs.remote.Server"),
     __metadata("design:paramtypes", [])
 ], Server);
 exports.Server = Server;

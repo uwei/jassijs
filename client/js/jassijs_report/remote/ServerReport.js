@@ -15,7 +15,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return await ServerReport_1.call(this.getDesign, path, parameter, context);
             }
             else {
+                //@ts-ignore
                 var DoServerreport = (await new Promise((resolve_1, reject_1) => { require(["jassijs_report/DoServerreport"], resolve_1, reject_1); })).DoServerreport;
+                ServerReport_1.cacheLastParameter[path] = parameter;
                 return await new DoServerreport().getDesign(path, parameter);
             }
         }
@@ -24,18 +26,31 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
                 return await ServerReport_1.call(this.getBase64, path, parameter, context);
             }
             else {
+                //@ts-ignore
                 var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/DoServerreport"], resolve_2, reject_2); })).DoServerreport;
+                if (parameter == "useLastCachedParameter")
+                    parameter = ServerReport_1.cacheLastParameter[path];
                 return await new DoServerreport().getBase64(path, parameter);
             }
         }
+        static async getBase64LastTestResult(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await ServerReport_1.call(this.getBase64LastTestResult, context);
+            }
+            else {
+                //@ts-ignore
+                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/DoServerreport"], resolve_3, reject_3); })).DoServerreport;
+                return await new DoServerreport().getBase64LastTestResult();
+            }
+        }
     };
+    ServerReport.cacheLastParameter = {};
     ServerReport = ServerReport_1 = __decorate([
         (0, Registry_1.$Class)("jassijs_report.remote.ServerReport")
     ], ServerReport);
     exports.ServerReport = ServerReport;
     async function test() {
         var ret = await ServerReport.getBase64("jassijs_report/TestServerreport", { sort: "name" });
-        debugger;
         return ret;
         //    console.log(await new ServerReport().sayHello("Kurt"));
     }

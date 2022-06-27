@@ -1,22 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.fill = void 0;
+exports.test = exports.fill = void 0;
 var reportdesign = {
     content: [
         {
             datatable: {
+                header: ["name2233", "lastname"],
                 dataforeach: "person",
-                body: [
-                    "${person.name}", "${person.lastname}"
-                ]
+                body: ["${person.name}", "${person.lastname}"]
             }
         }
     ]
 };
 async function fill(parameter) {
     var data = [
-        { name: "Aoron", lastname: "Müller" },
-        { name: "Heino", lastname: "Brecht" }
+        { name: "Aoron", lastname: "Müllera", fullname: () => this.name + ", " + this.lastname },
+        { name: "Heino", lastname: "Brechtp", fullname: () => this.name + ", " + this.lastname }
     ];
     if (parameter.sort === "name")
         data = data.sort((a, b) => { return a.name.localeCompare(b.name); });
@@ -28,4 +27,9 @@ async function fill(parameter) {
     };
 }
 exports.fill = fill;
+async function test() {
+    return await fill({ sort: "lastname" });
+}
+exports.test = test;
+//ok
 //# sourceMappingURL=TestServerreport.js.map

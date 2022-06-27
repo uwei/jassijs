@@ -15,6 +15,7 @@ import { ReportDesign } from "jassijs_report/ReportDesign";
 import { Tools } from "jassijs/util/Tools";
 import { RComponent } from "jassijs_report/RComponent";
 import { RStack } from "jassijs_report/RStack";
+import { ServerReport } from "jassijs_report/remote/ServerReport";
 
 
 @$Class("jassijs_report.designer.ReportDesigner")
@@ -59,8 +60,8 @@ export class ReportDesigner extends ComponentDesigner {
             _this.propertyChanged();
         });
         this.__dom.classList.add("ReportDesigner");
-        this.dom.style.overflow= "scroll";
-        this.dom.style.width= "";
+        this.dom.style.overflow = "scroll";
+        this.dom.style.width = "";
         this.registerKeys();
     }
 
@@ -72,24 +73,35 @@ export class ReportDesigner extends ComponentDesigner {
     editDialog(enable) {
         if (enable === false) {
             super.editDialog(enable);
-
+            var _this = this;
             var rep = new PDFReport();
             //rep.content=this.designedComponent["design];
+            if (this._codeEditor?.file?.startsWith("$serverside/")) {
+                    this._codeEditor.evalServerside().then((data) => {
+                        if(!data)
+                            return;
+                        ServerReport.getBase64LastTestResult().then((base64) => {
+                            this.pdfviewer.report = rep;
+                            _this.pdfviewer.value = base64
+                        });
+                    });
+        
+            } else {
+                var data;
+                try {
+                    data = (<ReportDesign>this._codeChanger.value).toJSON();
+                    rep.value = data;//Tools.copyObject(data);// designedComponent["design"];
+                    rep.fill();
+                    rep.getBase64().then((data) => {
+                        this.pdfviewer.report = rep;
+                        //make a copy because the data would be modified 
+                        this.pdfviewer.value = data;
+                    })
+                } catch (err) {
+                    console.error(err);
+                    //viewer.value = await rep.getBase64();
 
-            var data;
-            try {
-                data = (<ReportDesign>this._codeChanger.value).toJSON();
-                rep.value = data;//Tools.copyObject(data);// designedComponent["design"];
-                rep.fill();
-                rep.getBase64().then((data) => {
-                    this.pdfviewer.report = rep;
-                    //make a copy because the data would be modified 
-                    this.pdfviewer.value = data;
-                })
-            } catch (err) {
-                console.error(err);
-                //viewer.value = await rep.getBase64();
-
+                }
             }
 
             //            this.lastView = this._designPlaceholder._components[0];
@@ -169,12 +181,12 @@ export class ReportDesigner extends ComponentDesigner {
         var text = await navigator.clipboard.readText();
         var all: any[] = JSON.parse(text);
         var target: RStack = this._propertyEditor.value;
-        var before=undefined;
-        if(target._components===undefined){
-            before=target;
-            target=target._parent;
-        }else
-            before=target._components[target._components.length - 1];//design dummy
+        var before = undefined;
+        if (target._components === undefined) {
+            before = target;
+            target = target._parent;
+        } else
+            before = target._components[target._components.length - 1];//design dummy
         var comp: RStack = ReportDesign.fromJSON(all);
         for (var x = 0; x < comp._components.length; x++) {
             target.addBefore(comp._components[x], before);//design dummy
@@ -250,11 +262,12 @@ export class ReportDesigner extends ComponentDesigner {
         this._codeEditor.variables.addVariable("this", component);
         this.createVariable(undefined, undefined, <Container>component);
         this._propertyEditor.value = component;
+
         this._codeChanger.parser = this._propertyEditor.parser;
         //@ts.ignore
         this._codeChanger.value = component;
         super.designedComponent = component;
-
+        this._codeChanger.updateParser();
 
     }
     /**

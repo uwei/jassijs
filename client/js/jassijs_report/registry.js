@@ -3,7 +3,7 @@ define("jassijs_report/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_report/designer/ReportDesigner.ts": {
-		"date": 1656186291717,
+		"date": 1656337133845,
 		"jassijs_report.designer.ReportDesigner": {}
 	},
 	"jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -234,7 +234,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/RText.ts": {
-		"date": 1656184904191,
+		"date": 1656335831495,
 		"jassijs_report.RText": {
 			"$ReportComponent": [
 				{
@@ -340,7 +340,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.remote.Report": {}
 	},
 	"jassijs_report/remote/ServerReport.ts": {
-		"date": 1656280942580,
+		"date": 1656331483222,
 		"jassijs_report.remote.ServerReport": {}
 	}
 }

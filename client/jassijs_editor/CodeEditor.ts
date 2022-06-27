@@ -19,6 +19,8 @@ import { $SettingsDescriptor, Settings } from "jassijs/remote/Settings";
 import { Test } from "jassijs/remote/Test";
 import modul from "./modul";
 import { currentsettings } from "jassijs/base/CurrentSettings";
+import windows from "jassijs/base/Windows";
+import { notify } from "jassijs/ui/Notify";
 
 jassijs.includeCSSFile("jassijs_editor.css");
 
@@ -226,11 +228,14 @@ export class CodeEditor extends Panel {
 
 
         var f = this._file.replace(".ts", "");
-        if (code.indexOf("@$") > -1) {
-            await registry.reload();
-        }
-        Reloader.instance.reloadJS(f);
+        if (this._file?.startsWith("$serverside/")) {
 
+        } else {
+            if (code.indexOf("@$") > -1) {
+                await registry.reload();
+            }
+            Reloader.instance.reloadJS(f);
+        }
 
     }
     /**
@@ -449,7 +454,7 @@ export class CodeEditor extends Panel {
                     //sometimes does a constructor create other Components so we need the first one
                     if (found)
                         continue;
-                    
+
                     if (sname && this.variables.getObjectFromVariable(sname) === undefined) {
                         if (ignoreVar.indexOf(sname) === -1) {
                             if (useThis && root === val.component)
@@ -469,6 +474,81 @@ export class CodeEditor extends Panel {
             return parser;
         }
 
+    }
+    /**
+     * load the right editor for the returned value
+     */
+    private async _processEvalResult(ret, filename) {
+        //_this.variables.addVariable("me", ret.me);
+        var _this = this;
+        _this.variables.updateCache();
+        if (ret instanceof Component && ret["reporttype"] === undefined) {
+            //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
+            //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
+            //   var Parser = classes.getClass("jassijs_editor.base.Parser");
+            var ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
+            var Parser = await classes.loadClass("jassijs_editor.util.Parser");
+            var parser = new Parser();
+            // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
+            if (!((_this._design) instanceof ComponentDesigner)) {
+                _this._design = new ComponentDesigner();
+
+                _this._main.add(_this._design, "Design", "design");
+                _this._design["codeEditor"] = _this;
+            }
+            //@ts-ignore
+            _this._design.connectParser(parser);
+            _this._design["designedComponent"] = ret;
+
+            await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
+            _this._design["editDialog"](true);
+            //});
+        } else if (ret["reportdesign"] !== undefined) {
+            var Parser = await classes.loadClass("jassijs_editor.util.Parser");
+            var ReportDesigner = await classes.loadClass("jassijs_report.designer.ReportDesigner");
+            var ReportDesign = await classes.loadClass("jassijs_report.ReportDesign");
+            if (!((_this._design) instanceof ReportDesigner)) {
+                _this._design = new ReportDesigner();
+                _this._main.add(_this._design, "Design", "design");
+                _this._design["codeEditor"] = _this;
+                parser = new Parser();
+                parser.classScope = undefined;// [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
+                //@ts-ignore
+                _this._design.connectParser(parser);
+
+            }
+            var rep = new ReportDesign();
+            rep.design = Object.assign({}, ret.reportdesign);
+            if (ret.value && rep.design.data === undefined)
+                rep.design.data = ret.value;
+            else if (ret.data && rep.design.data === undefined)
+                rep.design.data = ret.data;
+
+            if (ret.parameter && rep.design.parameter === undefined)
+                rep.design.parameter = ret.parameter;
+            _this._design["designedComponent"] = rep;
+
+            /*   require(["jassijs_report/ReportDesign"], function() {
+                   var rd = classes.getClass("jassijs_report.ReportDesign");
+                   let rep = rd["fromJSON"](ret);
+                   
+                   _this._design["designedComponent"] = rep;
+               });*/
+
+
+        }/*else if (ret["reporttype"] !== undefined) {
+                    require(["jassijs_report/designer/ReportDesigner"], function () {
+                        var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
+                        if (!((_this._design) instanceof ReportDesigner)) {
+                            _this._design = new ReportDesigner();
+                            _this._main.add(_this._design, "Design", "design");
+                            _this._design["codeEditor"] = _this;
+                        }
+                        _this._design["designedComponent"] = ret;
+
+             
+                    });
+                }*/
     }
     private async _evalCodeOnLoad(data) {
         this.variables.clear();
@@ -518,78 +598,9 @@ export class CodeEditor extends Panel {
             // Promise.resolve(ret).then(async function(ret) {
             if (ret !== undefined) {
 
-               
+                await this._processEvalResult(ret, filename);
+                Component.offComponentCreated(hook);
 
-                //_this.variables.addVariable("me", ret.me);
-
-                _this.variables.updateCache();
-                if (ret instanceof Component && ret["reporttype"] === undefined) {
-                    //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
-                    //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
-                    //   var Parser = classes.getClass("jassijs_editor.base.Parser");
-                    var ComponentDesigner = await classes.loadClass("jassijs_editor.ComponentDesigner");
-                    var Parser = await classes.loadClass("jassijs_editor.util.Parser");
-                    var parser = new Parser();
-                    // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
-                    if (!((_this._design) instanceof ComponentDesigner)) {
-                        _this._design = new ComponentDesigner();
-
-                        _this._main.add(_this._design, "Design", "design");
-                        _this._design["codeEditor"] = _this;
-                    }
-                    //@ts-ignore
-                    _this._design.connectParser(parser);
-                    _this._design["designedComponent"] = ret;
-                    Component.offComponentCreated(hook);
-                    await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
-                    _this._design["editDialog"](true);
-                    //});
-                } else if (ret["reportdesign"] !== undefined) {
-                    var Parser = await classes.loadClass("jassijs_editor.util.Parser");
-                    var ReportDesigner = await classes.loadClass("jassijs_report.designer.ReportDesigner");
-                    var ReportDesign = await classes.loadClass("jassijs_report.ReportDesign");
-                    if (!((_this._design) instanceof ReportDesigner)) {
-                        _this._design = new ReportDesigner();
-                        _this._main.add(_this._design, "Design", "design");
-                        _this._design["codeEditor"] = _this;
-                        parser = new Parser();
-                        parser.classScope = undefined;// [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
-                        //@ts-ignore
-                        _this._design.connectParser(parser);
-
-                    }
-                    var rep = new ReportDesign();
-                    rep.design = Object.assign({}, ret.reportdesign);
-                    if (ret.value && rep.design.data === undefined)
-                        rep.design.data = ret.value;
-                    else if (ret.data && rep.design.data === undefined)
-                        rep.design.data = ret.data;
-
-                    if (ret.parameter && rep.design.parameter === undefined)
-                        rep.design.parameter = ret.parameter;
-                    _this._design["designedComponent"] = rep;
-
-                    /*   require(["jassijs_report/ReportDesign"], function() {
-                           var rd = classes.getClass("jassijs_report.ReportDesign");
-                           let rep = rd["fromJSON"](ret);
-                           
-                           _this._design["designedComponent"] = rep;
-                       });*/
-
-
-                }/*else if (ret["reporttype"] !== undefined) {
-                    require(["jassijs_report/designer/ReportDesigner"], function () {
-                        var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
-                        if (!((_this._design) instanceof ReportDesigner)) {
-                            _this._design = new ReportDesigner();
-                            _this._main.add(_this._design, "Design", "design");
-                            _this._design["codeEditor"] = _this;
-                        }
-                        _this._design["designedComponent"] = ret;
-
-             
-                    });
-                }*/
             }
             Component.offComponentCreated(hook);
             //  });
@@ -646,6 +657,17 @@ export class CodeEditor extends Panel {
         }, [channel.port2]);
         var test = await ret;
     }
+    async evalServerside() {
+        var code = this._codePanel.value;
+        var testcode = await new Server().loadFile(this.file);
+        var hasModified = testcode !== code;
+        if (hasModified) {
+            notify("please save code before test", "error");
+            return undefined;
+        }
+        var res = await new Server().testServersideFile(this._file.substring(0, this._file.length - 3));
+        return res;
+    }
     /**
      * execute the current code
      * @param {boolean} toCursor -  if true the variables were inspected on cursor position, 
@@ -659,6 +681,14 @@ export class CodeEditor extends Panel {
         var lines = code.split("\n");
 
         var _this = this;
+        if (this.file?.startsWith("$serverside/")) {
+
+            var res = await this.evalServerside();
+            await this._processEvalResult(res);
+
+            return;
+        }
+
         window["test"] = undefined;
 
         code = "";
@@ -776,8 +806,11 @@ export class CodeEditor extends Panel {
      * @member {string} - title of the component
      */
     get title() {
-        var s = this.file.split("/");
-        return s[s.length - 1];
+        var s: any = this.file.split("/");
+        s = s[s.length - 1];
+        if (this.file?.startsWith("$serverside"))
+            s = s + "(s)";
+        return s;
     }
     /**
     * @member {string} - the url to edit
@@ -785,6 +818,7 @@ export class CodeEditor extends Panel {
     set file(value: string) { //the Code
         this._file = value;
         this.openFile(value);
+
     }
     @$Property({ isUrlTag: true, id: true })
     get file(): string {
@@ -846,15 +880,16 @@ export class CodeEditor extends Panel {
 export async function test() {
     var editor = new CodeEditor();
     //var url = "jassijs_editor/AcePanel.ts";
-    editor.height = 300;
+    editor.height = "100%";
     editor.width = "100%";
     //await editor.openFile(url);
-    editor.file="tests/TestDialog.ts";
-    setTimeout(()=>{
-    editor.evalCode();
+    editor.file = "$serverside/jassijs_report/TestServerreport.ts";//"tests/TestDialog.ts";
+    setTimeout(() => {
+        editor.evalCode();
 
-    },500);
-    return editor;
-
+    }, 500);
+    windows.add(editor, editor.title);
+    // debugger;
+    // var k=await new Server().testServersideFile("$serverside/jassijs_report/TestServerreport");
 };
 //jassijs.myRequire(modul.css["jassijs_editor.css"]);

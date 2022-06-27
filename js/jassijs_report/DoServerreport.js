@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DoServerreport = void 0;
+const Server_1 = require("jassijs/remote/Server");
 const pdfmakejassi_1 = require("./remote/pdfmakejassi");
 var path = require('path');
 var pdfMakePrinter = require('pdfmake/src/printer');
@@ -31,6 +32,14 @@ class DoServerreport {
         var fill = (await Promise.resolve().then(() => require(path))).fill;
         var content = await fill(parameter);
         return content;
+    }
+    async getBase64LastTestResult() {
+        var data = Server_1.Server.lastTestServersideFileResult;
+        data = (0, pdfmakejassi_1.createReportDefinition)(data.reportdesign, data.data, data.parameter);
+        var ret = await new Promise((resolve) => {
+            this.createPdfBinary(data, resolve);
+        });
+        return ret;
     }
     async getBase64(file, parameter) {
         var data = await this.getDesign(file, parameter);

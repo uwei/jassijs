@@ -60,6 +60,7 @@ let allFormats = (() => {
 export class RText extends RComponent {
     reporttype: string = "text";
     initIfNeeded;
+    focusLost;
     toolbar = ['bold italic underline forecolor backcolor fontsizeselect'];
     customToolbarButtons: {
         [name: string]: {
@@ -90,6 +91,7 @@ export class RText extends RComponent {
         this.extensionCalled = HTMLPanel.prototype.extensionCalled.bind(this);
         this._setDesignMode = HTMLPanel.prototype._setDesignMode.bind(this);
         this.initIfNeeded = HTMLPanel.prototype.initIfNeeded.bind(this);
+        this.focusLost = HTMLPanel.prototype.focusLost.bind(this);
         //@ts-ignore
         this._initTinymce = HTMLPanel.prototype._initTinymce.bind(this);
     }
@@ -122,7 +124,7 @@ export class RText extends RComponent {
         return this._format;
     }
 
-
+   
     fromJSON(ob: any): RText {
         var ret = this;
         if (ob.editTogether) {

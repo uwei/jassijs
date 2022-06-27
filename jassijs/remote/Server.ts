@@ -10,6 +10,7 @@ import { classes, JassiError } from "./Classes";
 @$Class("jassijs.remote.Server")
 export class Server extends RemoteObject {
     private static isonline: Promise<boolean> = undefined;
+    static lastTestServersideFileResult=undefined;
     //files found in js.map of modules in the jassijs.json
     public static filesInMap: { [name: string]: { modul: string, id: number } } = undefined;
     constructor() {
@@ -267,6 +268,29 @@ export class Server extends RemoteObject {
              var fs: any = await import("jassijs/server/Filesystem");
              return new fs.default().saveFiles(fileNames, contents);
          }*/
+    }
+    /**
+   * deletes a server modul
+   **/
+    async testServersideFile(name: string, context: Context = undefined): Promise<string> {
+        if(!name.startsWith("$serverside/"))
+            throw new JassiError(name+" i not a serverside file");
+        if (!context?.isServer) {
+            var ret = await this.call(this, this.testServersideFile, name, context);
+            //@ts-ignore
+            //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+            return ret;
+        } else {
+            if (!context.request.user.isAdmin){
+                throw new JassiError("only admins can delete");
+            }
+            //@ts-ignore
+            var test=(await import(name.replaceAll("$serverside/",""))).test;
+            if(test)
+                Server.lastTestServersideFileResult=await test();
+                return Server.lastTestServersideFileResult;
+                
+            }
     }
     /**
    * deletes a server modul

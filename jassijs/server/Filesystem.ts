@@ -427,9 +427,11 @@ export default class Filesystem {
                 var jfiles = [];
                 for (var modul in modules) {
                     for (var jfile in require.cache) {
-                       
+                        if(jfile.indexOf("TestServerreport")>-1)
+                            jfile=jfile;
                         if(jfile.replaceAll("\\", "/").indexOf("/"+modul+"/remote/")>-1||
-                        (fromServerdirectory&&jfile.replaceAll("\\", "/").endsWith("/js/"+fileName.replace(".ts",".js") ))){
+                          (fromServerdirectory&&jfile.replaceAll("\\", "/").replaceAll("$serverside/", "").
+                             endsWith("/js/"+fileName.replaceAll("$serverside/", "").replace(".ts",".js") ))){
                             //save Modules
                            
                             var p = jfile.substring(root.length).replaceAll("\\", "/");

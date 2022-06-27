@@ -1,22 +1,21 @@
 
 
 var reportdesign = {
-    content: [
-        {
-            datatable: {
-                dataforeach: "person",
-                body: [
-                    "${person.name}", "${person.lastname}"
-                ]
-            }
-        }
-    ]
+	content: [
+		{
+			datatable: {
+				header: ["name2233","lastname"],
+				dataforeach: "person",
+				body: ["${person.name}","${person.lastname}"]
+			}
+		}
+	]
 };
-
+ 
 export async function fill(parameter) {
     var data = [
-        { name: "Aoron", lastname: "Müller" },
-        { name: "Heino", lastname: "Brecht" }
+        { name: "Aoron", lastname: "Müllera" ,fullname:()=>this.name+", "+this.lastname},
+        { name: "Heino", lastname: "Brechtp",fullname:()=>this.name+", "+this.lastname}
     ]
     if (parameter.sort === "name")
         data = data.sort((a, b) => { return a.name.localeCompare(b.name) });
@@ -27,3 +26,8 @@ export async function fill(parameter) {
         data
     }
 }
+
+export async function test(){ 
+    return await fill({sort:"lastname"}); 
+}
+//ok

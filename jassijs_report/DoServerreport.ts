@@ -1,3 +1,4 @@
+import { Server } from "jassijs/remote/Server";
 import { createReportDefinition } from "./remote/pdfmakejassi";
 import { fill } from "./TestServerreport";
 var path = require('path');
@@ -37,7 +38,15 @@ export class DoServerreport{
         var content=await fill(parameter);
         return content; 
     }
-    
+    async getBase64LastTestResult(){
+        var data=Server.lastTestServersideFileResult;
+        data=createReportDefinition(data.reportdesign,data.data,data.parameter);
+        
+        var ret=await new Promise((resolve)=>{
+            this.createPdfBinary(data,resolve);
+        });
+        return ret;
+    }
     async getBase64(file:string,parameter){
         var data=await this.getDesign(file,parameter);
         data=createReportDefinition(data.reportdesign,data.data,data.parameter);
