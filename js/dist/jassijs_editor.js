@@ -917,7 +917,7 @@ define("jassijs_editor/modul", ["require", "exports"], function (require, export
         }
     };
 });
-define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test", "jassijs/base/CurrentSettings"], function (require, exports, Registry_5, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_6, Server_2, Reloader_2, Classes_1, Component_2, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1, CurrentSettings_1) {
+define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs_editor/CodePanel", "jassijs/ui/VariablePanel", "jassijs/ui/DockingContainer", "jassijs/ui/ErrorPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs/util/Reloader", "jassijs/remote/Classes", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs_editor/AcePanel", "jassijs_editor/util/Typescript", "jassijs_editor/MonacoPanel", "jassijs/remote/Settings", "jassijs/remote/Test", "jassijs/base/CurrentSettings", "jassijs/base/Windows", "jassijs/ui/Notify"], function (require, exports, Registry_5, Panel_1, CodePanel_3, VariablePanel_1, DockingContainer_1, ErrorPanel_1, Button_1, Registry_6, Server_2, Reloader_2, Classes_1, Component_2, Property_1, AcePanel_2, Typescript_2, MonacoPanel_1, Settings_1, Test_1, CurrentSettings_1, Windows_2, Notify_2) {
     "use strict";
     var CodeEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1083,12 +1083,17 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             
         }*/
         async _save(code) {
+            var _a;
             await new Server_2.Server().saveFile(this._file, code);
             var f = this._file.replace(".ts", "");
-            if (code.indexOf("@$") > -1) {
-                await Registry_6.default.reload();
+            if ((_a = this._file) === null || _a === void 0 ? void 0 : _a.startsWith("$serverside/")) {
             }
-            Reloader_2.Reloader.instance.reloadJS(f);
+            else {
+                if (code.indexOf("@$") > -1) {
+                    await Registry_6.default.reload();
+                }
+                Reloader_2.Reloader.instance.reloadJS(f);
+            }
         }
         /**
         * save the code to server
@@ -1304,6 +1309,75 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 return parser;
             }
         }
+        /**
+         * load the right editor for the returned value
+         */
+        async _processEvalResult(ret, filename) {
+            //_this.variables.addVariable("me", ret.me);
+            var _this = this;
+            _this.variables.updateCache();
+            if (ret instanceof Component_2.Component && ret["reporttype"] === undefined) {
+                //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
+                //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
+                //   var Parser = classes.getClass("jassijs_editor.base.Parser");
+                var ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.ComponentDesigner");
+                var Parser = await Classes_1.classes.loadClass("jassijs_editor.util.Parser");
+                var parser = new Parser();
+                // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
+                if (!((_this._design) instanceof ComponentDesigner)) {
+                    _this._design = new ComponentDesigner();
+                    _this._main.add(_this._design, "Design", "design");
+                    _this._design["codeEditor"] = _this;
+                }
+                //@ts-ignore
+                _this._design.connectParser(parser);
+                _this._design["designedComponent"] = ret;
+                await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
+                _this._design["editDialog"](true);
+                //});
+            }
+            else if (ret["reportdesign"] !== undefined) {
+                var Parser = await Classes_1.classes.loadClass("jassijs_editor.util.Parser");
+                var ReportDesigner = await Classes_1.classes.loadClass("jassijs_report.designer.ReportDesigner");
+                var ReportDesign = await Classes_1.classes.loadClass("jassijs_report.ReportDesign");
+                if (!((_this._design) instanceof ReportDesigner)) {
+                    _this._design = new ReportDesigner();
+                    _this._main.add(_this._design, "Design", "design");
+                    _this._design["codeEditor"] = _this;
+                    parser = new Parser();
+                    parser.classScope = undefined; // [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
+                    //@ts-ignore
+                    _this._design.connectParser(parser);
+                }
+                var rep = new ReportDesign();
+                rep.design = Object.assign({}, ret.reportdesign);
+                if (ret.value && rep.design.data === undefined)
+                    rep.design.data = ret.value;
+                else if (ret.data && rep.design.data === undefined)
+                    rep.design.data = ret.data;
+                if (ret.parameter && rep.design.parameter === undefined)
+                    rep.design.parameter = ret.parameter;
+                _this._design["designedComponent"] = rep;
+                /*   require(["jassijs_report/ReportDesign"], function() {
+                       var rd = classes.getClass("jassijs_report.ReportDesign");
+                       let rep = rd["fromJSON"](ret);
+                       
+                       _this._design["designedComponent"] = rep;
+                   });*/
+            } /*else if (ret["reporttype"] !== undefined) {
+                        require(["jassijs_report/designer/ReportDesigner"], function () {
+                            var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
+                            if (!((_this._design) instanceof ReportDesigner)) {
+                                _this._design = new ReportDesigner();
+                                _this._main.add(_this._design, "Design", "design");
+                                _this._design["codeEditor"] = _this;
+                            }
+                            _this._design["designedComponent"] = ret;
+    
+                 
+                        });
+                    }*/
+        }
         async _evalCodeOnLoad(data) {
             this.variables.clear();
             var code = this._codePanel.value;
@@ -1352,70 +1426,8 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
                 }
                 // Promise.resolve(ret).then(async function(ret) {
                 if (ret !== undefined) {
-                    //_this.variables.addVariable("me", ret.me);
-                    _this.variables.updateCache();
-                    if (ret instanceof Component_2.Component && ret["reporttype"] === undefined) {
-                        //require(["jassijs_editor/ComponentDesigner", "jassijs_editor/util/Parser"], function () {
-                        //    var ComponentDesigner = classes.getClass("jassijs_editor.ComponentDesigner");
-                        //   var Parser = classes.getClass("jassijs_editor.base.Parser");
-                        var ComponentDesigner = await Classes_1.classes.loadClass("jassijs_editor.ComponentDesigner");
-                        var Parser = await Classes_1.classes.loadClass("jassijs_editor.util.Parser");
-                        var parser = new Parser();
-                        // await _this.fillVariablesAndSetupParser(filename, ret, ret, {},parser);
-                        if (!((_this._design) instanceof ComponentDesigner)) {
-                            _this._design = new ComponentDesigner();
-                            _this._main.add(_this._design, "Design", "design");
-                            _this._design["codeEditor"] = _this;
-                        }
-                        //@ts-ignore
-                        _this._design.connectParser(parser);
-                        _this._design["designedComponent"] = ret;
-                        Component_2.Component.offComponentCreated(hook);
-                        await _this.fillVariablesAndSetupParser(filename, ret, ret, {}, parser);
-                        _this._design["editDialog"](true);
-                        //});
-                    }
-                    else if (ret["reportdesign"] !== undefined) {
-                        var Parser = await Classes_1.classes.loadClass("jassijs_editor.util.Parser");
-                        var ReportDesigner = await Classes_1.classes.loadClass("jassijs_report.designer.ReportDesigner");
-                        var ReportDesign = await Classes_1.classes.loadClass("jassijs_report.ReportDesign");
-                        if (!((_this._design) instanceof ReportDesigner)) {
-                            _this._design = new ReportDesigner();
-                            _this._main.add(_this._design, "Design", "design");
-                            _this._design["codeEditor"] = _this;
-                            parser = new Parser();
-                            parser.classScope = undefined; // [{ classname: _this._design?.constructor?.name, methodname: "layout" }, { classname: undefined, methodname: "test" }];
-                            //@ts-ignore
-                            _this._design.connectParser(parser);
-                        }
-                        var rep = new ReportDesign();
-                        rep.design = Object.assign({}, ret.reportdesign);
-                        if (ret.value && rep.design.data === undefined)
-                            rep.design.data = ret.value;
-                        else if (ret.data && rep.design.data === undefined)
-                            rep.design.data = ret.data;
-                        if (ret.parameter && rep.design.parameter === undefined)
-                            rep.design.parameter = ret.parameter;
-                        _this._design["designedComponent"] = rep;
-                        /*   require(["jassijs_report/ReportDesign"], function() {
-                               var rd = classes.getClass("jassijs_report.ReportDesign");
-                               let rep = rd["fromJSON"](ret);
-                               
-                               _this._design["designedComponent"] = rep;
-                           });*/
-                    } /*else if (ret["reporttype"] !== undefined) {
-                        require(["jassijs_report/designer/ReportDesigner"], function () {
-                            var ReportDesigner = classes.getClass("jassijs_report.designer.ReportDesigner");
-                            if (!((_this._design) instanceof ReportDesigner)) {
-                                _this._design = new ReportDesigner();
-                                _this._main.add(_this._design, "Design", "design");
-                                _this._design["codeEditor"] = _this;
-                            }
-                            _this._design["designedComponent"] = ret;
-    
-                 
-                        });
-                    }*/
+                    await this._processEvalResult(ret, filename);
+                    Component_2.Component.offComponentCreated(hook);
                 }
                 Component_2.Component.offComponentCreated(hook);
                 //  });
@@ -1467,17 +1479,34 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
             }, [channel.port2]);
             var test = await ret;
         }
+        async evalServerside() {
+            var code = this._codePanel.value;
+            var testcode = await new Server_2.Server().loadFile(this.file);
+            var hasModified = testcode !== code;
+            if (hasModified) {
+                (0, Notify_2.notify)("please save code before test", "error");
+                return undefined;
+            }
+            var res = await new Server_2.Server().testServersideFile(this._file.substring(0, this._file.length - 3));
+            return res;
+        }
         /**
          * execute the current code
          * @param {boolean} toCursor -  if true the variables were inspected on cursor position,
          *                              if false at the end of the layout() function or at the end of the code
          */
         async evalCode(toCursor = undefined) {
+            var _a;
             this.__evalToCursorReached = false;
             this.variables.clear();
             var code = this._codePanel.value;
             var lines = code.split("\n");
             var _this = this;
+            if ((_a = this.file) === null || _a === void 0 ? void 0 : _a.startsWith("$serverside/")) {
+                var res = await this.evalServerside();
+                await this._processEvalResult(res);
+                return;
+            }
             window["test"] = undefined;
             code = "";
             for (var x = 0; x < lines.length; x++) {
@@ -1586,8 +1615,12 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
          * @member {string} - title of the component
          */
         get title() {
+            var _a;
             var s = this.file.split("/");
-            return s[s.length - 1];
+            s = s[s.length - 1];
+            if ((_a = this.file) === null || _a === void 0 ? void 0 : _a.startsWith("$serverside"))
+                s = s + "(s)";
+            return s;
         }
         /**
         * @member {string} - the url to edit
@@ -1666,14 +1699,16 @@ define("jassijs_editor/CodeEditor", ["require", "exports", "jassijs/remote/Regis
     async function test() {
         var editor = new CodeEditor();
         //var url = "jassijs_editor/AcePanel.ts";
-        editor.height = 300;
+        editor.height = "100%";
         editor.width = "100%";
         //await editor.openFile(url);
-        editor.file = "tests/TestDialog.ts";
+        editor.file = "$serverside/jassijs_report/TestServerreport.ts"; //"tests/TestDialog.ts";
         setTimeout(() => {
             editor.evalCode();
         }, 500);
-        return editor;
+        Windows_2.default.add(editor, editor.title);
+        // debugger;
+        // var k=await new Server().testServersideFile("$serverside/jassijs_report/TestServerreport");
     }
     exports.test = test;
     ;
@@ -1777,7 +1812,7 @@ define("jassijs_editor/CodeEditorInvisibleComponents", ["require", "exports", "j
     ], CodeEditorInvisibleComponents);
     exports.CodeEditorInvisibleComponents = CodeEditorInvisibleComponents;
 });
-define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/ui/Notify"], function (require, exports, Registry_9, Panel_3, Router_1, Notify_2) {
+define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/ui/Notify"], function (require, exports, Registry_9, Panel_3, Router_1, Notify_3) {
     "use strict";
     var CodePanel_4;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1891,7 +1926,7 @@ define("jassijs_editor/CodePanel", ["require", "exports", "jassijs/remote/Regist
             var pos = this.positionToNumber(this.cursorPosition);
             var test = this.numberToPosition(pos);
             if (!CodePanel_4.typescript.isInited(this.file)) {
-                (0, Notify_2.notify)("please try later ... loading in progress", "info", { position: "bottom right" });
+                (0, Notify_3.notify)("please try later ... loading in progress", "info", { position: "bottom right" });
                 return;
             }
             CodePanel_4.typescript.getDefinitionAtPosition(this.file, pos).then((def) => {
@@ -3463,7 +3498,7 @@ define("jassijs_editor/MonacoPanel", ["require", "exports", "jassijs/remote/Regi
     }
     exports.test = test;
 });
-define("jassijs_editor/StartEditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/ui/SearchExplorer", "jassijs/ui/DBObjectExplorer", "jassijs/ui/ActionNodeMenu"], function (require, exports, FileExplorer_1, Windows_2, Panel_7, Button_4, Router_3, SearchExplorer_1, DBObjectExplorer_1, ActionNodeMenu_1) {
+define("jassijs_editor/StartEditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/base/Router", "jassijs/ui/SearchExplorer", "jassijs/ui/DBObjectExplorer", "jassijs/ui/ActionNodeMenu"], function (require, exports, FileExplorer_1, Windows_3, Panel_7, Button_4, Router_3, SearchExplorer_1, DBObjectExplorer_1, ActionNodeMenu_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     //var h=new RemoteObject().test();
@@ -3471,19 +3506,19 @@ define("jassijs_editor/StartEditor", ["require", "exports", "jassijs/ui/FileExpl
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
         var body = new Panel_7.Panel({ id: "body" });
         body.max();
-        Windows_2.default.addLeft(new DBObjectExplorer_1.DBObjectExplorer(), "DBObjects");
-        Windows_2.default.addLeft(new SearchExplorer_1.SearchExplorer(), "Search");
-        Windows_2.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
+        Windows_3.default.addLeft(new DBObjectExplorer_1.DBObjectExplorer(), "DBObjects");
+        Windows_3.default.addLeft(new SearchExplorer_1.SearchExplorer(), "Search");
+        Windows_3.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
         var bt = new Button_4.Button();
-        Windows_2.default._desktop.add(bt);
+        Windows_3.default._desktop.add(bt);
         bt.icon = "mdi mdi-refresh";
         var am = new ActionNodeMenu_1.ActionNodeMenu();
         bt.onclick(() => {
-            Windows_2.default._desktop.remove(am);
+            Windows_3.default._desktop.remove(am);
             am = new ActionNodeMenu_1.ActionNodeMenu();
-            Windows_2.default._desktop.add(am);
+            Windows_3.default._desktop.add(am);
         });
-        Windows_2.default._desktop.add(am);
+        Windows_3.default._desktop.add(am);
         Router_3.router.navigate(window.location.hash);
     }
     start().then();
@@ -3505,7 +3540,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1656080508765,
+                "date": 1656337058050,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
                     "@members": {}

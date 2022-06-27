@@ -3014,6 +3014,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
             this.extensionCalled = HTMLPanel_1.HTMLPanel.prototype.extensionCalled.bind(this);
             this._setDesignMode = HTMLPanel_1.HTMLPanel.prototype._setDesignMode.bind(this);
             this.initIfNeeded = HTMLPanel_1.HTMLPanel.prototype.initIfNeeded.bind(this);
+            this.focusLost = HTMLPanel_1.HTMLPanel.prototype.focusLost.bind(this);
             //@ts-ignore
             this._initTinymce = HTMLPanel_1.HTMLPanel.prototype._initTinymce.bind(this);
         }
@@ -3474,14 +3475,25 @@ define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry"
             throw new Classes_4.JassiError("Clintreports must implememt fill");
         }
         async open() {
-            var rep = new PDFReport_1.PDFReport();
-            var des = await this.fill();
-            rep.value = des.reportdesign;
-            rep.data = des.data;
-            rep.parameter = des.parameter;
-            rep.fill();
             var viewer = new PDFViewer_2.PDFViewer();
-            viewer.value = await rep.getBase64();
+            var clname = Classes_4.classes.getClassName(this);
+            var meta = Registry_19.default.getData("$Report", clname);
+            if ((meta === null || meta === void 0 ? void 0 : meta.length) > 0 && meta[0].params.length > 0) {
+                var path = meta[0].params[0].serverReportPath;
+                if (path) {
+                    viewer.value = await ServerReport_1.ServerReport.getBase64(path, this.parameter);
+                }
+                //return await this.call(this, this.fill, context);
+            }
+            else {
+                var rep = new PDFReport_1.PDFReport();
+                var des = await this.fill();
+                rep.value = des.reportdesign;
+                rep.data = des.data;
+                rep.parameter = des.parameter;
+                rep.fill();
+                viewer.value = await rep.getBase64();
+            }
             Windows_1.default.add(viewer, "Report");
         }
     };
@@ -4494,7 +4506,7 @@ define("jassijs_report/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1656186291717,
+                "date": 1656337133845,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -4725,7 +4737,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1656184904191,
+                "date": 1656335831495,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -4814,8 +4826,8 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/test/ServerReport.ts": {
-                "date": 1656275439533,
-                "jassijs_report.remote.ClientReportParameter": {},
+                "date": 1656282689278,
+                "jassijs_report.remote.ServerReportParameter": {},
                 "jassijs_report.test.ClientReport": {
                     "$Report": [
                         {
@@ -4827,17 +4839,17 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/Report.ts": {
-                "date": 1656277229813,
+                "date": 1656282517873,
                 "jassijs_report.remote.Report": {}
             },
             "jassijs_report/remote/ServerReport.ts": {
-                "date": 1656277819667,
+                "date": 1656331483222,
                 "jassijs_report.remote.ServerReport": {}
             }
         }
     };
 });
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Registry_23, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_5, PDFReport_2, PDFViewer_3, ReportDesign_10, Tools_3) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_report/remote/ServerReport"], function (require, exports, Registry_23, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_5, PDFReport_2, PDFViewer_3, ReportDesign_10, Tools_3, ServerReport_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
@@ -4885,24 +4897,38 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             this._codeChanger.parser = new Parser();
         }
         editDialog(enable) {
+            var _a, _b;
             if (enable === false) {
                 super.editDialog(enable);
+                var _this = this;
                 var rep = new PDFReport_2.PDFReport();
                 //rep.content=this.designedComponent["design];
-                var data;
-                try {
-                    data = this._codeChanger.value.toJSON();
-                    rep.value = data; //Tools.copyObject(data);// designedComponent["design"];
-                    rep.fill();
-                    rep.getBase64().then((data) => {
-                        this.pdfviewer.report = rep;
-                        //make a copy because the data would be modified 
-                        this.pdfviewer.value = data;
+                if ((_b = (_a = this._codeEditor) === null || _a === void 0 ? void 0 : _a.file) === null || _b === void 0 ? void 0 : _b.startsWith("$serverside/")) {
+                    this._codeEditor.evalServerside().then((data) => {
+                        if (!data)
+                            return;
+                        ServerReport_2.ServerReport.getBase64LastTestResult().then((base64) => {
+                            this.pdfviewer.report = rep;
+                            _this.pdfviewer.value = base64;
+                        });
                     });
                 }
-                catch (err) {
-                    console.error(err);
-                    //viewer.value = await rep.getBase64();
+                else {
+                    var data;
+                    try {
+                        data = this._codeChanger.value.toJSON();
+                        rep.value = data; //Tools.copyObject(data);// designedComponent["design"];
+                        rep.fill();
+                        rep.getBase64().then((data) => {
+                            this.pdfviewer.report = rep;
+                            //make a copy because the data would be modified 
+                            this.pdfviewer.value = data;
+                        });
+                    }
+                    catch (err) {
+                        console.error(err);
+                        //viewer.value = await rep.getBase64();
+                    }
                 }
                 //            this.lastView = this._designPlaceholder._components[0];
                 //          if (this._designPlaceholder._components.length > 0)
@@ -5054,6 +5080,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             //@ts.ignore
             this._codeChanger.value = component;
             super.designedComponent = component;
+            this._codeChanger.updateParser();
         }
         /**
            * undo action
@@ -5959,28 +5986,51 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
 });
 define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_27, RemoteObject_2) {
     "use strict";
-    var ServerReport_2;
+    var ServerReport_3;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ServerReport = void 0;
-    let ServerReport = ServerReport_2 = class ServerReport extends RemoteObject_2.RemoteObject {
-        //this is a sample remote function
-        static async fillReport(path, parameter, context = undefined) {
+    let ServerReport = ServerReport_3 = class ServerReport extends RemoteObject_2.RemoteObject {
+        static async getDesign(path, parameter, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_2.call(this.fillReport, path, parameter, context);
+                return await ServerReport_3.call(this.getDesign, path, parameter, context);
             }
             else {
-                var fill = (await new Promise((resolve_2, reject_2) => { require([path], resolve_2, reject_2); })).fill;
-                return await fill(parameter);
-                //return "Hello "+name;  //this would be execute on server  
+                //@ts-ignore
+                var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/DoServerreport"], resolve_2, reject_2); })).DoServerreport;
+                ServerReport_3.cacheLastParameter[path] = parameter;
+                return await new DoServerreport().getDesign(path, parameter);
+            }
+        }
+        static async getBase64(path, parameter, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await ServerReport_3.call(this.getBase64, path, parameter, context);
+            }
+            else {
+                //@ts-ignore
+                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/DoServerreport"], resolve_3, reject_3); })).DoServerreport;
+                if (parameter == "useLastCachedParameter")
+                    parameter = ServerReport_3.cacheLastParameter[path];
+                return await new DoServerreport().getBase64(path, parameter);
+            }
+        }
+        static async getBase64LastTestResult(context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await ServerReport_3.call(this.getBase64LastTestResult, context);
+            }
+            else {
+                //@ts-ignore
+                var DoServerreport = (await new Promise((resolve_4, reject_4) => { require(["jassijs_report/DoServerreport"], resolve_4, reject_4); })).DoServerreport;
+                return await new DoServerreport().getBase64LastTestResult();
             }
         }
     };
-    ServerReport = ServerReport_2 = __decorate([
+    ServerReport.cacheLastParameter = {};
+    ServerReport = ServerReport_3 = __decorate([
         (0, Registry_27.$Class)("jassijs_report.remote.ServerReport")
     ], ServerReport);
     exports.ServerReport = ServerReport;
     async function test() {
-        var ret = await ServerReport.fillReport("jassijs_report/TestServerreport", { sort: "name" });
+        var ret = await ServerReport.getBase64("jassijs_report/TestServerreport", { sort: "name" });
         return ret;
         //    console.log(await new ServerReport().sayHello("Kurt"));
     }
@@ -6647,7 +6697,7 @@ define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_repor
     }
     exports.test = test;
 });
-define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_report/remote/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_2, Property_14, Registry_29) {
+define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_2, Property_14, Registry_29) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -6663,16 +6713,16 @@ define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_repor
             }
         ]
     };
-    let ClientReportParameter = class ClientReportParameter {
+    let ServerReportParameter = class ServerReportParameter {
     };
-    ClientReportParameter = __decorate([
-        (0, Registry_29.$Class)("jassijs_report.remote.ClientReportParameter")
-    ], ClientReportParameter);
+    ServerReportParameter = __decorate([
+        (0, Registry_29.$Class)("jassijs_report.remote.ServerReportParameter")
+    ], ServerReportParameter);
     let ServerReport = class ServerReport extends Report_2.Report {
     };
     __decorate([
-        (0, Property_14.$Property)({ type: "json", componentType: "jassijs_report.remote.ClientReportParameter" }),
-        __metadata("design:type", ClientReportParameter)
+        (0, Property_14.$Property)({ type: "json", componentType: "jassijs_report.remote.ServerReportParameter" }),
+        __metadata("design:type", ServerReportParameter)
     ], ServerReport.prototype, "parameter", void 0);
     ServerReport = __decorate([
         (0, Report_2.$Report)({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/TestServerreport" }),
@@ -6680,6 +6730,7 @@ define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_repor
     ], ServerReport);
     async function test() {
         var cl = new ServerReport();
+        cl.parameter = { sort: "name" };
         await cl.open();
     }
     exports.test = test;

@@ -24,7 +24,7 @@ exports.default = {
         "jassijs_report.remote.ServerReport": {}
     },
     "jassijs_report/DoServerreport.ts": {
-        "date": 1656331375990
+        "date": 1656360761786
     }
 };
 //# sourceMappingURL=registry.js.map

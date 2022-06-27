@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DoServerreport = void 0;
+const fs = require("fs");
+var http = require('http');
 const Server_1 = require("jassijs/remote/Server");
 const pdfmakejassi_1 = require("./remote/pdfmakejassi");
 var path = require('path');
@@ -33,8 +35,45 @@ class DoServerreport {
         var content = await fill(parameter);
         return content;
     }
+    async download(url, dest) {
+        return await new Promise((resolve, reject) => {
+            const file = fs.createWriteStream(dest, { flags: "wx" });
+            const request = http.get(url, response => {
+                if (response.statusCode === 200) {
+                    response.pipe(file);
+                }
+                else {
+                    file.close();
+                    fs.unlink(dest, () => { }); // Delete temp file
+                    reject(`Server responded with ${response.statusCode}: ${response.statusMessage}`);
+                }
+            });
+            request.on("error", err => {
+                file.close();
+                fs.unlink(dest, () => { }); // Delete temp file
+                reject(err.message);
+            });
+            file.on("finish", () => {
+                resolve(undefined);
+            });
+            file.on("error", err => {
+                file.close();
+                if (err.code === "EEXIST") {
+                    reject("File already exists");
+                }
+                else {
+                    fs.unlink(dest, () => { }); // Delete temp file
+                    reject(err.message);
+                }
+            });
+        });
+    }
+    async loadFonds(report) {
+        this.download('http://i3.ytimg.com/vi/J---aiyznGQ/mqdefault.jpg', path.join(__dirname, '..', '..', '/client/cat.jpg'));
+    }
     async getBase64LastTestResult() {
         var data = Server_1.Server.lastTestServersideFileResult;
+        await this.loadFonds(data.reportdesign);
         data = (0, pdfmakejassi_1.createReportDefinition)(data.reportdesign, data.data, data.parameter);
         var ret = await new Promise((resolve) => {
             this.createPdfBinary(data, resolve);
@@ -43,6 +82,7 @@ class DoServerreport {
     }
     async getBase64(file, parameter) {
         var data = await this.getDesign(file, parameter);
+        await this.loadFonds(data.reportdesign);
         data = (0, pdfmakejassi_1.createReportDefinition)(data.reportdesign, data.data, data.parameter);
         var ret = await new Promise((resolve) => {
             this.createPdfBinary(data, resolve);

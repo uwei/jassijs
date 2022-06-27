@@ -385,7 +385,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/remote/Server.ts": {
-                "date": 1656076933159,
+                "date": 1656331319093,
                 "jassijs.remote.Server": {}
             },
             "jassijs/remote/Settings.ts": {
@@ -939,7 +939,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.HTMLEditorPanel": {}
             },
             "jassijs/ui/HTMLPanel.ts": {
-                "date": 1655844743106,
+                "date": 1656335881756,
                 "jassijs.ui.HTMLPanel": {
                     "$UIComponent": [
                         {
@@ -5074,6 +5074,29 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         /**
        * deletes a server modul
        **/
+        async testServersideFile(name, context = undefined) {
+            if (!name.startsWith("$serverside/"))
+                throw new Classes_12.JassiError(name + " i not a serverside file");
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                var ret = await this.call(this, this.testServersideFile, name, context);
+                //@ts-ignore
+                //  $.notify(fileNames[0] + " and more saved", "info", { position: "bottom right" });
+                return ret;
+            }
+            else {
+                if (!context.request.user.isAdmin) {
+                    throw new Classes_12.JassiError("only admins can delete");
+                }
+                //@ts-ignore
+                var test = (await new Promise((resolve_25, reject_25) => { require([name.replaceAll("$serverside/", "")], resolve_25, reject_25); })).test;
+                if (test)
+                    Server_2.lastTestServersideFileResult = await test();
+                return Server_2.lastTestServersideFileResult;
+            }
+        }
+        /**
+       * deletes a server modul
+       **/
         async removeServerModul(name, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
                 var ret = await this.call(this, this.removeServerModul, name, context);
@@ -5085,7 +5108,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 if (!context.request.user.isAdmin)
                     throw new Classes_12.JassiError("only admins can delete");
                 //@ts-ignore
-                var fs = await new Promise((resolve_25, reject_25) => { require(["jassijs/server/Filesystem"], resolve_25, reject_25); });
+                var fs = await new Promise((resolve_26, reject_26) => { require(["jassijs/server/Filesystem"], resolve_26, reject_26); });
                 return await new fs.default().removeServerModul(name);
             }
         }
@@ -5103,7 +5126,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 if (!context.request.user.isAdmin)
                     throw new Classes_12.JassiError("only admins can delete");
                 //@ts-ignore
-                var fs = await new Promise((resolve_26, reject_26) => { require(["jassijs/server/Filesystem"], resolve_26, reject_26); });
+                var fs = await new Promise((resolve_27, reject_27) => { require(["jassijs/server/Filesystem"], resolve_27, reject_27); });
                 return await new fs.default().remove(name);
             }
         }
@@ -5121,7 +5144,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 if (!context.request.user.isAdmin)
                     throw new Classes_12.JassiError("only admins can rename");
                 //@ts-ignore
-                var fs = await new Promise((resolve_27, reject_27) => { require(["jassijs/server/Filesystem"], resolve_27, reject_27); });
+                var fs = await new Promise((resolve_28, reject_28) => { require(["jassijs/server/Filesystem"], resolve_28, reject_28); });
                 return await new fs.default().rename(oldname, newname);
                 ;
             }
@@ -5163,7 +5186,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 if (!context.request.user.isAdmin)
                     throw new Classes_12.JassiError("only admins can createFile");
                 //@ts-ignore
-                var fs = await new Promise((resolve_28, reject_28) => { require(["jassijs/server/Filesystem"], resolve_28, reject_28); });
+                var fs = await new Promise((resolve_29, reject_29) => { require(["jassijs/server/Filesystem"], resolve_29, reject_29); });
                 return await new fs.default().createFile(filename, content);
             }
         }
@@ -5181,7 +5204,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 if (!context.request.user.isAdmin)
                     throw new Classes_12.JassiError("only admins can createFolder");
                 //@ts-ignore
-                var fs = await new Promise((resolve_29, reject_29) => { require(["jassijs/server/Filesystem"], resolve_29, reject_29); });
+                var fs = await new Promise((resolve_30, reject_30) => { require(["jassijs/server/Filesystem"], resolve_30, reject_30); });
                 return await new fs.default().createFolder(foldername);
             }
         }
@@ -5196,7 +5219,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
                 if (!context.request.user.isAdmin)
                     throw new Classes_12.JassiError("only admins can createFolder");
                 //@ts-ignore
-                var fs = await new Promise((resolve_30, reject_30) => { require(["jassijs/server/Filesystem"], resolve_30, reject_30); });
+                var fs = await new Promise((resolve_31, reject_31) => { require(["jassijs/server/Filesystem"], resolve_31, reject_31); });
                 return await new fs.default().createModule(modulname);
             }
         }
@@ -5209,6 +5232,7 @@ define("jassijs/remote/Server", ["require", "exports", "jassijs/remote/Registry"
         }
     };
     Server.isonline = undefined;
+    Server.lastTestServersideFileResult = undefined;
     //files found in js.map of modules in the jassijs.json
     Server.filesInMap = undefined;
     Server = Server_2 = __decorate([
@@ -5324,7 +5348,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
             }
             else {
                 //@ts-ignore
-                var man = await (await new Promise((resolve_31, reject_31) => { require(["jassijs/server/DBManager"], resolve_31, reject_31); })).DBManager.get();
+                var man = await (await new Promise((resolve_32, reject_32) => { require(["jassijs/server/DBManager"], resolve_32, reject_32); })).DBManager.get();
                 var id = context.request.user.user;
                 return {
                     user: await man.findOne(context, Setting_1.Setting, { "id": 1 }),
@@ -5369,7 +5393,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
                 }
                 else {
                     //@ts-ignore
-                    var man = await (await new Promise((resolve_32, reject_32) => { require(["jassijs/server/DBManager"], resolve_32, reject_32); })).DBManager.get();
+                    var man = await (await new Promise((resolve_33, reject_33) => { require(["jassijs/server/DBManager"], resolve_33, reject_33); })).DBManager.get();
                     var id = context.request.user.user;
                     //first load
                     let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });
@@ -5421,7 +5445,7 @@ define("jassijs/remote/Settings", ["require", "exports", "jassijs/remote/Registr
                 }
                 else {
                     //@ts-ignore
-                    var man = await (await new Promise((resolve_33, reject_33) => { require(["jassijs/server/DBManager"], resolve_33, reject_33); })).DBManager.get();
+                    var man = await (await new Promise((resolve_34, reject_34) => { require(["jassijs/server/DBManager"], resolve_34, reject_34); })).DBManager.get();
                     var id = context.request.user.user;
                     //first load
                     let entr = await man.findOne(context, Setting_1.Setting, { "id": (scope === "user" ? id : 0) });
@@ -5588,7 +5612,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
             else {
                 //@ts-ignore
                 //@ts-ignore
-                var ObjectTransaction = (await new Promise((resolve_34, reject_34) => { require(["jassijs/remote/ObjectTransaction"], resolve_34, reject_34); })).ObjectTransaction;
+                var ObjectTransaction = (await new Promise((resolve_35, reject_35) => { require(["jassijs/remote/ObjectTransaction"], resolve_35, reject_35); })).ObjectTransaction;
                 var ot = new ObjectTransaction();
                 ot.statements = [];
                 let ret = [];
@@ -5609,7 +5633,7 @@ define("jassijs/remote/Transaction", ["require", "exports", "jassijs/remote/Regi
         }
         async doServerStatement(statements, ot /*:ObjectTransaction*/, num, context) {
             //@ts-ignore
-            var _execute = (await new Promise((resolve_35, reject_35) => { require(["jassijs/server/DoRemoteProtocol"], resolve_35, reject_35); }))._execute;
+            var _execute = (await new Promise((resolve_36, reject_36) => { require(["jassijs/server/DoRemoteProtocol"], resolve_36, reject_36); }))._execute;
             var _this = this;
             var newcontext = {};
             Object.assign(newcontext, context);
@@ -6572,7 +6596,7 @@ define("jassijs/ui/Button", ["require", "exports", "jassijs/remote/Registry", "j
     ], Button);
     exports.Button = Button;
     async function test() {
-        var Panel = (await (new Promise((resolve_36, reject_36) => { require(["jassijs/ui/Panel"], resolve_36, reject_36); }))).Panel;
+        var Panel = (await (new Promise((resolve_37, reject_37) => { require(["jassijs/ui/Panel"], resolve_37, reject_37); }))).Panel;
         var pan = new Panel();
         var but = new Button();
         but.text = "Hallo";
@@ -9667,7 +9691,7 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
          * search Errors in code
          **/
         async search() {
-            var typescript = (await new Promise((resolve_37, reject_37) => { require(["jassijs_editor/util/Typescript"], resolve_37, reject_37); })).default;
+            var typescript = (await new Promise((resolve_38, reject_38) => { require(["jassijs_editor/util/Typescript"], resolve_38, reject_38); })).default;
             await typescript.initService();
             var all = await typescript.getDiagnosticsForAll();
             if (all.length === 0)
@@ -9773,7 +9797,7 @@ define("jassijs/ui/ErrorPanel", ["require", "exports", "jassijs/ui/Panel", "jass
                 }
                 if (u.indexOf("/js/") > -1 || ismodul) {
                     try {
-                        var TSSourceMap = (await new Promise((resolve_38, reject_38) => { require(["jassijs_editor/util/TSSourceMap"], resolve_38, reject_38); })).TSSourceMap;
+                        var TSSourceMap = (await new Promise((resolve_39, reject_39) => { require(["jassijs_editor/util/TSSourceMap"], resolve_39, reject_39); })).TSSourceMap;
                         var map = new TSSourceMap();
                         var pos = await map.getLineFromJS(u, Number(line), Number(col));
                         if (pos) {
@@ -10000,7 +10024,7 @@ define("jassijs/ui/FileExplorer", ["require", "exports", "jassijs/remote/Registr
                         return;
                     }
                     if (!all[0].isDirectory()) {
-                        let typescript = (await new Promise((resolve_39, reject_39) => { require(["jassijs_editor/util/Typescript"], resolve_39, reject_39); })).default;
+                        let typescript = (await new Promise((resolve_40, reject_40) => { require(["jassijs_editor/util/Typescript"], resolve_40, reject_40); })).default;
                         await (typescript === null || typescript === void 0 ? void 0 : typescript.renameFile(all[0].fullpath, newfile));
                     }
                     await ((_b = FileExplorer.instance) === null || _b === void 0 ? void 0 : _b.refresh());
@@ -10381,9 +10405,24 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                 // edi.hide();
             }
         }
+        focusLost() {
+            var editor = this.editor;
+            var _this = this;
+            var text = _this.dom.firstElementChild.innerHTML;
+            if (text === '<br data-mce-bogus="1">')
+                text = "";
+            editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);
+            if (_this._designMode === false)
+                return;
+            //editor.editDialog(false);
+            if (!document.getElementById(editor.id))
+                return;
+            editor._draganddropper.enableDraggable(true);
+        }
         _initTinymce(editor) {
             var _this = this;
             var tinymce = window["tinymce"]; //oder tinymcelib.default
+            console.log("run config");
             var config = {
                 //	                valid_elements: 'strong,em,span[style],a[href],ul,ol,li',
                 //  valid_styles: {
@@ -10397,22 +10436,13 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                 fixed_toolbar_container: '#' + this.editor.inlineEditorPanel._id,
                 setup: function (ed) {
                     ed.on('change', function (e) {
-                        var text = _this.dom.firstElementChild.innerHTML;
-                        if (text === '<br data-mce-bogus="1">')
-                            text = "";
-                        editor._propertyEditor.setPropertyInCode("value", '"' + text.replaceAll('"', "'") + '"', true);
                     });
                     ed.on('focus', function (e) {
                         //   $(ed.getContainer()).css("display", "inline");
                         //   debugger;
                     });
                     ed.on('blur', function (e) {
-                        if (_this._designMode === false)
-                            return;
-                        //editor.editDialog(false);
-                        if (!document.getElementById(ed.id))
-                            return;
-                        editor._draganddropper.enableDraggable(true);
+                        _this.focusLost();
                         //editor.editDialog(true);
                     });
                     ed.on('NodeChange', function (e) {
@@ -10463,12 +10493,7 @@ define("jassijs/ui/HTMLPanel", ["require", "exports", "jassijs/ui/Component", "j
                     editor._draganddropper.enableDraggable(false);
                 });*/
             _this.on('blur', function () {
-                HTMLPanel_3.oldeditor = tinymce.editors[_this._id];
-                editor._draganddropper.enableDraggable(true);
-                setTimeout(() => {
-                    let edi = tinymce.editors[_this._id];
-                    //  $(edi?.getContainer()).css("display", "none");
-                }, 100);
+                _this.focusLost();
             });
             _this.on('focus', function () {
                 _this.initIfNeeded(tinymce, config);
@@ -11161,7 +11186,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
     exports.ObjectChooser = ObjectChooser;
     async function test() {
         // kk.o=0;
-        var User = (await new Promise((resolve_40, reject_40) => { require(["jassijs/remote/security/User"], resolve_40, reject_40); })).User;
+        var User = (await new Promise((resolve_41, reject_41) => { require(["jassijs/remote/security/User"], resolve_41, reject_41); })).User;
         var dlg = new ObjectChooser();
         dlg.items = "jassijs.security.User";
         dlg.value = (await User.findOne());
@@ -11173,7 +11198,7 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
     exports.test = test;
     async function test2() {
         // kk.o=0;
-        var Kunde = (await new Promise((resolve_41, reject_41) => { require(["de/remote/Kunde"], resolve_41, reject_41); })).Kunde;
+        var Kunde = (await new Promise((resolve_42, reject_42) => { require(["de/remote/Kunde"], resolve_42, reject_42); })).Kunde;
         var dlg = new ObjectChooser();
         dlg.items = "de.Kunde";
         dlg.value = (await Kunde.find({ id: 1 }))[0];
@@ -12536,7 +12561,7 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Regis
         }
         async doSearch() {
             //import typescript from "jassijs_editor/util/Typescript";
-            var typescript = (await new Promise((resolve_42, reject_42) => { require(["jassijs_editor/util/Typescript"], resolve_42, reject_42); })).default;
+            var typescript = (await new Promise((resolve_43, reject_43) => { require(["jassijs_editor/util/Typescript"], resolve_43, reject_43); })).default;
             var all = [];
             var files = []; // [{name:"Hallo",lines:[{ name:"Treffer1",pos:1},{name:"treffer2" ,pos:2}]}];
             var toFind = this.search.value.toLocaleLowerCase();
@@ -12584,7 +12609,7 @@ define("jassijs/ui/SearchExplorer", ["require", "exports", "jassijs/remote/Regis
                 if (evt.data !== undefined && evt.data.file !== undefined) {
                     var pos = evt.data.pos;
                     var file = evt.data.file;
-                    new Promise((resolve_43, reject_43) => { require(["jassijs_editor/util/Typescript"], resolve_43, reject_43); }).then(Typescript => {
+                    new Promise((resolve_44, reject_44) => { require(["jassijs_editor/util/Typescript"], resolve_44, reject_44); }).then(Typescript => {
                         var text = Typescript.default.getCode(file);
                         var line = text.substring(0, pos).split("\n").length;
                         Router_6.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file + "&line=" + line);
@@ -14629,7 +14654,7 @@ define("jassijs/ui/VariablePanel", ["require", "exports", "jassijs/remote/Regist
             this.debugpoints = {};
         }
         async createTable() {
-            var Table = (await new Promise((resolve_44, reject_44) => { require(["jassijs/ui/Table"], resolve_44, reject_44); })).Table;
+            var Table = (await new Promise((resolve_45, reject_45) => { require(["jassijs/ui/Table"], resolve_45, reject_45); })).Table;
             this.table = new Table({
                 dataTreeChildFunction: function (obj) {
                     var ret = [];
@@ -16137,7 +16162,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
                             ic.setAttribute("style", "display:none");
                     }
                 });
-                var file = (await new Promise((resolve_45, reject_45) => { require(["jassijs/modul"], resolve_45, reject_45); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
+                var file = (await new Promise((resolve_46, reject_46) => { require(["jassijs/modul"], resolve_46, reject_46); })).default.css["materialdesignicons.min.css"] + "?ooo=9";
                 var text = await $.ajax({ method: "get", url: file, crossDomain: true, contentType: "text/plain" });
                 var all = text.split("}.");
                 var html = "";
