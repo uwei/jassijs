@@ -16,11 +16,12 @@ var reportdesign:JassijsReportDefinition = {
 };
 @$Class("jassijs_report.remote.ServerReportParameter")
 class ServerReportParameter {
+    @$Property({chooseFromStrict:true,chooseFrom:["name","lastname"]})
     sort?: string;
 }
 @$Report({name:"test/Sample Serverreport",serverReportPath:"jassijs_report/TestServerreport"})
-@$Class("jassijs_report.test.ClientReport")
-class ServerReport extends Report {
+@$Class("jassijs_report.test.ServerReport")
+export class ServerReport extends Report {
     @$Property({ type: "json", componentType: "jassijs_report.remote.ServerReportParameter" })
     declare parameter:ServerReportParameter;
     

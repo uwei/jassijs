@@ -34,35 +34,39 @@ export class Report extends RemoteObject {
         if (meta?.length > 0 && meta[0].params.length > 0) {
             var path = meta[0].params[0].serverReportPath;
             if (path) {
-                var ret = await ServerReport.fillReport(path, this.parameter);
+                var par=Object.assign({},this.parameter);
+                var ret = await ServerReport.fillReport(path, par);
                 return ret;
             }
             //return await this.call(this, this.fill, context);
         }
         throw new JassiError("Clintreports must implememt fill");
     }
-    public async open() {
-        var viewer = new PDFViewer();
+    public async getBase64() {
         var clname = classes.getClassName(this);
         var meta = registry.getData("$Report", clname);
         if (meta?.length > 0 && meta[0].params.length > 0) {
             var path = meta[0].params[0].serverReportPath;
             if (path) {
-                viewer.value = await ServerReport.getBase64(path, this.parameter);
+                var par=Object.assign({},this.parameter);
                 
+                return await ServerReport.getBase64(path, par);
+
             }
             //return await this.call(this, this.fill, context);
-        } else {
-            var rep = new PDFReport();
-            var des = await this.fill();
-            rep.value = des.reportdesign;
-            rep.data = des.data;
-            rep.parameter = des.parameter;
-            rep.fill();
-            viewer.value = await rep.getBase64();
         }
-        
-        
+        var rep = new PDFReport();
+        var des = await this.fill();
+        rep.value = des.reportdesign;
+        rep.data = des.data;
+        rep.parameter = des.parameter;
+        rep.fill();
+        return await rep.getBase64();
+
+    }
+    public async open() {
+        var viewer = new PDFViewer();
+        viewer.value = await this.getBase64();
         windows.add(viewer, "Report");
     }
 }

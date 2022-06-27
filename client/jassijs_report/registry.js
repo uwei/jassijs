@@ -311,8 +311,10 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/test/ClientReport.ts": {
-		"date": 1656275429152,
-		"jassijs_report.remote.ClientReportParameter": {},
+		"date": 1656370100356,
+		"jassijs_report.remote.ClientReportParameter": {
+			"@members": {}
+		},
 		"jassijs_report.test.ClientReport": {
 			"$Report": [
 				{
@@ -323,9 +325,11 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/test/ServerReport.ts": {
-		"date": 1656282689278,
-		"jassijs_report.remote.ServerReportParameter": {},
-		"jassijs_report.test.ClientReport": {
+		"date": 1656370552179,
+		"jassijs_report.remote.ServerReportParameter": {
+			"@members": {}
+		},
+		"jassijs_report.test.ServerReport": {
 			"$Report": [
 				{
 					"name": "test/Sample Serverreport",
@@ -336,12 +340,34 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/Report.ts": {
-		"date": 1656282517873,
+		"date": 1656371479656,
 		"jassijs_report.remote.Report": {}
 	},
 	"jassijs_report/remote/ServerReport.ts": {
 		"date": 1656331483222,
 		"jassijs_report.remote.ServerReport": {}
+	},
+	"jassijs_report/Reports.ts": {
+		"date": 1656370386535,
+		"jassijs_report/Reports": {
+			"$ActionProvider": [
+				"jassijs.base.ActionNode"
+			],
+			"@members": {
+				"show": {
+					"$Action": [
+						{
+							"name": "Tools/Reports",
+							"icon": "mdi mdi-chart-box-outline"
+						}
+					]
+				}
+			}
+		}
+	},
+	"jassijs_report/ReportViewer.ts": {
+		"date": 1656371651440,
+		"jassijs_report/ReportViewer": {}
 	}
 }
  }

@@ -1,4 +1,4 @@
-import { $Report, Report } from "jassijs_report/remote/Report";
+import { $Report, Report } from "jassijs_report/Report";
 import { $Property } from "jassijs/ui/Property";
 import { $Class } from "jassijs/remote/Registry";
 
@@ -15,12 +15,13 @@ var reportdesign:JassijsReportDefinition = {
     ]
 };
 @$Class("jassijs_report.remote.ClientReportParameter")
-class ClientReportParameter {
+export class ClientReportParameter {
+    @$Property()
     sort?: string;
 }
 @$Report({name:"test/Sample Clientreport"})
 @$Class("jassijs_report.test.ClientReport")
-class ClientReport extends Report {
+export class ClientReport extends Report {
     @$Property({ type: "json", componentType: "jassijs_report.remote.ClientReportParameter" })
     declare parameter: ClientReportParameter;
     async fill() {
