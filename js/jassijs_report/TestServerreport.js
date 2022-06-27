@@ -6,7 +6,16 @@ var reportdesign = {
         {
             datatable: {
                 widths: ["auto", "auto", 140],
-                header: [{ font: "Asap", text: "name2233" }, "lastname", ""],
+                header: [
+                    {
+                        bold: true,
+                        italics: true,
+                        font: "Asap",
+                        text: "name2233"
+                    },
+                    "lastname",
+                    ""
+                ],
                 footer: ["", "", "\n"],
                 dataforeach: "person",
                 body: [

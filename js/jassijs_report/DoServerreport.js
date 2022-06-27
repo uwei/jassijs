@@ -103,17 +103,17 @@ class DoServerreport {
                 await this.download(base + "/" + font + "-Regular.ttf", fname);
             }
             var fname = path.join(__dirname, '..', '..', '/jassijs_report/fonts/' + font + '-Bold.ttf');
-            this.fontDescriptors[font].normal = fname;
+            this.fontDescriptors[font].bold = fname;
             if (!fs.existsSync(fname)) {
                 await this.download(base + "/" + font + (font === "Roboto" ? "-Medium.ttf" : "-Bold.ttf"), fname);
             }
             var fname = path.join(__dirname, '..', '..', '/jassijs_report/fonts/' + font + '-Italic.ttf');
-            this.fontDescriptors[font].normal = fname;
+            this.fontDescriptors[font].italics = fname;
             if (!fs.existsSync(fname)) {
                 await this.download(base + "/" + font + "-Italic.ttf", fname);
             }
             var fname = path.join(__dirname, '..', '..', '/jassijs_report/fonts/' + font + '-BoldItalic.ttf');
-            this.fontDescriptors[font].normal = fname;
+            this.fontDescriptors[font].bolditalics = fname;
             if (!fs.existsSync(fname)) {
                 await this.download(base + "/" + font + (font === "Roboto" ? "-MediumItalic.ttf" : "-BoldItalic.ttf"), fname);
             }
