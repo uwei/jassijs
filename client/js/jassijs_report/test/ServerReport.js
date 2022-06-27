@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs_report/remote/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_1, Property_1, Registry_1) {
+define(["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_1, Property_1, Registry_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -23,16 +23,16 @@ define(["require", "exports", "jassijs_report/remote/Report", "jassijs/ui/Proper
             }
         ]
     };
-    let ClientReportParameter = class ClientReportParameter {
+    let ServerReportParameter = class ServerReportParameter {
     };
-    ClientReportParameter = __decorate([
-        (0, Registry_1.$Class)("jassijs_report.remote.ClientReportParameter")
-    ], ClientReportParameter);
+    ServerReportParameter = __decorate([
+        (0, Registry_1.$Class)("jassijs_report.remote.ServerReportParameter")
+    ], ServerReportParameter);
     let ServerReport = class ServerReport extends Report_1.Report {
     };
     __decorate([
-        (0, Property_1.$Property)({ type: "json", componentType: "jassijs_report.remote.ClientReportParameter" }),
-        __metadata("design:type", ClientReportParameter)
+        (0, Property_1.$Property)({ type: "json", componentType: "jassijs_report.remote.ServerReportParameter" }),
+        __metadata("design:type", ServerReportParameter)
     ], ServerReport.prototype, "parameter", void 0);
     ServerReport = __decorate([
         (0, Report_1.$Report)({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/TestServerreport" }),
@@ -40,6 +40,7 @@ define(["require", "exports", "jassijs_report/remote/Report", "jassijs/ui/Proper
     ], ServerReport);
     async function test() {
         var cl = new ServerReport();
+        cl.parameter = { sort: "name" };
         await cl.open();
     }
     exports.test = test;

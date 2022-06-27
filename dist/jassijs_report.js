@@ -1327,6 +1327,7 @@ define("jassijs_report/RImage", ["require", "exports", "jassijs/remote/Registry"
             this._image = "";
             this.init('<img class="RImage"></img>');
             this.domWrapper.classList.remove("jcontainer");
+            delete this._components;
         }
         /**
          * adds a component to the container before an other component
@@ -3000,6 +3001,7 @@ define("jassijs_report/RText", ["require", "exports", "jassijs/remote/Registry",
             this.__dom.style["text-overflow"] = "ellipsis";
             this.__dom.style["overflow"] = "hidden";
             this.dom.classList.add("designerNoResizable");
+            delete this._components;
             (0, CSSProperties_1.loadFontIfNedded)("Roboto");
             var el = this.dom.children[0];
             this._designMode = false;
@@ -3438,7 +3440,56 @@ define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Registr
     ], RUnknown);
     exports.RUnknown = RUnknown;
 });
-define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable", "jassijs_report/RUList", "jassijs_report/ROList", "jassijs_report/RImage"], function (require, exports, BoxPanel_2, Registry_19, RStack_1, RText_3, RColumns_1, RUnknown_1, Panel_4, RComponent_16, RDatatable_1, Property_10, RStyle_1, RTextGroup_1, RTable_2, RUList_1, ROList_1, RImage_1) {
+define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/base/Windows", "jassijs/remote/Classes", "jassijs_report/remote/ServerReport", "jassijs_report/PDFViewer", "jassijs_report/PDFReport"], function (require, exports, Registry_19, RemoteObject_1, Windows_1, Classes_4, ServerReport_1, PDFViewer_2, PDFReport_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Report = exports.$Report = exports.ReportProperties = void 0;
+    class ReportProperties {
+    }
+    exports.ReportProperties = ReportProperties;
+    function $Report(properties) {
+        return function (pclass) {
+            Registry_19.default.register("$Report", pclass, properties);
+        };
+    }
+    exports.$Report = $Report;
+    let Report = class Report extends RemoteObject_1.RemoteObject {
+        //this is a sample remote function
+        async fill() {
+            var clname = Classes_4.classes.getClassName(this);
+            var meta = Registry_19.default.getData("$Report", clname);
+            if ((meta === null || meta === void 0 ? void 0 : meta.length) > 0 && meta[0].params.length > 0) {
+                var path = meta[0].params[0].serverReportPath;
+                if (path) {
+                    var ret = await ServerReport_1.ServerReport.fillReport(path, this.parameter);
+                    return ret;
+                }
+                //return await this.call(this, this.fill, context);
+            }
+            throw new Classes_4.JassiError("Clintreports must implememt fill");
+        }
+        async open() {
+            var rep = new PDFReport_1.PDFReport();
+            var des = await this.fill();
+            rep.value = des.reportdesign;
+            rep.data = des.data;
+            rep.parameter = des.parameter;
+            rep.fill();
+            var viewer = new PDFViewer_2.PDFViewer();
+            viewer.value = await rep.getBase64();
+            Windows_1.default.add(viewer, "Report");
+        }
+    };
+    Report = __decorate([
+        (0, Registry_19.$Class)("jassijs_report.remote.Report")
+    ], Report);
+    exports.Report = Report;
+    async function test() {
+        //    console.log(await new Report().sayHello("Kurt"));
+    }
+    exports.test = test;
+});
+define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs_report/RStack", "jassijs_report/RText", "jassijs_report/RColumns", "jassijs_report/RUnknown", "jassijs/ui/Panel", "jassijs_report/RComponent", "jassijs_report/RDatatable", "jassijs/ui/Property", "jassijs_report/RStyle", "jassijs_report/RTextGroup", "jassijs_report/RTable", "jassijs_report/RUList", "jassijs_report/ROList", "jassijs_report/RImage"], function (require, exports, BoxPanel_2, Registry_20, RStack_1, RText_3, RColumns_1, RUnknown_1, Panel_4, RComponent_16, RDatatable_1, Property_10, RStyle_1, RTextGroup_1, RTable_2, RUList_1, ROList_1, RImage_1) {
     "use strict";
     var ReportDesign_8;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3470,7 +3521,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         __metadata("design:type", String)
     ], InfoProperties.prototype, "producer", void 0);
     InfoProperties = __decorate([
-        (0, Registry_19.$Class)("jassijs_report.InfoProperties")
+        (0, Registry_20.$Class)("jassijs_report.InfoProperties")
     ], InfoProperties);
     let PermissionProperties = class PermissionProperties {
         constructor() {
@@ -3511,7 +3562,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         __metadata("design:type", Boolean)
     ], PermissionProperties.prototype, "documentAssembly", void 0);
     PermissionProperties = __decorate([
-        (0, Registry_19.$Class)("jassijs_report.PermissionProperties")
+        (0, Registry_20.$Class)("jassijs_report.PermissionProperties")
     ], PermissionProperties);
     let StyleContainer = class StyleContainer extends Panel_4.Panel {
         constructor(props) {
@@ -3524,7 +3575,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
         }
     };
     StyleContainer = __decorate([
-        (0, Registry_19.$Class)("jassijs_report.StyleContainer"),
+        (0, Registry_20.$Class)("jassijs_report.StyleContainer"),
         (0, Property_10.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], StyleContainer);
@@ -3956,7 +4007,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     ], ReportDesign.prototype, "pageOrientation", null);
     ReportDesign = ReportDesign_8 = __decorate([
         (0, RComponent_16.$ReportComponent)({ fullPath: undefined, icon: undefined, editableChildComponents: ["this", "this.backgroundPanel", "this.headerPanel", "this.contentPanel", "this.footerPanel"] }),
-        (0, Registry_19.$Class)("jassijs_report.ReportDesign"),
+        (0, Registry_20.$Class)("jassijs_report.ReportDesign"),
         (0, Property_10.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], ReportDesign);
@@ -3966,7 +4017,7 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     }
     exports.test = test;
 });
-define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Registry_20, Runlater_2, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_9, Panel_5, Windows_1, DockingContainer_1, VariablePanel_1, Property_11) {
+define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Registry_21, Runlater_2, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_9, Panel_5, Windows_2, DockingContainer_1, VariablePanel_1, Property_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SimpleReportEditor = exports.SimpleReportEditorProperties = void 0;
@@ -4277,7 +4328,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         }
     };
     SimpleReportEditor = __decorate([
-        (0, Registry_20.$Class)("jassi_report.SimpleReportEditor"),
+        (0, Registry_21.$Class)("jassi_report.SimpleReportEditor"),
         __metadata("design:paramtypes", [SimpleReportEditorProperties])
     ], SimpleReportEditor);
     exports.SimpleReportEditor = SimpleReportEditor;
@@ -4317,13 +4368,13 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         editor.height = "100%";
         editor.value = JSON.stringify(reportdesign);
         setTimeout(() => {
-            Windows_1.default.add(editor, "Testtt");
+            Windows_2.default.add(editor, "Testtt");
         }, 10);
         //return editor;
     }
     exports.test = test;
 });
-define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Settings", "jassijs/base/CurrentSettings"], function (require, exports, FileExplorer_1, Windows_2, Panel_6, Router_1, Settings_1, CurrentSettings_1) {
+define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Settings", "jassijs/base/CurrentSettings"], function (require, exports, FileExplorer_1, Windows_3, Panel_6, Router_1, Settings_1, CurrentSettings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
@@ -4333,7 +4384,7 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/Fi
         var body = new Panel_6.Panel({ id: "body" });
         body.max();
         var site = new Panel_6.Panel();
-        Windows_2.default._desktop.add(site);
+        Windows_3.default._desktop.add(site);
         site.dom.innerHTML = '<h1>\n<a id="user-content-jassijs-reporteditor" class="anchor" href="#jassijs-reporteditor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Jassijs-Reporteditor</h1>\n<p>Jassijs Reporteditor is a visual tool for designing <a href="http://pdfmake.org/" rel="nofollow">pdfmake</a> reports. The reports can be rendered with pdfmake to pdf either directly in the browser or server-side with nodes.\nThe report designer can be executed directly via <a href="https://uwei.github.io/jassijs-reporteditor/web" rel="nofollow">https://uwei.github.io/jassijs-reporteditor/web</a>. The report designer can also be integrated into your own websites. An example of this is <a href="https://uwei.github.io/jassijs-reporteditor/simple" rel="nofollow">here</a>.</p>\n<h2>\n<a id="user-content-runtime" class="anchor" href="#runtime" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Runtime</h2>\n<p>The Jassijs report designer extends the syntax of pdfmake by filling data e.g. with the help of data tables. In order for the report to be filled at runtime, a conversion of the report design is necessary. Here is an <a href="https://uwei.github.io/jassijs-reporteditor/simple/usereport.html" rel="nofollow">example</a> or [with amd] (<a href="https://uwei.github.io/jassijs-reporteditor/simple/usereport-amd.html" rel="nofollow">https://uwei.github.io/jassijs-reporteditor/simple/usereport-amd.html</a>):</p>\n<div class="highlight highlight-text-html-basic"><pre><span class="pl-kos">&lt;</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">http://localhost/jassijs/dist/pdfmakejassi.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;/</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">docDefinition</span><span class="pl-c1">=</span><span class="pl-kos">{</span>\n\t\t\t<span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n\t\t\t\t<span class="pl-s">\'Hallo ${name}\'</span><span class="pl-kos">,</span>\n\t\t\t\t<span class="pl-s">\'${parameter.date}\'</span>\n\t\t\t<span class="pl-kos">]</span>\n\t\t<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-c">//fill data  </span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-c1">name</span>:<span class="pl-s">\'Max\'</span><span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">parameter</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-c1">date</span>:<span class="pl-s">\'2021-10-15\'</span><span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-s1">docDefinition</span><span class="pl-c1">=</span><span class="pl-s1">pdfmakejassi</span><span class="pl-kos">.</span><span class="pl-en">createReportDefinition</span><span class="pl-kos">(</span><span class="pl-s1">docDefinition</span><span class="pl-kos">,</span><span class="pl-s1">data</span><span class="pl-kos">,</span><span class="pl-s1">parameter</span><span class="pl-kos">)</span><span class="pl-kos">;</span>\n\n\t\t<span class="pl-s1">pdfMake</span><span class="pl-kos">.</span><span class="pl-en">createPdf</span><span class="pl-kos">(</span><span class="pl-s1">docDefinition</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">download</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>\n\t<span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;/</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span></pre></div>\n<h2>\n<a id="user-content-quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick Start:</h2>\n<p>The Jassijs Reportitor can be started directly in the <a href="https://uwei.github.io/jassijs-reporteditor/web" rel="nofollow">browser</a>. Please note that the reports stored there are not permanently stored and are lost when the browser cache is cleared.</p>\n<p>The existing reports are displayed on the right side. Double-click to open the report in Code view as javascript.\n<a href="https://camo.githubusercontent.com/9172b27b26433c0e87d06fd0419e757842ac89adb89e2bfb17be8de729d6431a/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72312e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/9172b27b26433c0e87d06fd0419e757842ac89adb89e2bfb17be8de729d6431a/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72312e6a7067" alt="jassijs-reporteditor1" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor1.jpg" style="max-width:100%;"></a></p>\n<p>With Run <a href="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" alt="jassijs-reporteditor2" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor2.jpg" style="max-width:100%;"></a> the report opens in the <strong>Design</strong> view.\n<a href="https://camo.githubusercontent.com/d014a6a69fa8a13596a3cf885687c93352c6f26c2e292889eb246b719aeb3c23/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72332e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/d014a6a69fa8a13596a3cf885687c93352c6f26c2e292889eb246b719aeb3c23/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72332e6a7067" alt="jassijs-reporteditor3" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor3.jpg" style="max-width:100%;"></a>\nThere, new report elements can be added from the <strong>Palette</strong> via drag and drop. The <strong>Properties</strong> of the selected report item can be changed in the property editor.</p>\n<p>With <a href="https://camo.githubusercontent.com/8a5bab1108211501516632442bbc08c3d50fc0eb4bf2643eaa39855eb1bb5478/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72342e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/8a5bab1108211501516632442bbc08c3d50fc0eb4bf2643eaa39855eb1bb5478/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72342e6a7067" alt="jassijs-reporteditor4" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor4.jpg" style="max-width:100%;"></a> the created pdf can be viewed.\n<a href="https://camo.githubusercontent.com/58e07784a867b283f4fb6f2770ef2d03b6367ac5fea0943030b0fdd50d7db066/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72352e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/58e07784a867b283f4fb6f2770ef2d03b6367ac5fea0943030b0fdd50d7db066/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72352e6a7067" alt="jassijs-reporteditor5" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor5.jpg" style="max-width:100%;"></a></p>\n<p>In the <strong>Code</strong> view, the report is displayed as Javascript code. With Run <a href="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" alt="jassijs-reporteditor2" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor2.jpg" style="max-width:100%;"></a> , changes in the code can be loaded back into the <strong>Design</strong> view.\nThere are many examples in the left side panel under Files that explain the report elements. Under pdfmake-Playground you will find examples of pdfmake. A detailed description of the syntax of pdfmake is described at <a href="http://pdfmake.org/" rel="nofollow">http://pdfmake.org/</a>.\nYou can create your own folders and reports (right-click context menu) under <strong>Files</strong>. But remember that the reports are only stored in the browser and are lost when the browser cache is cleared. You can also <strong>Download</strong> the <strong>modified</strong> reports (right-click on a folder in <strong>Files</strong>).</p>\n<h2>\n<a id="user-content-limitations" class="anchor" href="#limitations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Limitations</h2>\n<p>Not all properties of the report elements that are possible with pdfmake can be set with the visual disigner, but these properties are not lost when editing the report.</p>\n<h2>\n<a id="user-content-syntax-extensions" class="anchor" href="#syntax-extensions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Syntax extensions</h2>\n<p>The following extensions of the pdfmake syntax can be used with the help of link.</p>\n<h3>\n<a id="user-content-templating" class="anchor" href="#templating" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>templating:</h3>\n<p>With the help of javascript template strings, data can be filled into the report. The following example shows this.</p>\n<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-s1">reportdesign</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>\n\t<span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n        <span class="pl-s">\'Hallo ${name}\'</span><span class="pl-kos">,</span>\n        <span class="pl-s">\'${address.street}\'</span><span class="pl-kos">,</span>\n        <span class="pl-s">\'${parameter.date}\'</span>\n    <span class="pl-kos">]</span>\n<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\n<span class="pl-k">export</span> <span class="pl-k">function</span> <span class="pl-en">test</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>\n    <span class="pl-k">return</span> <span class="pl-kos">{</span> \n        reportdesign<span class="pl-kos">,</span>\n        <span class="pl-c1">data</span>:<span class="pl-kos">{</span>\n            <span class="pl-c1">name</span>:<span class="pl-s">\'Klaus\'</span><span class="pl-kos">,</span>\n            <span class="pl-c1">address</span>:<span class="pl-kos">{</span>\n                <span class="pl-c1">street</span>:<span class="pl-s">\'Mainstreet 8\'</span>\n            <span class="pl-kos">}</span>\n        <span class="pl-kos">}</span><span class="pl-kos">,</span>        \n        <span class="pl-c1">parameter</span>:<span class="pl-kos">{</span><span class="pl-c1">date</span>:<span class="pl-s">\'2021-10-10\'</span><span class="pl-kos">}</span>      <span class="pl-c">//parameter</span>\n    <span class="pl-kos">}</span><span class="pl-kos">;</span>\n<span class="pl-kos">}</span></pre></div>\n<p>The <strong>data</strong> of the report are specified in the data field or as a 2nd parameter when filling the report with <strong>pdfmakejassi.createReportDefinition</strong>.\nThis data could be filled line javascript Template-Strings like <strong>${name}</strong>.\nSimilar to data, parameters can also be filled in the report.</p>\n<h3>\n<a id="user-content-edittogether" class="anchor" href="#edittogether" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>edittogether</h3>\n<p>For texts with different formatting, individual text elements must be linked in pdfmake. Text elements that are to be edited together in a text box in the Designer are marked with edittogether. The text can be edited comfortably (thanks TinyMCE).\n<a href="https://camo.githubusercontent.com/a1741345d6b9db8cc6fa359d9ccebcb4940ba745ae8d42ec5c288553e1522dd0/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72362e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/a1741345d6b9db8cc6fa359d9ccebcb4940ba745ae8d42ec5c288553e1522dd0/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72362e6a7067" alt="jassijs-reporteditor6" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor6.jpg" style="max-width:100%;"></a></p>\n<h3>\n<a id="user-content-foreach" class="anchor" href="#foreach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>foreach</h3>\n<p>If the report data contain arrays, then this data can be filled into the report with foreach.\nHere is a simple <a href="https://uwei.github.io/jassijs-reporteditor/web/#do=jassijs_editor.CodeEditor&amp;file=demoreports/10-Foreach.ts" rel="nofollow">example</a>.</p>\n<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-s1">reportdesign</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>\n    <span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n        <span class="pl-kos">{</span>\n            <span class="pl-c1">foreach</span>: <span class="pl-s">\'line\'</span><span class="pl-kos">,</span>\n            <span class="pl-c1">text</span>: <span class="pl-s">\'${line.name}\'</span>\n        <span class="pl-kos">}</span><span class="pl-kos"></span>\n<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\n<span class="pl-k">export</span> <span class="pl-k">function</span> <span class="pl-en">test</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>\n    <span class="pl-k">return</span> <span class="pl-kos">{</span>\n        reportdesign<span class="pl-kos">,</span>\n        <span class="pl-c1">data</span>: <span class="pl-kos">[</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line1\'</span> <span class="pl-kos">}</span><span class="pl-kos">,</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line2\'</span> <span class="pl-kos">}</span><span class="pl-kos">,</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line3\'</span> <span class="pl-kos">}</span>\n        <span class="pl-kos">]</span>\n    <span class="pl-kos">}</span><span class="pl-kos">;</span>\n<span class="pl-kos">}</span></pre></div>\n<p>The element that is marked with foreach is repeated for each array element.\nThe array element can be accessed with ${line.name}.\nforeach $line is the short form for foreach $line in data.\nIf not the element itself but another report element is to be repeated,\ncan be used.</p>\n<h3>\n<a id="user-content-datatable" class="anchor" href="#datatable" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>datatable</h3>\n<p>Syntax {\n}\nBeispiel</p>\n<h3>\n<a id="user-content-format" class="anchor" href="#format" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>format</h3>\n<h2>\n<a id="user-content-aggregate-functions" class="anchor" href="#aggregate-functions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>aggregate Functions</h2>\n';
         site.css = {
             background_color: "white",
@@ -4341,7 +4392,7 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/Fi
         };
         site.height = "100%";
         site.width = "100%";
-        Windows_2.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
+        Windows_3.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
         Router_1.router.navigate(window.location.hash);
         //Ace should be default because long image blob breaks line   
         if (CurrentSettings_1.currentsettings.gets(Settings_1.Settings.keys.Development_DefaultEditor) === undefined) {
@@ -4371,7 +4422,7 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/Fi
     }
     exports.test = test;
 });
-define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_1, Registry_21, OptionDialog_1, FileExplorer_2) {
+define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_1, Registry_22, OptionDialog_1, FileExplorer_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateReport = void 0;
@@ -4401,7 +4452,7 @@ define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Act
     ], TemplateReport, "newFile", null);
     TemplateReport = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
-        (0, Registry_21.$Class)("jassijs_report.TemplateReport")
+        (0, Registry_22.$Class)("jassijs_report.TemplateReport")
     ], TemplateReport);
     exports.TemplateReport = TemplateReport;
 });
@@ -4437,12 +4488,8 @@ define("jassijs_report/pdfMake-interface", ["require", "exports"], function (req
 define("jassijs_report/registry", ["require"], function (require) {
     return {
         default: {
-            "jassijs_report/designer/Report.ts": {
-                "date": 1655556864382,
-                "jassijs_report.Report": {}
-            },
             "jassijs_report/designer/ReportDesigner.ts": {
-                "date": 1656016464249,
+                "date": 1656186291717,
                 "jassijs_report.designer.ReportDesigner": {}
             },
             "jassijs_report/designer/SimpleReportDesigner.ts": {
@@ -4451,6 +4498,9 @@ define("jassijs_report/registry", ["require"], function (require) {
             },
             "jassijs_report/modul.ts": {
                 "date": 1655329708587
+            },
+            "jassijs_report/pdfMake-interface.ts": {
+                "date": 1656184595147
             },
             "jassijs_report/PDFReport.ts": {
                 "date": 1655556864381,
@@ -4482,229 +4532,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "hideBaseClassProperties": true
                         }
                     ],
-                    "@members": {
-                        "foreach": {
-                            "$Property": []
-                        },
-                        "counter": {
-                            "$Property": [
-                                {
-                                    "default": "undefined",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "listType": {
-                            "$Property": [
-                                {
-                                    "name": "listType",
-                                    "default": "undefined",
-                                    "isVisible": "function",
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "fillColor": {
-                            "$Property": [
-                                {
-                                    "type": "color",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "colSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "rowSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "border": {
-                            "$Property": [
-                                {
-                                    "type": "boolean[]",
-                                    "default": [
-                                        false,
-                                        false,
-                                        false,
-                                        false
-                                    ],
-                                    "isVisible": "function",
-                                    "description": "border of the tablecell: left, top, right, bottom"
-                                }
-                            ]
-                        },
-                        "width": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "height": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "bold": {
-                            "$Property": []
-                        },
-                        "italics": {
-                            "$Property": []
-                        },
-                        "font": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "Alegreya",
-                                        "AlegreyaSans",
-                                        "AlegreyaSansSC",
-                                        "AlegreyaSC",
-                                        "AlmendraSC",
-                                        "Amaranth",
-                                        "Andada",
-                                        "AndadaSC",
-                                        "AnonymousPro",
-                                        "ArchivoNarrow",
-                                        "Arvo",
-                                        "Asap",
-                                        "AveriaLibre",
-                                        "AveriaSansLibre",
-                                        "AveriaSerifLibre",
-                                        "Cambay",
-                                        "Caudex",
-                                        "CrimsonText",
-                                        "Cuprum",
-                                        "Economica",
-                                        "Exo2",
-                                        "Exo",
-                                        "ExpletusSans",
-                                        "FiraSans",
-                                        "JosefinSans",
-                                        "JosefinSlab",
-                                        "Karla",
-                                        "Lato",
-                                        "LobsterTwo",
-                                        "Lora",
-                                        "Marvel",
-                                        "Merriweather",
-                                        "MerriweatherSans",
-                                        "Nobile",
-                                        "NoticiaText",
-                                        "Overlock",
-                                        "Philosopher",
-                                        "PlayfairDisplay",
-                                        "PlayfairDisplaySC",
-                                        "PT_Serif-Web",
-                                        "Puritan",
-                                        "Quantico",
-                                        "QuattrocentoSans",
-                                        "Quicksand",
-                                        "Rambla",
-                                        "Rosario",
-                                        "Sansation",
-                                        "Sarabun",
-                                        "Scada",
-                                        "Share",
-                                        "Sitara",
-                                        "SourceSansPro",
-                                        "TitilliumWeb",
-                                        "Volkhov",
-                                        "Vollkorn"
-                                    ]
-                                }
-                            ]
-                        },
-                        "fontSize": {
-                            "$Property": []
-                        },
-                        "background": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "color": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "alignment": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "left",
-                                        "center",
-                                        "right"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decoration": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "underline",
-                                        "lineThrough",
-                                        "overline"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decorationColor": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "decorationStyle": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "dashed",
-                                        "dotted",
-                                        "double",
-                                        "wavy"
-                                    ]
-                                }
-                            ]
-                        },
-                        "style": {
-                            "$Property": []
-                        },
-                        "lineHeight": {
-                            "$Property": [
-                                {
-                                    "default": 1
-                                }
-                            ]
-                        },
-                        "margin": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "description": "margin left, top, right, bottom"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RDatatable.ts": {
@@ -4722,14 +4550,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "dataforeach": {
-                            "$Property": []
-                        },
-                        "groupCount": {
-                            "$Property": []
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/remote/pdfmakejassi.ts": {
@@ -4743,335 +4564,16 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "hideBaseClassProperties": true
                         }
                     ],
-                    "@members": {
-                        "foreach": {
-                            "$Property": []
-                        },
-                        "counter": {
-                            "$Property": [
-                                {
-                                    "default": "undefined",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "listType": {
-                            "$Property": [
-                                {
-                                    "name": "listType",
-                                    "default": "undefined",
-                                    "isVisible": "function",
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "fillColor": {
-                            "$Property": [
-                                {
-                                    "type": "color",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "colSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "rowSpan": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "border": {
-                            "$Property": [
-                                {
-                                    "type": "boolean[]",
-                                    "default": [
-                                        false,
-                                        false,
-                                        false,
-                                        false
-                                    ],
-                                    "isVisible": "function",
-                                    "description": "border of the tablecell: left, top, right, bottom"
-                                }
-                            ]
-                        },
-                        "width": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "height": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "isVisible": "function"
-                                }
-                            ]
-                        },
-                        "bold": {
-                            "$Property": []
-                        },
-                        "italics": {
-                            "$Property": []
-                        },
-                        "font": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "Alegreya",
-                                        "AlegreyaSans",
-                                        "AlegreyaSansSC",
-                                        "AlegreyaSC",
-                                        "AlmendraSC",
-                                        "Amaranth",
-                                        "Andada",
-                                        "AndadaSC",
-                                        "AnonymousPro",
-                                        "ArchivoNarrow",
-                                        "Arvo",
-                                        "Asap",
-                                        "AveriaLibre",
-                                        "AveriaSansLibre",
-                                        "AveriaSerifLibre",
-                                        "Cambay",
-                                        "Caudex",
-                                        "CrimsonText",
-                                        "Cuprum",
-                                        "Economica",
-                                        "Exo2",
-                                        "Exo",
-                                        "ExpletusSans",
-                                        "FiraSans",
-                                        "JosefinSans",
-                                        "JosefinSlab",
-                                        "Karla",
-                                        "Lato",
-                                        "LobsterTwo",
-                                        "Lora",
-                                        "Marvel",
-                                        "Merriweather",
-                                        "MerriweatherSans",
-                                        "Nobile",
-                                        "NoticiaText",
-                                        "Overlock",
-                                        "Philosopher",
-                                        "PlayfairDisplay",
-                                        "PlayfairDisplaySC",
-                                        "PT_Serif-Web",
-                                        "Puritan",
-                                        "Quantico",
-                                        "QuattrocentoSans",
-                                        "Quicksand",
-                                        "Rambla",
-                                        "Rosario",
-                                        "Sansation",
-                                        "Sarabun",
-                                        "Scada",
-                                        "Share",
-                                        "Sitara",
-                                        "SourceSansPro",
-                                        "TitilliumWeb",
-                                        "Volkhov",
-                                        "Vollkorn"
-                                    ]
-                                }
-                            ]
-                        },
-                        "fontSize": {
-                            "$Property": []
-                        },
-                        "background": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "color": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "alignment": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "left",
-                                        "center",
-                                        "right"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decoration": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "underline",
-                                        "lineThrough",
-                                        "overline"
-                                    ]
-                                }
-                            ]
-                        },
-                        "decorationColor": {
-                            "$Property": [
-                                {
-                                    "type": "color"
-                                }
-                            ]
-                        },
-                        "decorationStyle": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "dashed",
-                                        "dotted",
-                                        "double",
-                                        "wavy"
-                                    ]
-                                }
-                            ]
-                        },
-                        "style": {
-                            "$Property": []
-                        },
-                        "lineHeight": {
-                            "$Property": [
-                                {
-                                    "default": 1
-                                }
-                            ]
-                        },
-                        "margin": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "description": "margin left, top, right, bottom"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/ReportDesign.ts": {
                 "date": 1656014998740,
                 "jassijs_report.InfoProperties": {
-                    "@members": {
-                        "title": {
-                            "$Property": [
-                                {
-                                    "description": "the title of the document"
-                                }
-                            ]
-                        },
-                        "author": {
-                            "$Property": [
-                                {
-                                    "description": "the name of the author"
-                                }
-                            ]
-                        },
-                        "subject": {
-                            "$Property": [
-                                {
-                                    "description": "the subject of the document"
-                                }
-                            ]
-                        },
-                        "keywords": {
-                            "$Property": [
-                                {
-                                    "description": "keywords associated with the document"
-                                }
-                            ]
-                        },
-                        "creator": {
-                            "$Property": [
-                                {
-                                    "description": "the creator of the document (default is ‘pdfmake’)"
-                                }
-                            ]
-                        },
-                        "producer": {
-                            "$Property": [
-                                {
-                                    "description": "the producer of the document"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 },
                 "jassijs_report.PermissionProperties": {
-                    "@members": {
-                        "printing": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "lowResolution",
-                                        "highResolution"
-                                    ],
-                                    "description": "whether printing is allowed. Specify \"lowResolution\" to allow degraded printing, or \"highResolution\" to allow printing with high resolution"
-                                }
-                            ]
-                        },
-                        "modifying": {
-                            "$Property": [
-                                {
-                                    "description": "whether modifying the file is allowed. Specify true to allow modifying document content"
-                                }
-                            ]
-                        },
-                        "copying": {
-                            "$Property": [
-                                {
-                                    "description": "whether copying text or graphics is allowed. Specify true to allow copying"
-                                }
-                            ]
-                        },
-                        "annotating": {
-                            "$Property": [
-                                {
-                                    "description": "whether annotating, form filling is allowed. Specify true to allow annotating and form filling"
-                                }
-                            ]
-                        },
-                        "fillingForms": {
-                            "$Property": [
-                                {
-                                    "description": "whether form filling and signing is allowed. Specify true to allow filling in form fields and signing"
-                                }
-                            ]
-                        },
-                        "contentAccessibility": {
-                            "$Property": [
-                                {
-                                    "description": "whether copying text for accessibility is allowed. Specify true to allow copying for accessibility"
-                                }
-                            ]
-                        },
-                        "documentAssembly": {
-                            "$Property": [
-                                {
-                                    "description": "whether assembling document is allowed. Specify true to allow document assembly"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 },
                 "jassijs_report.StyleContainer": {
                     "$Property": [
@@ -5099,128 +4601,11 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "hideBaseClassProperties": true
                         }
                     ],
-                    "@members": {
-                        "compress": {
-                            "$Property": []
-                        },
-                        "userPassword": {
-                            "$Property": [
-                                {
-                                    "description": "To enable encryption set user password in userPassword (string value). The PDF file will be encrypted when a user password is provided, and users will be prompted to enter the password to decrypt the file when opening it."
-                                }
-                            ]
-                        },
-                        "ownerPassword": {
-                            "$Property": [
-                                {
-                                    "description": "To set access privileges for the PDF file, you need to provide an owner password in ownerPassword (string value) and object permissions with permissions. By default, all operations are disallowed. You need to explicitly allow certain operations."
-                                }
-                            ]
-                        },
-                        "info": {
-                            "$Property": [
-                                {
-                                    "type": "json",
-                                    "componentType": "jassijs_report.InfoProperties"
-                                }
-                            ]
-                        },
-                        "permissions": {
-                            "$Property": [
-                                {
-                                    "type": "json",
-                                    "componentType": "jassijs_report.PermissionProperties"
-                                }
-                            ]
-                        },
-                        "pageMargins": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "default": [
-                                        40,
-                                        40,
-                                        40,
-                                        40
-                                    ],
-                                    "description": "margin of the page: left, top, right, bottom"
-                                }
-                            ]
-                        },
-                        "pageSize": {
-                            "$Property": [
-                                {
-                                    "description": "the size of the page",
-                                    "default": "A4",
-                                    "chooseFrom": [
-                                        "4A0",
-                                        "2A0",
-                                        "A0",
-                                        "A1",
-                                        "A2",
-                                        "A3",
-                                        "A4",
-                                        "A5",
-                                        "A6",
-                                        "A7",
-                                        "A8",
-                                        "A9",
-                                        "A10",
-                                        "B0",
-                                        "B1",
-                                        "B2",
-                                        "B3",
-                                        "B4",
-                                        "B5",
-                                        "B6",
-                                        "B7",
-                                        "B8",
-                                        "B9",
-                                        "B10",
-                                        "C0",
-                                        "C1",
-                                        "C2",
-                                        "C3",
-                                        "C4",
-                                        "C5",
-                                        "C6",
-                                        "C7",
-                                        "C8",
-                                        "C9",
-                                        "C10",
-                                        "RA0",
-                                        "RA1",
-                                        "RA2",
-                                        "RA3",
-                                        "RA4",
-                                        "SRA0",
-                                        "SRA1",
-                                        "SRA2",
-                                        "SRA3",
-                                        "SRA4",
-                                        "EXECUTIVE",
-                                        "FOLIO",
-                                        "LEGAL",
-                                        "LETTER",
-                                        "TABLOID"
-                                    ]
-                                }
-                            ]
-                        },
-                        "pageOrientation": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "landscape",
-                                        "portrait"
-                                    ],
-                                    "default": "portrait",
-                                    "description": "the orientation of the page landscape or portrait"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
+            },
+            "jassijs_report/ReportDesignGlobal.ts": {
+                "date": 1655397712425
             },
             "jassijs_report/RGroupTablerow.ts": {
                 "date": 1656073103788,
@@ -5232,15 +4617,11 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "expression": {
-                            "$Property": []
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RImage.ts": {
-                "date": 1656015205540,
+                "date": 1656184927090,
                 "jassijs_report.RImage": {
                     "$ReportComponent": [
                         {
@@ -5248,31 +4629,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "icon": "mdi mdi-image-frame"
                         }
                     ],
-                    "@members": {
-                        "image": {
-                            "$Property": [
-                                {
-                                    "type": "rimage",
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "fit": {
-                            "$Property": [
-                                {
-                                    "type": "number[]",
-                                    "decription": "fit in rectangle width, height e.g. 10,20"
-                                }
-                            ]
-                        },
-                        "opacity": {
-                            "$Property": [
-                                {
-                                    "type": "number"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RImageEditor.ts": {
@@ -5297,35 +4654,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "type": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "lower-alpha",
-                                        "upper-alpha",
-                                        "lower-roman",
-                                        "upper-roman",
-                                        "none"
-                                    ]
-                                }
-                            ]
-                        },
-                        "reversed": {
-                            "$Property": [
-                                {
-                                    "default": false
-                                }
-                            ]
-                        },
-                        "start": {
-                            "$Property": [
-                                {
-                                    "default": 1
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RStack.ts": {
@@ -5354,11 +4683,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "name": {
-                            "$Property": []
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RTable.ts": {
@@ -5376,19 +4701,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "headerRows": {
-                            "$Property": []
-                        },
-                        "layoutName": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": "allLayouts",
-                                    "chooseFromStrict": true
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RTableLayouts.ts": {
@@ -5407,7 +4720,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/RText.ts": {
-                "date": 1656021839670,
+                "date": 1656184904191,
                 "jassijs_report.RText": {
                     "$ReportComponent": [
                         {
@@ -5422,23 +4735,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             "description": "text"
                         }
                     ],
-                    "@members": {
-                        "value": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": "function"
-                                }
-                            ]
-                        },
-                        "format": {
-                            "$Property": [
-                                {
-                                    "type": "string",
-                                    "chooseFrom": "allFormats"
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RTextGroup.ts": {
@@ -5467,19 +4764,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                             ]
                         }
                     ],
-                    "@members": {
-                        "type": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "square",
-                                        "circle",
-                                        "none"
-                                    ]
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_report/RUnknown.ts": {
@@ -5492,12 +4777,6 @@ define("jassijs_report/registry", ["require"], function (require) {
             },
             "jassijs_report/StartReporteditor.ts": {
                 "date": 1655760762456
-            },
-            "jassijs_report/pdfMake-interface.ts": {
-                "date": 1656073303823
-            },
-            "jassijs_report/ReportDesignGlobal.ts": {
-                "date": 1655397712425
             },
             "jassijs_report/TemplateReport.ts": {
                 "date": 1656019402317,
@@ -5516,41 +4795,44 @@ define("jassijs_report/registry", ["require"], function (require) {
                         }
                     }
                 }
+            },
+            "jassijs_report/test/ClientReport.ts": {
+                "date": 1656275429152,
+                "jassijs_report.remote.ClientReportParameter": {},
+                "jassijs_report.test.ClientReport": {
+                    "$Report": [
+                        {
+                            "name": "test/Sample Clientreport"
+                        }
+                    ],
+                    "@members": {}
+                }
+            },
+            "jassijs_report/test/ServerReport.ts": {
+                "date": 1656275439533,
+                "jassijs_report.remote.ClientReportParameter": {},
+                "jassijs_report.test.ClientReport": {
+                    "$Report": [
+                        {
+                            "name": "test/Sample Serverreport",
+                            "serverReportPath": "jassijs_report/TestServerreport"
+                        }
+                    ],
+                    "@members": {}
+                }
+            },
+            "jassijs_report/Report.ts": {
+                "date": 1656277229813,
+                "jassijs_report.remote.Report": {}
+            },
+            "jassijs_report/remote/ServerReport.ts": {
+                "date": 1656277819667,
+                "jassijs_report.remote.ServerReport": {}
             }
         }
     };
 });
-define("jassijs_report/designer/Report", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/BoxPanel"], function (require, exports, Registry_22, BoxPanel_3) {
-    "use strict";
-    Object.defineProperty(exports, "__esModule", { value: true });
-    exports.Report = void 0;
-    let Report = 
-    //@$UIComponent({editableChildComponents:["this"]})
-    //@$Property({name:"horizontal",hide:true})
-    class Report extends BoxPanel_3.BoxPanel {
-        /**
-        *
-        * @param {object} properties - properties to init
-        * @param {string} [properties.id] -  connect to existing id (not reqired)
-        * @param {boolean} [properties.useSpan] -  use span not div
-        *
-        */
-        constructor(properties) {
-            super(properties);
-        }
-    };
-    Report = __decorate([
-        (0, Registry_22.$Class)("jassijs_report.Report")
-        //@$UIComponent({editableChildComponents:["this"]})
-        //@$Property({name:"horizontal",hide:true})
-        ,
-        __metadata("design:paramtypes", [Object])
-    ], Report);
-    exports.Report = Report;
-});
-//jassijs.register("reportcomponent", "jassijs_report.Report", "report/Report", "res/report.ico");
-// return CodeEditor.constructor;
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Registry_23, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_4, PDFReport_1, PDFViewer_2, ReportDesign_10, Tools_3) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools"], function (require, exports, Registry_23, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_5, PDFReport_2, PDFViewer_3, ReportDesign_10, Tools_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
@@ -5558,7 +4840,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         constructor() {
             super();
             this.propertyIsChanging = false;
-            this.pdfviewer = new PDFViewer_2.PDFViewer();
+            this.pdfviewer = new PDFViewer_3.PDFViewer();
             this._codeChanger = undefined;
             this.mainLayout = '{"settings":{"hasHeaders":true,"constrainDragToContainer":true,"reorderEnabled":true,"selectionEnabled":false,"popoutWholeStack":false,"blockedPopoutsThrowError":true,"closePopoutsOnUnload":true,"showPopoutIcon":false,"showMaximiseIcon":true,"showCloseIcon":true,"responsiveMode":"onload"},"dimensions":{"borderWidth":5,"minItemHeight":10,"minItemWidth":10,"headerHeight":20,"dragProxyWidth":300,"dragProxyHeight":200},"labels":{"close":"close","maximise":"maximise","minimise":"minimise","popout":"open in new window","popin":"pop in","tabDropdown":"additional tabs"},"content":[{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","content":[{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":81.04294066258988,"content":[{"type":"stack","width":80.57491289198606,"height":71.23503465658476,"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"content":[{"title":"Code..","type":"component","componentName":"code","componentState":{"title":"Code..","name":"code"},"isClosable":true,"reorderEnabled":true},{"title":"Design","type":"component","componentName":"design","componentState":{"title":"Design","name":"design"},"isClosable":true,"reorderEnabled":true}]},{"type":"column","isClosable":true,"reorderEnabled":true,"title":"","width":19.42508710801394,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":19.844357976653697,"content":[{"title":"Palette","type":"component","componentName":"componentPalette","componentState":{"title":"Palette","name":"componentPalette"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":80.1556420233463,"content":[{"title":"Properties","type":"component","componentName":"properties","componentState":{"title":"Properties","name":"properties"},"isClosable":true,"reorderEnabled":true}]}]}]},{"type":"row","isClosable":true,"reorderEnabled":true,"title":"","height":18.957059337410122,"content":[{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"height":18.957059337410122,"width":77.70034843205575,"content":[{"title":"Variables","type":"component","componentName":"variables","componentState":{"title":"Variables","name":"variables"},"isClosable":true,"reorderEnabled":true},{"title":"Errors","type":"component","componentName":"errors","componentState":{"title":"Errors","name":"errors"},"isClosable":true,"reorderEnabled":true}]},{"type":"stack","header":{},"isClosable":true,"reorderEnabled":true,"title":"","activeItemIndex":0,"width":22.299651567944256,"content":[{"title":"Components","type":"component","componentName":"components","componentState":{"title":"Components","name":"components"},"isClosable":true,"reorderEnabled":true}]}]}]}],"isClosable":true,"reorderEnabled":true,"title":"","openPopouts":[],"maximisedItemId":null}';
             this.editButton.tooltip = "pdf preview";
@@ -5590,16 +4872,17 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             this.__dom.classList.add("ReportDesigner");
             this.dom.style.overflow = "scroll";
             this.dom.style.width = "";
+            this.registerKeys();
         }
         connectParser(parser) {
             this._propertyEditor.parser = parser;
-            var Parser = Classes_4.classes.getClass("jassijs_editor.util.Parser");
+            var Parser = Classes_5.classes.getClass("jassijs_editor.util.Parser");
             this._codeChanger.parser = new Parser();
         }
         editDialog(enable) {
             if (enable === false) {
                 super.editDialog(enable);
-                var rep = new PDFReport_1.PDFReport();
+                var rep = new PDFReport_2.PDFReport();
                 //rep.content=this.designedComponent["design];
                 var data;
                 try {
@@ -5690,11 +4973,20 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             var text = await navigator.clipboard.readText();
             var all = JSON.parse(text);
             var target = this._propertyEditor.value;
+            var before = undefined;
+            if (target._components === undefined) {
+                before = target;
+                target = target._parent;
+            }
+            else
+                before = target._components[target._components.length - 1]; //design dummy
             var comp = ReportDesign_10.ReportDesign.fromJSON(all);
             for (var x = 0; x < comp._components.length; x++) {
-                target.addBefore(comp._components[x], target._components[target._components.length - 1]); //design dummy
+                target.addBefore(comp._components[x], before); //design dummy
             }
             this.propertyChanged();
+            this.editDialog(true);
+            this._componentExplorer.update();
             /*  var comp:RComponent=ReportDesign.fromJSON(all[x])
              for(var x=0;x<all.length;x++){
                 
@@ -5813,7 +5105,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;
     async function test2() {
-        var rep = new PDFReport_1.PDFReport();
+        var rep = new PDFReport_2.PDFReport();
         var def = {
             content: {
                 stack: [{
@@ -5854,7 +5146,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         };
         //	def.content=replaceTemplates(def.content,def.data);
         rep.value = def;
-        var viewer = new PDFViewer_2.PDFViewer();
+        var viewer = new PDFViewer_3.PDFViewer();
         viewer.value = await rep.getBase64();
         viewer.height = "200";
         return viewer;
@@ -6660,6 +5952,35 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
     ], RComponent);
     exports.RComponent = RComponent;
 });
+define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_27, RemoteObject_2) {
+    "use strict";
+    var ServerReport_2;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.ServerReport = void 0;
+    let ServerReport = ServerReport_2 = class ServerReport extends RemoteObject_2.RemoteObject {
+        //this is a sample remote function
+        static async fillReport(path, parameter, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await ServerReport_2.call(this.fillReport, path, parameter, context);
+            }
+            else {
+                var fill = (await new Promise((resolve_2, reject_2) => { require([path], resolve_2, reject_2); })).fill;
+                return await fill(parameter);
+                //return "Hello "+name;  //this would be execute on server  
+            }
+        }
+    };
+    ServerReport = ServerReport_2 = __decorate([
+        (0, Registry_27.$Class)("jassijs_report.remote.ServerReport")
+    ], ServerReport);
+    exports.ServerReport = ServerReport;
+    async function test() {
+        var ret = await ServerReport.fillReport("jassijs_report/TestServerreport", { sort: "name" });
+        return ret;
+        //    console.log(await new ServerReport().sayHello("Kurt"));
+    }
+    exports.test = test;
+});
 define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -7271,6 +6592,90 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
         var s = "${Math.round(avg(all,'age'),2)}".replaceTemplate(h, true);
         s = "${k}".replaceTemplate(h, true);
         s = "${ho()}".replaceTemplate(h, true);
+    }
+    exports.test = test;
+});
+define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_report/remote/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_1, Property_13, Registry_28) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var reportdesign = {
+        content: [
+            {
+                datatable: {
+                    dataforeach: "person",
+                    body: [
+                        "${person.name}", "${person.lastname}"
+                    ]
+                }
+            }
+        ]
+    };
+    let ClientReportParameter = class ClientReportParameter {
+    };
+    ClientReportParameter = __decorate([
+        (0, Registry_28.$Class)("jassijs_report.remote.ClientReportParameter")
+    ], ClientReportParameter);
+    let ClientReport = class ClientReport extends Report_1.Report {
+        async fill() {
+            var data = [
+                { name: "Aoron", lastname: "Müller" },
+                { name: "Heino", lastname: "Brecht" }
+            ];
+            return {
+                reportdesign,
+                data
+            };
+        }
+    };
+    __decorate([
+        (0, Property_13.$Property)({ type: "json", componentType: "jassijs_report.remote.ClientReportParameter" }),
+        __metadata("design:type", ClientReportParameter)
+    ], ClientReport.prototype, "parameter", void 0);
+    ClientReport = __decorate([
+        (0, Report_1.$Report)({ name: "test/Sample Clientreport" }),
+        (0, Registry_28.$Class)("jassijs_report.test.ClientReport")
+    ], ClientReport);
+    async function test() {
+        var cl = new ClientReport();
+        await cl.open();
+    }
+    exports.test = test;
+});
+define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_report/remote/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_2, Property_14, Registry_29) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var reportdesign = {
+        content: [
+            {
+                datatable: {
+                    dataforeach: "person",
+                    body: [
+                        "${person.name}", "${person.lastname}"
+                    ]
+                }
+            }
+        ]
+    };
+    let ClientReportParameter = class ClientReportParameter {
+    };
+    ClientReportParameter = __decorate([
+        (0, Registry_29.$Class)("jassijs_report.remote.ClientReportParameter")
+    ], ClientReportParameter);
+    let ServerReport = class ServerReport extends Report_2.Report {
+    };
+    __decorate([
+        (0, Property_14.$Property)({ type: "json", componentType: "jassijs_report.remote.ClientReportParameter" }),
+        __metadata("design:type", ClientReportParameter)
+    ], ServerReport.prototype, "parameter", void 0);
+    ServerReport = __decorate([
+        (0, Report_2.$Report)({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/TestServerreport" }),
+        (0, Registry_29.$Class)("jassijs_report.test.ClientReport")
+    ], ServerReport);
+    async function test() {
+        var cl = new ServerReport();
+        await cl.open();
     }
     exports.test = test;
 });

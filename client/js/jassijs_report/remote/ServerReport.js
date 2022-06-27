@@ -10,15 +10,22 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ServerReport = void 0;
     let ServerReport = ServerReport_1 = class ServerReport extends RemoteObject_1.RemoteObject {
-        //this is a sample remote function
-        static async fillReport(path, parameter, context = undefined) {
+        static async getDesign(path, parameter, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_1.call(this.fillReport, path, parameter, context);
+                return await ServerReport_1.call(this.getDesign, path, parameter, context);
             }
             else {
-                var fill = (await new Promise((resolve_1, reject_1) => { require([path], resolve_1, reject_1); })).fill;
-                return await fill(parameter);
-                //return "Hello "+name;  //this would be execute on server  
+                var DoServerreport = (await new Promise((resolve_1, reject_1) => { require(["jassijs_report/DoServerreport"], resolve_1, reject_1); })).DoServerreport;
+                return await new DoServerreport().getDesign(path, parameter);
+            }
+        }
+        static async getBase64(path, parameter, context = undefined) {
+            if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
+                return await ServerReport_1.call(this.getBase64, path, parameter, context);
+            }
+            else {
+                var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/DoServerreport"], resolve_2, reject_2); })).DoServerreport;
+                return await new DoServerreport().getBase64(path, parameter);
             }
         }
     };
@@ -27,7 +34,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
     ], ServerReport);
     exports.ServerReport = ServerReport;
     async function test() {
-        var ret = await ServerReport.fillReport("jassijs_report/TestServerreport", { sort: "name" });
+        var ret = await ServerReport.getBase64("jassijs_report/TestServerreport", { sort: "name" });
+        debugger;
         return ret;
         //    console.log(await new ServerReport().sayHello("Kurt"));
     }

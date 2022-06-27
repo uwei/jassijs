@@ -428,15 +428,15 @@ define("tests/registry", ["require"], function (require) {
             "tests/RemoteModulTests.ts": {
                 "date": 1655556792356
             },
-            "tests/TestReport.ts": {
-                "date": 1623864074000
-            },
             "tests/ServerTests.ts": {
                 "date": 1656077953224
             },
             "tests/TestDialog.ts": {
                 "date": 1656079687883,
                 "tests/TestDialog": {}
+            },
+            "tests/TestReport.ts": {
+                "date": 1623864074000
             }
         }
     };

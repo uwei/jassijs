@@ -2008,7 +2008,7 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             this._designToolbar.add(this.lassoButton);
             this.cutButton = new Button_3.Button();
             this.cutButton.icon = "mdi mdi-content-cut mdi-18px";
-            this.cutButton.tooltip = "Cut selected Controls (ENTF)";
+            this.cutButton.tooltip = "Cut selected Controls (Ctrl+Shift+X)";
             this.cutButton.onclick(function () {
                 _this.cutComponent();
             });
@@ -2021,14 +2021,14 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             });
             this.copyButton = new Button_3.Button();
             this.copyButton.icon = "mdi mdi-content-copy mdi-18px";
-            this.copyButton.tooltip = "Copy";
+            this.copyButton.tooltip = "Copy (Ctrl+Shift+C)";
             this.copyButton.onclick(function () {
                 _this.copy();
             });
             this._designToolbar.add(this.copyButton);
             this.pasteButton = new Button_3.Button();
             this.pasteButton.icon = "mdi mdi-content-paste mdi-18px";
-            this.pasteButton.tooltip = "Paste";
+            this.pasteButton.tooltip = "Paste (Ctrl+Shift+V)";
             this.pasteButton.onclick(function () {
                 _this.paste();
             });
@@ -2067,15 +2067,25 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                     evt.preventDefault();
                     return false;
                 }
-                if (evt.keyCode === 90 || evt.ctrlKey) { //Ctrl+Z
+                if (evt.keyCode === 90 && evt.ctrlKey) { //Ctrl+Z
                     _this.undo();
                 }
                 if (evt.keyCode === 116) { //F5
                     evt.preventDefault();
                     return false;
                 }
-                if (evt.keyCode === 46) { //Del
+                if (evt.keyCode === 46 || (evt.keyCode === 88 && evt.ctrlKey && evt.shiftKey)) { //Del or Ctrl X)
                     _this.cutComponent();
+                    evt.preventDefault();
+                    return false;
+                }
+                if (evt.keyCode === 67 && evt.ctrlKey && evt.shiftKey) { //Ctrl+C
+                    _this.copy();
+                    evt.preventDefault();
+                    return false;
+                }
+                if (evt.keyCode === 86 && evt.ctrlKey && evt.shiftKey) { //Ctrl+V
+                    _this.paste();
                     evt.preventDefault();
                     return false;
                 }
@@ -2196,11 +2206,10 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 this.copyProperties(clip, component);
             }
             var text = JSON.stringify(clip);
-            console.log(text);
             await navigator.clipboard.writeText(text);
             return text;
         }
-        async pasteComponent(clip, target, varname, variablelistold, variablelistnew) {
+        async pasteComponent(clip, target, before, varname, variablelistold, variablelistnew) {
             var _this = this;
             var created;
             if (clip.properties[varname] !== undefined && clip.properties[varname]["_new_"] !== undefined) {
@@ -2212,9 +2221,10 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
                 var newcomp = { createFromType: clip.types[varname] };
                 await Classes_3.classes.loadClass(clip.types[varname]);
                 var svarname = varname.split(".")[varname.split(".").length - 1];
-                created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, undefined, false, svarname);
+                created = _this.createComponent(clip.types[varname], newcomp, undefined, undefined, target, before, false, svarname);
                 variablelistold.push(varname);
-                variablelistnew.push(_this._codeEditor.getVariableFromObject(created));
+                var newvarname = _this._codeEditor.getVariableFromObject(created);
+                variablelistnew.push(newvarname);
                 //correct designdummy
                 for (var t = 0; t < target._components.length; t++) {
                     var ch = target._components[t];
@@ -2231,9 +2241,10 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             }
             if (clip.children[varname] !== undefined) {
                 for (var k = 0; k < clip.children[varname].length; k++) {
-                    await _this.pasteComponent(clip, created, clip.children[varname][k], variablelistold, variablelistnew);
+                    await _this.pasteComponent(clip, created, undefined, clip.children[varname][k], variablelistold, variablelistnew);
                 }
             }
+            return created;
         }
         async paste() {
             var text = await navigator.clipboard.readText();
@@ -2246,7 +2257,13 @@ define("jassijs_editor/ComponentDesigner", ["require", "exports", "jassijs/remot
             for (var x = 0; x < clip.varNamesToCopy.length; x++) {
                 var varname = clip.varNamesToCopy[x];
                 var target = _this._propertyEditor.value;
-                await _this.pasteComponent(clip, target, varname, variablelistold, variablelistnew);
+                if (target._components !== undefined)
+                    await _this.pasteComponent(clip, target, undefined, varname, variablelistold, variablelistnew);
+                else {
+                    // if(x===0)
+                    //    before=target;
+                    await _this.pasteComponent(clip, target._parent, target, varname, variablelistold, variablelistnew);
+                }
                 //set properties
             }
             //in the new Text the variables are renamed
@@ -3488,56 +3505,13 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.ChromeDebugger": {}
             },
             "jassijs_editor/CodeEditor.ts": {
-                "date": 1656079754918,
+                "date": 1656080508765,
                 "jassijs_editor.CodeEditorSettingsDescriptor": {
                     "$SettingsDescriptor": [],
-                    "@members": {
-                        "Development_DefaultEditor": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "ace",
-                                        "monaco",
-                                        "aceOnBrowser"
-                                    ],
-                                    "default": "aceOnBrowser",
-                                    "chooseFromStrict": true
-                                }
-                            ]
-                        },
-                        "Development_MoanacoEditorTheme": {
-                            "$Property": [
-                                {
-                                    "chooseFrom": [
-                                        "vs-dark",
-                                        "vs-light",
-                                        "hc-black"
-                                    ],
-                                    "default": "vs-light",
-                                    "chooseFromStrict": true
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 },
                 "jassijs_editor.CodeEditor": {
-                    "@members": {
-                        "file": {
-                            "$Property": [
-                                {
-                                    "isUrlTag": true,
-                                    "id": true
-                                }
-                            ]
-                        },
-                        "line": {
-                            "$Property": [
-                                {
-                                    "isUrlTag": true
-                                }
-                            ]
-                        }
-                    }
+                    "@members": {}
                 }
             },
             "jassijs_editor/CodeEditorInvisibleComponents.ts": {
@@ -3549,7 +3523,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.CodePanel": {}
             },
             "jassijs_editor/ComponentDesigner.ts": {
-                "date": 1655929453651,
+                "date": 1656185726677,
                 "jassijs_editor.ComponentDesigner": {}
             },
             "jassijs_editor/ComponentExplorer.ts": {

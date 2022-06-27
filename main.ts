@@ -5,6 +5,6 @@ import { Employees } from "northwind/remote/Employees";
 import { getManager } from "typeorm";*/
 console.log(require('path').dirname(require.main.filename).replaceAll("\\","/"));
                
-JassiServer();
+JassiServer(); 
 
  

@@ -182,13 +182,21 @@ class Indexer {
                                 decm[ex.text] = []; //Annotation without parameter
                             }
                             else {
-                                if (decm[ex.expression.text] === undefined) {
-                                    decm[ex.expression.text] = [];
+                                if (ex.expression.text === "$Property") {
+                                    //do nothing;
                                 }
-                                for (var a = 0; a < ex.arguments.length; a++) {
-                                    decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                else {
+                                    if (decm[ex.expression.text] === undefined) {
+                                        decm[ex.expression.text] = [];
+                                    }
+                                    for (var a = 0; a < ex.arguments.length; a++) {
+                                        decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                    }
                                 }
                             }
+                        }
+                        if (Object.keys(dec["@members"][membername]).length === 0) {
+                            delete dec["@members"][membername];
                         }
                     }
                 }

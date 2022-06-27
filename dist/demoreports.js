@@ -12,18 +12,6 @@ reportdesign.data = {
     }
 };
 reportdesign.parameter = { date: "2021-10-10" }; //parameter
-/*export function test() {
-    return {
-        reportdesign,
-        data:{
-            name:"Klaus",
-            address:{
-                street:"Mainstreet 8"
-            }
-        },
-        parameter:{date:"2021-10-10"}      //parameter
-    };
-}*/
 reportdesign = {
     content: [
         //for each could be in each element e.g. text
@@ -517,7 +505,7 @@ define("demoreports/registry", ["require"], function (require) {
     return {
         default: {
             "demoreports/01-Simpledata.ts": {
-                "date": 1655640800970
+                "date": 1656184584484
             },
             "demoreports/10-Foreach.ts": {
                 "date": 1655407641261
@@ -546,6 +534,9 @@ define("demoreports/registry", ["require"], function (require) {
             "demoreports/Invoice.ts": {
                 "date": 1655408066557
             },
+            "demoreports/modul.ts": {
+                "date": 1655641244993
+            },
             "demoreports/pdfmake-playground/Basics.ts": {
                 "date": 1655408093593
             },
@@ -572,9 +563,6 @@ define("demoreports/registry", ["require"], function (require) {
             },
             "demoreports/pdfmake-playground/Tables.ts": {
                 "date": 1655408197639
-            },
-            "demoreports/modul.ts": {
-                "date": 1655641244993
             }
         }
     };

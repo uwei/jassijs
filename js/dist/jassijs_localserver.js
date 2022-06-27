@@ -1281,7 +1281,13 @@ define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/server/Fil
                     text = text.substring(text.indexOf("default=") + 8);
                 }
             }
-            var index = JSON.parse(text);
+            try {
+                var index = JSON.parse(text);
+            }
+            catch (_a) {
+                console.log("error read modul " + modul + "- create new");
+                index = {};
+            }
             //remove deleted files
             for (var key in index) {
                 if (!(await this.fileExists(root + (root === "" ? "" : "/") + key))) {
@@ -1435,13 +1441,21 @@ define("jassijs_localserver/Indexer", ["require", "exports", "jassijs/server/Fil
                                     decm[ex.text] = []; //Annotation without parameter
                                 }
                                 else {
-                                    if (decm[ex.expression.text] === undefined) {
-                                        decm[ex.expression.text] = [];
+                                    if (ex.expression.text === "$Property") {
+                                        //do nothing;
                                     }
-                                    for (var a = 0; a < ex.arguments.length; a++) {
-                                        decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                    else {
+                                        if (decm[ex.expression.text] === undefined) {
+                                            decm[ex.expression.text] = [];
+                                        }
+                                        for (var a = 0; a < ex.arguments.length; a++) {
+                                            decm[ex.expression.text].push(this.convertArgument(ex.arguments[a]));
+                                        }
                                     }
                                 }
+                            }
+                            if (Object.keys(dec["@members"][membername]).length === 0) {
+                                delete dec["@members"][membername];
                             }
                         }
                     }

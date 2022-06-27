@@ -323,8 +323,8 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/test/ServerReport.ts": {
-		"date": 1656275439533,
-		"jassijs_report.remote.ClientReportParameter": {},
+		"date": 1656282689278,
+		"jassijs_report.remote.ServerReportParameter": {},
 		"jassijs_report.test.ClientReport": {
 			"$Report": [
 				{
@@ -336,11 +336,11 @@ define("jassijs_report/registry",["require"], function(require) {
 		}
 	},
 	"jassijs_report/Report.ts": {
-		"date": 1656277229813,
+		"date": 1656282517873,
 		"jassijs_report.remote.Report": {}
 	},
 	"jassijs_report/remote/ServerReport.ts": {
-		"date": 1656277819667,
+		"date": 1656280942580,
 		"jassijs_report.remote.ServerReport": {}
 	}
 }

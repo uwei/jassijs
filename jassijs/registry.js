@@ -43,6 +43,9 @@ exports.default={
 	"jassijs/remote/Jassi.ts": {
 		"date": 1655761747851
 	},
+	"jassijs/remote/JassijsGlobal.ts": {
+		"date": 1655549781561
+	},
 	"jassijs/remote/ObjectTransaction.ts": {
 		"date": 1622985414000
 	},
@@ -269,10 +272,10 @@ exports.default={
 		"date": 1656076564626
 	},
 	"jassijs/server/Indexer.ts": {
-		"date": 1654270950134
+		"date": 1656244788687
 	},
 	"jassijs/server/JassiServer.ts": {
-		"date": 1655577760706
+		"date": 1656280353428
 	},
 	"jassijs/server/PassportLoginRegister.ts": {
 		"date": 1622984046000
@@ -294,8 +297,5 @@ exports.default={
 	},
 	"jassijs/util/DatabaseSchema.ts": {
 		"date": 1611490792000
-	},
-	"jassijs/remote/JassijsGlobal.ts": {
-		"date": 1655549781561
 	}
 }

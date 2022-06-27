@@ -24,6 +24,7 @@ import { remoteProtocol } from "jassijs/server/DoRemoteProtocol";
 import { zip } from "jassijs/server/Zip";
 import { rawbody } from "jassijs/server/RawBody";
 import { ServerIndexer } from "./RegistryIndexer";
+import { DoServerreport } from "jassijs_report/DoServerreport";
 
 
 class JassiConnectionProperties {
