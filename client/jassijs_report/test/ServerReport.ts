@@ -13,7 +13,7 @@ import { $Class } from "jassijs/remote/Registry";
             }
         }
     ]
-};*/
+};*/ 
 @$Report({name:"test/Sample Serverreport",serverReportPath:"jassijs_report/TestServerreport"})
 @$Class("jassijs_report.test.ServerReport")
 export class ServerReport extends Report {
@@ -24,5 +24,5 @@ export class ServerReport extends Report {
 export async function test(){
     var cl=new ServerReport();
     cl.sort="lastname";
-    await cl.open();
+    await cl.show();
 }

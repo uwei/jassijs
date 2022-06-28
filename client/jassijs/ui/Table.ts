@@ -393,12 +393,12 @@ export class Table extends DataComponent implements TableConfig{
 }
 export async function test() {
     var tab = new Table({
-        
+       
     });
     tab.config({
         width :400,
         options :{
-            headerSort: true
+            headerSort: true  //,             selectable:true
         }
     });
     tab.showSearchbox=true;
@@ -412,6 +412,9 @@ export async function test() {
     window.setTimeout(() => {
         tab.items = tabledata;
     }, 100);
+    tab.on("dblclick",()=>{
+        alert(tab.value);
+    });
     //tab.select = {};
     // tab.showSearchbox = true;
     //    var kunden = await jassijs.db.load("de.Kunde");

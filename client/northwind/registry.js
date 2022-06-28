@@ -660,9 +660,6 @@ define("northwind/registry",["require"], function(require) {
 			}
 		}
 	},
-	"northwind/SampleServerReport.ts": {
-		"date": 1656275125505
-	},
 	"northwind/ShippersView.ts": {
 		"date": 1655556792357,
 		"northwind.ShippersView": {
@@ -687,6 +684,49 @@ define("northwind/registry",["require"], function(require) {
 				}
 			],
 			"@members": {}
+		}
+	},
+	"northwind/CustomerOrders.ts": {
+		"date": 1656448806935,
+		"northwind/CustomerOrders": {
+			"$ActionProvider": [
+				"jassijs.base.ActionNode"
+			],
+			"@members": {
+				"showDialog": {
+					"$Action": [
+						{
+							"name": "Northwind/Cutomer Orders",
+							"icon": "mdi-script-text-play-outline"
+						}
+					]
+				}
+			}
+		}
+	},
+	"northwind/reports/CustomerLabels.ts": {
+		"date": 1656456455632,
+		"nothwind.CustomerLabels": {
+			"$ActionProvider": [
+				"jassijs.base.ActionNode"
+			],
+			"$Report": [
+				{
+					"name": "nothwind/Customer Labels",
+					"actionname": "Northwind/Reports/Customer Labels",
+					"icon": "mdi mdi-file-chart-outline"
+				}
+			],
+			"@members": {
+				"dummy": {
+					"$Action": [
+						{
+							"name": "Northwind/Reports",
+							"icon": "mdi mdi-file-chart-outline"
+						}
+					]
+				}
+			}
 		}
 	}
 }

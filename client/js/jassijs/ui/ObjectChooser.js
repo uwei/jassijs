@@ -80,7 +80,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
                 me.IDTable.search("all", me.IDSearch.value, true);
             });
             me.IDTable.dom.addEventListener("dblclick", function (data) {
-                _this.ok();
+                setTimeout(() => { _this.ok(); }, 200);
             });
             me.IDSearch.onkeydown(function (event) {
                 if (event.keyCode == 13) {
@@ -106,8 +106,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Table", "ja
         }
         ok() {
             var me = this.me;
-            $(me.IDPanel.dom).dialog("destroy");
             this.value = me.IDTable.value;
+            $(me.IDPanel.dom).dialog("destroy");
             this.callEvent("change", event);
         }
         cancel() {

@@ -521,7 +521,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Container.ts": {
-		"date": 1656186469431,
+		"date": 1656417347591,
 		"jassijs.ui.Container": {}
 	},
 	"jassijs/ui/ContextMenu.ts": {
@@ -923,7 +923,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655585211781
 	},
 	"jassijs/ui/ObjectChooser.ts": {
-		"date": 1656016954534,
+		"date": 1656446321602,
 		"jassijs.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
@@ -973,7 +973,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1656017008794,
+		"date": 1656456105621,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {}
@@ -1247,7 +1247,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1656017023694,
+		"date": 1656420048461,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {}
 		},

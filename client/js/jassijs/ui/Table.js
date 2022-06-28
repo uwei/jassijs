@@ -408,7 +408,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         tab.config({
             width: 400,
             options: {
-                headerSort: true
+                headerSort: true //,             selectable:true
             }
         });
         tab.showSearchbox = true;
@@ -422,6 +422,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         window.setTimeout(() => {
             tab.items = tabledata;
         }, 100);
+        tab.on("dblclick", () => {
+            alert(tab.value);
+        });
         //tab.select = {};
         // tab.showSearchbox = true;
         //    var kunden = await jassijs.db.load("de.Kunde");

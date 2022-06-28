@@ -4,11 +4,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/base/Windows", "jassijs/remote/Classes", "jassijs_report/remote/ServerReport", "jassijs_report/PDFReport", "jassijs_report/ReportViewer"], function (require, exports, Registry_1, RemoteObject_1, Windows_1, Classes_1, ServerReport_1, PDFReport_1, ReportViewer_1) {
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs_report/ext/pdfmake", "jassijs/base/Windows", "jassijs/remote/Classes", "jassijs_report/remote/ServerReport", "jassijs_report/PDFReport", "jassijs/base/Actions"], function (require, exports, Registry_1, RemoteObject_1, pdfmake_1, Windows_1, Classes_1, ServerReport_1, PDFReport_1, Actions_1) {
     "use strict";
     var Report_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Report = exports.$Report = exports.ReportProperties = void 0;
+    //import { ReportViewer } from "jassijs_report/ReportViewer";
     class ReportProperties {
     }
     exports.ReportProperties = ReportProperties;
@@ -66,13 +70,74 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             rep.fill();
             return await rep.getBase64();
         }
+        getName() {
+            var clname = Classes_1.classes.getClassName(this);
+            var meta = Registry_1.default.getData("$Report", clname);
+            var ret = "Report";
+            if ((meta === null || meta === void 0 ? void 0 : meta.length) > 0 && meta[0].params.length > 0) {
+                ret = meta[0].params[0].name;
+                ret = ret.split("/")[ret.split("/").length - 1];
+            }
+            return ret;
+        }
+        _base64ToArrayBuffer(base64) {
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
         async open() {
-            var ret = new ReportViewer_1.ReportViewer();
+            var b64 = await this.getBase64();
+            var rep = pdfmake_1.default.createPdf({ content: [] });
+            var _this = this;
+            rep.getBuffer = async () => {
+                return _this._base64ToArrayBuffer(b64);
+            };
+            rep.open();
+            //alert("TODO");
+        }
+        async show() {
+            var ReportViewer = (await new Promise((resolve_1, reject_1) => { require(["jassijs_report/ReportViewer"], resolve_1, reject_1); })).ReportViewer;
+            var ret = new ReportViewer();
             ret.value = this;
-            Windows_1.default.add(ret, "Report");
+            Windows_1.default.add(ret, this.getName());
+        }
+        static createFunction(classname) {
+            return async function () {
+                var Rep = await Classes_1.classes.loadClass(classname);
+                new Rep().view();
+            };
+        }
+        /**
+        * create Action for all DBObjectView with actionname is defined
+        */
+        static async createActions() {
+            var ret = [];
+            var data = await Registry_1.default.getJSONData("$Report");
+            for (var x = 0; x < data.length; x++) {
+                var param = data[x].params[0];
+                if (param.actionname) {
+                    ret.push({
+                        name: param.actionname,
+                        icon: param.icon,
+                        run: this.createFunction(data[x].classname)
+                    });
+                }
+            }
+            return ret;
         }
     };
+    __decorate([
+        (0, Actions_1.$Actions)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], Report, "createActions", null);
     Report = Report_1 = __decorate([
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
         (0, Registry_1.$Class)("jassijs_report.remote.Report")
     ], Report);
     exports.Report = Report;

@@ -40,6 +40,7 @@ export class ReportViewer extends Panel {
 
             }
         }*/
+        this.me.pdfviewer.report=val;
         val.getBase64().then((data) => {
             this.me.pdfviewer.value = data;
         });

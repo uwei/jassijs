@@ -74,6 +74,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 _this.removePropertyInCode(name);
                 _this.updateParser();
                 _this.value = _this.value;
+                _this.callEvent("propertyChanged", event);
             });
             row.children[0].prepend(deletebutton.dom);
             this.table.dom.children[1].appendChild(row);

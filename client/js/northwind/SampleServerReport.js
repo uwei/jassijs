@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Property", "jassijs_report/remote/Report"], function (require, exports, Property_1, Report_1) {
+define(["require", "exports", "jassijs/ui/Property", "jassijs_report/Report"], function (require, exports, Property_1, Report_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.SampleClientReport = exports.SampleServerReport = void 0;

@@ -91,6 +91,7 @@ export class PropertyEditor extends Panel {
             _this.removePropertyInCode(name);
             _this.updateParser();
             _this.value = _this.value;
+            _this.callEvent("propertyChanged", event);
         });
 
 

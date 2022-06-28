@@ -322,7 +322,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/test/ServerReport.ts": {
-                "date": 1656413326551,
+                "date": 1656456686177,
                 "jassijs_report.test.ServerReport": {
                     "$Report": [
                         {
@@ -334,15 +334,24 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/Report.ts": {
-                "date": 1656413164459,
-                "jassijs_report.remote.Report": {}
+                "date": 1656458119181,
+                "jassijs_report.remote.Report": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "createActions": {
+                            "$Actions": []
+                        }
+                    }
+                }
             },
             "jassijs_report/remote/ServerReport.ts": {
                 "date": 1656331483222,
                 "jassijs_report.remote.ServerReport": {}
             },
             "jassijs_report/Reports.ts": {
-                "date": 1656413222666,
+                "date": 1656456917378,
                 "jassijs_report/Reports": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -360,7 +369,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/ReportViewer.ts": {
-                "date": 1656413813191,
+                "date": 1656456334039,
                 "jassijs_report/ReportViewer": {}
             }
         }

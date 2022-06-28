@@ -40,7 +40,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Table", "jas
                         var clname = data[0].classname;
                         var Cl = await Classes_1.classes.loadClass(clname);
                         var report = new Cl();
-                        report.open();
+                        report.show();
                         //await (<Report> new Cl()).open();
                     }
                 });

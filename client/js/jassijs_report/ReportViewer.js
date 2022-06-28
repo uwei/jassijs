@@ -31,6 +31,7 @@ define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", 
       
                   }
               }*/
+            this.me.pdfviewer.report = val;
             val.getBase64().then((data) => {
                 this.me.pdfviewer.value = data;
             });
