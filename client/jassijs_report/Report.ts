@@ -6,6 +6,7 @@ import { classes, JassiError } from "jassijs/remote/Classes";
 import { ServerReport } from "jassijs_report/remote/ServerReport";
 import { PDFViewer } from "jassijs_report/PDFViewer";
 import { PDFReport } from "jassijs_report/PDFReport";
+import { ReportViewer } from "jassijs_report/ReportViewer";
 
 export class ReportProperties {
 
@@ -25,7 +26,7 @@ export function $Report(properties: ReportProperties): Function {
 }
 @$Class("jassijs_report.remote.Report")
 export class Report extends RemoteObject {
-    parameter: any;
+    
 
     //this is a sample remote function
     public async fill() {
@@ -34,22 +35,35 @@ export class Report extends RemoteObject {
         if (meta?.length > 0 && meta[0].params.length > 0) {
             var path = meta[0].params[0].serverReportPath;
             if (path) {
-                var par=Object.assign({},this.parameter);
-                var ret = await ServerReport.fillReport(path, par);
+                var par=this.getParameter();
+                var ret = await ServerReport.getDesign(path, par);
                 return ret;
             }
             //return await this.call(this, this.fill, context);
         }
         throw new JassiError("Clintreports must implememt fill");
     }
+    getParameter(){
+        var reportFields=Object.keys(new Report());
+        var thisFields=Object.keys(this);
+        var ret={};
+        thisFields.forEach((f)=>{
+            if(reportFields.indexOf(f)===-1){
+                ret[f]=this[f];
+                if(typeof ret[f]==="function")
+                    ret[f].bind(ret);
+            }
+        });
+        return ret;
+    }
+
     public async getBase64() {
         var clname = classes.getClassName(this);
         var meta = registry.getData("$Report", clname);
         if (meta?.length > 0 && meta[0].params.length > 0) {
             var path = meta[0].params[0].serverReportPath;
             if (path) {
-                var par=Object.assign({},this.parameter);
-                
+                var par=this.getParameter();
                 return await ServerReport.getBase64(path, par);
 
             }
@@ -65,9 +79,9 @@ export class Report extends RemoteObject {
 
     }
     public async open() {
-        var viewer = new PDFViewer();
-        viewer.value = await this.getBase64();
-        windows.add(viewer, "Report");
+        var ret = new ReportViewer();
+        ret.value = this;
+        windows.add(ret, "Report");
     }
 }
 export async function test() {

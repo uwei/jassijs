@@ -28,9 +28,9 @@ export class ReportViewer extends Panel {
     }
     set value(val: Report) {
         this._value = val;
-
         var test = ComponentDescriptor.describe(val.constructor);
-        for (var x = 0; x < test.fields.length; x++) {
+        this.me.propertyeditor.value = val;
+      /*  for (var x = 0; x < test.fields.length; x++) {
             var field = test.fields[x];
             if (field.name === "parameter") {
                 var paramtype = field.componentType;
@@ -39,7 +39,7 @@ export class ReportViewer extends Panel {
                 this.me.propertyeditor.value = this.param;
 
             }
-        }
+        }*/
         val.getBase64().then((data) => {
             this.me.pdfviewer.value = data;
         });
@@ -64,7 +64,7 @@ export class ReportViewer extends Panel {
         });
         me.propertyeditor.onpropertyChanged(() => {
             var param = me.propertyeditor.value;
-            _this._value.parameter = param;
+            //_this._value.parameter = param;
             _this._value.getBase64().then((data) => {
                 _this.me.pdfviewer.value = data;
             });

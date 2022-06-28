@@ -43,9 +43,7 @@ export class Reports extends Panel {
                     var clname = data[0].classname;
                     var Cl=await classes.loadClass(clname);
                     var report:Report=new Cl();
-                    var viewer=new ReportViewer();
-                    viewer.value=report;
-                    windows.add(viewer,data[0].name);
+                    report.open();
                     //await (<Report> new Cl()).open();
                 }
             });

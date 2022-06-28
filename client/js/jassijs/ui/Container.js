@@ -69,6 +69,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component"]
          * @param {jassijs.ui.Component} before - the component before then component to add
          */
         addBefore(component, before) {
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
             component._parent = this;
             component.domWrapper["_parent"] = this;
             var index = this._components.indexOf(before);

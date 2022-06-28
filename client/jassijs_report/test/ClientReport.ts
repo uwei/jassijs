@@ -14,16 +14,12 @@ var reportdesign:JassijsReportDefinition = {
         }
     ]
 };
-@$Class("jassijs_report.remote.ClientReportParameter")
-export class ClientReportParameter {
-    @$Property()
-    sort?: string;
-}
+
 @$Report({name:"test/Sample Clientreport"})
 @$Class("jassijs_report.test.ClientReport")
 export class ClientReport extends Report {
-    @$Property({ type: "json", componentType: "jassijs_report.remote.ClientReportParameter" })
-    declare parameter: ClientReportParameter;
+    @$Property()
+    sort?: string;
     async fill() {
         var data=[
             {name:"Aoron",lastname:"Müller"},

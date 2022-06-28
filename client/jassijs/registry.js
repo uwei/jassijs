@@ -1137,7 +1137,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/LoadingEditor.ts": {
-		"date": 1655854504363,
+		"date": 1656414352631,
 		"jassijs.ui.PropertyEditors.LoadingEditor": {}
 	},
 	"jassijs/ui/PropertyEditors/NameEditor.ts": {

@@ -71,12 +71,16 @@ export class Container extends Component implements Omit<ContainerConfig, "child
      * @param {jassijs.ui.Component} before - the component before then component to add
      */
     addBefore(component: Component, before: Component) {//add a component to the container
+        if (component._parent !== undefined) {
+            component._parent.remove(component);
+        }
         component._parent = this;
         component.domWrapper["_parent"] = this;
         var index = this._components.indexOf(before);
         if (component.domWrapper.parentNode !== null && component.domWrapper.parentNode !== undefined) {
             component.domWrapper.parentNode.removeChild(component.domWrapper);
         }
+       
         if (component["designDummyFor"])
             this.designDummies.push(component);
         else

@@ -8,7 +8,7 @@ import { Component } from "jassijs/ui/Component";
 export class LoadingEditor extends Editor{
 	_property;
 	_propertyEditor;
-	_editor;
+	_editor:Editor;
     _saveOb;
     constructor( property, propertyEditor,waitforclass:Promise<any>) {
     	super(property,propertyEditor);
@@ -21,6 +21,10 @@ export class LoadingEditor extends Editor{
 			_this._editor=new cl(_this.property,_this.propertyEditor);
 			(<Component>_this.component).dom.parentNode.replaceChild(_this._editor.getComponent().dom,_this.component.dom);
 			_this._editor.ob=_this._saveOb;
+            _this._editor.onedit((p1,p2)=>{
+                debugger;
+                _this.callEvent("edit",p1,p2);
+            });
 			_this.component=_this._editor.component;
 		});
     }
