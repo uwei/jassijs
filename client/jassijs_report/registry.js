@@ -351,7 +351,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.remote.ServerReport": {}
 	},
 	"jassijs_report/Reports.ts": {
-		"date": 1656456917378,
+		"date": 1656500009002,
 		"jassijs_report/Reports": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"

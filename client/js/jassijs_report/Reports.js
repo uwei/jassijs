@@ -25,7 +25,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Table", "jas
                 children: [
                     me.table.config({
                         width: "100%",
-                        height: 80,
+                        //height: "100%",
                         showSearchbox: true,
                         contextMenu: me.contextmenu
                     }),
