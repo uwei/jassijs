@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs_report/ext/pdfmake", "jassijs/base/Windows", "jassijs/remote/Classes", "jassijs_report/remote/ServerReport", "jassijs_report/PDFReport", "jassijs/base/Actions"], function (require, exports, Registry_1, RemoteObject_1, pdfmake_1, Windows_1, Classes_1, ServerReport_1, PDFReport_1, Actions_1) {
     "use strict";
-    var Report_1;
+    var Report_1, _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Report = exports.$Report = exports.ReportProperties = void 0;
     //import { ReportViewer } from "jassijs_report/ReportViewer";
@@ -99,7 +99,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
             rep.open();
             //alert("TODO");
         }
-        async show() {
+        async view() {
             var ReportViewer = (await new Promise((resolve_1, reject_1) => { require(["jassijs_report/ReportViewer"], resolve_1, reject_1); })).ReportViewer;
             var ret = new ReportViewer();
             ret.value = this;
@@ -134,7 +134,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteO
         (0, Actions_1.$Actions)(),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
-        __metadata("design:returntype", Promise)
+        __metadata("design:returntype", typeof (_a = typeof Promise !== "undefined" && Promise) === "function" ? _a : Object)
     ], Report, "createActions", null);
     Report = Report_1 = __decorate([
         (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),

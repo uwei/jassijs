@@ -115,12 +115,13 @@ export class ObjectChooser extends Button implements ObjectChooserConfig, DataCo
         me.IDPanel.add(me.IDOK);
         me.IDPanel.add(me.IDCancel);
         me.IDPanel.add(me.IDTable);
-        me.IDOK.width = 55;
+        me.IDOK.width = 65;
         me.IDOK.text = "OK";
+        me.IDSearch.width="calc(100% - 132px)";
         me.IDOK.onclick(function (event) {
             _this.ok();
         });
-        me.IDSearch.width = 170;
+        //me.IDSearch.width = "calc (100% - 300px)";
         me.IDSearch.oninput(function (event) {
             me.IDTable.search("all", me.IDSearch.value, true);
         });
@@ -139,12 +140,13 @@ export class ObjectChooser extends Button implements ObjectChooserConfig, DataCo
         });
         me.IDSearch.height = 15;
         me.IDTable.width = "100%";
-        me.IDTable.height = "calc(100% - 10px)";
+        me.IDTable.height = "calc(100% - 38px)";
         setTimeout(() => { me.IDSearch.focus(); }, 200);
         setTimeout(() => { me.IDSearch.focus(); }, 1000);
         me.IDCancel.onclick(function (event) {
             _this.cancel();
         });
+        me.IDCancel.width=65;
         me.IDCancel.text = "Cancel";
         me.IDPanel.height = "100%";
         me.IDPanel.width = "100%";

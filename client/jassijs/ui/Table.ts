@@ -36,19 +36,19 @@ export interface TableConfig extends DataComponentConfig {
     /**
     * if the value is changed then the value of _component is also changed (_component.value)
     */
-    selectComponent?:any;
+    selectComponent?: any;
     /**
      * set the items of the table
      */
-    items?:any[];
-    columns?:Tabulator.ColumnDefinition[];
-    bindItems?:any[];
+    items?: any[];
+    columns?: Tabulator.ColumnDefinition[];
+    bindItems?: any[];
 }
 
 @$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" })
 @$Class("jassijs.ui.Table")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
-export class Table extends DataComponent implements TableConfig{
+export class Table extends DataComponent implements TableConfig {
     table: Tabulator;
     _selectHandler;
     _select: {
@@ -238,10 +238,13 @@ export class Table extends DataComponent implements TableConfig{
     set showSearchbox(enable: boolean) {
         let _this = this;
         if (!enable) {
+
             if (this._searchbox !== undefined) {
                 this._searchbox.destroy();
                 delete this._searchbox;
             }
+            if (this.height === "calc(100% - 28px)")
+                this.height = "100%";
         }
         else {
             this._searchbox = new Textbox();
@@ -260,13 +263,16 @@ export class Table extends DataComponent implements TableConfig{
                 }, 100);
             });
             this.domWrapper.prepend(this._searchbox.domWrapper);
+            if (this.height === "calc(100% - 7px)")///correct height
+                this.height = "100%";
+
         }
     }
     set selectComponent(_component: any) {
         this._select = _component;
     }
     get selectComponent(): any {
-        return this._select; 
+        return this._select;
     }
     set items(value: any[]) {
         if (value && this.dataTreeChildFunction) { //populate __treechilds
@@ -325,14 +331,30 @@ export class Table extends DataComponent implements TableConfig{
     * e.g. 50 or "100%"
     */
     set height(value: string | number) {
-        //@ts-ignore
-        this.table.setHeight(value);
-        //super.height=value;
+        if (value === "100%") {
+            if (this.showSearchbox)
+                value = "calc(100% - 28px)";
+            else
+                value = "calc(100% - 7px)";
+        }
+        super.height = value;
     }
     @$Property({ type: "string" })
     get height() {
         return super.height;
     }
+
+
+    set width(value: string | number) { //the Code
+        if (value === "100%")
+            value = "calc(100% - 5px)";
+        super.width = value;
+    }
+    @$Property({ type: "string" })
+    get width(): string {
+        return super.width;
+    }
+
     /**
      * Searches records in the grid
      * @param {string} field - name of the search field
@@ -379,7 +401,7 @@ export class Table extends DataComponent implements TableConfig{
         return this.table.getColumnDefinitions();
     }
     @$Property({ type: "databinder" })
-    set bindItems(databinder:any[]) {
+    set bindItems(databinder: any[]) {
         this._databinderItems = databinder[0];
         var _this = this;
         this._databinderItems.add(databinder[1], this, undefined, (tab) => {
@@ -393,15 +415,15 @@ export class Table extends DataComponent implements TableConfig{
 }
 export async function test() {
     var tab = new Table({
-       
+
     });
     tab.config({
-        width :400,
-        options :{
+        width: 400,
+        options: {
             headerSort: true  //,             selectable:true
         }
     });
-    tab.showSearchbox=true;
+    tab.showSearchbox = true;
     var tabledata = [
         { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
         { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
@@ -412,7 +434,7 @@ export async function test() {
     window.setTimeout(() => {
         tab.items = tabledata;
     }, 100);
-    tab.on("dblclick",()=>{
+    tab.on("dblclick", () => {
         alert(tab.value);
     });
     //tab.select = {};

@@ -36,11 +36,11 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Table", "jas
             me.contextmenu.getActions = async function (obs) {
                 var ret = [];
                 ret.push({
-                    name: "Show", call: async function (data) {
+                    name: "View", call: async function (data) {
                         var clname = data[0].classname;
                         var Cl = await Classes_1.classes.loadClass(clname);
                         var report = new Cl();
-                        report.show();
+                        report.view();
                         //await (<Report> new Cl()).open();
                     }
                 });

@@ -202,8 +202,8 @@ export class EmployeesView extends DBObjectView {
                 })
             ],
             isAbsolute: true,
-            width: "900",
-            height: "900"
+            width: "750",
+            height: "360"
         });
     }
 }

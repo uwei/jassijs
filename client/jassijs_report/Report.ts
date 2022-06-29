@@ -112,7 +112,7 @@ export class Report extends RemoteObject {
         //alert("TODO");
     }
 
-    public async show() {
+    public async view() {
         var ReportViewer = (await import("jassijs_report/ReportViewer")).ReportViewer;
         var ret = new ReportViewer();
         ret.value = this;

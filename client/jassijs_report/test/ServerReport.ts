@@ -24,5 +24,5 @@ export class ServerReport extends Report {
 export async function test(){
     var cl=new ServerReport();
     cl.sort="lastname";
-    await cl.show();
+    await cl.view();
 }

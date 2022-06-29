@@ -58,6 +58,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         get disabled() {
             return this.dom.disabled;
         }
+        set readOnly(value) {
+            this.dom.readOnly = true;
+        }
+        get readOnly() {
+            return this.dom.readOnly;
+        }
         set format(value) {
             this._format = value;
             var _this = this;
@@ -211,6 +217,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         (0, Property_1.$Property)({ type: "classselector", service: "$Converter" }),
         __metadata("design:type", DefaultConverter_1.DefaultConverter)
     ], Textbox.prototype, "converter", void 0);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Boolean])
+    ], Textbox.prototype, "readOnly", null);
     __decorate([
         (0, Property_1.$Property)({ type: "string", chooseFrom: allFormats }),
         __metadata("design:type", Object),

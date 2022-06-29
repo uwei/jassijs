@@ -633,7 +633,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectDialog.ts": {
-		"date": 1655556795276,
+		"date": 1656506203744,
 		"jassijs.ui.DBObjectDialog": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -923,7 +923,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655585211781
 	},
 	"jassijs/ui/ObjectChooser.ts": {
-		"date": 1656446321602,
+		"date": 1656506101900,
 		"jassijs.ui.ObjectChooser": {
 			"$UIComponent": [
 				{
@@ -1023,7 +1023,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-		"date": 1655556864383,
+		"date": 1656506935134,
 		"jassijs.ui.PropertyEditors.DatabinderEditor": {
 			"$PropertyEditor": [
 				[
@@ -1247,7 +1247,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1656420048461,
+		"date": 1656504924375,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {}
 		},
@@ -1286,7 +1286,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1656017073004,
+		"date": 1656507979161,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{

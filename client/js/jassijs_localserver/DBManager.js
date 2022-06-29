@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1) {
+define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/remote/security/User", "jassijs/remote/Registry"], function (require, exports, typeorm_1, Classes_1, Registry_1, User_1, Registry_2) {
     "use strict";
     var DBManager_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -61,7 +61,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 "database": sdb,
                 //"synchronize": true,
                 "logging": false,
-                "entities": dbclasses,
+                "entities": dbclasses
                 //"js/client/remote/de/**/*.js"
                 // "migrations": [
                 //    "src/migration/**/*.ts"
@@ -85,12 +85,17 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 catch (err1) {
                     try {
                         _initrunning = undefined;
-                        opts["ssl"] = true; //heroku need this
+                        //@ts-ignore //heroku need this
+                        opts.ssl = {
+                            rejectUnauthorized: false
+                        };
+                        //          opts["ssl"] = true;
                         _initrunning = (0, typeorm_1.createConnection)(opts);
                         await _initrunning;
                     }
                     catch (err) {
                         console.log("DB corrupt - revert the last change");
+                        console.error(err);
                         _instance = undefined;
                         _initrunning = undefined;
                         if (err.message === "The server does not support SSL connections") {
@@ -187,8 +192,14 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             DBManager_1.clearArray((0, typeorm_1.getMetadataArgsStorage)().uniques);
         }
         static async destroyConnection() {
-            if (_instance !== undefined)
-                await (0, typeorm_1.getConnection)().close();
+            if (_instance !== undefined) {
+                try {
+                    await DBManager_1.get();
+                    await (0, typeorm_1.getConnection)().close();
+                }
+                catch (_a) {
+                }
+            }
             _instance = undefined;
             DBManager_1.clearMetadata();
         }
@@ -210,7 +221,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
         async remove(context, entity) {
             var test = await (await DBManager_1.get()).checkParentRight(context, entity, [entity["id"]]);
             if (test === false)
-                throw new Error("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
+                throw new Classes_1.JassiError("you are not allowed to delete " + Classes_1.classes.getClassName(entity) + " with id " + entity["id"]);
             await this.connection().manager.remove(entity);
         }
         async addSaveTransaction(context, entity) {
@@ -247,7 +258,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             }
             if (obj.id !== undefined) {
                 if ((await this.connection().manager.findOne(obj.constructor, obj.id)) !== undefined) {
-                    throw new Error("object is already in DB: " + obj.id);
+                    throw new Classes_1.JassiError("object is already in DB: " + obj.id);
                 }
             }
             //@ts-ignore
@@ -292,7 +303,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 if (exist !== undefined) {
                     var t = await this.checkParentRight(context, cl, [entity["id"]]);
                     if (!t) {
-                        throw new Error("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"]);
+                        throw new Classes_1.JassiError("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"]);
                     }
                 }
             }
@@ -301,7 +312,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 var data = Registry_1.default.getMemberData("$CheckParentRight")[Classes_1.classes.getClassName(entity)];
                 for (var key in data) {
                     if (entity[key] === undefined) {
-                        throw new Error("the field " + key + " must not be undefined");
+                        throw new Classes_1.JassiError("the CheckParentRight field " + key + " must not be undefined");
                     }
                 }
             }
@@ -314,7 +325,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                     let cl = rel.type;
                     var t = await this.checkParentRight(context, cl, [data["id"]]);
                     if (!t) {
-                        throw new Error("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+                        throw new Classes_1.JassiError("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
                     }
                 }
                 if (data !== undefined && Array.isArray(data)) {
@@ -325,7 +336,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                     }
                     let t = await this.checkParentRight(context, cl, arr);
                     if (!t) {
-                        throw new Error("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
+                        throw new Classes_1.JassiError("you are not allowed to save " + Classes_1.classes.getClassName(cl) + " with id " + entity["id"] + " - no access to property " + rel.propertyName);
                     }
                 }
                 /* var tp=await p1.__proto__.constructor;
@@ -489,7 +500,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
         }
     };
     DBManager = DBManager_1 = __decorate([
-        (0, Registry_1.$Class)("jassi_localserver.DBManager"),
+        (0, Registry_2.$Class)("jassi_localserver.DBManager"),
         __metadata("design:paramtypes", [])
     ], DBManager);
     exports.DBManager = DBManager;
@@ -668,10 +679,18 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             }
         }
         _parseNode(context, node) {
-            if (node.operator !== undefined) {
-                var left = node.left;
-                var right = node.right;
+            /* if (node.operator !== undefined) {
+               var left = node.left;
+               var right = node.right;
+               this._checkExpression(context, left);
+               this._checkExpression(context, right);
+             }*/
+            var left = node.left;
+            var right = node.right;
+            if (node.left !== undefined) {
                 this._checkExpression(context, left);
+            }
+            if (node.right !== undefined) {
                 this._checkExpression(context, right);
             }
         }
@@ -685,7 +704,7 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 //this should prevent sql injection
                 var test = /[A-Z,a-z][A-Z,a-z,0-9,\.]*/g.exec(key);
                 if (test === null || test[0] !== key)
-                    throw new Error("could not set property " + key + " in where clause");
+                    throw new Classes_1.JassiError("could not set property " + key + " in where clause");
                 var field = this._getRelationFromProperty(key);
                 var pack = field.split(".")[0].substring(3);
                 if (pack !== "")
@@ -710,9 +729,9 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
                 return ret;
             var dummyselect = "select * from k where ";
             //we must replace because parsing Exception
-            var ast = parser.parse(dummyselect + sql.replaceAll(":", "xxxparams"));
+            var ast = parser.parse(dummyselect + sql.replaceAll(":...", "fxxparams").replaceAll(":", "xxxparams"));
             this._parseNode(context, ast.value.where);
-            var newsql = parser.stringify(ast).replaceAll("xxxparams", ":");
+            var newsql = parser.stringify(ast).replaceAll("fxxparams", ":...").replaceAll("xxxparams", ":");
             ret.andWhere(newsql.substring(dummyselect.length), whereParams);
             return ret;
         }

@@ -222,6 +222,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                     this._searchbox.destroy();
                     delete this._searchbox;
                 }
+                if (this.height === "calc(100% - 28px)")
+                    this.height = "100%";
             }
             else {
                 this._searchbox = new Textbox_1.Textbox();
@@ -240,6 +242,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                     }, 100);
                 });
                 this.domWrapper.prepend(this._searchbox.domWrapper);
+                if (this.height === "calc(100% - 7px)") ///correct height
+                    this.height = "100%";
             }
         }
         set selectComponent(_component) {
@@ -305,12 +309,24 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         * e.g. 50 or "100%"
         */
         set height(value) {
-            //@ts-ignore
-            this.table.setHeight(value);
-            //super.height=value;
+            if (value === "100%") {
+                if (this.showSearchbox)
+                    value = "calc(100% - 28px)";
+                else
+                    value = "calc(100% - 7px)";
+            }
+            super.height = value;
         }
         get height() {
             return super.height;
+        }
+        set width(value) {
+            if (value === "100%")
+                value = "calc(100% - 5px)";
+            super.width = value;
+        }
+        get width() {
+            return super.width;
         }
         /**
          * Searches records in the grid
@@ -391,6 +407,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         __metadata("design:type", Object),
         __metadata("design:paramtypes", [Object])
     ], Table.prototype, "height", null);
+    __decorate([
+        (0, Property_1.$Property)({ type: "string" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Table.prototype, "width", null);
     __decorate([
         (0, Property_1.$Property)({ type: "databinder" }),
         __metadata("design:type", Array),

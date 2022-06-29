@@ -23,7 +23,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "ja
             me.IDDBView = new Panel_1.Panel();
             me.table1 = new Table_1.Table();
             me.table1.height = "calc(100% - 300px)";
-            me.table1.width = "calc(100% - 50px)";
+            me.table1.width = "calc(100% - 20px)";
             me.splitpanel1.add(me.IDDBView);
             me.splitpanel1.spliter = [70, 30];
             me.splitpanel1.height = "100%";

@@ -37,7 +37,7 @@ define(["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "j
     async function test() {
         var cl = new ServerReport();
         cl.sort = "lastname";
-        await cl.show();
+        await cl.view();
     }
     exports.test = test;
 });

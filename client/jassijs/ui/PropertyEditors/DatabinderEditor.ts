@@ -58,11 +58,12 @@ export class DatabinderEditor extends Editor
                 if (binder === undefined)
                     continue;
                 let ob = binder.value;
-                if (ob !== undefined) {
+                if (ob !== undefined&&!Array.isArray(ob)) {
                     for (var m in ob) {
                         comps.push(m + "-" + binders[x]);
                     }
                 }
+                comps.push("this-" + binders[x]);
             }
             this.component.autocompleter = comps;
         }

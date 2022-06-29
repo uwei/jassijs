@@ -54,7 +54,6 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/HTMLPanel", "jass
             });
             this.me.IDProtokoll.value += "<br>Orders " + s;
             s = await CSVImport_1.CSVImport.startImport("https://uwei.github.io/jassijs/client/northwind/import/order_details.csv", "northwind.OrderDetails", { "order": "orderid", "product": "productid" }, undefined, (data) => {
-                debugger;
                 data.forEach((o) => { delete o.id; }); //remove id is autoid
             });
             this.me.IDProtokoll.value += "<br>OrderDetails " + s;

@@ -3,7 +3,7 @@ define("northwind/registry",["require"], function(require) {
  return {
   default: {
 	"northwind/CategoriesView.ts": {
-		"date": 1655761083704,
+		"date": 1656505473915,
 		"northwind.CategoriesView": {
 			"$DBObjectView": [
 				{
@@ -40,7 +40,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/EmployeesView.ts": {
-		"date": 1655556792358,
+		"date": 1656506319066,
 		"northwind.EmployeesView": {
 			"$DBObjectView": [
 				{
@@ -53,7 +53,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ImportData.ts": {
-		"date": 1655556792358,
+		"date": 1656501504887,
 		"northwind.ImportData": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -687,7 +687,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/CustomerOrders.ts": {
-		"date": 1656448806935,
+		"date": 1656502357465,
 		"northwind/CustomerOrders": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -696,7 +696,7 @@ define("northwind/registry",["require"], function(require) {
 				"showDialog": {
 					"$Action": [
 						{
-							"name": "Northwind/Cutomer Orders",
+							"name": "Northwind/Customer Orders",
 							"icon": "mdi-script-text-play-outline"
 						}
 					]
@@ -723,6 +723,42 @@ define("northwind/registry",["require"], function(require) {
 						{
 							"name": "Northwind/Reports",
 							"icon": "mdi mdi-file-chart-outline"
+						}
+					]
+				}
+			}
+		}
+	},
+	"northwind/CustomerPhoneList.ts": {
+		"date": 1656504951707,
+		"northwind/CustomerPhoneList": {
+			"$ActionProvider": [
+				"jassijs.base.ActionNode"
+			],
+			"@members": {
+				"showDialog": {
+					"$Action": [
+						{
+							"name": "Northwind/Customer Phone List",
+							"icon": "mdi-script-text-play-outline"
+						}
+					]
+				}
+			}
+		}
+	},
+	"northwind/ProductList.ts": {
+		"date": 1656508354146,
+		"northwind/ProductList": {
+			"$ActionProvider": [
+				"jassijs.base.ActionNode"
+			],
+			"@members": {
+				"showDialog": {
+					"$Action": [
+						{
+							"name": "Northwind/Product List",
+							"icon": "mdi mdi-reproduction"
 						}
 					]
 				}

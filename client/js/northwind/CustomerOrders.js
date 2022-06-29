@@ -96,7 +96,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/ui/BoxPanel", "jassij
         }
     };
     __decorate([
-        (0, Actions_1.$Action)({ name: "Northwind/Cutomer Orders", icon: "mdi-script-text-play-outline" }),
+        (0, Actions_1.$Action)({ name: "Northwind/Customer Orders", icon: "mdi-script-text-play-outline" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)

@@ -88,7 +88,7 @@ export class CustomerOrders extends Panel {
         this.width = "100%";
         this.height = "100%";
     }
-    @$Action({name:"Northwind/Cutomer Orders",icon:"mdi-script-text-play-outline"})
+    @$Action({name:"Northwind/Customer Orders",icon:"mdi-script-text-play-outline"})
     static showDialog(){
         windows.add(new CustomerOrders(),"Customer Orders");
     }
