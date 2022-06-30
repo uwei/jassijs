@@ -105,6 +105,48 @@ define("tests/registry",["require"], function(require) {
 	},
 	"tests/TestReport.ts": {
 		"date": 1623864074000
+	},
+	"tests/remote/TestBigData.ts": {
+		"date": 1656620693167,
+		"tests.TestBigData": {
+			"$DBObject": [],
+			"@members": {
+				"id": {
+					"PrimaryGeneratedColumn": []
+				},
+				"name": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"name2": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"number1": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				},
+				"number2": {
+					"Column": [
+						{
+							"nullable": true
+						}
+					]
+				}
+			}
+		}
+	},
+	"tests/BigDataTest.ts": {
+		"date": 1656621756679
 	}
 }
  }

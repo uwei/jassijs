@@ -49,7 +49,7 @@ define(["require", "exports"], function (require, exports) {
                 'source.map': "https://unpkg.com/source-map@0.7.3/dist/source-map",
                 'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
                 'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
-                'tabulatorlib': '//unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator',
+                'tabulatorlib': '//unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator',
                 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.2/tinymce.min',
                 // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
                 "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect"

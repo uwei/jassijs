@@ -56,7 +56,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/modul.ts": {
-		"date": 1655754833063
+		"date": 1656537417116
 	},
 	"jassijs/remote/Classes.ts": {
 		"date": 1655556496250,
@@ -80,7 +80,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.remote.DBArray": {}
 	},
 	"jassijs/remote/DBObject.ts": {
-		"date": 1655556864383,
+		"date": 1656597031023,
 		"jassijs.remote.DBObject": {}
 	},
 	"jassijs/remote/DBObjectQuery.ts": {
@@ -1247,7 +1247,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1656504924375,
+		"date": 1656619918706,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {}
 		},

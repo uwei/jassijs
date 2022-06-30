@@ -1,5 +1,4 @@
-;
-import { $Class } from "jassijs/remote/Registry";
+import registry, { $Class } from "jassijs/remote/Registry";
 import "jassijs/ext/tabulator";
 import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 import { $Property } from "jassijs/ui/Property";
@@ -7,8 +6,17 @@ import { Component, $UIComponent } from "jassijs/ui/Component";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Calendar } from "jassijs/ui/Calendar";
 import { Databinder } from "jassijs/ui/Databinder";
+import { classes } from "jassijs/remote/Classes";
+
+
+interface LazyLoadOption {
+    classname: string;
+    loadFunc: string;
+    pageSize?: number;
+}
 interface TableOptions extends Tabulator.Options {
     dataTreeChildFunction?: ((data: any) => any) | any;
+    lazyLoad?: LazyLoadOption;
 }
 @$Class("jassijs.ui.TableEditorProperties")
 class TableEditorProperties {
@@ -44,7 +52,6 @@ export interface TableConfig extends DataComponentConfig {
     columns?: Tabulator.ColumnDefinition[];
     bindItems?: any[];
 }
-
 @$UIComponent({ fullPath: "common/Table", icon: "mdi mdi-grid" })
 @$Class("jassijs.ui.Table")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.TableEditorProperties" })
@@ -55,6 +62,7 @@ export class Table extends DataComponent implements TableConfig {
         value: any;
     };
     ;
+    private _lazyLoadOption: LazyLoadOption;
     _tree;
     _items: any[];
     _searchbox: Textbox;
@@ -68,7 +76,6 @@ export class Table extends DataComponent implements TableConfig {
         this.options = properties;
         this._selectHandler = [];
     }
-
     config(config: TableConfig): Table {
         super.config(config);
         return this;
@@ -131,7 +138,32 @@ export class Table extends DataComponent implements TableConfig {
             }
             return undefined;
         };
+
+        if (properties.lazyLoad) {
+            this._lazyLoadOption = properties.lazyLoad
+            properties.ajaxURL = 'does/not/matter';
+            properties.ajaxRequestFunc = _this.lazyLoadFunc.bind(this);// (p1,p2,p3)=>_this.progressiveLoad(p1,p2,p3);
+            properties.progressiveLoad = 'scroll';
+
+        }
+
         this.table = new Tabulator("[id='" + this._id + "']", properties);
+        if (properties.lazyLoad) {
+            //updates the tabledata if user sort with headerclick
+            this.table.on("headerClick", function (e, c) {
+                setTimeout(() => {
+                    _this.table.replaceData("/data.php");
+                }, 100);
+            });
+            if (this._searchbox) {
+                this._searchbox.onchange(() => {
+                    setTimeout(() => {
+                        _this.table.replaceData("/data.php");
+                    }, 50);
+                });
+            }
+            delete properties.lazyLoad;
+        }
         if (lastItems) {
             this.items = lastItems;
         }
@@ -141,6 +173,94 @@ export class Table extends DataComponent implements TableConfig {
     }
     get options(): TableOptions {
         return this._lastOptions;
+    }
+    /**
+     * create a SQL-Querry for a search in all visible columns
+     */
+    private sqlForLazySearch() {
+        if (this._searchbox.value === undefined || this._searchbox.value === "") {
+            return undefined;
+        }
+        var fields = registry.getMemberData("design:type")[this._lazyLoadOption.classname];
+        var columns = this.table.getColumns(false);
+        var wheres: string[] = [];
+        for (var x = 0; x < columns.length; x++) {
+            var found = fields[columns[x].getField()];
+            //           where:`UPPER(CAST(ID AS TEXT)) LIKE :mftext`,
+            //        whereParams:{mftext:"%24%"}
+            if (found) {//
+                if (found[0][0] === String) {
+                    wheres.push("UPPER('" + columns[x].getField() + "') LIKE :mftext")
+                } else {
+                    wheres.push("UPPER(CAST('" + columns[x].getField() + "' AS TEXT)) LIKE :mftext")
+                }
+            }
+        }
+        if (wheres.length > 0) {
+            return wheres.join(" or ");
+        }
+    }
+    private _lastLazySort = undefined;
+    private _lastLazySearch = undefined;
+    /**
+     * loads lazy data from _progressiveLoadFunc
+     */
+    private lazyLoadFunc(url, param, param2) {
+        //var data=await this._progressiveLoadFunc();
+        //return data;
+        // debugger;
+        var _this = this;
+        return new Promise((resolve) => {
+            classes.loadClass(_this._lazyLoadOption.classname).then((cl) => {
+                var newSort = undefined;
+                var tt = _this.table.getSorters();
+                if (tt) {
+                    newSort = {}
+                    for (var x = 0; x < tt.length; x++) {
+                        newSort[tt[x].field] = tt[x].dir.toUpperCase();
+                    }
+
+                }
+                var pageSize = _this._lazyLoadOption.pageSize;
+                if (pageSize === undefined)
+                    pageSize = 200;
+                var opt: any = {
+                    skip: param2.page * pageSize,
+                    take: pageSize,
+                    order: newSort
+                };
+                var where = _this.sqlForLazySearch();
+                if (where) {
+                    opt.where = where;
+                    opt.whereParams = { mftext: "%" + this._searchbox.value.toUpperCase() + "%" };
+                 //   console.log(where);
+                }
+                if (JSON.stringify(newSort) !== this._lastLazySort || this._searchbox.value !== this._lastLazySearch) {
+                    pageSize = (1 + param2.page) * pageSize;
+                    opt.take = pageSize;
+                    opt.skip = 0;
+                    this._lastLazySort = JSON.stringify(newSort);
+                    this._lastLazySearch = this._searchbox.value;
+                }
+                cl[_this._lazyLoadOption.loadFunc](opt).then((data) => {
+                    var ret = {
+                        "last_page": data.length < pageSize ? 0 : (param2.page + 1),
+                        data: data
+                    };
+                    console.log(param2.page * pageSize);
+                    resolve(ret);
+                });
+                console.log("updateData");
+                var data = [];
+                for (var x = id; x < 200 + id; x++) {
+                    data.push({ id: x, name: "Person " + x });
+                }
+                id = x;
+                page++;
+
+            })
+
+        });
     }
     private defaultAutoColumnDefinitions(definitions: Tabulator.ColumnDefinition[]): Tabulator.ColumnDefinition[] {
         var _this = this;
@@ -238,7 +358,6 @@ export class Table extends DataComponent implements TableConfig {
     set showSearchbox(enable: boolean) {
         let _this = this;
         if (!enable) {
-
             if (this._searchbox !== undefined) {
                 this._searchbox.destroy();
                 delete this._searchbox;
@@ -262,10 +381,16 @@ export class Table extends DataComponent implements TableConfig {
                     });
                 }, 100);
             });
+            if(this._lazyLoadOption){
+                 this._searchbox.onchange(() => {
+                    setTimeout(() => {
+                        _this.table.replaceData("/data.php");
+                    }, 50);
+                });
+            }
             this.domWrapper.prepend(this._searchbox.domWrapper);
-            if (this.height === "calc(100% - 7px)")///correct height
+            if (this.height === "calc(100% - 7px)") ///correct height
                 this.height = "100%";
-
         }
     }
     set selectComponent(_component: any) {
@@ -343,9 +468,7 @@ export class Table extends DataComponent implements TableConfig {
     get height() {
         return super.height;
     }
-
-
-    set width(value: string | number) { //the Code
+    set width(value: string | number) {
         if (value === "100%")
             value = "calc(100% - 5px)";
         super.width = value;
@@ -354,7 +477,6 @@ export class Table extends DataComponent implements TableConfig {
     get width(): string {
         return super.width;
     }
-
     /**
      * Searches records in the grid
      * @param {string} field - name of the search field
@@ -413,15 +535,34 @@ export class Table extends DataComponent implements TableConfig {
         //databinder.checkAutocommit(this);
     }
 }
+var page = 0;
+var id = 0;
+function updateData(v1, v2, v3) {
+    // debugger;
+    return new Promise((resolve) => {
+        console.log("updateData");
+        var data = [];
+        for (var x = id; x < 200 + id; x++) {
+            data.push({ id: x, name: "Person " + x });
+        }
+        id = x;
+        page++;
+        var ret = {
+            "last_page": x > 2000 ? 0 : (v3.page + 1),
+            data: data
+        };
+        console.log(x);
+        resolve(ret);
+    });
+}
+
 export async function test() {
     var tab = new Table({
-
-    });
-    tab.config({
-        width: 400,
-        options: {
-            headerSort: true  //,             selectable:true
-        }
+        height: 200,
+        headerSort: true,
+        //   ajaxURL: 'does/not/matter',
+        // ajaxRequestFunc: updateData,
+        //progressiveLoad: 'scroll'
     });
     tab.showSearchbox = true;
     var tabledata = [
@@ -435,8 +576,10 @@ export async function test() {
         tab.items = tabledata;
     }, 100);
     tab.on("dblclick", () => {
-        alert(tab.value);
+        //  alert(tab.value);
     });
+    tab.width = 176;
+    tab.height = 223;
     //tab.select = {};
     // tab.showSearchbox = true;
     //    var kunden = await jassijs.db.load("de.Kunde");

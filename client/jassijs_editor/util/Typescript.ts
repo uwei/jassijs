@@ -173,6 +173,7 @@ export class Typescript {
             var type = "typescript";
 
             if (key.toLocaleLowerCase().endsWith(".ts")) {
+                  
                 //
                 if (this.initInIdle) {
                     var ffile = monaco.Uri.from({ path: "/" + key, scheme: 'file' });
@@ -181,6 +182,7 @@ export class Typescript {
                         monaco.editor.createModel(code[key], "typescript", ffile);
                     //});
                 } else {
+                    
                     monaco.languages.typescript.typescriptDefaults.addExtraLib(code[key], "file:///" + key);
                 }
             }

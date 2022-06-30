@@ -14,7 +14,7 @@ const passwordIteration = 10000;
 export interface MyFindManyOptions<Entity = any> extends FindManyOptions {
   whereParams?: any,
   onlyColumns?: string[];
-  [field: string]: any
+  order:{[field: string]: "ASC"|"DESC"};
 }
 
 
@@ -447,8 +447,21 @@ export class DBManager {
     ret = relations.join(ret);
     if (!context.request.user.isAdmin)
       ret = await relations.addParentRightDestriction(context, ret);
-
-
+    if(options?.skip){
+      ret.skip(options.skip);
+      delete options.skip;
+    }
+    if(options?.take){
+      ret.take(options.take);
+      delete options.take;
+    }
+    if(options?.order){
+      for(var key in options?.order){
+        ret.addOrderBy("\"me_"+key+"\"",options.order[key]);
+      }
+      
+      delete options.order;
+    }
     var test = ret.getSql();
     let objs = await ret.getMany();
     if (objs && onlyColumns) {
@@ -826,9 +839,12 @@ class RelationInfo {
       return ret;
     var dummyselect = "select * from k where ";
     //we must replace because parsing Exception
-    var ast = parser.parse(dummyselect + sql.replaceAll(":...", "fxxparams").replaceAll(":", "xxxparams"));
+    var fullSQL=dummyselect + sql.replaceAll(":...", "fxxparams").replaceAll(":", "xxxparams");
+    fullSQL=fullSQL.replace(" AS TEXT","_AS_TEXT");
+    var ast = parser.parse(fullSQL);
     this._parseNode(context, ast.value.where);
-    var newsql = parser.stringify(ast).replaceAll("fxxparams", ":...").replaceAll("xxxparams", ":");
+    var newsql:string = parser.stringify(ast).replaceAll("fxxparams", ":...").replaceAll("xxxparams", ":");
+    newsql=newsql.replaceAll("_AS_TEXT"," AS TEXT");
     ret.andWhere(newsql.substring(dummyselect.length), whereParams);
     return ret;
   }
