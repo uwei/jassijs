@@ -1,6 +1,7 @@
 
+
 var jquery_language='https://cdn.jsdelivr.net/gh/jquery/jquery-ui@main/ui/i18n/datepicker-'+navigator.language.split("-")[0];
-export default {
+export default { 
     "css": {
         "jassijs.css":"jassijs.css",
         "materialdesignicons.min.css":"https://cdn.jsdelivr.net/npm/@mdi/font@5.9.55/css/materialdesignicons.min.css",
@@ -21,7 +22,7 @@ export default {
         "node_modules/jquery.fancytree/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/jquery.fancytree/index.d.ts",
         "node_modules/requirejs/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/requirejs/index.d.ts",
         "node_modules/sizzle/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/sizzle/index.d.ts",
-        "node_modules/tabulator-tables/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/tabulator-tables@4.9.3/index.d.ts",
+        "tabulator-tables.ts": "https://cdn.jsdelivr.net/npm/@types/tabulator-tables@5.1.4/index.d.ts",
         "node_modules/typescript/typescriptServices.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-3.7/lib/typescriptServices.d.ts"
     },
     "require": {
@@ -48,12 +49,16 @@ export default {
             'source.map': "https://unpkg.com/source-map@0.7.3/dist/source-map",
             'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
             'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
-            'tabulatorlib': '//unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator',
+            //'tabulatorlib': '//unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator',
+            'tabulatorlib': '//unpkg.com/tabulator-tables@5.1.4/dist/js/tabulator',
+            
+            
             'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.2/tinymce.min',//also define in tinymce.js
            // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
            "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect"
         },
         "shim": {
+            'tabulator-tables': ['jassijs/ext/tabulator'],
             'goldenlayout': ["jquery"],
             "jquery.choosen": ["jquery"],
             "jquery.contextMenu": ["jquery.ui"],

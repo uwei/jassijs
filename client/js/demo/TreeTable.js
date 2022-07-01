@@ -38,9 +38,9 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
             var c = new Person("Christoph", 4, [u, t]);
             s.childs = [c];
             me.tab = new Table_1.Table({
+                items: [c],
                 dataTreeChildFunction: "t"
             });
-            me.tab.items = [c];
             me.tab.height = "150";
             me.tab.width = "100%";
             //me.tab.items = [c, u];

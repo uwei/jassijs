@@ -72,10 +72,10 @@ define(["require", "exports", "jassijs/ui/Panel", "de/remote/Kunde", "jassijs/ui
             me.idnachname.autocommit = true;
             this.add(me.idnachname);
             me.idtable = new Table_1.Table({
-                cellDblClick: function (event, group) {
-                    alert(8);
-                },
                 movableColumns: false
+            });
+            me.idtable.table.on("cellDblClick", function (event, group) {
+                alert(8);
             });
             /**/
             me.idtable.width = 275;

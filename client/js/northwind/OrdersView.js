@@ -60,8 +60,8 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassij
             me.panel1.add(me.shipAddress);
             me.panel1.add(me.shipPostalCode);
             me.panel1.add(me.shipCity);
-            me.panel1.add(me.shipCountry);
             me.panel1.add(me.shipRegion);
+            me.panel1.add(me.shipCountry);
             me.panel1.width = 250;
             me.panel1.height = 185;
             me.panel1.isAbsolute = true;

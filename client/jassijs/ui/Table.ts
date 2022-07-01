@@ -1,5 +1,5 @@
 import registry, { $Class } from "jassijs/remote/Registry";
-import "jassijs/ext/tabulator";
+//import "jassijs/ext/tabulator";
 import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 import { $Property } from "jassijs/ui/Property";
 import { Component, $UIComponent } from "jassijs/ui/Component";
@@ -7,6 +7,7 @@ import { Textbox } from "jassijs/ui/Textbox";
 import { Calendar } from "jassijs/ui/Calendar";
 import { Databinder } from "jassijs/ui/Databinder";
 import { classes } from "jassijs/remote/Classes";
+import { Tabulator } from "tabulator-tables";
 
 
 interface LazyLoadOption {
@@ -17,6 +18,7 @@ interface LazyLoadOption {
 interface TableOptions extends Tabulator.Options {
     dataTreeChildFunction?: ((data: any) => any) | any;
     lazyLoad?: LazyLoadOption;
+    items?: any[];
 }
 @$Class("jassijs.ui.TableEditorProperties")
 class TableEditorProperties {
@@ -30,8 +32,6 @@ class TableEditorProperties {
     dataTreeChildFunction: (any) => any | any;
     @$Property({ default: false })
     movableColumns: boolean;
-    @$Property({ default: "function(event:any,group:any){\n\t\n}" })
-    cellDblClick() { }
 }
 export interface TableConfig extends DataComponentConfig {
     options?: TableOptions;
@@ -63,6 +63,10 @@ export class Table extends DataComponent implements TableConfig {
     };
     ;
     private _lazyLoadOption: LazyLoadOption;
+    private _lastLazySort = undefined;
+    private _lastLazySearch = undefined;
+    private _lazyDataHasChanged = undefined;
+
     _tree;
     _items: any[];
     _searchbox: Textbox;
@@ -116,28 +120,8 @@ export class Table extends DataComponent implements TableConfig {
         //    properties.autoResize = false;
         if (properties.layout === undefined)
             properties.layout = "fitDataStretch"; //"fitDataFill";////"fitColumns";
-        var dataTreeRowExpanded = properties.dataTreeRowExpanded;
-        properties.dataTreeRowExpanded = function (row: Tabulator.RowComponent, level) {
-            _this.onTreeExpanded(row, level);
-            if (dataTreeRowExpanded !== undefined) {
-                dataTreeRowExpanded(row, level);
-            }
-        };
-        var rowClick = properties.rowClick;
-        properties.rowClick = function (e: any, row: Tabulator.RowComponent) {
-            _this._onselect(e, row);
-            if (rowClick !== undefined) {
-                rowClick(e, row);
-            }
-        };
-        var contextClick = properties.cellContext;
-        properties.cellContext = function (e: any, row: Tabulator.CellComponent) {
-            _this._oncontext(e, row);
-            if (contextClick !== undefined) {
-                contextClick(e, row);
-            }
-            return undefined;
-        };
+
+
 
         if (properties.lazyLoad) {
             this._lazyLoadOption = properties.lazyLoad
@@ -146,19 +130,27 @@ export class Table extends DataComponent implements TableConfig {
             properties.progressiveLoad = 'scroll';
 
         }
+        if (properties.items) {
+            properties.data = this._setItemsIntern(properties.items, false);
+            delete properties.items;;
+        }
 
         this.table = new Tabulator("[id='" + this._id + "']", properties);
+        this.table.on("rowClick", (e, e2) => { _this._onselect(e, e2) });
+        this.table.on("cellContext", (e, e2) => { _this._oncontext(e, e2) });
+        this.table.on("dataTreeRowExpanded", (e, e2) => { _this.onTreeExpanded(e, e2) });
+
         if (properties.lazyLoad) {
             //updates the tabledata if user sort with headerclick
             this.table.on("headerClick", function (e, c) {
                 setTimeout(() => {
-                    _this.table.replaceData("/data.php");
+                    _this.update();
                 }, 100);
             });
             if (this._searchbox) {
                 this._searchbox.onchange(() => {
                     setTimeout(() => {
-                        _this.table.replaceData("/data.php");
+                        _this.update();
                     }, 50);
                 });
             }
@@ -200,8 +192,9 @@ export class Table extends DataComponent implements TableConfig {
             return wheres.join(" or ");
         }
     }
-    private _lastLazySort = undefined;
-    private _lastLazySearch = undefined;
+    onlazyloaded(func) {
+        this.addEvent("lazyloaded", func);
+    }
     /**
      * loads lazy data from _progressiveLoadFunc
      */
@@ -233,14 +226,15 @@ export class Table extends DataComponent implements TableConfig {
                 if (where) {
                     opt.where = where;
                     opt.whereParams = { mftext: "%" + this._searchbox.value.toUpperCase() + "%" };
-                 //   console.log(where);
+                    //   console.log(where);
                 }
-                if (JSON.stringify(newSort) !== this._lastLazySort || this._searchbox.value !== this._lastLazySearch) {
+                if (JSON.stringify(newSort) !== this._lastLazySort || this._searchbox.value !== this._lastLazySearch || this._lazyDataHasChanged) {
                     pageSize = (1 + param2.page) * pageSize;
                     opt.take = pageSize;
                     opt.skip = 0;
                     this._lastLazySort = JSON.stringify(newSort);
                     this._lastLazySearch = this._searchbox.value;
+                    this._lazyDataHasChanged = undefined;
                 }
                 cl[_this._lazyLoadOption.loadFunc](opt).then((data) => {
                     var ret = {
@@ -249,14 +243,8 @@ export class Table extends DataComponent implements TableConfig {
                     };
                     console.log(param2.page * pageSize);
                     resolve(ret);
+                    _this.callEvent("lazyloaded", data, opt, param, param2);
                 });
-                console.log("updateData");
-                var data = [];
-                for (var x = id; x < 200 + id; x++) {
-                    data.push({ id: x, name: "Person " + x });
-                }
-                id = x;
-                page++;
 
             })
 
@@ -328,8 +316,18 @@ export class Table extends DataComponent implements TableConfig {
         }
     }
     async update() {
-        await this.table.updateData(this.items);
+        if (this._lazyLoadOption) {
+            this._lazyDataHasChanged = true;
+            var sel = this.value;
+
+            await this.table.replaceData("/data.php");
+            this.value = sel;
+        }
+        else {
+            await this.table.updateData(this.items);
+        }
     }
+
     private _oncontext(event: any, row: Tabulator.CellComponent) {
         if (this.contextMenu !== undefined) {
             this.contextMenu.value = [row.getData()];
@@ -381,8 +379,8 @@ export class Table extends DataComponent implements TableConfig {
                     });
                 }, 100);
             });
-            if(this._lazyLoadOption){
-                 this._searchbox.onchange(() => {
+            if (this._lazyLoadOption) {
+                this._searchbox.onchange(() => {
                     setTimeout(() => {
                         _this.table.replaceData("/data.php");
                     }, 50);
@@ -399,23 +397,76 @@ export class Table extends DataComponent implements TableConfig {
     get selectComponent(): any {
         return this._select;
     }
-    set items(value: any[]) {
+    private _setItemsIntern(value: any[], updateData = true) {
         if (value && this.dataTreeChildFunction) { //populate __treechilds
             for (let x = 0; x < value.length; x++) {
                 this.populateTreeData(value[x]);
             }
         }
         this._items = value;
-        if (value !== undefined)
+        if (value !== undefined && updateData)
             this.table.setData(value);
+        return value;
+    }
+    set items(value: any[]) {
+        this._setItemsIntern(value);
     }
     get items(): any[] {
         return this._items;
+    }
+    async updateOrInsertItem(item) {
+        var ret=await this.updateItem(item);
+        if(ret===undefined)
+            return await this.insertItem(item);
+    }
+    async updateItem(item) {
+        var rows = this.table.getRows();
+        for (var x = 0; x < rows.length; x++) {
+            if (rows[x].getData() === item) {
+                //@ts-ignore
+                await rows[x].update(item);
+                return rows[x];
+            }
+        }
+        return undefined;
+    }
+    async insertItem(item) {
+        var ret=await this.table.addRow(item);
+        ret.select();
+        ret.scrollTo();
+        return ret;
+    }
+    async removeItem(item) {
+        var rows = this.table.getRows();
+        for (var x = 0; x < rows.length; x++) {
+            if (rows[x].getData() === item) {
+                //@ts-ignore
+                try {
+                    rows[x + 1].select();
+                    rows[x + 1].scrollTo();
+                } catch { }
+                await rows[x].delete();
+                return;
+            }
+
+        }
     }
     /**
      * @member {object} sel - the selected object
      */
     set value(sel) {
+        //@ts-ignore
+        this.table.deselectRow(this.table.getSelectedRows());
+        var rows = this.table.getRows();
+        for (var x = 0; x < rows.length; x++) {
+            if (rows[x].getData() === sel) {
+                //@ts-ignore
+                this.table.selectRow(rows[x]);
+                this.table.scrollToRow(rows[x]);
+            }
+        }
+        return;
+        debugger;
         if (this.items === undefined)
             return;
         var pos = this.items.indexOf(sel);
@@ -423,9 +474,7 @@ export class Table extends DataComponent implements TableConfig {
         this.table.deselectRow(this.table.getSelectedRows());
         if (pos === -1)
             return;
-        //@ts-ignore
-        this.table.selectRow(this.table.getRows()[pos]);
-        this.table.scrollToRow(this.table.getRows()[pos]);
+
     }
     get value() {
         var ret = this.table.getSelectedRows();
@@ -557,14 +606,6 @@ function updateData(v1, v2, v3) {
 }
 
 export async function test() {
-    var tab = new Table({
-        height: 200,
-        headerSort: true,
-        //   ajaxURL: 'does/not/matter',
-        // ajaxRequestFunc: updateData,
-        //progressiveLoad: 'scroll'
-    });
-    tab.showSearchbox = true;
     var tabledata = [
         { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
         { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
@@ -572,9 +613,17 @@ export async function test() {
         { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: "01/08/1980" },
         { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
     ];
-    window.setTimeout(() => {
-        tab.items = tabledata;
-    }, 100);
+    var tab = new Table({
+        height: 200,
+        headerSort: true,
+        items: tabledata
+    });
+
+    tab.showSearchbox = true;
+
+    //window.setTimeout(() => {
+    tab.items = tabledata;
+    // }, 100);
     tab.on("dblclick", () => {
         //  alert(tab.value);
     });

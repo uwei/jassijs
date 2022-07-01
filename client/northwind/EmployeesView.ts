@@ -68,12 +68,20 @@ export class EmployeesView extends DBObjectView {
         me.objectchooser1 = new ObjectChooser();
         this.me.main.config({
             children: [
+                me.id.config({
+                    x: 5,
+                    y: 5,
+                    width: 60,
+                    label: "Id",
+                    bind: [me.databinder, "id"],
+                    converter: new NumberConverter()
+                }),
                 me.firstName.config({
                     x: 80,
                     y: 5,
                     label: "First name",
                     bind: [me.databinder, "FirstName"]
-                }), 
+                }),
                 me.lastName.config({
                     x: 250,
                     y: 5,
@@ -150,6 +158,13 @@ export class EmployeesView extends DBObjectView {
                     label: "Home Phone",
                     width: 140
                 }),
+                me.photoPath.config({
+                    x: 5,
+                    y: 240,
+                    bind: [me.databinder, "PhotoPath"],
+                    label: "Photo Path",
+                    width: 460
+                }),
                 me.notes.config({
                     x: 375,
                     y: 50,
@@ -169,21 +184,6 @@ export class EmployeesView extends DBObjectView {
                     width: 125,
                     bind: [me.databinder, "PhotoPath"]
                 }),
-                me.photoPath.config({
-                    x: 5,
-                    y: 240,
-                    bind: [me.databinder, "PhotoPath"],
-                    label: "Photo Path",
-                    width: 460
-                }),
-                me.id.config({
-                    x: 5,
-                    y: 5,
-                    width: 60,
-                    label: "Id",
-                    bind: [me.databinder, "id"],
-                    converter: new NumberConverter()
-                }),
                 me.reportsTo.config({
                     x: 7,
                     y: 298,
@@ -197,7 +197,7 @@ export class EmployeesView extends DBObjectView {
                     y: 310,
                     width: 25,
                     height: 25,
-                    bind: [me.databinder, "ReportsTo"],  
+                    bind: [me.databinder, "ReportsTo"],
                     items: "northwind.Employees"
                 })
             ],

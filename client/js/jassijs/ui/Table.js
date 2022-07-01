@@ -7,12 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Calendar", "jassijs/remote/Classes", "jassijs/ext/tabulator"], function (require, exports, Registry_1, DataComponent_1, Property_1, Component_1, Textbox_1, Calendar_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Calendar", "jassijs/remote/Classes", "tabulator-tables"], function (require, exports, Registry_1, DataComponent_1, Property_1, Component_1, Textbox_1, Calendar_1, Classes_1, tabulator_tables_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
     let TableEditorProperties = class TableEditorProperties {
-        cellDblClick() { }
     };
     __decorate([
         (0, Property_1.$Property)({ default: undefined }),
@@ -34,12 +33,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         (0, Property_1.$Property)({ default: false }),
         __metadata("design:type", Boolean)
     ], TableEditorProperties.prototype, "movableColumns", void 0);
-    __decorate([
-        (0, Property_1.$Property)({ default: "function(event:any,group:any){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], TableEditorProperties.prototype, "cellDblClick", null);
     TableEditorProperties = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
@@ -48,6 +41,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             super();
             this._lastLazySort = undefined;
             this._lastLazySearch = undefined;
+            this._lazyDataHasChanged = undefined;
             super.init('<div class="Table"></div>');
             var _this = this;
             this.options = properties;
@@ -92,46 +86,32 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             //    properties.autoResize = false;
             if (properties.layout === undefined)
                 properties.layout = "fitDataStretch"; //"fitDataFill";////"fitColumns";
-            var dataTreeRowExpanded = properties.dataTreeRowExpanded;
-            properties.dataTreeRowExpanded = function (row, level) {
-                _this.onTreeExpanded(row, level);
-                if (dataTreeRowExpanded !== undefined) {
-                    dataTreeRowExpanded(row, level);
-                }
-            };
-            var rowClick = properties.rowClick;
-            properties.rowClick = function (e, row) {
-                _this._onselect(e, row);
-                if (rowClick !== undefined) {
-                    rowClick(e, row);
-                }
-            };
-            var contextClick = properties.cellContext;
-            properties.cellContext = function (e, row) {
-                _this._oncontext(e, row);
-                if (contextClick !== undefined) {
-                    contextClick(e, row);
-                }
-                return undefined;
-            };
             if (properties.lazyLoad) {
                 this._lazyLoadOption = properties.lazyLoad;
                 properties.ajaxURL = 'does/not/matter';
                 properties.ajaxRequestFunc = _this.lazyLoadFunc.bind(this); // (p1,p2,p3)=>_this.progressiveLoad(p1,p2,p3);
                 properties.progressiveLoad = 'scroll';
             }
-            this.table = new Tabulator("[id='" + this._id + "']", properties);
+            if (properties.items) {
+                properties.data = this._setItemsIntern(properties.items, false);
+                delete properties.items;
+                ;
+            }
+            this.table = new tabulator_tables_1.Tabulator("[id='" + this._id + "']", properties);
+            this.table.on("rowClick", (e, e2) => { _this._onselect(e, e2); });
+            this.table.on("cellContext", (e, e2) => { _this._oncontext(e, e2); });
+            this.table.on("dataTreeRowExpanded", (e, e2) => { _this.onTreeExpanded(e, e2); });
             if (properties.lazyLoad) {
                 //updates the tabledata if user sort with headerclick
                 this.table.on("headerClick", function (e, c) {
                     setTimeout(() => {
-                        _this.table.replaceData("/data.php");
+                        _this.update();
                     }, 100);
                 });
                 if (this._searchbox) {
                     this._searchbox.onchange(() => {
                         setTimeout(() => {
-                            _this.table.replaceData("/data.php");
+                            _this.update();
                         }, 50);
                     });
                 }
@@ -174,6 +154,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                 return wheres.join(" or ");
             }
         }
+        onlazyloaded(func) {
+            this.addEvent("lazyloaded", func);
+        }
         /**
          * loads lazy data from _progressiveLoadFunc
          */
@@ -206,12 +189,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                         opt.whereParams = { mftext: "%" + this._searchbox.value.toUpperCase() + "%" };
                         //   console.log(where);
                     }
-                    if (JSON.stringify(newSort) !== this._lastLazySort || this._searchbox.value !== this._lastLazySearch) {
+                    if (JSON.stringify(newSort) !== this._lastLazySort || this._searchbox.value !== this._lastLazySearch || this._lazyDataHasChanged) {
                         pageSize = (1 + param2.page) * pageSize;
                         opt.take = pageSize;
                         opt.skip = 0;
                         this._lastLazySort = JSON.stringify(newSort);
                         this._lastLazySearch = this._searchbox.value;
+                        this._lazyDataHasChanged = undefined;
                     }
                     cl[_this._lazyLoadOption.loadFunc](opt).then((data) => {
                         var ret = {
@@ -220,14 +204,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                         };
                         console.log(param2.page * pageSize);
                         resolve(ret);
+                        _this.callEvent("lazyloaded", data, opt, param, param2);
                     });
-                    console.log("updateData");
-                    var data = [];
-                    for (var x = id; x < 200 + id; x++) {
-                        data.push({ id: x, name: "Person " + x });
-                    }
-                    id = x;
-                    page++;
                 });
             });
         }
@@ -297,7 +275,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             }
         }
         async update() {
-            await this.table.updateData(this.items);
+            if (this._lazyLoadOption) {
+                this._lazyDataHasChanged = true;
+                var sel = this.value;
+                await this.table.replaceData("/data.php");
+                this.value = sel;
+            }
+            else {
+                await this.table.updateData(this.items);
+            }
         }
         _oncontext(event, row) {
             if (this.contextMenu !== undefined) {
@@ -366,23 +352,76 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         get selectComponent() {
             return this._select;
         }
-        set items(value) {
+        _setItemsIntern(value, updateData = true) {
             if (value && this.dataTreeChildFunction) { //populate __treechilds
                 for (let x = 0; x < value.length; x++) {
                     this.populateTreeData(value[x]);
                 }
             }
             this._items = value;
-            if (value !== undefined)
+            if (value !== undefined && updateData)
                 this.table.setData(value);
+            return value;
+        }
+        set items(value) {
+            this._setItemsIntern(value);
         }
         get items() {
             return this._items;
+        }
+        async updateOrInsertItem(item) {
+            var ret = await this.updateItem(item);
+            if (ret === undefined)
+                return await this.insertItem(item);
+        }
+        async updateItem(item) {
+            var rows = this.table.getRows();
+            for (var x = 0; x < rows.length; x++) {
+                if (rows[x].getData() === item) {
+                    //@ts-ignore
+                    await rows[x].update(item);
+                    return rows[x];
+                }
+            }
+            return undefined;
+        }
+        async insertItem(item) {
+            var ret = await this.table.addRow(item);
+            ret.select();
+            ret.scrollTo();
+            return ret;
+        }
+        async removeItem(item) {
+            var rows = this.table.getRows();
+            for (var x = 0; x < rows.length; x++) {
+                if (rows[x].getData() === item) {
+                    //@ts-ignore
+                    try {
+                        rows[x + 1].select();
+                        rows[x + 1].scrollTo();
+                    }
+                    catch (_a) { }
+                    await rows[x].delete();
+                    return;
+                }
+            }
         }
         /**
          * @member {object} sel - the selected object
          */
         set value(sel) {
+            //@ts-ignore
+            this.table.deselectRow(this.table.getSelectedRows());
+            var rows = this.table.getRows();
+            for (var x = 0; x < rows.length; x++) {
+                if (rows[x].getData() === sel) {
+                    //@ts-ignore
+                    this.table.selectRow(rows[x]);
+                    this.table.scrollToRow(rows[x]);
+                }
+            }
+            return;
+            debugger;
             if (this.items === undefined)
                 return;
             var pos = this.items.indexOf(sel);
@@ -390,9 +429,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             this.table.deselectRow(this.table.getSelectedRows());
             if (pos === -1)
                 return;
-            //@ts-ignore
-            this.table.selectRow(this.table.getRows()[pos]);
-            this.table.scrollToRow(this.table.getRows()[pos]);
         }
         get value() {
             var ret = this.table.getSelectedRows();
@@ -559,14 +595,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         });
     }
     async function test() {
-        var tab = new Table({
-            height: 200,
-            headerSort: true,
-            //   ajaxURL: 'does/not/matter',
-            // ajaxRequestFunc: updateData,
-            //progressiveLoad: 'scroll'
-        });
-        tab.showSearchbox = true;
         var tabledata = [
             { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
             { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
@@ -574,9 +602,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: "01/08/1980" },
             { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
         ];
-        window.setTimeout(() => {
-            tab.items = tabledata;
-        }, 100);
+        var tab = new Table({
+            height: 200,
+            headerSort: true,
+            items: tabledata
+        });
+        tab.showSearchbox = true;
+        //window.setTimeout(() => {
+        tab.items = tabledata;
+        // }, 100);
         tab.on("dblclick", () => {
             //  alert(tab.value);
         });

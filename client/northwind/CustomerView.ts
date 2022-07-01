@@ -58,12 +58,12 @@ export class CustomerView extends DBObjectView {
                     width: 65,
                     label: "id"
                 }),
-                me.companyname.config({
-                    x: 195,
-                    y: 45,
-                    bind: [me.databinder, "CompanyName"],
-                    label: "Company Name",
-                    width: 155
+                me.contactname.config({
+                    x: 90,
+                    y: 5,
+                    label: "Contact Name",
+                    bind: [me.databinder, "ContactName"],
+                    width: 260
                 }),
                 me.contacttitle.config({
                     x: 10,
@@ -71,12 +71,12 @@ export class CustomerView extends DBObjectView {
                     label: "Contact Title",
                     bind: [me.databinder, "ContactTitle"]
                 }),
-                me.contactname.config({
-                    x: 90,
-                    y: 5,
-                    label: "Contact Name",
-                    bind: [me.databinder, "ContactName"],
-                    width: 260
+                me.companyname.config({
+                    x: 195,
+                    y: 45,
+                    bind: [me.databinder, "CompanyName"],
+                    label: "Company Name",
+                    width: 155
                 }),
                 me.address.config({
                     x: 10,

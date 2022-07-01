@@ -56,7 +56,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/modul.ts": {
-		"date": 1656537417116
+		"date": 1656674206998
 	},
 	"jassijs/remote/Classes.ts": {
 		"date": 1655556496250,
@@ -633,7 +633,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectDialog.ts": {
-		"date": 1656506203744,
+		"date": 1656681977508,
 		"jassijs.ui.DBObjectDialog": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -717,7 +717,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/DBObjectView.ts": {
-		"date": 1656021585019,
+		"date": 1656683378469,
 		"jassijs/ui/DBObjectView": {
 			"$UIComponent": [
 				{
@@ -1247,7 +1247,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1656619918706,
+		"date": 1656683556443,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {}
 		},

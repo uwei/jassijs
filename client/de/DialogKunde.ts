@@ -103,11 +103,12 @@ export class DialogKunde extends Panel {
         me.idnachname.autocommit = true;
         this.add(me.idnachname);
         me.idtable = new Table({
-            cellDblClick: function (event: any, group: any) {
-                alert(8);
-            },
+            
             movableColumns: false
         });
+        me.idtable.table.on("cellDblClick",function (event: any, group: any) {
+                alert(8);
+            })
         /**/
         me.idtable.width = 275;
         me.idtable.height = 195;

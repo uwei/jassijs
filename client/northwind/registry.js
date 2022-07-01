@@ -16,7 +16,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/CustomerView.ts": {
-		"date": 1656073060541,
+		"date": 1656682768374,
 		"northwind/CustomerView": {
 			"$DBObjectView": [
 				{
@@ -40,7 +40,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/EmployeesView.ts": {
-		"date": 1656506319066,
+		"date": 1656682851796,
 		"northwind.EmployeesView": {
 			"$DBObjectView": [
 				{
@@ -82,7 +82,7 @@ define("northwind/registry",["require"], function(require) {
 		"date": 1613551044000
 	},
 	"northwind/OrdersView.ts": {
-		"date": 1655556792358,
+		"date": 1656682898118,
 		"northwind.OrdersView": {
 			"$DBObjectView": [
 				{
@@ -95,7 +95,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ProductView.ts": {
-		"date": 1655556792358,
+		"date": 1656683100932,
 		"northwind.ProductView": {
 			"$DBObjectView": [
 				{
@@ -661,7 +661,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ShippersView.ts": {
-		"date": 1655556792357,
+		"date": 1656683116417,
 		"northwind.ShippersView": {
 			"$DBObjectView": [
 				{
@@ -674,7 +674,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/SuppliersView.ts": {
-		"date": 1655556792356,
+		"date": 1656683257685,
 		"northwind.SuppliersView": {
 			"$DBObjectView": [
 				{

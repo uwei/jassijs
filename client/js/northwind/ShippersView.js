@@ -37,19 +37,19 @@ define(["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/
                         x: 5,
                         y: 0
                     }),
-                    me.phone.config({
-                        x: 5,
-                        y: 50,
-                        width: 215,
-                        bind: [me.databinder, "Phone"],
-                        label: "Phone"
-                    }),
                     me.companyName.config({
                         x: 60,
                         y: 0,
                         bind: [me.databinder, "CompanyName"],
                         label: "Company name",
                         width: 160
+                    }),
+                    me.phone.config({
+                        x: 5,
+                        y: 50,
+                        width: 215,
+                        bind: [me.databinder, "Phone"],
+                        label: "Phone"
                     })
                 ]
             });

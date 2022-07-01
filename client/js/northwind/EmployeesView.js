@@ -41,6 +41,14 @@ define(["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel"
             me.objectchooser1 = new ObjectChooser_1.ObjectChooser();
             this.me.main.config({
                 children: [
+                    me.id.config({
+                        x: 5,
+                        y: 5,
+                        width: 60,
+                        label: "Id",
+                        bind: [me.databinder, "id"],
+                        converter: new NumberConverter_1.NumberConverter()
+                    }),
                     me.firstName.config({
                         x: 80,
                         y: 5,
@@ -123,6 +131,13 @@ define(["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel"
                         label: "Home Phone",
                         width: 140
                     }),
+                    me.photoPath.config({
+                        x: 5,
+                        y: 240,
+                        bind: [me.databinder, "PhotoPath"],
+                        label: "Photo Path",
+                        width: 460
+                    }),
                     me.notes.config({
                         x: 375,
                         y: 50,
@@ -141,21 +156,6 @@ define(["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel"
                         },
                         width: 125,
                         bind: [me.databinder, "PhotoPath"]
-                    }),
-                    me.photoPath.config({
-                        x: 5,
-                        y: 240,
-                        bind: [me.databinder, "PhotoPath"],
-                        label: "Photo Path",
-                        width: 460
-                    }),
-                    me.id.config({
-                        x: 5,
-                        y: 5,
-                        width: 60,
-                        label: "Id",
-                        bind: [me.databinder, "id"],
-                        converter: new NumberConverter_1.NumberConverter()
                     }),
                     me.reportsTo.config({
                         x: 7,

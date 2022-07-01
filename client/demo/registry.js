@@ -54,7 +54,7 @@ define("demo/registry",["require"], function(require) {
 		"demo/StyleDialog": {}
 	},
 	"demo/TableContextmenu.ts": {
-		"date": 1622984380000
+		"date": 1656676744798
 	},
 	"demo/TestComponent.ts": {
 		"date": 1655843269124,
@@ -111,7 +111,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1634384688000
 	},
 	"demo/TreeTable.ts": {
-		"date": 1655556795176,
+		"date": 1656676469598,
 		"demo.TreeTable": {}
 	},
 	"demo/TestProTable.ts": {

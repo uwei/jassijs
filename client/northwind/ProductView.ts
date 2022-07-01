@@ -25,7 +25,6 @@ type Me = {
     supplier?: HTMLPanel;
     supplierchooser?: ObjectChooser;
     styleNumber?: Style;
-   
 } & DBObjectViewMe;
 @$DBObjectView({ classname: "northwind.Products", actionname: "Northwind/Products", icon: "mdi mdi-reproduction" })
 @$Class("northwind.ProductView")
@@ -64,41 +63,12 @@ export class ProductView extends DBObjectView {
                     width: 65,
                     converter: new NumberConverter()
                 }),
-                me.styleNumber.config({
-                    css: {
-                        text_align: "right"
-                    }
-                }),
-                me.supplierchooser.config({
-                    x: 460,
-                    y: 125,
-                    bind: [me.databinder, "Supplier"],
-                    items: "northwind.Suppliers"
-                }),
-                me.supplier.config({
-                    x: 225,
-                    y: 110,
-                    bind: [me.databinder, "Supplier"],
-                    value: "New Orleans Cajun Delights",
-                    template: "{{CompanyName}}",
-                    label: "Supplier",
-                    width: 230
-                }),
-                me.categoryChooser.config({
-                    x: 185,
-                    y: 125,
-                    items: "northwind.Categories",
-                    bind: [me.databinder, "Category"],
-                    width: 30
-                }),
-                me.category.config({
-                    x: 10,
-                    y: 110,
-                    template: "{{CategoryName}}",
-                    value: "Condiments",
-                    bind: [me.databinder, "Category"],
-                    width: 170,
-                    label: "Category"
+                me.productName.config({
+                    x: 90,
+                    y: 10,
+                    bind: [me.databinder, "ProductName"],
+                    label: "Product Name",
+                    width: 310
                 }),
                 me.discontinued.config({
                     x: 415,
@@ -107,21 +77,19 @@ export class ProductView extends DBObjectView {
                     bind: [me.databinder, "Discontinued"],
                     label: "Discontinued"
                 }),
-                me.reorderLevel.config({
-                    x: 415,
+                me.quantityPerUnit.config({
+                    x: 10,
                     y: 60,
-                    bind: [me.databinder, "ReorderLevel"],
-                    width: 70,
-                    label: "Reorder Level",
-                    converter: new NumberConverter(),
-                    styles: [me.styleNumber]
+                    bind: [me.databinder, "QuantityPerUnit"],
+                    width: 135,
+                    label: "Quantity per Unit"
                 }),
-                me.unitsOnOrder.config({
-                    x: 325,
+                me.unitPrice.config({
+                    x: 160,
                     y: 60,
-                    bind: [me.databinder, "UnitsOnOrder"],
-                    label: "Units on Order",
-                    width: 75,
+                    bind: [me.databinder, "UnitPrice"],
+                    label: "Unit Price",
+                    width: 65,
                     converter: new NumberConverter(),
                     format: "#.##0,00",
                     styles: [me.styleNumber]
@@ -136,29 +104,61 @@ export class ProductView extends DBObjectView {
                     format: "#.##0,00",
                     styles: [me.styleNumber]
                 }),
-                me.unitPrice.config({
-                    x: 160,
+                me.unitsOnOrder.config({
+                    x: 325,
                     y: 60,
-                    bind: [me.databinder, "UnitPrice"],
-                    label: "Unit Price",
-                    width: 65,
+                    bind: [me.databinder, "UnitsOnOrder"],
+                    label: "Units on Order",
+                    width: 75,
                     converter: new NumberConverter(),
                     format: "#.##0,00",
                     styles: [me.styleNumber]
                 }),
-                me.quantityPerUnit.config({
-                    x: 10,
+                me.reorderLevel.config({
+                    x: 415,
                     y: 60,
-                    bind: [me.databinder, "QuantityPerUnit"],
-                    width: 135,
-                    label: "Quantity per Unit"
+                    bind: [me.databinder, "ReorderLevel"],
+                    width: 70,
+                    label: "Reorder Level",
+                    converter: new NumberConverter(),
+                    styles: [me.styleNumber]
                 }),
-                me.productName.config({
-                    x: 90,
-                    y: 10,
-                    bind: [me.databinder, "ProductName"],
-                    label: "Product Name",
-                    width: 310
+                me.category.config({
+                    x: 10,
+                    y: 110,
+                    template: "{{CategoryName}}",
+                    value: "Beverages",
+                    bind: [me.databinder, "Category"],
+                    width: 170,
+                    label: "Category"
+                }),
+                me.categoryChooser.config({
+                    x: 185,
+                    y: 125,
+                    items: "northwind.Categories",
+                    bind: [me.databinder, "Category"],
+                    width: 30,
+                    value: "Beverages"
+                }),
+                me.supplier.config({
+                    x: 225,
+                    y: 110,
+                    bind: [me.databinder, "Supplier"],
+                    value: "New Orleans Cajun Delights",
+                    template: "{{CompanyName}}",
+                    label: "Supplier",
+                    width: 230
+                }),
+                me.supplierchooser.config({
+                    x: 460,
+                    y: 125,
+                    bind: [me.databinder, "Supplier"],
+                    items: "northwind.Suppliers"
+                }),
+                me.styleNumber.config({
+                    css: {
+                        text_align: "right"
+                    }
                 })
             ] });
     }

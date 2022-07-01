@@ -88,7 +88,7 @@ export class DBObjectView extends Panel implements  Omit<DBObjectViewConfig,"isA
     }
     @$Property({ default: "function(obj?/*: DBObject*/){\n\t\n}" })
     oncreated(handler: (obj:DBObject ) => void) {
-        this.addEvent("deleted", handler);
+        this.addEvent("created", handler);
     }
     /**
      * saves the object
@@ -96,8 +96,8 @@ export class DBObjectView extends Panel implements  Omit<DBObjectViewConfig,"isA
     saveObject(){
     	var ob = this.me.databinder.fromForm();
         ob.save().then((obj)=>{
-        	this["value"]=obj;
-        	this.callEvent("saved", obj);
+        	this["value"]=typeof obj==="object"?obj:ob;
+        	this.callEvent("saved", ob);
         });
         
     }

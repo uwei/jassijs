@@ -57,25 +57,52 @@ export class SuppliersView extends DBObjectView {
                     bind: [me.databinder, "id"],
                     label: "Id"
                 }),
-                me.homepage.config({
-                    x: 10,
-                    y: 275,
-                    bind: [me.databinder, "HomePage"],
-                    label: "Home Page",
-                    width: 355
+                me.companyName.config({
+                    x: 75,
+                    y: 5,
+                    label: "Company Name",
+                    bind: [me.databinder, "CompanyName"],
+                    width: 290
                 }),
-                me.fax.config({
+                me.contactName.config({
+                    x: 10,
+                    y: 50,
+                    bind: [me.databinder, "ContactName"],
+                    label: "Contact Name"
+                }),
+                me.contactTitle.config({
                     x: 180,
-                    y: 230,
-                    bind: [me.databinder, "Fax"],
-                    label: "Fax",
+                    y: 50,
+                    bind: [me.databinder, "ContactTitle"],
+                    label: "Contact Title",
                     width: 185
                 }),
-                me.phone.config({
+                me.address.config({
                     x: 10,
-                    y: 230,
-                    bind: [me.databinder, "Phone"],
-                    label: "Phone",
+                    y: 95,
+                    bind: [me.databinder, "Address"],
+                    label: "Address",
+                    width: 355
+                }),
+                me.postalCode.config({
+                    x: 10,
+                    y: 140,
+                    bind: [me.databinder, "PostalCode"],
+                    width: 95,
+                    label: "Postal Code"
+                }),
+                me.city.config({
+                    x: 120,
+                    y: 140,
+                    bind: [me.databinder, "City"],
+                    label: "City",
+                    width: 245
+                }),
+                me.region.config({
+                    x: 10,
+                    y: 185,
+                    bind: [me.databinder, "Region"],
+                    label: "Region",
                     width: 155
                 }),
                 me.Country.config({
@@ -85,53 +112,26 @@ export class SuppliersView extends DBObjectView {
                     label: "Country",
                     width: 185
                 }),
-                me.region.config({
+                me.phone.config({
                     x: 10,
-                    y: 185,
-                    bind: [me.databinder, "Region"],
-                    label: "Region",
+                    y: 230,
+                    bind: [me.databinder, "Phone"],
+                    label: "Phone",
                     width: 155
                 }),
-                me.city.config({
-                    x: 120,
-                    y: 140,
-                    bind: [me.databinder, "City"],
-                    label: "City",
-                    width: 245
-                }),
-                me.postalCode.config({
-                    x: 10,
-                    y: 140,
-                    bind: [me.databinder, "PostalCode"],
-                    width: 95,
-                    label: "Postal Code"
-                }),
-                me.address.config({
-                    x: 10,
-                    y: 95,
-                    bind: [me.databinder, "Address"],
-                    label: "Address",
-                    width: 355
-                }),
-                me.contactTitle.config({
+                me.fax.config({
                     x: 180,
-                    y: 50,
-                    bind: [me.databinder, "ContactTitle"],
-                    label: "Contact Title",
+                    y: 230,
+                    bind: [me.databinder, "Fax"],
+                    label: "Fax",
                     width: 185
                 }),
-                me.contactName.config({
+                me.homepage.config({
                     x: 10,
-                    y: 50,
-                    bind: [me.databinder, "ContactName"],
-                    label: "Contact Name"
-                }),
-                me.companyName.config({
-                    x: 75,
-                    y: 5,
-                    label: "Company Name",
-                    bind: [me.databinder, "CompanyName"],
-                    width: 290
+                    y: 275,
+                    bind: [me.databinder, "HomePage"],
+                    label: "Home Page",
+                    width: 355
                 })
             ] });
     }

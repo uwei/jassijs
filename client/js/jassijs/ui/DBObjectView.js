@@ -48,7 +48,7 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
             return this["value"];
         }
         oncreated(handler) {
-            this.addEvent("deleted", handler);
+            this.addEvent("created", handler);
         }
         /**
          * saves the object
@@ -56,8 +56,8 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/BoxPanel", "jassi
         saveObject() {
             var ob = this.me.databinder.fromForm();
             ob.save().then((obj) => {
-                this["value"] = obj;
-                this.callEvent("saved", obj);
+                this["value"] = typeof obj === "object" ? obj : ob;
+                this.callEvent("saved", ob);
             });
         }
         onsaved(handler) {

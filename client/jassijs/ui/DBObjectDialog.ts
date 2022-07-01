@@ -21,7 +21,7 @@ export class DBObjectDialog extends Panel {
     me: Me;
     private _dbclassname: string;
     view: DBObjectView;
-    data: DBObject[];
+    //data: DBObject[];
     constructor() {
         super();
         this.me = {};
@@ -34,7 +34,8 @@ export class DBObjectDialog extends Panel {
         me.table1 = new Table();
         me.table1.height = "calc(100% - 300px)";
         me.table1.width = "calc(100% - 20px)";
-        me.splitpanel1.add(me.IDDBView);
+        me.table1.showSearchbox = true,
+            me.splitpanel1.add(me.IDDBView);
         me.splitpanel1.spliter = [70, 30];
         me.splitpanel1.height = "100%";
         me.splitpanel1.horizontal = false;
@@ -58,8 +59,15 @@ export class DBObjectDialog extends Panel {
         var cl = await classes.loadClass(this._dbclassname);
         var _this = this;
         //@ts-ignore
-        this.data = await cl.find();
-        this.me.table1.items = this.data;
+        // this.data = await cl.find();
+        this.me.table1.options = {
+            lazyLoad: {
+                classname: this._dbclassname,
+                loadFunc: "find"
+            }
+        }
+
+        //this.me.table1.items = this.data;
         //DBView
         var data = await registry.getJSONData("$DBObjectView");
         for (var x = 0; x < data.length; x++) {
@@ -70,24 +78,34 @@ export class DBObjectDialog extends Panel {
                 this.view = new cl();
 
                 this.me.IDDBView.add(this.view);
+                this.me.table1.onlazyloaded((data:any[]) => {
+                    if(data?.length>0&&this.view.value===undefined)
+                        this.view.value = data[0];
+                });
                 //@ts-ignore
-                this.view.value = this.data.length > 0 ? this.data[0] : undefined;
+                //   this.view.value = this.data.length > 0 ? this.data[0] : undefined;
                 this.view.onrefreshed(() => {
                     _this.me.table1.update();
                 });
+                this.view.oncreated((obj: DBObject) => {
+                   // _this.me.table1.insertItem(obj);
+                });
                 this.view.onsaved((obj: DBObject) => {
-                    var all = _this.me.table1.items;
-                    if (all.indexOf(obj) === -1) {
-                        all.push(obj);
-                        _this.me.table1.items = _this.me.table1.items;
-                        _this.me.table1.value = obj;
-                        _this.me.table1.update();
-                    }
-                    else
-                        _this.me.table1.update();
+                    _this.me.table1.updateOrInsertItem(obj);
+                    /* var all = _this.me.table1.items;
+                     if (all.indexOf(obj) === -1) {
+                         all.push(obj);
+                         _this.me.table1.items = _this.me.table1.items;
+                         _this.me.table1.value = obj;
+                         _this.me.table1.update();
+                     }
+                     else
+                         _this.me.table1.update();*/
                 });
                 this.view.ondeleted((obj: DBObject) => {
-                    var all = _this.me.table1.items;
+                    this.me.table1.removeItem(obj);
+                    _this.view.value=this.me.table1.value;
+                    /*var all = _this.me.table1.items;
                     var pos = all.indexOf(obj);
                     if (pos >= 0)
                         all.splice(pos, 1);
@@ -100,13 +118,13 @@ export class DBObjectDialog extends Panel {
                         _this.me.table1.value = all[pos];
                         _this.view.value = all[pos];
                     }
-                    _this.me.table1.update();
+                    _this.me.table1.update();*/
                 });
                 this.me.table1.selectComponent = this.view;
             }
         }
     }
-    private static createFunction(classname: string):any {
+    private static createFunction(classname: string): any {
         return function () {
             var ret = new DBObjectDialog();
             ret.dbclassname = classname;

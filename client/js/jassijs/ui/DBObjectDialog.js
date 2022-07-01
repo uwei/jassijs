@@ -13,6 +13,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "ja
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObjectDialog = void 0;
     let DBObjectDialog = DBObjectDialog_1 = class DBObjectDialog extends Panel_1.Panel {
+        //data: DBObject[];
         constructor() {
             super();
             this.me = {};
@@ -24,7 +25,8 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "ja
             me.table1 = new Table_1.Table();
             me.table1.height = "calc(100% - 300px)";
             me.table1.width = "calc(100% - 20px)";
-            me.splitpanel1.add(me.IDDBView);
+            me.table1.showSearchbox = true,
+                me.splitpanel1.add(me.IDDBView);
             me.splitpanel1.spliter = [70, 30];
             me.splitpanel1.height = "100%";
             me.splitpanel1.horizontal = false;
@@ -48,8 +50,14 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "ja
             var cl = await Classes_1.classes.loadClass(this._dbclassname);
             var _this = this;
             //@ts-ignore
-            this.data = await cl.find();
-            this.me.table1.items = this.data;
+            // this.data = await cl.find();
+            this.me.table1.options = {
+                lazyLoad: {
+                    classname: this._dbclassname,
+                    loadFunc: "find"
+                }
+            };
+            //this.me.table1.items = this.data;
             //DBView
             var data = await Registry_2.default.getJSONData("$DBObjectView");
             for (var x = 0; x < data.length; x++) {
@@ -59,24 +67,34 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "ja
                     this.me.IDDBView.removeAll();
                     this.view = new cl();
                     this.me.IDDBView.add(this.view);
+                    this.me.table1.onlazyloaded((data) => {
+                        if ((data === null || data === void 0 ? void 0 : data.length) > 0 && this.view.value === undefined)
+                            this.view.value = data[0];
+                    });
                     //@ts-ignore
-                    this.view.value = this.data.length > 0 ? this.data[0] : undefined;
+                    //   this.view.value = this.data.length > 0 ? this.data[0] : undefined;
                     this.view.onrefreshed(() => {
                         _this.me.table1.update();
                     });
+                    this.view.oncreated((obj) => {
+                        // _this.me.table1.insertItem(obj);
+                    });
                     this.view.onsaved((obj) => {
-                        var all = _this.me.table1.items;
-                        if (all.indexOf(obj) === -1) {
-                            all.push(obj);
-                            _this.me.table1.items = _this.me.table1.items;
-                            _this.me.table1.value = obj;
-                            _this.me.table1.update();
-                        }
-                        else
-                            _this.me.table1.update();
+                        _this.me.table1.updateOrInsertItem(obj);
+                        /* var all = _this.me.table1.items;
+                         if (all.indexOf(obj) === -1) {
+                             all.push(obj);
+                             _this.me.table1.items = _this.me.table1.items;
+                             _this.me.table1.value = obj;
+                             _this.me.table1.update();
+                         }
+                         else
+                             _this.me.table1.update();*/
                     });
                     this.view.ondeleted((obj) => {
-                        var all = _this.me.table1.items;
+                        this.me.table1.removeItem(obj);
+                        _this.view.value = this.me.table1.value;
+                        /*var all = _this.me.table1.items;
                         var pos = all.indexOf(obj);
                         if (pos >= 0)
                             all.splice(pos, 1);
@@ -89,7 +107,7 @@ define(["require", "exports", "jassijs/ui/Table", "jassijs/remote/Registry", "ja
                             _this.me.table1.value = all[pos];
                             _this.view.value = all[pos];
                         }
-                        _this.me.table1.update();
+                        _this.me.table1.update();*/
                     });
                     this.me.table1.selectComponent = this.view;
                 }

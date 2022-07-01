@@ -100,8 +100,8 @@ export class OrdersView extends DBObjectView {
         me.panel1.add(me.shipAddress);
         me.panel1.add(me.shipPostalCode);
         me.panel1.add(me.shipCity);
-        me.panel1.add(me.shipCountry);
         me.panel1.add(me.shipRegion);
+        me.panel1.add(me.shipCountry);
         me.panel1.width = 250;
         me.panel1.height = 185;
         me.panel1.isAbsolute = true;
@@ -265,9 +265,7 @@ export class OrdersView extends DBObjectView {
         me.htmlpanel1.styles = [];
         me.htmlpanel2.value = "Text<br>";
         me.htmlpanel2.width = 100;
-        me.style1.css = {
-          
-        };
+        me.style1.css = {};
     }
 }
 export async function test() {
