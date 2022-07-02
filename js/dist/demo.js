@@ -805,6 +805,39 @@ define("demo/TestList", ["require", "exports"], function (require, exports) {
     }
     exports.test = test;
 });
+define("demo/TestProTable", ["require", "exports", "jassijs/ui/Table"], function (require, exports, Table_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var x = 0;
+    async function test() {
+        /*  var dat=await Orders.find({
+             //where:`UPPER("ShipName") LIKE '%AC%'`
+             where:`UPPER(CAST(ID AS TEXT)) LIKE :mftext`,
+             whereParams:{mftext:"%24%"}
+          });
+         debugger;*/
+        var tab = new Table_3.Table({
+            lazyLoad: {
+                classname: "tests.TestBigData",
+                loadFunc: "find",
+                pageSize: 10
+            },
+        });
+        tab.showSearchbox = true;
+        tab.table.on("headerClick", function (e, c) {
+            setTimeout(() => {
+                tab.table.replaceData("/data.php");
+            }, 100);
+            //debugger;
+            console.log("now");
+        });
+        tab.width = "100%";
+        tab.height = 300;
+        return tab;
+    }
+    exports.test = test;
+});
 define("demo/TestTree", ["require", "exports", "jassijs/ui/Panel", "jassijs/ui/Tree", "jassijs/remote/Registry"], function (require, exports, Panel_7, Tree_2, Registry_10) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1356,7 +1389,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassij
     }
     exports.test = test;
 });
-define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Table"], function (require, exports, Panel_12, Registry_14, Table_3) {
+define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Table"], function (require, exports, Panel_12, Registry_14, Table_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
@@ -1386,7 +1419,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
             var t = new Person("Thomas", 5);
             var c = new Person("Christoph", 4, [u, t]);
             s.childs = [c];
-            me.tab = new Table_3.Table({
+            me.tab = new Table_4.Table({
                 dataTreeChildFunction: "t"
             });
             me.tab.items = [c];
@@ -1424,7 +1457,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
                     }
                 }
             }
-            me.tab = new Table_3.Table({
+            me.tab = new Table_4.Table({
                 dataTree: true,
                 dataTreeChildField: "__treechilds",
                 dataTreeRowExpanded: function (row) {
@@ -1592,6 +1625,9 @@ define("demo/registry", ["require"], function (require) {
             "demo/TreeTable.ts": {
                 "date": 1655556795176,
                 "demo.TreeTable": {}
+            },
+            "demo/TestProTable.ts": {
+                "date": 1656621988396
             }
         }
     };

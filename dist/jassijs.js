@@ -31,7 +31,7 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
             "node_modules/jquery.fancytree/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/jquery.fancytree/index.d.ts",
             "node_modules/requirejs/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/requirejs/index.d.ts",
             "node_modules/sizzle/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/sizzle/index.d.ts",
-            "node_modules/tabulator-tables/index.d.ts": "https://cdn.jsdelivr.net/npm/@types/tabulator-tables@4.9.3/index.d.ts",
+            "tabulator-tables.ts": "https://cdn.jsdelivr.net/npm/@types/tabulator-tables@5.1.4/index.d.ts",
             "node_modules/typescript/typescriptServices.d.ts": "https://cdn.jsdelivr.net/gh/microsoft/TypeScript@release-3.7/lib/typescriptServices.d.ts"
         },
         "require": {
@@ -58,12 +58,14 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
                 'source.map': "https://unpkg.com/source-map@0.7.3/dist/source-map",
                 'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
                 'splitlib': '//cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min',
-                'tabulatorlib': '//unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator',
+                //'tabulatorlib': '//unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator',
+                'tabulatorlib': '//unpkg.com/tabulator-tables@5.1.4/dist/js/tabulator',
                 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/5.9.2/tinymce.min',
                 // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
                 "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect"
             },
             "shim": {
+                'tabulator-tables': ['jassijs/ext/tabulator'],
                 'goldenlayout': ["jquery"],
                 "jquery.choosen": ["jquery"],
                 "jquery.contextMenu": ["jquery.ui"],
@@ -137,7 +139,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Windows": {}
             },
             "jassijs/modul.ts": {
-                "date": 1655754833063
+                "date": 1656674206998
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1655556496250,
@@ -161,7 +163,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.remote.DBArray": {}
             },
             "jassijs/remote/DBObject.ts": {
-                "date": 1655556864383,
+                "date": 1656597031023,
                 "jassijs.remote.DBObject": {}
             },
             "jassijs/remote/DBObjectQuery.ts": {
@@ -602,7 +604,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Container.ts": {
-                "date": 1656186469431,
+                "date": 1656417347591,
                 "jassijs.ui.Container": {}
             },
             "jassijs/ui/ContextMenu.ts": {
@@ -714,7 +716,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectDialog.ts": {
-                "date": 1655556795276,
+                "date": 1656681977508,
                 "jassijs.ui.DBObjectDialog": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -798,7 +800,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/DBObjectView.ts": {
-                "date": 1656021585019,
+                "date": 1656683378469,
                 "jassijs/ui/DBObjectView": {
                     "$UIComponent": [
                         {
@@ -1004,7 +1006,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655585211781
             },
             "jassijs/ui/ObjectChooser.ts": {
-                "date": 1656016954534,
+                "date": 1656506101900,
                 "jassijs.ui.ObjectChooser": {
                     "$UIComponent": [
                         {
@@ -1054,7 +1056,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1656017008794,
+                "date": 1656456105621,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {}
@@ -1104,7 +1106,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/DatabinderEditor.ts": {
-                "date": 1655556864383,
+                "date": 1656506935134,
                 "jassijs.ui.PropertyEditors.DatabinderEditor": {
                     "$PropertyEditor": [
                         [
@@ -1218,7 +1220,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/LoadingEditor.ts": {
-                "date": 1655854504363,
+                "date": 1656414352631,
                 "jassijs.ui.PropertyEditors.LoadingEditor": {}
             },
             "jassijs/ui/PropertyEditors/NameEditor.ts": {
@@ -1328,7 +1330,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
-                "date": 1656017023694,
+                "date": 1656683556443,
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -1367,7 +1369,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1656017073004,
+                "date": 1656507979161,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -3166,10 +3168,11 @@ define("jassijs/ext/split", ["splitlib"], function (split) {
         default: split
     };
 });
-define("jassijs/ext/tabulator", ['tabulatorlib'], function (Tabulator) {
+//define("jassijs/ext/tabulator", ['tabulatorlib'], function (Tabulator) {
+define("tabulator-tables", ['tabulatorlib'], function (Tabulator) {
     var path = require('jassijs/modul').default.require.paths["tabulatorlib"];
     jassijs.myRequire(path.replace("js", "css") + ".min.css");
-    window.Tabulator = Tabulator;
+    return { Tabulator };
 });
 ////GEHT NICHT 
 ////use requirejs(["https://cdnjs.cloudflare.com/ajax/libs/tinymce/5.4.2/tinymce.min.js"],function(tinymcelib){
@@ -7805,6 +7808,9 @@ define("jassijs/ui/Container", ["require", "exports", "jassijs/remote/Registry",
          * @param {jassijs.ui.Component} before - the component before then component to add
          */
         addBefore(component, before) {
+            if (component._parent !== undefined) {
+                component._parent.remove(component);
+            }
             component._parent = this;
             component.domWrapper["_parent"] = this;
             var index = this._components.indexOf(before);
@@ -8133,6 +8139,7 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.DBObjectDialog = void 0;
     let DBObjectDialog = DBObjectDialog_1 = class DBObjectDialog extends Panel_5.Panel {
+        //data: DBObject[];
         constructor() {
             super();
             this.me = {};
@@ -8143,8 +8150,9 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
             me.IDDBView = new Panel_5.Panel();
             me.table1 = new Table_2.Table();
             me.table1.height = "calc(100% - 300px)";
-            me.table1.width = "calc(100% - 50px)";
-            me.splitpanel1.add(me.IDDBView);
+            me.table1.width = "calc(100% - 20px)";
+            me.table1.showSearchbox = true,
+                me.splitpanel1.add(me.IDDBView);
             me.splitpanel1.spliter = [70, 30];
             me.splitpanel1.height = "100%";
             me.splitpanel1.horizontal = false;
@@ -8168,8 +8176,14 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
             var cl = await Classes_20.classes.loadClass(this._dbclassname);
             var _this = this;
             //@ts-ignore
-            this.data = await cl.find();
-            this.me.table1.items = this.data;
+            // this.data = await cl.find();
+            this.me.table1.options = {
+                lazyLoad: {
+                    classname: this._dbclassname,
+                    loadFunc: "find"
+                }
+            };
+            //this.me.table1.items = this.data;
             //DBView
             var data = await Registry_56.default.getJSONData("$DBObjectView");
             for (var x = 0; x < data.length; x++) {
@@ -8179,24 +8193,34 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
                     this.me.IDDBView.removeAll();
                     this.view = new cl();
                     this.me.IDDBView.add(this.view);
+                    this.me.table1.onlazyloaded((data) => {
+                        if ((data === null || data === void 0 ? void 0 : data.length) > 0 && this.view.value === undefined)
+                            this.view.value = data[0];
+                    });
                     //@ts-ignore
-                    this.view.value = this.data.length > 0 ? this.data[0] : undefined;
+                    //   this.view.value = this.data.length > 0 ? this.data[0] : undefined;
                     this.view.onrefreshed(() => {
                         _this.me.table1.update();
                     });
+                    this.view.oncreated((obj) => {
+                        // _this.me.table1.insertItem(obj);
+                    });
                     this.view.onsaved((obj) => {
-                        var all = _this.me.table1.items;
-                        if (all.indexOf(obj) === -1) {
-                            all.push(obj);
-                            _this.me.table1.items = _this.me.table1.items;
-                            _this.me.table1.value = obj;
-                            _this.me.table1.update();
-                        }
-                        else
-                            _this.me.table1.update();
+                        _this.me.table1.updateOrInsertItem(obj);
+                        /* var all = _this.me.table1.items;
+                         if (all.indexOf(obj) === -1) {
+                             all.push(obj);
+                             _this.me.table1.items = _this.me.table1.items;
+                             _this.me.table1.value = obj;
+                             _this.me.table1.update();
+                         }
+                         else
+                             _this.me.table1.update();*/
                     });
                     this.view.ondeleted((obj) => {
-                        var all = _this.me.table1.items;
+                        this.me.table1.removeItem(obj);
+                        _this.view.value = this.me.table1.value;
+                        /*var all = _this.me.table1.items;
                         var pos = all.indexOf(obj);
                         if (pos >= 0)
                             all.splice(pos, 1);
@@ -8209,7 +8233,7 @@ define("jassijs/ui/DBObjectDialog", ["require", "exports", "jassijs/ui/Table", "
                             _this.me.table1.value = all[pos];
                             _this.view.value = all[pos];
                         }
-                        _this.me.table1.update();
+                        _this.me.table1.update();*/
                     });
                     this.me.table1.selectComponent = this.view;
                 }
@@ -8473,7 +8497,7 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
             return this["value"];
         }
         oncreated(handler) {
-            this.addEvent("deleted", handler);
+            this.addEvent("created", handler);
         }
         /**
          * saves the object
@@ -8481,8 +8505,8 @@ define("jassijs/ui/DBObjectView", ["require", "exports", "jassijs/ui/Button", "j
         saveObject() {
             var ob = this.me.databinder.fromForm();
             ob.save().then((obj) => {
-                this["value"] = obj;
-                this.callEvent("saved", obj);
+                this["value"] = typeof obj === "object" ? obj : ob;
+                this.callEvent("saved", ob);
             });
         }
         onsaved(handler) {
@@ -11050,17 +11074,18 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
             me.IDPanel.add(me.IDOK);
             me.IDPanel.add(me.IDCancel);
             me.IDPanel.add(me.IDTable);
-            me.IDOK.width = 55;
+            me.IDOK.width = 65;
             me.IDOK.text = "OK";
+            me.IDSearch.width = "calc(100% - 132px)";
             me.IDOK.onclick(function (event) {
                 _this.ok();
             });
-            me.IDSearch.width = 170;
+            //me.IDSearch.width = "calc (100% - 300px)";
             me.IDSearch.oninput(function (event) {
                 me.IDTable.search("all", me.IDSearch.value, true);
             });
             me.IDTable.dom.addEventListener("dblclick", function (data) {
-                _this.ok();
+                setTimeout(() => { _this.ok(); }, 200);
             });
             me.IDSearch.onkeydown(function (event) {
                 if (event.keyCode == 13) {
@@ -11074,20 +11099,21 @@ define("jassijs/ui/ObjectChooser", ["require", "exports", "jassijs/remote/Regist
             });
             me.IDSearch.height = 15;
             me.IDTable.width = "100%";
-            me.IDTable.height = "calc(100% - 10px)";
+            me.IDTable.height = "calc(100% - 38px)";
             setTimeout(() => { me.IDSearch.focus(); }, 200);
             setTimeout(() => { me.IDSearch.focus(); }, 1000);
             me.IDCancel.onclick(function (event) {
                 _this.cancel();
             });
+            me.IDCancel.width = 65;
             me.IDCancel.text = "Cancel";
             me.IDPanel.height = "100%";
             me.IDPanel.width = "100%";
         }
         ok() {
             var me = this.me;
-            $(me.IDPanel.dom).dialog("destroy");
             this.value = me.IDTable.value;
+            $(me.IDPanel.dom).dialog("destroy");
             this.callEvent("change", event);
         }
         cancel() {
@@ -11623,6 +11649,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
                 _this.removePropertyInCode(name);
                 _this.updateParser();
                 _this.value = _this.value;
+                _this.callEvent("propertyChanged", event);
             });
             row.children[0].prepend(deletebutton.dom);
             this.table.dom.children[1].appendChild(row);
@@ -13110,13 +13137,11 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Calendar", "jassijs/ext/tabulator"], function (require, exports, Registry_87, DataComponent_5, Property_27, Component_27, Textbox_8, Calendar_1) {
+define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Calendar", "jassijs/remote/Classes", "tabulator-tables"], function (require, exports, Registry_87, DataComponent_5, Property_27, Component_27, Textbox_8, Calendar_1, Classes_27, tabulator_tables_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
-    ;
     let TableEditorProperties = class TableEditorProperties {
-        cellDblClick() { }
     };
     __decorate([
         (0, Property_27.$Property)({ default: undefined }),
@@ -13138,18 +13163,15 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
         (0, Property_27.$Property)({ default: false }),
         __metadata("design:type", Boolean)
     ], TableEditorProperties.prototype, "movableColumns", void 0);
-    __decorate([
-        (0, Property_27.$Property)({ default: "function(event:any,group:any){\n\t\n}" }),
-        __metadata("design:type", Function),
-        __metadata("design:paramtypes", []),
-        __metadata("design:returntype", void 0)
-    ], TableEditorProperties.prototype, "cellDblClick", null);
     TableEditorProperties = __decorate([
         (0, Registry_87.$Class)("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
     let Table = class Table extends DataComponent_5.DataComponent {
         constructor(properties) {
             super();
+            this._lastLazySort = undefined;
+            this._lastLazySearch = undefined;
+            this._lazyDataHasChanged = undefined;
             super.init('<div class="Table"></div>');
             var _this = this;
             this.options = properties;
@@ -13194,29 +13216,37 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
             //    properties.autoResize = false;
             if (properties.layout === undefined)
                 properties.layout = "fitDataStretch"; //"fitDataFill";////"fitColumns";
-            var dataTreeRowExpanded = properties.dataTreeRowExpanded;
-            properties.dataTreeRowExpanded = function (row, level) {
-                _this.onTreeExpanded(row, level);
-                if (dataTreeRowExpanded !== undefined) {
-                    dataTreeRowExpanded(row, level);
+            if (properties.lazyLoad) {
+                this._lazyLoadOption = properties.lazyLoad;
+                properties.ajaxURL = 'does/not/matter';
+                properties.ajaxRequestFunc = _this.lazyLoadFunc.bind(this); // (p1,p2,p3)=>_this.progressiveLoad(p1,p2,p3);
+                properties.progressiveLoad = 'scroll';
+            }
+            if (properties.items) {
+                properties.data = this._setItemsIntern(properties.items, false);
+                delete properties.items;
+                ;
+            }
+            this.table = new tabulator_tables_1.Tabulator("[id='" + this._id + "']", properties);
+            this.table.on("rowClick", (e, e2) => { _this._onselect(e, e2); });
+            this.table.on("cellContext", (e, e2) => { _this._oncontext(e, e2); });
+            this.table.on("dataTreeRowExpanded", (e, e2) => { _this.onTreeExpanded(e, e2); });
+            if (properties.lazyLoad) {
+                //updates the tabledata if user sort with headerclick
+                this.table.on("headerClick", function (e, c) {
+                    setTimeout(() => {
+                        _this.update();
+                    }, 100);
+                });
+                if (this._searchbox) {
+                    this._searchbox.onchange(() => {
+                        setTimeout(() => {
+                            _this.update();
+                        }, 50);
+                    });
                 }
-            };
-            var rowClick = properties.rowClick;
-            properties.rowClick = function (e, row) {
-                _this._onselect(e, row);
-                if (rowClick !== undefined) {
-                    rowClick(e, row);
-                }
-            };
-            var contextClick = properties.cellContext;
-            properties.cellContext = function (e, row) {
-                _this._oncontext(e, row);
-                if (contextClick !== undefined) {
-                    contextClick(e, row);
-                }
-                return undefined;
-            };
-            this.table = new Tabulator("[id='" + this._id + "']", properties);
+                delete properties.lazyLoad;
+            }
             if (lastItems) {
                 this.items = lastItems;
             }
@@ -13226,6 +13256,88 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
         }
         get options() {
             return this._lastOptions;
+        }
+        /**
+         * create a SQL-Querry for a search in all visible columns
+         */
+        sqlForLazySearch() {
+            if (this._searchbox.value === undefined || this._searchbox.value === "") {
+                return undefined;
+            }
+            var fields = Registry_87.default.getMemberData("design:type")[this._lazyLoadOption.classname];
+            var columns = this.table.getColumns(false);
+            var wheres = [];
+            for (var x = 0; x < columns.length; x++) {
+                var found = fields[columns[x].getField()];
+                //           where:`UPPER(CAST(ID AS TEXT)) LIKE :mftext`,
+                //        whereParams:{mftext:"%24%"}
+                if (found) { //
+                    if (found[0][0] === String) {
+                        wheres.push("UPPER('" + columns[x].getField() + "') LIKE :mftext");
+                    }
+                    else {
+                        wheres.push("UPPER(CAST('" + columns[x].getField() + "' AS TEXT)) LIKE :mftext");
+                    }
+                }
+            }
+            if (wheres.length > 0) {
+                return wheres.join(" or ");
+            }
+        }
+        onlazyloaded(func) {
+            this.addEvent("lazyloaded", func);
+        }
+        /**
+         * loads lazy data from _progressiveLoadFunc
+         */
+        lazyLoadFunc(url, param, param2) {
+            //var data=await this._progressiveLoadFunc();
+            //return data;
+            // debugger;
+            var _this = this;
+            return new Promise((resolve) => {
+                Classes_27.classes.loadClass(_this._lazyLoadOption.classname).then((cl) => {
+                    var newSort = undefined;
+                    var tt = _this.table.getSorters();
+                    if (tt) {
+                        newSort = {};
+                        for (var x = 0; x < tt.length; x++) {
+                            newSort[tt[x].field] = tt[x].dir.toUpperCase();
+                        }
+                    }
+                    var pageSize = _this._lazyLoadOption.pageSize;
+                    if (pageSize === undefined)
+                        pageSize = 200;
+                    var opt = {
+                        skip: param2.page * pageSize,
+                        take: pageSize,
+                        order: newSort
+                    };
+                    var where = _this.sqlForLazySearch();
+                    if (where) {
+                        opt.where = where;
+                        opt.whereParams = { mftext: "%" + this._searchbox.value.toUpperCase() + "%" };
+                        //   console.log(where);
+                    }
+                    if (JSON.stringify(newSort) !== this._lastLazySort || this._searchbox.value !== this._lastLazySearch || this._lazyDataHasChanged) {
+                        pageSize = (1 + param2.page) * pageSize;
+                        opt.take = pageSize;
+                        opt.skip = 0;
+                        this._lastLazySort = JSON.stringify(newSort);
+                        this._lastLazySearch = this._searchbox.value;
+                        this._lazyDataHasChanged = undefined;
+                    }
+                    cl[_this._lazyLoadOption.loadFunc](opt).then((data) => {
+                        var ret = {
+                            "last_page": data.length < pageSize ? 0 : (param2.page + 1),
+                            data: data
+                        };
+                        console.log(param2.page * pageSize);
+                        resolve(ret);
+                        _this.callEvent("lazyloaded", data, opt, param, param2);
+                    });
+                });
+            });
         }
         defaultAutoColumnDefinitions(definitions) {
             var _this = this;
@@ -13293,7 +13405,15 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
             }
         }
         async update() {
-            await this.table.updateData(this.items);
+            if (this._lazyLoadOption) {
+                this._lazyDataHasChanged = true;
+                var sel = this.value;
+                await this.table.replaceData("/data.php");
+                this.value = sel;
+            }
+            else {
+                await this.table.updateData(this.items);
+            }
         }
         _oncontext(event, row) {
             if (this.contextMenu !== undefined) {
@@ -13325,6 +13445,8 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
                     this._searchbox.destroy();
                     delete this._searchbox;
                 }
+                if (this.height === "calc(100% - 28px)")
+                    this.height = "100%";
             }
             else {
                 this._searchbox = new Textbox_8.Textbox();
@@ -13342,7 +13464,16 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
                         });
                     }, 100);
                 });
+                if (this._lazyLoadOption) {
+                    this._searchbox.onchange(() => {
+                        setTimeout(() => {
+                            _this.table.replaceData("/data.php");
+                        }, 50);
+                    });
+                }
                 this.domWrapper.prepend(this._searchbox.domWrapper);
+                if (this.height === "calc(100% - 7px)") ///correct height
+                    this.height = "100%";
             }
         }
         set selectComponent(_component) {
@@ -13351,23 +13482,76 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
         get selectComponent() {
             return this._select;
         }
-        set items(value) {
+        _setItemsIntern(value, updateData = true) {
             if (value && this.dataTreeChildFunction) { //populate __treechilds
                 for (let x = 0; x < value.length; x++) {
                     this.populateTreeData(value[x]);
                 }
             }
             this._items = value;
-            if (value !== undefined)
+            if (value !== undefined && updateData)
                 this.table.setData(value);
+            return value;
+        }
+        set items(value) {
+            this._setItemsIntern(value);
         }
         get items() {
             return this._items;
+        }
+        async updateOrInsertItem(item) {
+            var ret = await this.updateItem(item);
+            if (ret === undefined)
+                return await this.insertItem(item);
+        }
+        async updateItem(item) {
+            var rows = this.table.getRows();
+            for (var x = 0; x < rows.length; x++) {
+                if (rows[x].getData() === item) {
+                    //@ts-ignore
+                    await rows[x].update(item);
+                    return rows[x];
+                }
+            }
+            return undefined;
+        }
+        async insertItem(item) {
+            var ret = await this.table.addRow(item);
+            ret.select();
+            ret.scrollTo();
+            return ret;
+        }
+        async removeItem(item) {
+            var rows = this.table.getRows();
+            for (var x = 0; x < rows.length; x++) {
+                if (rows[x].getData() === item) {
+                    //@ts-ignore
+                    try {
+                        rows[x + 1].select();
+                        rows[x + 1].scrollTo();
+                    }
+                    catch (_a) { }
+                    await rows[x].delete();
+                    return;
+                }
+            }
         }
         /**
          * @member {object} sel - the selected object
          */
         set value(sel) {
+            //@ts-ignore
+            this.table.deselectRow(this.table.getSelectedRows());
+            var rows = this.table.getRows();
+            for (var x = 0; x < rows.length; x++) {
+                if (rows[x].getData() === sel) {
+                    //@ts-ignore
+                    this.table.selectRow(rows[x]);
+                    this.table.scrollToRow(rows[x]);
+                }
+            }
+            return;
+            debugger;
             if (this.items === undefined)
                 return;
             var pos = this.items.indexOf(sel);
@@ -13375,9 +13559,6 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
             this.table.deselectRow(this.table.getSelectedRows());
             if (pos === -1)
                 return;
-            //@ts-ignore
-            this.table.selectRow(this.table.getRows()[pos]);
-            this.table.scrollToRow(this.table.getRows()[pos]);
         }
         get value() {
             var ret = this.table.getSelectedRows();
@@ -13408,12 +13589,24 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
         * e.g. 50 or "100%"
         */
         set height(value) {
-            //@ts-ignore
-            this.table.setHeight(value);
-            //super.height=value;
+            if (value === "100%") {
+                if (this.showSearchbox)
+                    value = "calc(100% - 28px)";
+                else
+                    value = "calc(100% - 7px)";
+            }
+            super.height = value;
         }
         get height() {
             return super.height;
+        }
+        set width(value) {
+            if (value === "100%")
+                value = "calc(100% - 5px)";
+            super.width = value;
+        }
+        get width() {
+            return super.width;
         }
         /**
          * Searches records in the grid
@@ -13495,6 +13688,11 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
         __metadata("design:paramtypes", [Object])
     ], Table.prototype, "height", null);
     __decorate([
+        (0, Property_27.$Property)({ type: "string" }),
+        __metadata("design:type", Object),
+        __metadata("design:paramtypes", [Object])
+    ], Table.prototype, "width", null);
+    __decorate([
         (0, Property_27.$Property)({ type: "databinder" }),
         __metadata("design:type", Array),
         __metadata("design:paramtypes", [Array])
@@ -13506,15 +13704,27 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
         __metadata("design:paramtypes", [Object])
     ], Table);
     exports.Table = Table;
-    async function test() {
-        var tab = new Table({});
-        tab.config({
-            width: 400,
-            options: {
-                headerSort: true
+    var page = 0;
+    var id = 0;
+    function updateData(v1, v2, v3) {
+        // debugger;
+        return new Promise((resolve) => {
+            console.log("updateData");
+            var data = [];
+            for (var x = id; x < 200 + id; x++) {
+                data.push({ id: x, name: "Person " + x });
             }
+            id = x;
+            page++;
+            var ret = {
+                "last_page": x > 2000 ? 0 : (v3.page + 1),
+                data: data
+            };
+            console.log(x);
+            resolve(ret);
         });
-        tab.showSearchbox = true;
+    }
+    async function test() {
         var tabledata = [
             { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
             { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
@@ -13522,9 +13732,20 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
             { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: "01/08/1980" },
             { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
         ];
-        window.setTimeout(() => {
-            tab.items = tabledata;
-        }, 100);
+        var tab = new Table({
+            height: 200,
+            headerSort: true,
+            items: tabledata
+        });
+        tab.showSearchbox = true;
+        //window.setTimeout(() => {
+        tab.items = tabledata;
+        // }, 100);
+        tab.on("dblclick", () => {
+            //  alert(tab.value);
+        });
+        tab.width = 176;
+        tab.height = 223;
         //tab.select = {};
         // tab.showSearchbox = true;
         //    var kunden = await jassijs.db.load("de.Kunde");
@@ -13602,6 +13823,12 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Registry", "
         }
         get disabled() {
             return this.dom.disabled;
+        }
+        set readOnly(value) {
+            this.dom.readOnly = true;
+        }
+        get readOnly() {
+            return this.dom.readOnly;
         }
         set format(value) {
             this._format = value;
@@ -13756,6 +13983,11 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Registry", "
         (0, Property_29.$Property)({ type: "classselector", service: "$Converter" }),
         __metadata("design:type", typeof (_a = typeof DefaultConverter_1.DefaultConverter !== "undefined" && DefaultConverter_1.DefaultConverter) === "function" ? _a : Object)
     ], Textbox.prototype, "converter", void 0);
+    __decorate([
+        (0, Property_29.$Property)(),
+        __metadata("design:type", Boolean),
+        __metadata("design:paramtypes", [Boolean])
+    ], Textbox.prototype, "readOnly", null);
     __decorate([
         (0, Property_29.$Property)({ type: "string", chooseFrom: allFormats }),
         __metadata("design:type", Object),
@@ -15033,7 +15265,7 @@ define("jassijs/ui/PropertyEditors/BooleanEditor", ["require", "exports", "jassi
     ], BooleanEditor);
     exports.BooleanEditor = BooleanEditor;
 });
-define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/PropertyEditors/JsonEditor", "jassijs/util/Tools", "jassijs/ui/converters/StringConverter", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes"], function (require, exports, Select_3, Editor_2, JsonEditor_1, Tools_2, StringConverter_1, Registry_96, Panel_19, Textbox_10, Registry_97, ComponentDescriptor_7, Classes_27) {
+define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/PropertyEditors/JsonEditor", "jassijs/util/Tools", "jassijs/ui/converters/StringConverter", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/ComponentDescriptor", "jassijs/remote/Classes"], function (require, exports, Select_3, Editor_2, JsonEditor_1, Tools_2, StringConverter_1, Registry_96, Panel_19, Textbox_10, Registry_97, ComponentDescriptor_7, Classes_28) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ClassSelectorEditor = void 0;
@@ -15080,12 +15312,12 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
                 var file = converter.classname.replaceAll(".", "/");
                 var stype = file.split("/")[file.split("/").length - 1];
                 _this.propertyEditor.addImportIfNeeded(stype, file);
-                Classes_27.classes.loadClass(converter.classname).then((pclass) => {
+                Classes_28.classes.loadClass(converter.classname).then((pclass) => {
                     _this.propertyEditor.setPropertyInDesign(_this.property.name, new pclass());
                 });
             }
             _this.property.constructorClass = converter.classname;
-            _this.jsonEditor.showThisProperties = ComponentDescriptor_7.ComponentDescriptor.describe(Classes_27.classes.getClass(converter.classname)).fields;
+            _this.jsonEditor.showThisProperties = ComponentDescriptor_7.ComponentDescriptor.describe(Classes_28.classes.getClass(converter.classname)).fields;
             for (var x = 0; x < _this.jsonEditor.showThisProperties.length; x++) {
                 var test = _this.jsonEditor.showThisProperties[x].name;
                 if (test.startsWith("new")) {
@@ -15106,7 +15338,7 @@ define("jassijs/ui/PropertyEditors/ClassSelectorEditor", ["require", "exports", 
                    });*/
                 for (var x = 0; x < converters.length; x++) {
                     var con = converters[x];
-                    var cname = Classes_27.classes.getClassName(con.oclass);
+                    var cname = Classes_28.classes.getClassName(con.oclass);
                     var name = cname;
                     if (con.params[0] && con.params[0].name !== undefined)
                         name = con.params[0].name;
@@ -15336,7 +15568,7 @@ define("jassijs/ui/PropertyEditors/ColorEditor", ["require", "exports", "jassijs
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Editor_4, Select_5, Classes_28, Registry_99) {
+define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Select", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Editor_4, Select_5, Classes_29, Registry_99) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ComponentSelectorEditor = void 0;
@@ -15363,7 +15595,7 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
         set ob(ob) {
             super.ob = ob;
             var scomponentType = this.property.componentType.replace("[", "").replace("]", "");
-            var data = this.propertyEditor.getVariablesForType(Classes_28.classes.getClass(scomponentType));
+            var data = this.propertyEditor.getVariablesForType(Classes_29.classes.getClass(scomponentType));
             this.component.items = data === undefined ? [] : data;
             var value = this.propertyEditor.getPropertyValue(this.property);
             if (this.property.componentType.indexOf("[") === 0 && value) {
@@ -15416,7 +15648,7 @@ define("jassijs/ui/PropertyEditors/ComponentSelectorEditor", ["require", "export
     }
     exports.test = test;
 });
-define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/remote/Classes"], function (require, exports, Editor_5, Registry_100, Panel_20, Textbox_12, ObjectChooser_1, Classes_29) {
+define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jassijs/ui/PropertyEditors/Editor", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Textbox", "jassijs/ui/ObjectChooser", "jassijs/remote/Classes"], function (require, exports, Editor_5, Registry_100, Panel_20, Textbox_12, ObjectChooser_1, Classes_30) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DBObjectEditor = void 0;
@@ -15481,7 +15713,7 @@ define("jassijs/ui/PropertyEditors/DBObjectEditor", ["require", "exports", "jass
             return this.component;
         }
         async loadObject(id) {
-            var tp = await Classes_29.classes.loadClass(this.property.componentType);
+            var tp = await Classes_30.classes.loadClass(this.property.componentType);
             return await tp["findOne"](parseInt(id));
         }
         /**
@@ -15570,11 +15802,12 @@ define("jassijs/ui/PropertyEditors/DatabinderEditor", ["require", "exports", "ja
                     if (binder === undefined)
                         continue;
                     let ob = binder.value;
-                    if (ob !== undefined) {
+                    if (ob !== undefined && !Array.isArray(ob)) {
                         for (var m in ob) {
                             comps.push(m + "-" + binders[x]);
                         }
                     }
+                    comps.push("this-" + binders[x]);
                 }
                 this.component.autocompleter = comps;
             }
@@ -16213,7 +16446,7 @@ define("jassijs/ui/PropertyEditors/ImageEditor", ["require", "exports", "jassijs
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ext/jquerylib"], function (require, exports, Registry_109, Editor_12, Button_12, PropertyEditor_5, Tools_3, Classes_30, Property_32) {
+define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/Editor", "jassijs/ui/Button", "jassijs/ui/PropertyEditor", "jassijs/util/Tools", "jassijs/remote/Classes", "jassijs/ui/Property", "jassijs/ext/jquerylib"], function (require, exports, Registry_109, Editor_12, Button_12, PropertyEditor_5, Tools_3, Classes_31, Property_32) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.JsonEditor = void 0;
@@ -16345,7 +16578,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
             this.makePropertyChangedEvent(propEditor);
             propEditor.parentPropertyEditor = this.propertyEditor;
             propEditor.variablename = this.property.name;
-            var newclass = Classes_30.classes.getClass(this.property.componentType);
+            var newclass = Classes_31.classes.getClass(this.property.componentType);
             if (!this.property.componentType)
                 return;
             var newvalue = new newclass();
@@ -16356,7 +16589,7 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
                     var param = code === undefined ? undefined : code.substring(code.indexOf("(") + 1, code.indexOf(")"));
                     if (param === "")
                         param = undefined;
-                    Classes_30.classes.loadClass(this.property.constructorClass).then((oclass) => {
+                    Classes_31.classes.loadClass(this.property.constructorClass).then((oclass) => {
                         let oparam = Tools_3.Tools.jsonToObject(param);
                         var vv = new oclass(param === undefined ? undefined : oparam);
                         propEditor.value = vv;
@@ -16460,6 +16693,10 @@ define("jassijs/ui/PropertyEditors/LoadingEditor", ["require", "exports", "jassi
                 _this._editor = new cl(_this.property, _this.propertyEditor);
                 _this.component.dom.parentNode.replaceChild(_this._editor.getComponent().dom, _this.component.dom);
                 _this._editor.ob = _this._saveOb;
+                _this._editor.onedit((p1, p2) => {
+                    debugger;
+                    _this.callEvent("edit", p1, p2);
+                });
                 _this.component = _this._editor.component;
             });
         }
@@ -16700,7 +16937,7 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
     ], StringConverter);
     exports.StringConverter = StringConverter;
 });
-define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_13, NumberConverter_2, Textbox_20, BoxPanel_8, Select_8, Table_5, Registry_116, Panel_23, papaparse_1, Database_3, Registry_117, Classes_31, DBObject_8, Actions_17, Router_7, Server_5, Transaction_1) {
+define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_13, NumberConverter_2, Textbox_20, BoxPanel_8, Select_8, Table_5, Registry_116, Panel_23, papaparse_1, Database_3, Registry_117, Classes_32, DBObject_8, Actions_17, Router_7, Server_5, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -16718,7 +16955,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
             var _a;
             var _this = this;
             var html = "<option></option>";
-            var meta = (_a = Database_3.db.getMetadata(await Classes_31.classes.loadClass(this.me.select.value))) === null || _a === void 0 ? void 0 : _a.fields;
+            var meta = (_a = Database_3.db.getMetadata(await Classes_32.classes.loadClass(this.me.select.value))) === null || _a === void 0 ? void 0 : _a.fields;
             var lkeys = [];
             for (var key in meta) {
                 if (key === "this")
@@ -16743,7 +16980,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
             await Registry_117.default.loadAllFilesForService("$DBObject");
             var data = Registry_117.default.getData("$DBObject");
             data.forEach((entr) => {
-                cls.push(Classes_31.classes.getClassName(entr.oclass));
+                cls.push(Classes_32.classes.getClassName(entr.oclass));
             });
             this.me.select.items = cls;
             //debug
@@ -16847,7 +17084,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
                 }
             }
             imp.readData(ret);
-            var _meta = (_a = Database_3.db.getMetadata(await Classes_31.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
+            var _meta = (_a = Database_3.db.getMetadata(await Classes_32.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
             var meta = {};
             for (let k in _meta) {
                 meta[k.toLowerCase()] = k;
@@ -16897,10 +17134,10 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
         }
         async _doimport(data, dbclass, fromLine, assignedfields, beforeSave) {
             var _a;
-            var Type = Classes_31.classes.getClass(dbclass);
+            var Type = Classes_32.classes.getClass(dbclass);
             //read objects so we can read from cache
             let nil = await Type["find"]();
-            var meta = (_a = Database_3.db.getMetadata(await Classes_31.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
+            var meta = (_a = Database_3.db.getMetadata(await Classes_32.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
             var members = Registry_117.default.getMemberData("design:type")[dbclass];
             var allObjects = [];
             var from = fromLine;
@@ -17093,7 +17330,7 @@ define("jassijs/util/Cookies", ["require", "exports", "jassijs/ext/js-cookie"], 
     var Cookies = js_cookie_1.default;
     exports.Cookies = Cookies;
 });
-define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Database", "jassijs/remote/Classes"], function (require, exports, Database_4, Classes_32) {
+define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Database", "jassijs/remote/Classes"], function (require, exports, Database_4, Classes_33) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.ManyToMany = exports.ManyToOne = exports.OneToMany = exports.OneToOne = exports.PrimaryColumn = exports.Column = exports.JoinTable = exports.JoinColumn = exports.PrimaryGeneratedColumn = exports.Entity = void 0;
@@ -17102,7 +17339,7 @@ define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Dat
     function addDecorater(decoratername, ...args) {
         return function (...fargs) {
             var con = fargs.length === 1 ? fargs[0] : fargs[0].constructor;
-            var clname = Classes_32.classes.getClassName(con);
+            var clname = Classes_33.classes.getClassName(con);
             var field = fargs.length == 1 ? "this" : fargs[1];
             Database_4.db._setMetadata(con, field, decoratername, args, fargs, undefined);
         };

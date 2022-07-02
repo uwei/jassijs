@@ -3595,7 +3595,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1656073493631,
+                "date": 1656537319888,
                 "jassijs_editor.util.Typescript": {}
             }
         }
@@ -3612,7 +3612,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
 });
 */
 define("jassijs_editor/ext/monacoLib", ["require"], function (require, editor) {
-    window["globalThis"] = {};
+    //window["globalThis"] = {};
     return {};
 });
 //hach to make autocompletion for autoimports from other modules
@@ -3620,9 +3620,9 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
     //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
     let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
     //get Typescript instance
-    window.ts = window["globalThis"].ts;
-    window.globalThisOld = window["globalThis"];
-    delete window["globalThis"];
+    //window.ts = window["globalThis"].ts;
+    //window.globalThisOld = window["globalThis"];
+    //delete window["globalThis"];
     var platform_1 = require("vs/base/common/platform");
     platform_1.globals.MonacoEnvironment = {};
     function myfunc() {

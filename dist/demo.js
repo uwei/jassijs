@@ -638,17 +638,24 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     async function test() {
+        var tabledata = [
+            { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
+            { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
+            { id: 3, name: "Christine Lobowski", age: "42", col: "green", dob: "22/05/1982" },
+            { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: "01/08/1980" },
+            { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
+        ];
         var tab = new Table_2.Table({
             movableColumns: true,
-            rowDblClick: function () {
-                debugger;
-                tab.table.setFilter(data => {
-                    return data.name === "Mary May";
-                }); //rowManager.setActiveRows([tab.table.rowManager.rows[0]]);
-                // tab.table.redraw();     
-            }
+            items: tabledata
         });
         tab.width = 400;
+        tab.table.on("rowDblClick", function () {
+            tab.table.setFilter(data => {
+                return data.name === "Mary May";
+            }); //rowManager.setActiveRows([tab.table.rowManager.rows[0]]);
+            // tab.table.redraw();     
+        });
         var contextmenu = new ContextMenu_1.ContextMenu();
         tab.contextMenu = contextmenu;
         var menu = new MenuItem_1.MenuItem();
@@ -662,14 +669,6 @@ define("demo/TableContextmenu", ["require", "exports", "jassijs/ui/ContextMenu",
                         alert(data[0].name);
                     } }];
         };
-        var tabledata = [
-            { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
-            { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
-            { id: 3, name: "Christine Lobowski", age: "42", col: "green", dob: "22/05/1982" },
-            { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: "01/08/1980" },
-            { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
-        ];
-        tab.items = tabledata;
         tab.selectComponent = { value: "" };
         tab.showSearchbox = true;
         //    var kunden = await jassijs.db.load("de.Kunde");
@@ -797,6 +796,39 @@ define("demo/TestList", ["require", "exports"], function (require, exports) {
         var dlg = { reportdesign };
         dlg.reportdesign.data = [{ name: "Max" }, { name: "Moritz" }];
         return dlg;
+    }
+    exports.test = test;
+});
+define("demo/TestProTable", ["require", "exports", "jassijs/ui/Table"], function (require, exports, Table_3) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    var x = 0;
+    async function test() {
+        /*  var dat=await Orders.find({
+             //where:`UPPER("ShipName") LIKE '%AC%'`
+             where:`UPPER(CAST(ID AS TEXT)) LIKE :mftext`,
+             whereParams:{mftext:"%24%"}
+          });
+         debugger;*/
+        var tab = new Table_3.Table({
+            lazyLoad: {
+                classname: "tests.TestBigData",
+                loadFunc: "find",
+                pageSize: 10
+            },
+        });
+        tab.showSearchbox = true;
+        tab.table.on("headerClick", function (e, c) {
+            setTimeout(() => {
+                tab.table.replaceData("/data.php");
+            }, 100);
+            //debugger;
+            console.log("now");
+        });
+        tab.width = "100%";
+        tab.height = 300;
+        return tab;
     }
     exports.test = test;
 });
@@ -1351,7 +1383,7 @@ define("demo/TreeContextmenu", ["require", "exports", "jassijs/ui/Tree", "jassij
     }
     exports.test = test;
 });
-define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Table"], function (require, exports, Panel_12, Registry_14, Table_3) {
+define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Table"], function (require, exports, Panel_12, Registry_14, Table_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
@@ -1381,10 +1413,10 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
             var t = new Person("Thomas", 5);
             var c = new Person("Christoph", 4, [u, t]);
             s.childs = [c];
-            me.tab = new Table_3.Table({
+            me.tab = new Table_4.Table({
+                items: [c],
                 dataTreeChildFunction: "t"
             });
-            me.tab.items = [c];
             me.tab.height = "150";
             me.tab.width = "100%";
             //me.tab.items = [c, u];
@@ -1419,7 +1451,7 @@ define("demo/TreeTable", ["require", "exports", "jassijs/ui/Panel", "jassijs/rem
                     }
                 }
             }
-            me.tab = new Table_3.Table({
+            me.tab = new Table_4.Table({
                 dataTree: true,
                 dataTreeChildField: "__treechilds",
                 dataTreeRowExpanded: function (row) {
@@ -1528,7 +1560,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo/StyleDialog": {}
             },
             "demo/TableContextmenu.ts": {
-                "date": 1622984380000
+                "date": 1656676744798
             },
             "demo/TestComponent.ts": {
                 "date": 1655843269124,
@@ -1585,8 +1617,11 @@ define("demo/registry", ["require"], function (require) {
                 "date": 1634384688000
             },
             "demo/TreeTable.ts": {
-                "date": 1655556795176,
+                "date": 1656676469598,
                 "demo.TreeTable": {}
+            },
+            "demo/TestProTable.ts": {
+                "date": 1656621988396
             }
         }
     };

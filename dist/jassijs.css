@@ -43,12 +43,12 @@ br[data-mce-bogus="1"] {
 }
 
 .Table{
-  height: 100px;
-  width: 100px;
+  min-height: 25px;
+  min-width: 25px;
 }
 .Tree{
-  height: 50px;
-  width: 50px;
+  min-height: 25px;
+  min-width: 25px;
 }
 .Button{
   min-height: 8px;

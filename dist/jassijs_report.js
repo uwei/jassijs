@@ -3441,10 +3441,12 @@ define("jassijs_report/RUnknown", ["require", "exports", "jassijs/remote/Registr
     ], RUnknown);
     exports.RUnknown = RUnknown;
 });
-define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs/base/Windows", "jassijs/remote/Classes", "jassijs_report/remote/ServerReport", "jassijs_report/PDFViewer", "jassijs_report/PDFReport"], function (require, exports, Registry_19, RemoteObject_1, Windows_1, Classes_4, ServerReport_1, PDFViewer_2, PDFReport_1) {
+define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject", "jassijs_report/ext/pdfmake", "jassijs/base/Windows", "jassijs/remote/Classes", "jassijs_report/remote/ServerReport", "jassijs_report/PDFReport", "jassijs/base/Actions"], function (require, exports, Registry_19, RemoteObject_1, pdfmake_2, Windows_1, Classes_4, ServerReport_1, PDFReport_1, Actions_1) {
     "use strict";
+    var Report_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Report = exports.$Report = exports.ReportProperties = void 0;
+    //import { ReportViewer } from "jassijs_report/ReportViewer";
     class ReportProperties {
     }
     exports.ReportProperties = ReportProperties;
@@ -3454,7 +3456,7 @@ define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry"
         };
     }
     exports.$Report = $Report;
-    let Report = class Report extends RemoteObject_1.RemoteObject {
+    let Report = Report_1 = class Report extends RemoteObject_1.RemoteObject {
         //this is a sample remote function
         async fill() {
             var clname = Classes_4.classes.getClassName(this);
@@ -3462,37 +3464,114 @@ define("jassijs_report/Report", ["require", "exports", "jassijs/remote/Registry"
             if ((meta === null || meta === void 0 ? void 0 : meta.length) > 0 && meta[0].params.length > 0) {
                 var path = meta[0].params[0].serverReportPath;
                 if (path) {
-                    var ret = await ServerReport_1.ServerReport.fillReport(path, this.parameter);
+                    var par = this.getParameter();
+                    var ret = await ServerReport_1.ServerReport.getDesign(path, par);
                     return ret;
                 }
                 //return await this.call(this, this.fill, context);
             }
             throw new Classes_4.JassiError("Clintreports must implememt fill");
         }
-        async open() {
-            var viewer = new PDFViewer_2.PDFViewer();
+        getParameter() {
+            var reportFields = Object.keys(new Report_1());
+            var thisFields = Object.keys(this);
+            var ret = {};
+            thisFields.forEach((f) => {
+                if (reportFields.indexOf(f) === -1) {
+                    ret[f] = this[f];
+                    if (typeof ret[f] === "function")
+                        ret[f].bind(ret);
+                }
+            });
+            return ret;
+        }
+        async getBase64() {
             var clname = Classes_4.classes.getClassName(this);
             var meta = Registry_19.default.getData("$Report", clname);
             if ((meta === null || meta === void 0 ? void 0 : meta.length) > 0 && meta[0].params.length > 0) {
                 var path = meta[0].params[0].serverReportPath;
                 if (path) {
-                    viewer.value = await ServerReport_1.ServerReport.getBase64(path, this.parameter);
+                    var par = this.getParameter();
+                    return await ServerReport_1.ServerReport.getBase64(path, par);
                 }
                 //return await this.call(this, this.fill, context);
             }
-            else {
-                var rep = new PDFReport_1.PDFReport();
-                var des = await this.fill();
-                rep.value = des.reportdesign;
-                rep.data = des.data;
-                rep.parameter = des.parameter;
-                rep.fill();
-                viewer.value = await rep.getBase64();
+            var rep = new PDFReport_1.PDFReport();
+            var des = await this.fill();
+            rep.value = des.reportdesign;
+            rep.data = des.data;
+            rep.parameter = des.parameter;
+            rep.fill();
+            return await rep.getBase64();
+        }
+        getName() {
+            var clname = Classes_4.classes.getClassName(this);
+            var meta = Registry_19.default.getData("$Report", clname);
+            var ret = "Report";
+            if ((meta === null || meta === void 0 ? void 0 : meta.length) > 0 && meta[0].params.length > 0) {
+                ret = meta[0].params[0].name;
+                ret = ret.split("/")[ret.split("/").length - 1];
             }
-            Windows_1.default.add(viewer, "Report");
+            return ret;
+        }
+        _base64ToArrayBuffer(base64) {
+            var binary_string = window.atob(base64);
+            var len = binary_string.length;
+            var bytes = new Uint8Array(len);
+            for (var i = 0; i < len; i++) {
+                bytes[i] = binary_string.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+        async open() {
+            var b64 = await this.getBase64();
+            var rep = pdfmake_2.default.createPdf({ content: [] });
+            var _this = this;
+            rep.getBuffer = async () => {
+                return _this._base64ToArrayBuffer(b64);
+            };
+            rep.open();
+            //alert("TODO");
+        }
+        async view() {
+            var ReportViewer = (await new Promise((resolve_1, reject_1) => { require(["jassijs_report/ReportViewer"], resolve_1, reject_1); })).ReportViewer;
+            var ret = new ReportViewer();
+            ret.value = this;
+            Windows_1.default.add(ret, this.getName());
+        }
+        static createFunction(classname) {
+            return async function () {
+                var Rep = await Classes_4.classes.loadClass(classname);
+                new Rep().view();
+            };
+        }
+        /**
+        * create Action for all DBObjectView with actionname is defined
+        */
+        static async createActions() {
+            var ret = [];
+            var data = await Registry_19.default.getJSONData("$Report");
+            for (var x = 0; x < data.length; x++) {
+                var param = data[x].params[0];
+                if (param.actionname) {
+                    ret.push({
+                        name: param.actionname,
+                        icon: param.icon,
+                        run: this.createFunction(data[x].classname)
+                    });
+                }
+            }
+            return ret;
         }
     };
-    Report = __decorate([
+    __decorate([
+        (0, Actions_1.$Actions)(),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], Report, "createActions", null);
+    Report = Report_1 = __decorate([
+        (0, Actions_1.$ActionProvider)("jassijs.base.ActionNode"),
         (0, Registry_19.$Class)("jassijs_report.remote.Report")
     ], Report);
     exports.Report = Report;
@@ -4029,22 +4108,186 @@ define("jassijs_report/ReportDesign", ["require", "exports", "jassijs/ui/BoxPane
     }
     exports.test = test;
 });
-define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Registry_21, Runlater_2, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_9, Panel_5, Windows_2, DockingContainer_1, VariablePanel_1, Property_11) {
+define("jassijs_report/ReportViewer", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs_report/PDFViewer", "jassijs/ui/PropertyEditor", "jassijs/ui/ComponentDescriptor", "jassijs_report/test/ServerReport"], function (require, exports, BoxPanel_3, Registry_21, Panel_5, PDFViewer_2, PropertyEditor_1, ComponentDescriptor_1, ServerReport_2) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.ReportViewer = void 0;
+    let ReportViewer = class ReportViewer extends Panel_5.Panel {
+        constructor() {
+            super();
+            this.me = {};
+            this.layout(this.me);
+        }
+        set value(val) {
+            this._value = val;
+            var test = ComponentDescriptor_1.ComponentDescriptor.describe(val.constructor);
+            this.me.propertyeditor.value = val;
+            /*  for (var x = 0; x < test.fields.length; x++) {
+                  var field = test.fields[x];
+                  if (field.name === "parameter") {
+                      var paramtype = field.componentType;
+                      var Cl = classes.getClass(paramtype);
+                      this.param = new Cl();
+                      this.me.propertyeditor.value = this.param;
+      
+                  }
+              }*/
+            this.me.pdfviewer.report = val;
+            val.getBase64().then((data) => {
+                this.me.pdfviewer.value = data;
+            });
+            //ClientReportParameter();
+        }
+        layout(me) {
+            var _this = this;
+            me.boxpanel = new BoxPanel_3.BoxPanel();
+            me.pdfviewer = new PDFViewer_2.PDFViewer();
+            me.propertyeditor = new PropertyEditor_1.PropertyEditor();
+            this.config({
+                children: [
+                    me.boxpanel.config({
+                        horizontal: true,
+                        children: [
+                            me.pdfviewer.config({}),
+                            me.propertyeditor.config({})
+                        ],
+                        spliter: [80, 20]
+                    })
+                ]
+            });
+            me.propertyeditor.onpropertyChanged(() => {
+                var param = me.propertyeditor.value;
+                //_this._value.parameter = param;
+                _this._value.getBase64().then((data) => {
+                    _this.me.pdfviewer.value = data;
+                });
+            });
+        }
+    };
+    ReportViewer = __decorate([
+        (0, Registry_21.$Class)("jassijs_report/ReportViewer"),
+        __metadata("design:paramtypes", [])
+    ], ReportViewer);
+    exports.ReportViewer = ReportViewer;
+    async function test() {
+        var ret = new ReportViewer();
+        ret.value = new ServerReport_2.ServerReport();
+        return ret;
+    }
+    exports.test = test;
+});
+define("jassijs_report/Reports", ["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Classes", "jassijs/base/Actions", "jassijs/base/Windows"], function (require, exports, ContextMenu_2, Table_1, Registry_22, Panel_6, Router_1, Classes_5, Actions_2, Windows_2) {
+    "use strict";
+    var Reports_1;
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.Reports = void 0;
+    let Reports = Reports_1 = class Reports extends Panel_6.Panel {
+        constructor() {
+            super();
+            this.me = {};
+            this.layout(this.me);
+        }
+        layout(me) {
+            me.table = new Table_1.Table();
+            me.contextmenu = new ContextMenu_2.ContextMenu();
+            this.config({
+                children: [
+                    me.table.config({
+                        width: "100%",
+                        //height: "100%",
+                        showSearchbox: true,
+                        contextMenu: me.contextmenu
+                    }),
+                    me.contextmenu.config({})
+                ],
+            });
+            this.setData();
+            me.contextmenu.getActions = async function (obs) {
+                var ret = [];
+                ret.push({
+                    name: "View", call: async function (data) {
+                        var clname = data[0].classname;
+                        var Cl = await Classes_5.classes.loadClass(clname);
+                        var report = new Cl();
+                        report.view();
+                        //await (<Report> new Cl()).open();
+                    }
+                });
+                ret.push({
+                    name: "Reportdesign", call: function (data) {
+                        var file = data[0].filename;
+                        Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file.replaceAll("|", "/"));
+                    }
+                });
+                if (obs[0].serverPath) {
+                    ret.push({
+                        name: "Reportdesign (Server)", call: function (data) {
+                            var file = "$serverside/" + data[0].serverPath + ".ts";
+                            Router_1.router.navigate("#do=jassijs_editor.CodeEditor&file=" + file.replaceAll("|", "/"));
+                        }
+                    });
+                }
+                return ret;
+            };
+        }
+        async setData() {
+            var data = [];
+            var reports = await Registry_22.default.getJSONData("$Report");
+            for (var x = 0; x < reports.length; x++) {
+                var rep = reports[x];
+                var entry = {
+                    name: rep.params[0].name,
+                    classname: rep.classname,
+                    serverPath: rep.params[0].serverReportPath,
+                    filename: rep.filename
+                };
+                data.push(entry);
+            }
+            this.me.table.items = data;
+        }
+        static async show() {
+            Windows_2.default.add(new Reports_1(), "Reports");
+        }
+    };
+    __decorate([
+        (0, Actions_2.$Action)({
+            name: "Tools/Reports",
+            icon: "mdi mdi-chart-box-outline",
+        }),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", []),
+        __metadata("design:returntype", Promise)
+    ], Reports, "show", null);
+    Reports = Reports_1 = __decorate([
+        (0, Actions_2.$ActionProvider)("jassijs.base.ActionNode"),
+        (0, Registry_22.$Class)("jassijs_report/Reports"),
+        __metadata("design:paramtypes", [])
+    ], Reports);
+    exports.Reports = Reports;
+    class ReportEntry {
+    }
+    async function test() {
+        var ret = new Reports();
+        return ret;
+    }
+    exports.test = test;
+});
+define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remote/Registry", "jassijs/util/Runlater", "jassijs_report/designer/SimpleReportDesigner", "jassijs_editor/AcePanelSimple", "jassijs_report/ReportDesign", "jassijs/ui/Panel", "jassijs/base/Windows", "jassijs/ui/DockingContainer", "jassijs/ui/VariablePanel", "jassijs/ui/Property"], function (require, exports, Registry_23, Runlater_2, SimpleReportDesigner_1, AcePanelSimple_1, ReportDesign_9, Panel_7, Windows_3, DockingContainer_1, VariablePanel_1, Property_11) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SimpleReportEditor = exports.SimpleReportEditorProperties = void 0;
-    class SimpleCodeEditor extends Panel_5.Panel {
+    class SimpleCodeEditor extends Panel_7.Panel {
         constructor(codePanel) {
             super();
             this.maximize();
             this._main = new DockingContainer_1.DockingContainer();
-            this._codeView = new Panel_5.Panel();
-            this._codeToolbar = new Panel_5.Panel();
+            this._codeView = new Panel_7.Panel();
+            this._codeToolbar = new Panel_7.Panel();
             //if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
             this._codePanel = codePanel;
             this._file = "";
             this.variables = new VariablePanel_1.VariablePanel();
-            this._design = new Panel_5.Panel();
+            this._design = new Panel_7.Panel();
             this._init();
             this.editMode = true;
         }
@@ -4254,14 +4497,14 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         __metadata("design:type", Number),
         __metadata("design:paramtypes", [Number])
     ], SimpleCodeEditor.prototype, "line", null);
-    class SimpleReportEditorProperties extends Panel_5.PanelCreateProperties {
+    class SimpleReportEditorProperties extends Panel_7.PanelCreateProperties {
     }
     __decorate([
         (0, Property_11.$Property)(),
         __metadata("design:type", Boolean)
     ], SimpleReportEditorProperties.prototype, "startUpWithPdfView", void 0);
     exports.SimpleReportEditorProperties = SimpleReportEditorProperties;
-    let SimpleReportEditor = class SimpleReportEditor extends Panel_5.Panel {
+    let SimpleReportEditor = class SimpleReportEditor extends Panel_7.Panel {
         //value:string;
         constructor(properties) {
             super(properties);
@@ -4340,7 +4583,7 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         }
     };
     SimpleReportEditor = __decorate([
-        (0, Registry_21.$Class)("jassi_report.SimpleReportEditor"),
+        (0, Registry_23.$Class)("jassi_report.SimpleReportEditor"),
         __metadata("design:paramtypes", [SimpleReportEditorProperties])
     ], SimpleReportEditor);
     exports.SimpleReportEditor = SimpleReportEditor;
@@ -4380,23 +4623,23 @@ define("jassijs_report/SimpleReportEditor", ["require", "exports", "jassijs/remo
         editor.height = "100%";
         editor.value = JSON.stringify(reportdesign);
         setTimeout(() => {
-            Windows_2.default.add(editor, "Testtt");
+            Windows_3.default.add(editor, "Testtt");
         }, 10);
         //return editor;
     }
     exports.test = test;
 });
-define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Settings", "jassijs/base/CurrentSettings"], function (require, exports, FileExplorer_1, Windows_3, Panel_6, Router_1, Settings_1, CurrentSettings_1) {
+define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/FileExplorer", "jassijs/base/Windows", "jassijs/ui/Panel", "jassijs/base/Router", "jassijs/remote/Settings", "jassijs/base/CurrentSettings"], function (require, exports, FileExplorer_1, Windows_4, Panel_8, Router_2, Settings_1, CurrentSettings_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     //var h=new RemoteObject().test();
     async function start() {
         //  jassijs.myRequire("https://unpkg.com/source-map@0.7.3/dist/source-map.js");
-        var body = new Panel_6.Panel({ id: "body" });
+        var body = new Panel_8.Panel({ id: "body" });
         body.max();
-        var site = new Panel_6.Panel();
-        Windows_3.default._desktop.add(site);
+        var site = new Panel_8.Panel();
+        Windows_4.default._desktop.add(site);
         site.dom.innerHTML = '<h1>\n<a id="user-content-jassijs-reporteditor" class="anchor" href="#jassijs-reporteditor" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Jassijs-Reporteditor</h1>\n<p>Jassijs Reporteditor is a visual tool for designing <a href="http://pdfmake.org/" rel="nofollow">pdfmake</a> reports. The reports can be rendered with pdfmake to pdf either directly in the browser or server-side with nodes.\nThe report designer can be executed directly via <a href="https://uwei.github.io/jassijs-reporteditor/web" rel="nofollow">https://uwei.github.io/jassijs-reporteditor/web</a>. The report designer can also be integrated into your own websites. An example of this is <a href="https://uwei.github.io/jassijs-reporteditor/simple" rel="nofollow">here</a>.</p>\n<h2>\n<a id="user-content-runtime" class="anchor" href="#runtime" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Runtime</h2>\n<p>The Jassijs report designer extends the syntax of pdfmake by filling data e.g. with the help of data tables. In order for the report to be filled at runtime, a conversion of the report design is necessary. Here is an <a href="https://uwei.github.io/jassijs-reporteditor/simple/usereport.html" rel="nofollow">example</a> or [with amd] (<a href="https://uwei.github.io/jassijs-reporteditor/simple/usereport-amd.html" rel="nofollow">https://uwei.github.io/jassijs-reporteditor/simple/usereport-amd.html</a>):</p>\n<div class="highlight highlight-text-html-basic"><pre><span class="pl-kos">&lt;</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/pdfmake.min.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.2/vfs_fonts.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span> <span class="pl-c1">src</span>=\'<span class="pl-s">http://localhost/jassijs/dist/pdfmakejassi.js</span>\'<span class="pl-kos">&gt;</span><span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;/</span><span class="pl-ent">head</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span>\n  <span class="pl-kos">&lt;</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">docDefinition</span><span class="pl-c1">=</span><span class="pl-kos">{</span>\n\t\t\t<span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n\t\t\t\t<span class="pl-s">\'Hallo ${name}\'</span><span class="pl-kos">,</span>\n\t\t\t\t<span class="pl-s">\'${parameter.date}\'</span>\n\t\t\t<span class="pl-kos">]</span>\n\t\t<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-c">//fill data  </span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">data</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-c1">name</span>:<span class="pl-s">\'Max\'</span><span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-k">var</span> <span class="pl-s1">parameter</span><span class="pl-c1">=</span><span class="pl-kos">{</span><span class="pl-c1">date</span>:<span class="pl-s">\'2021-10-15\'</span><span class="pl-kos">}</span><span class="pl-kos">;</span>\n\t\t<span class="pl-s1">docDefinition</span><span class="pl-c1">=</span><span class="pl-s1">pdfmakejassi</span><span class="pl-kos">.</span><span class="pl-en">createReportDefinition</span><span class="pl-kos">(</span><span class="pl-s1">docDefinition</span><span class="pl-kos">,</span><span class="pl-s1">data</span><span class="pl-kos">,</span><span class="pl-s1">parameter</span><span class="pl-kos">)</span><span class="pl-kos">;</span>\n\n\t\t<span class="pl-s1">pdfMake</span><span class="pl-kos">.</span><span class="pl-en">createPdf</span><span class="pl-kos">(</span><span class="pl-s1">docDefinition</span><span class="pl-kos">)</span><span class="pl-kos">.</span><span class="pl-en">download</span><span class="pl-kos">(</span><span class="pl-kos">)</span><span class="pl-kos">;</span>\n\t<span class="pl-kos">&lt;/</span><span class="pl-ent">script</span><span class="pl-kos">&gt;</span>\n<span class="pl-kos">&lt;/</span><span class="pl-ent">body</span><span class="pl-kos">&gt;</span></pre></div>\n<h2>\n<a id="user-content-quick-start" class="anchor" href="#quick-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Quick Start:</h2>\n<p>The Jassijs Reportitor can be started directly in the <a href="https://uwei.github.io/jassijs-reporteditor/web" rel="nofollow">browser</a>. Please note that the reports stored there are not permanently stored and are lost when the browser cache is cleared.</p>\n<p>The existing reports are displayed on the right side. Double-click to open the report in Code view as javascript.\n<a href="https://camo.githubusercontent.com/9172b27b26433c0e87d06fd0419e757842ac89adb89e2bfb17be8de729d6431a/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72312e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/9172b27b26433c0e87d06fd0419e757842ac89adb89e2bfb17be8de729d6431a/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72312e6a7067" alt="jassijs-reporteditor1" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor1.jpg" style="max-width:100%;"></a></p>\n<p>With Run <a href="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" alt="jassijs-reporteditor2" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor2.jpg" style="max-width:100%;"></a> the report opens in the <strong>Design</strong> view.\n<a href="https://camo.githubusercontent.com/d014a6a69fa8a13596a3cf885687c93352c6f26c2e292889eb246b719aeb3c23/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72332e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/d014a6a69fa8a13596a3cf885687c93352c6f26c2e292889eb246b719aeb3c23/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72332e6a7067" alt="jassijs-reporteditor3" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor3.jpg" style="max-width:100%;"></a>\nThere, new report elements can be added from the <strong>Palette</strong> via drag and drop. The <strong>Properties</strong> of the selected report item can be changed in the property editor.</p>\n<p>With <a href="https://camo.githubusercontent.com/8a5bab1108211501516632442bbc08c3d50fc0eb4bf2643eaa39855eb1bb5478/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72342e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/8a5bab1108211501516632442bbc08c3d50fc0eb4bf2643eaa39855eb1bb5478/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72342e6a7067" alt="jassijs-reporteditor4" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor4.jpg" style="max-width:100%;"></a> the created pdf can be viewed.\n<a href="https://camo.githubusercontent.com/58e07784a867b283f4fb6f2770ef2d03b6367ac5fea0943030b0fdd50d7db066/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72352e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/58e07784a867b283f4fb6f2770ef2d03b6367ac5fea0943030b0fdd50d7db066/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72352e6a7067" alt="jassijs-reporteditor5" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor5.jpg" style="max-width:100%;"></a></p>\n<p>In the <strong>Code</strong> view, the report is displayed as Javascript code. With Run <a href="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/485308edc97cc3a97888998e8bc2691ad5f251b58d6f15f7ba70867f8cb4185e/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72322e6a7067" alt="jassijs-reporteditor2" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor2.jpg" style="max-width:100%;"></a> , changes in the code can be loaded back into the <strong>Design</strong> view.\nThere are many examples in the left side panel under Files that explain the report elements. Under pdfmake-Playground you will find examples of pdfmake. A detailed description of the syntax of pdfmake is described at <a href="http://pdfmake.org/" rel="nofollow">http://pdfmake.org/</a>.\nYou can create your own folders and reports (right-click context menu) under <strong>Files</strong>. But remember that the reports are only stored in the browser and are lost when the browser cache is cleared. You can also <strong>Download</strong> the <strong>modified</strong> reports (right-click on a folder in <strong>Files</strong>).</p>\n<h2>\n<a id="user-content-limitations" class="anchor" href="#limitations" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Limitations</h2>\n<p>Not all properties of the report elements that are possible with pdfmake can be set with the visual disigner, but these properties are not lost when editing the report.</p>\n<h2>\n<a id="user-content-syntax-extensions" class="anchor" href="#syntax-extensions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Syntax extensions</h2>\n<p>The following extensions of the pdfmake syntax can be used with the help of link.</p>\n<h3>\n<a id="user-content-templating" class="anchor" href="#templating" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>templating:</h3>\n<p>With the help of javascript template strings, data can be filled into the report. The following example shows this.</p>\n<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-s1">reportdesign</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>\n\t<span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n        <span class="pl-s">\'Hallo ${name}\'</span><span class="pl-kos">,</span>\n        <span class="pl-s">\'${address.street}\'</span><span class="pl-kos">,</span>\n        <span class="pl-s">\'${parameter.date}\'</span>\n    <span class="pl-kos">]</span>\n<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\n<span class="pl-k">export</span> <span class="pl-k">function</span> <span class="pl-en">test</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>\n    <span class="pl-k">return</span> <span class="pl-kos">{</span> \n        reportdesign<span class="pl-kos">,</span>\n        <span class="pl-c1">data</span>:<span class="pl-kos">{</span>\n            <span class="pl-c1">name</span>:<span class="pl-s">\'Klaus\'</span><span class="pl-kos">,</span>\n            <span class="pl-c1">address</span>:<span class="pl-kos">{</span>\n                <span class="pl-c1">street</span>:<span class="pl-s">\'Mainstreet 8\'</span>\n            <span class="pl-kos">}</span>\n        <span class="pl-kos">}</span><span class="pl-kos">,</span>        \n        <span class="pl-c1">parameter</span>:<span class="pl-kos">{</span><span class="pl-c1">date</span>:<span class="pl-s">\'2021-10-10\'</span><span class="pl-kos">}</span>      <span class="pl-c">//parameter</span>\n    <span class="pl-kos">}</span><span class="pl-kos">;</span>\n<span class="pl-kos">}</span></pre></div>\n<p>The <strong>data</strong> of the report are specified in the data field or as a 2nd parameter when filling the report with <strong>pdfmakejassi.createReportDefinition</strong>.\nThis data could be filled line javascript Template-Strings like <strong>${name}</strong>.\nSimilar to data, parameters can also be filled in the report.</p>\n<h3>\n<a id="user-content-edittogether" class="anchor" href="#edittogether" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>edittogether</h3>\n<p>For texts with different formatting, individual text elements must be linked in pdfmake. Text elements that are to be edited together in a text box in the Designer are marked with edittogether. The text can be edited comfortably (thanks TinyMCE).\n<a href="https://camo.githubusercontent.com/a1741345d6b9db8cc6fa359d9ccebcb4940ba745ae8d42ec5c288553e1522dd0/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72362e6a7067" target="_blank" rel="nofollow"><img src="https://camo.githubusercontent.com/a1741345d6b9db8cc6fa359d9ccebcb4940ba745ae8d42ec5c288553e1522dd0/68747470733a2f2f757765692e6769746875622e696f2f6a617373696a732d7265706f7274656469746f722f646f632f6a617373696a732d7265706f7274656469746f72362e6a7067" alt="jassijs-reporteditor6" data-canonical-src="https://uwei.github.io/jassijs-reporteditor/doc/jassijs-reporteditor6.jpg" style="max-width:100%;"></a></p>\n<h3>\n<a id="user-content-foreach" class="anchor" href="#foreach" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>foreach</h3>\n<p>If the report data contain arrays, then this data can be filled into the report with foreach.\nHere is a simple <a href="https://uwei.github.io/jassijs-reporteditor/web/#do=jassijs_editor.CodeEditor&amp;file=demoreports/10-Foreach.ts" rel="nofollow">example</a>.</p>\n<div class="highlight highlight-source-js"><pre><span class="pl-k">var</span> <span class="pl-s1">reportdesign</span> <span class="pl-c1">=</span> <span class="pl-kos">{</span>\n    <span class="pl-c1">content</span>: <span class="pl-kos">[</span>\n        <span class="pl-kos">{</span>\n            <span class="pl-c1">foreach</span>: <span class="pl-s">\'line\'</span><span class="pl-kos">,</span>\n            <span class="pl-c1">text</span>: <span class="pl-s">\'${line.name}\'</span>\n        <span class="pl-kos">}</span><span class="pl-kos"></span>\n<span class="pl-kos">}</span><span class="pl-kos">;</span>\n\n<span class="pl-k">export</span> <span class="pl-k">function</span> <span class="pl-en">test</span><span class="pl-kos">(</span><span class="pl-kos">)</span> <span class="pl-kos">{</span>\n    <span class="pl-k">return</span> <span class="pl-kos">{</span>\n        reportdesign<span class="pl-kos">,</span>\n        <span class="pl-c1">data</span>: <span class="pl-kos">[</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line1\'</span> <span class="pl-kos">}</span><span class="pl-kos">,</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line2\'</span> <span class="pl-kos">}</span><span class="pl-kos">,</span>\n            <span class="pl-kos">{</span> <span class="pl-c1">name</span>: <span class="pl-s">\'line3\'</span> <span class="pl-kos">}</span>\n        <span class="pl-kos">]</span>\n    <span class="pl-kos">}</span><span class="pl-kos">;</span>\n<span class="pl-kos">}</span></pre></div>\n<p>The element that is marked with foreach is repeated for each array element.\nThe array element can be accessed with ${line.name}.\nforeach $line is the short form for foreach $line in data.\nIf not the element itself but another report element is to be repeated,\ncan be used.</p>\n<h3>\n<a id="user-content-datatable" class="anchor" href="#datatable" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>datatable</h3>\n<p>Syntax {\n}\nBeispiel</p>\n<h3>\n<a id="user-content-format" class="anchor" href="#format" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>format</h3>\n<h2>\n<a id="user-content-aggregate-functions" class="anchor" href="#aggregate-functions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>aggregate Functions</h2>\n';
         site.css = {
             background_color: "white",
@@ -4404,8 +4647,8 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/Fi
         };
         site.height = "100%";
         site.width = "100%";
-        Windows_3.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
-        Router_1.router.navigate(window.location.hash);
+        Windows_4.default.addLeft(new FileExplorer_1.FileExplorer(), "Files");
+        Router_2.router.navigate(window.location.hash);
         //Ace should be default because long image blob breaks line   
         if (CurrentSettings_1.currentsettings.gets(Settings_1.Settings.keys.Development_DefaultEditor) === undefined) {
             Settings_1.Settings.save(Settings_1.Settings.keys.Development_DefaultEditor, "ace", "browser");
@@ -4434,7 +4677,7 @@ define("jassijs_report/StartReporteditor", ["require", "exports", "jassijs/ui/Fi
     }
     exports.test = test;
 });
-define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_1, Registry_22, OptionDialog_1, FileExplorer_2) {
+define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Actions", "jassijs/remote/Registry", "jassijs/ui/OptionDialog", "jassijs/ui/FileExplorer"], function (require, exports, Actions_3, Registry_24, OptionDialog_1, FileExplorer_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.TemplateReport = void 0;
@@ -4452,7 +4695,7 @@ define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Act
     };
     TemplateReport.code = code;
     __decorate([
-        (0, Actions_1.$Action)({
+        (0, Actions_3.$Action)({
             name: "New/Report",
             isEnabled: function (all) {
                 return all[0].isDirectory();
@@ -4463,8 +4706,8 @@ define("jassijs_report/TemplateReport", ["require", "exports", "jassijs/base/Act
         __metadata("design:returntype", Promise)
     ], TemplateReport, "newFile", null);
     TemplateReport = __decorate([
-        (0, Actions_1.$ActionProvider)("jassijs.remote.FileNode"),
-        (0, Registry_22.$Class)("jassijs_report.TemplateReport")
+        (0, Actions_3.$ActionProvider)("jassijs.remote.FileNode"),
+        (0, Registry_24.$Class)("jassijs_report.TemplateReport")
     ], TemplateReport);
     exports.TemplateReport = TemplateReport;
 });
@@ -4809,8 +5052,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/test/ClientReport.ts": {
-                "date": 1656275429152,
-                "jassijs_report.remote.ClientReportParameter": {},
+                "date": 1656501727996,
                 "jassijs_report.test.ClientReport": {
                     "$Report": [
                         {
@@ -4821,9 +5063,8 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/test/ServerReport.ts": {
-                "date": 1656282689278,
-                "jassijs_report.remote.ServerReportParameter": {},
-                "jassijs_report.test.ClientReport": {
+                "date": 1656501737136,
+                "jassijs_report.test.ServerReport": {
                     "$Report": [
                         {
                             "name": "test/Sample Serverreport",
@@ -4834,17 +5075,48 @@ define("jassijs_report/registry", ["require"], function (require) {
                 }
             },
             "jassijs_report/Report.ts": {
-                "date": 1656282517873,
-                "jassijs_report.remote.Report": {}
+                "date": 1656501701030,
+                "jassijs_report.remote.Report": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "createActions": {
+                            "$Actions": []
+                        }
+                    }
+                }
             },
             "jassijs_report/remote/ServerReport.ts": {
                 "date": 1656331483222,
                 "jassijs_report.remote.ServerReport": {}
+            },
+            "jassijs_report/Reports.ts": {
+                "date": 1656501787077,
+                "jassijs_report/Reports": {
+                    "$ActionProvider": [
+                        "jassijs.base.ActionNode"
+                    ],
+                    "@members": {
+                        "show": {
+                            "$Action": [
+                                {
+                                    "name": "Tools/Reports",
+                                    "icon": "mdi mdi-chart-box-outline"
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "jassijs_report/ReportViewer.ts": {
+                "date": 1656456334039,
+                "jassijs_report/ReportViewer": {}
             }
         }
     };
 });
-define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_report/remote/ServerReport"], function (require, exports, Registry_23, PropertyEditor_1, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_5, PDFReport_2, PDFViewer_3, ReportDesign_10, Tools_3, ServerReport_2) {
+define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEditor", "jassijs_editor/ComponentExplorer", "jassijs_editor/ComponentPalette", "jassijs_editor/CodeEditorInvisibleComponents", "jassijs_editor/ComponentDesigner", "jassijs/remote/Classes", "jassijs_report/PDFReport", "jassijs_report/PDFViewer", "jassijs_report/ReportDesign", "jassijs/util/Tools", "jassijs_report/remote/ServerReport"], function (require, exports, Registry_25, PropertyEditor_2, ComponentExplorer_1, ComponentPalette_1, CodeEditorInvisibleComponents_1, ComponentDesigner_1, Classes_6, PDFReport_2, PDFViewer_3, ReportDesign_10, Tools_3, ServerReport_3) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.test2 = exports.ReportDesigner = void 0;
@@ -4862,8 +5134,8 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
             var _this = this;
             this._codeEditor = value;
             this.variables = this._codeEditor.variables;
-            this._propertyEditor = new PropertyEditor_1.PropertyEditor(undefined, undefined);
-            this._codeChanger = new PropertyEditor_1.PropertyEditor(this._codeEditor, undefined);
+            this._propertyEditor = new PropertyEditor_2.PropertyEditor(undefined, undefined);
+            this._codeChanger = new PropertyEditor_2.PropertyEditor(this._codeEditor, undefined);
             this._errors = this._codeEditor._errors;
             this._componentPalette = new ComponentPalette_1.ComponentPalette();
             this._componentExplorer = new ComponentExplorer_1.ComponentExplorer(value, this._propertyEditor);
@@ -4888,7 +5160,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         }
         connectParser(parser) {
             this._propertyEditor.parser = parser;
-            var Parser = Classes_5.classes.getClass("jassijs_editor.util.Parser");
+            var Parser = Classes_6.classes.getClass("jassijs_editor.util.Parser");
             this._codeChanger.parser = new Parser();
         }
         editDialog(enable) {
@@ -4902,7 +5174,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
                     this._codeEditor.evalServerside().then((data) => {
                         if (!data)
                             return;
-                        ServerReport_2.ServerReport.getBase64LastTestResult().then((base64) => {
+                        ServerReport_3.ServerReport.getBase64LastTestResult().then((base64) => {
                             this.pdfviewer.report = rep;
                             _this.pdfviewer.value = base64;
                         });
@@ -5127,7 +5399,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
         }
     };
     ReportDesigner = __decorate([
-        (0, Registry_23.$Class)("jassijs_report.designer.ReportDesigner"),
+        (0, Registry_25.$Class)("jassijs_report.designer.ReportDesigner"),
         __metadata("design:paramtypes", [])
     ], ReportDesigner);
     exports.ReportDesigner = ReportDesigner;
@@ -5181,7 +5453,7 @@ define("jassijs_report/designer/ReportDesigner", ["require", "exports", "jassijs
     exports.test2 = test2;
     ;
     async function test() {
-        var CodeEditor = (await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/CodeEditor"], resolve_1, reject_1); })).CodeEditor;
+        var CodeEditor = (await new Promise((resolve_2, reject_2) => { require(["jassijs_editor/CodeEditor"], resolve_2, reject_2); })).CodeEditor;
         var editor = new CodeEditor();
         //var url = "jassijs_editor/AcePanel.ts";
         editor.height = 300;
@@ -5216,7 +5488,7 @@ export async function test() {
     exports.test = test;
     ;
 });
-define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Registry_24, ReportDesigner_1, Tools_4) {
+define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "jassijs/remote/Registry", "jassijs_report/designer/ReportDesigner", "jassijs/util/Tools"], function (require, exports, Registry_26, ReportDesigner_1, Tools_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SimpleReportDesigner = void 0;
@@ -5295,7 +5567,7 @@ define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "j
         }
     };
     SimpleReportDesigner = __decorate([
-        (0, Registry_24.$Class)("jassijs_report.designer.SimpleReportDesigner"),
+        (0, Registry_26.$Class)("jassijs_report.designer.SimpleReportDesigner"),
         __metadata("design:paramtypes", [Object])
     ], SimpleReportDesigner);
     exports.SimpleReportDesigner = SimpleReportDesigner;
@@ -5370,15 +5642,15 @@ if (window["globalThis"] !== undefined)
     console.log("window.globalThis is defined");
 define("jassijs_report/ext/pdfmake", ['pdfMakelib', "vfs_fonts"], function (ttt, vfs) {
     var fonts = require("vfs_fonts");
-    if (window["globalThis"] && window["globalThis"]["pdfMake"])
-        window.pdfMake = window["globalThis"]["pdfMake"];
-    if (window["globalThisOld"] && window["globalThisOld"]["pdfMake"])
-        window.pdfMake = window["globalThisOld"]["pdfMake"];
+    /* if (window["globalThis"] && window["globalThis"]["pdfMake"])
+         window.pdfMake = window["globalThis"]["pdfMake"];
+     if (window["globalThisOld"] && window["globalThisOld"]["pdfMake"])
+         window.pdfMake = window["globalThisOld"]["pdfMake"];*/
     return {
         default: window.pdfMake
     };
 });
-define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property"], function (require, exports, Component_7, Registry_25, Registry_26, Panel_7, Property_12) {
+define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property"], function (require, exports, Component_7, Registry_27, Registry_28, Panel_9, Property_12) {
     "use strict";
     var RComponent_17;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -5389,11 +5661,11 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
     exports.ReportComponentProperties = ReportComponentProperties;
     function $ReportComponent(properties) {
         return function (pclass) {
-            Registry_25.default.register("$ReportComponent", pclass, properties);
+            Registry_27.default.register("$ReportComponent", pclass, properties);
         };
     }
     exports.$ReportComponent = $ReportComponent;
-    let RComponent = RComponent_17 = class RComponent extends Panel_7.Panel {
+    let RComponent = RComponent_17 = class RComponent extends Panel_9.Panel {
         constructor(properties = undefined) {
             super(properties);
             this.reporttype = "nothing";
@@ -5973,55 +6245,55 @@ define("jassijs_report/remote/RComponent", ["require", "exports", "jassijs/ui/Co
         __metadata("design:paramtypes", [Array])
     ], RComponent.prototype, "margin", null);
     RComponent = RComponent_17 = __decorate([
-        (0, Registry_26.$Class)("jassijs_report.ReportComponent"),
+        (0, Registry_28.$Class)("jassijs_report.ReportComponent"),
         (0, Property_12.$Property)({ hideBaseClassProperties: true }),
         __metadata("design:paramtypes", [Object])
     ], RComponent);
     exports.RComponent = RComponent;
 });
-define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_27, RemoteObject_2) {
+define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_29, RemoteObject_2) {
     "use strict";
-    var ServerReport_3;
+    var ServerReport_4;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.ServerReport = void 0;
-    let ServerReport = ServerReport_3 = class ServerReport extends RemoteObject_2.RemoteObject {
+    let ServerReport = ServerReport_4 = class ServerReport extends RemoteObject_2.RemoteObject {
         static async getDesign(path, parameter, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_3.call(this.getDesign, path, parameter, context);
+                return await ServerReport_4.call(this.getDesign, path, parameter, context);
             }
             else {
                 //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_2, reject_2) => { require(["jassijs_report/DoServerreport"], resolve_2, reject_2); })).DoServerreport;
-                ServerReport_3.cacheLastParameter[path] = parameter;
+                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/DoServerreport"], resolve_3, reject_3); })).DoServerreport;
+                ServerReport_4.cacheLastParameter[path] = parameter;
                 return await new DoServerreport().getDesign(path, parameter);
             }
         }
         static async getBase64(path, parameter, context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_3.call(this.getBase64, path, parameter, context);
+                return await ServerReport_4.call(this.getBase64, path, parameter, context);
             }
             else {
                 //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_3, reject_3) => { require(["jassijs_report/DoServerreport"], resolve_3, reject_3); })).DoServerreport;
+                var DoServerreport = (await new Promise((resolve_4, reject_4) => { require(["jassijs_report/DoServerreport"], resolve_4, reject_4); })).DoServerreport;
                 if (parameter == "useLastCachedParameter")
-                    parameter = ServerReport_3.cacheLastParameter[path];
+                    parameter = ServerReport_4.cacheLastParameter[path];
                 return await new DoServerreport().getBase64(path, parameter);
             }
         }
         static async getBase64LastTestResult(context = undefined) {
             if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
-                return await ServerReport_3.call(this.getBase64LastTestResult, context);
+                return await ServerReport_4.call(this.getBase64LastTestResult, context);
             }
             else {
                 //@ts-ignore
-                var DoServerreport = (await new Promise((resolve_4, reject_4) => { require(["jassijs_report/DoServerreport"], resolve_4, reject_4); })).DoServerreport;
+                var DoServerreport = (await new Promise((resolve_5, reject_5) => { require(["jassijs_report/DoServerreport"], resolve_5, reject_5); })).DoServerreport;
                 return await new DoServerreport().getBase64LastTestResult();
             }
         }
     };
     ServerReport.cacheLastParameter = {};
-    ServerReport = ServerReport_3 = __decorate([
-        (0, Registry_27.$Class)("jassijs_report.remote.ServerReport")
+    ServerReport = ServerReport_4 = __decorate([
+        (0, Registry_29.$Class)("jassijs_report.remote.ServerReport")
     ], ServerReport);
     exports.ServerReport = ServerReport;
     async function test() {
@@ -6645,10 +6917,10 @@ define("jassijs_report/remote/pdfmakejassi", ["require", "exports"], function (r
     }
     exports.test = test;
 });
-define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_report/remote/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_1, Property_13, Registry_28) {
+define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_2, Property_13, Registry_30) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = void 0;
+    exports.test = exports.ClientReport = void 0;
     var reportdesign = {
         content: [
             {
@@ -6661,12 +6933,7 @@ define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_repor
             }
         ]
     };
-    let ClientReportParameter = class ClientReportParameter {
-    };
-    ClientReportParameter = __decorate([
-        (0, Registry_28.$Class)("jassijs_report.remote.ClientReportParameter")
-    ], ClientReportParameter);
-    let ClientReport = class ClientReport extends Report_1.Report {
+    let ClientReport = class ClientReport extends Report_2.Report {
         async fill() {
             var data = [
                 { name: "Aoron", lastname: "Müller" },
@@ -6679,54 +6946,51 @@ define("jassijs_report/test/ClientReport", ["require", "exports", "jassijs_repor
         }
     };
     __decorate([
-        (0, Property_13.$Property)({ type: "json", componentType: "jassijs_report.remote.ClientReportParameter" }),
-        __metadata("design:type", ClientReportParameter)
-    ], ClientReport.prototype, "parameter", void 0);
+        (0, Property_13.$Property)(),
+        __metadata("design:type", String)
+    ], ClientReport.prototype, "sort", void 0);
     ClientReport = __decorate([
-        (0, Report_1.$Report)({ name: "test/Sample Clientreport" }),
-        (0, Registry_28.$Class)("jassijs_report.test.ClientReport")
+        (0, Report_2.$Report)({ name: "test/Sample Clientreport" }),
+        (0, Registry_30.$Class)("jassijs_report.test.ClientReport")
     ], ClientReport);
+    exports.ClientReport = ClientReport;
     async function test() {
         var cl = new ClientReport();
         await cl.open();
     }
     exports.test = test;
 });
-define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_2, Property_14, Registry_29) {
+define("jassijs_report/test/ServerReport", ["require", "exports", "jassijs_report/Report", "jassijs/ui/Property", "jassijs/remote/Registry"], function (require, exports, Report_3, Property_14, Registry_31) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = void 0;
-    var reportdesign = {
+    exports.test = exports.ServerReport = void 0;
+    /*var reportdesign:JassijsReportDefinition = {
         content: [
             {
                 datatable: {
-                    dataforeach: "person",
+                    dataforeach:"person",
                     body: [
-                        "${person.name}", "${person.lastname}"
+                        "${person.name}","${person.lastname}"
                     ]
                 }
             }
         ]
-    };
-    let ServerReportParameter = class ServerReportParameter {
-    };
-    ServerReportParameter = __decorate([
-        (0, Registry_29.$Class)("jassijs_report.remote.ServerReportParameter")
-    ], ServerReportParameter);
-    let ServerReport = class ServerReport extends Report_2.Report {
+    };*/
+    let ServerReport = class ServerReport extends Report_3.Report {
     };
     __decorate([
-        (0, Property_14.$Property)({ type: "json", componentType: "jassijs_report.remote.ServerReportParameter" }),
-        __metadata("design:type", ServerReportParameter)
-    ], ServerReport.prototype, "parameter", void 0);
+        (0, Property_14.$Property)({ chooseFromStrict: true, chooseFrom: ["name", "lastname"] }),
+        __metadata("design:type", String)
+    ], ServerReport.prototype, "sort", void 0);
     ServerReport = __decorate([
-        (0, Report_2.$Report)({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/TestServerreport" }),
-        (0, Registry_29.$Class)("jassijs_report.test.ClientReport")
+        (0, Report_3.$Report)({ name: "test/Sample Serverreport", serverReportPath: "jassijs_report/TestServerreport" }),
+        (0, Registry_31.$Class)("jassijs_report.test.ServerReport")
     ], ServerReport);
+    exports.ServerReport = ServerReport;
     async function test() {
         var cl = new ServerReport();
-        cl.parameter = { sort: "name" };
-        await cl.open();
+        cl.sort = "lastname";
+        await cl.view();
     }
     exports.test = test;
 });

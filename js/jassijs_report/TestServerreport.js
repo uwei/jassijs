@@ -32,9 +32,9 @@ async function fill(parameter) {
         { name: "Aoron", lastname: "Müllera", fullname() { return this.name + ", " + this.lastname; } },
         { name: "Heino", lastname: "Brechtp", fullname() { return this.name + ", " + this.lastname; } }
     ];
-    if (parameter.sort === "name")
+    if ((parameter === null || parameter === void 0 ? void 0 : parameter.sort) === "name")
         data = data.sort((a, b) => { return a.name.localeCompare(b.name); });
-    if (parameter.sort === "lastname")
+    if ((parameter === null || parameter === void 0 ? void 0 : parameter.sort) === "lastname")
         data = data.sort((a, b) => { return a.lastname.localeCompare(b.lastname); });
     return {
         reportdesign,
@@ -43,7 +43,7 @@ async function fill(parameter) {
 }
 exports.fill = fill;
 async function test() {
-    return await fill({ sort: "lastname" });
+    return await fill(undefined);
 }
 exports.test = test;
 //ok

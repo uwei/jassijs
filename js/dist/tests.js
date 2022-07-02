@@ -12,6 +12,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function")
         return Reflect.metadata(k, v);
 };
+define("tests/BigDataTest", ["require", "exports", "tests/remote/TestBigData", "jassijs/remote/Transaction"], function (require, exports, TestBigData_1, Transaction_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = void 0;
+    function makeid(length) {
+        var result = '';
+        var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        var charactersLength = characters.length;
+        for (var i = 0; i < length; i++) {
+            result += characters.charAt(Math.floor(Math.random() *
+                charactersLength));
+        }
+        return result;
+    }
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
+    async function test() {
+        for (var x = 0; x < 10000; x++) {
+            var trans = new Transaction_1.Transaction();
+            for (var i = 1; i < 10000; i++) {
+                var e = new TestBigData_1.TestBigData();
+                e.name = makeid(200);
+                e.name2 = makeid(200);
+                e.number1 = getRandomInt(99999999);
+                e.number2 = getRandomInt(99999999);
+                trans.add(e, e.save);
+            }
+            console.log(x);
+            await trans.execute();
+        }
+    }
+    exports.test = test;
+});
 define("tests/DBTests", ["require", "exports", "tests/remote/TestOrderDetails", "tests/remote/TestCustomer", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/security/User", "jassijs/remote/security/Group", "jassijs/remote/security/ParentRight", "jassijs/remote/RemoteProtocol"], function (require, exports, TestOrderDetails_1, TestCustomer_1, TestOrder_1, DBObject_1, User_1, Group_1, ParentRight_1, RemoteProtocol_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -437,6 +471,48 @@ define("tests/registry", ["require"], function (require) {
             },
             "tests/TestReport.ts": {
                 "date": 1623864074000
+            },
+            "tests/remote/TestBigData.ts": {
+                "date": 1656620693167,
+                "tests.TestBigData": {
+                    "$DBObject": [],
+                    "@members": {
+                        "id": {
+                            "PrimaryGeneratedColumn": []
+                        },
+                        "name": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "name2": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "number1": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        },
+                        "number2": {
+                            "Column": [
+                                {
+                                    "nullable": true
+                                }
+                            ]
+                        }
+                    }
+                }
+            },
+            "tests/BigDataTest.ts": {
+                "date": 1656621756679
             }
         }
     };
@@ -470,25 +546,61 @@ define("tests/remote/T", ["require", "exports", "jassijs/remote/Registry", "jass
     }
     exports.test2 = test2;
 });
-define("tests/remote/TestCustomer", ["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_2, DBObject_3, Registry_5, DatabaseSchema_1, Rights_1) {
+define("tests/remote/TestBigData", ["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema"], function (require, exports, DBObject_3, Registry_5, DatabaseSchema_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.TestCustomer = void 0;
-    let TestCustomer = class TestCustomer extends DBObject_3.DBObject {
+    exports.TestBigData = void 0;
+    let TestBigData = class TestBigData extends DBObject_3.DBObject {
         constructor() {
             super();
         }
     };
     __decorate([
-        (0, DatabaseSchema_1.PrimaryColumn)(),
+        (0, DatabaseSchema_1.PrimaryGeneratedColumn)(),
         __metadata("design:type", Number)
-    ], TestCustomer.prototype, "id", void 0);
+    ], TestBigData.prototype, "id", void 0);
     __decorate([
         (0, DatabaseSchema_1.Column)({ nullable: true }),
         __metadata("design:type", String)
+    ], TestBigData.prototype, "name", void 0);
+    __decorate([
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", String)
+    ], TestBigData.prototype, "name2", void 0);
+    __decorate([
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", Number)
+    ], TestBigData.prototype, "number1", void 0);
+    __decorate([
+        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        __metadata("design:type", Number)
+    ], TestBigData.prototype, "number2", void 0);
+    TestBigData = __decorate([
+        (0, DBObject_3.$DBObject)(),
+        (0, Registry_5.$Class)("tests.TestBigData"),
+        __metadata("design:paramtypes", [])
+    ], TestBigData);
+    exports.TestBigData = TestBigData;
+});
+define("tests/remote/TestCustomer", ["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_2, DBObject_4, Registry_6, DatabaseSchema_2, Rights_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.TestCustomer = void 0;
+    let TestCustomer = class TestCustomer extends DBObject_4.DBObject {
+        constructor() {
+            super();
+        }
+    };
+    __decorate([
+        (0, DatabaseSchema_2.PrimaryColumn)(),
+        __metadata("design:type", Number)
+    ], TestCustomer.prototype, "id", void 0);
+    __decorate([
+        (0, DatabaseSchema_2.Column)({ nullable: true }),
+        __metadata("design:type", String)
     ], TestCustomer.prototype, "name", void 0);
     __decorate([
-        (0, DatabaseSchema_1.OneToMany)(type => TestOrder_2.TestOrder, order => order.customer),
+        (0, DatabaseSchema_2.OneToMany)(type => TestOrder_2.TestOrder, order => order.customer),
         __metadata("design:type", Array)
     ], TestCustomer.prototype, "orders", void 0);
     TestCustomer = __decorate([
@@ -498,8 +610,8 @@ define("tests/remote/TestCustomer", ["require", "exports", "tests/remote/TestOrd
                     i1: "from",
                     i2: "to"
                 } }]),
-        (0, DBObject_3.$DBObject)(),
-        (0, Registry_5.$Class)("tests.TestCustomer"),
+        (0, DBObject_4.$DBObject)(),
+        (0, Registry_6.$Class)("tests.TestCustomer"),
         __metadata("design:paramtypes", [])
     ], TestCustomer);
     exports.TestCustomer = TestCustomer;
@@ -508,32 +620,32 @@ define("tests/remote/TestCustomer", ["require", "exports", "tests/remote/TestOrd
     exports.test = test;
     ;
 });
-define("tests/remote/TestOrder", ["require", "exports", "tests/remote/TestOrderDetails", "tests/remote/TestCustomer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrderDetails_2, TestCustomer_2, DBObject_4, Registry_6, DatabaseSchema_2, Rights_2) {
+define("tests/remote/TestOrder", ["require", "exports", "tests/remote/TestOrderDetails", "tests/remote/TestCustomer", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrderDetails_2, TestCustomer_2, DBObject_5, Registry_7, DatabaseSchema_3, Rights_2) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestOrder = void 0;
-    let TestOrder = class TestOrder extends DBObject_4.DBObject {
+    let TestOrder = class TestOrder extends DBObject_5.DBObject {
         constructor() {
             super();
         }
     };
     __decorate([
-        (0, DatabaseSchema_2.PrimaryColumn)(),
+        (0, DatabaseSchema_3.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], TestOrder.prototype, "id", void 0);
     __decorate([
         (0, Rights_2.$CheckParentRight)(),
-        (0, DatabaseSchema_2.ManyToOne)(type => TestCustomer_2.TestCustomer),
+        (0, DatabaseSchema_3.ManyToOne)(type => TestCustomer_2.TestCustomer),
         __metadata("design:type", typeof (_a = typeof TestCustomer_2.TestCustomer !== "undefined" && TestCustomer_2.TestCustomer) === "function" ? _a : Object)
     ], TestOrder.prototype, "customer", void 0);
     __decorate([
-        (0, DatabaseSchema_2.OneToMany)(type => TestOrderDetails_2.TestOrderDetails, e => e.Order),
+        (0, DatabaseSchema_3.OneToMany)(type => TestOrderDetails_2.TestOrderDetails, e => e.Order),
         __metadata("design:type", Array)
     ], TestOrder.prototype, "details", void 0);
     TestOrder = __decorate([
-        (0, DBObject_4.$DBObject)(),
-        (0, Registry_6.$Class)("tests.TestOrder"),
+        (0, DBObject_5.$DBObject)(),
+        (0, Registry_7.$Class)("tests.TestOrder"),
         __metadata("design:paramtypes", [])
     ], TestOrder);
     exports.TestOrder = TestOrder;
@@ -542,28 +654,28 @@ define("tests/remote/TestOrder", ["require", "exports", "tests/remote/TestOrderD
     exports.test = test;
     ;
 });
-define("tests/remote/TestOrderDetails", ["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_3, DBObject_5, Registry_7, DatabaseSchema_3, Rights_3) {
+define("tests/remote/TestOrderDetails", ["require", "exports", "tests/remote/TestOrder", "jassijs/remote/DBObject", "jassijs/remote/Registry", "jassijs/util/DatabaseSchema", "jassijs/remote/security/Rights"], function (require, exports, TestOrder_3, DBObject_6, Registry_8, DatabaseSchema_4, Rights_3) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TestOrderDetails = void 0;
-    let TestOrderDetails = class TestOrderDetails extends DBObject_5.DBObject {
+    let TestOrderDetails = class TestOrderDetails extends DBObject_6.DBObject {
         constructor() {
             super();
         }
     };
     __decorate([
-        (0, DatabaseSchema_3.PrimaryColumn)(),
+        (0, DatabaseSchema_4.PrimaryColumn)(),
         __metadata("design:type", Number)
     ], TestOrderDetails.prototype, "id", void 0);
     __decorate([
         (0, Rights_3.$CheckParentRight)(),
-        (0, DatabaseSchema_3.ManyToOne)(type => TestOrder_3.TestOrder, e => e.details),
+        (0, DatabaseSchema_4.ManyToOne)(type => TestOrder_3.TestOrder, e => e.details),
         __metadata("design:type", typeof (_a = typeof TestOrder_3.TestOrder !== "undefined" && TestOrder_3.TestOrder) === "function" ? _a : Object)
     ], TestOrderDetails.prototype, "Order", void 0);
     TestOrderDetails = __decorate([
-        (0, DBObject_5.$DBObject)(),
-        (0, Registry_7.$Class)("tests.TestOrderDetails"),
+        (0, DBObject_6.$DBObject)(),
+        (0, Registry_8.$Class)("tests.TestOrderDetails"),
         __metadata("design:paramtypes", [])
     ], TestOrderDetails);
     exports.TestOrderDetails = TestOrderDetails;
