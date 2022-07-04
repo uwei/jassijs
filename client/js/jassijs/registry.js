@@ -969,11 +969,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Property.ts": {
-                "date": 1655556864382,
+                "date": 1656955647190,
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1656456105621,
+                "date": 1656955428455,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {}
@@ -1121,7 +1121,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/JsonEditor.ts": {
-                "date": 1656073158689,
+                "date": 1656964642539,
                 "jassijs.ui.PropertyEditors.JsonEditor": {
                     "$PropertyEditor": [
                         [
@@ -1130,9 +1130,6 @@ define("jassijs/registry", ["require"], function (require) {
                     ]
                 },
                 "jassijs.ui.PropertyEditorTestProperties": {
-                    "@members": {}
-                },
-                "jassijs.ui.PropertyEditorTestProperties2": {
                     "@members": {}
                 }
             },
@@ -1247,7 +1244,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
-                "date": 1656683556443,
+                "date": 1656963354400,
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -1286,7 +1283,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1656507979161,
+                "date": 1656962868275,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -1383,6 +1380,22 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/util/Tools.ts": {
                 "date": 1655556795177,
                 "jassijs.util.Tools": {}
+            },
+            "jassijs/ui/PropertyEditors/JsonArrayEditor.ts": {
+                "date": 1656960819948,
+                "jassijs.ui.PropertyEditors.JsonArrayEditor": {
+                    "$PropertyEditor": [
+                        [
+                            "jsonarray"
+                        ]
+                    ]
+                },
+                "jassijs.ui.JsonArrayEditor.TestProperties": {
+                    "@members": {}
+                },
+                "jassijs.ui.JsonArrayEditor.TestProperties2": {
+                    "@members": {}
+                }
             }
         }
     };

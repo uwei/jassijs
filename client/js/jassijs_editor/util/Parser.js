@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs/remote/Test"], function (require, exports, Registry_1, Typescript_1, Test_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs/remote/Test", "jassijs/remote/Classes"], function (require, exports, Registry_1, Typescript_1, Test_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.tests = exports.Parser = exports.ParsedClass = void 0;
@@ -169,10 +169,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
             else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
                 return Number(arg.text);
             }
-            else if (arg.kind === ts.SyntaxKind.ArrowFunction) {
+            else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
                 return arg.getText();
             }
-            throw "Error type not found";
+            throw new Classes_1.JassiError("Error type not found");
         }
         parseDecorator(dec) {
             var ex = dec.expression;

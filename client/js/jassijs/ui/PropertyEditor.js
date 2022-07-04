@@ -363,7 +363,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 //sometimes the component is already deleted e.g.resize
                 if (prop.editor["__destroyed"] !== true) {
                     if (prop.isVisible) {
-                        var isVisible = prop.isVisible(this.value);
+                        var isVisible = prop.isVisible(this.value, this);
                         var label = undefined;
                         for (let r = 0; r < this.table.dom.children[1].children.length; r++) {
                             var row = this.table.dom.children[1].children[r];

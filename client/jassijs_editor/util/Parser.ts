@@ -5,6 +5,7 @@ import { $Class } from "jassijs/remote/Registry";
 import typescript from "jassijs_editor/util/Typescript";
 import { Tests } from "jassijs/base/Tests";
 import { Test } from "jassijs/remote/Test";
+import { JassiError } from "jassijs/remote/Classes";
 
 
 interface Properties {
@@ -189,11 +190,11 @@ export class Parser {
             return false;
         } else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
             return Number(arg.text);
-        } else if (arg.kind === ts.SyntaxKind.ArrowFunction) {
+        } else if (arg.kind === ts.SyntaxKind.ArrowFunction||arg.kind===ts.SyntaxKind.FunctionExpression) {
             return arg.getText();
         }
 
-        throw "Error type not found";
+        throw new JassiError("Error type not found");
     }
     private parseDecorator(dec: ts.Decorator): ParsedDecorator {
         var ex: any = dec.expression;

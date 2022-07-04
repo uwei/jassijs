@@ -7,6 +7,7 @@ import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import { Tools } from "jassijs/util/Tools";
 import { classes } from "jassijs/remote/Classes";
 import { $Property } from "jassijs/ui/Property";
+import { BoxPanel } from "jassijs/ui/BoxPanel";
 
 
 @$PropertyEditor(["json"])
@@ -24,7 +25,7 @@ export class JsonEditor extends Editor {
         /** @member - the renedering component **/
         this.component = new Button();
         var _this = this;
-        this.component.onclick(function(param) {
+        this.component.onclick(function (param) {
             _this._onclick(param);
         });
     }
@@ -32,13 +33,10 @@ export class JsonEditor extends Editor {
      * @member {object} ob - the object which is edited
      */
     set ob(ob) {
-        if(ob===undefined)
+        if (ob === undefined)
             debugger;
         super.ob = ob;
-       
         var value = this.propertyEditor.getPropertyValue(this.property);
-        //set cache for propertyvalues
-
         var empty = value === undefined || value.length === 0;
         if (empty) {
             this.component.icon = "mdi mdi-decagram-outline"
@@ -68,44 +66,46 @@ export class JsonEditor extends Editor {
     onpropertyChanged(handler) {
         this.addEvent("propertyChanged", handler);
     }
-    private makePropertyChangedEvent(propEditor: PropertyEditor) {
+    private propertyChanged(param, propEditor: PropertyEditor) {
         var _this = this;
-        propEditor.onpropertyChanged(function(param) {
-            _this.callEvent("propertyChanged", param);
-            if (_this.propertyEditor.parentPropertyEditor === undefined) {//only if the last JSON-PropertyEditor Window is closed
-                var space = "";//_this.propertyEditor.getSpace(_this.property.name);
-                //var str = Tools.objectToJson(propEditor.value, space);
-                var str = Tools.stringObjectToJson(propEditor.codeChanges, space);
+        _this.callEvent("propertyChanged", param);
+        if (_this.propertyEditor.parentPropertyEditor === undefined) {//only if the last JSON-PropertyEditor Window is closed
+            var space = "";//_this.propertyEditor.getSpace(_this.property.name);
+            //var str = Tools.objectToJson(propEditor.value, space);
+            var str = Tools.stringObjectToJson(propEditor.codeChanges, space);
 
-                if (_this.property.constructorClass !== undefined) {
-                    var shortClassname: string = _this.property.constructorClass.split(".")[_this.property.constructorClass.split(".").length - 1];
+            if(_this.property.name==="new"){
+                var shortClassname: string = classes.getClassName(_this._ob).split(".")[classes.getClassName(_this._ob).split(".").length - 1];
+                str = "new " + shortClassname + "(" + str + ")";
+            }
+            if (_this.property.constructorClass !== undefined) {
+                var shortClassname: string = _this.property.constructorClass.split(".")[_this.property.constructorClass.split(".").length - 1];
 
-                    str = "new " + shortClassname + "(" + str + ")";
-                }
-                var line = _this.propertyEditor.setPropertyInCode(_this.property.name, str);
-                //set Property in Design
-                //???Alternativ: 
-                var test = _this._ob;//Tools.stringObjectToObject
-                if(test===undefined){
-                   //_this.ob={};
-                  // _this.propertyEditor.setPropertyInDesign(_this.property.name,_this.ob);
-                }
-                if (typeof (_this._ob[_this.property.name]) === "function")
-                    _this._ob[_this.property.name](propEditor.value);
-                else
-                    _this._ob[_this.property.name] = propEditor.value;
-                _this.callEvent("edit", param);
-            } else
-                propEditor.parentPropertyEditor.callEvent("propertyChanged", param);
-            let val = propEditor.value;
-            if (!val) {
-                _this.component.icon = "mdi mdi-decagram-outline"
-            } else{
-                _this.component.icon = "mdi mdi-decagram";
-			}
-        });
-
+                str = "new " + shortClassname + "(" + str + ")";
+            }
+            var line = _this.propertyEditor.setPropertyInCode(_this.property.name, str);
+            //set Property in Design
+            //???Alternativ: 
+            var test = _this._ob;//Tools.stringObjectToObject
+            if (test === undefined) {
+                //_this.ob={};
+                // _this.propertyEditor.setPropertyInDesign(_this.property.name,_this.ob);
+            }
+            if (typeof (_this._ob[_this.property.name]) === "function")
+                _this._ob[_this.property.name](propEditor.value);
+            else
+                _this._ob[_this.property.name] = propEditor.value;
+            _this.callEvent("edit", param);
+        } else
+            propEditor.parentPropertyEditor.callEvent("propertyChanged", param);
+        let val = propEditor.value;
+        if (!val) {
+            _this.component.icon = "mdi mdi-decagram-outline"
+        } else {
+            _this.component.icon = "mdi mdi-decagram";
+        }
     }
+
     /** 
      * initiate the default values in the PropertyEditor from code
      **/
@@ -131,82 +131,85 @@ export class JsonEditor extends Editor {
         }
 
     }
-   
-    /**
-     * intern the value changes
-     * @param {type} param
-     */
-    _onclick(param) {
-        var val = this.component.text;
-        //if(val!=="function"){//function is still empty
+
+
+    private createPropertyEditor(): PropertyEditor {
         var propEditor = new PropertyEditor();
-        propEditor.readPropertyValueFromDesign=this.propertyEditor.readPropertyValueFromDesign;
+        propEditor.readPropertyValueFromDesign = this.propertyEditor.readPropertyValueFromDesign;
         propEditor.showThisProperties = this.showThisProperties;
         var _this = this;
 
         this.setCode(propEditor);
-        this.makePropertyChangedEvent(propEditor);
+        propEditor.onpropertyChanged(function (param) {
+            _this.propertyChanged(param, propEditor)
+        });
 
         propEditor.parentPropertyEditor = this.propertyEditor;
         propEditor.variablename = this.property.name;
+        if (this.propertyEditor.parentPropertyEditor !== undefined) {
+            propEditor.showThisProperties = this.propertyEditor.showThisProperties;
+        }
+        return propEditor;
+    }
+    /**
+     * get the propertyvalue from code
+     */
+    private async getInitialPropertyValue(code) {
         var newclass = classes.getClass(this.property.componentType);
-        if(!this.property.componentType)
+        if (!this.property.componentType)
             return;
         var newvalue = new newclass();
         //only the top-PropertyEditor changed something
         if (this.propertyEditor.parentPropertyEditor === undefined) {
-            var code = this.propertyEditor.getPropertyValue(this.property);
-          
             if (this.property.constructorClass !== undefined) {
-                var param = code=== undefined ? undefined : code.substring(code.indexOf("(") + 1, code.indexOf(")"));
+                var param = code === undefined ? undefined : code.substring(code.indexOf("(") + 1, code.indexOf(")"));
                 if (param === "")
                     param = undefined;
-                classes.loadClass(this.property.constructorClass).then((oclass) => {
-                    let oparam = Tools.jsonToObject(param);
-                    var vv = new oclass(param === undefined ? undefined : oparam);
-                    propEditor.value = vv;
-
-
-                });
+                var oclass = await classes.loadClass(this.property.constructorClass);
+                let oparam = Tools.jsonToObject(param);
+                newvalue = new oclass(param === undefined ? undefined : oparam);
             } else {
                 let val = undefined;
                 if (code === undefined) {
                     val = {};
-                } else if(typeof(code)==="string"){
+                } else if (typeof (code) === "string") {
                     val = Tools.jsonToObject(code);
-                }else
-                    val=code;
+                } else
+                    val = code;
                 Object.assign(newvalue, val);
-                val = newvalue;
-                propEditor.value = val;
             }
-
         } else {
-            propEditor.showThisProperties = this.propertyEditor.showThisProperties;
             var val = this.propertyEditor.value[this.property.name];
-
-            //if (propEditor.value === undefined) {
-            if (val === undefined) {
-                propEditor.value = newvalue;
-                this.propertyEditor.value[this.property.name] = propEditor.value;
-            } else {
+            if (val !== undefined) {
                 Object.assign(newvalue, val);
-                val = newvalue;
-                propEditor.value = val;
             }
         }
+        return newvalue;
+    }
+    /**
+     * intern the value changes
+     * @param {type} param
+     */
+    async _onclick(param) {
+        var propEditor = this.createPropertyEditor();
+        propEditor.value = await this.getInitialPropertyValue(this.propertyEditor.getPropertyValue(this.property));
+        //if a new property is created attach it to the parenteditor
+        if(this.propertyEditor.parentPropertyEditor&&this.propertyEditor.value[this.property.name] ===undefined){
+            this.propertyEditor.value[this.property.name] = propEditor.value;
+        }
+        this.showDialog(propEditor, propEditor);
+    }
+    protected showDialog(control, propEditor) {
         var docheight = $(document).height();
-        var docwidth = $(document).width();
-        $(propEditor.dom).dialog({
+        $(control.dom).dialog({
             height: docheight,
             width: "320px",
-            beforeClose: function(event, ui) {
+            beforeClose: function (event, ui) {
                 if (propEditor.variablename === "new") {
                     propEditor.parentPropertyEditor.updateCodeEditor();
                 }
             }
         });
-
     }
 }
 @$Class("jassijs.ui.PropertyEditorTestProperties")
@@ -218,13 +221,7 @@ class TestProperties {
     jo: any;
 
 }
-@$Class("jassijs.ui.PropertyEditorTestProperties2")
-class TestProperties2 {
-    @$Property({ decription: "name of the dialog" })
-    name1: string;
-    @$Property({ decription: "name of the dialog" })
-    name2: string;
-}
+
 export function test() {
     var ret = new PropertyEditor();
     ret.value = new TestProperties();

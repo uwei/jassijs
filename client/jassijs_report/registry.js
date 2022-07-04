@@ -70,17 +70,6 @@ define("jassijs_report/registry",["require"], function(require) {
 	"jassijs_report/remote/pdfmakejassi.ts": {
 		"date": 1634336644000
 	},
-	"jassijs_report/remote/RComponent.ts": {
-		"date": 1656016829917,
-		"jassijs_report.ReportComponent": {
-			"$Property": [
-				{
-					"hideBaseClassProperties": true
-				}
-			],
-			"@members": {}
-		}
-	},
 	"jassijs_report/ReportDesign.ts": {
 		"date": 1656014998740,
 		"jassijs_report.InfoProperties": {

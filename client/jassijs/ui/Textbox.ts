@@ -5,12 +5,10 @@ import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
 import registry from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
 import { Numberformatter } from "jassijs/util/Numberformatter";
-
 //calc the default Formats
 let allFormats = (() => {
     var ret = [];
     const format = new Intl.NumberFormat();
-
     var decimal = format.format(1.1).substring(1, 2);
     var group = format.format(1234).substring(1, 2);
     /*	const parts = format.formatToParts(1234.6);
@@ -27,7 +25,6 @@ let allFormats = (() => {
     ret.push("#" + group + "##0" + decimal + "00 $");
     ret.push("0");
     ret.push("0" + decimal + "00");
-
     return ret;
 })();
 export interface TextboxConfig extends DataComponentConfig {
@@ -37,11 +34,11 @@ export interface TextboxConfig extends DataComponentConfig {
     */
     disabled?: boolean;
     /**
-    * @member {string} value - value of the component 
+    * @member {string} value - value of the component
     */
     format?: string;
     /**
-     * @member {string} value - value of the component 
+     * @member {string} value - value of the component
      */
     value?;
     /**
@@ -53,9 +50,7 @@ export interface TextboxConfig extends DataComponentConfig {
      * called if value has changed
      * @param {function} handler - the function which is executed
      */
-
     onchange?(handler);
-
     /**
      * called if a key is pressed down
      * @param {function} handler - the function which is executed
@@ -70,15 +65,15 @@ export interface TextboxConfig extends DataComponentConfig {
     /**
     *  @member {string|function} completerDisplay - property or function used to gets the value to display
     */
-    autocompleterDisplay?: string | ((object: any) => string)
+    autocompleterDisplay?: string | ((object: any) => string);
     /**
-    *  @member {[object]} completer - values used for autocompleting 
+    *  @member {[object]} completer - values used for autocompleting
     */
     autocompleter?: any[] | (() => any);
     /**
      * @member {boolean} - the textfield is readonly
      */
-    readOnly:boolean;
+    readOnly?: boolean;
 }
 @$UIComponent({ fullPath: "common/Textbox", icon: "mdi mdi-form-textbox" })
 @$Class("jassijs.ui.Textbox")
@@ -93,10 +88,12 @@ export class Textbox extends DataComponent implements TextboxConfig {
     _autocompleter;
     private _value: any = "";
     _format: string;
-    _formatProps: { focus: any, blur: any, inEditMode: boolean } = undefined;
-    constructor(color = undefined) { /* document.onkeydown = function(event) {
-                alert("Hallo");
-            };*/
+    _formatProps: {
+        focus: any;
+        blur: any;
+        inEditMode: boolean;
+    } = undefined;
+    constructor(color = undefined) {
         super();
         super.init('<input type="text" />');
         this.dom.style.color = color;
@@ -109,7 +106,6 @@ export class Textbox extends DataComponent implements TextboxConfig {
     get dom(): HTMLInputElement {
         return <any>super.dom;
     }
-
     set dom(value: HTMLInputElement) {
         super.dom = value;
     }
@@ -126,14 +122,13 @@ export class Textbox extends DataComponent implements TextboxConfig {
     get readOnly(): boolean {
         return this.dom.readOnly;
     }
-    set format(value) { //the Code
+    set format(value) {
         this._format = value;
         var _this = this;
         if (value === undefined && this._formatProps) {
             this.off("focus", this._formatProps.focus);
             this.off("blur", this._formatProps.blur);
         }
-
         if (value && this._formatProps === undefined) {
             _this._formatProps = { blur: undefined, focus: undefined, inEditMode: false };
             this._formatProps.focus = this.on("focus", () => {
@@ -148,23 +143,20 @@ export class Textbox extends DataComponent implements TextboxConfig {
             });
         }
         if (this.value)
-            this.value = this.value;//apply the ne format
-
+            this.value = this.value; //apply the ne format
     }
     @$Property({ type: "string", chooseFrom: allFormats })
     get format() {
         return this._format;
     }
     private updateValue() {
-
         var ret = this.dom?.value;
         if (this.converter !== undefined) {
             ret = this.converter.stringToObject(ret);
         }
         this._value = ret;
     }
-
-    set value(value) { //the Code
+    set value(value) {
         this._value = value;
         var v = value;
         if (this.converter)
@@ -172,34 +164,28 @@ export class Textbox extends DataComponent implements TextboxConfig {
         if (this._format) {
             v = Numberformatter.format(this._format, value);
         }
-
         this.dom.value = value === undefined ? "" : value;
     }
     @$Property({ type: "string" })
     get value() {
-        if (this._formatProps && this._formatProps.inEditMode === false)//
-            var j = 0;//do nothing
+        if (this._formatProps && this._formatProps.inEditMode === false) //
+            var j = 0; //do nothing
         else
             this.updateValue();
         return this._value;
     }
-
     @$Property({ default: "function(event){\n\t\n}" })
     onclick(handler) {
         return this.on("click", handler);
     }
-
     @$Property({ default: "function(event){\n\t\n}" })
     onchange(handler) {
         return this.on("change", handler);
     }
-
-
     @$Property({ default: "function(event){\n\t\n}" })
     onkeydown(handler) {
         return this.on("keydown", handler);
     }
-
     @$Property({ default: "function(event){\n\t\n}" })
     oninput(handler) {
         return this.on("input", handler);
@@ -215,15 +201,13 @@ export class Textbox extends DataComponent implements TextboxConfig {
     set placeholder(text: string) {
         this.dom.placeholder = text;
     }
-
     get placeholder(): string {
         return this.dom.placeholder;
     }
-
     set autocompleterDisplay(value: string | ((object: any) => string)) {
         this._autocompleterDisplay = value;
         if (this.autocompleter !== undefined) {
-            this.autocompleter = this.autocompleter;//force rendering
+            this.autocompleter = this.autocompleter; //force rendering
         }
     }
     get autocompleterDisplay() {
@@ -240,7 +224,8 @@ export class Textbox extends DataComponent implements TextboxConfig {
             var val = values[x];
             if (typeof (this.autocompleterDisplay) === "function") {
                 val = this.autocompleterDisplay(val);
-            } else if (this.autocompleterDisplay !== undefined) {
+            }
+            else if (this.autocompleterDisplay !== undefined) {
                 val = val[this.autocompleterDisplay];
             }
             html += '<option value="' + val + '">';
@@ -248,7 +233,6 @@ export class Textbox extends DataComponent implements TextboxConfig {
         }
         comp.innerHTML = html;
     }
-
     set autocompleter(value: any[] | (() => any)) {
         var list = this.dom.getAttribute("list");
         var _this = this;
@@ -258,7 +242,7 @@ export class Textbox extends DataComponent implements TextboxConfig {
                     var values = value();
                     _this.fillCompletionList(values);
                 }
-            })
+            });
         }
         if (list === undefined || list === null) {
             list = "j" + registry.nextID();
@@ -267,21 +251,19 @@ export class Textbox extends DataComponent implements TextboxConfig {
             this.dom.setAttribute("list", list);
         }
         if (typeof (value) === "function") {
-
-        } else {
+        }
+        else {
             this.fillCompletionList(value);
-
         }
     }
     get autocompleter() {
         var list = this.dom.list;
         if (list === undefined)
             return undefined;
-        var comp = list;//$(list)[0];
+        var comp = list; //$(list)[0];
         if (comp === undefined)
             return undefined;
         return comp["_values"];
-
     }
     /**
      * focus the textbox
@@ -294,13 +276,12 @@ export class Textbox extends DataComponent implements TextboxConfig {
             this._autocompleter.remove();
         super.destroy();
     }
-
 }
 export function test() {
-
     var ret = new Textbox();
     ret.autocompleter = ["Hallo", "Du"];
+    
     //ret.autocompleter=()=>[];
     return ret;
 }
-   // return CodeEditor.constructor;
+// return CodeEditor.constructor;
