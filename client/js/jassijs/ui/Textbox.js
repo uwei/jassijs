@@ -106,7 +106,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             if (this._format) {
                 v = Numberformatter_1.Numberformatter.format(this._format, value);
             }
-            this.dom.value = value === undefined ? "" : value;
+            this.dom.value = v === undefined ? "" : v;
         }
         get value() {
             if (this._formatProps && this._formatProps.inEditMode === false) //
@@ -271,6 +271,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     function test() {
         var ret = new Textbox();
         ret.autocompleter = ["Hallo", "Du"];
+        ret.format = "###,00";
+        ret.value = 10.1;
         //ret.autocompleter=()=>[];
         return ret;
     }

@@ -2,7 +2,7 @@
 define("jassijs/ext/jquerylib", [
    
     "jquery",
-    "jquery.ui"], function (require) {
+    "jquery.ui","jquery.ui.touch"], function (require) {
         
         jassijs.includeCSSFile( "jquery-ui.css");
        

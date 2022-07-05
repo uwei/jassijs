@@ -213,6 +213,20 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
     ], JsonEditor);
     exports.JsonEditor = JsonEditor;
     let TestProperties = class TestProperties {
+        extensionCalled(action) {
+            if (action.getPropertyEditorActions) {
+                action.getPropertyEditorActions.actions.push({
+                    name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
+                    run: (hallo) => alert(hallo)
+                });
+            }
+            if (action.getPropertyEditorActions) {
+                action.getPropertyEditorActions.actions.push({
+                    name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
+                    run: (hallo) => alert("h2" + hallo)
+                });
+            }
+        }
     };
     __decorate([
         (0, Property_1.$Property)({ decription: "name of the dialog" }),

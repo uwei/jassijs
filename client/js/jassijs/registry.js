@@ -56,7 +56,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Windows": {}
             },
             "jassijs/modul.ts": {
-                "date": 1656674206998
+                "date": 1657046681579
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1655556496250,
@@ -973,7 +973,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1656955428455,
+                "date": 1657048756889,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {}
@@ -1121,7 +1121,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/JsonEditor.ts": {
-                "date": 1656964642539,
+                "date": 1657048599551,
                 "jassijs.ui.PropertyEditors.JsonEditor": {
                     "$PropertyEditor": [
                         [
@@ -1283,7 +1283,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1656962868275,
+                "date": 1657046832516,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -1366,7 +1366,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1622984214000
             },
             "jassijs/util/Numberformatter.ts": {
-                "date": 1655556795177,
+                "date": 1657046807454,
                 "jassijs.util.Numberformatter": {}
             },
             "jassijs/util/Reloader.ts": {
@@ -1396,6 +1396,10 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.JsonArrayEditor.TestProperties2": {
                     "@members": {}
                 }
+            },
+            "jassijs/ui/PropertyEditors/TableColumnImport.ts": {
+                "date": 1657048998005,
+                "jassijs/ui/PropertyEditors/TableColumnImport": {}
             }
         }
     };

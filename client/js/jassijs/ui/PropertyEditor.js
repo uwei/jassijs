@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ext/jquerylib", "jassijs/base/PropertyEditorService"], function (require, exports, Registry_1, Panel_1, Image_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1, Component_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ext/jquerylib", "jassijs/base/PropertyEditorService"], function (require, exports, Registry_1, Panel_1, Button_1, Image_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1, Component_1, Classes_1) {
     "use strict";
     var PropertyEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -22,6 +22,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             this.codeChanges = {};
             this.hasLoadingEditor = false;
             this.table = new Panel_1.Panel();
+            this.toolbar = new Panel_1.Panel();
             this.parser = parser;
             this.table.init(`<table style="table-layout: fixed;font-size:11px">
                             <thead>
@@ -36,6 +37,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                                 </tr>
                             </tbody>
                             </table>`);
+            this.add(this.toolbar);
             this.add(this.table);
             this.table.width = "98%";
             $(this.table.dom).find(".propertyeditorheader").resizable({ handles: "e" });
@@ -228,9 +230,35 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 else
                     this.variablename = this.codeEditor.getVariableFromObject(this._value);
             }
+            this.addActions();
             var _this = this;
             this._initValue();
             _this.update();
+        }
+        addActions() {
+            var _a, _b;
+            var _this = this;
+            if ((_a = this._value) === null || _a === void 0 ? void 0 : _a.extensionCalled) {
+                var all = [];
+                (_b = this._value) === null || _b === void 0 ? void 0 : _b.extensionCalled({
+                    getPropertyEditorActions: {
+                        propertyEditor: this,
+                        actions: all
+                    }
+                });
+                this.toolbar.removeAll();
+                for (var x = 0; x < all.length; x++) {
+                    var bt = this.createAction(all[x]);
+                    this.toolbar.add(bt);
+                }
+            }
+        }
+        createAction(action) {
+            var bt = new Button_1.Button();
+            bt.icon = action.icon;
+            bt.onclick(() => action.run(this._value, this));
+            bt.tooltip = action.description;
+            return bt;
         }
         swapComponents(first, second) {
             //swap Design

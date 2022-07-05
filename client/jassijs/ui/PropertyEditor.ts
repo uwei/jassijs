@@ -16,7 +16,13 @@ import { Editor } from "jassijs/ui/PropertyEditors/Editor";
 import { Component } from "jassijs/ui/Component";
 import { Container } from "jassijs/ui/Container";
 import { classes } from "jassijs/remote/Classes";
+import { ActionProperties } from "jassijs/base/Actions";
 
+declare global {
+    export interface ExtensionAction {
+        getPropertyEditorActions?: { propertyEditor: PropertyEditor, actions: ActionProperties[] }
+    }
+}
 @$Class("jassijs.ui.PropertyEditor")
 export class PropertyEditor extends Panel {
     readPropertyValueFromDesign: boolean = false;
@@ -30,13 +36,15 @@ export class PropertyEditor extends Panel {
     properties;
     _value;
     codeChanges: { [property: string]: string | {} } = {};
-    private hasLoadingEditor=false;
+    toolbar: Panel;
+    private hasLoadingEditor = false;
     /**
     * edit object properties
     */
     constructor(codeEditor = undefined, parser = undefined) {
         super();
         this.table = new Panel();
+        this.toolbar = new Panel();
         this.parser = parser;
         this.table.init(`<table style="table-layout: fixed;font-size:11px">
                             <thead>
@@ -51,7 +59,10 @@ export class PropertyEditor extends Panel {
                                 </tr>
                             </tbody>
                             </table>`);
+
+        this.add(this.toolbar);
         this.add(this.table);
+
         this.table.width = "98%";
         $(this.table.dom).find(".propertyeditorheader").resizable({ handles: "e" });
         this.clear();
@@ -216,10 +227,10 @@ export class PropertyEditor extends Panel {
             this.codeChanges = {};
         if (value !== undefined || value?.dom !== undefined) {
             //if (!$(value.dom).is(":focus"))
-            if(value.dom&&document.activeElement!==value.dom)
-                (<HTMLElement> value.dom).focus();
+            if (value.dom && document.activeElement !== value.dom)
+                (<HTMLElement>value.dom).focus();
         }
-        if (this.hasLoadingEditor===false&& value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
+        if (this.hasLoadingEditor === false && value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
             this._value = value;
             if (this.codeEditor)
                 this.variablename = this.codeEditor.getVariableFromObject(this._value);
@@ -252,12 +263,38 @@ export class PropertyEditor extends Panel {
                 this.variablename = this.codeEditor.getVariableFromObject(this._value);
         }
 
-
-
+        this.addActions();
         var _this = this;
         this._initValue();
         _this.update();
 
+    }
+    private addActions() {
+        var _this = this;
+        if (this._value?.extensionCalled) {
+            var all: ActionProperties[] = [];
+            this._value?.extensionCalled(
+                {
+                    getPropertyEditorActions: {
+                        propertyEditor: this,
+                        actions: all
+                    }
+                });
+            this.toolbar.removeAll();
+            for (var x = 0; x < all.length; x++) {
+                var bt = this.createAction(all[x]);
+                this.toolbar.add(bt);
+            }
+        }
+    }
+    private createAction(action: ActionProperties) {
+        var bt = new Button();
+        bt.icon = action.icon;
+        bt.onclick(() =>
+            action.run(this._value, this)
+        );
+        bt.tooltip = action.description;
+        return bt;
     }
     swapComponents(first: Component, second: Component) {
         //swap Design
@@ -331,15 +368,15 @@ export class PropertyEditor extends Panel {
                 //nameEditor.ob = _this._value;
             }
         }
-        this.hasLoadingEditor=false;
+        this.hasLoadingEditor = false;
         for (var x = 0; x < props.length; x++) {
             if (props[x].name.indexOf("/") > -1) {
             } else {
                 _this.properties[props[x].name] = { isVisible: props[x].isVisible, name: props[x].name, component: undefined, description: props[x].description };
 
                 var editor = propertyeditor.createFor(props[x], _this);
-                if(classes.getClassName(editor)==="jassijs.ui.PropertyEditors.LoadingEditor"){
-                    this.hasLoadingEditor=true;
+                if (classes.getClassName(editor) === "jassijs.ui.PropertyEditors.LoadingEditor") {
+                    this.hasLoadingEditor = true;
                 }
                 if (editor === undefined) {
                     console.log("Editor not found for " + _this.variablename);
@@ -394,7 +431,7 @@ export class PropertyEditor extends Panel {
             //sometimes the component is already deleted e.g.resize
             if (prop.editor["__destroyed"] !== true) {
                 if (prop.isVisible) {
-                    var isVisible = prop.isVisible(this.value,this);
+                    var isVisible = prop.isVisible(this.value, this);
                     var label = undefined;
                     for (let r = 0; r < this.table.dom.children[1].children.length; r++) {
                         var row = this.table.dom.children[1].children[r];
@@ -403,7 +440,7 @@ export class PropertyEditor extends Panel {
                     }
                     if (isVisible) {
                         prop.editor.component.dom.parentNode.style.display = '';
-                        label.style.display= '';
+                        label.style.display = '';
                     } else {
                         prop.editor.component.dom.parentNode.style.display = 'none';
                         label.style.display = 'none';

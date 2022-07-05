@@ -1,6 +1,6 @@
 define("jassijs/ext/jquerylib", [
     "jquery",
-    "jquery.ui"
+    "jquery.ui", "jquery.ui.touch"
 ], function (require) {
     jassijs.includeCSSFile("jquery-ui.css");
     define("../widgets/datepicker", [], function () {

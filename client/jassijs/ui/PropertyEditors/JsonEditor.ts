@@ -74,7 +74,7 @@ export class JsonEditor extends Editor {
             //var str = Tools.objectToJson(propEditor.value, space);
             var str = Tools.stringObjectToJson(propEditor.codeChanges, space);
 
-            if(_this.property.name==="new"){
+            if (_this.property.name === "new") {
                 var shortClassname: string = classes.getClassName(_this._ob).split(".")[classes.getClassName(_this._ob).split(".").length - 1];
                 str = "new " + shortClassname + "(" + str + ")";
             }
@@ -194,7 +194,7 @@ export class JsonEditor extends Editor {
         var propEditor = this.createPropertyEditor();
         propEditor.value = await this.getInitialPropertyValue(this.propertyEditor.getPropertyValue(this.property));
         //if a new property is created attach it to the parenteditor
-        if(this.propertyEditor.parentPropertyEditor&&this.propertyEditor.value[this.property.name] ===undefined){
+        if (this.propertyEditor.parentPropertyEditor && this.propertyEditor.value[this.property.name] === undefined) {
             this.propertyEditor.value[this.property.name] = propEditor.value;
         }
         this.showDialog(propEditor, propEditor);
@@ -219,7 +219,20 @@ class TestProperties {
     @$Property({ name: "jo/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
     @$Property({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2" })
     jo: any;
-
+    extensionCalled?(action: ExtensionAction) {
+        if (action.getPropertyEditorActions) {
+            action.getPropertyEditorActions.actions.push({
+                name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
+                run: (hallo) => alert(hallo)
+            })
+        }
+        if (action.getPropertyEditorActions) {
+            action.getPropertyEditorActions.actions.push({
+                name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
+                run: (hallo) => alert("h2"+hallo)
+            })
+        }
+    }
 }
 
 export function test() {

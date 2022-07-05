@@ -164,7 +164,7 @@ export class Textbox extends DataComponent implements TextboxConfig {
         if (this._format) {
             v = Numberformatter.format(this._format, value);
         }
-        this.dom.value = value === undefined ? "" : value;
+        this.dom.value = v === undefined ? "" : v;
     }
     @$Property({ type: "string" })
     get value() {
@@ -280,7 +280,8 @@ export class Textbox extends DataComponent implements TextboxConfig {
 export function test() {
     var ret = new Textbox();
     ret.autocompleter = ["Hallo", "Du"];
-    
+    ret.format="###,00";
+    ret.value=10.1;
     //ret.autocompleter=()=>[];
     return ret;
 }

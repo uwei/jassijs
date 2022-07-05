@@ -38,7 +38,7 @@ define(["require", "exports"], function (require, exports) {
                 'jquery.fancytree.dnd': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/modules/jquery.fancytree.dnd',
                 'jquery': '//cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery',
                 'jquery.ui': '//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui',
-                //'jquery.ui.touch': '//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min',
+                'jquery.ui.touch': '//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min',
                 //use dblcklick 'jquery.doubletap': '//cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/2.0.3/jquery.mobile-events.min',
                 'jquery.notify': '//cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min',
                 'jquery.language': jquery_language,
@@ -64,7 +64,7 @@ define(["require", "exports"], function (require, exports) {
                 'jquery.fancytree.dnd': ["jquery", "jquery.ui"],
                 'jquery.ui': ["jquery"],
                 'jquery.notify': ["jquery"],
-                //      'jquery.ui.touch': ["jquery", "jquery.ui"],
+                'jquery.ui.touch': ["jquery", "jquery.ui"],
                 //            'jquery.doubletap': ["jquery"],
                 //  'jassijs/jassi': ['jquery', 'jquery.ui', /*'jquery.ui.touch'*/],
                 "spectrum": ["jquery"]

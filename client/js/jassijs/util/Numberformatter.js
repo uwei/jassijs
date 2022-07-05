@@ -128,11 +128,13 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
         return valObj;
     }
     function _format(mask, value, options = {}) {
+        const maskObj = processMask(mask);
+        if (typeof value === "string")
+            value = value.replace(maskObj.separator, ".");
         if (!mask || isNaN(Number(value))) {
             // Invalid inputs
             return value;
         }
-        const maskObj = processMask(mask);
         const valObj = processValue(value, maskObj, options);
         return maskObj.prefix + valObj.sign + valObj.result + maskObj.suffix;
     }
