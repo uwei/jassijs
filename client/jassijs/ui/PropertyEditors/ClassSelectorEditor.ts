@@ -10,6 +10,7 @@ import {PropertyEditor} from "jassijs/ui/PropertyEditor";
 import registry from "jassijs/remote/Registry";
 import {ComponentDescriptor} from "jassijs/ui/ComponentDescriptor";
 import { classes } from "jassijs/remote/Classes";
+import { Property } from "jassijs/ui/Property";
 
 @$PropertyEditor(["classselector"])
 @$Class("jassijs.ui.PropertyEditors.ClassSelectorEditor")
@@ -31,17 +32,25 @@ export  class ClassSelectorEditor extends Editor {
         this.select = new Select();
         this.select.width = "calc(100% - 26px)";
         this.property = Tools.copyObject(property);
+       //  this.property.componentType="jassijs.ui.converters.StringConverterProperies";
         this.jsonEditor = new JsonEditor(this.property, propertyEditor);
-        this.jsonEditor.parentPropertyEditor = this;
-        this.jsonEditor.component.text = "";
-        this.jsonEditor.component.icon = "mdi mdi-glasses";
-        this.jsonEditor.component.width = 26;
+        this.jsonEditor.parentPropertyEditor = propertyEditor.parentPropertyEditor;
+        
+        //this.jsonEditor.component.text = "";
+       // this.jsonEditor.component.icon = "mdi mdi-glasses";
+       // this.jsonEditor.component.width = 26;
         this.component.add(this.select);
         this.component.add(this.jsonEditor.getComponent());
         var _this = this;
 
         this.jsonEditor.onpropertyChanged(function (param) {
             return;
+            var svalue = _this.propertyEditor.getPropertyValue(_this.property);
+            svalue=svalue.substring(svalue.indexOf("(")+1,svalue.length-1);
+            
+            var value=Tools.jsonToObject(svalue);
+            var cl=classes.getClass(_this.property.constructorClass)
+            _this.propertyEditor.setPropertyInDesign(_this.property.name,new cl(value));
         });
         this.select.onchange(function (sel) {
             var converter = sel.data;
@@ -65,18 +74,28 @@ export  class ClassSelectorEditor extends Editor {
             
             classes.loadClass(converter.classname).then((pclass)=>{
                 _this.propertyEditor.setPropertyInDesign(_this.property.name,new pclass());
+                
             });
         }
+        classes.loadClass(converter.classname).then((cl)=>{
+            var meta=ComponentDescriptor.describe(cl)?.fields;
+            for(var x=0;x<meta.length;x++){
+                if(meta[x].name==="new"){
+                    _this.jsonEditor.property.componentType=meta[x].componentType;
+                }
+            }
+            
+        });
         _this.property.constructorClass = converter.classname;
-        _this.jsonEditor.showThisProperties = ComponentDescriptor.describe(classes.getClass(converter.classname)).fields;
-        for (var x = 0; x < _this.jsonEditor.showThisProperties.length; x++) {
+//        _this.jsonEditor.showThisProperties = ComponentDescriptor.describe(classes.getClass(converter.classname)).fields;
+/*        for (var x = 0; x < _this.jsonEditor.showThisProperties.length; x++) {
             var test = _this.jsonEditor.showThisProperties[x].name;
             if (test.startsWith("new")) {
                 _this.jsonEditor.showThisProperties[x].name = _this.property.name + test.substring(3);
             }
-        }
-        _this.jsonEditor.ob = {};
-        _this.jsonEditor.component.text = "";
+        }*/
+      //  _this.jsonEditor.ob = {};
+     //   _this.jsonEditor.component.text = "";
 
     }
     initSelect() {
@@ -111,11 +130,14 @@ export  class ClassSelectorEditor extends Editor {
      * @member {object} ob - the object which is edited
      */
     set ob(ob) {
+        
+        
         if (this.propertyEditor === undefined)
             return;
         if (this.select.items === undefined)
             return;//list is not inited
         var value = this.propertyEditor.getPropertyValue(this.property);
+        this.jsonEditor.ob=ob;
         if (value !== undefined) {
             
             for (var x = 0; x < this.select.items.length; x++) {

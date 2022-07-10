@@ -7,40 +7,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, Registry_1, Component_1, DataComponent_1, DefaultConverter_1, Registry_2, Property_1, Numberformatter_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/DataComponent", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_1, Component_1, DataComponent_1, DefaultConverter_1, Registry_2, Property_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Textbox = void 0;
-    //calc the default Formats
-    let allFormats = (() => {
-        var ret = [];
-        const format = new Intl.NumberFormat();
-        var decimal = format.format(1.1).substring(1, 2);
-        var group = format.format(1234).substring(1, 2);
-        /*	const parts = format.formatToParts(1234.6);
-                var decimal = ".";
-            var group=",";
-            parts.forEach(p => {
-                if (p.type === "decimal")
-                    decimal = p.value;
-                if (p.type === "group")
-                    group = p.value;
-            });*/
-        ret.push("#" + group + "##0" + decimal + "00");
-        ret.push("#" + group + "##0" + decimal + "00 €");
-        ret.push("#" + group + "##0" + decimal + "00 $");
-        ret.push("0");
-        ret.push("0" + decimal + "00");
-        return ret;
-    })();
     let Textbox = class Textbox extends DataComponent_1.DataComponent {
         constructor(color = undefined) {
             super();
             this._value = "";
-            this._formatProps = undefined;
+            this._isFocused = false;
             super.init('<input type="text" />');
+            var _this = this;
             this.dom.style.color = color;
-            this.converter = undefined;
+            this.onblur((e) => _this.blurcalled(e));
+            this.onfocus((e) => _this.focuscalled(e));
+            // this.converter = undefined;
         }
         config(config) {
             super.config(config);
@@ -59,59 +40,48 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
             return this.dom.disabled;
         }
         set readOnly(value) {
-            this.dom.readOnly = true;
+            this.dom.readOnly = value;
+        }
+        get converter() {
+            return this._converter;
+        }
+        set converter(value) {
+            this._converter = value;
+            this.value = this.value;
         }
         get readOnly() {
             return this.dom.readOnly;
         }
-        set format(value) {
-            this._format = value;
-            var _this = this;
-            if (value === undefined && this._formatProps) {
-                this.off("focus", this._formatProps.focus);
-                this.off("blur", this._formatProps.blur);
+        focuscalled(evt) {
+            this._isFocused = true;
+            if (this.converter) {
+                this.dom.value = this.converter.objectToString(this._value);
             }
-            if (value && this._formatProps === undefined) {
-                _this._formatProps = { blur: undefined, focus: undefined, inEditMode: false };
-                this._formatProps.focus = this.on("focus", () => {
-                    let val = this.value;
-                    _this._formatProps.inEditMode = true;
-                    this.dom.value = Numberformatter_1.Numberformatter.numberToString(val);
-                });
-                this._formatProps.blur = this.on("blur", () => {
-                    _this.updateValue();
-                    _this._formatProps.inEditMode = false;
-                    this.dom.value = Numberformatter_1.Numberformatter.format(this._format, this.value);
-                });
-            }
-            if (this.value)
-                this.value = this.value; //apply the ne format
-        }
-        get format() {
-            return this._format;
         }
         updateValue() {
-            var _a;
-            var ret = (_a = this.dom) === null || _a === void 0 ? void 0 : _a.value;
-            if (this.converter !== undefined) {
-                ret = this.converter.stringToObject(ret);
+            if (this.converter) {
+                this.value = this.converter.stringToObject(this.dom.value);
             }
-            this._value = ret;
+            else {
+                this.value = this.dom.value;
+            }
+        }
+        blurcalled(evt) {
+            this._isFocused = false;
+            this.updateValue();
+            if (this.converter) {
+                this.dom.value = this.converter.objectToFormatedString(this.value);
+            }
         }
         set value(value) {
             this._value = value;
             var v = value;
             if (this.converter)
-                v = this.converter.objectToString(v);
-            if (this._format) {
-                v = Numberformatter_1.Numberformatter.format(this._format, value);
-            }
+                v = this.converter.objectToFormatedString(v);
             this.dom.value = v === undefined ? "" : v;
         }
         get value() {
-            if (this._formatProps && this._formatProps.inEditMode === false) //
-                var j = 0; //do nothing
-            else
+            if (this._isFocused)
                 this.updateValue();
             return this._value;
         }
@@ -215,18 +185,14 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     };
     __decorate([
         (0, Property_1.$Property)({ type: "classselector", service: "$Converter" }),
-        __metadata("design:type", DefaultConverter_1.DefaultConverter)
-    ], Textbox.prototype, "converter", void 0);
+        __metadata("design:type", DefaultConverter_1.DefaultConverter),
+        __metadata("design:paramtypes", [DefaultConverter_1.DefaultConverter])
+    ], Textbox.prototype, "converter", null);
     __decorate([
         (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], Textbox.prototype, "readOnly", null);
-    __decorate([
-        (0, Property_1.$Property)({ type: "string", chooseFrom: allFormats }),
-        __metadata("design:type", Object),
-        __metadata("design:paramtypes", [Object])
-    ], Textbox.prototype, "format", null);
     __decorate([
         (0, Property_1.$Property)({ type: "string" }),
         __metadata("design:type", Object),
@@ -271,7 +237,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     function test() {
         var ret = new Textbox();
         ret.autocompleter = ["Hallo", "Du"];
-        ret.format = "###,00";
         ret.value = 10.1;
         //ret.autocompleter=()=>[];
         return ret;

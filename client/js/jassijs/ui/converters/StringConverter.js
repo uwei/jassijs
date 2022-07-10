@@ -11,12 +11,27 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StringConverter = void 0;
+    let StringConverterProperties = class StringConverterProperties {
+    };
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Number)
+    ], StringConverterProperties.prototype, "minChars", void 0);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Number)
+    ], StringConverterProperties.prototype, "maxChars", void 0);
+    StringConverterProperties = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.converters.StringConverterProperies")
+    ], StringConverterProperties);
     let StringConverter = 
     //@$Property({ name: "new/minChars", type: "number", default: undefined })
     //@$Property({ name: "new/maxChars", type: "number", default: undefined })
     class StringConverter extends DefaultConverter_1.DefaultConverter {
-        constructor() {
+        constructor(props) {
             super();
+            this.minChars = props === null || props === void 0 ? void 0 : props.minChars;
+            this.maxChars = props === null || props === void 0 ? void 0 : props.maxChars;
         }
         /**
          * converts a string to the object
@@ -31,17 +46,17 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
          * @param {string} obj - the object to convert
          */
         objectToString(obj) {
-            return obj.ToString();
+            return (obj === null || obj === void 0 ? void 0 : obj.toString()) + this.maxChars;
         }
     };
     StringConverter = __decorate([
         (0, DefaultConverter_1.$Converter)({ name: "string" }),
         (0, Registry_1.$Class)("jassijs.ui.converters.StringConverter"),
-        (0, Property_1.$Property)({ name: "new", type: "json" })
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.StringConverterProperies" })
         //@$Property({ name: "new/minChars", type: "number", default: undefined })
         //@$Property({ name: "new/maxChars", type: "number", default: undefined })
         ,
-        __metadata("design:paramtypes", [])
+        __metadata("design:paramtypes", [StringConverterProperties])
     ], StringConverter);
     exports.StringConverter = StringConverter;
 });

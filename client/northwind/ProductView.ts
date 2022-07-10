@@ -90,8 +90,7 @@ export class ProductView extends DBObjectView {
                     bind: [me.databinder, "UnitPrice"],
                     label: "Unit Price",
                     width: 65,
-                    converter: new NumberConverter(),
-                    format: "#.##0,00",
+                    converter: new NumberConverter({format: "#.##0,00"}),
                     styles: [me.styleNumber]
                 }),
                 me.unitsInStock.config({
@@ -100,8 +99,7 @@ export class ProductView extends DBObjectView {
                     bind: [me.databinder, "UnitsInStock"],
                     label: "Units in Stock",
                     width: 70,
-                    converter: new NumberConverter(),
-                    format: "#.##0,00",
+                    converter: new NumberConverter({format: "#.##0,00"}),
                     styles: [me.styleNumber]
                 }),
                 me.unitsOnOrder.config({
@@ -110,8 +108,7 @@ export class ProductView extends DBObjectView {
                     bind: [me.databinder, "UnitsOnOrder"],
                     label: "Units on Order",
                     width: 75,
-                    converter: new NumberConverter(),
-                    format: "#.##0,00",
+                    converter: new NumberConverter({format: "#.##0,00"}),
                     styles: [me.styleNumber]
                 }),
                 me.reorderLevel.config({

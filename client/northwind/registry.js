@@ -82,7 +82,7 @@ define("northwind/registry",["require"], function(require) {
 		"date": 1613551044000
 	},
 	"northwind/OrdersView.ts": {
-		"date": 1656682898118,
+		"date": 1657474966817,
 		"northwind.OrdersView": {
 			"$DBObjectView": [
 				{
@@ -95,7 +95,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ProductView.ts": {
-		"date": 1656683100932,
+		"date": 1657475021952,
 		"northwind.ProductView": {
 			"$DBObjectView": [
 				{
@@ -748,7 +748,7 @@ define("northwind/registry",["require"], function(require) {
 		}
 	},
 	"northwind/ProductList.ts": {
-		"date": 1656508354146,
+		"date": 1657475058632,
 		"northwind/ProductList": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"

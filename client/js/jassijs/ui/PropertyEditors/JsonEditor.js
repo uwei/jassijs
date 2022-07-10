@@ -30,8 +30,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
          * @member {object} ob - the object which is edited
          */
         set ob(ob) {
-            if (ob === undefined)
-                debugger;
+            this._ob = ob;
             super.ob = ob;
             var value = this.propertyEditor.getPropertyValue(this.property);
             var empty = value === undefined || value.length === 0;
@@ -83,10 +82,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
                     //_this.ob={};
                     // _this.propertyEditor.setPropertyInDesign(_this.property.name,_this.ob);
                 }
+                var newvalue = propEditor.value;
+                if (_this.property.constructorClass !== undefined) {
+                    var cl = Classes_1.classes.getClass(_this.property.constructorClass);
+                    newvalue = new cl(propEditor.value);
+                }
                 if (typeof (_this._ob[_this.property.name]) === "function")
-                    _this._ob[_this.property.name](propEditor.value);
+                    _this._ob[_this.property.name](newvalue);
                 else
-                    _this._ob[_this.property.name] = propEditor.value;
+                    _this._ob[_this.property.name] = newvalue;
                 _this.callEvent("edit", param);
             }
             else
@@ -145,21 +149,24 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
          * get the propertyvalue from code
          */
         async getInitialPropertyValue(code) {
-            var newclass = Classes_1.classes.getClass(this.property.componentType);
-            if (!this.property.componentType)
-                return;
-            var newvalue = new newclass();
+            var newvalue = undefined;
+            if (this.property.componentType) {
+                let newclass = Classes_1.classes.getClass(this.property.componentType);
+                newvalue = new newclass();
+            }
+            else {
+                newvalue = {};
+            }
             //only the top-PropertyEditor changed something
             if (this.propertyEditor.parentPropertyEditor === undefined) {
-                if (this.property.constructorClass !== undefined) {
-                    var param = code === undefined ? undefined : code.substring(code.indexOf("(") + 1, code.indexOf(")"));
-                    if (param === "")
-                        param = undefined;
-                    var oclass = await Classes_1.classes.loadClass(this.property.constructorClass);
-                    let oparam = Tools_1.Tools.jsonToObject(param);
-                    newvalue = new oclass(param === undefined ? undefined : oparam);
-                }
-                else {
+                /* if (this.property.constructorClass !== undefined) {
+                     var param = code === undefined ? undefined : code.substring(code.indexOf("(") + 1, code.indexOf(")"));
+                     if (param === "")
+                         param = undefined;
+                     var oclass = await classes.loadClass(this.property.constructorClass);
+                     let oparam = Tools.jsonToObject(param);
+                     newvalue = new oclass(param === undefined ? undefined : oparam);
+                 } else */ {
                     let val = undefined;
                     if (code === undefined) {
                         val = {};

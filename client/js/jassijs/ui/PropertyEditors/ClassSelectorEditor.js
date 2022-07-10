@@ -25,16 +25,22 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/E
             this.select = new Select_1.Select();
             this.select.width = "calc(100% - 26px)";
             this.property = Tools_1.Tools.copyObject(property);
+            //  this.property.componentType="jassijs.ui.converters.StringConverterProperies";
             this.jsonEditor = new JsonEditor_1.JsonEditor(this.property, propertyEditor);
-            this.jsonEditor.parentPropertyEditor = this;
-            this.jsonEditor.component.text = "";
-            this.jsonEditor.component.icon = "mdi mdi-glasses";
-            this.jsonEditor.component.width = 26;
+            this.jsonEditor.parentPropertyEditor = propertyEditor.parentPropertyEditor;
+            //this.jsonEditor.component.text = "";
+            // this.jsonEditor.component.icon = "mdi mdi-glasses";
+            // this.jsonEditor.component.width = 26;
             this.component.add(this.select);
             this.component.add(this.jsonEditor.getComponent());
             var _this = this;
             this.jsonEditor.onpropertyChanged(function (param) {
                 return;
+                var svalue = _this.propertyEditor.getPropertyValue(_this.property);
+                svalue = svalue.substring(svalue.indexOf("(") + 1, svalue.length - 1);
+                var value = Tools_1.Tools.jsonToObject(svalue);
+                var cl = Classes_1.classes.getClass(_this.property.constructorClass);
+                _this.propertyEditor.setPropertyInDesign(_this.property.name, new cl(value));
             });
             this.select.onchange(function (sel) {
                 var converter = sel.data;
@@ -58,16 +64,25 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/E
                     _this.propertyEditor.setPropertyInDesign(_this.property.name, new pclass());
                 });
             }
-            _this.property.constructorClass = converter.classname;
-            _this.jsonEditor.showThisProperties = ComponentDescriptor_1.ComponentDescriptor.describe(Classes_1.classes.getClass(converter.classname)).fields;
-            for (var x = 0; x < _this.jsonEditor.showThisProperties.length; x++) {
-                var test = _this.jsonEditor.showThisProperties[x].name;
-                if (test.startsWith("new")) {
-                    _this.jsonEditor.showThisProperties[x].name = _this.property.name + test.substring(3);
+            Classes_1.classes.loadClass(converter.classname).then((cl) => {
+                var _a;
+                var meta = (_a = ComponentDescriptor_1.ComponentDescriptor.describe(cl)) === null || _a === void 0 ? void 0 : _a.fields;
+                for (var x = 0; x < meta.length; x++) {
+                    if (meta[x].name === "new") {
+                        _this.jsonEditor.property.componentType = meta[x].componentType;
+                    }
                 }
-            }
-            _this.jsonEditor.ob = {};
-            _this.jsonEditor.component.text = "";
+            });
+            _this.property.constructorClass = converter.classname;
+            //        _this.jsonEditor.showThisProperties = ComponentDescriptor.describe(classes.getClass(converter.classname)).fields;
+            /*        for (var x = 0; x < _this.jsonEditor.showThisProperties.length; x++) {
+                        var test = _this.jsonEditor.showThisProperties[x].name;
+                        if (test.startsWith("new")) {
+                            _this.jsonEditor.showThisProperties[x].name = _this.property.name + test.substring(3);
+                        }
+                    }*/
+            //  _this.jsonEditor.ob = {};
+            //   _this.jsonEditor.component.text = "";
         }
         initSelect() {
             var _this = this;
@@ -104,6 +119,7 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/E
             if (this.select.items === undefined)
                 return; //list is not inited
             var value = this.propertyEditor.getPropertyValue(this.property);
+            this.jsonEditor.ob = ob;
             if (value !== undefined) {
                 for (var x = 0; x < this.select.items.length; x++) {
                     var sel = this.select.items[x];

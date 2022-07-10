@@ -53,6 +53,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
         objectToString(obj) {
             return obj.ToString();
         }
+        /**
+        * converts an object to an formatted string
+        * @param {string} obj - the object to convert
+        */
+        objectToFormatedString(obj) {
+            return this.objectToString(obj);
+        }
     };
     DefaultConverter = __decorate([
         $Converter({ name: "custom" }),

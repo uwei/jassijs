@@ -70,8 +70,7 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "j
                         bind: [me.databinder, "UnitPrice"],
                         label: "Unit Price",
                         width: 65,
-                        converter: new NumberConverter_1.NumberConverter(),
-                        format: "#.##0,00",
+                        converter: new NumberConverter_1.NumberConverter({ format: "#.##0,00" }),
                         styles: [me.styleNumber]
                     }),
                     me.unitsInStock.config({
@@ -80,8 +79,7 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "j
                         bind: [me.databinder, "UnitsInStock"],
                         label: "Units in Stock",
                         width: 70,
-                        converter: new NumberConverter_1.NumberConverter(),
-                        format: "#.##0,00",
+                        converter: new NumberConverter_1.NumberConverter({ format: "#.##0,00" }),
                         styles: [me.styleNumber]
                     }),
                     me.unitsOnOrder.config({
@@ -90,8 +88,7 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "j
                         bind: [me.databinder, "UnitsOnOrder"],
                         label: "Units on Order",
                         width: 75,
-                        converter: new NumberConverter_1.NumberConverter(),
-                        format: "#.##0,00",
+                        converter: new NumberConverter_1.NumberConverter({ format: "#.##0,00" }),
                         styles: [me.styleNumber]
                     }),
                     me.reorderLevel.config({

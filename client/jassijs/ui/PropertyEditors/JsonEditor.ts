@@ -33,8 +33,7 @@ export class JsonEditor extends Editor {
      * @member {object} ob - the object which is edited
      */
     set ob(ob) {
-        if (ob === undefined)
-            debugger;
+        this._ob = ob;
         super.ob = ob;
         var value = this.propertyEditor.getPropertyValue(this.property);
         var empty = value === undefined || value.length === 0;
@@ -91,10 +90,15 @@ export class JsonEditor extends Editor {
                 //_this.ob={};
                 // _this.propertyEditor.setPropertyInDesign(_this.property.name,_this.ob);
             }
+            var newvalue = propEditor.value;
+            if (_this.property.constructorClass !== undefined) {
+                var cl = classes.getClass(_this.property.constructorClass);
+                newvalue = new cl(propEditor.value);
+            }
             if (typeof (_this._ob[_this.property.name]) === "function")
-                _this._ob[_this.property.name](propEditor.value);
+                _this._ob[_this.property.name](newvalue);
             else
-                _this._ob[_this.property.name] = propEditor.value;
+                _this._ob[_this.property.name] = newvalue;
             _this.callEvent("edit", param);
         } else
             propEditor.parentPropertyEditor.callEvent("propertyChanged", param);
@@ -155,20 +159,23 @@ export class JsonEditor extends Editor {
      * get the propertyvalue from code
      */
     private async getInitialPropertyValue(code) {
-        var newclass = classes.getClass(this.property.componentType);
-        if (!this.property.componentType)
-            return;
-        var newvalue = new newclass();
+        var newvalue = undefined;
+        if (this.property.componentType) {
+            let newclass = classes.getClass(this.property.componentType);
+            newvalue = new newclass();
+        } else {
+            newvalue = {};
+        }
         //only the top-PropertyEditor changed something
         if (this.propertyEditor.parentPropertyEditor === undefined) {
-            if (this.property.constructorClass !== undefined) {
+           /* if (this.property.constructorClass !== undefined) {
                 var param = code === undefined ? undefined : code.substring(code.indexOf("(") + 1, code.indexOf(")"));
                 if (param === "")
                     param = undefined;
                 var oclass = await classes.loadClass(this.property.constructorClass);
                 let oparam = Tools.jsonToObject(param);
                 newvalue = new oclass(param === undefined ? undefined : oparam);
-            } else {
+            } else */{
                 let val = undefined;
                 if (code === undefined) {
                     val = {};
@@ -229,7 +236,7 @@ class TestProperties {
         if (action.getPropertyEditorActions) {
             action.getPropertyEditorActions.actions.push({
                 name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
-                run: (hallo) => alert("h2"+hallo)
+                run: (hallo) => alert("h2" + hallo)
             })
         }
     }

@@ -4,39 +4,13 @@ import { DataComponent, DataComponentConfig } from "jassijs/ui/DataComponent";
 import { DefaultConverter } from "jassijs/ui/converters/DefaultConverter";
 import registry from "jassijs/remote/Registry";
 import { Property, $Property } from "jassijs/ui/Property";
-import { Numberformatter } from "jassijs/util/Numberformatter";
-//calc the default Formats
-let allFormats = (() => {
-    var ret = [];
-    const format = new Intl.NumberFormat();
-    var decimal = format.format(1.1).substring(1, 2);
-    var group = format.format(1234).substring(1, 2);
-    /*	const parts = format.formatToParts(1234.6);
-            var decimal = ".";
-        var group=",";
-        parts.forEach(p => {
-            if (p.type === "decimal")
-                decimal = p.value;
-            if (p.type === "group")
-                group = p.value;
-        });*/
-    ret.push("#" + group + "##0" + decimal + "00");
-    ret.push("#" + group + "##0" + decimal + "00 €");
-    ret.push("#" + group + "##0" + decimal + "00 $");
-    ret.push("0");
-    ret.push("0" + decimal + "00");
-    return ret;
-})();
+
 export interface TextboxConfig extends DataComponentConfig {
     converter?: DefaultConverter;
     /**
     * @member {boolean} disabled - enable or disable the element
     */
     disabled?: boolean;
-    /**
-    * @member {string} value - value of the component
-    */
-    format?: string;
     /**
      * @member {string} value - value of the component
      */
@@ -82,23 +56,22 @@ export class Textbox extends DataComponent implements TextboxConfig {
     /* get dom(){
          return this.dom;
      }*/
-    @$Property({ type: "classselector", service: "$Converter" })
-    converter: DefaultConverter;
+
+    _converter: DefaultConverter;
     _autocompleterDisplay;
     _autocompleter;
     private _value: any = "";
-    _format: string;
-    _formatProps: {
-        focus: any;
-        blur: any;
-        inEditMode: boolean;
-    } = undefined;
+    private _isFocused = false;
     constructor(color = undefined) {
         super();
         super.init('<input type="text" />');
+        var _this = this;
         this.dom.style.color = color;
-        this.converter = undefined;
+        this.onblur((e) => _this.blurcalled(e));
+        this.onfocus((e) => _this.focuscalled(e));
+        // this.converter = undefined;
     }
+
     config(config: TextboxConfig): Textbox {
         super.config(config);
         return this;
@@ -116,61 +89,51 @@ export class Textbox extends DataComponent implements TextboxConfig {
         return this.dom.disabled;
     }
     set readOnly(value: boolean) {
-        this.dom.readOnly = true;
+        this.dom.readOnly = value;
+    }
+    get converter(): DefaultConverter {
+        return this._converter;
+    }
+    @$Property({ type: "classselector", service: "$Converter" })
+    set converter(value: DefaultConverter) {
+        this._converter = value;
+        this.value=this.value;
     }
     @$Property()
     get readOnly(): boolean {
         return this.dom.readOnly;
     }
-    set format(value) {
-        this._format = value;
-        var _this = this;
-        if (value === undefined && this._formatProps) {
-            this.off("focus", this._formatProps.focus);
-            this.off("blur", this._formatProps.blur);
+    private focuscalled(evt) {
+        this._isFocused = true;
+        if (this.converter) {
+            this.dom.value = this.converter.objectToString(this._value)
         }
-        if (value && this._formatProps === undefined) {
-            _this._formatProps = { blur: undefined, focus: undefined, inEditMode: false };
-            this._formatProps.focus = this.on("focus", () => {
-                let val = this.value;
-                _this._formatProps.inEditMode = true;
-                this.dom.value = Numberformatter.numberToString(val);
-            });
-            this._formatProps.blur = this.on("blur", () => {
-                _this.updateValue();
-                _this._formatProps.inEditMode = false;
-                this.dom.value = Numberformatter.format(this._format, this.value);
-            });
-        }
-        if (this.value)
-            this.value = this.value; //apply the ne format
-    }
-    @$Property({ type: "string", chooseFrom: allFormats })
-    get format() {
-        return this._format;
     }
     private updateValue() {
-        var ret = this.dom?.value;
-        if (this.converter !== undefined) {
-            ret = this.converter.stringToObject(ret);
+        if (this.converter) {
+            this.value = this.converter.stringToObject(this.dom.value);
+        } else {
+            this.value = this.dom.value;
         }
-        this._value = ret;
     }
+    private blurcalled(evt) {
+        this._isFocused = false;
+        this.updateValue();
+        if (this.converter) {
+            this.dom.value = this.converter.objectToFormatedString(this.value)
+        }
+    }
+
     set value(value) {
         this._value = value;
         var v = value;
         if (this.converter)
-            v = this.converter.objectToString(v);
-        if (this._format) {
-            v = Numberformatter.format(this._format, value);
-        }
+            v = this.converter.objectToFormatedString(v);
         this.dom.value = v === undefined ? "" : v;
     }
     @$Property({ type: "string" })
     get value() {
-        if (this._formatProps && this._formatProps.inEditMode === false) //
-            var j = 0; //do nothing
-        else
+        if (this._isFocused)
             this.updateValue();
         return this._value;
     }
@@ -278,10 +241,11 @@ export class Textbox extends DataComponent implements TextboxConfig {
     }
 }
 export function test() {
+
     var ret = new Textbox();
     ret.autocompleter = ["Hallo", "Du"];
-    ret.format="###,00";
-    ret.value=10.1;
+    ret.value = 10.1;
+
     //ret.autocompleter=()=>[];
     return ret;
 }

@@ -11,12 +11,50 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NumberConverter = void 0;
-    let NumberConverter = 
-    //@$Property({name:"new/min",type:"number",default:undefined})
-    //@$Property({name:"new/max",type:"number",default:undefined})
-    class NumberConverter extends DefaultConverter_1.DefaultConverter {
-        constructor(param = {}) {
+    let allFormats = (() => {
+        var ret = [];
+        const format = new Intl.NumberFormat();
+        var decimal = format.format(1.1).substring(1, 2);
+        var group = format.format(1234).substring(1, 2);
+        /*	const parts = format.formatToParts(1234.6);
+                var decimal = ".";
+            var group=",";
+            parts.forEach(p => {
+                if (p.type === "decimal")
+                    decimal = p.value;
+                if (p.type === "group")
+                    group = p.value;
+            });*/
+        ret.push("#" + group + "##0" + decimal + "00");
+        ret.push("#" + group + "##0" + decimal + "00 €");
+        ret.push("#" + group + "##0" + decimal + "00 $");
+        ret.push("0");
+        ret.push("0" + decimal + "00");
+        return ret;
+    })();
+    let NumberConverterProperties = class NumberConverterProperties {
+    };
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Number)
+    ], NumberConverterProperties.prototype, "min", void 0);
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Number)
+    ], NumberConverterProperties.prototype, "max", void 0);
+    __decorate([
+        (0, Property_1.$Property)({ type: "string", chooseFrom: allFormats }),
+        __metadata("design:type", String)
+    ], NumberConverterProperties.prototype, "format", void 0);
+    NumberConverterProperties = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.converters.NumberConverterProperies")
+    ], NumberConverterProperties);
+    let NumberConverter = class NumberConverter extends DefaultConverter_1.DefaultConverter {
+        constructor(props) {
             super();
+            this.min = props === null || props === void 0 ? void 0 : props.min;
+            this.max = props === null || props === void 0 ? void 0 : props.max;
+            this.format = props === null || props === void 0 ? void 0 : props.format;
         }
         /**
          * converts a string to the object
@@ -37,15 +75,15 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
                 return undefined;
             return Numberformatter_1.Numberformatter.numberToString(obj);
         }
+        objectToFormatedString(obj) {
+            return Numberformatter_1.Numberformatter.format(this.format, obj);
+        }
     };
     NumberConverter = __decorate([
         (0, DefaultConverter_1.$Converter)({ name: "number" }),
         (0, Registry_1.$Class)("jassijs.ui.converters.NumberConverter"),
-        (0, Property_1.$Property)({ name: "new", type: "json" })
-        //@$Property({name:"new/min",type:"number",default:undefined})
-        //@$Property({name:"new/max",type:"number",default:undefined})
-        ,
-        __metadata("design:paramtypes", [Object])
+        (0, Property_1.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.NumberConverterProperies" }),
+        __metadata("design:paramtypes", [NumberConverterProperties])
     ], NumberConverter);
     exports.NumberConverter = NumberConverter;
 });

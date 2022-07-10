@@ -13,6 +13,7 @@ import { Orders } from "northwind/remote/Orders";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import windows from "jassijs/base/Windows";
 import { Products } from "northwind/remote/Products";
+import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
 type Me = {
     databinder?: Databinder;
     repeater?: Repeater;
@@ -59,14 +60,15 @@ export class ProductList extends Panel {
                         me.textbox2 = new Textbox();
                         me.htmlpanel22 = new HTMLPanel();
                         me.textbox22 = new Textbox();
-                        me.repeater.design.config({ children: [
+                        me.repeater.design.config({
+                            children: [
                                 me.htmlpanel3.config({ value: " " }),
                                 me.boxpanel.config({
                                     children: [
                                         me.htmlpanel.config({ value: "Product Name:", width: "150" }),
                                         me.textbox.config({
                                             bind: [me.repeater.design.databinder, "ProductName"],
-                                            readOnly: true, 
+                                            readOnly: true,
                                             width: 290
                                         }),
                                         me.checkbox.config({
@@ -90,12 +92,14 @@ export class ProductList extends Panel {
                                             readOnly: true,
                                             width: 100,
                                             bind: [me.repeater.design.databinder, "UnitPrice"],
-                                            format: "$ #.##0,00"
+                                            converter: new NumberConverter({ format: "#.##0,00" }),
+
                                         })
                                     ],
                                     horizontal: true
                                 })
-                            ] });
+                            ]
+                        });
                     }
                 })
             ]
@@ -107,10 +111,10 @@ export class ProductList extends Panel {
         windows.add(new ProductList(), "ProductList");
     }
     async setData() {
-        var all:Products[] =<any> await Products.find({});
-        all.sort((a,b)=>{return a.ProductName.localeCompare(b.ProductName)});
+        var all: Products[] = <any>await Products.find({});
+        all.sort((a, b) => { return a.ProductName.localeCompare(b.ProductName) });
         this.me.databinder.value = all;
-        
+
         //        this.me.IDChooseCustomer.items = all;
         //      this.me.databinderCustomer.value = all[0];
     }

@@ -10,7 +10,7 @@ define("demo/registry",["require"], function(require) {
 		"demo/Dialog": {}
 	},
 	"demo/Dialog2.ts": {
-		"date": 1655890994125,
+		"date": 1657475234286,
 		"demo/Dialog2": {}
 	},
 	"demo/EmptyDialog.ts": {

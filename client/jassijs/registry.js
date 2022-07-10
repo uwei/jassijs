@@ -540,7 +540,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/converters/DefaultConverter.ts": {
-		"date": 1655556864383,
+		"date": 1657471897801,
 		"jassijs.ui.converters.DefaultConverterProperties": {
 			"@members": {}
 		},
@@ -560,7 +560,10 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/converters/NumberConverter.ts": {
-		"date": 1655556795276,
+		"date": 1657473978946,
+		"jassijs.ui.converters.NumberConverterProperies": {
+			"@members": {}
+		},
 		"jassijs.ui.converters.NumberConverter": {
 			"$Converter": [
 				{
@@ -570,13 +573,17 @@ define("jassijs/registry",["require"], function(require) {
 			"$Property": [
 				{
 					"name": "new",
-					"type": "json"
+					"type": "json",
+					"componentType": "jassijs.ui.converters.NumberConverterProperies"
 				}
 			]
 		}
 	},
 	"jassijs/ui/converters/StringConverter.ts": {
-		"date": 1655556795276,
+		"date": 1657129812942,
+		"jassijs.ui.converters.StringConverterProperies": {
+			"@members": {}
+		},
 		"jassijs.ui.converters.StringConverter": {
 			"$Converter": [
 				{
@@ -586,7 +593,8 @@ define("jassijs/registry",["require"], function(require) {
 			"$Property": [
 				{
 					"name": "new",
-					"type": "json"
+					"type": "json",
+					"componentType": "jassijs.ui.converters.StringConverterProperies"
 				}
 			]
 		}
@@ -969,7 +977,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Property.ts": {
-		"date": 1656955647190,
+		"date": 1657128598834,
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
@@ -993,7 +1001,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ClassSelectorEditor.ts": {
-		"date": 1655556795277,
+		"date": 1657473799199,
 		"jassijs.ui.PropertyEditors.ClassSelectorEditor": {
 			"$PropertyEditor": [
 				[
@@ -1121,7 +1129,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/JsonEditor.ts": {
-		"date": 1657048599551,
+		"date": 1657224991788,
 		"jassijs.ui.PropertyEditors.JsonEditor": {
 			"$PropertyEditor": [
 				[
@@ -1283,7 +1291,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1657046832516,
+		"date": 1657474669395,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{

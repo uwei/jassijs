@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Textbox_1, Registry_1, Panel_1) {
+define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Button_1, NumberConverter_1, Textbox_1, Registry_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog2 = void 0;
@@ -18,10 +18,20 @@ define(["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "
             this.layout(this.me);
         }
         layout(me) {
+            me.button = new Button_1.Button();
             me.textbox = new Textbox_1.Textbox();
-            me.textbox2 = new Textbox_1.Textbox();
-            me.textbox3 = new Textbox_1.Textbox();
-            this.config({ children: [me.textbox3.config({})] });
+            this.add(me.textbox);
+            this.add(me.button);
+            this.height = 19;
+            this.width = 820;
+            me.button.text = "button";
+            me.button.onclick(function (event) {
+                var h = me.textbox.value;
+                debugger;
+            });
+            me.textbox.converter = new NumberConverter_1.NumberConverter({
+                format: "#.##0,00 €"
+            });
         }
     };
     Dialog2 = __decorate([
@@ -31,6 +41,7 @@ define(["require", "exports", "jassijs/ui/Textbox", "jassijs/remote/Registry", "
     exports.Dialog2 = Dialog2;
     async function test() {
         var ret = new Dialog2();
+        ret.me.textbox.value = 8;
         return ret;
     }
     exports.test = test;
