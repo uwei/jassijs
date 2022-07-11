@@ -4,7 +4,7 @@ import { classes } from "jassijs/remote/Classes";
 import registry from "jassijs/remote/Registry";
 import {Editor} from "jassijs/ui/PropertyEditors/Editor";
 import {Property} from "jassijs/ui/Property";
-import { LoadingEditor } from "jassijs/ui/PropertyEditors/LoadingEditor";
+
 
 @$Class("jassijs.base.PropertyEditorService")
 export class PropertyEditorService {
@@ -47,25 +47,23 @@ export class PropertyEditorService {
      * @param {jassijs.ui.Property} property - name of the type 
      * @param {jassijs.ui.PropertyEditor} propertyEditor - the PropertyEditor instance 
      */
-    createFor( property:Property, propertyEditor:PropertyEditor):Editor {
+    createFor( property:Property, propertyEditor:PropertyEditor):Editor|Promise<any> {
         var sclass = undefined;
         var promise=undefined;
         if (property.editor !== undefined) {
             sclass = property.editor;
         } else {
             if (this.data[property.type] === undefined){
-               promise=this.loadType(property.type);
+                return this.loadType(property.type);
             }else
 	            sclass = this.data[property.type][0];
         }
-        if(sclass!==undefined){
         	var oclass = classes.getClass(sclass);
         	if(oclass)
 	        	return new (oclass)( property, propertyEditor);
-	        else
-	        	return new LoadingEditor(property,propertyEditor,classes.loadClass(sclass));
-        }else
-        	return new LoadingEditor(property,propertyEditor,promise);
+	        throw new Error("class not loaded "+sclass);
+                 
+                    //return new LoadingEditor(property,propertyEditor,classes.loadClass(sclass));
         
     }
     private register(oclass: new (...args: any[]) => any, types:string[]){

@@ -22,15 +22,14 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/converters/Number
             me.textbox = new Textbox_1.Textbox();
             this.add(me.textbox);
             this.add(me.button);
-            this.height = 19;
-            this.width = 820;
+            this.height = 17;
+            this.width = 876;
             me.button.text = "button";
             me.button.onclick(function (event) {
                 var h = me.textbox.value;
-                debugger;
             });
             me.textbox.converter = new NumberConverter_1.NumberConverter({
-                format: "#.##0,00 €"
+                format: "#.##0,00"
             });
         }
     };

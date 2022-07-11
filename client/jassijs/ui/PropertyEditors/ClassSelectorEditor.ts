@@ -1,57 +1,49 @@
-import {Select} from "jassijs/ui/Select";
-import {Editor,  $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
-import  {JsonEditor} from "jassijs/ui/PropertyEditors/JsonEditor";
-import {Tools} from "jassijs/util/Tools";
-import {StringConverter} from "jassijs/ui/converters/StringConverter";
+import { Select } from "jassijs/ui/Select";
+import { Editor, $PropertyEditor } from "jassijs/ui/PropertyEditors/Editor";
+import { JsonEditor } from "jassijs/ui/PropertyEditors/JsonEditor";
+import { Tools } from "jassijs/util/Tools";
+import { StringConverter } from "jassijs/ui/converters/StringConverter";
 import { $Class } from "jassijs/remote/Registry";
-import {Panel} from "jassijs/ui/Panel";
-import {Textbox} from "jassijs/ui/Textbox";
-import {PropertyEditor} from "jassijs/ui/PropertyEditor";
+import { Panel } from "jassijs/ui/Panel";
+import { Textbox } from "jassijs/ui/Textbox";
+import { PropertyEditor } from "jassijs/ui/PropertyEditor";
 import registry from "jassijs/remote/Registry";
-import {ComponentDescriptor} from "jassijs/ui/ComponentDescriptor";
+import { ComponentDescriptor } from "jassijs/ui/ComponentDescriptor";
 import { classes } from "jassijs/remote/Classes";
 import { Property } from "jassijs/ui/Property";
 
 @$PropertyEditor(["classselector"])
 @$Class("jassijs.ui.PropertyEditors.ClassSelectorEditor")
-export  class ClassSelectorEditor extends Editor {
+export class ClassSelectorEditor extends Editor {
     select: Select;
     jsonEditor: JsonEditor;
     me: any;
-
+    private destroyed: boolean;
     /**
      * Checkbox Editor for boolean values
      * used by PropertyEditor
      * @class jassijs.ui.PropertyEditors.BooleanEditor
      */
-    constructor( property = undefined, propertyEditor = undefined) {
+    constructor(property = undefined, propertyEditor = undefined) {
         super(property, propertyEditor);
         /** @member - the renedering component **/
         this.component = new Panel();
-        this.component.width="100%";
+        this.component.width = "100%";
         this.select = new Select();
         this.select.width = "calc(100% - 26px)";
         this.property = Tools.copyObject(property);
-       //  this.property.componentType="jassijs.ui.converters.StringConverterProperies";
+        //  this.property.componentType="jassijs.ui.converters.StringConverterProperies";
         this.jsonEditor = new JsonEditor(this.property, propertyEditor);
         this.jsonEditor.parentPropertyEditor = propertyEditor.parentPropertyEditor;
-        
+
         //this.jsonEditor.component.text = "";
-       // this.jsonEditor.component.icon = "mdi mdi-glasses";
-       // this.jsonEditor.component.width = 26;
+        // this.jsonEditor.component.icon = "mdi mdi-glasses";
+        // this.jsonEditor.component.width = 26;
         this.component.add(this.select);
         this.component.add(this.jsonEditor.getComponent());
         var _this = this;
 
-        this.jsonEditor.onpropertyChanged(function (param) {
-            return;
-            var svalue = _this.propertyEditor.getPropertyValue(_this.property);
-            svalue=svalue.substring(svalue.indexOf("(")+1,svalue.length-1);
-            
-            var value=Tools.jsonToObject(svalue);
-            var cl=classes.getClass(_this.property.constructorClass)
-            _this.propertyEditor.setPropertyInDesign(_this.property.name,new cl(value));
-        });
+      
         this.select.onchange(function (sel) {
             var converter = sel.data;
             _this.changeConverter(converter);
@@ -64,65 +56,68 @@ export  class ClassSelectorEditor extends Editor {
     changeConverter(converter) {
         var _this = this;
         var testval = _this.propertyEditor.getPropertyValue(_this.property);
-        var shortClassname:string=converter.classname.split(".")[converter.classname.split(".").length-1];
+        var shortClassname: string = converter.classname.split(".")[converter.classname.split(".").length - 1];
         if (testval === undefined || !testval.startsWith("new " + shortClassname)) {
             _this.propertyEditor.setPropertyInCode(_this.property.name, "new " + shortClassname + "()");
-            
-            var file=converter.classname.replaceAll(".", "/"); 
-             var stype = file.split("/")[file.split("/").length - 1];
-			_this.propertyEditor.addImportIfNeeded(stype,file);
-            
-            classes.loadClass(converter.classname).then((pclass)=>{
-                _this.propertyEditor.setPropertyInDesign(_this.property.name,new pclass());
-                
+
+            var file = converter.classname.replaceAll(".", "/");
+            var stype = file.split("/")[file.split("/").length - 1];
+            _this.propertyEditor.addImportIfNeeded(stype, file);
+
+            classes.loadClass(converter.classname).then((pclass) => {
+                _this.propertyEditor.setPropertyInDesign(_this.property.name, new pclass());
+
             });
         }
-        classes.loadClass(converter.classname).then((cl)=>{
-            var meta=ComponentDescriptor.describe(cl)?.fields;
-            for(var x=0;x<meta.length;x++){
-                if(meta[x].name==="new"){
-                    _this.jsonEditor.property.componentType=meta[x].componentType;
+        classes.loadClass(converter.classname).then((cl) => {
+            var meta = ComponentDescriptor.describe(cl)?.fields;
+            for (var x = 0; x < meta.length; x++) {
+                if (meta[x].name === "new") {
+                    _this.jsonEditor.property.componentType = meta[x].componentType;
                 }
             }
-            
+
         });
         _this.property.constructorClass = converter.classname;
-//        _this.jsonEditor.showThisProperties = ComponentDescriptor.describe(classes.getClass(converter.classname)).fields;
-/*        for (var x = 0; x < _this.jsonEditor.showThisProperties.length; x++) {
-            var test = _this.jsonEditor.showThisProperties[x].name;
-            if (test.startsWith("new")) {
-                _this.jsonEditor.showThisProperties[x].name = _this.property.name + test.substring(3);
-            }
-        }*/
-      //  _this.jsonEditor.ob = {};
-     //   _this.jsonEditor.component.text = "";
+        //        _this.jsonEditor.showThisProperties = ComponentDescriptor.describe(classes.getClass(converter.classname)).fields;
+        /*        for (var x = 0; x < _this.jsonEditor.showThisProperties.length; x++) {
+                    var test = _this.jsonEditor.showThisProperties[x].name;
+                    if (test.startsWith("new")) {
+                        _this.jsonEditor.showThisProperties[x].name = _this.property.name + test.substring(3);
+                    }
+                }*/
+        //  _this.jsonEditor.ob = {};
+        //   _this.jsonEditor.component.text = "";
 
     }
     initSelect() {
         var _this = this;
 
         registry.loadAllFilesForService(this.property.service).then(function () {
-            var converters=registry.getData(_this.property.service);
+            var converters = registry.getData(_this.property.service);
             var data = [];
-             /*data.push({
-                    classname:undefined,
-                    data:""    
-                });*/
-            for(var x=0;x<converters.length;x++){
-                var con=converters[x];
-                var cname=classes.getClassName(con.oclass);
-                var name=cname;
-                if(con.params[0]&&con.params[0].name!==undefined)
-                	name=con.params[0].name;
+            /*data.push({
+                   classname:undefined,
+                   data:""    
+               });*/
+            for (var x = 0; x < converters.length; x++) {
+                var con = converters[x];
+                var cname = classes.getClassName(con.oclass);
+                var name = cname;
+                if (con.params[0] && con.params[0].name !== undefined)
+                    name = con.params[0].name;
                 data.push({
-                    classname:cname,
-                    data:name   
+                    classname: cname,
+                    data: name
                 });
             }
+            if (!_this.destroyed) {
                 _this.select.items = data;
-                
+
                 _this.select.display = "data";
-                _this.ob = _this.ob;
+                if (_this.ob)
+                    _this.ob = _this.ob;
+            }
         });
         //	this.select
     }
@@ -130,31 +125,33 @@ export  class ClassSelectorEditor extends Editor {
      * @member {object} ob - the object which is edited
      */
     set ob(ob) {
-        
-        
+        this._ob = ob;
+
         if (this.propertyEditor === undefined)
             return;
         if (this.select.items === undefined)
             return;//list is not inited
+        if (ob === undefined)
+            return;
         var value = this.propertyEditor.getPropertyValue(this.property);
-        this.jsonEditor.ob=ob;
+        this.jsonEditor.ob = ob;
         if (value !== undefined) {
-            
+
             for (var x = 0; x < this.select.items.length; x++) {
-                var sel=this.select.items[x];
-                var shortClassname:string=sel.classname;
-                if(shortClassname!==undefined){
-                    shortClassname=shortClassname.split(".")[shortClassname.split(".").length-1];
+                var sel = this.select.items[x];
+                var shortClassname: string = sel.classname;
+                if (shortClassname !== undefined) {
+                    shortClassname = shortClassname.split(".")[shortClassname.split(".").length - 1];
                     if (value.indexOf(shortClassname) > -1) {
-                        
+
                         this.select.value = sel;
                         this.changeConverter(sel);
                         break;
                     }
                 }
             }
-        }else{
-            this.select.value="";
+        } else {
+            this.select.value = "";
         }
         super.ob = ob;
         // this.component.value=value;
@@ -192,6 +189,7 @@ export  class ClassSelectorEditor extends Editor {
         me.tb.converter = new StringConverter();
     }
     destroy() {
+        this.destroyed = true;
         this.select.destroy();
         super.destroy();
 

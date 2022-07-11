@@ -40,6 +40,7 @@ define(["require", "exports", "jassijs/ui/Component", "jassijs/remote/Registry",
         }
         set newlineafter(value) {
             this.dom.style.display = value ? "" : "inline-block";
+            this.domWrapper.style.display = value ? "" : "inline-block";
             this.dom.children[0].style.display = value ? "" : "inline-block";
         }
         compileTemplate(template) {

@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Registry", "jassijs/ui/PropertyEditors/LoadingEditor"], function (require, exports, Registry_1, Classes_1, Registry_2, LoadingEditor_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/Registry"], function (require, exports, Registry_1, Classes_1, Registry_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.propertyeditor = exports.PropertyEditorService = void 0;
@@ -56,20 +56,16 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Classes
             }
             else {
                 if (this.data[property.type] === undefined) {
-                    promise = this.loadType(property.type);
+                    return this.loadType(property.type);
                 }
                 else
                     sclass = this.data[property.type][0];
             }
-            if (sclass !== undefined) {
-                var oclass = Classes_1.classes.getClass(sclass);
-                if (oclass)
-                    return new (oclass)(property, propertyEditor);
-                else
-                    return new LoadingEditor_1.LoadingEditor(property, propertyEditor, Classes_1.classes.loadClass(sclass));
-            }
-            else
-                return new LoadingEditor_1.LoadingEditor(property, propertyEditor, promise);
+            var oclass = Classes_1.classes.getClass(sclass);
+            if (oclass)
+                return new (oclass)(property, propertyEditor);
+            throw new Error("class not loaded " + sclass);
+            //return new LoadingEditor(property,propertyEditor,classes.loadClass(sclass));
         }
         register(oclass, types) {
             var name = Classes_1.classes.getClassName(oclass);

@@ -50,6 +50,8 @@ export class Button extends Component implements ButtonConfig {
         var img;
         if(icon===undefined)
             icon="";
+        if(this.dom===undefined)
+            debugger;
         var el1 = this.dom.querySelector(".buttonspan");
         el1.classList.forEach((cl)=> {el1.classList.remove(cl)});
         el1.classList.add("buttonspan");
@@ -94,6 +96,9 @@ export class Button extends Component implements ButtonConfig {
 
             return this.dom.classList.contains("down");
         }
+    }
+    destroy(){
+        super.destroy();
     }
 }
 

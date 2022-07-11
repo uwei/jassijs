@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/remote/Classes", "jassijs/ext/jquerylib", "jassijs/base/PropertyEditorService"], function (require, exports, Registry_1, Panel_1, Button_1, Image_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1, Component_1, Classes_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Button", "jassijs/ui/Image", "jassijs/ui/ComponentDescriptor", "jassijs/ui/PropertyEditors/NameEditor", "jassijs/base/PropertyEditorService", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ext/jquerylib", "jassijs/base/PropertyEditorService"], function (require, exports, Registry_1, Panel_1, Button_1, Image_1, ComponentDescriptor_1, NameEditor_1, PropertyEditorService_1, Property_1, Component_1) {
     "use strict";
     var PropertyEditor_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -20,7 +20,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             super();
             this.readPropertyValueFromDesign = false;
             this.codeChanges = {};
-            this.hasLoadingEditor = false;
             this.table = new Panel_1.Panel();
             this.toolbar = new Panel_1.Panel();
             this.parser = parser;
@@ -197,7 +196,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 if (value.dom && document.activeElement !== value.dom)
                     value.dom.focus();
             }
-            if (this.hasLoadingEditor === false && value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
+            if (value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
                 this._value = value;
                 if (this.codeEditor)
                     this.variablename = this.codeEditor.getVariableFromObject(this._value);
@@ -232,8 +231,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             }
             this.addActions();
             var _this = this;
-            this._initValue();
-            _this.update();
+            if (this._initValue())
+                _this.update();
         }
         addActions() {
             var _a, _b;
@@ -331,31 +330,43 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                     //nameEditor.ob = _this._value;
                 }
             }
-            this.hasLoadingEditor = false;
+            var editorNotLoaded = [];
             for (var x = 0; x < props.length; x++) {
                 if (props[x].name.indexOf("/") > -1) {
                 }
                 else {
                     _this.properties[props[x].name] = { isVisible: props[x].isVisible, name: props[x].name, component: undefined, description: props[x].description };
                     var editor = PropertyEditorService_1.propertyeditor.createFor(props[x], _this);
-                    if (Classes_1.classes.getClassName(editor) === "jassijs.ui.PropertyEditors.LoadingEditor") {
-                        this.hasLoadingEditor = true;
+                    if (editor["then"]) { //editor is not loaded yet
+                        editorNotLoaded.push(editor);
                     }
-                    if (editor === undefined) {
-                        console.log("Editor not found for " + _this.variablename);
-                        continue;
-                    }
-                    var sname = editor.property.name;
-                    this.controlEditor(editor);
-                    if (_this.properties[editor.property.name] === undefined) {
-                        console.log("Property not found " + editor.property);
-                        continue;
-                    }
-                    _this.properties[editor.property.name].editor = editor;
-                    if (editor !== undefined && _this.properties[editor.property.name] !== undefined) {
-                        _this.properties[editor.property.name].component = editor.getComponent();
+                    else {
+                        //  if (classes.getClassName(editor) === "jassijs.ui.PropertyEditors.LoadingEditor") {
+                        //    this.hasLoadingEditor = true;
+                        // }
+                        if (editor === undefined) {
+                            console.log("Editor not found for " + _this.variablename);
+                            continue;
+                        }
+                        var sname = editor.property.name;
+                        this.controlEditor(editor);
+                        if (_this.properties[editor.property.name] === undefined) {
+                            console.log("Property not found " + editor.property);
+                            continue;
+                        }
+                        _this.properties[editor.property.name].editor = editor;
+                        if (editor !== undefined && _this.properties[editor.property.name] !== undefined) {
+                            _this.properties[editor.property.name].component = editor.getComponent();
+                        }
                     }
                 }
+            }
+            if (editorNotLoaded.length > 0) {
+                Promise.all(editorNotLoaded).then(() => {
+                    _this._initValue();
+                    _this.value = this.value; //load again
+                });
+                return false;
             }
             for (var key in _this.properties) {
                 var prop = _this.properties[key];
@@ -376,6 +387,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 let prop = allProperties[p];
                 _this.addProperty(prop.name, prop.editor, prop.description);
             }
+            return true;
             // });
         }
         /**

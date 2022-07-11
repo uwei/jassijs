@@ -37,7 +37,7 @@ export class PropertyEditor extends Panel {
     _value;
     codeChanges: { [property: string]: string | {} } = {};
     toolbar: Panel;
-    private hasLoadingEditor = false;
+
     /**
     * edit object properties
     */
@@ -230,7 +230,7 @@ export class PropertyEditor extends Panel {
             if (value.dom && document.activeElement !== value.dom)
                 (<HTMLElement>value.dom).focus();
         }
-        if (this.hasLoadingEditor === false && value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
+        if ( value !== undefined && this.value !== undefined && this.value.constructor === value.constructor) {
             this._value = value;
             if (this.codeEditor)
                 this.variablename = this.codeEditor.getVariableFromObject(this._value);
@@ -265,8 +265,8 @@ export class PropertyEditor extends Panel {
 
         this.addActions();
         var _this = this;
-        this._initValue();
-        _this.update();
+        if(this._initValue())
+            _this.update();
 
     }
     private addActions() {
@@ -327,7 +327,7 @@ export class PropertyEditor extends Panel {
                 deletebutton.style.visibility = 'visible';
         });
     }
-    private _initValue() {
+    private _initValue():boolean {
         var props = [];
        /* if (this.parentPropertyEditor !== undefined)
             this._addParentEditorProperties(this.parentPropertyEditor, props, this.variablename);
@@ -368,32 +368,43 @@ export class PropertyEditor extends Panel {
                 //nameEditor.ob = _this._value;
             }
         }
-        this.hasLoadingEditor = false;
+        var editorNotLoaded=[];
         for (var x = 0; x < props.length; x++) {
             if (props[x].name.indexOf("/") > -1) {
             } else {
                 _this.properties[props[x].name] = { isVisible: props[x].isVisible, name: props[x].name, component: undefined, description: props[x].description };
 
                 var editor = propertyeditor.createFor(props[x], _this);
-                if (classes.getClassName(editor) === "jassijs.ui.PropertyEditors.LoadingEditor") {
-                    this.hasLoadingEditor = true;
+                if (editor["then"]) {//editor is not loaded yet
+                    editorNotLoaded.push(editor);
+                    
+                } else {
+                  //  if (classes.getClassName(editor) === "jassijs.ui.PropertyEditors.LoadingEditor") {
+                    //    this.hasLoadingEditor = true;
+                   // }
+                    if (editor === undefined) {
+                        console.log("Editor not found for " + _this.variablename);
+                        continue;
+                    }
+                    var sname = editor.property.name;
+                    this.controlEditor(editor);
+                    if (_this.properties[editor.property.name] === undefined) {
+                        console.log("Property not found " + editor.property);
+                        continue;
+                    }
+                    _this.properties[editor.property.name].editor = editor;
+                    if (editor !== undefined && _this.properties[editor.property.name] !== undefined) {
+                        _this.properties[editor.property.name].component = editor.getComponent();
+                    }
                 }
-                if (editor === undefined) {
-                    console.log("Editor not found for " + _this.variablename);
-                    continue;
-                }
-                var sname = editor.property.name;
-                this.controlEditor(editor);
-                if (_this.properties[editor.property.name] === undefined) {
-                    console.log("Property not found " + editor.property);
-                    continue;
-                }
-                _this.properties[editor.property.name].editor = editor;
-                if (editor !== undefined && _this.properties[editor.property.name] !== undefined) {
-                    _this.properties[editor.property.name].component = editor.getComponent();
-                }
-
             }
+        }
+        if(editorNotLoaded.length>0){
+            Promise.all(editorNotLoaded).then(()=>{
+                _this._initValue();
+                _this.value=this.value;//load again
+            });
+            return false;
         }
 
         for (var key in _this.properties) {
@@ -415,7 +426,7 @@ export class PropertyEditor extends Panel {
             let prop = allProperties[p];
             _this.addProperty(prop.name, prop.editor, prop.description);
         }
-
+        return true;
         // });
     }
     /**

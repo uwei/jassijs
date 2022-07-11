@@ -28,6 +28,7 @@ export class JsonEditor extends Editor {
         this.component.onclick(function (param) {
             _this._onclick(param);
         });
+        this.component.icon = "mdi mdi-decagram-outline";
     }
     /**
      * @member {object} ob - the object which is edited

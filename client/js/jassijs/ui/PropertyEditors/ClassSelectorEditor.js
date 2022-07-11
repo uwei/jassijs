@@ -34,14 +34,6 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/E
             this.component.add(this.select);
             this.component.add(this.jsonEditor.getComponent());
             var _this = this;
-            this.jsonEditor.onpropertyChanged(function (param) {
-                return;
-                var svalue = _this.propertyEditor.getPropertyValue(_this.property);
-                svalue = svalue.substring(svalue.indexOf("(") + 1, svalue.length - 1);
-                var value = Tools_1.Tools.jsonToObject(svalue);
-                var cl = Classes_1.classes.getClass(_this.property.constructorClass);
-                _this.propertyEditor.setPropertyInDesign(_this.property.name, new cl(value));
-            });
             this.select.onchange(function (sel) {
                 var converter = sel.data;
                 _this.changeConverter(converter);
@@ -104,9 +96,12 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/E
                         data: name
                     });
                 }
-                _this.select.items = data;
-                _this.select.display = "data";
-                _this.ob = _this.ob;
+                if (!_this.destroyed) {
+                    _this.select.items = data;
+                    _this.select.display = "data";
+                    if (_this.ob)
+                        _this.ob = _this.ob;
+                }
             });
             //	this.select
         }
@@ -114,10 +109,13 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/E
          * @member {object} ob - the object which is edited
          */
         set ob(ob) {
+            this._ob = ob;
             if (this.propertyEditor === undefined)
                 return;
             if (this.select.items === undefined)
                 return; //list is not inited
+            if (ob === undefined)
+                return;
             var value = this.propertyEditor.getPropertyValue(this.property);
             this.jsonEditor.ob = ob;
             if (value !== undefined) {
@@ -170,6 +168,7 @@ define(["require", "exports", "jassijs/ui/Select", "jassijs/ui/PropertyEditors/E
             me.tb.converter = new StringConverter_1.StringConverter();
         }
         destroy() {
+            this.destroyed = true;
             this.select.destroy();
             super.destroy();
         }

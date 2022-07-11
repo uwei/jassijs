@@ -63,6 +63,7 @@ export class HTMLPanel extends DataComponent implements HTMLPanelConfig {
     }
     set newlineafter(value) {
         this.dom.style.display = value ? "" : "inline-block";
+        this.domWrapper.style.display = value ? "" : "inline-block";
         (<HTMLElement>this.dom.children[0]).style.display = value ? "" : "inline-block";
     }
     compileTemplate(template) {

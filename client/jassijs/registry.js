@@ -27,7 +27,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655806951272
 	},
 	"jassijs/base/PropertyEditorService.ts": {
-		"date": 1655556795176,
+		"date": 1657571266414,
 		"jassijs.base.PropertyEditorService": {}
 	},
 	"jassijs/base/Router.ts": {
@@ -441,7 +441,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Button.ts": {
-		"date": 1655752991925,
+		"date": 1657569477636,
 		"jassijs.ui.Button": {
 			"$UIComponent": [
 				{
@@ -861,7 +861,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.HTMLEditorPanel": {}
 	},
 	"jassijs/ui/HTMLPanel.ts": {
-		"date": 1656335881756,
+		"date": 1657572160680,
 		"jassijs.ui.HTMLPanel": {
 			"$UIComponent": [
 				{
@@ -981,7 +981,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1657048756889,
+		"date": 1657570005600,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {}
@@ -1001,7 +1001,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/ClassSelectorEditor.ts": {
-		"date": 1657473799199,
+		"date": 1657571441149,
 		"jassijs.ui.PropertyEditors.ClassSelectorEditor": {
 			"$PropertyEditor": [
 				[
@@ -1129,7 +1129,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/JsonEditor.ts": {
-		"date": 1657224991788,
+		"date": 1657569262297,
 		"jassijs.ui.PropertyEditors.JsonEditor": {
 			"$PropertyEditor": [
 				[
@@ -1140,10 +1140,6 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.PropertyEditorTestProperties": {
 			"@members": {}
 		}
-	},
-	"jassijs/ui/PropertyEditors/LoadingEditor.ts": {
-		"date": 1656414352631,
-		"jassijs.ui.PropertyEditors.LoadingEditor": {}
 	},
 	"jassijs/ui/PropertyEditors/NameEditor.ts": {
 		"date": 1655556795284,
