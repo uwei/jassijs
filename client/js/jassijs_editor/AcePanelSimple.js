@@ -7,10 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "ace/ext/language_tools"], function (require, exports, ace_1, Registry_1, CodePanel_1) {
+define(["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "ace/ext/language_tools"], function (require, exports, ace, Registry_1, CodePanel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.AcePanelSimple = void 0;
+    /// <amd-dependency path="ace/ace" name="ace"/>
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
     * @class jassijs.ui.CodePanel
@@ -22,7 +23,7 @@ define(["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_edi
             var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
             super.init(test);
             this.domWrapper.style.display = "";
-            this._editor = ace_1.default.edit(this._id);
+            this._editor = ace.edit(this._id);
             this.file = "";
             this._editor.setOptions({
                 enableBasicAutocompletion: true,
@@ -85,7 +86,7 @@ define(["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_edi
             //force ctrl+z not shows an empty document
             if (this._isInited === undefined) {
                 this._isInited = true;
-                this._editor.getSession().setUndoManager(new ace_1.default.UndoManager());
+                this._editor.getSession().setUndoManager(new ace.UndoManager());
             }
             if (lastcursor !== undefined) {
                 //this.cursorPosition = lastcursor;

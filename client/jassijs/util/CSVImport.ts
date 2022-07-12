@@ -8,8 +8,7 @@ import { Select } from "jassijs/ui/Select";
 import { Table } from "jassijs/ui/Table";
 import { $Class } from "jassijs/remote/Registry";
 import { Panel } from "jassijs/ui/Panel";
-//@ts-ignore
-import { Papa } from "jassijs/ext/papaparse";
+import  Papa  from "jassijs/ext/papaparse";
 import { db } from "jassijs/remote/Database";
 import registry from "jassijs/remote/Registry";
 import { classes } from "jassijs/remote/Classes";
@@ -18,6 +17,7 @@ import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import { router } from "jassijs/base/Router";
 import { Server } from "jassijs/remote/Server";
 import { Transaction } from "jassijs/remote/Transaction";
+import { Tabulator } from "tabulator-tables";
 
 
 type Me = {
@@ -82,7 +82,7 @@ export class CSVImport extends Panel {
 
 	}
 	readData(csvdata: string) {
-		var csvdata = Papa.parse(csvdata, { skipEmptyLines: true }).data;
+		csvdata = Papa.parse(csvdata, { skipEmptyLines: true }).data;
 		var len = csvdata[0].length;
 		this.data = [];
 		//convert [{1:hallo",2:"Du"}]

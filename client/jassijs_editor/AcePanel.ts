@@ -1,5 +1,5 @@
-//@ts-ignore
-import ace from 'ace/ace';
+/// <amd-dependency path="ace/ace" name="ace"/>
+declare var ace;
 import 'ace/ext/language_tools';
 import "jassijs_editor/Debugger";
 import typescript, { Typescript } from "jassijs_editor/util/Typescript";

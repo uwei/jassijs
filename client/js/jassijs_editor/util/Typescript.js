@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs_editor/ext/monaco", "jassijs/ext/requestidlecallback"], function (require, exports, Registry_1, Server_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs_editor/ext/monaco"], function (require, exports, Registry_1, Server_1) {
     "use strict";
     var Typescript_1;
     Object.defineProperty(exports, "__esModule", { value: true });

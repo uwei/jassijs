@@ -1,10 +1,9 @@
-define("jassijs/ext/spectrum", ["jassijs/remote/Jassi", "spectrum"], function () {
+define(["require", "exports", "spectrum", "jassijs/modul"], function (require, exports, spectrum, modul_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     //'spectrum':'//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min'
-    var path = require('jassijs/modul').default.require.paths["spectrum"];
+    var path = modul_1.default.require.paths["spectrum"];
     //path=path.substring(0,path.lastIndexOf("/"));
     jassijs.myRequire(path + ".css");
-    return {
-        default: ""
-    };
 });
-//# sourceMappingURL=spectrum.js.map
+//# sourceMappingURL=Spectrum.js.map

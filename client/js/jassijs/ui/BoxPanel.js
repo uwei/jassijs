@@ -7,10 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes", "jassijs/ext/split"], function (require, exports, Panel_1, Registry_1, Component_1, Property_1, Classes_1, split_1) {
+define(["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Registry", "jassijs/ui/Component", "jassijs/ui/Property", "jassijs/remote/Classes"], function (require, exports, Split, Panel_1, Registry_1, Component_1, Property_1, Classes_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.BoxPanel = void 0;
+    /// <amd-dependency path="splitlib" name="Split"/>
     let BoxPanel = class BoxPanel extends Panel_1.Panel {
         /**
         *
@@ -82,7 +83,7 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
                 this._components[x].__dom.style.height = (this.horizontal ? "100%" : "calc(100% - 5px)");
                 comp.push(this._components[x].domWrapper);
             }
-            this._splitcomponent = (0, split_1.default)(comp, {
+            this._splitcomponent = Split(comp, {
                 sizes: this._spliter,
                 gutterSize: 8,
                 minSize: [50, 50, 50, 50, 50, 50, 50, 50],

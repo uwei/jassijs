@@ -1,7 +1,5 @@
 import { $Class } from "jassijs/remote/Registry";
 
-//@ts-ignore
-//import lodash from "jassijs/ext/lodash";
 @$Class("jassijs.util.Tools")
 export class Tools {
 

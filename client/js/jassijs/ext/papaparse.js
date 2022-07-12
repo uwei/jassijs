@@ -1,7 +1,7 @@
-define("jassijs/ext/papaparse", ["papaparse"], function (papa) {
-    // jassijs.myRequire("//cdnjs.cloudflare.com/ajax/libs/chosen/1.8.7/chosen.css");
-    return {
-        Papa: papa
-    };
+define(["require", "exports", "papaparse"], function (require, exports, Papa) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <amd-dependency path="papaparse" name="Papa"/>
+    exports.default = Papa;
 });
 //# sourceMappingURL=papaparse.js.map

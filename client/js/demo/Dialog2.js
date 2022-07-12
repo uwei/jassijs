@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Button_1, NumberConverter_1, Textbox_1, Registry_1, Panel_1) {
+define(["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, BoxPanel_1, Button_1, NumberConverter_1, Textbox_1, Registry_1, Panel_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog2 = void 0;
@@ -20,10 +20,10 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/converters/Number
         layout(me) {
             me.button = new Button_1.Button();
             me.textbox = new Textbox_1.Textbox();
-            this.add(me.textbox);
-            this.add(me.button);
+            me.boxpanel = new BoxPanel_1.BoxPanel();
             this.height = 17;
             this.width = 876;
+            this.add(me.boxpanel);
             me.button.text = "button";
             me.button.onclick(function (event) {
                 var h = me.textbox.value;
@@ -31,6 +31,11 @@ define(["require", "exports", "jassijs/ui/Button", "jassijs/ui/converters/Number
             me.textbox.converter = new NumberConverter_1.NumberConverter({
                 format: "#.##0,00"
             });
+            me.boxpanel.add(me.textbox);
+            me.boxpanel.add(me.button);
+            me.boxpanel.spliter = [50, 50];
+            me.boxpanel.height = "500";
+            me.boxpanel.horizontal = true;
         }
     };
     Dialog2 = __decorate([

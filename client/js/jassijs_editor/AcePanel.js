@@ -7,11 +7,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1, Component_1) {
+define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1, Component_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.AcePanel = void 0;
+    /// <amd-dependency path="ace/ace" name="ace"/>
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
     * @class jassijs.ui.CodePanel
@@ -23,7 +24,7 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
             var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
             super.init(test);
             this.domWrapper.style.display = "";
-            this._editor = ace_1.default.edit(this._id);
+            this._editor = ace.edit(this._id);
             this.file = "";
             this.checkErrorTask = new Runlater_1.Runlater(function () {
                 _this._checkCode();
@@ -284,7 +285,7 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
          * initialize the Ace language Tools (only once)
          */
         _installLangTools() {
-            var aceLangTools = ace_1.default.require("ace/ext/language_tools");
+            var aceLangTools = ace.require("ace/ext/language_tools");
             var _this = this;
             if (aceLangTools.jassi === undefined) {
                 aceLangTools.jassi = {
@@ -439,7 +440,7 @@ define(["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jass
             //force ctrl+z not shows an empty document
             if (this._isInited === undefined) {
                 this._isInited = true;
-                this._editor.getSession().setUndoManager(new ace_1.default.UndoManager());
+                this._editor.getSession().setUndoManager(new ace.UndoManager());
             }
             if (lastcursor !== undefined) {
                 //this.cursorPosition = lastcursor;

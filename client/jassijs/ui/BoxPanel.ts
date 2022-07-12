@@ -1,10 +1,15 @@
+
+/// <amd-dependency path="splitlib" name="Split"/>
+declare var Split;
+
+
 import { Panel, PanelConfig } from "jassijs/ui/Panel";
 import { $Class } from "jassijs/remote/Registry";
 import { $UIComponent, ComponentConfig } from "jassijs/ui/Component";
 import { $Property } from "jassijs/ui/Property";
 import { classes } from "jassijs/remote/Classes";
 //@ts-ignore
-import Split from "jassijs/ext/split";
+//import Split from "jassijs/ext/split";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 
 

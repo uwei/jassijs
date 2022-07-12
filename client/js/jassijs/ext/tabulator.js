@@ -1,7 +1,10 @@
-//define("jassijs/ext/tabulator", ['tabulatorlib'], function (Tabulator) {
-define("tabulator-tables", ['tabulatorlib'], function (Tabulator) {
-    var path = require('jassijs/modul').default.require.paths["tabulatorlib"];
+define("tabulator-tables", ["require", "exports", "tabulatorlib", "jassijs/modul"], function (require, exports, tabulator, modul_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.Tabulator = void 0;
+    var Tabulator = tabulator;
+    exports.Tabulator = Tabulator;
+    var path = modul_1.default.require.paths["tabulatorlib"];
     jassijs.myRequire(path.replace("js", "css") + ".min.css");
-    return { Tabulator };
 });
-//# sourceMappingURL=tabulator.js.map
+//# sourceMappingURL=Tabulator.js.map

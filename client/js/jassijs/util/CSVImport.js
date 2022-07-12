@@ -56,7 +56,7 @@ define(["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs
             //debug
         }
         readData(csvdata) {
-            var csvdata = papaparse_1.Papa.parse(csvdata, { skipEmptyLines: true }).data;
+            csvdata = papaparse_1.default.parse(csvdata, { skipEmptyLines: true }).data;
             var len = csvdata[0].length;
             this.data = [];
             //convert [{1:hallo",2:"Du"}]

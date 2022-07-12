@@ -2,9 +2,7 @@
 import { $Class } from "jassijs/remote/Registry";
 import { Server } from "jassijs/remote/Server";
 import { FileNode } from "jassijs/remote/FileNode";
-//@ts-ignore
 import "jassijs_editor/ext/monaco";
-import "jassijs/ext/requestidlecallback";
 import { Editor } from "jassijs/ui/PropertyEditors/Editor";
 
 @$Class("jassijs_editor.util.Typescript")

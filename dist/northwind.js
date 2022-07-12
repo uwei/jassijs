@@ -846,8 +846,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.freight.bind = [me.databinder, "Freight"];
             me.freight.width = 70;
             me.freight.label = "Freight";
-            me.freight.converter = new NumberConverter_3.NumberConverter();
-            me.freight.format = "#.##0,00";
+            me.freight.converter = new NumberConverter_3.NumberConverter({ format: "#.##0,00" });
             me.freight.css = {
                 text_align: "right"
             };
@@ -940,7 +939,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
     }
     exports.test = test;
 });
-define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jassijs/ui/Repeater", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Products"], function (require, exports, Checkbox_1, Textbox_6, Repeater_2, BoxPanel_4, HTMLPanel_5, Databinder_2, Registry_9, Panel_6, Actions_4, Windows_3, Products_1) {
+define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jassijs/ui/Repeater", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Products", "jassijs/ui/converters/NumberConverter"], function (require, exports, Checkbox_1, Textbox_6, Repeater_2, BoxPanel_4, HTMLPanel_5, Databinder_2, Registry_9, Panel_6, Actions_4, Windows_3, Products_1, NumberConverter_4) {
     "use strict";
     var ProductList_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -973,7 +972,8 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
                             me.textbox2 = new Textbox_6.Textbox();
                             me.htmlpanel22 = new HTMLPanel_5.HTMLPanel();
                             me.textbox22 = new Textbox_6.Textbox();
-                            me.repeater.design.config({ children: [
+                            me.repeater.design.config({
+                                children: [
                                     me.htmlpanel3.config({ value: " " }),
                                     me.boxpanel.config({
                                         children: [
@@ -1004,12 +1004,13 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
                                                 readOnly: true,
                                                 width: 100,
                                                 bind: [me.repeater.design.databinder, "UnitPrice"],
-                                                format: "$ #.##0,00"
+                                                converter: new NumberConverter_4.NumberConverter({ format: "#.##0,00" }),
                                             })
                                         ],
                                         horizontal: true
                                     })
-                                ] });
+                                ]
+                            });
                         }
                     })
                 ]
@@ -1045,7 +1046,7 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
     }
     exports.test = test;
 });
-define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Products", "jassijs/ui/DBObjectView"], function (require, exports, Style_2, ObjectChooser_4, HTMLPanel_6, Checkbox_2, NumberConverter_4, Textbox_7, Registry_10, Property_6, Products_2, DBObjectView_6) {
+define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Products", "jassijs/ui/DBObjectView"], function (require, exports, Style_2, ObjectChooser_4, HTMLPanel_6, Checkbox_2, NumberConverter_5, Textbox_7, Registry_10, Property_6, Products_2, DBObjectView_6) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1080,7 +1081,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
                         bind: [me.databinder, "id"],
                         label: "Id",
                         width: 65,
-                        converter: new NumberConverter_4.NumberConverter()
+                        converter: new NumberConverter_5.NumberConverter()
                     }),
                     me.productName.config({
                         x: 90,
@@ -1109,8 +1110,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
                         bind: [me.databinder, "UnitPrice"],
                         label: "Unit Price",
                         width: 65,
-                        converter: new NumberConverter_4.NumberConverter(),
-                        format: "#.##0,00",
+                        converter: new NumberConverter_5.NumberConverter({ format: "#.##0,00" }),
                         styles: [me.styleNumber]
                     }),
                     me.unitsInStock.config({
@@ -1119,8 +1119,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
                         bind: [me.databinder, "UnitsInStock"],
                         label: "Units in Stock",
                         width: 70,
-                        converter: new NumberConverter_4.NumberConverter(),
-                        format: "#.##0,00",
+                        converter: new NumberConverter_5.NumberConverter({ format: "#.##0,00" }),
                         styles: [me.styleNumber]
                     }),
                     me.unitsOnOrder.config({
@@ -1129,8 +1128,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
                         bind: [me.databinder, "UnitsOnOrder"],
                         label: "Units on Order",
                         width: 75,
-                        converter: new NumberConverter_4.NumberConverter(),
-                        format: "#.##0,00",
+                        converter: new NumberConverter_5.NumberConverter({ format: "#.##0,00" }),
                         styles: [me.styleNumber]
                     }),
                     me.reorderLevel.config({
@@ -1139,7 +1137,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
                         bind: [me.databinder, "ReorderLevel"],
                         width: 70,
                         label: "Reorder Level",
-                        converter: new NumberConverter_4.NumberConverter(),
+                        converter: new NumberConverter_5.NumberConverter(),
                         styles: [me.styleNumber]
                     }),
                     me.category.config({
@@ -1200,7 +1198,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
     }
     exports.test = test;
 });
-define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_5, Textbox_8, Registry_11, Property_7, Shippers_1, DBObjectView_7) {
+define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_6, Textbox_8, Registry_11, Property_7, Shippers_1, DBObjectView_7) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1224,7 +1222,7 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
                 height: "150",
                 children: [
                     me.id.config({
-                        converter: new NumberConverter_5.NumberConverter(),
+                        converter: new NumberConverter_6.NumberConverter(),
                         bind: [me.databinder, "id"],
                         label: "Id",
                         width: 40,
@@ -1266,7 +1264,7 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
     }
     exports.test = test;
 });
-define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_6, Textbox_9, Registry_12, Property_8, Suppliers_1, DBObjectView_8) {
+define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_7, Textbox_9, Registry_12, Property_8, Suppliers_1, DBObjectView_8) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1297,7 +1295,7 @@ define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/
                     me.id.config({
                         x: 10,
                         y: 5,
-                        converter: new NumberConverter_6.NumberConverter(),
+                        converter: new NumberConverter_7.NumberConverter(),
                         width: 50,
                         bind: [me.databinder, "id"],
                         label: "Id"
@@ -1489,7 +1487,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1656682898118,
+                "date": 1657474966817,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1502,7 +1500,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1656683100932,
+                "date": 1657475021952,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -2155,7 +2153,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductList.ts": {
-                "date": 1656508354146,
+                "date": 1657475058632,
                 "northwind/ProductList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"

@@ -10,7 +10,7 @@ define("demo/registry",["require"], function(require) {
 		"demo/Dialog": {}
 	},
 	"demo/Dialog2.ts": {
-		"date": 1657571510777,
+		"date": 1657657099860,
 		"demo/Dialog2": {}
 	},
 	"demo/EmptyDialog.ts": {
@@ -104,7 +104,7 @@ define("demo/registry",["require"], function(require) {
 		"demo.TestTree": {}
 	},
 	"demo/TestUpload.ts": {
-		"date": 1655669139122,
+		"date": 1657656093199,
 		"demo/TestUpload": {}
 	},
 	"demo/TreeContextmenu.ts": {

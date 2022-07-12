@@ -7,11 +7,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace_1, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1, Component_1) {
+define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_editor/util/Typescript", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "jassijs/util/Runlater", "jassijs/ui/Component", "ace/ext/language_tools", "jassijs_editor/Debugger"], function (require, exports, ace, Typescript_1, Registry_1, Registry_2, CodePanel_1, Runlater_1, Component_1) {
     "use strict";
     var AcePanel_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.AcePanel = void 0;
+    /// <amd-dependency path="ace/ace" name="ace"/>
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
     * @class jassijs.ui.CodePanel
@@ -23,7 +24,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
             var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
             super.init(test);
             this.domWrapper.style.display = "";
-            this._editor = ace_1.default.edit(this._id);
+            this._editor = ace.edit(this._id);
             this.file = "";
             this.checkErrorTask = new Runlater_1.Runlater(function () {
                 _this._checkCode();
@@ -284,7 +285,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
          * initialize the Ace language Tools (only once)
          */
         _installLangTools() {
-            var aceLangTools = ace_1.default.require("ace/ext/language_tools");
+            var aceLangTools = ace.require("ace/ext/language_tools");
             var _this = this;
             if (aceLangTools.jassi === undefined) {
                 aceLangTools.jassi = {
@@ -439,7 +440,7 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
             //force ctrl+z not shows an empty document
             if (this._isInited === undefined) {
                 this._isInited = true;
-                this._editor.getSession().setUndoManager(new ace_1.default.UndoManager());
+                this._editor.getSession().setUndoManager(new ace.UndoManager());
             }
             if (lastcursor !== undefined) {
                 //this.cursorPosition = lastcursor;
@@ -526,10 +527,11 @@ define("jassijs_editor/AcePanel", ["require", "exports", "ace/ace", "jassijs_edi
     }
     exports.test = test;
 });
-define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "ace/ext/language_tools"], function (require, exports, ace_2, Registry_3, CodePanel_2) {
+define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassijs/remote/Registry", "jassijs_editor/CodePanel", "ace/ext/language_tools"], function (require, exports, ace, Registry_3, CodePanel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.AcePanelSimple = void 0;
+    /// <amd-dependency path="ace/ace" name="ace"/>
     /**
     * wrapper for the Ace-Code editor with Typesccript-Code-Completion an other features
     * @class jassijs.ui.CodePanel
@@ -541,7 +543,7 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassi
             var test = '<div class="CodePanel" style="height: 500px; width: 500px"></div>';
             super.init(test);
             this.domWrapper.style.display = "";
-            this._editor = ace_2.default.edit(this._id);
+            this._editor = ace.edit(this._id);
             this.file = "";
             this._editor.setOptions({
                 enableBasicAutocompletion: true,
@@ -604,7 +606,7 @@ define("jassijs_editor/AcePanelSimple", ["require", "exports", "ace/ace", "jassi
             //force ctrl+z not shows an empty document
             if (this._isInited === undefined) {
                 this._isInited = true;
-                this._editor.getSession().setUndoManager(new ace_2.default.UndoManager());
+                this._editor.getSession().setUndoManager(new ace.UndoManager());
             }
             if (lastcursor !== undefined) {
                 //this.cursorPosition = lastcursor;
@@ -3523,11 +3525,11 @@ define("jassijs_editor/registry", ["require"], function (require) {
     return {
         default: {
             "jassijs_editor/AcePanel.ts": {
-                "date": 1656073135815,
+                "date": 1657651682167,
                 "jassijs.ui.AcePanel": {}
             },
             "jassijs_editor/AcePanelSimple.ts": {
-                "date": 1656022299019,
+                "date": 1657651671767,
                 "jassijs.ui.AcePanelSimple": {}
             },
             "jassijs_editor/ChromeDebugger.ts": {
@@ -3583,7 +3585,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1656064903907,
+                "date": 1656955313898,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -3595,46 +3597,26 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1656537319888,
+                "date": 1657656454986,
                 "jassijs_editor.util.Typescript": {}
+            },
+            "jassijs_editor/ext/Monaco.ts": {
+                "date": 1657653558211
             }
         }
     };
 });
-//require.config({ paths: { vs: '//cdn.jsdelivr.net/npm/monaco-editor@0.20.0/dev/vs' } });
-//require.config({ paths: { vs: 'https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev/vs' } });
-//require.config({ paths: { vs: 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.21.2/min/vs' } });
-//let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
-/*require.config({ paths: {
-    monacoLib:"jassijs_editor/ext/monacoLib",
-    vs: monacopath+"/vs"
- }
-});
-*/
-define("jassijs_editor/ext/monacoLib", ["require"], function (require, editor) {
-    //window["globalThis"] = {};
-    return {};
-});
-//hach to make autocompletion for autoimports from other modules
-define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 'vs/editor/editor.main', "vs/language/typescript/tsWorker" /*,"monacoLib_editorWorkerServiceImpl","monacoLib_editorSimpleWorker","tsWorker"*/], function (mlib, require, monaco, tsWorker /*,editorWorkerServiceImpl,editorSimpleWorker,tsWorker*/) {
+define("jassijs_editor/ext/Monaco", ["require", "exports", "vs/editor/editor.main", "vs/language/typescript/tsWorker", "jassijs_editor/modul"], function (require, exports, _monaco, tsWorker, modul_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <amd-dependency path="vs/editor/editor.main" name="_monaco"/>
+    /// <amd-dependency path="vs/language/typescript/tsWorker" name="tsWorker"/>
+    //hack to make autocompletion for autoimports from other modules
     //let monacopath="https://cdn.jsdelivr.net/npm/monaco-editor@0.21.2/dev";
-    let monacopath = require("jassijs_editor/modul").default.require.paths.vs.replace("/vs", "");
-    //get Typescript instance
-    //window.ts = window["globalThis"].ts;
-    //window.globalThisOld = window["globalThis"];
-    //delete window["globalThis"];
+    let monacopath = modul_1.default.require.paths.vs.replace("/vs", "");
     var platform_1 = require("vs/base/common/platform");
     platform_1.globals.MonacoEnvironment = {};
     function myfunc() {
-        /* if(require.defined('vs/language/typescript/tsWorker')){
-             require(['vs/language/typescript/tsWorker'], function (tsWorker) {
-                 tsWorker.TypeScriptWorker.prototype.getCompletionsAtPosition = async function (fileName, position, properties) {
- 
-                     return await this._languageService.getCompletionsAtPosition(fileName, position, properties);
-                 }
-             });
-         }else{*/
-        //    debugger;
         if (require.getConfig().baseUrl === "") {
             setTimeout(() => { myfunc(); }, 10);
         }
@@ -3648,8 +3630,6 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
         //   }
     }
     platform_1.globals.MonacoEnvironment.getWorker = function (workerId, label) {
-        //var js="/*editorWorkerService*/self.MonacoEnvironment={baseUrl: '"+monacopath+"/'};importScripts('"+monacopath+"/vs/base/worker/"+workerId+"');/*editorWorkerService*/"+myfunc.toString()+";myfunc();";
-        //const blob = new Blob([js], { type: 'application/javascript' });
         const myPath = 'vs/base/worker/defaultWorkerFactory.js';
         //"https://cdn.jsdelivr.net/npm/monaco-editor@0.26.1/dev/vs/base/worker/workerMain.js"
         let scriptPath = monacopath + "/vs/base/worker/workerMain.js"; // require.toUrl('./' + workerId);
@@ -3663,48 +3643,7 @@ define("jassijs_editor/ext/monaco", ["jassijs_editor/ext/monacoLib", "require", 
         //var workerUrl=URL.createObjectURL(blob);
         return new Worker(workerUrl, { name: label });
     };
-    return {};
 });
-/*
- //hack to get languageService
-    /*var orgLS=ts.createLanguageService;
-
-    var funcResolve=undefined;
-    var waiter=new Promise((resolve)=>{
-        funcResolve=resolve;
-    });
-    ts.createLanguageService=function(host, documentRegistry, syntaxOnlyOrLanguageServiceMode){
-            let ret=orgLS(host, documentRegistry, syntaxOnlyOrLanguageServiceMode);
-            funcResolve(ret);
-            return ret;
-    }
-    var ret = {
-        getLanguageService:async function(){
-            return await waiter;
-        }
-    }
-    //hack monaco allways create a worker which not run as serviceWorker - so we can share the languageservice
-    var EditorWorkerHost = require("vs/editor/common/services/editorWorkerServiceImpl").EditorWorkerHost;
-    var EditorSimpleWorker = require("vs/editor/common/services/editorSimpleWorker").EditorSimpleWorker;
-    var EditorWorkerClient = require("vs/editor/common/services/editorWorkerServiceImpl").EditorWorkerClient;
-    class SynchronousWorkerClient {
-        constructor(instance) {
-            this._instance = instance;
-            this._proxyObj = Promise.resolve(this._instance);
-        }
-        dispose() {
-            this._instance.dispose();
-        }
-        getProxyObject() {
-            return this._proxyObj;
-        }
-    }
-    EditorWorkerClient.prototype._getOrCreateWorker = function() {
-        if (!this._worker)
-            this._worker = new SynchronousWorkerClient(new EditorSimpleWorker(new EditorWorkerHost(this), null));
-        return this._worker;
-
-    }*/ 
 define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"], function (require, exports, Registry_16) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -3944,7 +3883,7 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
     ], DragAndDropper);
     exports.DragAndDropper = DragAndDropper;
 });
-define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs/remote/Test"], function (require, exports, Registry_17, Typescript_4, Test_2) {
+define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Typescript", "jassijs/remote/Test", "jassijs/remote/Classes"], function (require, exports, Registry_17, Typescript_4, Test_2, Classes_6) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.tests = exports.Parser = exports.ParsedClass = void 0;
@@ -4106,10 +4045,10 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
             else if (arg.kind === ts.SyntaxKind.NumericLiteral) {
                 return Number(arg.text);
             }
-            else if (arg.kind === ts.SyntaxKind.ArrowFunction) {
+            else if (arg.kind === ts.SyntaxKind.ArrowFunction || arg.kind === ts.SyntaxKind.FunctionExpression) {
                 return arg.getText();
             }
-            throw "Error type not found";
+            throw new Classes_6.JassiError("Error type not found");
         }
         parseDecorator(dec) {
             var ex = dec.expression;
@@ -5356,7 +5295,7 @@ define("jassijs_editor/util/TSSourceMap", ["require", "exports", "jassijs/ext/so
     ], TSSourceMap);
     exports.TSSourceMap = TSSourceMap;
 });
-define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs_editor/ext/monaco", "jassijs/ext/requestidlecallback"], function (require, exports, Registry_20, Server_4) {
+define("jassijs_editor/util/Typescript", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server", "jassijs_editor/ext/monaco"], function (require, exports, Registry_20, Server_4) {
     "use strict";
     var Typescript_5;
     Object.defineProperty(exports, "__esModule", { value: true });

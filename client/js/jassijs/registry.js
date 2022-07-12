@@ -52,11 +52,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/base/Windows.ts": {
-                "date": 1655668017666,
+                "date": 1657655074508,
                 "jassijs.base.Windows": {}
             },
             "jassijs/modul.ts": {
-                "date": 1657046681579
+                "date": 1657656486349
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1655556496250,
@@ -419,7 +419,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
-                "date": 1655558623582,
+                "date": 1657656956670,
                 "jassijs.ui.BoxPanel": {
                     "$UIComponent": [
                         {
@@ -1349,7 +1349,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655668836579
             },
             "jassijs/util/CSVImport.ts": {
-                "date": 1655669375574,
+                "date": 1657656293258,
                 "jassijs.util.CSVImport": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -1382,7 +1382,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassi.util.Runlater": {}
             },
             "jassijs/util/Tools.ts": {
-                "date": 1655556795177,
+                "date": 1657655418217,
                 "jassijs.util.Tools": {}
             },
             "jassijs/ui/PropertyEditors/JsonArrayEditor.ts": {
@@ -1404,6 +1404,18 @@ define("jassijs/registry", ["require"], function (require) {
             "jassijs/ui/PropertyEditors/TableColumnImport.ts": {
                 "date": 1657048998005,
                 "jassijs/ui/PropertyEditors/TableColumnImport": {}
+            },
+            "jassijs/ext/Goldenlayout.ts": {
+                "date": 1657655068257
+            },
+            "jassijs/ext/Jquerylib.ts": {
+                "date": 1657655348617
+            },
+            "jassijs/ext/Papaparse.ts": {
+                "date": 1657656070445
+            },
+            "jassijs/ext/Spectrum.ts": {
+                "date": 1657656777955
             }
         }
     };

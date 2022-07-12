@@ -3,11 +3,11 @@ define("jassijs_editor/registry",["require"], function(require) {
  return {
   default: {
 	"jassijs_editor/AcePanel.ts": {
-		"date": 1656073135815,
+		"date": 1657651682167,
 		"jassijs.ui.AcePanel": {}
 	},
 	"jassijs_editor/AcePanelSimple.ts": {
-		"date": 1656022299019,
+		"date": 1657651671767,
 		"jassijs.ui.AcePanelSimple": {}
 	},
 	"jassijs_editor/ChromeDebugger.ts": {
@@ -75,8 +75,11 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-		"date": 1656537319888,
+		"date": 1657656454986,
 		"jassijs_editor.util.Typescript": {}
+	},
+	"jassijs_editor/ext/Monaco.ts": {
+		"date": 1657653558211
 	}
 }
  }

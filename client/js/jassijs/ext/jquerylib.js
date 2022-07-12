@@ -1,7 +1,6 @@
-define("jassijs/ext/jquerylib", [
-    "jquery",
-    "jquery.ui", "jquery.ui.touch"
-], function (require) {
+define(["require", "exports", "jquery", "jquery.ui", "jquery.ui.touch"], function (require, exports) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     jassijs.includeCSSFile("jquery-ui.css");
     define("../widgets/datepicker", [], function () {
         return $.datepicker;
@@ -9,8 +8,5 @@ define("jassijs/ext/jquerylib", [
     requirejs(['jquery.language'], function () {
         $.datepicker.setDefaults($.datepicker.regional[navigator.language.split("-")[0]]);
     });
-    return {
-        default: ""
-    };
 });
 //# sourceMappingURL=jquerylib.js.map

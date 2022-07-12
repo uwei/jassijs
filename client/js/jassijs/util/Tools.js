@@ -12,8 +12,6 @@ define(["require", "exports", "jassijs/remote/Registry"], function (require, exp
     var Tools_1;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Tools = void 0;
-    //@ts-ignore
-    //import lodash from "jassijs/ext/lodash";
     let Tools = Tools_1 = class Tools {
         constructor() {
         }

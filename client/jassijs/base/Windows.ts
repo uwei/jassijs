@@ -7,7 +7,7 @@ import { classes } from "jassijs/remote/Classes";
 import { DockingContainer } from "jassijs/ui/DockingContainer";
 import { Cookies } from "jassijs/util/Cookies";
 import { Component } from "jassijs/ui/Component";
-//@ts-ignore
+
 import GoldenLayout from "jassijs/ext/goldenlayout";
 
 
