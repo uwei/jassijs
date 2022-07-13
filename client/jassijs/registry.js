@@ -56,7 +56,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/modul.ts": {
-		"date": 1657656486349
+		"date": 1657658778395
 	},
 	"jassijs/remote/Classes.ts": {
 		"date": 1655556496250,
@@ -419,7 +419,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs/ui/ActionNodeMenu": {}
 	},
 	"jassijs/ui/BoxPanel.ts": {
-		"date": 1657656956670,
+		"date": 1657715386950,
 		"jassijs.ui.BoxPanel": {
 			"$UIComponent": [
 				{
@@ -748,7 +748,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.ui.DesignDummy": {}
 	},
 	"jassijs/ui/DockingContainer.ts": {
-		"date": 1656016899305,
+		"date": 1657658906918,
 		"jassijs.ui.DockingContainer": {}
 	},
 	"jassijs/ui/ErrorPanel.ts": {
@@ -1349,7 +1349,7 @@ define("jassijs/registry",["require"], function(require) {
 		"date": 1655668836579
 	},
 	"jassijs/util/CSVImport.ts": {
-		"date": 1657656293258,
+		"date": 1657658972678,
 		"jassijs.util.CSVImport": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -1416,6 +1416,30 @@ define("jassijs/registry",["require"], function(require) {
 	},
 	"jassijs/ext/Spectrum.ts": {
 		"date": 1657656777955
+	},
+	"jassijs/ext/Tabulator.ts": {
+		"date": 1657657498568
+	},
+	"jassijs/ext/Tinymce.ts": {
+		"date": 1657658560377
+	},
+	"jassijs/ext/goldenlayout.ts": {
+		"date": 1657655068257
+	},
+	"jassijs/ext/jquerylib.ts": {
+		"date": 1657655348617
+	},
+	"jassijs/ext/papaparse.ts": {
+		"date": 1657656070445
+	},
+	"jassijs/ext/spectrum.ts": {
+		"date": 1657656777955
+	},
+	"jassijs/ext/tabulator.ts": {
+		"date": 1657657498568
+	},
+	"jassijs/ext/tinymce.ts": {
+		"date": 1657658560377
 	}
 }
  }

@@ -92,7 +92,7 @@ define(["require", "exports", "splitlib", "jassijs/ui/Panel", "jassijs/remote/Re
         }
     };
     __decorate([
-        (0, Property_1.$Property)({ default: true }),
+        (0, Property_1.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], BoxPanel.prototype, "horizontal", null);

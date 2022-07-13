@@ -59,7 +59,7 @@ export class BoxPanel extends Panel implements BoxPanelConfig {
         this.updateSpliter();
 
     }
-    @$Property({ default: true })
+    @$Property()
     get horizontal(): boolean {
         return this._horizontal;
     }

@@ -4232,6 +4232,7 @@ define("jassijs_report/Reports", ["require", "exports", "jassijs/ui/ContextMenu"
         }
         async setData() {
             var data = [];
+            var _this = this;
             var reports = await Registry_22.default.getJSONData("$Report");
             for (var x = 0; x < reports.length; x++) {
                 var rep = reports[x];
@@ -4243,7 +4244,9 @@ define("jassijs_report/Reports", ["require", "exports", "jassijs/ui/ContextMenu"
                 };
                 data.push(entry);
             }
-            this.me.table.items = data;
+            setTimeout(() => {
+                _this.me.table.items = data;
+            }, 100);
         }
         static async show() {
             Windows_2.default.add(new Reports_1(), "Reports");
@@ -5081,7 +5084,7 @@ define("jassijs_report/registry", ["require"], function (require) {
                 "jassijs_report.remote.ServerReport": {}
             },
             "jassijs_report/Reports.ts": {
-                "date": 1656501787077,
+                "date": 1657717569501,
                 "jassijs_report/Reports": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -5101,6 +5104,18 @@ define("jassijs_report/registry", ["require"], function (require) {
             "jassijs_report/ReportViewer.ts": {
                 "date": 1656456334039,
                 "jassijs_report/ReportViewer": {}
+            },
+            "jassijs_report/ext/Pdfjs.ts": {
+                "date": 1657714199577
+            },
+            "jassijs_report/ext/Pdfmake.ts": {
+                "date": 1657714350894
+            },
+            "jassijs_report/ext/pdfjs.ts": {
+                "date": 1657714199577
+            },
+            "jassijs_report/ext/pdfmake.ts": {
+                "date": 1657714350894
             }
         }
     };
@@ -5587,57 +5602,20 @@ define("jassijs_report/designer/SimpleReportDesigner", ["require", "exports", "j
     }
     exports.test = test;
 });
-/*require.config(
-    {
-       // 'pdfjs-dist/build/pdf': 'myfolder/pdf.min',
-       // 'pdfjs-dist/build/pdf.worker': 'myfolder/pdf.worker.min'
-      paths: {
-          'pdfjs-dist/build/pdf': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min',
-          'pdfjs-dist/build/pdf.worker': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min',
-        //  'pdf.worker.entry': '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.entry.min'
-         },
-      shim: {
-        'pdfjs-dist/build/pdf': ['pdfjs-dist/build/pdf.worker'],
-        }
-  });*/
-define("jassijs_report/ext/pdfjs", ["pdfjs-dist/build/pdf", "pdfjs-dist/build/pdf.worker"], function (pdfjs, worker, pdfjsWorker) {
+define("jassijs_report/ext/pdfjs", ["require", "exports", "pdfjs-dist/build/pdf", "pdfjs-dist/build/pdf.worker"], function (require, exports, pdfjs, worker) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <amd-dependency path="pdfjs-dist/build/pdf" name="pdfjs"/>
+    /// <amd-dependency path="pdfjs-dist/build/pdf.worker" name="worker"/>
     pdfjs.GlobalWorkerOptions.workerSrc = '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.worker.min.js';
-    //pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    return {
-        default: pdfjs
-    };
+    exports.default = pdfjs;
 });
-/*require.config(
-    {
-      paths :
-      {
-          'pdfmake' : '//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/vfs_fonts',// '../../lib/vfs_fonts',
-          'pdfMakeLib' :'//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.68/pdfmake'  //'../../lib/pdfmake'
-      },
-      shim :
-      {
-          pdfMakeLib :
-          {
-              exports: 'pdfMake'
-          },
-          pdfmake :
-          {
-              deps: ['pdfMakeLib'],
-              exports: 'pdfMake'
-          }
-      }
-    });*/
-if (window["globalThis"] !== undefined)
-    console.log("window.globalThis is defined");
-define("jassijs_report/ext/pdfmake", ['pdfMakelib', "vfs_fonts"], function (ttt, vfs) {
-    var fonts = require("vfs_fonts");
-    /* if (window["globalThis"] && window["globalThis"]["pdfMake"])
-         window.pdfMake = window["globalThis"]["pdfMake"];
-     if (window["globalThisOld"] && window["globalThisOld"]["pdfMake"])
-         window.pdfMake = window["globalThisOld"]["pdfMake"];*/
-    return {
-        default: window.pdfMake
-    };
+define("jassijs_report/ext/pdfmake", ["require", "exports", "pdfMakelib", "vfs_fonts"], function (require, exports, pdfMakelib, vfs_fonts) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <amd-dependency path="pdfMakelib" name="pdfMakelib"/>
+    /// <amd-dependency path="vfs_fonts" name="vfs_fonts"/>
+    exports.default = window["pdfMake"];
 });
 define("jassijs_report/remote/ServerReport", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/RemoteObject"], function (require, exports, Registry_27, RemoteObject_2) {
     "use strict";

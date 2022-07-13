@@ -63,7 +63,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.DragAndDropper": {}
 	},
 	"jassijs_editor/util/Parser.ts": {
-		"date": 1656955313898,
+		"date": 1657715196680,
 		"jassijs_editor.util.Parser": {}
 	},
 	"jassijs_editor/util/Resizer.ts": {
@@ -75,10 +75,13 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.util.TSSourceMap": {}
 	},
 	"jassijs_editor/util/Typescript.ts": {
-		"date": 1657656454986,
+		"date": 1657659009951,
 		"jassijs_editor.util.Typescript": {}
 	},
 	"jassijs_editor/ext/Monaco.ts": {
+		"date": 1657653558211
+	},
+	"jassijs_editor/ext/monaco.ts": {
 		"date": 1657653558211
 	}
 }

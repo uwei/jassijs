@@ -145,7 +145,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Windows": {}
             },
             "jassijs/modul.ts": {
-                "date": 1657656486349
+                "date": 1657658778395
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1655556496250,
@@ -508,7 +508,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs/ui/ActionNodeMenu": {}
             },
             "jassijs/ui/BoxPanel.ts": {
-                "date": 1657656956670,
+                "date": 1657715386950,
                 "jassijs.ui.BoxPanel": {
                     "$UIComponent": [
                         {
@@ -837,7 +837,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.ui.DesignDummy": {}
             },
             "jassijs/ui/DockingContainer.ts": {
-                "date": 1656016899305,
+                "date": 1657658906918,
                 "jassijs.ui.DockingContainer": {}
             },
             "jassijs/ui/ErrorPanel.ts": {
@@ -1438,7 +1438,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1655668836579
             },
             "jassijs/util/CSVImport.ts": {
-                "date": 1657656293258,
+                "date": 1657658972678,
                 "jassijs.util.CSVImport": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"
@@ -1505,6 +1505,30 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/ext/Spectrum.ts": {
                 "date": 1657656777955
+            },
+            "jassijs/ext/Tabulator.ts": {
+                "date": 1657657498568
+            },
+            "jassijs/ext/Tinymce.ts": {
+                "date": 1657658560377
+            },
+            "jassijs/ext/goldenlayout.ts": {
+                "date": 1657655068257
+            },
+            "jassijs/ext/jquerylib.ts": {
+                "date": 1657655348617
+            },
+            "jassijs/ext/papaparse.ts": {
+                "date": 1657656070445
+            },
+            "jassijs/ext/spectrum.ts": {
+                "date": 1657656777955
+            },
+            "jassijs/ext/tabulator.ts": {
+                "date": 1657657498568
+            },
+            "jassijs/ext/tinymce.ts": {
+                "date": 1657658560377
             }
         }
     };
@@ -3100,7 +3124,23 @@ define("jassijs/base/Windows", ["require", "exports", "jassijs/ui/Panel", "jassi
 //  jassijs.windows._init();
 //  });
 //return Component.constructor;
-define("jassijs/ext/Goldenlayout", ["require", "exports", "goldenlayout"], function (require, exports, goldenlayout) {
+//Hack for jquery.fancytree.dnd
+define("jquery-ui/ui/widgets/draggable", function () {
+    return jQuery.ui;
+});
+define("jquery-ui/ui/widgets/droppable", function () {
+    return jQuery.ui;
+});
+//END Hack
+define("jassijs/ext/fancytree", ["jassijs/remote/Jassi", "jquery.fancytree", 'jquery.fancytree.filter', 'jquery.fancytree.multi', 'jquery.fancytree.dnd', "jassijs/modul"], function () {
+    //jassijs.myRequire("lib/skin-win8/ui.fancytree.min.css");
+    //'jquery.fancytree': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/jquery.fancytree.min',
+    var path = require('jassijs/modul').default.require.paths["jquery.fancytree"];
+    path = path.substring(0, path.lastIndexOf("/"));
+    jassijs.myRequire(path + "/skin-win8/ui.fancytree.css");
+    return { default: "" };
+});
+define("jassijs/ext/goldenlayout", ["require", "exports", "goldenlayout"], function (require, exports, goldenlayout) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /// <amd-dependency path="goldenlayout" name="goldenlayout"/>
@@ -3108,7 +3148,15 @@ define("jassijs/ext/Goldenlayout", ["require", "exports", "goldenlayout"], funct
     jassijs.includeCSSFile("goldenlayout-light-theme.css");
     exports.default = goldenlayout;
 });
-define("jassijs/ext/Jquerylib", ["require", "exports", "jquery", "jquery.ui", "jquery.ui.touch"], function (require, exports) {
+//polyfill for old ios
+var def = [];
+if (window.IntersectionObserver === undefined) {
+    def = ["intersection-observer"];
+}
+define("jassijs/ext/intersection-observer", def, function () {
+    return {};
+});
+define("jassijs/ext/jquerylib", ["require", "exports", "jquery", "jquery.ui", "jquery.ui.touch"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     jassijs.includeCSSFile("jquery-ui.css");
@@ -3119,13 +3167,33 @@ define("jassijs/ext/Jquerylib", ["require", "exports", "jquery", "jquery.ui", "j
         $.datepicker.setDefaults($.datepicker.regional[navigator.language.split("-")[0]]);
     });
 });
-define("jassijs/ext/Papaparse", ["require", "exports", "papaparse"], function (require, exports, Papa) {
+define("jassijs/ext/js-cookie", ['js-cookie'], function (cookie) {
+    return {
+        default: cookie
+    };
+});
+define("jassijs/ext/papaparse", ["require", "exports", "papaparse"], function (require, exports, Papa) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /// <amd-dependency path="papaparse" name="Papa"/>
     exports.default = Papa;
 });
-define("jassijs/ext/Spectrum", ["require", "exports", "spectrum", "jassijs/modul"], function (require, exports, spectrum, modul_1) {
+//dummy for sourcemap 
+define("fs", [], function () {
+    return undefined;
+});
+define("path", [], function () {
+    return undefined;
+});
+define("jassijs/ext/sourcemap", ["source.map", "exports"], function (sm, exp) {
+    exp = 1;
+    // requirejs.undef("fs");
+    // requirejs.undef("path");
+    return {
+        default: sm
+    };
+});
+define("jassijs/ext/spectrum", ["require", "exports", "spectrum", "jassijs/modul"], function (require, exports, spectrum, modul_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     //'spectrum':'//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min'
@@ -3142,7 +3210,7 @@ define("tabulator-tables", ["require", "exports", "tabulatorlib", "jassijs/modul
     var path = modul_2.default.require.paths["tabulatorlib"];
     jassijs.myRequire(path.replace("js", "css") + ".min.css");
 });
-define("jassijs/ext/Tinymce", ["require", "exports", "tinymcelib"], function (require, exports, tinymce) {
+define("jassijs/ext/tinymce", ["require", "exports", "tinymcelib"], function (require, exports, tinymce) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /// <amd-dependency path="tinymcelib" name="tinymce"/>
@@ -3162,50 +3230,6 @@ define("jassijs/ext/Tinymce", ["require", "exports", "tinymcelib"], function (re
         }
     };
     exports.default = tinymce;
-});
-//Hack for jquery.fancytree.dnd
-define("jquery-ui/ui/widgets/draggable", function () {
-    return jQuery.ui;
-});
-define("jquery-ui/ui/widgets/droppable", function () {
-    return jQuery.ui;
-});
-//END Hack
-define("jassijs/ext/fancytree", ["jassijs/remote/Jassi", "jquery.fancytree", 'jquery.fancytree.filter', 'jquery.fancytree.multi', 'jquery.fancytree.dnd', "jassijs/modul"], function () {
-    //jassijs.myRequire("lib/skin-win8/ui.fancytree.min.css");
-    //'jquery.fancytree': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/jquery.fancytree.min',
-    var path = require('jassijs/modul').default.require.paths["jquery.fancytree"];
-    path = path.substring(0, path.lastIndexOf("/"));
-    jassijs.myRequire(path + "/skin-win8/ui.fancytree.css");
-    return { default: "" };
-});
-//polyfill for old ios
-var def = [];
-if (window.IntersectionObserver === undefined) {
-    def = ["intersection-observer"];
-}
-define("jassijs/ext/intersection-observer", def, function () {
-    return {};
-});
-define("jassijs/ext/js-cookie", ['js-cookie'], function (cookie) {
-    return {
-        default: cookie
-    };
-});
-//dummy for sourcemap 
-define("fs", [], function () {
-    return undefined;
-});
-define("path", [], function () {
-    return undefined;
-});
-define("jassijs/ext/sourcemap", ["source.map", "exports"], function (sm, exp) {
-    exp = 1;
-    // requirejs.undef("fs");
-    // requirejs.undef("path");
-    return {
-        default: sm
-    };
 });
 define("jassijs/remote/Classes", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_12) {
     "use strict";
@@ -6468,7 +6492,7 @@ define("jassijs/ui/BoxPanel", ["require", "exports", "splitlib", "jassijs/ui/Pan
         }
     };
     __decorate([
-        (0, Property_5.$Property)({ default: true }),
+        (0, Property_5.$Property)(),
         __metadata("design:type", Boolean),
         __metadata("design:paramtypes", [Boolean])
     ], BoxPanel.prototype, "horizontal", null);

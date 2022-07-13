@@ -3585,7 +3585,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
-                "date": 1656955313898,
+                "date": 1657715196680,
                 "jassijs_editor.util.Parser": {}
             },
             "jassijs_editor/util/Resizer.ts": {
@@ -3597,16 +3597,19 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "jassijs_editor.util.TSSourceMap": {}
             },
             "jassijs_editor/util/Typescript.ts": {
-                "date": 1657656454986,
+                "date": 1657659009951,
                 "jassijs_editor.util.Typescript": {}
             },
             "jassijs_editor/ext/Monaco.ts": {
+                "date": 1657653558211
+            },
+            "jassijs_editor/ext/monaco.ts": {
                 "date": 1657653558211
             }
         }
     };
 });
-define("jassijs_editor/ext/Monaco", ["require", "exports", "vs/editor/editor.main", "vs/language/typescript/tsWorker", "jassijs_editor/modul"], function (require, exports, _monaco, tsWorker, modul_1) {
+define("jassijs_editor/ext/monaco", ["require", "exports", "vs/editor/editor.main", "vs/language/typescript/tsWorker", "jassijs_editor/modul"], function (require, exports, _monaco, tsWorker, modul_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     /// <amd-dependency path="vs/editor/editor.main" name="_monaco"/>
@@ -4634,7 +4637,7 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
                 classscope = this.classScope;
             var scope = this.getNodeFromScope(classscope, variablescope);
             var newExpression = undefined;
-            if (this.data[variableName]["config"] !== undefined) {
+            if (this.data[variableName]["config"] !== undefined && property !== "new") {
                 this.setPropertyInConfig(variableName, property, value, isFunction, replace, before, scope);
                 return;
             }
@@ -4827,15 +4830,16 @@ define("jassijs_editor/util/Parser", ["require", "exports", "jassijs/remote/Regi
     async function test() {
         tests(new Test_2.Test());
         await Typescript_4.default.waitForInited;
-        var code = Typescript_4.default.getCode("jassijs/remote/security/Group.ts");
+        var code = Typescript_4.default.getCode("demo/Dialog2.ts");
         var parser = new Parser();
         // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
         // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
         // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
         //parser.parse(code, undefined);
         //code="reportdesign={k:9};";
-        parser.parse(code); // [{ classname: "TestDialogBinder", methodname: "layout" }]);
-        parser.setPropertyInCode("reportdesign", "", "{o:0}", undefined);
+        parser.parse(code, [{ classname: "Dialog2", methodname: "layout" }]); // [{ classname: "TestDialogBinder", methodname: "layout" }]);
+        parser.setPropertyInCode("me.table", "new", 'new Table({\n      paginationSize: 1\n})', undefined);
+        console.log(parser.getModifiedCode());
         // parser.removeVariablesInCode(["me.repeater"]);
         //parser.addVariableInCode("Component", [{ classname: "Dialog", methodname: "layout" }]);
         //parser.setPropertyInCode("component", "x", "1", [{ classname: "Dialog", methodname: "layout" }]);

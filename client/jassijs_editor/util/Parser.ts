@@ -788,7 +788,7 @@ export class Parser {
             classscope = this.classScope;
         var scope = this.getNodeFromScope(classscope, variablescope);
         var newExpression = undefined;
-        if (this.data[variableName]["config"] !== undefined) {
+        if (this.data[variableName]["config"] !== undefined&&property !== "new") {
             this.setPropertyInConfig(variableName, property, value, isFunction, replace, before, scope);
             return;
         }
@@ -982,18 +982,18 @@ export async function test() {
     tests(new Test());
    
     await typescript.waitForInited;
-    var code = typescript.getCode("jassijs/remote/security/Group.ts");
+    var code = typescript.getCode("demo/Dialog2.ts");
     var parser = new Parser();
     // code = "function test(){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1,j:ppp.config({pp:9})})     }); }";
     // code = "function(test){ var hallo={};var h2={};var ppp={};hallo.p=9;hallo.config({a:1,b:2, k:h2.config({c:1},j(){j2.udo=9})     }); }";
     // code = "function test(){var ppp;var aaa=new Button();ppp.config({a:[9,6],  children:[ll.config({}),aaa.config({u:1,o:2,children:[kk.config({})]})]});}";
     //parser.parse(code, undefined);
     //code="reportdesign={k:9};";
-  
-    parser.parse(code);// [{ classname: "TestDialogBinder", methodname: "layout" }]);
- 
-    parser.setPropertyInCode("reportdesign","","{o:0}",undefined);
     
+    parser.parse(code,[{ classname: "Dialog2", methodname: "layout" }]);// [{ classname: "TestDialogBinder", methodname: "layout" }]);
+ 
+    parser.setPropertyInCode("me.table","new",'new Table({\n      paginationSize: 1\n})',undefined);
+    console.log(parser.getModifiedCode());
    // parser.removeVariablesInCode(["me.repeater"]);
     //parser.addVariableInCode("Component", [{ classname: "Dialog", methodname: "layout" }]);
     //parser.setPropertyInCode("component", "x", "1", [{ classname: "Dialog", methodname: "layout" }]);

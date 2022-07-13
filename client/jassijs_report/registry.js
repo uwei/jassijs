@@ -340,7 +340,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.remote.ServerReport": {}
 	},
 	"jassijs_report/Reports.ts": {
-		"date": 1656501787077,
+		"date": 1657717569501,
 		"jassijs_report/Reports": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -360,6 +360,18 @@ define("jassijs_report/registry",["require"], function(require) {
 	"jassijs_report/ReportViewer.ts": {
 		"date": 1656456334039,
 		"jassijs_report/ReportViewer": {}
+	},
+	"jassijs_report/ext/Pdfjs.ts": {
+		"date": 1657714199577
+	},
+	"jassijs_report/ext/Pdfmake.ts": {
+		"date": 1657714350894
+	},
+	"jassijs_report/ext/pdfjs.ts": {
+		"date": 1657714199577
+	},
+	"jassijs_report/ext/pdfmake.ts": {
+		"date": 1657714350894
 	}
 }
  }

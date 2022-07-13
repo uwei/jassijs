@@ -31,6 +31,7 @@ export class Reports extends Panel {
                     //height: "100%",
                     showSearchbox: true,
                     contextMenu: me.contextmenu
+                    
                 }),
                 me.contextmenu.config({})
             ],
@@ -38,11 +39,11 @@ export class Reports extends Panel {
         this.setData();
         me.contextmenu.getActions = async function (obs) {
             var ret = [];
-             ret.push({
+            ret.push({
                 name: "View", call: async function (data) {
                     var clname = data[0].classname;
-                    var Cl=await classes.loadClass(clname);
-                    var report:Report=new Cl();
+                    var Cl = await classes.loadClass(clname);
+                    var report: Report = new Cl();
                     report.view();
                     //await (<Report> new Cl()).open();
                 }
@@ -66,6 +67,7 @@ export class Reports extends Panel {
     }
     async setData() {
         var data = [];
+        var _this=this;
         var reports = await registry.getJSONData("$Report");
         for (var x = 0; x < reports.length; x++) {
             var rep = reports[x];
@@ -77,14 +79,16 @@ export class Reports extends Panel {
             };
             data.push(entry);
         }
-        this.me.table.items = data;
+        setTimeout(()=>{
+            _this.me.table.items=data;
+        },100);
     }
-     @$Action({
+    @$Action({
         name: "Tools/Reports",
-       icon: "mdi mdi-chart-box-outline",
+        icon: "mdi mdi-chart-box-outline",
     })
-    static async show(){
-        windows.add(new Reports(),"Reports");
+    static async show() {
+        windows.add(new Reports(), "Reports");
     }
 }
 class ReportEntry {

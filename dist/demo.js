@@ -72,7 +72,7 @@ define("demo/Dialog", ["require", "exports", "jassijs/ui/Button", "jassijs/ui/Bo
     }
     exports.test = test;
 });
-define("demo/Dialog2", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, BoxPanel_2, Button_2, NumberConverter_1, Textbox_1, Registry_2, Panel_2) {
+define("demo/Dialog2", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, BoxPanel_2, Button_2, Registry_2, Panel_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Dialog2 = void 0;
@@ -83,24 +83,17 @@ define("demo/Dialog2", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui
             this.layout(this.me);
         }
         layout(me) {
-            me.button = new Button_2.Button();
-            me.textbox = new Textbox_1.Textbox();
             me.boxpanel = new BoxPanel_2.BoxPanel();
-            this.height = 17;
-            this.width = 876;
-            this.add(me.boxpanel);
-            me.button.text = "button";
-            me.button.onclick(function (event) {
-                var h = me.textbox.value;
-            });
-            me.textbox.converter = new NumberConverter_1.NumberConverter({
-                format: "#.##0,00"
-            });
-            me.boxpanel.add(me.textbox);
-            me.boxpanel.add(me.button);
-            me.boxpanel.spliter = [50, 50];
-            me.boxpanel.height = "500";
-            me.boxpanel.horizontal = true;
+            me.button = new Button_2.Button();
+            me.button2 = new Button_2.Button();
+            this.config({ children: [
+                    me.boxpanel.config({
+                        children: [
+                            me.button.config({ text: "button" }),
+                            me.button2.config({ text: "button" })
+                        ]
+                    })
+                ] });
         }
     };
     Dialog2 = __decorate([
@@ -110,7 +103,6 @@ define("demo/Dialog2", ["require", "exports", "jassijs/ui/BoxPanel", "jassijs/ui
     exports.Dialog2 = Dialog2;
     async function test() {
         var ret = new Dialog2();
-        ret.me.textbox.value = 8;
         return ret;
     }
     exports.test = test;
@@ -234,14 +226,14 @@ define("demo/MemoryTest", ["require", "exports", "jassijs/remote/Server", "jassi
     }
     exports.MemoryTest = MemoryTest;
 });
-define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Textarea", "jassijs/ui/Table", "jassijs/ui/Style", "jassijs/ui/Repeater", "jassijs/ui/Image", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/Checkbox", "jassijs/ui/BoxPanel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Panel"], function (require, exports, Tree_1, Textarea_1, Table_1, Style_1, Repeater_1, Image_1, HTMLPanel_2, Databinder_1, Checkbox_1, BoxPanel_3, Textbox_2, Button_4, Panel_4) {
+define("demo/MyTest", ["require", "exports", "jassijs/ui/Tree", "jassijs/ui/Textarea", "jassijs/ui/Table", "jassijs/ui/Style", "jassijs/ui/Repeater", "jassijs/ui/Image", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/ui/Checkbox", "jassijs/ui/BoxPanel", "jassijs/ui/Textbox", "jassijs/ui/Button", "jassijs/ui/Panel"], function (require, exports, Tree_1, Textarea_1, Table_1, Style_1, Repeater_1, Image_1, HTMLPanel_2, Databinder_1, Checkbox_1, BoxPanel_3, Textbox_1, Button_4, Panel_4) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = void 0;
     function test() {
         var ret = new Panel_4.Panel();
         var button = new Button_4.Button();
-        var textbox = new Textbox_2.Textbox();
+        var textbox = new Textbox_1.Textbox();
         var boxpanel = new BoxPanel_3.BoxPanel();
         var checkbox = new Checkbox_1.Checkbox();
         var databinder = new Databinder_1.Databinder();
@@ -1531,7 +1523,7 @@ define("demo/registry", ["require"], function (require) {
                 "demo/Dialog": {}
             },
             "demo/Dialog2.ts": {
-                "date": 1657657099860,
+                "date": 1657715413559,
                 "demo/Dialog2": {}
             },
             "demo/EmptyDialog.ts": {

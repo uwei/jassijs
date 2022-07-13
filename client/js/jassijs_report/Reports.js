@@ -63,6 +63,7 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Table", "jas
         }
         async setData() {
             var data = [];
+            var _this = this;
             var reports = await Registry_1.default.getJSONData("$Report");
             for (var x = 0; x < reports.length; x++) {
                 var rep = reports[x];
@@ -74,7 +75,9 @@ define(["require", "exports", "jassijs/ui/ContextMenu", "jassijs/ui/Table", "jas
                 };
                 data.push(entry);
             }
-            this.me.table.items = data;
+            setTimeout(() => {
+                _this.me.table.items = data;
+            }, 100);
         }
         static async show() {
             Windows_1.default.add(new Reports_1(), "Reports");
