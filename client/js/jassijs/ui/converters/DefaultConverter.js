@@ -53,6 +53,12 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
         objectToString(obj) {
             return obj.ToString();
         }
+        get component() {
+            return this._component;
+        }
+        set component(component) {
+            this._component = component;
+        }
         /**
         * converts an object to an formatted string
         * @param {string} obj - the object to convert

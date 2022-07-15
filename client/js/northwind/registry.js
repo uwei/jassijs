@@ -40,7 +40,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1656682851796,
+                "date": 1657926807098,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -82,7 +82,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1657474966817,
+                "date": 1657926697931,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {

@@ -47,6 +47,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
         }
         set converter(value) {
             this._converter = value;
+            if (value)
+                this.converter.component = this;
             this.value = this.value;
         }
         get readOnly() {

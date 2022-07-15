@@ -1,6 +1,7 @@
 import { $Class } from "jassijs/remote/Registry";
 import registry from "jassijs/remote/Registry";
 import { $Property } from "jassijs/ui/Property";
+import { Component } from "jassijs/ui/Component";
 
 export class $ConverterProperties {
     name?: string;
@@ -20,12 +21,8 @@ class DefaultConverterProperties {
 @$Class("jassijs.ui.converters.DefaultConverter")
 @$Property({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
 //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
-export class DefaultConverter
-    /**
-     * Checkbox Editor for boolean values
-     * used by PropertyEditor
-     * @class jassijs.ui.PropertyEditors.BooleanEditor
-     */ {
+export class DefaultConverter {
+    _component?:Component;
     constructor() {
     }
     /**
@@ -41,9 +38,15 @@ export class DefaultConverter
      * @param {string} obj - the object to convert
      */
     objectToString(obj) {
+        
         return obj.ToString();
     }
-
+    get component():Component{
+        return this._component;
+    }
+    set component(component:Component){
+        this._component=component;
+    }
     /**
     * converts an object to an formatted string 
     * @param {string} obj - the object to convert

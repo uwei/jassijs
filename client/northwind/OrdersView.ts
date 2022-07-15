@@ -1,8 +1,8 @@
+import { DateTimeConverter } from "jassijs/ui/converters/DateTimeConverter";
 import { Style } from "jassijs/ui/Style";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
 import { Checkbox } from "jassijs/ui/Checkbox";
 import { Repeater } from "jassijs/ui/Repeater";
-import { Calendar } from "jassijs/ui/Calendar";
 import { ObjectChooser } from "jassijs/ui/ObjectChooser";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
@@ -34,9 +34,9 @@ type Me = {
     shipviaChooser?: ObjectChooser;
     employeename?: HTMLPanel;
     chooseEmployee?: ObjectChooser;
-    orderDate?: Calendar;
-    requiredDate?: Calendar;
-    shippedDate?: Calendar;
+    orderDate?: Textbox;
+    requiredDate?: Textbox;
+    shippedDate?: Textbox;
     boxpanel2?: BoxPanel;
     htmlpanel1?: HTMLPanel;
     htmlpanel2?: HTMLPanel;
@@ -79,9 +79,9 @@ export class OrdersView extends DBObjectView {
         me.shipviaChooser = new ObjectChooser();
         me.employeename = new HTMLPanel();
         me.chooseEmployee = new ObjectChooser();
-        me.orderDate = new Calendar();
-        me.requiredDate = new Calendar();
-        me.shippedDate = new Calendar();
+        me.orderDate = new Textbox();
+        me.requiredDate = new Textbox();
+        me.shippedDate = new Textbox();
         me.boxpanel2 = new BoxPanel();
         me.htmlpanel1 = new HTMLPanel();
         me.htmlpanel2 = new HTMLPanel();
@@ -191,7 +191,7 @@ export class OrdersView extends DBObjectView {
         me.freight.bind = [me.databinder, "Freight"];
         me.freight.width = 70;
         me.freight.label = "Freight";
-        me.freight.converter = new NumberConverter({format : "#.##0,00"});
+        me.freight.converter = new NumberConverter({ format: "#.##0,00" });
         me.freight.css = {
             text_align: "right"
         };
@@ -236,7 +236,7 @@ export class OrdersView extends DBObjectView {
         me.employeename.bind = [me.databinder, "Employee"];
         me.employeename.label = "Employee";
         me.employeename.width = 265;
-        me.employeename.value = "5 Steven Buchanan";
+        me.employeename.value = "6 Michael Suyama";
         me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
         me.employeename.styles = [me.style1];
         me.chooseEmployee.x = 275;
@@ -248,17 +248,21 @@ export class OrdersView extends DBObjectView {
         me.orderDate.y = 130;
         me.orderDate.bind = [me.databinder, "OrderDate"];
         me.orderDate.label = "Order Date";
-        me.orderDate.width = 70;
-        me.requiredDate.x = 90;
+        me.orderDate.width = 95;
+        me.orderDate.readOnly = false;
+        me.orderDate.converter = new DateTimeConverter();
+        me.requiredDate.x = 110;
         me.requiredDate.y = 130;
         me.requiredDate.bind = [me.databinder, "RequiredDate"];
         me.requiredDate.label = "Required Date";
-        me.requiredDate.width = 75;
-        me.shippedDate.x = 175;
+        me.requiredDate.width = 95;
+        me.requiredDate.converter = new DateTimeConverter();
+        me.shippedDate.x = 210;
         me.shippedDate.y = 130;
         me.shippedDate.bind = [me.databinder, "ShippedDate"];
-        me.shippedDate.width = 75;
+        me.shippedDate.width = "95";
         me.shippedDate.label = "Shipped Date";
+        me.shippedDate.converter = new DateTimeConverter();
         me.htmlpanel1.value = "Quantity<br>";
         me.htmlpanel1.width = 65;
         me.htmlpanel1.styles = [];

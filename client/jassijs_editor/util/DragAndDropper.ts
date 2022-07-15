@@ -75,8 +75,8 @@ export class DragAndDropper {
         }
         if (target._this.isAbsolute) {
 
-            var left = parseInt(ui.helper.style.left);
-            var top = parseInt(ui.helper.style.top);
+            var left = parseInt(ui.helper[0].style.left);
+            var top = parseInt(ui.helper[0].style.top);
             if (ui.draggable[0]._this.createFromType !== undefined) {
                 var offsetNewParent = $(target._this.dom).offset();
                 left = -offsetNewParent.left + parseInt($(ui.helper).css('left'));

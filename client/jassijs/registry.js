@@ -56,7 +56,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/modul.ts": {
-		"date": 1657658778395
+		"date": 1657921656489
 	},
 	"jassijs/remote/Classes.ts": {
 		"date": 1655556496250,
@@ -540,7 +540,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/converters/DefaultConverter.ts": {
-		"date": 1657471897801,
+		"date": 1657922211289,
 		"jassijs.ui.converters.DefaultConverterProperties": {
 			"@members": {}
 		},
@@ -1287,7 +1287,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Textbox.ts": {
-		"date": 1657474669395,
+		"date": 1657920923611,
 		"jassijs.ui.Textbox": {
 			"$UIComponent": [
 				{
@@ -1440,6 +1440,27 @@ define("jassijs/registry",["require"], function(require) {
 	},
 	"jassijs/ext/tinymce.ts": {
 		"date": 1657658560377
+	},
+	"jassijs/ui/converters/DateTimeConverter.ts": {
+		"date": 1657924998811,
+		"jassijs.ui.converters.DateTimeConverterProperies": {
+			"@members": {}
+		},
+		"jassijs.ui.converters.DateTimeConverter": {
+			"$Converter": [
+				{
+					"name": "datetime"
+				}
+			],
+			"$Property": [
+				{
+					"name": "new",
+					"type": "json",
+					"componentType": "jassijs.ui.converters.DateTimeConverterProperties"
+				}
+			],
+			"@members": {}
+		}
 	}
 }
  }

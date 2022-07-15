@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/Calendar", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, Style_1, BoxPanel_1, Repeater_1, Calendar_1, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Textbox_1, Registry_1, Panel_1, Property_1, Orders_1, DBObjectView_1) {
+define(["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, DateTimeConverter_1, Style_1, BoxPanel_1, Repeater_1, ObjectChooser_1, HTMLPanel_1, NumberConverter_1, Textbox_1, Registry_1, Panel_1, Property_1, Orders_1, DBObjectView_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.OrdersView = void 0;
@@ -39,9 +39,9 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassij
             me.shipviaChooser = new ObjectChooser_1.ObjectChooser();
             me.employeename = new HTMLPanel_1.HTMLPanel();
             me.chooseEmployee = new ObjectChooser_1.ObjectChooser();
-            me.orderDate = new Calendar_1.Calendar();
-            me.requiredDate = new Calendar_1.Calendar();
-            me.shippedDate = new Calendar_1.Calendar();
+            me.orderDate = new Textbox_1.Textbox();
+            me.requiredDate = new Textbox_1.Textbox();
+            me.shippedDate = new Textbox_1.Textbox();
             me.boxpanel2 = new BoxPanel_1.BoxPanel();
             me.htmlpanel1 = new HTMLPanel_1.HTMLPanel();
             me.htmlpanel2 = new HTMLPanel_1.HTMLPanel();
@@ -196,7 +196,7 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassij
             me.employeename.bind = [me.databinder, "Employee"];
             me.employeename.label = "Employee";
             me.employeename.width = 265;
-            me.employeename.value = "5 Steven Buchanan";
+            me.employeename.value = "6 Michael Suyama";
             me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
             me.employeename.styles = [me.style1];
             me.chooseEmployee.x = 275;
@@ -208,17 +208,21 @@ define(["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassij
             me.orderDate.y = 130;
             me.orderDate.bind = [me.databinder, "OrderDate"];
             me.orderDate.label = "Order Date";
-            me.orderDate.width = 70;
-            me.requiredDate.x = 90;
+            me.orderDate.width = 95;
+            me.orderDate.readOnly = false;
+            me.orderDate.converter = new DateTimeConverter_1.DateTimeConverter();
+            me.requiredDate.x = 110;
             me.requiredDate.y = 130;
             me.requiredDate.bind = [me.databinder, "RequiredDate"];
             me.requiredDate.label = "Required Date";
-            me.requiredDate.width = 75;
-            me.shippedDate.x = 175;
+            me.requiredDate.width = 95;
+            me.requiredDate.converter = new DateTimeConverter_1.DateTimeConverter();
+            me.shippedDate.x = 210;
             me.shippedDate.y = 130;
             me.shippedDate.bind = [me.databinder, "ShippedDate"];
-            me.shippedDate.width = 75;
+            me.shippedDate.width = "95";
             me.shippedDate.label = "Shipped Date";
+            me.shippedDate.converter = new DateTimeConverter_1.DateTimeConverter();
             me.htmlpanel1.value = "Quantity<br>";
             me.htmlpanel1.width = 65;
             me.htmlpanel1.styles = [];

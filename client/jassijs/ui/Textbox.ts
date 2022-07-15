@@ -97,6 +97,8 @@ export class Textbox extends DataComponent implements TextboxConfig {
     @$Property({ type: "classselector", service: "$Converter" })
     set converter(value: DefaultConverter) {
         this._converter = value;
+        if(value)
+            this.converter.component=this;
         this.value=this.value;
     }
     @$Property()

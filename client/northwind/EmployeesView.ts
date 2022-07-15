@@ -1,9 +1,9 @@
+import { DateTimeConverter } from "jassijs/ui/converters/DateTimeConverter";
 import { ObjectChooser } from "jassijs/ui/ObjectChooser";
 import { HTMLPanel } from "jassijs/ui/HTMLPanel";
 import { NumberConverter } from "jassijs/ui/converters/NumberConverter";
 import { Image } from "jassijs/ui/Image";
 import { Textarea } from "jassijs/ui/Textarea";
-import { Calendar } from "jassijs/ui/Calendar";
 import { Textbox } from "jassijs/ui/Textbox";
 import { Button } from "jassijs/ui/Button";
 import { $Class } from "jassijs/remote/Registry";
@@ -23,8 +23,8 @@ type Me = {
     city?: Textbox;
     region?: Textbox;
     state?: Textbox;
-    birthDate?: Calendar;
-    hiredate?: Calendar;
+    birthDate?: Textbox;
+    hiredate?: Textbox;
     homephone?: Textbox;
     notes?: Textarea;
     image1?: Image;
@@ -57,8 +57,8 @@ export class EmployeesView extends DBObjectView {
         me.city = new Textbox();
         me.region = new Textbox();
         me.state = new Textbox();
-        me.birthDate = new Calendar();
-        me.hiredate = new Calendar();
+        me.birthDate = new Textbox();
+        me.hiredate = new Textbox();
         me.homephone = new Textbox();
         me.notes = new Textarea();
         me.image1 = new Image();
@@ -140,23 +140,25 @@ export class EmployeesView extends DBObjectView {
                 me.birthDate.config({
                     x: 5,
                     y: 190,
-                    width: 90,
+                    width: 100,
                     bind: [me.databinder, "BirthDate"],
-                    label: "Birth Date"
+                    label: "Birth Date",
+                    converter: new DateTimeConverter()
                 }),
                 me.hiredate.config({
-                    x: 110,
+                    x: 115,
                     y: 190,
                     bind: [me.databinder, "HireDate"],
                     label: "Hire Date",
-                    width: 85
+                    width: 95,
+                    converter: new DateTimeConverter()
                 }),
                 me.homephone.config({
-                    x: 210,
+                    x: 220,
                     y: 190,
                     bind: [me.databinder, "HomePhone"],
                     label: "Home Phone",
-                    width: 140
+                    width: 130
                 }),
                 me.photoPath.config({
                     x: 5,
