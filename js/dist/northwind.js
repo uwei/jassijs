@@ -291,12 +291,12 @@ define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "j
                         width: 65,
                         label: "id"
                     }),
-                    me.companyname.config({
-                        x: 195,
-                        y: 45,
-                        bind: [me.databinder, "CompanyName"],
-                        label: "Company Name",
-                        width: 155
+                    me.contactname.config({
+                        x: 90,
+                        y: 5,
+                        label: "Contact Name",
+                        bind: [me.databinder, "ContactName"],
+                        width: 260
                     }),
                     me.contacttitle.config({
                         x: 10,
@@ -304,12 +304,12 @@ define("northwind/CustomerView", ["require", "exports", "jassijs/ui/Textbox", "j
                         label: "Contact Title",
                         bind: [me.databinder, "ContactTitle"]
                     }),
-                    me.contactname.config({
-                        x: 90,
-                        y: 5,
-                        label: "Contact Name",
-                        bind: [me.databinder, "ContactName"],
-                        width: 260
+                    me.companyname.config({
+                        x: 195,
+                        y: 45,
+                        bind: [me.databinder, "CompanyName"],
+                        label: "Company Name",
+                        width: 155
                     }),
                     me.address.config({
                         x: 10,
@@ -419,7 +419,7 @@ define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Registry",
     }
     exports.test = test;
 });
-define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Calendar", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView"], function (require, exports, ObjectChooser_2, HTMLPanel_2, NumberConverter_2, Image_1, Textarea_2, Calendar_1, Textbox_4, Registry_6, Property_4, Employees_1, DBObjectView_4) {
+define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView"], function (require, exports, DateTimeConverter_1, ObjectChooser_2, HTMLPanel_2, NumberConverter_2, Image_1, Textarea_2, Textbox_4, Registry_6, Property_4, Employees_1, DBObjectView_4) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -443,8 +443,8 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
             me.city = new Textbox_4.Textbox();
             me.region = new Textbox_4.Textbox();
             me.state = new Textbox_4.Textbox();
-            me.birthDate = new Calendar_1.Calendar();
-            me.hiredate = new Calendar_1.Calendar();
+            me.birthDate = new Textbox_4.Textbox();
+            me.hiredate = new Textbox_4.Textbox();
             me.homephone = new Textbox_4.Textbox();
             me.notes = new Textarea_2.Textarea();
             me.image1 = new Image_1.Image();
@@ -454,6 +454,14 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
             me.objectchooser1 = new ObjectChooser_2.ObjectChooser();
             this.me.main.config({
                 children: [
+                    me.id.config({
+                        x: 5,
+                        y: 5,
+                        width: 60,
+                        label: "Id",
+                        bind: [me.databinder, "id"],
+                        converter: new NumberConverter_2.NumberConverter()
+                    }),
                     me.firstName.config({
                         x: 80,
                         y: 5,
@@ -518,23 +526,32 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
                     me.birthDate.config({
                         x: 5,
                         y: 190,
-                        width: 90,
+                        width: 100,
                         bind: [me.databinder, "BirthDate"],
-                        label: "Birth Date"
+                        label: "Birth Date",
+                        converter: new DateTimeConverter_1.DateTimeConverter()
                     }),
                     me.hiredate.config({
-                        x: 110,
+                        x: 115,
                         y: 190,
                         bind: [me.databinder, "HireDate"],
                         label: "Hire Date",
-                        width: 85
+                        width: 95,
+                        converter: new DateTimeConverter_1.DateTimeConverter()
                     }),
                     me.homephone.config({
-                        x: 210,
+                        x: 220,
                         y: 190,
                         bind: [me.databinder, "HomePhone"],
                         label: "Home Phone",
-                        width: 140
+                        width: 130
+                    }),
+                    me.photoPath.config({
+                        x: 5,
+                        y: 240,
+                        bind: [me.databinder, "PhotoPath"],
+                        label: "Photo Path",
+                        width: 460
                     }),
                     me.notes.config({
                         x: 375,
@@ -554,21 +571,6 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
                         },
                         width: 125,
                         bind: [me.databinder, "PhotoPath"]
-                    }),
-                    me.photoPath.config({
-                        x: 5,
-                        y: 240,
-                        bind: [me.databinder, "PhotoPath"],
-                        label: "Photo Path",
-                        width: 460
-                    }),
-                    me.id.config({
-                        x: 5,
-                        y: 5,
-                        width: 60,
-                        label: "Id",
-                        bind: [me.databinder, "id"],
-                        converter: new NumberConverter_2.NumberConverter()
                     }),
                     me.reportsTo.config({
                         x: 7,
@@ -706,7 +708,7 @@ define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jass
     }
     exports.test = test;
 });
-define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/Calendar", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, Style_1, BoxPanel_3, Repeater_1, Calendar_2, ObjectChooser_3, HTMLPanel_4, NumberConverter_3, Textbox_5, Registry_8, Panel_5, Property_5, Orders_2, DBObjectView_5) {
+define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, DateTimeConverter_2, Style_1, BoxPanel_3, Repeater_1, ObjectChooser_3, HTMLPanel_4, NumberConverter_3, Textbox_5, Registry_8, Panel_5, Property_5, Orders_2, DBObjectView_5) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -739,9 +741,9 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.shipviaChooser = new ObjectChooser_3.ObjectChooser();
             me.employeename = new HTMLPanel_4.HTMLPanel();
             me.chooseEmployee = new ObjectChooser_3.ObjectChooser();
-            me.orderDate = new Calendar_2.Calendar();
-            me.requiredDate = new Calendar_2.Calendar();
-            me.shippedDate = new Calendar_2.Calendar();
+            me.orderDate = new Textbox_5.Textbox();
+            me.requiredDate = new Textbox_5.Textbox();
+            me.shippedDate = new Textbox_5.Textbox();
             me.boxpanel2 = new BoxPanel_3.BoxPanel();
             me.htmlpanel1 = new HTMLPanel_4.HTMLPanel();
             me.htmlpanel2 = new HTMLPanel_4.HTMLPanel();
@@ -760,8 +762,8 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.panel1.add(me.shipAddress);
             me.panel1.add(me.shipPostalCode);
             me.panel1.add(me.shipCity);
-            me.panel1.add(me.shipCountry);
             me.panel1.add(me.shipRegion);
+            me.panel1.add(me.shipCountry);
             me.panel1.width = 250;
             me.panel1.height = 185;
             me.panel1.isAbsolute = true;
@@ -851,8 +853,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.freight.bind = [me.databinder, "Freight"];
             me.freight.width = 70;
             me.freight.label = "Freight";
-            me.freight.converter = new NumberConverter_3.NumberConverter();
-            me.freight.format = "#.##0,00";
+            me.freight.converter = new NumberConverter_3.NumberConverter({ format: "#.##0,00" });
             me.freight.css = {
                 text_align: "right"
             };
@@ -897,7 +898,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.employeename.bind = [me.databinder, "Employee"];
             me.employeename.label = "Employee";
             me.employeename.width = 265;
-            me.employeename.value = "5 Steven Buchanan";
+            me.employeename.value = "6 Michael Suyama";
             me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
             me.employeename.styles = [me.style1];
             me.chooseEmployee.x = 275;
@@ -909,17 +910,21 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.orderDate.y = 130;
             me.orderDate.bind = [me.databinder, "OrderDate"];
             me.orderDate.label = "Order Date";
-            me.orderDate.width = 70;
-            me.requiredDate.x = 90;
+            me.orderDate.width = 95;
+            me.orderDate.readOnly = false;
+            me.orderDate.converter = new DateTimeConverter_2.DateTimeConverter();
+            me.requiredDate.x = 110;
             me.requiredDate.y = 130;
             me.requiredDate.bind = [me.databinder, "RequiredDate"];
             me.requiredDate.label = "Required Date";
-            me.requiredDate.width = 75;
-            me.shippedDate.x = 175;
+            me.requiredDate.width = 95;
+            me.requiredDate.converter = new DateTimeConverter_2.DateTimeConverter();
+            me.shippedDate.x = 210;
             me.shippedDate.y = 130;
             me.shippedDate.bind = [me.databinder, "ShippedDate"];
-            me.shippedDate.width = 75;
+            me.shippedDate.width = "95";
             me.shippedDate.label = "Shipped Date";
+            me.shippedDate.converter = new DateTimeConverter_2.DateTimeConverter();
             me.htmlpanel1.value = "Quantity<br>";
             me.htmlpanel1.width = 65;
             me.htmlpanel1.styles = [];
@@ -945,7 +950,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
     }
     exports.test = test;
 });
-define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jassijs/ui/Repeater", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Products"], function (require, exports, Checkbox_1, Textbox_6, Repeater_2, BoxPanel_4, HTMLPanel_5, Databinder_2, Registry_9, Panel_6, Actions_4, Windows_3, Products_1) {
+define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "jassijs/ui/Textbox", "jassijs/ui/Repeater", "jassijs/ui/BoxPanel", "jassijs/ui/HTMLPanel", "jassijs/ui/Databinder", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/base/Actions", "jassijs/base/Windows", "northwind/remote/Products", "jassijs/ui/converters/NumberConverter"], function (require, exports, Checkbox_1, Textbox_6, Repeater_2, BoxPanel_4, HTMLPanel_5, Databinder_2, Registry_9, Panel_6, Actions_4, Windows_3, Products_1, NumberConverter_4) {
     "use strict";
     var ProductList_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -978,7 +983,8 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
                             me.textbox2 = new Textbox_6.Textbox();
                             me.htmlpanel22 = new HTMLPanel_5.HTMLPanel();
                             me.textbox22 = new Textbox_6.Textbox();
-                            me.repeater.design.config({ children: [
+                            me.repeater.design.config({
+                                children: [
                                     me.htmlpanel3.config({ value: " " }),
                                     me.boxpanel.config({
                                         children: [
@@ -1009,12 +1015,13 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
                                                 readOnly: true,
                                                 width: 100,
                                                 bind: [me.repeater.design.databinder, "UnitPrice"],
-                                                format: "$ #.##0,00"
+                                                converter: new NumberConverter_4.NumberConverter({ format: "#.##0,00" }),
                                             })
                                         ],
                                         horizontal: true
                                     })
-                                ] });
+                                ]
+                            });
                         }
                     })
                 ]
@@ -1050,7 +1057,7 @@ define("northwind/ProductList", ["require", "exports", "jassijs/ui/Checkbox", "j
     }
     exports.test = test;
 });
-define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Products", "jassijs/ui/DBObjectView"], function (require, exports, Style_2, ObjectChooser_4, HTMLPanel_6, Checkbox_2, NumberConverter_4, Textbox_7, Registry_10, Property_6, Products_2, DBObjectView_6) {
+define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/Checkbox", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Products", "jassijs/ui/DBObjectView"], function (require, exports, Style_2, ObjectChooser_4, HTMLPanel_6, Checkbox_2, NumberConverter_5, Textbox_7, Registry_10, Property_6, Products_2, DBObjectView_6) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1085,18 +1092,81 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
                         bind: [me.databinder, "id"],
                         label: "Id",
                         width: 65,
-                        converter: new NumberConverter_4.NumberConverter()
+                        converter: new NumberConverter_5.NumberConverter()
                     }),
-                    me.styleNumber.config({
-                        css: {
-                            text_align: "right"
-                        }
+                    me.productName.config({
+                        x: 90,
+                        y: 10,
+                        bind: [me.databinder, "ProductName"],
+                        label: "Product Name",
+                        width: 310
                     }),
-                    me.supplierchooser.config({
-                        x: 460,
+                    me.discontinued.config({
+                        x: 415,
+                        y: 10,
+                        width: 70,
+                        bind: [me.databinder, "Discontinued"],
+                        label: "Discontinued"
+                    }),
+                    me.quantityPerUnit.config({
+                        x: 10,
+                        y: 60,
+                        bind: [me.databinder, "QuantityPerUnit"],
+                        width: 135,
+                        label: "Quantity per Unit"
+                    }),
+                    me.unitPrice.config({
+                        x: 160,
+                        y: 60,
+                        bind: [me.databinder, "UnitPrice"],
+                        label: "Unit Price",
+                        width: 65,
+                        converter: new NumberConverter_5.NumberConverter({ format: "#.##0,00" }),
+                        styles: [me.styleNumber]
+                    }),
+                    me.unitsInStock.config({
+                        x: 240,
+                        y: 60,
+                        bind: [me.databinder, "UnitsInStock"],
+                        label: "Units in Stock",
+                        width: 70,
+                        converter: new NumberConverter_5.NumberConverter({ format: "#.##0,00" }),
+                        styles: [me.styleNumber]
+                    }),
+                    me.unitsOnOrder.config({
+                        x: 325,
+                        y: 60,
+                        bind: [me.databinder, "UnitsOnOrder"],
+                        label: "Units on Order",
+                        width: 75,
+                        converter: new NumberConverter_5.NumberConverter({ format: "#.##0,00" }),
+                        styles: [me.styleNumber]
+                    }),
+                    me.reorderLevel.config({
+                        x: 415,
+                        y: 60,
+                        bind: [me.databinder, "ReorderLevel"],
+                        width: 70,
+                        label: "Reorder Level",
+                        converter: new NumberConverter_5.NumberConverter(),
+                        styles: [me.styleNumber]
+                    }),
+                    me.category.config({
+                        x: 10,
+                        y: 110,
+                        template: "{{CategoryName}}",
+                        value: "Beverages",
+                        bind: [me.databinder, "Category"],
+                        width: 170,
+                        label: "Category"
+                    }),
+                    me.categoryChooser.config({
+                        x: 185,
                         y: 125,
-                        bind: [me.databinder, "Supplier"],
-                        items: "northwind.Suppliers"
+                        items: "northwind.Categories",
+                        bind: [me.databinder, "Category"],
+                        width: 30,
+                        value: "Beverages"
                     }),
                     me.supplier.config({
                         x: 225,
@@ -1107,81 +1177,16 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
                         label: "Supplier",
                         width: 230
                     }),
-                    me.categoryChooser.config({
-                        x: 185,
+                    me.supplierchooser.config({
+                        x: 460,
                         y: 125,
-                        items: "northwind.Categories",
-                        bind: [me.databinder, "Category"],
-                        width: 30
+                        bind: [me.databinder, "Supplier"],
+                        items: "northwind.Suppliers"
                     }),
-                    me.category.config({
-                        x: 10,
-                        y: 110,
-                        template: "{{CategoryName}}",
-                        value: "Condiments",
-                        bind: [me.databinder, "Category"],
-                        width: 170,
-                        label: "Category"
-                    }),
-                    me.discontinued.config({
-                        x: 415,
-                        y: 10,
-                        width: 70,
-                        bind: [me.databinder, "Discontinued"],
-                        label: "Discontinued"
-                    }),
-                    me.reorderLevel.config({
-                        x: 415,
-                        y: 60,
-                        bind: [me.databinder, "ReorderLevel"],
-                        width: 70,
-                        label: "Reorder Level",
-                        converter: new NumberConverter_4.NumberConverter(),
-                        styles: [me.styleNumber]
-                    }),
-                    me.unitsOnOrder.config({
-                        x: 325,
-                        y: 60,
-                        bind: [me.databinder, "UnitsOnOrder"],
-                        label: "Units on Order",
-                        width: 75,
-                        converter: new NumberConverter_4.NumberConverter(),
-                        format: "#.##0,00",
-                        styles: [me.styleNumber]
-                    }),
-                    me.unitsInStock.config({
-                        x: 240,
-                        y: 60,
-                        bind: [me.databinder, "UnitsInStock"],
-                        label: "Units in Stock",
-                        width: 70,
-                        converter: new NumberConverter_4.NumberConverter(),
-                        format: "#.##0,00",
-                        styles: [me.styleNumber]
-                    }),
-                    me.unitPrice.config({
-                        x: 160,
-                        y: 60,
-                        bind: [me.databinder, "UnitPrice"],
-                        label: "Unit Price",
-                        width: 65,
-                        converter: new NumberConverter_4.NumberConverter(),
-                        format: "#.##0,00",
-                        styles: [me.styleNumber]
-                    }),
-                    me.quantityPerUnit.config({
-                        x: 10,
-                        y: 60,
-                        bind: [me.databinder, "QuantityPerUnit"],
-                        width: 135,
-                        label: "Quantity per Unit"
-                    }),
-                    me.productName.config({
-                        x: 90,
-                        y: 10,
-                        bind: [me.databinder, "ProductName"],
-                        label: "Product Name",
-                        width: 310
+                    me.styleNumber.config({
+                        css: {
+                            text_align: "right"
+                        }
                     })
                 ] });
         }
@@ -1204,7 +1209,7 @@ define("northwind/ProductView", ["require", "exports", "jassijs/ui/Style", "jass
     }
     exports.test = test;
 });
-define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_5, Textbox_8, Registry_11, Property_7, Shippers_1, DBObjectView_7) {
+define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Shippers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_6, Textbox_8, Registry_11, Property_7, Shippers_1, DBObjectView_7) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1228,19 +1233,12 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
                 height: "150",
                 children: [
                     me.id.config({
-                        converter: new NumberConverter_5.NumberConverter(),
+                        converter: new NumberConverter_6.NumberConverter(),
                         bind: [me.databinder, "id"],
                         label: "Id",
                         width: 40,
                         x: 5,
                         y: 0
-                    }),
-                    me.phone.config({
-                        x: 5,
-                        y: 50,
-                        width: 215,
-                        bind: [me.databinder, "Phone"],
-                        label: "Phone"
                     }),
                     me.companyName.config({
                         x: 60,
@@ -1248,6 +1246,13 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
                         bind: [me.databinder, "CompanyName"],
                         label: "Company name",
                         width: 160
+                    }),
+                    me.phone.config({
+                        x: 5,
+                        y: 50,
+                        width: 215,
+                        bind: [me.databinder, "Phone"],
+                        label: "Phone"
                     })
                 ]
             });
@@ -1270,7 +1275,7 @@ define("northwind/ShippersView", ["require", "exports", "jassijs/ui/converters/N
     }
     exports.test = test;
 });
-define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_6, Textbox_9, Registry_12, Property_8, Suppliers_1, DBObjectView_8) {
+define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Suppliers", "jassijs/ui/DBObjectView"], function (require, exports, NumberConverter_7, Textbox_9, Registry_12, Property_8, Suppliers_1, DBObjectView_8) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -1301,30 +1306,57 @@ define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/
                     me.id.config({
                         x: 10,
                         y: 5,
-                        converter: new NumberConverter_6.NumberConverter(),
+                        converter: new NumberConverter_7.NumberConverter(),
                         width: 50,
                         bind: [me.databinder, "id"],
                         label: "Id"
                     }),
-                    me.homepage.config({
-                        x: 10,
-                        y: 275,
-                        bind: [me.databinder, "HomePage"],
-                        label: "Home Page",
-                        width: 355
+                    me.companyName.config({
+                        x: 75,
+                        y: 5,
+                        label: "Company Name",
+                        bind: [me.databinder, "CompanyName"],
+                        width: 290
                     }),
-                    me.fax.config({
+                    me.contactName.config({
+                        x: 10,
+                        y: 50,
+                        bind: [me.databinder, "ContactName"],
+                        label: "Contact Name"
+                    }),
+                    me.contactTitle.config({
                         x: 180,
-                        y: 230,
-                        bind: [me.databinder, "Fax"],
-                        label: "Fax",
+                        y: 50,
+                        bind: [me.databinder, "ContactTitle"],
+                        label: "Contact Title",
                         width: 185
                     }),
-                    me.phone.config({
+                    me.address.config({
                         x: 10,
-                        y: 230,
-                        bind: [me.databinder, "Phone"],
-                        label: "Phone",
+                        y: 95,
+                        bind: [me.databinder, "Address"],
+                        label: "Address",
+                        width: 355
+                    }),
+                    me.postalCode.config({
+                        x: 10,
+                        y: 140,
+                        bind: [me.databinder, "PostalCode"],
+                        width: 95,
+                        label: "Postal Code"
+                    }),
+                    me.city.config({
+                        x: 120,
+                        y: 140,
+                        bind: [me.databinder, "City"],
+                        label: "City",
+                        width: 245
+                    }),
+                    me.region.config({
+                        x: 10,
+                        y: 185,
+                        bind: [me.databinder, "Region"],
+                        label: "Region",
                         width: 155
                     }),
                     me.Country.config({
@@ -1334,53 +1366,26 @@ define("northwind/SuppliersView", ["require", "exports", "jassijs/ui/converters/
                         label: "Country",
                         width: 185
                     }),
-                    me.region.config({
+                    me.phone.config({
                         x: 10,
-                        y: 185,
-                        bind: [me.databinder, "Region"],
-                        label: "Region",
+                        y: 230,
+                        bind: [me.databinder, "Phone"],
+                        label: "Phone",
                         width: 155
                     }),
-                    me.city.config({
-                        x: 120,
-                        y: 140,
-                        bind: [me.databinder, "City"],
-                        label: "City",
-                        width: 245
-                    }),
-                    me.postalCode.config({
-                        x: 10,
-                        y: 140,
-                        bind: [me.databinder, "PostalCode"],
-                        width: 95,
-                        label: "Postal Code"
-                    }),
-                    me.address.config({
-                        x: 10,
-                        y: 95,
-                        bind: [me.databinder, "Address"],
-                        label: "Address",
-                        width: 355
-                    }),
-                    me.contactTitle.config({
+                    me.fax.config({
                         x: 180,
-                        y: 50,
-                        bind: [me.databinder, "ContactTitle"],
-                        label: "Contact Title",
+                        y: 230,
+                        bind: [me.databinder, "Fax"],
+                        label: "Fax",
                         width: 185
                     }),
-                    me.contactName.config({
+                    me.homepage.config({
                         x: 10,
-                        y: 50,
-                        bind: [me.databinder, "ContactName"],
-                        label: "Contact Name"
-                    }),
-                    me.companyName.config({
-                        x: 75,
-                        y: 5,
-                        label: "Company Name",
-                        bind: [me.databinder, "CompanyName"],
-                        width: 290
+                        y: 275,
+                        bind: [me.databinder, "HomePage"],
+                        label: "Home Page",
+                        width: 355
                     })
                 ] });
         }
@@ -1414,7 +1419,7 @@ define("northwind/registry", ["require"], function (require) {
     return {
         default: {
             "northwind/CategoriesView.ts": {
-                "date": 1656505473915,
+                "date": 1657717579668,
                 "northwind.CategoriesView": {
                     "$DBObjectView": [
                         {
@@ -1427,7 +1432,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/CustomerView.ts": {
-                "date": 1656073060541,
+                "date": 1656682768374,
                 "northwind/CustomerView": {
                     "$DBObjectView": [
                         {
@@ -1451,7 +1456,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1656506319066,
+                "date": 1657926807098,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -1493,7 +1498,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1655556792358,
+                "date": 1657926697931,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {
@@ -1506,7 +1511,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductView.ts": {
-                "date": 1655556792358,
+                "date": 1657475021952,
                 "northwind.ProductView": {
                     "$DBObjectView": [
                         {
@@ -2072,7 +2077,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ShippersView.ts": {
-                "date": 1655556792357,
+                "date": 1656683116417,
                 "northwind.ShippersView": {
                     "$DBObjectView": [
                         {
@@ -2085,7 +2090,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/SuppliersView.ts": {
-                "date": 1655556792356,
+                "date": 1656683257685,
                 "northwind.SuppliersView": {
                     "$DBObjectView": [
                         {
@@ -2159,7 +2164,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/ProductList.ts": {
-                "date": 1656508354146,
+                "date": 1657475058632,
                 "northwind/ProductList": {
                     "$ActionProvider": [
                         "jassijs.base.ActionNode"

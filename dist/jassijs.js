@@ -54,6 +54,7 @@ define("jassijs/modul", ["require", "exports"], function (require, exports) {
                 'jquery.language': jquery_language,
                 'js-cookie': '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
                 'lodash': '//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min',
+                "luxon": "//cdnjs.cloudflare.com/ajax/libs/luxon/3.0.1/luxon.min",
                 'papaparse': '//cdnjs.cloudflare.com/ajax/libs/PapaParse/4.6.3/papaparse.min',
                 'source.map': "https://unpkg.com/source-map@0.7.3/dist/source-map",
                 'spectrum': '//cdnjs.cloudflare.com/ajax/libs/spectrum/1.8.0/spectrum.min',
@@ -145,7 +146,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.Windows": {}
             },
             "jassijs/modul.ts": {
-                "date": 1657658778395
+                "date": 1657921656489
             },
             "jassijs/remote/Classes.ts": {
                 "date": 1655556496250,
@@ -629,7 +630,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/converters/DefaultConverter.ts": {
-                "date": 1657471897801,
+                "date": 1657922211289,
                 "jassijs.ui.converters.DefaultConverterProperties": {
                     "@members": {}
                 },
@@ -1337,7 +1338,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
-                "date": 1656963354400,
+                "date": 1657974138065,
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -1376,7 +1377,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Textbox.ts": {
-                "date": 1657474669395,
+                "date": 1657920923611,
                 "jassijs.ui.Textbox": {
                     "$UIComponent": [
                         {
@@ -1529,6 +1530,27 @@ define("jassijs/registry", ["require"], function (require) {
             },
             "jassijs/ext/tinymce.ts": {
                 "date": 1657658560377
+            },
+            "jassijs/ui/converters/DateTimeConverter.ts": {
+                "date": 1657924998811,
+                "jassijs.ui.converters.DateTimeConverterProperies": {
+                    "@members": {}
+                },
+                "jassijs.ui.converters.DateTimeConverter": {
+                    "$Converter": [
+                        {
+                            "name": "datetime"
+                        }
+                    ],
+                    "$Property": [
+                        {
+                            "name": "new",
+                            "type": "json",
+                            "componentType": "jassijs.ui.converters.DateTimeConverterProperties"
+                        }
+                    ],
+                    "@members": {}
+                }
             }
         }
     };
@@ -13312,7 +13334,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
                 this.table.on("headerClick", function (e, c) {
                     setTimeout(() => {
                         _this.update();
-                    }, 100);
+                    }, 1000);
                 });
                 if (this._searchbox) {
                     this._searchbox.onchange(() => {
@@ -13349,11 +13371,10 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
                 //        whereParams:{mftext:"%24%"}
                 if (found) { //
                     if (found[0][0] === String) {
-                        wheres.push("UPPER('" + columns[x].getField() + "') LIKE :mftext");
+                        wheres.push("UPPER(\"" + columns[x].getField() + "\") LIKE :mftext");
                     }
-                    else {
-                        wheres.push("UPPER(CAST('" + columns[x].getField() + "' AS TEXT)) LIKE :mftext");
-                    }
+                    else if (found[0][0] === Number || found[0][0] === Date)
+                        wheres.push("UPPER(CAST(\"" + columns[x].getField() + "\" AS TEXT)) LIKE :mftext");
                 }
             }
             if (wheres.length > 0) {
@@ -13385,7 +13406,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
                     if (pageSize === undefined)
                         pageSize = 200;
                     var opt = {
-                        skip: param2.page * pageSize,
+                        skip: (param2.page - 1) * pageSize,
                         take: pageSize,
                         order: newSort
                     };
@@ -13889,6 +13910,8 @@ define("jassijs/ui/Textbox", ["require", "exports", "jassijs/remote/Registry", "
         }
         set converter(value) {
             this._converter = value;
+            if (value)
+                this.converter.component = this;
             this.value = this.value;
         }
         get readOnly() {
@@ -16945,7 +16968,122 @@ define("jassijs/ui/PropertyEditors/TableColumnImport", ["require", "exports", "j
     }
     exports.test = test;
 });
-define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_113, Registry_114, Property_34) {
+define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/ui/Textbox", "luxon"], function (require, exports, DefaultConverter_2, Registry_113, Property_34, Textbox_19) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.test = exports.DateTimeConverter = void 0;
+    let DateTimeConverterProperties = class DateTimeConverterProperties {
+    };
+    __decorate([
+        (0, Property_34.$Property)({ type: "string", chooseFrom: ["date", "time", "datetime", "timeseconds", "datetimeseconds"] }),
+        __metadata("design:type", String)
+    ], DateTimeConverterProperties.prototype, "type", void 0);
+    DateTimeConverterProperties = __decorate([
+        (0, Registry_113.$Class)("jassijs.ui.converters.DateTimeConverterProperies")
+    ], DateTimeConverterProperties);
+    let DateTimeConverter = class DateTimeConverter extends DefaultConverter_2.DefaultConverter {
+        constructor(props) {
+            super();
+            this.type = (props === null || props === void 0 ? void 0 : props.type) === undefined ? "date" : props === null || props === void 0 ? void 0 : props.type;
+        }
+        get component() {
+            return super.component;
+        }
+        set component(component) {
+            super.component = component;
+            if (this.type === "date") {
+                component.dom.setAttribute("type", "date");
+            }
+            if (this.type === "time" || this.type === "timeseconds") {
+                component.dom.setAttribute("type", "time");
+            }
+            if (this.type === "timeseconds") {
+                component.dom.setAttribute("step", "2");
+            }
+            if (this.type === "datetime" || this.type === "datetimeseconds") {
+                component.dom.setAttribute("type", "datetime-local");
+            }
+            if (this.type === "datetimeseconds") {
+                component.dom.setAttribute("step", "2");
+            }
+        }
+        /**
+         * converts a string to the object
+         * an error can be thrown for validation
+         * @param {string} str - the string to convert
+         */
+        stringToObject(str) {
+            if (str === undefined || str === "")
+                return undefined;
+            var ret;
+            if (this.type === "date" || this.type === undefined) {
+                ret = luxon.DateTime.fromFormat(str, 'yyyy-MM-dd');
+            }
+            else if (this.type === "datetime") {
+                ret = luxon.DateTime.fromFormat(str, "yyyy-MM-dd\'T\'HH:mm");
+            }
+            else if (this.type === "time") {
+                ret = luxon.DateTime.fromFormat(str, 'HH:mm');
+            }
+            else if (this.type === "datetimeseconds") {
+                ret = luxon.DateTime.fromFormat(str, "yyyy-MM-dd\'T\'HH:mm:ss");
+            }
+            else if (this.type === "timeseconds") {
+                ret = luxon.DateTime.fromFormat(str, 'HH:mm:ss');
+            }
+            return ret.toJSDate();
+            // return Numberformatter.stringToNumber(str);
+        }
+        /**
+         * converts an object to string
+         * @param  obj - the object to convert
+         */
+        objectToString(obj) {
+            if (obj === undefined)
+                return undefined;
+            var ret;
+            if (this.type === "date" || this.type === undefined) {
+                ret = luxon.DateTime.fromJSDate(obj).toFormat("yyyy-MM-dd");
+            }
+            else if (this.type === "datetime") {
+                ret = luxon.DateTime.fromJSDate(obj).toFormat("yyyy-MM-dd\'T\'HH:mm");
+            }
+            else if (this.type === "time") {
+                ret = luxon.DateTime.fromJSDate(obj).toFormat("HH:mm");
+            }
+            else if (this.type === "datetimeseconds") {
+                ret = luxon.DateTime.fromJSDate(obj).toFormat("yyyy-MM-dd\'T\'HH:mm:ss");
+            }
+            else if (this.type === "timeseconds") {
+                ret = luxon.DateTime.fromJSDate(obj).toFormat("HH:mm:ss");
+            }
+            return ret;
+            //        1979-12-31
+            //return Numberformatter.numberToString(obj);
+        }
+    };
+    __decorate([
+        (0, Property_34.$Property)({ type: "string", chooseFrom: ["date", "time", "datetime", "timeseconds", "datetimeseconds"] }),
+        __metadata("design:type", String)
+    ], DateTimeConverter.prototype, "type", void 0);
+    DateTimeConverter = __decorate([
+        (0, DefaultConverter_2.$Converter)({ name: "datetime" }),
+        (0, Registry_113.$Class)("jassijs.ui.converters.DateTimeConverter"),
+        (0, Property_34.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DateTimeConverterProperties" }),
+        __metadata("design:paramtypes", [DateTimeConverterProperties])
+    ], DateTimeConverter);
+    exports.DateTimeConverter = DateTimeConverter;
+    function test() {
+        var tb = new Textbox_19.Textbox();
+        tb.converter = new DateTimeConverter({
+            type: "datetimeseconds"
+        });
+        tb.value = new Date(2022, 12, 3, 15, 5);
+        return tb;
+    }
+    exports.test = test;
+});
+define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, Registry_114, Registry_115, Property_35) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DefaultConverter = exports.$Converter = exports.$ConverterProperties = void 0;
@@ -16954,7 +17092,7 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
     exports.$ConverterProperties = $ConverterProperties;
     function $Converter(param) {
         return function (pclass) {
-            Registry_114.default.register("$Converter", pclass, param);
+            Registry_115.default.register("$Converter", pclass, param);
         };
     }
     exports.$Converter = $Converter;
@@ -16963,13 +17101,13 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
         }
     };
     __decorate([
-        (0, Property_34.$Property)({ default: "function(ob){}" }),
+        (0, Property_35.$Property)({ default: "function(ob){}" }),
         __metadata("design:type", Function),
         __metadata("design:paramtypes", []),
         __metadata("design:returntype", void 0)
     ], DefaultConverterProperties.prototype, "stringToObject", null);
     DefaultConverterProperties = __decorate([
-        (0, Registry_113.$Class)("jassijs.ui.converters.DefaultConverterProperties")
+        (0, Registry_114.$Class)("jassijs.ui.converters.DefaultConverterProperties")
     ], DefaultConverterProperties);
     let DefaultConverter = 
     //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
@@ -16991,6 +17129,12 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
         objectToString(obj) {
             return obj.ToString();
         }
+        get component() {
+            return this._component;
+        }
+        set component(component) {
+            this._component = component;
+        }
         /**
         * converts an object to an formatted string
         * @param {string} obj - the object to convert
@@ -17001,15 +17145,15 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
     };
     DefaultConverter = __decorate([
         $Converter({ name: "custom" }),
-        (0, Registry_113.$Class)("jassijs.ui.converters.DefaultConverter"),
-        (0, Property_34.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
+        (0, Registry_114.$Class)("jassijs.ui.converters.DefaultConverter"),
+        (0, Property_35.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.DefaultConverterProperties" })
         //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
         ,
         __metadata("design:paramtypes", [])
     ], DefaultConverter);
     exports.DefaultConverter = DefaultConverter;
 });
-define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, DefaultConverter_2, Registry_115, Property_35, Numberformatter_1) {
+define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, DefaultConverter_3, Registry_116, Property_36, Numberformatter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NumberConverter = void 0;
@@ -17037,21 +17181,21 @@ define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/
     let NumberConverterProperties = class NumberConverterProperties {
     };
     __decorate([
-        (0, Property_35.$Property)(),
+        (0, Property_36.$Property)(),
         __metadata("design:type", Number)
     ], NumberConverterProperties.prototype, "min", void 0);
     __decorate([
-        (0, Property_35.$Property)(),
+        (0, Property_36.$Property)(),
         __metadata("design:type", Number)
     ], NumberConverterProperties.prototype, "max", void 0);
     __decorate([
-        (0, Property_35.$Property)({ type: "string", chooseFrom: allFormats }),
+        (0, Property_36.$Property)({ type: "string", chooseFrom: allFormats }),
         __metadata("design:type", String)
     ], NumberConverterProperties.prototype, "format", void 0);
     NumberConverterProperties = __decorate([
-        (0, Registry_115.$Class)("jassijs.ui.converters.NumberConverterProperies")
+        (0, Registry_116.$Class)("jassijs.ui.converters.NumberConverterProperies")
     ], NumberConverterProperties);
-    let NumberConverter = class NumberConverter extends DefaultConverter_2.DefaultConverter {
+    let NumberConverter = class NumberConverter extends DefaultConverter_3.DefaultConverter {
         constructor(props) {
             super();
             this.min = props === null || props === void 0 ? void 0 : props.min;
@@ -17082,34 +17226,34 @@ define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/
         }
     };
     NumberConverter = __decorate([
-        (0, DefaultConverter_2.$Converter)({ name: "number" }),
-        (0, Registry_115.$Class)("jassijs.ui.converters.NumberConverter"),
-        (0, Property_35.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.NumberConverterProperies" }),
+        (0, DefaultConverter_3.$Converter)({ name: "number" }),
+        (0, Registry_116.$Class)("jassijs.ui.converters.NumberConverter"),
+        (0, Property_36.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.NumberConverterProperies" }),
         __metadata("design:paramtypes", [NumberConverterProperties])
     ], NumberConverter);
     exports.NumberConverter = NumberConverter;
 });
-define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, DefaultConverter_3, Registry_116, Property_36) {
+define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property"], function (require, exports, DefaultConverter_4, Registry_117, Property_37) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.StringConverter = void 0;
     let StringConverterProperties = class StringConverterProperties {
     };
     __decorate([
-        (0, Property_36.$Property)(),
+        (0, Property_37.$Property)(),
         __metadata("design:type", Number)
     ], StringConverterProperties.prototype, "minChars", void 0);
     __decorate([
-        (0, Property_36.$Property)(),
+        (0, Property_37.$Property)(),
         __metadata("design:type", Number)
     ], StringConverterProperties.prototype, "maxChars", void 0);
     StringConverterProperties = __decorate([
-        (0, Registry_116.$Class)("jassijs.ui.converters.StringConverterProperies")
+        (0, Registry_117.$Class)("jassijs.ui.converters.StringConverterProperies")
     ], StringConverterProperties);
     let StringConverter = 
     //@$Property({ name: "new/minChars", type: "number", default: undefined })
     //@$Property({ name: "new/maxChars", type: "number", default: undefined })
-    class StringConverter extends DefaultConverter_3.DefaultConverter {
+    class StringConverter extends DefaultConverter_4.DefaultConverter {
         constructor(props) {
             super();
             this.minChars = props === null || props === void 0 ? void 0 : props.minChars;
@@ -17132,9 +17276,9 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
         }
     };
     StringConverter = __decorate([
-        (0, DefaultConverter_3.$Converter)({ name: "string" }),
-        (0, Registry_116.$Class)("jassijs.ui.converters.StringConverter"),
-        (0, Property_36.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.StringConverterProperies" })
+        (0, DefaultConverter_4.$Converter)({ name: "string" }),
+        (0, Registry_117.$Class)("jassijs.ui.converters.StringConverter"),
+        (0, Property_37.$Property)({ name: "new", type: "json", componentType: "jassijs.ui.converters.StringConverterProperies" })
         //@$Property({ name: "new/minChars", type: "number", default: undefined })
         //@$Property({ name: "new/maxChars", type: "number", default: undefined })
         ,
@@ -17142,7 +17286,7 @@ define("jassijs/ui/converters/StringConverter", ["require", "exports", "jassijs/
     ], StringConverter);
     exports.StringConverter = StringConverter;
 });
-define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_15, NumberConverter_2, Textbox_19, BoxPanel_9, Select_8, Table_6, Registry_117, Panel_24, papaparse_1, Database_3, Registry_118, Classes_31, DBObject_8, Actions_17, Router_7, Server_5, Transaction_1) {
+define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "jassijs/ui/Button", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/ui/BoxPanel", "jassijs/ui/Select", "jassijs/ui/Table", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ext/papaparse", "jassijs/remote/Database", "jassijs/remote/Registry", "jassijs/remote/Classes", "jassijs/remote/DBObject", "jassijs/base/Actions", "jassijs/base/Router", "jassijs/remote/Server", "jassijs/remote/Transaction"], function (require, exports, Upload_1, Button_15, NumberConverter_2, Textbox_20, BoxPanel_9, Select_8, Table_6, Registry_118, Panel_24, papaparse_1, Database_3, Registry_119, Classes_31, DBObject_8, Actions_17, Router_7, Server_5, Transaction_1) {
     "use strict";
     var CSVImport_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17182,8 +17326,8 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
         async initClasses() {
             var cls = [];
             var _this = this;
-            await Registry_118.default.loadAllFilesForService("$DBObject");
-            var data = Registry_118.default.getData("$DBObject");
+            await Registry_119.default.loadAllFilesForService("$DBObject");
+            var data = Registry_119.default.getData("$DBObject");
             data.forEach((entr) => {
                 cls.push(Classes_31.classes.getClassName(entr.oclass));
             });
@@ -17228,7 +17372,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
         }
         layout(me) {
             me.boxpanel1 = new BoxPanel_9.BoxPanel();
-            me.fromLine = new Textbox_19.Textbox();
+            me.fromLine = new Textbox_20.Textbox();
             me.next = new Button_15.Button();
             me.upload = new Upload_1.Upload();
             var _this = this;
@@ -17343,7 +17487,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
             //read objects so we can read from cache
             let nil = await Type["find"]();
             var meta = (_a = Database_3.db.getMetadata(await Classes_31.classes.loadClass(dbclass))) === null || _a === void 0 ? void 0 : _a.fields;
-            var members = Registry_118.default.getMemberData("design:type")[dbclass];
+            var members = Registry_119.default.getMemberData("design:type")[dbclass];
             var allObjects = [];
             var from = fromLine;
             for (var x = from - 1; x < data.length; x++) {
@@ -17409,7 +17553,7 @@ define("jassijs/util/CSVImport", ["require", "exports", "jassijs/ui/Upload", "ja
     ], CSVImport, "showDialog", null);
     CSVImport = CSVImport_1 = __decorate([
         (0, Actions_17.$ActionProvider)("jassijs.base.ActionNode"),
-        (0, Registry_117.$Class)("jassijs.util.CSVImport"),
+        (0, Registry_118.$Class)("jassijs.util.CSVImport"),
         __metadata("design:paramtypes", [])
     ], CSVImport);
     exports.CSVImport = CSVImport;
@@ -17590,7 +17734,7 @@ define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Dat
     }
     exports.ManyToMany = ManyToMany;
 });
-define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_119) {
+define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_120) {
     "use strict";
     var Numberformatter_2;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17759,7 +17903,7 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Re
         }
     };
     Numberformatter = Numberformatter_2 = __decorate([
-        (0, Registry_119.$Class)("jassijs.util.Numberformatter")
+        (0, Registry_120.$Class)("jassijs.util.Numberformatter")
     ], Numberformatter);
     exports.Numberformatter = Numberformatter;
     function test() {
@@ -17770,7 +17914,7 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Re
     }
     exports.test = test;
 });
-define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Notify"], function (require, exports, Registry_120, Registry_121, Notify_3) {
+define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registry", "jassijs/ui/Notify"], function (require, exports, Registry_121, Registry_122, Notify_3) {
     "use strict";
     var Reloader_1;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -17853,7 +17997,7 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Registry"
                     }
                 }
                 //load all classes which are in the same filename
-                var allclasses = await Registry_121.default.getJSONData("$Class");
+                var allclasses = await Registry_122.default.getJSONData("$Class");
                 var classesInFile = [];
                 for (var x = 0; x < allclasses.length; x++) {
                     var pclass = allclasses[x];
@@ -18021,12 +18165,12 @@ define("jassijs/util/Reloader", ["require", "exports", "jassijs/remote/Registry"
     Reloader.reloadCodeFromServerIsRunning = false;
     Reloader.instance = new Reloader_1();
     Reloader = Reloader_1 = __decorate([
-        (0, Registry_120.$Class)("jassijs.util.Reloader"),
+        (0, Registry_121.$Class)("jassijs.util.Reloader"),
         __metadata("design:paramtypes", [])
     ], Reloader);
     exports.Reloader = Reloader;
 });
-define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_122) {
+define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_123) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Runlater = void 0;
@@ -18063,12 +18207,12 @@ define("jassijs/util/Runlater", ["require", "exports", "jassijs/remote/Registry"
         }
     };
     Runlater = __decorate([
-        (0, Registry_122.$Class)("jassi.util.Runlater"),
+        (0, Registry_123.$Class)("jassi.util.Runlater"),
         __metadata("design:paramtypes", [Object, Object])
     ], Runlater);
     exports.Runlater = Runlater;
 });
-define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_123) {
+define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_124) {
     "use strict";
     var Tools_4;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -18367,7 +18511,7 @@ define("jassijs/util/Tools", ["require", "exports", "jassijs/remote/Registry"], 
         }
     };
     Tools = Tools_4 = __decorate([
-        (0, Registry_123.$Class)("jassijs.util.Tools"),
+        (0, Registry_124.$Class)("jassijs.util.Tools"),
         __metadata("design:paramtypes", [])
     ], Tools);
     exports.Tools = Tools;

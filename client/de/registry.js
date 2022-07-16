@@ -298,12 +298,14 @@ define("de/registry",["require"], function(require) {
 		"date": 1656077195438
 	},
 	"de/TH.ts": {
-		"date": 1655556795285,
-		"de/TH": {}
+		"date": 1657970513486
 	},
 	"de/TTDialog.ts": {
 		"date": 1655556795285,
 		"de/TTDialog": {}
+	},
+	"de/TestEmployees.ts": {
+		"date": 1657973727523
 	}
 }
  }

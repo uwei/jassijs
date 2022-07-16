@@ -749,11 +749,11 @@ define("jassijs_localserver/DBManager", ["require", "exports", "typeorm", "jassi
             var dummyselect = "select * from k where ";
             //we must replace because parsing Exception
             var fullSQL = dummyselect + sql.replaceAll(":...", "fxxparams").replaceAll(":", "xxxparams");
-            fullSQL = fullSQL.replace(" AS TEXT", "_AS_TEXT");
+            fullSQL = fullSQL.replaceAll("\" AS TEXT", " AS_TEXT\"");
             var ast = parser.parse(fullSQL);
             this._parseNode(context, ast.value.where);
             var newsql = parser.stringify(ast).replaceAll("fxxparams", ":...").replaceAll("xxxparams", ":");
-            newsql = newsql.replaceAll("_AS_TEXT", " AS TEXT");
+            newsql = newsql.replaceAll(" AS_TEXT\"", "\" AS TEXT");
             ret.andWhere(newsql.substring(dummyselect.length), whereParams);
             return ret;
         }
@@ -2056,19 +2056,13 @@ define("jassijs_localserver/registry", ["require"], function (require) {
         }
     };
 });
-define("jassijs_localserver/ext/jszip", ["jszip"], function (JSZip) {
+define("jassijs_localserver/ext/jzip", ["require", "exports", "jszip"], function (require, exports, JSZip) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    /// <amd-dependency path="jszip" name="JSZip"/>
     JSZip.support.nodebuffer = undefined; //we hacked window.Buffer
-    return {
-        default: JSZip
-    };
+    exports.default = JSZip;
 });
-/*
-define("jassijs_localserver/ext/typeorm-browser",["typeorm"], function(sql){
-
-    //jassijs.myRequire("lib/skin-win8/ui.fancytree.min.css");
-    //'jquery.fancytree': '//cdn.jsdelivr.net/npm/jquery.fancytree@2.37.0/dist/jquery.fancytree.min',
-
-});*/
 define("sha.js", [], () => { return {}; });
 define("dotenv", [], () => { return {}; });
 define("chalk", [], () => { return {}; });

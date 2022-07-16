@@ -106,7 +106,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                 this.table.on("headerClick", function (e, c) {
                     setTimeout(() => {
                         _this.update();
-                    }, 100);
+                    }, 1000);
                 });
                 if (this._searchbox) {
                     this._searchbox.onchange(() => {
@@ -143,11 +143,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                 //        whereParams:{mftext:"%24%"}
                 if (found) { //
                     if (found[0][0] === String) {
-                        wheres.push("UPPER('" + columns[x].getField() + "') LIKE :mftext");
+                        wheres.push("UPPER(\"" + columns[x].getField() + "\") LIKE :mftext");
                     }
-                    else {
-                        wheres.push("UPPER(CAST('" + columns[x].getField() + "' AS TEXT)) LIKE :mftext");
-                    }
+                    else if (found[0][0] === Number || found[0][0] === Date)
+                        wheres.push("UPPER(CAST(\"" + columns[x].getField() + "\" AS TEXT)) LIKE :mftext");
                 }
             }
             if (wheres.length > 0) {
@@ -179,7 +178,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                     if (pageSize === undefined)
                         pageSize = 200;
                     var opt = {
-                        skip: param2.page * pageSize,
+                        skip: (param2.page - 1) * pageSize,
                         take: pageSize,
                         order: newSort
                     };

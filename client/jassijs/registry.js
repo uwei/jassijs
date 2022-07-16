@@ -1248,7 +1248,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1656963354400,
+		"date": 1657974138065,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {}
 		},

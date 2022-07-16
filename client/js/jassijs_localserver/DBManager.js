@@ -744,11 +744,11 @@ define(["require", "exports", "typeorm", "jassijs/remote/Classes", "jassijs/remo
             var dummyselect = "select * from k where ";
             //we must replace because parsing Exception
             var fullSQL = dummyselect + sql.replaceAll(":...", "fxxparams").replaceAll(":", "xxxparams");
-            fullSQL = fullSQL.replace(" AS TEXT", "_AS_TEXT");
+            fullSQL = fullSQL.replaceAll("\" AS TEXT", " AS_TEXT\"");
             var ast = parser.parse(fullSQL);
             this._parseNode(context, ast.value.where);
             var newsql = parser.stringify(ast).replaceAll("fxxparams", ":...").replaceAll("xxxparams", ":");
-            newsql = newsql.replaceAll("_AS_TEXT", " AS TEXT");
+            newsql = newsql.replaceAll(" AS_TEXT\"", "\" AS TEXT");
             ret.andWhere(newsql.substring(dummyselect.length), whereParams);
             return ret;
         }

@@ -1,39 +1,15 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define(["require", "exports", "jassijs/ui/Button", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Button_1, Registry_1, Panel_1) {
+define(["require", "exports", "northwind/remote/Employees"], function (require, exports, Employees_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.TH = void 0;
-    let TH = class TH extends Panel_1.Panel {
-        constructor() {
-            super();
-            this.me = {};
-            this.layout(this.me);
-        }
-        layout(me) {
-            me.button = new Button_1.Button();
-            me.button2 = new Button_1.Button();
-            this.config({ children: [
-                    me.button.config({ text: "button" }),
-                    me.button2.config({ text: "button" })
-                ] });
-        }
-    };
-    TH = __decorate([
-        (0, Registry_1.$Class)("de/TH"),
-        __metadata("design:paramtypes", [])
-    ], TH);
-    exports.TH = TH;
+    exports.test = void 0;
     async function test() {
-        var ret = new TH();
-        return ret;
+        var k = await Employees_1.Employees.find({
+            //  "where":"UPPER(CAST('id' AS TEXT)) LIKE :mftext or UPPER('LastName') LIKE :mftext or UPPER('FirstName') LIKE :mftext or UPPER('Title') LIKE :mftext or UPPER('TitleOfCourtesy') LIKE :mftext or UPPER('Address') LIKE :mftext or UPPER('City') LIKE :mftext or UPPER('Region') LIKE :mftext or UPPER('PostalCode') LIKE :mftext or UPPER('Country') LIKE :mftext or UPPER('HomePhone') LIKE :mftext or UPPER('Extension') LIKE :mftext or UPPER('Photo') LIKE :mftext or UPPER('Notes') LIKE :mftext or UPPER('PhotoPath') LIKE :mftext or UPPER(CAST('BirthDate' AS TEXT)) LIKE :mftext or UPPER(CAST('HireDate' AS TEXT)) LIKE :mftext or UPPER(CAST('ReportsTo' AS TEXT)) LIKE :mftext",
+            "where": "UPPER('LastName') LIKE '%FUL%'"
+        });
+        // "whereParams":{"mftext":"%FUL%"}});
+        debugger;
+        ;
     }
     exports.test = test;
 });

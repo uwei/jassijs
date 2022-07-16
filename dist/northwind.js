@@ -414,7 +414,7 @@ define("northwind/DetailTest", ["require", "exports", "jassijs/remote/Registry",
     }
     exports.test = test;
 });
-define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Calendar", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView"], function (require, exports, ObjectChooser_2, HTMLPanel_2, NumberConverter_2, Image_1, Textarea_2, Calendar_1, Textbox_4, Registry_6, Property_4, Employees_1, DBObjectView_4) {
+define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Image", "jassijs/ui/Textarea", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Property", "northwind/remote/Employees", "jassijs/ui/DBObjectView"], function (require, exports, DateTimeConverter_1, ObjectChooser_2, HTMLPanel_2, NumberConverter_2, Image_1, Textarea_2, Textbox_4, Registry_6, Property_4, Employees_1, DBObjectView_4) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -438,8 +438,8 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
             me.city = new Textbox_4.Textbox();
             me.region = new Textbox_4.Textbox();
             me.state = new Textbox_4.Textbox();
-            me.birthDate = new Calendar_1.Calendar();
-            me.hiredate = new Calendar_1.Calendar();
+            me.birthDate = new Textbox_4.Textbox();
+            me.hiredate = new Textbox_4.Textbox();
             me.homephone = new Textbox_4.Textbox();
             me.notes = new Textarea_2.Textarea();
             me.image1 = new Image_1.Image();
@@ -521,23 +521,25 @@ define("northwind/EmployeesView", ["require", "exports", "jassijs/ui/ObjectChoos
                     me.birthDate.config({
                         x: 5,
                         y: 190,
-                        width: 90,
+                        width: 100,
                         bind: [me.databinder, "BirthDate"],
-                        label: "Birth Date"
+                        label: "Birth Date",
+                        converter: new DateTimeConverter_1.DateTimeConverter()
                     }),
                     me.hiredate.config({
-                        x: 110,
+                        x: 115,
                         y: 190,
                         bind: [me.databinder, "HireDate"],
                         label: "Hire Date",
-                        width: 85
+                        width: 95,
+                        converter: new DateTimeConverter_1.DateTimeConverter()
                     }),
                     me.homephone.config({
-                        x: 210,
+                        x: 220,
                         y: 190,
                         bind: [me.databinder, "HomePhone"],
                         label: "Home Phone",
-                        width: 140
+                        width: 130
                     }),
                     me.photoPath.config({
                         x: 5,
@@ -701,7 +703,7 @@ define("northwind/ImportData", ["require", "exports", "jassijs/ui/Button", "jass
     }
     exports.test = test;
 });
-define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/Calendar", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, Style_1, BoxPanel_3, Repeater_1, Calendar_2, ObjectChooser_3, HTMLPanel_4, NumberConverter_3, Textbox_5, Registry_8, Panel_5, Property_5, Orders_2, DBObjectView_5) {
+define("northwind/OrdersView", ["require", "exports", "jassijs/ui/converters/DateTimeConverter", "jassijs/ui/Style", "jassijs/ui/BoxPanel", "jassijs/ui/Repeater", "jassijs/ui/ObjectChooser", "jassijs/ui/HTMLPanel", "jassijs/ui/converters/NumberConverter", "jassijs/ui/Textbox", "jassijs/remote/Registry", "jassijs/ui/Panel", "jassijs/ui/Property", "northwind/remote/Orders", "jassijs/ui/DBObjectView"], function (require, exports, DateTimeConverter_2, Style_1, BoxPanel_3, Repeater_1, ObjectChooser_3, HTMLPanel_4, NumberConverter_3, Textbox_5, Registry_8, Panel_5, Property_5, Orders_2, DBObjectView_5) {
     "use strict";
     var _a;
     Object.defineProperty(exports, "__esModule", { value: true });
@@ -734,9 +736,9 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.shipviaChooser = new ObjectChooser_3.ObjectChooser();
             me.employeename = new HTMLPanel_4.HTMLPanel();
             me.chooseEmployee = new ObjectChooser_3.ObjectChooser();
-            me.orderDate = new Calendar_2.Calendar();
-            me.requiredDate = new Calendar_2.Calendar();
-            me.shippedDate = new Calendar_2.Calendar();
+            me.orderDate = new Textbox_5.Textbox();
+            me.requiredDate = new Textbox_5.Textbox();
+            me.shippedDate = new Textbox_5.Textbox();
             me.boxpanel2 = new BoxPanel_3.BoxPanel();
             me.htmlpanel1 = new HTMLPanel_4.HTMLPanel();
             me.htmlpanel2 = new HTMLPanel_4.HTMLPanel();
@@ -891,7 +893,7 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.employeename.bind = [me.databinder, "Employee"];
             me.employeename.label = "Employee";
             me.employeename.width = 265;
-            me.employeename.value = "5 Steven Buchanan";
+            me.employeename.value = "6 Michael Suyama";
             me.employeename.template = "{{id}} {{FirstName}} {{LastName}}";
             me.employeename.styles = [me.style1];
             me.chooseEmployee.x = 275;
@@ -903,17 +905,21 @@ define("northwind/OrdersView", ["require", "exports", "jassijs/ui/Style", "jassi
             me.orderDate.y = 130;
             me.orderDate.bind = [me.databinder, "OrderDate"];
             me.orderDate.label = "Order Date";
-            me.orderDate.width = 70;
-            me.requiredDate.x = 90;
+            me.orderDate.width = 95;
+            me.orderDate.readOnly = false;
+            me.orderDate.converter = new DateTimeConverter_2.DateTimeConverter();
+            me.requiredDate.x = 110;
             me.requiredDate.y = 130;
             me.requiredDate.bind = [me.databinder, "RequiredDate"];
             me.requiredDate.label = "Required Date";
-            me.requiredDate.width = 75;
-            me.shippedDate.x = 175;
+            me.requiredDate.width = 95;
+            me.requiredDate.converter = new DateTimeConverter_2.DateTimeConverter();
+            me.shippedDate.x = 210;
             me.shippedDate.y = 130;
             me.shippedDate.bind = [me.databinder, "ShippedDate"];
-            me.shippedDate.width = 75;
+            me.shippedDate.width = "95";
             me.shippedDate.label = "Shipped Date";
+            me.shippedDate.converter = new DateTimeConverter_2.DateTimeConverter();
             me.htmlpanel1.value = "Quantity<br>";
             me.htmlpanel1.width = 65;
             me.htmlpanel1.styles = [];
@@ -1445,7 +1451,7 @@ define("northwind/registry", ["require"], function (require) {
                 }
             },
             "northwind/EmployeesView.ts": {
-                "date": 1656682851796,
+                "date": 1657926807098,
                 "northwind.EmployeesView": {
                     "$DBObjectView": [
                         {
@@ -1487,7 +1493,7 @@ define("northwind/registry", ["require"], function (require) {
                 "date": 1613551044000
             },
             "northwind/OrdersView.ts": {
-                "date": 1657474966817,
+                "date": 1657926697931,
                 "northwind.OrdersView": {
                     "$DBObjectView": [
                         {

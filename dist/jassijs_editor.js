@@ -3581,7 +3581,7 @@ define("jassijs_editor/registry", ["require"], function (require) {
                 "date": 1623098600000
             },
             "jassijs_editor/util/DragAndDropper.ts": {
-                "date": 1655929645867,
+                "date": 1657925426664,
                 "jassijs_editor.util.DragAndDropper": {}
             },
             "jassijs_editor/util/Parser.ts": {
@@ -3708,8 +3708,8 @@ define("jassijs_editor/util/DragAndDropper", ["require", "exports", "jassijs/rem
                 newParent = newParent.designDummyFor._parent;
             }
             if (target._this.isAbsolute) {
-                var left = parseInt(ui.helper.style.left);
-                var top = parseInt(ui.helper.style.top);
+                var left = parseInt(ui.helper[0].style.left);
+                var top = parseInt(ui.helper[0].style.top);
                 if (ui.draggable[0]._this.createFromType !== undefined) {
                     var offsetNewParent = $(target._this.dom).offset();
                     left = -offsetNewParent.left + parseInt($(ui.helper).css('left'));
