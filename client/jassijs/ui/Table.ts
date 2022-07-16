@@ -8,18 +8,28 @@ import { Calendar } from "jassijs/ui/Calendar";
 import { Databinder } from "jassijs/ui/Databinder";
 import { classes } from "jassijs/remote/Classes";
 import { Tabulator } from "tabulator-tables";
-
-
+import { DateTimeConverter, DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
 interface LazyLoadOption {
     classname: string;
     loadFunc: string;
     pageSize?: number;
 }
+//@ts-ignore
 interface TableOptions extends Tabulator.Options {
     dataTreeChildFunction?: ((data: any) => any) | any;
     lazyLoad?: LazyLoadOption;
     items?: any[];
+    columns: ColumnDefinition[];
 }
+//@ts-ignore
+interface ColumnDefinition extends Tabulator.ColumnDefinition {
+    formatter?: Formatter;
+    formatterParams?: FormatterParams;
+}
+type FormatterParams = Tabulator.FormatterParams | {
+    datefimeformat: DateTimeFormat;
+};
+type Formatter = Tabulator.Formatter | "datetimeformat";
 @$Class("jassijs.ui.TableEditorProperties")
 class TableEditorProperties {
     @$Property({ default: undefined })
@@ -66,7 +76,6 @@ export class Table extends DataComponent implements TableConfig {
     private _lastLazySort = undefined;
     private _lastLazySearch = undefined;
     private _lazyDataHasChanged = undefined;
-
     _tree;
     _items: any[];
     _searchbox: Textbox;
@@ -84,7 +93,6 @@ export class Table extends DataComponent implements TableConfig {
         super.config(config);
         return this;
     }
-
     @$Property({ type: "json", componentType: "jassijs.ui.TableEditorProperties" })
     set options(properties: TableOptions) {
         var _this = this;
@@ -97,7 +105,7 @@ export class Table extends DataComponent implements TableConfig {
         }
         if (properties === undefined)
             properties = {};
-        if (properties.autoColumns === undefined)
+        if (properties.autoColumns === undefined && properties.columns === undefined)
             properties.autoColumns = true;
         if (properties.autoColumnsDefinitions === undefined) {
             properties.autoColumnsDefinitions = this.defaultAutoColumnDefinitions.bind(this);
@@ -120,26 +128,21 @@ export class Table extends DataComponent implements TableConfig {
         //    properties.autoResize = false;
         if (properties.layout === undefined)
             properties.layout = "fitDataStretch"; //"fitDataFill";////"fitColumns";
-
-
-
         if (properties.lazyLoad) {
-            this._lazyLoadOption = properties.lazyLoad
+            this._lazyLoadOption = properties.lazyLoad;
             properties.ajaxURL = 'does/not/matter';
-            properties.ajaxRequestFunc = _this.lazyLoadFunc.bind(this);// (p1,p2,p3)=>_this.progressiveLoad(p1,p2,p3);
+            properties.ajaxRequestFunc = _this.lazyLoadFunc.bind(this); // (p1,p2,p3)=>_this.progressiveLoad(p1,p2,p3);
             properties.progressiveLoad = 'scroll';
-
         }
         if (properties.items) {
             properties.data = this._setItemsIntern(properties.items, false);
-            delete properties.items;;
+            delete properties.items;
+            ;
         }
-
         this.table = new Tabulator("[id='" + this._id + "']", properties);
-        this.table.on("rowClick", (e, e2) => { _this._onselect(e, e2) });
-        this.table.on("cellContext", (e, e2) => { _this._oncontext(e, e2) });
-        this.table.on("dataTreeRowExpanded", (e, e2) => { _this.onTreeExpanded(e, e2) });
-
+        this.table.on("rowClick", (e, e2) => { _this._onselect(e, e2); });
+        this.table.on("cellContext", (e, e2) => { _this._oncontext(e, e2); });
+        this.table.on("dataTreeRowExpanded", (e, e2) => { _this.onTreeExpanded(e, e2); });
         if (properties.lazyLoad) {
             //updates the tabledata if user sort with headerclick
             this.table.on("headerClick", function (e, c) {
@@ -180,15 +183,13 @@ export class Table extends DataComponent implements TableConfig {
             var found = fields[columns[x].getField()];
             //           where:`UPPER(CAST(ID AS TEXT)) LIKE :mftext`,
             //        whereParams:{mftext:"%24%"}
-            if (found) {//
+            if (found) { //
                 if (found[0][0] === String) {
-                    wheres.push("UPPER(\"" + columns[x].getField() + "\") LIKE :mftext")
-                
-                }else if(found[0][0] === Number||found[0][0] === Date)
-                    wheres.push("UPPER(CAST(\"" + columns[x].getField() + "\" AS TEXT)) LIKE :mftext")
-                } 
-                
-            
+                    wheres.push("UPPER(\"" + columns[x].getField() + "\") LIKE :mftext");
+                }
+                else if (found[0][0] === Number || found[0][0] === Date)
+                    wheres.push("UPPER(CAST(\"" + columns[x].getField() + "\" AS TEXT)) LIKE :mftext");
+            }
         }
         if (wheres.length > 0) {
             return wheres.join(" or ");
@@ -210,17 +211,16 @@ export class Table extends DataComponent implements TableConfig {
                 var newSort = undefined;
                 var tt = _this.table.getSorters();
                 if (tt) {
-                    newSort = {}
+                    newSort = {};
                     for (var x = 0; x < tt.length; x++) {
                         newSort[tt[x].field] = tt[x].dir.toUpperCase();
                     }
-
                 }
                 var pageSize = _this._lazyLoadOption.pageSize;
                 if (pageSize === undefined)
                     pageSize = 200;
                 var opt: any = {
-                    skip: (param2.page-1) * pageSize,
+                    skip: (param2.page - 1) * pageSize,
                     take: pageSize,
                     order: newSort
                 };
@@ -247,9 +247,7 @@ export class Table extends DataComponent implements TableConfig {
                     resolve(ret);
                     _this.callEvent("lazyloaded", data, opt, param, param2);
                 });
-
-            })
-
+            });
         });
     }
     private defaultAutoColumnDefinitions(definitions: Tabulator.ColumnDefinition[]): Tabulator.ColumnDefinition[] {
@@ -263,9 +261,9 @@ export class Table extends DataComponent implements TableConfig {
                 data = _this.items[0][definitions[x].field];
                 if (typeof data === "function")
                     continue;
-                if (data instanceof Date) {
+                if (data instanceof Date || definitions[x].formatter === undefined) {
                     definitions[x].formatter = function (cell, formatterParams, onRendered) {
-                        return Calendar.formatDate(cell.getValue()); //return the contents of the cell;
+                        return cell.getValue() === undefined ? "" : cell.getValue().toLocaleDateString(); //return the contents of the cell;
                     };
                 }
             }
@@ -321,7 +319,6 @@ export class Table extends DataComponent implements TableConfig {
         if (this._lazyLoadOption) {
             this._lazyDataHasChanged = true;
             var sel = this.value;
-
             await this.table.replaceData("/data.php");
             this.value = sel;
         }
@@ -329,7 +326,6 @@ export class Table extends DataComponent implements TableConfig {
             await this.table.updateData(this.items);
         }
     }
-
     private _oncontext(event: any, row: Tabulator.CellComponent) {
         if (this.contextMenu !== undefined) {
             this.contextMenu.value = [row.getData()];
@@ -417,8 +413,8 @@ export class Table extends DataComponent implements TableConfig {
         return this._items;
     }
     async updateOrInsertItem(item) {
-        var ret=await this.updateItem(item);
-        if(ret===undefined)
+        var ret = await this.updateItem(item);
+        if (ret === undefined)
             return await this.insertItem(item);
     }
     async updateItem(item) {
@@ -433,7 +429,7 @@ export class Table extends DataComponent implements TableConfig {
         return undefined;
     }
     async insertItem(item) {
-        var ret=await this.table.addRow(item);
+        var ret = await this.table.addRow(item);
         ret.select();
         ret.scrollTo();
         return ret;
@@ -446,11 +442,11 @@ export class Table extends DataComponent implements TableConfig {
                 try {
                     rows[x + 1].select();
                     rows[x + 1].scrollTo();
-                } catch { }
+                }
+                catch { }
                 await rows[x].delete();
                 return;
             }
-
         }
     }
     /**
@@ -476,7 +472,6 @@ export class Table extends DataComponent implements TableConfig {
         this.table.deselectRow(this.table.getSelectedRows());
         if (pos === -1)
             return;
-
     }
     get value() {
         var ret = this.table.getSelectedRows();
@@ -484,23 +479,6 @@ export class Table extends DataComponent implements TableConfig {
             return undefined;
         }
         return ret[0].getData();
-        /*var aids = w2ui[this._id].getSelection();
-        if (aids.length === 0)
-            return undefined;
-        var obs = w2ui[this._id].records;
-        var selection = [];
-        for (var x = 0; x < obs.length; x++) {
-            for (var y = 0; y < aids.length; y++) {
-                if (obs[x].id === aids[y]) {
-                    var test = obs[x]._originalObject;
-                    if (test !== undefined)//extract proxy
-                        selection.push(obs[x]._originalObject);
-                    else
-                        selection.push(obs[x]);
-                }
-            }
-        }
-        return selection.length === 1 ? selection[0] : selection;*/
     }
     /**
     * @member {string|number} - the height of the component
@@ -586,54 +564,107 @@ export class Table extends DataComponent implements TableConfig {
         //databinder.checkAutocommit(this);
     }
 }
-var page = 0;
-var id = 0;
-function updateData(v1, v2, v3) {
-    // debugger;
-    return new Promise((resolve) => {
-        console.log("updateData");
-        var data = [];
-        for (var x = id; x < 200 + id; x++) {
-            data.push({ id: x, name: "Person " + x });
+Tabulator.extendModule("format", "formatters", {
+    datetimeformat: function (cell, formatterParams) {
+        var val = cell.getValue();
+        if (val === undefined)
+            return "";
+        if (formatterParams?.datefimeformat === undefined) {
+            return DateTimeConverter.toLocalString(val, "DATE_SHORT");
         }
-        id = x;
-        page++;
-        var ret = {
-            "last_page": x > 2000 ? 0 : (v3.page + 1),
-            data: data
-        };
-        console.log(x);
-        resolve(ret);
-    });
-}
+        else {
+            return DateTimeConverter.toLocalString(val, formatterParams?.datefimeformat);
+        }
+    },
+});
+Tabulator.extendModule("edit", "editors", {
+    datetimeformat: function (cell, onRendered, success, cancel, editorParams) {
+        var f: DateTimeFormat = cell.getColumn().getDefinition()?.formatterParams?.datefimeformat;
+        var editor = document.createElement("input");
+        var format = "yyyy-MM-dd";
+        if (f === undefined || f.startsWith("DATE_")) {
+            format = "yyyy-MM-dd";
+            editor.setAttribute("type", "date");
+        }
+        else if (f.startsWith("DATE_")) {
+            format = "yyyy-MM-dd";
+        }
+        else if (f.startsWith("TIME_") && f.indexOf("SECONDS") > 0) {
+            editor.setAttribute("type", "time");
+            editor.setAttribute("step", "2");
+            format = "HH:mm:ss";
+        }
+        else if (f.startsWith("TIME_") && f.indexOf("SECONDS") === -1) {
+            editor.setAttribute("type", "time");
+            format = "HH:mm";
+        }
+        else if (f.startsWith("DATETIME_") && f.indexOf("SECONDS") > 0) {
+            editor.setAttribute("type", "datetime-local");
+            editor.setAttribute("step", "2");
+            format = "yyyy-MM-dd\'T\'HH:mm";
+        }
+        else if (f.startsWith("DATETIME_") && f.indexOf("SECONDS") === -1) {
+            editor.setAttribute("type", "datetime-local");
+            format = "yyyy-MM-dd\'T\'HH:mm:ss";
+        }
+        //create and style input
+        editor.style.padding = "3px";
+        editor.style.width = "100%";
+        editor.style.boxSizing = "border-box";
+        //Set value of editor to the current value of the cell
+        editor.value = DateTimeConverter.toFormat(cell.getValue(), format);
+        //set focus on the select box when the editor is selected (timeout allows for editor to be added to DOM)
+        onRendered(function () {
+            editor.focus();
+            editor.style.css = "100%";
+        });
+        editor.addEventListener("keydown", (ev) => {
+            if (ev.keyCode == 13) {
+                successFunc();
+            }
+            if (ev.keyCode == 27) {
+                cancel();
+            }
+        });
+        //when the value has been set, trigger the cell to update
+        function successFunc() {
+            var str=editor.value
+            if(format.split(":").length>editor.value.split(":").length)
+                str=str+":00";
+            var ret = DateTimeConverter.fromFormat(str, format);
 
+            console.log(ret);
+            success(ret);
+        }
+        // editor.addEventListener("change", successFunc);
+        editor.addEventListener("blur", successFunc);
+        //return the editor element
+        return editor;
+    },
+});
 export async function test() {
     var tabledata = [
-        { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
-        { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
-        { id: 3, name: "Christine Lobowski", age: "42", col: "green", dob: "22/05/1982" },
-        { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: "01/08/1980" },
-        { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
+        { id: 1, name: "Oli Bob", age: "12", col: "red", dob: new Date() },
+        { id: 2, name: "Mary May", age: "1", col: "blue", dob: new Date() },
+        { id: 3, name: "Christine Lobowski", age: "42", col: "green", dob: new Date() },
+        { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: new Date() },
+        { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: new Date() },
     ];
     var tab = new Table({
-        height: 200,
+        height: 300,
         headerSort: true,
-        items: tabledata
+        items: tabledata,
+        columns: [
+            { field: "id", title: "id" },
+            { field: "name", title: "name", formatter: "buttonTick" },
+            { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
+        ]
     });
-
     tab.showSearchbox = true;
-
-    //window.setTimeout(() => {
-    tab.items = tabledata;
-    // }, 100);
     tab.on("dblclick", () => {
         //  alert(tab.value);
     });
-    tab.width = 176;
-    tab.height = 223;
-    //tab.select = {};
-    // tab.showSearchbox = true;
-    //    var kunden = await jassijs.db.load("de.Kunde");
-    //   tab.items = kunden;
+    tab.width = 417;
+    tab.height = 324;
     return tab;
 }

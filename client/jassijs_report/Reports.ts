@@ -7,9 +7,8 @@ import { classes } from "jassijs/remote/Classes";
 import { Report } from "jassijs_report/Report";
 import { $Action, $ActionProvider } from "jassijs/base/Actions";
 import windows from "jassijs/base/Windows";
-import { ReportViewer } from "jassijs_report/ReportViewer";
 type Me = {
-    table?: Table;
+    table?: Table; 
     contextmenu?: ContextMenu;
 };
 @$ActionProvider("jassijs.base.ActionNode")

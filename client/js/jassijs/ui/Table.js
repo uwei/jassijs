@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Calendar", "jassijs/remote/Classes", "tabulator-tables"], function (require, exports, Registry_1, DataComponent_1, Property_1, Component_1, Textbox_1, Calendar_1, Classes_1, tabulator_tables_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter"], function (require, exports, Registry_1, DataComponent_1, Property_1, Component_1, Textbox_1, Classes_1, tabulator_tables_1, DateTimeConverter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -63,7 +63,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             }
             if (properties === undefined)
                 properties = {};
-            if (properties.autoColumns === undefined)
+            if (properties.autoColumns === undefined && properties.columns === undefined)
                 properties.autoColumns = true;
             if (properties.autoColumnsDefinitions === undefined) {
                 properties.autoColumnsDefinitions = this.defaultAutoColumnDefinitions.bind(this);
@@ -219,9 +219,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                     data = _this.items[0][definitions[x].field];
                     if (typeof data === "function")
                         continue;
-                    if (data instanceof Date) {
+                    if (data instanceof Date || definitions[x].formatter === undefined) {
                         definitions[x].formatter = function (cell, formatterParams, onRendered) {
-                            return Calendar_1.Calendar.formatDate(cell.getValue()); //return the contents of the cell;
+                            return cell.getValue() === undefined ? "" : cell.getValue().toLocaleDateString(); //return the contents of the cell;
                         };
                     }
                 }
@@ -435,23 +435,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                 return undefined;
             }
             return ret[0].getData();
-            /*var aids = w2ui[this._id].getSelection();
-            if (aids.length === 0)
-                return undefined;
-            var obs = w2ui[this._id].records;
-            var selection = [];
-            for (var x = 0; x < obs.length; x++) {
-                for (var y = 0; y < aids.length; y++) {
-                    if (obs[x].id === aids[y]) {
-                        var test = obs[x]._originalObject;
-                        if (test !== undefined)//extract proxy
-                            selection.push(obs[x]._originalObject);
-                        else
-                            selection.push(obs[x]);
-                    }
-                }
-            }
-            return selection.length === 1 ? selection[0] : selection;*/
         }
         /**
         * @member {string|number} - the height of the component
@@ -573,52 +556,108 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         __metadata("design:paramtypes", [Object])
     ], Table);
     exports.Table = Table;
-    var page = 0;
-    var id = 0;
-    function updateData(v1, v2, v3) {
-        // debugger;
-        return new Promise((resolve) => {
-            console.log("updateData");
-            var data = [];
-            for (var x = id; x < 200 + id; x++) {
-                data.push({ id: x, name: "Person " + x });
+    tabulator_tables_1.Tabulator.extendModule("format", "formatters", {
+        datetimeformat: function (cell, formatterParams) {
+            var val = cell.getValue();
+            if (val === undefined)
+                return "";
+            if ((formatterParams === null || formatterParams === void 0 ? void 0 : formatterParams.datefimeformat) === undefined) {
+                return DateTimeConverter_1.DateTimeConverter.toLocalString(val, "DATE_SHORT");
             }
-            id = x;
-            page++;
-            var ret = {
-                "last_page": x > 2000 ? 0 : (v3.page + 1),
-                data: data
-            };
-            console.log(x);
-            resolve(ret);
-        });
-    }
+            else {
+                return DateTimeConverter_1.DateTimeConverter.toLocalString(val, formatterParams === null || formatterParams === void 0 ? void 0 : formatterParams.datefimeformat);
+            }
+        },
+    });
+    tabulator_tables_1.Tabulator.extendModule("edit", "editors", {
+        datetimeformat: function (cell, onRendered, success, cancel, editorParams) {
+            var _a, _b;
+            var f = (_b = (_a = cell.getColumn().getDefinition()) === null || _a === void 0 ? void 0 : _a.formatterParams) === null || _b === void 0 ? void 0 : _b.datefimeformat;
+            var editor = document.createElement("input");
+            var format = "yyyy-MM-dd";
+            if (f === undefined || f.startsWith("DATE_")) {
+                format = "yyyy-MM-dd";
+                editor.setAttribute("type", "date");
+            }
+            else if (f.startsWith("DATE_")) {
+                format = "yyyy-MM-dd";
+            }
+            else if (f.startsWith("TIME_") && f.indexOf("SECONDS") > 0) {
+                editor.setAttribute("type", "time");
+                editor.setAttribute("step", "2");
+                format = "HH:mm:ss";
+            }
+            else if (f.startsWith("TIME_") && f.indexOf("SECONDS") === -1) {
+                editor.setAttribute("type", "time");
+                format = "HH:mm";
+            }
+            else if (f.startsWith("DATETIME_") && f.indexOf("SECONDS") > 0) {
+                editor.setAttribute("type", "datetime-local");
+                editor.setAttribute("step", "2");
+                format = "yyyy-MM-dd\'T\'HH:mm";
+            }
+            else if (f.startsWith("DATETIME_") && f.indexOf("SECONDS") === -1) {
+                editor.setAttribute("type", "datetime-local");
+                format = "yyyy-MM-dd\'T\'HH:mm:ss";
+            }
+            //create and style input
+            editor.style.padding = "3px";
+            editor.style.width = "100%";
+            editor.style.boxSizing = "border-box";
+            //Set value of editor to the current value of the cell
+            editor.value = DateTimeConverter_1.DateTimeConverter.toFormat(cell.getValue(), format);
+            //set focus on the select box when the editor is selected (timeout allows for editor to be added to DOM)
+            onRendered(function () {
+                editor.focus();
+                editor.style.css = "100%";
+            });
+            editor.addEventListener("keydown", (ev) => {
+                if (ev.keyCode == 13) {
+                    successFunc();
+                }
+                if (ev.keyCode == 27) {
+                    cancel();
+                }
+            });
+            //when the value has been set, trigger the cell to update
+            function successFunc() {
+                var str = editor.value;
+                if (format.split(":").length > editor.value.split(":").length)
+                    str = str + ":00";
+                var ret = DateTimeConverter_1.DateTimeConverter.fromFormat(str, format);
+                console.log(ret);
+                success(ret);
+            }
+            // editor.addEventListener("change", successFunc);
+            editor.addEventListener("blur", successFunc);
+            //return the editor element
+            return editor;
+        },
+    });
     async function test() {
         var tabledata = [
-            { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
-            { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
-            { id: 3, name: "Christine Lobowski", age: "42", col: "green", dob: "22/05/1982" },
-            { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: "01/08/1980" },
-            { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
+            { id: 1, name: "Oli Bob", age: "12", col: "red", dob: new Date() },
+            { id: 2, name: "Mary May", age: "1", col: "blue", dob: new Date() },
+            { id: 3, name: "Christine Lobowski", age: "42", col: "green", dob: new Date() },
+            { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: new Date() },
+            { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: new Date() },
         ];
         var tab = new Table({
-            height: 200,
+            height: 300,
             headerSort: true,
-            items: tabledata
+            items: tabledata,
+            columns: [
+                { field: "id", title: "id" },
+                { field: "name", title: "name", formatter: "buttonTick" },
+                { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
+            ]
         });
         tab.showSearchbox = true;
-        //window.setTimeout(() => {
-        tab.items = tabledata;
-        // }, 100);
         tab.on("dblclick", () => {
             //  alert(tab.value);
         });
-        tab.width = 176;
-        tab.height = 223;
-        //tab.select = {};
-        // tab.showSearchbox = true;
-        //    var kunden = await jassijs.db.load("de.Kunde");
-        //   tab.items = kunden;
+        tab.width = 417;
+        tab.height = 324;
         return tab;
     }
     exports.test = test;

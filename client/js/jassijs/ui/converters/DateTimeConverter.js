@@ -14,7 +14,7 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
     let DateTimeConverterProperties = class DateTimeConverterProperties {
     };
     __decorate([
-        (0, Property_1.$Property)({ type: "string", chooseFrom: ["date", "time", "datetime", "timeseconds", "datetimeseconds"] }),
+        (0, Property_1.$Property)({ type: "string", chooseFrom: ["DATE_SHORT", "TIME_SIMPLE", "DATETIME_SHORT", "TIME_WITH_SECONDS", "DATETIME_SHORT_WITH_SECONDS"] }),
         __metadata("design:type", String)
     ], DateTimeConverterProperties.prototype, "type", void 0);
     DateTimeConverterProperties = __decorate([
@@ -23,26 +23,26 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
     let DateTimeConverter = class DateTimeConverter extends DefaultConverter_1.DefaultConverter {
         constructor(props) {
             super();
-            this.type = (props === null || props === void 0 ? void 0 : props.type) === undefined ? "date" : props === null || props === void 0 ? void 0 : props.type;
+            this.type = (props === null || props === void 0 ? void 0 : props.type) === undefined ? "DATE_SHORT" : props === null || props === void 0 ? void 0 : props.type;
         }
         get component() {
             return super.component;
         }
         set component(component) {
             super.component = component;
-            if (this.type === "date") {
+            if (this.type === "DATE_SHORT") {
                 component.dom.setAttribute("type", "date");
             }
-            if (this.type === "time" || this.type === "timeseconds") {
+            if (this.type === "TIME_SIMPLE" || this.type === "TIME_WITH_SECONDS") {
                 component.dom.setAttribute("type", "time");
             }
-            if (this.type === "timeseconds") {
+            if (this.type === "TIME_WITH_SECONDS") {
                 component.dom.setAttribute("step", "2");
             }
-            if (this.type === "datetime" || this.type === "datetimeseconds") {
+            if (this.type === "DATETIME_SHORT" || this.type === "DATETIME_SHORT_WITH_SECONDS") {
                 component.dom.setAttribute("type", "datetime-local");
             }
-            if (this.type === "datetimeseconds") {
+            if (this.type === "DATETIME_SHORT_WITH_SECONDS") {
                 component.dom.setAttribute("step", "2");
             }
         }
@@ -55,19 +55,19 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
             if (str === undefined || str === "")
                 return undefined;
             var ret;
-            if (this.type === "date" || this.type === undefined) {
+            if (this.type === "DATE_SHORT" || this.type === undefined) {
                 ret = luxon.DateTime.fromFormat(str, 'yyyy-MM-dd');
             }
-            else if (this.type === "datetime") {
+            else if (this.type === "DATETIME_SHORT") {
                 ret = luxon.DateTime.fromFormat(str, "yyyy-MM-dd\'T\'HH:mm");
             }
-            else if (this.type === "time") {
+            else if (this.type === "TIME_SIMPLE") {
                 ret = luxon.DateTime.fromFormat(str, 'HH:mm');
             }
-            else if (this.type === "datetimeseconds") {
+            else if (this.type === "DATETIME_SHORT_WITH_SECONDS") {
                 ret = luxon.DateTime.fromFormat(str, "yyyy-MM-dd\'T\'HH:mm:ss");
             }
-            else if (this.type === "timeseconds") {
+            else if (this.type === "TIME_WITH_SECONDS") {
                 ret = luxon.DateTime.fromFormat(str, 'HH:mm:ss');
             }
             return ret.toJSDate();
@@ -81,28 +81,45 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
             if (obj === undefined)
                 return undefined;
             var ret;
-            if (this.type === "date" || this.type === undefined) {
+            if (this.type === "DATE_SHORT" || this.type === undefined) {
                 ret = luxon.DateTime.fromJSDate(obj).toFormat("yyyy-MM-dd");
             }
-            else if (this.type === "datetime") {
+            else if (this.type === "DATETIME_SHORT") {
                 ret = luxon.DateTime.fromJSDate(obj).toFormat("yyyy-MM-dd\'T\'HH:mm");
             }
-            else if (this.type === "time") {
+            else if (this.type === "TIME_SIMPLE") {
                 ret = luxon.DateTime.fromJSDate(obj).toFormat("HH:mm");
             }
-            else if (this.type === "datetimeseconds") {
+            else if (this.type === "DATETIME_SHORT_WITH_SECONDS") {
                 ret = luxon.DateTime.fromJSDate(obj).toFormat("yyyy-MM-dd\'T\'HH:mm:ss");
             }
-            else if (this.type === "timeseconds") {
+            else if (this.type === "TIME_WITH_SECONDS") {
                 ret = luxon.DateTime.fromJSDate(obj).toFormat("HH:mm:ss");
             }
             return ret;
             //        1979-12-31
             //return Numberformatter.numberToString(obj);
         }
+        /**
+         * format date to string
+         * @param format- e.g. "yyyy-MM-dd" or "HH:mm:ss"
+         */
+        static toFormat(date, format) {
+            return luxon.DateTime.fromJSDate(date).toFormat(format);
+        }
+        /**
+       * parse date a string
+       * @param format- e.g. "yyyy-MM-dd" or "HH:mm:ss"
+       */
+        static fromFormat(date, format) {
+            return luxon.DateTime.fromFormat(date, format).toJSDate();
+        }
+        static toLocalString(date, format) {
+            return luxon.DateTime.fromJSDate(date).toLocaleString(luxon.DateTime[format]);
+        }
     };
     __decorate([
-        (0, Property_1.$Property)({ type: "string", chooseFrom: ["date", "time", "datetime", "timeseconds", "datetimeseconds"] }),
+        (0, Property_1.$Property)({ type: "string", chooseFrom: ["DATE_SHORT", "TIME_SIMPLE", "DATETIME_SHORT", "TIME_WITH_SECONDS", "DATETIME_SHORT_WITH_SECONDS"] }),
         __metadata("design:type", String)
     ], DateTimeConverter.prototype, "type", void 0);
     DateTimeConverter = __decorate([
@@ -115,10 +132,12 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
     function test() {
         var tb = new Textbox_1.Textbox();
         tb.converter = new DateTimeConverter({
-            type: "datetimeseconds"
+            type: "DATETIME_SHORT_WITH_SECONDS"
         });
         tb.value = new Date(2022, 12, 3, 15, 5);
-        return tb;
+        console.log(DateTimeConverter.toLocalString(new Date(), ""));
+        // console.log(luxon.DateTime.fromJSDate(new Date()).toLocaleString(luxon.DateTime.DATETIME_SHORT));//Format(luxon.DateTime["DATETIME_SHORT"]));
+        //    return tb;
     }
     exports.test = test;
 });

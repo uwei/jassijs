@@ -1248,7 +1248,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
-                "date": 1657974138065,
+                "date": 1658000924565,
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -1442,7 +1442,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657658560377
             },
             "jassijs/ui/converters/DateTimeConverter.ts": {
-                "date": 1657924998811,
+                "date": 1658001075770,
                 "jassijs.ui.converters.DateTimeConverterProperies": {
                     "@members": {}
                 },

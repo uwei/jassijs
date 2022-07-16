@@ -340,7 +340,7 @@ define("jassijs_report/registry",["require"], function(require) {
 		"jassijs_report.remote.ServerReport": {}
 	},
 	"jassijs_report/Reports.ts": {
-		"date": 1657717569501,
+		"date": 1657978944425,
 		"jassijs_report/Reports": {
 			"$ActionProvider": [
 				"jassijs.base.ActionNode"
@@ -372,6 +372,17 @@ define("jassijs_report/registry",["require"], function(require) {
 	},
 	"jassijs_report/ext/pdfmake.ts": {
 		"date": 1657714350894
+	},
+	"jassijs_report/remote/RComponent.ts": {
+		"date": 1656016829917,
+		"jassijs_report.ReportComponent": {
+			"$Property": [
+				{
+					"hideBaseClassProperties": true
+				}
+			],
+			"@members": {}
+		}
 	}
 }
  }
