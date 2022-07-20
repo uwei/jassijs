@@ -33,7 +33,10 @@ export class Property
         public decription?:string;
         /** @member - hides the properties from the base class **/
         public hideBaseClassProperties?:boolean;
+        /** @member - is the property visible */
         public isVisible?:(component,propertyeditor?)=>boolean;
+        /** @member - jassijs.base.Action -   the actions in the PropertyEditor  */
+        public editoractions?: /*Action*/any[];
         /**
          * Property for PropertyEditor
          * @class jassijs.ui.EditorProperty

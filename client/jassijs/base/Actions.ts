@@ -4,6 +4,7 @@ import { FileNode } from "jassijs/remote/FileNode";
 import { classes } from "jassijs/remote/Classes";
 
 
+
 export class ActionProperties {
 	/** @member {string} - the name of the Action */
 	name: string;
@@ -46,7 +47,8 @@ export function $ActionProvider(longclassname: string): Function {
 export interface Action {
 	name: string;
 	icon?: string;
-	call: (objects: any[]) => void;
+	call: (objects: any[],params?) => void;
+	description?:string;
 }
 @$Class("jassijs.base.Actions")
 export class Actions {

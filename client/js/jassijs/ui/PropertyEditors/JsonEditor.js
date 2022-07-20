@@ -132,6 +132,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
         }
         createPropertyEditor() {
             var propEditor = new PropertyEditor_1.PropertyEditor();
+            debugger;
+            propEditor.actions = this.property.editoractions;
             propEditor.readPropertyValueFromDesign = this.propertyEditor.readPropertyValueFromDesign;
             propEditor.showThisProperties = this.showThisProperties;
             var _this = this;
@@ -220,18 +222,27 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
         __metadata("design:paramtypes", [Object, Object])
     ], JsonEditor);
     exports.JsonEditor = JsonEditor;
+    var actions = [{
+            name: "PropertyAction",
+            call: (hallo) => alert("Hallo2"),
+            description: "Hallodesc2",
+            icon: "mdi mdi-account-hard-hat"
+        }];
+    let TestProperties2 = class TestProperties2 {
+    };
+    __decorate([
+        (0, Property_1.$Property)(),
+        __metadata("design:type", Boolean)
+    ], TestProperties2.prototype, "hallo", void 0);
+    TestProperties2 = __decorate([
+        (0, Registry_1.$Class)("jassijs.ui.PropertyEditorTestProperties2")
+    ], TestProperties2);
     let TestProperties = class TestProperties {
         extensionCalled(action) {
             if (action.getPropertyEditorActions) {
                 action.getPropertyEditorActions.actions.push({
                     name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
-                    run: (hallo) => alert(hallo)
-                });
-            }
-            if (action.getPropertyEditorActions) {
-                action.getPropertyEditorActions.actions.push({
-                    name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
-                    run: (hallo) => alert("h2" + hallo)
+                    call: (hallo) => alert(hallo)
                 });
             }
         }
@@ -241,8 +252,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/PropertyEdi
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     __decorate([
-        (0, Property_1.$Property)({ name: "jo/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
-        (0, Property_1.$Property)({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2" }),
+        (0, Property_1.$Property)({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2",
+            editoractions: actions
+        }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "jo", void 0);
     TestProperties = __decorate([

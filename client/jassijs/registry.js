@@ -7,7 +7,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.ActionNode": {}
 	},
 	"jassijs/base/Actions.ts": {
-		"date": 1655556795278,
+		"date": 1658347729695,
 		"jassijs.base.Actions": {}
 	},
 	"jassijs/base/CurrentSettings.ts": {
@@ -977,11 +977,11 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Property.ts": {
-		"date": 1657128598834,
+		"date": 1658347723535,
 		"jassijs.ui.Property": {}
 	},
 	"jassijs/ui/PropertyEditor.ts": {
-		"date": 1657570005600,
+		"date": 1658349763762,
 		"jassijs.ui.PropertyEditor": {},
 		"jassijs.ui.PropertyEditorTestSubProperties": {
 			"@members": {}
@@ -1129,13 +1129,16 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/PropertyEditors/JsonEditor.ts": {
-		"date": 1657569262297,
+		"date": 1658349511725,
 		"jassijs.ui.PropertyEditors.JsonEditor": {
 			"$PropertyEditor": [
 				[
 					"json"
 				]
 			]
+		},
+		"jassijs.ui.PropertyEditorTestProperties2": {
+			"@members": {}
 		},
 		"jassijs.ui.PropertyEditorTestProperties": {
 			"@members": {}

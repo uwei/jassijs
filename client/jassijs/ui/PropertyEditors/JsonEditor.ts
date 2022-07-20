@@ -8,6 +8,7 @@ import { Tools } from "jassijs/util/Tools";
 import { classes } from "jassijs/remote/Classes";
 import { $Property } from "jassijs/ui/Property";
 import { BoxPanel } from "jassijs/ui/BoxPanel";
+import { Action } from "jassijs/base/Actions";
 
 
 @$PropertyEditor(["json"])
@@ -139,7 +140,10 @@ export class JsonEditor extends Editor {
 
 
     private createPropertyEditor(): PropertyEditor {
+       
         var propEditor = new PropertyEditor();
+         debugger;
+        propEditor.actions=this.property.editoractions;
         propEditor.readPropertyValueFromDesign = this.propertyEditor.readPropertyValueFromDesign;
         propEditor.showThisProperties = this.showThisProperties;
         var _this = this;
@@ -154,6 +158,7 @@ export class JsonEditor extends Editor {
         if (this.propertyEditor.parentPropertyEditor !== undefined) {
             propEditor.showThisProperties = this.propertyEditor.showThisProperties;
         }
+        
         return propEditor;
     }
     /**
@@ -220,26 +225,33 @@ export class JsonEditor extends Editor {
         });
     }
 }
+var actions: Action[]=[{
+        name:"PropertyAction",
+        call: (hallo) => alert("Hallo2"),
+        description: "Hallodesc2",
+        icon: "mdi mdi-account-hard-hat"
+    }];
+@$Class("jassijs.ui.PropertyEditorTestProperties2")
+class TestProperties2 {
+    @$Property()
+    hallo:boolean;
+}
 @$Class("jassijs.ui.PropertyEditorTestProperties")
 class TestProperties {
     @$Property({ decription: "name of the dialog" })
     dialogname: string;
-    @$Property({ name: "jo/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
-    @$Property({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2" })
+    @$Property({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2",
+        editoractions: actions
+    })
     jo: any;
     extensionCalled?(action: ExtensionAction) {
         if (action.getPropertyEditorActions) {
             action.getPropertyEditorActions.actions.push({
                 name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
-                run: (hallo) => alert(hallo)
+                call: (hallo) => alert(hallo)
             })
         }
-        if (action.getPropertyEditorActions) {
-            action.getPropertyEditorActions.actions.push({
-                name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
-                run: (hallo) => alert("h2" + hallo)
-            })
-        }
+      
     }
 }
 

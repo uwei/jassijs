@@ -201,6 +201,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 if (this.codeEditor)
                     this.variablename = this.codeEditor.getVariableFromObject(this._value);
                 this.update();
+                this.addActions();
                 return;
             }
             this._multiselectEditors = [];
@@ -221,6 +222,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 this._value = value;
             if (value === []) {
                 this._value = undefined;
+                this.addActions();
                 return;
             }
             if (this.codeEditor !== undefined && this.parentPropertyEditor === undefined) {
@@ -235,27 +237,28 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
                 _this.update();
         }
         addActions() {
-            var _a, _b;
+            var _a, _b, _c;
             var _this = this;
-            if ((_a = this._value) === null || _a === void 0 ? void 0 : _a.extensionCalled) {
-                var all = [];
-                (_b = this._value) === null || _b === void 0 ? void 0 : _b.extensionCalled({
+            var all = [];
+            (_a = this.actions) === null || _a === void 0 ? void 0 : _a.forEach((e) => all.push(e));
+            if ((_b = this._value) === null || _b === void 0 ? void 0 : _b.extensionCalled) {
+                (_c = this._value) === null || _c === void 0 ? void 0 : _c.extensionCalled({
                     getPropertyEditorActions: {
                         propertyEditor: this,
                         actions: all
                     }
                 });
-                this.toolbar.removeAll();
-                for (var x = 0; x < all.length; x++) {
-                    var bt = this.createAction(all[x]);
-                    this.toolbar.add(bt);
-                }
+            }
+            this.toolbar.removeAll();
+            for (var x = 0; x < all.length; x++) {
+                var bt = this.createAction(all[x]);
+                this.toolbar.add(bt);
             }
         }
         createAction(action) {
             var bt = new Button_1.Button();
             bt.icon = action.icon;
-            bt.onclick(() => action.run(this._value, this));
+            bt.onclick(() => action.call(this._value, this));
             bt.tooltip = action.description;
             return bt;
         }
@@ -798,7 +801,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
         ;
     };
     __decorate([
-        (0, Property_1.$Property)({ decription: "name of the dialog", }),
+        (0, Property_1.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     __decorate([
