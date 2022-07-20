@@ -7,7 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter"], function (require, exports, Registry_1, DataComponent_1, Property_1, Component_1, Textbox_1, Classes_1, tabulator_tables_1, DateTimeConverter_1) {
+define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter"], function (require, exports, Registry_1, DataComponent_1, Property_1, Component_1, Textbox_1, Classes_1, tabulator_tables_1, DateTimeConverter_1, Numberformatter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -76,8 +76,8 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             }
             if (properties.dataTreeChildField !== undefined)
                 properties.dataTree = true;
-            if (properties.paginationSize !== undefined && properties.pagination == undefined)
-                properties.pagination = "local";
+            //if (properties.paginationSize !== undefined && properties.pagination == undefined)
+            //   properties.pagination = "local";
             // if(properties.layoutColumnsOnNewData===undefined)
             //     properties.layoutColumnsOnNewData=true;
             if (properties.selectable === undefined)
@@ -568,6 +568,17 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
                 return DateTimeConverter_1.DateTimeConverter.toLocalString(val, formatterParams === null || formatterParams === void 0 ? void 0 : formatterParams.datefimeformat);
             }
         },
+        numberformat: function (cell, formatterParams) {
+            var val = cell.getValue();
+            if (val === undefined)
+                return "";
+            if ((formatterParams === null || formatterParams === void 0 ? void 0 : formatterParams.numberformat) === undefined) {
+                return val.toLocaleString();
+            }
+            else {
+                return Numberformatter_1.Numberformatter.format(formatterParams === null || formatterParams === void 0 ? void 0 : formatterParams.numberformat, val);
+            }
+        }
     });
     tabulator_tables_1.Tabulator.extendModule("edit", "editors", {
         datetimeformat: function (cell, onRendered, success, cancel, editorParams) {
@@ -609,7 +620,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             //set focus on the select box when the editor is selected (timeout allows for editor to be added to DOM)
             onRendered(function () {
                 editor.focus();
-                editor.style.css = "100%";
+                // editor.style.css = "100%";
             });
             editor.addEventListener("keydown", (ev) => {
                 if (ev.keyCode == 13) {
@@ -633,14 +644,48 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             //return the editor element
             return editor;
         },
+        numberformat: function (cell, onRendered, success, cancel, editorParams) {
+            var editor = document.createElement("input");
+            var format = "yyyy-MM-dd";
+            // editor.setAttribute("type", "number");
+            //create and style input
+            editor.style.padding = "3px";
+            editor.style.width = "100%";
+            editor.style.boxSizing = "border-box";
+            //Set value of editor to the current value of the cell
+            editor.value = Numberformatter_1.Numberformatter.numberToString(cell.getValue());
+            //set focus on the select box when the editor is selected (timeout allows for editor to be added to DOM)
+            onRendered(function () {
+                editor.focus();
+                //  editor.style.css = "100%";
+            });
+            editor.addEventListener("keydown", (ev) => {
+                if (ev.keyCode == 13) {
+                    successFunc();
+                }
+                if (ev.keyCode == 27) {
+                    cancel();
+                }
+            });
+            //when the value has been set, trigger the cell to update
+            function successFunc() {
+                var str = editor.value;
+                var ret = Numberformatter_1.Numberformatter.stringToNumber(str);
+                success(ret);
+            }
+            // editor.addEventListener("change", successFunc);
+            editor.addEventListener("blur", successFunc);
+            //return the editor element
+            return editor;
+        }
     });
     async function test() {
         var tabledata = [
-            { id: 1, name: "Oli Bob", age: "12", col: "red", dob: new Date() },
-            { id: 2, name: "Mary May", age: "1", col: "blue", dob: new Date() },
-            { id: 3, name: "Christine Lobowski", age: "42", col: "green", dob: new Date() },
-            { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: new Date() },
-            { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: new Date() },
+            { id: 1, name: "Oli Bob", age: 12.5, col: "red", dob: new Date() },
+            { id: 2, name: "Mary May", age: 1.555, col: "blue", dob: new Date() },
+            { id: 3, name: "Christine Lobowski", age: 42, col: "green", dob: new Date() },
+            { id: 4, name: "Brendon Philips", age: 12, col: "orange", dob: new Date() },
+            { id: 5, name: "Margret Marmajuke", age: 99, col: "yellow", dob: new Date() },
         ];
         var tab = new Table({
             height: 300,
@@ -648,6 +693,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             items: tabledata,
             columns: [
                 { field: "id", title: "id" },
+                { field: "age", title: "age", formatter: "numberformat", formatterParams: { numberformat: "#.##0,00" }, editor: "numberformat" },
                 { field: "name", title: "name", formatter: "buttonTick" },
                 { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
             ]

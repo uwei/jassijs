@@ -75,7 +75,7 @@ export class NumberConverter extends DefaultConverter
         return Numberformatter.numberToString(obj);
     }
     objectToFormatedString(obj) {
-        return Numberformatter.format(this.format, obj)
+        return Numberformatter.format(this.format, obj);
     }
 }
 

@@ -9,6 +9,7 @@ import { Databinder } from "jassijs/ui/Databinder";
 import { classes } from "jassijs/remote/Classes";
 import { Tabulator } from "tabulator-tables";
 import { DateTimeConverter, DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
+import { Numberformatter } from "jassijs/util/Numberformatter";
 interface LazyLoadOption {
     classname: string;
     loadFunc: string;
@@ -19,17 +20,20 @@ interface TableOptions extends Tabulator.Options {
     dataTreeChildFunction?: ((data: any) => any) | any;
     lazyLoad?: LazyLoadOption;
     items?: any[];
-    columns: ColumnDefinition[];
+    columns?: ColumnDefinition[];
 }
 //@ts-ignore
 interface ColumnDefinition extends Tabulator.ColumnDefinition {
     formatter?: Formatter;
     formatterParams?: FormatterParams;
+    editor?:Editor;
 }
 type FormatterParams = Tabulator.FormatterParams | {
     datefimeformat: DateTimeFormat;
+    numberformat: "#.##0,00" | string;
 };
-type Formatter = Tabulator.Formatter | "datetimeformat";
+type Editor = Tabulator.Editor | "datetimeformat" | "numberformat";
+type Formatter = Tabulator.Formatter | "datetimeformat" | "numberformat";
 @$Class("jassijs.ui.TableEditorProperties")
 class TableEditorProperties {
     @$Property({ default: undefined })
@@ -118,8 +122,8 @@ export class Table extends DataComponent implements TableConfig {
         }
         if (properties.dataTreeChildField !== undefined)
             properties.dataTree = true;
-        if (properties.paginationSize !== undefined && properties.pagination == undefined)
-            properties.pagination = "local";
+        //if (properties.paginationSize !== undefined && properties.pagination == undefined)
+         //   properties.pagination = "local";
         // if(properties.layoutColumnsOnNewData===undefined)
         //     properties.layoutColumnsOnNewData=true;
         if (properties.selectable === undefined)
@@ -139,8 +143,8 @@ export class Table extends DataComponent implements TableConfig {
             delete properties.items;
             ;
         }
-        this.table = new Tabulator("[id='" + this._id + "']", properties);
-        this.table.on("rowClick", (e, e2) => { _this._onselect(e, e2); });
+        this.table = new Tabulator("[id='" + this._id + "']", <any>properties);
+        this.table.on("rowClick", (e, e2) => { _this._onselect(<any>e, e2); });
         this.table.on("cellContext", (e, e2) => { _this._oncontext(e, e2); });
         this.table.on("dataTreeRowExpanded", (e, e2) => { _this.onTreeExpanded(e, e2); });
         if (properties.lazyLoad) {
@@ -576,6 +580,17 @@ Tabulator.extendModule("format", "formatters", {
             return DateTimeConverter.toLocalString(val, formatterParams?.datefimeformat);
         }
     },
+    numberformat: function (cell, formatterParams) {
+        var val: number = cell.getValue();
+        if (val === undefined)
+            return "";
+        if (formatterParams?.numberformat === undefined) {
+            return val.toLocaleString();
+        }
+        else {
+            return Numberformatter.format(formatterParams?.numberformat, val);
+        }
+    }
 });
 Tabulator.extendModule("edit", "editors", {
     datetimeformat: function (cell, onRendered, success, cancel, editorParams) {
@@ -616,7 +631,7 @@ Tabulator.extendModule("edit", "editors", {
         //set focus on the select box when the editor is selected (timeout allows for editor to be added to DOM)
         onRendered(function () {
             editor.focus();
-            editor.style.css = "100%";
+            // editor.style.css = "100%";
         });
         editor.addEventListener("keydown", (ev) => {
             if (ev.keyCode == 13) {
@@ -628,9 +643,9 @@ Tabulator.extendModule("edit", "editors", {
         });
         //when the value has been set, trigger the cell to update
         function successFunc() {
-            var str=editor.value
-            if(format.split(":").length>editor.value.split(":").length)
-                str=str+":00";
+            var str = editor.value
+            if (format.split(":").length > editor.value.split(":").length)
+                str = str + ":00";
             var ret = DateTimeConverter.fromFormat(str, format);
 
             console.log(ret);
@@ -641,14 +656,49 @@ Tabulator.extendModule("edit", "editors", {
         //return the editor element
         return editor;
     },
+    numberformat: function (cell, onRendered, success, cancel, editorParams) {
+        var editor = document.createElement("input");
+        var format = "yyyy-MM-dd";
+       // editor.setAttribute("type", "number");
+
+        //create and style input
+        editor.style.padding = "3px";
+        editor.style.width = "100%";
+        editor.style.boxSizing = "border-box";
+        //Set value of editor to the current value of the cell
+        editor.value = Numberformatter.numberToString(cell.getValue());
+        //set focus on the select box when the editor is selected (timeout allows for editor to be added to DOM)
+        onRendered(function () {
+            editor.focus();
+            //  editor.style.css = "100%";
+        });
+        editor.addEventListener("keydown", (ev) => {
+            if (ev.keyCode == 13) {
+                successFunc();
+            }
+            if (ev.keyCode == 27) {
+                cancel();
+            }
+        });
+        //when the value has been set, trigger the cell to update
+        function successFunc() {
+            var str = editor.value;
+            var ret = Numberformatter.stringToNumber(str);
+            success(ret);
+        }
+        // editor.addEventListener("change", successFunc);
+        editor.addEventListener("blur", successFunc);
+        //return the editor element
+        return editor;
+    }
 });
 export async function test() {
     var tabledata = [
-        { id: 1, name: "Oli Bob", age: "12", col: "red", dob: new Date() },
-        { id: 2, name: "Mary May", age: "1", col: "blue", dob: new Date() },
-        { id: 3, name: "Christine Lobowski", age: "42", col: "green", dob: new Date() },
-        { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: new Date() },
-        { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: new Date() },
+        { id: 1, name: "Oli Bob", age: 12.5, col: "red", dob: new Date() },
+        { id: 2, name: "Mary May", age: 1.555, col: "blue", dob: new Date() },
+        { id: 3, name: "Christine Lobowski", age: 42, col: "green", dob: new Date() },
+        { id: 4, name: "Brendon Philips", age: 12, col: "orange", dob: new Date() },
+        { id: 5, name: "Margret Marmajuke", age: 99, col: "yellow", dob: new Date() },
     ];
     var tab = new Table({
         height: 300,
@@ -656,6 +706,7 @@ export async function test() {
         items: tabledata,
         columns: [
             { field: "id", title: "id" },
+            { field: "age", title: "age", formatter: "numberformat",formatterParams: { numberformat: "#.##0,00" }, editor: "numberformat" },
             { field: "name", title: "name", formatter: "buttonTick" },
             { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
         ]
