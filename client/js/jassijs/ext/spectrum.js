@@ -6,4 +6,4 @@ define(["require", "exports", "spectrum", "jassijs/modul"], function (require, e
     //path=path.substring(0,path.lastIndexOf("/"));
     jassijs.myRequire(path + ".css");
 });
-//# sourceMappingURL=Spectrum.js.map
+//# sourceMappingURL=spectrum.js.map

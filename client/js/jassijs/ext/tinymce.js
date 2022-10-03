@@ -19,4 +19,4 @@ define(["require", "exports", "tinymcelib"], function (require, exports, tinymce
     };
     exports.default = tinymce;
 });
-//# sourceMappingURL=Tinymce.js.map
+//# sourceMappingURL=tinymce.js.map

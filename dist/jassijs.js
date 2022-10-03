@@ -97,7 +97,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "jassijs.base.ActionNode": {}
             },
             "jassijs/base/Actions.ts": {
-                "date": 1655556795278,
+                "date": 1658347729695,
                 "jassijs.base.Actions": {}
             },
             "jassijs/base/CurrentSettings.ts": {
@@ -650,7 +650,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/converters/NumberConverter.ts": {
-                "date": 1657473978946,
+                "date": 1658334940375,
                 "jassijs.ui.converters.NumberConverterProperies": {
                     "@members": {}
                 },
@@ -1067,11 +1067,11 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Property.ts": {
-                "date": 1657128598834,
+                "date": 1658347723535,
                 "jassijs.ui.Property": {}
             },
             "jassijs/ui/PropertyEditor.ts": {
-                "date": 1657570005600,
+                "date": 1658349763762,
                 "jassijs.ui.PropertyEditor": {},
                 "jassijs.ui.PropertyEditorTestSubProperties": {
                     "@members": {}
@@ -1219,13 +1219,16 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/PropertyEditors/JsonEditor.ts": {
-                "date": 1657569262297,
+                "date": 1658349511725,
                 "jassijs.ui.PropertyEditors.JsonEditor": {
                     "$PropertyEditor": [
                         [
                             "json"
                         ]
                     ]
+                },
+                "jassijs.ui.PropertyEditorTestProperties2": {
+                    "@members": {}
                 },
                 "jassijs.ui.PropertyEditorTestProperties": {
                     "@members": {}
@@ -1338,7 +1341,7 @@ define("jassijs/registry", ["require"], function (require) {
                 }
             },
             "jassijs/ui/Table.ts": {
-                "date": 1657974138065,
+                "date": 1658337768787,
                 "jassijs.ui.TableEditorProperties": {
                     "@members": {}
                 },
@@ -1532,7 +1535,7 @@ define("jassijs/registry", ["require"], function (require) {
                 "date": 1657658560377
             },
             "jassijs/ui/converters/DateTimeConverter.ts": {
-                "date": 1657924998811,
+                "date": 1658001075770,
                 "jassijs.ui.converters.DateTimeConverterProperies": {
                     "@members": {}
                 },
@@ -11834,6 +11837,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
                 if (this.codeEditor)
                     this.variablename = this.codeEditor.getVariableFromObject(this._value);
                 this.update();
+                this.addActions();
                 return;
             }
             this._multiselectEditors = [];
@@ -11854,6 +11858,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
                 this._value = value;
             if (value === []) {
                 this._value = undefined;
+                this.addActions();
                 return;
             }
             if (this.codeEditor !== undefined && this.parentPropertyEditor === undefined) {
@@ -11868,27 +11873,28 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
                 _this.update();
         }
         addActions() {
-            var _a, _b;
+            var _a, _b, _c;
             var _this = this;
-            if ((_a = this._value) === null || _a === void 0 ? void 0 : _a.extensionCalled) {
-                var all = [];
-                (_b = this._value) === null || _b === void 0 ? void 0 : _b.extensionCalled({
+            var all = [];
+            (_a = this.actions) === null || _a === void 0 ? void 0 : _a.forEach((e) => all.push(e));
+            if ((_b = this._value) === null || _b === void 0 ? void 0 : _b.extensionCalled) {
+                (_c = this._value) === null || _c === void 0 ? void 0 : _c.extensionCalled({
                     getPropertyEditorActions: {
                         propertyEditor: this,
                         actions: all
                     }
                 });
-                this.toolbar.removeAll();
-                for (var x = 0; x < all.length; x++) {
-                    var bt = this.createAction(all[x]);
-                    this.toolbar.add(bt);
-                }
+            }
+            this.toolbar.removeAll();
+            for (var x = 0; x < all.length; x++) {
+                var bt = this.createAction(all[x]);
+                this.toolbar.add(bt);
             }
         }
         createAction(action) {
             var bt = new Button_9.Button();
             bt.icon = action.icon;
-            bt.onclick(() => action.run(this._value, this));
+            bt.onclick(() => action.call(this._value, this));
             bt.tooltip = action.description;
             return bt;
         }
@@ -12431,7 +12437,7 @@ define("jassijs/ui/PropertyEditor", ["require", "exports", "jassijs/remote/Regis
         ;
     };
     __decorate([
-        (0, Property_23.$Property)({ decription: "name of the dialog", }),
+        (0, Property_23.$Property)({ decription: "name of the dialog" }),
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     __decorate([
@@ -13235,7 +13241,7 @@ define("jassijs/ui/Style", ["require", "exports", "jassijs/ui/InvisibleComponent
     }
     exports.test2 = test2;
 });
-define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/ui/Calendar", "jassijs/remote/Classes", "tabulator-tables"], function (require, exports, Registry_87, DataComponent_5, Property_27, Component_27, Textbox_8, Calendar_1, Classes_26, tabulator_tables_1) {
+define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataComponent", "jassijs/ui/Property", "jassijs/ui/Component", "jassijs/ui/Textbox", "jassijs/remote/Classes", "tabulator-tables", "jassijs/ui/converters/DateTimeConverter", "jassijs/util/Numberformatter"], function (require, exports, Registry_87, DataComponent_5, Property_27, Component_27, Textbox_8, Classes_26, tabulator_tables_1, DateTimeConverter_1, Numberformatter_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Table = void 0;
@@ -13291,7 +13297,7 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
             }
             if (properties === undefined)
                 properties = {};
-            if (properties.autoColumns === undefined)
+            if (properties.autoColumns === undefined && properties.columns === undefined)
                 properties.autoColumns = true;
             if (properties.autoColumnsDefinitions === undefined) {
                 properties.autoColumnsDefinitions = this.defaultAutoColumnDefinitions.bind(this);
@@ -13304,8 +13310,8 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
             }
             if (properties.dataTreeChildField !== undefined)
                 properties.dataTree = true;
-            if (properties.paginationSize !== undefined && properties.pagination == undefined)
-                properties.pagination = "local";
+            //if (properties.paginationSize !== undefined && properties.pagination == undefined)
+            //   properties.pagination = "local";
             // if(properties.layoutColumnsOnNewData===undefined)
             //     properties.layoutColumnsOnNewData=true;
             if (properties.selectable === undefined)
@@ -13447,9 +13453,9 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
                     data = _this.items[0][definitions[x].field];
                     if (typeof data === "function")
                         continue;
-                    if (data instanceof Date) {
+                    if (data instanceof Date || definitions[x].formatter === undefined) {
                         definitions[x].formatter = function (cell, formatterParams, onRendered) {
-                            return Calendar_1.Calendar.formatDate(cell.getValue()); //return the contents of the cell;
+                            return cell.getValue() === undefined ? "" : cell.getValue().toLocaleDateString(); //return the contents of the cell;
                         };
                     }
                 }
@@ -13663,23 +13669,6 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
                 return undefined;
             }
             return ret[0].getData();
-            /*var aids = w2ui[this._id].getSelection();
-            if (aids.length === 0)
-                return undefined;
-            var obs = w2ui[this._id].records;
-            var selection = [];
-            for (var x = 0; x < obs.length; x++) {
-                for (var y = 0; y < aids.length; y++) {
-                    if (obs[x].id === aids[y]) {
-                        var test = obs[x]._originalObject;
-                        if (test !== undefined)//extract proxy
-                            selection.push(obs[x]._originalObject);
-                        else
-                            selection.push(obs[x]);
-                    }
-                }
-            }
-            return selection.length === 1 ? selection[0] : selection;*/
         }
         /**
         * @member {string|number} - the height of the component
@@ -13801,52 +13790,154 @@ define("jassijs/ui/Table", ["require", "exports", "jassijs/remote/Registry", "ja
         __metadata("design:paramtypes", [Object])
     ], Table);
     exports.Table = Table;
-    var page = 0;
-    var id = 0;
-    function updateData(v1, v2, v3) {
-        // debugger;
-        return new Promise((resolve) => {
-            console.log("updateData");
-            var data = [];
-            for (var x = id; x < 200 + id; x++) {
-                data.push({ id: x, name: "Person " + x });
+    tabulator_tables_1.Tabulator.extendModule("format", "formatters", {
+        datetimeformat: function (cell, formatterParams) {
+            var val = cell.getValue();
+            if (val === undefined)
+                return "";
+            if ((formatterParams === null || formatterParams === void 0 ? void 0 : formatterParams.datefimeformat) === undefined) {
+                return DateTimeConverter_1.DateTimeConverter.toLocalString(val, "DATE_SHORT");
             }
-            id = x;
-            page++;
-            var ret = {
-                "last_page": x > 2000 ? 0 : (v3.page + 1),
-                data: data
-            };
-            console.log(x);
-            resolve(ret);
-        });
-    }
+            else {
+                return DateTimeConverter_1.DateTimeConverter.toLocalString(val, formatterParams === null || formatterParams === void 0 ? void 0 : formatterParams.datefimeformat);
+            }
+        },
+        numberformat: function (cell, formatterParams) {
+            var val = cell.getValue();
+            if (val === undefined)
+                return "";
+            if ((formatterParams === null || formatterParams === void 0 ? void 0 : formatterParams.numberformat) === undefined) {
+                return val.toLocaleString();
+            }
+            else {
+                return Numberformatter_1.Numberformatter.format(formatterParams === null || formatterParams === void 0 ? void 0 : formatterParams.numberformat, val);
+            }
+        }
+    });
+    tabulator_tables_1.Tabulator.extendModule("edit", "editors", {
+        datetimeformat: function (cell, onRendered, success, cancel, editorParams) {
+            var _a, _b;
+            var f = (_b = (_a = cell.getColumn().getDefinition()) === null || _a === void 0 ? void 0 : _a.formatterParams) === null || _b === void 0 ? void 0 : _b.datefimeformat;
+            var editor = document.createElement("input");
+            var format = "yyyy-MM-dd";
+            if (f === undefined || f.startsWith("DATE_")) {
+                format = "yyyy-MM-dd";
+                editor.setAttribute("type", "date");
+            }
+            else if (f.startsWith("DATE_")) {
+                format = "yyyy-MM-dd";
+            }
+            else if (f.startsWith("TIME_") && f.indexOf("SECONDS") > 0) {
+                editor.setAttribute("type", "time");
+                editor.setAttribute("step", "2");
+                format = "HH:mm:ss";
+            }
+            else if (f.startsWith("TIME_") && f.indexOf("SECONDS") === -1) {
+                editor.setAttribute("type", "time");
+                format = "HH:mm";
+            }
+            else if (f.startsWith("DATETIME_") && f.indexOf("SECONDS") > 0) {
+                editor.setAttribute("type", "datetime-local");
+                editor.setAttribute("step", "2");
+                format = "yyyy-MM-dd\'T\'HH:mm";
+            }
+            else if (f.startsWith("DATETIME_") && f.indexOf("SECONDS") === -1) {
+                editor.setAttribute("type", "datetime-local");
+                format = "yyyy-MM-dd\'T\'HH:mm:ss";
+            }
+            //create and style input
+            editor.style.padding = "3px";
+            editor.style.width = "100%";
+            editor.style.boxSizing = "border-box";
+            //Set value of editor to the current value of the cell
+            editor.value = DateTimeConverter_1.DateTimeConverter.toFormat(cell.getValue(), format);
+            //set focus on the select box when the editor is selected (timeout allows for editor to be added to DOM)
+            onRendered(function () {
+                editor.focus();
+                // editor.style.css = "100%";
+            });
+            editor.addEventListener("keydown", (ev) => {
+                if (ev.keyCode == 13) {
+                    successFunc();
+                }
+                if (ev.keyCode == 27) {
+                    cancel();
+                }
+            });
+            //when the value has been set, trigger the cell to update
+            function successFunc() {
+                var str = editor.value;
+                if (format.split(":").length > editor.value.split(":").length)
+                    str = str + ":00";
+                var ret = DateTimeConverter_1.DateTimeConverter.fromFormat(str, format);
+                console.log(ret);
+                success(ret);
+            }
+            // editor.addEventListener("change", successFunc);
+            editor.addEventListener("blur", successFunc);
+            //return the editor element
+            return editor;
+        },
+        numberformat: function (cell, onRendered, success, cancel, editorParams) {
+            var editor = document.createElement("input");
+            var format = "yyyy-MM-dd";
+            // editor.setAttribute("type", "number");
+            //create and style input
+            editor.style.padding = "3px";
+            editor.style.width = "100%";
+            editor.style.boxSizing = "border-box";
+            //Set value of editor to the current value of the cell
+            editor.value = Numberformatter_1.Numberformatter.numberToString(cell.getValue());
+            //set focus on the select box when the editor is selected (timeout allows for editor to be added to DOM)
+            onRendered(function () {
+                editor.focus();
+                //  editor.style.css = "100%";
+            });
+            editor.addEventListener("keydown", (ev) => {
+                if (ev.keyCode == 13) {
+                    successFunc();
+                }
+                if (ev.keyCode == 27) {
+                    cancel();
+                }
+            });
+            //when the value has been set, trigger the cell to update
+            function successFunc() {
+                var str = editor.value;
+                var ret = Numberformatter_1.Numberformatter.stringToNumber(str);
+                success(ret);
+            }
+            // editor.addEventListener("change", successFunc);
+            editor.addEventListener("blur", successFunc);
+            //return the editor element
+            return editor;
+        }
+    });
     async function test() {
         var tabledata = [
-            { id: 1, name: "Oli Bob", age: "12", col: "red", dob: "" },
-            { id: 2, name: "Mary May", age: "1", col: "blue", dob: "14/05/1982" },
-            { id: 3, name: "Christine Lobowski", age: "42", col: "green", dob: "22/05/1982" },
-            { id: 4, name: "Brendon Philips", age: "125", col: "orange", dob: "01/08/1980" },
-            { id: 5, name: "Margret Marmajuke", age: "16", col: "yellow", dob: "31/01/1999" },
+            { id: 1, name: "Oli Bob", age: 12.5, col: "red", dob: new Date() },
+            { id: 2, name: "Mary May", age: 1.555, col: "blue", dob: new Date() },
+            { id: 3, name: "Christine Lobowski", age: 42, col: "green", dob: new Date() },
+            { id: 4, name: "Brendon Philips", age: 12, col: "orange", dob: new Date() },
+            { id: 5, name: "Margret Marmajuke", age: 99, col: "yellow", dob: new Date() },
         ];
         var tab = new Table({
-            height: 200,
+            height: 300,
             headerSort: true,
-            items: tabledata
+            items: tabledata,
+            columns: [
+                { field: "id", title: "id" },
+                { field: "age", title: "age", formatter: "numberformat", formatterParams: { numberformat: "#.##0,00" }, editor: "numberformat" },
+                { field: "name", title: "name", formatter: "buttonTick" },
+                { field: "dob", title: "dob", formatter: "datetimeformat", formatterParams: { datefimeformat: "DATETIME_SHORT" }, editor: "datetimeformat" }
+            ]
         });
         tab.showSearchbox = true;
-        //window.setTimeout(() => {
-        tab.items = tabledata;
-        // }, 100);
         tab.on("dblclick", () => {
             //  alert(tab.value);
         });
-        tab.width = 176;
-        tab.height = 223;
-        //tab.select = {};
-        // tab.showSearchbox = true;
-        //    var kunden = await jassijs.db.load("de.Kunde");
-        //   tab.items = kunden;
+        tab.width = 417;
+        tab.height = 324;
         return tab;
     }
     exports.test = test;
@@ -16746,6 +16837,8 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         }
         createPropertyEditor() {
             var propEditor = new PropertyEditor_6.PropertyEditor();
+            debugger;
+            propEditor.actions = this.property.editoractions;
             propEditor.readPropertyValueFromDesign = this.propertyEditor.readPropertyValueFromDesign;
             propEditor.showThisProperties = this.showThisProperties;
             var _this = this;
@@ -16834,18 +16927,27 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         __metadata("design:paramtypes", [Object, Object])
     ], JsonEditor);
     exports.JsonEditor = JsonEditor;
+    var actions = [{
+            name: "PropertyAction",
+            call: (hallo) => alert("Hallo2"),
+            description: "Hallodesc2",
+            icon: "mdi mdi-account-hard-hat"
+        }];
+    let TestProperties2 = class TestProperties2 {
+    };
+    __decorate([
+        (0, Property_33.$Property)(),
+        __metadata("design:type", Boolean)
+    ], TestProperties2.prototype, "hallo", void 0);
+    TestProperties2 = __decorate([
+        (0, Registry_110.$Class)("jassijs.ui.PropertyEditorTestProperties2")
+    ], TestProperties2);
     let TestProperties = class TestProperties {
         extensionCalled(action) {
             if (action.getPropertyEditorActions) {
                 action.getPropertyEditorActions.actions.push({
                     name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
-                    run: (hallo) => alert(hallo)
-                });
-            }
-            if (action.getPropertyEditorActions) {
-                action.getPropertyEditorActions.actions.push({
-                    name: "Hallo", description: "Hallodesc", icon: "mdi mdi-table-arrow-up",
-                    run: (hallo) => alert("h2" + hallo)
+                    call: (hallo) => alert(hallo)
                 });
             }
         }
@@ -16855,8 +16957,9 @@ define("jassijs/ui/PropertyEditors/JsonEditor", ["require", "exports", "jassijs/
         __metadata("design:type", String)
     ], TestProperties.prototype, "dialogname", void 0);
     __decorate([
-        (0, Property_33.$Property)({ name: "jo/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" }),
-        (0, Property_33.$Property)({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2" }),
+        (0, Property_33.$Property)({ name: "jo", type: "json", componentType: "jassijs.ui.PropertyEditorTestProperties2",
+            editoractions: actions
+        }),
         __metadata("design:type", Object)
     ], TestProperties.prototype, "jo", void 0);
     TestProperties = __decorate([
@@ -16975,7 +17078,7 @@ define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassij
     let DateTimeConverterProperties = class DateTimeConverterProperties {
     };
     __decorate([
-        (0, Property_34.$Property)({ type: "string", chooseFrom: ["date", "time", "datetime", "timeseconds", "datetimeseconds"] }),
+        (0, Property_34.$Property)({ type: "string", chooseFrom: ["DATE_SHORT", "TIME_SIMPLE", "DATETIME_SHORT", "TIME_WITH_SECONDS", "DATETIME_SHORT_WITH_SECONDS"] }),
         __metadata("design:type", String)
     ], DateTimeConverterProperties.prototype, "type", void 0);
     DateTimeConverterProperties = __decorate([
@@ -16984,26 +17087,26 @@ define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassij
     let DateTimeConverter = class DateTimeConverter extends DefaultConverter_2.DefaultConverter {
         constructor(props) {
             super();
-            this.type = (props === null || props === void 0 ? void 0 : props.type) === undefined ? "date" : props === null || props === void 0 ? void 0 : props.type;
+            this.type = (props === null || props === void 0 ? void 0 : props.type) === undefined ? "DATE_SHORT" : props === null || props === void 0 ? void 0 : props.type;
         }
         get component() {
             return super.component;
         }
         set component(component) {
             super.component = component;
-            if (this.type === "date") {
+            if (this.type === "DATE_SHORT") {
                 component.dom.setAttribute("type", "date");
             }
-            if (this.type === "time" || this.type === "timeseconds") {
+            if (this.type === "TIME_SIMPLE" || this.type === "TIME_WITH_SECONDS") {
                 component.dom.setAttribute("type", "time");
             }
-            if (this.type === "timeseconds") {
+            if (this.type === "TIME_WITH_SECONDS") {
                 component.dom.setAttribute("step", "2");
             }
-            if (this.type === "datetime" || this.type === "datetimeseconds") {
+            if (this.type === "DATETIME_SHORT" || this.type === "DATETIME_SHORT_WITH_SECONDS") {
                 component.dom.setAttribute("type", "datetime-local");
             }
-            if (this.type === "datetimeseconds") {
+            if (this.type === "DATETIME_SHORT_WITH_SECONDS") {
                 component.dom.setAttribute("step", "2");
             }
         }
@@ -17016,19 +17119,19 @@ define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassij
             if (str === undefined || str === "")
                 return undefined;
             var ret;
-            if (this.type === "date" || this.type === undefined) {
+            if (this.type === "DATE_SHORT" || this.type === undefined) {
                 ret = luxon.DateTime.fromFormat(str, 'yyyy-MM-dd');
             }
-            else if (this.type === "datetime") {
+            else if (this.type === "DATETIME_SHORT") {
                 ret = luxon.DateTime.fromFormat(str, "yyyy-MM-dd\'T\'HH:mm");
             }
-            else if (this.type === "time") {
+            else if (this.type === "TIME_SIMPLE") {
                 ret = luxon.DateTime.fromFormat(str, 'HH:mm');
             }
-            else if (this.type === "datetimeseconds") {
+            else if (this.type === "DATETIME_SHORT_WITH_SECONDS") {
                 ret = luxon.DateTime.fromFormat(str, "yyyy-MM-dd\'T\'HH:mm:ss");
             }
-            else if (this.type === "timeseconds") {
+            else if (this.type === "TIME_WITH_SECONDS") {
                 ret = luxon.DateTime.fromFormat(str, 'HH:mm:ss');
             }
             return ret.toJSDate();
@@ -17042,28 +17145,45 @@ define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassij
             if (obj === undefined)
                 return undefined;
             var ret;
-            if (this.type === "date" || this.type === undefined) {
+            if (this.type === "DATE_SHORT" || this.type === undefined) {
                 ret = luxon.DateTime.fromJSDate(obj).toFormat("yyyy-MM-dd");
             }
-            else if (this.type === "datetime") {
+            else if (this.type === "DATETIME_SHORT") {
                 ret = luxon.DateTime.fromJSDate(obj).toFormat("yyyy-MM-dd\'T\'HH:mm");
             }
-            else if (this.type === "time") {
+            else if (this.type === "TIME_SIMPLE") {
                 ret = luxon.DateTime.fromJSDate(obj).toFormat("HH:mm");
             }
-            else if (this.type === "datetimeseconds") {
+            else if (this.type === "DATETIME_SHORT_WITH_SECONDS") {
                 ret = luxon.DateTime.fromJSDate(obj).toFormat("yyyy-MM-dd\'T\'HH:mm:ss");
             }
-            else if (this.type === "timeseconds") {
+            else if (this.type === "TIME_WITH_SECONDS") {
                 ret = luxon.DateTime.fromJSDate(obj).toFormat("HH:mm:ss");
             }
             return ret;
             //        1979-12-31
             //return Numberformatter.numberToString(obj);
         }
+        /**
+         * format date to string
+         * @param format- e.g. "yyyy-MM-dd" or "HH:mm:ss"
+         */
+        static toFormat(date, format) {
+            return luxon.DateTime.fromJSDate(date).toFormat(format);
+        }
+        /**
+       * parse date a string
+       * @param format- e.g. "yyyy-MM-dd" or "HH:mm:ss"
+       */
+        static fromFormat(date, format) {
+            return luxon.DateTime.fromFormat(date, format).toJSDate();
+        }
+        static toLocalString(date, format) {
+            return luxon.DateTime.fromJSDate(date).toLocaleString(luxon.DateTime[format]);
+        }
     };
     __decorate([
-        (0, Property_34.$Property)({ type: "string", chooseFrom: ["date", "time", "datetime", "timeseconds", "datetimeseconds"] }),
+        (0, Property_34.$Property)({ type: "string", chooseFrom: ["DATE_SHORT", "TIME_SIMPLE", "DATETIME_SHORT", "TIME_WITH_SECONDS", "DATETIME_SHORT_WITH_SECONDS"] }),
         __metadata("design:type", String)
     ], DateTimeConverter.prototype, "type", void 0);
     DateTimeConverter = __decorate([
@@ -17076,10 +17196,12 @@ define("jassijs/ui/converters/DateTimeConverter", ["require", "exports", "jassij
     function test() {
         var tb = new Textbox_19.Textbox();
         tb.converter = new DateTimeConverter({
-            type: "datetimeseconds"
+            type: "DATETIME_SHORT_WITH_SECONDS"
         });
         tb.value = new Date(2022, 12, 3, 15, 5);
-        return tb;
+        console.log(DateTimeConverter.toLocalString(new Date(), ""));
+        // console.log(luxon.DateTime.fromJSDate(new Date()).toLocaleString(luxon.DateTime.DATETIME_SHORT));//Format(luxon.DateTime["DATETIME_SHORT"]));
+        //    return tb;
     }
     exports.test = test;
 });
@@ -17153,7 +17275,7 @@ define("jassijs/ui/converters/DefaultConverter", ["require", "exports", "jassijs
     ], DefaultConverter);
     exports.DefaultConverter = DefaultConverter;
 });
-define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, DefaultConverter_3, Registry_116, Property_36, Numberformatter_1) {
+define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs/remote/Registry", "jassijs/ui/Property", "jassijs/util/Numberformatter"], function (require, exports, DefaultConverter_3, Registry_116, Property_36, Numberformatter_2) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.NumberConverter = void 0;
@@ -17210,7 +17332,7 @@ define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/
         stringToObject(str) {
             if (str === undefined || str === "")
                 return undefined;
-            return Numberformatter_1.Numberformatter.stringToNumber(str);
+            return Numberformatter_2.Numberformatter.stringToNumber(str);
         }
         /**
          * converts an object to string
@@ -17219,10 +17341,10 @@ define("jassijs/ui/converters/NumberConverter", ["require", "exports", "jassijs/
         objectToString(obj) {
             if (obj === undefined)
                 return undefined;
-            return Numberformatter_1.Numberformatter.numberToString(obj);
+            return Numberformatter_2.Numberformatter.numberToString(obj);
         }
         objectToFormatedString(obj) {
-            return Numberformatter_1.Numberformatter.format(this.format, obj);
+            return Numberformatter_2.Numberformatter.format(this.format, obj);
         }
     };
     NumberConverter = __decorate([
@@ -17736,7 +17858,7 @@ define("jassijs/util/DatabaseSchema", ["require", "exports", "jassijs/remote/Dat
 });
 define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Registry"], function (require, exports, Registry_120) {
     "use strict";
-    var Numberformatter_2;
+    var Numberformatter_3;
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Numberformatter = void 0;
     //https://github.com/Mottie/javascript-number-formatter/blob/master/src/format.js
@@ -17869,7 +17991,7 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Re
         return maskObj.prefix + valObj.sign + valObj.result + maskObj.suffix;
     }
     ;
-    let Numberformatter = Numberformatter_2 = class Numberformatter {
+    let Numberformatter = Numberformatter_3 = class Numberformatter {
         static format(mask, value, options = {}) {
             return _format(mask, value, options);
         }
@@ -17890,7 +18012,7 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Re
                 return undefined;
             if (num === null)
                 return null;
-            var l = num.toString().replace(".", Numberformatter_2.getLocaleDecimal());
+            var l = num.toString().replace(".", Numberformatter_3.getLocaleDecimal());
             return l;
         }
         static stringToNumber(num) {
@@ -17898,11 +18020,11 @@ define("jassijs/util/Numberformatter", ["require", "exports", "jassijs/remote/Re
                 return undefined;
             if (num === null)
                 return null;
-            var l = num.replace(Numberformatter_2.getLocaleDecimal(), ".");
+            var l = num.replace(Numberformatter_3.getLocaleDecimal(), ".");
             return Number.parseFloat(l);
         }
     };
-    Numberformatter = Numberformatter_2 = __decorate([
+    Numberformatter = Numberformatter_3 = __decorate([
         (0, Registry_120.$Class)("jassijs.util.Numberformatter")
     ], Numberformatter);
     exports.Numberformatter = Numberformatter;

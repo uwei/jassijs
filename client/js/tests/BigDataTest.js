@@ -1,7 +1,7 @@
 define(["require", "exports", "tests/remote/TestBigData", "jassijs/remote/Transaction"], function (require, exports, TestBigData_1, Transaction_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = void 0;
+    exports.test2 = void 0;
     function makeid(length) {
         var result = '';
         var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -15,7 +15,7 @@ define(["require", "exports", "tests/remote/TestBigData", "jassijs/remote/Transa
     function getRandomInt(max) {
         return Math.floor(Math.random() * max);
     }
-    async function test() {
+    async function test2() {
         for (var x = 0; x < 10000; x++) {
             var trans = new Transaction_1.Transaction();
             for (var i = 1; i < 10000; i++) {
@@ -30,6 +30,6 @@ define(["require", "exports", "tests/remote/TestBigData", "jassijs/remote/Transa
             await trans.execute();
         }
     }
-    exports.test = test;
+    exports.test2 = test2;
 });
 //# sourceMappingURL=BigDataTest.js.map

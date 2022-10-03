@@ -7,4 +7,4 @@ define("tabulator-tables", ["require", "exports", "tabulatorlib", "jassijs/modul
     var path = modul_1.default.require.paths["tabulatorlib"];
     jassijs.myRequire(path.replace("js", "css") + ".min.css");
 });
-//# sourceMappingURL=Tabulator.js.map
+//# sourceMappingURL=tabulator.js.map

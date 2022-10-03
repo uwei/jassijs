@@ -5,4 +5,4 @@ define(["require", "exports", "jszip"], function (require, exports, JSZip) {
     JSZip.support.nodebuffer = undefined; //we hacked window.Buffer
     exports.default = JSZip;
 });
-//# sourceMappingURL=Jzip.js.map
+//# sourceMappingURL=jzip.js.map

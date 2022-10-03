@@ -13,7 +13,7 @@ function makeid(length) {
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
-export async function test() {
+export async function test2() {
 
   for (var x = 0; x < 10000; x++) {
     var trans = new Transaction();
