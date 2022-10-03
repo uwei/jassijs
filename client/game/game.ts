@@ -15,6 +15,7 @@ export class Game {
   lastUpdate: number;
   speed: number = 1;
   pausedSpeed: number;
+  refreshIntervall=1000;
   constructor() {
     var _this = this;
     Game.instance = this;
@@ -24,14 +25,16 @@ export class Game {
     CityDialog.instance = undefined;
   }
   update() {
+    //var t=new Date().getTime();
+
     var _this = this;
-    var diff = ((Date.now() - this.lastUpdate)) * 60 * 60 * this.speed;
+    var diff = 1000*60*60* this.speed;//((Date.now() - this.lastUpdate)) * 60 * 60 * this.speed;
     this.date = new Date(this.date.getTime() + diff);
-    try{
-    document.getElementById("gamemoney").innerHTML = this.money;
-    document.getElementById("gamedate").innerHTML = this.date.toLocaleDateString() + " " + this.date.toLocaleTimeString();
-    this.world.update();
-    }catch{
+    try {
+      document.getElementById("gamemoney").innerHTML = this.money;
+      document.getElementById("gamedate").innerHTML = this.date.toLocaleDateString() + " " + this.date.toLocaleTimeString();
+      this.world.update();
+    } catch {
       console.log("stop game");
       return;
     }
@@ -39,10 +42,11 @@ export class Game {
     setTimeout(() => {
       _this.update();
 
-    }, 1000);
+    }, this.refreshIntervall);
+    //console.log("tooks"+(new Date().getTime()-t));
     CityDialog.getInstance().update();
     AirplaneDialog.getInstance().update();
-    
+
   }
   create(dom: HTMLElement) {
     var _this = this;
@@ -56,7 +60,7 @@ export class Game {
           </div>  
         `;
     this.domHeader = <any>document.createRange().createContextualFragment(sdomHeader).children[0];
-    
+
     var sdomWorld = `
           <div id="world" style="position:relative;width: 100%;height:calc(100% - 15px);">
           </div>  
@@ -68,18 +72,18 @@ export class Game {
     this.world.create(this.domWorld);
 
     this.update();
-    setTimeout(()=>{
-      document.getElementById("gamedate").addEventListener("mousedown",()=>{
+    setTimeout(() => {
+      document.getElementById("gamedate").addEventListener("mousedown", () => {
         console.log("down");
       });
-    },500);
+    }, 500);
   }
   resume() {
-    if(this.pausedSpeed!==undefined){
-      this.speed=this.pausedSpeed;
-      this.pausedSpeed=undefined;
+    if (this.pausedSpeed !== undefined) {
+      this.speed = this.pausedSpeed;
+      this.pausedSpeed = undefined;
     }
-    
+
   }
   isPaused() {
     return this.pausedSpeed != undefined;

@@ -61,6 +61,14 @@ export class World {
             }*/
             this.airplanes[x].update();
         }
+        for (var x = 0; x < this.cities?.length; x++) {
+            /*if (this.airplanes[x].x < 500)
+                this.airplanes[x].x = this.airplanes[x].x + 1;
+            else {
+                this.airplanes[x].x = 100;
+            }*/
+            this.cities[x].update();
+        }
     }
     create(dom: HTMLElement) {
         var _this = this;
@@ -69,11 +77,11 @@ export class World {
         for (var x = 0; x < this.cities.length; x++) {
             this.cities[x].create();
             this.cities[x].update();
-
+ 
             dom.appendChild(this.cities[x].dom);
         }
-        for (var x = 0; x < 1; x++) {
-            var ap = new Airplane();
+        for (var x = 0; x < 20; x++) {
+            var ap = new Airplane(this);
             ap.name = "Airplane " + x;
             ap.speed = 10;
             ap.create();

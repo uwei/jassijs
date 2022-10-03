@@ -19,19 +19,24 @@ export class City {
     people: number;
     market: number[];
     companies: Company[];
-    airplanesInCity:Airplane[];
+    airplanesInCity: Airplane[];
+    neutralCompaniesCount = 2;
+    neutralDailyProducedToday: number[];
+    lastUpdate = undefined;
     constructor() {
         this.market = [];
-        this.airplanesInCity=[];
+        this.airplanesInCity = [];
         this.createCompanies();
         for (var x = 0; x < allProducts.length; x++) {
-            var val=0;
-            for(var y=0;y<this.companies.length;y++){
-                if(this.companies[y].productid===x){//starts with weekly produce
-                    val=Math.round(3*allProducts[x].dailyProduce*200/25);
-                }else{
-                     val=Math.round(0.5*allProducts[x].dailyProduce*200/25);
+            var val = 0;
+            for (var y = 0; y < this.companies.length; y++) {
+                if (this.companies[y].productid === x) {//starts with weekly produce
+                    val = Math.round(10 * allProducts[x].dailyProduce * this.neutralCompaniesCount);
                 }
+            }
+            if (val === 0) {
+                val = Math.round(2 * allProducts[x].dailyConsumtion * this.neutralCompaniesCount*200);
+
             }
             this.market.push(val);
 
@@ -62,15 +67,60 @@ export class City {
             _this.oncontextmenu(ev);
             return undefined;
         });
-    }
-    update() {
         this.dom.style.top = this.y.toString() + "px";
         this.dom.style.left = this.x.toString() + "px";
     }
-    
+    updateNeutralCompanies() {
+
+        //neutral companies
+        if (this.neutralDailyProducedToday === undefined) {
+            this.neutralDailyProducedToday = [];
+            for (var x = 0; x < this.companies.length; x++) {
+                this.neutralDailyProducedToday[x] = 0;
+            }
+        }
+        var dayProcent = this.world.game.date.getHours() / 24;
+        if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
+            dayProcent = 1;
+
+        }
+
+        for (var x = 0; x < this.companies.length; x++) {
+            var prod = this.companies[x].productid;
+            var totalDailyProduce = Math.round(allProducts[prod].dailyProduce * this.neutralCompaniesCount);
+            var untilNow = Math.round(totalDailyProduce * dayProcent);
+            if (untilNow > this.neutralDailyProducedToday[x]) {
+                var diff = untilNow - this.neutralDailyProducedToday[x];
+                if (diff > 0) {//only go to markt if price is ok
+                    var product = allProducts[prod];
+                    var price = product.calcPrice(this.people, this.market[prod]+diff, true);
+                   // if (prod ===14)
+                     //   console.log("check " + this.companies[x].productid + ":  " + price + " > " + (product.pricePurchase * 2 / 3) + " Bestand: " + this.market[prod]);
+
+                    if (price > product.pricePurchase * 2 / 3) {
+                        this.market[prod]=this.market[prod]+diff;
+                       // if (prod===14)
+                         //   console.log("produce " + this.companies[x].productid + ":" + diff + "/" + "  ->" + untilNow + "/" + totalDailyProduce);
+                    }
+                }
+                this.neutralDailyProducedToday[x] = this.neutralDailyProducedToday[x] + diff;
+            }
+            if (dayProcent === 1) {
+                this.neutralDailyProducedToday[x] = 0;
+            }
+        }
+    }
+    update() {
+        if (this.lastUpdate === undefined) {
+            this.lastUpdate = this.world.game.date.getTime();
+        }
+        this.updateNeutralCompanies();
+        this.lastUpdate = this.world.game.date.getTime();
+    }
+
     oncontextmenu(evt: MouseEvent) {
         evt.preventDefault();
-        (<Airplane>this.world.selection).status="to "+this.name;
+        (<Airplane>this.world.selection).status = "to " + this.name;
         (<Airplane>this.world.selection).flyTo(this.x, this.y);
         console.log(evt.offsetX);
 

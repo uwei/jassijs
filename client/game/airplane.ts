@@ -20,6 +20,9 @@ export class Airplane {
     world: World;
     products;
     status:string="";
+    constructor(world:World){
+        this.world=world;
+    }
     create() {
         var _this = this;
         this.dom = <any>document.createRange().createContextualFragment("<span style='transform:rotate(0turn)' class='mdi mdi-airplane'></span>").children[0];//document.createElement("span");
@@ -36,6 +39,7 @@ export class Airplane {
             _this.onclick(ev);
             return undefined;
         });
+        this.lastUpdate=this.world.game.date.getTime();
         this.update();
 
     }
@@ -59,7 +63,7 @@ export class Airplane {
     unselect() {
         this.dom.style.color = "black";
     }
-    calcNewPosition(){
+ calcNewPosition(){
         var pixelToTarget=Math.round( Math.sqrt(Math.pow(this.targetX-this.x,2)+Math.pow(this.targetY-this.y,2)));//Pytharoras
         var fromX=this.x;
         var fromY=this.y;
@@ -120,7 +124,7 @@ export class Airplane {
         h.airplane = this;
         h.show();
 
-    }
+    
     }
 }
 

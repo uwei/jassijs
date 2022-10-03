@@ -218,7 +218,7 @@ export class CityDialog {
                 });
                 document.getElementById("citydialog-market-sell-slider_" + x).addEventListener("input", (e) => {
                     var t = <HTMLInputElement>e.target;
-                    var price = _this.calcPrice(t, -Number(t.value));
+                    var price = _this.calcPrice(t, Number(t.value));
                     t.nextElementSibling.innerHTML = "" + t.value + " " + Number(t.value) * price;
 
                     t.parentNode.parentNode.children[3].innerHTML = "" + price;
