@@ -10,17 +10,26 @@ export class World {
     cities: City[];
     airplanes: Airplane[];
     selection;
-    dom:HTMLElement;
-    game:Game;
+    dom: HTMLElement;
+    game: Game;
     constructor() {
         var _this = this;
         this.cities = [];
         this.airplanes = [];
-        
-       
+        this._intervall=setInterval(() => {
+            for (var x = 0; x < _this.airplanes?.length; x++) {
+                /*if (this.airplanes[x].x < 500)
+                    this.airplanes[x].x = this.airplanes[x].x + 1;
+                else {
+                    this.airplanes[x].x = 100;
+                }*/
+                _this.airplanes[x].update();
+            }
+        }, 100);
+
 
     }
-     private getElementOffset(el) {
+    private getElementOffset(el) {
         let top = 0;
         let left = 0;
         let element = el;
@@ -31,36 +40,29 @@ export class World {
             top += element.offsetTop || 0;
             left += element.offsetLeft || 0;
             element = element.offsetParent;
-        } while (element); 
+        } while (element);
 
         return {
             top,
             left,
         };
     }
-    oncontextmenu(evt:MouseEvent){
+    oncontextmenu(evt: MouseEvent) {
         evt.preventDefault();
-/*
-         if(this.selection){
-             var pt=this.getElementOffset(evt.currentTarget);
-            (<Airplane>this.selection).flyTo(evt.x-pt.left-8,evt.y-pt.top-10);
-            console.log(evt.offsetX);
-        }*/
-        
+        /*
+                 if(this.selection){
+                     var pt=this.getElementOffset(evt.currentTarget);
+                    (<Airplane>this.selection).flyTo(evt.x-pt.left-8,evt.y-pt.top-10);
+                    console.log(evt.offsetX);
+                }*/
+
     }
     onclick(th: MouseEvent) {
-     
-            this.selection?.unselect();
+
+        this.selection?.unselect();
     }
     update() {
-        for (var x = 0; x < this.airplanes?.length; x++) {
-            /*if (this.airplanes[x].x < 500)
-                this.airplanes[x].x = this.airplanes[x].x + 1;
-            else {
-                this.airplanes[x].x = 100;
-            }*/
-            this.airplanes[x].update();
-        }
+
         for (var x = 0; x < this.cities?.length; x++) {
             /*if (this.airplanes[x].x < 500)
                 this.airplanes[x].x = this.airplanes[x].x + 1;
@@ -72,20 +74,20 @@ export class World {
     }
     create(dom: HTMLElement) {
         var _this = this;
-        this.dom=dom;
-        this.cities = createCities(this,5);
+        this.dom = dom;
+        this.cities = createCities(this, 5);
         for (var x = 0; x < this.cities.length; x++) {
             this.cities[x].create();
             this.cities[x].update();
- 
+
             dom.appendChild(this.cities[x].dom);
         }
         for (var x = 0; x < 20; x++) {
             var ap = new Airplane(this);
             ap.name = "Airplane " + x;
-            ap.speed = 10;
+            ap.speed = 200;
             ap.create();
-            ap.world=this;
+            ap.world = this;
             this.dom.appendChild(ap.dom);
             this.airplanes.push(ap);
         }
@@ -93,18 +95,18 @@ export class World {
             _this.onclick(ev);
             return undefined;
         });
-        dom.addEventListener("contextmenu", (ev:MouseEvent)=>{
+        dom.addEventListener("contextmenu", (ev: MouseEvent) => {
             _this.oncontextmenu(ev);
             return undefined;
         });
-       
+
     }
-    findCityAt(x:number,y:number){
-        for(var i=0;i<this.cities.length;i++){
-            if(this.cities[i].x===x&&this.cities[i].y===y){
+    findCityAt(x: number, y: number) {
+        for (var i = 0; i < this.cities.length; i++) {
+            if (this.cities[i].x === x && this.cities[i].y === y) {
                 return this.cities[i];
             }
-        }   
+        }
         return undefined;
     }
     destroy() {

@@ -45,6 +45,7 @@ export class Airplane {
     }
     
     flyTo(x: number, y: number) {
+        this.lastUpdate=this.world.game.date.getTime();
         console.log("fly to "+x+":"+y)
         this.action="fly";
         this.targetX = x;
@@ -70,11 +71,11 @@ export class Airplane {
         var fromTime=0;
         var toX=this.targetX;
         var toY=this.targetY;
-        var toTime=pixelToTarget/this.speed;    //t=s/v;
+        var toTime=pixelToTarget/this.speed;    //t=s/v; in Tage
         var speedVectorX=toX-fromX;
         var speedVectorY=toY-fromY;
-        var speedVectorTime=(toTime-fromTime)/this.world.game.speed;
-        var nowTime=(Date.now()-this.lastUpdate)/1000;
+        var speedVectorTime=(toTime-fromTime);
+        var nowTime=(this.world.game.date.getTime()-this.lastUpdate)/(1000*60*60*24);
         var nowX=Math.round((nowTime/speedVectorTime)*speedVectorX+fromX);
         var nowY=Math.round((nowTime/speedVectorTime)*speedVectorY+fromY);
         if(nowTime>=toTime){
@@ -103,13 +104,11 @@ export class Airplane {
         }
     }
     update() {
-        if(this.lastUpdate===undefined){
-            this.lastUpdate=Date.now();
-        }
+       
         if(this.targetX!==undefined){
             this.calcNewPosition();
         }
-        this.lastUpdate=Date.now();
+        this.lastUpdate=this.world.game.date.getTime();
        this.dom.style.top = this.y + "px";
        this.dom.style.left = this.x + "px";
 

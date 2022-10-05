@@ -3,6 +3,7 @@ import { World } from "game/world";
 import { Panel } from "jassijs/ui/Panel";
 import windows from "jassijs/base/Windows";
 import { AirplaneDialog } from "game/airplanedialog";
+import { Icons } from "game/icons";
 
 export class Game {
   static instance: Game;
@@ -15,7 +16,7 @@ export class Game {
   lastUpdate: number;
   speed: number = 1;
   pausedSpeed: number;
-  refreshIntervall=1000;
+  timer;
   constructor() {
     var _this = this;
     Game.instance = this;
@@ -23,26 +24,31 @@ export class Game {
     this.lastUpdate = Date.now();
     this.date = new Date("Sat Jan 01 2000 00:00:00");
     CityDialog.instance = undefined;
+    this.nevercallthisfunction();
   }
-  update() {
-    //var t=new Date().getTime();
-
-    var _this = this;
-    var diff = 1000*60*60* this.speed;//((Date.now() - this.lastUpdate)) * 60 * 60 * this.speed;
-    this.date = new Date(this.date.getTime() + diff);
+  public updateTitle() {
     try {
       document.getElementById("gamemoney").innerHTML = this.money;
-      document.getElementById("gamedate").innerHTML = this.date.toLocaleDateString() + " " + this.date.toLocaleTimeString();
+      document.getElementById("gamedate").innerHTML = this.date.toLocaleDateString() + " " + this.date.toLocaleTimeString().substring(0, this.date.toLocaleTimeString().length - 3);
       this.world.update();
     } catch {
       console.log("stop game");
       return;
     }
+  }
+  //never call this outside the timer - then would be 2 updates
+  private nevercallthisfunction() {
+    //var t=new Date().getTime();
+    var intervall =1000/this.speed ;
+    var _this = this;
+    var diff = 1000 * 60 * 60;//update always at full clock//((Date.now() - this.lastUpdate)) * 60 * 60 * this.speed;
+    this.date = new Date(this.date.getTime() + diff);
+  this.updateTitle();
     this.lastUpdate = Date.now();
-    setTimeout(() => {
-      _this.update();
+    this.timer=setTimeout(() => {
+      _this.nevercallthisfunction();
 
-    }, this.refreshIntervall);
+    }, intervall);
     //console.log("tooks"+(new Date().getTime()-t));
     CityDialog.getInstance().update();
     AirplaneDialog.getInstance().update();
@@ -56,7 +62,7 @@ export class Game {
     this.world.game = this;
     var sdomHeader = `
           <div style="height:15px">
-            Traffics <span id="gamedate"></span>   Money:<span id="gamemoney"></span>
+            Traffics <span id="gamedate"></span>   Money:<span id="gamemoney"></span>`+Icons.money+`
           </div>  
         `;
     this.domHeader = <any>document.createRange().createContextualFragment(sdomHeader).children[0];
@@ -71,7 +77,7 @@ export class Game {
     this.dom.appendChild(this.domWorld);
     this.world.create(this.domWorld);
 
-    this.update();
+
     setTimeout(() => {
       document.getElementById("gamedate").addEventListener("mousedown", () => {
         console.log("down");
@@ -79,23 +85,19 @@ export class Game {
     }, 500);
   }
   resume() {
-    if (this.pausedSpeed !== undefined) {
-      this.speed = this.pausedSpeed;
-      this.pausedSpeed = undefined;
-    }
-
+    if(this.timer===0)
+     this.nevercallthisfunction();
   }
   isPaused() {
-    return this.pausedSpeed != undefined;
+    return this.timer===0;
   }
   pause() {
-    if (this.pausedSpeed !== undefined)
-      return;
-    this.pausedSpeed = this.speed;
-    this.speed = 0.0000000000000000000001;
+   clearTimeout(this.timer);
+   this.timer=0;
   }
 
   destroy() {
     this.world.destroy();
+    clearTimeout(this.timer);
   }
 }

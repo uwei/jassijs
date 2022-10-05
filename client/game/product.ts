@@ -67,7 +67,7 @@ export class Product {
             ["white", "violet"],
             ["white", "pink"]
         ];
-        return "<div style='width:14px;font-size:10px;color:" + colors[this.id][1] + ";background-color:" + colors[this.id][0] + "' class='mdi mdi-circle-multiple'></div>";
+        return "<span style='width:14px;font-size:10px;color:" + colors[this.id][1] + ";background-color:" + colors[this.id][0] + "' class='mdi mdi-circle-multiple'></span>";
     }
 }
 

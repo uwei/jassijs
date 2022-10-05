@@ -1,6 +1,10 @@
 import { City } from "game/city";
 import { allProducts, Product } from "game/product";
+import { Icons } from "game/icons";
 var css = `
+    table{
+        font-size:inherit;
+    }
     .citydialog >*{
         font-size:10px;
     }
@@ -67,7 +71,7 @@ export class CityDialog {
     private create() {
         //template for code reloading
         var sdom = `
-          <div id="citydialog" class="citydialog">
+          <div hidden id="citydialog" class="citydialog">
             <div></div>
            </div>
         `;
@@ -91,6 +95,7 @@ export class CityDialog {
                     <li><a href="#citydialog-market" id="citydialog-market-tab">Market</a></li>
                     <li><a href="#citydialog-buildings">Buildings</a></li>
                     <li><a href="#citydialog-warehouse">Warehouse</a></li>
+                    <li><a href="#citydialog-score">Score</a></li>
                 </ul>
                 <div id="citydialog-market">
                     <table id="citydialog-market-table" style="height:100%;weight:100%;">
@@ -147,9 +152,9 @@ export class CityDialog {
                             <th> </th>
                             <th>buildings</th>
                             <th>jobs</th>
-                            <th>costs</th>
                             <th>needs</th>
-                            <th>new building</th>
+                            <th></th>
+                            <th>costs new<br/>building</th>
                             <th>actions</th>
                         </tr>
                        ${(function fun() {
@@ -163,7 +168,8 @@ export class CityDialog {
                     ret = ret + "<td></td>";
                     ret = ret + "<td></td>";
                     ret = ret + "<td></td>";
-                    ret = ret + "<td></td>";
+                    ret = ret + '<td><button id="new-factory_' + x + '">' + "+" + Icons.factory + '</button>' +
+                        '<button id="delete-factory_' + x + '">' + "-" + Icons.factory + '</button></td>';
                     ret = ret + "</tr>";
                 }
                 return ret;
@@ -172,6 +178,26 @@ export class CityDialog {
                 </div>
                 <div id="citydialog-warehouse">
                     <p>Warehouse1.</p>sad asd sd as 
+                </div>
+                 <div id="citydialog-score">
+                    <table id="citydialog-score-table" style="height:100%;weight:100%;">
+                        <tr>
+                            <th>icon</th>
+                            <th>name</th>
+                            <th>score</th>
+                        </tr>
+                       ${(function fun() {
+                var ret = "";
+                for (var x = 0; x < allProducts.length; x++) {
+                    ret = ret + "<tr>";
+                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>" + allProducts[x].name + "</td>";
+                    ret = ret + "<td>0</td>";
+                    ret = ret + "</tr>";
+                }
+                return ret;
+            })()}
+                    </table>
                 </div>
             </div>
           </div>
@@ -187,6 +213,7 @@ export class CityDialog {
                 //collapsible: true
             });
         }, 100);
+
         document.body.appendChild(this.dom);
 
         //        document.getElementById("citydialog-prev")
@@ -249,6 +276,14 @@ export class CityDialog {
 
                 });
             }
+            for (var x = 0; x < 5; x++) {
+                document.getElementById("new-factory_" + x).addEventListener("click", (evt) => {
+                    alert("create x");
+                })
+                document.getElementById("delete-factory_" + x).addEventListener("click", (evt) => {
+                    alert("delete x");
+                })
+            }
         }, 500);
         //document.createElement("span");
     }
@@ -259,7 +294,7 @@ export class CityDialog {
         store[productid] += amount;
 
         this.update(true);
-        this.city.world.game.update();
+        this.city.world.game.updateTitle();
     }
     getStore() {
         var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-partner");
@@ -286,11 +321,11 @@ export class CityDialog {
         //pause game while trading
         if (!force) {
             if (document.getElementById("citydialog-market-tab")?.parentElement?.classList?.contains("ui-tabs-active")) {
-                if (!this.city.world.game.isPaused()) {
-                    this.hasPaused = true;
-                    this.city.world.game.pause();
-                }
-                return;//no update because of slider
+                /* if (!this.city.world.game.isPaused()) {
+                     this.hasPaused = true;
+                     this.city.world.game.pause();
+                 }
+                 return;*///no update because of slider
             } else {
                 if (this.hasPaused) {
                     this.city.world.game.resume();
@@ -333,39 +368,17 @@ export class CityDialog {
                 (<HTMLInputElement>tr.children[4].children[0]).max = "0";
                 (<HTMLInputElement>tr.children[6].children[0]).max = "0";
             }
-            /*   ret = ret + "<td>" + _this.city.market[x] + "</td>";
-               ret = ret + '<td>' +
-                   '<input class="cdmslider" id="citydialog-market-slider${x}"' +
-                   'type="range" min="0" max="29000" step="1.0" value="0"' +
-                   'style="overflow: hidden;width: 50%;height: 70%;"' +
-                   'oninput="this.nextElementSibling.innerHTML = this.value;' +
-                   'this.parentNode.parentNode.children[4].innerHTML=value;' +
-                   '">' + "<span>0</span></td>";
-               ret = ret + "<td>" + 0 + "</td>";
-               ret = ret + '<td>' +
-                   '<input class="cdmslider" id="citydialog-market-slider${x}"' +
-                   'type="range" min="0" max="29000" step="1.0" value="0"' +
-                   'style="overflow: hidden;width: 50%;height: 70%;"' +
-                   'oninput="this.nextElementSibling.innerHTML = this.value;' +
-                   'this.parentNode.parentNode.children[4].innerHTML=value;' +
-                   '">' + "<span>0</span></td>";
-               ret = ret + "<td>100</td>";
-               ret = ret + "<tr>";
-           }*/
         }
 
         /*
-                            <th>icon</th>
-                            <th>name</th>
+                        <th>produce</th>
+                            <th> </th>
                             <th>buildings</th>
                             <th>jobs</th>
-                            <th>cost per day<th>
-                            <th>produce</th>
-                            <th>needs1</th>
-                            <th>needs2</th>
-                            <th>new building</th>
-                            <th>create</th>
-                            <th>destroy</th>
+                            <th>needs</th>
+                            <th></th>
+                            <th>costs new building</th>
+                            <th>actions</th>
         */
         var companies = this.city.companies;
         var all = allProducts;
@@ -375,18 +388,33 @@ export class CityDialog {
             var product = all[companies[x].productid];
             var produce = companies[x].getDailyProduce();
             tr.children[0].innerHTML = produce + " " + product.getIcon();
-            tr.children[1].innerHTML = product.name + "</td>";
-            tr.children[2].innerHTML = companies[x].buildings + "</td>";
-            tr.children[3].innerHTML = companies[x].workers + "/" + companies[x].getMaxWorkers() + "</td>";
-            tr.children[4].innerHTML = "1000" + "</td>";
-            var needs = "";
+            tr.children[1].innerHTML = product.name;
+            tr.children[2].innerHTML = companies[x].buildings.toString();
+            tr.children[3].innerHTML = companies[x].workers + "/" + companies[x].getMaxWorkers();
+            var needs1 = "";
+            var needs2 = "";
             if (product.input1 !== undefined)
-                needs = "" + companies[x].getDailyInput1() + " " + all[product.input1].getIcon() + " ";
+                needs1 = "" + companies[x].getDailyInput1() + "<br/>" + all[product.input1].getIcon() + " ";
+            tr.children[4].innerHTML = needs1;
             if (product.input2 !== undefined)
-                needs = needs + "" + companies[x].getDailyInput2() + " " + all[product.input2].getIcon();
-            tr.children[5].innerHTML = needs + "</td>";
-            tr.children[6].innerHTML = '<input type="button" value="+">' + "</td>" + '<input type="button" value="-">' + "</td>";
-
+                needs2 = needs2 + "" + companies[x].getDailyInput2() + "<br/>" + all[product.input2].getIcon();
+            tr.children[5].innerHTML = needs2;
+            tr.children[6].innerHTML = companies[x].getBuildingCoastsAsIcon();
+            var coasts = companies[x].getBuildingCoasts();
+            if (this.city.world.game.money < coasts[0]||this.city.market[0]<coasts[1]||this.city.market[1]<coasts[2]) {
+                document.getElementById("new-factory_" + x).setAttribute("disabled", "");
+                document.getElementById("new-factory_" + x).setAttribute("title", "not all building costs are available");
+                this.dom.removeAttribute("title",);
+            } else {
+                document.getElementById("new-factory_" + x).removeAttribute("disabled");
+                document.getElementById("new-factory_" + x).removeAttribute("title");
+            }
+        }
+        //score
+        for (var x = 0; x < allProducts.length; x++) {
+            var table = document.getElementById("citydialog-score-table");
+            var tr = table.children[0].children[x + 1];
+            tr.children[2].innerHTML = this.city.score[x] + "</td>";
         }
         return;
     }
@@ -397,6 +425,8 @@ export class CityDialog {
     }
     show() {
         var _this = this;
+
+        this.dom.removeAttribute("hidden");
         this.update();
 
         $(this.dom).dialog({
@@ -405,7 +435,7 @@ export class CityDialog {
                 _this.update(true);
             },
             close: function (ev, ev2) {
-               if (_this.hasPaused) {
+                if (_this.hasPaused) {
                     _this.city.world.game.resume();
                 }
             }

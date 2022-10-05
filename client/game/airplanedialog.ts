@@ -2,10 +2,14 @@ import { City } from "game/city";
 import { allProducts, Product } from "game/product";
 import { Airplane } from "game/airplane";
 var css = `
+    table{
+        font-size:inherit;
+    }
+
     .airplanedialog >*{
         font-size:10px;
     }
-    .ui-dialog-title{
+    .ui-dialog-title{ 
         font-size:10px;
     }
     .ui-dialog-titlebar{
@@ -45,7 +49,7 @@ export class AirplaneDialog {
     private create() {
         //template for code reloading
         var sdom = `
-          <div id="airplanedialog" class="airplanedialog">
+          <div hidden id="airplanedialog" class="airplanedialog">
             <div></div>
            </div>
         `;
@@ -167,6 +171,7 @@ export class AirplaneDialog {
     }
     show() {
         var _this = this;
+          this.dom.removeAttribute("hidden");
         this.update();
 
         $(this.dom).dialog({

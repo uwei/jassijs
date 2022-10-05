@@ -1,35 +1,10 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel"], function (require, exports, Registry_1, Panel_1) {
+define(["require", "exports"], function (require, exports) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
-    exports.test = exports.loesche = void 0;
-    let loesche = class loesche extends Panel_1.Panel {
-        constructor() {
-            super();
-            this.me = {};
-            this.layout(this.me);
-        }
-        layout(me) {
-            this.config({});
-        }
-    };
-    loesche = __decorate([
-        (0, Registry_1.$Class)("game/loesche"),
-        __metadata("design:paramtypes", [])
-    ], loesche);
-    exports.loesche = loesche;
-    async function test() {
-        var ret = new loesche();
-        return ret;
+    exports.OO = void 0;
+    alert(8);
+    class OO {
     }
-    exports.test = test;
+    exports.OO = OO;
 });
-//# sourceMappingURL=loesche.js.map
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoibG9lc2NoZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uL2dhbWUvbG9lc2NoZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7O0lBQUEsS0FBSyxDQUFDLENBQUMsQ0FBQyxDQUFDO0lBQ1QsTUFBYSxFQUFFO0tBRWQ7SUFGRCxnQkFFQyIsInNvdXJjZXNDb250ZW50IjpbImFsZXJ0KDgpO1xuZXhwb3J0IGNsYXNzIE9Pe1xuICAgIFxufSJdfQ==

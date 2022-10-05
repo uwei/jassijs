@@ -20,26 +20,29 @@ export class City {
     market: number[];
     companies: Company[];
     airplanesInCity: Airplane[];
-    neutralCompaniesCount = 2;
+    private static neutralStartPeople = 1000;
+    private static neutralProductionRate = 2;//produce 0.2 times more then neutralPeople consumed 
     neutralDailyProducedToday: number[];
+    consumedToday: number[];
     lastUpdate = undefined;
+    score: number[]=[];
     constructor() {
         this.market = [];
         this.airplanesInCity = [];
         this.createCompanies();
         for (var x = 0; x < allProducts.length; x++) {
             var val = 0;
+            this.score.push(50);
             for (var y = 0; y < this.companies.length; y++) {
-                if (this.companies[y].productid === x) {//starts with weekly produce
-                    val = Math.round(10 * allProducts[x].dailyProduce * this.neutralCompaniesCount);
+                if (this.companies[y].productid === x) {
+                    val = 2 * Math.round(City.neutralStartPeople * allProducts[x].dailyConsumtion * City.neutralProductionRate);
                 }
             }
             if (val === 0) {
-                val = Math.round(2 * allProducts[x].dailyConsumtion * this.neutralCompaniesCount*200);
+                val = Math.round(0.5 * City.neutralStartPeople * allProducts[x].dailyConsumtion);
 
             }
             this.market.push(val);
-
         }
     }
     private createCompanies() {
@@ -87,20 +90,20 @@ export class City {
 
         for (var x = 0; x < this.companies.length; x++) {
             var prod = this.companies[x].productid;
-            var totalDailyProduce = Math.round(allProducts[prod].dailyProduce * this.neutralCompaniesCount);
+            var totalDailyProduce = Math.round(allProducts[prod].dailyConsumtion * City.neutralStartPeople * City.neutralProductionRate);
             var untilNow = Math.round(totalDailyProduce * dayProcent);
             if (untilNow > this.neutralDailyProducedToday[x]) {
                 var diff = untilNow - this.neutralDailyProducedToday[x];
                 if (diff > 0) {//only go to markt if price is ok
                     var product = allProducts[prod];
-                    var price = product.calcPrice(this.people, this.market[prod]+diff, true);
-                   // if (prod ===14)
-                     //   console.log("check " + this.companies[x].productid + ":  " + price + " > " + (product.pricePurchase * 2 / 3) + " Bestand: " + this.market[prod]);
+                    var price = product.calcPrice(this.people, this.market[prod] + 0/*diff*/, true);
+                    // if (prod ===14)
+                    //   console.log("check " + this.companies[x].productid + ":  " + price + " > " + (product.pricePurchase * 2 / 3) + " Bestand: " + this.market[prod]);
 
-                    if (price > product.pricePurchase * 2 / 3) {
-                        this.market[prod]=this.market[prod]+diff;
-                       // if (prod===14)
-                         //   console.log("produce " + this.companies[x].productid + ":" + diff + "/" + "  ->" + untilNow + "/" + totalDailyProduce);
+                    if (price > product.pricePurchase * 4 / 5) {
+                        this.market[prod] = this.market[prod] + diff;
+                        // if (prod===14)
+                        //   console.log("produce " + this.companies[x].productid + ":" + diff + "/" + "  ->" + untilNow + "/" + totalDailyProduce);
                     }
                 }
                 this.neutralDailyProducedToday[x] = this.neutralDailyProducedToday[x] + diff;
@@ -110,11 +113,66 @@ export class City {
             }
         }
     }
+    isProducedHere(productid: number) {
+        for (var x = 0; x < this.companies.length; x++) {
+            if (this.companies[x].productid === productid)
+                return true;
+        }
+        return false;
+    }
+    updateDailyConsumtion() {
+
+        //neutral companies
+        if (this.consumedToday === undefined) {
+            this.consumedToday = [];
+            for (var x = 0; x < allProducts.length; x++) {
+                this.consumedToday[x] = 0;
+            }
+        }
+        var dayProcent = this.world.game.date.getHours() / 24;
+        if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
+            dayProcent = 1;
+
+        }
+
+        for (var x = 0; x < allProducts.length; x++) {
+            var totalDailyConsumtion = Math.round(allProducts[x].dailyConsumtion * this.people);
+            var untilNow = Math.round(totalDailyConsumtion * dayProcent);
+            if (untilNow > this.consumedToday[x]) {
+                var diff = untilNow - this.consumedToday[x];
+                var product = allProducts[x];
+                var price = product.calcPrice(this.people, this.market[x] - diff, false);
+                var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * 4 / 3 - product.priceSelling);
+                this.consumedToday[x] = untilNow;
+                if (price <= priceMax) {
+                    /* if (this.isProducedHere(product.id)) {
+                         console.log(x+"kaufe von markt " + price + "<=" + priceMax+" ("+this.market[x]+")");
+                     }*/
+                    this.market[x] -= diff;
+                    this.score[x] = Math.round((this.score[x]+0.2)*100)/100;
+                } else {
+                    this.score[x] =  Math.round((this.score[x]-0.1)*100)/100;
+
+                    /* if (this.isProducedHere(product.id)) {
+                         console.log(x+"zu teuer " + price + ">" + priceMax);
+                     }*/
+
+                }
+                if(this.score[x]>100)
+                    this.score[x]=100;
+
+            }
+            if (dayProcent === 1) {
+                this.consumedToday[x] = 0;
+            }
+        }
+    }
     update() {
         if (this.lastUpdate === undefined) {
             this.lastUpdate = this.world.game.date.getTime();
         }
         this.updateNeutralCompanies();
+        this.updateDailyConsumtion();
         this.lastUpdate = this.world.game.date.getTime();
     }
 

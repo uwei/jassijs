@@ -1,4 +1,5 @@
 import { allProducts } from "game/product";
+import { Icons } from "game/icons";
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -49,6 +50,17 @@ export class Company {
             needs = this.workers * product.input1Amount/25;
         }
         return needs;
+    }
+    getBuildingCoastsAsIcon(){
+        var a=this.getBuildingCoasts();
+       
+        return a[0]+Icons.money+"<br/>"+a[1]+allProducts[0].getIcon()+"<br/>"+a[2]+allProducts[1].getIcon();
+    }    
+    getBuildingCoasts(){
+        var fact=5-(allProducts[this.productid].distribution)/4;
+        return [fact*10000,
+                fact*5,
+                fact*10]
     }
     getDailyInput2(): number {
         var needs = 0;
