@@ -62,12 +62,14 @@ export class City {
             return a.productid - b.productid;
         });
     }
-    create() {
+    create(cityid:number) {
         var _this = this;
         this.dom = <any>document.createElement("img");
         this.dom.style.border = "1px solid black";
         this.dom.setAttribute("src", this.icon);
+        this.dom.setAttribute("cityid",cityid.toString())
         this.dom.style.position = "absolute";
+        this.dom.classList.add("city");
         this.dom.addEventListener("click", (ev: MouseEvent) => {
             _this.onclick(ev);
             return undefined;
@@ -82,19 +84,7 @@ export class City {
         var desc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (14 + this.y) +
             'px;left:' + this.x + 'px;font-size:9px;">' + this.name + '</span>').children[0];
         this.world.dom.appendChild(desc);
-      /*  setTimeout(() => {
-            $(_this.dom).draggable({
-                connectToSortable: '#route-list',
-                helper:  function (event) {
-                    var id=_this.world.cities.indexOf(_this);
-                    var ret=  '<li id="route-' + id + '" class="ui-state-default"><img src="' + _this.icon + '" </img>' + _this.name + "</li>";
         
-                    return $(ret);
-               // return helper._position.dom;
-                },
-                 revert: 'invalid'
-            });
-        }, 100);*/
 
     }
     updateNeutralCompanies() {

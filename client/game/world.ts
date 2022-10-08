@@ -61,9 +61,18 @@ export class World {
     onclick(th: MouseEvent) {
         console.log("close");
         this.selection?.unselect();
-        if (th.target === this.dom) {
-            CityDialog.getInstance().close();
-            AirplaneDialog.getInstance().close();
+        if (th.target === this.dom&&!AirplaneDialog.getInstance().dropCitiesEnabled) {
+            try {
+                CityDialog.getInstance().close();
+            } catch {
+
+            }
+            try {
+                AirplaneDialog.getInstance().close();
+
+            } catch {
+
+            }
         }
     }
     update() {
@@ -88,7 +97,7 @@ export class World {
         this.dom = dom;
         createCities(this, 5);
         for (var x = 0; x < this.cities.length; x++) {
-            this.cities[x].create();
+            this.cities[x].create(x);
             this.cities[x].update();
 
 

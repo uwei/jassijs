@@ -37,6 +37,7 @@ export class AirplaneDialog {
     private _airplane: Airplane;
     hasPaused = false;
     public static instance;
+    public dropCitiesEnabled = false;
     constructor() {
         this.create();
     }
@@ -89,9 +90,9 @@ export class AirplaneDialog {
           </div>
             <div id="airplanedialog-tabs">
                 <ul>
-                    <li><a href="#airplanedialog-products">`+ Icons.table.replace('<span', '<span title="Load"') + `</a></li>
-                    <li><a href="#airplanedialog-info">`+ Icons.info.replace('<span', '<span title="Info"') + `</a></li>
-                    <li><a href="#airplanedialog-route">`+ Icons.route.replace('<span', '<span title="Route"') + `</a></li>
+                    <li><a href="#airplanedialog-products" class="airplanedialog-tabs">`+ Icons.table.replace('<span', '<span title="Load"') + `</a></li>
+                    <li><a href="#airplanedialog-info" class="airplanedialog-tabs">`+ Icons.info.replace('<span', '<span title="Info"') + `</a></li>
+                    <li  id="airplanedialog-route-tab"><a href="#airplanedialog-route" class="airplanedialog-tabs">`+ Icons.route.replace('<span', '<span title="Route"') + `</a></li>
                 </ul>
                 <div id="airplanedialog-products">
                     <div id="airplanedialog-products-list">
@@ -150,9 +151,40 @@ export class AirplaneDialog {
                 else
                     _this.airplane.activeRoute = act * Math.abs(_this.airplane.activeRoute)
             });
+            $('.airplanedialog-tabs').click(function (event) {
+                if (event.target.getAttribute("href") === "#airplanedialog-route" ||
+                    (<any>event.target.parentNode).getAttribute("href") === "#airplanedialog-route") {
+                    _this.enableDropCities(true);
+                } else {
+                    _this.enableDropCities(false);
+                }
 
+
+            });
         }, 500);
         //document.createElement("span");
+    }
+    enableDropCities(enable: boolean) {
+        var _this=this;
+        console.log("route "+(enable ? "enable" : "disable"));
+        if (this.dropCitiesEnabled && !enable) {
+            $(".city").draggable('destroy');
+        }
+        if (this.dropCitiesEnabled === false && enable) {
+            $(".city").draggable({
+                connectToSortable: '#route-list',
+                helper: function (event) {
+                    var id = parseInt(event.target.getAttribute("cityid"));
+                    var city=_this.airplane.world.cities[id];
+                    var ret = '<li id="route-' + id + '" class="ui-state-default"><img src="' + city.icon + '" </img>' + city.name + "</li>";
+
+                    return $(ret);
+                    // return helper._position.dom;
+                },
+                revert: 'invalid'
+            });
+        }
+        this.dropCitiesEnabled=enable;
     }
     updateData() {
         var _this = this;
@@ -277,12 +309,18 @@ export class AirplaneDialog {
         var _this = this;
         this.dom.removeAttribute("hidden");
         this.update();
-
+        if ($("#airplanedialog-route-tab").hasClass("ui-tabs-active")) {
+            _this.enableDropCities(true);
+        }
+        //ui-tabs-active
         $(this.dom).dialog({
             width: "190px",
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
                 _this.update(true);
+            },
+            close: function () {
+                _this.enableDropCities(false);
             }
         });
         $(this.dom).parent().css({ position: "fixed" });
