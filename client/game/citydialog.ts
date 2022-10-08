@@ -154,14 +154,14 @@ export class CityDialog {
                 <div id="citydialog-buildings">
                      <table id="citydialog-buildings-table" style="height:100%;weight:100%;">
                         <tr>
-                            <th>produce</th>
+                            <th>Produce</th>
                             <th> </th>
-                            <th>buildings</th>
-                            <th>jobs</th>
-                            <th>needs</th>
+                            <th>Buildings</th>
+                            <th>Jobs</th>
+                            <th>Needs</th>
                             <th></th>
-                            <th>costs new<br/>building</th>
-                            <th>actions</th>
+                            <th>Costs new<br/>building</th>
+                            <th>Actions</th>
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -196,14 +196,46 @@ export class CityDialog {
                     </div>
                 </div>
                 <div id="citydialog-warehouse">
+                    <table id="citydialog-warehouse-table" style="height:100%;weight:100%;">
+                        <tr>
+                            <th>Name</th>
+                            <th></th>
+                            <th>Stock</th>
+                            <th>Produce</th>
+                            <th>Need</th>
+                            <th>Min-Stock</th>
+                            <th>Selling price</th>
+                        </tr>
+                       ${(function fun() {
+                var ret = "";
+                for (var x = 0; x < allProducts.length; x++) {
+                    ret = ret + "<tr>";
+                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>" + allProducts[x].name + "</td>";
+                    ret = ret + "<td>0</td>";
+                    ret = ret + "<td>0</td>";
+                    ret = ret + "<td>0</td>";
+                    ret = ret + '<td>' +
+                        '<input type="text" class="warehouse-needs" id="warehouse-needs_' + x + '"' +
+                        'style="width: 50px;"' +
+                        '"></td>';
+                    ret = ret + '<td>' +
+                        '<input type="text" class="warehouse-produce" id="warehouse-produce_' + x + '"' +
+                        'style="width: 50px;"' +
+                        '"></td>';
+                    ret = ret + "</tr>";
+                }
+                return ret;
+            })()}
+                    </table>
                     <p>number of warehouses <span id="citydialog-warehouse-count"><span></p>
                 </div>
                  <div id="citydialog-score">
                     <table id="citydialog-score-table" style="height:100%;weight:100%;">
                         <tr>
-                            <th>icon</th>
-                            <th>name</th>
-                            <th>score</th>
+                            <th>Name</th>
+                            <th> </th>
+                            <th>Score</th>
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -297,7 +329,7 @@ export class CityDialog {
                 inedit = true;
                 var id = Number(t.id.split("_")[1]);
                 var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
-                _this.sellOrBuy(id, -Number(t.value), _this.calcPrice(t, Number(t.value)), _this.getStore(),selectsource.value === "Warehouse");
+                _this.sellOrBuy(id, -Number(t.value), _this.calcPrice(t, Number(t.value)), _this.getStore(), selectsource.value === "Warehouse");
                 t.nextElementSibling.innerHTML = "0";
                 t.value = "0";
                 inedit = false;
@@ -323,6 +355,7 @@ export class CityDialog {
                 _this.city.world.game.money = _this.city.world.game.money - coasts[0];
                 _this.city.market[0] = _this.city.market[0] - coasts[1];
                 _this.city.market[1] = _this.city.market[1] - coasts[2];
+                comp.workers+=25;
                 comp.buildings++;
                 _this.update();
                 //alert("create x");
@@ -461,6 +494,7 @@ export class CityDialog {
         }
 
     }
+
     updateBuildings() {
         /*
                                <th>produce</th>
@@ -537,6 +571,36 @@ export class CityDialog {
 
     }
     updateWarehouse() {
+        var needs = [];
+        for (var x = 0; x < allProducts.length; x++) {
+            needs.push(0);
+        }
+        for (var i = 0; i < this.city.companies.length; i++) {
+            var test = allProducts[this.city.companies[i].productid];
+            if (test.input1 !== undefined) {
+                needs[test.input1] += (Math.round(this.city.companies[i].workers * test.input1Amount / 25));
+            }
+            if (test.input2 === x) {
+                needs[test.input2] += (Math.round(this.city.companies[i].workers * test.input2Amount / 25));
+            }
+        }
+        for (var x = 0; x < allProducts.length; x++) {
+            var table = document.getElementById("citydialog-warehouse-table");
+            var tr = table.children[0].children[x + 1];
+
+            tr.children[2].innerHTML = this.city.warehouse[x].toString();
+            var prod = "";
+            var product = allProducts[x];
+            for (var i = 0; i < this.city.companies.length; i++) {
+                if (this.city.companies[i].productid === x) {
+                    prod = Math.round(this.city.companies[i].workers * product.dailyProduce / 25).toString();
+                }
+            }
+            tr.children[3].innerHTML =prod;
+            tr.children[4].innerHTML =needs[x]===0?"":needs[x];
+        }
+
+
         document.getElementById("citydialog-warehouse-count").innerHTML = this.city.warehouseses.toString();
 
         //score
@@ -605,7 +669,7 @@ export class CityDialog {
         $(this.dom).parent().css({ position: "fixed" });
 
     }
-    close(){
-         $(this.dom).dialog( "close" );
+    close() {
+        $(this.dom).dialog("close");
     }
 }
