@@ -144,11 +144,11 @@ export class AirplaneDialog {
                 _this.update(true);
             });
             document.getElementById("route-active").addEventListener('click', (e) => {
-                var act=((<any>document.getElementById("route-active")).checked?1:-1);
-                if(act===-1&&_this.airplane.activeRoute===0)
-                    _this.airplane.activeRoute=-1;
+                var act = ((<any>document.getElementById("route-active")).checked ? 1 : -1);
+                if (act === -1 && _this.airplane.activeRoute === 0)
+                    _this.airplane.activeRoute = -1;
                 else
-                    _this.airplane.activeRoute=act*Math.abs(_this.airplane.activeRoute)
+                    _this.airplane.activeRoute = act * Math.abs(_this.airplane.activeRoute)
             });
 
         }, 500);
@@ -288,5 +288,7 @@ export class AirplaneDialog {
         $(this.dom).parent().css({ position: "fixed" });
 
     }
-
+    close() {
+        $(this.dom).dialog("close");
+    }
 }

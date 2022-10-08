@@ -605,5 +605,7 @@ export class CityDialog {
         $(this.dom).parent().css({ position: "fixed" });
 
     }
-
+    close(){
+         $(this.dom).dialog( "close" );
+    }
 }

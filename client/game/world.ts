@@ -4,6 +4,7 @@ import { Airplane } from "game/airplane";
 import windows from "jassijs/base/Windows";
 import { CityDialog } from "game/citydialog";
 import { Game } from "game/game";
+import { AirplaneDialog } from "game/airplanedialog";
 
 export class World {
     _intervall;
@@ -58,8 +59,12 @@ export class World {
 
     }
     onclick(th: MouseEvent) {
-
+        console.log("close");
         this.selection?.unselect();
+        if (th.target === this.dom) {
+            CityDialog.getInstance().close();
+            AirplaneDialog.getInstance().close();
+        }
     }
     update() {
 

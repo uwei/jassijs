@@ -82,7 +82,7 @@ export class City {
         var desc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (14 + this.y) +
             'px;left:' + this.x + 'px;font-size:9px;">' + this.name + '</span>').children[0];
         this.world.dom.appendChild(desc);
-        setTimeout(() => {
+      /*  setTimeout(() => {
             $(_this.dom).draggable({
                 connectToSortable: '#route-list',
                 helper:  function (event) {
@@ -94,7 +94,7 @@ export class City {
                 },
                  revert: 'invalid'
             });
-        }, 100);
+        }, 100);*/
 
     }
     updateNeutralCompanies() {
@@ -209,10 +209,11 @@ export class City {
 
     }
     onclick(th: MouseEvent) {
+        th.preventDefault();
         var h = CityDialog.getInstance();
         h.city = this;
         h.show();
-
+        
     }
 }
 

@@ -153,6 +153,7 @@ export class Airplane {
         }
     }
     onclick(th: MouseEvent) {
+        th.preventDefault();
         th.stopPropagation();
         console.log(this.name);
         this.world.selection?.unselect();
@@ -161,7 +162,6 @@ export class Airplane {
         var h = AirplaneDialog.getInstance();
         h.airplane = this;
         h.show();
-
 
     }
 }
