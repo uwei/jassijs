@@ -9,6 +9,7 @@ function getRandomInt(max) {
 }
 
 export class City {
+    id: number;
     x: number;
     y: number;
     name: string;
@@ -25,7 +26,10 @@ export class City {
     neutralDailyProducedToday: number[];
     consumedToday: number[];
     lastUpdate = undefined;
-    score: number[]=[];
+    score: number[] = [];
+    warehouse: number[] = [];
+    warehouseses = 0;
+    houses = 0;
     constructor() {
         this.market = [];
         this.airplanesInCity = [];
@@ -42,6 +46,7 @@ export class City {
                 val = Math.round(0.5 * City.neutralStartPeople * allProducts[x].dailyConsumtion);
 
             }
+            this.warehouse.push(5000);
             this.market.push(val);
         }
     }
@@ -60,6 +65,7 @@ export class City {
     create() {
         var _this = this;
         this.dom = <any>document.createElement("img");
+        this.dom.style.border = "1px solid black";
         this.dom.setAttribute("src", this.icon);
         this.dom.style.position = "absolute";
         this.dom.addEventListener("click", (ev: MouseEvent) => {
@@ -72,6 +78,24 @@ export class City {
         });
         this.dom.style.top = this.y.toString() + "px";
         this.dom.style.left = this.x.toString() + "px";
+        this.world.dom.appendChild(this.dom);
+        var desc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (14 + this.y) +
+            'px;left:' + this.x + 'px;font-size:9px;">' + this.name + '</span>').children[0];
+        this.world.dom.appendChild(desc);
+        setTimeout(() => {
+            $(_this.dom).draggable({
+                connectToSortable: '#route-list',
+                helper:  function (event) {
+                    var id=_this.world.cities.indexOf(_this);
+                    var ret=  '<li id="route-' + id + '" class="ui-state-default"><img src="' + _this.icon + '" </img>' + _this.name + "</li>";
+        
+                    return $(ret);
+               // return helper._position.dom;
+                },
+                 revert: 'invalid'
+            });
+        }, 100);
+
     }
     updateNeutralCompanies() {
 
@@ -149,17 +173,17 @@ export class City {
                          console.log(x+"kaufe von markt " + price + "<=" + priceMax+" ("+this.market[x]+")");
                      }*/
                     this.market[x] -= diff;
-                    this.score[x] = Math.round((this.score[x]+0.2)*100)/100;
+                    this.score[x] = Math.round((this.score[x] + 0.2) * 100) / 100;
                 } else {
-                    this.score[x] =  Math.round((this.score[x]-0.1)*100)/100;
+                    this.score[x] = Math.round((this.score[x] - 0.1) * 100) / 100;
 
                     /* if (this.isProducedHere(product.id)) {
                          console.log(x+"zu teuer " + price + ">" + priceMax);
                      }*/
 
                 }
-                if(this.score[x]>100)
-                    this.score[x]=100;
+                if (this.score[x] > 100)
+                    this.score[x] = 100;
 
             }
             if (dayProcent === 1) {
@@ -178,8 +202,8 @@ export class City {
 
     oncontextmenu(evt: MouseEvent) {
         evt.preventDefault();
-        (<Airplane>this.world.selection).status = "to " + this.name;
-        (<Airplane>this.world.selection).flyTo(this.x, this.y);
+        //(<Airplane>this.world.selection).status = "to " + this.name;
+        (<Airplane>this.world.selection).flyTo(this);
         console.log(evt.offsetX);
 
 
@@ -192,9 +216,9 @@ export class City {
     }
 }
 
-function createCities2(count) {
-    var cities: City[] = [];
+function createCities2(count, checkProduction = false) {
     var allids = [];
+    var cities:City[]=[]
     for (var x = 0; x < count; x++) {
         var city = new City();
         cities.push(city);
@@ -204,38 +228,83 @@ function createCities2(count) {
         }
 
     }
-    //check if all Procducts with distribution> 4could be produces
-    for (var x = 0; x < allProducts.length; x++) {
-        if (allProducts[x].distribution > 4 && allids.indexOf(allProducts[x].id) === -1) {
+    if (checkProduction) {
+        //check if all Procducts with distribution> 4could be produces
+        for (var x = 0; x < allProducts.length; x++) {
+            if (allProducts[x].distribution > 4 && allids.indexOf(allProducts[x].id) === -1) {
 
-            return createCities2(count);
+                return createCities2(count);
+            }
         }
     }
     return cities;
 }
-export function createCities(world: World, count: number): City[] {
-    if (count < 5)
+function calcPosNewCity(world: World, deep) {
+    var x = getRandomInt(world.game.mapWidth);
+    var y = getRandomInt(world.game.mapHeight);
+    for (var i = 0; i < world.cities.length; i++) {
+        var ct = world.cities[i];
+        if (x > (ct.x - 100) && x < (ct.x + 100) && y > (ct.y - 100) && (y < ct.y + 100)) {
+            //conflict
+            if (deep > 0) {
+                deep--;
+                return calcPosNewCity(world, deep);
+            } else { //
+                world.game.mapHeight = world.game.mapHeight + 100;
+                world.game.mapWidth = world.game.mapWidth + 100;
+                return calcPosNewCity(world, deep);
+            }
+        }
+    }
+    return [x, y]
+}
+export function createCities(world: World, count: number) {
+    if (world.cities.length === 0 && count < 5) {
         throw new Error("min 5 cities");
-    var cities: City[] = createCities2(count);
+    }
+    var cities=[];
+    if (world.cities.length === 0)
+        cities=createCities2(count, true);
+    else
+        cities=createCities2(false);
 
     var allready = [];
+    for (var x = 0; x < world.cities.length; x++) {
+        allready.push(world.cities[x].id);
+    }
     for (var x = 0; x < count; x++) {
+        if (world.cities.length >= allCities.length)
+            throw "No more cities available";
         var city = cities[x];
-        city.x = getRandomInt(500);
-        city.y = getRandomInt(500);
+        world.cities.push(city);
+        if (x === 0 && world.cities.length === 1) {//the first city starts with datawarehouse
+            city.warehouseses = 1;
+            city.houses = 1;
+        }
+        
+        if (world.cities.length === 1) {
+            city.x = world.game.mapWidth;
+            city.y = world.game.mapHeight;
+        } else {
+            var test = calcPosNewCity(world, 100);
+            city.x = test[0];
+            city.y = test[1];
+            //überschneidung
+
+        }
         city.world = world;
         city.people = 1000;
-        var num = getRandomInt(193);
+        var num = getRandomInt(allCities.length);
         while (allready.indexOf(num) !== -1) {
-            num = getRandomInt(193);
+            num = getRandomInt(allCities.length);
         }
         allready.push(num);
+        city.id = num;
         city.name = allCities[num][1];
         city.country = allCities[num][0];
         city.icon = "https://" + allCities[num][2];
-        cities.push(city);
+      //  cities.push(city);
     }
-    return cities;
 }
 export function test() {
 

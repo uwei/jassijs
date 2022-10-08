@@ -1,6 +1,8 @@
-import { City } from "game/city";
+import { allCities, City } from "game/city";
 import { allProducts, Product } from "game/product";
 import { Airplane } from "game/airplane";
+import { Icons } from "game/icons";
+import { Route } from "game/route";
 var css = `
     table{
         font-size:inherit;
@@ -15,6 +17,16 @@ var css = `
     .ui-dialog-titlebar{
         height:10px;
     }
+    #route-list>li{
+        list-style-type: none; /* Remove bullets */
+        padding: 0; /* Remove padding */
+        margin: 0;
+    }
+    #route-list{
+        margin-block-start: 0px;
+        margin-block-end: 0px;
+        padding-inline-start: 0px;
+    }
 `;
 //@ts-ignore
 window.airplane = function () {
@@ -22,7 +34,7 @@ window.airplane = function () {
 }
 export class AirplaneDialog {
     dom: HTMLDivElement;
-    airplane: Airplane;
+    private _airplane: Airplane;
     hasPaused = false;
     public static instance;
     constructor() {
@@ -32,6 +44,13 @@ export class AirplaneDialog {
         if (AirplaneDialog.instance === undefined)
             AirplaneDialog.instance = new AirplaneDialog();
         return AirplaneDialog.instance;
+    }
+    set airplane(value: Airplane) {
+        this._airplane = value;
+        this.updateRoute();
+    }
+    get airplane() {
+        return this._airplane;
     }
     private createStyle() {
         var style = document.createElement('style');
@@ -70,8 +89,9 @@ export class AirplaneDialog {
           </div>
             <div id="airplanedialog-tabs">
                 <ul>
-                    <li><a href="#airplanedialog-products">products</a></li>
-                    <li><a href="#airplanedialog-info">Info</a></li>
+                    <li><a href="#airplanedialog-products">`+ Icons.table.replace('<span', '<span title="Load"') + `</a></li>
+                    <li><a href="#airplanedialog-info">`+ Icons.info.replace('<span', '<span title="Info"') + `</a></li>
+                    <li><a href="#airplanedialog-route">`+ Icons.route.replace('<span', '<span title="Route"') + `</a></li>
                 </ul>
                 <div id="airplanedialog-products">
                     <div id="airplanedialog-products-list">
@@ -81,6 +101,13 @@ export class AirplaneDialog {
                 <div id="airplanedialog-info">
                     
                  </div>
+                 <div id="airplanedialog-route">
+                    <input type="checkbox" id="route-active"> active</input>
+                    <ul id="route-list">
+                     
+           
+                    </ul>
+                <div>
                 
             </div>
           </div>
@@ -95,6 +122,7 @@ export class AirplaneDialog {
             $("#airplanedialog-tabs").tabs({
                 //collapsible: true
             });
+            //  $( "#route-list" ).sortable();
         }, 100);
         document.body.appendChild(this.dom);
 
@@ -115,10 +143,80 @@ export class AirplaneDialog {
                 _this.airplane = _this.airplane.world.airplanes[pos];
                 _this.update(true);
             });
-
+            document.getElementById("route-active").addEventListener('click', (e) => {
+                var act=((<any>document.getElementById("route-active")).checked?1:-1);
+                if(act===-1&&_this.airplane.activeRoute===0)
+                    _this.airplane.activeRoute=-1;
+                else
+                    _this.airplane.activeRoute=act*Math.abs(_this.airplane.activeRoute)
+            });
 
         }, 500);
         //document.createElement("span");
+    }
+    updateData() {
+        var _this = this;
+        var childs = document.getElementById("route-list").children;
+        var old: Route[] = [];
+        for (var x = 0; x < _this.airplane.route.length; x++) {
+            old.push(_this.airplane.route[x]);
+        }
+        _this.airplane.route = [];
+        for (var x = 0; x < childs.length; x++) {
+            if (childs[x].id === "route-dummy")
+                continue;
+            var sid = childs[x].id.split("-")[1];
+            var id = parseInt(sid);
+            var found: Route = undefined;
+            for (var y = 0; y < old.length; y++) {
+                if (old[y].cityid === id) {
+                    found = old[y];
+                    old.splice(y, 1);
+                    break;
+                }
+            }
+            if (found === undefined) {
+                found = new Route();
+                found.cityid = id;
+            }
+            _this.airplane.route.push(found);
+        }
+    }
+    updateRoute() {
+        var _this = this;
+        if (document.getElementById("route-list") === null)
+            return;
+        var html = "";
+        if (this.airplane.route.length === 0)
+            html = '<li id="route-dummy">drag and drop cities here</li>';
+        var ids = [];
+        for (var x = 0; x < this.airplane.route.length; x++) {
+            var id = this.airplane.route[x].cityid;
+            html += '<li id="route-' + id + '" class="ui-state-default"><img src="' + this.airplane.world.cities[id].icon + '" </img>' +
+                this.airplane.world.cities[id].name + " " + Icons.trash.replace("mdi ", "mdi route-delete") + "</li>";
+
+            ids.push(this.airplane.route[x].cityid);
+            //var sdom;
+            //var dom:HTMLSpanElement= <any>document.createRange().createContextualFragment(sdom).children[0];
+
+        }
+        document.getElementById("route-list").innerHTML = html;
+        $("#route-list").sortable({
+            update: (event, ui) => {
+                _this.updateData();
+                setTimeout(() => {
+                    _this.updateRoute();
+
+                }, 50);
+            }
+        });
+
+
+        //  $("airplanedialog-route").sortable
+        //                   <span>`+this.airplane.world.cities[0].icon+this.airplane.world.cities[0].name+`</span> 
+        //                 <span>`+this.airplane.world.cities[1].icon+this.airplane.world.cities[1].name+`</span> 
+        //               <span>`+this.airplane.world.cities[3].icon+this.airplane.world.cities[3].name+`</span> 
+
     }
     selectAirplace(ap) {
         this.airplane = ap;
@@ -126,10 +224,11 @@ export class AirplaneDialog {
         ap.world.selection = ap;
         ap.select();
         this.update(true);
-        
+
     }
     update(force = false) {
-        if(this.airplane===undefined)
+        var _this = this;
+        if (this.airplane === undefined)
             return;
         var ret = '<div style="display:grid;grid-template-columns: 30px 30px 30px 30px;">';
         for (var x = 0; x < allProducts.length; x++) {
@@ -140,6 +239,11 @@ export class AirplaneDialog {
         ret += "<div>";
         document.getElementById("airplanedialog-products-list").innerHTML = ret;
         this.updateTitle();
+        $(".route-delete").click(function () {
+            $(this).closest('li').remove();
+            _this.updateData();
+        });
+        (<any>document.getElementById("route-active")).checked = (this.airplane.activeRoute > -1);
         /*
           var companies = this.city.companies;
           var all = allProducts;
@@ -167,19 +271,21 @@ export class AirplaneDialog {
     updateTitle() {
         var sicon = '';
         if ($(this.dom).parent().find('.ui-dialog-title').length > 0)
-            $(this.dom).parent().find('.ui-dialog-title')[0].innerHTML = this.airplane.name+" "+this.airplane.status; //'<img style="float: right" id="citydialog-icon" src="' + this.city.icon + '"  height="15"></img> ' + this.city.name + " " + this.city.people;
+            $(this.dom).parent().find('.ui-dialog-title')[0].innerHTML = this.airplane.name + " " + this.airplane.status; //'<img style="float: right" id="citydialog-icon" src="' + this.city.icon + '"  height="15"></img> ' + this.city.name + " " + this.city.people;
     }
     show() {
         var _this = this;
-          this.dom.removeAttribute("hidden");
+        this.dom.removeAttribute("hidden");
         this.update();
 
         $(this.dom).dialog({
-            width: "170px",
+            width: "190px",
+            //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
                 _this.update(true);
             }
         });
+        $(this.dom).parent().css({ position: "fixed" });
 
     }
 

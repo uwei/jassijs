@@ -30,10 +30,12 @@ export class Company {
     productid: number;
     buildings: number = 0;
     workers: number = 0;
+    hasLicense=false;
     constructor(notThisIds: number[] = undefined) {
         this.productid = getRandomCompanyType(notThisIds);
-        this.buildings = getRandomInt(3)+1;
+        this.buildings =0;// getRandomInt(3)+1;
         this.workers = 25 * this.buildings;
+        this.hasLicense=(allProducts[this.productid].distribution<=8)?false:true;
     }
     getMaxWorkers(): number {
         return this.buildings * 25;
@@ -54,7 +56,7 @@ export class Company {
     getBuildingCoastsAsIcon(){
         var a=this.getBuildingCoasts();
        
-        return a[0]+Icons.money+"<br/>"+a[1]+allProducts[0].getIcon()+"<br/>"+a[2]+allProducts[1].getIcon();
+        return a[0]+Icons.money+"<br/>"+a[1]+"x"+allProducts[0].getIcon()+"<br/>"+a[2]+"x"+allProducts[1].getIcon();
     }    
     getBuildingCoasts(){
         var fact=5-(allProducts[this.productid].distribution)/4;

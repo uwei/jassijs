@@ -8,8 +8,8 @@ class PPanel extends Panel {
     game = new Game();
     constructor() {
         super();
-        this.width = 500;
-        this.height = 500; 
+        this.width = "1050px";
+        this.height = "650px"; 
         this.game.create(this.dom); 
     }
     

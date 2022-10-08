@@ -16,7 +16,7 @@ export class World {
         var _this = this;
         this.cities = [];
         this.airplanes = [];
-        this._intervall=setInterval(() => {
+        this._intervall = setInterval(() => {
             for (var x = 0; x < _this.airplanes?.length; x++) {
                 /*if (this.airplanes[x].x < 500)
                     this.airplanes[x].x = this.airplanes[x].x + 1;
@@ -72,15 +72,21 @@ export class World {
             this.cities[x].update();
         }
     }
+    addCity() {
+        var city = createCities(this, 1)[0];
+        city.create();
+        city.update();
+
+    }
     create(dom: HTMLElement) {
         var _this = this;
         this.dom = dom;
-        this.cities = createCities(this, 5);
+        createCities(this, 5);
         for (var x = 0; x < this.cities.length; x++) {
             this.cities[x].create();
             this.cities[x].update();
 
-            dom.appendChild(this.cities[x].dom);
+
         }
         for (var x = 0; x < 20; x++) {
             var ap = new Airplane(this);
