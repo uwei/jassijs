@@ -7,7 +7,7 @@ import { City } from "game/city";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
-
+//
 export class Airplane {
     name: string;
     action: string;
