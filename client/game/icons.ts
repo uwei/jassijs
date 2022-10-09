@@ -10,5 +10,6 @@ export class Icons{
     static route="<span  class='mdi  mdi-recycle-variant'></span>";
     static info="<span  class='mdi  mdi-information-outline'></span>";
     static trash="<span  class='mdi  mdi-delete-forever-outline'></span>";
+    static edit="<span  class='mdi  mdi-square-edit-outline'></span>";
     
 }

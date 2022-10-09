@@ -89,8 +89,8 @@ export class CityDialog {
         var sdom = `
           <div>
           <div>
-            <input id="citydialog-prev" type="button" value="<"/>"
-            <input id="citydialog-next" type="button" value=">"/>"
+            <input id="citydialog-prev" type="button" value="<"/>
+            <input id="citydialog-next" type="button" value=">"/>
           </div>
             <div id="citydialog-tabs">
                 <ul>
@@ -187,13 +187,20 @@ export class CityDialog {
                     </table>
                     <br/>
                     <b>residential building</b>
-                    <div id="citydialog-buildings">
+                    <br/>
                        `+ Icons.home + ` houses: <span id="houses">0/0</span>  
                         `+ Icons.people + ` renter: <span id="renter">0/0</span>  
-                        <button id="buy-house">+`+ Icons.home + ` for 15.000` + Icons.money + " 20x" + allProducts[0].getIcon() +
-            " 40x" + allProducts[1].getIcon() + `</button> 
+                        <button id="buy-house">+`+ Icons.home + ` for 25.000` + Icons.money + " 40x" + allProducts[0].getIcon() +
+            " 80x" + allProducts[1].getIcon() + `</button> 
                         <button id="delete-house">-`+ Icons.home + `</button>
-                    </div>
+                        <br/>
+                        <b>Warehouse</b>
+                    <br/>
+                       `+ Icons.warehouse + ` houses: <span id="count-warehouses">0/0</span>  
+                        ` + ` costs: <span id="costs-warehouses">0</span> `+Icons.money+`  
+                        <button id="buy-warehouse">+`+ Icons.home + ` for 15.000` + Icons.money + " 20x" + allProducts[0].getIcon() +
+            " 40x" + allProducts[1].getIcon() + `</button> 
+                        <button id="delete-warehouse">-`+ Icons.home + `</button>
                 </div>
                 <div id="citydialog-warehouse">
                     <table id="citydialog-warehouse-table" style="height:100%;weight:100%;">
@@ -216,11 +223,11 @@ export class CityDialog {
                     ret = ret + "<td>0</td>";
                     ret = ret + "<td>0</td>";
                     ret = ret + '<td>' +
-                        '<input type="text" class="warehouse-needs" id="warehouse-needs_' + x + '"' +
+                        '<input type="number" min="0" class="warehouse-min-stock" id="warehouse-min-stock_' + x + '"' +
                         'style="width: 50px;"' +
                         '"></td>';
                     ret = ret + '<td>' +
-                        '<input type="text" class="warehouse-produce" id="warehouse-produce_' + x + '"' +
+                        '<input type="number" min="0" class="warehouse-selling-price" id="warehouse-selling-price_' + x + '"' +
                         'style="width: 50px;"' +
                         '"></td>';
                     ret = ret + "</tr>";
@@ -355,7 +362,7 @@ export class CityDialog {
                 _this.city.world.game.money = _this.city.world.game.money - coasts[0];
                 _this.city.market[0] = _this.city.market[0] - coasts[1];
                 _this.city.market[1] = _this.city.market[1] - coasts[2];
-                comp.workers+=25;
+                comp.workers += 25;
                 comp.buildings++;
                 _this.update();
                 //alert("create x");
@@ -382,9 +389,9 @@ export class CityDialog {
 
         }
         document.getElementById("buy-house").addEventListener("click", (evt) => {
-            _this.city.world.game.money = _this.city.world.game.money - 15000;
-            _this.city.market[0] = _this.city.market[0] - 20;
-            _this.city.market[1] = _this.city.market[1] - 40;
+            _this.city.world.game.money = _this.city.world.game.money - 25000;
+            _this.city.market[0] = _this.city.market[0] - 40;
+            _this.city.market[1] = _this.city.market[1] - 80;
             _this.city.houses++;
             _this.update();
         });
@@ -398,6 +405,34 @@ export class CityDialog {
             }
             console.log("remove worker");
         });
+        document.getElementById("buy-warehouse").addEventListener("click", (evt) => {
+            _this.city.world.game.money = _this.city.world.game.money - 25000;
+            _this.city.market[0] = _this.city.market[0] - 40;
+            _this.city.market[1] = _this.city.market[1] - 80;
+            _this.city.warehouses++;
+            _this.update();
+        });
+        document.getElementById("delete-warehouse").addEventListener("click", (evt) => {
+            if (_this.city.warehouses === 0)
+                return;
+            _this.city.warehouses--;
+            _this.update();
+       
+        });
+        for (var x = 0; x < allProducts.length; x++) {
+            document.getElementById("warehouse-min-stock_"+x).addEventListener("change", (e) => {
+                var ctrl = (<HTMLInputElement>e.target);
+                var id = parseInt(ctrl.id.split("_")[1]);
+                _this.city.warehouseMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
+            });
+            document.getElementById("warehouse-selling-price_"+x).addEventListener("change", (e) => {
+                var ctrl = (<HTMLInputElement>e.target);
+                var id = parseInt(ctrl.id.split("_")[1]);
+                _this.city.warehouseMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
+                
+            });
+        }
+
     }
     sellOrBuy(productid, amount: number, price: number, storetarget: number[], isWarehouse: boolean) {
         if (isWarehouse) {
@@ -414,7 +449,7 @@ export class CityDialog {
         var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-target");
         var val = select.value;
         if (val) {
-            if (this.city.warehouseses > 0 && val === "Warehouse") {
+            if (this.city.warehouses > 0 && val === "Warehouse") {
                 return this.city.warehouse;
             }
             for (var x = 0; x < this.city.world.airplanes.length; x++) {
@@ -429,7 +464,7 @@ export class CityDialog {
         var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
         var last = select.value;
         select.innerHTML = "";
-        if (this.city.warehouseses > 0) {
+        if (this.city.warehouses > 0) {
             var opt: HTMLOptionElement = document.createElement("option");
             opt.value = "Warehouse";
             opt.text = opt.value;
@@ -533,13 +568,13 @@ export class CityDialog {
             } else {
                 document.getElementById("buy-license_" + x).removeAttribute("hidden");
             }
-            if (this.city.warehouseses === 0) {
+            if (this.city.warehouses === 0) {
                 document.getElementById("no-warehouse_" + x).removeAttribute("hidden");
             } else {
                 document.getElementById("no-warehouse_" + x).setAttribute("hidden", "");
             }
 
-            if (comp.hasLicense && this.city.warehouseses > 0) {
+            if (comp.hasLicense && this.city.warehouses > 0) {
                 document.getElementById("new-factory_" + x).removeAttribute("hidden");
                 document.getElementById("delete-factory_" + x).removeAttribute("hidden");
             } else {
@@ -596,12 +631,18 @@ export class CityDialog {
                     prod = Math.round(this.city.companies[i].workers * product.dailyProduce / 25).toString();
                 }
             }
-            tr.children[3].innerHTML =prod;
-            tr.children[4].innerHTML =needs[x]===0?"":needs[x];
+            tr.children[3].innerHTML = prod;
+            tr.children[4].innerHTML = needs[x] === 0 ? "" : needs[x];
+            if(document.activeElement!==tr.children[5].children[0])
+                (<HTMLInputElement>tr.children[5].children[0]).value = this.city.warehouseMinStock[x] === undefined ? "" : this.city.warehouseMinStock[x].toString();
+            if(document.activeElement!==tr.children[6].children[0])
+                (<HTMLInputElement>tr.children[6].children[0]).value = this.city.warehouseSellingPrice[x] === undefined ? "" : this.city.warehouseSellingPrice[x].toString();
         }
-
-
-        document.getElementById("citydialog-warehouse-count").innerHTML = this.city.warehouseses.toString();
+        document.getElementById("count-warehouses").innerHTML=""+this.city.warehouses;
+        document.getElementById("costs-warehouses").innerHTML=""+(this.city.warehouses*50);
+    }
+    updateScore() {
+        document.getElementById("citydialog-warehouse-count").innerHTML = this.city.warehouses.toString();
 
         //score
         for (var x = 0; x < allProducts.length; x++) {
@@ -639,6 +680,7 @@ export class CityDialog {
         this.updateMarket();
         this.updateBuildings();
         this.updateWarehouse();
+        this.updateScore();
 
         return;
     }

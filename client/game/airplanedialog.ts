@@ -3,13 +3,14 @@ import { allProducts, Product } from "game/product";
 import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
 import { Route } from "game/route";
+import { RouteDialog } from "game/Routedialog";
 var css = `
     table{
         font-size:inherit;
     }
 
     .airplanedialog >*{
-        font-size:10px;
+        font-size:10px; 
     }
     .ui-dialog-title{ 
         font-size:10px;
@@ -85,8 +86,8 @@ export class AirplaneDialog {
         var sdom = `
           <div>
           <div>
-            <input id="airplanedialog-prev" type="button" value="<"/>"
-            <input id="airplanedialog-next" type="button" value=">"/>"
+            <input id="airplanedialog-prev" type="button" value="<"/>
+            <input id="airplanedialog-next" type="button" value=">"/>
           </div>
             <div id="airplanedialog-tabs">
                 <ul>
@@ -104,6 +105,7 @@ export class AirplaneDialog {
                  </div>
                  <div id="airplanedialog-route">
                     <input type="checkbox" id="route-active"> active</input>
+                    <button id="edit-route">`+Icons.edit + `</button>
                     <ul id="route-list">
                      
            
@@ -158,9 +160,12 @@ export class AirplaneDialog {
                 } else {
                     _this.enableDropCities(false);
                 }
-
-
             });
+            document.getElementById("edit-route").addEventListener('click', (e) => {
+                RouteDialog.getInstance().airplane=_this.airplane;
+                RouteDialog.getInstance().show();
+            });
+            
         }, 500);
         //document.createElement("span");
     }

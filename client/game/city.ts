@@ -28,11 +28,15 @@ export class City {
     lastUpdate = undefined;
     score: number[] = [];
     warehouse: number[] = [];
-    warehouseses = 0;
+    warehouses = 0;
     houses = 0;
+    warehouseMinStock:number[];
+    warehouseSellingPrice:number[];
     constructor() {
         this.market = [];
         this.airplanesInCity = [];
+        this.warehouseMinStock=[];
+        this.warehouseSellingPrice=[];
         this.createCompanies();
         for (var x = 0; x < allProducts.length; x++) {
             var val = 0;
@@ -46,6 +50,8 @@ export class City {
                 val = Math.round(0.5 * City.neutralStartPeople * allProducts[x].dailyConsumtion);
 
             }
+            this.warehouseMinStock.push(undefined);
+            this.warehouseSellingPrice.push(allProducts[x].priceSelling);
             this.warehouse.push(5000);
             this.market.push(val);
         }
