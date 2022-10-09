@@ -1,7 +1,7 @@
 import { World } from "game/world";
 import { CityDialog } from "game/citydialog";
 import { allProducts } from "game/product";
-import { Company } from "game/Company";
+import { Company } from "game/company";
 import { Airplane } from "game/airplane";
 
 function getRandomInt(max) {

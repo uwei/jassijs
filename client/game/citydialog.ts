@@ -24,6 +24,7 @@ window.city = function () {
 export class CityDialog {
     dom: HTMLDivElement;
     city: City;
+    route:Route
     hasPaused = false;
     public static instance;
     constructor() {

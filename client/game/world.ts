@@ -102,7 +102,7 @@ export class World {
 
 
         }
-        for (var x = 0; x < 20; x++) {
+        for (var x = 0; x < 1; x++) {
             var ap = new Airplane(this);
             ap.name = "Airplane " + x;
             ap.speed = 200;

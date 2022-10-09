@@ -31,6 +31,7 @@ export class Company {
     buildings: number = 0;
     workers: number = 0;
     hasLicense=false;
+    type="Company";
     constructor(notThisIds: number[] = undefined) {
         this.productid = getRandomCompanyType(notThisIds);
         this.buildings =0;// getRandomInt(3)+1;

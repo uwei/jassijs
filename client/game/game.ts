@@ -4,6 +4,7 @@ import { Panel } from "jassijs/ui/Panel";
 import windows from "jassijs/base/Windows";
 import { AirplaneDialog } from "game/airplanedialog";
 import { Icons } from "game/icons";
+import { Company } from "game/company";
 
 
 export class Game {
@@ -66,6 +67,7 @@ export class Game {
     var sdomHeader = `
           <div style="height:15px;position:fixed;">
             Traffics <span id="gamedate"></span>   Money:<span id="gamemoney"></span>`+ Icons.money + `
+            <button id="save-game">`+ Icons.save + `</button> 
           </div>  
         `;
     this.domHeader = <any>document.createRange().createContextualFragment(sdomHeader).children[0];
@@ -77,17 +79,66 @@ export class Game {
 
     this.domWorld = <any>document.createRange().createContextualFragment(sdomWorld).children[0];
     this.dom.appendChild(this.domHeader);
-    var headerPlaceeholder=<any>document.createRange().createContextualFragment('<div style="height:15px"></div>').children[0]
+    var headerPlaceeholder = <any>document.createRange().createContextualFragment('<div style="height:15px"></div>').children[0]
     this.dom.appendChild(headerPlaceeholder);
     this.dom.appendChild(this.domWorld);
     this.world.create(this.domWorld);
 
 
     setTimeout(() => {
-      document.getElementById("gamedate").addEventListener("mousedown", () => {
-        console.log("down");
-      });
+      _this.bindActions();
     }, 500);
+  }
+  bindActions() {
+    var _this = this;
+    document.getElementById("gamedate").addEventListener("mousedown", () => {
+      console.log("down");
+    });
+    document.getElementById("save-game").addEventListener("click", () => {
+      _this.save();
+    });
+  }
+  save() {
+    var sdata = JSON.stringify(this, (key: string, value: any) => {
+      var ret:any={};
+      if (value instanceof HTMLElement) {
+        return undefined;
+      }
+      if(key==="lastUpdate")
+        return undefined;
+      if (value?.constructor?.name === "World") {
+        Object.assign(ret,value);
+        delete ret.game;
+        return ret;
+      }
+      if (value?.constructor?.name === "Airplane") {
+        
+        Object.assign(ret,value);
+        delete ret.world;
+        return ret;
+      }
+      if (value?.constructor?.name === "City") {
+       
+        Object.assign(ret,value);
+        delete ret.world;
+        return ret;
+      }
+      return value;
+    }, "\t");
+    this.load(sdata);
+    console.log(sdata);
+  }
+  load(data:string){
+    var ret=JSON.parse(data,(key,value)=>{
+      var r=value;
+      if(value?.type==="Company"){
+        r=new Company();
+        Object.assign(r,value);
+        return r;
+      }
+      return r;
+    });
+    debugger;
   }
   resume() {
     if (this.timer === 0)
@@ -107,6 +158,6 @@ export class Game {
   }
 }
 
-export function test(){
+export function test() {
 
 }

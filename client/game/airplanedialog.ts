@@ -1,9 +1,9 @@
-import { allCities, City } from "game/city";
+import { City } from "game/city";
 import { allProducts, Product } from "game/product";
 import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
 import { Route } from "game/route";
-import { RouteDialog } from "game/Routedialog";
+import { RouteDialog } from "game/routedialog";
 var css = `
     table{
         font-size:inherit;
@@ -163,6 +163,13 @@ export class AirplaneDialog {
             });
             document.getElementById("edit-route").addEventListener('click', (e) => {
                 RouteDialog.getInstance().airplane=_this.airplane;
+                RouteDialog.getInstance().route=undefined;
+                if(_this.airplane.route.length>0)
+                    RouteDialog.getInstance().route=_this.airplane.route[0];
+                else{
+                    alert("no route defined");
+                    return;
+                }
                 RouteDialog.getInstance().show();
             });
             
