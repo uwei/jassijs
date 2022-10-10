@@ -23,6 +23,7 @@ export class Game {
   timer;
   mapWidth = 1000;
   mapHeight = 600;
+  static temposcale = [0.01, 0.5, 1, 2, 4, 8, 16, 32, 64, 128]
   constructor() {
     var _this = this;
     Game.instance = this;
@@ -71,7 +72,11 @@ export class Game {
     this.dom = dom;
     var sdomHeader = `
           <div style="height:15px;position:fixed;">
-            Traffics <span id="gamedate"></span>   Money:<span id="gamemoney"></span>`+ Icons.money + `
+            Traffics 
+            <button id="game-slower">`+ Icons.minus + `</button> 
+            <span id="gamedate"></span>   
+            <button id="game-faster">`+ Icons.plus + `</button> 
+            Money:<span id="gamemoney"></span>`+ Icons.money + `
             <button id="save-game">`+ Icons.save + `</button> 
             <button id="load-game">`+ Icons.load + `</button> 
             <button id="debug-game">`+ Icons.debug + `</button> 
@@ -109,6 +114,35 @@ export class Game {
     });
     document.getElementById("debug-game").addEventListener("click", () => {
       _this.world.addCity();
+    });
+    document.getElementById("game-slower").addEventListener("click", () => {
+      if (_this.speed === Game.temposcale[0]) {
+        _this.pause();
+        console.log("pause");
+        return;
+      }
+      var pos = Game.temposcale.indexOf(_this.speed);
+      pos--;
+      if (pos == -1)
+        return;
+      _this.speed = Game.temposcale[pos];
+      _this.pause();
+      _this.resume();
+    });
+    document.getElementById("game-faster").addEventListener("click", () => {
+      if (_this.isPaused()) {
+        _this.resume();
+        return;
+      }
+      var pos = Game.temposcale.indexOf(_this.speed);
+      pos++;
+      if (pos >= Game.temposcale.length) {
+        console.log("max");
+        return;
+      }
+      _this.speed = Game.temposcale[pos];
+      _this.pause();
+      _this.resume();
     });
   }
   save() {
@@ -150,7 +184,7 @@ export class Game {
     var data = window.localStorage.getItem("savegame");
     var ret = JSON.parse(data, (key, value) => {
       var r: any = value;
-      if(value===null)
+      if (value === null)
         return undefined;
       if (value?.type === "Company") {
         r = new Company();
