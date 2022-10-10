@@ -39,8 +39,7 @@ export class Airplane {
         var _this = this;
         this.dom = <any>document.createRange().createContextualFragment("<span style='transform:rotate(0turn)' class='mdi mdi-airplane'></span>").children[0];//document.createElement("span");
         this.dom.style.position = "absolute";
-        this.x = getRandomInt(this.world.game.mapWidth);
-        this.y = getRandomInt(this.world.game.mapHeight);
+      
         this.action = "wait";
         this.products = [];
         for (var x = 0; x < allProducts.length; x++) {
@@ -75,10 +74,10 @@ export class Airplane {
         }
     }
     select() {
-        this.dom.style.color = "red";
+        this.dom?.style.color = "red";
     }
     unselect() {
-        this.dom.style.color = "black";
+        this.dom?.style.color = "black";
     }
     arrived() {
         console.log("target arrived");

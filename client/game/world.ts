@@ -5,7 +5,9 @@ import windows from "jassijs/base/Windows";
 import { CityDialog } from "game/citydialog";
 import { Game } from "game/game";
 import { AirplaneDialog } from "game/airplanedialog";
-
+    function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
 export class World {
     _intervall;
     cities: City[];
@@ -93,13 +95,15 @@ export class World {
         city.update(); 
 
     }
+
     newGame(){
         createCities(this, 5);
         for (var x = 0; x < 40; x++) {
             var ap = new Airplane(this);
             ap.name = "Airplane " + x;
             ap.speed = 200;
-            
+              ap.x = getRandomInt(this.game.mapWidth);
+        ap.y = getRandomInt(this.game.mapHeight);
             ap.world = this;
             this.airplanes.push(ap);
         }

@@ -150,6 +150,8 @@ export class Game {
     var data = window.localStorage.getItem("savegame");
     var ret = JSON.parse(data, (key, value) => {
       var r: any = value;
+      if(value===null)
+        return undefined;
       if (value?.type === "Company") {
         r = new Company();
         Object.assign(r, value);
