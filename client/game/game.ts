@@ -5,6 +5,8 @@ import windows from "jassijs/base/Windows";
 import { AirplaneDialog } from "game/airplanedialog";
 import { Icons } from "game/icons";
 import { Company } from "game/company";
+import { Airplane } from "game/airplane";
+import { City } from "game/city";
 
 
 export class Game {
@@ -58,16 +60,21 @@ export class Game {
     AirplaneDialog.getInstance().update();
 
   }
-  create(dom: HTMLElement) {
-    var _this = this;
-    this.dom = dom;
-
+  newGame() {
     this.world = new World();
     this.world.game = this;
+    this.world.newGame();
+  }
+  render(dom: HTMLElement) {
+    var _this = this;
+    dom.innerHTML = "";
+    this.dom = dom;
     var sdomHeader = `
           <div style="height:15px;position:fixed;">
             Traffics <span id="gamedate"></span>   Money:<span id="gamemoney"></span>`+ Icons.money + `
             <button id="save-game">`+ Icons.save + `</button> 
+            <button id="load-game">`+ Icons.load + `</button> 
+            <button id="debug-game">`+ Icons.debug + `</button> 
           </div>  
         `;
     this.domHeader = <any>document.createRange().createContextualFragment(sdomHeader).children[0];
@@ -82,7 +89,7 @@ export class Game {
     var headerPlaceeholder = <any>document.createRange().createContextualFragment('<div style="height:15px"></div>').children[0]
     this.dom.appendChild(headerPlaceeholder);
     this.dom.appendChild(this.domWorld);
-    this.world.create(this.domWorld);
+    this.world.render(this.domWorld);
 
 
     setTimeout(() => {
@@ -97,48 +104,89 @@ export class Game {
     document.getElementById("save-game").addEventListener("click", () => {
       _this.save();
     });
+    document.getElementById("load-game").addEventListener("click", () => {
+      _this.load();
+    });
+    document.getElementById("debug-game").addEventListener("click", () => {
+      _this.world.addCity();
+    });
   }
   save() {
+    this.pause();
     var sdata = JSON.stringify(this, (key: string, value: any) => {
-      var ret:any={};
+      var ret: any = {};
       if (value instanceof HTMLElement) {
         return undefined;
       }
-      if(key==="lastUpdate")
+      if (key === "lastUpdate")
         return undefined;
       if (value?.constructor?.name === "World") {
-        Object.assign(ret,value);
+        Object.assign(ret, value);
         delete ret.game;
         return ret;
       }
       if (value?.constructor?.name === "Airplane") {
-        
-        Object.assign(ret,value);
+
+        Object.assign(ret, value);
         delete ret.world;
         return ret;
       }
       if (value?.constructor?.name === "City") {
-       
-        Object.assign(ret,value);
+
+        Object.assign(ret, value);
         delete ret.world;
         return ret;
       }
       return value;
     }, "\t");
-    this.load(sdata);
+    window.localStorage.setItem("savegame", sdata);
+    //this.load();
     console.log(sdata);
+    this.resume();
+
   }
-  load(data:string){
-    var ret=JSON.parse(data,(key,value)=>{
-      var r=value;
-      if(value?.type==="Company"){
-        r=new Company();
-        Object.assign(r,value);
+  load() {
+    this.pause();
+    var data = window.localStorage.getItem("savegame");
+    var ret = JSON.parse(data, (key, value) => {
+      var r: any = value;
+      if (value?.type === "Company") {
+        r = new Company();
+        Object.assign(r, value);
+        return r;
+      }
+      if (value?.type === "Airplane") {
+        r = new Airplane(undefined);
+        Object.assign(r, value);
+        return r;
+      }
+      if (value?.type === "World") {
+        r = new World();
+        Object.assign(r, value);
+        return r;
+      }
+      if (value?.type === "City") {
+        r = new City();
+        Object.assign(r, value);
         return r;
       }
       return r;
     });
-    debugger;
+    Object.assign(this, ret);
+    this.world.game = this;
+    this.date = new Date(this.date);
+    for (var x = 0; x < this.world.airplanes.length; x++) {
+      this.world.airplanes[x].world = this.world;
+
+    }
+    for (var x = 0; x < this.world.cities.length; x++) {
+      this.world.cities[x].world = this.world;
+      //for(var y=0;y<this.world.cities[x].companies.length;y++){
+      //  this.world.cities[x].companies[y].
+      //}
+    }
+    this.render(this.dom);
+    this.resume();
   }
   resume() {
     if (this.timer === 0)

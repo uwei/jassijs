@@ -4,6 +4,7 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
     exports.World = void 0;
     class World {
         constructor() {
+            this.type = "World";
             var _this = this;
             this.cities = [];
             this.airplanes = [];
@@ -74,25 +75,30 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
         }
         addCity() {
             var city = (0, city_1.createCities)(this, 1)[0];
-            city.create();
+            city.render(this.cities.indexOf(city));
             city.update();
         }
-        create(dom) {
-            var _this = this;
-            this.dom = dom;
+        newGame() {
             (0, city_1.createCities)(this, 5);
-            for (var x = 0; x < this.cities.length; x++) {
-                this.cities[x].create(x);
-                this.cities[x].update();
-            }
             for (var x = 0; x < 40; x++) {
                 var ap = new airplane_1.Airplane(this);
                 ap.name = "Airplane " + x;
                 ap.speed = 200;
-                ap.create();
                 ap.world = this;
-                this.dom.appendChild(ap.dom);
                 this.airplanes.push(ap);
+            }
+        }
+        render(dom) {
+            var _this = this;
+            this.dom = dom;
+            for (var x = 0; x < this.cities.length; x++) {
+                this.cities[x].render(x);
+                this.cities[x].update();
+            }
+            for (var x = 0; x < this.airplanes.length; x++) {
+                var ap = this.airplanes[x];
+                ap.render();
+                this.dom.appendChild(ap.dom);
             }
             dom.addEventListener("click", (ev) => {
                 _this.onclick(ev);

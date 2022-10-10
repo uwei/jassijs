@@ -13,6 +13,7 @@ export class World {
     selection;
     dom: HTMLElement;
     game: Game;
+    type="World";
     constructor() {
         var _this = this;
         this.cities = [];
@@ -87,29 +88,34 @@ export class World {
         }
     }
     addCity() {
-        var city = createCities(this, 1)[0];
-        city.create();
-        city.update();
+        var city:City = createCities(this, 1)[0];
+        city.render(this.cities.indexOf(city));
+        city.update(); 
 
     }
-    create(dom: HTMLElement) {
-        var _this = this;
-        this.dom = dom;
+    newGame(){
         createCities(this, 5);
-        for (var x = 0; x < this.cities.length; x++) {
-            this.cities[x].create(x);
-            this.cities[x].update();
-
-
-        }
         for (var x = 0; x < 40; x++) {
             var ap = new Airplane(this);
             ap.name = "Airplane " + x;
             ap.speed = 200;
-            ap.create();
+            
             ap.world = this;
-            this.dom.appendChild(ap.dom);
             this.airplanes.push(ap);
+        }
+    }
+    render(dom: HTMLElement) {
+        var _this = this;
+        this.dom = dom;
+        
+        for (var x = 0; x < this.cities.length; x++) {
+            this.cities[x].render(x);
+            this.cities[x].update();
+        }
+        for (var x = 0; x < this.airplanes.length; x++) {
+            var ap=this.airplanes[x];
+            ap.render();
+            this.dom.appendChild(ap.dom);
         }
         dom.addEventListener("click", (ev: MouseEvent) => {
             _this.onclick(ev);

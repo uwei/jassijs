@@ -25,6 +25,7 @@ export class Airplane {
     status: string = "";
     route: Route[];
     activeRoute = 0;
+    type="Airplane";
     constructor(world: World) {
         this.world = world;
         this.route = [];
@@ -34,7 +35,7 @@ export class Airplane {
               this.route.push(rt);
           }*/
     }
-    create() {
+    render() {
         var _this = this;
         this.dom = <any>document.createRange().createContextualFragment("<span style='transform:rotate(0turn)' class='mdi mdi-airplane'></span>").children[0];//document.createElement("span");
         this.dom.style.position = "absolute";

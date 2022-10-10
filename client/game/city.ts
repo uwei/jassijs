@@ -32,6 +32,7 @@ export class City {
     houses = 0;
     warehouseMinStock:number[];
     warehouseSellingPrice:number[];
+    type="City";
     constructor() {
         this.market = [];
         this.airplanesInCity = [];
@@ -68,7 +69,7 @@ export class City {
             return a.productid - b.productid;
         });
     }
-    create(cityid:number) {
+    render(cityid:number) {
         var _this = this;
         this.dom = <any>document.createElement("img");
         this.dom.style.border = "1px solid black";
@@ -263,7 +264,7 @@ export function createCities(world: World, count: number) {
     if (world.cities.length === 0)
         cities=createCities2(count, true);
     else
-        cities=createCities2(false);
+        cities=createCities2(count,false);
 
     var allready = [];
     for (var x = 0; x < world.cities.length; x++) {
@@ -302,6 +303,7 @@ export function createCities(world: World, count: number) {
         city.icon = "https://" + allCities[num][2];
       //  cities.push(city);
     }
+    return cities;
 }
 export function test() {
 

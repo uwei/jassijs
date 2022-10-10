@@ -12,4 +12,8 @@ export class Icons{
     static trash="<span  class='mdi  mdi-delete-forever-outline'></span>";
     static edit="<span  class='mdi  mdi-square-edit-outline'></span>";
     static save="<span  class='mdi  mdi-content-save-outline'></span>";
+    static load="<span  class='mdi  mdi-folder-open-outline'></span>";
+    static debug="<span  class='mdi  mdi-bug-outline'></span>";
+    
+
 }

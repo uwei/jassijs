@@ -10,7 +10,8 @@ class PPanel extends Panel {
         super();
         this.width = "1050px";
         this.height = "650px"; 
-        this.game.create(this.dom); 
+        this.game.newGame();
+        this.game.render(this.dom); 
     }
     
     destroy() {
@@ -22,7 +23,7 @@ export function test() {
     
     var ret = new PPanel();
     ret.dom.style.backgroundColor="white";
-    var wd=windows.findComponent("Game");
+    var wd=windows.findComponent("Game"); 
     wd?.destroy();
     windows.add(ret, "Game");
 }

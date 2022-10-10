@@ -10,6 +10,7 @@ define(["require", "exports", "game/product", "game/airplanedialog"], function (
         constructor(world) {
             this.status = "";
             this.activeRoute = 0;
+            this.type = "Airplane";
             this.world = world;
             this.route = [];
             /*  for(var x=0;x<4;x++){
@@ -18,7 +19,7 @@ define(["require", "exports", "game/product", "game/airplanedialog"], function (
                   this.route.push(rt);
               }*/
         }
-        create() {
+        render() {
             var _this = this;
             this.dom = document.createRange().createContextualFragment("<span style='transform:rotate(0turn)' class='mdi mdi-airplane'></span>").children[0]; //document.createElement("span");
             this.dom.style.position = "absolute";
