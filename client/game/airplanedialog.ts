@@ -221,6 +221,7 @@ export class AirplaneDialog {
             }
             if (found === undefined) {
                 found = new Route();
+                found.airplane=_this.airplane;
                 found.cityid = id;
             }
             _this.airplane.route.push(found);

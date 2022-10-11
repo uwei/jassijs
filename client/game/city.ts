@@ -3,6 +3,7 @@ import { CityDialog } from "game/citydialog";
 import { allProducts } from "game/product";
 import { Company } from "game/company";
 import { Airplane } from "game/airplane";
+import { Icons } from "game/icons";
 
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
@@ -33,6 +34,7 @@ export class City {
     warehouseMinStock:number[];
     warehouseSellingPrice:number[];
     type="City";
+    domDesc:HTMLSpanElement;
     constructor() {
         this.market = [];
         this.airplanesInCity = [];
@@ -62,6 +64,7 @@ export class City {
         this.companies = [];
         for (var x = 0; x < 5; x++) {
             var comp = new Company(allready);
+            comp.city=this;
             this.companies.push(comp);
             allready.push(comp.productid);
         }
@@ -88,9 +91,9 @@ export class City {
         this.dom.style.top = this.y.toString() + "px";
         this.dom.style.left = this.x.toString() + "px";
         this.world.dom.appendChild(this.dom);
-        var desc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (14 + this.y) +
+        this.domDesc=<any> document.createRange().createContextualFragment('<span style="position:absolute;top:' + (14 + this.y) +
             'px;left:' + this.x + 'px;font-size:9px;">' + this.name + '</span>').children[0];
-        this.world.dom.appendChild(desc);
+        this.world.dom.appendChild(this.domDesc);
         
 
     }
@@ -192,7 +195,14 @@ export class City {
         if (this.lastUpdate === undefined) {
             this.lastUpdate = this.world.game.date.getTime();
         }
+
+        this.domDesc.innerHTML=this.name+"("+this.people.toLocaleString()+")" + "<br/>"+allProducts[0].getIcon()+" "+Icons.edit;
+      
+
         this.updateNeutralCompanies();
+        for(var x=0;x<this.companies.length;x++){
+            this.companies[x].update();
+        }
         this.updateDailyConsumtion();
         this.lastUpdate = this.world.game.date.getTime();
     }
@@ -275,11 +285,7 @@ export function createCities(world: World, count: number) {
             throw "No more cities available";
         var city = cities[x];
         world.cities.push(city);
-        if (x === 0 && world.cities.length === 1) {//the first city starts with datawarehouse
-            city.warehouseses = 1;
-            city.houses = 1;
-        }
-        
+       
         if (world.cities.length === 1) {
             city.x = world.game.mapWidth;
             city.y = world.game.mapHeight;

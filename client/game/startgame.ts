@@ -3,7 +3,11 @@ import { World } from "game/world";
 import { Panel } from "jassijs/ui/Panel";
 import windows from "jassijs/base/Windows";
 import { Game } from "game/game";
-class PPanel extends Panel {
+import { $Action, $ActionProvider } from "jassijs/base/Actions";
+import { $Class } from "jassijs/remote/Registry";
+@$ActionProvider("jassijs.base.ActionNode")
+@$Class("game.PPanel")
+export class PPanel extends Panel {
     
     game = new Game();
     constructor() {
@@ -17,6 +21,13 @@ class PPanel extends Panel {
     destroy() {
         this.game.destroy();
         super.destroy();
+    }
+      @$Action({
+        name: "Game",
+        icon: "mdi  mdi-airplane",
+    })
+    static async show() {
+        test();
     }
 }
 export function test() {

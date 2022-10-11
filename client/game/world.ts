@@ -5,7 +5,7 @@ import windows from "jassijs/base/Windows";
 import { CityDialog } from "game/citydialog";
 import { Game } from "game/game";
 import { AirplaneDialog } from "game/airplanedialog";
-    function getRandomInt(max) {
+function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 export class World {
@@ -15,7 +15,7 @@ export class World {
     selection;
     dom: HTMLElement;
     game: Game;
-    type="World";
+    type = "World";
     constructor() {
         var _this = this;
         this.cities = [];
@@ -64,7 +64,7 @@ export class World {
     onclick(th: MouseEvent) {
         console.log("close");
         this.selection?.unselect();
-        if (th.target === this.dom&&!AirplaneDialog.getInstance().dropCitiesEnabled) {
+        if (th.target === this.dom && !AirplaneDialog.getInstance().dropCitiesEnabled) {
             try {
                 CityDialog.getInstance().close();
             } catch {
@@ -90,34 +90,36 @@ export class World {
         }
     }
     addCity() {
-        var city:City = createCities(this, 1)[0];
+        var city: City = createCities(this, 1)[0];
         city.render(this.cities.indexOf(city));
-        city.update(); 
+        city.update();
 
     }
 
-    newGame(){
+    newGame() {
         createCities(this, 5);
         for (var x = 0; x < 40; x++) {
             var ap = new Airplane(this);
             ap.name = "Airplane " + x;
             ap.speed = 200;
-              ap.x = getRandomInt(this.game.mapWidth);
-        ap.y = getRandomInt(this.game.mapHeight);
+            ap.x = getRandomInt(this.game.mapWidth);
+            ap.y = getRandomInt(this.game.mapHeight);
             ap.world = this;
             this.airplanes.push(ap);
         }
+        this.cities[0].houses=1;
+        this.cities[0].warehouses=1;
     }
     render(dom: HTMLElement) {
         var _this = this;
         this.dom = dom;
-        
+
         for (var x = 0; x < this.cities.length; x++) {
             this.cities[x].render(x);
             this.cities[x].update();
         }
         for (var x = 0; x < this.airplanes.length; x++) {
-            var ap=this.airplanes[x];
+            var ap = this.airplanes[x];
             ap.render();
             this.dom.appendChild(ap.dom);
         }

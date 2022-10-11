@@ -16,6 +16,7 @@ export class Icons {
     static debug = "<span  class='mdi  mdi-bug-outline'></span>";
     static plus = "<span  class='mdi  mdi-plus-circle-outline'></span>";
     static minus = "<span  class='mdi  mdi-minus-circle-outline'></span>";
+    static fillDown = "<span  class='mdi  mdi-elevator-down'></span>";
     
 
 }

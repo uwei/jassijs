@@ -7,6 +7,7 @@ import { Icons } from "game/icons";
 import { Company } from "game/company";
 import { Airplane } from "game/airplane";
 import { City } from "game/city";
+import { Route } from "game/route";
 
 
 export class Game {
@@ -171,6 +172,17 @@ export class Game {
         delete ret.world;
         return ret;
       }
+      if (value?.constructor?.name === "Company") {
+        Object.assign(ret, value);
+        delete ret.city;
+        return ret;
+      }
+      if (value?.constructor?.name === "Route") {
+
+        Object.assign(ret, value);
+        delete ret.airplane;
+        return ret;
+      }
       return value;
     }, "\t");
     window.localStorage.setItem("savegame", sdata);
@@ -206,6 +218,11 @@ export class Game {
         Object.assign(r, value);
         return r;
       }
+      if (value?.type === "Route") {
+        r = new Route();
+        Object.assign(r, value);
+        return r;
+      }
       return r;
     });
     Object.assign(this, ret);
@@ -213,10 +230,15 @@ export class Game {
     this.date = new Date(this.date);
     for (var x = 0; x < this.world.airplanes.length; x++) {
       this.world.airplanes[x].world = this.world;
-
+      for (var y = 0; y < this.world.airplanes[x].route.length; y++) {
+        this.world.airplanes[x].route[y].airplane = this.world.airplanes[x];
+      }
     }
     for (var x = 0; x < this.world.cities.length; x++) {
       this.world.cities[x].world = this.world;
+       for (var y = 0; y < this.world.cities[x].companies.length; y++) {
+        this.world.cities[x].companies[y].city = this.world.cities[x];
+      }
       //for(var y=0;y<this.world.cities[x].companies.length;y++){
       //  this.world.cities[x].companies[y].
       //}

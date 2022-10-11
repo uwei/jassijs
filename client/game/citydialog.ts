@@ -21,10 +21,15 @@ var css = `
 window.city = function () {
     return CityDialog.getInstance().city;
 }
+var log = (function() {
+  var log = Math.log;
+  return function(n, base) {
+    return log(n)/(base ? log(base) : 1);
+  };
+})();
 export class CityDialog {
     dom: HTMLDivElement;
     city: City;
-    route:Route
     hasPaused = false;
     public static instance;
     constructor() {
@@ -280,6 +285,12 @@ export class CityDialog {
         setTimeout(() => { _this.bindActions(); }, 500);
         //document.createElement("span");
     }
+    getSliderValue(dom:HTMLInputElement):number{
+        var maxValue=parseInt(dom.getAttribute("maxValue"));
+        var val=parseInt(dom.value);
+        var exp=Math.round(log(maxValue,40)*1000)/1000;
+        return  Math.round(Math.pow(val,exp));
+    }
     bindActions() {
         var _this = this;
         document.getElementById("citydialog-next").addEventListener("click", (ev) => {
@@ -304,16 +315,16 @@ export class CityDialog {
         for (var x = 0; x < allProducts.length; x++) {
             document.getElementById("citydialog-market-buy-slider_" + x).addEventListener("input", (e) => {
                 var t = <HTMLInputElement>e.target;
-                var price = _this.calcPrice(t, Number(t.value));
-                t.nextElementSibling.innerHTML = "" + t.value + " " + Number(t.value) * price;
-
+                var val=_this.getSliderValue(t);
+                var price = _this.calcPrice(t, val);
+                t.nextElementSibling.innerHTML = "" + val + " " + val * price;
                 t.parentNode.parentNode.children[3].innerHTML = "" + price;
             });
             document.getElementById("citydialog-market-sell-slider_" + x).addEventListener("input", (e) => {
                 var t = <HTMLInputElement>e.target;
-                var price = _this.calcPrice(t, Number(t.value));
-                t.nextElementSibling.innerHTML = "" + t.value + " " + Number(t.value) * price;
-
+                var val=_this.getSliderValue(t);
+                var price = _this.calcPrice(t, val);
+                t.nextElementSibling.innerHTML = "" + val + " " + val * price;
                 t.parentNode.parentNode.children[3].innerHTML = "" + price;
             });
             var inedit = false;
@@ -324,7 +335,8 @@ export class CityDialog {
                 inedit = true;
                 var id = Number(t.id.split("_")[1]);
                 var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
-                _this.sellOrBuy(id, Number(t.value), _this.calcPrice(t, Number(t.value)), _this.getStore(), selectsource.value === "Warehouse");
+                var val=_this.getSliderValue(t);
+                _this.sellOrBuy(id, val, _this.calcPrice(t,  val), _this.getStore(), selectsource.value === "Warehouse");
                 t.nextElementSibling.innerHTML = "0";
                 t.value = "0";
                 inedit = false;
@@ -335,9 +347,10 @@ export class CityDialog {
                     return;
                 var t = <HTMLInputElement>e.target;
                 inedit = true;
+                var val=_this.getSliderValue(t);
                 var id = Number(t.id.split("_")[1]);
                 var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
-                _this.sellOrBuy(id, -Number(t.value), _this.calcPrice(t, Number(t.value)), _this.getStore(), selectsource.value === "Warehouse");
+                _this.sellOrBuy(id, -val, _this.calcPrice(t, val), _this.getStore(), selectsource.value === "Warehouse");
                 t.nextElementSibling.innerHTML = "0";
                 t.value = "0";
                 inedit = false;
@@ -376,6 +389,9 @@ export class CityDialog {
                 var comp = _this.city.companies[id];
                 if (comp.buildings > 0)
                     comp.buildings--;
+                if(comp.workers>comp.buildings*25){
+                    comp.workers=comp.buildings*25;
+                }
                 _this.update();
             });
             document.getElementById("buy-license_" + x).addEventListener("click", (evt) => {
@@ -517,9 +533,11 @@ export class CityDialog {
             if (storetarget) {
                 (<HTMLInputElement>tr.children[4].children[0]).readOnly = false;
                 (<HTMLInputElement>tr.children[6].children[0]).readOnly = false;
-                (<HTMLInputElement>tr.children[4].children[0]).max = storesource[x].toString();
+                (<HTMLInputElement>tr.children[4].children[0]).max = "40";//storesource[x].toString();
+                (<HTMLInputElement>tr.children[4].children[0]).setAttribute("maxValue",storesource[x].toString());
                 tr.children[5].innerHTML = storetarget[x].toString();
-                (<HTMLInputElement>tr.children[6].children[0]).max = storetarget[x].toString();
+                (<HTMLInputElement>tr.children[6].children[0]).max = "40";//storetarget[x].toString();
+                (<HTMLInputElement>tr.children[6].children[0]).setAttribute("maxValue",storetarget[x].toString());
             } else {
                 (<HTMLInputElement>tr.children[4].children[0]).readOnly = true;
                 (<HTMLInputElement>tr.children[6].children[0]).readOnly = true;
@@ -640,7 +658,7 @@ export class CityDialog {
                 (<HTMLInputElement>tr.children[6].children[0]).value = this.city.warehouseSellingPrice[x] === undefined ? "" : this.city.warehouseSellingPrice[x].toString();
         }
         document.getElementById("count-warehouses").innerHTML=""+this.city.warehouses;
-        document.getElementById("costs-warehouses").innerHTML=""+(this.city.warehouses*50);
+       // document.getElementById("costs-warehouses").innerHTML=""+(this.city.warehouses*50);
     }
     updateScore() {
         document.getElementById("citydialog-warehouse-count").innerHTML = this.city.warehouses.toString();

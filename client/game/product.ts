@@ -60,7 +60,7 @@ export class Product {
             ["brown", "yellow"],
             ["blue", "white"],
             ["red", "blue"],
-            ["blue", "white"],
+            ["blue", "yellow"],
             ["white", "black"],
             ["white", "brown"],
             ["white", "red"],
