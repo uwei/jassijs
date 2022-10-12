@@ -53,7 +53,7 @@ export class RouteDialog {
                 var id = parseInt(ctrl.id.split("_")[1]);
                 _this.route.loadMarketUntilAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
             });
-            
+
             document.getElementById("unload-market-min-price_" + x).addEventListener("change", (e) => {
                 var ctrl = (<HTMLInputElement>e.target);
                 var id = parseInt(ctrl.id.split("_")[1]);
@@ -100,13 +100,13 @@ export class RouteDialog {
             }
             _this.update();
         });
-       document.getElementById("route-unload-warehous-fill").addEventListener("click", (e) => {
+        document.getElementById("route-unload-warehous-fill").addEventListener("click", (e) => {
             for (var x = 1; x < _this.route.unloadWarehouseAmount.length; x++) {
                 this.route.unloadWarehouseAmount[x] = this.route.unloadWarehouseAmount[0];
             }
             _this.update();
         });
-         document.getElementById("route-load-market-fill").addEventListener("click", (e) => {
+        document.getElementById("route-load-market-fill").addEventListener("click", (e) => {
             for (var x = 1; x < _this.route.loadMarketAmount.length; x++) {
                 this.route.loadMarketAmount[x] = this.route.loadMarketAmount[0];
             }
@@ -118,19 +118,79 @@ export class RouteDialog {
             }
             _this.update();
         });
-         document.getElementById("route-load-warehouse-fill").addEventListener("click", (e) => {
+        document.getElementById("route-load-warehouse-fill").addEventListener("click", (e) => {
             for (var x = 1; x < _this.route.loadWarehouseAmount.length; x++) {
                 this.route.loadWarehouseAmount[x] = this.route.loadWarehouseAmount[0];
             }
             _this.update();
         });
-         document.getElementById("route-load-warehouse-until-fill").addEventListener("click", (e) => {
+        document.getElementById("route-load-warehouse-until-fill").addEventListener("click", (e) => {
             for (var x = 1; x < _this.route.loadWarehouseUntilAmount.length; x++) {
                 this.route.loadWarehouseUntilAmount[x] = this.route.loadWarehouseUntilAmount[0];
             }
             _this.update();
         });
-         
+        document.getElementById("route-load-fill-consumtion").addEventListener("click", (e) => {
+            _this.loadFillConsumtion();
+        });
+         document.getElementById("route-copy-prev").addEventListener("click", (e) => {
+            _this.copyRoute();
+        });
+
+
+    }
+    copyRoute(){
+        var pos=this.route.airplane.route.indexOf(this.route);
+        if(pos===0)
+            return;
+        pos--;
+        var source=this.route.airplane.route[pos];
+        for(var x=0;x<allProducts.length;x++){
+            this.route.loadMarketAmount[x]=source.loadMarketAmount[x];
+            this.route.loadMarketPrice[x]=source.loadMarketPrice[x];
+            this.route.loadMarketUntilAmount[x]=source.loadMarketUntilAmount[x];
+            this.route.loadWarehouseAmount[x]=source.loadWarehouseAmount[x];
+            this.route.loadWarehouseUntilAmount[x]=source.loadWarehouseUntilAmount[x];
+            this.route.unloadMarketAmount[x]=source.unloadMarketAmount[x];
+            this.route.unloadMarketPrice[x]=source.unloadMarketPrice[x];
+            this.route.unloadWarehouseAmount[x]=source.unloadWarehouseAmount[x];
+        }
+        this.update();
+    }
+    loadFillConsumtion() {
+        var _this = this;
+        var all = _this.route.airplane.route;
+        var lenpixel = 0;
+        var lastpos = undefined;
+        for (var x = 0; x < all.length; x++) {
+            var city = _this.route.airplane.world.cities[all[x].cityid];
+            if (lastpos === undefined) {
+                lastpos = [city.x, city.y];
+                var lastcity = _this.route.airplane.world.cities[all[all.length - 1].cityid];
+                var dist = Math.round(Math.sqrt(Math.pow(lastpos[0] - lastcity.x, 2) + Math.pow(lastpos[1] - lastcity.y, 2)));//Pytharoras
+                lenpixel += dist;
+            } else {
+                var dist = Math.round(Math.sqrt(Math.pow(lastpos[0] - city.x, 2) + Math.pow(lastpos[1] - city.y, 2)));//Pytharoras
+                lenpixel += dist;
+                lastpos = [city.x, city.y];
+            }
+        }
+        var days = lenpixel / _this.route.airplane.speed; //t=s/v; in Tage
+        var totalDays = (Math.round(days * 24) + 1 + all.length * 3 + all.length * 3);   //+3h load and unload
+        console.log(totalDays);
+        for (var x = 0; x < allProducts.length; x++) {
+            this.route.loadWarehouseAmount[x] = 0;
+        }
+        for (var x = 0; x < all.length; x++) {
+            var city = _this.route.airplane.world.cities[all[x].cityid];
+            if (all[x].cityid !== this.route.cityid) {
+                for (var y = 0; y < allProducts.length; y++) {
+                    this.route.loadWarehouseAmount[y] += Math.round(totalDays * allProducts[y].dailyConsumtion * city.people / 24);
+                }
+
+            }
+        }
+        _this.update();
     }
     private create() {
         //template for code reloading
@@ -157,6 +217,8 @@ export class RouteDialog {
                     
                     
             </select>
+            <button id="route-copy-prev" title="copy prev route">`+ Icons.copy + `</button>
+                      
           </div>
             <div id="routedialog-tabs">
                 <ul>
@@ -168,9 +230,9 @@ export class RouteDialog {
                         <tr>
                             <th>Name</th>
                             <th></th>
-                            <th>Market<br/>max amount<br/><button id="route-unload-market-fill">`+ Icons.fillDown + `</button> </th>
+                            <th>Market<br/>max amount<br/><button id="route-unload-market-fill" title="fill first row down">`+ Icons.fillDown + `</button> </th>
                             <th>Market<br/>min price</th>
-                            <th>Warehouse<br/>amount<br/><button id="route-unload-warehous-fill">`+ Icons.fillDown + `</button></th>
+                            <th>Warehouse<br/>amount<br/><button id="route-unload-warehous-fill" title="fill first row down">`+ Icons.fillDown + `</button></th>
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -199,10 +261,15 @@ export class RouteDialog {
                             <th>Name</th>
                             <th></th>
                             <th>Market<br/>amount<br/><button id="route-load-market-fill">`+ Icons.fillDown + `</button></th>
-                            <th>Market<br/>until amount<br/><button id="route-load-market-until-fill">`+ Icons.fillDown + `</button></th>
+                            <th>Market<br/>until amount<br/><button id="route-load-market-until-fill" title="fill first row down">`+ Icons.fillDown + `</button></th>
                             <th>Market<br/>max price</th>
-                            <th>Warehouse<br/>amount<br/><button id="route-load-warehouse-fill">`+ Icons.fillDown + `</button></th>
-                            <th>Warehouse<br/>until amount<br/><button id="route-load-warehouse-until-fill">`+ Icons.fillDown + `</button></th>
+                            <th>Warehouse<br/>amount<br/>
+                                <button id="route-load-warehouse-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                                <button id="route-load-fill-consumtion" title="fill consumtion">`+ Icons.food + `</button>
+                            </th>
+                            <th>Warehouse<br/>until amount<br/>
+                                <button id="route-load-warehouse-until-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                            </th>
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -256,6 +323,13 @@ export class RouteDialog {
     }
 
     update(force = false) {
+         try {
+            if (!$(this.dom).dialog('isOpen')) {
+                return;
+            }
+        } catch {
+            return;
+        }
         var select: HTMLSelectElement = <any>document.getElementById("route-select");
         select.innerHTML = "";
         for (var x = 0; x < this.airplane.route.length; x++) {

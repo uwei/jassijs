@@ -39,13 +39,13 @@ export class Route {
             var max = this.airplane.products[x];
 
             if (this.unloadMarketAmount[x] !== undefined) {
-                max=Math.min(this.airplane.products[x],this.unloadMarketAmount[x]);
-                if(max<0)
-                    max=0;
+                max = Math.min(this.airplane.products[x], this.unloadMarketAmount[x]);
+                if (max < 0)
+                    max = 0;
             }
-            if(max){
+            if (max) {
                 for (var y = 0; y < max; y++) {
-                    var price = allProducts[x].calcPrice(city.people, city.market[x] + 1, city.isProducedHere(x));
+                    var price = allProducts[x].calcPrice(city.people, city.market[x] , false);//city.isProducedHere(x));
                     if (price >= this.unloadMarketPrice[x]) {
                         city.world.game.money += 1 * price;
                         city.market[x] += 1;
@@ -59,16 +59,54 @@ export class Route {
             }
         }
     }
+    unloadWarehouse() {
+        var city = this.airplane.world.cities[this.cityid];
+        for (var x = 0; x < allProducts.length; x++) {
+            var max = this.unloadWarehouseAmount[x];
+            if (max !== undefined) {
+                max = Math.min(max, this.airplane.products[x]);
+                if(max){
+                    this.airplane.products[x] -= max;
+                    city.warehouse[x] += max;
+                }
+            }
+        }
+    }
+    loadWarehouse() {
+        var city = this.airplane.world.cities[this.cityid];
+        for (var x = 0; x < allProducts.length; x++) {
+            var max = this.loadWarehouseUntilAmount[x];
+            if (max === undefined)
+                max = this.loadWarehouseAmount[x];
+            else{
+                max=city.warehouse[x]-this.loadWarehouseUntilAmount[x];
+                if(max<0)
+                    max=0;
+            }
+            if(max&&city.warehouseMinStock[x]){
+                if(city.warehouse[x]-max<city.warehouseMinStock[x]){
+                    max=city.warehouse[x]-city.warehouseMinStock[x];
+                    if(max<0)
+                        max=0;
+                }
+            }
+            if(max){
+                this.airplane.products[x] += max;
+                city.warehouse[x] -= max;
+            }
+        }
+
+    }
     loadMarket() {
         var city = this.airplane.world.cities[this.cityid];
         for (var x = 0; x < allProducts.length; x++) {
             var max = this.loadMarketAmount[x];
             if (this.loadMarketUntilAmount[x] !== undefined) {
-                max=this.loadMarketUntilAmount[x]-this.airplane.products[x];
-                if(max<0)
-                    max=0;
+                max = this.loadMarketUntilAmount[x] - this.airplane.products[x];
+                if (max < 0)
+                    max = 0;
             }
-            if(max){
+            if (max) {
                 for (var y = 0; y < max; y++) {
                     var price = allProducts[x].calcPrice(city.people, city.market[x] - 1, city.isProducedHere(x));
                     if (price <= this.loadMarketPrice[x]) {
@@ -87,9 +125,11 @@ export class Route {
     load() {
 
         this.loadMarket();
+        this.loadWarehouse();
     }
     unload() {
 
         this.unloadMarket();
+        this.unloadWarehouse();
     }
 }

@@ -97,7 +97,7 @@ export class World {
     }
 
     newGame() {
-        createCities(this, 5);
+        createCities(this, 15);
         for (var x = 0; x < 40; x++) {
             var ap = new Airplane(this);
             ap.name = "Airplane " + x;

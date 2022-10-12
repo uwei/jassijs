@@ -188,7 +188,7 @@ export class AirplaneDialog {
                 helper: function (event) {
                     var id = parseInt(event.target.getAttribute("cityid"));
                     var city=_this.airplane.world.cities[id];
-                    var ret = '<li id="route-' + id + '" class="ui-state-default"><img src="' + city.icon + '" </img>' + city.name + "</li>";
+                    var ret = '<li id="route-' + id + '" class="ui-state-default"><img style="width:20px" src="' + city.icon + '" </img>' + city.name + "</li>";
 
                     return $(ret);
                     // return helper._position.dom;
@@ -237,7 +237,7 @@ export class AirplaneDialog {
         var ids = [];
         for (var x = 0; x < this.airplane.route.length; x++) {
             var id = this.airplane.route[x].cityid;
-            html += '<li id="route-' + id + '" class="ui-state-default"><img src="' + this.airplane.world.cities[id].icon + '" </img>' +
+            html += '<li id="route-' + id + '" class="ui-state-default"><img style="width:20px;" src="' + this.airplane.world.cities[id].icon + '" </img>' +
                 this.airplane.world.cities[id].name + " " + Icons.trash.replace("mdi ", "mdi route-delete") + "</li>";
 
             ids.push(this.airplane.route[x].cityid);
@@ -275,6 +275,13 @@ export class AirplaneDialog {
         var _this = this;
         if (this.airplane === undefined)
             return;
+         try {
+            if (!$(this.dom).dialog('isOpen')) {
+                return;
+            }
+        } catch {
+            return;
+        }
         var ret = '<div style="display:grid;grid-template-columns: 30px 30px 30px 30px;">';
         for (var x = 0; x < allProducts.length; x++) {
             if (this.airplane.products[x] !== 0) {

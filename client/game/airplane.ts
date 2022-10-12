@@ -37,7 +37,7 @@ export class Airplane {
     }
     render() {
         var _this = this;
-        this.dom = <any>document.createRange().createContextualFragment("<span style='transform:rotate(0turn)' class='mdi mdi-airplane'></span>").children[0];//document.createElement("span");
+        this.dom = <any>document.createRange().createContextualFragment("<span style='font-size:20px;transform:rotate(0turn)' class='mdi mdi-airplane'></span>").children[0];//document.createElement("span");
         this.dom.style.position = "absolute";
       
         this.action = "wait";
@@ -60,7 +60,7 @@ export class Airplane {
         var y=city.y;
         
         this.lastUpdate = this.world.game.date.getTime();
-        console.log("fly to " + city.name)
+       // console.log("fly to " + city.name)
         this.action = "fly";
         this.status="fly to "+ city.name;
         this.targetX = x;
@@ -137,7 +137,7 @@ export class Airplane {
         this.dom.style.left = (this.x - 15) + "px";
         if (this.activeRoute !== -1&&this.route.length>1) {
             if (this.action==="unload"&&(this.lastUpdate - this.lastAction) > (3 * 1000*60*60)) {
-                console.log("load now");
+               // console.log("load now");
                 this.action = "load";
                 this.status = "load";
                 this.lastAction = this.lastUpdate;
@@ -145,14 +145,15 @@ export class Airplane {
                 AirplaneDialog.getInstance().update();
             }
             if (this.action==="load"&&(this.lastUpdate - this.lastAction) > (3 * 1000*60*60)) {
-                this.activeRoute++;
+               
+                this.lastAction = this.lastUpdate;
+                this.route[this.activeRoute].load();
+                AirplaneDialog.getInstance().update();
+             this.activeRoute++;
                 if(this.activeRoute===this.route.length)
                     this.activeRoute=0;
                 var city=this.world.cities[this.route[this.activeRoute].cityid];
                 this.flyTo(city);
-                this.lastAction = this.lastUpdate;
-                this.route[this.activeRoute].load();
-                AirplaneDialog.getInstance().update();
                 
             }
         }
