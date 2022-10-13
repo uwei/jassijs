@@ -157,7 +157,7 @@ export class CityDialog {
             })()}
                     </table>
                 </div>
-                <div id="citydialog-buildings">
+                <div id="citydialog-buildings"> 
                      <table id="citydialog-buildings-table" style="height:100%;weight:100%;">
                         <tr>
                             <th>Produce</th>
@@ -294,7 +294,7 @@ export class CityDialog {
     bindActions() {
         var _this = this;
         document.getElementById("citydialog-next").addEventListener("click", (ev) => {
-            var pos = _this.city.world.cities.indexOf(_this.city);
+            var pos = _this.city.world.cities.indexOf(_this.city); 
             pos++;
             if (pos >= _this.city.world.cities.length)
                 pos = 0;
@@ -373,7 +373,7 @@ export class CityDialog {
                 var id = Number(sid.split("_")[1]);
                 var comp = _this.city.companies[id];
                 var coasts = comp.getBuildingCoasts();
-                _this.city.world.game.money = _this.city.world.game.money - coasts[0];
+                _this.city.world.game.changeMoney(-coasts[0],"buy building",_this.city);
                 _this.city.market[0] = _this.city.market[0] - coasts[1];
                 _this.city.market[1] = _this.city.market[1] - coasts[2];
                 comp.workers += 25;
@@ -400,13 +400,13 @@ export class CityDialog {
                     sid = (<any>evt.target).parentNode.id
                 var id = Number(sid.split("_")[1]);
                 var comp = _this.city.companies[id];
-                _this.city.world.game.money -= 50000;
+                _this.city.world.game.changeMoney(-50000,"buy licence",_this.city);
                 comp.hasLicense = true;
             });
 
         }
         document.getElementById("buy-house").addEventListener("click", (evt) => {
-            _this.city.world.game.money = _this.city.world.game.money - 25000;
+            _this.city.world.game.changeMoney(-25000,"buy building",_this.city);
             _this.city.market[0] = _this.city.market[0] - 40;
             _this.city.market[1] = _this.city.market[1] - 80;
             _this.city.houses++;
@@ -423,7 +423,7 @@ export class CityDialog {
             console.log("remove worker");
         });
         document.getElementById("buy-warehouse").addEventListener("click", (evt) => {
-            _this.city.world.game.money = _this.city.world.game.money - 25000;
+            _this.city.world.game.changeMoney(-25000,"buy building",_this.city);
             _this.city.market[0] = _this.city.market[0] - 40;
             _this.city.market[1] = _this.city.market[1] - 80;
             _this.city.warehouses++;
@@ -455,7 +455,7 @@ export class CityDialog {
         if (isWarehouse) {
             this.city.warehouse[productid] -= amount;
         } else {
-            this.city.world.game.money += -amount * price;
+            this.city.world.game.changeMoney( -amount * price,"sell or buy from market",this.city);
             this.city.market[productid] -= amount;
         }
         storetarget[productid] += amount;
@@ -601,7 +601,7 @@ export class CityDialog {
                 document.getElementById("delete-factory_" + x).setAttribute("hidden", "");
             }
             var coasts = comp.getBuildingCoasts();
-            if (this.city.world.game.money < coasts[0] || this.city.market[0] < coasts[1] || this.city.market[1] < coasts[2]) {
+            if (this.city.world.game.getMoney() < coasts[0] || this.city.market[0] < coasts[1] || this.city.market[1] < coasts[2]) {
                 document.getElementById("new-factory_" + x).setAttribute("disabled", "");
                 document.getElementById("new-factory_" + x).setAttribute("title", "not all building costs are available");
             } else {
@@ -611,7 +611,7 @@ export class CityDialog {
         }
         document.getElementById("houses").innerHTML = "" + (this.city.houses + "/" + this.city.houses);
         document.getElementById("renter").innerHTML = "" + (this.city.people - 1000 + "/" + this.city.houses * 100);
-        if (this.city.world.game.money < 15000 || this.city.market[0] < 20 || this.city.market[1] < 40) {
+        if (this.city.world.game.getMoney() < 15000 || this.city.market[0] < 20 || this.city.market[1] < 40) {
             document.getElementById("buy-house").setAttribute("disabled", "");
         } else {
             document.getElementById("buy-house").removeAttribute("disabled");

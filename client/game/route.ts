@@ -12,7 +12,7 @@ export class Route {
     loadWarehouseAmount: number[];
     loadWarehouseUntilAmount: number[];
     airplane: Airplane;
-    type = "Route";
+    type = "Route"; 
     constructor() {
         this.unloadMarketAmount = [];
         this.unloadMarketPrice = [];
@@ -47,7 +47,7 @@ export class Route {
                 for (var y = 0; y < max; y++) {
                     var price = allProducts[x].calcPrice(city.people, city.market[x] , false);//city.isProducedHere(x));
                     if (price >= this.unloadMarketPrice[x]) {
-                        city.world.game.money += 1 * price;
+                        city.world.game.changeMoney(1 * price,"airplane sells from market",city);
                         city.market[x] += 1;
                         this.airplane.products[x] -= 1;
                     } else {
@@ -110,7 +110,7 @@ export class Route {
                 for (var y = 0; y < max; y++) {
                     var price = allProducts[x].calcPrice(city.people, city.market[x] - 1, city.isProducedHere(x));
                     if (price <= this.loadMarketPrice[x]) {
-                        city.world.game.money += -1 * price;
+                        city.world.game.changeMoney(-1 * price,"airplane buys from market",city);
                         city.market[x] -= 1;
                         this.airplane.products[x] += 1;
                     } else {

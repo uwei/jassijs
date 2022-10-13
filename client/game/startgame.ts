@@ -33,7 +33,7 @@ export class PPanel extends Panel {
 export function test() {
     
     var ret = new PPanel();
-    ret.dom.style.backgroundColor="white";
+    //ret.dom.style.backgroundColor="white";
     var wd=windows.findComponent("Game"); 
     wd?.destroy();
     windows.add(ret, "Game");

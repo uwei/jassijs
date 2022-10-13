@@ -55,7 +55,7 @@ export class City {
             }
             this.warehouseMinStock.push(undefined);
             this.warehouseSellingPrice.push(allProducts[x].priceSelling);
-            this.warehouse.push(5000);
+            this.warehouse.push(0);
             this.market.push(val);
         }
     }
@@ -111,7 +111,7 @@ export class City {
             dayProcent = 1;
 
         }
-        
+
         for (var x = 0; x < this.companies.length; x++) {
             var prod = this.companies[x].productid;
             var totalDailyProduce = Math.round(City.neutralStartPeople * allProducts[prod].dailyConsumtion * City.neutralProductionRate);
@@ -122,24 +122,24 @@ export class City {
                     var product = allProducts[prod];
                     for (var o = 0; o < diff; o++) {
                         var price = product.calcPrice(this.people, this.market[prod] + 1/*diff*/, true);
-                       // if(this.world.cities.indexOf(this)===0)
-                      //    console.log("check " + this.companies[x].productid + ":  " + price + " > " + (product.pricePurchase * 2 / 3) + " Bestand: " + this.market[prod]);
+                        // if(this.world.cities.indexOf(this)===0)
+                        //    console.log("check " + this.companies[x].productid + ":  " + price + " > " + (product.pricePurchase * 2 / 3) + " Bestand: " + this.market[prod]);
                         if (price > product.pricePurchase * 4 / 5) {
                             this.market[prod] = this.market[prod] + diff;
-                          //  if(this.world.cities.indexOf(this)===0)
-                           //    console.log("produce " + this.companies[x].productid + ":" + diff + "/" + "  ->" + untilNow + "/" + totalDailyProduce);
-                        }else{
-                           // if(this.world.cities.indexOf(this)===0)
-                              //  debugger;
+                            //  if(this.world.cities.indexOf(this)===0)
+                            //    console.log("produce " + this.companies[x].productid + ":" + diff + "/" + "  ->" + untilNow + "/" + totalDailyProduce);
+                        } else {
+                            // if(this.world.cities.indexOf(this)===0)
+                            //  debugger;
                         }
                     }
                     this.neutralDailyProducedToday[x] = this.neutralDailyProducedToday[x] + diff;
                 }
-               
+
             }
-             if (dayProcent === 1) {
-                    this.neutralDailyProducedToday[x] = 0;
-                }
+            if (dayProcent === 1) {
+                this.neutralDailyProducedToday[x] = 0;
+            }
         }
     }
 
@@ -167,33 +167,46 @@ export class City {
 
         for (var x = 0; x < allProducts.length; x++) {
             var totalDailyConsumtion = Math.round(allProducts[x].dailyConsumtion * this.people);
+            if(totalDailyConsumtion<0)
+                totalDailyConsumtion=1;
             var untilNow = Math.round(totalDailyConsumtion * dayProcent);
             if (untilNow > this.consumedToday[x]) {
                 var diff = untilNow - this.consumedToday[x];
                 var product = allProducts[x];
 
-                
-                    var price = product.calcPrice(this.people, this.market[x]-diff+1, false);
-                    var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * 4 / 3 - product.priceSelling);
-                    this.consumedToday[x] = untilNow;
-                    if (price <= priceMax) {
-                    //  if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
-                    //      console.log(x+"kaufe von markt " + price + "<=" + priceMax+" ("+this.market[x]+")");
-                        
-                        this.market[x] -=diff;
-                        this.score[x] = Math.round((this.score[x] + 0.2) * 100) / 100;
-                    } else {
-                        this.score[x] = Math.round((this.score[x] - 0.15) * 100) / 100;
 
-                        // if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
-                        //     console.log(x+"zu teuer " + price + ">" + priceMax);
-                        
-
+                var price = product.calcPrice(this.people, this.market[x] - diff + 1, false);
+                var fromWarehouse = false;
+                if (this.warehouse[x] >= diff && (this.warehouseMinStock[x] === undefined || (this.warehouse[x] - diff) > this.warehouseMinStock[x])) {
+                    if (this.warehouseSellingPrice[x] <= price) {
+                        fromWarehouse = true;
+                        price = this.warehouseSellingPrice[x];
                     }
-               
+                }
+                var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * 4 / 3 - product.priceSelling);
+                this.consumedToday[x] = untilNow;
+                if (price <= priceMax) {
+                    if (fromWarehouse) {
+                        this.world.game.changeMoney((Math.round(price * diff)),"people buy from the warehouse",this);
+                        this.warehouse[x] -= diff;
+                    } else {
+                        //  if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
+                        //      console.log(x+"kaufe von markt " + price + "<=" + priceMax+" ("+this.market[x]+")");
+                        this.market[x] -= diff;
+                    }
+                    this.score[x] = Math.round((this.score[x] + 0.2) * 100) / 100; 
+                } else {
+                    this.score[x] = Math.round((this.score[x] - 0.15) * 100) / 100;
+
+                    // if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
+                    //     console.log(x+"zu teuer " + price + ">" + priceMax);
+
+
+                }
+
                 if (this.score[x] > 100)
                     this.score[x] = 100;
-                        if (this.score[x] < 0)
+                if (this.score[x] < 0)
                     this.score[x] = 0;
 
             }
@@ -202,10 +215,45 @@ export class City {
             }
         }
     }
+    sellWareHouseToMarket() {
+        for (var x = 0; x < allProducts.length; x++) {
+            var product = allProducts[x];
+            while (true) {
+                var price = product.calcPrice(this.people, this.market[x], this.isProducedHere(x));
+                if (price >= this.warehouseSellingPrice[x]&&this.warehouse[x]>1) {
+                    if (this.warehouseMinStock[x] === undefined || (this.warehouse[x] - 1 > this.warehouseMinStock[x])){
+                        this.world.game.changeMoney((Math.round(price * 1)),"market buy from the warehouse",this);
+                        this.warehouse[x] -= 1; 
+                        this.market[x] += 1;
+                    } else
+                        break;
+                } else
+                    break;
+            }
+        }
+    }
+    updateDalyCosts(){
+        if(this.warehouses>0)
+            this.world.game.changeMoney(-this.warehouses*50,"daily costs warehouses",this);
+        
+        if(this.houses>0)
+            this.world.game.changeMoney(-this.houses*42,"daily costs houses",this);
+
+        if(this.people-1000>0){
+            this.world.game.changeMoney(Math.round((this.people-1000)*1.6),"rental fee",this);
+        }
+        var companycosts=0;
+        for(var x=0;x<this.companies.length;x++){
+            companycosts+=(this.companies[x].buildings*100);
+        }   
+         if(companycosts>0){
+            this.world.game.changeMoney(companycosts,"daily costs companies",this);
+        }     
+    }
     update() {
         if (this.lastUpdate === undefined) {
             this.lastUpdate = this.world.game.date.getTime();
-        }
+        } 
 
         this.domDesc.innerHTML = this.name + "<br/>" + this.people.toLocaleString() + "<br/>" + allProducts[0].getIcon() + " " + Icons.edit;
 
@@ -215,6 +263,11 @@ export class City {
             this.companies[x].update();
         }
         this.updateDailyConsumtion();
+        this.sellWareHouseToMarket();
+        if(this.world.game.date.getDate()!==new Date(this.lastUpdate).getDate()){
+            //a new day starts
+            this.updateDalyCosts();
+        }
         this.lastUpdate = this.world.game.date.getTime();
     }
 

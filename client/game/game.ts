@@ -16,7 +16,7 @@ export class Game {
   world: World;
   domHeader: HTMLDivElement;
   domWorld: HTMLDivElement;
-  money;
+  _money;
   date: Date;
   lastUpdate: number;
   speed: number = 1;
@@ -28,7 +28,7 @@ export class Game {
   constructor() {
     var _this = this;
     Game.instance = this;
-    this.money = 2000000;
+    
     this.lastUpdate = Date.now();
     this.date = new Date("Sat Jan 01 2000 00:00:00");
     CityDialog.instance = undefined;
@@ -36,7 +36,7 @@ export class Game {
   }
   public updateTitle() {
     try {
-      document.getElementById("gamemoney").innerHTML = new Number(this.money).toLocaleString();
+      document.getElementById("gamemoney").innerHTML = new Number(this.getMoney()).toLocaleString();
       document.getElementById("gamedate").innerHTML = this.date.toLocaleDateString() + " " + this.date.toLocaleTimeString().substring(0, this.date.toLocaleTimeString().length - 3);
       this.world.update();
     } catch {
@@ -64,15 +64,24 @@ export class Game {
   }
   newGame() {
     this.world = new World();
-    this.world.game = this;
+    this.world.game = this; 
+    this._money = 20000;
     this.world.newGame();
+  }
+  getMoney(){
+    return this._money;
+  }
+  changeMoney(change:number,why:string,city:City=undefined){
+    this._money+=change;
+    console.log(change+" "+why);
   }
   render(dom: HTMLElement) {
     var _this = this;
     dom.innerHTML = "";
+    dom.style.backgroundColor="lightblue";
     this.dom = dom;
     var sdomHeader = `
-          <div style="height:15px;position:fixed;">
+          <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
             Traffics 
             <button id="game-slower">`+ Icons.minus + `</button> 
             <span id="gamedate"></span>   

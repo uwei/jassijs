@@ -16,6 +16,7 @@ export class World {
     dom: HTMLElement;
     game: Game;
     type = "World";
+    lastUpdate = undefined;
     constructor() {
         var _this = this;
         this.cities = [];
@@ -79,6 +80,9 @@ export class World {
         }
     }
     update() {
+        if (this.lastUpdate === undefined) {
+            this.lastUpdate = this.game.date.getTime();
+        }
 
         for (var x = 0; x < this.cities?.length; x++) {
             /*if (this.airplanes[x].x < 500)
@@ -88,6 +92,14 @@ export class World {
             }*/
             this.cities[x].update();
         }
+        if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
+            var ges = 0;
+            for (var x = 0; x < this.airplanes.length; x++) {
+                ges += this.airplanes[x].costs;
+            }
+            this.game.changeMoney(-ges, "daily costs airplane");
+        }
+        this.lastUpdate = this.game.date.getTime();
     }
     addCity() {
         var city: City = createCities(this, 1)[0];
@@ -98,7 +110,7 @@ export class World {
 
     newGame() {
         createCities(this, 15);
-        for (var x = 0; x < 40; x++) {
+        for (var x = 0; x < 1; x++) {
             var ap = new Airplane(this);
             ap.name = "Airplane " + x;
             ap.speed = 200;
@@ -107,8 +119,8 @@ export class World {
             ap.world = this;
             this.airplanes.push(ap);
         }
-        this.cities[0].houses=1;
-        this.cities[0].warehouses=1;
+        this.cities[0].houses = 1;
+        this.cities[0].warehouses = 1;
     }
     render(dom: HTMLElement) {
         var _this = this;

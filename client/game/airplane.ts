@@ -24,8 +24,10 @@ export class Airplane {
     products;
     status: string = "";
     route: Route[];
+    costs=20;
+    capacity=200;
     activeRoute = 0;
-    type="Airplane";
+    type = "Airplane";
     constructor(world: World) {
         this.world = world;
         this.route = [];
@@ -39,7 +41,7 @@ export class Airplane {
         var _this = this;
         this.dom = <any>document.createRange().createContextualFragment("<span style='font-size:20px;transform:rotate(0turn)' class='mdi mdi-airplane'></span>").children[0];//document.createElement("span");
         this.dom.style.position = "absolute";
-      
+
         this.action = "wait";
         this.products = [];
         for (var x = 0; x < allProducts.length; x++) {
@@ -55,14 +57,14 @@ export class Airplane {
 
     }
 
-    flyTo(city:City) {
-        var x=city.x;
-        var y=city.y;
-        
+    flyTo(city: City) {
+        var x = city.x;
+        var y = city.y;
+
         this.lastUpdate = this.world.game.date.getTime();
-       // console.log("fly to " + city.name)
+        // console.log("fly to " + city.name)
         this.action = "fly";
-        this.status="fly to "+ city.name;
+        this.status = "fly to " + city.name;
         this.targetX = x;
         this.targetY = y;
         this.update();
@@ -74,10 +76,12 @@ export class Airplane {
         }
     }
     select() {
-        this.dom?.style.color = "red";
+        if (this.dom)
+            this.dom.style.color = "red";
     }
     unselect() {
-        this.dom?.style.color = "black";
+        if (this.dom)
+            this.dom.style.color = "black";
     }
     arrived() {
         console.log("target arrived");
@@ -88,7 +92,7 @@ export class Airplane {
         this.world.findCityAt(this.x, this.y)?.airplanesInCity.push(this);
         this.dom.style.transform = "rotate(0deg)";
         if (this.activeRoute !== -1) {
-             console.log("unload now");
+            console.log("unload now");
             this.action = "unload";
             this.status = "unload";
             this.lastAction = this.lastUpdate;
@@ -135,26 +139,26 @@ export class Airplane {
         this.lastUpdate = this.world.game.date.getTime();
         this.dom.style.top = this.y + "px";
         this.dom.style.left = (this.x - 15) + "px";
-        if (this.activeRoute !== -1&&this.route.length>1) {
-            if (this.action==="unload"&&(this.lastUpdate - this.lastAction) > (3 * 1000*60*60)) {
-               // console.log("load now");
+        if (this.activeRoute !== -1 && this.route.length > 1) {
+            if (this.action === "unload" && (this.lastUpdate - this.lastAction) > (3 * 1000 * 60 * 60)) {
+                // console.log("load now");
                 this.action = "load";
                 this.status = "load";
                 this.lastAction = this.lastUpdate;
                 this.route[this.activeRoute].unload();
                 AirplaneDialog.getInstance().update();
             }
-            if (this.action==="load"&&(this.lastUpdate - this.lastAction) > (3 * 1000*60*60)) {
-               
+            if (this.action === "load" && (this.lastUpdate - this.lastAction) > (3 * 1000 * 60 * 60)) {
+
                 this.lastAction = this.lastUpdate;
                 this.route[this.activeRoute].load();
                 AirplaneDialog.getInstance().update();
-             this.activeRoute++;
-                if(this.activeRoute===this.route.length)
-                    this.activeRoute=0;
-                var city=this.world.cities[this.route[this.activeRoute].cityid];
+                this.activeRoute++;
+                if (this.activeRoute === this.route.length)
+                    this.activeRoute = 0;
+                var city = this.world.cities[this.route[this.activeRoute].cityid];
                 this.flyTo(city);
-                
+
             }
         }
     }
