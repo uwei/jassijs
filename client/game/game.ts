@@ -86,14 +86,14 @@ export class Game {
     this.domHeader = <any>document.createRange().createContextualFragment(sdomHeader).children[0];
 
     var sdomWorld = `
-          <div id="world" style="position:relative;width: 100%;height:calc(100% - 15px);">
+          <div id="world" style="position:absolute;top:20px;">
           </div>  
         `;
 
     this.domWorld = <any>document.createRange().createContextualFragment(sdomWorld).children[0];
     this.dom.appendChild(this.domHeader);
-    var headerPlaceeholder = <any>document.createRange().createContextualFragment('<div style="height:15px"></div>').children[0]
-    this.dom.appendChild(headerPlaceeholder);
+   // var headerPlaceeholder = <any>document.createRange().createContextualFragment('<div style="height:15px"></div>').children[0]
+   // this.dom.appendChild(headerPlaceeholder);
     this.dom.appendChild(this.domWorld);
     this.world.render(this.domWorld);
 
