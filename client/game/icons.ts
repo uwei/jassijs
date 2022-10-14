@@ -19,4 +19,6 @@ export class Icons {
     static fillDown = "<span  class='mdi  mdi-elevator-down'></span>";
     static food = "<span  class='mdi  mdi-food-variant'></span>";
     static copy="<span  class='mdi  mdi-content-copy'></span>";
+    static airplane="<span  class='mdi  mdi-airplane'></span>";
+    
 }

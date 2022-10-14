@@ -60,16 +60,16 @@ export class Company {
         }
         return needs;
     }
-    getBuildingCoastsAsIcon() {
-        var a = this.getBuildingCoasts();
 
-        return a[0] + Icons.money + "<br/>" + a[1] + "x" + allProducts[0].getIcon() + "<br/>" + a[2] + "x" + allProducts[1].getIcon();
-    }
-    getBuildingCoasts() {
+    getBuildingMaterial() {
         var fact = 5 - (allProducts[this.productid].distribution) / 4;
-        return [fact * 10000,
-        fact * 5,
-        fact * 10]
+        return [
+            fact * 5,
+            fact * 10]
+    }
+    getBuildingCosts() {
+        var fact = 5 - (allProducts[this.productid].distribution) / 4;
+        return fact * 10000;
     }
     getDailyInput2(): number {
         var needs = 0;
@@ -79,16 +79,16 @@ export class Company {
         }
         return needs;
     }
-    update(){
-         if (this.lastUpdate === undefined) {
+    update() {
+        if (this.lastUpdate === undefined) {
             this.lastUpdate = this.city.world.game.date.getTime();
         }
         this.updateProduction();
         this.lastUpdate = this.city.world.game.date.getTime();
     }
     updateProduction() {
-       
-        if(this.workers===0)
+
+        if (this.workers === 0)
             return;
         var dayProcent = this.city.world.game.date.getHours() / 24;
         if (this.city.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
@@ -105,15 +105,15 @@ export class Company {
         if (allProducts[prod].input1)
             totalDailyNeed2 = Math.round(this.workers * allProducts[prod].input2Amount / 25);
 
-        if (this.dailyProducedToday===0&& totalDailyNeed1 !== undefined) {
+        if (this.dailyProducedToday === 0 && totalDailyNeed1 !== undefined) {
             if (totalDailyNeed1 >= this.city.warehouse[allProducts[prod].input1]) {
                 console.log(totalDailyNeed1 + "x" + allProducts[prod].input1 + " needed");
                 return;
-            }else{
-                
+            } else {
+
             }
         }
-        if (this.dailyProducedToday===0&& totalDailyNeed2 !== undefined) {
+        if (this.dailyProducedToday === 0 && totalDailyNeed2 !== undefined) {
             if (totalDailyNeed2 >= this.city.warehouse[allProducts[prod].input2]) {
                 console.log(totalDailyNeed2 + "x" + allProducts[prod].input2 + " needed");
                 return;
@@ -123,25 +123,25 @@ export class Company {
         if (untilNow > this.dailyProducedToday) {
             var diff = untilNow - this.dailyProducedToday;
             if (diff > 0) {
-                if(this.dailyProducedToday===0){
-                    if(totalDailyNeed1!==undefined)
-                       this.city.warehouse[allProducts[prod].input1]-=totalDailyNeed1;
-                    if(totalDailyNeed2!==undefined)
-                       this.city.warehouse[allProducts[prod].input2]-=totalDailyNeed2;
+                if (this.dailyProducedToday === 0) {
+                    if (totalDailyNeed1 !== undefined)
+                        this.city.warehouse[allProducts[prod].input1] -= totalDailyNeed1;
+                    if (totalDailyNeed2 !== undefined)
+                        this.city.warehouse[allProducts[prod].input2] -= totalDailyNeed2;
                 }
-                this.city.warehouse[prod]+=diff;
+                this.city.warehouse[prod] += diff;
                 console.log(diff + "x" + prod + " produced");
                 this.dailyProducedToday = this.dailyProducedToday + diff;
             }
-             
-               
-            
+
+
+
         }
         if (dayProcent === 1) {
             this.dailyProducedToday = 0;
         }
-    } 
-    
+    }
+
 }
 export function test() {
     var ids = [];

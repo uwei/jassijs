@@ -12,7 +12,7 @@ export class Route {
     loadWarehouseAmount: number[];
     loadWarehouseUntilAmount: number[];
     airplane: Airplane;
-    type = "Route"; 
+    type = "Route";
     constructor() {
         this.unloadMarketAmount = [];
         this.unloadMarketPrice = [];
@@ -45,9 +45,9 @@ export class Route {
             }
             if (max) {
                 for (var y = 0; y < max; y++) {
-                    var price = allProducts[x].calcPrice(city.people, city.market[x] , false);//city.isProducedHere(x));
+                    var price = allProducts[x].calcPrice(city.people, city.market[x], false);//city.isProducedHere(x));
                     if (price >= this.unloadMarketPrice[x]) {
-                        city.world.game.changeMoney(1 * price,"airplane sells from market",city);
+                        city.world.game.changeMoney(1 * price, "airplane sells from market", city);
                         city.market[x] += 1;
                         this.airplane.products[x] -= 1;
                     } else {
@@ -65,7 +65,7 @@ export class Route {
             var max = this.unloadWarehouseAmount[x];
             if (max !== undefined) {
                 max = Math.min(max, this.airplane.products[x]);
-                if(max){
+                if (max) {
                     this.airplane.products[x] -= max;
                     city.warehouse[x] += max;
                 }
@@ -76,21 +76,23 @@ export class Route {
         var city = this.airplane.world.cities[this.cityid];
         for (var x = 0; x < allProducts.length; x++) {
             var max = this.loadWarehouseUntilAmount[x];
-            if (max === undefined)
+            if (max === undefined) {
                 max = this.loadWarehouseAmount[x];
-            else{
-                max=city.warehouse[x]-this.loadWarehouseUntilAmount[x];
-                if(max<0)
-                    max=0;
+                if (max && max > city.warehouse[x])
+                    max = city.warehouse[x];
+            } else {
+                max = city.warehouse[x] - this.loadWarehouseUntilAmount[x];
             }
-            if(max&&city.warehouseMinStock[x]){
-                if(city.warehouse[x]-max<city.warehouseMinStock[x]){
-                    max=city.warehouse[x]-city.warehouseMinStock[x];
-                    if(max<0)
-                        max=0;
+            if (max < 0)
+                max = 0;
+            if (max && city.warehouseMinStock[x]) {
+                if (city.warehouse[x] - max < city.warehouseMinStock[x]) {
+                    max = city.warehouse[x] - city.warehouseMinStock[x];
+                    if (max < 0)
+                        max = 0;
                 }
             }
-            if(max){
+            if (max) {
                 this.airplane.products[x] += max;
                 city.warehouse[x] -= max;
             }
@@ -110,7 +112,7 @@ export class Route {
                 for (var y = 0; y < max; y++) {
                     var price = allProducts[x].calcPrice(city.people, city.market[x] - 1, city.isProducedHere(x));
                     if (price <= this.loadMarketPrice[x]) {
-                        city.world.game.changeMoney(-1 * price,"airplane buys from market",city);
+                        city.world.game.changeMoney(-1 * price, "airplane buys from market", city);
                         city.market[x] -= 1;
                         this.airplane.products[x] += 1;
                     } else {

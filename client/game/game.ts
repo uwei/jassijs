@@ -44,6 +44,13 @@ export class Game {
       return;
     }
   }
+  updateSize(){
+    this.domWorld.style.width=(this.mapWidth+80)+"px"; 
+    this.domWorld.style.height=(this.mapHeight+100)+"px"; 
+    (<HTMLElement> this.domWorld.parentNode).style.width=(this.mapWidth+80)+"px"; 
+    (<HTMLElement> this.domWorld.parentNode).style.height=(this.mapHeight+100)+"px"; 
+    
+  }
   //never call this outside the timer - then would be 2 updates
   private nevercallthisfunction() {
     //var t=new Date().getTime();
@@ -73,7 +80,7 @@ export class Game {
   }
   changeMoney(change:number,why:string,city:City=undefined){
     this._money+=change;
-    console.log(change+" "+why);
+  //  console.log(change+" "+why);
   }
   render(dom: HTMLElement) {
     var _this = this;
@@ -105,7 +112,7 @@ export class Game {
    // this.dom.appendChild(headerPlaceeholder);
     this.dom.appendChild(this.domWorld);
     this.world.render(this.domWorld);
-
+    this.updateSize();
 
     setTimeout(() => {
       _this.bindActions();
