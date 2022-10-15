@@ -1,6 +1,6 @@
 import { Panel } from "jassijs/ui/Panel";
 import { City, createCities } from "game/city";
-import { Airplane } from "game/airplane";
+import { Airplane, allAirplaneTypes } from "game/airplane";
 import windows from "jassijs/base/Windows";
 import { CityDialog } from "game/citydialog";
 import { Game } from "game/game";
@@ -112,10 +112,13 @@ export class World {
         createCities(this, 15);
         for (var x = 0; x < 1; x++) {
             var ap = new Airplane(this);
-            ap.name = "Airplane " + x;
-            ap.speed = 200;
-            ap.x = getRandomInt(this.game.mapWidth);
-            ap.y = getRandomInt(this.game.mapHeight);
+            ap.name = allAirplaneTypes[0].model + (x+1);
+            ap.speed = allAirplaneTypes[0].speed;
+            ap.costs = allAirplaneTypes[0].costs;
+            ap.capacity = allAirplaneTypes[0].capacity;
+            ap.x = this.cities[0].x;
+            ap.y =this.cities[0].y;
+            this.cities[0].airplanesInCity.push(x); 
             ap.world = this;
             this.airplanes.push(ap);
         }

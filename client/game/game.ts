@@ -8,6 +8,7 @@ import { Company } from "game/company";
 import { Airplane } from "game/airplane";
 import { City } from "game/city";
 import { Route } from "game/route";
+import { allProducts } from "game/product";
 
 
 export class Game {
@@ -131,6 +132,10 @@ export class Game {
     });
     document.getElementById("debug-game").addEventListener("click", () => {
       _this.world.addCity();
+      for(var x=0;x<allProducts.length;x++){
+        _this.world.cities[0].warehouse[x]=5000;
+      }
+      _this._money=100000;
     });
     document.getElementById("game-slower").addEventListener("click", () => {
       if (_this.speed === Game.temposcale[0]) {

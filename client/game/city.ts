@@ -350,7 +350,7 @@ function createCities2(count, checkProduction = false) {
     if (checkProduction) {
         //check if all Procducts with distribution> 4could be produces
         for (var x = 0; x < allProducts.length; x++) {
-            if (allProducts[x].distribution > 4 && allids.indexOf(allProducts[x].id) === -1) {
+            if (allids.indexOf(allProducts[x].id) === -1) {
 
                 return createCities2(count);
             }

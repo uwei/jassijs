@@ -50,6 +50,7 @@ export class Route {
                         city.world.game.changeMoney(1 * price, "airplane sells from market", city);
                         city.market[x] += 1;
                         this.airplane.products[x] -= 1;
+                        this.airplane.refreshLoadedCount();
                     } else {
                         break;
 
@@ -67,6 +68,7 @@ export class Route {
                 max = Math.min(max, this.airplane.products[x]);
                 if (max) {
                     this.airplane.products[x] -= max;
+                    this.airplane.refreshLoadedCount();
                     city.warehouse[x] += max;
                 }
             }
@@ -81,7 +83,7 @@ export class Route {
                 if (max && max > city.warehouse[x])
                     max = city.warehouse[x];
             } else {
-                max = city.warehouse[x] - this.loadWarehouseUntilAmount[x];
+                max = this.loadWarehouseUntilAmount[x]-this.airplane.products[x];
             }
             if (max < 0)
                 max = 0;
@@ -92,8 +94,12 @@ export class Route {
                         max = 0;
                 }
             }
+            if (max && max > (this.airplane.capacity - this.airplane.loadedCount))
+                max = this.airplane.capacity - this.airplane.loadedCount;
+
             if (max) {
                 this.airplane.products[x] += max;
+                this.airplane.refreshLoadedCount();
                 city.warehouse[x] -= max;
             }
         }
@@ -108,6 +114,8 @@ export class Route {
                 if (max < 0)
                     max = 0;
             }
+            if (max && max > (this.airplane.capacity - this.airplane.loadedCount))
+                max = this.airplane.capacity - this.airplane.loadedCount;
             if (max) {
                 for (var y = 0; y < max; y++) {
                     var price = allProducts[x].calcPrice(city.people, city.market[x] - 1, city.isProducedHere(x));
@@ -115,6 +123,7 @@ export class Route {
                         city.world.game.changeMoney(-1 * price, "airplane buys from market", city);
                         city.market[x] -= 1;
                         this.airplane.products[x] += 1;
+                        this.airplane.refreshLoadedCount();
                     } else {
                         break;
 
@@ -125,9 +134,8 @@ export class Route {
         }
     }
     load() {
-
-        this.loadMarket();
         this.loadWarehouse();
+        this.loadMarket();
     }
     unload() {
 

@@ -26,13 +26,20 @@ export class Airplane {
     products;
     status: string = "";
     route: Route[];
-    costs=20;
-    capacity=200;
+    costs:number;
+    capacity:number;
+    loadedCount:number=0;
     activeRoute = 0;
+    squadron:Airplane[]=[];//Geschwader
     type = "Airplane";
     constructor(world: World) {
         this.world = world;
         this.route = [];
+         this.products = [];
+          for (var x = 0; x < allProducts.length; x++) {
+            this.products[x] = 0;
+
+        }
         /*  for(var x=0;x<4;x++){
               var rt=new Route();
               rt.cityid=x;
@@ -45,11 +52,8 @@ export class Airplane {
         this.dom.style.position = "absolute";
 
         this.action = "wait";
-        this.products = [];
-        for (var x = 0; x < allProducts.length; x++) {
-            this.products[x] = 0;
-
-        }
+       
+       
         this.dom.addEventListener("click", (ev: MouseEvent) => {
             _this.onclick(ev);
             return undefined;
@@ -58,7 +62,13 @@ export class Airplane {
         this.update();
 
     }
-
+    refreshLoadedCount(){
+        var all=0;
+        for(var x=0;x<allProducts.length;x++){
+            all+=this.products[x];
+        }
+        this.loadedCount=all;
+    }
     flyTo(city: City) {
         var x = city.x;
         var y = city.y;
@@ -71,7 +81,7 @@ export class Airplane {
         this.targetY = y;
         this.update();
         for (var i = 0; i < this.world.cities.length; i++) {
-            var pos = this.world.cities[i].airplanesInCity.indexOf(this);
+            var pos = this.world.cities[i].airplanesInCity.indexOf(this.world.airplanes.indexOf(this));
             if (pos !== -1) {
                 this.world.cities[i].airplanesInCity.splice(pos, 1);
             }
@@ -91,7 +101,7 @@ export class Airplane {
         this.targetY = undefined;
         this.action = "wait";
         this.status = "";
-        this.world.findCityAt(this.x, this.y)?.airplanesInCity.push(this);
+        this.world.findCityAt(this.x, this.y)?.airplanesInCity.push(this.world.airplanes.indexOf(this));
         this.dom.style.transform = "rotate(0deg)";
         if (this.activeRoute !== -1) {
             console.log("unload now");
@@ -178,12 +188,12 @@ export class Airplane {
     }
 }
 var allAirplaneTypes=[
-{typeid:1,model:"Airplane A",speed:100,capacity:200, costs:20,buildDays:25,buildingCosts:11000,buildingMaterial:[40,0,0,10,0,0,0,0,10,0,10,0,0,0,0,10]},
-{typeid:2,model:"Airplane B",speed:120,capacity:300, costs:30,buildDays:30,buildingCosts:21000,buildingMaterial:[60,0,0,20,0,0,0,0,20,0,20,0,0,0,0,20]},
-{typeid:3,model:"Airplane C",speed:100,capacity:500, costs:50,buildDays:39,buildingCosts:32000,buildingMaterial:[100,0,0,30,0,0,0,0,30,0,30,0,0,0,0,30]},
-{typeid:4,model:"Airplane D",speed:110,capacity:650, costs:65,buildDays:45,buildingCosts:55000,buildingMaterial:[120,0,0,40,0,0,0,0,40,0,40,0,0,0,0,40]},
-{typeid:5,model:"Airplane E",speed:100,capacity:1000, costs:100,buildDays:56,buildingCosts:109000,buildingMaterial:[200,0,0,50,0,0,0,0,50,0,50,0,0,0,0,50]},
-{typeid:6,model:"Airplane F",speed:130,capacity:2000, costs:200,buildDays:79,buildingCosts:110000,buildingMaterial:[400,0,0,100,0,0,0,0,100,0,100,0,0,0,0,100]}
+{typeid:1,model:"Airplane A",speed:200,capacity:200, costs:20,buildDays:25,buildingCosts:11000,buildingMaterial:[40,0,0,10,0,0,0,0,10,0,10,0,0,0,0,10]},
+{typeid:2,model:"Airplane B",speed:210,capacity:300, costs:30,buildDays:30,buildingCosts:21000,buildingMaterial:[60,0,0,20,0,0,0,0,20,0,20,0,0,0,0,20]},
+{typeid:3,model:"Airplane C",speed:220,capacity:500, costs:50,buildDays:39,buildingCosts:32000,buildingMaterial:[100,0,0,30,0,0,0,0,30,0,30,0,0,0,0,30]},
+{typeid:4,model:"Airplane D",speed:240,capacity:650, costs:65,buildDays:45,buildingCosts:55000,buildingMaterial:[120,0,0,40,0,0,0,0,40,0,40,0,0,0,0,40]},
+{typeid:5,model:"Airplane E",speed:260,capacity:1000, costs:100,buildDays:56,buildingCosts:109000,buildingMaterial:[200,0,0,50,0,0,0,0,50,0,50,0,0,0,0,50]},
+{typeid:6,model:"Airplane F",speed:280,capacity:2000, costs:200,buildDays:79,buildingCosts:110000,buildingMaterial:[400,0,0,100,0,0,0,0,100,0,100,0,0,0,0,100]}
 ];
 export{allAirplaneTypes};
 //<span style='font-size:100px;'>&#9951;</span>
