@@ -412,7 +412,7 @@ export class CityDialog {
                 var comp = _this.city.companies[id];
 
                 _this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building");
-                comp.workers += 25;
+               // comp.workers += 25;
                 comp.buildings++;
                 _this.update();
                 //alert("create x");

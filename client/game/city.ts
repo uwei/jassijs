@@ -150,6 +150,23 @@ export class City {
         }
         return false;
     }
+    updatePeople(){
+        var newPeople=Math.round(this.people/1000);
+        while(this.people<(1000+this.houses*100)&&newPeople>0){
+            var comps=[];
+            for(var x=0;x<this.companies.length;x++){
+                if((this.companies[x].buildings*25)>this.companies[x].workers)
+                    comps.push(x);
+            }
+            if(comps.length===0)
+                return;
+            this.people++;
+            var winner=getRandomInt(comps.length);
+            console.log("+1 in company "+winner);
+            this.companies[winner].workers++;
+            newPeople--;
+        }
+    }
     updateDailyConsumtion() {
 
         //neutral companies
@@ -264,6 +281,7 @@ export class City {
         }
         this.updateDailyConsumtion();
         this.sellWareHouseToMarket();
+        this.updatePeople();
         if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             //a new day starts
             this.updateDalyCosts();
