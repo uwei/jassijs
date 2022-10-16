@@ -42,7 +42,8 @@ export class Route {
                 max = Math.min(this.airplane.products[x], this.unloadMarketAmount[x]);
                 if (max < 0)
                     max = 0;
-            }
+            }else
+                max=0;
             if (max) {
                 for (var y = 0; y < max; y++) {
                     var price = allProducts[x].calcPrice(city.people, city.market[x], false);//city.isProducedHere(x));
@@ -83,8 +84,8 @@ export class Route {
                 if (max && max > city.warehouse[x])
                     max = city.warehouse[x];
             } else {
-                max = this.loadWarehouseUntilAmount[x]-this.airplane.products[x];
-            }
+                max = city.warehouse[x]-this.loadWarehouseUntilAmount[x];
+            }            
             if (max < 0)
                 max = 0;
             if (max && city.warehouseMinStock[x]) {

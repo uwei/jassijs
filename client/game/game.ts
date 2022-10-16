@@ -10,7 +10,10 @@ import { City } from "game/city";
 import { Route } from "game/route";
 import { allProducts } from "game/product";
 
+window.onbeforeunload = function() {
+      return "Do you want to exit?";
 
+};
 export class Game {
   static instance: Game;
   dom: HTMLElement;

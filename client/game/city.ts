@@ -50,7 +50,7 @@ export class City {
                 }
             }
             if (val === 0) {
-                val = Math.round(10 * City.neutralStartPeople * allProducts[x].dailyConsumtion);
+                val = Math.round(15 * City.neutralStartPeople * allProducts[x].dailyConsumtion);
 
             }
             this.warehouseMinStock.push(undefined);
@@ -115,6 +115,8 @@ export class City {
         for (var x = 0; x < this.companies.length; x++) {
             var prod = this.companies[x].productid;
             var totalDailyProduce = Math.round(City.neutralStartPeople * allProducts[prod].dailyConsumtion * City.neutralProductionRate);
+            if(totalDailyProduce<1)
+                totalDailyProduce=1;
             var untilNow = Math.round(totalDailyProduce * dayProcent);
             if (untilNow > this.neutralDailyProducedToday[x]) {
                 var diff = untilNow - this.neutralDailyProducedToday[x];
@@ -150,8 +152,22 @@ export class City {
         }
         return false;
     }
+    transferWorker(numberOfWorker:number){
+         for(var y=0;y<numberOfWorker;y++){
+            var comps=[];
+            for(var x=0;x<this.companies.length;x++){
+                if((this.companies[x].buildings*25)>this.companies[x].workers)
+                    comps.push(x);
+            }
+            if(comps.length===0)
+                return;
+            
+            var winner=getRandomInt(comps.length);
+            this.companies[comps[winner]].workers++;
+         }
+    }
     updatePeople(){
-        var newPeople=Math.round(this.people/1000);
+        var newPeople=1;
         while(this.people<(1000+this.houses*100)&&newPeople>0){
             var comps=[];
             for(var x=0;x<this.companies.length;x++){
@@ -163,8 +179,21 @@ export class City {
             this.people++;
             var winner=getRandomInt(comps.length);
             console.log("+1 in company "+winner);
-            this.companies[winner].workers++;
+            this.companies[comps[winner]].workers++;
             newPeople--;
+        }
+        while(this.people>(1000+this.houses*100)){
+            var comps=[];
+            for(var x=0;x<this.companies.length;x++){
+                if(this.companies[x].workers>0)
+                    comps.push(x);
+            }
+            if(comps.length===0)
+                return;
+            this.people--;
+            var winner=getRandomInt(comps.length);
+            console.log("+1 in company "+winner);
+            this.companies[comps[winner]].workers--;
         }
     }
     updateDailyConsumtion() {
@@ -441,8 +470,9 @@ export function createCities(world: World, count: number) {
     }
     return cities;
 }
-export function test() {
 
+export function test(){
+    console.log(getRandomInt(2));
 }
 //https://de.wikipedia.org/wiki/Liste_der_Hauptst%C3%A4dte_der_Erde   https://lizenzhinweisgenerator.de/ Wikipedia
 var allCities = [

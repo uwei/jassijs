@@ -131,33 +131,36 @@ export class RouteDialog {
             _this.update();
         });
         document.getElementById("route-load-fill-consumtion").addEventListener("click", (e) => {
-            _this.loadFillConsumtion();
+            _this.loadFillConsumtion(true);
         });
-         document.getElementById("route-copy-prev").addEventListener("click", (e) => {
+        document.getElementById("route-load-fill-consumtion-until").addEventListener("click", (e) => {
+            _this.loadFillConsumtion(false);
+        });
+        document.getElementById("route-copy-prev").addEventListener("click", (e) => {
             _this.copyRoute();
         });
 
 
     }
-    copyRoute(){
-        var pos=this.route.airplane.route.indexOf(this.route);
-        if(pos===0)
+    copyRoute() {
+        var pos = this.route.airplane.route.indexOf(this.route);
+        if (pos === 0)
             return;
         pos--;
-        var source=this.route.airplane.route[pos];
-        for(var x=0;x<allProducts.length;x++){
-            this.route.loadMarketAmount[x]=source.loadMarketAmount[x];
-            this.route.loadMarketPrice[x]=source.loadMarketPrice[x];
-            this.route.loadMarketUntilAmount[x]=source.loadMarketUntilAmount[x];
-            this.route.loadWarehouseAmount[x]=source.loadWarehouseAmount[x];
-            this.route.loadWarehouseUntilAmount[x]=source.loadWarehouseUntilAmount[x];
-            this.route.unloadMarketAmount[x]=source.unloadMarketAmount[x];
-            this.route.unloadMarketPrice[x]=source.unloadMarketPrice[x];
-            this.route.unloadWarehouseAmount[x]=source.unloadWarehouseAmount[x];
+        var source = this.route.airplane.route[pos];
+        for (var x = 0; x < allProducts.length; x++) {
+            this.route.loadMarketAmount[x] = source.loadMarketAmount[x];
+            this.route.loadMarketPrice[x] = source.loadMarketPrice[x];
+            this.route.loadMarketUntilAmount[x] = source.loadMarketUntilAmount[x];
+            this.route.loadWarehouseAmount[x] = source.loadWarehouseAmount[x];
+            this.route.loadWarehouseUntilAmount[x] = source.loadWarehouseUntilAmount[x];
+            this.route.unloadMarketAmount[x] = source.unloadMarketAmount[x];
+            this.route.unloadMarketPrice[x] = source.unloadMarketPrice[x];
+            this.route.unloadWarehouseAmount[x] = source.unloadWarehouseAmount[x];
         }
         this.update();
     }
-    loadFillConsumtion() {
+    loadFillConsumtion(allCities: boolean) {
         var _this = this;
         var all = _this.route.airplane.route;
         var lenpixel = 0;
@@ -178,14 +181,31 @@ export class RouteDialog {
         var days = lenpixel / _this.route.airplane.speed; //t=s/v; in Tage
         var totalDays = (Math.round(days * 24) + 1 + all.length * 3 + all.length * 3);   //+3h load and unload
         console.log(totalDays);
+        var store = allCities ? this.route.loadWarehouseAmount : this.route.loadWarehouseUntilAmount;
         for (var x = 0; x < allProducts.length; x++) {
-            this.route.loadWarehouseAmount[x] = 0;
+            store[x] = 0;
         }
         for (var x = 0; x < all.length; x++) {
             var city = _this.route.airplane.world.cities[all[x].cityid];
-            if (all[x].cityid !== this.route.cityid) {
+            var cause;
+            if (allCities) {
+                cause = (all[x].cityid !== this.route.cityid);
+            } else {
+                cause = all[x].cityid === this.route.cityid;
+            }
+
+            if (cause) {
+                for (var c = 0; c < city.companies.length; c++) {
+                    var prod = allProducts[city.companies[c].productid];
+                    if (prod.input1)
+                        store[prod.input1] += Math.round((city.companies[c].workers * prod.input1Amount / 25));
+                    if (prod.input2)
+                        store[prod.input2] += Math.round((city.companies[c].workers * prod.input2Amount / 25));
+
+                }
                 for (var y = 0; y < allProducts.length; y++) {
-                    this.route.loadWarehouseAmount[y] += Math.round(totalDays * allProducts[y].dailyConsumtion * city.people / 24);
+                    store[y] += Math.round(totalDays * allProducts[y].dailyConsumtion * city.people / 24);
+
                 }
 
             }
@@ -269,6 +289,7 @@ export class RouteDialog {
                             </th>
                             <th>Warehouse<br/>until amount<br/>
                                 <button id="route-load-warehouse-until-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                                <button id="route-load-fill-consumtion-until" title="fill consumtion">`+ Icons.food + `</button>
                             </th>
                         </tr>
                        ${(function fun() {
@@ -323,7 +344,7 @@ export class RouteDialog {
     }
 
     update(force = false) {
-         try {
+        try {
             if (!$(this.dom).dialog('isOpen')) {
                 return;
             }

@@ -324,7 +324,7 @@ export class CityDialog {
     getSliderValue(dom: HTMLInputElement): number {
         var maxValue = parseInt(dom.getAttribute("maxValue"));
         var val = parseInt(dom.value);
-        if(val===0)
+        if (val === 0)
             return 0;
         var exp = Math.round(log(maxValue, 40) * 1000) / 1000;
         return Math.round(Math.pow(val, exp));
@@ -412,7 +412,7 @@ export class CityDialog {
                 var comp = _this.city.companies[id];
 
                 _this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building");
-               // comp.workers += 25;
+                // comp.workers += 25;
                 comp.buildings++;
                 _this.update();
                 //alert("create x");
@@ -425,9 +425,14 @@ export class CityDialog {
                 var comp = _this.city.companies[id];
                 if (comp.buildings > 0)
                     comp.buildings--;
-                if (comp.workers > comp.buildings * 25) {
-                    comp.workers = comp.buildings * 25;
+                var unempl = this.city.companies[id].workers - (this.city.companies[id].buildings * 25);
+                if (unempl > 0) {
+                    this.city.companies[id].workers -= unempl;
+                    this.city.transferWorker(unempl);
                 }
+                /*if (comp.workers > comp.buildings * 25) {
+                    comp.workers = comp.buildings * 25;
+                }*/
                 _this.update();
             });
             document.getElementById("buy-license_" + x).addEventListener("click", (evt) => {
@@ -451,9 +456,9 @@ export class CityDialog {
                 return;
             _this.city.houses--;
             _this.update();
-            if ((_this.city.people - 1000) > _this.city.houses * 100) {
+            /*if ((_this.city.people - 1000) > _this.city.houses * 100) {
                 _this.city.people = 1000 + _this.city.houses * 100;
-            }
+            }*/
             console.log("remove worker");
         });
         document.getElementById("buy-warehouse").addEventListener("click", (evt) => {
@@ -496,13 +501,15 @@ export class CityDialog {
     newAirplane(typeid: number) {
         var _this = this;
         _this.city.commitBuildingCosts(allAirplaneTypes[typeid].buildingCosts, allAirplaneTypes[typeid].buildingMaterial, "buy airplane");
-        var maxNumber=1;
-        for(var x=0;x<_this.city.world.airplanes.length;x++){
-            var test=_this.city.world.airplanes[x];
-            var pos=test.name.indexOf(allAirplaneTypes[typeid].model);
-            var nr=parseInt(test.name.substring(test.name.length+pos));
-            if(nr!==NaN&&nr>maxNumber )
-                maxNumber=nr;
+        var maxNumber = 1;
+        for (var x = 0; x < _this.city.world.airplanes.length; x++) {
+            var test = _this.city.world.airplanes[x];
+            var pos = test.name.indexOf(allAirplaneTypes[typeid].model);
+            if(pos===0){
+                var nr = parseInt(test.name.substring(allAirplaneTypes[typeid].model.length));
+                if (nr !== NaN && nr > maxNumber)
+                    maxNumber = nr;
+            }
         }
         maxNumber++;
         var ap = new Airplane(_this.city.world);
@@ -510,8 +517,8 @@ export class CityDialog {
         ap.x = _this.city.x;
         ap.y = _this.city.y;
         ap.world = _this.city.world;
-        ap.typeid=typeid;
-        ap.name = allAirplaneTypes[typeid].model+ maxNumber;
+        ap.typeid = typeid;
+        ap.name = allAirplaneTypes[typeid].model + maxNumber;
         ap.speed = allAirplaneTypes[typeid].speed;
         ap.costs = allAirplaneTypes[typeid].costs;
         ap.capacity = allAirplaneTypes[typeid].capacity;
@@ -533,11 +540,11 @@ export class CityDialog {
         this.update(true);
         this.city.world.game.updateTitle();
     }
-    getAirplaneInMarket(){
-         var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-target");
+    getAirplaneInMarket() {
+        var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-target");
         var val = select.value;
-        if(val){
-        for (var x = 0; x < this.city.world.airplanes.length; x++) {
+        if (val) {
+            for (var x = 0; x < this.city.world.airplanes.length; x++) {
                 if (val === this.city.world.airplanes[x].name)
                     return this.city.world.airplanes[x];
             }
@@ -610,17 +617,17 @@ export class CityDialog {
             tr.children[3].innerHTML = (selectsource.value === "Warehouse" ? "" : this.calcPrice(<any>tr.children[4].children[0], 0).toString());
             (<HTMLInputElement>tr.children[4].children[0]).max = storesource[x].toString();
             if (storetarget) {
-                var max=storesource[x];
-                var testap=this.getAirplaneInMarket();
-                if(testap)
-                    max=Math.min(max,testap.capacity-testap.loadedCount);
+                var max = storesource[x];
+                var testap = this.getAirplaneInMarket();
+                if (testap)
+                    max = Math.min(max, testap.capacity - testap.loadedCount);
                 (<HTMLInputElement>tr.children[4].children[0]).readOnly = false;
                 (<HTMLInputElement>tr.children[6].children[0]).readOnly = false;
                 (<HTMLInputElement>tr.children[4].children[0]).max = "40";//storesource[x].toString();
                 (<HTMLInputElement>tr.children[4].children[0]).setAttribute("maxValue", max.toString());
                 tr.children[5].innerHTML = storetarget[x].toString();
                 (<HTMLInputElement>tr.children[6].children[0]).max = "40";//storetarget[x].toString();
-                
+
                 (<HTMLInputElement>tr.children[6].children[0]).setAttribute("maxValue", storetarget[x].toString());
             } else {
                 (<HTMLInputElement>tr.children[4].children[0]).readOnly = true;
@@ -659,10 +666,11 @@ export class CityDialog {
             var needs1 = "";
             var needs2 = "";
             if (product.input1 !== undefined)
-                needs1 = "" + comp.getDailyInput1() + "<br/>" + all[product.input1].getIcon() + " ";
+                needs1 = "" + comp.getDailyInput1() +  all[product.input1].getIcon() + " ";
             tr.children[4].innerHTML = needs1;
             if (product.input2 !== undefined)
-                needs2 = needs2 + "" + comp.getDailyInput2() + "<br/>" + all[product.input2].getIcon();
+                needs2 =  "<br/>" + comp.getDailyInput2() +  all[product.input2].getIcon();
+            tr.children[4].innerHTML = needs1+" "+needs2;
             // tr.children[5].innerHTML = City.getBuildingCostsAsIcon(comp.getBuildingCosts(), comp.getBuildingMaterial(), true);
 
             if (comp.hasLicense) {
@@ -757,9 +765,9 @@ export class CityDialog {
             if (document.activeElement !== tr.children[6].children[0])
                 (<HTMLInputElement>tr.children[6].children[0]).value = this.city.warehouseSellingPrice[x] === undefined ? "" : this.city.warehouseSellingPrice[x].toString();
         }
-         
+
         document.getElementById("citydialog-warehouse-count").innerHTML = "" + this.city.warehouses;
-     
+
         // document.getElementById("costs-warehouses").innerHTML=""+(this.city.warehouses*50);
     }
     updateConstruction() {

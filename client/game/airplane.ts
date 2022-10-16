@@ -157,17 +157,23 @@ export class Airplane {
                 this.action = "load";
                 this.status = "load";
                 this.lastAction = this.lastUpdate;
-                this.route[this.activeRoute].unload();
+                 if(this.activeRoute>=this.route.length){
+                    this.activeRoute=0;
+                 }else
+                    this.route[this.activeRoute].unload();
                 AirplaneDialog.getInstance().update();
             }
             if (this.action === "load" && (this.lastUpdate - this.lastAction) > (3 * 1000 * 60 * 60)) {
 
                 this.lastAction = this.lastUpdate;
-                this.route[this.activeRoute].load();
+                if(this.activeRoute>=this.route.length)
+                    this.activeRoute=0;
+                else
+                    this.route[this.activeRoute].load();
                 AirplaneDialog.getInstance().update();
                 this.activeRoute++;
-                if (this.activeRoute === this.route.length)
-                    this.activeRoute = 0;
+                if(this.activeRoute>=this.route.length)
+                    this.activeRoute=0;
                 var city = this.world.cities[this.route[this.activeRoute].cityid];
                 this.flyTo(city);
 
