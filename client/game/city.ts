@@ -21,7 +21,7 @@ export class City {
     people: number;
     market: number[];
     companies: Company[];
-    airplanesInCity: Airplane[];
+    airplanesInCity: number[];
     private static neutralStartPeople = 1000;
     private static neutralProductionRate = 2;//produce 0.2 times more then neutralPeople consumed 
     neutralDailyProducedToday: number[];

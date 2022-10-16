@@ -20,5 +20,7 @@ export class Icons {
     static food = "<span  class='mdi  mdi-food-variant'></span>";
     static copy="<span  class='mdi  mdi-content-copy'></span>";
     static airplane="<span  class='mdi  mdi-airplane'></span>";
+    static toright="<span  class='mdi  mdi-arrow-right-bold-outline'></span>";
+    static toleft="<span  class='mdi  mdi-arrow-left-bold-outline'></span>";
     
 }

@@ -6,6 +6,7 @@ import { CityDialog } from "game/citydialog";
 import { Game } from "game/game";
 import { AirplaneDialog } from "game/airplanedialog";
 import { RouteDialog } from "game/routedialog";
+import { SquadronDialog } from "game/squadrondialog";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -53,6 +54,18 @@ export class World {
             left,
         };
     }
+    findAirplane(name: string) {
+        for (var x = 0; x < this.airplanes.length; x++) {
+            if (this.airplanes[x].name === name) {
+                return this.airplanes[x];
+            }
+            for (var i = 0; i < this.airplanes[x].squadron.length; i++) {
+                if (this.airplanes[x].squadron[i].name === name) {
+                    return this.airplanes[x].squadron[i];
+                }
+            }
+        }
+    }
     oncontextmenu(evt: MouseEvent) {
         evt.preventDefault();
         /*
@@ -80,6 +93,11 @@ export class World {
             }
             try {
                 RouteDialog.getInstance().close();
+            } catch {
+
+            }
+            try {
+                SquadronDialog.getInstance().close();
             } catch {
 
             }
@@ -118,13 +136,14 @@ export class World {
         createCities(this, 15);
         for (var x = 0; x < 1; x++) {
             var ap = new Airplane(this);
-            ap.name = allAirplaneTypes[0].model + (x+1);
+            ap.name = allAirplaneTypes[0].model + (x + 1);
             ap.speed = allAirplaneTypes[0].speed;
             ap.costs = allAirplaneTypes[0].costs;
             ap.capacity = allAirplaneTypes[0].capacity;
             ap.x = this.cities[0].x;
-            ap.y =this.cities[0].y;
-            this.cities[0].airplanesInCity.push(x); 
+            ap.y = this.cities[0].y;
+            ap.typeid = allAirplaneTypes[0].typeid;
+            this.cities[0].airplanesInCity.push(x);
             ap.world = this;
             this.airplanes.push(ap);
         }

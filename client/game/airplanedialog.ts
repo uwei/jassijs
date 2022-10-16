@@ -4,6 +4,7 @@ import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
 import { Route } from "game/route";
 import { RouteDialog } from "game/routedialog";
+import { SquadronDialog } from "game/squadrondialog";
 var css = `
     table{
         font-size:inherit;
@@ -101,11 +102,15 @@ export class AirplaneDialog {
                     </div>         
                 </div>
                 <div id="airplanedialog-info">
-                    
+                    <input type="text" id="airplanedialog-name"> </input>
+                    <span id="airplanedialog-type">Type:</span><br/>
+                    <span id="airplanedialog-speed">Speed:</span><br/>
+                    <span id="airplanedialog-capacity">Capacity:</span><br/> <button id="edit-squadron">`+ Icons.edit + `</button>
                  </div>
                  <div id="airplanedialog-route">
+                    
                     <input type="checkbox" id="route-active"> active</input>
-                    <button id="edit-route">`+Icons.edit + `</button>
+                    <button id="edit-route">`+ Icons.edit + `</button>
                     <ul id="route-list">
                      
            
@@ -153,6 +158,18 @@ export class AirplaneDialog {
                 else
                     _this.airplane.activeRoute = act * Math.abs(_this.airplane.activeRoute)
             });
+
+            document.getElementById("airplanedialog-name").addEventListener("change", (e) => {
+                var t = <HTMLInputElement>e.target;
+                var val = t.value;
+                if(this.airplane.world.findAirplane(val)!==undefined){
+                    alert("an airplane with name "+val+" already exists");
+                    return;
+                }
+                _this.airplane.name = val;
+                _this.update();
+            });
+
             $('.airplanedialog-tabs').click(function (event) {
                 if (event.target.getAttribute("href") === "#airplanedialog-route" ||
                     (<any>event.target.parentNode).getAttribute("href") === "#airplanedialog-route") {
@@ -162,23 +179,28 @@ export class AirplaneDialog {
                 }
             });
             document.getElementById("edit-route").addEventListener('click', (e) => {
-                RouteDialog.getInstance().airplane=_this.airplane;
-                RouteDialog.getInstance().route=undefined;
-                if(_this.airplane.route.length>0)
-                    RouteDialog.getInstance().route=_this.airplane.route[0];
-                else{
+                RouteDialog.getInstance().airplane = _this.airplane;
+                RouteDialog.getInstance().route = undefined;
+                if (_this.airplane.route.length > 0)
+                    RouteDialog.getInstance().route = _this.airplane.route[0];
+                else {
                     alert("no route defined");
                     return;
                 }
                 RouteDialog.getInstance().show();
             });
-            
+            document.getElementById("edit-squadron").addEventListener('click', (e) => {
+                SquadronDialog.getInstance().airplane = _this.airplane;
+                SquadronDialog.getInstance().show();
+            });
+
+
         }, 500);
         //document.createElement("span");
     }
     enableDropCities(enable: boolean) {
-        var _this=this;
-        console.log("route "+(enable ? "enable" : "disable"));
+        var _this = this;
+        console.log("route " + (enable ? "enable" : "disable"));
         if (this.dropCitiesEnabled && !enable) {
             $(".city").draggable('destroy');
         }
@@ -187,7 +209,7 @@ export class AirplaneDialog {
                 connectToSortable: '#route-list',
                 helper: function (event) {
                     var id = parseInt(event.target.getAttribute("cityid"));
-                    var city=_this.airplane.world.cities[id];
+                    var city = _this.airplane.world.cities[id];
                     var ret = '<li id="route-' + id + '" class="ui-state-default"><img style="width:20px" src="' + city.icon + '" </img>' + city.name + "</li>";
 
                     return $(ret);
@@ -196,7 +218,7 @@ export class AirplaneDialog {
                 revert: 'invalid'
             });
         }
-        this.dropCitiesEnabled=enable;
+        this.dropCitiesEnabled = enable;
     }
     updateData() {
         var _this = this;
@@ -221,7 +243,7 @@ export class AirplaneDialog {
             }
             if (found === undefined) {
                 found = new Route();
-                found.airplane=_this.airplane;
+                found.airplane = _this.airplane;
                 found.cityid = id;
             }
             _this.airplane.route.push(found);
@@ -271,11 +293,18 @@ export class AirplaneDialog {
         this.update(true);
 
     }
+    updateInfo() {
+        if (document.activeElement !== document.getElementById("airplanedialog-name"))
+            (<HTMLInputElement>document.getElementById("airplanedialog-name")).value = this.airplane.name;
+        (<HTMLInputElement>document.getElementById("airplanedialog-type")).innerHTML = "Type: " + this.airplane.typeid;
+        (<HTMLInputElement>document.getElementById("airplanedialog-speed")).innerHTML = "Speed: " + this.airplane.speed;
+        (<HTMLInputElement>document.getElementById("airplanedialog-capacity")).innerHTML = "Capacity:" + this.airplane.loadedCount + "/" + this.airplane.capacity;
+    }
     update(force = false) {
         var _this = this;
         if (this.airplane === undefined)
             return;
-         try {
+        try {
             if (!$(this.dom).dialog('isOpen')) {
                 return;
             }
@@ -296,28 +325,7 @@ export class AirplaneDialog {
             _this.updateData();
         });
         (<any>document.getElementById("route-active")).checked = (this.airplane.activeRoute > -1);
-        /*
-          var companies = this.city.companies;
-          var all = allProducts;
-          for (var x = 0; x < companies.length; x++) {
-              var table = document.getElementById("citydialog-buildings-table");
-              var tr = table.children[0].children[x + 1];
-              var product = all[companies[x].productid];
-              var produce = companies[x].getDailyProduce();
-              tr.children[0].innerHTML = produce + " " + product.getIcon();
-              tr.children[1].innerHTML = product.name + "</td>";
-              tr.children[2].innerHTML = companies[x].buildings + "</td>";
-              tr.children[3].innerHTML = companies[x].workers + "/" + companies[x].getMaxWorkers() + "</td>";
-              tr.children[4].innerHTML = "1000" + "</td>";
-              var needs = "";
-              if (product.input1 !== undefined)
-                  needs = "" + companies[x].getDailyInput1() + " " + all[product.input1].getIcon() + " ";
-              if (product.input2 !== undefined)
-                  needs = needs + "" + companies[x].getDailyInput2() + " " + all[product.input2].getIcon();
-              tr.children[5].innerHTML = needs + "</td>";
-              tr.children[6].innerHTML = '<input type="button" value="+">' + "</td>" + '<input type="button" value="-">' + "</td>";
-  
-          }*/
+        this.updateInfo();
 
     }
     updateTitle() {

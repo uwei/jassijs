@@ -517,13 +517,13 @@ export class CityDialog {
         ap.x = _this.city.x;
         ap.y = _this.city.y;
         ap.world = _this.city.world;
-        ap.typeid = typeid;
+        ap.typeid = allAirplaneTypes[typeid].typeid;
         ap.name = allAirplaneTypes[typeid].model + maxNumber;
         ap.speed = allAirplaneTypes[typeid].speed;
         ap.costs = allAirplaneTypes[typeid].costs;
         ap.capacity = allAirplaneTypes[typeid].capacity;
         _this.city.world.airplanes.push(ap);
-        this.city.airplanesInCity.push(_this.city.world.airplanes.indexOf(ap));
+        this.city.airplanesInCity.push(_this.city.world.airplanes.indexOf(ap)); 
         ap.render();
         _this.city.world.dom.appendChild(ap.dom);
         _this.update(true);
