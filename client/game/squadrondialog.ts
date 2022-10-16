@@ -49,9 +49,6 @@ export class SquadronDialog {
             var pos=_this.airplane.world.airplanes.indexOf(ap);
             var appos=_this.airplane.world.airplanes.indexOf(ap);
             _this.airplane.world.airplanes.splice(pos,1);
-            var city: City = this.airplane.getCurrentCity();
-            pos=city.airplanesInCity.indexOf(appos);
-            city.airplanesInCity.splice(pos,1);
             
             _this.airplane.squadron.push(ap);
             _this.airplane.updateSquadron();
@@ -127,14 +124,14 @@ export class SquadronDialog {
         var selectCity = document.getElementById("airplanes-in-city");
         var selectSquadron = document.getElementById("airplanes-in-squadron");
         var city: City = this.airplane.getCurrentCity();
-        var apid = this.airplane.world.airplanes.indexOf(this.airplane);
-    
+        
         if (city !== undefined) {
             selectCity.innerHTML = "";
-            for (var x = 0; x < city.airplanesInCity.length; x++) {
-                if (city.airplanesInCity[x] !== apid) {
+            var aps=city.getAirplanesInCity();
+            for (var x = 0; x < aps.length; x++) {
+                if (aps[x] !== this.airplane) {
                     var opt: HTMLOptionElement = document.createElement("option");
-                    var toadd = this.airplane.world.airplanes[city.airplanesInCity[x]];
+                    var toadd = aps[x];
                     opt.value = toadd.name;
                     opt.text = toadd.name;
                     selectCity.appendChild(opt);

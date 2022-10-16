@@ -21,7 +21,6 @@ export class City {
     people: number;
     market: number[];
     companies: Company[];
-    airplanesInCity: number[];
     private static neutralStartPeople = 1000;
     private static neutralProductionRate = 2;//produce 0.2 times more then neutralPeople consumed 
     neutralDailyProducedToday: number[];
@@ -37,7 +36,6 @@ export class City {
     domDesc: HTMLSpanElement;
     constructor() {
         this.market = [];
-        this.airplanesInCity = [];
         this.warehouseMinStock = [];
         this.warehouseSellingPrice = [];
         this.createCompanies();
@@ -71,6 +69,15 @@ export class City {
         this.companies.sort((a, b) => {
             return a.productid - b.productid;
         });
+    }
+    getAirplanesInCity():Airplane[]{
+        var ret:Airplane[]=[];
+        for(var x=0;x<this.world.airplanes.length;x++){
+            var ap=this.world.airplanes[x];
+            if(ap.x===this.x&&ap.y===this.y)
+                ret.push(ap);
+        }
+        return ret;
     }
     render(cityid: number) {
         var _this = this;

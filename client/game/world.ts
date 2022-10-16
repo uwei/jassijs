@@ -143,7 +143,6 @@ export class World {
             ap.x = this.cities[0].x;
             ap.y = this.cities[0].y;
             ap.typeid = allAirplaneTypes[0].typeid;
-            this.cities[0].airplanesInCity.push(x);
             ap.world = this;
             this.airplanes.push(ap);
         }

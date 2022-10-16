@@ -518,12 +518,11 @@ export class CityDialog {
         ap.y = _this.city.y;
         ap.world = _this.city.world;
         ap.typeid = allAirplaneTypes[typeid].typeid;
-        ap.name = allAirplaneTypes[typeid].model + maxNumber;
+        ap.name = allAirplaneTypes[typeid].model + maxNumber; 
         ap.speed = allAirplaneTypes[typeid].speed;
         ap.costs = allAirplaneTypes[typeid].costs;
         ap.capacity = allAirplaneTypes[typeid].capacity;
         _this.city.world.airplanes.push(ap);
-        this.city.airplanesInCity.push(_this.city.world.airplanes.indexOf(ap)); 
         ap.render();
         _this.city.world.dom.appendChild(ap.dom);
         _this.update(true);
@@ -584,9 +583,10 @@ export class CityDialog {
                 selectsource.value = "Market";
             }
         }
-        for (var x = 0; x < this.city.airplanesInCity.length; x++) {
+        var allAPs=this.city.getAirplanesInCity();
+        for (var x = 0; x < allAPs.length; x++) {
             var opt: HTMLOptionElement = document.createElement("option");
-            opt.value = this.city.world.airplanes[this.city.airplanesInCity[x]].name;
+            opt.value =allAPs[x].name;
             opt.text = opt.value;
             select.appendChild(opt);
         }

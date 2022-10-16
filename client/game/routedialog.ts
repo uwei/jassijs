@@ -139,9 +139,45 @@ export class RouteDialog {
         document.getElementById("route-copy-prev").addEventListener("click", (e) => {
             _this.copyRoute();
         });
-
-
+        document.getElementById("routedialog-airplane-prev").addEventListener("click", (e) => {
+            _this.prevRoute();
+        });
+        document.getElementById("routedialog-airplane-next").addEventListener("click", (e) => {
+            _this.nextRoute();
+        });
     }
+    prevRoute() {
+        var _this = this;
+        var pos = _this.airplane.world.airplanes.indexOf(_this.airplane);
+        pos--;
+        if (pos === 0)
+            pos = _this.airplane.world.airplanes.length - 1;
+        _this.airplane = _this.airplane.world.airplanes[pos];
+        _this.route = undefined;
+        if (_this.airplane.world.airplanes[pos].route.length === 0) {
+            _this.route = undefined;
+            this.prevRoute();
+            return;
+        }
+        _this.route = _this.airplane.world.airplanes[pos].route[0];
+        _this.update(true);
+    }
+    nextRoute() {
+        var _this = this;
+        var pos = _this.airplane.world.airplanes.indexOf(_this.airplane);
+        pos++;
+        if (pos >= _this.airplane.world.airplanes.length)
+            pos = 0;
+        _this.airplane = _this.airplane.world.airplanes[pos];
+        if (_this.airplane.world.airplanes[pos].route.length === 0) {
+            _this.route = undefined;
+            this.nextRoute();
+            return;
+        }
+        _this.route = _this.airplane.world.airplanes[pos].route[0];
+        _this.update(true);
+    }
+
     copyRoute() {
         var pos = this.route.airplane.route.indexOf(this.route);
         if (pos === 0)
@@ -198,13 +234,13 @@ export class RouteDialog {
                 for (var c = 0; c < city.companies.length; c++) {
                     var prod = allProducts[city.companies[c].productid];
                     if (prod.input1)
-                        store[prod.input1] += Math.round((city.companies[c].workers * prod.input1Amount / 25));
+                        store[prod.input1] += Math.round((1.1*city.companies[c].buildings*25 * prod.input1Amount / 25));
                     if (prod.input2)
-                        store[prod.input2] += Math.round((city.companies[c].workers * prod.input2Amount / 25));
+                        store[prod.input2] += Math.round((1.1*city.companies[c].buildings*25 * prod.input2Amount / 25));
 
                 }
                 for (var y = 0; y < allProducts.length; y++) {
-                    store[y] += Math.round(totalDays * allProducts[y].dailyConsumtion * city.people / 24);
+                    store[y] += Math.round(1.1*totalDays * allProducts[y].dailyConsumtion * city.people / 24);
 
                 }
 
@@ -231,8 +267,9 @@ export class RouteDialog {
         var sdom = `
           <div>
           <div>
-            <input id="routedialog-prev" type="button" value="<"/>
-            <input id="routedialog-next" type="button" value=">"/>
+            <input id="routedialog-airplane-prev" type="button" value="<"/>
+            <span id="routedialog-airplane-name"></span>
+            <input id="routedialog-airplane-next" type="button" value=">"/>
             <select id="route-select" >
                     
                     
@@ -351,6 +388,7 @@ export class RouteDialog {
         } catch {
             return;
         }
+        document.getElementById("routedialog-airplane-name").innerHTML = this.airplane.name;
         var select: HTMLSelectElement = <any>document.getElementById("route-select");
         select.innerHTML = "";
         for (var x = 0; x < this.airplane.route.length; x++) {

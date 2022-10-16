@@ -45,11 +45,11 @@ export class Airplane {
               rt.cityid=x;
               this.route.push(rt);
           }*/
-    }
+    } 
     getCurrentCity(){
-        var apid = this.world.airplanes.indexOf(this);
+        
         for (var x = 0; x < this.world.cities.length; x++) {
-            if (this.world.cities[x].airplanesInCity.indexOf(apid) > -1) {
+            if (this.world.cities[x].x===this.x&&this.world.cities[x].y===this.y) {
                 return this.world.cities[x];
             }
         }
@@ -99,12 +99,7 @@ export class Airplane {
         this.targetX = x;
         this.targetY = y;
         this.update();
-        for (var i = 0; i < this.world.cities.length; i++) {
-            var pos = this.world.cities[i].airplanesInCity.indexOf(this.world.airplanes.indexOf(this)); 
-            if (pos !== -1) {
-                this.world.cities[i].airplanesInCity.splice(pos, 1);
-            }
-        }
+       
     }
     select() {
         if (this.dom)
@@ -120,7 +115,6 @@ export class Airplane {
         this.targetY = undefined;
         this.action = "wait";
         this.status = "";
-        this.world.findCityAt(this.x, this.y)?.airplanesInCity.push(this.world.airplanes.indexOf(this));
         this.dom.style.transform = "rotate(0deg)";
         if (this.activeRoute !== -1) {
             console.log("unload now");
