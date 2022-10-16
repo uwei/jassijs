@@ -5,6 +5,7 @@ import windows from "jassijs/base/Windows";
 import { CityDialog } from "game/citydialog";
 import { Game } from "game/game";
 import { AirplaneDialog } from "game/airplanedialog";
+import { RouteDialog } from "game/routedialog";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -74,6 +75,11 @@ export class World {
             try {
                 AirplaneDialog.getInstance().close();
 
+            } catch {
+
+            }
+            try {
+                RouteDialog.getInstance().close();
             } catch {
 
             }
