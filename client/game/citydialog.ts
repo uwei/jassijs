@@ -51,7 +51,7 @@ export class CityDialog {
         if (ret > ((0.0 + prod) * 4 / 3))
             color = "LightPink";
             
-        (<HTMLElement>el.parentElement.parentElement.children[3]).style.background = color;
+        (<HTMLElement>el.parentElement.parentElement.children[4]).style.background = color;
         return ret;
     }
     private create() {
@@ -120,18 +120,18 @@ export class CityDialog {
                         <tr>
                             <th>Name</th>
                             <th></th>
+                            <th></th>
                             <th>
-                                <select id="citydialog-market-table-source" style="width:55px">
+                                <select id="citydialog-market-table-source" style="width:80px">
                                     <option value="Market">Market</option>
                                 </select>
                             </th>
                             <th>Price</th>
-                            <th>Buy</th>
-                            <th> <select id="citydialog-market-table-target" style="width:50px">
+                            <th></th>
+                            <th> <select id="citydialog-market-table-target" style="width:80px">
                                     <option value="placeholder">placeholder</option>
                                 </select>
                             </th>
-                            <th>Sell</th>
                             
                         </tr>
                        ${(function fun() {
@@ -140,26 +140,26 @@ export class CityDialog {
                     console.log(id + " " + change);
                 }
                 for (var x = 0; x < allProducts.length; x++) {
-                    ret = ret + "<tr>";
+                    ret = ret + '<tr style="position:relative">';
                     ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + allProducts[x].name + "</td>";
-                    ret = ret + "<td>0</td>";
-                    ret = ret + '<td style="width:40px;"><span>0</span><span id="citydialog-market-info_' + x + '"></span></td>';
-                    ret = ret + '<td>' +
+                    ret = ret + '<td style="width:20px">' +
                         '<input class="cdmslider" id="citydialog-market-buy-slider_' + x + '"' +
                         'type="range" min="0" max="10" step="1.0" value="0"' +
-                        'style="overflow: hidden;width: 50%;height: 70%;"' +
+                        'style="z-index:'+(100-x)+'; overflow:float;position:absolute;height:1px;top:16px;width: 100px"' +
                         //'oninput="this.nextElementSibling.innerHTML = this.value;' +
                         //'this.parentNode.parentNode.children[3].innerHTML=1;' +
-                        '">' + "<span>0</span></td>";
+                        '>';
                     ret = ret + "<td>0</td>";
-                    ret = ret + '<td>' +
+                    ret = ret + '<td style="width:40px;"><span>0</span><span id="citydialog-market-info_' + x + '"></span></td>';
+                    ret = ret + '<td style="width:20px">' +
                         '<input class="cdmslider" id="citydialog-market-sell-slider_' + x + '"' +
                         'type="range" min="0" max="500" step="1.0" value="0"' +
-                        'style="overflow: hidden;width: 50%;height: 70%;"' +
+                        'style="z-index:'+(100-x)+'; overflow:float;position:absolute;height:1px;top:16px;width: 100px"' +
                         //'oninput="this.nextElementSibling.innerHTML = this.value;' +
                         // 'this.parentNode.parentNode.children[3].innerHTML=value;' +
-                        '">' + "<span>0</span></td>";
+                        '>';
+                    ret = ret + "<td>0</td>";
                     ret = ret + "<td></td>";
                     ret = ret + "</tr>";
                 }
@@ -336,8 +336,8 @@ export class CityDialog {
                 if(val===0)
                     document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                 else
-                    document.getElementById("citydialog-market-info_" + id).innerHTML = "<br/>x" + val + "<br/>= -" + val * price;
-                t.parentNode.parentNode.children[3].children[0].innerHTML = "" + price;
+                    document.getElementById("citydialog-market-info_" + id).innerHTML = "x" + val + "<br/>= -" + val * price;
+                t.parentNode.parentNode.children[4].children[0].innerHTML = "" + price;
             });
             document.getElementById("citydialog-market-sell-slider_" + x).addEventListener("input", (e) => {
                 var t = <HTMLInputElement>e.target;
@@ -348,7 +348,7 @@ export class CityDialog {
                     document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                 else
                     document.getElementById("citydialog-market-info_" + id).innerHTML = "<br/>x" + val + "<br/>= -" + val * price;
-                t.parentNode.parentNode.children[3].children[0].innerHTML = "" + price;
+                t.parentNode.parentNode.children[4].children[0].innerHTML = "" + price;
             });
             var inedit = false;
             document.getElementById("citydialog-market-buy-slider_" + x).addEventListener("change", (e) => {
@@ -593,28 +593,29 @@ export class CityDialog {
             var table = document.getElementById("citydialog-market-table");
             var tr = table.children[0].children[x + 1];
 
-            tr.children[2].innerHTML = storesource[x].toString();
-            tr.children[3].children[0].innerHTML = (selectsource.value === "Warehouse" ? "" : this.calcPrice(<any>tr.children[4].children[0], 0).toString());
-            (<HTMLInputElement>tr.children[4].children[0]).max = storesource[x].toString();
+            tr.children[3].innerHTML = storesource[x].toString();
+            var buyslider=<HTMLInputElement> document.getElementById("citydialog-market-buy-slider_" + x);
+            var sellslider=<HTMLInputElement> document.getElementById("citydialog-market-sell-slider_" + x);
+            tr.children[4].children[0].innerHTML = (selectsource.value === "Warehouse" ? "" : this.calcPrice(buyslider, 0).toString());
             if (storetarget) {
                 var max = storesource[x];
                 var testap = this.getAirplaneInMarket();
                 if (testap)
                     max = Math.min(max, testap.capacity - testap.loadedCount);
-                (<HTMLInputElement>tr.children[4].children[0]).readOnly = false;
-                (<HTMLInputElement>tr.children[6].children[0]).readOnly = false;
-                (<HTMLInputElement>tr.children[4].children[0]).max = "40";//storesource[x].toString();
-                (<HTMLInputElement>tr.children[4].children[0]).setAttribute("maxValue", max.toString());
-                tr.children[5].innerHTML = storetarget[x].toString();
-                (<HTMLInputElement>tr.children[6].children[0]).max = "40";//storetarget[x].toString();
+                buyslider.readOnly = false;
+                sellslider.readOnly = false;
+                buyslider.max = "40";//storesource[x].toString();
+                buyslider.setAttribute("maxValue", max.toString());
+                tr.children[6].innerHTML = storetarget[x].toString();
+                sellslider.max = "40";//storetarget[x].toString();
 
-                (<HTMLInputElement>tr.children[6].children[0]).setAttribute("maxValue", storetarget[x].toString());
+                sellslider.setAttribute("maxValue", storetarget[x].toString());
             } else {
-                (<HTMLInputElement>tr.children[4].children[0]).readOnly = true;
-                (<HTMLInputElement>tr.children[6].children[0]).readOnly = true;
-                tr.children[5].innerHTML = "";
-                (<HTMLInputElement>tr.children[4].children[0]).max = "0";
-                (<HTMLInputElement>tr.children[6].children[0]).max = "0";
+                buyslider.readOnly = true;
+                sellslider.readOnly = true;
+                tr.children[6].innerHTML = "";
+                buyslider.max = "0";
+                sellslider.max = "0";
             }
         }
 
@@ -823,7 +824,7 @@ export class CityDialog {
         this.update();
 
         $(this.dom).dialog({
-            width: "450px",
+            width: "400px",
             draggable: true,
             // position: { my: "left top", at: "right top", of: $(AirplaneDialog.getInstance().dom) },
             open: function (event, ui) {

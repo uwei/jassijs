@@ -322,15 +322,15 @@ export class RouteDialog {
                     ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + allProducts[x].name + "</td>";
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-amount" id="load-market-max-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
+                        'style="width: 40px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-market-until-amount" id="load-market-until-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
+                        'style="width: 40px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
+                        'style="width: 40px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-amount" id="load-warehouse-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
+                        'style="width: 40px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-until-amount" id="load-warehouse-until-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
+                        'style="width: 40px;"' + '"></td>';
                     ret = ret + "</tr>";
                 }
                 return ret;
@@ -421,7 +421,7 @@ export class RouteDialog {
         this.update();
         //ui-tabs-active
         $(this.dom).dialog({
-            width: "583px",
+            width: "400px",
             draggable:true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {

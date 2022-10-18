@@ -144,7 +144,7 @@ export class SquadronDialog {
         //ui-tabs-active
         $(this.dom).dialog({
             title: "Modify Squadron",
-            width: "583px",
+            width: "400px",
             draggable:true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
