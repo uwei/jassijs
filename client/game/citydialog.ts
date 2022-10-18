@@ -28,7 +28,7 @@ export class CityDialog {
             CityDialog.instance = new CityDialog();
         return CityDialog.instance;
     }
- 
+
     private calcPrice(el: HTMLInputElement, val: number) {
         var id = Number(el.id.split("_")[1]);
         var isProducedHere = false;
@@ -41,15 +41,16 @@ export class CityDialog {
         if (el.id.indexOf("sell") > -1)
             val = -val;
         var ret = allProducts[id].calcPrice(this.city.people, this.city.market[id] - val, isProducedHere);
-        var color = "green";
+        var color = "#32CD32";
         if (ret > ((0.0 + prod) * 2 / 3))
-            color = "LightGreen";
+            color = "#DAF7A6 ";
         if (ret > ((0.0 + prod) * 2.5 / 3))
             color = "white";
         if (ret > ((0.0 + prod) * 1))
-            color = "LightPink";
+            color = "Yellow";
         if (ret > ((0.0 + prod) * 4 / 3))
-            color = "red";
+            color = "LightPink";
+            
         (<HTMLElement>el.parentElement.parentElement.children[3]).style.background = color;
         return ret;
     }
@@ -65,7 +66,7 @@ export class CityDialog {
         if (old) {
             old.parentNode.removeChild(old);
         }
-      
+
         var products = allProducts;
         var _this = this;
         var city = _this.city;
@@ -143,7 +144,7 @@ export class CityDialog {
                     ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + allProducts[x].name + "</td>";
                     ret = ret + "<td>0</td>";
-                    ret = ret + "<td>0</td>";
+                    ret = ret + '<td style="width:40px;"><span>0</span><span id="citydialog-market-info_' + x + '"></span></td>';
                     ret = ret + '<td>' +
                         '<input class="cdmslider" id="citydialog-market-buy-slider_' + x + '"' +
                         'type="range" min="0" max="10" step="1.0" value="0"' +
@@ -331,15 +332,23 @@ export class CityDialog {
                 var t = <HTMLInputElement>e.target;
                 var val = _this.getSliderValue(t);
                 var price = _this.calcPrice(t, val);
-                t.nextElementSibling.innerHTML = "" + val + " " + val * price;
-                t.parentNode.parentNode.children[3].innerHTML = "" + price;
+                var id = parseInt(t.id.split("_")[1]);
+                if(val===0)
+                    document.getElementById("citydialog-market-info_" + id).innerHTML = "";
+                else
+                    document.getElementById("citydialog-market-info_" + id).innerHTML = "<br/>x" + val + "<br/>= -" + val * price;
+                t.parentNode.parentNode.children[3].children[0].innerHTML = "" + price;
             });
             document.getElementById("citydialog-market-sell-slider_" + x).addEventListener("input", (e) => {
                 var t = <HTMLInputElement>e.target;
                 var val = _this.getSliderValue(t);
                 var price = _this.calcPrice(t, val);
-                t.nextElementSibling.innerHTML = "" + val + " " + val * price;
-                t.parentNode.parentNode.children[3].innerHTML = "" + price;
+                var id = parseInt(t.id.split("_")[1]);
+                if(val===0)
+                    document.getElementById("citydialog-market-info_" + id).innerHTML = "";
+                else
+                    document.getElementById("citydialog-market-info_" + id).innerHTML = "<br/>x" + val + "<br/>= -" + val * price;
+                t.parentNode.parentNode.children[3].children[0].innerHTML = "" + price;
             });
             var inedit = false;
             document.getElementById("citydialog-market-buy-slider_" + x).addEventListener("change", (e) => {
@@ -351,7 +360,7 @@ export class CityDialog {
                 var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
                 var val = _this.getSliderValue(t);
                 _this.sellOrBuy(id, val, _this.calcPrice(t, val), _this.getStore(), selectsource.value === "Warehouse");
-                t.nextElementSibling.innerHTML = "0";
+                document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                 t.value = "0";
                 inedit = false;
 
@@ -365,7 +374,7 @@ export class CityDialog {
                 var id = Number(t.id.split("_")[1]);
                 var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
                 _this.sellOrBuy(id, -val, _this.calcPrice(t, val), _this.getStore(), selectsource.value === "Warehouse");
-                t.nextElementSibling.innerHTML = "0";
+                document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                 t.value = "0";
                 inedit = false;
 
@@ -476,7 +485,7 @@ export class CityDialog {
         for (var x = 0; x < _this.city.world.airplanes.length; x++) {
             var test = _this.city.world.airplanes[x];
             var pos = test.name.indexOf(allAirplaneTypes[typeid].model);
-            if(pos===0){
+            if (pos === 0) {
                 var nr = parseInt(test.name.substring(allAirplaneTypes[typeid].model.length));
                 if (nr !== NaN && nr > maxNumber)
                     maxNumber = nr;
@@ -489,7 +498,7 @@ export class CityDialog {
         ap.y = _this.city.y;
         ap.world = _this.city.world;
         ap.typeid = allAirplaneTypes[typeid].typeid;
-        ap.name = allAirplaneTypes[typeid].model + maxNumber; 
+        ap.name = allAirplaneTypes[typeid].model + maxNumber;
         ap.speed = allAirplaneTypes[typeid].speed;
         ap.costs = allAirplaneTypes[typeid].costs;
         ap.capacity = allAirplaneTypes[typeid].capacity;
@@ -554,10 +563,10 @@ export class CityDialog {
                 selectsource.value = "Market";
             }
         }
-        var allAPs=this.city.getAirplanesInCity();
+        var allAPs = this.city.getAirplanesInCity();
         for (var x = 0; x < allAPs.length; x++) {
             var opt: HTMLOptionElement = document.createElement("option");
-            opt.value =allAPs[x].name;
+            opt.value = allAPs[x].name;
             opt.text = opt.value;
             select.appendChild(opt);
         }
@@ -585,7 +594,7 @@ export class CityDialog {
             var tr = table.children[0].children[x + 1];
 
             tr.children[2].innerHTML = storesource[x].toString();
-            tr.children[3].innerHTML = (selectsource.value === "Warehouse" ? "" : this.calcPrice(<any>tr.children[4].children[0], 0).toString());
+            tr.children[3].children[0].innerHTML = (selectsource.value === "Warehouse" ? "" : this.calcPrice(<any>tr.children[4].children[0], 0).toString());
             (<HTMLInputElement>tr.children[4].children[0]).max = storesource[x].toString();
             if (storetarget) {
                 var max = storesource[x];
@@ -637,11 +646,11 @@ export class CityDialog {
             var needs1 = "";
             var needs2 = "";
             if (product.input1 !== undefined)
-                needs1 = "" + comp.getDailyInput1() +  all[product.input1].getIcon() + " ";
+                needs1 = "" + comp.getDailyInput1() + all[product.input1].getIcon() + " ";
             tr.children[4].innerHTML = needs1;
             if (product.input2 !== undefined)
-                needs2 =  "<br/>" + comp.getDailyInput2() +  all[product.input2].getIcon();
-            tr.children[4].innerHTML = needs1+" "+needs2;
+                needs2 = "<br/>" + comp.getDailyInput2() + all[product.input2].getIcon();
+            tr.children[4].innerHTML = needs1 + " " + needs2;
             // tr.children[5].innerHTML = City.getBuildingCostsAsIcon(comp.getBuildingCosts(), comp.getBuildingMaterial(), true);
 
             if (comp.hasLicense) {
@@ -825,7 +834,7 @@ export class CityDialog {
                     _this.city.world.game.resume();
                 }
             }
-        }).dialog("widget").draggable("option","containment","none");
+        }).dialog("widget").draggable("option", "containment", "none");
         $(this.dom).parent().css({ position: "fixed" });
 
     }
