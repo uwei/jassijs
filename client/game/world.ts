@@ -7,6 +7,7 @@ import { Game } from "game/game";
 import { AirplaneDialog } from "game/airplanedialog";
 import { RouteDialog } from "game/routedialog";
 import { SquadronDialog } from "game/squadrondialog";
+import { Company } from "game/company";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -134,6 +135,7 @@ export class World {
 
     newGame() {
         createCities(this, 15);
+       
         for (var x = 0; x < 1; x++) {
             var ap = new Airplane(this);
             ap.name = allAirplaneTypes[0].model + (x + 1);
@@ -148,6 +150,21 @@ export class World {
         }
         this.cities[0].houses = 1;
         this.cities[0].warehouses = 1;
+/*
+
+         this.cities=[this.cities[0]];
+        this.cities[0].companies=[];
+        for(var x=0;x<19;x++){
+            var comp=new Company();
+            comp.city=this.cities[0];
+            comp.productid=x;
+            comp.workers=20*10;
+            comp.buildings=10;
+            this.cities[0].companies.push(comp);
+            this.cities[0].warehouse[x]=10000;
+        }
+        this.cities[0].people=10*19*20;
+        this.cities[0].houses=10*19*20/100+1;*/
     }
     render(dom: HTMLElement) {
         var _this = this;

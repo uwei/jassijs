@@ -5,31 +5,7 @@ import { Icons } from "game/icons";
 import { Route } from "game/route";
 import { RouteDialog } from "game/routedialog";
 import { SquadronDialog } from "game/squadrondialog";
-var css = `
-    table{
-        font-size:inherit;
-    }
 
-    .airplanedialog >*{
-        font-size:10px; 
-    }
-    .ui-dialog-title{ 
-        font-size:10px;
-    }
-    .ui-dialog-titlebar{
-        height:10px;
-    }
-    #route-list>li{
-        list-style-type: none; /* Remove bullets */
-        padding: 0; /* Remove padding */
-        margin: 0;
-    }
-    #route-list{
-        margin-block-start: 0px;
-        margin-block-end: 0px;
-        padding-inline-start: 0px;
-    }
-`;
 //@ts-ignore
 window.airplane = function () {
     return AirplaneDialog.getInstance().airplane;
@@ -55,19 +31,7 @@ export class AirplaneDialog {
     get airplane() {
         return this._airplane;
     }
-    private createStyle() {
-        var style = document.createElement('style');
-        style.id = "airplanedialogcss";
-        style.type = 'text/css';
-        style.innerHTML = css;
-
-        var old = document.getElementById("airplanedialogcss");
-        if (old) {
-            old.parentNode.removeChild(old);
-        }
-        document.getElementsByTagName('head')[0].appendChild(style);
-    }
-
+ 
     private create() {
         //template for code reloading
         var sdom = `
@@ -80,7 +44,6 @@ export class AirplaneDialog {
         if (old) {
             old.parentNode.removeChild(old);
         }
-        this.createStyle();
         var airplane = this.airplane;
         var products = allProducts;
         var _this = this;
@@ -343,6 +306,7 @@ export class AirplaneDialog {
         //ui-tabs-active
         $(this.dom).dialog({
             width: "190px",
+            draggable:true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
                 _this.update(true);
@@ -350,7 +314,7 @@ export class AirplaneDialog {
             close: function () {
                 _this.enableDropCities(false);
             }
-        });
+        }).dialog("widget").draggable("option","containment","none");
         $(this.dom).parent().css({ position: "fixed" });
 
     }

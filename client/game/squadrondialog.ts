@@ -4,11 +4,6 @@ import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
 import { Route } from "game/route";
 import { City } from "game/city";
-var css = `
-  .squadronialog >*{
-        font-size:10px; 
-    }
-`;
 
 export class SquadronDialog {
     dom: HTMLDivElement;
@@ -26,18 +21,6 @@ export class SquadronDialog {
         return SquadronDialog.instance;
     }
 
-    private createStyle() {
-        var style = document.createElement('style');
-        style.id = "routedialogcss";
-        style.type = 'text/css';
-        style.innerHTML = css;
-
-        var old = document.getElementById("routedialogcss");
-        if (old) {
-            old.parentNode.removeChild(old);
-        }
-        document.getElementsByTagName('head')[0].appendChild(style);
-    }
     bindActions() {
         var _this=this;
         document.getElementById("sqadron-add").addEventListener('click', (e) => {
@@ -75,7 +58,6 @@ export class SquadronDialog {
         if (old) {
             old.parentNode.removeChild(old);
         }
-        this.createStyle();
         var airplane = this.airplane;
         var products = allProducts;
         var _this = this;
@@ -163,13 +145,14 @@ export class SquadronDialog {
         $(this.dom).dialog({
             title: "Modify Squadron",
             width: "583px",
+            draggable:true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
                 _this.update();
             },
             close: function () {
             }
-        });
+        }).dialog("widget").draggable("option","containment","none");
         $(this.dom).parent().css({ position: "fixed" });
 
     }

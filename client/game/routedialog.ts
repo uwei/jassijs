@@ -3,11 +3,6 @@ import { allProducts, Product } from "game/product";
 import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
 import { Route } from "game/route";
-var css = `
-  .routedialog >*{
-        font-size:10px; 
-    }
-`;
 
 export class RouteDialog {
     dom: HTMLDivElement;
@@ -27,18 +22,7 @@ export class RouteDialog {
         return RouteDialog.instance;
     }
 
-    private createStyle() {
-        var style = document.createElement('style');
-        style.id = "routedialogcss";
-        style.type = 'text/css';
-        style.innerHTML = css;
-
-        var old = document.getElementById("routedialogcss");
-        if (old) {
-            old.parentNode.removeChild(old);
-        }
-        document.getElementsByTagName('head')[0].appendChild(style);
-    }
+  
     bindActions() {
         var _this = this;
         for (var x = 0; x < allProducts.length; x++) {
@@ -234,9 +218,9 @@ export class RouteDialog {
                 for (var c = 0; c < city.companies.length; c++) {
                     var prod = allProducts[city.companies[c].productid];
                     if (prod.input1)
-                        store[prod.input1] += Math.round((1.1*city.companies[c].buildings*25 * prod.input1Amount / 25));
+                        store[prod.input1] += Math.round((1.1*city.companies[c].buildings* prod.input1Amount ));
                     if (prod.input2)
-                        store[prod.input2] += Math.round((1.1*city.companies[c].buildings*25 * prod.input2Amount / 25));
+                        store[prod.input2] += Math.round((1.1*city.companies[c].buildings * prod.input2Amount ));
 
                 }
                 for (var y = 0; y < allProducts.length; y++) {
@@ -260,7 +244,6 @@ export class RouteDialog {
         if (old) {
             old.parentNode.removeChild(old);
         }
-        this.createStyle();
         var airplane = this.airplane;
         var products = allProducts;
         var _this = this;
@@ -439,13 +422,14 @@ export class RouteDialog {
         //ui-tabs-active
         $(this.dom).dialog({
             width: "583px",
+            draggable:true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
                 _this.update(true);
             },
             close: function () {
             }
-        });
+        }).dialog("widget").draggable("option","containment","none");
         $(this.dom).parent().css({ position: "fixed" });
 
     }

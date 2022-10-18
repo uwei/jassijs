@@ -1,7 +1,7 @@
 import { World } from "game/world";
 import { CityDialog } from "game/citydialog";
 import { allProducts } from "game/product";
-import { Company } from "game/company";
+import { Company, debugNeed } from "game/company";
 import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
 
@@ -21,7 +21,7 @@ export class City {
     people: number;
     market: number[];
     companies: Company[];
-    private static neutralStartPeople = 1000;
+    static neutralStartPeople = 200;
     private static neutralProductionRate = 2;//produce 0.2 times more then neutralPeople consumed 
     neutralDailyProducedToday: number[];
     consumedToday: number[];
@@ -34,6 +34,7 @@ export class City {
     warehouseSellingPrice: number[];
     type = "City";
     domDesc: HTMLSpanElement;
+   
     constructor() {
         this.market = [];
         this.warehouseMinStock = [];
@@ -44,11 +45,11 @@ export class City {
             this.score.push(50);
             for (var y = 0; y < this.companies.length; y++) {
                 if (this.companies[y].productid === x) {
-                    val = 20 * Math.round(City.neutralStartPeople * allProducts[x].dailyConsumtion * City.neutralProductionRate);
+                    val =  20*Math.round(City.neutralStartPeople * allProducts[x].dailyConsumtion * City.neutralProductionRate);
                 }
             }
             if (val === 0) {
-                val = Math.round(15 * City.neutralStartPeople * allProducts[x].dailyConsumtion);
+                val = 10*Math.round(City.neutralStartPeople * allProducts[x].dailyConsumtion * City.neutralProductionRate);
 
             }
             this.warehouseMinStock.push(undefined);
@@ -105,7 +106,8 @@ export class City {
 
     }
     updateNeutralCompanies() {
-
+        if(this.people>3000)
+            return;
         //neutral companies
         if (this.neutralDailyProducedToday === undefined) {
             this.neutralDailyProducedToday = [];
@@ -175,10 +177,10 @@ export class City {
     }
     updatePeople(){
         var newPeople=1;
-        while(this.people<(1000+this.houses*100)&&newPeople>0){
+        while(this.people<(City.neutralStartPeople+this.houses*100)&&newPeople>0){
             var comps=[];
             for(var x=0;x<this.companies.length;x++){
-                if((this.companies[x].buildings*25)>this.companies[x].workers)
+                if((this.companies[x].buildings*Company.workerInCompany)>this.companies[x].workers)
                     comps.push(x);
             }
             if(comps.length===0)
@@ -189,7 +191,7 @@ export class City {
             this.companies[comps[winner]].workers++;
             newPeople--;
         }
-        while(this.people>(1000+this.houses*100)){
+        while(this.people>(City.neutralStartPeople+this.houses*100)){
             var comps=[];
             for(var x=0;x<this.companies.length;x++){
                 if(this.companies[x].workers>0)
@@ -213,14 +215,15 @@ export class City {
             }
         }
         var dayProcent = this.world.game.date.getHours() / 24;
-        if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
+        if (this.world.game.date.getHours() ===23) {
             dayProcent = 1;
 
         }
 
         for (var x = 0; x < allProducts.length; x++) {
             var totalDailyConsumtion = Math.round(allProducts[x].dailyConsumtion * this.people);
-            if (totalDailyConsumtion < 0)
+            totalDailyConsumtion--;//never go down
+            if (totalDailyConsumtion < 1)
                 totalDailyConsumtion = 1;
             var untilNow = Math.round(totalDailyConsumtion * dayProcent);
             if (untilNow > this.consumedToday[x]) {
@@ -252,7 +255,7 @@ export class City {
                     this.score[x] = Math.round((this.score[x] - 0.15) * 100) / 100;
 
                     // if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
-                    //     console.log(x+"zu teuer " + price + ">" + priceMax);
+                       // console.log(x+" zu teuer " + price + ">" + priceMax);
 
 
                 }
@@ -264,7 +267,9 @@ export class City {
 
             }
             if (dayProcent === 1) {
-                this.consumedToday[x] = 0;
+               
+             //  console.log("consumed "+x+"  "+this.consumedToday[x]);
+                 this.consumedToday[x] = 0;
             }
         }
     }
@@ -293,7 +298,7 @@ export class City {
             this.world.game.changeMoney(-this.houses * 42, "daily costs houses", this);
 
         if (this.people - 1000 > 0) {
-            this.world.game.changeMoney(Math.round((this.people - 1000) * 1.6), "rental fee", this);
+            this.world.game.changeMoney(Math.round((this.people - City.neutralStartPeople) * 1.6), "rental fee", this);
         }
         var companycosts = 0;
         for (var x = 0; x < this.companies.length; x++) {
@@ -321,6 +326,12 @@ export class City {
         if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             //a new day starts
             this.updateDalyCosts();
+        }
+        if(this.world.game.date.getHours()===23){
+            for(var x=0;x<debugNeed.length;x++){
+               // console.log("needed "+x+" "+debugNeed[x]);
+                debugNeed[x]=0;
+            }
         }
         this.lastUpdate = this.world.game.date.getTime();
     }
@@ -463,7 +474,7 @@ export function createCities(world: World, count: number) {
 
         }
         city.world = world;
-        city.people = 1000;
+        city.people = City.neutralStartPeople;
         var num = getRandomInt(allCities.length);
         while (allready.indexOf(num) !== -1) {
             num = getRandomInt(allCities.length);

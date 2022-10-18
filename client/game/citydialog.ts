@@ -3,20 +3,8 @@ import { allProducts, Product } from "game/product";
 import { Icons } from "game/icons";
 import { Airplane, allAirplaneTypes } from "game/airplane";
 import { AirplaneDialog } from "game/airplanedialog";
-var css = `
-    table{
-        font-size:inherit;
-    }
-    .citydialog >*{
-        font-size:10px;
-    }
-    .ui-dialog-title{
-        font-size:10px;
-    }
-    .ui-dialog-titlebar{
-        height:10px;
-    } 
-`;
+import { Company } from "game/company";
+
 //@ts-ignore
 window.city = function () {
     return CityDialog.getInstance().city;
@@ -40,18 +28,7 @@ export class CityDialog {
             CityDialog.instance = new CityDialog();
         return CityDialog.instance;
     }
-    private createStyle() {
-        var style = document.createElement('style');
-        style.id = "citydialogcss";
-        style.type = 'text/css';
-        style.innerHTML = css;
-
-        var old = document.getElementById("citydialogcss");
-        if (old) {
-            old.parentNode.removeChild(old);
-        }
-        document.getElementsByTagName('head')[0].appendChild(style);
-    }
+ 
     private calcPrice(el: HTMLInputElement, val: number) {
         var id = Number(el.id.split("_")[1]);
         var isProducedHere = false;
@@ -88,8 +65,7 @@ export class CityDialog {
         if (old) {
             old.parentNode.removeChild(old);
         }
-        this.createStyle();
-
+      
         var products = allProducts;
         var _this = this;
         var city = _this.city;
@@ -412,10 +388,8 @@ export class CityDialog {
                 var comp = _this.city.companies[id];
 
                 _this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building");
-                // comp.workers += 25;
                 comp.buildings++;
                 _this.update();
-                //alert("create x");
             });
             document.getElementById("delete-factory_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
@@ -425,14 +399,11 @@ export class CityDialog {
                 var comp = _this.city.companies[id];
                 if (comp.buildings > 0)
                     comp.buildings--;
-                var unempl = this.city.companies[id].workers - (this.city.companies[id].buildings * 25);
+                var unempl = this.city.companies[id].workers - (this.city.companies[id].buildings * Company.workerInCompany);
                 if (unempl > 0) {
                     this.city.companies[id].workers -= unempl;
                     this.city.transferWorker(unempl);
                 }
-                /*if (comp.workers > comp.buildings * 25) {
-                    comp.workers = comp.buildings * 25;
-                }*/
                 _this.update();
             });
             document.getElementById("buy-license_" + x).addEventListener("click", (evt) => {
@@ -712,7 +683,7 @@ export class CityDialog {
         document.getElementById("count-warehouses").innerHTML = "" + this.city.warehouses;
 
         document.getElementById("houses").innerHTML = "" + (this.city.houses + "/" + this.city.houses);
-        document.getElementById("renter").innerHTML = "" + (this.city.people - 1000 + "/" + this.city.houses * 100);
+        document.getElementById("renter").innerHTML = "" + (this.city.people - City.neutralStartPeople + "/" + this.city.houses * 100);
         if (this.city.canBuild(25000, [40, 80]) !== "") {
             document.getElementById("buy-house").setAttribute("disabled", "");
         } else {
@@ -740,10 +711,10 @@ export class CityDialog {
         for (var i = 0; i < this.city.companies.length; i++) {
             var test = allProducts[this.city.companies[i].productid];
             if (test.input1 !== undefined) {
-                needs[test.input1] += (Math.round(this.city.companies[i].workers * test.input1Amount / 25));
+                needs[test.input1] += (Math.round(this.city.companies[i].workers * test.input1Amount / Company.workerInCompany));
             }
             if (test.input2 === x) {
-                needs[test.input2] += (Math.round(this.city.companies[i].workers * test.input2Amount / 25));
+                needs[test.input2] += (Math.round(this.city.companies[i].workers * test.input2Amount / Company.workerInCompany));
             }
         }
         for (var x = 0; x < allProducts.length; x++) {
@@ -755,7 +726,7 @@ export class CityDialog {
             var product = allProducts[x];
             for (var i = 0; i < this.city.companies.length; i++) {
                 if (this.city.companies[i].productid === x) {
-                    prod = Math.round(this.city.companies[i].workers * product.dailyProduce / 25).toString();
+                    prod = Math.round(this.city.companies[i].workers * product.dailyProduce / Company.workerInCompany).toString();
                 }
             }
             tr.children[3].innerHTML = prod;
@@ -844,6 +815,7 @@ export class CityDialog {
 
         $(this.dom).dialog({
             width: "450px",
+            draggable: true,
             // position: { my: "left top", at: "right top", of: $(AirplaneDialog.getInstance().dom) },
             open: function (event, ui) {
                 _this.update(true);
@@ -853,7 +825,7 @@ export class CityDialog {
                     _this.city.world.game.resume();
                 }
             }
-        });
+        }).dialog("widget").draggable("option","containment","none");
         $(this.dom).parent().css({ position: "fixed" });
 
     }
