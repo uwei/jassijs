@@ -4,24 +4,24 @@ import { Icons } from "game/icons";
 import { Airplane, allAirplaneTypes } from "game/airplane";
 import { AirplaneDialog } from "game/airplanedialog";
 import { Company } from "game/company";
+import { CityDialogMarket } from "game/citydialogmarket";
 
 //@ts-ignore
 window.city = function () {
     return CityDialog.getInstance().city;
 }
-var log = (function () {
-    var log = Math.log;
-    return function (n, base) {
-        return log(n) / (base ? log(base) : 1);
-    };
-})();
+
 export class CityDialog {
     dom: HTMLDivElement;
     city: City;
     hasPaused = false;
+    marketDialog:CityDialogMarket;
     public static instance;
     constructor() {
+        this.marketDialog=new CityDialogMarket();
+        this.marketDialog.citydialog=this;
         this.create();
+        
     }
     static getInstance(): CityDialog {
         if (CityDialog.instance === undefined)
@@ -29,31 +29,7 @@ export class CityDialog {
         return CityDialog.instance;
     }
 
-    private calcPrice(el: HTMLInputElement, val: number) {
-        var id = Number(el.id.split("_")[1]);
-        var isProducedHere = false;
-        for (var x = 0; x < this.city.companies.length; x++) {
-            if (this.city.companies[x].productid === id)
-                isProducedHere = true;
-        }
-        var prod = allProducts[id].priceSelling;
-
-        if (el.id.indexOf("sell") > -1)
-            val = -val;
-        var ret = allProducts[id].calcPrice(this.city.people, this.city.market[id] - val, isProducedHere);
-        var color = "#32CD32";
-        if (ret > ((0.0 + prod) * 2 / 3))
-            color = "#DAF7A6 ";
-        if (ret > ((0.0 + prod) * 2.5 / 3))
-            color = "white";
-        if (ret > ((0.0 + prod) * 1))
-            color = "Yellow";
-        if (ret > ((0.0 + prod) * 4 / 3))
-            color = "LightPink";
-            
-        (<HTMLElement>el.parentElement.parentElement.children[4]).style.background = color;
-        return ret;
-    }
+    
     private create() {
         //template for code reloading
         var sdom = `
@@ -84,7 +60,7 @@ export class CityDialog {
                     <li><a href="#citydialog-construction" id="citydialog-construction-tab" class="citydialog-tabs">Construction</a></li>
                     <li><a href="#citydialog-score" id="citydialog-score-tab"  class="citydialog-tabs">Score</a></li>
                 </ul>
-                <div id="citydialog-market">`+ this.createMarket() + `
+                <div id="citydialog-market">`+ this.marketDialog.create() + `
                 </div>
                 <div id="citydialog-buildings"> `+ this.createBuildings() + `
                 </div>
@@ -115,58 +91,7 @@ export class CityDialog {
         setTimeout(() => { _this.bindActions(); }, 500);
         //document.createElement("span");
     }
-    createMarket() {
-        return ` <table id="citydialog-market-table" style="height:100%;weight:100%;">
-                        <tr>
-                            <th>Name</th>
-                            <th></th>
-                            <th></th>
-                            <th>
-                                <select id="citydialog-market-table-source" style="width:80px">
-                                    <option value="Market">Market</option>
-                                </select>
-                            </th>
-                            <th>Price</th>
-                            <th></th>
-                            <th> <select id="citydialog-market-table-target" style="width:80px">
-                                    <option value="placeholder">placeholder</option>
-                                </select>
-                            </th>
-                            
-                        </tr>
-                       ${(function fun() {
-                var ret = "";
-                function price(id: string, change: number) {
-                    console.log(id + " " + change);
-                }
-                for (var x = 0; x < allProducts.length; x++) {
-                    ret = ret + '<tr style="position:relative">';
-                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>" + allProducts[x].name + "</td>";
-                    ret = ret + '<td style="width:20px">' +
-                        '<input class="cdmslider" id="citydialog-market-buy-slider_' + x + '"' +
-                        'type="range" min="0" max="10" step="1.0" value="0"' +
-                        'style="z-index:'+(100-x)+'; overflow:float;position:absolute;height:1px;top:16px;width: 100px"' +
-                        //'oninput="this.nextElementSibling.innerHTML = this.value;' +
-                        //'this.parentNode.parentNode.children[3].innerHTML=1;' +
-                        '>';
-                    ret = ret + "<td>0</td>";
-                    ret = ret + '<td style="width:40px;"><span>0</span><span id="citydialog-market-info_' + x + '"></span></td>';
-                    ret = ret + '<td style="width:20px">' +
-                        '<input class="cdmslider" id="citydialog-market-sell-slider_' + x + '"' +
-                        'type="range" min="0" max="500" step="1.0" value="0"' +
-                        'style="z-index:'+(100-x)+'; overflow:float;position:absolute;height:1px;top:16px;width: 100px"' +
-                        //'oninput="this.nextElementSibling.innerHTML = this.value;' +
-                        // 'this.parentNode.parentNode.children[3].innerHTML=value;' +
-                        '>';
-                    ret = ret + "<td>0</td>";
-                    ret = ret + "<td></td>";
-                    ret = ret + "</tr>";
-                }
-                return ret;
-            })()}
-                    </table>`;
-    }
+  
     createBuildings() {
         return `<table id="citydialog-buildings-table" style="height:100%;weight:100%;">
                         <tr>
@@ -298,96 +223,11 @@ export class CityDialog {
             })()}  
                 </table> `;
     }
-    getSliderValue(dom: HTMLInputElement): number {
-        var maxValue = parseInt(dom.getAttribute("maxValue"));
-        var val = parseInt(dom.value);
-        if (val === 0)
-            return 0;
-        var exp = Math.round(log(maxValue, 40) * 1000) / 1000;
-        return Math.round(Math.pow(val, exp));
-    }
+   
     bindActions() {
         var _this = this;
-        document.getElementById("citydialog-next").addEventListener("click", (ev) => {
-            var pos = _this.city.world.cities.indexOf(_this.city);
-            pos++;
-            if (pos >= _this.city.world.cities.length)
-                pos = 0;
-            _this.city = _this.city.world.cities[pos];
-            _this.update(true);
-        });
-        document.getElementById("citydialog-prev").addEventListener("click", (ev) => {
-            var pos = _this.city.world.cities.indexOf(_this.city);
-            pos--;
-            if (pos === -1)
-                pos = _this.city.world.cities.length - 1;
-            _this.city = _this.city.world.cities[pos];
-            _this.update(true);
-        });
-        $('.citydialog-tabs').click(function (event) {
-            _this.update(true);
-        });
-        for (var x = 0; x < allProducts.length; x++) {
-            document.getElementById("citydialog-market-buy-slider_" + x).addEventListener("input", (e) => {
-                var t = <HTMLInputElement>e.target;
-                var val = _this.getSliderValue(t);
-                var price = _this.calcPrice(t, val);
-                var id = parseInt(t.id.split("_")[1]);
-                if(val===0)
-                    document.getElementById("citydialog-market-info_" + id).innerHTML = "";
-                else
-                    document.getElementById("citydialog-market-info_" + id).innerHTML = "x" + val + "<br/>= -" + val * price;
-                t.parentNode.parentNode.children[4].children[0].innerHTML = "" + price;
-            });
-            document.getElementById("citydialog-market-sell-slider_" + x).addEventListener("input", (e) => {
-                var t = <HTMLInputElement>e.target;
-                var val = _this.getSliderValue(t);
-                var price = _this.calcPrice(t, val);
-                var id = parseInt(t.id.split("_")[1]);
-                if(val===0)
-                    document.getElementById("citydialog-market-info_" + id).innerHTML = "";
-                else
-                    document.getElementById("citydialog-market-info_" + id).innerHTML = "<br/>x" + val + "<br/>= -" + val * price;
-                t.parentNode.parentNode.children[4].children[0].innerHTML = "" + price;
-            });
-            var inedit = false;
-            document.getElementById("citydialog-market-buy-slider_" + x).addEventListener("change", (e) => {
-                if (inedit)
-                    return;
-                var t = <HTMLInputElement>e.target;
-                inedit = true;
-                var id = Number(t.id.split("_")[1]);
-                var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
-                var val = _this.getSliderValue(t);
-                _this.sellOrBuy(id, val, _this.calcPrice(t, val), _this.getStore(), selectsource.value === "Warehouse");
-                document.getElementById("citydialog-market-info_" + id).innerHTML = "";
-                t.value = "0";
-                inedit = false;
-
-            });
-            document.getElementById("citydialog-market-sell-slider_" + x).addEventListener("change", (e) => {
-                if (inedit)
-                    return;
-                var t = <HTMLInputElement>e.target;
-                inedit = true;
-                var val = _this.getSliderValue(t);
-                var id = Number(t.id.split("_")[1]);
-                var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
-                _this.sellOrBuy(id, -val, _this.calcPrice(t, val), _this.getStore(), selectsource.value === "Warehouse");
-                document.getElementById("citydialog-market-info_" + id).innerHTML = "";
-                t.value = "0";
-                inedit = false;
-
-            });
-        }
-        document.getElementById("citydialog-market-table-source").addEventListener("change", (e) => {
-
-            _this.update(true);
-        });
-        document.getElementById("citydialog-market-table-target").addEventListener("change", (e) => {
-
-            _this.update(true);
-        });
+        this.marketDialog.update();
+       
         for (var x = 0; x < 5; x++) {
             document.getElementById("new-factory_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
@@ -454,29 +294,18 @@ export class CityDialog {
             _this.update();
 
         });
-        for (var x = 0; x < allProducts.length; x++) {
-            document.getElementById("warehouse-min-stock_" + x).addEventListener("change", (e) => {
-                var ctrl = (<HTMLInputElement>e.target);
-                var id = parseInt(ctrl.id.split("_")[1]);
-                _this.city.warehouseMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
-            });
-            document.getElementById("warehouse-selling-price_" + x).addEventListener("change", (e) => {
-                var ctrl = (<HTMLInputElement>e.target);
-                var id = parseInt(ctrl.id.split("_")[1]);
-                _this.city.warehouseMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
-
-            });
-        }
+       
         for (var x = 0; x < allAirplaneTypes.length; x++) {
             document.getElementById("new-airplane_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
                 if (sid === "")
                     sid = (<any>evt.target).parentNode.id
-                var id = parseInt(sid.split("_")[1]);
+                var id = parseInt(sid.split("_")[1]); 
                 _this.newAirplane(id);
             });
 
         }
+        this.marketDialog.bindActions();
     }
     newAirplane(typeid: number) {
         var _this = this;
@@ -507,120 +336,8 @@ export class CityDialog {
         _this.city.world.dom.appendChild(ap.dom);
         _this.update(true);
     }
-    sellOrBuy(productid, amount: number, price: number, storetarget: number[], isWarehouse: boolean) {
-        if (isWarehouse) {
-            this.city.warehouse[productid] -= amount;
-        } else {
-            this.city.world.game.changeMoney(-amount * price, "sell or buy from market", this.city);
-            this.city.market[productid] -= amount;
-        }
-        storetarget[productid] += amount;
-        this.getAirplaneInMarket()?.refreshLoadedCount();
-        this.update(true);
-        this.city.world.game.updateTitle();
-    }
-    getAirplaneInMarket() {
-        var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-target");
-        var val = select.value;
-        if (val) {
-            for (var x = 0; x < this.city.world.airplanes.length; x++) {
-                if (val === this.city.world.airplanes[x].name)
-                    return this.city.world.airplanes[x];
-            }
-        }
-        return undefined;
-    }
-    getStore() {
-        var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-target");
-        var val = select.value;
-        if (val) {
-            if (this.city.warehouses > 0 && val === "Warehouse") {
-                return this.city.warehouse;
-            }
-            return this.getAirplaneInMarket()?.products;
-        }
-        return undefined;
-    }
-    updateMarket() {
-        var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-target");
-        var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
-        var last = select.value;
-        select.innerHTML = "";
-        if (this.city.warehouses > 0) {
-            var opt: HTMLOptionElement = document.createElement("option");
-            opt.value = "Warehouse";
-            opt.text = opt.value;
-            select.appendChild(opt);
-            if (selectsource.children.length === 1) {
-                var opt: HTMLOptionElement = document.createElement("option");
-                opt.value = "Warehouse";
-                opt.text = opt.value;
-                selectsource.appendChild(opt);
-            }
-        } else {
-            if (selectsource.children.length === 2) {
-                selectsource.removeChild(selectsource.children[1]);
-                selectsource.value = "Market";
-            }
-        }
-        var allAPs = this.city.getAirplanesInCity();
-        for (var x = 0; x < allAPs.length; x++) {
-            var opt: HTMLOptionElement = document.createElement("option");
-            opt.value = allAPs[x].name;
-            opt.text = opt.value;
-            select.appendChild(opt);
-        }
-
-        if (last !== "") {
-            select.value = last;
-        }
-        this.updateTitle();
-        /*
-                            <th>icon</th>
-                            <th>name</th>
-                            <th>market</th>
-                            <th>buy</th>
-                            <th>airplane1</th>
-                            <th>sell</th>
-                            <th>price</th>
-        */
-        var storetarget = this.getStore();
-        var storesource = this.city.market;
-        if (selectsource.value === "Warehouse") {
-            storesource = this.city.warehouse;
-        }
-        for (var x = 0; x < allProducts.length; x++) {
-            var table = document.getElementById("citydialog-market-table");
-            var tr = table.children[0].children[x + 1];
-
-            tr.children[3].innerHTML = storesource[x].toString();
-            var buyslider=<HTMLInputElement> document.getElementById("citydialog-market-buy-slider_" + x);
-            var sellslider=<HTMLInputElement> document.getElementById("citydialog-market-sell-slider_" + x);
-            tr.children[4].children[0].innerHTML = (selectsource.value === "Warehouse" ? "" : this.calcPrice(buyslider, 0).toString());
-            if (storetarget) {
-                var max = storesource[x];
-                var testap = this.getAirplaneInMarket();
-                if (testap)
-                    max = Math.min(max, testap.capacity - testap.loadedCount);
-                buyslider.readOnly = false;
-                sellslider.readOnly = false;
-                buyslider.max = "40";//storesource[x].toString();
-                buyslider.setAttribute("maxValue", max.toString());
-                tr.children[6].innerHTML = storetarget[x].toString();
-                sellslider.max = "40";//storetarget[x].toString();
-
-                sellslider.setAttribute("maxValue", storetarget[x].toString());
-            } else {
-                buyslider.readOnly = true;
-                sellslider.readOnly = true;
-                tr.children[6].innerHTML = "";
-                buyslider.max = "0";
-                sellslider.max = "0";
-            }
-        }
-
-    }
-
+    
+   
     updateBuildings() {
         /*
                                <th>produce</th>
@@ -799,7 +516,7 @@ export class CityDialog {
 
 
         if (document.getElementById("citydialog-market-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
-            this.updateMarket();
+            this.marketDialog.update();
         if (document.getElementById("citydialog-buildings-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
             this.updateBuildings();
         if (document.getElementById("citydialog-warehouse-tab")?.parentElement?.classList?.contains("ui-tabs-active"))

@@ -16,7 +16,12 @@ table {
     text-indent: initial;
     border-spacing: 0px;
 }
-
+.ui-slider-handle.ui-corner-all.ui-state-default{
+    position:absolute;
+    top:-12px;
+    left: 0%;
+    width:10px;
+}
 .airplanedialog>* {
     font-size: 10px;
 }
