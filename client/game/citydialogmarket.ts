@@ -8,8 +8,13 @@ var log = (function () {
     };
 })();
 export class CityDialogMarket {
-    citydialog: CityDialog;
-    create() {
+    static instance:CityDialogMarket;
+    static getInstance(): CityDialogMarket {
+        if (CityDialogMarket.instance === undefined)
+            CityDialogMarket.instance = new CityDialogMarket();
+        return CityDialogMarket.instance;
+    }
+    create() { 
 
         return ` <table id="citydialog-market-table" style="height:100%;weight:100%;">
                         <tr>
@@ -31,30 +36,21 @@ export class CityDialogMarket {
                         </tr>
                        ${(function fun() {
                 var ret = "";
-                function price(id: string, change: number) {
+                function price(id: string, change: number) { 
                     console.log(id + " " + change);
                 }
                 for (var x = 0; x < allProducts.length; x++) {
                     ret = ret + '<tr >';
                     ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + allProducts[x].name + "</td>";
-                    ret = ret + '<td style="width:20px">' +
-                        '<input hidden class="cdmslider" id="citydialog-market-buy-slider_' + x + '"' +
-                        'type="range" min="0" max="10" step="1.0" value="0"' +
-                        'style="z-index:' + (100 - x) + '; overflow:float;position:absolute;height:1px;top:16px;width: 100px"' +
-                        //'oninput="this.nextElementSibling.innerHTML = this.value;' +
-                        //'this.parentNode.parentNode.children[3].innerHTML=1;' +
-                        '>';
+                    ret = ret + '<td style="width:20px"><div style="position:relative">' +
+                        '<div id="sell-slider_' + x + '" style="overflow:float;position:absolute;height:1px;top:5px;width: 92px" ><div>' +
+                        '</div></td>';
                     ret = ret + "<td>0</td>";
                     ret = ret + '<td style="width:40px;"><span>0</span><span id="citydialog-market-info_' + x + '"></span></td>';
                     ret = ret + '<td style="width:20px"><div style="position:relative">' +
-                        '<div id="sell-slider_' + x + '" style="overflow:float;position:absolute;height:1px;top:5px;width: 100px" ><div>' +
-                        '<input hidden class="cdmslider" id="citydialog-market-sell-slider_' + x + '"' +
-                        'type="range" min="0" max="500" step="1.0" value="0"' +
-                        'style="z-index:' + (100 - x) + '; overflow:float;position:absolute;height:1px;top:16px;width: 100px"' +
-                        //'oninput="this.nextElementSibling.innerHTML = this.value;' +
-                        // 'this.parentNode.parentNode.children[3].innerHTML=value;' +
-                        '></div></td>';
+                        '<div id="buy-slider_' + x + '" style="overflow:float;position:absolute;left:4px;height:1px;top:5px;width: 92px" ><div>' +
+                        '</div></td>';
                     ret = ret + "<td>0</td>";
                     ret = ret + "<td></td>";
                     ret = ret + "</tr>";
@@ -64,24 +60,10 @@ export class CityDialogMarket {
                     </table>`;
     }
     bindActions() {
-        var city = this.citydialog.city;
         var _this = this;
-        document.getElementById("citydialog-next").addEventListener("click", (ev) => {
-            var pos = city.world.cities.indexOf(city);
-            pos++;
-            if (pos >= city.world.cities.length)
-                pos = 0;
-            city = city.world.cities[pos];
-            _this.update();
-        });
-        document.getElementById("citydialog-prev").addEventListener("click", (ev) => {
-            var pos = city.world.cities.indexOf(city);
-            pos--;
-            if (pos === -1)
-                pos = city.world.cities.length - 1;
-            city = city.world.cities[pos];
-            _this.update();
-        });
+         var city = CityDialog.getInstance().city;
+       
+      
         document.getElementById("citydialog-market-table-source").addEventListener("change", (e) => {
 
             _this.update();
@@ -93,16 +75,17 @@ export class CityDialogMarket {
         $('.citydialog-tabs').click(function (event) {
             _this.update();
         });
+        var inedit;
         for (var x = 0; x < allProducts.length; x++) {
             $("#sell-slider_" + x).slider({
                 min: 0,
                 max: 40,
                 range: "min",
-                value: 0,
+                value: 40,
                 slide: function (event, ui) {
                     var t = <HTMLInputElement>event.target;
                     var val = _this.getSliderValue(t);
-                    console.log(val);
+                     t.setAttribute("curVal",val.toString());
                     var price = _this.calcPrice(t, val);
                     var id = parseInt(t.id.split("_")[1]);
                     if (val === 0)
@@ -117,7 +100,7 @@ export class CityDialogMarket {
                         return;
                     var t = <HTMLInputElement>e.target;
 
-                    var val = _this.getSliderValue(t);
+                    var val =parseInt(t.getAttribute("curVal"));
                     if (val === 0)
                         return;
                     inedit = true;
@@ -125,61 +108,48 @@ export class CityDialogMarket {
                     var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
                     _this.sellOrBuy(id, -val, _this.calcPrice(t, val), _this.getStore(), selectsource.value === "Warehouse");
                     document.getElementById("citydialog-market-info_" + id).innerHTML = "";
+                    $(t).slider("value", 40);
+                    inedit = false;
+                }
+            });
+            $("#buy-slider_" + x).slider({
+                min: 0,
+                max: 40,
+                range: "min",
+                value: 0,
+                slide: function (event, ui) {
+                    var t = <HTMLInputElement>event.target;
+                    var val = _this.getSliderValue(t);
+                    t.setAttribute("curVal",val.toString());
+                    console.log(val);
+                    var price = _this.calcPrice(t, val);
+                    var id = parseInt(t.id.split("_")[1]);
+                    if (val === 0)
+                        document.getElementById("citydialog-market-info_" + id).innerHTML = "";
+                    else
+                        document.getElementById("citydialog-market-info_" + id).innerHTML = "x" + val + "<br/>= -" + val * price;
+                    t.parentNode.parentNode.parentNode.children[4].children[0].innerHTML = "" + price;
+                },
+                change: function (e, ui) {
+
+                    if (inedit)
+                        return;
+                    var t = <HTMLInputElement>e.target;
+
+                    var val =parseInt(t.getAttribute("curVal"));
+                    console.log("buy "+val);
+                    if (val === 0)
+                        return;
+                    inedit = true;
+                    var id = Number(t.id.split("_")[1]);
+                    var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
+                    _this.sellOrBuy(id, val, _this.calcPrice(t, val), _this.getStore(), selectsource.value === "Warehouse");
+                    document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                     $(t).slider("value", 0);
                     inedit = false;
                 }
             });
-            document.getElementById("citydialog-market-buy-slider_" + x).addEventListener("input", (e) => {
-                var t = <HTMLInputElement>e.target;
-                var val = _this.getSliderValue(t);
-                var price = _this.calcPrice(t, val);
-                var id = parseInt(t.id.split("_")[1]);
-                if (val === 0)
-                    document.getElementById("citydialog-market-info_" + id).innerHTML = "";
-                else
-                    document.getElementById("citydialog-market-info_" + id).innerHTML = "x" + val + "<br/>= -" + val * price;
-                t.parentNode.parentNode.children[4].children[0].innerHTML = "" + price;
-            });
-            document.getElementById("citydialog-market-sell-slider_" + x).addEventListener("input", (e) => {
-                var t = <HTMLInputElement>e.target;
-                var val = _this.getSliderValue(t);
-                var price = _this.calcPrice(t, val);
-                var id = parseInt(t.id.split("_")[1]);
-                if (val === 0)
-                    document.getElementById("citydialog-market-info_" + id).innerHTML = "";
-                else
-                    document.getElementById("citydialog-market-info_" + id).innerHTML = "x" + val + "<br/>= " + val * price;
-                t.parentNode.parentNode.children[4].children[0].innerHTML = "" + price;
-            });
-            var inedit = false;
-            document.getElementById("citydialog-market-buy-slider_" + x).addEventListener("change", (e) => {
-                if (inedit)
-                    return;
-                var t = <HTMLInputElement>e.target;
-                inedit = true;
-                var id = Number(t.id.split("_")[1]);
-                var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
-                var val = _this.getSliderValue(t);
-                _this.sellOrBuy(id, val, _this.calcPrice(t, val), _this.getStore(), selectsource.value === "Warehouse");
-                document.getElementById("citydialog-market-info_" + id).innerHTML = "";
-                t.value = "0";
-                inedit = false;
 
-            });
-            document.getElementById("citydialog-market-sell-slider_" + x).addEventListener("change", (e) => {
-                if (inedit)
-                    return;
-                var t = <HTMLInputElement>e.target;
-                inedit = true;
-                var val = _this.getSliderValue(t);
-                var id = Number(t.id.split("_")[1]);
-                var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
-                _this.sellOrBuy(id, -val, _this.calcPrice(t, val), _this.getStore(), selectsource.value === "Warehouse");
-                document.getElementById("citydialog-market-info_" + id).innerHTML = "";
-                t.value = "0";
-                inedit = false;
-
-            });
         }
 
 
@@ -200,7 +170,7 @@ export class CityDialogMarket {
     }
 
     sellOrBuy(productid, amount: number, price: number, storetarget: number[], isWarehouse: boolean) {
-        var city = this.citydialog.city;
+         var city = CityDialog.getInstance().city;
         if (isWarehouse) {
             city.warehouse[productid] -= amount;
         } else {
@@ -213,7 +183,7 @@ export class CityDialogMarket {
         city.world.game.updateTitle();
     }
     getAirplaneInMarket() {
-        var city = this.citydialog.city;
+         var city = CityDialog.getInstance().city;
         var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-target");
         var val = select.value;
         if (val) {
@@ -225,7 +195,7 @@ export class CityDialogMarket {
         return undefined;
     }
     getStore() {
-        var city = this.citydialog.city;
+        var city = CityDialog.getInstance().city;
         var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-target");
         var val = select.value;
         if (val) {
@@ -238,7 +208,7 @@ export class CityDialogMarket {
     }
     update() {
 
-        var city = this.citydialog.city;
+        var city = CityDialog.getInstance().city;
         if (!city)
             return;
         var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-target");
@@ -273,7 +243,7 @@ export class CityDialogMarket {
         if (last !== "") {
             select.value = last;
         }
-        this.citydialog.updateTitle();
+         CityDialog.getInstance().updateTitle();
         /*
                             <th>icon</th>
                             <th>name</th>
@@ -293,7 +263,7 @@ export class CityDialogMarket {
             var tr = table.children[0].children[x + 1];
 
             tr.children[3].innerHTML = storesource[x].toString();
-            var buyslider = <HTMLInputElement>document.getElementById("citydialog-market-buy-slider_" + x);
+            var buyslider = <HTMLInputElement>document.getElementById("buy-slider_" + x);
             var sellslider = <HTMLInputElement>document.getElementById("sell-slider_" + x);
             tr.children[4].children[0].innerHTML = (selectsource.value === "Warehouse" ? "" : this.calcPrice(buyslider, 0).toString());
             if (storetarget) {
@@ -303,35 +273,41 @@ export class CityDialogMarket {
                     max = Math.min(max, testap.capacity - testap.loadedCount);
                 buyslider.readOnly = false;
                 // sellslider.readOnly = false;
-                buyslider.max = "40";//storesource[x].toString();
                 buyslider.setAttribute("maxValue", max.toString());
                 tr.children[6].innerHTML = storetarget[x].toString();
                 if (storetarget[x] !== 0)
                     $(sellslider).slider("enable");//storetarget[x].toString();
                 else
-                    $(sellslider).slider("disalbe");//storetarget[x].toString();
+                    $(sellslider).slider("disable");//storetarget[x].toString();
+                if (max!== 0)
+                    $(buyslider).slider("enable");//storetarget[x].toString();
+                else
+                    $(buyslider).slider("disable");//storetarget[x].toString();
 
                 sellslider.setAttribute("maxValue", storetarget[x].toString());
             } else {
                 buyslider.readOnly = true;
                 // sellslider.readOnly = true;
                 tr.children[6].innerHTML = "";
-                buyslider.max = "0";
+                $(buyslider).slider("disable");
                 $(sellslider).slider("disable");
             }
         }
-        this.citydialog.updateTitle();
+        CityDialog.getInstance().updateTitle();
     }
     getSliderValue(dom: HTMLInputElement): number {
         var maxValue = parseInt(dom.getAttribute("maxValue"));
         var val = $(dom).slider("value");// parseInt(dom.value);
+        console.log(val);
+        if (dom.id.indexOf("sell") > -1)
+            val = 40 - val;
         if (val === 0)
             return 0;
         var exp = Math.round(log(maxValue, 40) * 1000) / 1000;
         return Math.round(Math.pow(val, exp));
     }
     private calcPrice(el: HTMLInputElement, val: number) {
-        var city = this.citydialog.city;
+         var city = CityDialog.getInstance().city;
         var id = Number(el.id.split("_")[1]);
         var isProducedHere = false;
         for (var x = 0; x < city.companies.length; x++) {

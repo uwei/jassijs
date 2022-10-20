@@ -15,13 +15,9 @@ export class CityDialog {
     dom: HTMLDivElement;
     city: City;
     hasPaused = false;
-    marketDialog:CityDialogMarket;
     public static instance;
     constructor() {
-        this.marketDialog=new CityDialogMarket();
-        this.marketDialog.citydialog=this;
         this.create();
-        
     }
     static getInstance(): CityDialog {
         if (CityDialog.instance === undefined)
@@ -60,7 +56,7 @@ export class CityDialog {
                     <li><a href="#citydialog-construction" id="citydialog-construction-tab" class="citydialog-tabs">Construction</a></li>
                     <li><a href="#citydialog-score" id="citydialog-score-tab"  class="citydialog-tabs">Score</a></li>
                 </ul>
-                <div id="citydialog-market">`+ this.marketDialog.create() + `
+                <div id="citydialog-market">`+ CityDialogMarket.getInstance().create() + `
                 </div>
                 <div id="citydialog-buildings"> `+ this.createBuildings() + `
                 </div>
@@ -226,8 +222,24 @@ export class CityDialog {
    
     bindActions() {
         var _this = this;
-        this.marketDialog.update();
-       
+        CityDialogMarket.getInstance().update();
+         document.getElementById("citydialog-next").addEventListener("click", (ev) => {
+            var pos = _this.city.world.cities.indexOf(_this.city);
+            pos++;
+            if (pos >= _this.city.world.cities.length)
+                pos = 0;
+            _this.city = _this.city.world.cities[pos];
+            _this.update();
+        });
+        document.getElementById("citydialog-prev").addEventListener("click", (ev) => {
+           
+            var pos = _this.city.world.cities.indexOf(_this.city);
+            pos--;
+            if (pos === -1)
+                pos = _this.city.world.cities.length - 1;
+            _this.city = _this.city.world.cities[pos];
+            _this.update();
+        });
         for (var x = 0; x < 5; x++) {
             document.getElementById("new-factory_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
@@ -305,7 +317,7 @@ export class CityDialog {
             });
 
         }
-        this.marketDialog.bindActions();
+        CityDialogMarket.getInstance().bindActions();
     }
     newAirplane(typeid: number) {
         var _this = this;
@@ -516,7 +528,7 @@ export class CityDialog {
 
 
         if (document.getElementById("citydialog-market-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
-            this.marketDialog.update();
+            CityDialogMarket.getInstance().update();
         if (document.getElementById("citydialog-buildings-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
             this.updateBuildings();
         if (document.getElementById("citydialog-warehouse-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
