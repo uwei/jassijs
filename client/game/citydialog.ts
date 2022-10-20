@@ -222,14 +222,13 @@ export class CityDialog {
    
     bindActions() {
         var _this = this;
-        CityDialogMarket.getInstance().update();
          document.getElementById("citydialog-next").addEventListener("click", (ev) => {
             var pos = _this.city.world.cities.indexOf(_this.city);
             pos++;
             if (pos >= _this.city.world.cities.length)
                 pos = 0;
             _this.city = _this.city.world.cities[pos];
-            _this.update();
+            _this.update(true);
         });
         document.getElementById("citydialog-prev").addEventListener("click", (ev) => {
            
@@ -238,7 +237,7 @@ export class CityDialog {
             if (pos === -1)
                 pos = _this.city.world.cities.length - 1;
             _this.city = _this.city.world.cities[pos];
-            _this.update();
+            _this.update(true);
         });
         for (var x = 0; x < 5; x++) {
             document.getElementById("new-factory_" + x).addEventListener("click", (evt) => {
@@ -525,7 +524,7 @@ export class CityDialog {
                 }
             }
         }
-
+        CityDialogMarket.getInstance().update();
 
         if (document.getElementById("citydialog-market-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
             CityDialogMarket.getInstance().update();

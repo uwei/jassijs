@@ -8,13 +8,13 @@ var log = (function () {
     };
 })();
 export class CityDialogMarket {
-    static instance:CityDialogMarket;
+    static instance: CityDialogMarket;
     static getInstance(): CityDialogMarket {
         if (CityDialogMarket.instance === undefined)
             CityDialogMarket.instance = new CityDialogMarket();
         return CityDialogMarket.instance;
     }
-    create() { 
+    create() {
 
         return ` <table id="citydialog-market-table" style="height:100%;weight:100%;">
                         <tr>
@@ -36,7 +36,7 @@ export class CityDialogMarket {
                         </tr>
                        ${(function fun() {
                 var ret = "";
-                function price(id: string, change: number) { 
+                function price(id: string, change: number) {
                     console.log(id + " " + change);
                 }
                 for (var x = 0; x < allProducts.length; x++) {
@@ -61,19 +61,18 @@ export class CityDialogMarket {
     }
     bindActions() {
         var _this = this;
-         var city = CityDialog.getInstance().city;
-       
-      
-        document.getElementById("citydialog-market-table-source").addEventListener("change", (e) => {
+        var city = CityDialog.getInstance().city;
 
-            _this.update();
+
+        document.getElementById("citydialog-market-table-source").addEventListener("change", (e) => {
+            CityDialog.getInstance().update(true);
         });
         document.getElementById("citydialog-market-table-target").addEventListener("change", (e) => {
 
-            _this.update();
+            CityDialog.getInstance().update(true);
         });
         $('.citydialog-tabs').click(function (event) {
-            _this.update();
+            CityDialog.getInstance().update(true);
         });
         var inedit;
         for (var x = 0; x < allProducts.length; x++) {
@@ -85,7 +84,7 @@ export class CityDialogMarket {
                 slide: function (event, ui) {
                     var t = <HTMLInputElement>event.target;
                     var val = _this.getSliderValue(t);
-                     t.setAttribute("curVal",val.toString());
+                    t.setAttribute("curVal", val.toString());
                     var price = _this.calcPrice(t, val);
                     var id = parseInt(t.id.split("_")[1]);
                     if (val === 0)
@@ -99,10 +98,15 @@ export class CityDialogMarket {
                     if (inedit)
                         return;
                     var t = <HTMLInputElement>e.target;
-
-                    var val =parseInt(t.getAttribute("curVal"));
+                    var test = $(t).slider("value");
+                    var val;
+                    if (test ===0 || test === 40)//Cursor verspringt
+                        val = _this.getSliderValue(t);//
+                    else
+                        val = parseInt(t.getAttribute("curVal"));
                     if (val === 0)
                         return;
+                    console.log("sell " + val);
                     inedit = true;
                     var id = Number(t.id.split("_")[1]);
                     var selectsource: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-source");
@@ -120,7 +124,7 @@ export class CityDialogMarket {
                 slide: function (event, ui) {
                     var t = <HTMLInputElement>event.target;
                     var val = _this.getSliderValue(t);
-                    t.setAttribute("curVal",val.toString());
+                    t.setAttribute("curVal", val.toString());
                     console.log(val);
                     var price = _this.calcPrice(t, val);
                     var id = parseInt(t.id.split("_")[1]);
@@ -135,9 +139,14 @@ export class CityDialogMarket {
                     if (inedit)
                         return;
                     var t = <HTMLInputElement>e.target;
-
-                    var val =parseInt(t.getAttribute("curVal"));
-                    console.log("buy "+val);
+                    var test = $(t).slider("value");
+                    var val;
+                    if (test ===0 || test === 40)//Cursor verspringt
+                        val = _this.getSliderValue(t);//
+                    else
+                        val = parseInt(t.getAttribute("curVal"));
+                    //var val =parseInt(t.getAttribute("curVal"));
+                    console.log("buy " + val);
                     if (val === 0)
                         return;
                     inedit = true;
@@ -170,7 +179,7 @@ export class CityDialogMarket {
     }
 
     sellOrBuy(productid, amount: number, price: number, storetarget: number[], isWarehouse: boolean) {
-         var city = CityDialog.getInstance().city;
+        var city = CityDialog.getInstance().city;
         if (isWarehouse) {
             city.warehouse[productid] -= amount;
         } else {
@@ -179,11 +188,10 @@ export class CityDialogMarket {
         }
         storetarget[productid] += amount;
         this.getAirplaneInMarket()?.refreshLoadedCount();
-        this.update();
-        city.world.game.updateTitle();
+        CityDialog.getInstance().update(true);
     }
     getAirplaneInMarket() {
-         var city = CityDialog.getInstance().city;
+        var city = CityDialog.getInstance().city;
         var select: HTMLSelectElement = <any>document.getElementById("citydialog-market-table-target");
         var val = select.value;
         if (val) {
@@ -243,7 +251,7 @@ export class CityDialogMarket {
         if (last !== "") {
             select.value = last;
         }
-         CityDialog.getInstance().updateTitle();
+        CityDialog.getInstance().updateTitle();
         /*
                             <th>icon</th>
                             <th>name</th>
@@ -279,7 +287,7 @@ export class CityDialogMarket {
                     $(sellslider).slider("enable");//storetarget[x].toString();
                 else
                     $(sellslider).slider("disable");//storetarget[x].toString();
-                if (max!== 0)
+                if (max !== 0)
                     $(buyslider).slider("enable");//storetarget[x].toString();
                 else
                     $(buyslider).slider("disable");//storetarget[x].toString();
@@ -298,16 +306,21 @@ export class CityDialogMarket {
     getSliderValue(dom: HTMLInputElement): number {
         var maxValue = parseInt(dom.getAttribute("maxValue"));
         var val = $(dom).slider("value");// parseInt(dom.value);
-        console.log(val);
+
         if (dom.id.indexOf("sell") > -1)
             val = 40 - val;
         if (val === 0)
             return 0;
+        if (val === 40)
+            return maxValue;
         var exp = Math.round(log(maxValue, 40) * 1000) / 1000;
-        return Math.round(Math.pow(val, exp));
+        var ret = Math.round(Math.pow(val, exp));
+
+        console.log("max" + maxValue + " " + val + " ->" + ret);
+        return ret;
     }
     private calcPrice(el: HTMLInputElement, val: number) {
-         var city = CityDialog.getInstance().city;
+        var city = CityDialog.getInstance().city;
         var id = Number(el.id.split("_")[1]);
         var isProducedHere = false;
         for (var x = 0; x < city.companies.length; x++) {
