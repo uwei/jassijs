@@ -1,7 +1,9 @@
 table {
     font-size: inherit;
 }
-
+.active-route.ui-state-default{
+    background-color:lightgray;
+}
 
 tr {
     padding: 0 0 0 0;
@@ -14,6 +16,7 @@ table {
     text-indent: initial;
     border-spacing: 0px;
 }
+
 .airplanedialog>* {
     font-size: 10px;
 }
@@ -24,6 +27,12 @@ table {
 
 .ui-dialog-titlebar {
     height: 10px;
+}
+#edit-route{
+      font-size: 12px;
+}
+#delete-route{
+      font-size: 12px;
 }
 
 #route-list>li {

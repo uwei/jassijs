@@ -31,7 +31,7 @@ export class AirplaneDialog {
     get airplane() {
         return this._airplane;
     }
- 
+
     private create() {
         //template for code reloading
         var sdom = `
@@ -74,6 +74,7 @@ export class AirplaneDialog {
                     
                     <input type="checkbox" id="route-active"> active</input>
                     <button id="edit-route">`+ Icons.edit + `</button>
+                    <button id="delete-route">`+ Icons.remove + `</button>
                     <ul id="route-list">
                      
            
@@ -125,8 +126,8 @@ export class AirplaneDialog {
             document.getElementById("airplanedialog-name").addEventListener("change", (e) => {
                 var t = <HTMLInputElement>e.target;
                 var val = t.value;
-                if(this.airplane.world.findAirplane(val)!==undefined){
-                    alert("an airplane with name "+val+" already exists");
+                if (this.airplane.world.findAirplane(val) !== undefined) {
+                    alert("an airplane with name " + val + " already exists");
                     return;
                 }
                 _this.airplane.name = val;
@@ -156,8 +157,30 @@ export class AirplaneDialog {
                 SquadronDialog.getInstance().airplane = _this.airplane;
                 SquadronDialog.getInstance().show();
             });
+            document.getElementById("delete-route").addEventListener('click', (e) => {
+                var select = document.getElementById("route-list");
+                for (var x = 0; x < select.children.length; x++) {
+                    if (select.children[x].classList.contains("active-route")) {
+                        $(select.children[x]).remove();
 
+                    }
+                }
+                _this.updateData();
 
+            });
+            document.getElementById("route-list").addEventListener('click', (e) => {
+                var el = <HTMLElement>$(e.target).closest('li')[0];
+
+                if (el.id.split("-").length > 1) {
+                    var id = parseInt(el.id.split("-")[1]);
+                    var select = document.getElementById("route-list");
+                    for (var x = 0; x < select.children.length; x++) {
+                        select.children[x].classList.remove("active-route");
+                    }
+                    
+                }
+                el.classList.add("active-route");
+            });
         }, 500);
         //document.createElement("span");
     }
@@ -223,7 +246,7 @@ export class AirplaneDialog {
         for (var x = 0; x < this.airplane.route.length; x++) {
             var id = this.airplane.route[x].cityid;
             html += '<li id="route-' + id + '" class="ui-state-default"><img style="width:20px;" src="' + this.airplane.world.cities[id].icon + '" </img>' +
-                this.airplane.world.cities[id].name + " " + Icons.trash.replace("mdi ", "mdi route-delete") + "</li>";
+                this.airplane.world.cities[id].name + "</li>";
 
             ids.push(this.airplane.route[x].cityid);
             //var sdom;
@@ -240,6 +263,7 @@ export class AirplaneDialog {
                 }, 50);
             }
         });
+
 
 
         //  $("airplanedialog-route").sortable
@@ -283,10 +307,7 @@ export class AirplaneDialog {
         ret += "<div>";
         document.getElementById("airplanedialog-products-list").innerHTML = ret;
         this.updateTitle();
-        $(".route-delete").click(function () {
-            $(this).closest('li').remove();
-            _this.updateData();
-        });
+
         (<any>document.getElementById("route-active")).checked = (this.airplane.activeRoute > -1);
         this.updateInfo();
 
@@ -306,7 +327,7 @@ export class AirplaneDialog {
         //ui-tabs-active
         $(this.dom).dialog({
             width: "190px",
-            draggable:true,
+            draggable: true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
                 _this.update(true);
@@ -314,7 +335,7 @@ export class AirplaneDialog {
             close: function () {
                 _this.enableDropCities(false);
             }
-        }).dialog("widget").draggable("option","containment","none");
+        }).dialog("widget").draggable("option", "containment", "none");
         $(this.dom).parent().css({ position: "fixed" });
 
     }

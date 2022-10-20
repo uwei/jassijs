@@ -22,5 +22,6 @@ export class Icons {
     static airplane="<span  class='mdi  mdi-airplane'></span>";
     static toright="<span  class='mdi  mdi-arrow-right-bold-outline'></span>";
     static toleft="<span  class='mdi  mdi-arrow-left-bold-outline'></span>";
+    static remove="<span  class='mdi  mdi-delete-forever-outline'></span>";
     
 }
