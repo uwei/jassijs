@@ -65,7 +65,16 @@ export class Company {
         }
         return needs;
     }
-
+    getDayilyCosts(){
+        var fact=8;
+        if(allProducts[this.productid].distribution===8){
+            fact=9;
+        }
+        if(allProducts[this.productid].distribution===4){
+            fact=10;
+        }
+        return this.workers*fact;
+    }
     getBuildingMaterial() {
         var fact = 5 - (allProducts[this.productid].distribution) / 4;
         return [

@@ -1,6 +1,9 @@
-
-//25 Arbeiter je Haus
-//0.14 Kosten je Arbeiter je Tag
+var log = (function () {
+    var log = Math.log;
+    return function (n, base) {
+        return log(n) / (base ? log(base) : 1);
+    };
+})();
 
 export class Product {
     id: number;
@@ -35,6 +38,8 @@ export class Product {
     calcPrice(people: number, amount: number, isProducedHere: boolean) {
         var consume = Math.round(this.dailyConsumtion * people * 40);
         var normal = isProducedHere ? this.pricePurchase : this.priceSelling;
+
+    
         var min = Math.round((0.0 + normal) * 2 / 3);
         var max = Math.round((0.0 + normal) * 5 / 3);
         // var test = Math.round(consume * normal / amount);
@@ -47,6 +52,42 @@ export class Product {
         }
         return test;
     }
+
+    calcPrice2(people: number, amount: number, isProducedHere: boolean) {
+        var consume = Math.round(this.dailyConsumtion * people * 40);
+        var normal = isProducedHere ? this.pricePurchase : this.priceSelling;
+        var min = Math.round((0.0 + normal) * 2 / 3);
+        var max = Math.round((0.0 + normal) * 5 / 3);
+        var consumeMin = Math.round(consume*2/3);
+        var consumeMax = Math.round(consume*5/3);
+        if(amount<consumeMin)
+            return max;
+        if(amount>consumeMax)
+            return min;
+        var test=0;
+        if(amount>consume){
+            var exp = Math.round(log(consumeMax,max) * 1000) / 1000;
+            var t=consume-2*(amount-consume)
+            test =Math.round(Math.pow(t, exp));
+        }else{
+            var exp = Math.round(log(consumeMin,min) * 1000) / 1000;
+            var t=consume-2*(consume-amount);
+            test =Math.round(Math.pow(amount, exp));
+        
+        }
+        // var test = Math.round(consume * normal / amount);
+        // var test=Math.round((0.0+normal)+Math.pow(consume,0.6)-Math.pow(amount,0.6));
+/*        var test = Math.round(normal + (normal - (amount / consume * normal)));
+        if (test < min)
+            return min;
+        if (test > max || amount < 30) {
+            return max;
+        }*/
+        return test;
+    }
+      
+       
+
     getIcon(): string {
         var colors = [
             ["", "green", "mdi-pine-tree"],
@@ -76,25 +117,25 @@ export class Product {
 }
 
 export var allProducts = [
-    new Product({ id: 0, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 33,  distribution: 16,amountForPeople:5 }),
-    new Product({ id: 1, name: "Ziegel", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 33,  distribution: 16 ,amountForPeople:4.5 }),
-    new Product({ id: 2, name: "Getreide", dailyProduce: 7, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 33,distribution: 16,amountForPeople:4  }),
-    new Product({ id: 3, name: "Eisen", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 33, distribution: 16,amountForPeople:3  }),
-    new Product({ id: 4, name: "Wolle", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 50, distribution: 16,amountForPeople:2.5  }),
-    new Product({ id: 5, name: "Öl", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 50,  distribution: 16,amountForPeople:3  }),
-    new Product({ id: 6, name: "Brot", dailyProduce: 6, input1: 2, input1Amount: 2, input2: undefined, input2Amount: 0, priceProduction: 50, distribution: 8,amountForPeople:5  }),
-    new Product({ id: 7, name: "Plaste", dailyProduce: 6, input1: 5, input1Amount: 2, input2: undefined, input2Amount: 0, priceProduction: 58,  distribution: 8 ,amountForPeople:5 }),
-    new Product({ id: 8, name: "Fleisch", dailyProduce: 2, input1: 2, input1Amount: 1, input2: undefined, input2Amount: 0,  priceProduction: 167, distribution: 8,amountForPeople:2  }),
-    new Product({ id: 9, name: "Möbel", dailyProduce: 2, input1: 1, input1Amount: 0.5, input2: 3, input2Amount: 1,  priceProduction: 150,  distribution: 8,amountForPeople:2  }),
-    new Product({ id: 10, name: "Kleidung", dailyProduce: 1, input1: 4, input1Amount: 2, input2: undefined, input2Amount: 0,  priceProduction: 150,  distribution: 8,amountForPeople:1  }),
-    new Product({ id: 11, name: "Fisch", dailyProduce: 3, input1: undefined, input1Amount: undefined, input2: undefined, input2Amount: 0, priceProduction: 75,distribution: 8,amountForPeople:2  }),
-    new Product({ id: 12, name: "Apfel", dailyProduce: 4, input1: undefined, input1Amount: undefined, input2: undefined, input2Amount: 0,priceProduction: 129,  distribution: 8 ,amountForPeople:3 }),
-    new Product({ id: 13, name: "Saft", dailyProduce: 3, input1: 12, input1Amount: 1, input2: undefined, input2Amount: 0,priceProduction: 350,  distribution: 8 ,amountForPeople:3 }),
+    new Product({ id: 0, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32,  distribution: 16,amountForPeople:5 }),
+    new Product({ id: 1, name: "Ziegel", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32,  distribution: 16 ,amountForPeople:4.5 }),
+    new Product({ id: 2, name: "Getreide", dailyProduce: 7, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 23,distribution: 16,amountForPeople:4  }),
+    new Product({ id: 3, name: "Eisen", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32, distribution: 16,amountForPeople:3  }),
+    new Product({ id: 4, name: "Wolle", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32, distribution: 16,amountForPeople:2.5  }),
+    new Product({ id: 5, name: "Öl", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction:32,  distribution: 16,amountForPeople:3  }),
+    new Product({ id: 6, name: "Brot", dailyProduce: 6, input1: 2, input1Amount: 2, input2: undefined, input2Amount: 0, priceProduction: 49, distribution: 8,amountForPeople:5  }),
+    new Product({ id: 7, name: "Plaste", dailyProduce: 6, input1: 5, input1Amount: 2, input2: undefined, input2Amount: 0, priceProduction: 57,  distribution: 8 ,amountForPeople:5 }),
+    new Product({ id: 8, name: "Fleisch", dailyProduce: 2, input1: 2, input1Amount: 1, input2: undefined, input2Amount: 0,  priceProduction: 109, distribution: 8,amountForPeople:2  }),
+    new Product({ id: 9, name: "Möbel", dailyProduce: 2, input1: 1, input1Amount: 0.5, input2: 3, input2Amount: 1,  priceProduction: 117,  distribution: 8,amountForPeople:2  }),
+    new Product({ id: 10, name: "Kleidung", dailyProduce: 1, input1: 4, input1Amount: 2, input2: undefined, input2Amount: 0,  priceProduction: 286,  distribution: 8,amountForPeople:1  }),
+    new Product({ id: 11, name: "Fisch", dailyProduce: 3, input1: undefined, input1Amount: undefined, input2: undefined, input2Amount: 0, priceProduction: 60,distribution: 8,amountForPeople:2  }),
+    new Product({ id: 12, name: "Apfel", dailyProduce: 4, input1: undefined, input1Amount: undefined, input2: undefined, input2Amount: 0,priceProduction: 45,  distribution: 8 ,amountForPeople:3 }),
+    new Product({ id: 13, name: "Saft", dailyProduce: 3, input1: 12, input1Amount: 1, input2: undefined, input2Amount: 0,priceProduction: 85,  distribution: 8 ,amountForPeople:3 }),
     new Product({ id: 14, name: "Gold", dailyProduce: 2, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 100,  distribution: 4 ,amountForPeople: 1}), 
-    new Product({ id: 15, name: "Schmuck", dailyProduce: 2, input1: 14, input1Amount: 1, input2: undefined, input2Amount: 0,  priceProduction: 117, distribution: 4 ,amountForPeople:2 }),
-    new Product({ id: 16, name: "Spielzeug", dailyProduce: 1, input1: 4, input1Amount: 0.5, input2: 7, input2Amount: 0.5,  priceProduction: 300,  distribution: 4,amountForPeople:1  }),
-    new Product({ id: 17, name: "Fahrrad", dailyProduce: 1, input1: 3, input1Amount: 1, input2: 7, input2Amount: 0.5,  priceProduction: 288,  distribution: 4 ,amountForPeople:1 }),
-    new Product({ id: 18, name: "Fischbrot", dailyProduce: 1, input1: 11, input1Amount: 1, input2: 6, input2Amount: 1,  priceProduction: 400,  distribution: 4 ,amountForPeople:1 })
+    new Product({ id: 15, name: "Schmuck", dailyProduce: 2, input1: 14, input1Amount: 1, input2: undefined, input2Amount: 0,  priceProduction: 184, distribution: 4 ,amountForPeople:2 }),
+    new Product({ id: 16, name: "Spielzeug", dailyProduce: 1, input1: 4, input1Amount: 0.5, input2: 7, input2Amount: 0.5,  priceProduction: 274,  distribution: 4,amountForPeople:1  }),
+    new Product({ id: 17, name: "Fahrrad", dailyProduce: 1, input1: 3, input1Amount: 1, input2: 7, input2Amount: 0.5,  priceProduction: 274,  distribution: 4 ,amountForPeople:1 }),
+    new Product({ id: 18, name: "Fischbrot", dailyProduce: 1, input1: 11, input1Amount: 1, input2: 6, input2Amount: 1,  priceProduction: 382,  distribution: 4 ,amountForPeople:1 })
 ];
 /*export var allProducts = [
     new Product({ id: 0, name: "Holz", dailyProduce: 2.5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0, dailyConsumtion: 0.0015, priceProduction: 33, pricePurchase: 40, priceSelling: 59, distribution: 16 }),
@@ -122,20 +163,8 @@ export var allProducts = [
 
 export function test() {
     var people = 30656;
-    var prodid = 4;
-    var prod = allProducts[4];
-    /* var consume = Math.round(prod.dailyConsumtion * people * 4);
-     var normal = prod.pricePurchase;
-     var min = Math.round(normal * 2 / 3);
-     var max = Math.round(normal * 5 / 3);
-     var testmenge = 10;
-     var test = Math.round(consume * normal / testmenge);
-     //allProducts[2].calcPrice(10000,0);
-     //((23.5+60*0.4)*60-0.4*Math.pow(60,2))
-     //console.log(consume);
-     var p=(23.5+60*0.4)/-0.4;
-     var q=500/0.4;
-     var x2=-p/2+Math.sqrt((Math.pow(p/2,2))-q);
- */
-    console.log(prod.calcPrice(people, 99, true));
+    console.log(allProducts[1].pricePurchase+" "+Math.round(200*allProducts[1].dailyConsumtion*40));
+    console.log(allProducts[1].calcPrice(200,2,true));
 }
+
+

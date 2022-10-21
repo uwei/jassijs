@@ -34,7 +34,7 @@ export class City {
     warehouseSellingPrice: number[];
     type = "City";
     domDesc: HTMLSpanElement;
-   
+
     constructor() {
         this.market = [];
         this.warehouseMinStock = [];
@@ -45,11 +45,11 @@ export class City {
             this.score.push(50);
             for (var y = 0; y < this.companies.length; y++) {
                 if (this.companies[y].productid === x) {
-                    val =  20*Math.round(City.neutralStartPeople * allProducts[x].dailyConsumtion * City.neutralProductionRate);
+                    val = 22 * Math.round(City.neutralStartPeople * allProducts[x].dailyConsumtion * City.neutralProductionRate);
                 }
             }
             if (val === 0) {
-                val = 10*Math.round(City.neutralStartPeople * allProducts[x].dailyConsumtion * City.neutralProductionRate);
+                val = 10 * Math.round(City.neutralStartPeople * allProducts[x].dailyConsumtion * City.neutralProductionRate);
 
             }
             this.warehouseMinStock.push(undefined);
@@ -71,11 +71,11 @@ export class City {
             return a.productid - b.productid;
         });
     }
-    getAirplanesInCity():Airplane[]{
-        var ret:Airplane[]=[];
-        for(var x=0;x<this.world.airplanes.length;x++){
-            var ap=this.world.airplanes[x];
-            if(ap.x===this.x&&ap.y===this.y)
+    getAirplanesInCity(): Airplane[] {
+        var ret: Airplane[] = [];
+        for (var x = 0; x < this.world.airplanes.length; x++) {
+            var ap = this.world.airplanes[x];
+            if (ap.x === this.x && ap.y === this.y)
                 ret.push(ap);
         }
         return ret;
@@ -106,7 +106,7 @@ export class City {
 
     }
     updateNeutralCompanies() {
-        if(this.people>3000)
+        if (this.people > 3000)
             return;
         //neutral companies
         if (this.neutralDailyProducedToday === undefined) {
@@ -124,8 +124,8 @@ export class City {
         for (var x = 0; x < this.companies.length; x++) {
             var prod = this.companies[x].productid;
             var totalDailyProduce = Math.round(City.neutralStartPeople * allProducts[prod].dailyConsumtion * City.neutralProductionRate);
-            if(totalDailyProduce<1)
-                totalDailyProduce=1;
+            if (totalDailyProduce < 1)
+                totalDailyProduce = 1;
             var untilNow = Math.round(totalDailyProduce * dayProcent);
             if (untilNow > this.neutralDailyProducedToday[x]) {
                 var diff = untilNow - this.neutralDailyProducedToday[x];
@@ -161,47 +161,47 @@ export class City {
         }
         return false;
     }
-    transferWorker(numberOfWorker:number){
-         for(var y=0;y<numberOfWorker;y++){
-            var comps=[];
-            for(var x=0;x<this.companies.length;x++){
-                if((this.companies[x].buildings*25)>this.companies[x].workers)
+    transferWorker(numberOfWorker: number) {
+        for (var y = 0; y < numberOfWorker; y++) {
+            var comps = [];
+            for (var x = 0; x < this.companies.length; x++) {
+                if ((this.companies[x].buildings * 25) > this.companies[x].workers)
                     comps.push(x);
             }
-            if(comps.length===0)
+            if (comps.length === 0)
                 return;
-            
-            var winner=getRandomInt(comps.length);
+
+            var winner = getRandomInt(comps.length);
             this.companies[comps[winner]].workers++;
-         }
+        }
     }
-    updatePeople(){
-        var newPeople=1;
-        while(this.people<(City.neutralStartPeople+this.houses*100)&&newPeople>0){
-            var comps=[];
-            for(var x=0;x<this.companies.length;x++){
-                if((this.companies[x].buildings*Company.workerInCompany)>this.companies[x].workers)
+    updatePeople() {
+        var newPeople = 1;
+        while (this.people < (City.neutralStartPeople + this.houses * 100) && newPeople > 0) {
+            var comps = [];
+            for (var x = 0; x < this.companies.length; x++) {
+                if ((this.companies[x].buildings * Company.workerInCompany) > this.companies[x].workers)
                     comps.push(x);
             }
-            if(comps.length===0)
+            if (comps.length === 0)
                 return;
             this.people++;
-            var winner=getRandomInt(comps.length);
-            console.log("+1 in company "+winner);
+            var winner = getRandomInt(comps.length);
+            console.log("+1 in company " + winner);
             this.companies[comps[winner]].workers++;
             newPeople--;
         }
-        while(this.people>(City.neutralStartPeople+this.houses*100)){
-            var comps=[];
-            for(var x=0;x<this.companies.length;x++){
-                if(this.companies[x].workers>0)
+        while (this.people > (City.neutralStartPeople + this.houses * 100)) {
+            var comps = [];
+            for (var x = 0; x < this.companies.length; x++) {
+                if (this.companies[x].workers > 0)
                     comps.push(x);
             }
-            if(comps.length===0)
+            if (comps.length === 0)
                 return;
             this.people--;
-            var winner=getRandomInt(comps.length);
-            console.log("+1 in company "+winner);
+            var winner = getRandomInt(comps.length);
+            console.log("+1 in company " + winner);
             this.companies[comps[winner]].workers--;
         }
     }
@@ -215,7 +215,7 @@ export class City {
             }
         }
         var dayProcent = this.world.game.date.getHours() / 24;
-        if (this.world.game.date.getHours() ===23) {
+        if (this.world.game.date.getHours() === 23) {
             dayProcent = 1;
 
         }
@@ -255,7 +255,7 @@ export class City {
                     this.score[x] = Math.round((this.score[x] - 0.15) * 100) / 100;
 
                     // if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
-                       // console.log(x+" zu teuer " + price + ">" + priceMax);
+                    // console.log(x+" zu teuer " + price + ">" + priceMax);
 
 
                 }
@@ -267,9 +267,9 @@ export class City {
 
             }
             if (dayProcent === 1) {
-               
-             //  console.log("consumed "+x+"  "+this.consumedToday[x]);
-                 this.consumedToday[x] = 0;
+
+                //  console.log("consumed "+x+"  "+this.consumedToday[x]);
+                this.consumedToday[x] = 0;
             }
         }
     }
@@ -297,17 +297,19 @@ export class City {
         if (this.houses > 0)
             this.world.game.changeMoney(-this.houses * 42, "daily costs houses", this);
 
-        if (this.people - 1000 > 0) {
+        if (this.people - City.neutralStartPeople > 0) {
             this.world.game.changeMoney(Math.round((this.people - City.neutralStartPeople) * 1.6), "rental fee", this);
         }
         var companycosts = 0;
         for (var x = 0; x < this.companies.length; x++) {
-            companycosts += (this.companies[x].buildings * 100);
+            companycosts +=   this.companies[x].getDayilyCosts();
+     
         }
         if (companycosts > 0) {
-            this.world.game.changeMoney(companycosts, "daily costs companies", this);
+            this.world.game.changeMoney(-companycosts, "daily costs salary", this);
         }
     }
+   
     update() {
         if (this.lastUpdate === undefined) {
             this.lastUpdate = this.world.game.date.getTime();
@@ -327,10 +329,11 @@ export class City {
             //a new day starts
             this.updateDalyCosts();
         }
-        if(this.world.game.date.getHours()===23){
-            for(var x=0;x<debugNeed.length;x++){
-               // console.log("needed "+x+" "+debugNeed[x]);
-                debugNeed[x]=0;
+        if (this.world.game.date.getHours() === 23) {
+           
+            for (var x = 0; x < debugNeed.length; x++) {
+                // console.log("needed "+x+" "+debugNeed[x]);
+                debugNeed[x] = 0;
             }
         }
         this.lastUpdate = this.world.game.date.getTime();
@@ -351,7 +354,7 @@ export class City {
         h.show();
 
     }
-    commitBuildingCosts(buildPrice: number, buildMaterial: number[],transactiontext:string): boolean {
+    commitBuildingCosts(buildPrice: number, buildMaterial: number[], transactiontext: string): boolean {
         if (this.canBuild(buildPrice, buildMaterial) !== "")
             return false;
         var total = buildPrice;
@@ -359,17 +362,17 @@ export class City {
         for (var x = 0; x < buildMaterial.length; x++) {
             if (buildMaterial[x] > 0) {
                 //checkwarehouse
-                var min=Math.min(buildMaterial[x],this.warehouse[x]);
-                this.warehouse[x]-=min;
-                var diff=buildMaterial[x]-min;
-                if(diff>0){//markt
-                    var price=allProducts[x].calcPrice(this.people, this.market[x] - diff, false);
-                    this.market[x]-=diff;
-                    total+=(price*diff);
+                var min = Math.min(buildMaterial[x], this.warehouse[x]);
+                this.warehouse[x] -= min;
+                var diff = buildMaterial[x] - min;
+                if (diff > 0) {//markt
+                    var price = allProducts[x].calcPrice(this.people, this.market[x] - diff, false);
+                    this.market[x] -= diff;
+                    total += (price * diff);
                 }
             }
         }
-        this.world.game.changeMoney(-total,transactiontext,this);
+        this.world.game.changeMoney(-total, transactiontext, this);
     }
     //returns undefined if markt
     canBuild(buildPrice: number, buildMaterial: number[]) {
@@ -417,7 +420,7 @@ function createCities2(count, checkProduction = false) {
         for (var x = 0; x < allProducts.length; x++) {
             if (allids.indexOf(allProducts[x].id) === -1) {
 
-                return createCities2(count);
+                return createCities2(count,checkProduction);
             }
         }
     }
@@ -489,7 +492,7 @@ export function createCities(world: World, count: number) {
     return cities;
 }
 
-export function test(){
+export function test() {
     console.log(getRandomInt(2));
 }
 //https://de.wikipedia.org/wiki/Liste_der_Hauptst%C3%A4dte_der_Erde   https://lizenzhinweisgenerator.de/ Wikipedia

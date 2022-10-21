@@ -100,7 +100,7 @@ export class CityDialogMarket {
                     var t = <HTMLInputElement>e.target;
                     var test = $(t).slider("value");
                     var val;
-                    if (test ===0 || test === 40)//Cursor verspringt
+                    if (test === 0 || test === 40)//Cursor verspringt
                         val = _this.getSliderValue(t);//
                     else
                         val = parseInt(t.getAttribute("curVal"));
@@ -114,6 +114,16 @@ export class CityDialogMarket {
                     document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                     $(t).slider("value", 40);
                     inedit = false;
+                },
+                stop: function (e: any, ui) {
+                     inedit = true;
+                    setTimeout(() => {
+                        var id = Number(e.target.id.split("_")[1]);
+                        document.getElementById("citydialog-market-info_" + id).innerHTML = "";
+                        $(e.target).slider("value", 40);
+                        inedit = false;
+
+                    }, 200);
                 }
             });
             $("#buy-slider_" + x).slider({
@@ -134,6 +144,7 @@ export class CityDialogMarket {
                         document.getElementById("citydialog-market-info_" + id).innerHTML = "x" + val + "<br/>= -" + val * price;
                     t.parentNode.parentNode.parentNode.children[4].children[0].innerHTML = "" + price;
                 },
+            
                 change: function (e, ui) {
 
                     if (inedit)
@@ -141,7 +152,7 @@ export class CityDialogMarket {
                     var t = <HTMLInputElement>e.target;
                     var test = $(t).slider("value");
                     var val;
-                    if (test ===0 || test === 40)//Cursor verspringt
+                    if (test === 0 || test === 40)//Cursor verspringt
                         val = _this.getSliderValue(t);//
                     else
                         val = parseInt(t.getAttribute("curVal"));
@@ -156,6 +167,16 @@ export class CityDialogMarket {
                     document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                     $(t).slider("value", 0);
                     inedit = false;
+                },
+                stop: function (e: any, ui) {
+                    setTimeout(() => {
+                         inedit = true;
+                        var id = Number(e.target.id.split("_")[1]);
+                        document.getElementById("citydialog-market-info_" + id).innerHTML = "";
+                        $(e.target).slider("value", 0);
+                        inedit = false;
+
+                    }, 200);
                 }
             });
 
@@ -315,8 +336,6 @@ export class CityDialogMarket {
             return maxValue;
         var exp = Math.round(log(maxValue, 40) * 1000) / 1000;
         var ret = Math.round(Math.pow(val, exp));
-
-        console.log("max" + maxValue + " " + val + " ->" + ret);
         return ret;
     }
     private calcPrice(el: HTMLInputElement, val: number) {

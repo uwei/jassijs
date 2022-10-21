@@ -84,7 +84,7 @@ export class Game {
   }
   changeMoney(change:number,why:string,city:City=undefined){
     this._money+=change;
-  //  console.log(change+" "+why);
+    console.log(change+" "+why);
   }
   render(dom: HTMLElement) {
     var _this = this;
