@@ -144,6 +144,7 @@ export class AirplaneDialog {
                 }
             });
             document.getElementById("edit-route").addEventListener('click', (e) => {
+                _this.enableDropCities(false);
                 RouteDialog.getInstance().airplane = _this.airplane;
                 RouteDialog.getInstance().route = undefined;
                 if (_this.airplane.route.length > 0)

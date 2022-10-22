@@ -23,5 +23,7 @@ export class Icons {
     static toright="<span  class='mdi  mdi-arrow-right-bold-outline'></span>";
     static toleft="<span  class='mdi  mdi-arrow-left-bold-outline'></span>";
     static remove="<span  class='mdi  mdi-delete-forever-outline'></span>";
+    static nine="<span  class='mdi  mdi-numeric-9-plus-circle-outline'></span>";
+   
     
 }

@@ -95,8 +95,8 @@ export class Product {
 
     getIcon(): string {
         var colors = [
-            ["", "green", "mdi-pine-tree"],
             ["", "orange", "mdi-format-line-style"],
+            ["", "green", "mdi-pine-tree"],
             ["", "yellow", "mdi-grass"],
             ["", "silver", "mdi-checkbox-blank-circle"],
             ["", "lightgray", "mdi-apple-icloud"],

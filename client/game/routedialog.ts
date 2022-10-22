@@ -21,8 +21,139 @@ export class RouteDialog {
             RouteDialog.instance = new RouteDialog();
         return RouteDialog.instance;
     }
+    private create() {
+        //template for code reloading
+        var sdom = `
+          <div hidden id="routedialog" class="routedialog">
+            <div></div>
+           </div>
+        `;
+        this.dom = <any>document.createRange().createContextualFragment(sdom).children[0];
+        var old = document.getElementById("routedialog");
+        if (old) {
+            old.parentNode.removeChild(old);
+        }
+        var airplane = this.airplane;
+        var products = allProducts;
+        var _this = this;
+        var sdom = `
+          <div>
+          <div>
+            <input id="routedialog-airplane-prev" type="button" value="<"/>
+            <span id="routedialog-airplane-name"></span>
+            <input id="routedialog-airplane-next" type="button" value=">"/>
+            <select id="route-select" >
+            </select>
+            <input id="routedialog-route-next" type="button" value=">"/>
+            <button id="route-copy-prev" title="copy prev route">`+ Icons.copy + `</button>
+                      
+          </div>
+            <div id="routedialog-tabs">
+                <ul>
+                    <li><a href="#routedialog-unload" class="routedialog-tabs">Unload</a></li>
+                    <li><a href="#routedialog-load" class="routedialog-tabs">Load</a></li>
+                </ul>
+                <div id="routedialog-unload">
+                      <table id="routedialog-unload-table" style="height:100%;weight:100%;">
+                        <tr>
+                            <th>Name</th>
+                            <th></th>
+                            <th>Market<br/>max amount<br/><button id="route-unload-market-fill" title="fill first row down">`+ Icons.fillDown + `</button> </th>
+                            <th>Market<br/>min price</th>
+                            <th>Warehouse<br/>amount<br/>
+                            <button id="route-unload-warehous-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                            <button id="route-unload-warehous-fill9" title="fill 99999999 down">`+ Icons.nine + `</button>
+                            </th>
+                        </tr>
+                       ${(function fun() {
+                var ret = "";
+                function price(id: string, change: number) {
+                    console.log(id + " " + change);
+                }
+                for (var x = 0; x < allProducts.length; x++) {
+                    ret = ret + "<tr>";
+                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>" + allProducts[x].name + "</td>";
+                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-max-amount" id="unload-market-max-amount_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-min-price" id="unload-market-min-price_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-warehouse-amount" id="unload-warehouse-amount_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + "</tr>";
+                }
+                return ret;
+            })()}
+                    </table>    
+                </div>
+                <div id="routedialog-load">
+                      <table id="routedialog-load-table" style="height:100%;weight:100%;">
+                        <tr >
+                            <th>Name</th>
+                            <th></th>
+                            <th>Market<br/>amount<br/><button id="route-load-market-fill">`+ Icons.fillDown + `</button></th>
+                            <th>Market<br/>until amount<br/><button id="route-load-market-until-fill" title="fill first row down">`+ Icons.fillDown + `</button></th>
+                            <th>Market<br/>max price</th>
+                            <th>Warehouse<br/>amount<br/>
+                                <button id="route-load-warehouse-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                                <button id="route-load-fill-consumtion" title="fill consumtion">`+ Icons.food + `</button>
+                            </th>
+                            <th>Warehouse<br/>until amount<br/>
+                                <button id="route-load-warehouse-until-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                                <button id="route-load-fill-consumtion-until" title="fill consumtion">`+ Icons.food + `</button>
+                            </th>
+                        </tr>
+                       ${(function fun() {
+                var ret = "";
+                function price(id: string, change: number) {
+                    console.log(id + " " + change);
+                }
+                for (var x = 0; x < allProducts.length; x++) {
+                    ret = ret + "<tr>";
+                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>" + allProducts[x].name + "</td>";
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-amount" id="load-market-max-amount_' + x + '"' +
+                        'style="width: 40px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-until-amount" id="load-market-until-amount_' + x + '"' +
+                        'style="width: 40px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
+                        'style="width: 40px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-amount" id="load-warehouse-amount_' + x + '"' +
+                        'style="width: 40px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-until-amount" id="load-warehouse-until-amount_' + x + '"' +
+                        'style="width: 40px;"' + '"></td>';
+                    ret = ret + "</tr>";
+                }
+                return ret;
+            })()}
+                    </table>    
+                 </div>
+                <div>
+                
+            </div>
+          </div>
+        `;
+        var newdom = <any>document.createRange().createContextualFragment(sdom).children[0];
+        this.dom.removeChild(this.dom.children[0]);
+        this.dom.appendChild(newdom);
+        $("#routedialog-tabs").tabs({
+            //collapsible: true
+        });
+        setTimeout(() => {
+            $("#routedialog-tabs").tabs({
+                //collapsible: true
+            });
+            //  $( "#route-list" ).sortable();
+        }, 100);
+        document.body.appendChild(this.dom);
 
-  
+        //        document.getElementById("citydialog-prev")
+        setTimeout(() => {
+            _this.bindActions();
+        }, 500);
+        //document.createElement("span");
+    }
+
     bindActions() {
         var _this = this;
         for (var x = 0; x < allProducts.length; x++) {
@@ -90,6 +221,12 @@ export class RouteDialog {
             }
             _this.update();
         });
+        document.getElementById("route-unload-warehous-fill9").addEventListener("click", (e) => {
+            for (var x = 0; x < _this.route.unloadWarehouseAmount.length; x++) {
+                this.route.unloadWarehouseAmount[x] = 9999999999;
+            }
+            _this.update();
+        });
         document.getElementById("route-load-market-fill").addEventListener("click", (e) => {
             for (var x = 1; x < _this.route.loadMarketAmount.length; x++) {
                 this.route.loadMarketAmount[x] = this.route.loadMarketAmount[0];
@@ -124,13 +261,16 @@ export class RouteDialog {
             _this.copyRoute();
         });
         document.getElementById("routedialog-airplane-prev").addEventListener("click", (e) => {
-            _this.prevRoute();
+            _this.prevAirplane();
         });
         document.getElementById("routedialog-airplane-next").addEventListener("click", (e) => {
+            _this.nextAirplane();
+        });
+        document.getElementById("routedialog-route-next").addEventListener("click", (e) => {
             _this.nextRoute();
         });
     }
-    prevRoute() {
+    prevAirplane() {
         var _this = this;
         var pos = _this.airplane.world.airplanes.indexOf(_this.airplane);
         pos--;
@@ -140,13 +280,13 @@ export class RouteDialog {
         _this.route = undefined;
         if (_this.airplane.world.airplanes[pos].route.length === 0) {
             _this.route = undefined;
-            this.prevRoute();
+            this.prevAirplane();
             return;
         }
         _this.route = _this.airplane.world.airplanes[pos].route[0];
         _this.update(true);
     }
-    nextRoute() {
+    nextAirplane() {
         var _this = this;
         var pos = _this.airplane.world.airplanes.indexOf(_this.airplane);
         pos++;
@@ -155,11 +295,21 @@ export class RouteDialog {
         _this.airplane = _this.airplane.world.airplanes[pos];
         if (_this.airplane.world.airplanes[pos].route.length === 0) {
             _this.route = undefined;
-            this.nextRoute();
+            this.nextAirplane();
             return;
         }
         _this.route = _this.airplane.world.airplanes[pos].route[0];
         _this.update(true);
+    }
+    nextRoute() {
+        var _this=this;
+        var pos=_this.airplane.route.indexOf(this.route);
+        pos++;
+        if(pos===_this.airplane.route.length){
+            pos=0;
+        }
+        _this.route = _this.airplane.route[pos];
+        _this.update();
     }
 
     copyRoute() {
@@ -218,13 +368,13 @@ export class RouteDialog {
                 for (var c = 0; c < city.companies.length; c++) {
                     var prod = allProducts[city.companies[c].productid];
                     if (prod.input1)
-                        store[prod.input1] += Math.round((1.1*city.companies[c].buildings* prod.input1Amount ));
+                        store[prod.input1] += Math.round((1.1 * city.companies[c].buildings * prod.input1Amount));
                     if (prod.input2)
-                        store[prod.input2] += Math.round((1.1*city.companies[c].buildings * prod.input2Amount ));
+                        store[prod.input2] += Math.round((1.1 * city.companies[c].buildings * prod.input2Amount));
 
                 }
                 for (var y = 0; y < allProducts.length; y++) {
-                    store[y] += Math.round(1.1*totalDays * allProducts[y].dailyConsumtion * city.people / 24);
+                    store[y] += Math.round(1.1 * totalDays * allProducts[y].dailyConsumtion * city.people / 24);
 
                 }
 
@@ -232,136 +382,7 @@ export class RouteDialog {
         }
         _this.update();
     }
-    private create() {
-        //template for code reloading
-        var sdom = `
-          <div hidden id="routedialog" class="routedialog">
-            <div></div>
-           </div>
-        `;
-        this.dom = <any>document.createRange().createContextualFragment(sdom).children[0];
-        var old = document.getElementById("routedialog");
-        if (old) {
-            old.parentNode.removeChild(old);
-        }
-        var airplane = this.airplane;
-        var products = allProducts;
-        var _this = this;
-        var sdom = `
-          <div>
-          <div>
-            <input id="routedialog-airplane-prev" type="button" value="<"/>
-            <span id="routedialog-airplane-name"></span>
-            <input id="routedialog-airplane-next" type="button" value=">"/>
-            <select id="route-select" >
-                    
-                    
-            </select>
-            <button id="route-copy-prev" title="copy prev route">`+ Icons.copy + `</button>
-                      
-          </div>
-            <div id="routedialog-tabs">
-                <ul>
-                    <li><a href="#routedialog-unload" class="routedialog-tabs">Unload</a></li>
-                    <li><a href="#routedialog-load" class="routedialog-tabs">Load</a></li>
-                </ul>
-                <div id="routedialog-unload">
-                      <table id="routedialog-unload-table" style="height:100%;weight:100%;">
-                        <tr>
-                            <th>Name</th>
-                            <th></th>
-                            <th>Market<br/>max amount<br/><button id="route-unload-market-fill" title="fill first row down">`+ Icons.fillDown + `</button> </th>
-                            <th>Market<br/>min price</th>
-                            <th>Warehouse<br/>amount<br/><button id="route-unload-warehous-fill" title="fill first row down">`+ Icons.fillDown + `</button></th>
-                        </tr>
-                       ${(function fun() {
-                var ret = "";
-                function price(id: string, change: number) {
-                    console.log(id + " " + change);
-                }
-                for (var x = 0; x < allProducts.length; x++) {
-                    ret = ret + "<tr>";
-                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>" + allProducts[x].name + "</td>";
-                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-max-amount" id="unload-market-max-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-min-price" id="unload-market-min-price_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-warehouse-amount" id="unload-warehouse-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + "</tr>";
-                }
-                return ret;
-            })()}
-                    </table>    
-                </div>
-                <div id="routedialog-load">
-                      <table id="routedialog-load-table" style="height:100%;weight:100%;">
-                        <tr>
-                            <th>Name</th>
-                            <th></th>
-                            <th>Market<br/>amount<br/><button id="route-load-market-fill">`+ Icons.fillDown + `</button></th>
-                            <th>Market<br/>until amount<br/><button id="route-load-market-until-fill" title="fill first row down">`+ Icons.fillDown + `</button></th>
-                            <th>Market<br/>max price</th>
-                            <th>Warehouse<br/>amount<br/>
-                                <button id="route-load-warehouse-fill" title="fill first row down">`+ Icons.fillDown + `</button>
-                                <button id="route-load-fill-consumtion" title="fill consumtion">`+ Icons.food + `</button>
-                            </th>
-                            <th>Warehouse<br/>until amount<br/>
-                                <button id="route-load-warehouse-until-fill" title="fill first row down">`+ Icons.fillDown + `</button>
-                                <button id="route-load-fill-consumtion-until" title="fill consumtion">`+ Icons.food + `</button>
-                            </th>
-                        </tr>
-                       ${(function fun() {
-                var ret = "";
-                function price(id: string, change: number) {
-                    console.log(id + " " + change);
-                }
-                for (var x = 0; x < allProducts.length; x++) {
-                    ret = ret + "<tr>";
-                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>" + allProducts[x].name + "</td>";
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-amount" id="load-market-max-amount_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-until-amount" id="load-market-until-amount_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-amount" id="load-warehouse-amount_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-until-amount" id="load-warehouse-until-amount_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
-                    ret = ret + "</tr>";
-                }
-                return ret;
-            })()}
-                    </table>    
-                 </div>
-                <div>
-                
-            </div>
-          </div>
-        `;
-        var newdom = <any>document.createRange().createContextualFragment(sdom).children[0];
-        this.dom.removeChild(this.dom.children[0]);
-        this.dom.appendChild(newdom);
-        $("#routedialog-tabs").tabs({
-            //collapsible: true
-        });
-        setTimeout(() => {
-            $("#routedialog-tabs").tabs({
-                //collapsible: true
-            });
-            //  $( "#route-list" ).sortable();
-        }, 100);
-        document.body.appendChild(this.dom);
 
-        //        document.getElementById("citydialog-prev")
-        setTimeout(() => {
-            _this.bindActions();
-        }, 500);
-        //document.createElement("span");
-    }
 
     update(force = false) {
         try {
@@ -421,15 +442,15 @@ export class RouteDialog {
         this.update();
         //ui-tabs-active
         $(this.dom).dialog({
-            width: "400px",
-            draggable:true,
+            width: "425px",
+            draggable: true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
                 _this.update(true);
             },
             close: function () {
             }
-        }).dialog("widget").draggable("option","containment","none");
+        }).dialog("widget").draggable("option", "containment", "none");
         $(this.dom).parent().css({ position: "fixed" });
 
     }
