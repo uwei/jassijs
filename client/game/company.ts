@@ -73,7 +73,7 @@ export class Company {
         if(allProducts[this.productid].distribution===4){
             fact=10;
         }
-        return this.workers*fact;
+        return this.workers*fact/allProducts[this.productid].dailyProduce;
     }
     getBuildingMaterial() {
         var fact = 5 - (allProducts[this.productid].distribution) / 4;
