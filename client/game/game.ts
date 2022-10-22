@@ -9,9 +9,10 @@ import { Airplane } from "game/airplane";
 import { City } from "game/city";
 import { Route } from "game/route";
 import { allProducts } from "game/product";
+import { DiagramDialog } from "game/diagramdialog";
 
-window.onbeforeunload = function() {
-      return "Do you want to exit?";
+window.onbeforeunload = function () {
+  return "Do you want to exit?";
 
 };
 export class Game {
@@ -32,7 +33,7 @@ export class Game {
   constructor() {
     var _this = this;
     Game.instance = this;
-    
+
     this.lastUpdate = Date.now();
     this.date = new Date("Sat Jan 01 2000 00:00:00");
     CityDialog.instance = undefined;
@@ -48,12 +49,12 @@ export class Game {
       return;
     }
   }
-  updateSize(){
-    this.domWorld.style.width=(this.mapWidth+80)+"px"; 
-    this.domWorld.style.height=(this.mapHeight+100)+"px"; 
-    (<HTMLElement> this.domWorld.parentNode).style.width=(this.mapWidth+80)+"px"; 
-    (<HTMLElement> this.domWorld.parentNode).style.height=(this.mapHeight+100)+"px"; 
-    
+  updateSize() {
+    this.domWorld.style.width = (this.mapWidth + 80) + "px";
+    this.domWorld.style.height = (this.mapHeight + 100) + "px";
+    (<HTMLElement>this.domWorld.parentNode).style.width = (this.mapWidth + 80) + "px";
+    (<HTMLElement>this.domWorld.parentNode).style.height = (this.mapHeight + 100) + "px";
+
   }
   //never call this outside the timer - then would be 2 updates
   private nevercallthisfunction() {
@@ -75,21 +76,21 @@ export class Game {
   }
   newGame() {
     this.world = new World();
-    this.world.game = this; 
+    this.world.game = this;
     this._money = 20000;
     this.world.newGame();
   }
-  getMoney(){
+  getMoney() {
     return this._money;
   }
-  changeMoney(change:number,why:string,city:City=undefined){
-    this._money+=change;
-  //  console.log(change+" "+why);
+  changeMoney(change: number, why: string, city: City = undefined) {
+    this._money += change;
+    //  console.log(change+" "+why);
   }
   render(dom: HTMLElement) {
     var _this = this;
     dom.innerHTML = "";
-    dom.style.backgroundColor="lightblue";
+    dom.style.backgroundColor = "lightblue";
     this.dom = dom;
     var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
@@ -101,6 +102,7 @@ export class Game {
             <button id="save-game">`+ Icons.save + `</button> 
             <button id="debug-game">`+ Icons.debug + `</button> 
             <button id="load-game">`+ Icons.load + `</button> 
+            <button id="show-diagram">`+ Icons.diagram + `</button> 
           </div>  
         `;
     this.domHeader = <any>document.createRange().createContextualFragment(sdomHeader).children[0];
@@ -112,8 +114,8 @@ export class Game {
 
     this.domWorld = <any>document.createRange().createContextualFragment(sdomWorld).children[0];
     this.dom.appendChild(this.domHeader);
-   // var headerPlaceeholder = <any>document.createRange().createContextualFragment('<div style="height:15px"></div>').children[0]
-   // this.dom.appendChild(headerPlaceeholder);
+    // var headerPlaceeholder = <any>document.createRange().createContextualFragment('<div style="height:15px"></div>').children[0]
+    // this.dom.appendChild(headerPlaceeholder);
     this.dom.appendChild(this.domWorld);
     this.world.render(this.domWorld);
     this.updateSize();
@@ -135,10 +137,14 @@ export class Game {
     });
     document.getElementById("debug-game").addEventListener("click", () => {
       _this.world.addCity();
-      for(var x=0;x<allProducts.length;x++){
-        _this.world.cities[0].warehouse[x]=5000;
+      for (var x = 0; x < allProducts.length; x++) {
+        _this.world.cities[0].warehouse[x] = 5000;
       }
-      _this._money=100000;
+      _this._money = 100000;
+    });
+    document.getElementById("show-diagram").addEventListener("click", () => {
+      DiagramDialog.getInstance().world=this.world;
+      DiagramDialog.getInstance().show();
     });
     document.getElementById("game-slower").addEventListener("click", () => {
       if (_this.speed === Game.temposcale[0]) {
@@ -260,7 +266,7 @@ export class Game {
     }
     for (var x = 0; x < this.world.cities.length; x++) {
       this.world.cities[x].world = this.world;
-       for (var y = 0; y < this.world.cities[x].companies.length; y++) {
+      for (var y = 0; y < this.world.cities[x].companies.length; y++) {
         this.world.cities[x].companies[y].city = this.world.cities[x];
       }
       //for(var y=0;y<this.world.cities[x].companies.length;y++){

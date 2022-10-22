@@ -24,6 +24,8 @@ export class Icons {
     static toleft="<span  class='mdi  mdi-arrow-left-bold-outline'></span>";
     static remove="<span  class='mdi  mdi-delete-forever-outline'></span>";
     static nine="<span  class='mdi  mdi-numeric-9-plus-circle-outline'></span>";
+     static diagram="<span  class='mdi  mdi-chart-multiple'></span>";
+     static refresh="<span  class='mdi  mdi-refresh'></span>";
    
     
 }

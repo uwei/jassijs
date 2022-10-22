@@ -102,6 +102,13 @@ export class SquadronDialog {
     }
 
     update() {
+         try {
+            if (!$(this.dom).dialog('isOpen')) {
+                return;
+            }
+        } catch {
+            return;
+        }
         var selectCity = document.getElementById("airplanes-in-city");
         var selectSquadron = document.getElementById("airplanes-in-squadron");
         var city: City = this.airplane.getCurrentCity();

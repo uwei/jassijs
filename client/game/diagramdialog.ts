@@ -1,0 +1,144 @@
+
+import { allProducts, Product } from "game/product";
+import { Airplane } from "game/airplane";
+import { Icons } from "game/icons";
+import { Route } from "game/route";
+import { City } from "game/city";
+import { World } from "game/world";
+
+export class DiagramDialog {
+    dom: HTMLDivElement;
+    world: World;
+    public static instance;
+
+    constructor() {
+
+        this.create();
+
+    }
+    static getInstance(): DiagramDialog {
+        if (DiagramDialog.instance === undefined)
+            DiagramDialog.instance = new DiagramDialog();
+        return DiagramDialog.instance;
+    }
+
+    bindActions() {
+        var _this = this;
+
+        document.getElementById("diagramdialog-refresh").addEventListener('click', (e) => {
+            _this.update();
+        });
+    }
+
+    private create() {
+        //template for code reloading
+        var sdom = `
+          <div hidden id="diagramdialog" class="diagramdialog">
+            <div></div>
+           </div>
+        `;
+        this.dom = <any>document.createRange().createContextualFragment(sdom).children[0];
+        var old = document.getElementById("DiagramDialog");
+        if (old) {
+            old.parentNode.removeChild(old);
+        }
+        var _this = this;
+        var sdom = `
+          <div>
+            <button id="diagramdialog-refresh" title="refresh data">`+ Icons.refresh + `</button>
+                            
+            <div id="diagramdialog-tabs">
+                <ul>
+                    <li><a href="#diagramdialog-buildings" id="diagramdialog-buildings-tab" class="diagramdialog-tabs">Buildings</a></li>
+                    <li><a href="#diagramdialog-balance" id="diagramdialog-balance-tab" class="diagramdialog-tabs">Balance</a></li>
+                </ul>
+                 <div id="diagramdialog-buildings">`+ _this.createBuildings() + `
+                </div> 
+                <div id="diagramdialog-balance">                TODO                </div>
+            </div>
+           </div> 
+            `;
+        var newdom = <any>document.createRange().createContextualFragment(sdom).children[0];
+        this.dom.removeChild(this.dom.children[0]);
+        this.dom.appendChild(newdom);
+
+        document.body.appendChild(this.dom);
+        $("#diagramdialog-tabs").tabs({
+            //collapsible: true
+        });
+        //        document.getElementById("citydialog-prev")
+        setTimeout(() => {
+            $("#diagramdialog-tabs").tabs({
+                //collapsible: true
+            });
+            _this.bindActions();
+        }, 500);
+        //document.createElement("span");
+    }
+    createBuildings() {
+        return `<table id="diagramdialog-buildings-table" style="height:100%;weight:100%;">
+                        <tr>
+                            <th>Name</th>
+                            <th> </th>
+                            <th>count Buildings</th>
+                        </tr>
+                       ${(function fun() {
+                var ret = "";
+                for (var x = 0; x < allProducts.length; x++) {
+                    ret = ret + "<tr>";
+                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>" + allProducts[x].name + "</td>";
+                    ret = ret + "<td>0</td>";
+                    ret = ret + "</tr>";
+                }
+                return ret;
+            })()}
+                    </table>`;
+    }
+    update() {
+        try {
+            if (!$(this.dom).dialog('isOpen')) {
+                return;
+            }
+        } catch {
+            return;
+        }
+        var table = document.getElementById("diagramdialog-buildings-table");
+        var buildings = [];
+        for (var x = 0; x < allProducts.length; x++) {
+            buildings.push(0);
+        }
+        for (var x = 0; x < this.world.cities.length; x++) {
+            for (var y = 0; y < this.world.cities[x].companies.length; y++) {
+                var comp = this.world.cities[x].companies[y];
+                buildings[comp.productid] += comp.buildings;
+            }
+        }
+        for (var x = 0; x < allProducts.length; x++) {
+            var tr = table.children[0].children[x + 1];
+            tr.children[2].innerHTML = buildings[x];
+        }
+    }
+    show() {
+        var _this = this;
+        this.dom.removeAttribute("hidden");
+        this.update();
+        //ui-tabs-active
+        $(this.dom).dialog({
+            title: "Statistics",
+            width: "400px",
+            draggable: true,
+            //     position:{my:"left top",at:"right top",of:$(document)} ,
+            open: function (event, ui) {
+                _this.update();
+            },
+            close: function () {
+            }
+        }).dialog("widget").draggable("option", "containment", "none");
+        $(this.dom).parent().css({ position: "fixed" });
+
+    }
+    close() {
+        $(this.dom).dialog("close");
+    }
+}

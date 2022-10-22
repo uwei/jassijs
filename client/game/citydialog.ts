@@ -451,7 +451,7 @@ export class CityDialog {
             if (test.input1 !== undefined) {
                 needs[test.input1] += (Math.round(this.city.companies[i].workers * test.input1Amount / Company.workerInCompany));
             }
-            if (test.input2 === x) {
+            if (test.input2 !==undefined) {
                 needs[test.input2] += (Math.round(this.city.companies[i].workers * test.input2Amount / Company.workerInCompany));
             }
         }

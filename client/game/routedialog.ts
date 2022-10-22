@@ -349,7 +349,7 @@ export class RouteDialog {
             }
         }
         var days = lenpixel / _this.route.airplane.speed; //t=s/v; in Tage
-        var totalDays = (Math.round(days * 24) + 1 + all.length * 3 + all.length * 3);   //+3h load and unload
+        var totalDays = (Math.round(days * 24) + 1 + all.length * 3 + all.length * 3)/24;   //+3h load and unload
         console.log(totalDays);
         var store = allCities ? this.route.loadWarehouseAmount : this.route.loadWarehouseUntilAmount;
         for (var x = 0; x < allProducts.length; x++) {
@@ -368,13 +368,13 @@ export class RouteDialog {
                 for (var c = 0; c < city.companies.length; c++) {
                     var prod = allProducts[city.companies[c].productid];
                     if (prod.input1)
-                        store[prod.input1] += Math.round((1.1 * city.companies[c].buildings * prod.input1Amount));
+                        store[prod.input1] += Math.round((1.1 * city.companies[c].buildings * prod.input1Amount*totalDays));
                     if (prod.input2)
-                        store[prod.input2] += Math.round((1.1 * city.companies[c].buildings * prod.input2Amount));
+                        store[prod.input2] += Math.round((1.1 * city.companies[c].buildings * prod.input2Amount*totalDays));
 
                 }
                 for (var y = 0; y < allProducts.length; y++) {
-                    store[y] += Math.round(1.1 * totalDays * allProducts[y].dailyConsumtion * city.people / 24);
+                    store[y] += Math.round(1.1 * totalDays * allProducts[y].dailyConsumtion * city.people);
 
                 }
 

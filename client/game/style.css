@@ -7,7 +7,9 @@ table {
 .ui-droppable.ui-droppable-active.ui-droppable-hover{
     background-color:yellow;
 }
-
+.airplane_fullloaded{
+    color:blue;
+}
 tr {
     padding: 0 0 0 0;
 }
@@ -63,5 +65,9 @@ table {
 }
 
 .routedialog>* {
+    font-size: 10px;
+}
+
+.diagramdialog>* {
     font-size: 10px;
 }
