@@ -120,7 +120,7 @@ export class World {
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             var ges = 0;
             for (var x = 0; x < this.airplanes.length; x++) {
-                ges += this.airplanes[x].costs;
+                ges += this.airplanes[x].getDailyCosts();
             }
             this.game.changeMoney(-ges, "daily costs airplane");
         }

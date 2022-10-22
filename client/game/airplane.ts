@@ -205,6 +205,13 @@ export class Airplane {
         h.show();
 
     }
+    getDailyCosts(){
+        var ret=allAirplaneTypes[this.typeid].costs;
+        for(var x=0;x<this.squadron.length;x++){
+            ret+=allAirplaneTypes[this.squadron[x].typeid].costs;
+        }
+        return ret;
+    }
 }
 var allAirplaneTypes=[
 {typeid:0,model:"Airplane A",speed:200,capacity:200, costs:20,buildDays:25,buildingCosts:11000,buildingMaterial:[0,0,0,40,0,10,0,10,0,10,0,0,0,0,10]},

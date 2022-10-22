@@ -24,7 +24,6 @@ export class SquadronDialog {
     bindActions() {
         var _this=this;
         document.getElementById("sqadron-add").addEventListener('click', (e) => {
-            debugger;
             var val = (<HTMLSelectElement>document.getElementById("airplanes-in-city")).value;
             if (val === "no airplanes in city"||val==="")
                 return;
