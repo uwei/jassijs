@@ -17,20 +17,25 @@ export class Product {
     priceProduction: number;
     pricePurchase: number;
     priceSelling: number;
+    static ratePurchase=5/4;
+    static rateSelling=6/4;
+    static rateMin=3/4;
+    static rateMax=5/4;
     private amountForPeople:number;
     //how often it is used
     distribution: number;
     constructor(prod) {
         Object.assign(this, prod);
         this.dailyConsumtion=Math.round((10000*this.amountForPeople/380))/10000-0.0001;
-        this.pricePurchase=Math.round(this.priceProduction*4/3);
-        this.priceSelling=Math.round(this.priceProduction*5/3);
+        this.pricePurchase=Math.round(this.priceProduction*Product.ratePurchase);
+        this.priceSelling=Math.round(this.priceProduction*Product.rateSelling);
     }
+    
     getMinPrice() {
-        return Math.round(this.priceSelling * 2 / 3);
+        return Math.round(this.priceSelling * Product.rateMin);
     }
     getMaxPrice() {
-        return Math.round(this.priceSelling * 5 / 3);
+        return Math.round(this.priceSelling * Product.rateMax);
     }
     /**
      * calc price for a city with people and the
@@ -40,8 +45,8 @@ export class Product {
         var normal = isProducedHere ? this.pricePurchase : this.priceSelling;
 
     
-        var min = Math.round((0.0 + normal) * 2 / 3);
-        var max = Math.round((0.0 + normal) * 5 / 3);
+        var min = Math.round((0.0 + normal) * Product.rateMin);
+        var max = Math.round((0.0 + normal) * Product.rateMax);
         // var test = Math.round(consume * normal / amount);
         // var test=Math.round((0.0+normal)+Math.pow(consume,0.6)-Math.pow(amount,0.6));
         var test = Math.round(normal + (normal - (amount / consume * normal)));
@@ -56,10 +61,10 @@ export class Product {
     calcPrice2(people: number, amount: number, isProducedHere: boolean) {
         var consume = Math.round(this.dailyConsumtion * people * 40);
         var normal = isProducedHere ? this.pricePurchase : this.priceSelling;
-        var min = Math.round((0.0 + normal) * 2 / 3);
-        var max = Math.round((0.0 + normal) * 5 / 3);
-        var consumeMin = Math.round(consume*2/3);
-        var consumeMax = Math.round(consume*5/3);
+        var min = Math.round((0.0 + normal) * Product.rateMin);
+        var max = Math.round((0.0 + normal) *Product.rateMax);
+        var consumeMin = Math.round(consume*Product.rateMin);
+        var consumeMax = Math.round(consume*Product.rateMax);
         if(amount<consumeMin)
             return max;
         if(amount>consumeMax)
@@ -117,8 +122,8 @@ export class Product {
 }
 
 export var allProducts = [
-    new Product({ id: 0, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32,  distribution: 16,amountForPeople:5 }),
-    new Product({ id: 1, name: "Ziegel", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32,  distribution: 16 ,amountForPeople:4.5 }),
+    new Product({ id: 0, name: "Stein", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32,  distribution: 16,amountForPeople:5 }),
+    new Product({ id: 1, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32,  distribution: 16 ,amountForPeople:4.5 }),
     new Product({ id: 2, name: "Getreide", dailyProduce: 7, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 23,distribution: 16,amountForPeople:4  }),
     new Product({ id: 3, name: "Eisen", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32, distribution: 16,amountForPeople:3  }),
     new Product({ id: 4, name: "Wolle", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32, distribution: 16,amountForPeople:2.5  }),

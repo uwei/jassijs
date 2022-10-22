@@ -150,9 +150,10 @@ export class World {
         }
         this.cities[0].houses = 1;
         this.cities[0].warehouses = 1;
-/*
 
-         this.cities=[this.cities[0]];
+
+     /* Lastenausgleich   
+        this.cities=[this.cities[0]];
         this.cities[0].companies=[];
         for(var x=0;x<19;x++){
             var comp=new Company();

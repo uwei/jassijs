@@ -1,5 +1,5 @@
 import { City } from "game/city";
-import { allProducts } from "game/product";
+import { allProducts, Product } from "game/product";
 import { CityDialog } from "game/citydialog";
 var log = (function () {
     var log = Math.log;
@@ -346,19 +346,19 @@ export class CityDialogMarket {
             if (city.companies[x].productid === id)
                 isProducedHere = true;
         }
-        var prod = allProducts[id].priceSelling;
+        var prod = isProducedHere?allProducts[id].pricePurchase: allProducts[id].priceSelling;
 
         if (el.id.indexOf("sell") > -1)
             val = -val;
         var ret = allProducts[id].calcPrice(city.people, city.market[id] - val, isProducedHere);
         var color = "#32CD32";
-        if (ret > ((0.0 + prod) * 2 / 3))
+        if (ret > ((0.0 + prod) * ((1-Product.rateMin)*2/4+Product.rateMin)))
             color = "#DAF7A6 ";
-        if (ret > ((0.0 + prod) * 2.5 / 3))
+        if (ret > ((0.0 + prod) *((1-Product.rateMin)*3/4+Product.rateMin)))
             color = "white";
         if (ret > ((0.0 + prod) * 1))
             color = "Yellow";
-        if (ret > ((0.0 + prod) * 4 / 3))
+        if (ret > ((0.0 + prod) *((Product.rateMax-1)*2/4+1)))
             color = "LightPink";
 
         (<HTMLElement>el.parentElement.parentElement.parentElement.children[4]).style.background = color;

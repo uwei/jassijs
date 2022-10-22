@@ -114,9 +114,9 @@ export class Company {
         var totalDailyProduce = Math.round(this.workers * allProducts[prod].dailyProduce / Company.workerInCompany);
         var totalDailyNeed1 = undefined;
         var totalDailyNeed2 = undefined;
-        if (allProducts[prod].input1)
+        if (allProducts[prod].input1!==undefined)
             totalDailyNeed1 = Math.round(this.workers * allProducts[prod].input1Amount / Company.workerInCompany);
-        if (allProducts[prod].input1)
+        if (allProducts[prod].input2!==undefined)
             totalDailyNeed2 = Math.round(this.workers * allProducts[prod].input2Amount / Company.workerInCompany);
 
         if (this.dailyProducedToday === 0 && totalDailyNeed1 !== undefined) {

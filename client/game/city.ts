@@ -1,6 +1,6 @@
 import { World } from "game/world";
 import { CityDialog } from "game/citydialog";
-import { allProducts } from "game/product";
+import { allProducts, Product } from "game/product";
 import { Company, debugNeed } from "game/company";
 import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
@@ -239,7 +239,7 @@ export class City {
                         price = this.warehouseSellingPrice[x];
                     }
                 }
-                var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * 4 / 3 - product.priceSelling);
+                var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * Product.rateMax - product.priceSelling);
                 this.consumedToday[x] = untilNow;
                 if (price <= priceMax) {
                     if (fromWarehouse) {
