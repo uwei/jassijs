@@ -99,8 +99,8 @@ export class Game {
             <button id="game-faster">`+ Icons.plus + `</button> 
             Money:<span id="gamemoney"></span>`+ Icons.money + `
             <button id="save-game">`+ Icons.save + `</button> 
-            <button id="load-game">`+ Icons.load + `</button> 
             <button id="debug-game">`+ Icons.debug + `</button> 
+            <button id="load-game">`+ Icons.load + `</button> 
           </div>  
         `;
     this.domHeader = <any>document.createRange().createContextualFragment(sdomHeader).children[0];
