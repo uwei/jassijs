@@ -68,14 +68,15 @@ export class AirplaneDialog {
                     <input type="text" id="airplanedialog-name"> </input>
                     <span id="airplanedialog-type">Type:</span><br/>
                     <span id="airplanedialog-speed">Speed:</span><br/>
-                    <span id="airplanedialog-capacity">Capacity:</span><br/> <button id="edit-squadron">`+ Icons.edit + `</button>
+                    <span id="airplanedialog-capacity">Capacity:</span><br/> 
+                    <button style="font-size:14px" id="edit-squadron">`+ Icons.edit + `</button>
                  </div>
                  <div id="airplanedialog-route">
                     
                     <input type="checkbox" id="route-active"> active</input>
-                    <button id="edit-route">`+ Icons.edit + `</button>
-                    <button id="delete-route">`+ Icons.remove + `</button>
-                    <ul id="route-list">
+                    <button style="font-size:14px" id="edit-route">`+ Icons.edit + `</button>
+                    <button style="font-size:14px"  id="delete-route">`+ Icons.remove + `</button>
+                    <ul style="min-heigt:40px" id="route-list">
                      
            
                     </ul>
@@ -177,9 +178,15 @@ export class AirplaneDialog {
                     for (var x = 0; x < select.children.length; x++) {
                         select.children[x].classList.remove("active-route");
                     }
-                    
+
                 }
                 el.classList.add("active-route");
+            });
+            $("#delete-route").droppable({
+                drop: (e, e2) => {
+                    $(e2.draggable[0]).remove();
+                    _this.updateData();
+                }
             });
         }, 500);
         //document.createElement("span");
@@ -240,8 +247,8 @@ export class AirplaneDialog {
         if (document.getElementById("route-list") === null)
             return;
         var html = "";
-        if (this.airplane.route.length === 0)
-            html = '<li id="route-dummy">drag and drop cities here</li>';
+        //if (this.airplane.route.length === 0)
+        //  html = '<li id="route-dummy">drag and drop cities here</br></li>';
         var ids = [];
         for (var x = 0; x < this.airplane.route.length; x++) {
             var id = this.airplane.route[x].cityid;
@@ -253,6 +260,7 @@ export class AirplaneDialog {
             //var dom:HTMLSpanElement= <any>document.createRange().createContextualFragment(sdom).children[0];
 
         }
+        html += '<li id="route-dummy">drag and drop<br/> cities here</li>';
         document.getElementById("route-list").innerHTML = html;
         $("#route-list").sortable({
             update: (event, ui) => {

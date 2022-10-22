@@ -4,6 +4,9 @@ table {
 .active-route.ui-state-default{
     background-color:lightgray;
 }
+.ui-droppable.ui-droppable-active.ui-droppable-hover{
+    background-color:yellow;
+}
 
 tr {
     padding: 0 0 0 0;
