@@ -292,7 +292,7 @@ export class City {
     }
     updateDalyCosts() {
         if (this.warehouses > 0)
-            this.world.game.changeMoney(-this.warehouses * 50, "daily costs warehouses", this);
+            this.world.game.changeMoney(-this.warehouses * 100, "daily costs warehouses", this);
 
         if (this.houses > 0)
             this.world.game.changeMoney(-this.houses * 42, "daily costs houses", this);

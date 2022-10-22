@@ -83,7 +83,7 @@ export class Company {
     }
     getBuildingCosts() {
         var fact = 5 - (allProducts[this.productid].distribution) / 4;
-        return fact * 10000;
+        return fact * 20000;
     }
     getDailyInput2(): number {
         var needs = 0;

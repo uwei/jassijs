@@ -17,10 +17,10 @@ export class Product {
     priceProduction: number;
     pricePurchase: number;
     priceSelling: number;
-    static ratePurchase=5/4;
-    static rateSelling=6/4;
-    static rateMin=3/4;
-    static rateMax=5/4;
+    static ratePurchase=4.5/4;
+    static rateSelling=5/4;
+    static rateMin=2/3;
+    static rateMax=4/3;
     private amountForPeople:number;
     //how often it is used
     distribution: number;
