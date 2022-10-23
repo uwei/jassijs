@@ -17,6 +17,7 @@ export class City {
     country: string;
     icon: string;
     dom: HTMLElement;
+    domAirport: HTMLElement;
     world: World;
     people: number;
     market: number[];
@@ -34,8 +35,10 @@ export class City {
     warehouseSellingPrice: number[];
     type = "City";
     domDesc: HTMLSpanElement;
-
+    hasAirport;
     constructor() {
+        this.hasAirport = true;
+
         this.market = [];
         this.warehouseMinStock = [];
         this.warehouseSellingPrice = [];
@@ -88,20 +91,39 @@ export class City {
         this.dom.setAttribute("cityid", cityid.toString())
         this.dom.style.position = "absolute";
         this.dom.classList.add("city");
+
+        this.dom.style.top = this.y.toString() + "px";
+        this.dom.style.left = this.x.toString() + "px";
+        this.world.dom.appendChild(this.dom);
+        this.dom.style.zIndex = "1";
+        this.domDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
+            'px;left:' + this.x + 'px;font-size:14px;">' + this.name + '</span>').children[0];
+        this.world.dom.appendChild(this.domDesc);
+
+        this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
+            'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + Icons.airport + '</span>').children[0];
+
+        this.world.dom.appendChild(this.domAirport);
+        if (!this.hasAirport) {
+            this.domAirport.style.visibility = "hidden";
+        }
         this.dom.addEventListener("click", (ev: MouseEvent) => {
             _this.onclick(ev);
             return undefined;
         });
+
         this.dom.addEventListener("contextmenu", (ev: MouseEvent) => {
             _this.oncontextmenu(ev);
             return undefined;
         });
-        this.dom.style.top = this.y.toString() + "px";
-        this.dom.style.left = this.x.toString() + "px";
-        this.world.dom.appendChild(this.dom);
-        this.domDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
-            'px;left:' + this.x + 'px;font-size:14px;">' + this.name + '</span>').children[0];
-        this.world.dom.appendChild(this.domDesc);
+        this.domAirport.addEventListener("click", (ev: MouseEvent) => {
+            _this.oncontextmenu(ev);
+            return undefined;
+        });
+        this.domAirport.addEventListener("contextmenu", (ev: MouseEvent) => {
+            _this.oncontextmenu(ev);
+            return undefined;
+        });
 
 
     }
@@ -165,7 +187,7 @@ export class City {
         for (var y = 0; y < numberOfWorker; y++) {
             var comps = [];
             for (var x = 0; x < this.companies.length; x++) {
-                if ((this.companies[x].buildings * 25) > this.companies[x].workers)
+                if ((this.companies[x].buildings * Company.workerInCompany) > this.companies[x].workers)
                     comps.push(x);
             }
             if (comps.length === 0)
@@ -298,18 +320,18 @@ export class City {
             this.world.game.changeMoney(-this.houses * 42, "daily costs houses", this);
 
         if (this.people - City.neutralStartPeople > 0) {
-            this.world.game.changeMoney(Math.round((this.people - City.neutralStartPeople) * 1.6), "rental fee", this);
+            this.world.game.changeMoney(Math.round((this.people - City.neutralStartPeople) * 3), "rental fee", this);
         }
         var companycosts = 0;
         for (var x = 0; x < this.companies.length; x++) {
-            companycosts +=   this.companies[x].getDayilyCosts();
-     
+            companycosts += this.companies[x].getDayilyCosts();
+
         }
         if (companycosts > 0) {
             this.world.game.changeMoney(-companycosts, "daily costs salary", this);
         }
     }
-   
+
     update() {
         if (this.lastUpdate === undefined) {
             this.lastUpdate = this.world.game.date.getTime();
@@ -324,13 +346,14 @@ export class City {
         }
         this.updateDailyConsumtion();
         this.sellWareHouseToMarket();
-        this.updatePeople();
+        if (this.world.game.date.getHours() % 4 === 0)
+            this.updatePeople();
         if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             //a new day starts
             this.updateDalyCosts();
         }
         if (this.world.game.date.getHours() === 23) {
-           
+
             for (var x = 0; x < debugNeed.length; x++) {
                 // console.log("needed "+x+" "+debugNeed[x]);
                 debugNeed[x] = 0;
@@ -348,6 +371,16 @@ export class City {
 
     }
     onclick(th: MouseEvent) {
+        if (this.hasAirport === false) {
+            var price = Number(1000000).toLocaleString();
+            if (confirm(`Do you want to buy an airport for ${price}?`)) {
+                this.world.game.changeMoney(1000000, "bay an airport", this);
+                this.hasAirport = true;
+                this.domAirport.style.visibility = "initial";
+                this.world.addCity(false);//cities[this.world.cities.length - 1].hasAirport = false;
+            }
+            return;
+        }
         th.preventDefault();
         var h = CityDialog.getInstance();
         h.city = this;
@@ -373,6 +406,7 @@ export class City {
             }
         }
         this.world.game.changeMoney(-total, transactiontext, this);
+        return true;
     }
     //returns undefined if markt
     canBuild(buildPrice: number, buildMaterial: number[]) {
@@ -420,15 +454,15 @@ function createCities2(count, checkProduction = false) {
         for (var x = 0; x < allProducts.length; x++) {
             if (allids.indexOf(allProducts[x].id) === -1) {
 
-                return createCities2(count,checkProduction);
+                return createCities2(count, checkProduction);
             }
         }
     }
     return cities;
 }
 function calcPosNewCity(world: World, deep) {
-    var x = getRandomInt(world.game.mapWidth);
-    var y = getRandomInt(world.game.mapHeight);
+    var x = getRandomInt(world.game.mapWidth - 40) + 40;
+    var y = getRandomInt(world.game.mapHeight - 12) + 12;
     for (var i = 0; i < world.cities.length; i++) {
         var ct = world.cities[i];
         if (x > (ct.x - 100) && x < (ct.x + 100) && y > (ct.y - 100) && (y < ct.y + 100)) {
@@ -484,7 +518,7 @@ export function createCities(world: World, count: number) {
         }
         allready.push(num);
         city.id = num;
-        city.name = allCities[num][1];
+        city.name = allCities[num][1].substring(0, 17);
         city.country = allCities[num][0];
         city.icon = "https://" + allCities[num][2];
         //  cities.push(city);

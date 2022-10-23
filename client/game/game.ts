@@ -15,6 +15,10 @@ window.onbeforeunload = function () {
   return "Do you want to exit?";
 
 };
+class Statistic {
+  today: { [key: string]: number }={};
+  yesterday: { [key: string]: number }={};
+}
 export class Game {
   static instance: Game;
   dom: HTMLElement;
@@ -29,6 +33,7 @@ export class Game {
   timer;
   mapWidth = 1000;
   mapHeight = 600;
+  statistic = new Statistic();
   static temposcale = [0.01, 0.5, 1, 2, 4, 8, 16, 32, 64, 128]
   constructor() {
     var _this = this;
@@ -85,6 +90,9 @@ export class Game {
   }
   changeMoney(change: number, why: string, city: City = undefined) {
     this._money += change;
+    if (this.statistic.today[why] === undefined)
+      this.statistic.today[why] = 0;
+    this.statistic.today[why] += change;
     //  console.log(change+" "+why);
   }
   render(dom: HTMLElement) {
@@ -136,14 +144,16 @@ export class Game {
       _this.load();
     });
     document.getElementById("debug-game").addEventListener("click", () => {
-      _this.world.addCity();
+      _this.world.addCity(false);
+      //_this.world.cities[_this.world.cities.length-1].hasAirport=false;
+      return;
       for (var x = 0; x < allProducts.length; x++) {
         _this.world.cities[0].warehouse[x] = 5000;
       }
       _this._money = 100000;
     });
     document.getElementById("show-diagram").addEventListener("click", () => {
-      DiagramDialog.getInstance().world=this.world;
+      DiagramDialog.getInstance().world = this.world;
       DiagramDialog.getInstance().show();
     });
     document.getElementById("game-slower").addEventListener("click", () => {

@@ -83,7 +83,12 @@ export class Company {
     }
     getBuildingCosts() {
         var fact = 5 - (allProducts[this.productid].distribution) / 4;
-        return fact * 20000;
+        var factcount=0;
+        for(var x=0;x<this.city.companies.length;x++){
+            factcount+=this.city.companies[x].buildings;
+        }
+        //je 20 1 höher
+        return fact * 10000+Math.round(10000*factcount/20);
     }
     getDailyInput2(): number {
         var needs = 0;

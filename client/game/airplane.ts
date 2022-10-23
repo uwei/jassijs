@@ -40,6 +40,7 @@ export class Airplane {
 
         }
         this.typeid=1;
+        this.action = "wait";
         /*  for(var x=0;x<4;x++){
               var rt=new Route();
               rt.cityid=x;
@@ -70,7 +71,7 @@ export class Airplane {
         this.dom = <any>document.createRange().createContextualFragment("<span style='font-size:20px;transform:rotate(0turn)' class='mdi mdi-airplane'></span>").children[0];//document.createElement("span");
         this.dom.style.position = "absolute";
 
-        this.action = "wait";
+        
        
        
         this.dom.addEventListener("click", (ev: MouseEvent) => {
@@ -103,11 +104,11 @@ export class Airplane {
     }
     select() {
         if (this.dom)
-            this.dom.style.color = "red";
+            this.dom.classList.add("airplane_selected");
     }
     unselect() {
         if (this.dom)
-            this.dom.style.color = "black";
+            this.dom.classList.remove("airplane_selected");
     }
     arrived() {
         console.log("target arrived");
@@ -157,6 +158,9 @@ export class Airplane {
         }
     }
     update() {
+        if(!this.dom){
+            return;
+        }
         if(this.loadedCount===this.capacity&&!this.dom.classList.contains("airplane_fullloaded")){
             this.dom.classList.add("airplane_fullloaded");
         }
@@ -168,7 +172,7 @@ export class Airplane {
         }
         this.lastUpdate = this.world.game.date.getTime();
         this.dom.style.top = this.y + "px";
-        this.dom.style.left = (this.x - 15) + "px";
+        this.dom.style.left = (this.x - 35) + "px";
         if (this.activeRoute !== -1 && this.route.length > 1) {
             if (this.action === "unload" && (this.lastUpdate - this.lastAction) > (3 * 1000 * 60 * 60)) {
                 // console.log("load now");
@@ -224,7 +228,7 @@ var allAirplaneTypes=[
 {typeid:2,model:"Airplane C",speed:220,capacity:500, costs:150,buildDays:39,buildingCosts:60000,buildingMaterial:[0,0,0,100,0,30,0,30,0,30,0,0,0,0,30]},
 {typeid:3,model:"Airplane D",speed:240,capacity:650, costs:180,buildDays:45,buildingCosts:75000,buildingMaterial:[0,0,0,120,0,40,0,40,0,40,0,0,0,0,40]},
 {typeid:4,model:"Airplane E",speed:260,capacity:1000, costs:270,buildDays:56,buildingCosts:150000,buildingMaterial:[0,0,0,200,0,50,0,50,0,50,0,0,0,0,50]},
-{typeid:5,model:"Airplane F",speed:300,capacity:2000, costs:500,buildDays:79,buildingCosts:210000,buildingMaterial:[0,0,0,400,0,100,0,100,0,100,0,0,0,0,100]},
+{typeid:5,model:"Airplane F",speed:300,capacity:2000, costs:500,buildDays:79,buildingCosts:300000,buildingMaterial:[0,0,0,400,0,100,0,100,0,100,0,0,0,0,100]},
 ];
 export{allAirplaneTypes};
 //<span style='font-size:100px;'>&#9951;</span>

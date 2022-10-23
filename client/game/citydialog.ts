@@ -225,7 +225,7 @@ export class CityDialog {
          document.getElementById("citydialog-next").addEventListener("click", (ev) => {
             var pos = _this.city.world.cities.indexOf(_this.city);
             pos++;
-            if (pos >= _this.city.world.cities.length)
+            if (pos >= _this.city.world.cities.length-1)
                 pos = 0;
             _this.city = _this.city.world.cities[pos];
             _this.update(true);
@@ -235,7 +235,7 @@ export class CityDialog {
             var pos = _this.city.world.cities.indexOf(_this.city);
             pos--;
             if (pos === -1)
-                pos = _this.city.world.cities.length - 1;
+                pos = _this.city.world.cities.length - 2;
             _this.city = _this.city.world.cities[pos];
             _this.update(true);
         });
@@ -247,7 +247,8 @@ export class CityDialog {
                 var id = Number(sid.split("_")[1]);
                 var comp = _this.city.companies[id];
 
-                _this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building");
+                if(!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building"))
+                    return;
                 comp.buildings++;
                 _this.update();
             });
@@ -272,13 +273,15 @@ export class CityDialog {
                     sid = (<any>evt.target).parentNode.id
                 var id = Number(sid.split("_")[1]);
                 var comp = _this.city.companies[id];
-                _this.city.commitBuildingCosts(50000, [], "buy licence");
+                if(!_this.city.commitBuildingCosts(50000, [], "buy licence"))
+                    return;
                 comp.hasLicense = true;
             });
 
         }
         document.getElementById("buy-house").addEventListener("click", (evt) => {
-            this.city.commitBuildingCosts(15000, [20, 40], "buy building");
+            if(!this.city.commitBuildingCosts(15000, [20, 40], "buy building"))
+                reutrn;
             _this.city.houses++;
             _this.update();
         });
@@ -293,8 +296,8 @@ export class CityDialog {
             console.log("remove worker");
         });
         document.getElementById("buy-warehouse").addEventListener("click", (evt) => {
-
-            _this.city.commitBuildingCosts(25000, [40, 80], "buy building");
+            if(!_this.city.commitBuildingCosts(25000, [40, 80], "buy building"))
+                return;
             _this.city.warehouses++;
             _this.update();
         });
@@ -320,7 +323,8 @@ export class CityDialog {
     }
     newAirplane(typeid: number) {
         var _this = this;
-        _this.city.commitBuildingCosts(allAirplaneTypes[typeid].buildingCosts, allAirplaneTypes[typeid].buildingMaterial, "buy airplane");
+        if(!_this.city.commitBuildingCosts(allAirplaneTypes[typeid].buildingCosts, allAirplaneTypes[typeid].buildingMaterial, "buy airplane"))
+            return;
         var maxNumber = 1;
         for (var x = 0; x < _this.city.world.airplanes.length; x++) {
             var test = _this.city.world.airplanes[x];
@@ -509,6 +513,8 @@ export class CityDialog {
         } catch {
             return;
         }
+        if(!this.city.hasAirport)
+            return;
         this.updateTitle();
         //pause game while trading
         if (!force) {

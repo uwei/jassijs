@@ -54,7 +54,10 @@ export class DiagramDialog {
                 </ul>
                  <div id="diagramdialog-buildings">`+ _this.createBuildings() + `
                 </div> 
-                <div id="diagramdialog-balance">                TODO                </div>
+                <div id="diagramdialog-balance">   
+                    <table id="diagramdialog-balance-table">
+                    </table>         
+                </div>
             </div>
            </div> 
             `;
@@ -118,6 +121,35 @@ export class DiagramDialog {
             var tr = table.children[0].children[x + 1];
             tr.children[2].innerHTML = buildings[x];
         }
+
+        //
+        var table = document.getElementById("diagramdialog-balance-table");
+        var content=`
+            <tr>
+                <th>What</th>
+                <th>Yesterday</th>
+                <th>Today</th>
+            </tr>
+        `;
+        var allKeys=[];
+        for(var key in this.world.game.statistic.today){
+            if(allKeys.indexOf(key)===-1)
+                allKeys.push(key);
+        }
+        for(var key in this.world.game.statistic.yesterday){
+            if(allKeys.indexOf(key)===-1)
+                allKeys.push(key);
+        }
+        allKeys.sort((a:string,b)=>a.localeCompare(b));
+        for(var x=0;x<allKeys.length;x++){
+            var k=allKeys[x];
+            content+=`<tr>
+                        <td>`+k+`</td>
+                        <td>`+this.world.game.statistic.yesterday[k]+`</td>
+                        <td>`+this.world.game.statistic.today[k]+`</td>
+                      </tr>`
+        }
+        table.innerHTML=content;
     }
     show() {
         var _this = this;

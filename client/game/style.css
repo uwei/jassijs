@@ -10,6 +10,12 @@ table {
 .airplane_fullloaded{
     color:blue;
 }
+.airplane_fullloaded.airplane_selected{
+    color:red;
+}
+.airplane_selected{
+    color:red;
+}
 tr {
     padding: 0 0 0 0;
 }

@@ -26,6 +26,7 @@ export class Icons {
     static nine="<span  class='mdi  mdi-numeric-9-plus-circle-outline'></span>";
      static diagram="<span  class='mdi  mdi-chart-multiple'></span>";
      static refresh="<span  class='mdi  mdi-refresh'></span>";
-   
+     static airport="<span  class='mdi  mdi-airport'></span>";
+    
     
 }

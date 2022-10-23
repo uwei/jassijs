@@ -8,6 +8,7 @@ import { AirplaneDialog } from "game/airplanedialog";
 import { RouteDialog } from "game/routedialog";
 import { SquadronDialog } from "game/squadrondialog";
 import { Company } from "game/company";
+import { DiagramDialog } from "game/diagramdialog";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -102,6 +103,11 @@ export class World {
             } catch {
 
             }
+             try {
+                DiagramDialog.getInstance().close();
+            } catch {
+
+            }
         }
     }
     update() {
@@ -123,19 +129,22 @@ export class World {
                 ges += this.airplanes[x].getDailyCosts();
             }
             this.game.changeMoney(-ges, "daily costs airplane");
+            this.game.statistic.yesterday=this.game.statistic.today;
+            this.game.statistic.today={};
         }
         this.lastUpdate = this.game.date.getTime();
     }
-    addCity() {
+    addCity(hasAirport=true) {
         var city: City = createCities(this, 1)[0];
+        city.hasAirport=hasAirport;
         city.render(this.cities.indexOf(city));
         city.update();
 
     }
 
     newGame() {
-        createCities(this, 15);
-       
+        createCities(this, 16);
+        this.cities[this.cities.length-1].hasAirport=false;
         for (var x = 0; x < 1; x++) {
             var ap = new Airplane(this);
             ap.name = allAirplaneTypes[0].model + (x + 1);
