@@ -145,8 +145,8 @@ export class DiagramDialog {
             var k=allKeys[x];
             content+=`<tr>
                         <td>`+k+`</td>
-                        <td style="text-align: right">`+this.world.game.statistic.yesterday[k]+`</td>
-                        <td style="text-align: right">`+this.world.game.statistic.today[k]+`</td>
+                        <td style="text-align: right">`+(this.world.game.statistic.yesterday[k]===undefined?"":this.world.game.statistic.yesterday[k])+`</td>
+                        <td style="text-align: right">`+(this.world.game.statistic.today[k]===undefined?"":this.world.game.statistic.today[k])+`</td>
                       </tr>`
         }
         table.innerHTML=content;

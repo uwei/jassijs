@@ -314,13 +314,13 @@ export class City {
     }
     updateDalyCosts() {
         if (this.warehouses > 0)
-            this.world.game.changeMoney(-this.warehouses * 100, "daily costs warehouses", this);
+            this.world.game.changeMoney(- this.warehouses*(this.warehouses>5?1000:500), "daily costs warehouses", this);
 
         if (this.houses > 0)
             this.world.game.changeMoney(-this.houses * 42, "daily costs houses", this);
 
         if (this.people - City.neutralStartPeople > 0) {
-            this.world.game.changeMoney(Math.round((this.people - City.neutralStartPeople) * 3), "rental fee", this);
+            this.world.game.changeMoney(Math.round((this.people - City.neutralStartPeople) * 0.8), "rental fee", this);
         }
         var companycosts = 0;
         for (var x = 0; x < this.companies.length; x++) {
@@ -406,6 +406,7 @@ export class City {
             }
         }
         this.world.game.changeMoney(-total, transactiontext, this);
+        CityDialog.getInstance().update(true);
         return true;
     }
     //returns undefined if markt

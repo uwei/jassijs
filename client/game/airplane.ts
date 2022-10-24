@@ -164,7 +164,7 @@ export class Airplane {
         if(this.loadedCount===this.capacity&&!this.dom.classList.contains("airplane_fullloaded")){
             this.dom.classList.add("airplane_fullloaded");
         }
-        if(this.loadedCount!==this.capacity&&!this.dom.classList.contains("airplane_fullloaded")){
+        if(this.loadedCount!==this.capacity&&this.dom.classList.contains("airplane_fullloaded")){
             this.dom.classList.remove("airplane_fullloaded");
         }
         if (this.targetX !== undefined) {
