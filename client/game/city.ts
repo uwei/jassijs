@@ -56,7 +56,7 @@ export class City {
 
             }
             this.warehouseMinStock.push(undefined);
-            this.warehouseSellingPrice.push(allProducts[x].priceSelling);
+            this.warehouseSellingPrice.push(this.isProducedHere(x)?allProducts[x].pricePurchase: allProducts[x].priceSelling);
             this.warehouse.push(0);
             this.market.push(val);
         }
@@ -253,7 +253,7 @@ export class City {
                 var product = allProducts[x];
 
 
-                var price = product.calcPrice(this.people, this.market[x] - diff + 1, false);
+                var price = product.calcPrice(this.people, this.market[x] - diff , false);
                 var fromWarehouse = false;
                 if (this.warehouse[x] >= diff && (this.warehouseMinStock[x] === undefined || (this.warehouse[x] - diff) > this.warehouseMinStock[x])) {
                     if (this.warehouseSellingPrice[x] <= price) {

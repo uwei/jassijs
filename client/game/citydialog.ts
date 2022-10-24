@@ -146,7 +146,7 @@ export class CityDialog {
                             <th>Produce</th>
                             <th>Need</th>
                             <th>Min-Stock</th>
-                            <th>Selling price</th>
+                            <th>Selling price <button id="warehouse-fill-price" title="reset price">`+ Icons.fillDown + `</button></th>
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -319,6 +319,15 @@ export class CityDialog {
             });
 
         }
+          document.getElementById("warehouse-fill-price").addEventListener("click", (evt) => {
+            if (_this.city.warehouses === 0)
+                return;
+            for(var x =0;x<allProducts.length;x++){
+                _this.city.warehouseSellingPrice[x]=this.city.isProducedHere(x)?allProducts[x].pricePurchase:allProducts[x].priceSelling;
+            }
+            _this.update();
+
+        });
         CityDialogMarket.getInstance().bindActions();
     }
     newAirplane(typeid: number) {

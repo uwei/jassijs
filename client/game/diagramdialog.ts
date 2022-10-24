@@ -119,7 +119,7 @@ export class DiagramDialog {
         }
         for (var x = 0; x < allProducts.length; x++) {
             var tr = table.children[0].children[x + 1];
-            tr.children[2].innerHTML = buildings[x];
+            tr.children[2].innerHTML = buildings[x]===undefined?"":buildings[x];
         }
 
         //
@@ -145,8 +145,8 @@ export class DiagramDialog {
             var k=allKeys[x];
             content+=`<tr>
                         <td>`+k+`</td>
-                        <td>`+this.world.game.statistic.yesterday[k]+`</td>
-                        <td>`+this.world.game.statistic.today[k]+`</td>
+                        <td style="text-align: right">`+this.world.game.statistic.yesterday[k]+`</td>
+                        <td style="text-align: right">`+this.world.game.statistic.today[k]+`</td>
                       </tr>`
         }
         table.innerHTML=content;
