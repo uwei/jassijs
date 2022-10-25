@@ -1,5 +1,5 @@
 import { City } from "game/city";
-import { allProducts, Product } from "game/product";
+import {  Product } from "game/product";
 import { CityDialog } from "game/citydialog";
 var log = (function () {
     var log = Math.log;
@@ -39,10 +39,10 @@ export class CityDialogMarket {
                 function price(id: string, change: number) {
                     console.log(id + " " + change);
                 }
-                for (var x = 0; x < allProducts.length; x++) {
+                for (var x = 0; x < window.parameter.allProducts.length; x++) {
                     ret = ret + '<tr >';
-                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>" + allProducts[x].name + "</td>";
+                    ret = ret + "<td>" + window.parameter.allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>" + window.parameter.allProducts[x].name + "</td>";
                     ret = ret + '<td style="width:20px"><div style="position:relative">' +
                         '<div id="sell-slider_' + x + '" style="overflow:float;position:absolute;height:1px;top:5px;width: 92px" ><div>' +
                         '</div></td>';
@@ -75,7 +75,7 @@ export class CityDialogMarket {
             CityDialog.getInstance().update(true);
         });
         var inedit;
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             $("#sell-slider_" + x).slider({
                 min: 0,
                 max: 40,
@@ -116,8 +116,9 @@ export class CityDialogMarket {
                     inedit = false;
                 },
                 stop: function (e: any, ui) {
-                     inedit = true;
+                    
                     setTimeout(() => {
+                         inedit = true;
                         var id = Number(e.target.id.split("_")[1]);
                         document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                         $(e.target).slider("value", 40);
@@ -183,7 +184,7 @@ export class CityDialogMarket {
         }
 
 
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             document.getElementById("warehouse-min-stock_" + x).addEventListener("change", (e) => {
                 var ctrl = (<HTMLInputElement>e.target);
                 var id = parseInt(ctrl.id.split("_")[1]);
@@ -287,7 +288,7 @@ export class CityDialogMarket {
         if (selectsource.value === "Warehouse") {
             storesource = city.warehouse;
         }
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             var table = document.getElementById("citydialog-market-table");
             var tr = table.children[0].children[x + 1];
 
@@ -346,19 +347,19 @@ export class CityDialogMarket {
             if (city.companies[x].productid === id)
                 isProducedHere = true;
         }
-        var prod = isProducedHere?allProducts[id].pricePurchase: allProducts[id].priceSelling;
+        var prod = isProducedHere?parameter.allProducts[id].pricePurchase: parameter.allProducts[id].priceSelling;
 
         if (el.id.indexOf("sell") > -1)
             val = -val;
-        var ret = allProducts[id].calcPrice(city.people, city.market[id] - val, isProducedHere);
+        var ret = parameter.allProducts[id].calcPrice(city.people, city.market[id] - val, isProducedHere);
         var color = "#32CD32";
-        if (ret > ((0.0 + prod) * ((1-Product.rateMin)*2/4+Product.rateMin)))
+        if (ret > ((0.0 + prod) * ((1-parameter.ratePriceMin)*2/4+parameter.ratePriceMin)))
             color = "#DAF7A6 ";
-        if (ret > ((0.0 + prod) *((1-Product.rateMin)*3/4+Product.rateMin)))
+        if (ret > ((0.0 + prod) *((1-parameter.ratePriceMin)*3/4+parameter.ratePriceMin)))
             color = "white";
         if (ret > ((0.0 + prod) * 1))
             color = "Yellow";
-        if (ret > ((0.0 + prod) *((Product.rateMax-1)*2/4+1)))
+        if (ret > ((0.0 + prod) *((parameter.ratePriceMax-1)*2/4+1)))
             color = "LightPink";
 
         (<HTMLElement>el.parentElement.parentElement.parentElement.children[4]).style.background = color;

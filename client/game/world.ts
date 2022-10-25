@@ -1,6 +1,6 @@
 import { Panel } from "jassijs/ui/Panel";
 import { City, createCities } from "game/city";
-import { Airplane, allAirplaneTypes } from "game/airplane";
+import { Airplane } from "game/airplane";
 import windows from "jassijs/base/Windows";
 import { CityDialog } from "game/citydialog";
 import { Game } from "game/game";
@@ -81,7 +81,7 @@ export class World {
     onclick(th: MouseEvent) {
         console.log("close");
         this.selection?.unselect();
-        if (th.target === this.dom && !AirplaneDialog.getInstance().dropCitiesEnabled) {
+        if (th.target === this.dom) {
             try {
                 CityDialog.getInstance().close();
             } catch {
@@ -126,7 +126,7 @@ export class World {
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             var ges = 0;
             for (var x = 0; x < this.airplanes.length; x++) {
-                ges += this.airplanes[x].getDailyCosts();
+                ges += Math.round(this.airplanes[x].getDailyCosts()*parameter.rateCostsAirplaine);
             }
             this.game.changeMoney(-ges, "daily costs airplane");
             this.game.statistic.yesterday=this.game.statistic.today;
@@ -147,19 +147,17 @@ export class World {
         this.cities[this.cities.length-1].hasAirport=false;
         for (var x = 0; x < 1; x++) {
             var ap = new Airplane(this);
-            ap.name = allAirplaneTypes[0].model + (x + 1);
-            ap.speed = allAirplaneTypes[0].speed;
-            ap.costs = allAirplaneTypes[0].costs;
-            ap.capacity = allAirplaneTypes[0].capacity;
+            ap.name = parameter.allAirplaneTypes[0].model + (x + 1);
+            ap.speed = parameter.allAirplaneTypes[0].speed;
+            ap.costs = parameter.allAirplaneTypes[0].costs;
+            ap.capacity = parameter.allAirplaneTypes[0].capacity;
             ap.x = this.cities[0].x;
             ap.y = this.cities[0].y;
-            ap.typeid = allAirplaneTypes[0].typeid;
+            ap.typeid = parameter.allAirplaneTypes[0].typeid;
             ap.world = this;
             this.airplanes.push(ap);
         }
-        this.cities[0].houses = 1;
-        this.cities[0].warehouses = 1;
-
+     
 
      /* Lastenausgleich   
         this.cities=[this.cities[0]];

@@ -1,7 +1,7 @@
 import { City } from "game/city";
-import { allProducts, Product } from "game/product";
+import { Product } from "game/product";
 import { Icons } from "game/icons";
-import { Airplane, allAirplaneTypes } from "game/airplane";
+import { Airplane } from "game/airplane";
 import { AirplaneDialog } from "game/airplanedialog";
 import { Company } from "game/company";
 import { CityDialogMarket } from "game/citydialogmarket";
@@ -39,7 +39,7 @@ export class CityDialog {
             old.parentNode.removeChild(old);
         }
 
-        var products = allProducts;
+        var products = parameter.allProducts;
         var _this = this;
         var city = _this.city;
         var sdom = `
@@ -125,16 +125,16 @@ export class CityDialog {
                     <br/>
                        `+ Icons.home + ` houses: <span id="houses">0/0</span>  
                         `+ Icons.people + ` renter: <span id="renter">0/0</span>  
-                        <button id="buy-house">+`+ Icons.home + ` for 25.000` + Icons.money + " 40x" + allProducts[0].getIcon() +
-            " 80x" + allProducts[1].getIcon() + `</button> 
+                        <button id="buy-house">+`+ Icons.home + ` for 25.000` + Icons.money + " 40x" + parameter.allProducts[0].getIcon() +
+            " 80x" + parameter.allProducts[1].getIcon() + `</button> 
                         <button id="delete-house">-`+ Icons.home + `</button>
                         <br/>
                         <b>Warehouse</b>
                     <br/>
                        `+ Icons.warehouse + ` houses: <span id="count-warehouses">0/0</span>  
                         ` + ` costs: <span id="costs-warehouses">0</span> ` + Icons.money + `  
-                        <button id="buy-warehouse">+`+ Icons.home + ` for 15.000` + Icons.money + " 20x" + allProducts[0].getIcon() +
-            " 40x" + allProducts[1].getIcon() + `</button> 
+                        <button id="buy-warehouse">+`+ Icons.home + ` for 15.000` + Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
+            " 40x" + parameter.allProducts[1].getIcon() + `</button> 
                         <button id="delete-warehouse">-`+ Icons.home + `</button>`;
     }
     createWarehouse() {
@@ -150,10 +150,10 @@ export class CityDialog {
                         </tr>
                        ${(function fun() {
                 var ret = "";
-                for (var x = 0; x < allProducts.length; x++) {
+                for (var x = 0; x < parameter.allProducts.length; x++) {
                     ret = ret + "<tr>";
-                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>" + allProducts[x].name + "</td>";
+                    ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
                     ret = ret + "<td>0</td>";
                     ret = ret + "<td>0</td>";
                     ret = ret + "<td>0</td>";
@@ -181,10 +181,10 @@ export class CityDialog {
                         </tr>
                        ${(function fun() {
                 var ret = "";
-                for (var x = 0; x < allProducts.length; x++) {
+                for (var x = 0; x < parameter.allProducts.length; x++) {
                     ret = ret + "<tr>";
-                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>" + allProducts[x].name + "</td>";
+                    ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
                     ret = ret + "<td>0</td>";
                     ret = ret + "</tr>";
                 }
@@ -204,15 +204,15 @@ export class CityDialog {
                         </tr>
                         ${(function fun() {
                 var ret = "";
-                for (var x = 0; x < allAirplaneTypes.length; x++) {
+                for (var x = 0; x < parameter.allAirplaneTypes.length; x++) {
                     ret = ret + "<tr>";
-                    ret = ret + "<td>" + allAirplaneTypes[x].model + "</td>";
-                    ret = ret + "<td>" + allAirplaneTypes[x].speed + "</td>";
-                    ret = ret + "<td>" + allAirplaneTypes[x].capacity + "</td>";
-                    ret = ret + "<td>" + allAirplaneTypes[x].costs + "</td>";
-                    ret = ret + "<td>" + allAirplaneTypes[x].buildDays + "</td>";
+                    ret = ret + "<td>" + parameter.allAirplaneTypes[x].model + "</td>";
+                    ret = ret + "<td>" + parameter.allAirplaneTypes[x].speed + "</td>";
+                    ret = ret + "<td>" + parameter.allAirplaneTypes[x].capacity + "</td>";
+                    ret = ret + "<td>" + parameter.allAirplaneTypes[x].costs + "</td>";
+                    ret = ret + "<td>" + parameter.allAirplaneTypes[x].buildDays + "</td>";
                     ret = ret + "<td>" + '<button id="new-airplane_' + x + '">' + "+" + Icons.airplane + " " +
-                        City.getBuildingCostsAsIcon(allAirplaneTypes[x].buildingCosts, allAirplaneTypes[x].buildingMaterial) + "</button></td>";
+                        City.getBuildingCostsAsIcon(Math.round(parameter.allAirplaneTypes[x].buildingCosts*parameter.rateCostsAirplaine), parameter.allAirplaneTypes[x].buildingMaterial) + "</button></td>";
                     ret = ret + "</tr>";
                 }
                 return ret;
@@ -260,7 +260,7 @@ export class CityDialog {
                 var comp = _this.city.companies[id];
                 if (comp.buildings > 0)
                     comp.buildings--;
-                var unempl = this.city.companies[id].workers - (this.city.companies[id].buildings * Company.workerInCompany);
+                var unempl = this.city.companies[id].workers - (this.city.companies[id].buildings * parameter.workerInCompany);
                 if (unempl > 0) {
                     this.city.companies[id].workers -= unempl;
                     this.city.transferWorker(unempl);
@@ -281,7 +281,7 @@ export class CityDialog {
         }
         document.getElementById("buy-house").addEventListener("click", (evt) => {
             if (!this.city.commitBuildingCosts(15000, [20, 40], "buy building"))
-                reutrn;
+                return;
             _this.city.houses++;
             _this.update();
         });
@@ -309,7 +309,7 @@ export class CityDialog {
 
         });
 
-        for (var x = 0; x < allAirplaneTypes.length; x++) {
+        for (var x = 0; x < parameter.allAirplaneTypes.length; x++) {
             document.getElementById("new-airplane_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
                 if (sid === "")
@@ -322,13 +322,13 @@ export class CityDialog {
         document.getElementById("warehouse-fill-price").addEventListener("click", (evt) => {
             if (_this.city.warehouses === 0)
                 return;
-            for (var x = 0; x < allProducts.length; x++) {
-                _this.city.warehouseSellingPrice[x] = this.city.isProducedHere(x) ? allProducts[x].pricePurchase : allProducts[x].priceSelling;
+            for (var x = 0; x < parameter.allProducts.length; x++) {
+                _this.city.warehouseSellingPrice[x] = this.city.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling;
             }
             _this.update();
 
         });
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             document.getElementById("warehouse-min-stock_" + x).addEventListener("change", (e) => {
                 var ctrl = (<HTMLInputElement>e.target);
                 var id = parseInt(ctrl.id.split("_")[1]);
@@ -345,14 +345,14 @@ export class CityDialog {
     }
     newAirplane(typeid: number) {
         var _this = this;
-        if (!_this.city.commitBuildingCosts(allAirplaneTypes[typeid].buildingCosts, allAirplaneTypes[typeid].buildingMaterial, "buy airplane"))
+        if (!_this.city.commitBuildingCosts(Math.round(parameter.allAirplaneTypes[typeid].buildingCosts*parameter.rateBuyAirplane), parameter.allAirplaneTypes[typeid].buildingMaterial, "buy airplane"))
             return;
         var maxNumber = 1;
         for (var x = 0; x < _this.city.world.airplanes.length; x++) {
             var test = _this.city.world.airplanes[x];
-            var pos = test.name.indexOf(allAirplaneTypes[typeid].model);
+            var pos = test.name.indexOf(parameter.allAirplaneTypes[typeid].model);
             if (pos === 0) {
-                var nr = parseInt(test.name.substring(allAirplaneTypes[typeid].model.length));
+                var nr = parseInt(test.name.substring(parameter.allAirplaneTypes[typeid].model.length));
                 if (nr !== NaN && nr > maxNumber)
                     maxNumber = nr;
             }
@@ -363,11 +363,11 @@ export class CityDialog {
         ap.x = _this.city.x;
         ap.y = _this.city.y;
         ap.world = _this.city.world;
-        ap.typeid = allAirplaneTypes[typeid].typeid;
-        ap.name = allAirplaneTypes[typeid].model + maxNumber;
-        ap.speed = allAirplaneTypes[typeid].speed;
-        ap.costs = allAirplaneTypes[typeid].costs;
-        ap.capacity = allAirplaneTypes[typeid].capacity;
+        ap.typeid = parameter.allAirplaneTypes[typeid].typeid;
+        ap.name = parameter.allAirplaneTypes[typeid].model + maxNumber;
+        ap.speed = parameter.allAirplaneTypes[typeid].speed;
+        ap.costs = parameter.allAirplaneTypes[typeid].costs;
+        ap.capacity = parameter.allAirplaneTypes[typeid].capacity;
         _this.city.world.airplanes.push(ap);
         ap.render();
         _this.city.world.dom.appendChild(ap.dom);
@@ -387,7 +387,7 @@ export class CityDialog {
                                    <th>actions</th>
                */
         var companies = this.city.companies;
-        var all = allProducts;
+        var all = parameter.allProducts;
         for (var x = 0; x < companies.length; x++) {
             var comp = companies[x];
             var table = document.getElementById("citydialog-buildings-table");
@@ -406,8 +406,7 @@ export class CityDialog {
             if (product.input2 !== undefined)
                 needs2 = "<br/>" + comp.getDailyInput2() + all[product.input2].getIcon();
             tr.children[4].innerHTML = needs1 + " " + needs2;
-            // tr.children[5].innerHTML = City.getBuildingCostsAsIcon(comp.getBuildingCosts(), comp.getBuildingMaterial(), true);
-
+            
             if (comp.hasLicense) {
                 document.getElementById("buy-license_" + x).setAttribute("hidden", "");
             } else {
@@ -430,7 +429,6 @@ export class CityDialog {
             }
             var mat = comp.getBuildingMaterial();
             if (this.city.canBuild(comp.getBuildingCosts(), comp.getBuildingMaterial()) != "") {
-                //    this.city.world.game.getMoney() < comp.getBuildingCosts() || this.city.market[0] < mat[0] || this.city.market[1] < mat[1]) {
                 document.getElementById("new-factory_" + x).setAttribute("disabled", "");
                 document.getElementById("new-factory_" + x).setAttribute("title", "not all building costs are available");
             } else {
@@ -447,7 +445,7 @@ export class CityDialog {
         document.getElementById("count-warehouses").innerHTML = "" + this.city.warehouses;
 
         document.getElementById("houses").innerHTML = "" + (this.city.houses + "/" + this.city.houses);
-        document.getElementById("renter").innerHTML = "" + (this.city.people - City.neutralStartPeople + "/" + this.city.houses * 100);
+        document.getElementById("renter").innerHTML = "" + (this.city.people - parameter.neutralStartPeople + "/" + this.city.houses * 100);
         if (this.city.canBuild(25000, [40, 80]) !== "") {
             document.getElementById("buy-house").setAttribute("disabled", "");
         } else {
@@ -469,28 +467,28 @@ export class CityDialog {
     }
     updateWarehouse() {
         var needs = [];
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             needs.push(0);
         }
         for (var i = 0; i < this.city.companies.length; i++) {
-            var test = allProducts[this.city.companies[i].productid];
+            var test = parameter.allProducts[this.city.companies[i].productid];
             if (test.input1 !== undefined) {
-                needs[test.input1] += (Math.round(this.city.companies[i].workers * test.input1Amount / Company.workerInCompany));
+                needs[test.input1] += (Math.round(this.city.companies[i].workers * test.input1Amount / parameter.workerInCompany));
             }
             if (test.input2 !== undefined) {
-                needs[test.input2] += (Math.round(this.city.companies[i].workers * test.input2Amount / Company.workerInCompany));
+                needs[test.input2] += (Math.round(this.city.companies[i].workers * test.input2Amount / parameter.workerInCompany));
             }
         }
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             var table = document.getElementById("citydialog-warehouse-table");
             var tr = table.children[0].children[x + 1];
 
             tr.children[2].innerHTML = this.city.warehouse[x].toString();
             var prod = "";
-            var product = allProducts[x];
+            var product = parameter.allProducts[x];
             for (var i = 0; i < this.city.companies.length; i++) {
                 if (this.city.companies[i].productid === x) {
-                    prod = Math.round(this.city.companies[i].workers * product.dailyProduce / Company.workerInCompany).toString();
+                    prod = Math.round(this.city.companies[i].workers * product.dailyProduce / parameter.workerInCompany).toString();
                 }
             }
             tr.children[3].innerHTML = prod;
@@ -506,8 +504,8 @@ export class CityDialog {
         // document.getElementById("costs-warehouses").innerHTML=""+(this.city.warehouses*50);
     }
     updateConstruction() {
-        for (var x = 0; x < allAirplaneTypes.length; x++) {
-            if (this.city.canBuild(allAirplaneTypes[x].buildingCosts, allAirplaneTypes[x].buildingMaterial) === "") {
+        for (var x = 0; x < parameter.allAirplaneTypes.length; x++) {
+            if (this.city.canBuild(Math.round(parameter.allAirplaneTypes[x].buildingCosts*parameter.rateCostsAirplaine), parameter.allAirplaneTypes[x].buildingMaterial) === "") {
                 document.getElementById("new-airplane_" + x).removeAttribute("disabled");
             } else {
                 document.getElementById("new-airplane_" + x).setAttribute("disabled", "");
@@ -518,7 +516,7 @@ export class CityDialog {
     updateScore() {
 
         //score
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             var table = document.getElementById("citydialog-score-table");
             var tr = table.children[0].children[x + 1];
             tr.children[2].innerHTML = this.city.score[x] + "</td>";

@@ -8,7 +8,7 @@ import { Company } from "game/company";
 import { Airplane } from "game/airplane";
 import { City } from "game/city";
 import { Route } from "game/route";
-import { allProducts } from "game/product";
+import {  Product } from "game/product";
 import { DiagramDialog } from "game/diagramdialog";
 
 window.onbeforeunload = function () {
@@ -16,9 +16,66 @@ window.onbeforeunload = function () {
 
 };
 class Statistic {
-  today: { [key: string]: number }={};
-  yesterday: { [key: string]: number }={};
+  today: { [key: string]: number } = {};
+  yesterday: { [key: string]: number } = {};
 }
+
+declare global {
+  var parameter:Parameter;
+}
+
+export class Parameter {
+  ratePurchase = 1.125;
+  rateSelling = 1.25;
+  ratePriceMin = 0.66;
+  ratePriceMax = 1.33;
+  rateBuyAirplane = 1;
+  rateBuyBuilding = 1;
+  rateBuyBuildingGrowFactor = 5000;
+  rateCostsAirplaine = 1;
+  rateCostsHouse = 1;
+  rateCostsWarehouse = 100;
+  rateCostsWarehouseMany = 1000;
+  workerInCompany = 20;
+  neutralStartPeople = 200;
+  neutralProductionRate = 2;
+  newAirportRate=1.05;
+  allProducts:Product[];
+  allAirplaneTypes=[
+    {typeid:0,model:"Airplane A",speed:200,capacity:200, costs:60,buildDays:25,buildingCosts:20000,buildingMaterial:[0,0,0,40,0,10,0,10,0,10,0,0,0,0,10]},
+    {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:30,buildingCosts:41000,buildingMaterial:[0,0,0,60,0,20,0,20,0,20,0,0,0,0,20]},
+    {typeid:2,model:"Airplane C",speed:220,capacity:500, costs:150,buildDays:39,buildingCosts:60000,buildingMaterial:[0,0,0,100,0,30,0,30,0,30,0,0,0,0,30]},
+    {typeid:3,model:"Airplane D",speed:240,capacity:650, costs:180,buildDays:45,buildingCosts:75000,buildingMaterial:[0,0,0,120,0,40,0,40,0,40,0,0,0,0,40]},
+    {typeid:4,model:"Airplane E",speed:260,capacity:1000, costs:270,buildDays:56,buildingCosts:150000,buildingMaterial:[0,0,0,200,0,50,0,50,0,50,0,0,0,0,50]},
+    {typeid:5,model:"Airplane F",speed:300,capacity:2000, costs:500,buildDays:79,buildingCosts:300000,buildingMaterial:[0,0,0,400,0,100,0,100,0,100,0,0,0,0,100]},
+    ];
+}
+window.parameter=new Parameter();
+globalThis.parameter=new Parameter();
+
+
+parameter.allProducts= [
+  new Product({ id: 0, name: "Stein", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32,  distribution: 16,amountForPeople:5 }),
+  new Product({ id: 1, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32,  distribution: 16 ,amountForPeople:4.5 }),
+  new Product({ id: 2, name: "Getreide", dailyProduce: 7, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 23,distribution: 16,amountForPeople:4  }),
+  new Product({ id: 3, name: "Eisen", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32, distribution: 16,amountForPeople:3  }),
+  new Product({ id: 4, name: "Wolle", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32, distribution: 16,amountForPeople:2.5  }),
+  new Product({ id: 5, name: "Öl", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction:32,  distribution: 16,amountForPeople:3  }),
+  new Product({ id: 6, name: "Brot", dailyProduce: 6, input1: 2, input1Amount: 2, input2: undefined, input2Amount: 0, priceProduction: 49, distribution: 8,amountForPeople:5  }),
+  new Product({ id: 7, name: "Plaste", dailyProduce: 6, input1: 5, input1Amount: 2, input2: undefined, input2Amount: 0, priceProduction: 57,  distribution: 8 ,amountForPeople:5 }),
+  new Product({ id: 8, name: "Fleisch", dailyProduce: 2, input1: 2, input1Amount: 1, input2: undefined, input2Amount: 0,  priceProduction: 109, distribution: 8,amountForPeople:2  }),
+  new Product({ id: 9, name: "Möbel", dailyProduce: 2, input1: 1, input1Amount: 0.5, input2: 3, input2Amount: 1,  priceProduction: 117,  distribution: 8,amountForPeople:2  }),
+  new Product({ id: 10, name: "Kleidung", dailyProduce: 1, input1: 4, input1Amount: 2, input2: undefined, input2Amount: 0,  priceProduction: 286,  distribution: 8,amountForPeople:1  }),
+  new Product({ id: 11, name: "Fisch", dailyProduce: 3, input1: undefined, input1Amount: undefined, input2: undefined, input2Amount: 0, priceProduction: 60,distribution: 8,amountForPeople:2  }),
+  new Product({ id: 12, name: "Apfel", dailyProduce: 4, input1: undefined, input1Amount: undefined, input2: undefined, input2Amount: 0,priceProduction: 45,  distribution: 8 ,amountForPeople:3 }),
+  new Product({ id: 13, name: "Saft", dailyProduce: 3, input1: 12, input1Amount: 1, input2: undefined, input2Amount: 0,priceProduction: 85,  distribution: 8 ,amountForPeople:3 }),
+  new Product({ id: 14, name: "Gold", dailyProduce: 2, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 100,  distribution: 4 ,amountForPeople: 1}), 
+  new Product({ id: 15, name: "Schmuck", dailyProduce: 2, input1: 14, input1Amount: 1, input2: undefined, input2Amount: 0,  priceProduction: 184, distribution: 4 ,amountForPeople:2 }),
+  new Product({ id: 16, name: "Spielzeug", dailyProduce: 1, input1: 4, input1Amount: 0.5, input2: 7, input2Amount: 0.5,  priceProduction: 274,  distribution: 4,amountForPeople:1  }),
+  new Product({ id: 17, name: "Fahrrad", dailyProduce: 1, input1: 3, input1Amount: 1, input2: 7, input2Amount: 0.5,  priceProduction: 274,  distribution: 4 ,amountForPeople:1 }),
+  new Product({ id: 18, name: "Fischbrot", dailyProduce: 1, input1: 11, input1Amount: 1, input2: 6, input2Amount: 1,  priceProduction: 382,  distribution: 4 ,amountForPeople:1 })
+];
+//global.parameter=new Parametetr();
 export class Game {
   static instance: Game;
   dom: HTMLElement;
@@ -144,13 +201,10 @@ export class Game {
       _this.load();
     });
     document.getElementById("debug-game").addEventListener("click", () => {
-      _this.world.addCity(false);
-      //_this.world.cities[_this.world.cities.length-1].hasAirport=false;
-      return;
-      for (var x = 0; x < allProducts.length; x++) {
+      for (var x = 0; x < parameter.allProducts.length; x++) {
         _this.world.cities[0].warehouse[x] = 5000;
       }
-      _this._money = 100000;
+      _this._money = 1000000;
     });
     document.getElementById("show-diagram").addEventListener("click", () => {
       DiagramDialog.getInstance().world = this.world;
@@ -240,6 +294,11 @@ export class Game {
         return undefined;
       if (value?.type === "Company") {
         r = new Company();
+        Object.assign(r, value);
+        return r;
+      }
+      if (value?.type === "Product") {
+        r = new Product(value);
         Object.assign(r, value);
         return r;
       }

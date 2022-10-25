@@ -1,5 +1,4 @@
 import { World } from "game/world";
-import { allProducts } from "game/product";
 import { AirplaneDialog } from "game/airplanedialog";
 import { Route } from "game/route";
 import { City } from "game/city";
@@ -35,7 +34,7 @@ export class Airplane {
         this.world = world;
         this.route = [];
          this.products = [];
-          for (var x = 0; x < allProducts.length; x++) {
+          for (var x = 0; x < parameter.allProducts.length; x++) {
             this.products[x] = 0;
 
         }
@@ -57,8 +56,8 @@ export class Airplane {
         return undefined;
     }
     updateSquadron(){
-        var speed=allAirplaneTypes[this.typeid].speed;
-        var capacity=allAirplaneTypes[this.typeid].capacity;
+        var speed=parameter.allAirplaneTypes[this.typeid].speed;
+        var capacity=parameter.allAirplaneTypes[this.typeid].capacity;
         for(var x=0;x<this.squadron.length;x++){
             speed=Math.min(this.squadron[x].speed,speed);
             capacity+=this.squadron[x].capacity;
@@ -84,7 +83,7 @@ export class Airplane {
     }
     refreshLoadedCount(){
         var all=0;
-        for(var x=0;x<allProducts.length;x++){
+        for(var x=0;x<parameter.allProducts.length;x++){
             all+=this.products[x];
         }
         this.loadedCount=all;
@@ -111,14 +110,12 @@ export class Airplane {
             this.dom.classList.remove("airplane_selected");
     }
     arrived() {
-        console.log("target arrived");
         this.targetX = undefined;
         this.targetY = undefined;
         this.action = "wait";
         this.status = "";
         this.dom.style.transform = "rotate(0deg)";
         if (this.activeRoute !== -1) {
-            console.log("unload now");
             this.action = "unload";
             this.status = "unload";
             this.lastAction = this.lastUpdate;
@@ -205,7 +202,6 @@ export class Airplane {
     onclick(th: MouseEvent) {
         th.preventDefault();
         th.stopPropagation();
-        console.log(this.name);
         this.world.selection?.unselect();
         this.world.selection = this;
         this.select();
@@ -215,20 +211,12 @@ export class Airplane {
 
     }
     getDailyCosts(){
-        var ret=allAirplaneTypes[this.typeid].costs;
+        var ret=parameter.allAirplaneTypes[this.typeid].costs;
         for(var x=0;x<this.squadron.length;x++){
-            ret+=allAirplaneTypes[this.squadron[x].typeid].costs;
+            ret+=parameter.allAirplaneTypes[this.squadron[x].typeid].costs;
         }
         return ret;
     }
 }
-var allAirplaneTypes=[
-{typeid:0,model:"Airplane A",speed:200,capacity:200, costs:60,buildDays:25,buildingCosts:20000,buildingMaterial:[0,0,0,40,0,10,0,10,0,10,0,0,0,0,10]},
-{typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:30,buildingCosts:41000,buildingMaterial:[0,0,0,60,0,20,0,20,0,20,0,0,0,0,20]},
-{typeid:2,model:"Airplane C",speed:220,capacity:500, costs:150,buildDays:39,buildingCosts:60000,buildingMaterial:[0,0,0,100,0,30,0,30,0,30,0,0,0,0,30]},
-{typeid:3,model:"Airplane D",speed:240,capacity:650, costs:180,buildDays:45,buildingCosts:75000,buildingMaterial:[0,0,0,120,0,40,0,40,0,40,0,0,0,0,40]},
-{typeid:4,model:"Airplane E",speed:260,capacity:1000, costs:270,buildDays:56,buildingCosts:150000,buildingMaterial:[0,0,0,200,0,50,0,50,0,50,0,0,0,0,50]},
-{typeid:5,model:"Airplane F",speed:300,capacity:2000, costs:500,buildDays:79,buildingCosts:300000,buildingMaterial:[0,0,0,400,0,100,0,100,0,100,0,0,0,0,100]},
-];
-export{allAirplaneTypes};
+
 //<span style='font-size:100px;'>&#9951;</span>

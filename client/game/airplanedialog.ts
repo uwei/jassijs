@@ -1,5 +1,5 @@
 import { City } from "game/city";
-import { allProducts, Product } from "game/product";
+import {Product } from "game/product";
 import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
 import { Route } from "game/route";
@@ -45,7 +45,7 @@ export class AirplaneDialog {
             old.parentNode.removeChild(old);
         }
         var airplane = this.airplane;
-        var products = allProducts;
+        var products = window.parameter.allProducts;
         var _this = this;
         var sdom = `
           <div>
@@ -196,7 +196,14 @@ export class AirplaneDialog {
         var _this = this;
         console.log("route " + (enable ? "enable" : "disable"));
         if (this.dropCitiesEnabled && !enable) {
-            $(".city").draggable('destroy');
+            for(var x=0;x<this.airplane.world.cities.length;x++){
+                try{
+                $(this.airplane.world.cities[x].dom).draggable('destroy');
+                }catch{
+                    
+                }
+            }
+            
         }
         if (this.dropCitiesEnabled === false && enable) {
             $(".city").draggable({
@@ -211,6 +218,11 @@ export class AirplaneDialog {
                 },
                 revert: 'invalid'
             });
+            for(var x=0;x<_this.airplane.world.cities.length;x++){
+                if(this.airplane.world.cities[x].hasAirport===false){
+                    $(this.airplane.world.cities[x].dom).draggable('disable');
+                }
+            }
         }
         this.dropCitiesEnabled = enable;
     }
@@ -308,9 +320,9 @@ export class AirplaneDialog {
             return;
         }
         var ret = '<div style="display:grid;grid-template-columns: 30px 30px 30px 30px;">';
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             if (this.airplane.products[x] !== 0) {
-                ret = ret + '<div>' + allProducts[x].getIcon() + " " + this.airplane.products[x] + " " + "</div>";
+                ret = ret + '<div>' + parameter.allProducts[x].getIcon() + " " + this.airplane.products[x] + " " + "</div>";
             }
         }
         ret += "<div>";

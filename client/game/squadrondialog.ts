@@ -1,5 +1,5 @@
 
-import { allProducts, Product } from "game/product";
+import { Product } from "game/product";
 import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
 import { Route } from "game/route";
@@ -58,7 +58,7 @@ export class SquadronDialog {
             old.parentNode.removeChild(old);
         }
         var airplane = this.airplane;
-        var products = allProducts;
+        var products = parameter.allProducts;
         var _this = this;
         var sdom = `
           <div>

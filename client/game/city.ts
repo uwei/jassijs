@@ -1,6 +1,6 @@
 import { World } from "game/world";
 import { CityDialog } from "game/citydialog";
-import { allProducts, Product } from "game/product";
+import { Product } from "game/product";
 import { Company, debugNeed } from "game/company";
 import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
@@ -22,8 +22,6 @@ export class City {
     people: number;
     market: number[];
     companies: Company[];
-    static neutralStartPeople = 200;
-    private static neutralProductionRate = 2;//produce 0.2 times more then neutralPeople consumed 
     neutralDailyProducedToday: number[];
     consumedToday: number[];
     lastUpdate = undefined;
@@ -43,20 +41,20 @@ export class City {
         this.warehouseMinStock = [];
         this.warehouseSellingPrice = [];
         this.createCompanies();
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             var val = 0;
             this.score.push(50);
             for (var y = 0; y < this.companies.length; y++) {
                 if (this.companies[y].productid === x) {
-                    val = 22 * Math.round(City.neutralStartPeople * allProducts[x].dailyConsumtion * City.neutralProductionRate);
+                    val = 22 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
                 }
             }
             if (val === 0) {
-                val = 10 * Math.round(City.neutralStartPeople * allProducts[x].dailyConsumtion * City.neutralProductionRate);
+                val = 10 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
 
             }
             this.warehouseMinStock.push(undefined);
-            this.warehouseSellingPrice.push(this.isProducedHere(x)?allProducts[x].pricePurchase: allProducts[x].priceSelling);
+            this.warehouseSellingPrice.push(this.isProducedHere(x)?parameter.allProducts[x].pricePurchase: parameter.allProducts[x].priceSelling);
             this.warehouse.push(0);
             this.market.push(val);
         }
@@ -145,19 +143,20 @@ export class City {
 
         for (var x = 0; x < this.companies.length; x++) {
             var prod = this.companies[x].productid;
-            var totalDailyProduce = Math.round(City.neutralStartPeople * allProducts[prod].dailyConsumtion * City.neutralProductionRate);
+            var totalDailyProduce = Math.round(parameter.neutralStartPeople * parameter.allProducts[prod].dailyConsumtion * parameter.neutralProductionRate);
             if (totalDailyProduce < 1)
                 totalDailyProduce = 1;
             var untilNow = Math.round(totalDailyProduce * dayProcent);
             if (untilNow > this.neutralDailyProducedToday[x]) {
                 var diff = untilNow - this.neutralDailyProducedToday[x];
                 if (diff > 0) {//only go to markt if price is ok
-                    var product = allProducts[prod];
+                    var product = parameter.allProducts[prod];
                     for (var o = 0; o < diff; o++) {
                         var price = product.calcPrice(this.people, this.market[prod] + 1/*diff*/, true);
                         // if(this.world.cities.indexOf(this)===0)
                         //    console.log("check " + this.companies[x].productid + ":  " + price + " > " + (product.pricePurchase * 2 / 3) + " Bestand: " + this.market[prod]);
-                        if (price > product.pricePurchase * 4 / 5) {
+                        var fact=1-(1-parameter.ratePriceMin)/2;
+                        if (price > product.pricePurchase*fact) {
                             this.market[prod] = this.market[prod] + diff;
                             //  if(this.world.cities.indexOf(this)===0)
                             //    console.log("produce " + this.companies[x].productid + ":" + diff + "/" + "  ->" + untilNow + "/" + totalDailyProduce);
@@ -187,7 +186,7 @@ export class City {
         for (var y = 0; y < numberOfWorker; y++) {
             var comps = [];
             for (var x = 0; x < this.companies.length; x++) {
-                if ((this.companies[x].buildings * Company.workerInCompany) > this.companies[x].workers)
+                if ((this.companies[x].buildings * parameter.workerInCompany) > this.companies[x].workers)
                     comps.push(x);
             }
             if (comps.length === 0)
@@ -199,10 +198,10 @@ export class City {
     }
     updatePeople() {
         var newPeople = 1;
-        while (this.people < (City.neutralStartPeople + this.houses * 100) && newPeople > 0) {
+        while (this.people < (parameter.neutralStartPeople + this.houses * 100) && newPeople > 0) {
             var comps = [];
             for (var x = 0; x < this.companies.length; x++) {
-                if ((this.companies[x].buildings * Company.workerInCompany) > this.companies[x].workers)
+                if ((this.companies[x].buildings * parameter.workerInCompany) > this.companies[x].workers)
                     comps.push(x);
             }
             if (comps.length === 0)
@@ -213,7 +212,7 @@ export class City {
             this.companies[comps[winner]].workers++;
             newPeople--;
         }
-        while (this.people > (City.neutralStartPeople + this.houses * 100)) {
+        while (this.people > (parameter.neutralStartPeople + this.houses * 100)) {
             var comps = [];
             for (var x = 0; x < this.companies.length; x++) {
                 if (this.companies[x].workers > 0)
@@ -232,7 +231,7 @@ export class City {
         //neutral companies
         if (this.consumedToday === undefined) {
             this.consumedToday = [];
-            for (var x = 0; x < allProducts.length; x++) {
+            for (var x = 0; x < parameter.allProducts.length; x++) {
                 this.consumedToday[x] = 0;
             }
         }
@@ -242,15 +241,15 @@ export class City {
 
         }
 
-        for (var x = 0; x < allProducts.length; x++) {
-            var totalDailyConsumtion = Math.round(allProducts[x].dailyConsumtion * this.people);
+        for (var x = 0; x < parameter.allProducts.length; x++) {
+            var totalDailyConsumtion = Math.round(parameter.allProducts[x].dailyConsumtion * this.people);
             totalDailyConsumtion--;//never go down
             if (totalDailyConsumtion < 1)
                 totalDailyConsumtion = 1;
             var untilNow = Math.round(totalDailyConsumtion * dayProcent);
             if (untilNow > this.consumedToday[x]) {
                 var diff = untilNow - this.consumedToday[x];
-                var product = allProducts[x];
+                var product = parameter.allProducts[x];
 
 
                 var price = product.calcPrice(this.people, this.market[x] - diff , false);
@@ -261,7 +260,7 @@ export class City {
                         price = this.warehouseSellingPrice[x];
                     }
                 }
-                var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * Product.rateMax - product.priceSelling);
+                var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * parameter.ratePriceMax - product.priceSelling);
                 this.consumedToday[x] = untilNow;
                 if (price <= priceMax) {
                     if (fromWarehouse) {
@@ -296,8 +295,8 @@ export class City {
         }
     }
     sellWareHouseToMarket() {
-        for (var x = 0; x < allProducts.length; x++) {
-            var product = allProducts[x];
+        for (var x = 0; x < parameter.allProducts.length; x++) {
+            var product = parameter.allProducts[x];
             while (true) {
                 var price = product.calcPrice(this.people, this.market[x], this.isProducedHere(x));
                 if (price >= this.warehouseSellingPrice[x] && this.warehouse[x] > 1) {
@@ -311,16 +310,16 @@ export class City {
                     break;
             }
         }
-    }
+    } 
     updateDalyCosts() {
         if (this.warehouses > 0)
-            this.world.game.changeMoney(- this.warehouses*(this.warehouses>5?1000:500), "daily costs warehouses", this);
+            this.world.game.changeMoney(- Math.round(this.warehouses*(this.warehouses>5?parameter.rateCostsWarehouseMany:parameter.rateCostsWarehouse)), "daily costs warehouses", this);
 
         if (this.houses > 0)
-            this.world.game.changeMoney(-this.houses * 42, "daily costs houses", this);
+            this.world.game.changeMoney(-Math.round(this.houses * 42*parameter.rateCostsHouse), "daily costs houses", this);
 
-        if (this.people - City.neutralStartPeople > 0) {
-            this.world.game.changeMoney(Math.round((this.people - City.neutralStartPeople) * 0.8), "rental fee", this);
+        if (this.people - parameter.neutralStartPeople > 0) {
+            this.world.game.changeMoney(Math.round((this.people - parameter.neutralStartPeople) * 0.8), "rental fee", this);
         }
         var companycosts = 0;
         for (var x = 0; x < this.companies.length; x++) {
@@ -337,7 +336,7 @@ export class City {
             this.lastUpdate = this.world.game.date.getTime();
         }
 
-        this.domDesc.innerHTML = this.name + "<br/>" + this.people.toLocaleString() + "<br/>" + allProducts[0].getIcon() + " " + Icons.edit;
+        this.domDesc.innerHTML = this.name + "<br/>" + this.people.toLocaleString() + "<br/>" + parameter.allProducts[0].getIcon() + " " + Icons.edit;
 
 
         this.updateNeutralCompanies();
@@ -372,9 +371,14 @@ export class City {
     }
     onclick(th: MouseEvent) {
         if (this.hasAirport === false) {
-            var price = Number(1000000).toLocaleString();
+            var iprice=Math.round(parameter.newAirportRate*(this.world.cities.length-15)*1000000);
+            var price = Number(iprice).toLocaleString();
             if (confirm(`Do you want to buy an airport for ${price}?`)) {
-                this.world.game.changeMoney(1000000, "bay an airport", this);
+                if(this.world.game.getMoney()<iprice){
+                    alert("Not enough money");
+                    return;
+                }
+                this.world.game.changeMoney(-iprice, "bay an airport", this);
                 this.hasAirport = true;
                 this.domAirport.style.visibility = "initial";
                 this.world.addCity(false);//cities[this.world.cities.length - 1].hasAirport = false;
@@ -399,7 +403,7 @@ export class City {
                 this.warehouse[x] -= min;
                 var diff = buildMaterial[x] - min;
                 if (diff > 0) {//markt
-                    var price = allProducts[x].calcPrice(this.people, this.market[x] - diff, false);
+                    var price = parameter.allProducts[x].calcPrice(this.people, this.market[x] - diff, false);
                     this.market[x] -= diff;
                     total += (price * diff);
                 }
@@ -418,8 +422,8 @@ export class City {
             if (buildMaterial[x] > this.warehouse[x]) {
                 var diff = buildMaterial[x] - this.warehouse[x];
                 if ((diff) > this.market[x])
-                    ret += ret + " " + allProducts[x].getIcon();
-                total += allProducts[x].calcPrice(this.people, this.market[x] - diff, false);
+                    ret += ret + " " + parameter.allProducts[x].getIcon();
+                total += parameter.allProducts[x].calcPrice(this.people, this.market[x] - diff, false);
             }
         }
         if (total > this.world.game.getMoney()) {
@@ -432,7 +436,7 @@ export class City {
         var s = money + " " + Icons.money;
         for (var x = 0; x < buildingMaterial.length; x++) {
             if (buildingMaterial[x])
-                s = s + " " + (withBreak ? "<br/>" : "") + buildingMaterial[x] + "x" + allProducts[x].getIcon();
+                s = s + " " + (withBreak ? "<br/>" : "") + buildingMaterial[x] + "x" + parameter.allProducts[x].getIcon();
         }
         return s;
     }
@@ -452,8 +456,8 @@ function createCities2(count, checkProduction = false) {
     }
     if (checkProduction) {
         //check if all Procducts with distribution> 4could be produces
-        for (var x = 0; x < allProducts.length; x++) {
-            if (allids.indexOf(allProducts[x].id) === -1) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
+            if (allids.indexOf(parameter.allProducts[x].id) === -1) {
 
                 return createCities2(count, checkProduction);
             }
@@ -512,7 +516,7 @@ export function createCities(world: World, count: number) {
 
         }
         city.world = world;
-        city.people = City.neutralStartPeople;
+        city.people = parameter.neutralStartPeople;
         var num = getRandomInt(allCities.length);
         while (allready.indexOf(num) !== -1) {
             num = getRandomInt(allCities.length);

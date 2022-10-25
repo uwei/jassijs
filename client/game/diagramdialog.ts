@@ -1,5 +1,5 @@
 
-import { allProducts, Product } from "game/product";
+import { Product } from "game/product";
 import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
 import { Route } from "game/route";
@@ -87,10 +87,10 @@ export class DiagramDialog {
                         </tr>
                        ${(function fun() {
                 var ret = "";
-                for (var x = 0; x < allProducts.length; x++) {
+                for (var x = 0; x < parameter.allProducts.length; x++) {
                     ret = ret + "<tr>";
-                    ret = ret + "<td>" + allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>" + allProducts[x].name + "</td>";
+                    ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
                     ret = ret + "<td>0</td>";
                     ret = ret + "</tr>";
                 }
@@ -108,7 +108,7 @@ export class DiagramDialog {
         }
         var table = document.getElementById("diagramdialog-buildings-table");
         var buildings = [];
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             buildings.push(0);
         }
         for (var x = 0; x < this.world.cities.length; x++) {
@@ -117,7 +117,7 @@ export class DiagramDialog {
                 buildings[comp.productid] += comp.buildings;
             }
         }
-        for (var x = 0; x < allProducts.length; x++) {
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             var tr = table.children[0].children[x + 1];
             tr.children[2].innerHTML = buildings[x]===undefined?"":buildings[x];
         }
