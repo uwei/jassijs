@@ -87,8 +87,8 @@ export class RouteDialog {
                     </table>    
                 </div>
                 <div id="routedialog-load">
-                <input type="number" min="0" id="route-max-load" >;
-                max-load
+                max amount each product: <input type="number" min="0" id="route-max-load" >
+                
                       <table id="routedialog-load-table" style="height:100%;weight:100%;">
                         <tr >
                             <th>Name</th>
@@ -99,7 +99,7 @@ export class RouteDialog {
                                 <button id="route-load-warehouse-fill" title="fill first row down">`+ Icons.fillDown + `</button>
                                 <button id="route-load-fill-consumtion" title="fill consumtion">`+ Icons.food + `</button>
                             </th>
-                            <th>Warehouse<br/>until amount<br/>
+                            <th>Warehouse<br/>everything except<br/>
                                 <button id="route-load-warehouse-until-fill" title="fill first row down">`+ Icons.fillDown + `</button>
                                 <button id="route-load-fill-consumtion-until" title="fill consumtion">`+ Icons.food + `</button>
                             </th>

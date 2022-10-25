@@ -78,8 +78,8 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     </table>    
                 </div>
                 <div id="routedialog-load">
-                <input type="number" min="0" id="route-max-load" >;
-                max-load
+                max amount each product: <input type="number" min="0" id="route-max-load" >
+                
                       <table id="routedialog-load-table" style="height:100%;weight:100%;">
                         <tr >
                             <th>Name</th>
@@ -90,7 +90,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                                 <button id="route-load-warehouse-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button>
                                 <button id="route-load-fill-consumtion" title="fill consumtion">` + icons_1.Icons.food + `</button>
                             </th>
-                            <th>Warehouse<br/>until amount<br/>
+                            <th>Warehouse<br/>everything except<br/>
                                 <button id="route-load-warehouse-until-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button>
                                 <button id="route-load-fill-consumtion-until" title="fill consumtion">` + icons_1.Icons.food + `</button>
                             </th>
