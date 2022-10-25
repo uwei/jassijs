@@ -94,7 +94,6 @@ export class RouteDialog {
                             <th>Name</th>
                             <th></th>
                             <th>Market<br/>amount<br/><button id="route-load-market-fill">`+ Icons.fillDown + `</button></th>
-                            <th>Market<br/>until amount<br/><button id="route-load-market-until-fill" title="fill first row down">`+ Icons.fillDown + `</button></th>
                             <th>Market<br/>max price</th>
                             <th>Warehouse<br/>amount<br/>
                                 <button id="route-load-warehouse-fill" title="fill first row down">`+ Icons.fillDown + `</button>
@@ -115,8 +114,6 @@ export class RouteDialog {
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-amount" id="load-market-max-amount_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-until-amount" id="load-market-until-amount_' + x + '"' +
                         'style="width: 40px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
                         'style="width: 40px;"' + '"></td>';
@@ -408,7 +405,6 @@ export class RouteDialog {
             (<HTMLInputElement>document.getElementById("unload-market-min-price")).value = "";
             (<HTMLInputElement>document.getElementById("unload-warehouse-amount")).value = "";
             (<HTMLInputElement>document.getElementById("load-market-max-amount")).value = "";
-            (<HTMLInputElement>document.getElementById("load-market-until-amount")).value = "";
             (<HTMLInputElement>document.getElementById("load-market-max-price")).value = "";
             (<HTMLInputElement>document.getElementById("load-warehouse-amount")).value = "";
             (<HTMLInputElement>document.getElementById("load-warehouse-until-amount")).value = "";

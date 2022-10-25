@@ -85,7 +85,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                             <th>Name</th>
                             <th></th>
                             <th>Market<br/>amount<br/><button id="route-load-market-fill">` + icons_1.Icons.fillDown + `</button></th>
-                            <th>Market<br/>until amount<br/><button id="route-load-market-until-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button></th>
                             <th>Market<br/>max price</th>
                             <th>Warehouse<br/>amount<br/>
                                 <button id="route-load-warehouse-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button>
@@ -106,8 +105,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-amount" id="load-market-max-amount_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-until-amount" id="load-market-until-amount_' + x + '"' +
                         'style="width: 40px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
                         'style="width: 40px;"' + '"></td>';
@@ -386,7 +383,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                 document.getElementById("unload-market-min-price").value = "";
                 document.getElementById("unload-warehouse-amount").value = "";
                 document.getElementById("load-market-max-amount").value = "";
-                document.getElementById("load-market-until-amount").value = "";
                 document.getElementById("load-market-max-price").value = "";
                 document.getElementById("load-warehouse-amount").value = "";
                 document.getElementById("load-warehouse-until-amount").value = "";
