@@ -57,7 +57,6 @@ export class RouteDialog {
                       <table id="routedialog-unload-table" style="height:100%;weight:100%;">
                         <tr>
                             <th>Name</th>
-                            <th></th>
                             <th>Market<br/>max amount<br/><button id="route-unload-market-fill" title="fill first row down">`+ Icons.fillDown + `</button> </th>
                             <th>Market<br/>min<br/>price</th>
                             <th>Warehouse<br/>amount<br/>
@@ -89,7 +88,7 @@ export class RouteDialog {
                 for (var x = 0; x < parameter.allProducts.length; x++) {
                     ret = ret + "<tr>";
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
+                   // ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
                     ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-max-amount" id="unload-market-max-amount_' + x + '"' +
                         'style="width: 50px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-min-price" id="unload-market-min-price_' + x + '"' +
