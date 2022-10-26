@@ -56,7 +56,7 @@ export class RouteDialog {
                 <div id="routedialog-unload">
                       <table id="routedialog-unload-table" style="height:100%;weight:100%;">
                         <tr>
-                            <th>Name</th>
+                            <th></th>
                             <th>Market<br/>max amount<br/><button id="route-unload-market-fill" title="fill first row down">`+ Icons.fillDown + `</button> </th>
                             <th>Market<br/>min<br/>price</th>
                             <th>Warehouse<br/>amount<br/>
@@ -448,7 +448,7 @@ export class RouteDialog {
         this.update();
         //ui-tabs-active
         $(this.dom).dialog({
-            width: "504px",
+            width: "490px",
             draggable: true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
