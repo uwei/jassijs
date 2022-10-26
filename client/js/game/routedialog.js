@@ -351,7 +351,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                             store[prod.input2] += Math.round((1.1 * city.companies[c].buildings * prod.input2Amount * totalDays));
                     }
                     for (var y = 0; y < parameter.allProducts.length; y++) {
-                        store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * city.people);
+                        store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * city.houses * 100);
                     }
                 }
             }
