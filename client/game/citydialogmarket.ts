@@ -114,6 +114,7 @@ export class CityDialogMarket {
                     document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                     $(t).slider("value", 40);
                     inedit = false;
+                    CityDialog.getInstance().update(true);
                 },
                 stop: function (e: any, ui) {
                     
@@ -168,6 +169,7 @@ export class CityDialogMarket {
                     document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                     $(t).slider("value", 0);
                     inedit = false;
+                    CityDialog.getInstance().update(true);
                 },
                 stop: function (e: any, ui) {
                     setTimeout(() => {

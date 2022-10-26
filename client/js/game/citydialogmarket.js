@@ -109,6 +109,7 @@ define(["require", "exports", "game/citydialog"], function (require, exports, ci
                         document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                         $(t).slider("value", 40);
                         inedit = false;
+                        citydialog_1.CityDialog.getInstance().update(true);
                     },
                     stop: function (e, ui) {
                         setTimeout(() => {
@@ -159,6 +160,7 @@ define(["require", "exports", "game/citydialog"], function (require, exports, ci
                         document.getElementById("citydialog-market-info_" + id).innerHTML = "";
                         $(t).slider("value", 0);
                         inedit = false;
+                        citydialog_1.CityDialog.getInstance().update(true);
                     },
                     stop: function (e, ui) {
                         setTimeout(() => {

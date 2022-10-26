@@ -36,7 +36,7 @@ export class Product {
     /**
      * calc price for a city with people and the
      */
-    calcPrice(people: number, amount: number, isProducedHere: boolean) {
+    calcPrice0(people: number, amount: number, isProducedHere: boolean) {
         var consume = Math.round(this.dailyConsumtion * people * 40);
         var normal = isProducedHere ? this.pricePurchase : this.priceSelling;
 
@@ -54,7 +54,7 @@ export class Product {
         return test;
     }
 
-    calcPrice2(people: number, amount: number, isProducedHere: boolean) {
+    calcPrice(people: number, amount: number, isProducedHere: boolean) {
         var consume = Math.round(this.dailyConsumtion * people * 40);
         var normal = isProducedHere ? this.pricePurchase : this.priceSelling;
         var min = Math.round((0.0 + normal) * parameter.ratePriceMin);
@@ -67,13 +67,13 @@ export class Product {
             return min;
         var test=0;
         if(amount>consume){
-            var exp = Math.round(log(consumeMax,max) * 1000) / 1000;
-            var t=consume-2*(amount-consume)
-            test =Math.round(Math.pow(t, exp));
+            var exp = Math.round(log(consume-consumeMin,normal-min)* 1000) / 1000;
+            var diff=Math.pow(amount-consume, 1/exp);
+            test =Math.round(normal-diff);
         }else{
-            var exp = Math.round(log(consumeMin,min) * 1000) / 1000;
-            var t=consume-2*(consume-amount);
-            test =Math.round(Math.pow(amount, exp));
+             var exp = Math.round(log(-consume+consumeMax,-normal+max)* 1000) / 1000;
+            var diff=Math.pow(-amount+consume, 1/exp);
+            test =Math.round(normal+diff);
         
         }
         // var test = Math.round(consume * normal / amount);

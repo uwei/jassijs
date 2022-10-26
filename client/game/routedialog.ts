@@ -59,11 +59,27 @@ export class RouteDialog {
                             <th>Name</th>
                             <th></th>
                             <th>Market<br/>max amount<br/><button id="route-unload-market-fill" title="fill first row down">`+ Icons.fillDown + `</button> </th>
-                            <th>Market<br/>min price</th>
+                            <th>Market<br/>min<br/>price</th>
                             <th>Warehouse<br/>amount<br/>
-                            <button id="route-unload-warehous-fill" title="fill first row down">`+ Icons.fillDown + `</button>
-                            <button id="route-unload-warehous-fill9" title="fill 99999999 down">`+ Icons.nine + `</button>
+                                <button id="route-unload-warehous-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                                <button id="route-unload-warehous-fill9" title="fill 99999999 down">`+ Icons.nine + `</button>
                             </th>
+
+                            <th>Market<br/>amount<br/><button id="route-load-market-fill">`+ Icons.fillDown + `</button></th>
+                            <th>Market<br/>max price</th>
+                            <th>Warehouse<br/>amount<br/>
+                                <button id="route-load-warehouse-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                                <button id="route-load-fill-consumtion" title="fill consumtion">`+ Icons.food + `</button>
+                            </th>
+                            <th>Warehouse<br/>everything except<br/>
+                                <button id="route-load-warehouse-until-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                                <button id="route-load-fill-consumtion-until" title="fill consumtion">`+ Icons.food + `</button>
+                            </th>
+
+
+
+
+
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -77,9 +93,21 @@ export class RouteDialog {
                     ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-max-amount" id="unload-market-max-amount_' + x + '"' +
                         'style="width: 50px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-min-price" id="unload-market-min-price_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
+                        'style="width: 43px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="unload-warehouse-amount" id="unload-warehouse-amount_' + x + '"' +
                         'style="width: 50px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-amount" id="load-market-max-amount_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-amount" id="load-warehouse-amount_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-until-amount" id="load-warehouse-until-amount_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+
+
+
+
                     ret = ret + "</tr>";
                 }
                 return ret;
@@ -93,16 +121,7 @@ export class RouteDialog {
                         <tr >
                             <th>Name</th>
                             <th></th>
-                            <th>Market<br/>amount<br/><button id="route-load-market-fill">`+ Icons.fillDown + `</button></th>
-                            <th>Market<br/>max price</th>
-                            <th>Warehouse<br/>amount<br/>
-                                <button id="route-load-warehouse-fill" title="fill first row down">`+ Icons.fillDown + `</button>
-                                <button id="route-load-fill-consumtion" title="fill consumtion">`+ Icons.food + `</button>
-                            </th>
-                            <th>Warehouse<br/>everything except<br/>
-                                <button id="route-load-warehouse-until-fill" title="fill first row down">`+ Icons.fillDown + `</button>
-                                <button id="route-load-fill-consumtion-until" title="fill consumtion">`+ Icons.food + `</button>
-                            </th>
+                            
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -113,14 +132,7 @@ export class RouteDialog {
                     ret = ret + "<tr>";
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-amount" id="load-market-max-amount_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-amount" id="load-warehouse-amount_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-until-amount" id="load-warehouse-until-amount_' + x + '"' +
-                        'style="width: 40px;"' + '"></td>';
+                   
                     ret = ret + "</tr>";
                 }
                 return ret;
@@ -437,7 +449,7 @@ export class RouteDialog {
         this.update();
         //ui-tabs-active
         $(this.dom).dialog({
-            width: "425px",
+            width: "504px",
             draggable: true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
