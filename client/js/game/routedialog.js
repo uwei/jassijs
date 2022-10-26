@@ -39,8 +39,16 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             <button id="route-copy-prev" title="copy prev route">` + icons_1.Icons.copy + `</button>
                       
           </div>
-           <table id="routedialog-unload-table" style="height:100%;weight:100%;">
+          
+            <div id="routedialog-tabs">
+                <ul>
+                    <li><a href="#routedialog-unload" class="routedialog-tabs">Unload</a></li>
+                    <li><a href="#routedialog-load" class="routedialog-tabs">Load</a></li>
+                </ul>
+                <div id="routedialog-unload">
+                         <table id="routedialog-unload-table" style="height:100%;weight:100%;">
                         <tr>
+                            <th>Name</th>
                             <th></th>
                             <th>Market<br/>max amount<br/><button id="route-unload-market-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button> </th>
                             <th>Market<br/>min<br/>price</th>
@@ -49,7 +57,37 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                                 <button id="route-unload-warehous-fill9" title="fill 99999999 down">` + icons_1.Icons.nine + `</button>
                             </th>
 
-                            <th>Market<br/>amount<br/><button id="route-load-market-fill">` + icons_1.Icons.fillDown + `</button></th>
+                        </tr>
+                       ${(function fun() {
+                var ret = "";
+                function price(id, change) {
+                    console.log(id + " " + change);
+                }
+                for (var x = 0; x < parameter.allProducts.length; x++) {
+                    ret = ret + "<tr>";
+                    ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
+                    // ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
+                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-max-amount" id="unload-market-max-amount_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-min-price" id="unload-market-min-price_' + x + '"' +
+                        'style="width: 43px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-warehouse-amount" id="unload-warehouse-amount_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + "</tr>";
+                }
+                return ret;
+            })()}
+                    </table> 
+                </div>
+                <div id="routedialog-load">
+                max amount each product: <input type="number" min="0" id="route-max-load" >
+                
+                      <table id="routedialog-load-table" style="height:100%;weight:100%;">
+                        <tr >
+                            <th>Name</th>
+                            <th></th>
+                              <th>Market<br/>amount<br/><button id="route-load-market-fill">` + icons_1.Icons.fillDown + `</button></th>
                             <th>Market<br/>max price</th>
                             <th>Warehouse<br/>amount<br/>
                                 <button id="route-load-warehouse-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button>
@@ -61,54 +99,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                             </th>
 
 
-
-
-
-                        </tr>
-                       ${(function fun() {
-                var ret = "";
-                function price(id, change) {
-                    console.log(id + " " + change);
-                }
-                for (var x = 0; x < parameter.allProducts.length; x++) {
-                    ret = ret + "<tr>";
-                    ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
-                    // ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
-                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-max-amount" id="unload-market-max-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-min-price" id="unload-market-min-price_' + x + '"' +
-                        'style="width: 43px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-warehouse-amount" id="unload-warehouse-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-amount" id="load-market-max-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-amount" id="load-warehouse-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-until-amount" id="load-warehouse-until-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + "</tr>";
-                }
-                return ret;
-            })()}
-                    </table> 
-            <div id="routedialog-tabs">
-                <ul>
-                    <li><a href="#routedialog-unload" class="routedialog-tabs">Unload</a></li>
-                    <li><a href="#routedialog-load" class="routedialog-tabs">Load</a></li>
-                </ul>
-                <div id="routedialog-unload">
-                        
-                </div>
-                <div id="routedialog-load">
-                max amount each product: <input type="number" min="0" id="route-max-load" >
-                
-                      <table id="routedialog-load-table" style="height:100%;weight:100%;">
-                        <tr >
-                            <th>Name</th>
-                            <th></th>
-                            
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -119,6 +109,14 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     ret = ret + "<tr>";
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-amount" id="load-market-max-amount_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-amount" id="load-warehouse-amount_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-until-amount" id="load-warehouse-until-amount_' + x + '"' +
+                        'style="width: 50px;"' + '"></td>';
                     ret = ret + "</tr>";
                 }
                 return ret;
@@ -420,7 +418,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             this.update();
             //ui-tabs-active
             $(this.dom).dialog({
-                width: "455px",
+                width: "400px",
                 draggable: true,
                 //     position:{my:"left top",at:"right top",of:$(document)} ,
                 open: function (event, ui) {
