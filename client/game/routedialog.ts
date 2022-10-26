@@ -370,7 +370,7 @@ export class RouteDialog {
 
                 }
                 for (var y = 0; y < parameter.allProducts.length; y++) {
-                    store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * city.houses*100);
+                    store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * (city.houses*100+parameter.neutralStartPeople));
 
                 }
 
