@@ -48,13 +48,7 @@ export class RouteDialog {
             <button id="route-copy-prev" title="copy prev route">`+ Icons.copy + `</button>
                       
           </div>
-            <div id="routedialog-tabs">
-                <ul>
-                    <li><a href="#routedialog-unload" class="routedialog-tabs">Unload</a></li>
-                    <li><a href="#routedialog-load" class="routedialog-tabs">Load</a></li>
-                </ul>
-                <div id="routedialog-unload">
-                      <table id="routedialog-unload-table" style="height:100%;weight:100%;">
+           <table id="routedialog-unload-table" style="height:100%;weight:100%;">
                         <tr>
                             <th></th>
                             <th>Market<br/>max amount<br/><button id="route-unload-market-fill" title="fill first row down">`+ Icons.fillDown + `</button> </th>
@@ -111,7 +105,14 @@ export class RouteDialog {
                 }
                 return ret;
             })()}
-                    </table>    
+                    </table> 
+            <div id="routedialog-tabs">
+                <ul>
+                    <li><a href="#routedialog-unload" class="routedialog-tabs">Unload</a></li>
+                    <li><a href="#routedialog-load" class="routedialog-tabs">Load</a></li>
+                </ul>
+                <div id="routedialog-unload">
+                        
                 </div>
                 <div id="routedialog-load">
                 max amount each product: <input type="number" min="0" id="route-max-load" >
@@ -448,7 +449,7 @@ export class RouteDialog {
         this.update();
         //ui-tabs-active
         $(this.dom).dialog({
-            width: "490px",
+            width: "455px",
             draggable: true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
