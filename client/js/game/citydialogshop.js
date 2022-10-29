@@ -138,16 +138,18 @@ define(["require", "exports", "game/citydialog", "game/icons", "game/citydialogm
                 return;
             var select = document.getElementById("citydialog-shop-table-target");
             var last = select.value;
-            select.innerHTML = "";
-            var allAPs = city.getAirplanesInCity();
-            for (var x = 0; x < allAPs.length; x++) {
-                var opt = document.createElement("option");
-                opt.value = allAPs[x].name;
-                opt.text = opt.value;
-                select.appendChild(opt);
-            }
-            if (last !== "") {
-                select.value = last;
+            if (document.activeElement !== document.getElementById("citydialog-shop-table-target")) {
+                select.innerHTML = "";
+                var allAPs = city.getAirplanesInCity();
+                for (var x = 0; x < allAPs.length; x++) {
+                    var opt = document.createElement("option");
+                    opt.value = allAPs[x].name;
+                    opt.text = opt.value;
+                    select.appendChild(opt);
+                }
+                if (last !== "") {
+                    select.value = last;
+                }
             }
             citydialog_1.CityDialog.getInstance().updateTitle();
             var storetarget = citydialogmarket_1.CityDialogMarket.getStore("citydialog-shop-table-target");

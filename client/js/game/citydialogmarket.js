@@ -196,7 +196,7 @@ define(["require", "exports", "game/citydialog"], function (require, exports, ci
                 if (city.shops > 0 && val === "MyShop") {
                     return city.shop;
                 }
-                return (_a = this.getAirplaneInMarket("citydialog-market-table-target")) === null || _a === void 0 ? void 0 : _a.products;
+                return (_a = this.getAirplaneInMarket(target)) === null || _a === void 0 ? void 0 : _a.products;
             }
             return undefined;
         }

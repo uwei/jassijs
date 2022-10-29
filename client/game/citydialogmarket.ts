@@ -203,7 +203,7 @@ export class CityDialogMarket {
             if (city.shops > 0 && val === "MyShop") {
                 return city.shop;
             }
-            return this.getAirplaneInMarket("citydialog-market-table-target")?.products;
+            return this.getAirplaneInMarket(target)?.products;
         }
         return undefined;
     }

@@ -150,19 +150,22 @@ export class CityDialogShop {
             return;
         var select: HTMLSelectElement = <any>document.getElementById("citydialog-shop-table-target");
         var last = select.value;
-        select.innerHTML = "";
+            
+        if (document.activeElement !== <any>document.getElementById("citydialog-shop-table-target")) {
+            select.innerHTML = "";
 
-        var allAPs = city.getAirplanesInCity();
-        for (var x = 0; x < allAPs.length; x++) {
-            var opt: HTMLOptionElement = document.createElement("option");
-            opt.value = allAPs[x].name;
-            opt.text = opt.value;
-            select.appendChild(opt);
+            var allAPs = city.getAirplanesInCity();
+            for (var x = 0; x < allAPs.length; x++) {
+                var opt: HTMLOptionElement = document.createElement("option");
+                opt.value = allAPs[x].name;
+                opt.text = opt.value;
+                select.appendChild(opt);
+            }
+            if (last !== "") {
+                select.value = last;
+            }
         }
-
-        if (last !== "") {
-            select.value = last;
-        }
+       
         CityDialog.getInstance().updateTitle();
 
         var storetarget = CityDialogMarket.getStore("citydialog-shop-table-target");
