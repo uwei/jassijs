@@ -132,7 +132,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.dom = dom;
             var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
-            Traffics 
+            Traffics* 
             <button id="game-slower">` + icons_1.Icons.minus + `</button> 
             <span id="gamedate"></span>   
             <button id="game-faster">` + icons_1.Icons.plus + `</button> 

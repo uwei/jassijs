@@ -460,7 +460,7 @@ export class CityDialog {
             CityDialogMarket.getInstance().update();
         if (document.getElementById("citydialog-buildings-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
             this.updateBuildings();
-        if (document.getElementById("citydialog-shop-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
+        if (force||document.getElementById("citydialog-shop-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
             CityDialogShop.getInstance().update();
         if (document.getElementById("citydialog-construction-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
             this.updateConstruction();

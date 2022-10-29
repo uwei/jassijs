@@ -428,7 +428,7 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                 citydialogmarket_1.CityDialogMarket.getInstance().update();
             if ((_j = (_h = (_g = document.getElementById("citydialog-buildings-tab")) === null || _g === void 0 ? void 0 : _g.parentElement) === null || _h === void 0 ? void 0 : _h.classList) === null || _j === void 0 ? void 0 : _j.contains("ui-tabs-active"))
                 this.updateBuildings();
-            if ((_m = (_l = (_k = document.getElementById("citydialog-shop-tab")) === null || _k === void 0 ? void 0 : _k.parentElement) === null || _l === void 0 ? void 0 : _l.classList) === null || _m === void 0 ? void 0 : _m.contains("ui-tabs-active"))
+            if (force || ((_m = (_l = (_k = document.getElementById("citydialog-shop-tab")) === null || _k === void 0 ? void 0 : _k.parentElement) === null || _l === void 0 ? void 0 : _l.classList) === null || _m === void 0 ? void 0 : _m.contains("ui-tabs-active")))
                 citydialogshop_1.CityDialogShop.getInstance().update();
             if ((_q = (_p = (_o = document.getElementById("citydialog-construction-tab")) === null || _o === void 0 ? void 0 : _o.parentElement) === null || _p === void 0 ? void 0 : _p.classList) === null || _q === void 0 ? void 0 : _q.contains("ui-tabs-active"))
                 this.updateConstruction();
