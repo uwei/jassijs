@@ -29,7 +29,7 @@ export class City {
     shop: number[] = [];
     shops = 0;
     shopMinStock: number[];
-    shopsellingPrice: number[];
+    shopSellingPrice: number[];
     type = "City";
     domDesc: HTMLSpanElement;
     hasAirport;
@@ -38,7 +38,7 @@ export class City {
 
         this.market = [];
         this.shopMinStock = [];
-        this.shopsellingPrice = [];
+        this.shopSellingPrice = [];
         this.createCompanies();
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var val = 0;
@@ -53,7 +53,7 @@ export class City {
 
             }
             this.shopMinStock.push(undefined);
-            this.shopsellingPrice.push(this.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling);
+            this.shopSellingPrice.push(this.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling);
             this.shop.push(0);
             this.market.push(val);
         }
@@ -249,9 +249,9 @@ export class City {
                 var price = product.calcPrice(this.people, this.market[x] - diff, false);
                 var fromshop = false;
                 if (this.shop[x] >= diff && (this.shopMinStock[x] === undefined || (this.shop[x] - diff) > this.shopMinStock[x])) {
-                    if (this.shopsellingPrice[x] <= price) {
+                    if (this.shopSellingPrice[x] <= price) {
                         fromshop = true;
-                        price = this.shopsellingPrice[x];
+                        price = this.shopSellingPrice[x];
                     }
                 }
                 var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * parameter.ratePriceMax - product.priceSelling);
@@ -288,12 +288,12 @@ export class City {
             }
         }
     }
-    sellshopToMarket() {
+    sellShopToMarket() {
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var product = parameter.allProducts[x];
             while (true) {
                 var price = product.calcPrice(this.people, this.market[x], this.isProducedHere(x));
-                if (price >= this.shopsellingPrice[x] && this.shop[x] > 1) {
+                if (price >= this.shopSellingPrice[x] && this.shop[x] > 1) {
                     if (this.shopMinStock[x] === undefined || (this.shop[x] - 1 > this.shopMinStock[x])) {
                         this.world.game.changeMoney((Math.round(price * 1)), "market buy from the shop", this);
                         this.shop[x] -= 1;
@@ -306,7 +306,7 @@ export class City {
         }
     }
     getDailyCostsShops(){
-        return Math.round(this.shops * (this.shops > 3 ? parameter.rateCostsShopMany : parameter.rateCostShop));
+        return Math.round(this.shops * (this.shops >= 5 ? parameter.rateCostsShopMany : parameter.rateCostShop));
     }
     updateDailyCosts() {
         if (this.shops > 0)
@@ -339,7 +339,7 @@ export class City {
             this.companies[x].update();
         }
         this.updateDailyConsumtion();
-        this.sellshopToMarket();
+        this.sellShopToMarket();
         if (this.world.game.date.getHours() % 6 === 0)
             this.updatePeople();
         if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {

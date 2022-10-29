@@ -427,7 +427,7 @@ export class CityDialog {
     }
     update(force = false) {
 
-        if (!this.city)
+        if (!this.city) 
             return;
         try {
             if (!$(this.dom).dialog('isOpen')) {
@@ -441,8 +441,7 @@ export class CityDialog {
         this.updateTitle();
         //pause game while trading
         if (!force) {
-            if (document.getElementById("citydialog-market-tab")?.parentElement?.classList?.contains("ui-tabs-active")||
-                document.getElementById("citydialog-shop-tab")?.parentElement?.classList?.contains("ui-tabs-active")
+            if (document.getElementById("citydialog-market-tab")?.parentElement?.classList?.contains("ui-tabs-active")
             ) {
                 if (!this.city.world.game.isPaused()) {
                     this.hasPaused = true;

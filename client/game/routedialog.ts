@@ -179,7 +179,7 @@ export class RouteDialog {
             document.getElementById("unload-shop-amount_" + x).addEventListener("change", (e) => {
                 var ctrl = (<HTMLInputElement>e.target);
                 var id = parseInt(ctrl.id.split("_")[1]);
-                _this.route.unloadshopAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
+                _this.route.unloadShopAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
             });
 
             document.getElementById("load-market-max-amount_" + x).addEventListener("change", (e) => {
@@ -195,12 +195,12 @@ export class RouteDialog {
             document.getElementById("load-shop-amount_" + x).addEventListener("change", (e) => {
                 var ctrl = (<HTMLInputElement>e.target);
                 var id = parseInt(ctrl.id.split("_")[1]);
-                _this.route.loadshopAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
+                _this.route.loadShopAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
             });
             document.getElementById("load-shop-until-amount_" + x).addEventListener("change", (e) => {
                 var ctrl = (<HTMLInputElement>e.target);
                 var id = parseInt(ctrl.id.split("_")[1]);
-                _this.route.loadshopUntilAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
+                _this.route.loadShopUntilAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
             });
 
 
@@ -225,14 +225,14 @@ export class RouteDialog {
             _this.update();
         });
         document.getElementById("route-unload-warehous-fill").addEventListener("click", (e) => {
-            for (var x = 1; x < _this.route.unloadshopAmount.length; x++) {
-                this.route.unloadshopAmount[x] = this.route.unloadshopAmount[0];
+            for (var x = 1; x < _this.route.unloadShopAmount.length; x++) {
+                this.route.unloadShopAmount[x] = this.route.unloadShopAmount[0];
             }
             _this.update();
         });
         document.getElementById("route-unload-warehous-fill9").addEventListener("click", (e) => {
-            for (var x = 0; x < _this.route.unloadshopAmount.length; x++) {
-                this.route.unloadshopAmount[x] = 9999999999;
+            for (var x = 0; x < _this.route.unloadShopAmount.length; x++) {
+                this.route.unloadShopAmount[x] = 9999999999;
             }
             _this.update();
         });
@@ -244,14 +244,14 @@ export class RouteDialog {
         });
 
         document.getElementById("route-load-shop-fill").addEventListener("click", (e) => {
-            for (var x = 1; x < _this.route.loadshopAmount.length; x++) {
-                this.route.loadshopAmount[x] = this.route.loadshopAmount[0];
+            for (var x = 1; x < _this.route.loadShopAmount.length; x++) {
+                this.route.loadShopAmount[x] = this.route.loadShopAmount[0];
             }
             _this.update();
         });
         document.getElementById("route-load-shop-until-fill").addEventListener("click", (e) => {
-            for (var x = 1; x < _this.route.loadshopUntilAmount.length; x++) {
-                this.route.loadshopUntilAmount[x] = this.route.loadshopUntilAmount[0];
+            for (var x = 1; x < _this.route.loadShopUntilAmount.length; x++) {
+                this.route.loadShopUntilAmount[x] = this.route.loadShopUntilAmount[0];
             }
             _this.update();
         });
@@ -326,11 +326,11 @@ export class RouteDialog {
         for (var x = 0; x < parameter.allProducts.length; x++) {
             this.route.loadMarketAmount[x] = source.loadMarketAmount[x];
             this.route.loadMarketPrice[x] = source.loadMarketPrice[x];
-            this.route.loadshopAmount[x] = source.loadshopAmount[x];
-            this.route.loadshopUntilAmount[x] = source.loadshopUntilAmount[x];
+            this.route.loadShopAmount[x] = source.loadShopAmount[x];
+            this.route.loadShopUntilAmount[x] = source.loadShopUntilAmount[x];
             this.route.unloadMarketAmount[x] = source.unloadMarketAmount[x];
             this.route.unloadMarketPrice[x] = source.unloadMarketPrice[x];
-            this.route.unloadshopAmount[x] = source.unloadshopAmount[x];
+            this.route.unloadShopAmount[x] = source.unloadShopAmount[x];
         }
         this.update();
     }
@@ -355,7 +355,7 @@ export class RouteDialog {
         var days = lenpixel / _this.route.airplane.speed; //t=s/v; in Tage
         var totalDays = (Math.round(days * 24) + 1 + all.length * 3 + all.length * 3) / 24;   //+3h load and unload
         console.log(totalDays);
-        var store = allCities ? this.route.loadshopAmount : this.route.loadshopUntilAmount;
+        var store = allCities ? this.route.loadShopAmount : this.route.loadShopUntilAmount;
         for (var x = 0; x < parameter.allProducts.length; x++) {
             store[x] = 0;
         }
@@ -429,15 +429,15 @@ export class RouteDialog {
             if (document.activeElement !== document.getElementById("unload-market-min-price_" + x))
                 (<HTMLInputElement>document.getElementById("unload-market-min-price_" + x)).value = (this.route.unloadMarketPrice[x] === undefined) ? "" : this.route.unloadMarketPrice[x].toString();
             if (document.activeElement !== document.getElementById("unload-shop-amount_" + x))
-                (<HTMLInputElement>document.getElementById("unload-shop-amount_" + x)).value = (this.route.unloadshopAmount[x] === undefined) ? "" : this.route.unloadshopAmount[x].toString();
+                (<HTMLInputElement>document.getElementById("unload-shop-amount_" + x)).value = (this.route.unloadShopAmount[x] === undefined) ? "" : this.route.unloadShopAmount[x].toString();
             if (document.activeElement !== document.getElementById("load-market-max-amount_" + x))
                 (<HTMLInputElement>document.getElementById("load-market-max-amount_" + x)).value = (this.route.loadMarketAmount[x] === undefined) ? "" : this.route.loadMarketAmount[x].toString();
             if (document.activeElement !== document.getElementById("load-market-max-price_" + x))
                 (<HTMLInputElement>document.getElementById("load-market-max-price_" + x)).value = (this.route.loadMarketPrice[x] === undefined) ? "" : this.route.loadMarketPrice[x].toString();
             if (document.activeElement !== document.getElementById("load-shop-amount_" + x))
-                (<HTMLInputElement>document.getElementById("load-shop-amount_" + x)).value = (this.route.loadshopAmount[x] === undefined) ? "" : this.route.loadshopAmount[x].toString();
+                (<HTMLInputElement>document.getElementById("load-shop-amount_" + x)).value = (this.route.loadShopAmount[x] === undefined) ? "" : this.route.loadShopAmount[x].toString();
             if (document.activeElement !== document.getElementById("load-shop-until-amount_" + x))
-                (<HTMLInputElement>document.getElementById("load-shop-until-amount_" + x)).value = (this.route.loadshopUntilAmount[x] === undefined) ? "" : this.route.loadshopUntilAmount[x].toString();
+                (<HTMLInputElement>document.getElementById("load-shop-until-amount_" + x)).value = (this.route.loadShopUntilAmount[x] === undefined) ? "" : this.route.loadShopUntilAmount[x].toString();
         }
 
     }

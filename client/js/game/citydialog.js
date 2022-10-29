@@ -394,7 +394,7 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
             }
         }
         update(force = false) {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
             if (!this.city)
                 return;
             try {
@@ -402,7 +402,7 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                     return;
                 }
             }
-            catch (_x) {
+            catch (_u) {
                 return;
             }
             if (!this.city.hasAirport)
@@ -410,8 +410,7 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
             this.updateTitle();
             //pause game while trading
             if (!force) {
-                if (((_c = (_b = (_a = document.getElementById("citydialog-market-tab")) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.classList) === null || _c === void 0 ? void 0 : _c.contains("ui-tabs-active")) ||
-                    ((_f = (_e = (_d = document.getElementById("citydialog-shop-tab")) === null || _d === void 0 ? void 0 : _d.parentElement) === null || _e === void 0 ? void 0 : _e.classList) === null || _f === void 0 ? void 0 : _f.contains("ui-tabs-active"))) {
+                if ((_c = (_b = (_a = document.getElementById("citydialog-market-tab")) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.classList) === null || _c === void 0 ? void 0 : _c.contains("ui-tabs-active")) {
                     if (!this.city.world.game.isPaused()) {
                         this.hasPaused = true;
                         this.city.world.game.pause();
@@ -425,15 +424,15 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                 }
             }
             citydialogmarket_1.CityDialogMarket.getInstance().update();
-            if ((_j = (_h = (_g = document.getElementById("citydialog-market-tab")) === null || _g === void 0 ? void 0 : _g.parentElement) === null || _h === void 0 ? void 0 : _h.classList) === null || _j === void 0 ? void 0 : _j.contains("ui-tabs-active"))
+            if ((_f = (_e = (_d = document.getElementById("citydialog-market-tab")) === null || _d === void 0 ? void 0 : _d.parentElement) === null || _e === void 0 ? void 0 : _e.classList) === null || _f === void 0 ? void 0 : _f.contains("ui-tabs-active"))
                 citydialogmarket_1.CityDialogMarket.getInstance().update();
-            if ((_m = (_l = (_k = document.getElementById("citydialog-buildings-tab")) === null || _k === void 0 ? void 0 : _k.parentElement) === null || _l === void 0 ? void 0 : _l.classList) === null || _m === void 0 ? void 0 : _m.contains("ui-tabs-active"))
+            if ((_j = (_h = (_g = document.getElementById("citydialog-buildings-tab")) === null || _g === void 0 ? void 0 : _g.parentElement) === null || _h === void 0 ? void 0 : _h.classList) === null || _j === void 0 ? void 0 : _j.contains("ui-tabs-active"))
                 this.updateBuildings();
-            if ((_q = (_p = (_o = document.getElementById("citydialog-shop-tab")) === null || _o === void 0 ? void 0 : _o.parentElement) === null || _p === void 0 ? void 0 : _p.classList) === null || _q === void 0 ? void 0 : _q.contains("ui-tabs-active"))
+            if ((_m = (_l = (_k = document.getElementById("citydialog-shop-tab")) === null || _k === void 0 ? void 0 : _k.parentElement) === null || _l === void 0 ? void 0 : _l.classList) === null || _m === void 0 ? void 0 : _m.contains("ui-tabs-active"))
                 citydialogshop_1.CityDialogShop.getInstance().update();
-            if ((_t = (_s = (_r = document.getElementById("citydialog-construction-tab")) === null || _r === void 0 ? void 0 : _r.parentElement) === null || _s === void 0 ? void 0 : _s.classList) === null || _t === void 0 ? void 0 : _t.contains("ui-tabs-active"))
+            if ((_q = (_p = (_o = document.getElementById("citydialog-construction-tab")) === null || _o === void 0 ? void 0 : _o.parentElement) === null || _p === void 0 ? void 0 : _p.classList) === null || _q === void 0 ? void 0 : _q.contains("ui-tabs-active"))
                 this.updateConstruction();
-            if ((_w = (_v = (_u = document.getElementById("citydialog-score-tab")) === null || _u === void 0 ? void 0 : _u.parentElement) === null || _v === void 0 ? void 0 : _v.classList) === null || _w === void 0 ? void 0 : _w.contains("ui-tabs-active"))
+            if ((_t = (_s = (_r = document.getElementById("citydialog-score-tab")) === null || _r === void 0 ? void 0 : _r.parentElement) === null || _s === void 0 ? void 0 : _s.classList) === null || _t === void 0 ? void 0 : _t.contains("ui-tabs-active"))
                 this.updateScore();
             return;
         }

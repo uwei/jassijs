@@ -318,6 +318,8 @@ export class Game {
         if(value.warehouse){
           value.shop=value.warehouse;
           value.shops=value.warehouses;
+          value.shopSellingPrice=value.warehouseSellingPrice;
+          delete value.warehouseSellingPrice;
           delete value.warehouse;
           delete value.warehouses;
         }
@@ -326,6 +328,15 @@ export class Game {
       }
       if (value?.type === "Route") {
         r = new Route();
+        if(value.loadWarehouseAmount){
+          value.loadShopAmount=value.loadWarehouseAmount;
+          value.unloadShopAmount=value.unloadWarehouseAmount;
+          value.loadShopUntilAmount=value.loadWarehouseUntilAmount;
+          delete value.loadWarehouseAmount;
+          delete value.unloadWarehouseAmount;
+          delete value.loadWarehouseUntilAmount;
+          
+        }
         Object.assign(r, value);
         return r;
       }

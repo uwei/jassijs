@@ -72,7 +72,7 @@ export class CityDialogShop {
             if (city.shops === 0)
                 return;
             for (var x = 0; x < parameter.allProducts.length; x++) {
-                city.shopsellingPrice[x] = city.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling;
+                city.shopSellingPrice[x] = city.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling;
             }
             _this.update();
 
@@ -100,10 +100,10 @@ export class CityDialogShop {
                 value: 40,
                 slide: function (event, ui) {
                     console.log("slide");
-                    CityDialogMarket.slide(event, false, "citydialog-shop-info_",false);
+                    CityDialogMarket.slide(event, false, "citydialog-shop-info_", false);
                 },
                 change: function (e, ui) {
-                    CityDialogMarket.changeSlider(e, true,"citydialog-shop-info_",false);
+                    CityDialogMarket.changeSlider(e, true, "citydialog-shop-info_", false);
                 },
                 stop: function (e: any, ui) {
                     setTimeout(() => {
@@ -121,11 +121,11 @@ export class CityDialogShop {
                 range: "min",
                 value: 0,
                 slide: function (event, ui) {
-                    CityDialogMarket.slide(event, true, "citydialog-shop-info_",false);
+                    CityDialogMarket.slide(event, true, "citydialog-shop-info_", false);
                 },
 
                 change: function (e, ui) {
-                    CityDialogMarket.changeSlider(e, false,"citydialog-shop-info_",false);
+                    CityDialogMarket.changeSlider(e, false, "citydialog-shop-info_", false);
                 },
                 stop: function (e: any, ui) {
                     setTimeout(() => {
@@ -151,7 +151,7 @@ export class CityDialogShop {
         var select: HTMLSelectElement = <any>document.getElementById("citydialog-shop-table-target");
         var last = select.value;
         select.innerHTML = "";
-       
+
         var allAPs = city.getAirplanesInCity();
         for (var x = 0; x < allAPs.length; x++) {
             var opt: HTMLOptionElement = document.createElement("option");
@@ -165,50 +165,51 @@ export class CityDialogShop {
         }
         CityDialog.getInstance().updateTitle();
 
-        var storetarget = CityDialogMarket.getStore("citydialog-shop-table-target"); 
+        var storetarget = CityDialogMarket.getStore("citydialog-shop-table-target");
         var storesource = city.shop;
-        var gesamount=0;
+        var gesamount = 0;
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var table = document.getElementById("citydialog-shop-table");
             var tr = table.children[0].children[x + 1];
-            gesamount+=storesource[x];
+            gesamount += storesource[x];
             tr.children[1].innerHTML = city.shop[x].toString();
             var buyslider = <HTMLInputElement>document.getElementById("shop-buy-slider_" + x);
             var sellslider = <HTMLInputElement>document.getElementById("shop-sell-slider_" + x);
-            if (storetarget) {
-                var max = storesource[x];
-                var testap = CityDialogMarket.getAirplaneInMarket("citydialog-shop-table-target");
-                if (testap)
-                    max = Math.min(max, testap.capacity - testap.loadedCount);
-                buyslider.readOnly = false;
-                // sellslider.readOnly = false;
-                buyslider.setAttribute("maxValue", max.toString());
-                tr.children[5].innerHTML = storetarget[x].toString();
-                if (storetarget[x] !== 0)
-                    $(sellslider).slider("enable");//storetarget[x].toString();
-                else
-                    $(sellslider).slider("disable");//storetarget[x].toString();
-                if (max !== 0)
-                    $(buyslider).slider("enable");//storetarget[x].toString();
-                else
-                    $(buyslider).slider("disable");//storetarget[x].toString();
+            if (document.activeElement !== buyslider && document.activeElement !== sellslider) {
+                if (storetarget) {
+                    var max = storesource[x];
+                    var testap = CityDialogMarket.getAirplaneInMarket("citydialog-shop-table-target");
+                    if (testap)
+                        max = Math.min(max, testap.capacity - testap.loadedCount);
+                    buyslider.readOnly = false;
+                    // sellslider.readOnly = false;
+                    buyslider.setAttribute("maxValue", max.toString());
+                    tr.children[5].innerHTML = storetarget[x].toString();
+                    if (storetarget[x] !== 0)
+                        $(sellslider).slider("enable");//storetarget[x].toString();
+                    else
+                        $(sellslider).slider("disable");//storetarget[x].toString();
+                    if (max !== 0)
+                        $(buyslider).slider("enable");//storetarget[x].toString();
+                    else
+                        $(buyslider).slider("disable");//storetarget[x].toString();
 
-                sellslider.setAttribute("maxValue", storetarget[x].toString());
-            } else {
-                buyslider.readOnly = true;
-                // sellslider.readOnly = true;
-                tr.children[5].innerHTML = "";
-                $(buyslider).slider("disable");
-                $(sellslider).slider("disable");
+                    sellslider.setAttribute("maxValue", storetarget[x].toString());
+                } else {
+                    buyslider.readOnly = true;
+                    // sellslider.readOnly = true;
+                    tr.children[5].innerHTML = "";
+                    $(buyslider).slider("disable");
+                    $(sellslider).slider("disable");
+                }
             }
-
             if (document.activeElement !== tr.children[6].children[0])
                 (<HTMLInputElement>tr.children[6].children[0]).value = city.shopMinStock[x] === undefined ? "" : city.shopMinStock[x].toString();
             if (document.activeElement !== tr.children[7].children[0])
-                (<HTMLInputElement>tr.children[7].children[0]).value = city.shopsellingPrice[x] === undefined ? "" : city.shopsellingPrice[x].toString();
+                (<HTMLInputElement>tr.children[7].children[0]).value = city.shopSellingPrice[x] === undefined ? "" : city.shopSellingPrice[x].toString();
         }
 
-        document.getElementById("citydialog-shop-info").innerHTML = "Shops:" + city.shops+" Capacity "+gesamount+"/"+city.shops*parameter.capacityShop;
+        document.getElementById("citydialog-shop-info").innerHTML = "Shops:" + city.shops + " Capacity " + gesamount + "/" + city.shops * parameter.capacityShop;
 
     }
 

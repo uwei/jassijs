@@ -3,7 +3,7 @@ var log = (function () {
     return function (n, base) {
         return log(n) / (base ? log(base) : 1);
     };
-})();
+})(); 
 
 export class Product {
     id: number;

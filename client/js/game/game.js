@@ -284,6 +284,8 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                     if (value.warehouse) {
                         value.shop = value.warehouse;
                         value.shops = value.warehouses;
+                        value.shopSellingPrice = value.warehouseSellingPrice;
+                        delete value.warehouseSellingPrice;
                         delete value.warehouse;
                         delete value.warehouses;
                     }
@@ -292,6 +294,14 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 }
                 if ((value === null || value === void 0 ? void 0 : value.type) === "Route") {
                     r = new route_1.Route();
+                    if (value.loadWarehouseAmount) {
+                        value.loadShopAmount = value.loadWarehouseAmount;
+                        value.unloadShopAmount = value.unloadWarehouseAmount;
+                        value.loadShopUntilAmount = value.loadWarehouseUntilAmount;
+                        delete value.loadWarehouseAmount;
+                        delete value.unloadWarehouseAmount;
+                        delete value.loadWarehouseUntilAmount;
+                    }
                     Object.assign(r, value);
                     return r;
                 }
