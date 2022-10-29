@@ -33,9 +33,8 @@ export class Parameter {
   rateBuyBuilding = 1;
   rateBuyBuildingGrowFactor = 5000;
   rateCostsAirplaine = 1;
-  rateCostsHouse = 1;
-  rateCostsWarehouse = 100;
-  rateCostsWarehouseMany = 1000;
+  rateCostsshop = 100;
+  rateCostsshopMany = 1000;
   workerInCompany = 20;
   neutralStartPeople = 200;
   neutralProductionRate = 2;
@@ -203,7 +202,7 @@ export class Game {
     });
     document.getElementById("debug-game").addEventListener("click", () => {
       for (var x = 0; x < parameter.allProducts.length; x++) {
-        _this.world.cities[0].warehouse[x] = 5000;
+        _this.world.cities[0].shop[x] = 5000;
       }
       _this._money = 1000000;
     });

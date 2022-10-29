@@ -112,7 +112,7 @@ define(["require", "exports"], function (require, exports) {
             if (parameter.allProducts[prod].input2 !== undefined)
                 totalDailyNeed2 = Math.round(this.workers * parameter.allProducts[prod].input2Amount / parameter.workerInCompany);
             if (this.dailyProducedToday === 0 && totalDailyNeed1 !== undefined) {
-                if (totalDailyNeed1 >= this.city.warehouse[parameter.allProducts[prod].input1]) {
+                if (totalDailyNeed1 >= this.city.shop[parameter.allProducts[prod].input1]) {
                     // console.log(totalDailyNeed1 + "x" + parameter.allProducts[prod].input1 + " needed");
                     return;
                 }
@@ -120,7 +120,7 @@ define(["require", "exports"], function (require, exports) {
                 }
             }
             if (this.dailyProducedToday === 0 && totalDailyNeed2 !== undefined) {
-                if (totalDailyNeed2 >= this.city.warehouse[parameter.allProducts[prod].input2]) {
+                if (totalDailyNeed2 >= this.city.shop[parameter.allProducts[prod].input2]) {
                     // console.log(totalDailyNeed2 + "x" + parameter.allProducts[prod].input2 + " needed");
                     return;
                 }
@@ -131,15 +131,15 @@ define(["require", "exports"], function (require, exports) {
                 if (diff > 0) {
                     if (this.dailyProducedToday === 0) {
                         if (totalDailyNeed1 !== undefined) {
-                            this.city.warehouse[parameter.allProducts[prod].input1] -= totalDailyNeed1;
+                            this.city.shop[parameter.allProducts[prod].input1] -= totalDailyNeed1;
                             debugNeed[parameter.allProducts[prod].input1] += totalDailyNeed1;
                         }
                         if (totalDailyNeed2 !== undefined) {
-                            this.city.warehouse[parameter.allProducts[prod].input2] -= totalDailyNeed2;
+                            this.city.shop[parameter.allProducts[prod].input2] -= totalDailyNeed2;
                             debugNeed[parameter.allProducts[prod].input2] += totalDailyNeed2;
                         }
                     }
-                    this.city.warehouse[prod] += diff;
+                    this.city.shop[prod] += diff;
                     // console.log(diff + "x" + prod + " produced");
                     this.dailyProducedToday = this.dailyProducedToday + diff;
                 }

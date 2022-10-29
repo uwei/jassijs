@@ -2,7 +2,7 @@
 export class Icons {
 
     static factory = "<span  class='mdi mdi-factory'></span>";
-    static warehouse = "<span  class='mdi mdi-warehouse'></span>";
+    static shop = "<span  class='mdi mdi-shop'></span>";
     static money = "<span style='color:darkgreen' class='mdi mdi-cash-100'></span>";
     static home = "<span  class='mdi  mdi-home-outline'></span>";
     static people = "<span  class='mdi  mdi-human-male'></span>";

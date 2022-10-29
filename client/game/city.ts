@@ -26,11 +26,10 @@ export class City {
     consumedToday: number[];
     lastUpdate = undefined;
     score: number[] = [];
-    warehouse: number[] = [];
-    warehouses = 0;
-    houses = 0;
-    warehouseMinStock: number[];
-    warehouseSellingPrice: number[];
+    shop: number[] = [];
+    shops = 0;
+    shopMinStock: number[];
+    shopsellingPrice: number[];
     type = "City";
     domDesc: HTMLSpanElement;
     hasAirport;
@@ -38,8 +37,8 @@ export class City {
         this.hasAirport = true;
 
         this.market = [];
-        this.warehouseMinStock = [];
-        this.warehouseSellingPrice = [];
+        this.shopMinStock = [];
+        this.shopsellingPrice = [];
         this.createCompanies();
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var val = 0;
@@ -53,9 +52,9 @@ export class City {
                 val = 10 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
 
             }
-            this.warehouseMinStock.push(undefined);
-            this.warehouseSellingPrice.push(this.isProducedHere(x)?parameter.allProducts[x].pricePurchase: parameter.allProducts[x].priceSelling);
-            this.warehouse.push(0);
+            this.shopMinStock.push(undefined);
+            this.shopsellingPrice.push(this.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling);
+            this.shop.push(0);
             this.market.push(val);
         }
     }
@@ -97,7 +96,7 @@ export class City {
         this.domDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
             'px;left:' + this.x + 'px;font-size:14px;">' + this.name + '</span>').children[0];
         this.world.dom.appendChild(this.domDesc);
-
+         this.domDesc.style.zIndex = "2";
         this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
             'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + Icons.airport + '</span>').children[0];
 
@@ -126,7 +125,7 @@ export class City {
 
     }
     updateNeutralCompanies() {
-        if (this.people > 3000)
+        if (this.people > 500)
             return;
         //neutral companies
         if (this.neutralDailyProducedToday === undefined) {
@@ -155,8 +154,8 @@ export class City {
                         var price = product.calcPrice(this.people, this.market[prod] + 1/*diff*/, true);
                         // if(this.world.cities.indexOf(this)===0)
                         //    console.log("check " + this.companies[x].productid + ":  " + price + " > " + (product.pricePurchase * 2 / 3) + " Bestand: " + this.market[prod]);
-                        var fact=1-(1-parameter.ratePriceMin)/2;
-                        if (price > product.pricePurchase*fact) {
+                        var fact = 1 - (1 - parameter.ratePriceMin) / 2;
+                        if (price > product.pricePurchase * fact) {
                             this.market[prod] = this.market[prod] + diff;
                             //  if(this.world.cities.indexOf(this)===0)
                             //    console.log("produce " + this.companies[x].productid + ":" + diff + "/" + "  ->" + untilNow + "/" + totalDailyProduce);
@@ -198,7 +197,7 @@ export class City {
     }
     updatePeople() {
         var newPeople = 1;
-        while (this.people < (parameter.neutralStartPeople + this.houses * 100) && newPeople > 0) {
+        while (newPeople > 0) {
             var comps = [];
             for (var x = 0; x < this.companies.length; x++) {
                 if ((this.companies[x].buildings * parameter.workerInCompany) > this.companies[x].workers)
@@ -212,19 +211,14 @@ export class City {
             this.companies[comps[winner]].workers++;
             newPeople--;
         }
-        while (this.people > (parameter.neutralStartPeople + this.houses * 100)) {
-            var comps = [];
-            for (var x = 0; x < this.companies.length; x++) {
-                if (this.companies[x].workers > 0)
-                    comps.push(x);
-            }
-            if (comps.length === 0)
-                return;
-            this.people--;
-            var winner = getRandomInt(comps.length);
-            console.log("+1 in company " + winner);
-            this.companies[comps[winner]].workers--;
+
+        var comps = [];
+        for (var x = 0; x < this.companies.length; x++) {
+            if (this.companies[x].workers > this.companies[x].buildings * parameter.workerInCompany)
+                this.companies[x].workers = this.companies[x].buildings * parameter.workerInCompany
         }
+
+
     }
     updateDailyConsumtion() {
 
@@ -252,20 +246,20 @@ export class City {
                 var product = parameter.allProducts[x];
 
 
-                var price = product.calcPrice(this.people, this.market[x] - diff , false);
-                var fromWarehouse = false;
-                if (this.warehouse[x] >= diff && (this.warehouseMinStock[x] === undefined || (this.warehouse[x] - diff) > this.warehouseMinStock[x])) {
-                    if (this.warehouseSellingPrice[x] <= price) {
-                        fromWarehouse = true;
-                        price = this.warehouseSellingPrice[x];
+                var price = product.calcPrice(this.people, this.market[x] - diff, false);
+                var fromshop = false;
+                if (this.shop[x] >= diff && (this.shopMinStock[x] === undefined || (this.shop[x] - diff) > this.shopMinStock[x])) {
+                    if (this.shopsellingPrice[x] <= price) {
+                        fromshop = true;
+                        price = this.shopsellingPrice[x];
                     }
                 }
                 var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * parameter.ratePriceMax - product.priceSelling);
                 this.consumedToday[x] = untilNow;
                 if (price <= priceMax) {
-                    if (fromWarehouse) {
-                        this.world.game.changeMoney((Math.round(price * diff)), "people buy from the warehouse", this);
-                        this.warehouse[x] -= diff;
+                    if (fromshop) {
+                        this.world.game.changeMoney((Math.round(price * diff)), "people buy from the shop", this);
+                        this.shop[x] -= diff;
                     } else {
                         //  if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
                         //      console.log(x+"kaufe von markt " + price + "<=" + priceMax+" ("+this.market[x]+")");
@@ -294,15 +288,15 @@ export class City {
             }
         }
     }
-    sellWareHouseToMarket() {
+    sellshopToMarket() {
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var product = parameter.allProducts[x];
             while (true) {
                 var price = product.calcPrice(this.people, this.market[x], this.isProducedHere(x));
-                if (price >= this.warehouseSellingPrice[x] && this.warehouse[x] > 1) {
-                    if (this.warehouseMinStock[x] === undefined || (this.warehouse[x] - 1 > this.warehouseMinStock[x])) {
-                        this.world.game.changeMoney((Math.round(price * 1)), "market buy from the warehouse", this);
-                        this.warehouse[x] -= 1;
+                if (price >= this.shopsellingPrice[x] && this.shop[x] > 1) {
+                    if (this.shopMinStock[x] === undefined || (this.shop[x] - 1 > this.shopMinStock[x])) {
+                        this.world.game.changeMoney((Math.round(price * 1)), "market buy from the shop", this);
+                        this.shop[x] -= 1;
                         this.market[x] += 1;
                     } else
                         break;
@@ -310,13 +304,11 @@ export class City {
                     break;
             }
         }
-    } 
+    }
     updateDalyCosts() {
-        if (this.warehouses > 0)
-            this.world.game.changeMoney(- Math.round(this.warehouses*(this.warehouses>5?parameter.rateCostsWarehouseMany:parameter.rateCostsWarehouse)), "daily costs warehouses", this);
+        if (this.shops > 0)
+            this.world.game.changeMoney(- Math.round(this.shops * (this.shops > 5 ? parameter.rateCostsshopMany : parameter.rateCostsshop)), "daily costs shops", this);
 
-        if (this.houses > 0)
-            this.world.game.changeMoney(-Math.round(this.houses * 42*parameter.rateCostsHouse), "daily costs houses", this);
 
         if (this.people - parameter.neutralStartPeople > 0) {
             this.world.game.changeMoney(Math.round((this.people - parameter.neutralStartPeople) * 0.8), "rental fee", this);
@@ -344,8 +336,8 @@ export class City {
             this.companies[x].update();
         }
         this.updateDailyConsumtion();
-        this.sellWareHouseToMarket();
-        if (this.world.game.date.getHours() % 4 === 0)
+        this.sellshopToMarket();
+        if (this.world.game.date.getHours() % 6 === 0)
             this.updatePeople();
         if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             //a new day starts
@@ -371,10 +363,10 @@ export class City {
     }
     onclick(th: MouseEvent) {
         if (this.hasAirport === false) {
-            var iprice=Math.round(parameter.newAirportRate*(this.world.cities.length-15)*1000000);
+            var iprice = Math.round(parameter.newAirportRate * (this.world.cities.length - 15) * 1000000);
             var price = Number(iprice).toLocaleString();
             if (confirm(`Do you want to buy an airport for ${price}?`)) {
-                if(this.world.game.getMoney()<iprice){
+                if (this.world.game.getMoney() < iprice) {
                     alert("Not enough money");
                     return;
                 }
@@ -398,9 +390,9 @@ export class City {
         var ret = "";
         for (var x = 0; x < buildMaterial.length; x++) {
             if (buildMaterial[x] > 0) {
-                //checkwarehouse
-                var min = Math.min(buildMaterial[x], this.warehouse[x]);
-                this.warehouse[x] -= min;
+                //checkshop
+                var min = Math.min(buildMaterial[x], this.shop[x]);
+                this.shop[x] -= min;
                 var diff = buildMaterial[x] - min;
                 if (diff > 0) {//markt
                     var price = parameter.allProducts[x].calcPrice(this.people, this.market[x] - diff, false);
@@ -418,9 +410,9 @@ export class City {
         var total = buildPrice;
         var ret = "";
         for (var x = 0; x < buildMaterial.length; x++) {
-            //checkwarehouse
-            if (buildMaterial[x] > this.warehouse[x]) {
-                var diff = buildMaterial[x] - this.warehouse[x];
+            //checkshop
+            if (buildMaterial[x] > this.shop[x]) {
+                var diff = buildMaterial[x] - this.shop[x];
                 if ((diff) > this.market[x])
                     ret += ret + " " + parameter.allProducts[x].getIcon();
                 total += parameter.allProducts[x].calcPrice(this.people, this.market[x] - diff, false);

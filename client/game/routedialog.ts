@@ -61,7 +61,7 @@ export class RouteDialog {
                             <th></th>
                             <th>Market<br/>max amount<br/><button id="route-unload-market-fill" title="fill first row down">`+ Icons.fillDown + `</button> </th>
                             <th>Market<br/>min<br/>price</th>
-                            <th>Warehouse<br/>amount<br/>
+                            <th>shop<br/>amount<br/>
                                 <button id="route-unload-warehous-fill" title="fill first row down">`+ Icons.fillDown + `</button>
                                 <button id="route-unload-warehous-fill9" title="fill 99999999 down">`+ Icons.nine + `</button>
                             </th>
@@ -82,7 +82,7 @@ export class RouteDialog {
                         'style="width: 50px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-min-price" id="unload-market-min-price_' + x + '"' +
                         'style="width: 43px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-warehouse-amount" id="unload-warehouse-amount_' + x + '"' +
+                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-shop-amount" id="unload-shop-amount_' + x + '"' +
                         'style="width: 50px;"' + '"></td>';
                     ret = ret + "</tr>";
                 }
@@ -99,12 +99,12 @@ export class RouteDialog {
                             <th></th>
                               <th>Market<br/>amount<br/><button id="route-load-market-fill">`+ Icons.fillDown + `</button></th>
                             <th>Market<br/>max price</th>
-                            <th>Warehouse<br/>amount<br/>
-                                <button id="route-load-warehouse-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                            <th>shop<br/>amount<br/>
+                                <button id="route-load-shop-fill" title="fill first row down">`+ Icons.fillDown + `</button>
                                 <button id="route-load-fill-consumtion" title="fill consumtion">`+ Icons.food + `</button>
                             </th>
-                            <th>Warehouse<br/>everything except<br/>
-                                <button id="route-load-warehouse-until-fill" title="fill first row down">`+ Icons.fillDown + `</button>
+                            <th>shop<br/>everything except<br/>
+                                <button id="route-load-shop-until-fill" title="fill first row down">`+ Icons.fillDown + `</button>
                                 <button id="route-load-fill-consumtion-until" title="fill consumtion">`+ Icons.food + `</button>
                             </th>
 
@@ -123,9 +123,9 @@ export class RouteDialog {
                         'style="width: 50px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
                         'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-amount" id="load-warehouse-amount_' + x + '"' +
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-shop-amount" id="load-shop-amount_' + x + '"' +
                         'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-warehouse-until-amount" id="load-warehouse-until-amount_' + x + '"' +
+                    ret = ret + '<td>' + '<input type="number" min="0" class="load-shop-until-amount" id="load-shop-until-amount_' + x + '"' +
                         'style="width: 50px;"' + '"></td>';
 
 
@@ -176,10 +176,10 @@ export class RouteDialog {
                 var id = parseInt(ctrl.id.split("_")[1]);
                 _this.route.unloadMarketPrice[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
             });
-            document.getElementById("unload-warehouse-amount_" + x).addEventListener("change", (e) => {
+            document.getElementById("unload-shop-amount_" + x).addEventListener("change", (e) => {
                 var ctrl = (<HTMLInputElement>e.target);
                 var id = parseInt(ctrl.id.split("_")[1]);
-                _this.route.unloadWarehouseAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
+                _this.route.unloadshopAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
             });
 
             document.getElementById("load-market-max-amount_" + x).addEventListener("change", (e) => {
@@ -192,15 +192,15 @@ export class RouteDialog {
                 var id = parseInt(ctrl.id.split("_")[1]);
                 _this.route.loadMarketPrice[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
             });
-            document.getElementById("load-warehouse-amount_" + x).addEventListener("change", (e) => {
+            document.getElementById("load-shop-amount_" + x).addEventListener("change", (e) => {
                 var ctrl = (<HTMLInputElement>e.target);
                 var id = parseInt(ctrl.id.split("_")[1]);
-                _this.route.loadWarehouseAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
+                _this.route.loadshopAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
             });
-            document.getElementById("load-warehouse-until-amount_" + x).addEventListener("change", (e) => {
+            document.getElementById("load-shop-until-amount_" + x).addEventListener("change", (e) => {
                 var ctrl = (<HTMLInputElement>e.target);
                 var id = parseInt(ctrl.id.split("_")[1]);
-                _this.route.loadWarehouseUntilAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
+                _this.route.loadshopUntilAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
             });
 
 
@@ -225,14 +225,14 @@ export class RouteDialog {
             _this.update();
         });
         document.getElementById("route-unload-warehous-fill").addEventListener("click", (e) => {
-            for (var x = 1; x < _this.route.unloadWarehouseAmount.length; x++) {
-                this.route.unloadWarehouseAmount[x] = this.route.unloadWarehouseAmount[0];
+            for (var x = 1; x < _this.route.unloadshopAmount.length; x++) {
+                this.route.unloadshopAmount[x] = this.route.unloadshopAmount[0];
             }
             _this.update();
         });
         document.getElementById("route-unload-warehous-fill9").addEventListener("click", (e) => {
-            for (var x = 0; x < _this.route.unloadWarehouseAmount.length; x++) {
-                this.route.unloadWarehouseAmount[x] = 9999999999;
+            for (var x = 0; x < _this.route.unloadshopAmount.length; x++) {
+                this.route.unloadshopAmount[x] = 9999999999;
             }
             _this.update();
         });
@@ -243,15 +243,15 @@ export class RouteDialog {
             _this.update();
         });
 
-        document.getElementById("route-load-warehouse-fill").addEventListener("click", (e) => {
-            for (var x = 1; x < _this.route.loadWarehouseAmount.length; x++) {
-                this.route.loadWarehouseAmount[x] = this.route.loadWarehouseAmount[0];
+        document.getElementById("route-load-shop-fill").addEventListener("click", (e) => {
+            for (var x = 1; x < _this.route.loadshopAmount.length; x++) {
+                this.route.loadshopAmount[x] = this.route.loadshopAmount[0];
             }
             _this.update();
         });
-        document.getElementById("route-load-warehouse-until-fill").addEventListener("click", (e) => {
-            for (var x = 1; x < _this.route.loadWarehouseUntilAmount.length; x++) {
-                this.route.loadWarehouseUntilAmount[x] = this.route.loadWarehouseUntilAmount[0];
+        document.getElementById("route-load-shop-until-fill").addEventListener("click", (e) => {
+            for (var x = 1; x < _this.route.loadshopUntilAmount.length; x++) {
+                this.route.loadshopUntilAmount[x] = this.route.loadshopUntilAmount[0];
             }
             _this.update();
         });
@@ -326,11 +326,11 @@ export class RouteDialog {
         for (var x = 0; x < parameter.allProducts.length; x++) {
             this.route.loadMarketAmount[x] = source.loadMarketAmount[x];
             this.route.loadMarketPrice[x] = source.loadMarketPrice[x];
-            this.route.loadWarehouseAmount[x] = source.loadWarehouseAmount[x];
-            this.route.loadWarehouseUntilAmount[x] = source.loadWarehouseUntilAmount[x];
+            this.route.loadshopAmount[x] = source.loadshopAmount[x];
+            this.route.loadshopUntilAmount[x] = source.loadshopUntilAmount[x];
             this.route.unloadMarketAmount[x] = source.unloadMarketAmount[x];
             this.route.unloadMarketPrice[x] = source.unloadMarketPrice[x];
-            this.route.unloadWarehouseAmount[x] = source.unloadWarehouseAmount[x];
+            this.route.unloadshopAmount[x] = source.unloadshopAmount[x];
         }
         this.update();
     }
@@ -355,7 +355,7 @@ export class RouteDialog {
         var days = lenpixel / _this.route.airplane.speed; //t=s/v; in Tage
         var totalDays = (Math.round(days * 24) + 1 + all.length * 3 + all.length * 3) / 24;   //+3h load and unload
         console.log(totalDays);
-        var store = allCities ? this.route.loadWarehouseAmount : this.route.loadWarehouseUntilAmount;
+        var store = allCities ? this.route.loadshopAmount : this.route.loadshopUntilAmount;
         for (var x = 0; x < parameter.allProducts.length; x++) {
             store[x] = 0;
         }
@@ -411,11 +411,11 @@ export class RouteDialog {
         else {
             (<HTMLInputElement>document.getElementById("unload-market-max-amount")).value = "";
             (<HTMLInputElement>document.getElementById("unload-market-min-price")).value = "";
-            (<HTMLInputElement>document.getElementById("unload-warehouse-amount")).value = "";
+            (<HTMLInputElement>document.getElementById("unload-shop-amount")).value = "";
             (<HTMLInputElement>document.getElementById("load-market-max-amount")).value = "";
             (<HTMLInputElement>document.getElementById("load-market-max-price")).value = "";
-            (<HTMLInputElement>document.getElementById("load-warehouse-amount")).value = "";
-            (<HTMLInputElement>document.getElementById("load-warehouse-until-amount")).value = "";
+            (<HTMLInputElement>document.getElementById("load-shop-amount")).value = "";
+            (<HTMLInputElement>document.getElementById("load-shop-until-amount")).value = "";
             return;
         }
         if (document.activeElement !== document.getElementById("load-market-until-amount_" + x))
@@ -426,16 +426,16 @@ export class RouteDialog {
                 (<HTMLInputElement>document.getElementById("unload-market-max-amount_" + x)).value = (this.route.unloadMarketAmount[x] === undefined) ? "" : this.route.unloadMarketAmount[x].toString();
             if (document.activeElement !== document.getElementById("unload-market-min-price_" + x))
                 (<HTMLInputElement>document.getElementById("unload-market-min-price_" + x)).value = (this.route.unloadMarketPrice[x] === undefined) ? "" : this.route.unloadMarketPrice[x].toString();
-            if (document.activeElement !== document.getElementById("unload-warehouse-amount_" + x))
-                (<HTMLInputElement>document.getElementById("unload-warehouse-amount_" + x)).value = (this.route.unloadWarehouseAmount[x] === undefined) ? "" : this.route.unloadWarehouseAmount[x].toString();
+            if (document.activeElement !== document.getElementById("unload-shop-amount_" + x))
+                (<HTMLInputElement>document.getElementById("unload-shop-amount_" + x)).value = (this.route.unloadshopAmount[x] === undefined) ? "" : this.route.unloadshopAmount[x].toString();
             if (document.activeElement !== document.getElementById("load-market-max-amount_" + x))
                 (<HTMLInputElement>document.getElementById("load-market-max-amount_" + x)).value = (this.route.loadMarketAmount[x] === undefined) ? "" : this.route.loadMarketAmount[x].toString();
             if (document.activeElement !== document.getElementById("load-market-max-price_" + x))
                 (<HTMLInputElement>document.getElementById("load-market-max-price_" + x)).value = (this.route.loadMarketPrice[x] === undefined) ? "" : this.route.loadMarketPrice[x].toString();
-            if (document.activeElement !== document.getElementById("load-warehouse-amount_" + x))
-                (<HTMLInputElement>document.getElementById("load-warehouse-amount_" + x)).value = (this.route.loadWarehouseAmount[x] === undefined) ? "" : this.route.loadWarehouseAmount[x].toString();
-            if (document.activeElement !== document.getElementById("load-warehouse-until-amount_" + x))
-                (<HTMLInputElement>document.getElementById("load-warehouse-until-amount_" + x)).value = (this.route.loadWarehouseUntilAmount[x] === undefined) ? "" : this.route.loadWarehouseUntilAmount[x].toString();
+            if (document.activeElement !== document.getElementById("load-shop-amount_" + x))
+                (<HTMLInputElement>document.getElementById("load-shop-amount_" + x)).value = (this.route.loadshopAmount[x] === undefined) ? "" : this.route.loadshopAmount[x].toString();
+            if (document.activeElement !== document.getElementById("load-shop-until-amount_" + x))
+                (<HTMLInputElement>document.getElementById("load-shop-until-amount_" + x)).value = (this.route.loadshopUntilAmount[x] === undefined) ? "" : this.route.loadshopUntilAmount[x].toString();
         }
 
     }

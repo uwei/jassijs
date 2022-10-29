@@ -21,9 +21,8 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.rateBuyBuilding = 1;
             this.rateBuyBuildingGrowFactor = 5000;
             this.rateCostsAirplaine = 1;
-            this.rateCostsHouse = 1;
-            this.rateCostsWarehouse = 100;
-            this.rateCostsWarehouseMany = 1000;
+            this.rateCostsshop = 100;
+            this.rateCostsshopMany = 1000;
             this.workerInCompany = 20;
             this.neutralStartPeople = 200;
             this.neutralProductionRate = 2;
@@ -172,7 +171,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             });
             document.getElementById("debug-game").addEventListener("click", () => {
                 for (var x = 0; x < parameter.allProducts.length; x++) {
-                    _this.world.cities[0].warehouse[x] = 5000;
+                    _this.world.cities[0].shop[x] = 5000;
                 }
                 _this._money = 1000000;
             });

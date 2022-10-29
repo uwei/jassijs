@@ -6,29 +6,29 @@ export class Route {
     maxLoad: number;
     unloadMarketAmount: number[];
     unloadMarketPrice: number[];
-    unloadWarehouseAmount: number[];
+    unloadshopAmount: number[];
     loadMarketAmount: number[];
     loadMarketPrice: number[];
-    loadWarehouseAmount: number[];
-    loadWarehouseUntilAmount: number[];
+    loadshopAmount: number[];
+    loadshopUntilAmount: number[];
     airplane: Airplane;
     type = "Route";
     constructor() {
         this.unloadMarketAmount = [];
         this.unloadMarketPrice = [];
-        this.unloadWarehouseAmount = [];
+        this.unloadshopAmount = [];
         this.loadMarketAmount = [];
         this.loadMarketPrice = [];
-        this.loadWarehouseAmount = [];
-        this.loadWarehouseUntilAmount = [];
+        this.loadshopAmount = [];
+        this.loadshopUntilAmount = [];
         for (var x = 0; x < parameter.allProducts.length; x++) {
             this.unloadMarketAmount.push(undefined);
             this.unloadMarketPrice.push(parameter.allProducts[x].priceSelling);
-            this.unloadWarehouseAmount.push(undefined);
+            this.unloadshopAmount.push(undefined);
             this.loadMarketAmount.push(undefined);
             this.loadMarketPrice.push(parameter.allProducts[x].pricePurchase);
-            this.loadWarehouseAmount.push(undefined);
-            this.loadWarehouseUntilAmount.push(undefined);
+            this.loadshopAmount.push(undefined);
+            this.loadshopUntilAmount.push(undefined);
         }
     }
     unloadMarket() {
@@ -59,30 +59,30 @@ export class Route {
             }
         }
     }
-    unloadWarehouse() {
+    unloadshop() {
         var city = this.airplane.world.cities[this.cityid];
         for (var x = 0; x < parameter.allProducts.length; x++) {
-            var max = this.unloadWarehouseAmount[x];
+            var max = this.unloadshopAmount[x];
             if (max !== undefined) {
                 max = Math.min(max, this.airplane.products[x]);
                 if (max) {
                     this.airplane.products[x] -= max;
                     this.airplane.refreshLoadedCount();
-                    city.warehouse[x] += max;
+                    city.shop[x] += max;
                 }
             }
         }
     }
-    loadWarehouse() {
+    loadshop() {
         var city = this.airplane.world.cities[this.cityid];
         for (var x = 0; x < parameter.allProducts.length; x++) {
-            var max = this.loadWarehouseUntilAmount[x];
+            var max = this.loadshopUntilAmount[x];
             if (max === undefined) {
-                max = this.loadWarehouseAmount[x];
-                if (max && max > city.warehouse[x])
-                    max = city.warehouse[x];
+                max = this.loadshopAmount[x];
+                if (max && max > city.shop[x])
+                    max = city.shop[x];
             } else {
-                max = city.warehouse[x] - this.loadWarehouseUntilAmount[x];
+                max = city.shop[x] - this.loadshopUntilAmount[x];
             }
             if (max < 0)
                 max = 0;
@@ -91,9 +91,9 @@ export class Route {
                 if (max < 0)
                     max = 0;
             }
-            if (max && city.warehouseMinStock[x]) {
-                if (city.warehouse[x] - max < city.warehouseMinStock[x]) {
-                    max = city.warehouse[x] - city.warehouseMinStock[x];
+            if (max && city.shopMinStock[x]) {
+                if (city.shop[x] - max < city.shopMinStock[x]) {
+                    max = city.shop[x] - city.shopMinStock[x];
                     if (max < 0)
                         max = 0;
                 }
@@ -104,7 +104,7 @@ export class Route {
             if (max) {
                 this.airplane.products[x] += max;
                 this.airplane.refreshLoadedCount();
-                city.warehouse[x] -= max;
+                city.shop[x] -= max;
             }
         }
 
@@ -138,12 +138,12 @@ export class Route {
         }
     }
     load() {
-        this.loadWarehouse();
+        this.loadshop();
         this.loadMarket();
     }
     unload() {
 
         this.unloadMarket();
-        this.unloadWarehouse();
+        this.unloadshop();
     }
 }

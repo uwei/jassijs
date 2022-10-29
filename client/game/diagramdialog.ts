@@ -165,6 +165,13 @@ export class DiagramDialog {
                 _this.update();
             },
             close: function () {
+            },
+            create: function (e) {
+                setTimeout(() => {
+                    $(e.target).dialog("widget").find(".ui-dialog-titlebar-close")[0].addEventListener('touchstart', (e) => {
+                        _this.close();
+                    });
+                }, 200);
             }
         }).dialog("widget").draggable("option", "containment", "none");
         $(this.dom).parent().css({ position: "fixed" });

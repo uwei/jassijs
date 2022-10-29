@@ -6,7 +6,7 @@ define(["require", "exports"], function (require, exports) {
     }
     exports.Icons = Icons;
     Icons.factory = "<span  class='mdi mdi-factory'></span>";
-    Icons.warehouse = "<span  class='mdi mdi-warehouse'></span>";
+    Icons.shop = "<span  class='mdi mdi-shop'></span>";
     Icons.money = "<span style='color:darkgreen' class='mdi mdi-cash-100'></span>";
     Icons.home = "<span  class='mdi  mdi-home-outline'></span>";
     Icons.people = "<span  class='mdi  mdi-human-male'></span>";

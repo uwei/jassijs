@@ -1,4 +1,4 @@
-define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/citydialogmarket"], function (require, exports, city_1, icons_1, airplane_1, citydialogmarket_1) {
+define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/citydialogmarket", "game/citydialogshop"], function (require, exports, city_1, icons_1, airplane_1, citydialogmarket_1, citydialogshop_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CityDialog = void 0;
@@ -41,7 +41,7 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                 <ul>
                     <li><a href="#citydialog-market" id="citydialog-market-tab" class="citydialog-tabs">Market</a></li>
                     <li><a href="#citydialog-buildings" id="citydialog-buildings-tab" class="citydialog-tabs">Buildings</a></li>
-                    <li><a href="#citydialog-warehouse" id="citydialog-warehouse-tab"  class="citydialog-tabs">` + icons_1.Icons.warehouse + ` Warehouse</a></li>
+                    <li><a href="#citydialog-shop" id="citydialog-shop-tab"  class="citydialog-tabs">` + icons_1.Icons.shop + ` MyShop</a></li>
                     <li><a href="#citydialog-construction" id="citydialog-construction-tab" class="citydialog-tabs">Construction</a></li>
                     <li><a href="#citydialog-score" id="citydialog-score-tab"  class="citydialog-tabs">Score</a></li>
                 </ul>
@@ -49,7 +49,7 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                 </div>
                 <div id="citydialog-buildings"> ` + this.createBuildings() + `
                 </div>
-                <div id="citydialog-warehouse">` + this.createWarehouse() + `
+                <div id="citydialog-shop">` + citydialogshop_1.CityDialogShop.getInstance().create() + `
                 </div>
                 <div id="citydialog-construction">` + this.createConstruction() + `
                 </div>
@@ -97,7 +97,7 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                     ret = ret + '<td><button id="new-factory_' + x + '">' + "+" + icons_1.Icons.factory + '</button>' +
                         '<button id="delete-factory_' + x + '">' + "-" + icons_1.Icons.factory + '</button>' +
                         '<button id="buy-license_' + x + '">' + "buy license to produce for 50.000" + icons_1.Icons.money + '</button>' +
-                        '<div id="no-warehouse_' + x + '">need a warehouse to produce</div>' +
+                        '<div id="no-shop_' + x + '">need a shop to produce</div>' +
                         '</td>';
                     ret = ret + "</tr>";
                 }
@@ -105,62 +105,22 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
             })()}
                     </table>
                     <br/>
-                    <b>residential building</b>
-                    <br/>
-                       ` + icons_1.Icons.home + ` houses: <span id="houses">0/0</span>  
-                        ` + icons_1.Icons.people + ` renter: <span id="renter">0/0</span>  
-                        <button id="buy-house">+` + icons_1.Icons.home + ` for 25.000` + icons_1.Icons.money + " 40x" + parameter.allProducts[0].getIcon() +
-                " 80x" + parameter.allProducts[1].getIcon() + `</button> 
-                        <button id="delete-house">-` + icons_1.Icons.home + `</button>
                         <br/>
-                        <b>Warehouse</b>
+                        <b>shop</b>
                     <br/>
-                       ` + icons_1.Icons.warehouse + ` houses: <span id="count-warehouses">0/0</span>  
-                        ` + ` costs: <span id="costs-warehouses">0</span> ` + icons_1.Icons.money + `  
-                        <button id="buy-warehouse">+` + icons_1.Icons.home + ` for 15.000` + icons_1.Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
+                       ` + icons_1.Icons.shop + ` houses: <span id="count-shops">0/0</span>  
+                        ` + ` costs: <span id="costs-shops">0</span> ` + icons_1.Icons.money + `  
+                        <button id="buy-shop">+` + icons_1.Icons.home + ` for 15.000` + icons_1.Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
                 " 40x" + parameter.allProducts[1].getIcon() + `</button> 
-                        <button id="delete-warehouse">-` + icons_1.Icons.home + `</button>`;
-        }
-        createWarehouse() {
-            return `<table id="citydialog-warehouse-table" style="height:100%;weight:100%;">
-                        <tr>
-                            <th>Name</th>
-                            <th></th>
-                            <th>Stock</th>
-                            <th>Produce</th>
-                            <th>Need</th>
-                            <th>Min-Stock</th>
-                            <th>Selling price<br/><button id="warehouse-fill-price" title="reset price">` + icons_1.Icons.fillDown + `</button></th>
-                        </tr>
-                       ${(function fun() {
-                var ret = "";
-                for (var x = 0; x < parameter.allProducts.length; x++) {
-                    ret = ret + "<tr>";
-                    ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
-                    ret = ret + "<td>0</td>";
-                    ret = ret + "<td>0</td>";
-                    ret = ret + "<td>0</td>";
-                    ret = ret + '<td>' +
-                        '<input type="number" min="0" class="warehouse-min-stock" id="warehouse-min-stock_' + x + '"' +
-                        'style="width: 50px;"' +
-                        '"></td>';
-                    ret = ret + '<td>' +
-                        '<input type="number" min="0" class="warehouse-selling-price" id="warehouse-selling-price_' + x + '"' +
-                        'style="width: 50px;"' +
-                        '"></td>';
-                    ret = ret + "</tr>";
-                }
-                return ret;
-            })()}
-                    </table>
-                    <p>number of warehouses <span id="citydialog-warehouse-count"><span></p>`;
+                        <button id="delete-shop">-` + icons_1.Icons.home + `</button>`;
         }
         createScore() {
             return `<table id="citydialog-score-table" style="height:100%;weight:100%;">
                         <tr>
                             <th>Name</th>
                             <th> </th>
+                            <th>Produce</th>
+                            <th>Need</th>
                             <th>Score</th>
                         </tr>
                        ${(function fun() {
@@ -169,6 +129,8 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                     ret = ret + "<tr>";
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
+                    ret = ret + "<td>0</td>";
+                    ret = ret + "<td>0</td>";
                     ret = ret + "<td>0</td>";
                     ret = ret + "</tr>";
                 }
@@ -259,32 +221,16 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                     comp.hasLicense = true;
                 });
             }
-            document.getElementById("buy-house").addEventListener("click", (evt) => {
-                if (!this.city.commitBuildingCosts(15000, [20, 40], "buy building"))
-                    return;
-                _this.city.houses++;
-                _this.update();
-            });
-            document.getElementById("delete-house").addEventListener("click", (evt) => {
-                if (_this.city.houses === 0)
-                    return;
-                _this.city.houses--;
-                _this.update();
-                /*if ((_this.city.people - 1000) > _this.city.houses * 100) {
-                    _this.city.people = 1000 + _this.city.houses * 100;
-                }*/
-                console.log("remove worker");
-            });
-            document.getElementById("buy-warehouse").addEventListener("click", (evt) => {
+            document.getElementById("buy-shop").addEventListener("click", (evt) => {
                 if (!_this.city.commitBuildingCosts(25000, [40, 80], "buy building"))
                     return;
-                _this.city.warehouses++;
+                _this.city.shops++;
                 _this.update();
             });
-            document.getElementById("delete-warehouse").addEventListener("click", (evt) => {
-                if (_this.city.warehouses === 0)
+            document.getElementById("delete-shop").addEventListener("click", (evt) => {
+                if (_this.city.shops === 0)
                     return;
-                _this.city.warehouses--;
+                _this.city.shops--;
                 _this.update();
             });
             for (var x = 0; x < parameter.allAirplaneTypes.length; x++) {
@@ -296,26 +242,7 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                     _this.newAirplane(id);
                 });
             }
-            document.getElementById("warehouse-fill-price").addEventListener("click", (evt) => {
-                if (_this.city.warehouses === 0)
-                    return;
-                for (var x = 0; x < parameter.allProducts.length; x++) {
-                    _this.city.warehouseSellingPrice[x] = this.city.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling;
-                }
-                _this.update();
-            });
-            for (var x = 0; x < parameter.allProducts.length; x++) {
-                document.getElementById("warehouse-min-stock_" + x).addEventListener("change", (e) => {
-                    var ctrl = e.target;
-                    var id = parseInt(ctrl.id.split("_")[1]);
-                    _this.city.warehouseMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
-                });
-                document.getElementById("warehouse-selling-price_" + x).addEventListener("change", (e) => {
-                    var ctrl = e.target;
-                    var id = parseInt(ctrl.id.split("_")[1]);
-                    _this.city.warehouseMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
-                });
-            }
+            citydialogshop_1.CityDialogShop.getInstance().bindActions();
             citydialogmarket_1.CityDialogMarket.getInstance().bindActions();
         }
         newAirplane(typeid) {
@@ -385,13 +312,13 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                 else {
                     document.getElementById("buy-license_" + x).removeAttribute("hidden");
                 }
-                if (this.city.warehouses === 0) {
-                    document.getElementById("no-warehouse_" + x).removeAttribute("hidden");
+                if (this.city.shops === 0) {
+                    document.getElementById("no-shop_" + x).removeAttribute("hidden");
                 }
                 else {
-                    document.getElementById("no-warehouse_" + x).setAttribute("hidden", "");
+                    document.getElementById("no-shop_" + x).setAttribute("hidden", "");
                 }
-                if (comp.hasLicense && this.city.warehouses > 0) {
+                if (comp.hasLicense && this.city.shops > 0) {
                     document.getElementById("new-factory_" + x).innerHTML = "+" + icons_1.Icons.factory +
                         city_1.City.getBuildingCostsAsIcon(comp.getBuildingCosts(), comp.getBuildingMaterial());
                     document.getElementById("new-factory_" + x).removeAttribute("hidden");
@@ -417,29 +344,25 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                     document.getElementById("buy-license_" + x).setAttribute("disabled", "");
                 }
             }
-            document.getElementById("count-warehouses").innerHTML = "" + this.city.warehouses;
-            document.getElementById("houses").innerHTML = "" + (this.city.houses + "/" + this.city.houses);
-            document.getElementById("renter").innerHTML = "" + (this.city.people - parameter.neutralStartPeople + "/" + this.city.houses * 100);
-            if (this.city.canBuild(25000, [40, 80]) !== "") {
-                document.getElementById("buy-house").setAttribute("disabled", "");
-            }
-            else {
-                document.getElementById("buy-house").removeAttribute("disabled");
-            }
+            document.getElementById("count-shops").innerHTML = "" + this.city.shops;
             if (this.city.canBuild(15000, [20, 40]) !== "") {
-                document.getElementById("buy-warehouse").setAttribute("disabled", "");
+                document.getElementById("buy-shop").setAttribute("disabled", "");
             }
             else {
-                document.getElementById("buy-warehouse").removeAttribute("disabled");
-            }
-            if (this.city.houses === 0) {
-                document.getElementById("delete-house").setAttribute("disabled", "");
-            }
-            else {
-                document.getElementById("delete-house").removeAttribute("disabled");
+                document.getElementById("buy-shop").removeAttribute("disabled");
             }
         }
-        updateWarehouse() {
+        updateConstruction() {
+            for (var x = 0; x < parameter.allAirplaneTypes.length; x++) {
+                if (this.city.canBuild(Math.round(parameter.allAirplaneTypes[x].buildingCosts * parameter.rateCostsAirplaine), parameter.allAirplaneTypes[x].buildingMaterial) === "") {
+                    document.getElementById("new-airplane_" + x).removeAttribute("disabled");
+                }
+                else {
+                    document.getElementById("new-airplane_" + x).setAttribute("disabled", "");
+                }
+            }
+        }
+        updateScore() {
             var needs = [];
             for (var x = 0; x < parameter.allProducts.length; x++) {
                 needs.push(0);
@@ -453,10 +376,10 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                     needs[test.input2] += (Math.round(this.city.companies[i].workers * test.input2Amount / parameter.workerInCompany));
                 }
             }
+            //score
             for (var x = 0; x < parameter.allProducts.length; x++) {
-                var table = document.getElementById("citydialog-warehouse-table");
+                var table = document.getElementById("citydialog-score-table");
                 var tr = table.children[0].children[x + 1];
-                tr.children[2].innerHTML = this.city.warehouse[x].toString();
                 var prod = "";
                 var product = parameter.allProducts[x];
                 for (var i = 0; i < this.city.companies.length; i++) {
@@ -464,36 +387,13 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                         prod = Math.round(this.city.companies[i].workers * product.dailyProduce / parameter.workerInCompany).toString();
                     }
                 }
-                tr.children[3].innerHTML = prod;
-                tr.children[4].innerHTML = needs[x] === 0 ? "" : needs[x];
-                if (document.activeElement !== tr.children[5].children[0])
-                    tr.children[5].children[0].value = this.city.warehouseMinStock[x] === undefined ? "" : this.city.warehouseMinStock[x].toString();
-                if (document.activeElement !== tr.children[6].children[0])
-                    tr.children[6].children[0].value = this.city.warehouseSellingPrice[x] === undefined ? "" : this.city.warehouseSellingPrice[x].toString();
-            }
-            document.getElementById("citydialog-warehouse-count").innerHTML = "" + this.city.warehouses;
-            // document.getElementById("costs-warehouses").innerHTML=""+(this.city.warehouses*50);
-        }
-        updateConstruction() {
-            for (var x = 0; x < parameter.allAirplaneTypes.length; x++) {
-                if (this.city.canBuild(Math.round(parameter.allAirplaneTypes[x].buildingCosts * parameter.rateCostsAirplaine), parameter.allAirplaneTypes[x].buildingMaterial) === "") {
-                    document.getElementById("new-airplane_" + x).removeAttribute("disabled");
-                }
-                else {
-                    document.getElementById("new-airplane_" + x).setAttribute("disabled", "");
-                }
-            }
-        }
-        updateScore() {
-            //score
-            for (var x = 0; x < parameter.allProducts.length; x++) {
-                var table = document.getElementById("citydialog-score-table");
-                var tr = table.children[0].children[x + 1];
-                tr.children[2].innerHTML = this.city.score[x] + "</td>";
+                tr.children[2].innerHTML = prod;
+                tr.children[3].innerHTML = needs[x] === 0 ? "" : needs[x];
+                tr.children[4].innerHTML = this.city.score[x] + "</td>";
             }
         }
         update(force = false) {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w;
             if (!this.city)
                 return;
             try {
@@ -501,7 +401,7 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                     return;
                 }
             }
-            catch (_u) {
+            catch (_x) {
                 return;
             }
             if (!this.city.hasAirport)
@@ -509,7 +409,8 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
             this.updateTitle();
             //pause game while trading
             if (!force) {
-                if ((_c = (_b = (_a = document.getElementById("citydialog-market-tab")) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.classList) === null || _c === void 0 ? void 0 : _c.contains("ui-tabs-active")) {
+                if (((_c = (_b = (_a = document.getElementById("citydialog-market-tab")) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.classList) === null || _c === void 0 ? void 0 : _c.contains("ui-tabs-active")) ||
+                    ((_f = (_e = (_d = document.getElementById("citydialog-shop-tab")) === null || _d === void 0 ? void 0 : _d.parentElement) === null || _e === void 0 ? void 0 : _e.classList) === null || _f === void 0 ? void 0 : _f.contains("ui-tabs-active"))) {
                     if (!this.city.world.game.isPaused()) {
                         this.hasPaused = true;
                         this.city.world.game.pause();
@@ -523,15 +424,15 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                 }
             }
             citydialogmarket_1.CityDialogMarket.getInstance().update();
-            if ((_f = (_e = (_d = document.getElementById("citydialog-market-tab")) === null || _d === void 0 ? void 0 : _d.parentElement) === null || _e === void 0 ? void 0 : _e.classList) === null || _f === void 0 ? void 0 : _f.contains("ui-tabs-active"))
+            if ((_j = (_h = (_g = document.getElementById("citydialog-market-tab")) === null || _g === void 0 ? void 0 : _g.parentElement) === null || _h === void 0 ? void 0 : _h.classList) === null || _j === void 0 ? void 0 : _j.contains("ui-tabs-active"))
                 citydialogmarket_1.CityDialogMarket.getInstance().update();
-            if ((_j = (_h = (_g = document.getElementById("citydialog-buildings-tab")) === null || _g === void 0 ? void 0 : _g.parentElement) === null || _h === void 0 ? void 0 : _h.classList) === null || _j === void 0 ? void 0 : _j.contains("ui-tabs-active"))
+            if ((_m = (_l = (_k = document.getElementById("citydialog-buildings-tab")) === null || _k === void 0 ? void 0 : _k.parentElement) === null || _l === void 0 ? void 0 : _l.classList) === null || _m === void 0 ? void 0 : _m.contains("ui-tabs-active"))
                 this.updateBuildings();
-            if ((_m = (_l = (_k = document.getElementById("citydialog-warehouse-tab")) === null || _k === void 0 ? void 0 : _k.parentElement) === null || _l === void 0 ? void 0 : _l.classList) === null || _m === void 0 ? void 0 : _m.contains("ui-tabs-active"))
-                this.updateWarehouse();
-            if ((_q = (_p = (_o = document.getElementById("citydialog-construction-tab")) === null || _o === void 0 ? void 0 : _o.parentElement) === null || _p === void 0 ? void 0 : _p.classList) === null || _q === void 0 ? void 0 : _q.contains("ui-tabs-active"))
+            if ((_q = (_p = (_o = document.getElementById("citydialog-shop-tab")) === null || _o === void 0 ? void 0 : _o.parentElement) === null || _p === void 0 ? void 0 : _p.classList) === null || _q === void 0 ? void 0 : _q.contains("ui-tabs-active"))
+                citydialogshop_1.CityDialogShop.getInstance().update();
+            if ((_t = (_s = (_r = document.getElementById("citydialog-construction-tab")) === null || _r === void 0 ? void 0 : _r.parentElement) === null || _s === void 0 ? void 0 : _s.classList) === null || _t === void 0 ? void 0 : _t.contains("ui-tabs-active"))
                 this.updateConstruction();
-            if ((_t = (_s = (_r = document.getElementById("citydialog-score-tab")) === null || _r === void 0 ? void 0 : _r.parentElement) === null || _s === void 0 ? void 0 : _s.classList) === null || _t === void 0 ? void 0 : _t.contains("ui-tabs-active"))
+            if ((_w = (_v = (_u = document.getElementById("citydialog-score-tab")) === null || _u === void 0 ? void 0 : _u.parentElement) === null || _v === void 0 ? void 0 : _v.classList) === null || _w === void 0 ? void 0 : _w.contains("ui-tabs-active"))
                 this.updateScore();
             return;
         }
@@ -556,6 +457,13 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                     if (_this.hasPaused) {
                         _this.city.world.game.resume();
                     }
+                },
+                create: function (e) {
+                    setTimeout(() => {
+                        $(e.target).dialog("widget").find(".ui-dialog-titlebar-close")[0].addEventListener('touchstart', (e) => {
+                            _this.close();
+                        });
+                    }, 200);
                 }
             }).dialog("widget").draggable("option", "containment", "none");
             $(this.dom).parent().css({ position: "fixed" });

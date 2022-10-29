@@ -352,7 +352,7 @@ export class AirplaneDialog {
             _this.enableDropCities(true);
         }
         //ui-tabs-active
-        var dlg=$(this.dom).dialog({
+        var dlg = $(this.dom).dialog({
             width: "190px",
             draggable: true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
@@ -363,16 +363,15 @@ export class AirplaneDialog {
             close: function () {
                 _this.close();
             },
-            create:function(){
-                setTimeout(()=>{
-                var j=dlg.dialog("widget").find(".ui-dialog-titlebar-close");
-                j[0].addEventListener('touchstart', (e) => {
-                    _this.close();
-                });
-                },200);
+            create: function (e) {
+                setTimeout(() => {
+                    $(e.target).dialog("widget").find(".ui-dialog-titlebar-close")[0].addEventListener('touchstart', (e) => {
+                        _this.close();
+                    });
+                }, 200);
             }
         });
-         dlg.dialog("widget").draggable("option", "containment", "none");
+        dlg.dialog("widget").draggable("option", "containment", "none");
         $(this.dom).parent().css({ position: "fixed" });
 
     }

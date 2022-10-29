@@ -49,6 +49,7 @@ define(["require", "exports", "game/airplanedialog"], function (require, exports
             var _this = this;
             this.dom = document.createRange().createContextualFragment("<span z-index:2;style='font-size:20px;transform:rotate(0turn)' class='mdi mdi-airplane'></span>").children[0]; //document.createElement("span");
             this.dom.style.position = "absolute";
+            this.dom.style.zIndex = "10";
             this.dom.addEventListener("click", (ev) => {
                 _this.onclick(ev);
                 return undefined;

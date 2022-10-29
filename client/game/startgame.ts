@@ -15,7 +15,7 @@ export class PPanel extends Panel {
         //this.width = "1050px";
         // this.height = "650px"; 
         this.game.newGame();
-        this.game.render(this.dom);
+        this.game.render(this.dom); 
     }
 
     destroy() {

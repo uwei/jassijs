@@ -170,7 +170,7 @@ export class World {
             comp.workers=20*anz;
             comp.buildings=anz;
             this.cities[0].companies.push(comp);
-            this.cities[0].warehouse[x]=1000000;
+            this.cities[0].shop[x]=1000000;
         }
         this.cities[0].people=anz*19*20;
         this.cities[0].houses=anz*19*20/100+1;*/

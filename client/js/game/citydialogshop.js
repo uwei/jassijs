@@ -1,0 +1,203 @@
+define(["require", "exports", "game/citydialog", "game/icons", "game/citydialogmarket"], function (require, exports, citydialog_1, icons_1, citydialogmarket_1) {
+    "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
+    exports.CityDialogShop = void 0;
+    var log = (function () {
+        var log = Math.log;
+        return function (n, base) {
+            return log(n) / (base ? log(base) : 1);
+        };
+    })();
+    class CityDialogShop {
+        static getInstance() {
+            if (CityDialogShop.instance === undefined)
+                CityDialogShop.instance = new CityDialogShop();
+            return CityDialogShop.instance;
+        }
+        create() {
+            return `<table id="citydialog-shop-table" style="height:100%;weight:100%;">
+                        <tr>
+                            <th></th>
+                            <th>Shop</th>
+                            <th></th>
+                            <th>#</th>
+                            <th> <select id="citydialog-shop-table-target" style="width:60px">
+                                    <option value="placeholder">placeholder</option>
+                                </select>
+                            </th>
+                            <th></th>
+                            <th>Min<br/>Stock</th>
+                            <th>Selling<br/>price<br/><button id="shop-fill-price" title="reset price">` + icons_1.Icons.fillDown + `</button></th>
+                        </tr>
+                       ${(function fun() {
+                var ret = "";
+                for (var x = 0; x < parameter.allProducts.length; x++) {
+                    ret = ret + "<tr>";
+                    ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
+                    ret = ret + "<td>0</td>"; //stack
+                    ret = ret + '<td style="width:110px"><div style="position:relative">' +
+                        '<div id="shop-sell-slider_' + x + '" style="overflow:float;position:absolute;height:1px;top:5px;width: 53px" ><div>' +
+                        '</div></td>';
+                    ret = ret + '<td style="width:30px;"><span id="citydialog-shop-info_' + x + '"></span></td>';
+                    ret = ret + '<td style="width:40px"><div style="position:relative">' +
+                        '<div id="shop-buy-slider_' + x + '" style="overflow:float;position:absolute;left:4px;height:1px;top:5px;width: 62px" ><div>' +
+                        '</div></td>';
+                    ret = ret + '<td style="width:40px">0</td>'; //Airplane stack
+                    ret = ret + '<td>' +
+                        '<input type="number" min="0" class="shop-min-stock" id="shop-min-stock_' + x + '"' +
+                        'style="width: 50px;"' +
+                        '"></td>';
+                    ret = ret + '<td>' +
+                        '<input type="number" min="0" class="shop-selling-price" id="shop-selling-price_' + x + '"' +
+                        'style="width: 50px;"' +
+                        '"></td>';
+                    ret = ret + "</tr>";
+                }
+                return ret;
+            })()}
+                    </table>
+                    <p>number of shops <span id="citydialog-shop-count"><span></p>`;
+        }
+        bindActions() {
+            var _this = this;
+            document.getElementById("citydialog-shop-table-target").addEventListener("change", (e) => {
+                citydialog_1.CityDialog.getInstance().update(true);
+            });
+            document.getElementById("shop-fill-price").addEventListener("click", (evt) => {
+                var city = citydialog_1.CityDialog.getInstance().city;
+                if (city.shops === 0)
+                    return;
+                for (var x = 0; x < parameter.allProducts.length; x++) {
+                    city.shopsellingPrice[x] = city.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling;
+                }
+                _this.update();
+            });
+            for (var x = 0; x < parameter.allProducts.length; x++) {
+                document.getElementById("shop-min-stock_" + x).addEventListener("change", (e) => {
+                    var city = citydialog_1.CityDialog.getInstance().city;
+                    var ctrl = e.target;
+                    var id = parseInt(ctrl.id.split("_")[1]);
+                    city.shopMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
+                });
+                document.getElementById("shop-selling-price_" + x).addEventListener("change", (e) => {
+                    var city = citydialog_1.CityDialog.getInstance().city;
+                    var ctrl = e.target;
+                    var id = parseInt(ctrl.id.split("_")[1]);
+                    city.shopMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
+                });
+            }
+            for (var x = 0; x < parameter.allProducts.length; x++) {
+                $("#shop-sell-slider_" + x).slider({
+                    min: 0,
+                    max: 40,
+                    range: "min",
+                    value: 40,
+                    slide: function (event, ui) {
+                        console.log("slide");
+                        citydialogmarket_1.CityDialogMarket.slide(event, false, "citydialog-shop-info_", false);
+                    },
+                    change: function (e, ui) {
+                        citydialogmarket_1.CityDialogMarket.changeSlider(e, true, "citydialog-shop-info_", false);
+                    },
+                    stop: function (e, ui) {
+                        setTimeout(() => {
+                            citydialogmarket_1.CityDialogMarket.inedit = true;
+                            var id = Number(e.target.id.split("_")[1]);
+                            document.getElementById("citydialog-shop-info_" + id).innerHTML = "";
+                            $(e.target).slider("value", 40);
+                            citydialogmarket_1.CityDialogMarket.inedit = false;
+                        }, 200);
+                    }
+                });
+                $("#shop-buy-slider_" + x).slider({
+                    min: 0,
+                    max: 40,
+                    range: "min",
+                    value: 0,
+                    slide: function (event, ui) {
+                        citydialogmarket_1.CityDialogMarket.slide(event, true, "citydialog-shop-info_", false);
+                    },
+                    change: function (e, ui) {
+                        citydialogmarket_1.CityDialogMarket.changeSlider(e, false, "citydialog-shop-info_", false);
+                    },
+                    stop: function (e, ui) {
+                        setTimeout(() => {
+                            citydialogmarket_1.CityDialogMarket.inedit = true;
+                            var id = Number(e.target.id.split("_")[1]);
+                            document.getElementById("citydialog-shop-info_" + id).innerHTML = "";
+                            $(e.target).slider("value", 0);
+                            citydialogmarket_1.CityDialogMarket.inedit = false;
+                        }, 200);
+                    }
+                });
+            }
+        }
+        update() {
+            var city = citydialog_1.CityDialog.getInstance().city;
+            if (!city)
+                return;
+            var select = document.getElementById("citydialog-shop-table-target");
+            var last = select.value;
+            select.innerHTML = "";
+            if (city.shops > 0) {
+                var opt = document.createElement("option");
+                opt.value = "MyShop";
+                opt.text = opt.value;
+                select.appendChild(opt);
+            }
+            var allAPs = city.getAirplanesInCity();
+            for (var x = 0; x < allAPs.length; x++) {
+                var opt = document.createElement("option");
+                opt.value = allAPs[x].name;
+                opt.text = opt.value;
+                select.appendChild(opt);
+            }
+            if (last !== "") {
+                select.value = last;
+            }
+            citydialog_1.CityDialog.getInstance().updateTitle();
+            var storetarget = citydialogmarket_1.CityDialogMarket.getStore("citydialog-shop-table-target");
+            var storesource = city.shop;
+            for (var x = 0; x < parameter.allProducts.length; x++) {
+                var table = document.getElementById("citydialog-shop-table");
+                var tr = table.children[0].children[x + 1];
+                tr.children[1].innerHTML = city.shop[x].toString();
+                var buyslider = document.getElementById("shop-buy-slider_" + x);
+                var sellslider = document.getElementById("shop-sell-slider_" + x);
+                if (storetarget) {
+                    var max = storesource[x];
+                    var testap = citydialogmarket_1.CityDialogMarket.getAirplaneInMarket("citydialog-shop-table-target");
+                    if (testap)
+                        max = Math.min(max, testap.capacity - testap.loadedCount);
+                    buyslider.readOnly = false;
+                    // sellslider.readOnly = false;
+                    buyslider.setAttribute("maxValue", max.toString());
+                    tr.children[5].innerHTML = storetarget[x].toString();
+                    if (storetarget[x] !== 0)
+                        $(sellslider).slider("enable"); //storetarget[x].toString();
+                    else
+                        $(sellslider).slider("disable"); //storetarget[x].toString();
+                    if (max !== 0)
+                        $(buyslider).slider("enable"); //storetarget[x].toString();
+                    else
+                        $(buyslider).slider("disable"); //storetarget[x].toString();
+                    sellslider.setAttribute("maxValue", storetarget[x].toString());
+                }
+                else {
+                    buyslider.readOnly = true;
+                    // sellslider.readOnly = true;
+                    tr.children[5].innerHTML = "";
+                    $(buyslider).slider("disable");
+                    $(sellslider).slider("disable");
+                }
+                if (document.activeElement !== tr.children[6].children[0])
+                    tr.children[6].children[0].value = city.shopMinStock[x] === undefined ? "" : city.shopMinStock[x].toString();
+                if (document.activeElement !== tr.children[7].children[0])
+                    tr.children[7].children[0].value = city.shopsellingPrice[x] === undefined ? "" : city.shopsellingPrice[x].toString();
+            }
+            document.getElementById("citydialog-shop-count").innerHTML = "" + city.shops;
+        }
+    }
+    exports.CityDialogShop = CityDialogShop;
+});
+//# sourceMappingURL=citydialogshop.js.map

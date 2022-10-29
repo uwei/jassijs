@@ -9,14 +9,13 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
         constructor() {
             this.lastUpdate = undefined;
             this.score = [];
-            this.warehouse = [];
-            this.warehouses = 0;
-            this.houses = 0;
+            this.shop = [];
+            this.shops = 0;
             this.type = "City";
             this.hasAirport = true;
             this.market = [];
-            this.warehouseMinStock = [];
-            this.warehouseSellingPrice = [];
+            this.shopMinStock = [];
+            this.shopsellingPrice = [];
             this.createCompanies();
             for (var x = 0; x < parameter.allProducts.length; x++) {
                 var val = 0;
@@ -29,9 +28,9 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
                 if (val === 0) {
                     val = 10 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
                 }
-                this.warehouseMinStock.push(undefined);
-                this.warehouseSellingPrice.push(this.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling);
-                this.warehouse.push(0);
+                this.shopMinStock.push(undefined);
+                this.shopsellingPrice.push(this.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling);
+                this.shop.push(0);
                 this.market.push(val);
             }
         }
@@ -72,6 +71,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
             this.domDesc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
                 'px;left:' + this.x + 'px;font-size:14px;">' + this.name + '</span>').children[0];
             this.world.dom.appendChild(this.domDesc);
+            this.domDesc.style.zIndex = "2";
             this.domAirport = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
                 'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + icons_1.Icons.airport + '</span>').children[0];
             this.world.dom.appendChild(this.domAirport);
@@ -96,7 +96,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
             });
         }
         updateNeutralCompanies() {
-            if (this.people > 3000)
+            if (this.people > 500)
                 return;
             //neutral companies
             if (this.neutralDailyProducedToday === undefined) {
@@ -164,7 +164,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
         }
         updatePeople() {
             var newPeople = 1;
-            while (this.people < (parameter.neutralStartPeople + this.houses * 100) && newPeople > 0) {
+            while (newPeople > 0) {
                 var comps = [];
                 for (var x = 0; x < this.companies.length; x++) {
                     if ((this.companies[x].buildings * parameter.workerInCompany) > this.companies[x].workers)
@@ -178,18 +178,10 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
                 this.companies[comps[winner]].workers++;
                 newPeople--;
             }
-            while (this.people > (parameter.neutralStartPeople + this.houses * 100)) {
-                var comps = [];
-                for (var x = 0; x < this.companies.length; x++) {
-                    if (this.companies[x].workers > 0)
-                        comps.push(x);
-                }
-                if (comps.length === 0)
-                    return;
-                this.people--;
-                var winner = getRandomInt(comps.length);
-                console.log("+1 in company " + winner);
-                this.companies[comps[winner]].workers--;
+            var comps = [];
+            for (var x = 0; x < this.companies.length; x++) {
+                if (this.companies[x].workers > this.companies[x].buildings * parameter.workerInCompany)
+                    this.companies[x].workers = this.companies[x].buildings * parameter.workerInCompany;
             }
         }
         updateDailyConsumtion() {
@@ -214,19 +206,19 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
                     var diff = untilNow - this.consumedToday[x];
                     var product = parameter.allProducts[x];
                     var price = product.calcPrice(this.people, this.market[x] - diff, false);
-                    var fromWarehouse = false;
-                    if (this.warehouse[x] >= diff && (this.warehouseMinStock[x] === undefined || (this.warehouse[x] - diff) > this.warehouseMinStock[x])) {
-                        if (this.warehouseSellingPrice[x] <= price) {
-                            fromWarehouse = true;
-                            price = this.warehouseSellingPrice[x];
+                    var fromshop = false;
+                    if (this.shop[x] >= diff && (this.shopMinStock[x] === undefined || (this.shop[x] - diff) > this.shopMinStock[x])) {
+                        if (this.shopsellingPrice[x] <= price) {
+                            fromshop = true;
+                            price = this.shopsellingPrice[x];
                         }
                     }
                     var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * parameter.ratePriceMax - product.priceSelling);
                     this.consumedToday[x] = untilNow;
                     if (price <= priceMax) {
-                        if (fromWarehouse) {
-                            this.world.game.changeMoney((Math.round(price * diff)), "people buy from the warehouse", this);
-                            this.warehouse[x] -= diff;
+                        if (fromshop) {
+                            this.world.game.changeMoney((Math.round(price * diff)), "people buy from the shop", this);
+                            this.shop[x] -= diff;
                         }
                         else {
                             //  if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
@@ -251,15 +243,15 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
                 }
             }
         }
-        sellWareHouseToMarket() {
+        sellshopToMarket() {
             for (var x = 0; x < parameter.allProducts.length; x++) {
                 var product = parameter.allProducts[x];
                 while (true) {
                     var price = product.calcPrice(this.people, this.market[x], this.isProducedHere(x));
-                    if (price >= this.warehouseSellingPrice[x] && this.warehouse[x] > 1) {
-                        if (this.warehouseMinStock[x] === undefined || (this.warehouse[x] - 1 > this.warehouseMinStock[x])) {
-                            this.world.game.changeMoney((Math.round(price * 1)), "market buy from the warehouse", this);
-                            this.warehouse[x] -= 1;
+                    if (price >= this.shopsellingPrice[x] && this.shop[x] > 1) {
+                        if (this.shopMinStock[x] === undefined || (this.shop[x] - 1 > this.shopMinStock[x])) {
+                            this.world.game.changeMoney((Math.round(price * 1)), "market buy from the shop", this);
+                            this.shop[x] -= 1;
                             this.market[x] += 1;
                         }
                         else
@@ -271,10 +263,8 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
             }
         }
         updateDalyCosts() {
-            if (this.warehouses > 0)
-                this.world.game.changeMoney(-Math.round(this.warehouses * (this.warehouses > 5 ? parameter.rateCostsWarehouseMany : parameter.rateCostsWarehouse)), "daily costs warehouses", this);
-            if (this.houses > 0)
-                this.world.game.changeMoney(-Math.round(this.houses * 42 * parameter.rateCostsHouse), "daily costs houses", this);
+            if (this.shops > 0)
+                this.world.game.changeMoney(-Math.round(this.shops * (this.shops > 5 ? parameter.rateCostsshopMany : parameter.rateCostsshop)), "daily costs shops", this);
             if (this.people - parameter.neutralStartPeople > 0) {
                 this.world.game.changeMoney(Math.round((this.people - parameter.neutralStartPeople) * 0.8), "rental fee", this);
             }
@@ -296,8 +286,8 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
                 this.companies[x].update();
             }
             this.updateDailyConsumtion();
-            this.sellWareHouseToMarket();
-            if (this.world.game.date.getHours() % 4 === 0)
+            this.sellshopToMarket();
+            if (this.world.game.date.getHours() % 6 === 0)
                 this.updatePeople();
             if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
                 //a new day starts
@@ -345,9 +335,9 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
             var ret = "";
             for (var x = 0; x < buildMaterial.length; x++) {
                 if (buildMaterial[x] > 0) {
-                    //checkwarehouse
-                    var min = Math.min(buildMaterial[x], this.warehouse[x]);
-                    this.warehouse[x] -= min;
+                    //checkshop
+                    var min = Math.min(buildMaterial[x], this.shop[x]);
+                    this.shop[x] -= min;
                     var diff = buildMaterial[x] - min;
                     if (diff > 0) { //markt
                         var price = parameter.allProducts[x].calcPrice(this.people, this.market[x] - diff, false);
@@ -365,9 +355,9 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
             var total = buildPrice;
             var ret = "";
             for (var x = 0; x < buildMaterial.length; x++) {
-                //checkwarehouse
-                if (buildMaterial[x] > this.warehouse[x]) {
-                    var diff = buildMaterial[x] - this.warehouse[x];
+                //checkshop
+                if (buildMaterial[x] > this.shop[x]) {
+                    var diff = buildMaterial[x] - this.shop[x];
                     if ((diff) > this.market[x])
                         ret += ret + " " + parameter.allProducts[x].getIcon();
                     total += parameter.allProducts[x].calcPrice(this.people, this.market[x] - diff, false);

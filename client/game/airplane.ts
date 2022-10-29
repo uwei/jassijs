@@ -69,7 +69,7 @@ export class Airplane {
         var _this = this;
         this.dom = <any>document.createRange().createContextualFragment("<span z-index:2;style='font-size:20px;transform:rotate(0turn)' class='mdi mdi-airplane'></span>").children[0];//document.createElement("span");
         this.dom.style.position = "absolute";
-
+        this.dom.style.zIndex = "10";
         
        
        
