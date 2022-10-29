@@ -7,7 +7,7 @@ function getRandomInt(max) {
 var distributionTable: number[] = undefined;
 var debugNeed=[];
 for(var x=0;x<19;x++){
-    debugNeed.push(x);
+    debugNeed.push(0);
 }
 export {debugNeed};
 function getRandomCompanyType(notThisIds: number[] = undefined) {

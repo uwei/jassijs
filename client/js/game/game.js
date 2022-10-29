@@ -79,7 +79,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
         updateTitle() {
             try {
                 document.getElementById("gamemoney").innerHTML = new Number(this.getMoney()).toLocaleString();
-                document.getElementById("gamedate").innerHTML = this.date.toLocaleDateString() + " " + this.date.toLocaleTimeString().substring(0, this.date.toLocaleTimeString().length - 3);
+                document.getElementById("gamedate").innerHTML = this.date.toLocaleDateString();
                 this.world.update();
             }
             catch (_a) {

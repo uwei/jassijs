@@ -138,20 +138,22 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 ap.world = this;
                 this.airplanes.push(ap);
             }
-            /* Lastenausgleich
+            /*
+             //Lastenausgleich
+               var anz=100;
                this.cities=[this.cities[0]];
                this.cities[0].companies=[];
                for(var x=0;x<19;x++){
                    var comp=new Company();
                    comp.city=this.cities[0];
                    comp.productid=x;
-                   comp.workers=20*10;
-                   comp.buildings=10;
+                   comp.workers=20*anz;
+                   comp.buildings=anz;
                    this.cities[0].companies.push(comp);
-                   this.cities[0].warehouse[x]=10000;
+                   this.cities[0].warehouse[x]=1000000;
                }
-               this.cities[0].people=10*19*20;
-               this.cities[0].houses=10*19*20/100+1;*/
+               this.cities[0].people=anz*19*20;
+               this.cities[0].houses=anz*19*20/100+1;*/
         }
         render(dom) {
             var _this = this;

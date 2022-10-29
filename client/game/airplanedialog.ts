@@ -1,5 +1,5 @@
 import { City } from "game/city";
-import {Product } from "game/product";
+import { Product } from "game/product";
 import { Airplane } from "game/airplane";
 import { Icons } from "game/icons";
 import { Route } from "game/route";
@@ -171,17 +171,10 @@ export class AirplaneDialog {
 
             });
             document.getElementById("route-list").addEventListener('click', (e) => {
-                var el = <HTMLElement>$(e.target).closest('li')[0];
-
-                if (el.id.split("-").length > 1) {
-                    var id = parseInt(el.id.split("-")[1]);
-                    var select = document.getElementById("route-list");
-                    for (var x = 0; x < select.children.length; x++) {
-                        select.children[x].classList.remove("active-route");
-                    }
-
-                }
-                el.classList.add("active-route");
+                _this.selectCíty(e);
+            });
+            document.getElementById("route-list").addEventListener('touchstart', (e) => {
+                _this.selectCíty(e);
             });
             $("#delete-route").droppable({
                 drop: (e, e2) => {
@@ -192,18 +185,31 @@ export class AirplaneDialog {
         }, 500);
         //document.createElement("span");
     }
+    selectCíty(e) {
+        var el = <HTMLElement>$(e.target).closest('li')[0];
+
+        if (el.id.split("-").length > 1) {
+            var id = parseInt(el.id.split("-")[1]);
+            var select = document.getElementById("route-list");
+            for (var x = 0; x < select.children.length; x++) {
+                select.children[x].classList.remove("active-route");
+            }
+
+        }
+        el.classList.add("active-route");
+    }
     enableDropCities(enable: boolean) {
         var _this = this;
         console.log("route " + (enable ? "enable" : "disable"));
         if (this.dropCitiesEnabled && !enable) {
-            for(var x=0;x<this.airplane.world.cities.length;x++){
-                try{
-                $(this.airplane.world.cities[x].dom).draggable('destroy');
-                }catch{
-                    
+            for (var x = 0; x < this.airplane.world.cities.length; x++) {
+                try {
+                    $(this.airplane.world.cities[x].dom).draggable('destroy');
+                } catch {
+
                 }
             }
-            
+
         }
         if (this.dropCitiesEnabled === false && enable) {
             $(".city").draggable({
@@ -218,8 +224,8 @@ export class AirplaneDialog {
                 },
                 revert: 'invalid'
             });
-            for(var x=0;x<_this.airplane.world.cities.length;x++){
-                if(this.airplane.world.cities[x].hasAirport===false){
+            for (var x = 0; x < _this.airplane.world.cities.length; x++) {
+                if (this.airplane.world.cities[x].hasAirport === false) {
                     $(this.airplane.world.cities[x].dom).draggable('disable');
                 }
             }
@@ -346,17 +352,27 @@ export class AirplaneDialog {
             _this.enableDropCities(true);
         }
         //ui-tabs-active
-        $(this.dom).dialog({
+        var dlg=$(this.dom).dialog({
             width: "190px",
             draggable: true,
             //     position:{my:"left top",at:"right top",of:$(document)} ,
             open: function (event, ui) {
+
                 _this.update(true);
             },
             close: function () {
-                _this.enableDropCities(false);
+                _this.close();
+            },
+            create:function(){
+                setTimeout(()=>{
+                var j=dlg.dialog("widget").find(".ui-dialog-titlebar-close");
+                j[0].addEventListener('touchstart', (e) => {
+                    _this.close();
+                });
+                },200);
             }
-        }).dialog("widget").draggable("option", "containment", "none");
+        });
+         dlg.dialog("widget").draggable("option", "containment", "none");
         $(this.dom).parent().css({ position: "fixed" });
 
     }

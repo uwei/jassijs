@@ -9,7 +9,7 @@ define(["require", "exports"], function (require, exports) {
     var debugNeed = [];
     exports.debugNeed = debugNeed;
     for (var x = 0; x < 19; x++) {
-        debugNeed.push(x);
+        debugNeed.push(0);
     }
     function getRandomCompanyType(notThisIds = undefined) {
         if (notThisIds === undefined)
