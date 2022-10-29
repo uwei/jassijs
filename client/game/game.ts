@@ -33,12 +33,13 @@ export class Parameter {
   rateBuyBuilding = 1;
   rateBuyBuildingGrowFactor = 5000;
   rateCostsAirplaine = 1;
-  rateCostsshop = 100;
-  rateCostsshopMany = 1000;
+  rateCostShop = 100;
+  rateCostsShopMany = 1000;
   workerInCompany = 20;
   neutralStartPeople = 200;
   neutralProductionRate = 2;
   newAirportRate=1.05;
+  capacityShop=5000;
   allProducts:Product[];
   allAirplaneTypes=[
     {typeid:0,model:"Airplane A",speed:200,capacity:200, costs:60,buildDays:25,buildingCosts:20000,buildingMaterial:[0,0,0,40,0,10,0,10,0,10,0,0,0,0,10]},
@@ -314,6 +315,12 @@ export class Game {
       }
       if (value?.type === "City") {
         r = new City();
+        if(value.warehouse){
+          value.shop=value.warehouse;
+          value.shops=value.warehouses;
+          delete value.warehouse;
+          delete value.warehouses;
+        }
         Object.assign(r, value);
         return r;
       }

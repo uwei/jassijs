@@ -45,7 +45,7 @@ export class CityDialogMarket {
                     ret = ret + '<td style="width:20px"><div style="position:relative">' +
                         '<div id="sell-slider_' + x + '" style="overflow:float;position:absolute;height:1px;top:5px;width: 66px" ><div>' +
                         '</div></td>';
-                    ret = ret + "<td>0</td>";
+                    ret = ret + "<td >0</td>";
                     ret = ret + '<td style="width:40px;"><span>0</span><span id="citydialog-market-info_' + x + '"></span></td>';
                     ret = ret + '<td style="width:20px"><div style="position:relative">' +
                         '<div id="buy-slider_' + x + '" style="overflow:float;position:absolute;left:4px;height:1px;top:5px;width: 92px" ><div>' +

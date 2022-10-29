@@ -123,9 +123,9 @@ export class CityDialog {
                     </table>
                     <br/>
                         <br/>
-                        <b>shop</b>
+                        <b>My-Shops</b>
                     <br/>
-                       `+ Icons.shop + ` houses: <span id="count-shops">0/0</span>  
+                       `+ Icons.shop + ` Shops: <span id="count-shops">0/0</span>  
                         ` + ` costs: <span id="costs-shops">0</span> ` + Icons.money + `  
                         <button id="buy-shop">+`+ Icons.home + ` for 15.000` + Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
             " 40x" + parameter.allProducts[1].getIcon() + `</button> 
@@ -371,6 +371,7 @@ export class CityDialog {
 
         }
         document.getElementById("count-shops").innerHTML = "" + this.city.shops;
+        document.getElementById("costs-shops").innerHTML = "" + this.city.getDailyCostsShops();
 
         if (this.city.canBuild(15000, [20, 40]) !== "") {
             document.getElementById("buy-shop").setAttribute("disabled", "");

@@ -36,7 +36,7 @@ export class CityDialogShop {
                 for (var x = 0; x < parameter.allProducts.length; x++) {
                     ret = ret + "<tr>";
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>0</td>";//stack
+                    ret = ret + '<td style="text-align: right">0</td>';//stack
                     ret = ret + '<td style="width:110px"><div style="position:relative">' +
                         '<div id="shop-sell-slider_' + x + '" style="overflow:float;position:absolute;height:1px;top:5px;width: 53px" ><div>' +
                         '</div></td>';
@@ -58,7 +58,7 @@ export class CityDialogShop {
                 return ret;
             })()}
                     </table>
-                    <p>number of shops <span id="citydialog-shop-count"><span></p>`;
+                    <span id="citydialog-shop-info"><span>`;
 
     }
     bindActions() {
@@ -151,12 +151,7 @@ export class CityDialogShop {
         var select: HTMLSelectElement = <any>document.getElementById("citydialog-shop-table-target");
         var last = select.value;
         select.innerHTML = "";
-        if (city.shops > 0) {
-            var opt: HTMLOptionElement = document.createElement("option");
-            opt.value = "MyShop";
-            opt.text = opt.value;
-            select.appendChild(opt);
-        }
+       
         var allAPs = city.getAirplanesInCity();
         for (var x = 0; x < allAPs.length; x++) {
             var opt: HTMLOptionElement = document.createElement("option");
@@ -172,10 +167,11 @@ export class CityDialogShop {
 
         var storetarget = CityDialogMarket.getStore("citydialog-shop-table-target"); 
         var storesource = city.shop;
+        var gesamount=0;
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var table = document.getElementById("citydialog-shop-table");
             var tr = table.children[0].children[x + 1];
-
+            gesamount+=storesource[x];
             tr.children[1].innerHTML = city.shop[x].toString();
             var buyslider = <HTMLInputElement>document.getElementById("shop-buy-slider_" + x);
             var sellslider = <HTMLInputElement>document.getElementById("shop-sell-slider_" + x);
@@ -212,7 +208,7 @@ export class CityDialogShop {
                 (<HTMLInputElement>tr.children[7].children[0]).value = city.shopsellingPrice[x] === undefined ? "" : city.shopsellingPrice[x].toString();
         }
 
-        document.getElementById("citydialog-shop-count").innerHTML = "" + city.shops;
+        document.getElementById("citydialog-shop-info").innerHTML = "Shops:" + city.shops+" Capacity "+gesamount+"/"+city.shops*parameter.capacityShop;
 
     }
 

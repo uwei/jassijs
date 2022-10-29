@@ -348,7 +348,9 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     cause = all[x].cityid === this.route.cityid;
                 }
                 if (cause) {
+                    var allPeople = 0;
                     for (var c = 0; c < city.companies.length; c++) {
+                        allPeople += city.companies[c].buildings * parameter.workerInCompany;
                         var prod = parameter.allProducts[city.companies[c].productid];
                         if (prod.input1)
                             store[prod.input1] += Math.round((1.1 * city.companies[c].buildings * prod.input1Amount * totalDays));
@@ -356,7 +358,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                             store[prod.input2] += Math.round((1.1 * city.companies[c].buildings * prod.input2Amount * totalDays));
                     }
                     for (var y = 0; y < parameter.allProducts.length; y++) {
-                        store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * (city.houses * 100 + parameter.neutralStartPeople));
+                        store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * (allPeople + parameter.neutralStartPeople));
                     }
                 }
             }

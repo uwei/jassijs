@@ -106,9 +106,9 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                     </table>
                     <br/>
                         <br/>
-                        <b>shop</b>
+                        <b>My-Shops</b>
                     <br/>
-                       ` + icons_1.Icons.shop + ` houses: <span id="count-shops">0/0</span>  
+                       ` + icons_1.Icons.shop + ` Shops: <span id="count-shops">0/0</span>  
                         ` + ` costs: <span id="costs-shops">0</span> ` + icons_1.Icons.money + `  
                         <button id="buy-shop">+` + icons_1.Icons.home + ` for 15.000` + icons_1.Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
                 " 40x" + parameter.allProducts[1].getIcon() + `</button> 
@@ -345,6 +345,7 @@ define(["require", "exports", "game/city", "game/icons", "game/airplane", "game/
                 }
             }
             document.getElementById("count-shops").innerHTML = "" + this.city.shops;
+            document.getElementById("costs-shops").innerHTML = "" + this.city.getDailyCostsShops();
             if (this.city.canBuild(15000, [20, 40]) !== "") {
                 document.getElementById("buy-shop").setAttribute("disabled", "");
             }

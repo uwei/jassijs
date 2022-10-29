@@ -305,9 +305,12 @@ export class City {
             }
         }
     }
-    updateDalyCosts() {
+    getDailyCostsShops(){
+        return Math.round(this.shops * (this.shops > 3 ? parameter.rateCostsShopMany : parameter.rateCostShop));
+    }
+    updateDailyCosts() {
         if (this.shops > 0)
-            this.world.game.changeMoney(- Math.round(this.shops * (this.shops > 5 ? parameter.rateCostsshopMany : parameter.rateCostsshop)), "daily costs shops", this);
+            this.world.game.changeMoney(- this.getDailyCostsShops(), "daily costs shops", this);
 
 
         if (this.people - parameter.neutralStartPeople > 0) {
@@ -341,7 +344,7 @@ export class City {
             this.updatePeople();
         if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             //a new day starts
-            this.updateDalyCosts();
+            this.updateDailyCosts();
         }
         if (this.world.game.date.getHours() === 23) {
 

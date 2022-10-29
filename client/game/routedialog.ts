@@ -369,7 +369,9 @@ export class RouteDialog {
             }
 
             if (cause) {
+                var allPeople=0;
                 for (var c = 0; c < city.companies.length; c++) {
+                    allPeople+=city.companies[c].buildings*parameter.workerInCompany;
                     var prod = parameter.allProducts[city.companies[c].productid];
                     if (prod.input1)
                         store[prod.input1] += Math.round((1.1 * city.companies[c].buildings * prod.input1Amount * totalDays));
@@ -378,7 +380,7 @@ export class RouteDialog {
 
                 }
                 for (var y = 0; y < parameter.allProducts.length; y++) {
-                    store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * (city.houses * 100 + parameter.neutralStartPeople));
+                    store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * (allPeople+parameter.neutralStartPeople));
 
                 }
 

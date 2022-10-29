@@ -262,9 +262,12 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
                 }
             }
         }
-        updateDalyCosts() {
+        getDailyCostsShops() {
+            return Math.round(this.shops * (this.shops > 3 ? parameter.rateCostsShopMany : parameter.rateCostShop));
+        }
+        updateDailyCosts() {
             if (this.shops > 0)
-                this.world.game.changeMoney(-Math.round(this.shops * (this.shops > 5 ? parameter.rateCostsshopMany : parameter.rateCostsshop)), "daily costs shops", this);
+                this.world.game.changeMoney(-this.getDailyCostsShops(), "daily costs shops", this);
             if (this.people - parameter.neutralStartPeople > 0) {
                 this.world.game.changeMoney(Math.round((this.people - parameter.neutralStartPeople) * 0.8), "rental fee", this);
             }
@@ -291,7 +294,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/icons"], 
                 this.updatePeople();
             if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
                 //a new day starts
-                this.updateDalyCosts();
+                this.updateDailyCosts();
             }
             if (this.world.game.date.getHours() === 23) {
                 for (var x = 0; x < company_1.debugNeed.length; x++) {

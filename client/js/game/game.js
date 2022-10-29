@@ -21,12 +21,13 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.rateBuyBuilding = 1;
             this.rateBuyBuildingGrowFactor = 5000;
             this.rateCostsAirplaine = 1;
-            this.rateCostsshop = 100;
-            this.rateCostsshopMany = 1000;
+            this.rateCostShop = 100;
+            this.rateCostsShopMany = 1000;
             this.workerInCompany = 20;
             this.neutralStartPeople = 200;
             this.neutralProductionRate = 2;
             this.newAirportRate = 1.05;
+            this.capacityShop = 5000;
             this.allAirplaneTypes = [
                 { typeid: 0, model: "Airplane A", speed: 200, capacity: 200, costs: 60, buildDays: 25, buildingCosts: 20000, buildingMaterial: [0, 0, 0, 40, 0, 10, 0, 10, 0, 10, 0, 0, 0, 0, 10] },
                 { typeid: 1, model: "Airplane B", speed: 210, capacity: 300, costs: 90, buildDays: 30, buildingCosts: 41000, buildingMaterial: [0, 0, 0, 60, 0, 20, 0, 20, 0, 20, 0, 0, 0, 0, 20] },
@@ -280,6 +281,12 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 }
                 if ((value === null || value === void 0 ? void 0 : value.type) === "City") {
                     r = new city_1.City();
+                    if (value.warehouse) {
+                        value.shop = value.warehouse;
+                        value.shops = value.warehouses;
+                        delete value.warehouse;
+                        delete value.warehouses;
+                    }
                     Object.assign(r, value);
                     return r;
                 }
