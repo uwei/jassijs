@@ -27,6 +27,7 @@ export class Icons {
      static diagram="<span  class='mdi  mdi-chart-multiple'></span>";
      static refresh="<span  class='mdi  mdi-refresh'></span>";
      static airport="<span  class='mdi  mdi-airport'></span>";
+     static hammer="<span  class='mdi  mdi-hammer-wrench'></span>";
     
     
 }

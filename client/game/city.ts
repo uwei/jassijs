@@ -8,7 +8,11 @@ import { Icons } from "game/icons";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
-
+class QueueItem {
+    typeid: number;
+    name: string;
+    ready: number;
+}
 export class City {
     id: number;
     x: number;
@@ -30,6 +34,8 @@ export class City {
     shops = 0;
     shopMinStock: number[];
     shopSellingPrice: number[];
+    queueAirplane: QueueItem[] = [];
+    queueBuildings: QueueItem[] = [];
     type = "City";
     domDesc: HTMLSpanElement;
     hasAirport;
@@ -58,6 +64,7 @@ export class City {
             this.market.push(val);
         }
     }
+
     private createCompanies() {
         var allready = [];
         this.companies = [];
@@ -96,7 +103,7 @@ export class City {
         this.domDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
             'px;left:' + this.x + 'px;font-size:14px;">' + this.name + '</span>').children[0];
         this.world.dom.appendChild(this.domDesc);
-         this.domDesc.style.zIndex = "2";
+        this.domDesc.style.zIndex = "2";
         this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
             'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + Icons.airport + '</span>').children[0];
 
@@ -122,6 +129,50 @@ export class City {
             return undefined;
         });
 
+
+    }
+    buildBuilding(typeid: number) {
+        var last = this.world.game.date.getTime();
+        if (this.queueBuildings.length > 0)
+            last = this.queueBuildings[this.queueBuildings.length - 1].ready;
+        last += parameter.daysBuildBuilding * 1000 * 60 * 60 * 24;
+        this.queueBuildings.push({ ready: last, typeid: typeid, name: "" });
+    }
+    buildAirplane(typeid: number) {
+        var last = this.world.game.date.getTime();
+        if (this.queueAirplane.length > 0)
+            last = this.queueAirplane[this.buildAirplane.length - 1].ready;
+        last += parameter.allAirplaneTypes[typeid].buildDays * 1000 * 60 * 60 * 24;
+        this.queueAirplane.push({ ready: last, typeid: typeid, name: parameter.allAirplaneTypes[typeid].model });
+    }
+    newAirplane(typeid: number) {
+        var _this = this;
+        if (!_this.commitBuildingCosts(Math.round(parameter.allAirplaneTypes[typeid].buildingCosts * parameter.rateBuyAirplane), parameter.allAirplaneTypes[typeid].buildingMaterial, "buy airplane"))
+            return;
+        var maxNumber = 1;
+        for (var x = 0; x < _this.world.airplanes.length; x++) {
+            var test = _this.world.airplanes[x];
+            var pos = test.name.indexOf(parameter.allAirplaneTypes[typeid].model);
+            if (pos === 0) {
+                var nr = parseInt(test.name.substring(parameter.allAirplaneTypes[typeid].model.length));
+                if (nr !== NaN && nr > maxNumber)
+                    maxNumber = nr;
+            }
+        }
+        maxNumber++;
+        var ap = new Airplane(_this.world);
+        ap.speed = 200;
+        ap.x = _this.x;
+        ap.y = _this.y;
+        ap.world = _this.world;
+        ap.typeid = parameter.allAirplaneTypes[typeid].typeid;
+        ap.name = parameter.allAirplaneTypes[typeid].model + maxNumber;
+        ap.speed = parameter.allAirplaneTypes[typeid].speed;
+        ap.costs = parameter.allAirplaneTypes[typeid].costs;
+        ap.capacity = parameter.allAirplaneTypes[typeid].capacity;
+        _this.world.airplanes.push(ap);
+        ap.render();
+        _this.world.dom.appendChild(ap.dom);
 
     }
     updateNeutralCompanies() {
@@ -195,6 +246,46 @@ export class City {
             this.companies[comps[winner]].workers++;
         }
     }
+    tryRemoveBuildingInProgress(typeid) {
+        var ret = false;
+        for (var x = this.queueBuildings.length - 1; x > -1; x--) {
+            if (this.queueBuildings[x].typeid === typeid) {
+                this.queueBuildings.splice(x, 1);
+                return true;
+            }
+        }
+        return false;
+    }
+    getBuildingInProgress(typeid) {
+        var ret = 0;
+        for (var x = 0; x < this.queueBuildings.length; x++) {
+            if (this.queueBuildings[x].typeid === typeid)
+                ret++;
+        }
+        return ret;
+    }
+    updateAirplaneQueue() {
+        if (this.queueAirplane.length > 0 && this.queueAirplane[0].ready <= this.world.game.date.getTime()) {
+            this.newAirplane(this.queueAirplane[0].typeid);
+            this.queueAirplane.splice(0, 1);
+        }
+    }
+    updateBuildingQueue() {
+        if (this.queueBuildings.length > 0 && this.queueBuildings[0].ready <= this.world.game.date.getTime()) {
+            if (this.queueBuildings[0].typeid === 10000) {
+               this.shops++;
+            } else {
+                for (var x = 0; x < this.companies.length; x++) {
+                    if (this.companies[x].productid === this.queueBuildings[0].typeid) {
+                        this.companies[x].buildings++;
+                        break;
+                    }
+                }
+            }
+            //this.newAirplane(this.queueAirplane[0].typeid);
+            this.queueBuildings.splice(0, 1);
+        }
+    }
     updatePeople() {
         var newPeople = 1;
         while (newPeople > 0) {
@@ -207,7 +298,7 @@ export class City {
                 return;
             this.people++;
             var winner = getRandomInt(comps.length);
-            console.log("+1 in company " + winner);
+            //            console.log("+1 in company " + winner);
             this.companies[comps[winner]].workers++;
             newPeople--;
         }
@@ -305,7 +396,7 @@ export class City {
             }
         }
     }
-    getDailyCostsShops(){
+    getDailyCostsShops() {
         return Math.round(this.shops * (this.shops >= 5 ? parameter.rateCostsShopMany : parameter.rateCostShop));
     }
     updateDailyCosts() {
@@ -339,6 +430,8 @@ export class City {
             this.companies[x].update();
         }
         this.updateDailyConsumtion();
+        this.updateAirplaneQueue();
+        this.updateBuildingQueue();
         this.sellShopToMarket();
         if (this.world.game.date.getHours() % 6 === 0)
             this.updatePeople();

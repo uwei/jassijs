@@ -27,7 +27,7 @@ export class Airplane {
     costs:number;
     capacity:number;
     loadedCount:number=0;
-    activeRoute = 0;
+    activeRoute = -1;
     squadron:Airplane[]=[];//Geschwader
     type = "Airplane";
     constructor(world: World) {
@@ -39,7 +39,7 @@ export class Airplane {
 
         }
         this.typeid=1;
-        this.action = "wait";
+        this.action = "";
         /*  for(var x=0;x<4;x++){
               var rt=new Route();
               rt.cityid=x;
@@ -112,7 +112,7 @@ export class Airplane {
     arrived() {
         this.targetX = undefined;
         this.targetY = undefined;
-        this.action = "wait";
+        this.action = "";
         this.status = "";
         this.dom.style.transform = "rotate(0deg)";
         if (this.activeRoute !== -1) {
@@ -163,6 +163,12 @@ export class Airplane {
         }
         if(this.loadedCount!==this.capacity&&this.dom.classList.contains("airplane_fullloaded")){
             this.dom.classList.remove("airplane_fullloaded");
+        }
+        if(this.status===""&&!this.dom.classList.contains("airplane_lazy")){
+            this.dom.classList.add("airplane_lazy");
+        }
+        if(this.status!==""&&this.dom.classList.contains("airplane_lazy")){
+            this.dom.classList.remove("airplane_lazy");
         }
         if (this.targetX !== undefined) {
             this.calcNewPosition();

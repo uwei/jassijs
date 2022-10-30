@@ -10,11 +10,14 @@ table {
 .airplane_fullloaded{
     color:blue;
 }
+.airplane_lazy{
+    color:green;
+}
 .airplane_fullloaded.airplane_selected{
     color:red;
 }
 .airplane_selected{
-    color:red;
+    color:fuchsia;
 }
 tr {
     padding: 0 0 0 0;

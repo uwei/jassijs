@@ -42,13 +42,14 @@ export class Parameter {
   newAirportRate=1.05;
   capacityShop=5000;
   allProducts:Product[];
+  daysBuildBuilding=4;
   allAirplaneTypes=[
-    {typeid:0,model:"Airplane A",speed:200,capacity:200, costs:60,buildDays:25,buildingCosts:20000,buildingMaterial:[0,0,0,40,0,10,0,10,0,10,0,0,0,0,10]},
-    {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:30,buildingCosts:41000,buildingMaterial:[0,0,0,60,0,20,0,20,0,20,0,0,0,0,20]},
-    {typeid:2,model:"Airplane C",speed:220,capacity:500, costs:150,buildDays:39,buildingCosts:60000,buildingMaterial:[0,0,0,100,0,30,0,30,0,30,0,0,0,0,30]},
-    {typeid:3,model:"Airplane D",speed:240,capacity:650, costs:180,buildDays:45,buildingCosts:75000,buildingMaterial:[0,0,0,120,0,40,0,40,0,40,0,0,0,0,40]},
-    {typeid:4,model:"Airplane E",speed:260,capacity:1000, costs:270,buildDays:56,buildingCosts:150000,buildingMaterial:[0,0,0,200,0,50,0,50,0,50,0,0,0,0,50]},
-    {typeid:5,model:"Airplane F",speed:300,capacity:2000, costs:500,buildDays:79,buildingCosts:300000,buildingMaterial:[0,0,0,400,0,100,0,100,0,100,0,0,0,0,100]},
+    {typeid:0,model:"Airplane A",speed:200,capacity:200, costs:60,buildDays:20,buildingCosts:20000,buildingMaterial:[0,0,0,40,0,10,0,10,0,10,0,0,0,0,10]},
+    {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:25,buildingCosts:40000,buildingMaterial:[0,0,0,60,0,20,0,20,0,20,0,0,0,0,20]},
+    {typeid:2,model:"Airplane C",speed:220,capacity:400, costs:150,buildDays:35,buildingCosts:60000,buildingMaterial:[0,0,0,100,0,30,0,30,0,30,0,0,0,0,30]},
+    {typeid:3,model:"Airplane D",speed:240,capacity:700, costs:180,buildDays:40,buildingCosts:80000,buildingMaterial:[0,0,0,120,0,40,0,40,0,40,0,0,0,0,40]},
+    {typeid:4,model:"Airplane E",speed:260,capacity:1500, costs:270,buildDays:50,buildingCosts:200000,buildingMaterial:[0,0,0,200,0,50,0,50,0,50,0,0,0,0,50]},
+    {typeid:5,model:"Airplane F",speed:300,capacity:3000, costs:700,buildDays:80,buildingCosts:350000,buildingMaterial:[0,0,0,400,0,100,0,100,0,100,0,0,0,0,100]},
     ];
 }
 window.parameter=new Parameter();
@@ -162,7 +163,7 @@ export class Game {
     this.dom = dom;
     var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
-            Traffics* 
+            Traffics 
             <button id="game-slower">`+ Icons.minus + `</button> 
             <span id="gamedate"></span>   
             <button id="game-faster">`+ Icons.plus + `</button> 

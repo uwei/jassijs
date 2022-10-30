@@ -371,7 +371,9 @@ export class RouteDialog {
             if (cause) {
                 var allPeople=0;
                 for (var c = 0; c < city.companies.length; c++) {
-                    allPeople+=city.companies[c].buildings*parameter.workerInCompany;
+                    var buildings=city.companies[c].buildings;
+                    buildings+=city.getBuildingInProgress(city.companies[c].productid);
+                    allPeople+=buildings*parameter.workerInCompany;
                     var prod = parameter.allProducts[city.companies[c].productid];
                     if (prod.input1)
                         store[prod.input1] += Math.round((1.1 * city.companies[c].buildings * prod.input1Amount * totalDays));

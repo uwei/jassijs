@@ -108,8 +108,10 @@ export class DiagramDialog {
         }
         var table = document.getElementById("diagramdialog-buildings-table");
         var buildings = [];
+
         for (var x = 0; x < parameter.allProducts.length; x++) {
             buildings.push(0);
+
         }
         for (var x = 0; x < this.world.cities.length; x++) {
             for (var y = 0; y < this.world.cities[x].companies.length; y++) {
@@ -119,37 +121,45 @@ export class DiagramDialog {
         }
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var tr = table.children[0].children[x + 1];
-            tr.children[2].innerHTML = buildings[x]===undefined?"":buildings[x];
+            var inprogr = 0;
+            for (var y = 0; y < this.world.cities.length; y++) {
+                inprogr += this.world.cities[y].getBuildingInProgress(x);
+            }
+            var sh = buildings[x] === undefined ? "" : buildings[x];
+            if (inprogr) {
+                sh = sh + "(" + inprogr + Icons.hammer + ")";
+            }
+            tr.children[2].innerHTML = sh;
         }
 
         //
         var table = document.getElementById("diagramdialog-balance-table");
-        var content=`
+        var content = `
             <tr>
                 <th>What</th>
                 <th>Yesterday</th>
                 <th>Today</th>
             </tr>
         `;
-        var allKeys=[];
-        for(var key in this.world.game.statistic.today){
-            if(allKeys.indexOf(key)===-1)
+        var allKeys = [];
+        for (var key in this.world.game.statistic.today) {
+            if (allKeys.indexOf(key) === -1)
                 allKeys.push(key);
         }
-        for(var key in this.world.game.statistic.yesterday){
-            if(allKeys.indexOf(key)===-1)
+        for (var key in this.world.game.statistic.yesterday) {
+            if (allKeys.indexOf(key) === -1)
                 allKeys.push(key);
         }
-        allKeys.sort((a:string,b)=>a.localeCompare(b));
-        for(var x=0;x<allKeys.length;x++){
-            var k=allKeys[x];
-            content+=`<tr>
-                        <td>`+k+`</td>
-                        <td style="text-align: right">`+(this.world.game.statistic.yesterday[k]===undefined?"":this.world.game.statistic.yesterday[k])+`</td>
-                        <td style="text-align: right">`+(this.world.game.statistic.today[k]===undefined?"":this.world.game.statistic.today[k])+`</td>
+        allKeys.sort((a: string, b) => a.localeCompare(b));
+        for (var x = 0; x < allKeys.length; x++) {
+            var k = allKeys[x];
+            content += `<tr>
+                        <td>`+ k + `</td>
+                        <td style="text-align: right">`+ (this.world.game.statistic.yesterday[k] === undefined ? "" : this.world.game.statistic.yesterday[k]) + `</td>
+                        <td style="text-align: right">`+ (this.world.game.statistic.today[k] === undefined ? "" : this.world.game.statistic.today[k]) + `</td>
                       </tr>`
         }
-        table.innerHTML=content;
+        table.innerHTML = content;
     }
     show() {
         var _this = this;
