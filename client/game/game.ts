@@ -10,6 +10,7 @@ import { City } from "game/city";
 import { Route } from "game/route";
 import {  Product } from "game/product";
 import { DiagramDialog } from "game/diagramdialog";
+import { SaveDialog } from "game/savedialog";
 
 window.onbeforeunload = function () {
   return "Do you want to exit?";
@@ -77,6 +78,7 @@ parameter.allProducts= [
 ];
 //global.parameter=new Parametetr();
 export class Game {
+  parameter=parameter;
   static instance: Game;
   dom: HTMLElement;
   world: World;
@@ -167,7 +169,6 @@ export class Game {
             Money:<span id="gamemoney"></span>`+ Icons.money + `
             <button id="save-game">`+ Icons.save + `</button> 
             <button id="debug-game">`+ Icons.debug + `</button> 
-            <button id="load-game">`+ Icons.load + `</button> 
             <button id="show-diagram">`+ Icons.diagram + `</button> 
           </div>  
         `;
@@ -196,11 +197,10 @@ export class Game {
       console.log("down");
     });
     document.getElementById("save-game").addEventListener("click", () => {
-      _this.save();
+      SaveDialog.getInstance().game=this;
+      SaveDialog.getInstance().show();
     });
-    document.getElementById("load-game").addEventListener("click", () => {
-      _this.load();
-    });
+   
     document.getElementById("debug-game").addEventListener("click", () => {
       for (var x = 0; x < parameter.allProducts.length; x++) {
         _this.world.cities[0].shop[x] = 5000;
@@ -241,128 +241,7 @@ export class Game {
       _this.resume();
     });
   }
-  save() {
-    this.pause();
-    var sdata = JSON.stringify(this, (key: string, value: any) => {
-      var ret: any = {};
-      if (value instanceof HTMLElement) {
-        return undefined;
-      }
-      if (key === "lastUpdate")
-        return undefined;
-      if (value?.constructor?.name === "World") {
-        Object.assign(ret, value);
-        delete ret.game;
-        return ret;
-      }
-      if (value?.constructor?.name === "Airplane") {
-
-        Object.assign(ret, value);
-        delete ret.world;
-        return ret;
-      }
-      if (value?.constructor?.name === "City") {
-
-        Object.assign(ret, value);
-        delete ret.world;
-        return ret;
-      }
-      if (value?.constructor?.name === "Company") {
-        Object.assign(ret, value);
-        delete ret.city;
-        return ret;
-      }
-      if (value?.constructor?.name === "Route") {
-
-        Object.assign(ret, value);
-        delete ret.airplane;
-        return ret;
-      }
-      return value;
-    }, "\t");
-    window.localStorage.setItem("savegame", sdata);
-    //this.load();
-    console.log(sdata);
-    this.resume();
-
-  }
-  load() {
-    this.pause();
-    var data = window.localStorage.getItem("savegame");
-    var ret = JSON.parse(data, (key, value) => {
-      var r: any = value;
-      if (value === null)
-        return undefined;
-      if (value?.type === "Company") {
-        r = new Company();
-        Object.assign(r, value);
-        return r;
-      }
-      if (value?.type === "Product") {
-        r = new Product(value);
-        Object.assign(r, value);
-        return r;
-      }
-      if (value?.type === "Airplane") {
-        r = new Airplane(undefined);
-        Object.assign(r, value);
-        return r;
-      }
-      if (value?.type === "World") {
-        r = new World();
-        Object.assign(r, value);
-        return r;
-      }
-      if (value?.type === "City") {
-        r = new City();
-        if(value.warehouse){
-          value.shop=value.warehouse;
-          value.shops=value.warehouses;
-          value.shopSellingPrice=value.warehouseSellingPrice;
-          delete value.warehouseSellingPrice;
-          delete value.warehouse;
-          delete value.warehouses;
-        }
-        Object.assign(r, value);
-        return r;
-      }
-      if (value?.type === "Route") {
-        r = new Route();
-        if(value.loadWarehouseAmount){
-          value.loadShopAmount=value.loadWarehouseAmount;
-          value.unloadShopAmount=value.unloadWarehouseAmount;
-          value.loadShopUntilAmount=value.loadWarehouseUntilAmount;
-          delete value.loadWarehouseAmount;
-          delete value.unloadWarehouseAmount;
-          delete value.loadWarehouseUntilAmount;
-          
-        }
-        Object.assign(r, value);
-        return r;
-      }
-      return r;
-    });
-    Object.assign(this, ret);
-    this.world.game = this;
-    this.date = new Date(this.date);
-    for (var x = 0; x < this.world.airplanes.length; x++) {
-      this.world.airplanes[x].world = this.world;
-      for (var y = 0; y < this.world.airplanes[x].route.length; y++) {
-        this.world.airplanes[x].route[y].airplane = this.world.airplanes[x];
-      }
-    }
-    for (var x = 0; x < this.world.cities.length; x++) {
-      this.world.cities[x].world = this.world;
-      for (var y = 0; y < this.world.cities[x].companies.length; y++) {
-        this.world.cities[x].companies[y].city = this.world.cities[x];
-      }
-      //for(var y=0;y<this.world.cities[x].companies.length;y++){
-      //  this.world.cities[x].companies[y].
-      //}
-    }
-    this.render(this.dom);
-    this.resume();
-  }
+  
   resume() {
     if (this.timer === 0)
       this.nevercallthisfunction();
