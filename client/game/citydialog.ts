@@ -257,7 +257,7 @@ export class CityDialog {
         }
 
         document.getElementById("buy-shop").addEventListener("click", (evt) => {
-            if (!_this.city.commitBuildingCosts(25000, [40, 80], "buy building"))
+            if (!_this.city.commitBuildingCosts(15000, [20, 40], "buy building"))
                 return;
             _this.city.buildBuilding(10000);
             _this.update();
