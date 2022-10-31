@@ -280,6 +280,9 @@ export class CityDialog {
                 if (sid === "")
                     sid = (<any>evt.target).parentNode.id
                 var id = parseInt(sid.split("_")[1]);
+                if (!_this.city.commitBuildingCosts(Math.round(parameter.allAirplaneTypes[id].buildingCosts * 
+                        parameter.rateBuyAirplane), parameter.allAirplaneTypes[id].buildingMaterial, "buy airplane"))
+                            return;
                 _this.city.buildAirplane(id);
                 _this.update(true);
                 //_this.newAirplane(id);
@@ -364,7 +367,7 @@ export class CityDialog {
             }
 
         }
-        var sh = ""+this.city.shops;
+        var sh = "" + this.city.shops;
         var inprogr = this.city.getBuildingInProgress(10000);
         if (inprogr) {
             sh = sh + "(" + inprogr + Icons.hammer + ")";

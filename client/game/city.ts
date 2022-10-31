@@ -147,8 +147,7 @@ export class City {
     }
     newAirplane(typeid: number) {
         var _this = this;
-        if (!_this.commitBuildingCosts(Math.round(parameter.allAirplaneTypes[typeid].buildingCosts * parameter.rateBuyAirplane), parameter.allAirplaneTypes[typeid].buildingMaterial, "buy airplane"))
-            return;
+       
         var maxNumber = 1;
         for (var x = 0; x < _this.world.airplanes.length; x++) {
             var test = _this.world.airplanes[x];
@@ -404,9 +403,6 @@ export class City {
             this.world.game.changeMoney(- this.getDailyCostsShops(), "daily costs shops", this);
 
 
-        if (this.people - parameter.neutralStartPeople > 0) {
-            this.world.game.changeMoney(Math.round((this.people - parameter.neutralStartPeople) * 0.8), "rental fee", this);
-        }
         var companycosts = 0;
         for (var x = 0; x < this.companies.length; x++) {
             companycosts += this.companies[x].getDayilyCosts();
