@@ -87,16 +87,16 @@ export class SquadronDialog {
                 <table>
                     <tr>
                         <td>
-                           <select id="airplanes-in-city" size="7">
+                           <select id="airplanes-in-city" size="7" style="height: 250px;">
                                 <option value="no airplanes in city">no airplanes in city</option>
                             </select>
                         </td>
                         <td>
-                             <button id="sqadron-add">`+ Icons.toright + `</button>
                              <button id="sqadron-del" >`+ Icons.toleft + `</button><br/>
+                             <button id="sqadron-add">`+ Icons.toright + `</button>
                         </td>
                         <td>
-                           <select id="airplanes-in-squadron" size="7">
+                           <select id="airplanes-in-squadron" size="7" style="height: 250px;">
                                 
                             </select>
                         </td>

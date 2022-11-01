@@ -397,6 +397,7 @@ export class AirplaneDialog {
 
     }
     close() {
+        this.enableDropCities(false);
         $(this.dom).dialog("close");
     }
 }
