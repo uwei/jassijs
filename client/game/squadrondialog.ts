@@ -87,7 +87,7 @@ export class SquadronDialog {
                 <table>
                     <tr>
                         <td>
-                           <select id="airplanes-in-city" size="7" style="height: 250px;">
+                           <select id="airplanes-in-city" size="7" style="height: auto;">
                                 <option value="no airplanes in city">no airplanes in city</option>
                             </select>
                         </td>

@@ -82,7 +82,8 @@ export class Company {
     }
     getBuildingCosts() {
         var fact = 5 - (parameter.allProducts[this.productid].distribution) / 4;
-        return Math.round(parameter.rateBuyBuilding*fact * 10000+Math.round(parameter.rateBuyBuildingGrowFactor*this.buildings));
+        var buildings=this.buildings+this.city.getBuildingInProgress(this.productid);
+        return Math.round(parameter.rateBuyBuilding*fact * 10000+Math.round(parameter.rateBuyBuildingGrowFactor*buildings));
     }
     getDailyInput2(): number {
         var needs = 0;

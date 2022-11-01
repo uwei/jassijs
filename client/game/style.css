@@ -7,6 +7,10 @@ table {
 .ui-droppable.ui-droppable-active.ui-droppable-hover{
     background-color:yellow;
 }
+select{
+  -webkit-appearance: menulist-textfield;
+
+}
 .airplane_fullloaded{
     color:blue;
 }

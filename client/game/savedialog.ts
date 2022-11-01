@@ -51,7 +51,7 @@ export class SaveDialog {
                 </tr>
                 <tr>
                     <td>
-                            <select id="save-files" size="7" style="width:100%;height: 250px;">
+                            <select id="save-files" size="7" style="width:100%;height: auto;">
                             </select>
                     </td>
                     <td>
