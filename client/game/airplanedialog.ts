@@ -70,6 +70,7 @@ export class AirplaneDialog {
                     <span id="airplanedialog-speed">Speed:</span><br/>
                     <span id="airplanedialog-capacity">Capacity:</span><br/> 
                     <button style="font-size:14px" id="edit-squadron">`+ Icons.edit + `</button>
+                    <button style="font-size:14px" id="delete-airplane">`+ Icons.remove + `</button>
                  </div>
                  <div id="airplanedialog-route">
                     
@@ -159,6 +160,11 @@ export class AirplaneDialog {
                 SquadronDialog.getInstance().airplane = _this.airplane;
                 SquadronDialog.getInstance().show();
             });
+             document.getElementById("delete-airplane").addEventListener('click', (e) => {
+                 if (confirm(`Delete the the entire squadron?`)) {
+                    _this.deleteAirplane(_this.airplane);
+                 }
+            });
             document.getElementById("delete-route").addEventListener('click', (e) => {
                 var select = document.getElementById("route-list");
                 for (var x = 0; x < select.children.length; x++) {
@@ -184,6 +190,21 @@ export class AirplaneDialog {
             });
         }, 500);
         //document.createElement("span");
+    }
+    deleteAirplane(ap:Airplane){
+
+        for(var x=0;x<ap.squadron.length;x++){
+            this.deleteAirplane(ap.squadron[x]);
+            ap.squadron=[];
+        }
+        var pos=this.airplane.world.airplanes.indexOf(ap);
+        if(pos!==-1)
+            this.airplane.world.airplanes.splice(pos,1);
+        if(ap.dom?.style)
+            ap.dom.style.display="none";
+        if(ap.dom)
+            this.airplane.world.dom.removeChild(ap.dom);
+        this.update();
     }
     selectCíty(e) {
         var el = <HTMLElement>$(e.target).closest('li')[0];

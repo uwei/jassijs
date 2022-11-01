@@ -77,8 +77,8 @@ export class Company {
     getBuildingMaterial() {
         var fact = 5 - (parameter.allProducts[this.productid].distribution) / 4;
         return [
-            fact * 5,
-            fact * 10]
+            fact * 15,
+            fact * 15]
     }
     getBuildingCosts() {
         var fact = 5 - (parameter.allProducts[this.productid].distribution) / 4;

@@ -518,9 +518,16 @@ export class City {
 
     static getBuildingCostsAsIcon(money: number, buildingMaterial: number[], withBreak = false) {
         var s = money + " " + Icons.money;
+        var lastAmount=undefined;
         for (var x = 0; x < buildingMaterial.length; x++) {
-            if (buildingMaterial[x])
-                s = s + " " + (withBreak ? "<br/>" : "") + buildingMaterial[x] + "x" + parameter.allProducts[x].getIcon();
+            if (buildingMaterial[x]){
+                var s1=buildingMaterial[x] + "x";
+                if(lastAmount===buildingMaterial[x])
+                    s1="";
+
+                s = s + " " + (withBreak ? "<br/>" : "")  +s1+ parameter.allProducts[x].getIcon();
+                lastAmount=buildingMaterial[x];
+            }
         }
         return s;
     }
