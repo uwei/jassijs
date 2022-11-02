@@ -66,9 +66,18 @@ export class Route {
             if (max !== undefined) {
                 max = Math.min(max, this.airplane.products[x]);
                 if (max) {
+                    var diff = city.shops * parameter.capacityShop - city.getCompleteAmount();
+                    if(diff>0)
+                        max=Math.min(max, diff);
+                     else
+                        max=0;
                     this.airplane.products[x] -= max;
                     this.airplane.refreshLoadedCount();
                     city.shop[x] += max;
+                    diff = city.shops * parameter.capacityShop - city.getCompleteAmount();
+                    if(diff<=0){
+                        city.domShopfull.style.display = "initial";
+                    }
                 }
             }
         }

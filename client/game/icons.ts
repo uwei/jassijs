@@ -28,6 +28,7 @@ export class Icons {
      static refresh="<span  class='mdi  mdi-refresh'></span>";
      static airport="<span  class='mdi  mdi-airport'></span>";
      static hammer="<span  class='mdi  mdi-hammer-wrench'></span>";
+     static store="<span  class='mdi  mdi-store'></span>";
     
     
 }

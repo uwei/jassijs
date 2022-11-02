@@ -36,6 +36,7 @@ export class City {
     shopSellingPrice: number[];
     queueAirplane: QueueItem[] = [];
     queueBuildings: QueueItem[] = [];
+    domShopfull: HTMLSpanElement;
     type = "City";
     domDesc: HTMLSpanElement;
     hasAirport;
@@ -100,9 +101,15 @@ export class City {
         this.dom.style.left = this.x.toString() + "px";
         this.world.dom.appendChild(this.dom);
         this.dom.style.zIndex = "1";
-        this.domDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
-            'px;left:' + this.x + 'px;font-size:14px;">' + this.name + '</span>').children[0];
-        this.world.dom.appendChild(this.domDesc);
+        var spanDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
+            'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
+        this.domDesc = <any>document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
+        spanDesc.appendChild(this.domDesc);
+        this.domShopfull = <any>document.createRange().createContextualFragment(Icons.store).children[0];
+        this.domShopfull.style.color = "red";
+        this.domShopfull.style.display = "none";
+        spanDesc.appendChild(this.domShopfull);
+        this.world.dom.appendChild(spanDesc);
         this.domDesc.style.zIndex = "2";
         this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
             'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + Icons.airport + '</span>').children[0];
@@ -147,7 +154,7 @@ export class City {
     }
     newAirplane(typeid: number) {
         var _this = this;
-       
+
         var maxNumber = 1;
         for (var x = 0; x < _this.world.airplanes.length; x++) {
             var test = _this.world.airplanes[x];
@@ -272,7 +279,7 @@ export class City {
     updateBuildingQueue() {
         if (this.queueBuildings.length > 0 && this.queueBuildings[0].ready <= this.world.game.date.getTime()) {
             if (this.queueBuildings[0].typeid === 10000) {
-               this.shops++;
+                this.shops++;
             } else {
                 for (var x = 0; x < this.companies.length; x++) {
                     if (this.companies[x].productid === this.queueBuildings[0].typeid) {
@@ -412,13 +419,30 @@ export class City {
             this.world.game.changeMoney(-companycosts, "daily costs salary", this);
         }
     }
-
+    getCompleteAmount() {
+        var gesamount = 0;
+        for (var x = 0; x < parameter.allProducts.length; x++) {
+            gesamount += this.shop[x];
+        }
+        return gesamount;
+    }
+    updateStatus() {
+        if (!this.hasAirport)
+            return;
+        //shop full
+        var gesamount = this.getCompleteAmount();
+        var max = this.shops * parameter.capacityShop;
+        if (gesamount >= max) {
+            this.domShopfull.style.display = "initial";
+        } else
+            this.domShopfull.style.display = "none";
+    }
     update() {
         if (this.lastUpdate === undefined) {
             this.lastUpdate = this.world.game.date.getTime();
         }
 
-        this.domDesc.innerHTML = this.name + "<br/>" + this.people.toLocaleString() + "<br/>" + parameter.allProducts[0].getIcon() + " " + Icons.edit;
+        this.domDesc.innerHTML = this.name + "<br/>" + this.people.toLocaleString() + "<br/>";
 
 
         this.updateNeutralCompanies();
@@ -437,6 +461,7 @@ export class City {
         }
         if (this.world.game.date.getHours() === 23) {
 
+            this.updateStatus();
             for (var x = 0; x < debugNeed.length; x++) {
                 // console.log("needed "+x+" "+debugNeed[x]);
                 debugNeed[x] = 0;
@@ -518,15 +543,15 @@ export class City {
 
     static getBuildingCostsAsIcon(money: number, buildingMaterial: number[], withBreak = false) {
         var s = money + " " + Icons.money;
-        var lastAmount=undefined;
+        var lastAmount = undefined;
         for (var x = 0; x < buildingMaterial.length; x++) {
-            if (buildingMaterial[x]){
-                var s1=buildingMaterial[x] + "x";
-                if(lastAmount===buildingMaterial[x])
-                    s1="";
+            if (buildingMaterial[x]) {
+                var s1 = buildingMaterial[x] + "x";
+                if (lastAmount === buildingMaterial[x])
+                    s1 = "";
 
-                s = s + " " + (withBreak ? "<br/>" : "")  +s1+ parameter.allProducts[x].getIcon();
-                lastAmount=buildingMaterial[x];
+                s = s + " " + (withBreak ? "<br/>" : "") + s1 + parameter.allProducts[x].getIcon();
+                lastAmount = buildingMaterial[x];
             }
         }
         return s;

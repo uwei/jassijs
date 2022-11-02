@@ -156,13 +156,13 @@ export class CityDialogMarket {
         var val = CityDialogMarket.getSliderValue(t);
         t.setAttribute("curVal", val.toString());
         console.log(val);
-        
+        var price=0;
         var id = parseInt(t.id.split("_")[1]);
         if (val === 0)
             document.getElementById(infofield + id).innerHTML = "";
         else {
             if (changePrice){
-                var price = CityDialogMarket.calcPrice(t, val);
+                price = CityDialogMarket.calcPrice(t, val);
                 document.getElementById(infofield + id).innerHTML = "x" + val + "<br/>= " + (buy ? "-" : "") + val * price;
             }else
                 document.getElementById(infofield + id).innerHTML = ""+val;
@@ -258,6 +258,14 @@ export class CityDialogMarket {
                 var testap = CityDialogMarket.getAirplaneInMarket("citydialog-market-table-target");
                 if (testap)
                     max = Math.min(max, testap.capacity - testap.loadedCount);
+                else{
+                    var diff=city.shops*parameter.capacityShop-city.getCompleteAmount();
+                    
+                    if(diff>0)
+                        max=Math.min(max, diff);
+                     else
+                        max=0;
+                }
                 buyslider.readOnly = false;
                 // sellslider.readOnly = false;
                 buyslider.setAttribute("maxValue", max.toString());

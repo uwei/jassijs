@@ -150,7 +150,7 @@ export class CityDialogShop {
             return;
         var select: HTMLSelectElement = <any>document.getElementById("citydialog-shop-table-target");
         var last = select.value;
-            
+
         if (document.activeElement !== <any>document.getElementById("citydialog-shop-table-target")) {
             select.innerHTML = "";
 
@@ -165,7 +165,7 @@ export class CityDialogShop {
                 select.value = last;
             }
         }
-       
+
         CityDialog.getInstance().updateTitle();
 
         var storetarget = CityDialogMarket.getStore("citydialog-shop-table-target");
@@ -196,8 +196,13 @@ export class CityDialogShop {
                         $(buyslider).slider("enable");//storetarget[x].toString();
                     else
                         $(buyslider).slider("disable");//storetarget[x].toString();
-
-                    sellslider.setAttribute("maxValue", storetarget[x].toString());
+                    var max2 = storetarget[x];
+                    var diff = city.shops * parameter.capacityShop - city.getCompleteAmount();
+                    if(diff>0)
+                        max2=Math.min(max2, diff);
+                     else
+                        max2=0;
+                    sellslider.setAttribute("maxValue", max2.toString());
                 } else {
                     buyslider.readOnly = true;
                     // sellslider.readOnly = true;
