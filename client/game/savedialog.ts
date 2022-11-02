@@ -44,15 +44,17 @@ export class SaveDialog {
                 <tr>
                     <td>
                         Filename: <input id="save-filename"/>
-                        
                     </td>
                     <td>
                     </td>
                 </tr>
                 <tr>
-                    <td>
-                            <select id="save-files" size="7" style="width:100%;height: auto;">
-                            </select>
+                    <td style="vertical-align: top;">
+                     <ul style="min-heigt:40px" class="mylist boxborder" id="save-files">
+                     
+           
+                    </ul>
+                      
                     </td>
                     <td>
                         <button id="save-save" title="save">Save</button>
@@ -110,14 +112,19 @@ export class SaveDialog {
             _this.close();
         });
         document.getElementById("save-files").addEventListener("click", (ev) => {
-
-            idfilename.value = (<any>ev.target).value;//.substring(4);
+            idfilename.value = (<any>ev.target).getAttribute("value");//.substring(4);
+            var el = <HTMLElement>ev.target;
+            var select = document.getElementById("save-files");
+            for (var x = 0; x < select.children.length; x++) {
+                select.children[x].classList.remove("active-listitem");
+            }
+            el.classList.add("active-listitem");
 
         });
-         document.getElementById("save-delete").addEventListener("click", (ev) => {
-                window.localStorage.removeItem("save"+idfilename.value);
+        document.getElementById("save-delete").addEventListener("click", (ev) => {
+            window.localStorage.removeItem("save" + idfilename.value);
 
-           _this.update();
+            _this.update();
 
         });
     }
@@ -127,7 +134,7 @@ export class SaveDialog {
         var ret = ""
         for (var key in window.localStorage) {
             if (key.startsWith("save")) {
-                ret += '<option value="' + key.substring(4) + '">' + key.substring(4) + '</option>';
+                ret += '<li value="' + key.substring(4) + '">' + key.substring(4) + '</li>';
                 //list.push();
             }
         }

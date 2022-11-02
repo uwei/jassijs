@@ -1,16 +1,20 @@
 table {
     font-size: inherit;
 }
-.active-route.ui-state-default{
+.boxborder { 
+    border: 1px solid black; 
+}
+
+.active-listitem.ui-state-default{
+    background-color:lightgray;
+}
+.active-listitem{
     background-color:lightgray;
 }
 .ui-droppable.ui-droppable-active.ui-droppable-hover{
     background-color:yellow;
 }
-select{
-  -webkit-appearance: menulist-textfield;
 
-}
 .airplane_fullloaded{
     color:blue;
 }
@@ -59,7 +63,7 @@ table {
       font-size: 12px;
 }
 
-#route-list>li {
+.mylist>li {
     list-style-type: none;
     /* Remove bullets */
     padding: 0;
@@ -67,7 +71,7 @@ table {
     margin: 0;
 }
 
-#route-list {
+.mylist {
     margin-block-start: 0px;
     margin-block-end: 0px;
     padding-inline-start: 0px;

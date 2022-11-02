@@ -20,11 +20,36 @@ export class SquadronDialog {
             SquadronDialog.instance = new SquadronDialog();
         return SquadronDialog.instance;
     }
-
+    getActiveItem(list: string) {
+        var select = document.getElementById(list);
+        for (var x = 0; x < select.children.length; x++) {
+            if (select.children[x].classList.contains("active-listitem"))
+                return select.children[x].getAttribute("value");
+        }
+        return "";
+    }
     bindActions() {
         var _this = this;
+        document.getElementById("airplanes-in-city").addEventListener("click", (ev) => {
+            var el = <HTMLElement>ev.target;
+            var select = document.getElementById("airplanes-in-city");
+            for (var x = 0; x < select.children.length; x++) {
+                select.children[x].classList.remove("active-listitem");
+            }
+            el.classList.add("active-listitem");
+
+        });
+        document.getElementById("airplanes-in-squadron").addEventListener("click", (ev) => {
+            var el = <HTMLElement>ev.target;
+            var select = document.getElementById("airplanes-in-squadron");
+            for (var x = 0; x < select.children.length; x++) {
+                select.children[x].classList.remove("active-listitem");
+            }
+            el.classList.add("active-listitem");
+
+        });
         document.getElementById("sqadron-add").addEventListener('click', (e) => {
-            var val = (<HTMLSelectElement>document.getElementById("airplanes-in-city")).value;
+            var val =  _this.getActiveItem("airplanes-in-city"); //(<HTMLSelectElement>document.getElementById("airplanes-in-city")).value;
             if (val === "no airplanes in city" || val === "")
                 return;
             var ap = _this.airplane.world.findAirplane(val);
@@ -42,7 +67,8 @@ export class SquadronDialog {
 
         });
         document.getElementById("sqadron-del").addEventListener('click', (e) => {
-            var val = (<HTMLSelectElement>document.getElementById("airplanes-in-squadron")).value;
+            var val =  _this.getActiveItem("airplanes-in-squadron");
+          //  var val = (<HTMLSelectElement>document.getElementById("airplanes-in-squadron")).value;
             if (val === "")
                 return;
             var ap = _this.airplane.world.findAirplane(val);
@@ -52,15 +78,15 @@ export class SquadronDialog {
             _this.airplane.world.airplanes.push(ap);
             _this.airplane.updateSquadron();
             ap.updateSquadron();
-            if (ap.dom === undefined){
-                 ap.world=_this.airplane.world;
+            if (ap.dom === undefined) {
+                ap.world = _this.airplane.world;
                 ap.render();
-               
-            }else {
+
+            } else {
                 ap.dom.style.display = "initial";
-                
+
             }
-                _this.airplane.world.dom.appendChild(ap.dom);
+            _this.airplane.world.dom.appendChild(ap.dom);
             ap.x = _this.airplane.x;
             ap.y = _this.airplane.y;
             _this.update();
@@ -87,18 +113,20 @@ export class SquadronDialog {
                 <table>
                     <tr>
                         <td>
-                           <select id="airplanes-in-city" size="7" style="height: auto;">
-                                <option value="no airplanes in city">no airplanes in city</option>
-                            </select>
+                            Airplanes in city
+                           <ul id="airplanes-in-city" class="mylist boxborder" style="height: 250px;width:150px">
+                                <li value="no airplanes in city">no airplanes in city</li>
+                            </ul>
                         </td>
                         <td>
-                             <button id="sqadron-del" >`+ Icons.toleft + `</button><br/>
                              <button id="sqadron-add">`+ Icons.toright + `</button>
+                             <button id="sqadron-del" >`+ Icons.toleft + `</button><br/>
                         </td>
                         <td>
-                           <select id="airplanes-in-squadron" size="7" style="height: 250px;">
+                            Airlanes in Squadron
+                           <ul id="airplanes-in-squadron" class="mylist boxborder" style="height: 250px;width:150px">
                                 
-                            </select>
+                            </ul>
                         </td>
                         
                     </tr>
@@ -138,32 +166,26 @@ export class SquadronDialog {
         if (city !== undefined) {
             selectCity.innerHTML = "";
             var aps = city.getAirplanesInCity();
+            var s = "";
             for (var x = 0; x < aps.length; x++) {
                 if (aps[x] !== this.airplane) {
-                    var opt: HTMLOptionElement = document.createElement("option");
                     var toadd = aps[x];
-                    opt.value = toadd.name;
-                    opt.text = toadd.name;
-                    selectCity.appendChild(opt);
+                    s += '<li value="' + toadd.name + '">' + toadd.name + '</li>'
                 }
             }
+            selectCity.innerHTML = s;
         }
         if (selectCity.innerHTML === "") {
-            selectCity.innerHTML = '<option value="no airplanes in city">no airplanes in city</option>';
+            selectCity.innerHTML = '<li value="no airplanes in city">no airplanes in city</li>';
         }
         selectSquadron.innerHTML = "";
-        var opt: HTMLOptionElement = document.createElement("option");
-        opt.value = this.airplane.name;
-        opt.text = this.airplane.name;
-        selectSquadron.appendChild(opt);
+        //selectSquadron.appendChild(opt);
+        var s = "";
         for (var x = 0; x < this.airplane.squadron.length; x++) {
-            var opt: HTMLOptionElement = document.createElement("option");
             var toadd = this.airplane.squadron[x];
-            opt.value = toadd.name;
-            opt.text = toadd.name;
-            selectSquadron.appendChild(opt);
-
+            s += '<li value="' + toadd.name + '">' + toadd.name + '</li>'
         }
+        selectSquadron.innerHTML = s;
     }
     show() {
         var _this = this;

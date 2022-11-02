@@ -77,7 +77,7 @@ export class AirplaneDialog {
                     <input type="checkbox" id="route-active"> active</input>
                     <button style="font-size:14px" id="edit-route">`+ Icons.edit + `</button>
                     <button style="font-size:14px"  id="delete-route">`+ Icons.remove + `</button>
-                    <ul style="min-heigt:40px" id="route-list">
+                    <ul style="min-heigt:40px" class="mylist" id="route-list">
                      
            
                     </ul>
@@ -168,7 +168,7 @@ export class AirplaneDialog {
             document.getElementById("delete-route").addEventListener('click', (e) => {
                 var select = document.getElementById("route-list");
                 for (var x = 0; x < select.children.length; x++) {
-                    if (select.children[x].classList.contains("active-route")) {
+                    if (select.children[x].classList.contains("active-listitem")) {
                         $(select.children[x]).remove();
 
                     }
@@ -213,11 +213,11 @@ export class AirplaneDialog {
             var id = parseInt(el.id.split("-")[1]);
             var select = document.getElementById("route-list");
             for (var x = 0; x < select.children.length; x++) {
-                select.children[x].classList.remove("active-route");
+                select.children[x].classList.remove("active-listitem");
             }
 
         }
-        el.classList.add("active-route");
+        el.classList.add("active-listitem");
     }
     enableDropCities(enable: boolean) {
         var _this = this;
