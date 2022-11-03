@@ -49,25 +49,20 @@ export class SaveDialog {
                     </td>
                 </tr>
                 <tr>
-                    <td style="vertical-align: top;">
-                     <ul style="min-heigt:40px" class="mylist boxborder" id="save-files">
+                    <td style="vertical-align: top;width:100%">
+                     <ul style="width:100%" class="mylist boxborder" id="save-files">
                      
            
                     </ul>
                       
                     </td>
                     <td>
-                        <button id="save-save" title="save">Save</button>
-                        <br/><br/>
-                        <button id="save-load" title="save">Load</button>
-                        <br/><br/>
-                        <button id="save-delete" title="save">Delete</button>
-                        <br/><br/>
-                        <button id="save-export" title="save">Export</button>
-                        <br/><br/>
-                        <button id="save-import" title="save">Import</button>
-                        <br/><br/>
-                        <button id="save-cancel" title="save">Cancel</button>
+                        <button id="save-save" title="save" style="width:100%">Save</button>
+                        <button id="save-load" title="save" style="width:100%">Load</button>
+                        <button id="save-delete" title="save" style="width:100%">Delete</button>
+                        <button id="save-export" title="save" style="width:100%">Export</button>
+                        <button id="save-import" title="save" style="width:100%">Import</button>
+                        <button id="save-cancel" title="save" style="width:100%">Cancel</button>
             
                     </td>
                 </tr>    

@@ -40,12 +40,13 @@ export class RouteDialog {
           <div>
           <div>
             <input id="routedialog-airplane-prev" type="button" value="<"/>
-            <span id="routedialog-airplane-name"></span>
+            <div id="routedialog-airplane-name" style="display:inline;width:50px"></div>
             <input id="routedialog-airplane-next" type="button" value=">"/>
             <select id="route-select" >
             </select>
             <input id="routedialog-route-next" type="button" value=">"/>
             <button id="route-copy-prev" title="copy prev route">`+ Icons.copy + `</button>
+            <button id="update-all-routes" title="update all routes">`+ Icons.food + `</button>
                       
           </div>
           
@@ -256,10 +257,16 @@ export class RouteDialog {
             _this.update();
         });
         document.getElementById("route-load-fill-consumtion").addEventListener("click", (e) => {
-            _this.loadFillConsumtion(true);
+            RouteDialog.loadFillConsumtion(_this.route,true);
+            _this.update();
         });
         document.getElementById("route-load-fill-consumtion-until").addEventListener("click", (e) => {
-            _this.loadFillConsumtion(false);
+            RouteDialog.loadFillConsumtion(this.route,false);
+            _this.update();
+        });
+        document.getElementById("update-all-routes").addEventListener("click", (e) => {
+            _this.loadFillAllConsumtion();
+            _this.update();
         });
         document.getElementById("route-copy-prev").addEventListener("click", (e) => {
             _this.copyRoute();
@@ -334,16 +341,26 @@ export class RouteDialog {
         }
         this.update();
     }
-    loadFillConsumtion(allCities: boolean) {
+    loadFillAllConsumtion(){
+        for(var x=0;x<this.route.airplane.route.length;x++){
+            if(this.route.airplane.route[x].loadShopAmount[0]!==undefined){
+                RouteDialog.loadFillConsumtion(this.route.airplane.route[x],true);
+            }
+            if(this.route.airplane.route[x].loadShopUntilAmount[0]!==undefined){
+                RouteDialog.loadFillConsumtion(this.route.airplane.route[x],false);
+            }
+        }
+    }
+    static loadFillConsumtion(route:Route,allCities: boolean) {
         var _this = this;
-        var all = _this.route.airplane.route;
+        var all = route.airplane.route;
         var lenpixel = 0;
         var lastpos = undefined;
         for (var x = 0; x < all.length; x++) {
-            var city = _this.route.airplane.world.cities[all[x].cityid];
+            var city = route.airplane.world.cities[all[x].cityid];
             if (lastpos === undefined) {
                 lastpos = [city.x, city.y];
-                var lastcity = _this.route.airplane.world.cities[all[all.length - 1].cityid];
+                var lastcity = route.airplane.world.cities[all[all.length - 1].cityid];
                 var dist = Math.round(Math.sqrt(Math.pow(lastpos[0] - lastcity.x, 2) + Math.pow(lastpos[1] - lastcity.y, 2)));//Pytharoras
                 lenpixel += dist;
             } else {
@@ -352,20 +369,20 @@ export class RouteDialog {
                 lastpos = [city.x, city.y];
             }
         }
-        var days = lenpixel / _this.route.airplane.speed; //t=s/v; in Tage
+        var days = lenpixel / route.airplane.speed; //t=s/v; in Tage
         var totalDays = (Math.round(days * 24) + 1 + all.length * 3 + all.length * 3) / 24;   //+3h load and unload
         console.log(totalDays);
-        var store = allCities ? this.route.loadShopAmount : this.route.loadShopUntilAmount;
+        var store = allCities ? route.loadShopAmount : route.loadShopUntilAmount;
         for (var x = 0; x < parameter.allProducts.length; x++) {
             store[x] = 0;
         }
         for (var x = 0; x < all.length; x++) {
-            var city = _this.route.airplane.world.cities[all[x].cityid];
+            var city = route.airplane.world.cities[all[x].cityid];
             var cause;
             if (allCities) {
-                cause = (all[x].cityid !== this.route.cityid);
+                cause = (all[x].cityid !== route.cityid);
             } else {
-                cause = all[x].cityid === this.route.cityid;
+                cause = all[x].cityid === route.cityid;
             }
 
             if (cause) {
@@ -388,7 +405,7 @@ export class RouteDialog {
 
             }
         }
-        _this.update();
+        
     }
 
 
