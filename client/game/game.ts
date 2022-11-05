@@ -164,12 +164,12 @@ export class Game {
     var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
             Traffics- 
-            <button id="game-slower">`+ Icons.minus + `</button> 
+            <button id="game-slower"  class="mybutton">`+ Icons.minus + `</button> 
             <span id="gamedate"></span>   
-            <button id="game-faster">`+ Icons.plus + `</button> 
+            <button id="game-faster"  class="mybutton">`+ Icons.plus + `</button> 
             Money:<span id="gamemoney"></span>`+ Icons.money + `
-            <button id="save-game">`+ Icons.save + `</button> 
-            <button id="show-diagram">`+ Icons.diagram + `</button> 
+            <button id="save-game"  class="mybutton">`+ Icons.save + `</button> 
+            <button id="show-diagram"  class="mybutton">`+ Icons.diagram + `</button> 
           </div>  
         `;
     this.domHeader = <any>document.createRange().createContextualFragment(sdomHeader).children[0];

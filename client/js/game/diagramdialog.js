@@ -32,7 +32,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             var _this = this;
             var sdom = `
           <div>
-            <button id="diagramdialog-refresh" title="refresh data">` + icons_1.Icons.refresh + `</button>
+            <button id="diagramdialog-refresh" title="refresh data"  class="mybutton">` + icons_1.Icons.refresh + `</button>
                             
             <div id="diagramdialog-tabs">
                 <ul>

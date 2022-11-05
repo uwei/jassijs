@@ -61,14 +61,14 @@ define(["require", "exports", "game/icons", "game/route", "game/routedialog", "g
                     <span id="airplanedialog-type">Type:</span><br/>
                     <span id="airplanedialog-speed">Speed:</span><br/>
                     <span id="airplanedialog-capacity">Capacity:</span><br/> 
-                    <button style="font-size:14px" id="edit-squadron">` + icons_1.Icons.edit + `</button>
-                    <button style="font-size:14px" id="delete-airplane">` + icons_1.Icons.remove + `</button>
+                    <button style="font-size:14px" id="edit-squadron" class="mybutton">` + icons_1.Icons.edit + `</button>
+                    <button style="font-size:14px" id="delete-airplane" class="mybutton">` + icons_1.Icons.remove + `</button>
                  </div>
                  <div id="airplanedialog-route">
                     
                     <input type="checkbox" id="route-active"> active</input>
-                    <button style="font-size:14px" id="edit-route">` + icons_1.Icons.edit + `</button>
-                    <button style="font-size:14px"  id="delete-route">` + icons_1.Icons.remove + `</button>
+                    <button style="font-size:14px" id="edit-route" class="mybutton">` + icons_1.Icons.edit + `</button>
+                    <button style="font-size:14px"  id="delete-route" class="mybutton">` + icons_1.Icons.remove + `</button>
                     <ul style="min-heigt:40px" class="mylist" id="route-list">
                      
            

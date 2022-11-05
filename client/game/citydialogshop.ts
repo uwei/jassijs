@@ -29,7 +29,7 @@ export class CityDialogShop {
                             </th>
                             <th></th>
                             <th>Min<br/>Stock</th>
-                            <th>Selling<br/>price<br/><button id="shop-fill-price" title="reset price">`+ Icons.fillDown + `</button></th>
+                            <th>Selling<br/>price<br/><button id="shop-fill-price" title="reset price"  class="mybutton">`+ Icons.fillDown + `</button></th>
                         </tr>
                        ${(function fun() {
                 var ret = "";

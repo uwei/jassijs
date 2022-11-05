@@ -119,8 +119,8 @@ export class SquadronDialog {
                             </ul>
                         </td>
                         <td>
-                             <button id="sqadron-add">`+ Icons.toright + `</button>
-                             <button id="sqadron-del" >`+ Icons.toleft + `</button><br/>
+                             <button id="sqadron-add" class="mybutton">`+ Icons.toright + `</button>
+                             <button id="sqadron-del"  class="mybutton">`+ Icons.toleft + `</button><br/>
                         </td>
                         <td>
                             Airlanes in Squadron

@@ -69,14 +69,14 @@ export class AirplaneDialog {
                     <span id="airplanedialog-type">Type:</span><br/>
                     <span id="airplanedialog-speed">Speed:</span><br/>
                     <span id="airplanedialog-capacity">Capacity:</span><br/> 
-                    <button style="font-size:14px" id="edit-squadron">`+ Icons.edit + `</button>
-                    <button style="font-size:14px" id="delete-airplane">`+ Icons.remove + `</button>
+                    <button style="font-size:14px" id="edit-squadron" class="mybutton">`+ Icons.edit + `</button>
+                    <button style="font-size:14px" id="delete-airplane" class="mybutton">`+ Icons.remove + `</button>
                  </div>
                  <div id="airplanedialog-route">
                     
                     <input type="checkbox" id="route-active"> active</input>
-                    <button style="font-size:14px" id="edit-route">`+ Icons.edit + `</button>
-                    <button style="font-size:14px"  id="delete-route">`+ Icons.remove + `</button>
+                    <button style="font-size:14px" id="edit-route" class="mybutton">`+ Icons.edit + `</button>
+                    <button style="font-size:14px"  id="delete-route" class="mybutton">`+ Icons.remove + `</button>
                     <ul style="min-heigt:40px" class="mylist" id="route-list">
                      
            

@@ -103,8 +103,8 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                             </ul>
                         </td>
                         <td>
-                             <button id="sqadron-add">` + icons_1.Icons.toright + `</button>
-                             <button id="sqadron-del" >` + icons_1.Icons.toleft + `</button><br/>
+                             <button id="sqadron-add" class="mybutton">` + icons_1.Icons.toright + `</button>
+                             <button id="sqadron-del"  class="mybutton">` + icons_1.Icons.toleft + `</button><br/>
                         </td>
                         <td>
                             Airlanes in Squadron

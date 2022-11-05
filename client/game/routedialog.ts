@@ -39,14 +39,14 @@ export class RouteDialog {
         var sdom = `
           <div>
           <div>
-            <input id="routedialog-airplane-prev" type="button" value="<"/>
+            <button id="update-all-routes" title="update all routes" class="mybutton">`+ Icons.food + `</button>
+            <input id="routedialog-airplane-prev" type="button" value="<" class="mybutton"/>
             <div id="routedialog-airplane-name" style="display:inline;width:50px"></div>
-            <input id="routedialog-airplane-next" type="button" value=">"/>
-            <button id="update-all-routes" title="update all routes">`+ Icons.food + `</button>
+            <input id="routedialog-airplane-next" type="button" value=">" class="mybutton"/>
             <select id="route-select" >
             </select>
-            <input id="routedialog-route-next" type="button" value=">"/>
-            <button id="route-copy-prev" title="copy prev route">`+ Icons.copy + `</button>
+            <input id="routedialog-route-next" type="button" value=">" class="mybutton"/>
+            <button id="route-copy-prev" title="copy prev route" class="mybutton">`+ Icons.copy + `</button>
                       
           </div>
           

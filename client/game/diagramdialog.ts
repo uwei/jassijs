@@ -45,7 +45,7 @@ export class DiagramDialog {
         var _this = this;
         var sdom = `
           <div>
-            <button id="diagramdialog-refresh" title="refresh data">`+ Icons.refresh + `</button>
+            <button id="diagramdialog-refresh" title="refresh data"  class="mybutton">`+ Icons.refresh + `</button>
                             
             <div id="diagramdialog-tabs">
                 <ul>

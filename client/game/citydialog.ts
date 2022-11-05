@@ -46,8 +46,8 @@ export class CityDialog {
         var sdom = `
           <div>
           <div>
-            <input id="citydialog-prev" type="button" value="<"/>
-            <input id="citydialog-next" type="button" value=">"/>
+            <input id="citydialog-prev" type="button" value="<"  class="mybutton"/>
+            <input id="citydialog-next" type="button" value=">"  class="mybutton"/>
           </div>
             <div id="citydialog-tabs">
                 <ul>
@@ -110,9 +110,9 @@ export class CityDialog {
                     ret = ret + "<td></td>";
                     ret = ret + "<td></td>";
                     ret = ret + "<td></td>";
-                    ret = ret + '<td><button id="new-factory_' + x + '">' + "+" + Icons.factory + '</button>' +
-                        '<button id="delete-factory_' + x + '">' + "-" + Icons.factory + '</button>' +
-                        '<button id="buy-license_' + x + '">' + "buy license to produce for 50.000" + Icons.money + '</button>' +
+                    ret = ret + '<td><button id="new-factory_' + x + '" class="mybutton">' + "+" + Icons.factory + '</button>' +
+                        '<button id="delete-factory_' + x + '" class="mybutton">' + "-" + Icons.factory + '</button>' +
+                        '<button id="buy-license_' + x + '" class="mybutton">' + "buy license to produce for 50.000" + Icons.money + '</button>' +
                         '<div id="no-shop_' + x + '">need a shop to produce</div>' +
 
                         '</td>';
@@ -127,9 +127,9 @@ export class CityDialog {
                     <br/>
                        `+ Icons.shop + ` Shops: <span id="count-shops">0/0</span>  
                         ` + ` costs: <span id="costs-shops">0</span> ` + Icons.money + `  
-                        <button id="buy-shop">+`+ Icons.home + ` for 15.000` + Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
+                        <button id="buy-shop"  class="mybutton">+`+ Icons.home + ` for 15.000` + Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
             " 40x" + parameter.allProducts[1].getIcon() + `</button> 
-                        <button id="delete-shop">-`+ Icons.home + `</button>`;
+                        <button id="delete-shop"  class="mybutton">-`+ Icons.home + `</button>`;
     }
 
     createScore() {
@@ -175,7 +175,7 @@ export class CityDialog {
                     ret = ret + "<td>" + parameter.allAirplaneTypes[x].capacity + "</td>";
                     ret = ret + "<td>" + parameter.allAirplaneTypes[x].costs + "</td>";
                     ret = ret + "<td>" + parameter.allAirplaneTypes[x].buildDays + "</td>";
-                    ret = ret + "<td>" + '<button id="new-airplane_' + x + '">' + "+" + Icons.airplane + " " +
+                    ret = ret + "<td>" + '<button id="new-airplane_' + x + '" class="mybutton">' + "+" + Icons.airplane + " " +
                         City.getBuildingCostsAsIcon(Math.round(parameter.allAirplaneTypes[x].buildingCosts * parameter.rateCostsAirplaine), parameter.allAirplaneTypes[x].buildingMaterial) + "</button></td>";
                     ret = ret + "</tr>";
                 }

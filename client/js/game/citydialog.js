@@ -34,8 +34,8 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
             var sdom = `
           <div>
           <div>
-            <input id="citydialog-prev" type="button" value="<"/>
-            <input id="citydialog-next" type="button" value=">"/>
+            <input id="citydialog-prev" type="button" value="<"  class="mybutton"/>
+            <input id="citydialog-next" type="button" value=">"  class="mybutton"/>
           </div>
             <div id="citydialog-tabs">
                 <ul>
@@ -94,9 +94,9 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
                     ret = ret + "<td></td>";
                     ret = ret + "<td></td>";
                     ret = ret + "<td></td>";
-                    ret = ret + '<td><button id="new-factory_' + x + '">' + "+" + icons_1.Icons.factory + '</button>' +
-                        '<button id="delete-factory_' + x + '">' + "-" + icons_1.Icons.factory + '</button>' +
-                        '<button id="buy-license_' + x + '">' + "buy license to produce for 50.000" + icons_1.Icons.money + '</button>' +
+                    ret = ret + '<td><button id="new-factory_' + x + '" class="mybutton">' + "+" + icons_1.Icons.factory + '</button>' +
+                        '<button id="delete-factory_' + x + '" class="mybutton">' + "-" + icons_1.Icons.factory + '</button>' +
+                        '<button id="buy-license_' + x + '" class="mybutton">' + "buy license to produce for 50.000" + icons_1.Icons.money + '</button>' +
                         '<div id="no-shop_' + x + '">need a shop to produce</div>' +
                         '</td>';
                     ret = ret + "</tr>";
@@ -110,9 +110,9 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
                     <br/>
                        ` + icons_1.Icons.shop + ` Shops: <span id="count-shops">0/0</span>  
                         ` + ` costs: <span id="costs-shops">0</span> ` + icons_1.Icons.money + `  
-                        <button id="buy-shop">+` + icons_1.Icons.home + ` for 15.000` + icons_1.Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
+                        <button id="buy-shop"  class="mybutton">+` + icons_1.Icons.home + ` for 15.000` + icons_1.Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
                 " 40x" + parameter.allProducts[1].getIcon() + `</button> 
-                        <button id="delete-shop">-` + icons_1.Icons.home + `</button>`;
+                        <button id="delete-shop"  class="mybutton">-` + icons_1.Icons.home + `</button>`;
         }
         createScore() {
             return `<table id="citydialog-score-table" style="height:100%;weight:100%;">
@@ -157,7 +157,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
                     ret = ret + "<td>" + parameter.allAirplaneTypes[x].capacity + "</td>";
                     ret = ret + "<td>" + parameter.allAirplaneTypes[x].costs + "</td>";
                     ret = ret + "<td>" + parameter.allAirplaneTypes[x].buildDays + "</td>";
-                    ret = ret + "<td>" + '<button id="new-airplane_' + x + '">' + "+" + icons_1.Icons.airplane + " " +
+                    ret = ret + "<td>" + '<button id="new-airplane_' + x + '" class="mybutton">' + "+" + icons_1.Icons.airplane + " " +
                         city_1.City.getBuildingCostsAsIcon(Math.round(parameter.allAirplaneTypes[x].buildingCosts * parameter.rateCostsAirplaine), parameter.allAirplaneTypes[x].buildingMaterial) + "</button></td>";
                     ret = ret + "</tr>";
                 }

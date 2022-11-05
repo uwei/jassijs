@@ -135,12 +135,12 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
             Traffics- 
-            <button id="game-slower">` + icons_1.Icons.minus + `</button> 
+            <button id="game-slower"  class="mybutton">` + icons_1.Icons.minus + `</button> 
             <span id="gamedate"></span>   
-            <button id="game-faster">` + icons_1.Icons.plus + `</button> 
+            <button id="game-faster"  class="mybutton">` + icons_1.Icons.plus + `</button> 
             Money:<span id="gamemoney"></span>` + icons_1.Icons.money + `
-            <button id="save-game">` + icons_1.Icons.save + `</button> 
-            <button id="show-diagram">` + icons_1.Icons.diagram + `</button> 
+            <button id="save-game"  class="mybutton">` + icons_1.Icons.save + `</button> 
+            <button id="show-diagram"  class="mybutton">` + icons_1.Icons.diagram + `</button> 
           </div>  
         `;
             this.domHeader = document.createRange().createContextualFragment(sdomHeader).children[0];

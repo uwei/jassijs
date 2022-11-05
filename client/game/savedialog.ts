@@ -57,12 +57,12 @@ export class SaveDialog {
                       
                     </td>
                     <td>
-                        <button id="save-save" title="save" style="width:100%">Save</button>
-                        <button id="save-load" title="save" style="width:100%">Load</button>
-                        <button id="save-delete" title="save" style="width:100%">Delete</button>
-                        <button id="save-export" title="save" style="width:100%">Export</button>
-                        <button id="save-import" title="save" style="width:100%">Import</button>
-                        <button id="save-cancel" title="save" style="width:100%">Cancel</button>
+                        <button id="save-save" title="save" style="width:100%" class="mybutton">Save</button>
+                        <button id="save-load" title="save" style="width:100%" class="mybutton">Load</button>
+                        <button id="save-delete" title="save" style="width:100%" class="mybutton">Delete</button>
+                        <button id="save-export" title="save" style="width:100%" class="mybutton">Export</button>
+                        <button id="save-import" title="save" style="width:100%" class="mybutton">Import</button>
+                        <button id="save-cancel" title="save" style="width:100%" class="mybutton">Cancel</button>
             
                     </td>
                 </tr>    

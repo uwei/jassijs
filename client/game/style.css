@@ -4,7 +4,9 @@ table {
 .boxborder { 
     border: 1px solid black; 
 }
-
+.mybutton{
+    height:28px;
+}
 .active-listitem.ui-state-default{
     background-color:lightgray;
 }
