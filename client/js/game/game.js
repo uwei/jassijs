@@ -140,7 +140,6 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             <button id="game-faster">` + icons_1.Icons.plus + `</button> 
             Money:<span id="gamemoney"></span>` + icons_1.Icons.money + `
             <button id="save-game">` + icons_1.Icons.save + `</button> 
-            <button id="debug-game">` + icons_1.Icons.debug + `</button> 
             <button id="show-diagram">` + icons_1.Icons.diagram + `</button> 
           </div>  
         `;
@@ -169,12 +168,12 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 savedialog_1.SaveDialog.getInstance().game = this;
                 savedialog_1.SaveDialog.getInstance().show();
             });
-            document.getElementById("debug-game").addEventListener("click", () => {
-                for (var x = 0; x < parameter.allProducts.length; x++) {
-                    _this.world.cities[0].shop[x] = 5000;
-                }
-                _this._money = 1000000;
-            });
+            /*   document.getElementById("debug-game").addEventListener("click", () => {
+                 for (var x = 0; x < parameter.allProducts.length; x++) {
+                   _this.world.cities[0].shop[x] = 5000;
+                 }
+                 _this._money = 1000000;
+               });*/
             document.getElementById("show-diagram").addEventListener("click", () => {
                 diagramdialog_1.DiagramDialog.getInstance().world = this.world;
                 diagramdialog_1.DiagramDialog.getInstance().show();

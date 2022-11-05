@@ -42,11 +42,11 @@ export class RouteDialog {
             <input id="routedialog-airplane-prev" type="button" value="<"/>
             <div id="routedialog-airplane-name" style="display:inline;width:50px"></div>
             <input id="routedialog-airplane-next" type="button" value=">"/>
+            <button id="update-all-routes" title="update all routes">`+ Icons.food + `</button>
             <select id="route-select" >
             </select>
             <input id="routedialog-route-next" type="button" value=">"/>
             <button id="route-copy-prev" title="copy prev route">`+ Icons.copy + `</button>
-            <button id="update-all-routes" title="update all routes">`+ Icons.food + `</button>
                       
           </div>
           

@@ -169,7 +169,6 @@ export class Game {
             <button id="game-faster">`+ Icons.plus + `</button> 
             Money:<span id="gamemoney"></span>`+ Icons.money + `
             <button id="save-game">`+ Icons.save + `</button> 
-            <button id="debug-game">`+ Icons.debug + `</button> 
             <button id="show-diagram">`+ Icons.diagram + `</button> 
           </div>  
         `;
@@ -202,12 +201,12 @@ export class Game {
       SaveDialog.getInstance().show();
     });
    
-    document.getElementById("debug-game").addEventListener("click", () => {
+ /*   document.getElementById("debug-game").addEventListener("click", () => {
       for (var x = 0; x < parameter.allProducts.length; x++) {
         _this.world.cities[0].shop[x] = 5000;
       }
       _this._money = 1000000;
-    });
+    });*/
     document.getElementById("show-diagram").addEventListener("click", () => {
       DiagramDialog.getInstance().world = this.world;
       DiagramDialog.getInstance().show();
