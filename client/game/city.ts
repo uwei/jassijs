@@ -110,7 +110,7 @@ export class City {
         this.domShopfull.style.display = "none";
         spanDesc.appendChild(this.domShopfull);
         this.world.dom.appendChild(spanDesc);
-        this.domDesc.style.zIndex = "2";
+        spanDesc.style.zIndex = "2";
         this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
             'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + Icons.airport + '</span>').children[0];
 

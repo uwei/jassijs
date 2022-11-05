@@ -81,7 +81,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.domShopfull.style.display = "none";
             spanDesc.appendChild(this.domShopfull);
             this.world.dom.appendChild(spanDesc);
-            this.domDesc.style.zIndex = "2";
+            spanDesc.style.zIndex = "2";
             this.domAirport = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
                 'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + icons_1.Icons.airport + '</span>').children[0];
             this.world.dom.appendChild(this.domAirport);
