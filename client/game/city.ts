@@ -362,9 +362,9 @@ export class City {
                         //      console.log(x+"kaufe von markt " + price + "<=" + priceMax+" ("+this.market[x]+")");
                         this.market[x] -= diff;
                     }
-                    this.score[x] = Math.round((this.score[x] + 0.2) * 100) / 100;
+                    this.score[x] = Math.round((this.score[x] + 0.1) * 100) / 100;
                 } else {
-                    this.score[x] = Math.round((this.score[x] - 0.15) * 100) / 100;
+                    this.score[x] = Math.round((this.score[x] - 0.1) * 100) / 100;
 
                     // if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
                     // console.log(x+" zu teuer " + price + ">" + priceMax);
@@ -592,10 +592,10 @@ function calcPosNewCity(world: World, deep) {
                 deep--;
                 return calcPosNewCity(world, deep);
             } else { //
-                world.game.mapHeight = world.game.mapHeight + 100;
-                world.game.mapWidth = world.game.mapWidth + 100;
+                world.game.mapHeight = world.game.mapHeight + 50;
+                world.game.mapWidth = world.game.mapWidth + 50;
                 world.game.updateSize();
-                return calcPosNewCity(world, deep);
+                return calcPosNewCity(world, 250);
             }
         }
     }

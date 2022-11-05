@@ -45,7 +45,7 @@ export class Company {
         this.productid = getRandomCompanyType(notThisIds);
         this.buildings = 0;// getRandomInt(3)+1;
         this.workers = parameter.workerInCompany * this.buildings;
-        this.hasLicense = (parameter.allProducts[this.productid].distribution <= 8) ? false : true;
+        this.hasLicense = (parameter.allProducts[this.productid].distribution <= 2) ? false : true;
 
     }
     getMaxWorkers(): number {
@@ -66,22 +66,22 @@ export class Company {
     }
     getDayilyCosts(){
         var fact=8;
-        if(parameter.allProducts[this.productid].distribution===8){
+        if(parameter.allProducts[this.productid].distribution===2){
             fact=9;
         }
-        if(parameter.allProducts[this.productid].distribution===4){
+        if(parameter.allProducts[this.productid].distribution===1){
             fact=10;
         }
         return Math.round(this.workers*fact/parameter.allProducts[this.productid].dailyProduce);
     }
     getBuildingMaterial() {
-        var fact = 5 - (parameter.allProducts[this.productid].distribution) / 4;
+        var fact =4  - (parameter.allProducts[this.productid].distribution) ;
         return [
             fact * 15,
             fact * 15]
     }
     getBuildingCosts() {
-        var fact = 5 - (parameter.allProducts[this.productid].distribution) / 4;
+        var fact = 4 - (parameter.allProducts[this.productid].distribution);
         var buildings=this.buildings+this.city.getBuildingInProgress(this.productid);
         return Math.round(parameter.rateBuyBuilding*fact * 10000+Math.round(parameter.rateBuyBuildingGrowFactor*buildings));
     }

@@ -275,6 +275,17 @@ export class SaveDialog {
             }
             return r;
         });
+        if(parameter.allProducts[0].distribution===16){
+            for(var x=0;x<parameter.allProducts.length;x++){
+                if(parameter.allProducts[x].distribution===16)
+                    parameter.allProducts[x].distribution=3;
+                if(parameter.allProducts[x].distribution===8)
+                    parameter.allProducts[x].distribution=2;
+                if(parameter.allProducts[x].distribution===4)
+                    parameter.allProducts[x].distribution=1;
+                    
+            }
+        }
         var game = this.game;
         Object.assign(this.game, ret);
         game.world.game = game;
