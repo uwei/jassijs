@@ -1,4 +1,4 @@
-define(["require", "exports", "game/product", "game/airplane", "game/route", "game/city", "game/world", "game/company"], function (require, exports, product_1, airplane_1, route_1, city_1, world_1, company_1) {
+define(["require", "exports", "game/product", "game/airplane", "game/route", "game/city", "game/world", "game/company", "game/citydialog"], function (require, exports, product_1, airplane_1, route_1, city_1, world_1, company_1, citydialog_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.SaveDialog = void 0;
@@ -191,6 +191,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
         }
         load(filename) {
             this.game.pause();
+            citydialog_1.CityDialog.getInstance().filteredCities = undefined;
             var data = window.localStorage.getItem("save" + filename);
             var ret = JSON.parse(data, (key, value) => {
                 var r = value;

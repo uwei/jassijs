@@ -36,6 +36,9 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
           <div>
             <input id="citydialog-prev" type="button" value="<"  class="mybutton"/>
             <input id="citydialog-next" type="button" value=">"  class="mybutton"/>
+            <select id="citydialog-filter" style="width:80px">
+                ` + this.productFilter() + `
+            </select>
           </div>
             <div id="citydialog-tabs">
                 <ul>
@@ -72,6 +75,14 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
             //        document.getElementById("citydialog-prev")
             setTimeout(() => { _this.bindActions(); }, 500);
             //document.createElement("span");
+        }
+        productFilter() {
+            var ret = '<option value="all">All</option>';
+            for (var x = 0; x < parameter.allProducts.length; x++) {
+                //  ret+='<option value="'+x+'"><span>'+parameter.allProducts[x].getIcon()+" "+parameter.allProducts[x].name+'</span></option>';
+                ret += '<option value="' + x + '">' + parameter.allProducts[x].name + '</option>';
+            }
+            return ret;
         }
         createBuildings() {
             return `<table id="citydialog-buildings-table" style="height:100%;weight:100%;">
@@ -171,23 +182,52 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
             
             `;
         }
+        nextCity() {
+            var _this = this;
+            if (_this.filteredCities === undefined)
+                _this.filteredCities = _this.city.world.cities;
+            var pos = _this.filteredCities.indexOf(_this.city);
+            pos++;
+            if (pos >= _this.filteredCities.length - 1)
+                pos = 0;
+            _this.city = _this.filteredCities[pos];
+            _this.update(true);
+        }
+        prevCity() {
+            var _this = this;
+            if (this.filteredCities === undefined)
+                this.filteredCities = _this.city.world.cities;
+            var pos = _this.filteredCities.indexOf(_this.city);
+            pos--;
+            if (pos === -1)
+                pos = _this.filteredCities.length - 2;
+            _this.city = _this.filteredCities[pos];
+            _this.update(true);
+        }
         bindActions() {
             var _this = this;
             document.getElementById("citydialog-next").addEventListener("click", (ev) => {
-                var pos = _this.city.world.cities.indexOf(_this.city);
-                pos++;
-                if (pos >= _this.city.world.cities.length - 1)
-                    pos = 0;
-                _this.city = _this.city.world.cities[pos];
-                _this.update(true);
+                _this.nextCity();
             });
             document.getElementById("citydialog-prev").addEventListener("click", (ev) => {
-                var pos = _this.city.world.cities.indexOf(_this.city);
-                pos--;
-                if (pos === -1)
-                    pos = _this.city.world.cities.length - 2;
-                _this.city = _this.city.world.cities[pos];
-                _this.update(true);
+                _this.prevCity();
+            });
+            document.getElementById("citydialog-filter").addEventListener("change", (ev) => {
+                var sel = document.getElementById("citydialog-filter").value;
+                if (sel === "all")
+                    this.filteredCities = _this.city.world.cities;
+                else {
+                    this.filteredCities = [];
+                    for (var x = 0; x < _this.city.world.cities.length; x++) {
+                        var city = _this.city.world.cities[x];
+                        for (var y = 0; y < city.companies.length; y++) {
+                            if (city.companies[y].productid === Number(sel)) {
+                                this.filteredCities.push(city);
+                            }
+                        }
+                    }
+                }
+                _this.nextCity();
             });
             for (var x = 0; x < 5; x++) {
                 document.getElementById("new-factory_" + x).addEventListener("click", (evt) => {

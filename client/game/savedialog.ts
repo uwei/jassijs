@@ -7,6 +7,7 @@ import { City } from "game/city";
 import { World } from "game/world";
 import { Game } from "game/game";
 import { Company } from "game/company";
+import { CityDialog } from "game/citydialog";
 
 export class SaveDialog {
     dom: HTMLDivElement;
@@ -215,6 +216,7 @@ export class SaveDialog {
     }
     load(filename: string) {
         this.game.pause();
+        CityDialog.getInstance().filteredCities=undefined;
         var data = window.localStorage.getItem("save" + filename);
         var ret = JSON.parse(data, (key, value) => {
             var r: any = value;
