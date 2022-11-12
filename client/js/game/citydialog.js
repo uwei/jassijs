@@ -188,9 +188,11 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
                 _this.filteredCities = _this.city.world.cities;
             var pos = _this.filteredCities.indexOf(_this.city);
             pos++;
-            if (pos >= _this.filteredCities.length - 1)
+            if (pos >= _this.filteredCities.length)
                 pos = 0;
             _this.city = _this.filteredCities[pos];
+            if (_this.city === undefined)
+                _this.city = _this.filteredCities[0];
             _this.update(true);
         }
         prevCity() {
@@ -200,8 +202,10 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
             var pos = _this.filteredCities.indexOf(_this.city);
             pos--;
             if (pos === -1)
-                pos = _this.filteredCities.length - 2;
+                pos = _this.filteredCities.length - 1;
             _this.city = _this.filteredCities[pos];
+            if (_this.city === undefined)
+                _this.city = _this.filteredCities[0];
             _this.update(true);
         }
         bindActions() {
