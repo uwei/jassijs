@@ -267,6 +267,7 @@ export class RouteDialog {
         document.getElementById("update-all-routes").addEventListener("click", (e) => {
             _this.loadFillAllConsumtion();
             _this.update();
+             _this.nextAirplane();
         });
         document.getElementById("route-copy-prev").addEventListener("click", (e) => {
             _this.copyRoute();
@@ -279,6 +280,7 @@ export class RouteDialog {
         });
         document.getElementById("routedialog-route-next").addEventListener("click", (e) => {
             _this.nextRoute();
+           
         });
     }
     prevAirplane() {
