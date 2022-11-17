@@ -230,6 +230,8 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
                             }
                         }
                     }
+                    this.filteredCities.sort((a, b) => { return a.shop[parseInt(sel)] - b.shop[parseInt(sel)]; });
+                    this.city = this.filteredCities[this.filteredCities.length - 1];
                 }
                 _this.nextCity();
             });
