@@ -193,6 +193,8 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
             _this.city = _this.filteredCities[pos];
             if (_this.city === undefined)
                 _this.city = _this.filteredCities[0];
+            if (!_this.city.hasAirport)
+                this.nextCity();
             _this.update(true);
         }
         prevCity() {
@@ -206,6 +208,8 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
             _this.city = _this.filteredCities[pos];
             if (_this.city === undefined)
                 _this.city = _this.filteredCities[0];
+            if (!_this.city.hasAirport)
+                this.prevCity();
             _this.update(true);
         }
         bindActions() {
@@ -230,7 +234,20 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
                             }
                         }
                     }
-                    this.filteredCities.sort((a, b) => { return a.shop[parseInt(sel)] - b.shop[parseInt(sel)]; });
+                    this.filteredCities.sort((a, b) => {
+                        var a1, b1;
+                        for (var y = 0; y < a.companies.length; y++) {
+                            if (a.companies[y].productid === Number(sel)) {
+                                a1 = a.companies[y].buildings;
+                            }
+                        }
+                        for (var y = 0; y < b.companies.length; y++) {
+                            if (b.companies[y].productid === Number(sel)) {
+                                b1 = b.companies[y].buildings;
+                            }
+                        }
+                        return a1 - b1;
+                    });
                     this.city = this.filteredCities[this.filteredCities.length - 1];
                 }
                 _this.nextCity();
