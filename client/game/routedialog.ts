@@ -257,17 +257,17 @@ export class RouteDialog {
             _this.update();
         });
         document.getElementById("route-load-fill-consumtion").addEventListener("click", (e) => {
-            RouteDialog.loadFillConsumtion(_this.route,true);
+            RouteDialog.loadFillConsumtion(_this.route, true);
             _this.update();
         });
         document.getElementById("route-load-fill-consumtion-until").addEventListener("click", (e) => {
-            RouteDialog.loadFillConsumtion(this.route,false);
+            RouteDialog.loadFillConsumtion(this.route, false);
             _this.update();
         });
         document.getElementById("update-all-routes").addEventListener("click", (e) => {
             _this.loadFillAllConsumtion();
             _this.update();
-             _this.nextAirplane();
+
         });
         document.getElementById("route-copy-prev").addEventListener("click", (e) => {
             _this.copyRoute();
@@ -280,7 +280,7 @@ export class RouteDialog {
         });
         document.getElementById("routedialog-route-next").addEventListener("click", (e) => {
             _this.nextRoute();
-           
+
         });
     }
     prevAirplane() {
@@ -343,17 +343,24 @@ export class RouteDialog {
         }
         this.update();
     }
-    loadFillAllConsumtion(){
-        for(var x=0;x<this.route.airplane.route.length;x++){
-            if(this.route.airplane.route[x].loadShopAmount[0]!==undefined){
-                RouteDialog.loadFillConsumtion(this.route.airplane.route[x],true);
-            }
-            if(this.route.airplane.route[x].loadShopUntilAmount[0]!==undefined){
-                RouteDialog.loadFillConsumtion(this.route.airplane.route[x],false);
+    loadFillAllConsumtion() {
+        var money = 20000 * this.route.airplane.world.cities.length;
+        if (confirm("Update conumtion in all routes for " + money + "?")) {
+            this.route.airplane.world.game.changeMoney(-money,"update routes");
+            for (var a = 0; a < this.route.airplane.world.airplanes.length; a++) {
+                var ap=this.route.airplane.world.airplanes[a];
+                for (var x = 0; x < ap.route.length; x++) {
+                    if (ap.route[x].loadShopAmount[0] !== undefined) {
+                        RouteDialog.loadFillConsumtion(ap.route[x], true);
+                    }
+                    if (this.route.airplane.route[x].loadShopUntilAmount[0] !== undefined) {
+                        RouteDialog.loadFillConsumtion(ap.route[x], false);
+                    }
+                }
             }
         }
     }
-    static loadFillConsumtion(route:Route,allCities: boolean) {
+    static loadFillConsumtion(route: Route, allCities: boolean) {
         var _this = this;
         var all = route.airplane.route;
         var lenpixel = 0;
@@ -388,26 +395,26 @@ export class RouteDialog {
             }
 
             if (cause) {
-                var allPeople=0;
+                var allPeople = 0;
                 for (var c = 0; c < city.companies.length; c++) {
-                    var buildings=city.companies[c].buildings;
-                    buildings+=city.getBuildingInProgress(city.companies[c].productid);
-                    allPeople+=buildings*parameter.workerInCompany;
+                    var buildings = city.companies[c].buildings;
+                    buildings += city.getBuildingInProgress(city.companies[c].productid);
+                    allPeople += buildings * parameter.workerInCompany;
                     var prod = parameter.allProducts[city.companies[c].productid];
                     if (prod.input1)
-                        store[prod.input1] += Math.round((1.1 * city.companies[c].buildings * prod.input1Amount * totalDays));
+                        store[prod.input1] += Math.round((1.25 * city.companies[c].buildings * prod.input1Amount * totalDays));
                     if (prod.input2)
-                        store[prod.input2] += Math.round((1.1 * city.companies[c].buildings * prod.input2Amount * totalDays));
+                        store[prod.input2] += Math.round((1.25 * city.companies[c].buildings * prod.input2Amount * totalDays));
 
                 }
                 for (var y = 0; y < parameter.allProducts.length; y++) {
-                    store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * (allPeople+parameter.neutralStartPeople));
+                    store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * (allPeople + parameter.neutralStartPeople));
 
                 }
 
             }
         }
-        
+
     }
 
 

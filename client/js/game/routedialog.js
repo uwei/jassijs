@@ -246,7 +246,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             document.getElementById("update-all-routes").addEventListener("click", (e) => {
                 _this.loadFillAllConsumtion();
                 _this.update();
-                _this.nextAirplane();
             });
             document.getElementById("route-copy-prev").addEventListener("click", (e) => {
                 _this.copyRoute();
@@ -321,12 +320,19 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             this.update();
         }
         loadFillAllConsumtion() {
-            for (var x = 0; x < this.route.airplane.route.length; x++) {
-                if (this.route.airplane.route[x].loadShopAmount[0] !== undefined) {
-                    RouteDialog.loadFillConsumtion(this.route.airplane.route[x], true);
-                }
-                if (this.route.airplane.route[x].loadShopUntilAmount[0] !== undefined) {
-                    RouteDialog.loadFillConsumtion(this.route.airplane.route[x], false);
+            var money = 20000 * this.route.airplane.world.cities.length;
+            if (confirm("Update conumtion in all routes for " + money + "?")) {
+                this.route.airplane.world.game.changeMoney(-money, "update routes");
+                for (var a = 0; a < this.route.airplane.world.airplanes.length; a++) {
+                    var ap = this.route.airplane.world.airplanes[a];
+                    for (var x = 0; x < ap.route.length; x++) {
+                        if (ap.route[x].loadShopAmount[0] !== undefined) {
+                            RouteDialog.loadFillConsumtion(ap.route[x], true);
+                        }
+                        if (this.route.airplane.route[x].loadShopUntilAmount[0] !== undefined) {
+                            RouteDialog.loadFillConsumtion(ap.route[x], false);
+                        }
+                    }
                 }
             }
         }
@@ -373,9 +379,9 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                         allPeople += buildings * parameter.workerInCompany;
                         var prod = parameter.allProducts[city.companies[c].productid];
                         if (prod.input1)
-                            store[prod.input1] += Math.round((1.1 * city.companies[c].buildings * prod.input1Amount * totalDays));
+                            store[prod.input1] += Math.round((1.25 * city.companies[c].buildings * prod.input1Amount * totalDays));
                         if (prod.input2)
-                            store[prod.input2] += Math.round((1.1 * city.companies[c].buildings * prod.input2Amount * totalDays));
+                            store[prod.input2] += Math.round((1.25 * city.companies[c].buildings * prod.input2Amount * totalDays));
                     }
                     for (var y = 0; y < parameter.allProducts.length; y++) {
                         store[y] += Math.round(1.1 * totalDays * parameter.allProducts[y].dailyConsumtion * (allPeople + parameter.neutralStartPeople));
