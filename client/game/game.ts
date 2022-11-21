@@ -43,6 +43,7 @@ export class Parameter {
   capacityShop=5000;
   allProducts:Product[];
   daysBuildBuilding=4;
+  costsAdvertising=2000;
   allAirplaneTypes=[
     {typeid:0,model:"Airplane A",speed:200,capacity:200, costs:60,buildDays:20,buildingCosts:20000,buildingMaterial:[0,0,0,10,0,10,0,10,0,10,0,0,0,0,10]},
     {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:25,buildingCosts:40000,buildingMaterial:[0,0,0,20,0,20,0,20,0,20,0,0,0,0,20]},

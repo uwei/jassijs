@@ -16,6 +16,7 @@ export class World {
     _intervall;
     cities: City[];
     airplanes: Airplane[];
+    advertising:number[];
     selection;
     dom: HTMLElement;
     game: Game;
@@ -25,6 +26,11 @@ export class World {
         var _this = this;
         this.cities = [];
         this.airplanes = [];
+        this.advertising=[];
+        for(var x=0;x<parameter.allProducts.length;x++){
+            this.advertising.push(undefined);
+        }
+        this.advertising
         this._intervall = setInterval(() => {
             for (var x = 0; x < _this.airplanes?.length; x++) {
                 /*if (this.airplanes[x].x < 500)
@@ -124,6 +130,11 @@ export class World {
             this.cities[x].update();
         }
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
+            for(var y=0;y<parameter.allProducts.length;y++){
+                if(this.game.world.advertising[y]&&this.game.date.getTime()>this.game.world.advertising[y]){
+                    this.game.world.advertising[y]=undefined;
+                }
+            }
             var ges = 0;
             for (var x = 0; x < this.airplanes.length; x++) {
                 ges += Math.round(this.airplanes[x].getDailyCosts()*parameter.rateCostsAirplaine);

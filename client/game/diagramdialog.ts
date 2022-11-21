@@ -28,6 +28,16 @@ export class DiagramDialog {
         document.getElementById("diagramdialog-refresh").addEventListener('click', (e) => {
             _this.update();
         });
+        for (var x = 0; x < parameter.allProducts.length; x++) {
+            document.getElementById("diagram-advertise_" + x).addEventListener("click", (evt) => {
+                var sid = (<any>evt.target).id;
+                 var id = Number(sid.split("_")[1]);
+                var money=_this.world.cities.length * parameter.costsAdvertising;
+                _this.world.game.changeMoney(-money,"advertising");
+                _this.world.advertising[id]=new Date(_this.world.game.date.getTime()+30*24*60*60*1000).getTime();
+                _this.update();
+            });
+        }
     }
 
     private create() {
@@ -38,7 +48,7 @@ export class DiagramDialog {
            </div>
         `;
         this.dom = <any>document.createRange().createContextualFragment(sdom).children[0];
-        var old = document.getElementById("DiagramDialog");
+        var old = document.getElementById("diagramdialog");
         if (old) {
             old.parentNode.removeChild(old);
         }
@@ -84,6 +94,7 @@ export class DiagramDialog {
                             <th>Name</th>
                             <th> </th>
                             <th>count Buildings</th>
+                            <th>Advertise</th>
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -92,6 +103,7 @@ export class DiagramDialog {
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
                     ret = ret + "<td>0</td>";
+                    ret = ret + "<td>" + '<button id="diagram-advertise_' + x + '" class="mybutton"></button>' + "</td>";
                     ret = ret + "</tr>";
                 }
                 return ret;
@@ -130,6 +142,14 @@ export class DiagramDialog {
                 sh = sh + "(" + inprogr + Icons.hammer + ")";
             }
             tr.children[2].innerHTML = sh;
+            var but = <HTMLButtonElement>document.getElementById("diagram-advertise_" + x);
+            if (this.world.advertising[x]) {
+                but.innerHTML = "until " + new Date(this.world.advertising[x]).toLocaleDateString();
+                but.setAttribute("disabled", "");
+            } else {
+                but.removeAttribute("disabled");
+                but.innerHTML = "for " + this.world.cities.length * parameter.costsAdvertising+" "+Icons.money;
+            }
         }
 
         //
