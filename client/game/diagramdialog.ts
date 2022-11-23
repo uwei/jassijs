@@ -28,6 +28,12 @@ export class DiagramDialog {
         document.getElementById("diagramdialog-refresh").addEventListener('click', (e) => {
             _this.update();
         });
+        document.getElementById("buildWithOneClick").addEventListener('change', (e) => {
+            var num=parseInt((<HTMLInputElement>document.getElementById("buildWithOneClick")).value);
+            parameter.numberBuildWithOneClick=num;
+            _this.update();
+        });
+        
         for (var x = 0; x < parameter.allProducts.length; x++) {
             document.getElementById("diagram-advertise_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
@@ -61,12 +67,16 @@ export class DiagramDialog {
                 <ul>
                     <li><a href="#diagramdialog-buildings" id="diagramdialog-buildings-tab" class="diagramdialog-tabs">Buildings</a></li>
                     <li><a href="#diagramdialog-balance" id="diagramdialog-balance-tab" class="diagramdialog-tabs">Balance</a></li>
+                    <li><a href="#diagramdialog-settings" id="diagramdialog-settings-tab" class="diagramdialog-tabs">Settings</a></li>
                 </ul>
                  <div id="diagramdialog-buildings">`+ _this.createBuildings() + `
                 </div> 
                 <div id="diagramdialog-balance">   
                     <table id="diagramdialog-balance-table">
                     </table>         
+                </div>
+                 <div id="diagramdialog-settings">   
+                       number build company with one click: <input id="buildWithOneClick"  value="""/>
                 </div>
             </div>
            </div> 
@@ -111,6 +121,7 @@ export class DiagramDialog {
                     </table>`;
     }
     update() {
+         (<HTMLInputElement>document.getElementById("buildWithOneClick")).value=""+parameter.numberBuildWithOneClick;
         try {
             if (!$(this.dom).dialog('isOpen')) {
                 return;

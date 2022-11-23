@@ -207,12 +207,12 @@ export class CityDialog {
             _this.filteredCities = _this.city.world.cities;
         var pos = _this.filteredCities.indexOf(_this.city);
         pos++;
-        if (pos >= _this.filteredCities.length )
+        if (pos >= _this.filteredCities.length)
             pos = 0;
         _this.city = _this.filteredCities[pos];
-        if(_this.city===undefined)
-            _this.city=_this.filteredCities[0];
-        if(!_this.city.hasAirport)
+        if (_this.city === undefined)
+            _this.city = _this.filteredCities[0];
+        if (!_this.city.hasAirport)
             this.nextCity();
         _this.update(true);
     }
@@ -225,11 +225,11 @@ export class CityDialog {
         if (pos === -1)
             pos = _this.filteredCities.length - 1;
         _this.city = _this.filteredCities[pos];
-        if(_this.city===undefined)
-            _this.city=_this.filteredCities[0];
-         if(!_this.city.hasAirport)
+        if (_this.city === undefined)
+            _this.city = _this.filteredCities[0];
+        if (!_this.city.hasAirport)
             this.prevCity();
-       
+
         _this.update(true);
     }
     bindActions() {
@@ -245,30 +245,30 @@ export class CityDialog {
             if (sel === "all")
                 this.filteredCities = _this.city.world.cities;
             else {
-                this.filteredCities=[];
-                for(var x=0;x<_this.city.world.cities.length;x++){
-                    var city=_this.city.world.cities[x];
-                    for(var y=0;y<city.companies.length;y++){
-                        if(city.companies[y].productid===Number(sel)){
-                             this.filteredCities.push(city);
+                this.filteredCities = [];
+                for (var x = 0; x < _this.city.world.cities.length; x++) {
+                    var city = _this.city.world.cities[x];
+                    for (var y = 0; y < city.companies.length; y++) {
+                        if (city.companies[y].productid === Number(sel)) {
+                            this.filteredCities.push(city);
                         }
                     }
                 }
-                this.filteredCities.sort((a,b)=>{
-                    var a1,b1;
-                    for(var y=0;y<a.companies.length;y++){
-                        if(a.companies[y].productid===Number(sel)){
-                             a1=a.companies[y].buildings;
+                this.filteredCities.sort((a, b) => {
+                    var a1, b1;
+                    for (var y = 0; y < a.companies.length; y++) {
+                        if (a.companies[y].productid === Number(sel)) {
+                            a1 = a.companies[y].buildings;
                         }
                     }
-                    for(var y=0;y<b.companies.length;y++){
-                        if(b.companies[y].productid===Number(sel)){
-                             b1=b.companies[y].buildings;
+                    for (var y = 0; y < b.companies.length; y++) {
+                        if (b.companies[y].productid === Number(sel)) {
+                            b1 = b.companies[y].buildings;
                         }
                     }
-                    return a1-b1;
+                    return a1 - b1;
                 });
-                this.city=this.filteredCities[this.filteredCities.length-1];
+                this.city = this.filteredCities[this.filteredCities.length - 1];
             }
             _this.nextCity();
         });
@@ -280,10 +280,11 @@ export class CityDialog {
                     sid = (<any>evt.target).parentNode.id
                 var id = Number(sid.split("_")[1]);
                 var comp = _this.city.companies[id];
-
-                if (!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building"))
-                    return;
-                _this.city.buildBuilding(comp.productid);
+                for (var i = 0; i < parameter.numberBuildWithOneClick; i++) {
+                    if (!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building"))
+                        return;
+                    _this.city.buildBuilding(comp.productid);
+                }
                 //comp.buildings++;
                 _this.update();
             });
