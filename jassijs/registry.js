@@ -275,7 +275,7 @@ exports.default={
 		"date": 1656244788687
 	},
 	"jassijs/server/JassiServer.ts": {
-		"date": 1656280353428
+		"date": 1670059415132
 	},
 	"jassijs/server/PassportLoginRegister.ts": {
 		"date": 1622984046000

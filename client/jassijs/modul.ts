@@ -42,7 +42,7 @@ export default {
             'jquery.ui': '//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui',
             'jquery.ui.touch': '//cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min',
             //use dblcklick 'jquery.doubletap': '//cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/2.0.3/jquery.mobile-events.min',
-            'jquery.notify': '//cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min',
+            'jquery.notify': '//cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min', 
             'jquery.language':jquery_language, 
             'js-cookie': '//cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min',
             'lodash': '//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min',
@@ -54,11 +54,13 @@ export default {
             //'tabulatorlib': '//unpkg.com/tabulator-tables@5.2.7/dist/js/tabulator',
             'tabulatorlib': '//unpkg.com/tabulator-tables@5.1.4/dist/js/tabulator',
             'tinymcelib': tinyurl+'/tinymce.min',//also define in tinymce.js
+            'tabulator-tables': "jassijs/ext/tabulator",
+            //"tabulatorext":'jassijs/ext/tabulator',
            // 'tinymcelib': '//cdnjs.cloudflare.com/ajax/libs/tinymce/6.0.3/tinymce.min'//also define in tinymce.js
            "reflect-metadata": "https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.13/Reflect"
         },
         "shim": {
-            'tabulator-tables': ['jassijs/ext/tabulator'],
+            //'tabulator-tables': ['tabulatorext'],
             'goldenlayout': ["jquery"],
             "jquery.choosen": ["jquery"],
             "jquery.contextMenu": ["jquery.ui"],

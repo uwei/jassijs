@@ -56,7 +56,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/modul.ts": {
-		"date": 1657921656489
+		"date": 1670059899996
 	},
 	"jassijs/remote/Classes.ts": {
 		"date": 1655556496250,

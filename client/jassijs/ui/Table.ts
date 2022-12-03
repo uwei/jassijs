@@ -7,7 +7,7 @@ import { Textbox } from "jassijs/ui/Textbox";
 import { Calendar } from "jassijs/ui/Calendar";
 import { Databinder } from "jassijs/ui/Databinder";
 import { classes } from "jassijs/remote/Classes";
-import { Tabulator } from "tabulator-tables";
+import { Tabulator } from "tabulator-tables"; 
 import { DateTimeConverter, DateTimeFormat } from "jassijs/ui/converters/DateTimeConverter";
 import { Numberformatter } from "jassijs/util/Numberformatter";
 interface LazyLoadOption {
