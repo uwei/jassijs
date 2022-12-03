@@ -26,7 +26,7 @@ class JassiConnectionProperties {
  * @returns expressApp
  */
 function JassiServer(properties = {}, expressApp = undefined) {
-    console.log("DB" + process.env.DATABASE_URL);
+    console.log("DB URL" + process.env.DATABASE_URL);
     let app = expressApp;
     if (app === undefined)
         app = express();
