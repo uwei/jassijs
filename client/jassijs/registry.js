@@ -56,7 +56,7 @@ define("jassijs/registry",["require"], function(require) {
 		"jassijs.base.Windows": {}
 	},
 	"jassijs/modul.ts": {
-		"date": 1670059899996
+		"date": 1670062127376
 	},
 	"jassijs/remote/Classes.ts": {
 		"date": 1655556496250,
@@ -1251,7 +1251,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/ui/Table.ts": {
-		"date": 1658337768787,
+		"date": 1670084418238,
 		"jassijs.ui.TableEditorProperties": {
 			"@members": {}
 		},

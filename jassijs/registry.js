@@ -262,7 +262,7 @@ exports.default={
 		"date": 1625397512000
 	},
 	"jassijs/server/DBManager.ts": {
-		"date": 1657972013448,
+		"date": 1670062537861,
 		"jassi_localserver.DBManager": {}
 	},
 	"jassijs/server/DoRemoteProtocol.ts": {
@@ -275,7 +275,7 @@ exports.default={
 		"date": 1656244788687
 	},
 	"jassijs/server/JassiServer.ts": {
-		"date": 1670059415132
+		"date": 1670062843323
 	},
 	"jassijs/server/PassportLoginRegister.ts": {
 		"date": 1622984046000

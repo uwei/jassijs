@@ -265,7 +265,7 @@ export class Table extends DataComponent implements TableConfig {
                 data = _this.items[0][definitions[x].field];
                 if (typeof data === "function")
                     continue;
-                if (data instanceof Date || definitions[x].formatter === undefined) {
+                if (data instanceof Date && definitions[x].formatter === undefined) {
                     definitions[x].formatter = function (cell, formatterParams, onRendered) {
                         return cell.getValue() === undefined ? "" : cell.getValue().toLocaleDateString(); //return the contents of the cell;
                     };
