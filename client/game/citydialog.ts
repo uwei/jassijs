@@ -280,7 +280,20 @@ export class CityDialog {
                     sid = (<any>evt.target).parentNode.id
                 var id = Number(sid.split("_")[1]);
                 var comp = _this.city.companies[id];
-                for (var i = 0; i < parameter.numberBuildWithOneClick; i++) {
+                     if (!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building"))
+                        return;
+                    _this.city.buildBuilding(comp.productid);
+                //comp.buildings++;
+                _this.update();
+            });
+             document.getElementById("new-factory_" + x).addEventListener("contextmenu", (evt) => {
+                 evt.preventDefault();
+                var sid = (<any>evt.target).id;
+                if (sid === "")
+                    sid = (<any>evt.target).parentNode.id
+                var id = Number(sid.split("_")[1]);
+                var comp = _this.city.companies[id];
+                for (var i = 0; i < parameter.numberBuildWithContextMenu; i++) {
                     if (!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building"))
                         return;
                     _this.city.buildBuilding(comp.productid);

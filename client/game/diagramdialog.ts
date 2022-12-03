@@ -30,7 +30,7 @@ export class DiagramDialog {
         });
         document.getElementById("buildWithOneClick").addEventListener('change', (e) => {
             var num=parseInt((<HTMLInputElement>document.getElementById("buildWithOneClick")).value);
-            parameter.numberBuildWithOneClick=num;
+            parameter.numberBuildWithContextMenu=num;
             _this.update();
         });
         
@@ -121,7 +121,7 @@ export class DiagramDialog {
                     </table>`;
     }
     update() {
-         (<HTMLInputElement>document.getElementById("buildWithOneClick")).value=""+parameter.numberBuildWithOneClick;
+         (<HTMLInputElement>document.getElementById("buildWithOneClick")).value=""+parameter.numberBuildWithContextMenu;
         try {
             if (!$(this.dom).dialog('isOpen')) {
                 return;

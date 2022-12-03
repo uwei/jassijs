@@ -52,7 +52,11 @@ export default function JassiServer(properties: JassiConnectionProperties={}, ex
     if (properties.updeateRegistryOnStart!==false)
         new ServerIndexer().updateRegistry();
     if (properties.syncRemoteFiles!==false){
+      try{
         syncRemoteFiles();
+      }catch{
+        console.log("could not sync remotefiles");
+      }
     }
     app.use(staticfiles);
     app.use(rawbody);
