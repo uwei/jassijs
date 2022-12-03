@@ -41,6 +41,8 @@ let DBManager = DBManager_1 = class DBManager {
         if (test !== undefined) {
             var all = test.split(":");
             stype = all[0];
+            if (stype === "postgresql")
+                stype = "postgres";
             var h = all[2].split("@");
             shost = h[1];
             iport = Number(all[3].split("/")[0]);
