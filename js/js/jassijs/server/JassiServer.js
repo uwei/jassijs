@@ -26,7 +26,6 @@ class JassiConnectionProperties {
  * @returns expressApp
  */
 function JassiServer(properties = {}, expressApp = undefined) {
-    console.log("DB" + process.env.DATABASE_URL);
     let app = expressApp;
     if (app === undefined)
         app = express();
@@ -57,19 +56,4 @@ function JassiServer(properties = {}, expressApp = undefined) {
     return app;
 }
 exports.default = JassiServer;
-/*
-if(process.env.PORT){
-  app.listen(PORT, () => console.log(`Listening on ${PORT}`));
-}else{
-  var server=https.createServer({
-    key:fs.readFileSync("mycert/uwei.selfhost.key"),
-    cert:fs.readFileSync("mycert/uwei.selfhost.crt")
-    //pfx:fs.readFileSync("mycert/mycert.pfx"),
-    //passphrase:"j@ssi"
-  },app);
-  server.listen(PORT,()=>{
-    console.log(`Listening on ${PORT}`)
-  })
-}*/
-//process.env.PORT
 //# sourceMappingURL=JassiServer.js.map
