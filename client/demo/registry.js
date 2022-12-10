@@ -118,7 +118,7 @@ define("demo/registry",["require"], function(require) {
 		"date": 1656621988396
 	},
 	"demo/_test1.ts": {
-		"date": 1670673552183
+		"date": 1670673958420
 	}
 }
  }

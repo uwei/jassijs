@@ -99,13 +99,11 @@ export class Route {
                 max = Math.min(this.maxLoad - this.airplane.products[x],max);
                 if (max < 0)
                     max = 0;
-            }
+            } 
             if (max && city.shopMinStock[x]) {
-                if (city.shop[x] - max < city.shopMinStock[x]) {
-                    max = city.shop[x] - city.shopMinStock[x];
+                max=max-city.shopMinStock[x];
                     if (max < 0)
                         max = 0;
-                }
             }
             if (max && max > (this.airplane.capacity - this.airplane.loadedCount))
                 max = this.airplane.capacity - this.airplane.loadedCount;
