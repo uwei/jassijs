@@ -276,6 +276,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
    * deletes a server modul
    **/
     async testServersideFile(name, context = undefined) {
+        var _a;
         if (!name.startsWith("$serverside/"))
             throw new Classes_1.JassiError(name + " i not a serverside file");
         if (!(context === null || context === void 0 ? void 0 : context.isServer)) {
@@ -289,7 +290,7 @@ let Server = Server_1 = class Server extends RemoteObject_1.RemoteObject {
                 throw new Classes_1.JassiError("only admins can delete");
             }
             //@ts-ignore
-            var test = (await Promise.resolve().then(() => require(name.replaceAll("$serverside/", "")))).test;
+            var test = (await (_a = name.replaceAll("$serverside/", ""), Promise.resolve().then(() => require(_a)))).test;
             if (test)
                 Server_1.lastTestServersideFileResult = await test();
             return Server_1.lastTestServersideFileResult;

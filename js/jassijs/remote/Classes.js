@@ -43,6 +43,7 @@ let Classes = class Classes {
      * @param classname - the class to load
      */
     async loadClass(classname) {
+        var _a, _b;
         var cl = await Registry_1.default.getJSONData("$Class", classname);
         if (cl === undefined) {
             try {
@@ -52,7 +53,7 @@ let Classes = class Classes {
                     await Promise.resolve().then(() => require.main.require(classname.replaceAll(".", "/")));
                 }
                 else {
-                    await Promise.resolve().then(() => require(classname.replaceAll(".", "/")));
+                    await (_a = classname.replaceAll(".", "/"), Promise.resolve().then(() => require(_a)));
                 }
             }
             catch (err) {
@@ -77,7 +78,7 @@ let Classes = class Classes {
                 var imp = await Promise.resolve().then(() => require.main.require(file.replace(".ts", "")));
             }
             else {
-                var imp = await Promise.resolve().then(() => require(file.replace(".ts", "")));
+                var imp = await (_b = file.replace(".ts", ""), Promise.resolve().then(() => require(_b)));
             }
         }
         return this.getClass(classname);

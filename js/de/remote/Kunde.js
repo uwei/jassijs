@@ -19,6 +19,9 @@ const DBObjectQuery_1 = require("jassijs/remote/DBObjectQuery");
 const Rights_1 = require("jassijs/remote/security/Rights");
 //import "jassijs/ext/enableExtension.js?de.Kunde";
 let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
+    initExtensions() {
+        //this function would be extended
+    }
     constructor() {
         super();
         this.id = 0;
@@ -28,9 +31,6 @@ let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
         this.PLZ = "";
         this.hausnummer = 0;
         this.initExtensions();
-    }
-    initExtensions() {
-        //this function would be extended
     }
     /**
     * add here all properties for the PropertyEditor

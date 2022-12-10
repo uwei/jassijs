@@ -39,14 +39,14 @@ exports.MyFindManyOptions = MyFindManyOptions;
 * @class DBObject
 */
 let DBObject = DBObject_1 = class DBObject extends RemoteObject_1.RemoteObject {
-    constructor() {
-        super();
-    }
     //clear cache on reload
     static _initFunc() {
         Registry_2.default.onregister("$Class", (data, name) => {
             delete DBObject_1.cache[name];
         });
+    }
+    constructor() {
+        super();
     }
     isAutoId() {
         var _a;

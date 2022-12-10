@@ -109,7 +109,7 @@ export class DBManager {
          opts.ssl={
           rejectUnauthorized: false
        }
-//          opts["ssl"] = true;
+//          opts["ssl"] = true; 
           _initrunning = createConnection(opts);
           await _initrunning;
 

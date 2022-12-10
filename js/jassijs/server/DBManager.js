@@ -96,7 +96,7 @@ let DBManager = DBManager_1 = class DBManager {
                     opts.ssl = {
                         rejectUnauthorized: false
                     };
-                    //          opts["ssl"] = true;
+                    //          opts["ssl"] = true; 
                     _initrunning = (0, typeorm_1.createConnection)(opts);
                     await _initrunning;
                 }
@@ -275,7 +275,6 @@ let DBManager = DBManager_1 = class DBManager {
         return retob;
     }
     async save(context, entity, options) {
-        var _a;
         await this._checkParentRightsForSave(context, entity);
         if (((window === null || window === void 0 ? void 0 : window.document) === undefined)) { //crypt password only in nodes
             if (Classes_1.classes.getClassName(entity) === "jassijs.security.User" && entity.password !== undefined) {
@@ -297,7 +296,7 @@ let DBManager = DBManager_1 = class DBManager {
         //delete entity.password;
         //delete ret["password"];
         //@ts-ignore
-        return (_a = ret) === null || _a === void 0 ? void 0 : _a.id;
+        return ret === null || ret === void 0 ? void 0 : ret.id;
     }
     async _checkParentRightsForSave(context, entity) {
         var _a;

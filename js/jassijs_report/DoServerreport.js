@@ -23,7 +23,8 @@ class DoServerreport {
         doc.end();
     }
     async getDesign(path, parameter) {
-        var fill = (await Promise.resolve().then(() => require(path))).fill;
+        var _a;
+        var fill = (await (_a = path, Promise.resolve().then(() => require(_a)))).fill;
         var content = await fill(parameter);
         return content;
     }
