@@ -72,7 +72,7 @@ parameter.allProducts= [
   new Product({ id: 10, name: "Kleidung", dailyProduce: 1, input1: 4, input1Amount: 2, input2: undefined, input2Amount: 0,  priceProduction: 286,  distribution: 2,amountForPeople:1  }),
   new Product({ id: 11, name: "Fisch", dailyProduce: 3, input1: undefined, input1Amount: undefined, input2: undefined, input2Amount: 0, priceProduction: 60,distribution: 2,amountForPeople:2  }),
   new Product({ id: 12, name: "Apfel", dailyProduce: 4, input1: undefined, input1Amount: undefined, input2: undefined, input2Amount: 0,priceProduction: 45,  distribution: 2 ,amountForPeople:3 }),
-  new Product({ id: 13, name: "Saft", dailyProduce: 3, input1: 12, input1Amount: 1, input2: undefined, input2Amount: 0,priceProduction: 85,  distribution: 8 ,amountForPeople:3 }),
+  new Product({ id: 13, name: "Saft", dailyProduce: 3, input1: 12, input1Amount: 1, input2: undefined, input2Amount: 0,priceProduction: 85,  distribution: 1 ,amountForPeople:3 }),
   new Product({ id: 14, name: "Gold", dailyProduce: 2, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 100,  distribution: 1 ,amountForPeople: 1}), 
   new Product({ id: 15, name: "Schmuck", dailyProduce: 2, input1: 14, input1Amount: 1, input2: undefined, input2Amount: 0,  priceProduction: 184, distribution: 1 ,amountForPeople:2 }),
   new Product({ id: 16, name: "Spielzeug", dailyProduce: 1, input1: 4, input1Amount: 0.5, input2: 7, input2Amount: 0.5,  priceProduction: 274,  distribution: 1,amountForPeople:1  }),

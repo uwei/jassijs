@@ -32,6 +32,8 @@ export class SquadronDialog {
         var _this = this;
         document.getElementById("airplanes-in-city").addEventListener("click", (ev) => {
             var el = <HTMLElement>ev.target;
+            if(!(el instanceof HTMLLIElement))
+                return;
             var select = document.getElementById("airplanes-in-city");
             for (var x = 0; x < select.children.length; x++) {
                 select.children[x].classList.remove("active-listitem");

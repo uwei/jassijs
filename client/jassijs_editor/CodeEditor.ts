@@ -613,10 +613,10 @@ export class CodeEditor extends Panel {
         //@ts-ignore 
         var tss = await import("jassijs_editor/util/Typescript");
         //@ts-ignore 
-        var settings = Typescript.compilerSettings;
+        var settings = Object.assign({},Typescript.compilerSettings);
         settings["inlineSourceMap"] = true;
         settings["inlineSources"] = true;
-        var files = await tss.default.transpile(file + ".ts", code);
+        var files = await tss.default.transpile(file + ".ts", code,settings);
 
         var codets = -1;
         var codemap = -1;

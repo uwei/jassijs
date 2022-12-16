@@ -15,7 +15,7 @@ define("jassijs_editor/registry",["require"], function(require) {
 		"jassijs_editor.ChromeDebugger": {}
 	},
 	"jassijs_editor/CodeEditor.ts": {
-		"date": 1656337058050,
+		"date": 1671231419201,
 		"jassijs_editor.CodeEditorSettingsDescriptor": {
 			"$SettingsDescriptor": [],
 			"@members": {}

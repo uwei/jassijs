@@ -527,10 +527,10 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Panel", "ja
             //@ts-ignore 
             var tss = await new Promise((resolve_1, reject_1) => { require(["jassijs_editor/util/Typescript"], resolve_1, reject_1); });
             //@ts-ignore 
-            var settings = Typescript_1.Typescript.compilerSettings;
+            var settings = Object.assign({}, Typescript_1.Typescript.compilerSettings);
             settings["inlineSourceMap"] = true;
             settings["inlineSources"] = true;
-            var files = await tss.default.transpile(file + ".ts", code);
+            var files = await tss.default.transpile(file + ".ts", code, settings);
             var codets = -1;
             var codemap = -1;
             var codejs = -1;

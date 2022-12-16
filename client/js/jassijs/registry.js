@@ -299,7 +299,7 @@ define("jassijs/registry",["require"], function(require) {
 		}
 	},
 	"jassijs/remote/Server.ts": {
-		"date": 1656331319093,
+		"date": 1671231018271,
 		"jassijs.remote.Server": {}
 	},
 	"jassijs/remote/Settings.ts": {
