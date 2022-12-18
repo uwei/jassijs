@@ -314,7 +314,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                 });
             }
             document.getElementById("buy-shop").addEventListener("click", (evt) => {
-                if (!_this.city.commitBuildingCosts(15000, [20, 40], "buy building"))
+                if (!_this.city.commitBuildingCosts(15000, [], "buy building"))
                     return;
                 _this.city.buildBuilding(10000);
                 _this.update();
@@ -426,7 +426,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
             }
             document.getElementById("count-shops").innerHTML = "" + sh;
             document.getElementById("costs-shops").innerHTML = "" + this.city.getDailyCostsShops();
-            if (this.city.canBuild(15000, [20, 40]) !== "") {
+            if (this.city.canBuild(15000, []) !== "") {
                 document.getElementById("buy-shop").setAttribute("disabled", "");
             }
             else {
