@@ -37,7 +37,7 @@ export class Parameter {
   rateCostShop = 100;
   rateCostsShopMany = 1000;
   workerInCompany = 20;
-  neutralStartPeople = 500;
+  neutralStartPeople = 200;
   neutralProductionRate = 2;
   newAirportRate=1.05;
   capacityShop=5000;
@@ -145,7 +145,7 @@ export class Game {
   newGame() {
     this.world = new World();
     this.world.game = this;
-    this._money = 50000;
+    this._money = 100000;
     this.world.newGame();
   }
   getMoney() {
