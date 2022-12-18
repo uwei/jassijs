@@ -13,11 +13,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Typescript = void 0;
     let Typescript = Typescript_1 = class Typescript {
-        constructor() {
-            this.initInIdle = true;
-            if (Typescript_1._isInited === undefined)
-                this.waitForInited = this.initService();
-        }
         isInited(file) {
             return Typescript_1._isInited === true;
         }
@@ -49,6 +44,11 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Server"
                 ret.contents.push(comp.sourceMapText);
             }
             return ret;
+        }
+        constructor() {
+            this.initInIdle = true;
+            if (Typescript_1._isInited === undefined)
+                this.waitForInited = this.initService();
         }
         static initMonaco() {
             /* monaco.languages.typescript.javascriptDefaults.setCompilerOptions({

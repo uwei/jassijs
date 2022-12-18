@@ -42,13 +42,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     TreeEditorProperties = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.TreeEditorProperties")
     ], TreeEditorProperties);
-    let Tree = 
-    /*@$Property({ name: "new/selectMode", type: "number", default: 3, chooseFrom: [1, 2, 3], description: "1=single 2=multi 3=multi_hier" })
-    @$Property({ name: "new/checkbox", type: "boolean", default: false, description: "desplay a checkbos before the node" })
-    @$Property({ name: "new/multi", type: "json" })
-    @$Property({ name: "new/multi/mode", type: "string", default: "", chooseFrom: ["", "sameParent", "sameLevel"], description: "multi selection mode" })
-    */
-    class Tree extends Component_1.Component {
+    let Tree = class Tree extends Component_1.Component {
         constructor(options) {
             super();
             super.init('<div class="Tree"></div>');

@@ -4,34 +4,22 @@ import { Airplane } from "game/airplane";
 export class Route {
     cityid: number;
     maxLoad: number;
-    unloadMarketAmount: number[];
-    unloadMarketPrice: number[];
     unloadShopAmount: number[];
-    loadMarketAmount: number[];
-    loadMarketPrice: number[];
     loadShopAmount: number[];
     loadShopUntilAmount: number[];
     airplane: Airplane;
     type = "Route";
     constructor() {
-        this.unloadMarketAmount = [];
-        this.unloadMarketPrice = [];
         this.unloadShopAmount = [];
-        this.loadMarketAmount = [];
-        this.loadMarketPrice = [];
         this.loadShopAmount = [];
         this.loadShopUntilAmount = [];
         for (var x = 0; x < parameter.allProducts.length; x++) {
-            this.unloadMarketAmount.push(undefined);
-            this.unloadMarketPrice.push(parameter.allProducts[x].priceSelling);
             this.unloadShopAmount.push(undefined);
-            this.loadMarketAmount.push(undefined);
-            this.loadMarketPrice.push(parameter.allProducts[x].pricePurchase);
             this.loadShopAmount.push(undefined);
             this.loadShopUntilAmount.push(undefined);
         }
     }
-    unloadMarket() {
+   /* unloadMarket() {
         var city = this.airplane.world.cities[this.cityid];
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var max = this.airplane.products[x];
@@ -58,7 +46,7 @@ export class Route {
 
             }
         }
-    }
+    }*/
     unloadShop() {
         var city = this.airplane.world.cities[this.cityid];
         for (var x = 0; x < parameter.allProducts.length; x++) {
@@ -112,7 +100,7 @@ export class Route {
         }
 
     }
-    loadMarket() {
+  /*  loadMarket() {
         var city = this.airplane.world.cities[this.cityid];
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var max = this.loadMarketAmount[x];
@@ -139,14 +127,14 @@ export class Route {
 
             }
         }
-    }
+    }*/
     load() {
         this.loadShop();
-        this.loadMarket();
+       // this.loadMarket();
     }
     unload() {
 
-        this.unloadMarket();
+      //  this.unloadMarket();
         this.unloadShop();
     }
 }

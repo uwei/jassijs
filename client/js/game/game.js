@@ -24,7 +24,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.rateCostShop = 100;
             this.rateCostsShopMany = 1000;
             this.workerInCompany = 20;
-            this.neutralStartPeople = 200;
+            this.neutralStartPeople = 500;
             this.neutralProductionRate = 2;
             this.newAirportRate = 1.05;
             this.capacityShop = 5000;
@@ -32,12 +32,12 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.costsAdvertising = 2000;
             this.numberBuildWithContextMenu = 10;
             this.allAirplaneTypes = [
-                { typeid: 0, model: "Airplane A", speed: 200, capacity: 200, costs: 60, buildDays: 20, buildingCosts: 20000, buildingMaterial: [0, 0, 0, 10, 0, 10, 0, 10, 0, 10, 0, 0, 0, 0, 10] },
-                { typeid: 1, model: "Airplane B", speed: 210, capacity: 300, costs: 90, buildDays: 25, buildingCosts: 40000, buildingMaterial: [0, 0, 0, 20, 0, 20, 0, 20, 0, 20, 0, 0, 0, 0, 20] },
-                { typeid: 2, model: "Airplane C", speed: 220, capacity: 400, costs: 150, buildDays: 35, buildingCosts: 60000, buildingMaterial: [0, 0, 0, 30, 0, 30, 0, 30, 0, 30, 0, 0, 0, 0, 30] },
-                { typeid: 3, model: "Airplane D", speed: 240, capacity: 700, costs: 180, buildDays: 40, buildingCosts: 80000, buildingMaterial: [0, 0, 0, 40, 0, 40, 0, 40, 0, 40, 0, 0, 0, 0, 40] },
-                { typeid: 4, model: "Airplane E", speed: 260, capacity: 1500, costs: 270, buildDays: 50, buildingCosts: 200000, buildingMaterial: [0, 0, 0, 50, 0, 50, 0, 50, 0, 50, 0, 0, 0, 0, 50] },
-                { typeid: 5, model: "Airplane F", speed: 300, capacity: 3000, costs: 700, buildDays: 80, buildingCosts: 350000, buildingMaterial: [0, 0, 0, 100, 0, 100, 0, 100, 0, 100, 0, 0, 0, 0, 100] },
+                { typeid: 0, model: "Airplane", speed: 200, capacity: 200, costs: 60, buildDays: 20, buildingCosts: 20000, buildingMaterial: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
+                /* {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:25,buildingCosts:40000,buildingMaterial:[0,0,0,20,0,20,0,20,0,20,0,0,0,0,20]},
+                 {typeid:2,model:"Airplane C",speed:220,capacity:400, costs:150,buildDays:35,buildingCosts:60000,buildingMaterial:[0,0,0,30,0,30,0,30,0,30,0,0,0,0,30]},
+                 {typeid:3,model:"Airplane D",speed:240,capacity:700, costs:180,buildDays:40,buildingCosts:80000,buildingMaterial:[0,0,0,40,0,40,0,40,0,40,0,0,0,0,40]},
+                 {typeid:4,model:"Airplane E",speed:260,capacity:1500, costs:270,buildDays:50,buildingCosts:200000,buildingMaterial:[0,0,0,50,0,50,0,50,0,50,0,0,0,0,50]},
+                 {typeid:5,model:"Airplane F",speed:300,capacity:3000, costs:700,buildDays:80,buildingCosts:350000,buildingMaterial:[0,0,0,100,0,100,0,100,0,100,0,0,0,0,100]},*/
             ];
         }
     }
@@ -116,7 +116,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
         newGame() {
             this.world = new world_1.World();
             this.world.game = this;
-            this._money = 20000;
+            this._money = 50000;
             this.world.newGame();
         }
         getMoney() {

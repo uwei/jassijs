@@ -29,7 +29,6 @@ export class CityDialogShop {
                             </th>
                             <th></th>
                             <th>Min<br/>Stock</th>
-                            <th>Selling<br/>price<br/><button id="shop-fill-price" title="reset price"  class="mybutton">`+ Icons.fillDown + `</button></th>
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -49,10 +48,6 @@ export class CityDialogShop {
                         '<input type="number" min="0" class="shop-min-stock" id="shop-min-stock_' + x + '"' +
                         'style="width: 50px;"' +
                         '"></td>';
-                    ret = ret + '<td>' +
-                        '<input type="number" min="0" class="shop-selling-price" id="shop-selling-price_' + x + '"' +
-                        'style="width: 50px;"' +
-                        '"></td>';
                     ret = ret + "</tr>";
                 }
                 return ret;
@@ -67,16 +62,7 @@ export class CityDialogShop {
 
             CityDialog.getInstance().update(true);
         });
-        document.getElementById("shop-fill-price").addEventListener("click", (evt) => {
-            var city = CityDialog.getInstance().city;
-            if (city.shops === 0)
-                return;
-            for (var x = 0; x < parameter.allProducts.length; x++) {
-                city.shopSellingPrice[x] = city.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling;
-            }
-            _this.update();
 
-        });
         for (var x = 0; x < parameter.allProducts.length; x++) {
             document.getElementById("shop-min-stock_" + x).addEventListener("change", (e) => {
                 var city = CityDialog.getInstance().city;
@@ -84,13 +70,7 @@ export class CityDialogShop {
                 var id = parseInt(ctrl.id.split("_")[1]);
                 city.shopMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
             });
-            document.getElementById("shop-selling-price_" + x).addEventListener("change", (e) => {
-                var city = CityDialog.getInstance().city;
-                var ctrl = (<HTMLInputElement>e.target);
-                var id = parseInt(ctrl.id.split("_")[1]);
-                city.shopMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
-
-            });
+          
         }
         for (var x = 0; x < parameter.allProducts.length; x++) {
             $("#shop-sell-slider_" + x).slider({
@@ -213,9 +193,7 @@ export class CityDialogShop {
             }
             if (document.activeElement !== tr.children[6].children[0])
                 (<HTMLInputElement>tr.children[6].children[0]).value = city.shopMinStock[x] === undefined ? "" : city.shopMinStock[x].toString();
-            if (document.activeElement !== tr.children[7].children[0])
-                (<HTMLInputElement>tr.children[7].children[0]).value = city.shopSellingPrice[x] === undefined ? "" : city.shopSellingPrice[x].toString();
-        }
+           }
 
         document.getElementById("citydialog-shop-info").innerHTML = "Shops:" + city.shops + " Capacity " + gesamount + "/" + city.shops * parameter.capacityShop;
 

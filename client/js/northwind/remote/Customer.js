@@ -53,7 +53,9 @@ define(["require", "exports", "jassijs/remote/DBObject", "jassijs/remote/Registr
         __metadata("design:type", String)
     ], Customer.prototype, "City", void 0);
     __decorate([
-        (0, DatabaseSchema_1.Column)({ nullable: true }),
+        (0, DatabaseSchema_1.Column)({ nullable: true })
+        // @Column({default:""})
+        ,
         __metadata("design:type", String)
     ], Customer.prototype, "Region", void 0);
     __decorate([

@@ -37,6 +37,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
         (0, Registry_1.$Class)("jassijs.ui.TableEditorProperties")
     ], TableEditorProperties);
     let Table = class Table extends DataComponent_1.DataComponent {
+        ;
         constructor(properties) {
             super();
             this._lastLazySort = undefined;
@@ -47,7 +48,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/DataCompone
             this.options = properties;
             this._selectHandler = [];
         }
-        ;
         config(config) {
             super.config(config);
             return this;

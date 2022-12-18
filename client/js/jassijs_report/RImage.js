@@ -12,9 +12,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Property", 
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RImage = void 0;
     //mdi-format-list-numbered
-    let RImage = 
-    //@$Property({name:"horizontal",hide:true})
-    class RImage extends RComponent_1.RComponent {
+    let RImage = class RImage extends RComponent_1.RComponent {
         /**
         *
         * @param {object} properties - properties to init

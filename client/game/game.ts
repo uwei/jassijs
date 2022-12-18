@@ -37,7 +37,7 @@ export class Parameter {
   rateCostShop = 100;
   rateCostsShopMany = 1000;
   workerInCompany = 20;
-  neutralStartPeople = 200;
+  neutralStartPeople = 500;
   neutralProductionRate = 2;
   newAirportRate=1.05;
   capacityShop=5000;
@@ -46,12 +46,12 @@ export class Parameter {
   costsAdvertising=2000;
   numberBuildWithContextMenu=10;
   allAirplaneTypes=[
-    {typeid:0,model:"Airplane A",speed:200,capacity:200, costs:60,buildDays:20,buildingCosts:20000,buildingMaterial:[0,0,0,10,0,10,0,10,0,10,0,0,0,0,10]},
-    {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:25,buildingCosts:40000,buildingMaterial:[0,0,0,20,0,20,0,20,0,20,0,0,0,0,20]},
+    {typeid:0,model:"Airplane",speed:200,capacity:200, costs:60,buildDays:20,buildingCosts:20000,buildingMaterial:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
+   /* {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:25,buildingCosts:40000,buildingMaterial:[0,0,0,20,0,20,0,20,0,20,0,0,0,0,20]},
     {typeid:2,model:"Airplane C",speed:220,capacity:400, costs:150,buildDays:35,buildingCosts:60000,buildingMaterial:[0,0,0,30,0,30,0,30,0,30,0,0,0,0,30]},
     {typeid:3,model:"Airplane D",speed:240,capacity:700, costs:180,buildDays:40,buildingCosts:80000,buildingMaterial:[0,0,0,40,0,40,0,40,0,40,0,0,0,0,40]},
     {typeid:4,model:"Airplane E",speed:260,capacity:1500, costs:270,buildDays:50,buildingCosts:200000,buildingMaterial:[0,0,0,50,0,50,0,50,0,50,0,0,0,0,50]},
-    {typeid:5,model:"Airplane F",speed:300,capacity:3000, costs:700,buildDays:80,buildingCosts:350000,buildingMaterial:[0,0,0,100,0,100,0,100,0,100,0,0,0,0,100]},
+    {typeid:5,model:"Airplane F",speed:300,capacity:3000, costs:700,buildDays:80,buildingCosts:350000,buildingMaterial:[0,0,0,100,0,100,0,100,0,100,0,0,0,0,100]},*/
     ];
 }
 window.parameter=new Parameter();
@@ -145,7 +145,7 @@ export class Game {
   newGame() {
     this.world = new World();
     this.world.game = this;
-    this._money = 20000;
+    this._money = 50000;
     this.world.newGame();
   }
   getMoney() {

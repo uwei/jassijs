@@ -11,12 +11,7 @@ define(["require", "exports", "jassijs/ui/InvisibleComponent", "jassijs/ui/Compo
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test2 = exports.test = exports.Style = void 0;
-    let Style = 
-    /**
-     * on ore mors Style can be assigned to component
-     * the style is appended to the head
-     **/
-    class Style extends InvisibleComponent_1.InvisibleComponent {
+    let Style = class Style extends InvisibleComponent_1.InvisibleComponent {
         constructor() {
             super();
             super.init('<span class="InvisibleComponent"></span>');

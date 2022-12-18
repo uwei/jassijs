@@ -21,9 +21,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Container",
         (0, Registry_1.$Class)("jassijs.ui.PanelCreateProperties")
     ], PanelCreateProperties);
     exports.PanelCreateProperties = PanelCreateProperties;
-    let Panel = 
-    //@$Property({ name: "new/useSpan", type: "boolean", default: false })
-    class Panel extends Container_1.Container {
+    let Panel = class Panel extends Container_1.Container {
         /**
         *
         * @param {object} properties - properties to init

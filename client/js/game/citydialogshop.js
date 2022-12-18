@@ -1,4 +1,4 @@
-define(["require", "exports", "game/citydialog", "game/icons", "game/citydialogmarket"], function (require, exports, citydialog_1, icons_1, citydialogmarket_1) {
+define(["require", "exports", "game/citydialog", "game/citydialogmarket"], function (require, exports, citydialog_1, citydialogmarket_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CityDialogShop = void 0;
@@ -27,7 +27,6 @@ define(["require", "exports", "game/citydialog", "game/icons", "game/citydialogm
                             </th>
                             <th></th>
                             <th>Min<br/>Stock</th>
-                            <th>Selling<br/>price<br/><button id="shop-fill-price" title="reset price"  class="mybutton">` + icons_1.Icons.fillDown + `</button></th>
                         </tr>
                        ${(function fun() {
                 var ret = "";
@@ -47,10 +46,6 @@ define(["require", "exports", "game/citydialog", "game/icons", "game/citydialogm
                         '<input type="number" min="0" class="shop-min-stock" id="shop-min-stock_' + x + '"' +
                         'style="width: 50px;"' +
                         '"></td>';
-                    ret = ret + '<td>' +
-                        '<input type="number" min="0" class="shop-selling-price" id="shop-selling-price_' + x + '"' +
-                        'style="width: 50px;"' +
-                        '"></td>';
                     ret = ret + "</tr>";
                 }
                 return ret;
@@ -63,23 +58,8 @@ define(["require", "exports", "game/citydialog", "game/icons", "game/citydialogm
             document.getElementById("citydialog-shop-table-target").addEventListener("change", (e) => {
                 citydialog_1.CityDialog.getInstance().update(true);
             });
-            document.getElementById("shop-fill-price").addEventListener("click", (evt) => {
-                var city = citydialog_1.CityDialog.getInstance().city;
-                if (city.shops === 0)
-                    return;
-                for (var x = 0; x < parameter.allProducts.length; x++) {
-                    city.shopSellingPrice[x] = city.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling;
-                }
-                _this.update();
-            });
             for (var x = 0; x < parameter.allProducts.length; x++) {
                 document.getElementById("shop-min-stock_" + x).addEventListener("change", (e) => {
-                    var city = citydialog_1.CityDialog.getInstance().city;
-                    var ctrl = e.target;
-                    var id = parseInt(ctrl.id.split("_")[1]);
-                    city.shopMinStock[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
-                });
-                document.getElementById("shop-selling-price_" + x).addEventListener("change", (e) => {
                     var city = citydialog_1.CityDialog.getInstance().city;
                     var ctrl = e.target;
                     var id = parseInt(ctrl.id.split("_")[1]);
@@ -198,8 +178,6 @@ define(["require", "exports", "game/citydialog", "game/icons", "game/citydialogm
                 }
                 if (document.activeElement !== tr.children[6].children[0])
                     tr.children[6].children[0].value = city.shopMinStock[x] === undefined ? "" : city.shopMinStock[x].toString();
-                if (document.activeElement !== tr.children[7].children[0])
-                    tr.children[7].children[0].value = city.shopSellingPrice[x] === undefined ? "" : city.shopSellingPrice[x].toString();
             }
             document.getElementById("citydialog-shop-info").innerHTML = "Shops:" + city.shops + " Capacity " + gesamount + "/" + city.shops * parameter.capacityShop;
         }

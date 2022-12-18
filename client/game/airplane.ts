@@ -55,6 +55,12 @@ export class Airplane {
         }
         return undefined;
     }
+    upgrade(){
+        this.typeid++;
+        this.speed=Math.round(this.speed*1.2);
+        this.capacity=Math.round(this.capacity*1.5);
+        this.world.game.changeMoney(-this.typeid*10000,"upgrade airplane");
+    }
     updateSquadron(){
         var speed=parameter.allAirplaneTypes[this.typeid].speed;
         var capacity=parameter.allAirplaneTypes[this.typeid].capacity;

@@ -24,14 +24,14 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             for (var x = 0; x < parameter.allProducts.length; x++) {
                 var val = 0;
                 this.score.push(50);
-                for (var y = 0; y < this.companies.length; y++) {
-                    if (this.companies[y].productid === x) {
-                        val = 22 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
-                    }
-                }
-                if (val === 0) {
-                    val = 10 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
-                }
+                /* for (var y = 0; y < this.companies.length; y++) {
+                     if (this.companies[y].productid === x) {
+                         val = 22 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
+                     }
+                 }
+                 if (val === 0) {*/
+                val = 10 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
+                //}
                 this.shopMinStock.push(undefined);
                 this.shopSellingPrice.push(this.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling);
                 this.shop.push(0);
@@ -298,6 +298,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                     var diff = untilNow - this.consumedToday[x];
                     var product = parameter.allProducts[x];
                     var price = product.calcPrice(this.people, this.market[x] - diff, false);
+                    var fromshop = true;
                     var fromshop = false;
                     if (this.shop[x] >= diff && (this.shopMinStock[x] === undefined || (this.shop[x] - diff) > this.shopMinStock[x])) {
                         if (this.shopSellingPrice[x] <= price) {
@@ -355,6 +356,8 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             }
         }
         getDailyCostsShops() {
+            if (this.shops === 1)
+                return 20;
             return Math.round(this.shops * (this.shops >= 5 ? parameter.rateCostsShopMany : parameter.rateCostShop));
         }
         updateDailyCosts() {
@@ -392,7 +395,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 this.lastUpdate = this.world.game.date.getTime();
             }
             this.domDesc.innerHTML = this.name + "<br/>" + this.people.toLocaleString() + "<br/>";
-            this.updateNeutralCompanies();
+            //this.updateNeutralCompanies();
             for (var x = 0; x < this.companies.length; x++) {
                 this.companies[x].update();
             }
@@ -503,6 +506,12 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
         var cities = [];
         for (var x = 0; x < count; x++) {
             var city = new City();
+            if (checkProduction && x === 0) {
+                city.companies[0].productid = 0;
+                city.companies[0].hasLicense = true;
+                city.companies[1].productid = 1;
+                city.companies[1].hasLicense = true;
+            }
             cities.push(city);
             for (var y = 0; y < city.companies.length; y++) {
                 allids.push(city.companies[y].productid);

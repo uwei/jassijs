@@ -4,7 +4,6 @@ import { Icons } from "game/icons";
 import { Airplane } from "game/airplane";
 import { AirplaneDialog } from "game/airplanedialog";
 import { Company } from "game/company";
-import { CityDialogMarket } from "game/citydialogmarket";
 import { CityDialogShop } from "game/citydialogshop";
 
 //@ts-ignore
@@ -47,22 +46,21 @@ export class CityDialog {
         var sdom = `
           <div>
           <div>
-            <input id="citydialog-prev" type="button" value="<"  class="mybutton"/>
-            <input id="citydialog-next" type="button" value=">"  class="mybutton"/>
+            <input style="width:30px" id="citydialog-prev" type="button" value="<"  class="mybutton"/>
+            <input style="width:30px" id="citydialog-next" type="button" value=">"  class="mybutton"/>
+            
             <select id="citydialog-filter" style="width:80px">
                 `+ this.productFilter() + `
             </select>
+            <input type="checkbox" id="hide-busy" name="vehicle1">hide busy
           </div>
             <div id="citydialog-tabs">
                 <ul>
-                    <li><a href="#citydialog-market" id="citydialog-market-tab" class="citydialog-tabs">Market</a></li>
                     <li><a href="#citydialog-buildings" id="citydialog-buildings-tab" class="citydialog-tabs">Buildings</a></li>
                     <li><a href="#citydialog-shop" id="citydialog-shop-tab"  class="citydialog-tabs">`+ Icons.shop + ` MyShop</a></li>
                     <li><a href="#citydialog-construction" id="citydialog-construction-tab" class="citydialog-tabs">Construction</a></li>
                     <li><a href="#citydialog-score" id="citydialog-score-tab"  class="citydialog-tabs">Score</a></li>
                 </ul>
-                <div id="citydialog-market">`+ CityDialogMarket.getInstance().create() + `
-                </div>
                 <div id="citydialog-buildings"> `+ this.createBuildings() + `
                 </div>
                 <div id="citydialog-shop">`+ CityDialogShop.getInstance().create() + `
@@ -139,8 +137,7 @@ export class CityDialog {
                     <br/>
                        `+ Icons.shop + ` Shops: <span id="count-shops">0/0</span>  
                         ` + ` costs: <span id="costs-shops">0</span> ` + Icons.money + `  
-                        <button id="buy-shop"  class="mybutton">+`+ Icons.home + ` for 15.000` + Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
-            " 40x" + parameter.allProducts[1].getIcon() + `</button> 
+                        <button id="buy-shop"  class="mybutton">+`+ Icons.home + ` for 15.000` + Icons.money +`</button> 
                         <button id="delete-shop"  class="mybutton">-`+ Icons.home + `</button>`;
     }
 
@@ -242,6 +239,8 @@ export class CityDialog {
         });
         document.getElementById("citydialog-filter").addEventListener("change", (ev) => {
             var sel = (<HTMLSelectElement>document.getElementById("citydialog-filter")).value;
+            var hide_busy=(<HTMLInputElement>document.getElementById("hide-busy")).checked;
+            
             if (sel === "all")
                 this.filteredCities = _this.city.world.cities;
             else {
@@ -250,7 +249,10 @@ export class CityDialog {
                     var city = _this.city.world.cities[x];
                     for (var y = 0; y < city.companies.length; y++) {
                         if (city.companies[y].productid === Number(sel)) {
-                            this.filteredCities.push(city);
+                            if(hide_busy&&city.getBuildingInProgress(parseInt(sel))>0){
+                                //
+                            }else
+                                this.filteredCities.push(city);
                         }
                     }
                 }
@@ -368,7 +370,6 @@ export class CityDialog {
 
         }
         CityDialogShop.getInstance().bindActions();
-        CityDialogMarket.getInstance().bindActions();
     }
 
 
@@ -531,25 +532,7 @@ export class CityDialog {
         if (!this.city.hasAirport)
             return;
         this.updateTitle();
-        //pause game while trading
-        if (!force) {
-            if (document.getElementById("citydialog-market-tab")?.parentElement?.classList?.contains("ui-tabs-active")
-            ) {
-                if (!this.city.world.game.isPaused()) {
-                    this.hasPaused = true;
-                    this.city.world.game.pause();
-                }
-                return;///no update because of slider
-            } else {
-                if (this.hasPaused) {
-                    this.city.world.game.resume();
-                }
-            }
-        }
-        CityDialogMarket.getInstance().update();
-
-        if (document.getElementById("citydialog-market-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
-            CityDialogMarket.getInstance().update();
+       
         if (document.getElementById("citydialog-buildings-tab")?.parentElement?.classList?.contains("ui-tabs-active"))
             this.updateBuildings();
         if (force || document.getElementById("citydialog-shop-tab")?.parentElement?.classList?.contains("ui-tabs-active"))

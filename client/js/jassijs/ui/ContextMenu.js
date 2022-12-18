@@ -14,6 +14,15 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
     jassijs.includeCSSFile("contextMenu.css");
     //https://github.com/s-yadav/contextMenu.js/
     let ContextMenu = class ContextMenu extends InvisibleComponent_1.InvisibleComponent {
+        /**
+         * @member - the objects for the includeClassActions @ActionProvider if  is enabled
+         **/
+        set value(value) {
+            this._value = value;
+        }
+        get value() {
+            return this._value;
+        }
         constructor() {
             super();
             super.init('<span class="InvisibleComponent"></span>');
@@ -30,15 +39,6 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Menu", "jas
             this.onbeforeshow(function () {
                 return _this._updateClassActions();
             });
-        }
-        /**
-         * @member - the objects for the includeClassActions @ActionProvider if  is enabled
-         **/
-        set value(value) {
-            this._value = value;
-        }
-        get value() {
-            return this._value;
         }
         config(config) {
             super.config(config);

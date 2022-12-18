@@ -155,6 +155,7 @@ export class World {
 
     newGame() {
         createCities(this, 16);
+        this.cities[0].shops=1;
         this.cities[this.cities.length-1].hasAirport=false;
         for (var x = 0; x < 1; x++) {
             var ap = new Airplane(this);

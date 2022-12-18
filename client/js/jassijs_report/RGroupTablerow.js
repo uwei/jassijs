@@ -11,9 +11,7 @@ define(["require", "exports", "jassijs_report/RTablerow", "jassijs_report/RCompo
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RGroupTablerow = void 0;
-    let RGroupTablerow = 
-    //@$Property({name:"horizontal",hide:true})
-    class RGroupTablerow extends RTablerow_1.RTablerow {
+    let RGroupTablerow = class RGroupTablerow extends RTablerow_1.RTablerow {
         get expression() {
             var _a, _b, _c;
             var pos = (_a = this.parent) === null || _a === void 0 ? void 0 : _a.groupFooterPanel.indexOf(this);

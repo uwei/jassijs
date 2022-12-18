@@ -12,9 +12,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RColumns = void 0;
     //Limitations: columnGap not implemented defaultStyle: {columnGap: 20}
-    let RColumns = 
-    //@$Property({ hideBaseClassProperties: true })
-    class RColumns extends RComponent_1.RComponent {
+    let RColumns = class RColumns extends RComponent_1.RComponent {
         /**
         *
         * @param {object} properties - properties to init

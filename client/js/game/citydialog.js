@@ -1,4 +1,4 @@
-define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket", "game/citydialogshop"], function (require, exports, city_1, icons_1, citydialogmarket_1, citydialogshop_1) {
+define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"], function (require, exports, city_1, icons_1, citydialogshop_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.CityDialog = void 0;
@@ -34,22 +34,21 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
             var sdom = `
           <div>
           <div>
-            <input id="citydialog-prev" type="button" value="<"  class="mybutton"/>
-            <input id="citydialog-next" type="button" value=">"  class="mybutton"/>
+            <input style="width:30px" id="citydialog-prev" type="button" value="<"  class="mybutton"/>
+            <input style="width:30px" id="citydialog-next" type="button" value=">"  class="mybutton"/>
+            
             <select id="citydialog-filter" style="width:80px">
                 ` + this.productFilter() + `
             </select>
+            <input type="checkbox" id="hide-busy" name="vehicle1">hide busy
           </div>
             <div id="citydialog-tabs">
                 <ul>
-                    <li><a href="#citydialog-market" id="citydialog-market-tab" class="citydialog-tabs">Market</a></li>
                     <li><a href="#citydialog-buildings" id="citydialog-buildings-tab" class="citydialog-tabs">Buildings</a></li>
                     <li><a href="#citydialog-shop" id="citydialog-shop-tab"  class="citydialog-tabs">` + icons_1.Icons.shop + ` MyShop</a></li>
                     <li><a href="#citydialog-construction" id="citydialog-construction-tab" class="citydialog-tabs">Construction</a></li>
                     <li><a href="#citydialog-score" id="citydialog-score-tab"  class="citydialog-tabs">Score</a></li>
                 </ul>
-                <div id="citydialog-market">` + citydialogmarket_1.CityDialogMarket.getInstance().create() + `
-                </div>
                 <div id="citydialog-buildings"> ` + this.createBuildings() + `
                 </div>
                 <div id="citydialog-shop">` + citydialogshop_1.CityDialogShop.getInstance().create() + `
@@ -121,8 +120,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
                     <br/>
                        ` + icons_1.Icons.shop + ` Shops: <span id="count-shops">0/0</span>  
                         ` + ` costs: <span id="costs-shops">0</span> ` + icons_1.Icons.money + `  
-                        <button id="buy-shop"  class="mybutton">+` + icons_1.Icons.home + ` for 15.000` + icons_1.Icons.money + " 20x" + parameter.allProducts[0].getIcon() +
-                " 40x" + parameter.allProducts[1].getIcon() + `</button> 
+                        <button id="buy-shop"  class="mybutton">+` + icons_1.Icons.home + ` for 15.000` + icons_1.Icons.money + `</button> 
                         <button id="delete-shop"  class="mybutton">-` + icons_1.Icons.home + `</button>`;
         }
         createScore() {
@@ -222,6 +220,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
             });
             document.getElementById("citydialog-filter").addEventListener("change", (ev) => {
                 var sel = document.getElementById("citydialog-filter").value;
+                var hide_busy = document.getElementById("hide-busy").checked;
                 if (sel === "all")
                     this.filteredCities = _this.city.world.cities;
                 else {
@@ -230,7 +229,11 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
                         var city = _this.city.world.cities[x];
                         for (var y = 0; y < city.companies.length; y++) {
                             if (city.companies[y].productid === Number(sel)) {
-                                this.filteredCities.push(city);
+                                if (hide_busy && city.getBuildingInProgress(parseInt(sel)) > 0) {
+                                    //
+                                }
+                                else
+                                    this.filteredCities.push(city);
                             }
                         }
                     }
@@ -341,7 +344,6 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
                 });
             }
             citydialogshop_1.CityDialogShop.getInstance().bindActions();
-            citydialogmarket_1.CityDialogMarket.getInstance().bindActions();
         }
         updateBuildings() {
             /*
@@ -484,7 +486,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
             }
         }
         update(force = false) {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
             if (!this.city)
                 return;
             try {
@@ -492,37 +494,19 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogmarket"
                     return;
                 }
             }
-            catch (_u) {
+            catch (_o) {
                 return;
             }
             if (!this.city.hasAirport)
                 return;
             this.updateTitle();
-            //pause game while trading
-            if (!force) {
-                if ((_c = (_b = (_a = document.getElementById("citydialog-market-tab")) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.classList) === null || _c === void 0 ? void 0 : _c.contains("ui-tabs-active")) {
-                    if (!this.city.world.game.isPaused()) {
-                        this.hasPaused = true;
-                        this.city.world.game.pause();
-                    }
-                    return; ///no update because of slider
-                }
-                else {
-                    if (this.hasPaused) {
-                        this.city.world.game.resume();
-                    }
-                }
-            }
-            citydialogmarket_1.CityDialogMarket.getInstance().update();
-            if ((_f = (_e = (_d = document.getElementById("citydialog-market-tab")) === null || _d === void 0 ? void 0 : _d.parentElement) === null || _e === void 0 ? void 0 : _e.classList) === null || _f === void 0 ? void 0 : _f.contains("ui-tabs-active"))
-                citydialogmarket_1.CityDialogMarket.getInstance().update();
-            if ((_j = (_h = (_g = document.getElementById("citydialog-buildings-tab")) === null || _g === void 0 ? void 0 : _g.parentElement) === null || _h === void 0 ? void 0 : _h.classList) === null || _j === void 0 ? void 0 : _j.contains("ui-tabs-active"))
+            if ((_c = (_b = (_a = document.getElementById("citydialog-buildings-tab")) === null || _a === void 0 ? void 0 : _a.parentElement) === null || _b === void 0 ? void 0 : _b.classList) === null || _c === void 0 ? void 0 : _c.contains("ui-tabs-active"))
                 this.updateBuildings();
-            if (force || ((_m = (_l = (_k = document.getElementById("citydialog-shop-tab")) === null || _k === void 0 ? void 0 : _k.parentElement) === null || _l === void 0 ? void 0 : _l.classList) === null || _m === void 0 ? void 0 : _m.contains("ui-tabs-active")))
+            if (force || ((_f = (_e = (_d = document.getElementById("citydialog-shop-tab")) === null || _d === void 0 ? void 0 : _d.parentElement) === null || _e === void 0 ? void 0 : _e.classList) === null || _f === void 0 ? void 0 : _f.contains("ui-tabs-active")))
                 citydialogshop_1.CityDialogShop.getInstance().update();
-            if ((_q = (_p = (_o = document.getElementById("citydialog-construction-tab")) === null || _o === void 0 ? void 0 : _o.parentElement) === null || _p === void 0 ? void 0 : _p.classList) === null || _q === void 0 ? void 0 : _q.contains("ui-tabs-active"))
+            if ((_j = (_h = (_g = document.getElementById("citydialog-construction-tab")) === null || _g === void 0 ? void 0 : _g.parentElement) === null || _h === void 0 ? void 0 : _h.classList) === null || _j === void 0 ? void 0 : _j.contains("ui-tabs-active"))
                 this.updateConstruction();
-            if ((_t = (_s = (_r = document.getElementById("citydialog-score-tab")) === null || _r === void 0 ? void 0 : _r.parentElement) === null || _s === void 0 ? void 0 : _s.classList) === null || _t === void 0 ? void 0 : _t.contains("ui-tabs-active"))
+            if ((_m = (_l = (_k = document.getElementById("citydialog-score-tab")) === null || _k === void 0 ? void 0 : _k.parentElement) === null || _l === void 0 ? void 0 : _l.classList) === null || _m === void 0 ? void 0 : _m.contains("ui-tabs-active"))
                 this.updateScore();
             return;
         }

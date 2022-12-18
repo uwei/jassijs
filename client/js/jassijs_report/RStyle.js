@@ -12,18 +12,7 @@ define(["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Regis
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.RStyle = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
-    let RStyle = 
-    //@$Property({name:"horizontal",hide:true})
-    class RStyle extends RComponent_1.RComponent {
-        constructor(properties = undefined) {
-            super(properties);
-            this.$isInivisibleComponent = true; //invisible component in designer
-            this.reporttype = "style";
-            var _this = this;
-            this.onstylechanged((param1, param2) => {
-                _this.update();
-            });
-        }
+    let RStyle = class RStyle extends RComponent_1.RComponent {
         set name(value) {
             var old = this._name;
             this._name = value;
@@ -53,6 +42,15 @@ define(["require", "exports", "jassijs_report/RComponent", "jassijs/remote/Regis
         }
         get name() {
             return this._name;
+        }
+        constructor(properties = undefined) {
+            super(properties);
+            this.$isInivisibleComponent = true; //invisible component in designer
+            this.reporttype = "style";
+            var _this = this;
+            this.onstylechanged((param1, param2) => {
+                _this.update();
+            });
         }
         toJSON() {
             var ret = super.toJSON();

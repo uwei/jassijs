@@ -12,13 +12,13 @@ define(["require", "exports", "jassijs/ui/Panel", "jassijs/remote/Registry", "ja
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.TreeTable = void 0;
     class Person {
+        t() {
+            return this.childs;
+        }
         constructor(name, id, childs = undefined) {
             this.name = name;
             this.id = id;
             this.childs = childs;
-        }
-        t() {
-            return this.childs;
         }
     }
     class Me {

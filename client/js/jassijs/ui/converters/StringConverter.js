@@ -24,10 +24,7 @@ define(["require", "exports", "jassijs/ui/converters/DefaultConverter", "jassijs
     StringConverterProperties = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.converters.StringConverterProperies")
     ], StringConverterProperties);
-    let StringConverter = 
-    //@$Property({ name: "new/minChars", type: "number", default: undefined })
-    //@$Property({ name: "new/maxChars", type: "number", default: undefined })
-    class StringConverter extends DefaultConverter_1.DefaultConverter {
+    let StringConverter = class StringConverter extends DefaultConverter_1.DefaultConverter {
         constructor(props) {
             super();
             this.minChars = props === null || props === void 0 ? void 0 : props.minChars;

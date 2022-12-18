@@ -69,7 +69,7 @@ export class AirplaneDialog {
                     <span id="airplanedialog-type">Type:</span><br/>
                     <span id="airplanedialog-speed">Speed:</span><br/>
                     <span id="airplanedialog-capacity">Capacity:</span><br/> 
-                    <button style="font-size:14px" id="edit-squadron" class="mybutton">`+ Icons.edit + `</button>
+                    <button style="font-size:14px" id="upgrade-squadron" class="mybutton">Upgrade</button>
                     <button style="font-size:14px" id="delete-airplane" class="mybutton">`+ Icons.remove + `</button>
                  </div>
                  <div id="airplanedialog-route">
@@ -156,9 +156,10 @@ export class AirplaneDialog {
                 }
                 RouteDialog.getInstance().show();
             });
-            document.getElementById("edit-squadron").addEventListener('click', (e) => {
-                SquadronDialog.getInstance().airplane = _this.airplane;
-                SquadronDialog.getInstance().show();
+            document.getElementById("upgrade-squadron").addEventListener('click', (e) => {
+                _this.airplane.upgrade();
+                //SquadronDialog.getInstance().airplane = _this.airplane;
+                //SquadronDialog.getInstance().show();
             });
              document.getElementById("delete-airplane").addEventListener('click', (e) => {
                  if (confirm(`Delete the the entire squadron?`)) {

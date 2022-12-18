@@ -1,5 +1,2 @@
-define(["require", "exports"], function (require, exports) {
-    "use strict";
-    var a = 1;
-});
+var a = 2;
 //# sourceMappingURL=_test1.js.map

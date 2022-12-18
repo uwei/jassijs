@@ -1,4 +1,4 @@
-define(["require", "exports", "game/icons", "game/route", "game/routedialog", "game/squadrondialog"], function (require, exports, icons_1, route_1, routedialog_1, squadrondialog_1) {
+define(["require", "exports", "game/icons", "game/route", "game/routedialog"], function (require, exports, icons_1, route_1, routedialog_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.AirplaneDialog = void 0;
@@ -61,7 +61,7 @@ define(["require", "exports", "game/icons", "game/route", "game/routedialog", "g
                     <span id="airplanedialog-type">Type:</span><br/>
                     <span id="airplanedialog-speed">Speed:</span><br/>
                     <span id="airplanedialog-capacity">Capacity:</span><br/> 
-                    <button style="font-size:14px" id="edit-squadron" class="mybutton">` + icons_1.Icons.edit + `</button>
+                    <button style="font-size:14px" id="upgrade-squadron" class="mybutton">Upgrade</button>
                     <button style="font-size:14px" id="delete-airplane" class="mybutton">` + icons_1.Icons.remove + `</button>
                  </div>
                  <div id="airplanedialog-route">
@@ -146,9 +146,10 @@ define(["require", "exports", "game/icons", "game/route", "game/routedialog", "g
                     }
                     routedialog_1.RouteDialog.getInstance().show();
                 });
-                document.getElementById("edit-squadron").addEventListener('click', (e) => {
-                    squadrondialog_1.SquadronDialog.getInstance().airplane = _this.airplane;
-                    squadrondialog_1.SquadronDialog.getInstance().show();
+                document.getElementById("upgrade-squadron").addEventListener('click', (e) => {
+                    _this.airplane.upgrade();
+                    //SquadronDialog.getInstance().airplane = _this.airplane;
+                    //SquadronDialog.getInstance().show();
                 });
                 document.getElementById("delete-airplane").addEventListener('click', (e) => {
                     if (confirm(`Delete the the entire squadron?`)) {

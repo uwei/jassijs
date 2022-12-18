@@ -14,6 +14,9 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
     exports.test = exports.Kunde = void 0;
     //import "jassijs/ext/enableExtension.js?de.Kunde";
     let Kunde = Kunde_1 = class Kunde extends DBObject_1.DBObject {
+        initExtensions() {
+            //this function would be extended
+        }
         constructor() {
             super();
             this.id = 0;
@@ -23,9 +26,6 @@ define(["require", "exports", "jassijs/remote/DBObject", "de/remote/AR", "jassij
             this.PLZ = "";
             this.hausnummer = 0;
             this.initExtensions();
-        }
-        initExtensions() {
-            //this function would be extended
         }
         /**
         * add here all properties for the PropertyEditor

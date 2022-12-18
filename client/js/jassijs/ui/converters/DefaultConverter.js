@@ -33,9 +33,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/remote/Registr
     DefaultConverterProperties = __decorate([
         (0, Registry_1.$Class)("jassijs.ui.converters.DefaultConverterProperties")
     ], DefaultConverterProperties);
-    let DefaultConverter = 
-    //@$Property({ name: "new/stringToObject", type: "function", default: "function(ob){}" })
-    class DefaultConverter {
+    let DefaultConverter = class DefaultConverter {
         constructor() {
         }
         /**

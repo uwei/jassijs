@@ -291,9 +291,9 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_editor/util/Ty
                     left = node1.getText(); // this.code.substring(node1.pos, node1.end).trim();
                     var params = [];
                     node.arguments.forEach((arg) => {
-                        var _a, _b, _c;
+                        var _a, _b;
                         params.push(arg.getText());
-                        if (((_c = (_b = (_a = arg) === null || _a === void 0 ? void 0 : _a.expression) === null || _b === void 0 ? void 0 : _b.name) === null || _c === void 0 ? void 0 : _c.getText()) === "config") {
+                        if (((_b = (_a = arg === null || arg === void 0 ? void 0 : arg.expression) === null || _a === void 0 ? void 0 : _a.name) === null || _b === void 0 ? void 0 : _b.getText()) === "config") {
                             _this.parseConfig(arg);
                         }
                         //arg.getText().indexOf(".config(")

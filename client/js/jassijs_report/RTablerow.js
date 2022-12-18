@@ -12,9 +12,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ui/Component",
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTablerow = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
-    let RTablerow = 
-    //@$Property({name:"horizontal",hide:true})
-    class RTablerow extends RComponent_1.RComponent {
+    let RTablerow = class RTablerow extends RComponent_1.RComponent {
         /**
         *
         * @param {object} properties - properties to init

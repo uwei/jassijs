@@ -12,9 +12,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RTextGroup = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
-    let RTextGroup = 
-    //@$Property({name:"horizontal",hide:true})
-    class RTextGroup extends RComponent_1.RComponent {
+    let RTextGroup = class RTextGroup extends RComponent_1.RComponent {
         /**
         *
         * @param {object} properties - properties to init

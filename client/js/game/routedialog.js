@@ -42,59 +42,22 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
           </div>
           
             <div id="routedialog-tabs">
-                <ul>
-                    <li><a href="#routedialog-unload" class="routedialog-tabs">Unload</a></li>
-                    <li><a href="#routedialog-load" class="routedialog-tabs">Load</a></li>
-                </ul>
-                <div id="routedialog-unload">
-                         <table id="routedialog-unload-table" style="height:100%;weight:100%;">
-                        <tr>
-                            <th>Name</th>
-                            <th></th>
-                            <th>Market<br/>max amount<br/><button id="route-unload-market-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button> </th>
-                            <th>Market<br/>min<br/>price</th>
-                            <th>shop<br/>amount<br/>
-                                <button id="route-unload-warehous-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button>
-                                <button id="route-unload-warehous-fill9" title="fill 99999999 down">` + icons_1.Icons.nine + `</button>
-                            </th>
-
-                        </tr>
-                       ${(function fun() {
-                var ret = "";
-                function price(id, change) {
-                    console.log(id + " " + change);
-                }
-                for (var x = 0; x < parameter.allProducts.length; x++) {
-                    ret = ret + "<tr>";
-                    ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
-                    ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
-                    // ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
-                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-max-amount" id="unload-market-max-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-market-min-price" id="unload-market-min-price_' + x + '"' +
-                        'style="width: 43px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-shop-amount" id="unload-shop-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + "</tr>";
-                }
-                return ret;
-            })()}
-                    </table> 
-                </div>
                 <div id="routedialog-load">
-                max amount each product: <input type="number" min="0" id="route-max-load" >
                 
                       <table id="routedialog-load-table" style="height:100%;weight:100%;">
                         <tr >
                             <th>Name</th>
                             <th></th>
-                              <th>Market<br/>amount<br/><button id="route-load-market-fill">` + icons_1.Icons.fillDown + `</button></th>
-                            <th>Market<br/>max price</th>
-                            <th>shop<br/>amount<br/>
+                             <th>unload<br/>
+                                <button id="route-unload-warehous-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button>
+                                <button id="route-unload-warehous-fill9" title="fill 99999999 down">` + icons_1.Icons.nine + `</button>
+                            </th>
+                            <th>load<br/>
                                 <button id="route-load-shop-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button>
                                 <button id="route-load-fill-consumtion" title="fill consumtion">` + icons_1.Icons.food + `</button>
                             </th>
-                            <th>shop<br/>everything except<br/>
+
+                            <th>load<br/>everything except<br/>
                                 <button id="route-load-shop-until-fill" title="fill first row down">` + icons_1.Icons.fillDown + `</button>
                                 <button id="route-load-fill-consumtion-until" title="fill consumtion">` + icons_1.Icons.food + `</button>
                             </th>
@@ -110,9 +73,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     ret = ret + "<tr>";
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-amount" id="load-market-max-amount_' + x + '"' +
-                        'style="width: 50px;"' + '"></td>';
-                    ret = ret + '<td>' + '<input type="number" min="0" class="load-market-max-price" id="load-market-max-price_' + x + '"' +
+                    ret = ret + '<td>' + '<input type="number" min="0" class="unload-shop-amount" id="unload-shop-amount_' + x + '"' +
                         'style="width: 50px;"' + '"></td>';
                     ret = ret + '<td>' + '<input type="number" min="0" class="load-shop-amount" id="load-shop-amount_' + x + '"' +
                         'style="width: 50px;"' + '"></td>';
@@ -132,9 +93,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             var newdom = document.createRange().createContextualFragment(sdom).children[0];
             this.dom.removeChild(this.dom.children[0]);
             this.dom.appendChild(newdom);
-            $("#routedialog-tabs").tabs({
-            //collapsible: true
-            });
             setTimeout(() => {
                 $("#routedialog-tabs").tabs({
                 //collapsible: true
@@ -151,30 +109,10 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
         bindActions() {
             var _this = this;
             for (var x = 0; x < parameter.allProducts.length; x++) {
-                document.getElementById("unload-market-max-amount_" + x).addEventListener("change", (e) => {
-                    var ctrl = e.target;
-                    var id = parseInt(ctrl.id.split("_")[1]);
-                    _this.route.unloadMarketAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
-                });
-                document.getElementById("unload-market-min-price_" + x).addEventListener("change", (e) => {
-                    var ctrl = e.target;
-                    var id = parseInt(ctrl.id.split("_")[1]);
-                    _this.route.unloadMarketPrice[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
-                });
                 document.getElementById("unload-shop-amount_" + x).addEventListener("change", (e) => {
                     var ctrl = e.target;
                     var id = parseInt(ctrl.id.split("_")[1]);
                     _this.route.unloadShopAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
-                });
-                document.getElementById("load-market-max-amount_" + x).addEventListener("change", (e) => {
-                    var ctrl = e.target;
-                    var id = parseInt(ctrl.id.split("_")[1]);
-                    _this.route.loadMarketAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
-                });
-                document.getElementById("load-market-max-price_" + x).addEventListener("change", (e) => {
-                    var ctrl = e.target;
-                    var id = parseInt(ctrl.id.split("_")[1]);
-                    _this.route.loadMarketPrice[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
                 });
                 document.getElementById("load-shop-amount_" + x).addEventListener("change", (e) => {
                     var ctrl = e.target;
@@ -187,22 +125,10 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     _this.route.loadShopUntilAmount[id] = ctrl.value === "" ? undefined : parseInt(ctrl.value);
                 });
             }
-            document.getElementById("route-max-load").addEventListener("change", (e) => {
-                var val = document.getElementById("route-max-load").value;
-                var ival = parseInt(val);
-                _this.route.maxLoad = ival;
-                _this.update();
-            });
             document.getElementById("route-select").addEventListener("change", (e) => {
                 var val = document.getElementById("route-select").value;
                 var id = parseInt(val);
                 _this.route = _this.airplane.route[id];
-                _this.update();
-            });
-            document.getElementById("route-unload-market-fill").addEventListener("click", (e) => {
-                for (var x = 1; x < _this.route.unloadMarketAmount.length; x++) {
-                    this.route.unloadMarketAmount[x] = this.route.unloadMarketAmount[0];
-                }
                 _this.update();
             });
             document.getElementById("route-unload-warehous-fill").addEventListener("click", (e) => {
@@ -214,12 +140,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             document.getElementById("route-unload-warehous-fill9").addEventListener("click", (e) => {
                 for (var x = 0; x < _this.route.unloadShopAmount.length; x++) {
                     this.route.unloadShopAmount[x] = 9999999999;
-                }
-                _this.update();
-            });
-            document.getElementById("route-load-market-fill").addEventListener("click", (e) => {
-                for (var x = 1; x < _this.route.loadMarketAmount.length; x++) {
-                    this.route.loadMarketAmount[x] = this.route.loadMarketAmount[0];
                 }
                 _this.update();
             });
@@ -309,12 +229,8 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             var source = this.route.airplane.route[pos];
             this.route.maxLoad = source.maxLoad;
             for (var x = 0; x < parameter.allProducts.length; x++) {
-                this.route.loadMarketAmount[x] = source.loadMarketAmount[x];
-                this.route.loadMarketPrice[x] = source.loadMarketPrice[x];
                 this.route.loadShopAmount[x] = source.loadShopAmount[x];
                 this.route.loadShopUntilAmount[x] = source.loadShopUntilAmount[x];
-                this.route.unloadMarketAmount[x] = source.unloadMarketAmount[x];
-                this.route.unloadMarketPrice[x] = source.unloadMarketPrice[x];
                 this.route.unloadShopAmount[x] = source.unloadShopAmount[x];
             }
             this.update();
@@ -411,28 +327,14 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             if (this.route)
                 select.value = "" + this.airplane.route.indexOf(this.route);
             else {
-                document.getElementById("unload-market-max-amount").value = "";
-                document.getElementById("unload-market-min-price").value = "";
                 document.getElementById("unload-shop-amount").value = "";
-                document.getElementById("load-market-max-amount").value = "";
-                document.getElementById("load-market-max-price").value = "";
                 document.getElementById("load-shop-amount").value = "";
                 document.getElementById("load-shop-until-amount").value = "";
                 return;
             }
-            if (document.activeElement !== document.getElementById("load-market-until-amount_" + x))
-                document.getElementById("route-max-load").value = (this.route.maxLoad === undefined) ? "" : this.route.maxLoad.toString();
             for (var x = 0; x < parameter.allProducts.length; x++) {
-                if (document.activeElement !== document.getElementById("unload-market-max-amount_" + x))
-                    document.getElementById("unload-market-max-amount_" + x).value = (this.route.unloadMarketAmount[x] === undefined) ? "" : this.route.unloadMarketAmount[x].toString();
-                if (document.activeElement !== document.getElementById("unload-market-min-price_" + x))
-                    document.getElementById("unload-market-min-price_" + x).value = (this.route.unloadMarketPrice[x] === undefined) ? "" : this.route.unloadMarketPrice[x].toString();
                 if (document.activeElement !== document.getElementById("unload-shop-amount_" + x))
                     document.getElementById("unload-shop-amount_" + x).value = (this.route.unloadShopAmount[x] === undefined) ? "" : this.route.unloadShopAmount[x].toString();
-                if (document.activeElement !== document.getElementById("load-market-max-amount_" + x))
-                    document.getElementById("load-market-max-amount_" + x).value = (this.route.loadMarketAmount[x] === undefined) ? "" : this.route.loadMarketAmount[x].toString();
-                if (document.activeElement !== document.getElementById("load-market-max-price_" + x))
-                    document.getElementById("load-market-max-price_" + x).value = (this.route.loadMarketPrice[x] === undefined) ? "" : this.route.loadMarketPrice[x].toString();
                 if (document.activeElement !== document.getElementById("load-shop-amount_" + x))
                     document.getElementById("load-shop-amount_" + x).value = (this.route.loadShopAmount[x] === undefined) ? "" : this.route.loadShopAmount[x].toString();
                 if (document.activeElement !== document.getElementById("load-shop-until-amount_" + x))

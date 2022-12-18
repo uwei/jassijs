@@ -12,13 +12,13 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs/ext/jquerylib"
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.DragAndDropper = void 0;
     let DragAndDropper = class DragAndDropper {
+        ;
         constructor() {
             this.onpropertychanged = undefined;
             this.onpropertyadded = undefined;
             this.lastDropCanceled = false;
             this.allIDs = "";
         }
-        ;
         /**
          * could be override to block dragging
          */

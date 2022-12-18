@@ -71,10 +71,7 @@ define(["require", "exports"], function (require, exports) {
         }
         getBuildingMaterial() {
             var fact = 4 - (parameter.allProducts[this.productid].distribution);
-            return [
-                fact * 15,
-                fact * 15
-            ];
+            return [];
         }
         getBuildingCosts() {
             var fact = 4 - (parameter.allProducts[this.productid].distribution);

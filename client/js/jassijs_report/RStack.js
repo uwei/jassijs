@@ -12,9 +12,7 @@ define(["require", "exports", "jassijs/remote/Registry", "jassijs_report/ReportD
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.RStack = void 0;
     //@$UIComponent({editableChildComponents:["this"]})
-    let RStack = 
-    //@$Property({name:"horizontal",hide:true})
-    class RStack extends RComponent_1.RComponent {
+    let RStack = class RStack extends RComponent_1.RComponent {
         /**
         *
         * @param {object} properties - properties to init
