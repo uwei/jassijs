@@ -318,9 +318,9 @@ export class RouteDialog {
                     allPeople += buildings * parameter.workerInCompany;
                     var prod = parameter.allProducts[city.companies[c].productid];
                     if (prod.input1)
-                        store[prod.input1] += Math.round((1.25 * city.companies[c].buildings * prod.input1Amount * totalDays));
+                        store[prod.input1] += Math.round((1.25 * buildings * prod.input1Amount * totalDays));
                     if (prod.input2)
-                        store[prod.input2] += Math.round((1.25 * city.companies[c].buildings * prod.input2Amount * totalDays));
+                        store[prod.input2] += Math.round((1.25 * buildings * prod.input2Amount * totalDays));
 
                 }
                 for (var y = 0; y < parameter.allProducts.length; y++) {
