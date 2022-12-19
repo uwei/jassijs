@@ -448,7 +448,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                     <th>Finished</th>
                     <th></th>
                 </tr>`;
-            for (var x = 0; x < 1; x++) {
+            for (var x = 0; x < this.city.queueAirplane.length; x++) {
                 html += '<tr><td >' + this.city.queueAirplane[x].name + "</td>";
                 html += "     <td>" + new Date(this.city.queueAirplane[x].ready).toLocaleDateString() + "</td>";
                 html += "</tr>";
