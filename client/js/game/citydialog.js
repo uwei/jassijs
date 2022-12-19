@@ -329,7 +329,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                 _this.city.shops--;
                 _this.update();
             });
-            for (var x = 0; x < parameter.allAirplaneTypes.length; x++) {
+            for (var x = 0; x < 1; x++) {
                 document.getElementById("new-airplane_" + x).addEventListener("click", (evt) => {
                     var sid = evt.target.id;
                     if (sid === "")

@@ -354,7 +354,7 @@ export class CityDialog {
 
         });
 
-        for (var x = 0; x < parameter.allAirplaneTypes.length; x++) {
+        for (var x = 0; x < 1; x++) {
             document.getElementById("new-airplane_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
                 if (sid === "")
