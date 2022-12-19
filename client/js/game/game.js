@@ -143,7 +143,6 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             Money:<span id="gamemoney"></span>` + icons_1.Icons.money + `
             <button id="save-game"  class="mybutton">` + icons_1.Icons.save + `</button> 
             <button id="show-diagram"  class="mybutton">` + icons_1.Icons.diagram + `</button> 
-            <button id="debug-game"  class="mybutton">` + icons_1.Icons.debug + `</button> 
           </div>  
         `;
             this.domHeader = document.createRange().createContextualFragment(sdomHeader).children[0];
@@ -171,14 +170,16 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
                 savedialog_1.SaveDialog.getInstance().game = this;
                 savedialog_1.SaveDialog.getInstance().show();
             });
-            document.getElementById("debug-game").addEventListener("click", () => {
-                for (var x = 0; x < this.world.airplanes.length; x++) {
-                    this.world.airplanes[x].costs = parameter.allAirplaneTypes[0].costs;
-                    this.world.airplanes[x].speed = parameter.allAirplaneTypes[0].speed;
-                    this.world.airplanes[x].typeid = 0;
-                    this.world.airplanes[x].capacity = parameter.allAirplaneTypes[0].capacity;
-                }
-            });
+            /*
+             document.getElementById("debug-game").addEventListener("click", () => {
+              for(var x=0;x<this.world.airplanes.length;x++){
+                this.world.airplanes[x].costs=parameter.allAirplaneTypes[0].costs;
+                this.world.airplanes[x].speed=parameter.allAirplaneTypes[0].speed;
+                this.world.airplanes[x].typeid=0;
+                this.world.airplanes[x].capacity=parameter.allAirplaneTypes[0].capacity;
+                
+              }
+             });*/
             document.getElementById("show-diagram").addEventListener("click", () => {
                 diagramdialog_1.DiagramDialog.getInstance().world = this.world;
                 diagramdialog_1.DiagramDialog.getInstance().show();
