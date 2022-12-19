@@ -28,7 +28,12 @@ export class Airplane {
     capacity:number;
     loadedCount:number=0;
     activeRoute = -1;
-    squadron:Airplane[]=[];//Geschwader
+    get squadron():Airplane[]{
+        return [];//Geschwader
+    }
+    set squadron(val){
+        //Geschwader
+    }
     type = "Airplane";
     constructor(world: World) {
         this.world = world;
@@ -46,6 +51,7 @@ export class Airplane {
               this.route.push(rt);
           }*/
     } 
+    
     getCurrentCity(){
         
         for (var x = 0; x < this.world.cities.length; x++) {
@@ -57,7 +63,7 @@ export class Airplane {
     }
     upgrade(){
         this.typeid++;
-        this.speed=Math.round(this.speed*1.2);
+        this.speed=Math.round(this.speed*1.08);
         this.capacity=Math.round(this.capacity*1.5);
         this.world.game.changeMoney(-this.typeid*10000,"upgrade airplane");
         this.costs=Math.round(this.capacity*1.5);
