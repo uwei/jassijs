@@ -66,7 +66,7 @@ export class Airplane {
         this.speed=Math.round(this.speed*1.04);
         this.capacity=Math.round(this.capacity*1.5);
         this.world.game.changeMoney(-this.typeid*10000,"upgrade airplane");
-        this.costs=Math.round(this.capacity*1.5);
+        this.costs=Math.round(this.costs*1.5);
     }
     updateSquadron(){
         var speed=parameter.allAirplaneTypes[this.typeid].speed;

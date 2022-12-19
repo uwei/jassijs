@@ -61,6 +61,7 @@ define(["require", "exports", "game/icons", "game/route", "game/routedialog"], f
                     <span id="airplanedialog-type">Type:</span><br/>
                     <span id="airplanedialog-speed">Speed:</span><br/>
                     <span id="airplanedialog-capacity">Capacity:</span><br/> 
+                    <span id="airplanedialog-costs">Daily Costs:</span><br/> 
                     <button style="font-size:14px" id="upgrade-squadron" class="mybutton">Upgrade</button>
                     <button style="font-size:14px" id="delete-airplane" class="mybutton">` + icons_1.Icons.remove + `</button>
                  </div>
@@ -148,6 +149,7 @@ define(["require", "exports", "game/icons", "game/route", "game/routedialog"], f
                 });
                 document.getElementById("upgrade-squadron").addEventListener('click', (e) => {
                     _this.airplane.upgrade();
+                    _this.update();
                     //SquadronDialog.getInstance().airplane = _this.airplane;
                     //SquadronDialog.getInstance().show();
                 });
@@ -312,6 +314,7 @@ define(["require", "exports", "game/icons", "game/route", "game/routedialog"], f
             document.getElementById("airplanedialog-type").innerHTML = "Type: " + this.airplane.typeid;
             document.getElementById("airplanedialog-speed").innerHTML = "Speed: " + this.airplane.speed;
             document.getElementById("airplanedialog-capacity").innerHTML = "Capacity:" + this.airplane.loadedCount + "/" + this.airplane.capacity;
+            document.getElementById("airplanedialog-costs").innerHTML = "Daily costs:" + this.airplane.costs;
         }
         update(force = false) {
             var _this = this;

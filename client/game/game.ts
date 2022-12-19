@@ -172,6 +172,7 @@ export class Game {
             Money:<span id="gamemoney"></span>`+ Icons.money + `
             <button id="save-game"  class="mybutton">`+ Icons.save + `</button> 
             <button id="show-diagram"  class="mybutton">`+ Icons.diagram + `</button> 
+            <button id="debug-game"  class="mybutton">`+ Icons.debug + `</button> 
           </div>  
         `;
     this.domHeader = <any>document.createRange().createContextualFragment(sdomHeader).children[0];
@@ -203,12 +204,15 @@ export class Game {
       SaveDialog.getInstance().show();
     });
    
- /*   document.getElementById("debug-game").addEventListener("click", () => {
-      for (var x = 0; x < parameter.allProducts.length; x++) {
-        _this.world.cities[0].shop[x] = 5000;
-      }
-      _this._money = 1000000;
-    });*/
+    document.getElementById("debug-game").addEventListener("click", () => {
+     for(var x=0;x<this.world.airplanes.length;x++){
+       this.world.airplanes[x].costs=parameter.allAirplaneTypes[0].costs;
+       this.world.airplanes[x].speed=parameter.allAirplaneTypes[0].speed;
+       this.world.airplanes[x].typeid=0;
+       this.world.airplanes[x].capacity=parameter.allAirplaneTypes[0].capacity;
+       
+     }
+    });
     document.getElementById("show-diagram").addEventListener("click", () => {
       DiagramDialog.getInstance().world = this.world;
       DiagramDialog.getInstance().show();

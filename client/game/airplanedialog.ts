@@ -69,6 +69,7 @@ export class AirplaneDialog {
                     <span id="airplanedialog-type">Type:</span><br/>
                     <span id="airplanedialog-speed">Speed:</span><br/>
                     <span id="airplanedialog-capacity">Capacity:</span><br/> 
+                    <span id="airplanedialog-costs">Daily Costs:</span><br/> 
                     <button style="font-size:14px" id="upgrade-squadron" class="mybutton">Upgrade</button>
                     <button style="font-size:14px" id="delete-airplane" class="mybutton">`+ Icons.remove + `</button>
                  </div>
@@ -158,6 +159,7 @@ export class AirplaneDialog {
             });
             document.getElementById("upgrade-squadron").addEventListener('click', (e) => {
                 _this.airplane.upgrade();
+                _this.update();
                 //SquadronDialog.getInstance().airplane = _this.airplane;
                 //SquadronDialog.getInstance().show();
             });
@@ -335,6 +337,7 @@ export class AirplaneDialog {
         (<HTMLInputElement>document.getElementById("airplanedialog-type")).innerHTML = "Type: " + this.airplane.typeid;
         (<HTMLInputElement>document.getElementById("airplanedialog-speed")).innerHTML = "Speed: " + this.airplane.speed;
         (<HTMLInputElement>document.getElementById("airplanedialog-capacity")).innerHTML = "Capacity:" + this.airplane.loadedCount + "/" + this.airplane.capacity;
+        (<HTMLInputElement>document.getElementById("airplanedialog-costs")).innerHTML = "Daily costs:" + this.airplane.costs;
     }
     update(force = false) {
         var _this = this;
