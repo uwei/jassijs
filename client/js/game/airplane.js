@@ -40,6 +40,7 @@ define(["require", "exports", "game/airplanedialog"], function (require, exports
             this.speed = Math.round(this.speed * 1.2);
             this.capacity = Math.round(this.capacity * 1.5);
             this.world.game.changeMoney(-this.typeid * 10000, "upgrade airplane");
+            this.costs = Math.round(this.capacity * 1.5);
         }
         updateSquadron() {
             var speed = parameter.allAirplaneTypes[this.typeid].speed;
@@ -198,11 +199,12 @@ define(["require", "exports", "game/airplanedialog"], function (require, exports
             h.show();
         }
         getDailyCosts() {
-            var ret = parameter.allAirplaneTypes[this.typeid].costs;
-            for (var x = 0; x < this.squadron.length; x++) {
-                ret += parameter.allAirplaneTypes[this.squadron[x].typeid].costs;
+            /*var ret=parameter.allAirplaneTypes[this.typeid].costs;
+            for(var x=0;x<this.squadron.length;x++){
+                ret+=parameter.allAirplaneTypes[this.squadron[x].typeid].costs;
             }
-            return ret;
+            return ret;*/
+            return this.costs;
         }
     }
     exports.Airplane = Airplane;
