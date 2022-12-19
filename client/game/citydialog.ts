@@ -466,7 +466,7 @@ export class CityDialog {
     }
 
     updateConstruction() {
-        for (var x = 0; x < parameter.allAirplaneTypes.length; x++) {
+        for (var x = 0; x < 1; x++) {
             if (this.city.canBuild(Math.round(parameter.allAirplaneTypes[x].buildingCosts * parameter.rateCostsAirplaine), parameter.allAirplaneTypes[x].buildingMaterial) === "") {
                 document.getElementById("new-airplane_" + x).removeAttribute("disabled");
             } else {
@@ -480,7 +480,7 @@ export class CityDialog {
                     <th>Finished</th>
                     <th></th>
                 </tr>`;
-        for (var x = 0; x < this.city.queueAirplane.length; x++) {
+        for (var x = 0; x < 1; x++) {
             html += '<tr><td >' + this.city.queueAirplane[x].name + "</td>";
             html += "     <td>" + new Date(this.city.queueAirplane[x].ready).toLocaleDateString() + "</td>";
             html += "</tr>";
