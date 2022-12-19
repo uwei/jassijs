@@ -165,7 +165,7 @@ export class Game {
     this.dom = dom;
     var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
-            Traffics- 
+            Traffics V1.2- 
             <button id="game-slower"  class="mybutton">`+ Icons.minus + `</button> 
             <span id="gamedate"></span>   
             <button id="game-faster"  class="mybutton">`+ Icons.plus + `</button> 

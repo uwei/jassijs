@@ -333,7 +333,7 @@ export class City {
         }
 
         for (var x = 0; x < parameter.allProducts.length; x++) {
-            var totalDailyConsumtion = Math.round(parameter.allProducts[x].dailyConsumtion * this.people*(this.world.advertising[x]?1.1:1));
+            var totalDailyConsumtion = Math.round(parameter.allProducts[x].dailyConsumtion * this.people*(this.world.advertising[x]?1.25:1));
             totalDailyConsumtion--;//never go down
             if (totalDailyConsumtion < 1)
                 totalDailyConsumtion = 1;
