@@ -159,7 +159,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                         </tr>
                         ${(function fun() {
                 var ret = "";
-                for (var x = 0; x < parameter.allAirplaneTypes.length; x++) {
+                for (var x = 0; x < 1; x++) {
                     ret = ret + "<tr>";
                     ret = ret + "<td>" + parameter.allAirplaneTypes[x].model + "</td>";
                     ret = ret + "<td>" + parameter.allAirplaneTypes[x].speed + "</td>";
