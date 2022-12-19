@@ -46,7 +46,7 @@ export class RouteDialog {
             <select id="route-select" >
             </select>
             <input id="routedialog-route-next" type="button" value=">" class="mybutton"/>
-            <button id="route-copy-prev" title="copy prev route" class="mybutton">`+ Icons.copy + `</button>
+           
                       
           </div>
           
@@ -189,9 +189,7 @@ export class RouteDialog {
             _this.update();
 
         });
-        document.getElementById("route-copy-prev").addEventListener("click", (e) => {
-            _this.copyRoute();
-        });
+      
         document.getElementById("routedialog-airplane-prev").addEventListener("click", (e) => {
             _this.prevAirplane();
         });

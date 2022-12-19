@@ -37,7 +37,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             <select id="route-select" >
             </select>
             <input id="routedialog-route-next" type="button" value=">" class="mybutton"/>
-            <button id="route-copy-prev" title="copy prev route" class="mybutton">` + icons_1.Icons.copy + `</button>
+           
                       
           </div>
           
@@ -166,9 +166,6 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
             document.getElementById("update-all-routes").addEventListener("click", (e) => {
                 _this.loadFillAllConsumtion();
                 _this.update();
-            });
-            document.getElementById("route-copy-prev").addEventListener("click", (e) => {
-                _this.copyRoute();
             });
             document.getElementById("routedialog-airplane-prev").addEventListener("click", (e) => {
                 _this.prevAirplane();

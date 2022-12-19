@@ -249,7 +249,7 @@ export class CityDialog {
                     var city = _this.city.world.cities[x];
                     for (var y = 0; y < city.companies.length; y++) {
                         if (city.companies[y].productid === Number(sel)) {
-                            if(hide_busy&&city.getBuildingInProgress(parseInt(sel))>0){
+                            if(hide_busy&&city.queueBuildings.length>0){
                                 //
                             }else
                                 this.filteredCities.push(city);
