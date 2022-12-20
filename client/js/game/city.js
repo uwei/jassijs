@@ -111,6 +111,12 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 last = this.queueBuildings[this.queueBuildings.length - 1].ready;
             last += parameter.daysBuildBuilding * 1000 * 60 * 60 * 24;
             this.queueBuildings.push({ ready: last, typeid: typeid, name: "" });
+            //shop should create at first
+            if (typeid === 10000) {
+                var t = this.queueBuildings[0].typeid;
+                this.queueBuildings[0].typeid = this.queueBuildings[this.queueBuildings.length - 1].typeid;
+                this.queueBuildings[this.queueBuildings.length - 1].typeid = t;
+            }
         }
         buildAirplane(typeid) {
             var last = this.world.game.date.getTime();
