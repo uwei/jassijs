@@ -322,7 +322,7 @@ export class RouteDialog {
 
                 }
                 for (var y = 0; y < parameter.allProducts.length; y++) {
-                    store[y] += Math.round(1.3 * totalDays * parameter.allProducts[y].dailyConsumtion * (allPeople + parameter.neutralStartPeople));
+                    store[y] += Math.round(1.15 * totalDays * parameter.allProducts[y].dailyConsumtion * (allPeople + parameter.neutralStartPeople));
 
                 }
 
