@@ -108,6 +108,7 @@ define(["require", "exports", "game/airplanedialog"], function (require, exports
             }
         }
         calcNewPosition() {
+            var _this = this;
             var pixelToTarget = Math.round(Math.sqrt(Math.pow(this.targetX - this.x, 2) + Math.pow(this.targetY - this.y, 2))); //Pytharoras
             var fromX = this.x;
             var fromY = this.y;
@@ -136,7 +137,9 @@ define(["require", "exports", "game/airplanedialog"], function (require, exports
                     winkel = 180 - rad * (180) / Math.PI;
                 }
                 var s = ("" + winkel).replace(",", ".");
-                this.dom.style.transform = "rotate(" + s + "deg)";
+                //   setTimeout(()=>{
+                _this.dom.style.transform = "rotate(" + s + "deg)";
+                //   });
                 // console.log(pixelToTarget+" pixel in "+toTime+" seconds. Position "+nowX+" "+nowY+" lastupdate "+nowTime+" "+winkel+"°");
                 this.x = nowX;
                 this.y = nowY;

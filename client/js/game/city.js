@@ -397,10 +397,13 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 this.domShopfull.style.display = "none";
         }
         update() {
+            var _this = this;
             if (this.lastUpdate === undefined) {
                 this.lastUpdate = this.world.game.date.getTime();
             }
-            this.domDesc.innerHTML = this.name + "<br/>" + this.people.toLocaleString() + "<br/>";
+            //  setTimeout(()=>{
+            _this.domDesc.innerText = this.name + "\n" + this.people.toLocaleString();
+            //  },1);
             //this.updateNeutralCompanies();
             for (var x = 0; x < this.companies.length; x++) {
                 this.companies[x].update();

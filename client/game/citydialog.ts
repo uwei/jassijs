@@ -574,7 +574,8 @@ export class CityDialog {
                         _this.close();
                     });
                 }, 200);
-            }
+            },
+            resizable: false
         }).dialog("widget").draggable("option", "containment", "none");
         $(this.dom).parent().css({ position: "fixed" });
 

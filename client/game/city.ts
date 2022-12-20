@@ -447,11 +447,14 @@ export class City {
             this.domShopfull.style.display = "none";
     }
     update() {
+        var _this=this;
         if (this.lastUpdate === undefined) {
             this.lastUpdate = this.world.game.date.getTime();
         }
+      //  setTimeout(()=>{
+            _this.domDesc.innerText = this.name + "\n" + this.people.toLocaleString();
 
-        this.domDesc.innerHTML = this.name + "<br/>" + this.people.toLocaleString() + "<br/>";
+      //  },1);
 
 
         //this.updateNeutralCompanies();

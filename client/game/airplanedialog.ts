@@ -394,7 +394,8 @@ export class AirplaneDialog {
                         _this.close();
                     });
                 }, 200);
-            }
+            },
+            resizable: false
         });
         dlg.dialog("widget").draggable("option", "containment", "none");
         $(this.dom).parent().css({ position: "fixed" });

@@ -197,7 +197,8 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                             _this.close();
                         });
                     }, 200);
-                }
+                },
+                resizable: false
             }).dialog("widget").draggable("option", "containment", "none");
             $(this.dom).parent().css({ position: "fixed" });
         }
