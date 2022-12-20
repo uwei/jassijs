@@ -545,7 +545,7 @@ export class City {
     }
 
     static getBuildingCostsAsIcon(money: number, buildingMaterial: number[], withBreak = false) {
-        var s = money + " " + Icons.money;
+        var s = money.toLocaleString() + " " + Icons.money;
         var lastAmount = undefined;
         for (var x = 0; x < buildingMaterial.length; x++) {
             if (buildingMaterial[x]) {

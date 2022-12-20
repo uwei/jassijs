@@ -486,7 +486,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             return ret;
         }
         static getBuildingCostsAsIcon(money, buildingMaterial, withBreak = false) {
-            var s = money + " " + icons_1.Icons.money;
+            var s = money.toLocaleString() + " " + icons_1.Icons.money;
             var lastAmount = undefined;
             for (var x = 0; x < buildingMaterial.length; x++) {
                 if (buildingMaterial[x]) {

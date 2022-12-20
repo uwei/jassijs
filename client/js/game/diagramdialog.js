@@ -144,7 +144,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                 }
                 else {
                     but.removeAttribute("disabled");
-                    but.innerHTML = "for " + this.world.cities.length * parameter.costsAdvertising + " " + icons_1.Icons.money;
+                    but.innerHTML = "for " + (this.world.cities.length * parameter.costsAdvertising).toLocaleString() + " " + icons_1.Icons.money;
                 }
             }
             //

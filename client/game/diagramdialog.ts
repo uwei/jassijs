@@ -159,7 +159,7 @@ export class DiagramDialog {
                 but.setAttribute("disabled", "");
             } else {
                 but.removeAttribute("disabled");
-                but.innerHTML = "for " + this.world.cities.length * parameter.costsAdvertising+" "+Icons.money;
+                but.innerHTML = "for " + (this.world.cities.length * parameter.costsAdvertising).toLocaleString()+" "+Icons.money;
             }
         }
 

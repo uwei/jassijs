@@ -139,7 +139,7 @@ define(["require", "exports", "game/citydialog", "game/citydialogmarket"], funct
                 var table = document.getElementById("citydialog-shop-table");
                 var tr = table.children[0].children[x + 1];
                 gesamount += storesource[x];
-                tr.children[1].innerHTML = city.shop[x].toString();
+                tr.children[1].innerHTML = city.shop[x].toLocaleString();
                 var buyslider = document.getElementById("shop-buy-slider_" + x);
                 var sellslider = document.getElementById("shop-sell-slider_" + x);
                 if (document.activeElement !== buyslider && document.activeElement !== sellslider) {
