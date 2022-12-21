@@ -272,7 +272,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
         }
         getRating(people) {
             var score = this.getScore();
-            var maxpeople = (score + 1) * 200;
+            var maxpeople = Math.max(parameter.neutralStartPeople, (score + 1) * 200);
             if (people === maxpeople)
                 return 0;
             if (score === 19)
@@ -330,12 +330,16 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
         }
         updatePeople() {
             var newPeople = Math.max(1, Math.round(this.people / 100000));
-            var workers = 0;
+            var workers = parameter.neutralStartPeople;
             for (var x = 0; x < this.world.cities.length; x++) {
                 var ct = this.world.cities[x];
                 for (var i = 0; i < ct.companies.length; i++) {
                     workers += ct.companies[i].workers;
                 }
+            }
+            if (this.people < workers) {
+                this.people = workers;
+                return;
             }
             //  var rating=this.getRating(this.people)===-1?Math.round(newPeople/2):newPeople;
             while (newPeople > 0) {
@@ -494,7 +498,9 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 this.lastUpdate = this.world.game.date.getTime();
             }
             //  setTimeout(()=>{
-            _this.domDesc.innerText = this.name + "\n" + this.people.toLocaleString();
+            var s = this.name + "\n" + (this.people === 0 ? "" : this.people.toLocaleString());
+            if (_this.domDesc.innerText !== s)
+                _this.domDesc.innerText = s;
             //  },1);
             //this.updateNeutralCompanies();
             for (var x = 0; x < this.companies.length; x++) {
@@ -679,7 +685,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 //überschneidung
             }
             city.world = world;
-            city.people = parameter.neutralStartPeople;
+            city.people = 0; // parameter.neutralStartPeople;
             var num = getRandomInt(allCities.length);
             while (allready.indexOf(num) !== -1) {
                 num = getRandomInt(allCities.length);

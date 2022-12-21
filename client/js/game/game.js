@@ -24,7 +24,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.rateCostShop = 100;
             this.rateCostsShopMany = 1000;
             this.workerInCompany = 20;
-            this.neutralStartPeople = 0;
+            this.neutralStartPeople = 500;
             this.neutralProductionRate = 2;
             this.newAirportRate = 1.05;
             this.capacityShop = 5000;
@@ -33,6 +33,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.peopleInHouse = 200;
             this.numberBuildWithContextMenu = 10;
             this.numberBuildHousesWithContextMenu = 10;
+            this.startMoney = 250000;
             this.allAirplaneTypes = [
                 { typeid: 0, model: "Airplane", speed: 200, capacity: 200, costs: 60, buildDays: 20, buildingCosts: 20000, buildingMaterial: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
                 /* {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:25,buildingCosts:40000,buildingMaterial:[0,0,0,20,0,20,0,20,0,20,0,0,0,0,20]},
@@ -71,12 +72,12 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
     class Game {
         constructor() {
             this.parameter = parameter;
-            this.speed = 1;
             this.mapWidth = 1000;
             this.mapHeight = 600;
             this.statistic = new Statistic();
             var _this = this;
             Game.instance = this;
+            this.speed = Game.temposcale[6];
             this.lastUpdate = Date.now();
             this.date = new Date("Sat Jan 01 2000 00:00:00");
             citydialog_1.CityDialog.instance = undefined;
@@ -118,7 +119,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
         newGame() {
             this.world = new world_1.World();
             this.world.game = this;
-            this._money = 120000;
+            this._money = parameter.startMoney;
             this.world.newGame();
         }
         getMoney() {
@@ -233,7 +234,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
         }
     }
     exports.Game = Game;
-    Game.temposcale = [0.01, 0.5, 1, 2, 4, 8, 16, 32, 64, 128];
+    Game.temposcale = [0.01, 0.5, 1, 2, 4, 8, 16, 32, 64, 128, 256];
     function test() {
     }
     exports.test = test;

@@ -30,7 +30,7 @@ export class World {
         for(var x=0;x<parameter.allProducts.length;x++){
             this.advertising.push(undefined);
         }
-        this.advertising
+       
         this._intervall = setInterval(() => {
             for (var x = 0; x < _this.airplanes?.length; x++) {
                 /*if (this.airplanes[x].x < 500)
@@ -154,9 +154,11 @@ export class World {
     }
 
     newGame() {
-        createCities(this, 16);
+        createCities(this, 15);
         this.cities[0].shops=1;
         this.cities[0].houses=1;
+        this.cities[0].people = parameter.neutralStartPeople;
+        createCities(this,1);
         this.cities[this.cities.length-1].hasAirport=false;
         for (var x = 0; x < 1; x++) {
             var ap = new Airplane(this);

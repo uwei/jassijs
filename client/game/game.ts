@@ -37,7 +37,7 @@ export class Parameter {
   rateCostShop = 100;
   rateCostsShopMany = 1000;
   workerInCompany = 20;
-  neutralStartPeople = 0;
+  neutralStartPeople = 500;
   neutralProductionRate = 2;
   newAirportRate=1.05;
   capacityShop=5000;
@@ -47,6 +47,7 @@ export class Parameter {
   peopleInHouse=200;
   numberBuildWithContextMenu=10;
   numberBuildHousesWithContextMenu=10;
+  startMoney=250000;
   allAirplaneTypes=[
     {typeid:0,model:"Airplane",speed:200,capacity:200, costs:60,buildDays:20,buildingCosts:20000,buildingMaterial:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
    /* {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:25,buildingCosts:40000,buildingMaterial:[0,0,0,20,0,20,0,20,0,20,0,0,0,0,20]},
@@ -93,17 +94,17 @@ export class Game {
   version:"1.0";
   date: Date;
   lastUpdate: number;
-  speed: number = 1;
+  speed: number;
   pausedSpeed: number;
   timer;
   mapWidth = 1000;
   mapHeight = 600;
   statistic = new Statistic();
-  static temposcale = [0.01, 0.5, 1, 2, 4, 8, 16, 32, 64, 128]
+  static temposcale = [0.01, 0.5, 1, 2, 4, 8, 16, 32, 64, 128,256]
   constructor() {
     var _this = this;
     Game.instance = this;
-
+    this.speed=Game.temposcale[6];
     this.lastUpdate = Date.now();
     this.date = new Date("Sat Jan 01 2000 00:00:00");
     CityDialog.instance = undefined;
@@ -147,7 +148,7 @@ export class Game {
   newGame() {
     this.world = new World();
     this.world.game = this;
-    this._money = 120000;
+    this._money = parameter.startMoney;
     this.world.newGame();
   }
   getMoney() {

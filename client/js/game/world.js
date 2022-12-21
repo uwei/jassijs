@@ -16,7 +16,6 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
             for (var x = 0; x < parameter.allProducts.length; x++) {
                 this.advertising.push(undefined);
             }
-            this.advertising;
             this._intervall = setInterval(() => {
                 var _a;
                 for (var x = 0; x < ((_a = _this.airplanes) === null || _a === void 0 ? void 0 : _a.length); x++) {
@@ -134,9 +133,11 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
             city.update();
         }
         newGame() {
-            (0, city_1.createCities)(this, 16);
+            (0, city_1.createCities)(this, 15);
             this.cities[0].shops = 1;
             this.cities[0].houses = 1;
+            this.cities[0].people = parameter.neutralStartPeople;
+            (0, city_1.createCities)(this, 1);
             this.cities[this.cities.length - 1].hasAirport = false;
             for (var x = 0; x < 1; x++) {
                 var ap = new airplane_1.Airplane(this);

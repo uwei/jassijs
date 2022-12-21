@@ -310,7 +310,7 @@ export class City {
     }
     getRating(people: number) {
         var score = this.getScore();
-        var maxpeople = (score + 1) * 200;
+        var maxpeople = Math.max(parameter.neutralStartPeople, (score + 1) * 200);
         if (people === maxpeople)
             return 0;
         if (score === 19)
@@ -367,12 +367,16 @@ export class City {
     }
     updatePeople() {
         var newPeople = Math.max(1, Math.round(this.people / 100000));
-        var workers=0;
+        var workers=parameter.neutralStartPeople;
         for(var x=0;x<this.world.cities.length;x++){
             var ct=this.world.cities[x];
             for(var i=0;i<ct.companies.length;i++){
                 workers+=ct.companies[i].workers;
             }
+        }
+        if(this.people<workers){
+            this.people=workers;
+            return;
         }
         //  var rating=this.getRating(this.people)===-1?Math.round(newPeople/2):newPeople;
         while (newPeople > 0) {
@@ -382,9 +386,9 @@ export class City {
                 this.people--;
             newPeople--;
         }
-        if(this.people>workers){
-            this.people=workers;
-        }
+         if (this.people > workers) {
+            this.people = workers;
+         }
        // if (this.people > this.houses * parameter.peopleInHouse) {
       //      this.people = this.houses * parameter.peopleInHouse;
       //  }
@@ -545,7 +549,9 @@ export class City {
             this.lastUpdate = this.world.game.date.getTime();
         }
         //  setTimeout(()=>{
-        _this.domDesc.innerText = this.name + "\n" + this.people.toLocaleString();
+        var s=this.name + "\n" +(this.people===0?"":this.people.toLocaleString());
+        if(_this.domDesc.innerText!==s)
+            _this.domDesc.innerText = s;
 
         //  },1);
 
@@ -744,7 +750,7 @@ export function createCities(world: World, count: number) {
 
         }
         city.world = world;
-        city.people = parameter.neutralStartPeople;
+        city.people =0;// parameter.neutralStartPeople;
         var num = getRandomInt(allCities.length);
         while (allready.indexOf(num) !== -1) {
             num = getRandomInt(allCities.length);
