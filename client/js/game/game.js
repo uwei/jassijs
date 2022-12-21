@@ -118,7 +118,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
         newGame() {
             this.world = new world_1.World();
             this.world.game = this;
-            this._money = 100000;
+            this._money = 120000;
             this.world.newGame();
         }
         getMoney() {

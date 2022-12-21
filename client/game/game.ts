@@ -147,7 +147,7 @@ export class Game {
   newGame() {
     this.world = new World();
     this.world.game = this;
-    this._money = 100000;
+    this._money = 120000;
     this.world.newGame();
   }
   getMoney() {

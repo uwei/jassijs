@@ -329,7 +329,14 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                     return false;*/
         }
         updatePeople() {
-            var newPeople = Math.max(10, Math.round(this.people / 1000));
+            var newPeople = Math.max(1, Math.round(this.people / 100000));
+            var workers = 0;
+            for (var x = 0; x < this.world.cities.length; x++) {
+                var ct = this.world.cities[x];
+                for (var i = 0; i < ct.companies.length; i++) {
+                    workers += ct.companies[i].workers;
+                }
+            }
             //  var rating=this.getRating(this.people)===-1?Math.round(newPeople/2):newPeople;
             while (newPeople > 0) {
                 if (this.getRating(this.people) === 1)
@@ -338,9 +345,12 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                     this.people--;
                 newPeople--;
             }
-            if (this.people > this.houses * parameter.peopleInHouse) {
-                this.people = this.houses * parameter.peopleInHouse;
+            if (this.people > workers) {
+                this.people = workers;
             }
+            // if (this.people > this.houses * parameter.peopleInHouse) {
+            //      this.people = this.houses * parameter.peopleInHouse;
+            //  }
         }
         updatePeopleOld() {
             var newPeople = 1;
