@@ -136,6 +136,7 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
         newGame() {
             (0, city_1.createCities)(this, 16);
             this.cities[0].shops = 1;
+            this.cities[0].houses = 1;
             this.cities[this.cities.length - 1].hasAirport = false;
             for (var x = 0; x < 1; x++) {
                 var ap = new airplane_1.Airplane(this);

@@ -24,13 +24,15 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.rateCostShop = 100;
             this.rateCostsShopMany = 1000;
             this.workerInCompany = 20;
-            this.neutralStartPeople = 200;
+            this.neutralStartPeople = 0;
             this.neutralProductionRate = 2;
             this.newAirportRate = 1.05;
             this.capacityShop = 5000;
             this.daysBuildBuilding = 4;
             this.costsAdvertising = 2000;
+            this.peopleInHouse = 200;
             this.numberBuildWithContextMenu = 10;
+            this.numberBuildHousesWithContextMenu = 10;
             this.allAirplaneTypes = [
                 { typeid: 0, model: "Airplane", speed: 200, capacity: 200, costs: 60, buildDays: 20, buildingCosts: 20000, buildingMaterial: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] }
                 /* {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:25,buildingCosts:40000,buildingMaterial:[0,0,0,20,0,20,0,20,0,20,0,0,0,0,20]},
@@ -136,7 +138,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.dom = dom;
             var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
-            Traffics V1.2- 
+            Traffics V1.3- 
             <button id="game-slower"  class="mybutton">` + icons_1.Icons.minus + `</button> 
             <span id="gamedate"></span>   
             <button id="game-faster"  class="mybutton">` + icons_1.Icons.plus + `</button> 

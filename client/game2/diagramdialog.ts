@@ -33,11 +33,7 @@ export class DiagramDialog {
             parameter.numberBuildWithContextMenu=num;
             _this.update();
         });
-         document.getElementById("buildHousesWithOneClick").addEventListener('change', (e) => {
-            var num=parseInt((<HTMLInputElement>document.getElementById("buildHousesWithOneClick")).value);
-            parameter.numberBuildHousesWithContextMenu=num;
-            _this.update();
-        });
+        
         for (var x = 0; x < parameter.allProducts.length; x++) {
             document.getElementById("diagram-advertise_" + x).addEventListener("click", (evt) => {
                 var sid = (<any>evt.target).id;
@@ -80,8 +76,7 @@ export class DiagramDialog {
                     </table>         
                 </div>
                  <div id="diagramdialog-settings">   
-                       number build company with one click: <input id="buildWithOneClick"  value="""/><br/>
-                       number build houses with one click: <input id="buildHousesWithOneClick"  value="""/>
+                       number build company with one click: <input id="buildWithOneClick"  value="""/>
                 </div>
             </div>
            </div> 
@@ -127,7 +122,6 @@ export class DiagramDialog {
     }
     update() {
          (<HTMLInputElement>document.getElementById("buildWithOneClick")).value=""+parameter.numberBuildWithContextMenu;
-         (<HTMLInputElement>document.getElementById("buildHousesWithOneClick")).value=""+parameter.numberBuildHousesWithContextMenu;
         try {
             if (!$(this.dom).dialog('isOpen')) {
                 return;

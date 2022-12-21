@@ -21,6 +21,11 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                 parameter.numberBuildWithContextMenu = num;
                 _this.update();
             });
+            document.getElementById("buildHousesWithOneClick").addEventListener('change', (e) => {
+                var num = parseInt(document.getElementById("buildHousesWithOneClick").value);
+                parameter.numberBuildHousesWithContextMenu = num;
+                _this.update();
+            });
             for (var x = 0; x < parameter.allProducts.length; x++) {
                 document.getElementById("diagram-advertise_" + x).addEventListener("click", (evt) => {
                     var sid = evt.target.id;
@@ -62,7 +67,8 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     </table>         
                 </div>
                  <div id="diagramdialog-settings">   
-                       number build company with one click: <input id="buildWithOneClick"  value="""/>
+                       number build company with one click: <input id="buildWithOneClick"  value="""/><br/>
+                       number build houses with one click: <input id="buildHousesWithOneClick"  value="""/>
                 </div>
             </div>
            </div> 
@@ -107,6 +113,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
         }
         update() {
             document.getElementById("buildWithOneClick").value = "" + parameter.numberBuildWithContextMenu;
+            document.getElementById("buildHousesWithOneClick").value = "" + parameter.numberBuildHousesWithContextMenu;
             try {
                 if (!$(this.dom).dialog('isOpen')) {
                     return;

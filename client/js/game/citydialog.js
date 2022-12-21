@@ -120,8 +120,13 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                     <br/>
                        ` + icons_1.Icons.shop + ` Shops: <span id="count-shops">0/0</span>  
                         ` + ` costs: <span id="costs-shops">0</span> ` + icons_1.Icons.money + `  
-                        <button id="buy-shop"  class="mybutton">+` + icons_1.Icons.home + ` for 15.000` + icons_1.Icons.money + `</button> 
-                        <button id="delete-shop"  class="mybutton">-` + icons_1.Icons.home + `</button>`;
+                        <button id="buy-shop"  class="mybutton">+` + icons_1.Icons.shop + ` for 15.000` + icons_1.Icons.money + `</button> 
+                        <button id="delete-shop"  class="mybutton">-` + icons_1.Icons.shop + `</button>` +
+                `<div id="city-houses">` + icons_1.Icons.home + ` Houses: <span id="count-houses">0/0</span>  
+                        ` + ` costs: <span id="costs-houses">0</span> ` + icons_1.Icons.money + `  
+                        <button id="buy-house"  class="mybutton">+` + icons_1.Icons.home + ` for 10.000` + icons_1.Icons.money + `</button> 
+                        <button id="delete-house"  class="mybutton">-` + icons_1.Icons.home + `</button>` +
+                '</div>';
         }
         createScore() {
             return `<table id="citydialog-score-table" style="height:100%;weight:100%;">
@@ -295,11 +300,12 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                     }
                     if (comp.buildings > 0)
                         comp.buildings--;
-                    var unempl = this.city.companies[id].workers - (this.city.companies[id].buildings * parameter.workerInCompany);
-                    if (unempl > 0) {
-                        this.city.companies[id].workers -= unempl;
-                        this.city.transferWorker(unempl);
-                    }
+                    _this.city.companies[id].workers -= parameter.workerInCompany;
+                    /* var unempl = this.city.companies[id].workers - (this.city.companies[id].buildings * parameter.workerInCompany);
+                     if (unempl > 0) {
+                         this.city.companies[id].workers -= unempl;
+                         this.city.transferWorker(unempl);
+                     }*/
                     _this.update();
                 });
                 document.getElementById("buy-license_" + x).addEventListener("click", (evt) => {
@@ -327,6 +333,42 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                     return;
                 }
                 _this.city.shops--;
+                _this.update();
+            });
+            document.getElementById("buy-house").addEventListener("click", (evt) => {
+                if (!_this.city.commitBuildingCosts(10000, [], "buy house"))
+                    return;
+                _this.city.houses++;
+                //_this.city.buildBuilding(10000);
+                _this.update();
+            });
+            document.getElementById("buy-house").addEventListener("contextmenu", (evt) => {
+                evt.preventDefault();
+                if (!_this.city.commitBuildingCosts(10000 * parameter.numberBuildHousesWithContextMenu, [], "buy house"))
+                    return;
+                _this.city.houses = _this.city.houses + parameter.numberBuildHousesWithContextMenu;
+                //_this.city.buildBuilding(10000);
+                _this.update();
+            });
+            document.getElementById("delete-house").addEventListener("click", (evt) => {
+                if (_this.city.houses === 0)
+                    return;
+                //if (_this.city.tryRemoveBuildingInProgress(10000)) {
+                //    _this.update();
+                //    return;
+                //}
+                _this.city.houses--;
+                _this.update();
+            });
+            document.getElementById("delete-house").addEventListener("contextmenu", (evt) => {
+                evt.preventDefault();
+                if (_this.city.houses < parameter.numberBuildHousesWithContextMenu)
+                    return;
+                //if (_this.city.tryRemoveBuildingInProgress(10000)) {
+                //    _this.update();
+                //    return;
+                //}
+                _this.city.houses = _this.city.houses - parameter.numberBuildHousesWithContextMenu;
                 _this.update();
             });
             for (var x = 0; x < 1; x++) {
@@ -426,11 +468,18 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
             }
             document.getElementById("count-shops").innerHTML = "" + sh;
             document.getElementById("costs-shops").innerHTML = "" + this.city.getDailyCostsShops();
+            document.getElementById("count-houses").innerHTML = "" + this.city.houses.toLocaleString();
             if (this.city.canBuild(15000, []) !== "") {
                 document.getElementById("buy-shop").setAttribute("disabled", "");
             }
             else {
                 document.getElementById("buy-shop").removeAttribute("disabled");
+            }
+            if (this.city.canBuild(10000, []) !== "") {
+                document.getElementById("buy-house").setAttribute("disabled", "");
+            }
+            else {
+                document.getElementById("buy-house").removeAttribute("disabled");
             }
         }
         updateConstruction() {

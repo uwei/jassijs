@@ -280,6 +280,20 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                 //  this.world.cities[x].companies[y].
                 //}
             }
+            if (game.world.cities[1].people > 0) {
+                //migration
+                for (var x = 1; x < game.world.cities.length; x++) {
+                    game.world.cities[0].people += game.world.cities[x].people;
+                    game.world.cities[x].people = 0;
+                }
+                for (var x = 1; x < parameter.allProducts.length; x++) {
+                    game.world.cities[0].score[x] = 50;
+                }
+                game.world.cities[0].people = Math.round(game.world.cities[0].people);
+                game.world.cities[0].shops = game.world.cities[0].shops * 7;
+                game.world.cities[0].houses = Math.round(game.world.cities[0].people / parameter.peopleInHouse);
+            }
+            console.log("People: " + game.world.cities[0].people.toLocaleString());
             game.render(this.game.dom);
             game.resume();
             window.localStorage.setItem("lastgame", filename);

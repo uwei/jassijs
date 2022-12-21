@@ -13,6 +13,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.score = [];
             this.shop = [];
             this.shops = 0;
+            this.houses = 0;
             this.queueAirplane = [];
             this.queueBuildings = [];
             this.type = "City";
@@ -252,6 +253,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                     for (var x = 0; x < this.companies.length; x++) {
                         if (this.companies[x].productid === this.queueBuildings[0].typeid) {
                             this.companies[x].buildings++;
+                            this.companies[x].workers += parameter.workerInCompany;
                             break;
                         }
                     }
@@ -260,7 +262,87 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 this.queueBuildings.splice(0, 1);
             }
         }
+        getScore() {
+            var ret = 0;
+            for (var x = 0; x < this.score.length; x++) {
+                if (this.score[x] > 50)
+                    ret++;
+            }
+            return ret;
+        }
+        getRating(people) {
+            var score = this.getScore();
+            var maxpeople = (score + 1) * 200;
+            if (people === maxpeople)
+                return 0;
+            if (score === 19)
+                return 1;
+            if (people > maxpeople) {
+                return -1;
+            }
+            else
+                return 1;
+            /*        if(people<1000){
+                        return true;
+                    }else if(people<300&&score>0){
+                        return true;
+                    }else if(people<400&&score>1){
+                        return true;
+                    }else if(people<500&&score>2){
+                        return true;
+                    }else if(people<600&&score>3){
+                        return true;
+                    }else if(people<7000&&score>4){
+                        return true;
+                    }else if(people<9000&&score>5){
+                        return true;
+                    }else if(people<1200&&score>6){
+                        return true;
+                    }else if(people<2000&&score>7){
+                        return true;
+                    }else if(people<2500&&score>8){
+                        return true;
+                    }else if(people<3000&&score>9){
+                        return true;
+                    }else if(people<4000&&score>10){
+                        return true;
+                    }else if(people<5000&&score>11){
+                        return true;
+                    }else if(people<6000&&score>12){
+                        return true;
+                    }else if(people<8000&&score>13){
+                        return true;
+                    }else if(people<10000&&score>14){
+                        return true;
+                    }else if(people<15000&&score>15){
+                        return true;
+                    }else if(people<20000&&score>16){
+                        return true;
+                    }else if(people<25000&&score>17){
+                        return true;
+                    }else if(people<30000&&score>18){
+                        return true;
+                    }else if(score>18){
+                        return true;
+                    }
+            
+                    return false;*/
+        }
         updatePeople() {
+            var newPeople = Math.max(10, Math.round(this.people / 1000));
+            //  var rating=this.getRating(this.people)===-1?Math.round(newPeople/2):newPeople;
+            while (newPeople > 0) {
+                if (this.getRating(this.people) === 1)
+                    this.people++;
+                if (this.getRating(this.people) === -1)
+                    this.people--;
+                newPeople--;
+            }
+            if (this.people > this.houses * parameter.peopleInHouse) {
+                this.people = this.houses * parameter.peopleInHouse;
+            }
+        }
+        updatePeopleOld() {
             var newPeople = 1;
             while (newPeople > 0) {
                 var comps = [];
@@ -408,11 +490,12 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             for (var x = 0; x < this.companies.length; x++) {
                 this.companies[x].update();
             }
-            this.updateDailyConsumtion();
+            if (this === this.world.cities[0])
+                this.updateDailyConsumtion();
             this.updateAirplaneQueue();
             this.updateBuildingQueue();
             this.sellShopToMarket();
-            if (this.world.game.date.getHours() % 6 === 0)
+            if (this.world.game.date.getHours() % 1 === 0 && this == this.world.cities[0])
                 this.updatePeople();
             if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
                 //a new day starts

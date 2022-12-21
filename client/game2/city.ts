@@ -32,7 +32,6 @@ export class City {
     score: number[] = [];
     shop: number[] = [];
     shops = 0;
-    houses = 0;
     shopMinStock: number[];
     shopSellingPrice: number[];
     queueAirplane: QueueItem[] = [];
@@ -51,13 +50,13 @@ export class City {
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var val = 0;
             this.score.push(50);
-            /* for (var y = 0; y < this.companies.length; y++) {
-                 if (this.companies[y].productid === x) {
-                     val = 22 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
-                 }
-             }
-             if (val === 0) {*/
-            val = 10 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
+           /* for (var y = 0; y < this.companies.length; y++) {
+                if (this.companies[y].productid === x) {
+                    val = 22 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
+                }
+            }
+            if (val === 0) {*/
+                val = 10 * Math.round(parameter.neutralStartPeople * parameter.allProducts[x].dailyConsumtion * parameter.neutralProductionRate);
 
             //}
             this.shopMinStock.push(undefined);
@@ -146,10 +145,10 @@ export class City {
         last += parameter.daysBuildBuilding * 1000 * 60 * 60 * 24;
         this.queueBuildings.push({ ready: last, typeid: typeid, name: "" });
         //shop should create at first
-        if (typeid === 10000) {
-            var t = this.queueBuildings[0].typeid;
-            this.queueBuildings[0].typeid = this.queueBuildings[this.queueBuildings.length - 1].typeid;
-            this.queueBuildings[this.queueBuildings.length - 1].typeid = t;
+        if(typeid===10000){
+            var t=this.queueBuildings[0].typeid;
+            this.queueBuildings[0].typeid=this.queueBuildings[this.queueBuildings.length-1].typeid;
+            this.queueBuildings[this.queueBuildings.length-1].typeid=t;
         }
     }
     buildAirplane(typeid: number) {
@@ -291,7 +290,6 @@ export class City {
                 for (var x = 0; x < this.companies.length; x++) {
                     if (this.companies[x].productid === this.queueBuildings[0].typeid) {
                         this.companies[x].buildings++;
-                        this.companies[x].workers += parameter.workerInCompany;
                         break;
                     }
                 }
@@ -300,88 +298,7 @@ export class City {
             this.queueBuildings.splice(0, 1);
         }
     }
-    getScore(): number {
-        var ret = 0;
-        for (var x = 0; x < this.score.length; x++) {
-            if (this.score[x] > 50)
-                ret++;
-        }
-        return ret;
-    }
-    getRating(people: number) {
-        var score = this.getScore();
-        var maxpeople = (score + 1) * 200;
-        if (people === maxpeople)
-            return 0;
-        if (score === 19)
-            return 1;
-        if (people > maxpeople) {
-            return -1;
-        } else
-            return 1;
-        /*        if(people<1000){
-                    return true;
-                }else if(people<300&&score>0){
-                    return true;
-                }else if(people<400&&score>1){
-                    return true;
-                }else if(people<500&&score>2){
-                    return true;
-                }else if(people<600&&score>3){
-                    return true;
-                }else if(people<7000&&score>4){
-                    return true;
-                }else if(people<9000&&score>5){
-                    return true;
-                }else if(people<1200&&score>6){
-                    return true;
-                }else if(people<2000&&score>7){
-                    return true;
-                }else if(people<2500&&score>8){
-                    return true;
-                }else if(people<3000&&score>9){
-                    return true;
-                }else if(people<4000&&score>10){
-                    return true;
-                }else if(people<5000&&score>11){
-                    return true;
-                }else if(people<6000&&score>12){
-                    return true;
-                }else if(people<8000&&score>13){
-                    return true;
-                }else if(people<10000&&score>14){
-                    return true;
-                }else if(people<15000&&score>15){
-                    return true;
-                }else if(people<20000&&score>16){
-                    return true;
-                }else if(people<25000&&score>17){
-                    return true;
-                }else if(people<30000&&score>18){
-                    return true;
-                }else if(score>18){
-                    return true;
-                }
-        
-                return false;*/
-    }
     updatePeople() {
-        var newPeople = Math.max(10, Math.round(this.people / 1000));
-        //  var rating=this.getRating(this.people)===-1?Math.round(newPeople/2):newPeople;
-        while (newPeople > 0) {
-            if (this.getRating(this.people) === 1)
-                this.people++;
-            if (this.getRating(this.people) === -1)
-                this.people--;
-            newPeople--;
-        }
-        if (this.people > this.houses * parameter.peopleInHouse) {
-            this.people = this.houses * parameter.peopleInHouse;
-        }
-
-
-    }
-    updatePeopleOld() {
         var newPeople = 1;
         while (newPeople > 0) {
             var comps = [];
@@ -422,7 +339,7 @@ export class City {
         }
 
         for (var x = 0; x < parameter.allProducts.length; x++) {
-            var totalDailyConsumtion = Math.round(parameter.allProducts[x].dailyConsumtion * this.people * (this.world.advertising[x] ? 1.15 : 1));
+            var totalDailyConsumtion = Math.round(parameter.allProducts[x].dailyConsumtion * this.people*(this.world.advertising[x]?1.15:1));
             totalDailyConsumtion--;//never go down
             if (totalDailyConsumtion < 1)
                 totalDailyConsumtion = 1;
@@ -433,8 +350,8 @@ export class City {
 
 
                 var price = product.calcPrice(this.people, this.market[x] - diff, false);
-                var fromshop = true;
-                var fromshop = false;
+                var fromshop=true;
+               var fromshop = false;
                 if (this.shop[x] >= diff && (this.shopMinStock[x] === undefined || (this.shop[x] - diff) > this.shopMinStock[x])) {
                     if (this.shopSellingPrice[x] <= price) {
                         fromshop = true;
@@ -493,7 +410,7 @@ export class City {
         }
     }
     getDailyCostsShops() {
-        if (this.shops === 1)
+        if(this.shops===1)
             return 20;
         return Math.round(this.shops * (this.shops >= 5 ? parameter.rateCostsShopMany : parameter.rateCostShop));
     }
@@ -530,26 +447,25 @@ export class City {
             this.domShopfull.style.display = "none";
     }
     update() {
-        var _this = this;
+        var _this=this;
         if (this.lastUpdate === undefined) {
             this.lastUpdate = this.world.game.date.getTime();
         }
-        //  setTimeout(()=>{
-        _this.domDesc.innerText = this.name + "\n" + this.people.toLocaleString();
+      //  setTimeout(()=>{
+            _this.domDesc.innerText = this.name + "\n" + this.people.toLocaleString();
 
-        //  },1);
+      //  },1);
 
 
         //this.updateNeutralCompanies();
         for (var x = 0; x < this.companies.length; x++) {
             this.companies[x].update();
         }
-        if (this === this.world.cities[0])
-            this.updateDailyConsumtion();
+        this.updateDailyConsumtion();
         this.updateAirplaneQueue();
         this.updateBuildingQueue();
         this.sellShopToMarket();
-        if (this.world.game.date.getHours() % 1 === 0 && this == this.world.cities[0])
+        if (this.world.game.date.getHours() % 6 === 0)
             this.updatePeople();
         if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             //a new day starts
@@ -659,11 +575,11 @@ function createCities2(count, checkProduction = false) {
     var cities: City[] = []
     for (var x = 0; x < count; x++) {
         var city = new City();
-        if (checkProduction && x === 0) {
-            city.companies[0].productid = 0;
-            city.companies[0].hasLicense = true;
-            city.companies[1].productid = 1;
-            city.companies[1].hasLicense = true;
+        if(checkProduction&&x===0){
+            city.companies[0].productid=0;
+            city.companies[0].hasLicense=true;
+            city.companies[1].productid=1;
+            city.companies[1].hasLicense=true;
         }
         cities.push(city);
         for (var y = 0; y < city.companies.length; y++) {

@@ -37,16 +37,14 @@ export class Parameter {
   rateCostShop = 100;
   rateCostsShopMany = 1000;
   workerInCompany = 20;
-  neutralStartPeople = 0;
+  neutralStartPeople = 200;
   neutralProductionRate = 2;
   newAirportRate=1.05;
   capacityShop=5000;
   allProducts:Product[];
   daysBuildBuilding=4;
   costsAdvertising=2000;
-  peopleInHouse=200;
   numberBuildWithContextMenu=10;
-  numberBuildHousesWithContextMenu=10;
   allAirplaneTypes=[
     {typeid:0,model:"Airplane",speed:200,capacity:200, costs:60,buildDays:20,buildingCosts:20000,buildingMaterial:[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]}
    /* {typeid:1,model:"Airplane B",speed:210,capacity:300, costs:90,buildDays:25,buildingCosts:40000,buildingMaterial:[0,0,0,20,0,20,0,20,0,20,0,0,0,0,20]},
@@ -167,7 +165,7 @@ export class Game {
     this.dom = dom;
     var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
-            Traffics V1.3- 
+            Traffics V1.2- 
             <button id="game-slower"  class="mybutton">`+ Icons.minus + `</button> 
             <span id="gamedate"></span>   
             <button id="game-faster"  class="mybutton">`+ Icons.plus + `</button> 

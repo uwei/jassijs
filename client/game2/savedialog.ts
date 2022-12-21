@@ -216,7 +216,7 @@ export class SaveDialog {
     }
     load(filename: string) {
         this.game.pause();
-        CityDialog.getInstance().filteredCities = undefined;
+        CityDialog.getInstance().filteredCities=undefined;
         var data = window.localStorage.getItem("save" + filename);
         var ret = JSON.parse(data, (key, value) => {
             var r: any = value;
@@ -277,15 +277,15 @@ export class SaveDialog {
             }
             return r;
         });
-        if (parameter.allProducts[0].distribution === 16) {
-            for (var x = 0; x < parameter.allProducts.length; x++) {
-                if (parameter.allProducts[x].distribution === 16)
-                    parameter.allProducts[x].distribution = 3;
-                if (parameter.allProducts[x].distribution === 8)
-                    parameter.allProducts[x].distribution = 2;
-                if (parameter.allProducts[x].distribution === 4)
-                    parameter.allProducts[x].distribution = 1;
-
+        if(parameter.allProducts[0].distribution===16){
+            for(var x=0;x<parameter.allProducts.length;x++){
+                if(parameter.allProducts[x].distribution===16)
+                    parameter.allProducts[x].distribution=3;
+                if(parameter.allProducts[x].distribution===8)
+                    parameter.allProducts[x].distribution=2;
+                if(parameter.allProducts[x].distribution===4)
+                    parameter.allProducts[x].distribution=1;
+                    
             }
         }
         var game = this.game;
@@ -307,21 +307,6 @@ export class SaveDialog {
             //  this.world.cities[x].companies[y].
             //}
         }
-        if (game.world.cities[1].people > 0) {
-            //migration
-            for (var x = 1; x < game.world.cities.length; x++) {
-                game.world.cities[0].people += game.world.cities[x].people;
-                game.world.cities[x].people = 0;
-            }
-            for (var x = 1; x < parameter.allProducts.length; x++) {
-                game.world.cities[0].score[x] = 50;
-
-            }
-            game.world.cities[0].people=Math.round(game.world.cities[0].people);
-            game.world.cities[0].shops=game.world.cities[0].shops*7;
-            game.world.cities[0].houses=Math.round(game.world.cities[0].people/parameter.peopleInHouse);
-        }
-        console.log("People: " + game.world.cities[0].people.toLocaleString());
         game.render(this.game.dom);
         game.resume();
         window.localStorage.setItem("lastgame", filename);
