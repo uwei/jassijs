@@ -126,6 +126,7 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                 this.game.changeMoney(-ges, "daily costs airplane");
                 this.game.statistic.yesterday = this.game.statistic.today;
                 this.game.statistic.today = {};
+                diagramdialog_1.DiagramDialog.getInstance().update();
             }
             this.lastUpdate = this.game.date.getTime();
         }

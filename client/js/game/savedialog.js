@@ -294,6 +294,12 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                 game.world.cities[0].houses = Math.round(game.world.cities[0].people / parameter.peopleInHouse);
             }
             console.log("People: " + game.world.cities[0].people.toLocaleString());
+            if (ret.version === undefined) {
+                //migration
+                for (let x = 0; x < parameter.allProducts.length; x++) {
+                    parameter.allProducts[x].dailyConsumtion = parameter.allProducts[x].getAmountForPeople() / (parameter.workerInCompany * 19);
+                }
+            }
             game.render(this.game.dom);
             game.resume();
             window.localStorage.setItem("lastgame", filename);

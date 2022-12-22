@@ -95,6 +95,8 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                             <th>Name</th>
                             <th> </th>
                             <th>count Buildings</th>
+                            <th>Consumtion</th>
+                            <th>Rate</th>
                             <th>Advertise</th>
                         </tr>
                        ${(function fun() {
@@ -103,6 +105,8 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     ret = ret + "<tr>";
                     ret = ret + "<td>" + parameter.allProducts[x].getIcon() + "</td>";
                     ret = ret + "<td>" + parameter.allProducts[x].name + "</td>";
+                    ret = ret + "<td>0</td>";
+                    ret = ret + "<td>0</td>";
                     ret = ret + "<td>0</td>";
                     ret = ret + "<td>" + '<button id="diagram-advertise_' + x + '" class="mybutton"></button>' + "</td>";
                     ret = ret + "</tr>";
@@ -144,6 +148,10 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     sh = sh + "(" + inprogr + icons_1.Icons.hammer + ")";
                 }
                 tr.children[2].innerHTML = sh;
+                tr.children[3].innerHTML = parameter.allProducts[x].dailyConsumtion.toLocaleString();
+                var test1 = parameter.allProducts[x].getAmountForPeople() / (parameter.workerInCompany * parameter.allProducts.length);
+                var abw1 = Math.round(1000 * (parameter.allProducts[x].dailyConsumtion - test1) / parameter.allProducts[x].dailyConsumtion) / 10;
+                tr.children[4].innerHTML = abw1.toLocaleString();
                 var but = document.getElementById("diagram-advertise_" + x);
                 if (this.world.advertising[x]) {
                     but.innerHTML = "until " + new Date(this.world.advertising[x]).toLocaleDateString();
