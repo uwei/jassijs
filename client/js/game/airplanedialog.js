@@ -65,7 +65,7 @@ define(["require", "exports", "game/icons", "game/route", "game/routedialog"], f
                     <button style="font-size:14px" id="upgrade-squadron" class="mybutton">Upgrade</button>
                     <button style="font-size:14px" id="delete-airplane" class="mybutton">` + icons_1.Icons.remove + `</button>
                  </div>
-                 <div id="airplanedialog-route">
+                 <div id="airplanedialog-route" style="min-height:80px">
                     
                     <input type="checkbox" id="route-active"> active</input>
                     <button style="font-size:14px" id="edit-route" class="mybutton">` + icons_1.Icons.edit + `</button>
@@ -113,8 +113,10 @@ define(["require", "exports", "game/icons", "game/route", "game/routedialog"], f
                     var act = (document.getElementById("route-active").checked ? 1 : -1);
                     if (act === -1 && _this.airplane.activeRoute === 0)
                         _this.airplane.activeRoute = -1;
-                    else
+                    else {
                         _this.airplane.activeRoute = act * Math.abs(_this.airplane.activeRoute);
+                        _this.airplane.flyTo(_this.airplane.world.cities[_this.airplane.route[0].cityid]);
+                    }
                 });
                 document.getElementById("airplanedialog-name").addEventListener("change", (e) => {
                     var t = e.target;

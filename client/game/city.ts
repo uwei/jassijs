@@ -446,8 +446,7 @@ export class City {
                 var product = parameter.allProducts[x];
 
 
-                var price = product.calcPrice(this.people, this.market[x] - diff, false);
-                var fromshop = true;
+                var price =99999999999999; //product.calcPrice(this.people, this.market[x] - diff, false);
                 var fromshop = false;
                 if (this.shop[x] >= diff && (this.shopMinStock[x] === undefined || (this.shop[x] - diff) > this.shopMinStock[x])) {
                     if (this.shopSellingPrice[x] <= price) {
@@ -469,11 +468,7 @@ export class City {
                     this.score[x] = Math.round((this.score[x] + 0.1) * 100) / 100;
                 } else {
                     this.score[x] = Math.round((this.score[x] - 0.1) * 100) / 100;
-
-                    // if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
-                    // console.log(x+" zu teuer " + price + ">" + priceMax);
-
-
+                
                 }
 
                 if (this.score[x] > 100)
@@ -489,7 +484,7 @@ export class City {
             }
         }
     }
-    sellShopToMarket() {
+    /*sellShopToMarket() {
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var product = parameter.allProducts[x];
             while (true) {
@@ -505,7 +500,7 @@ export class City {
                     break;
             }
         }
-    }
+    }*/
     getDailyCostsShops() {
         if (this.shops === 1)
             return 20;
@@ -564,7 +559,7 @@ export class City {
             this.updateDailyConsumtion();
         this.updateAirplaneQueue();
         this.updateBuildingQueue();
-        this.sellShopToMarket();
+       // this.sellShopToMarket();
         if (this.world.game.date.getHours() % 1 === 0 && this == this.world.cities[0])
             this.updatePeople();
         if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {

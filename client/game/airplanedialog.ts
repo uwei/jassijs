@@ -73,7 +73,7 @@ export class AirplaneDialog {
                     <button style="font-size:14px" id="upgrade-squadron" class="mybutton">Upgrade</button>
                     <button style="font-size:14px" id="delete-airplane" class="mybutton">`+ Icons.remove + `</button>
                  </div>
-                 <div id="airplanedialog-route">
+                 <div id="airplanedialog-route" style="min-height:80px">
                     
                     <input type="checkbox" id="route-active"> active</input>
                     <button style="font-size:14px" id="edit-route" class="mybutton">`+ Icons.edit + `</button>
@@ -122,8 +122,10 @@ export class AirplaneDialog {
                 var act = ((<any>document.getElementById("route-active")).checked ? 1 : -1);
                 if (act === -1 && _this.airplane.activeRoute === 0)
                     _this.airplane.activeRoute = -1;
-                else
-                    _this.airplane.activeRoute = act * Math.abs(_this.airplane.activeRoute)
+                else{
+                    _this.airplane.activeRoute = act * Math.abs(_this.airplane.activeRoute);
+                    _this.airplane.flyTo(_this.airplane.world.cities[_this.airplane.route[0].cityid]);
+                }
             });
 
             document.getElementById("airplanedialog-name").addEventListener("change", (e) => {

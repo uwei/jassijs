@@ -399,8 +399,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 if (untilNow > this.consumedToday[x]) {
                     var diff = untilNow - this.consumedToday[x];
                     var product = parameter.allProducts[x];
-                    var price = product.calcPrice(this.people, this.market[x] - diff, false);
-                    var fromshop = true;
+                    var price = 99999999999999; //product.calcPrice(this.people, this.market[x] - diff, false);
                     var fromshop = false;
                     if (this.shop[x] >= diff && (this.shopMinStock[x] === undefined || (this.shop[x] - diff) > this.shopMinStock[x])) {
                         if (this.shopSellingPrice[x] <= price) {
@@ -424,8 +423,6 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                     }
                     else {
                         this.score[x] = Math.round((this.score[x] - 0.1) * 100) / 100;
-                        // if (this.isProducedHere(product.id)&&this.world.cities.indexOf(this)===0) 
-                        // console.log(x+" zu teuer " + price + ">" + priceMax);
                     }
                     if (this.score[x] > 100)
                         this.score[x] = 100;
@@ -438,7 +435,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 }
             }
         }
-        sellShopToMarket() {
+        /*sellShopToMarket() {
             for (var x = 0; x < parameter.allProducts.length; x++) {
                 var product = parameter.allProducts[x];
                 while (true) {
@@ -448,15 +445,13 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                             this.world.game.changeMoney((Math.round(price * 1)), "market buy from the shop", this);
                             this.shop[x] -= 1;
                             this.market[x] += 1;
-                        }
-                        else
+                        } else
                             break;
-                    }
-                    else
+                    } else
                         break;
                 }
             }
-        }
+        }*/
         getDailyCostsShops() {
             if (this.shops === 1)
                 return 20;
@@ -510,7 +505,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 this.updateDailyConsumtion();
             this.updateAirplaneQueue();
             this.updateBuildingQueue();
-            this.sellShopToMarket();
+            // this.sellShopToMarket();
             if (this.world.game.date.getHours() % 1 === 0 && this == this.world.cities[0])
                 this.updatePeople();
             if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
