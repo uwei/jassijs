@@ -46,7 +46,7 @@ export class Product {
             Product.randomUpdateConsumtion();
             return;
         }
-         console.log("change price "+prod1.name+" +"+proz+"% and "+prod2.name+" -"+proz;
+        alert("change price "+prod1.name+" +"+proz+"% and "+prod2.name+" -"+proz;
         prod1.dailyConsumtion=prod1.dailyConsumtion+diff;
         prod2.dailyConsumtion=prod2.dailyConsumtion-diff;
            
