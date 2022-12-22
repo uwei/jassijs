@@ -32,7 +32,7 @@ export class Product {
     static randomUpdateConsumtion(){
         var prod1=parameter.allProducts[getRandomInt(parameter.allProducts.length)];
         var prod2=parameter.allProducts[getRandomInt(parameter.allProducts.length)];
-        var proz=Math.round(getRandomInt(50))/10;//Prozent
+        var proz=Math.round(getRandomInt(100))/10;//Prozent
         var diff=Math.round(100000*prod1.dailyConsumtion*proz/100)/100000;
         var proz1=prod1.dailyConsumtion+diff;
         var proz2=prod2.dailyConsumtion-diff;
@@ -41,12 +41,12 @@ export class Product {
         var test2=Math.round((100000*prod2.amountForPeople/(parameter.workerInCompany*parameter.allProducts.length)))/100000;
         var abw1=(proz1-test1)/proz1;
         var abw2=(proz2-test2)/proz2;
-        if(Math.abs(abw1)>0.1||Math.abs(abw2)>0.1){
+        if(Math.abs(abw1)>0.27||Math.abs(abw2)>0.2){
             console.log("change price "+prod1.name+" +"+proz+"% and "+prod2.name+" -"+proz+"% failed. Diff is Prod1 "+Math.abs(abw1)+" Prod2 "+Math.abs(abw2));
             Product.randomUpdateConsumtion();
             return;
         }
-        alert("change price "+prod1.name+" +"+proz+"% and "+prod2.name+" -"+proz;
+        alert("change price "+prod1.name+" +"+proz+"% and "+prod2.name+" -"+proz);
         prod1.dailyConsumtion=prod1.dailyConsumtion+diff;
         prod2.dailyConsumtion=prod2.dailyConsumtion-diff;
            
