@@ -60,7 +60,6 @@ export class Parameter {
 window.parameter=new Parameter();
 globalThis.parameter=new Parameter();
 
-
 parameter.allProducts= [
   new Product({ id: 0, name: "Stein", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32,  distribution: 3,amountForPeople:5 }),
   new Product({ id: 1, name: "Holz", dailyProduce: 5, input1: undefined, input1Amount: 0, input2: undefined, input2Amount: 0,  priceProduction: 32,  distribution: 3 ,amountForPeople:4.5 }),

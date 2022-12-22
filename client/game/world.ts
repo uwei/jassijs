@@ -9,6 +9,7 @@ import { RouteDialog } from "game/routedialog";
 import { SquadronDialog } from "game/squadrondialog";
 import { Company } from "game/company";
 import { DiagramDialog } from "game/diagramdialog";
+import { Product } from "game/product";
 function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
@@ -16,7 +17,7 @@ export class World {
     _intervall;
     cities: City[];
     airplanes: Airplane[];
-    advertising:number[];
+    advertising: number[];
     selection;
     dom: HTMLElement;
     game: Game;
@@ -26,11 +27,11 @@ export class World {
         var _this = this;
         this.cities = [];
         this.airplanes = [];
-        this.advertising=[];
-        for(var x=0;x<parameter.allProducts.length;x++){
+        this.advertising = [];
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             this.advertising.push(undefined);
         }
-       
+
         this._intervall = setInterval(() => {
             for (var x = 0; x < _this.airplanes?.length; x++) {
                 /*if (this.airplanes[x].x < 500)
@@ -109,13 +110,14 @@ export class World {
             } catch {
 
             }
-             try {
+            try {
                 DiagramDialog.getInstance().close();
             } catch {
 
             }
         }
     }
+
     update() {
         if (this.lastUpdate === undefined) {
             this.lastUpdate = this.game.date.getTime();
@@ -129,25 +131,28 @@ export class World {
             }*/
             this.cities[x].update();
         }
+        if (this.game.date.getMonth() !== new Date(this.lastUpdate).getMonth()) {
+            Product.randomUpdateConsumtion();
+        }
         if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
-            for(var y=0;y<parameter.allProducts.length;y++){
-                if(this.game.world.advertising[y]&&this.game.date.getTime()>this.game.world.advertising[y]){
-                    this.game.world.advertising[y]=undefined;
+            for (var y = 0; y < parameter.allProducts.length; y++) {
+                if (this.game.world.advertising[y] && this.game.date.getTime() > this.game.world.advertising[y]) {
+                    this.game.world.advertising[y] = undefined;
                 }
             }
             var ges = 0;
             for (var x = 0; x < this.airplanes.length; x++) {
-                ges += Math.round(this.airplanes[x].getDailyCosts()*parameter.rateCostsAirplaine);
+                ges += Math.round(this.airplanes[x].getDailyCosts() * parameter.rateCostsAirplaine);
             }
             this.game.changeMoney(-ges, "daily costs airplane");
-            this.game.statistic.yesterday=this.game.statistic.today;
-            this.game.statistic.today={};
+            this.game.statistic.yesterday = this.game.statistic.today;
+            this.game.statistic.today = {};
         }
         this.lastUpdate = this.game.date.getTime();
     }
-    addCity(hasAirport=true) {
+    addCity(hasAirport = true) {
         var city: City = createCities(this, 1)[0];
-        city.hasAirport=hasAirport;
+        city.hasAirport = hasAirport;
         city.render(this.cities.indexOf(city));
         city.update();
 
@@ -155,11 +160,11 @@ export class World {
 
     newGame() {
         createCities(this, 15);
-        this.cities[0].shops=1;
-        this.cities[0].houses=1;
+        this.cities[0].shops = 1;
+        this.cities[0].houses = 1;
         this.cities[0].people = parameter.neutralStartPeople;
-        createCities(this,1);
-        this.cities[this.cities.length-1].hasAirport=false;
+        createCities(this, 1);
+        this.cities[this.cities.length - 1].hasAirport = false;
         for (var x = 0; x < 1; x++) {
             var ap = new Airplane(this);
             ap.name = parameter.allAirplaneTypes[0].model + (x + 1);
@@ -172,23 +177,23 @@ export class World {
             ap.world = this;
             this.airplanes.push(ap);
         }
-     
-     /*
-      //Lastenausgleich   
-        var anz=100;
-        this.cities=[this.cities[0]];
-        this.cities[0].companies=[];
-        for(var x=0;x<19;x++){
-            var comp=new Company();
-            comp.city=this.cities[0];
-            comp.productid=x;
-            comp.workers=20*anz;
-            comp.buildings=anz;
-            this.cities[0].companies.push(comp);
-            this.cities[0].shop[x]=1000000;
-        }
-        this.cities[0].people=anz*19*20;
-        this.cities[0].houses=anz*19*20/100+1;*/
+
+        /*
+         //Lastenausgleich   
+           var anz=100;
+           this.cities=[this.cities[0]];
+           this.cities[0].companies=[];
+           for(var x=0;x<19;x++){
+               var comp=new Company();
+               comp.city=this.cities[0];
+               comp.productid=x;
+               comp.workers=20*anz;
+               comp.buildings=anz;
+               this.cities[0].companies.push(comp);
+               this.cities[0].shop[x]=1000000;
+           }
+           this.cities[0].people=anz*19*20;
+           this.cities[0].houses=anz*19*20/100+1;*/
     }
     render(dom: HTMLElement) {
         var _this = this;

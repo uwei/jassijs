@@ -1,4 +1,4 @@
-define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "game/airplanedialog", "game/routedialog", "game/squadrondialog", "game/diagramdialog"], function (require, exports, city_1, airplane_1, citydialog_1, airplanedialog_1, routedialog_1, squadrondialog_1, diagramdialog_1) {
+define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "game/airplanedialog", "game/routedialog", "game/squadrondialog", "game/diagramdialog", "game/product"], function (require, exports, city_1, airplane_1, citydialog_1, airplanedialog_1, routedialog_1, squadrondialog_1, diagramdialog_1, product_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.World = void 0;
@@ -109,6 +109,9 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
                     this.airplanes[x].x = 100;
                 }*/
                 this.cities[x].update();
+            }
+            if (this.game.date.getMonth() !== new Date(this.lastUpdate).getMonth()) {
+                product_1.Product.randomUpdateConsumtion();
             }
             if (this.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
                 for (var y = 0; y < parameter.allProducts.length; y++) {

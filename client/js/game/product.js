@@ -8,12 +8,36 @@ define(["require", "exports"], function (require, exports) {
             return log(n) / (base ? log(base) : 1);
         };
     })();
+    function getRandomInt(max) {
+        return Math.floor(Math.random() * max);
+    }
     class Product {
         constructor(prod) {
             Object.assign(this, prod);
-            this.dailyConsumtion = Math.round((10000 * this.amountForPeople / 380)) / 10000 - 0.0001;
+            this.dailyConsumtion = Math.round((100000 * this.amountForPeople / (parameter.workerInCompany * 19))) / 100000;
             this.pricePurchase = Math.round(this.priceProduction * parameter.ratePurchase);
             this.priceSelling = Math.round(this.priceProduction * parameter.rateSelling);
+        }
+        static randomUpdateConsumtion() {
+            var prod1 = parameter.allProducts[getRandomInt(parameter.allProducts.length)];
+            var prod2 = parameter.allProducts[getRandomInt(parameter.allProducts.length)];
+            var proz = Math.round(getRandomInt(50)) / 10; //Prozent
+            var diff = Math.round(100000 * prod1.dailyConsumtion * proz / 100) / 100000;
+            var proz1 = prod1.dailyConsumtion + diff;
+            var proz2 = prod2.dailyConsumtion - diff;
+            //change should not be greater then 5%
+            var test1 = Math.round((100000 * prod1.amountForPeople / (parameter.workerInCompany * parameter.allProducts.length))) / 100000;
+            var test2 = Math.round((100000 * prod2.amountForPeople / (parameter.workerInCompany * parameter.allProducts.length))) / 100000;
+            var abw1 = (proz1 - test1) / proz1;
+            var abw2 = (proz2 - test2) / proz2;
+            if (Math.abs(abw1) > 0.1 || Math.abs(abw2) > 0.1) {
+                console.log("change price " + prod1.name + " +" + proz + "% and " + prod2.name + " -" + proz + "% failed. Diff is Prod1 " + Math.abs(abw1) + " Prod2 " + Math.abs(abw2));
+                Product.randomUpdateConsumtion();
+                return;
+            }
+            console.log("change price " + prod1.name + " +" + proz + "% and " + prod2.name + " -" + proz);
+            prod1.dailyConsumtion = prod1.dailyConsumtion + diff;
+            prod2.dailyConsumtion = prod2.dailyConsumtion - diff;
         }
         getMinPrice() {
             return Math.round(this.priceSelling * parameter.ratePriceMin);
