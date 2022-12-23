@@ -75,7 +75,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
     //global.parameter=new Parametetr();
     class Game {
         constructor() {
-            this.version = "1.1";
+            this.version = "1.2";
             this.mapWidth = 1000;
             this.mapHeight = 600;
             this.statistic = new Statistic();

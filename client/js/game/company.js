@@ -94,6 +94,7 @@ define(["require", "exports"], function (require, exports) {
             this.lastUpdate = this.city.world.game.date.getTime();
         }
         updateProduction() {
+            var _a, _b, _c, _d;
             if (this.workers === 0)
                 return;
             var dayProcent = this.city.world.game.date.getHours() / 24;
@@ -123,13 +124,13 @@ define(["require", "exports"], function (require, exports) {
             }
             if (this.dailyProducedToday === 0 && totalDailyNeed2 !== undefined) {
                 if (totalDailyNeed2 >= this.city.shop[parameter.allProducts[prod].input2]) {
-                    if (this.city.domProductNeeded[parameter.allProducts[prod].input2].style.display !== "initial")
+                    if (((_b = (_a = this.city.domProductNeeded[parameter.allProducts[prod].input2]) === null || _a === void 0 ? void 0 : _a.style) === null || _b === void 0 ? void 0 : _b.display) !== "initial")
                         this.city.domProductNeeded[parameter.allProducts[prod].input2].style.display = "initial";
                     // console.log(totalDailyNeed2 + "x" + parameter.allProducts[prod].input2 + " needed");
                     return;
                 }
                 else {
-                    if (this.city.domProductNeeded[parameter.allProducts[prod].input2].style.display !== "none")
+                    if (((_d = (_c = this.city.domProductNeeded[parameter.allProducts[prod].input2]) === null || _c === void 0 ? void 0 : _c.style) === null || _d === void 0 ? void 0 : _d.display) !== "none")
                         this.city.domProductNeeded[parameter.allProducts[prod].input2].style.display = "none";
                 }
             }

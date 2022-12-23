@@ -93,7 +93,7 @@ export class Game {
   domHeader: HTMLDivElement;
   domWorld: HTMLDivElement;
   _money;
-  version="1.1";
+  version="1.2";
   date: Date;
   lastUpdate: number;
   speed: number;
