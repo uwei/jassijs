@@ -269,7 +269,7 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                 }
             }
             var days = lenpixel / route.airplane.speed; //t=s/v; in Tage
-            var totalDays = (Math.round(days * 24) + 1 + all.length * 3 + all.length * 3) / 24; //+3h load and unload
+            var totalDays = (Math.round(days * 24) + 1 + all.length * 4 + all.length * 4) / 24; //+4h load and unload
             console.log(totalDays);
             var store = allCities ? route.loadShopAmount : route.loadShopUntilAmount;
             for (var x = 0; x < parameter.allProducts.length; x++) {

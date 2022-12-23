@@ -38,6 +38,8 @@ export class City {
     queueAirplane: QueueItem[] = [];
     queueBuildings: QueueItem[] = [];
     domShopfull: HTMLSpanElement;
+    domProductNeeded:HTMLSpanElement[]=[];
+    domWarning:HTMLSpanElement;
     type = "City";
     domDesc: HTMLSpanElement;
     hasAirport;
@@ -89,6 +91,21 @@ export class City {
         }
         return ret;
     }
+    renderWarningIcons(){
+        this.domShopfull = <any>document.createRange().createContextualFragment(Icons.store).children[0];
+        this.domShopfull.style.color = "red";
+        this.domShopfull.style.display = "none";
+        this.domWarning.appendChild(this.domShopfull);
+
+        for(var x=0;x<parameter.allProducts.length;x++){
+            var dom = <any>document.createRange().createContextualFragment(parameter.allProducts[x].getIcon()).children[0];
+        //this.dom.style.color = "red";
+            dom.style.display = "none";
+            this.domWarning.appendChild(dom);
+            this.domProductNeeded.push(dom);
+        }
+
+    }
     render(cityid: number) {
         var _this = this;
         this.dom = <any>document.createElement("img");
@@ -106,10 +123,9 @@ export class City {
             'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
         this.domDesc = <any>document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
         spanDesc.appendChild(this.domDesc);
-        this.domShopfull = <any>document.createRange().createContextualFragment(Icons.store).children[0];
-        this.domShopfull.style.color = "red";
-        this.domShopfull.style.display = "none";
-        spanDesc.appendChild(this.domShopfull);
+        this.domWarning= <any>document.createRange().createContextualFragment("<span></span>").children[0];
+        this.renderWarningIcons();
+        spanDesc.appendChild(this.domWarning);
         this.world.dom.appendChild(spanDesc);
         spanDesc.style.zIndex = "2";
         this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
@@ -535,8 +551,11 @@ export class City {
         var max = this.shops * parameter.capacityShop;
         if (gesamount >= max) {
             this.domShopfull.style.display = "initial";
-        } else
-            this.domShopfull.style.display = "none";
+        } else{
+             this.domShopfull.style.display = "none";
+        }
+       
+
     }
     update() {
         var _this = this;
@@ -566,6 +585,7 @@ export class City {
             //a new day starts
             this.updateDailyCosts();
         }
+       
         if (this.world.game.date.getHours() === 23) {
 
             this.updateStatus();

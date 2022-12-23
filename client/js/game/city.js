@@ -16,6 +16,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.houses = 0;
             this.queueAirplane = [];
             this.queueBuildings = [];
+            this.domProductNeeded = [];
             this.type = "City";
             this.hasAirport = true;
             this.market = [];
@@ -61,6 +62,19 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             }
             return ret;
         }
+        renderWarningIcons() {
+            this.domShopfull = document.createRange().createContextualFragment(icons_1.Icons.store).children[0];
+            this.domShopfull.style.color = "red";
+            this.domShopfull.style.display = "none";
+            this.domWarning.appendChild(this.domShopfull);
+            for (var x = 0; x < parameter.allProducts.length; x++) {
+                var dom = document.createRange().createContextualFragment(parameter.allProducts[x].getIcon()).children[0];
+                //this.dom.style.color = "red";
+                dom.style.display = "none";
+                this.domWarning.appendChild(dom);
+                this.domProductNeeded.push(dom);
+            }
+        }
         render(cityid) {
             var _this = this;
             this.dom = document.createElement("img");
@@ -77,10 +91,9 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
             this.domDesc = document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
             spanDesc.appendChild(this.domDesc);
-            this.domShopfull = document.createRange().createContextualFragment(icons_1.Icons.store).children[0];
-            this.domShopfull.style.color = "red";
-            this.domShopfull.style.display = "none";
-            spanDesc.appendChild(this.domShopfull);
+            this.domWarning = document.createRange().createContextualFragment("<span></span>").children[0];
+            this.renderWarningIcons();
+            spanDesc.appendChild(this.domWarning);
             this.world.dom.appendChild(spanDesc);
             spanDesc.style.zIndex = "2";
             this.domAirport = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
@@ -484,8 +497,9 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             if (gesamount >= max) {
                 this.domShopfull.style.display = "initial";
             }
-            else
+            else {
                 this.domShopfull.style.display = "none";
+            }
         }
         update() {
             var _this = this;
