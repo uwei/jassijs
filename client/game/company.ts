@@ -119,12 +119,12 @@ export class Company {
 
         if (this.dailyProducedToday === 0 && totalDailyNeed1 !== undefined) {
             if (totalDailyNeed1 >= this.city.shop[parameter.allProducts[prod].input1]) {
-                if(this.city.domProductNeeded[parameter.allProducts[prod].input1].style.display !== "initial")
+                if(this.city.domProductNeeded[parameter.allProducts[prod].input1]?.style?.display !== "initial")
                     this.city.domProductNeeded[parameter.allProducts[prod].input1].style.display = "initial";
                // console.log(totalDailyNeed1 + "x" + parameter.allProducts[prod].input1 + " needed");
                 return;
             } else {
-                if(this.city.domProductNeeded[parameter.allProducts[prod].input1].style.display !== "none")
+                if(this.city.domProductNeeded[parameter.allProducts[prod].input1]?.style?.display !== "none")
                      this.city.domProductNeeded[parameter.allProducts[prod].input1].style.display = "none";
             }
         }
