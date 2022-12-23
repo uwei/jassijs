@@ -121,7 +121,6 @@ define(["require", "exports"], function (require, exports) {
                         this.city.domProductNeeded[parameter.allProducts[prod].input1].style.display = "none";
                 }
             }
-            this.city.domProductNeeded[parameter.allProducts[prod].input1].style;
             if (this.dailyProducedToday === 0 && totalDailyNeed2 !== undefined) {
                 if (totalDailyNeed2 >= this.city.shop[parameter.allProducts[prod].input2]) {
                     if (this.city.domProductNeeded[parameter.allProducts[prod].input2] && this.city.domProductNeeded[parameter.allProducts[prod].input2].style.display !== "initial")
