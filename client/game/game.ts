@@ -11,7 +11,7 @@ import { Route } from "game/route";
 import {  Product } from "game/product";
 import { DiagramDialog } from "game/diagramdialog";
 import { SaveDialog } from "game/savedialog";
-
+var gameversion="1.7";
 window.onbeforeunload = function () {
   return "Do you want to exit?";
 
@@ -171,7 +171,7 @@ export class Game {
     this.dom = dom;
     var sdomHeader = `
           <div style="height:15px;position:fixed;z-index:10000;background-color:lightblue;">
-            Traffics V`+this.version+` 
+            Traffics V`+gameversion+` 
             <button id="game-slower"  class="mybutton">`+ Icons.minus + `</button> 
             <span id="gamedate"></span>   
             <button id="game-faster"  class="mybutton">`+ Icons.plus + `</button> 
