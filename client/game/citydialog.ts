@@ -121,6 +121,7 @@ export class CityDialog {
                     ret = ret + "<td></td>";
                     ret = ret + "<td></td>";
                     ret = ret + '<td><button id="new-factory_' + x + '" class="mybutton">' + "+" + Icons.factory + '</button>' +
+                        '<button id="new-factoryX_' + x + '" class="mybutton">' + "x" + Icons.factory + '</button>'+
                         '<button id="delete-factory_' + x + '" class="mybutton">' + "-" + Icons.factory + '</button>' +
                         '<button id="buy-license_' + x + '" class="mybutton">' + "buy license to produce for 50.000" + Icons.money + '</button>' +
                         '<div id="no-shop_' + x + '">need a shop to produce</div>' +
@@ -137,11 +138,11 @@ export class CityDialog {
                     <br/>
                        `+ Icons.shop + ` Shops: <span id="count-shops">0/0</span>  
                         ` + ` costs: <span id="costs-shops">0</span> ` + Icons.money + `  
-                        <button id="buy-shop"  class="mybutton">+`+ Icons.shop + ` for 15.000` + Icons.money +`</button> 
+                        <button id="buy-shop"  class="mybutton">+`+ Icons.shop + ` for 15k` + Icons.money +`</button> 
                         <button id="delete-shop"  class="mybutton">-`+ Icons.shop + `</button>`+
                      `<div id="city-houses">`+ Icons.home + ` Houses: <span id="count-houses">0/0</span>  
                         ` + ` costs: <span id="costs-houses">0</span> ` + Icons.money + `  
-                        <button id="buy-house"  class="mybutton">+`+ Icons.home + ` for 10.000` + Icons.money +`</button> 
+                        <button id="buy-house"  class="mybutton">+`+ Icons.home + ` for 10k` + Icons.money +`</button> 
                         <button id="delete-house"  class="mybutton">-`+ Icons.home + `</button>`+
                     '</div>'
     }
@@ -291,6 +292,22 @@ export class CityDialog {
                         return;
                     _this.city.buildBuilding(comp.productid);
                
+                //comp.buildings++;
+                _this.update();
+            });
+            document.getElementById("new-factoryX_" + x).addEventListener("click", (evt) => {
+                var sid = (<any>evt.target).id;
+                if (sid === "")
+                    sid = (<any>evt.target).parentNode.id
+                var id = Number(sid.split("_")[1]);
+                var comp = _this.city.companies[id];
+                for (var i = 0; i < parameter.numberBuildWithContextMenu; i++) {
+                    if (!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building"))
+                        return;
+                    _this.city.buildBuilding(comp.productid);
+                       
+
+                }
                 //comp.buildings++;
                 _this.update();
             });
@@ -474,9 +491,11 @@ export class CityDialog {
                 document.getElementById("new-factory_" + x).innerHTML = "+" + Icons.factory +
                     City.getBuildingCostsAsIcon(comp.getBuildingCosts(), comp.getBuildingMaterial());
                 document.getElementById("new-factory_" + x).removeAttribute("hidden");
+                document.getElementById("new-factoryX_" + x).removeAttribute("hidden");
                 document.getElementById("delete-factory_" + x).removeAttribute("hidden");
             } else {
                 document.getElementById("new-factory_" + x).setAttribute("hidden", "");
+                document.getElementById("new-factoryX_" + x).setAttribute("hidden", "");
                 document.getElementById("delete-factory_" + x).setAttribute("hidden", "");
             }
             var mat = comp.getBuildingMaterial();
