@@ -199,9 +199,9 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                     return undefined;
                 if (key === "parameter") {
                     Object.assign(parameter, value);
-                    for (var x = 0; x < parameter.allProducts.length; x++) {
-                        parameter.allProducts[x] = new product_1.Product(parameter.allProducts[x]);
-                    }
+                    /*  for (var x = 0; x < parameter.allProducts.length; x++) {
+                          parameter.allProducts[x] = new Product(parameter.allProducts[x]);
+                      }*/
                 }
                 if ((value === null || value === void 0 ? void 0 : value.type) === "Company") {
                     r = new company_1.Company();

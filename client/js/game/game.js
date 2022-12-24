@@ -2,7 +2,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.test = exports.Game = exports.Parameter = void 0;
-    var gameversion = "1.11";
+    var gameversion = "1.12";
     window.onbeforeunload = function () {
         return "Do you want to exit?";
     };

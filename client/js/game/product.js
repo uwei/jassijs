@@ -13,6 +13,7 @@ define(["require", "exports"], function (require, exports) {
     }
     class Product {
         constructor(prod) {
+            this.type = "Product";
             Object.assign(this, prod);
             this.dailyConsumtion = this.amountForPeople / (parameter.workerInCompany * 19); ///Math.round((100000*this.amountForPeople/(parameter.workerInCompany*19)))/100000;
             this.pricePurchase = Math.round(this.priceProduction * parameter.ratePurchase);

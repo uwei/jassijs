@@ -22,6 +22,7 @@ export class Product {
     private amountForPeople:number;
     //how often it is used
     distribution: number;
+    type = "Product";
     constructor(prod) {
         Object.assign(this, prod);
         this.dailyConsumtion=this.amountForPeople/(parameter.workerInCompany*19);///Math.round((100000*this.amountForPeople/(parameter.workerInCompany*19)))/100000;

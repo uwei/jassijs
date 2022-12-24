@@ -224,9 +224,9 @@ export class SaveDialog {
                 return undefined;
             if (key === "parameter") {
                 Object.assign(parameter, value);
-                for (var x = 0; x < parameter.allProducts.length; x++) {
+              /*  for (var x = 0; x < parameter.allProducts.length; x++) {
                     parameter.allProducts[x] = new Product(parameter.allProducts[x]);
-                }
+                }*/
             }
             if (value?.type === "Company") {
                 r = new Company();
