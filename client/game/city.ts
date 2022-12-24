@@ -96,7 +96,7 @@ export class City {
         this.domShopfull.style.color = "red";
         this.domShopfull.style.display = "none";
         this.domWarning.appendChild(this.domShopfull);
-
+        this.domProductNeeded=[];
         for(var x=0;x<parameter.allProducts.length;x++){
             var dom = <any>document.createRange().createContextualFragment(parameter.allProducts[x].getIcon()).children[0];
         //this.dom.style.color = "red";

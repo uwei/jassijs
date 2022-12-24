@@ -293,8 +293,9 @@ export class RouteDialog {
             }
         }
         var days = lenpixel / route.airplane.speed; //t=s/v; in Tage
-        var totalDays = (Math.round(days * 24) + 1 + all.length * 4 + all.length * 4) / 24;   //+4h load and unload
-
+        var totalDays = (Math.round(days * 24) + 1 + all.length * 3 + all.length * 3) / 24;   //+4h load and unload
+        if(totalDays<3)
+            totalDays=3;
         console.log(totalDays);
         var store = allCities ? route.loadShopAmount : route.loadShopUntilAmount;
         for (var x = 0; x < parameter.allProducts.length; x++) {
