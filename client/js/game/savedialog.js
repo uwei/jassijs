@@ -208,7 +208,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                     Object.assign(r, value);
                     return r;
                 }
-                if ((value === null || value === void 0 ? void 0 : value.type) === "Product") {
+                if ((value === null || value === void 0 ? void 0 : value.type) === "Product" || (value === null || value === void 0 ? void 0 : value.dailyConsumtion)) {
                     r = new product_1.Product(value);
                     Object.assign(r, value);
                     return r;
@@ -223,7 +223,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                     Object.assign(r, value);
                     return r;
                 }
-                if ((value === null || value === void 0 ? void 0 : value.type) === "City" || (value === null || value === void 0 ? void 0 : value.country)) { //country for migration
+                if ((value === null || value === void 0 ? void 0 : value.type) === "City") {
                     r = new city_1.City();
                     if (value.warehouse) {
                         value.shop = value.warehouse;

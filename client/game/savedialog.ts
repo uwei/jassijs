@@ -233,7 +233,7 @@ export class SaveDialog {
                 Object.assign(r, value);
                 return r;
             }
-            if (value?.type === "Product") {
+            if (value?.type === "Product"||value?.dailyConsumtion) {
                 r = new Product(value);
                 Object.assign(r, value);
                 return r;
@@ -248,7 +248,7 @@ export class SaveDialog {
                 Object.assign(r, value);
                 return r;
             }
-            if (value?.type === "City"||value?.country) {//country for migration
+            if (value?.type === "City") {
                 r = new City();
                 if (value.warehouse) {
                     value.shop = value.warehouse;
