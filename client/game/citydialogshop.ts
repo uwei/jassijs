@@ -195,7 +195,7 @@ export class CityDialogShop {
                 (<HTMLInputElement>tr.children[6].children[0]).value = city.shopMinStock[x] === undefined ? "" : city.shopMinStock[x].toString();
            }
 
-        document.getElementById("citydialog-shop-info").innerHTML = "Shops:" + city.shops + " Capacity " + gesamount + "/" + city.shops * parameter.capacityShop;
+        document.getElementById("citydialog-shop-info").innerHTML = "Shops:" + city.shops + " Capacity " + gesamount.toLocaleString() + "/" + (city.shops * parameter.capacityShop).toLocaleString();
 
     }
 
