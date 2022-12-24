@@ -11,7 +11,7 @@ import { Route } from "game/route";
 import {  Product } from "game/product";
 import { DiagramDialog } from "game/diagramdialog";
 import { SaveDialog } from "game/savedialog";
-var gameversion="1.12";
+var gameversion="1.13";
 window.onbeforeunload = function () {
   return "Do you want to exit?";
 

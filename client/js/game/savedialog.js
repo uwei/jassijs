@@ -223,7 +223,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                     Object.assign(r, value);
                     return r;
                 }
-                if ((value === null || value === void 0 ? void 0 : value.type) === "City") {
+                if ((value === null || value === void 0 ? void 0 : value.type) === "City" || (value === null || value === void 0 ? void 0 : value.country)) { //country for migration
                     r = new city_1.City();
                     if (value.warehouse) {
                         value.shop = value.warehouse;

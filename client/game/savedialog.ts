@@ -248,7 +248,7 @@ export class SaveDialog {
                 Object.assign(r, value);
                 return r;
             }
-            if (value?.type === "City") {
+            if (value?.type === "City"||value?.country) {//country for migration
                 r = new City();
                 if (value.warehouse) {
                     value.shop = value.warehouse;
