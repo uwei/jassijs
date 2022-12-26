@@ -287,6 +287,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                     }
                     //comp.buildings++;
                     _this.update();
+                    _this.city.world.game.updateTitle();
                 });
                 document.getElementById("new-factory_" + x).addEventListener("contextmenu", (evt) => {
                     evt.preventDefault();
@@ -302,20 +303,25 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                     }
                     //comp.buildings++;
                     _this.update();
+                    _this.city.world.game.updateTitle();
                 });
                 document.getElementById("delete-factory_" + x).addEventListener("click", (evt) => {
                     var sid = evt.target.id;
                     if (sid === "")
                         sid = evt.target.parentNode.id;
                     var id = Number(sid.split("_")[1]);
-                    var comp = _this.city.companies[id];
-                    if (_this.city.tryRemoveBuildingInProgress(comp.productid)) {
-                        _this.update();
-                        return;
+                    _this.deleteFactory(id);
+                    _this.update();
+                });
+                document.getElementById("delete-factory_" + x).addEventListener("contextmenu", (evt) => {
+                    evt.preventDefault();
+                    var sid = evt.target.id;
+                    if (sid === "")
+                        sid = evt.target.parentNode.id;
+                    var id = Number(sid.split("_")[1]);
+                    for (var i = 0; i < parameter.numberBuildWithContextMenu; i++) {
+                        _this.deleteFactory(id);
                     }
-                    if (comp.buildings > 0)
-                        comp.buildings--;
-                    _this.city.companies[id].workers -= parameter.workerInCompany;
                     /* var unempl = this.city.companies[id].workers - (this.city.companies[id].buildings * parameter.workerInCompany);
                      if (unempl > 0) {
                          this.city.companies[id].workers -= unempl;
@@ -401,6 +407,17 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                 });
             }
             citydialogshop_1.CityDialogShop.getInstance().bindActions();
+        }
+        deleteFactory(id) {
+            var _this = this;
+            var comp = _this.city.companies[id];
+            if (_this.city.tryRemoveBuildingInProgress(comp.productid)) {
+                _this.update();
+                return;
+            }
+            if (comp.buildings > 0)
+                comp.buildings--;
+            _this.city.companies[id].workers -= parameter.workerInCompany;
         }
         updateBuildings() {
             /*
