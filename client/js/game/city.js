@@ -148,7 +148,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 var pos = test.name.indexOf(parameter.allAirplaneTypes[typeid].model);
                 if (pos === 0) {
                     var nr = parseInt(test.name.substring(parameter.allAirplaneTypes[typeid].model.length));
-                    if (nr !== NaN && nr > maxNumber)
+                    if (Number.isNaN(nr) && nr > maxNumber)
                         maxNumber = nr;
                 }
             }
@@ -680,8 +680,9 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             allready.push(world.cities[x].id);
         }
         for (var x = 0; x < count; x++) {
-            if (world.cities.length >= allCities.length)
-                throw "No more cities available";
+            if (world.cities.length >= allCities.length) {
+                alert("Congratulations. You have built airports in all cities.");
+            }
             var city = cities[x];
             world.cities.push(city);
             if (world.cities.length === 1) {
