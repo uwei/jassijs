@@ -682,6 +682,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
         for (var x = 0; x < count; x++) {
             if (world.cities.length >= allCities.length) {
                 alert("Congratulations. You have built airports in all cities.");
+                throw new Error("all built");
             }
             var city = cities[x];
             world.cities.push(city);
