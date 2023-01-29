@@ -330,6 +330,9 @@ export class SaveDialog {
                 parameter.allProducts[x].dailyConsumtion=parameter.allProducts[x].getAmountForPeople()/(parameter.workerInCompany*19);
             }
         }
+        if(parseFloat(ret.version)<=1.2){
+            game.parameter.allAirplaneTypes[0].buildingMaterial=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        }
         game.render(this.game.dom);
         game.resume();
         window.localStorage.setItem("lastgame", filename);
