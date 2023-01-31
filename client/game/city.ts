@@ -34,7 +34,7 @@ export class City {
     shops = 0;
     houses = 0;
     shopMinStock: number[];
-    shopSellingPrice: number[];
+    //shopSellingPrice: number[];
     queueAirplane: QueueItem[] = [];
     queueBuildings: QueueItem[] = [];
     domShopfull: HTMLSpanElement;
@@ -48,7 +48,7 @@ export class City {
 
         this.market = [];
         this.shopMinStock = [];
-        this.shopSellingPrice = [];
+        //this.shopSellingPrice = [];
         this.createCompanies();
         for (var x = 0; x < parameter.allProducts.length; x++) {
             var val = 0;
@@ -63,7 +63,7 @@ export class City {
 
             //}
             this.shopMinStock.push(undefined);
-            this.shopSellingPrice.push(this.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling);
+            //this.shopSellingPrice.push(this.isProducedHere(x) ? parameter.allProducts[x].pricePurchase : parameter.allProducts[x].priceSelling);
             this.shop.push(0);
             this.market.push(val);
         }
@@ -465,9 +465,9 @@ export class City {
                 var price =99999999999999; //product.calcPrice(this.people, this.market[x] - diff, false);
                 var fromshop = false;
                 if (this.shop[x] >= diff && (this.shopMinStock[x] === undefined || (this.shop[x] - diff) > this.shopMinStock[x])) {
-                    if (this.shopSellingPrice[x] <= price) {
+                    if (parameter.allProducts[x].priceSelling <= price) {
                         fromshop = true;
-                        price = this.shopSellingPrice[x];
+                        price = parameter.allProducts[x].priceSelling;
                     }
                 }
                 var priceMax = product.priceSelling + getRandomInt(Math.round(product.priceSelling) * parameter.ratePriceMax - product.priceSelling);
@@ -627,7 +627,7 @@ export class City {
         h.show();
 
     }
-    commitBuildingCosts(buildPrice: number, buildMaterial: number[], transactiontext: string): boolean {
+    commitBuildingCosts(buildPrice: number, buildMaterial: number[], transactiontext: string,doUpdateCity=true): boolean {
         if (this.canBuild(buildPrice, buildMaterial) !== "")
             return false;
         var total = buildPrice;
@@ -646,7 +646,8 @@ export class City {
             }
         }
         this.world.game.changeMoney(-total, transactiontext, this);
-        CityDialog.getInstance().update(true);
+        if(doUpdateCity)
+            CityDialog.getInstance().update(true);
         return true;
     }
     //returns undefined if markt
@@ -669,7 +670,11 @@ export class City {
     }
 
     static getBuildingCostsAsIcon(money: number, buildingMaterial: number[], withBreak = false) {
-        var s = (money/1000).toLocaleString() + "k";
+        var s = (money/1000).toLocaleString() + "K";
+        if(money>=10000000)
+            s = (money/1000000).toLocaleString() + "M";
+        if(money>=10000000000)
+            s = (money/1000000000).toLocaleString() + "Mrd";
         var lastAmount = undefined;
         for (var x = 0; x < buildingMaterial.length; x++) {
             if (buildingMaterial[x]) {

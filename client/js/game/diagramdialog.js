@@ -116,8 +116,10 @@ define(["require", "exports", "game/icons"], function (require, exports, icons_1
                     </table>`;
         }
         update() {
-            document.getElementById("buildWithOneClick").value = "" + parameter.numberBuildWithContextMenu;
-            document.getElementById("buildHousesWithOneClick").value = "" + parameter.numberBuildHousesWithContextMenu;
+            if (document.activeElement !== document.getElementById("buildWithOneClick"))
+                document.getElementById("buildWithOneClick").value = "" + parameter.numberBuildWithContextMenu;
+            if (document.activeElement !== document.getElementById("buildHousesWithOneClick"))
+                document.getElementById("buildHousesWithOneClick").value = "" + parameter.numberBuildHousesWithContextMenu;
             try {
                 if (!$(this.dom).dialog('isOpen')) {
                     return;

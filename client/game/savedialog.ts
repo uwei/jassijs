@@ -192,6 +192,7 @@ export class SaveDialog {
 
                 Object.assign(ret, value);
                 delete ret.world;
+                delete ret.domProductNeeded;
                 return ret;
             }
             if (value?.constructor?.name === "Company") {
@@ -224,16 +225,16 @@ export class SaveDialog {
                 return undefined;
             if (key === "parameter") {
                 Object.assign(parameter, value);
-              /*  for (var x = 0; x < parameter.allProducts.length; x++) {
-                    parameter.allProducts[x] = new Product(parameter.allProducts[x]);
-                }*/
+                /*  for (var x = 0; x < parameter.allProducts.length; x++) {
+                      parameter.allProducts[x] = new Product(parameter.allProducts[x]);
+                  }*/
             }
             if (value?.type === "Company") {
                 r = new Company();
                 Object.assign(r, value);
                 return r;
             }
-            if (value?.type === "Product"||value?.dailyConsumtion) {
+            if (value?.type === "Product" || value?.dailyConsumtion) {
                 r = new Product(value);
                 Object.assign(r, value);
                 return r;
@@ -250,28 +251,13 @@ export class SaveDialog {
             }
             if (value?.type === "City") {
                 r = new City();
-                if (value.warehouse) {
-                    value.shop = value.warehouse;
-                    value.shops = value.warehouses;
-                    value.shopSellingPrice = value.warehouseSellingPrice;
-                    delete value.warehouseSellingPrice;
-                    delete value.warehouse;
-                    delete value.warehouses;
-                }
+                
                 Object.assign(r, value);
                 return r;
             }
             if (value?.type === "Route") {
                 r = new Route();
-                if (value.loadWarehouseAmount) {
-                    value.loadShopAmount = value.loadWarehouseAmount;
-                    value.unloadShopAmount = value.unloadWarehouseAmount;
-                    value.loadShopUntilAmount = value.loadWarehouseUntilAmount;
-                    delete value.loadWarehouseAmount;
-                    delete value.unloadWarehouseAmount;
-                    delete value.loadWarehouseUntilAmount;
-
-                }
+             
                 Object.assign(r, value);
                 return r;
             }
@@ -317,21 +303,34 @@ export class SaveDialog {
                 game.world.cities[0].score[x] = 50;
 
             }
-            game.world.cities[0].people=Math.round(game.world.cities[0].people);
-            game.world.cities[0].shops=game.world.cities[0].shops*7;
-            game.world.cities[0].houses=Math.round(game.world.cities[0].people/parameter.peopleInHouse);
+            game.world.cities[0].people = Math.round(game.world.cities[0].people);
+            game.world.cities[0].shops = game.world.cities[0].shops * 7;
+            game.world.cities[0].houses = Math.round(game.world.cities[0].people / parameter.peopleInHouse);
         }
         console.log("People: " + game.world.cities[0].people.toLocaleString());
 
 
-        if(ret.version===undefined){
+        if (ret.version === undefined) {
             //migration
-            for(let x=0;x<parameter.allProducts.length;x++){ 
-                parameter.allProducts[x].dailyConsumtion=parameter.allProducts[x].getAmountForPeople()/(parameter.workerInCompany*19);
+            for (let x = 0; x < parameter.allProducts.length; x++) {
+                parameter.allProducts[x].dailyConsumtion = parameter.allProducts[x].getAmountForPeople() / (parameter.workerInCompany * 19);
             }
         }
-        if(parseFloat(ret.version)<=1.2){
-            game.parameter.allAirplaneTypes[0].buildingMaterial=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        if (parseFloat(ret.version) <= 1.2) {
+            game.parameter.allAirplaneTypes[0].buildingMaterial = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        }
+        if (parseFloat(ret.version) <= 1.2) {
+            for (var x = 0; x < game.world.cities.length; x++) {
+                delete game.world.cities[x]["shopSellingPrice"];
+            }
+            for (var x = 0; x < game.world.airplanes.length; x++) {
+                for(var y=0;y< game.world.airplanes[x].route.length;y++){
+                    delete game.world.airplanes[x].route[y]["loadMarketAmount"];
+                    delete game.world.airplanes[x].route[y]["loadMarketPrice"];
+                    delete game.world.airplanes[x].route[y]["unloadMarketPrice"];
+                    delete game.world.airplanes[x].route[y]["unloadMarketAmount"];
+                }
+            }
         }
         game.render(this.game.dom);
         game.resume();

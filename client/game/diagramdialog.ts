@@ -130,7 +130,10 @@ export class DiagramDialog {
                     </table>`;
     }
     update() {
-         (<HTMLInputElement>document.getElementById("buildWithOneClick")).value=""+parameter.numberBuildWithContextMenu;
+        
+        if (document.activeElement !== <any>document.getElementById("buildWithOneClick")) 
+             (<HTMLInputElement>document.getElementById("buildWithOneClick")).value=""+parameter.numberBuildWithContextMenu;
+        if (document.activeElement !== <any>document.getElementById("buildHousesWithOneClick")) 
          (<HTMLInputElement>document.getElementById("buildHousesWithOneClick")).value=""+parameter.numberBuildHousesWithContextMenu;
         try {
             if (!$(this.dom).dialog('isOpen')) {

@@ -169,6 +169,7 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                 if (((_c = value === null || value === void 0 ? void 0 : value.constructor) === null || _c === void 0 ? void 0 : _c.name) === "City") {
                     Object.assign(ret, value);
                     delete ret.world;
+                    delete ret.domProductNeeded;
                     return ret;
                 }
                 if (((_d = value === null || value === void 0 ? void 0 : value.constructor) === null || _d === void 0 ? void 0 : _d.name) === "Company") {
@@ -225,27 +226,11 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
                 }
                 if ((value === null || value === void 0 ? void 0 : value.type) === "City") {
                     r = new city_1.City();
-                    if (value.warehouse) {
-                        value.shop = value.warehouse;
-                        value.shops = value.warehouses;
-                        value.shopSellingPrice = value.warehouseSellingPrice;
-                        delete value.warehouseSellingPrice;
-                        delete value.warehouse;
-                        delete value.warehouses;
-                    }
                     Object.assign(r, value);
                     return r;
                 }
                 if ((value === null || value === void 0 ? void 0 : value.type) === "Route") {
                     r = new route_1.Route();
-                    if (value.loadWarehouseAmount) {
-                        value.loadShopAmount = value.loadWarehouseAmount;
-                        value.unloadShopAmount = value.unloadWarehouseAmount;
-                        value.loadShopUntilAmount = value.loadWarehouseUntilAmount;
-                        delete value.loadWarehouseAmount;
-                        delete value.unloadWarehouseAmount;
-                        delete value.loadWarehouseUntilAmount;
-                    }
                     Object.assign(r, value);
                     return r;
                 }
@@ -302,6 +287,19 @@ define(["require", "exports", "game/product", "game/airplane", "game/route", "ga
             }
             if (parseFloat(ret.version) <= 1.2) {
                 game.parameter.allAirplaneTypes[0].buildingMaterial = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            }
+            if (parseFloat(ret.version) <= 1.2) {
+                for (var x = 0; x < game.world.cities.length; x++) {
+                    delete game.world.cities[x]["shopSellingPrice"];
+                }
+                for (var x = 0; x < game.world.airplanes.length; x++) {
+                    for (var y = 0; y < game.world.airplanes[x].route.length; y++) {
+                        delete game.world.airplanes[x].route[y]["loadMarketAmount"];
+                        delete game.world.airplanes[x].route[y]["loadMarketPrice"];
+                        delete game.world.airplanes[x].route[y]["unloadMarketPrice"];
+                        delete game.world.airplanes[x].route[y]["unloadMarketAmount"];
+                    }
+                }
             }
             game.render(this.game.dom);
             game.resume();

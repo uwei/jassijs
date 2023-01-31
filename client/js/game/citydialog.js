@@ -105,8 +105,8 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                     ret = ret + "<td></td>";
                     ret = ret + "<td></td>";
                     ret = ret + '<td><button id="new-factory_' + x + '" class="mybutton">' + "+" + icons_1.Icons.factory + '</button>' +
-                        '<button id="new-factoryX_' + x + '" class="mybutton">' + "x" + icons_1.Icons.factory + '</button>' +
-                        '<button id="delete-factory_' + x + '" class="mybutton">' + "-" + icons_1.Icons.factory + '</button>' +
+                        '<button id="new-factoryX_' + x + '" class="mybutton">' + "x " + icons_1.Icons.factory + '</button>' +
+                        '<button id="delete-factory_' + x + '" class="mybutton">' + "- " + icons_1.Icons.factory + '</button>' +
                         '<button id="buy-license_' + x + '" class="mybutton">' + "buy license to produce for 50.000" + icons_1.Icons.money + '</button>' +
                         '<div id="no-shop_' + x + '">need a shop to produce</div>' +
                         '</td>';
@@ -216,6 +216,22 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                 this.prevCity();
             _this.update(true);
         }
+        buildCompanies(evt) {
+            var _this = this;
+            var sid = evt.target.id;
+            if (sid === "")
+                sid = evt.target.parentNode.id;
+            var id = Number(sid.split("_")[1]);
+            var comp = _this.city.companies[id];
+            for (var i = 0; i < parameter.numberBuildWithContextMenu; i++) {
+                if (!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building", false))
+                    return;
+                _this.city.buildBuilding(comp.productid);
+            }
+            //comp.buildings++;
+            _this.update();
+            _this.city.world.game.updateTitle();
+        }
         bindActions() {
             var _this = this;
             document.getElementById("citydialog-next").addEventListener("click", (ev) => {
@@ -242,6 +258,9 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                                     this.filteredCities.push(city);
                             }
                         }
+                    }
+                    if (this.filteredCities.length === 0) {
+                        this.filteredCities = [_this.city];
                     }
                     this.filteredCities.sort((a, b) => {
                         var a1, b1;
@@ -275,35 +294,11 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                     _this.update();
                 });
                 document.getElementById("new-factoryX_" + x).addEventListener("click", (evt) => {
-                    var sid = evt.target.id;
-                    if (sid === "")
-                        sid = evt.target.parentNode.id;
-                    var id = Number(sid.split("_")[1]);
-                    var comp = _this.city.companies[id];
-                    for (var i = 0; i < parameter.numberBuildWithContextMenu; i++) {
-                        if (!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building"))
-                            return;
-                        _this.city.buildBuilding(comp.productid);
-                    }
-                    //comp.buildings++;
-                    _this.update();
-                    _this.city.world.game.updateTitle();
+                    _this.buildCompanies(evt);
                 });
                 document.getElementById("new-factory_" + x).addEventListener("contextmenu", (evt) => {
                     evt.preventDefault();
-                    var sid = evt.target.id;
-                    if (sid === "")
-                        sid = evt.target.parentNode.id;
-                    var id = Number(sid.split("_")[1]);
-                    var comp = _this.city.companies[id];
-                    for (var i = 0; i < parameter.numberBuildWithContextMenu; i++) {
-                        if (!_this.city.commitBuildingCosts(comp.getBuildingCosts(), comp.getBuildingMaterial(), "buy building"))
-                            return;
-                        _this.city.buildBuilding(comp.productid);
-                    }
-                    //comp.buildings++;
-                    _this.update();
-                    _this.city.world.game.updateTitle();
+                    _this.buildCompanies(evt);
                 });
                 document.getElementById("delete-factory_" + x).addEventListener("click", (evt) => {
                     var sid = evt.target.id;
@@ -338,6 +333,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                     if (!_this.city.commitBuildingCosts(50000, [], "buy licence"))
                         return;
                     comp.hasLicense = true;
+                    _this.update();
                 });
             }
             document.getElementById("buy-shop").addEventListener("click", (evt) => {
@@ -415,9 +411,10 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                 _this.update();
                 return;
             }
-            if (comp.buildings > 0)
+            if (comp.buildings > 0) {
                 comp.buildings--;
-            _this.city.companies[id].workers -= parameter.workerInCompany;
+                _this.city.companies[id].workers -= parameter.workerInCompany;
+            }
         }
         updateBuildings() {
             /*
@@ -443,17 +440,21 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                 var s = comp.buildings.toString();
                 var inprogr = this.city.getBuildingInProgress(comp.productid);
                 if (inprogr) {
-                    s = s + "(" + inprogr + icons_1.Icons.hammer + ")";
+                    s = s + "<br/>" + inprogr + icons_1.Icons.hammer + "";
                 }
                 tr.children[2].innerHTML = s;
-                tr.children[3].innerHTML = comp.workers + "/" + comp.getMaxWorkers();
+                tr.children[3].innerHTML = "" + comp.workers; // + "/" + comp.getMaxWorkers();
+                if (comp.workers > 10000)
+                    tr.children[3].innerHTML = (Math.round(comp.workers / 1000)).toLocaleString() + "K";
+                if (comp.workers > 10000000)
+                    tr.children[3].innerHTML = (Math.round(comp.workers / 1000000)).toLocaleString() + "M";
                 var needs1 = "";
                 var needs2 = "";
                 if (product.input1 !== undefined)
-                    needs1 = "" + comp.getDailyInput1() + all[product.input1].getIcon() + " ";
+                    needs1 = "" + Math.round(comp.getDailyInput1()) + all[product.input1].getIcon() + " ";
                 tr.children[4].innerHTML = needs1;
                 if (product.input2 !== undefined)
-                    needs2 = "<br/>" + comp.getDailyInput2() + all[product.input2].getIcon();
+                    needs2 = "<br/>" + Math.round(comp.getDailyInput2()) + all[product.input2].getIcon();
                 tr.children[4].innerHTML = needs1 + " " + needs2;
                 if (comp.hasLicense) {
                     document.getElementById("buy-license_" + x).setAttribute("hidden", "");
