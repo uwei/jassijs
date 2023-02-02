@@ -36,6 +36,7 @@ define(["require", "exports"], function (require, exports) {
             this.buildings = 0;
             this.workers = 0;
             this.hasLicense = false;
+            this.buildingsWithoutCosts = undefined;
             this.type = "Company";
             this.dailyProducedToday = 0;
             this.productid = getRandomCompanyType(notThisIds);
@@ -75,7 +76,7 @@ define(["require", "exports"], function (require, exports) {
         }
         getBuildingCosts() {
             var fact = 4 - (parameter.allProducts[this.productid].distribution);
-            var buildings = this.buildings + this.city.getBuildingInProgress(this.productid);
+            var buildings = this.buildings - (this.buildingsWithoutCosts === undefined ? 0 : this.buildingsWithoutCosts) + this.city.getBuildingInProgress(this.productid);
             return Math.round(parameter.rateBuyBuilding * fact * 10000 + Math.round(parameter.rateBuyBuildingGrowFactor * buildings));
         }
         getDailyInput2() {

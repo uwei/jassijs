@@ -14,6 +14,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.shop = [];
             this.shops = 0;
             this.houses = 0;
+            this.buildingplaces = 0;
             //shopSellingPrice: number[];
             this.queueAirplane = [];
             this.queueBuildings = [];
@@ -106,6 +107,12 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.domAirport = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
                 'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + icons_1.Icons.airport + '</span>').children[0];
             this.world.dom.appendChild(this.domAirport);
+            this.domStar = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
+                'px;left:' + (this.x + 40) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + icons_1.Icons.stare + '</span>').children[0];
+            this.domStar.addEventListener("click", (ev) => {
+                _this.resetBuildingsWithoutCosts();
+            });
+            this.world.dom.appendChild(this.domStar);
             if (!this.hasAirport) {
                 this.domAirport.style.visibility = "hidden";
             }
@@ -126,11 +133,19 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 return undefined;
             });
         }
+        resetBuildingsWithoutCosts() {
+            var _this = this;
+            this.domStar.style.visibility = "hidden";
+            for (var x = 0; x < this.companies.length; x++) {
+                this.companies[x].buildingsWithoutCosts = this.companies[x].buildings;
+            }
+            alert("Congratulations. All building costs " + this.name + " are reset.");
+        }
         buildBuilding(typeid) {
             var last = this.world.game.date.getTime();
             if (this.queueBuildings.length > 0)
                 last = this.queueBuildings[this.queueBuildings.length - 1].ready;
-            last += parameter.daysBuildBuilding * 1000 * 60 * 60 * 24;
+            last += (parameter.daysBuildBuilding * 1000 * 60 * 60 * 24) / (!this.buildingplaces ? 1 : (this.buildingplaces + 1));
             this.queueBuildings.push({ ready: last, typeid: typeid, name: "" });
             //shop should create at first
             if (typeid === 10000) {
@@ -516,6 +531,18 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             else
                 this.domRating.style.display = "none";
         }
+        updateresetBuildingsWithoutCosts() {
+            var _this = this;
+            if (this.world.game.date.getHours() === 0) {
+                var test = getRandomInt(20000);
+                if (test === 0) {
+                    this.domStar.style.display = "initial";
+                    setTimeout(() => {
+                        _this.domStar.style.display = "none";
+                    }, 3000);
+                }
+            }
+        }
         update() {
             var _this = this;
             if (this.lastUpdate === undefined) {
@@ -534,6 +561,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.updateDailyConsumtion();
             this.updateAirplaneQueue();
             this.updateBuildingQueue();
+            this.updateresetBuildingsWithoutCosts();
             // this.sellShopToMarket();
             if (this.world.game.date.getHours() % 1 === 0)
                 this.updatePeople();

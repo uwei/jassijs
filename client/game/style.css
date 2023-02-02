@@ -90,3 +90,17 @@ table {
 .diagramdialog>* {
     font-size: 10px;
 }
+
+ @keyframes animate {
+            0% {
+                opacity: 0;
+            }
+  
+            50% {
+                opacity: 0.7;
+            }
+  
+            100% {
+                opacity: 0;
+            }
+        }

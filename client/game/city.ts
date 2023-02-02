@@ -22,6 +22,7 @@ export class City {
     icon: string;
     dom: HTMLElement;
     domAirport: HTMLElement;
+    domStar: HTMLElement;
     world: World;
     people: number;
     market: number[];
@@ -33,14 +34,15 @@ export class City {
     shop: number[] = [];
     shops = 0;
     houses = 0;
+    buildingplaces=0;
     shopMinStock: number[];
     //shopSellingPrice: number[];
     queueAirplane: QueueItem[] = [];
     queueBuildings: QueueItem[] = [];
     domShopfull: HTMLSpanElement;
     domRating: HTMLSpanElement;
-    domProductNeeded:HTMLSpanElement[]=[];
-    domWarning:HTMLSpanElement;
+    domProductNeeded: HTMLSpanElement[] = [];
+    domWarning: HTMLSpanElement;
     type = "City";
     domDesc: HTMLSpanElement;
     hasAirport;
@@ -92,7 +94,7 @@ export class City {
         }
         return ret;
     }
-    renderWarningIcons(){
+    renderWarningIcons() {
         this.domShopfull = <any>document.createRange().createContextualFragment(Icons.store).children[0];
         this.domShopfull.style.color = "red";
         this.domShopfull.style.display = "none";
@@ -102,11 +104,11 @@ export class City {
         this.domRating.style.color = "red";
         this.domRating.style.display = "none";
         this.domWarning.appendChild(this.domRating);
-        
-        this.domProductNeeded=[];
-        for(var x=0;x<parameter.allProducts.length;x++){
+
+        this.domProductNeeded = [];
+        for (var x = 0; x < parameter.allProducts.length; x++) {
             var dom = <any>document.createRange().createContextualFragment(parameter.allProducts[x].getIcon()).children[0];
-        //this.dom.style.color = "red";
+            //this.dom.style.color = "red";
             dom.style.display = "none";
             this.domWarning.appendChild(dom);
             this.domProductNeeded.push(dom);
@@ -130,15 +132,22 @@ export class City {
             'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
         this.domDesc = <any>document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
         spanDesc.appendChild(this.domDesc);
-        this.domWarning= <any>document.createRange().createContextualFragment("<span></span>").children[0];
+        this.domWarning = <any>document.createRange().createContextualFragment("<span></span>").children[0];
         this.renderWarningIcons();
         spanDesc.appendChild(this.domWarning);
         this.world.dom.appendChild(spanDesc);
         spanDesc.style.zIndex = "2";
         this.domAirport = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
             'px;left:' + (this.x - 40) + 'px;font-size:40px;color:white;">' + Icons.airport + '</span>').children[0];
-
         this.world.dom.appendChild(this.domAirport);
+        this.domStar = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (this.y - 16) +
+            'px;left:' + (this.x + 40) + 'px;font-size:40px;color:yellow;display:none;animation: animate   0.5s linear infinite;" >' + Icons.stare + '</span>').children[0];
+        this.domStar.addEventListener("click", (ev: MouseEvent) => {
+            _this.resetBuildingsWithoutCosts();
+        });
+
+        this.world.dom.appendChild(this.domStar);
+
         if (!this.hasAirport) {
             this.domAirport.style.visibility = "hidden";
         }
@@ -159,14 +168,21 @@ export class City {
             _this.oncontextmenu(ev);
             return undefined;
         });
+    }
+    resetBuildingsWithoutCosts() {
+        var _this = this;
+        this.domStar.style.visibility = "hidden";
+        for (var x = 0; x < this.companies.length; x++) {
+            this.companies[x].buildingsWithoutCosts = this.companies[x].buildings;
+        }
 
-
+        alert("Congratulations. All building costs "+this.name+" are reset.")
     }
     buildBuilding(typeid: number) {
         var last = this.world.game.date.getTime();
         if (this.queueBuildings.length > 0)
             last = this.queueBuildings[this.queueBuildings.length - 1].ready;
-        last += parameter.daysBuildBuilding * 1000 * 60 * 60 * 24;
+        last += (parameter.daysBuildBuilding * 1000 * 60 * 60 * 24)/(!this.buildingplaces?1:(this.buildingplaces+1));
         this.queueBuildings.push({ ready: last, typeid: typeid, name: "" });
         //shop should create at first
         if (typeid === 10000) {
@@ -391,35 +407,35 @@ export class City {
     updatePeople() {
         var newPeople = Math.max(1, Math.round(this.people / 100000));
 
-        var workers=parameter.neutralStartPeople;
-      //  for(var x=0;x<this.world.cities.length;x++){
-           // var ct=this.world.cities[x];
-            for(var i=0;i<this.companies.length;i++){
-                workers+=this.companies[i].workers;
-            }
-       // }
-        if(this.people>workers){
-            this.people=workers;
+        var workers = parameter.neutralStartPeople;
+        //  for(var x=0;x<this.world.cities.length;x++){
+        // var ct=this.world.cities[x];
+        for (var i = 0; i < this.companies.length; i++) {
+            workers += this.companies[i].workers;
+        }
+        // }
+        if (this.people > workers) {
+            this.people = workers;
             return;
         }
         //  var rating=this.getRating(this.people)===-1?Math.round(newPeople/2):newPeople;
         while (newPeople > 0) {
-            var rate=this.getRating(this.people) 
-            if (rate=== 1)
+            var rate = this.getRating(this.people)
+            if (rate === 1)
                 this.people++;
-            if(rate<0){
+            if (rate < 0) {
 
             }
-         //   if (this.getRating(this.people) === -1)
-           //     this.people--;
+            //   if (this.getRating(this.people) === -1)
+            //     this.people--;
             newPeople--;
         }
-         if (this.people > workers) {
+        if (this.people > workers) {
             this.people = workers;
-         }
-       // if (this.people > this.houses * parameter.peopleInHouse) {
-      //      this.people = this.houses * parameter.peopleInHouse;
-      //  }
+        }
+        // if (this.people > this.houses * parameter.peopleInHouse) {
+        //      this.people = this.houses * parameter.peopleInHouse;
+        //  }
 
 
     }
@@ -474,7 +490,7 @@ export class City {
                 var product = parameter.allProducts[x];
 
 
-                var price =99999999999999; //product.calcPrice(this.people, this.market[x] - diff, false);
+                var price = 99999999999999; //product.calcPrice(this.people, this.market[x] - diff, false);
                 var fromshop = false;
                 if (this.shop[x] >= diff && (this.shopMinStock[x] === undefined || (this.shop[x] - diff) > this.shopMinStock[x])) {
                     if (parameter.allProducts[x].priceSelling <= price) {
@@ -496,7 +512,7 @@ export class City {
                     this.score[x] = Math.round((this.score[x] + 0.1) * 100) / 100;
                 } else {
                     this.score[x] = Math.round((this.score[x] - 0.1) * 100) / 100;
-                
+
                 }
 
                 if (this.score[x] > 100)
@@ -563,15 +579,25 @@ export class City {
         var max = this.shops * parameter.capacityShop;
         if (gesamount >= max) {
             this.domShopfull.style.display = "initial";
-        } else{
-             this.domShopfull.style.display = "none";
+        } else {
+            this.domShopfull.style.display = "none";
         }
-        if(this.getRating(this.people+1)<0){
+        if (this.getRating(this.people + 1) < 0) {
             this.domRating.style.display = "initial";
-        }else
-             this.domRating.style.display = "none";
-       
-
+        } else
+            this.domRating.style.display = "none";
+    }
+    updateresetBuildingsWithoutCosts() {
+        var _this = this;
+        if (this.world.game.date.getHours() === 0) {
+            var test = getRandomInt(20000);
+            if (test === 0) {
+                this.domStar.style.display = "initial";
+                setTimeout(() => {
+                    _this.domStar.style.display = "none";
+                }, 3000);
+            }
+        }
     }
     update() {
         var _this = this;
@@ -579,8 +605,8 @@ export class City {
             this.lastUpdate = this.world.game.date.getTime();
         }
         //  setTimeout(()=>{
-        var s=this.name + "\n" +(this.people===0?"":this.people.toLocaleString());
-        if(_this.domDesc.innerText!==s)
+        var s = this.name + "\n" + (this.people === 0 ? "" : this.people.toLocaleString());
+        if (_this.domDesc.innerText !== s)
             _this.domDesc.innerText = s;
 
         //  },1);
@@ -590,18 +616,19 @@ export class City {
         for (var x = 0; x < this.companies.length; x++) {
             this.companies[x].update();
         }
-      //  if (this === this.world.cities[0])
-            this.updateDailyConsumtion();
+        //  if (this === this.world.cities[0])
+        this.updateDailyConsumtion();
         this.updateAirplaneQueue();
         this.updateBuildingQueue();
-       // this.sellShopToMarket();
-        if (this.world.game.date.getHours() % 1 === 0 )
+        this.updateresetBuildingsWithoutCosts();
+        // this.sellShopToMarket();
+        if (this.world.game.date.getHours() % 1 === 0)
             this.updatePeople();
         if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             //a new day starts
             this.updateDailyCosts();
         }
-       
+
         if (this.world.game.date.getHours() === 23) {
 
             this.updateStatus();
@@ -643,7 +670,7 @@ export class City {
         h.show();
 
     }
-    commitBuildingCosts(buildPrice: number, buildMaterial: number[], transactiontext: string,doUpdateCity=true): boolean {
+    commitBuildingCosts(buildPrice: number, buildMaterial: number[], transactiontext: string, doUpdateCity = true): boolean {
         if (this.canBuild(buildPrice, buildMaterial) !== "")
             return false;
         var total = buildPrice;
@@ -662,7 +689,7 @@ export class City {
             }
         }
         this.world.game.changeMoney(-total, transactiontext, this);
-        if(doUpdateCity)
+        if (doUpdateCity)
             CityDialog.getInstance().update(true);
         return true;
     }
@@ -686,11 +713,11 @@ export class City {
     }
 
     static getBuildingCostsAsIcon(money: number, buildingMaterial: number[], withBreak = false) {
-        var s = (money/1000).toLocaleString() + "K";
-        if(money>=10000000)
-            s = (money/1000000).toLocaleString() + "M";
-        if(money>=10000000000)
-            s = (money/1000000000).toLocaleString() + "Mrd";
+        var s = (money / 1000).toLocaleString() + "K";
+        if (money >= 10000000)
+            s = (money / 1000000).toLocaleString() + "M";
+        if (money >= 10000000000)
+            s = (money / 1000000000).toLocaleString() + "Mrd";
         var lastAmount = undefined;
         for (var x = 0; x < buildingMaterial.length; x++) {
             if (buildingMaterial[x]) {
@@ -770,7 +797,7 @@ export function createCities(world: World, count: number) {
         allready.push(world.cities[x].id);
     }
     for (var x = 0; x < count; x++) {
-        if (world.cities.length >= allCities.length){
+        if (world.cities.length >= allCities.length) {
             alert("Congratulations. You have built airports in all cities.");
             throw new Error("all built");
         }
