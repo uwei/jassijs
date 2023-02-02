@@ -44,7 +44,8 @@ export class City {
     domProductNeeded: HTMLSpanElement[] = [];
     domWarning: HTMLSpanElement;
     type = "City";
-    domDesc: HTMLSpanElement;
+    domName: HTMLSpanElement;
+    domPeople: HTMLSpanElement;
     hasAirport;
     constructor() {
         this.hasAirport = true;
@@ -130,8 +131,11 @@ export class City {
         this.dom.style.zIndex = "1";
         var spanDesc = <any>document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
             'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
-        this.domDesc = <any>document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
-        spanDesc.appendChild(this.domDesc);
+        this.domName = <any>document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
+        spanDesc.appendChild(this.domName);
+        spanDesc.appendChild(<any>document.createRange().createContextualFragment('<br/>').children[0]);
+        this.domPeople = <any>document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
+        spanDesc.appendChild(this.domPeople);
         this.domWarning = <any>document.createRange().createContextualFragment("<span></span>").children[0];
         this.renderWarningIcons();
         spanDesc.appendChild(this.domWarning);
@@ -605,9 +609,12 @@ export class City {
             this.lastUpdate = this.world.game.date.getTime();
         }
         //  setTimeout(()=>{
-        var s = this.name + "\n" + (this.people === 0 ? "" : this.people.toLocaleString());
-        if (_this.domDesc.innerText !== s)
-            _this.domDesc.innerText = s;
+        var s =(this.people === 0 ? "" : this.people.toLocaleString());
+        if (_this.domPeople.textContent !== s){
+       
+            _this.domPeople.textContent = s;
+
+        }
 
         //  },1);
 

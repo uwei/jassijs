@@ -97,8 +97,11 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.dom.style.zIndex = "1";
             var spanDesc = document.createRange().createContextualFragment('<span style="position:absolute;top:' + (30 + this.y) +
                 'px;left:' + this.x + 'px;font-size:14px;"></span>').children[0];
-            this.domDesc = document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
-            spanDesc.appendChild(this.domDesc);
+            this.domName = document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
+            spanDesc.appendChild(this.domName);
+            spanDesc.appendChild(document.createRange().createContextualFragment('<br/>').children[0]);
+            this.domPeople = document.createRange().createContextualFragment('<span>' + this.name + '</span>').children[0];
+            spanDesc.appendChild(this.domPeople);
             this.domWarning = document.createRange().createContextualFragment("<span></span>").children[0];
             this.renderWarningIcons();
             spanDesc.appendChild(this.domWarning);
@@ -549,9 +552,10 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 this.lastUpdate = this.world.game.date.getTime();
             }
             //  setTimeout(()=>{
-            var s = this.name + "\n" + (this.people === 0 ? "" : this.people.toLocaleString());
-            if (_this.domDesc.innerText !== s)
-                _this.domDesc.innerText = s;
+            var s = (this.people === 0 ? "" : this.people.toLocaleString());
+            if (_this.domPeople.textContent !== s) {
+                _this.domPeople.textContent = s;
+            }
             //  },1);
             //this.updateNeutralCompanies();
             for (var x = 0; x < this.companies.length; x++) {
