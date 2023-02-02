@@ -28,6 +28,7 @@ export class World {
         this.cities = [];
         this.airplanes = [];
         this.advertising = [];
+       
         for (var x = 0; x < parameter.allProducts.length; x++) {
             this.advertising.push(undefined);
         }
@@ -163,7 +164,8 @@ export class World {
         createCities(this, 15);
         this.cities[0].shops = 1;
         this.cities[0].houses = 1;
-        this.cities[0].people = parameter.neutralStartPeople;
+      
+        
         createCities(this, 1);
         this.cities[this.cities.length - 1].hasAirport = false;
         for (var x = 0; x < 1; x++) {

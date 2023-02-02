@@ -20,6 +20,7 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.domProductNeeded = [];
             this.type = "City";
             this.hasAirport = true;
+            this.people = parameter.neutralStartPeople;
             this.market = [];
             this.shopMinStock = [];
             //this.shopSellingPrice = [];
@@ -68,6 +69,10 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             this.domShopfull.style.color = "red";
             this.domShopfull.style.display = "none";
             this.domWarning.appendChild(this.domShopfull);
+            this.domRating = document.createRange().createContextualFragment(icons_1.Icons.people).children[0];
+            this.domRating.style.color = "red";
+            this.domRating.style.display = "none";
+            this.domWarning.appendChild(this.domRating);
             this.domProductNeeded = [];
             for (var x = 0; x < parameter.allProducts.length; x++) {
                 var dom = document.createRange().createContextualFragment(parameter.allProducts[x].getIcon()).children[0];
@@ -352,16 +357,19 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 workers += this.companies[i].workers;
             }
             // }
-            if (this.people < workers) {
+            if (this.people > workers) {
                 this.people = workers;
                 return;
             }
             //  var rating=this.getRating(this.people)===-1?Math.round(newPeople/2):newPeople;
             while (newPeople > 0) {
-                if (this.getRating(this.people) === 1)
+                var rate = this.getRating(this.people);
+                if (rate === 1)
                     this.people++;
-                if (this.getRating(this.people) === -1)
-                    this.people--;
+                if (rate < 0) {
+                }
+                //   if (this.getRating(this.people) === -1)
+                //     this.people--;
                 newPeople--;
             }
             if (this.people > workers) {
@@ -502,6 +510,11 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
             else {
                 this.domShopfull.style.display = "none";
             }
+            if (this.getRating(this.people + 1) < 0) {
+                this.domRating.style.display = "initial";
+            }
+            else
+                this.domRating.style.display = "none";
         }
         update() {
             var _this = this;
@@ -703,7 +716,6 @@ define(["require", "exports", "game/citydialog", "game/company", "game/airplane"
                 //überschneidung
             }
             city.world = world;
-            city.people = 0; // parameter.neutralStartPeople;
             var num = getRandomInt(allCities.length);
             while (allready.indexOf(num) !== -1) {
                 num = getRandomInt(allCities.length);

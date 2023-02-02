@@ -293,7 +293,7 @@ export class SaveDialog {
             //  this.world.cities[x].companies[y].
             //}
         }
-        if (game.world.cities[1].people > 0) {
+      /*  if (game.world.cities[1].people > 0) {
             //migration
             for (var x = 1; x < game.world.cities.length; x++) {
                 game.world.cities[0].people += game.world.cities[x].people;
@@ -308,7 +308,7 @@ export class SaveDialog {
             game.world.cities[0].houses = Math.round(game.world.cities[0].people / parameter.peopleInHouse);
         }
         console.log("People: " + game.world.cities[0].people.toLocaleString());
-
+*/
 
         if (ret.version === undefined) {
             //migration

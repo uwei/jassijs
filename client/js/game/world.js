@@ -140,7 +140,6 @@ define(["require", "exports", "game/city", "game/airplane", "game/citydialog", "
             (0, city_1.createCities)(this, 15);
             this.cities[0].shops = 1;
             this.cities[0].houses = 1;
-            this.cities[0].people = parameter.neutralStartPeople;
             (0, city_1.createCities)(this, 1);
             this.cities[this.cities.length - 1].hasAirport = false;
             for (var x = 0; x < 1; x++) {

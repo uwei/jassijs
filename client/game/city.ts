@@ -38,6 +38,7 @@ export class City {
     queueAirplane: QueueItem[] = [];
     queueBuildings: QueueItem[] = [];
     domShopfull: HTMLSpanElement;
+    domRating: HTMLSpanElement;
     domProductNeeded:HTMLSpanElement[]=[];
     domWarning:HTMLSpanElement;
     type = "City";
@@ -45,7 +46,7 @@ export class City {
     hasAirport;
     constructor() {
         this.hasAirport = true;
-
+        this.people = parameter.neutralStartPeople;
         this.market = [];
         this.shopMinStock = [];
         //this.shopSellingPrice = [];
@@ -96,6 +97,12 @@ export class City {
         this.domShopfull.style.color = "red";
         this.domShopfull.style.display = "none";
         this.domWarning.appendChild(this.domShopfull);
+
+        this.domRating = <any>document.createRange().createContextualFragment(Icons.people).children[0];
+        this.domRating.style.color = "red";
+        this.domRating.style.display = "none";
+        this.domWarning.appendChild(this.domRating);
+        
         this.domProductNeeded=[];
         for(var x=0;x<parameter.allProducts.length;x++){
             var dom = <any>document.createRange().createContextualFragment(parameter.allProducts[x].getIcon()).children[0];
@@ -383,6 +390,7 @@ export class City {
     }
     updatePeople() {
         var newPeople = Math.max(1, Math.round(this.people / 100000));
+
         var workers=parameter.neutralStartPeople;
       //  for(var x=0;x<this.world.cities.length;x++){
            // var ct=this.world.cities[x];
@@ -390,16 +398,20 @@ export class City {
                 workers+=this.companies[i].workers;
             }
        // }
-        if(this.people<workers){
+        if(this.people>workers){
             this.people=workers;
             return;
         }
         //  var rating=this.getRating(this.people)===-1?Math.round(newPeople/2):newPeople;
         while (newPeople > 0) {
-            if (this.getRating(this.people) === 1)
+            var rate=this.getRating(this.people) 
+            if (rate=== 1)
                 this.people++;
-            if (this.getRating(this.people) === -1)
-                this.people--;
+            if(rate<0){
+
+            }
+         //   if (this.getRating(this.people) === -1)
+           //     this.people--;
             newPeople--;
         }
          if (this.people > workers) {
@@ -554,6 +566,10 @@ export class City {
         } else{
              this.domShopfull.style.display = "none";
         }
+        if(this.getRating(this.people+1)<0){
+            this.domRating.style.display = "initial";
+        }else
+             this.domRating.style.display = "none";
        
 
     }
@@ -772,7 +788,6 @@ export function createCities(world: World, count: number) {
 
         }
         city.world = world;
-        city.people =0;// parameter.neutralStartPeople;
         var num = getRandomInt(allCities.length);
         while (allready.indexOf(num) !== -1) {
             num = getRandomInt(allCities.length);
