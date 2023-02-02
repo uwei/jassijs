@@ -479,7 +479,7 @@ export class CityDialog {
                 s = s + "<br/>" + inprogr + Icons.hammer + "";
             }
             tr.children[2].innerHTML = s;
-            tr.children[3].innerHTML =""+ comp.workers;// + "/" + comp.getMaxWorkers();
+            tr.children[3].innerHTML =""+ comp.workers + "/<br/>" + comp.getMaxWorkers();
             if(comp.workers>10000)
               tr.children[3].innerHTML=(Math.round(comp.workers/1000)).toLocaleString() + "K";
             if(comp.workers>10000000)

@@ -323,10 +323,10 @@ export class RouteDialog {
                         store[prod.input2] += Math.round((1.3 * buildings * prod.input2Amount * totalDays));
 
                 }
-              /*  for (var y = 0; y < parameter.allProducts.length; y++) {
-                    store[y] += Math.round(1.15 * totalDays * parameter.allProducts[y].dailyConsumtion * (allPeople + parameter.neutralStartPeople));
+                for (var y = 0; y < parameter.allProducts.length; y++) {
+                    store[y] += Math.round(1.3 * totalDays * parameter.allProducts[y].dailyConsumtion * (allPeople + parameter.neutralStartPeople));
 
-                }*/
+                }
 
             }
         }

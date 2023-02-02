@@ -37,7 +37,7 @@ export class Parameter {
   rateCostShop = 100;
   rateCostsShopMany = 1000;
   workerInCompany = 20;
-  neutralStartPeople = 500;
+  neutralStartPeople = 200;
   neutralProductionRate = 2;
   newAirportRate=1.05;
   capacityShop=5000;
@@ -93,7 +93,7 @@ export class Game {
   domHeader: HTMLDivElement;
   domWorld: HTMLDivElement;
   _money;
-  version="1.3";
+  version="1.4";
   date: Date;
   lastUpdate: number;
   speed: number;

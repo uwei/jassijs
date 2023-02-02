@@ -25,7 +25,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
             this.rateCostShop = 100;
             this.rateCostsShopMany = 1000;
             this.workerInCompany = 20;
-            this.neutralStartPeople = 500;
+            this.neutralStartPeople = 200;
             this.neutralProductionRate = 2;
             this.newAirportRate = 1.05;
             this.capacityShop = 5000;
@@ -76,7 +76,7 @@ define(["require", "exports", "game/citydialog", "game/world", "game/airplanedia
     //global.parameter=new Parametetr();
     class Game {
         constructor() {
-            this.version = "1.3";
+            this.version = "1.4";
             this.mapWidth = 1000;
             this.mapHeight = 600;
             this.statistic = new Statistic();

@@ -443,7 +443,7 @@ define(["require", "exports", "game/city", "game/icons", "game/citydialogshop"],
                     s = s + "<br/>" + inprogr + icons_1.Icons.hammer + "";
                 }
                 tr.children[2].innerHTML = s;
-                tr.children[3].innerHTML = "" + comp.workers; // + "/" + comp.getMaxWorkers();
+                tr.children[3].innerHTML = "" + comp.workers + "/<br/>" + comp.getMaxWorkers();
                 if (comp.workers > 10000)
                     tr.children[3].innerHTML = (Math.round(comp.workers / 1000)).toLocaleString() + "K";
                 if (comp.workers > 10000000)

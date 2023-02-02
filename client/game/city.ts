@@ -384,12 +384,12 @@ export class City {
     updatePeople() {
         var newPeople = Math.max(1, Math.round(this.people / 100000));
         var workers=parameter.neutralStartPeople;
-        for(var x=0;x<this.world.cities.length;x++){
-            var ct=this.world.cities[x];
-            for(var i=0;i<ct.companies.length;i++){
-                workers+=ct.companies[i].workers;
+      //  for(var x=0;x<this.world.cities.length;x++){
+           // var ct=this.world.cities[x];
+            for(var i=0;i<this.companies.length;i++){
+                workers+=this.companies[i].workers;
             }
-        }
+       // }
         if(this.people<workers){
             this.people=workers;
             return;
@@ -574,12 +574,12 @@ export class City {
         for (var x = 0; x < this.companies.length; x++) {
             this.companies[x].update();
         }
-        if (this === this.world.cities[0])
+      //  if (this === this.world.cities[0])
             this.updateDailyConsumtion();
         this.updateAirplaneQueue();
         this.updateBuildingQueue();
        // this.sellShopToMarket();
-        if (this.world.game.date.getHours() % 1 === 0 && this == this.world.cities[0])
+        if (this.world.game.date.getHours() % 1 === 0 )
             this.updatePeople();
         if (this.world.game.date.getDate() !== new Date(this.lastUpdate).getDate()) {
             //a new day starts

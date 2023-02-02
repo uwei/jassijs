@@ -332,6 +332,13 @@ export class SaveDialog {
                 }
             }
         }
+        if (parseFloat(ret.version) < 1.4) {
+           
+            for (var x = 1; x < game.world.cities.length; x++) {
+               game.world.cities[x].shops=Math.round( game.world.cities[x].shops*2);
+            }
+            game.version="1.4";
+        }
         game.render(this.game.dom);
         game.resume();
         window.localStorage.setItem("lastgame", filename);
