@@ -339,6 +339,18 @@ export class SaveDialog {
             }
             game.version="1.4";
         }
+         if (parseFloat(ret.version) < 1.5) {
+           
+            for (var x = 1; x < game.world.cities.length; x++) {
+               var max=0;
+               for(var y =0;y<5;y++){
+                   max+=game.world.cities[x].companies[y].buildings*parameter.workerInCompany;
+               }
+               game.world.cities[x].people=max;
+               //game.world.cities[x].people=game.world.cities[x].shops*2);
+            }
+            game.version="1.5";
+        }
         game.render(this.game.dom);
         game.resume();
         window.localStorage.setItem("lastgame", filename);
